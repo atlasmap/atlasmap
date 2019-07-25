@@ -524,43 +524,63 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">The AtlasMap Team</span><br>
 <span id="revnumber">version 1.42.0-SNAPSHOT,</span>
-<span id="revdate">2019-07-24</span>
+<span id="revdate">2019-07-25</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">AtlasMap User Guide</div>
 <ul class="sectlevel1">
-<li><a href="#quickstart">1. Quickstart</a>
+<li><a href="#basics">1. How to define an AtlasMap data mapping?</a>
 <ul class="sectlevel2">
-<li><a href="#running-atlasmap-data-mapper-ui-standalone">1.1. Running AtlasMap Data Mapper UI standalone</a></li>
-<li><a href="#running-atlasmap-data-mapping-with-apache-camel">1.2. Running AtlasMap data mapping with Apache Camel</a></li>
+<li><a href="#field-types">1.1. Field Types</a>
+<ul class="sectlevel3">
+<li><a href="#terminal-field">1.1.1. Terminal field</a></li>
+<li><a href="#parent-field">1.1.2. Parent field</a></li>
+<li><a href="#collection-field">1.1.3. Collection field</a></li>
 </ul>
 </li>
-<li><a href="#import-files-in-ui">2. Import Files in UI</a>
-<ul class="sectlevel2">
-<li><a href="#import-files-to-panel">2.1. Import XML/JSON schema or instance or Java class files</a></li>
+<li><a href="#mapping-types">1.2. Mapping Types</a>
+<ul class="sectlevel3">
+<li><a href="#one-to-one">1.2.1. One to One</a></li>
+<li><a href="#many-to-one">1.2.2. Many to One</a></li>
+<li><a href="#one-to-many">1.2.3. One to Many</a></li>
+<li><a href="#for-each">1.2.4. For Each</a></li>
 </ul>
 </li>
-<li><a href="#design-mappings-in-ui">3. Design Mappings in UI</a>
-<ul class="sectlevel2">
-<li><a href="#find-the-field-you-want-to-map">3.1. Find the data field that you want to map</a></li>
-<li><a href="#map-one-source-field-to-one-target-field">3.2. Map one source field to one target field</a></li>
-<li><a href="#example-missing-unwanted-data">3.3. Example of missing or unwanted data when combining or separating fields</a></li>
-<li><a href="#combine-multiple-source-fields-into-one-target-field">3.4. Combine multiple source fields into one target field</a></li>
-<li><a href="#separate-one-source-field-into-multiple-target-fields">3.5. Separate one source field into multiple target fields</a></li>
-<li><a href="#transform-target-data">3.6. Transform source or target data</a></li>
-<li><a href="#applying-conditions-to-mappings">3.7. Applying conditions to mappings</a></li>
-<li><a href="#view-mappings">3.8. View the mappings</a></li>
-<li><a href="#available-transformations">3.9. Descriptions of available transformations</a></li>
+<li><a href="#transformation">1.3. Transformation</a></li>
 </ul>
 </li>
-<li><a href="#export-files-in-ui">4. Export Files in UI</a>
+<li><a href="#quickstart">2. Quickstart</a>
 <ul class="sectlevel2">
-<li><a href="#export-files">4.1. Export AtlasMap Data Mapper Catalog File</a></li>
+<li><a href="#running-atlasmap-data-mapper-ui-standalone">2.1. Running AtlasMap Data Mapper UI standalone</a></li>
+<li><a href="#running-atlasmap-data-mapping-with-apache-camel">2.2. Running AtlasMap data mapping with Apache Camel</a></li>
 </ul>
 </li>
-<li><a href="#reset-files-in-ui">5. Reset Files in UI</a>
+<li><a href="#import-files-in-ui">3. Import Files in UI</a>
 <ul class="sectlevel2">
-<li><a href="#reset-files">5.1. Reset the AtlasMap Data Mapper</a></li>
+<li><a href="#import-files-to-panel">3.1. Import XML/JSON schema or instance or Java class files</a></li>
+</ul>
+</li>
+<li><a href="#design-mappings-in-ui">4. Design Mappings in UI</a>
+<ul class="sectlevel2">
+<li><a href="#find-the-field-you-want-to-map">4.1. Find the data field that you want to map</a></li>
+<li><a href="#map-one-source-field-to-one-target-field">4.2. Map one source field to one target field</a></li>
+<li><a href="#example-missing-unwanted-data">4.3. Example of missing or unwanted data when combining or separating fields</a></li>
+<li><a href="#combine-multiple-source-fields-into-one-target-field">4.4. Combine multiple source fields into one target field</a></li>
+<li><a href="#separate-one-source-field-into-multiple-target-fields">4.5. Separate one source field into multiple target fields</a></li>
+<li><a href="#transform-target-data">4.6. Transform source or target data</a></li>
+<li><a href="#applying-conditions-to-mappings">4.7. Applying conditions to mappings</a></li>
+<li><a href="#view-mappings">4.8. View the mappings</a></li>
+<li><a href="#available-transformations">4.9. Descriptions of available transformations</a></li>
+</ul>
+</li>
+<li><a href="#export-files-in-ui">5. Export Files in UI</a>
+<ul class="sectlevel2">
+<li><a href="#export-files">5.1. Export AtlasMap Data Mapper Catalog File</a></li>
+</ul>
+</li>
+<li><a href="#reset-files-in-ui">6. Reset Files in UI</a>
+<ul class="sectlevel2">
+<li><a href="#reset-files">6.1. Reset the AtlasMap Data Mapper</a></li>
 </ul>
 </li>
 </ul>
@@ -583,10 +603,106 @@ AtlasMap mapping definition which can process data mappings as a part of a Camel
 </div>
 </div>
 <div class="sect1">
-<h2 id="quickstart">1. Quickstart</h2>
+<h2 id="basics">1. How to define an AtlasMap data mapping?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>AtlasMap focuses more on field-by-field mapping than whole document transformation. It allows users to choose individual fields from incoming documents, and map them to fields of the outgoing document <sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnote_1" title="View footnote.">1</a>]</sup>.
+So then, what is <code>field</code> in AtlasMap? Let&#8217;s see an example with XML:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;order&gt;</span>
+  <span class="tag">&lt;orderId</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">O123</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+  <span class="tag">&lt;items&gt;</span>
+    <span class="tag">&lt;item&gt;</span>
+      <span class="tag">&lt;itemId&gt;</span>Orange<span class="tag">&lt;/itemId&gt;</span>
+      <span class="tag">&lt;quantity</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/item&gt;</span>
+    <span class="tag">&lt;item&gt;</span>
+      <span class="tag">&lt;itemId&gt;</span>Apple<span class="tag">&lt;/itemId&gt;</span>
+      <span class="tag">&lt;quantity</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">2</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/item&gt;</span>
+  <span class="tag">&lt;items&gt;</span>
+<span class="tag">&lt;/order&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this XML instance document, <code>/order/items/item[0]/itemId</code> and <code>/order/orderId/@value</code> are terminal fields. In AtlasMap, only terminal fields can be selected to be added into a mapping. Other parent elements like <code>/order</code>, <code>/order/orderId</code>, <code>/order/items/item[0]</code> are not selectable. Instead it can be expanded to see descendant fields.</p>
+</div>
+<div class="sect2">
+<h3 id="field-types">1.1. Field Types</h3>
+<div class="paragraph">
+<p>There are roughly 3 types of fields that differentiate behavior.</p>
+</div>
+<div class="sect3">
+<h4 id="terminal-field">1.1.1. Terminal field</h4>
+<div class="paragraph">
+<p>Terminal field is selectable in AtlasMap Data Mapper UI and can participate in mapping directly. Its path identifies the value in the document payload.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="parent-field">1.1.2. Parent field</h4>
+<div class="paragraph">
+<p>Also called as Complex field. Parent field cannot participate in mapping directly, but it&#8217;s expandable in UI so user can see descendant fields.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="collection-field">1.1.3. Collection field</h4>
+<div class="paragraph">
+<p>Collection field is a kind of terminal field. It&#8217;s selectable and mappable. The difference is that either the collection field itself or any of its parent fields is a collection. In an example XML above, <code>item</code> is a collection which could be multiple. Therefore <code>/order/items/item[]/itemId</code> is a collection field. In a programming term, it&#8217;s just array, List, etc. One thing to keep in mind is that, "how many items are going to be delivered?" is not decided at design time. Each transaction should be able to deliver a different number of items with same mapping definition.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="mapping-types">1.2. Mapping Types</h3>
+<div class="paragraph">
+<p>Looking from field multiplicity aspects, there are 4 types of mapping in AtlasMap.</p>
+</div>
+<div class="sect3">
+<h4 id="one-to-one">1.2.1. One to One</h4>
+<div class="paragraph">
+<p>Map from one source field to one target field.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="many-to-one">1.2.2. Many to One</h4>
+<div class="paragraph">
+<p>Map from multiple source fields to one target field. Many-to-One mapping requires one Many-to-One transformation to map multiple values into one. At this moment, we only support separating values with a delimiter. Other Many-to-One transformation will be added once (<a href="https://github.com/atlasmap/atlasmap/issues/912">#912</a>).] is fixed.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="one-to-many">1.2.3. One to Many</h4>
+<div class="paragraph">
+<p>Map from one source field to multiple target fields. One-to-Many mapping requires one One-to-Many transformation to map one value into mutiple values. At this moment, we only support combining values with a delimiter. Other One-to-Many transformation will be added once (<a href="https://github.com/atlasmap/atlasmap/issues/912">#912</a>).] is fixed.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="for-each">1.2.4. For Each</h4>
+<div class="paragraph">
+<p>Map from one source collection field to one target collection field. It iterates One-to-One mapping for each element in the collection field.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="transformation">1.3. Transformation</h3>
+<div class="paragraph">
+<p>In addition to simply mapping the source field value to target field value, AtlasMap supports transformations that apply to both source and/or target field in the mapping. Transformation is a single function to be applied to a field value, such as <code>Uppercase</code> which changes all characters of the string field value to uppercase. You can add any number of transformations to the mapped field from <code>Mapping Detail</code> pane at right side in the UI.</p>
+</div>
+<div class="paragraph">
+<p>Allowing transformations to be added for both source and target field might not immediately make sense. But let&#8217;s think about Many-to-One case, to combine <code>Street</code>, <code>City</code>, <code>State</code> into comma separated single string. If you want to uppercase only <code>State</code>, then you need to add on <code>State</code> source field. If you want to uppercase everything, then it&#8217;s easier to add just one <code>Uppercase</code> transformation on the target field as opposed to add it for each source fields. In other words we can call source field transformation as Pre-mapping, and the target field transformation as Post-mapping.</p>
+</div>
+<div class="paragraph">
+<p>Multiplicity transformations described above are special type of transformations which changes multiplicity. Multiplicity transformations can be added only when it&#8217;s One-to-Many or Many-to-One mapping.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="quickstart">2. Quickstart</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="running-atlasmap-data-mapper-ui-standalone">1.1. Running AtlasMap Data Mapper UI standalone</h3>
+<h3 id="running-atlasmap-data-mapper-ui-standalone">2.1. Running AtlasMap Data Mapper UI standalone</h3>
 <div class="paragraph">
 <p>Here is the shortest path to run standalone AtlasMap.</p>
 </div>
@@ -615,7 +731,7 @@ AtlasMap mapping definition which can process data mappings as a part of a Camel
 </div>
 </div>
 <div class="sect2">
-<h3 id="running-atlasmap-data-mapping-with-apache-camel">1.2. Running AtlasMap data mapping with Apache Camel</h3>
+<h3 id="running-atlasmap-data-mapping-with-apache-camel">2.2. Running AtlasMap data mapping with Apache Camel</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -645,10 +761,10 @@ from("direct:start")
 </div>
 </div>
 <div class="sect1">
-<h2 id="import-files-in-ui">2. Import Files in UI</h2>
+<h2 id="import-files-in-ui">3. Import Files in UI</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="import-files-to-panel">2.1. Import XML/JSON schema or instance or Java class files</h3>
+<h3 id="import-files-to-panel">3.1. Import XML/JSON schema or instance or Java class files</h3>
 <div class="paragraph">
 <p>Data mapping fundamentally involes morphing one data shape into another.  A user
 defines these shapes using XML schemas, JSON notation or by establishing a simple Java
@@ -1007,10 +1123,10 @@ In the <code>Bicycle.jar</code> example, the class package name is <code>io.paul
 </div>
 </div>
 <div class="sect1">
-<h2 id="design-mappings-in-ui">3. Design Mappings in UI</h2>
+<h2 id="design-mappings-in-ui">4. Design Mappings in UI</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="find-the-field-you-want-to-map">3.1. Find the data field that you want to map</h3>
+<h3 id="find-the-field-you-want-to-map">4.1. Find the data field that you want to map</h3>
 <div class="paragraph">
 <p>In a relatively simple integration, mapping data fields is easy
 and intuitive. In more complex integrations or in integrations that handle
@@ -1064,7 +1180,7 @@ field that you want to map to.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="map-one-source-field-to-one-target-field">3.2. Map one source field to one target field</h3>
+<h3 id="map-one-source-field-to-one-target-field">4.2. Map one source field to one target field</h3>
 <div class="paragraph">
 <p>The default mapping behavior maps one source field to one target field.
 For example, map the <code>Name</code> field to the <code>CustomerName</code> field.</p>
@@ -1170,7 +1286,7 @@ field that you want to map to and click <strong>Enter</strong>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="example-missing-unwanted-data">3.3. Example of missing or unwanted data when combining or separating fields</h3>
+<h3 id="example-missing-unwanted-data">4.3. Example of missing or unwanted data when combining or separating fields</h3>
 <div class="paragraph">
 <p>In a data mapping, you might need to identify missing or unwanted data when a source or
 target field contains compound data. For example, consider a
@@ -1248,7 +1364,7 @@ at indexes 3, 7, and 8. See <a href="#combine-multiple-source-fields-into-one-ta
 </div>
 </div>
 <div class="sect2">
-<h3 id="combine-multiple-source-fields-into-one-target-field">3.4. Combine multiple source fields into one target field</h3>
+<h3 id="combine-multiple-source-fields-into-one-target-field">4.4. Combine multiple source fields into one target field</h3>
 <div class="paragraph">
 <p>In a data mapping, you can combine multiple source fields into one
 compound target field. For example, you can map the <code>FirstName</code> and <code>LastName</code>
@@ -1368,7 +1484,7 @@ mapping in the table to view preview fields for it.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="separate-one-source-field-into-multiple-target-fields">3.5. Separate one source field into multiple target fields</h3>
+<h3 id="separate-one-source-field-into-multiple-target-fields">4.5. Separate one source field into multiple target fields</h3>
 <div class="paragraph">
 <p>In a data mapping, you can separate a compound source field into multiple
 target fields. For  example, map the <code>Name</code> field to the <code>FirstName</code> and
@@ -1481,7 +1597,7 @@ mapping in the table to view preview fields for it.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="transform-target-data">3.6. Transform source or target data</h3>
+<h3 id="transform-target-data">4.6. Transform source or target data</h3>
 <div class="paragraph">
 <p>In the data mapper, after you define a mapping, you can transform
 any field in the mapping.
@@ -1644,7 +1760,7 @@ your cursor in the <strong>Preview Results</strong> field in the Target panel.  
 </div>
 </div>
 <div class="sect2">
-<h3 id="applying-conditions-to-mappings">3.7. Applying conditions to mappings</h3>
+<h3 id="applying-conditions-to-mappings">4.7. Applying conditions to mappings</h3>
 <div class="paragraph">
 <p>In some integrations, it is helpful to add conditional
 processing to a mapping. For example, suppose that you are
@@ -1962,7 +2078,7 @@ Equal</p></td>
 </table>
 </div>
 <div class="sect2">
-<h3 id="view-mappings">3.8. View the mappings</h3>
+<h3 id="view-mappings">4.8. View the mappings</h3>
 <div class="paragraph">
 <p>While you are using the data mapper UI, you can view the mappings
 that are already defined. This lets you check whether the
@@ -1988,7 +2104,7 @@ target fields, click <span class="image"><img src="images/grid.png" alt="grid" t
 </div>
 </div>
 <div class="sect2">
-<h3 id="available-transformations">3.9. Descriptions of available transformations</h3>
+<h3 id="available-transformations">4.9. Descriptions of available transformations</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2396,10 +2512,10 @@ length of the string before the supplied <code>match</code> string.</p></td>
 </div>
 </div>
 <div class="sect1">
-<h2 id="export-files-in-ui">4. Export Files in UI</h2>
+<h2 id="export-files-in-ui">5. Export Files in UI</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="export-files">4.1. Export AtlasMap Data Mapper Catalog File</h3>
+<h3 id="export-files">5.1. Export AtlasMap Data Mapper Catalog File</h3>
 <div class="paragraph">
 <p>Once all required schema files and JARs have been imported and all mappings
 have been defined you can save your work using the <strong>export</strong> button.  The export
@@ -2426,10 +2542,10 @@ local <code>Downloads</code> directory.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="reset-files-in-ui">5. Reset Files in UI</h2>
+<h2 id="reset-files-in-ui">6. Reset Files in UI</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="reset-files">5.1. Reset the AtlasMap Data Mapper</h3>
+<h3 id="reset-files">6.1. Reset the AtlasMap Data Mapper</h3>
 <div class="paragraph">
 <p>Upon initial installation of AtlasMap the user is presented with a blank canvas.
 No mappings are possible until the user imports files into the Source and Target panels.
@@ -2463,10 +2579,16 @@ files.</p>
 </div>
 </div>
 </div>
+<div id="footnotes">
+<hr>
+<div class="footnote" id="_footnote_1">
+<a href="#_footnoteref_1">1</a>. It doesn&#8217;t mean we won&#8217;t address whole document mapping at all. For example we have a plan to support bulk mapping by detecting the same object structure at both sides of documents (<a href="https://github.com/atlasmap/atlasmap/issues/86">#86</a>).
+</div>
+</div>
 <div id="footer">
 <div id="footer-text">
 Version 1.42.0-SNAPSHOT<br>
-Last updated 2019-07-24 20:35:21 UTC
+Last updated 2019-07-25 16:47:40 UTC
 </div>
 </div>
 </body>
