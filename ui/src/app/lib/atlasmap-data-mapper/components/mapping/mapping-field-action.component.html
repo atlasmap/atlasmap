@@ -6,7 +6,7 @@
         <div class="clear"></div>
         <select (change)="configSelectionChanged($event);" [ngModel]="action.name" *ngIf="!action.isSeparateOrCombineMode">
           <option *ngFor="let actionConfig of getActionConfigs()" [attr.actionIndex]="actionIndex"
-                          [attr.value]="actionConfig.name">{{ getLabel(actionConfig.name) }}</option>
+                          [attr.value]="actionConfig.name" style="color: black">{{ getLabel(actionConfig.name) }}</option>
         </select>
         <div style="float:right; margin-right: 5px;" *ngIf="!action.isSeparateOrCombineMode">
           <i class="glyphicon glyphicon-remove" aria-hidden="true" (click)="removeAction(action)" style="font-size:14px"

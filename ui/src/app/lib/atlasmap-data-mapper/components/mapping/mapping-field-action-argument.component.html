@@ -5,7 +5,7 @@
     <label>{{ getLabel(argConfig.name) }}</label>
     <select (change)="actionConfigParamSelectionChanged($event)" [ngModel]="getActionConfigParamVDefault(argConfig, actionIndex, argValIndex)">
       <option *ngFor="let actionConfigParamVal of getActionConfigParamValues(argConfig)" [attr.argValIndex]="argValIndex"
-              [attr.actionIndex]="actionIndex" [attr.value]="actionConfigParamVal">{{ actionConfigParamVal }}
+              [attr.actionIndex]="actionIndex" [attr.value]="actionConfigParamVal" style="color: black;">{{ actionConfigParamVal }}
       </option>
     </select>
   </div>

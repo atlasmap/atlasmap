@@ -5,7 +5,7 @@
     (dragenter)="dragEnterLeave($event, true)" (dragleave)="dragEnterLeave($event, false)" (dragover)="allowDrop($event)">
 
     <div class="searchBox" *ngIf="displayFieldSearchBox()" >
-      <input type="text" #searchFilterBox id="{{inputId}}" style="border-color: #4d5258;"
+      <input type="text" #searchFilterBox id="{{inputId}}" style="border-color: #4d5258; color: green"
         (keyup)="updateSearchFilter(searchFilterBox.value)" [typeahead]="dataSource" typeaheadWaitMs="200"
         typeaheadOptionField="displayName" [typeaheadItemTemplate]="typeaheadTemplate" [ngModel]="searchFilter"
         (typeaheadOnSelect)="selectionChanged($event)" [placeholder]="getSearchPlaceholder()">

@@ -9,7 +9,7 @@
     <label tooltip="Enter a separator delimiter character" >Separator:
       <select class="combobox" name="separator" id="separator" [ngModel]="mapping.transition.delimiter">
         <ng-container *ngFor="let delimiter of delimiters" id="delimiter">
-          <option *ngIf="modeIsSupported(delimiter)" value="{{ delimiter.delimiter }}">
+          <option *ngIf="modeIsSupported(delimiter)" value="{{ delimiter.delimiter }}" style="color: black;">
             <label *ngIf="isUserDelimiter(delimiter); else standardDelimiter">{{ mapping.transition.userDelimiter }}</label>
             <ng-template #standardDelimiter>{{ delimiter.prettyName }}</ng-template>
           </option>
