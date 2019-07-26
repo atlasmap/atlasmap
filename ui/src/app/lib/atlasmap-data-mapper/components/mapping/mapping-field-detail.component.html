@@ -7,6 +7,7 @@
 
 <!-- our template for tooltip popover -->
 <ng-template #tolTemplate>
+
 <div class="fieldDetailTooltip">
   <label class="parentObjectName" *ngIf="displayParentObject()">
     <i [ngClass]="sourceIconCSSClass"></i> {{ parentObjectName }}
@@ -19,47 +20,44 @@
 
 <div class="fieldDetail" style="white-space: nowrap;" *ngIf="mappedField">
 
-  <label class="parentObjectName" style="float: left;" *ngIf="displayParentObject()">
-    <i [ngClass]="sourceIconCSSClass"></i> {{ parentObjectName }} <span
-      class="pficon pficon-info" [tooltip]="tolTemplate" placement="left" style=" padding-left: 5px;"></span>
-  </label>
+  <label class="parentObjectName" *ngIf="displayParentObject()">
 
-  <div class="clear"></div>
+    <!-- icon -->
+    <span
+      class="pficon pficon-info" [tooltip]="tolTemplate" placement="right">
+    </span>
 
-  <div>
-  <label class="label" style="float: left; text-align: left; width: 50%;">
-    {{ mappedField.field.name }}
-  </label>
+    <!-- field name -->
+    <label class="label">
+      {{ mappedField.field.name }}
+    </label>
 
-  <!-- Index: -->
-  <label style="display: inline-block; text-align: right; margin-right: 10px; font-style: italic;"
-    tooltip="To change the index ordinal value, drag and drop to the desired position."
-    *ngIf="displayIndex()">Index: </label>
+    <!-- Index: -->
+    <div class="index-container" style="float:right">
+      <label tooltip="To change the index ordinal value, drag and drop to the desired position."
+        *ngIf="displayIndex()">Index:</label>
 
-  <div style="display: inline-block; text-align: right; font-size: 100%; margin-right: 5px; font-weight: bold; color: green; width: 35px;"
-	*ngIf="displayIndex()">
-    <div *ngIf="mappedField.isPadField(); else textInput">
-      <label style="font-size: 110%; color: dark-gray;
-        text-align: right;"
-        tooltip="This pad field has been automatically created to represent indexing gaps.">{{ mapping.getIndexForMappedField(mappedField) }}</label>
+      <div class="index-value" *ngIf="displayIndex()">
+        <div *ngIf="mappedField.isPadField(); else textInput">
+          <label style="color: dark-gray; margin-bottom: 0px; font-style: normal;"
+            tooltip="This pad field has been automatically created to represent indexing gaps.">{{ mapping.getIndexForMappedField(mappedField) }}</label>
+        </div>
+        <ng-template #textInput>
+          <input type="text" id="{{inputId}}" placement="top" [ngModel]="mapping.getIndexForMappedField(mappedField)"
+            typeaheadWaitMs="400" (change)="indexSelectionChanged($event, mappedField)"
+            tooltip="You may edit the index for this element directly.  Placeholders may be automatically inserted to account for any gaps in the indexing.">
+        </ng-template>
+      </div>
+      <div style="float: left;">
+        <i class="pficon pficon-delete link" aria-hidden="true" (click)="removeMappedField(mappedField)"
+          tooltip="Remove mapping element" placement="left"></i>
+      </div>
     </div>
-    <ng-template #textInput>
-      <input type="text" id="{{inputId}}" placement="top"
-	    style="font-size: 110%; font-weight: bold; color: green; text-align: right; height: 20px"
-        [ngModel]="mapping.getIndexForMappedField(mappedField)" typeaheadWaitMs="400"
-        (change)="indexSelectionChanged($event, mappedField)"
-        tooltip="You may edit the index for this element directly.  Placeholders may be automatically inserted to account for any gaps in the indexing.">
-    </ng-template>
-  </div>
-
-  <div class="pull-right" style="margin-right: 5px;">
-    <i class="pficon pficon-delete link" aria-hidden="true" (click)="removeMappedField(mappedField)"
-      tooltip="Remove mapping element" placement="left"></i>
-  </div>
-  </div>
+  </label>
 
   <div class="clear"></div>
 
+  <!-- Add Transformation -->
   <div style="width: 100%;" *ngIf="!mappedField.isPadField()">
     <div style="float: left; padding-right: 5px; padding-top: 10px" *ngIf="isTransformCapable()">
       <i class="fa fa-bolt" aria-hidden="true" (click)="addTransformation()"

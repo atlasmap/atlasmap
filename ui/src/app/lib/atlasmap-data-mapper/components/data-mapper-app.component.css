@@ -203,6 +203,14 @@
 .fieldDetailTooltip LABEL.parentObjectName I { vertical-align:baseline; }
 .fieldMappingDetail .fieldDetail INPUT { padding:2px 2px; width:calc(100%);
     color: #4d5258; box-shadow: inset 0 2px 2px 0 rgba(0, 0, 0, 0.08); border:solid 1px #bbbbbb; }
+.fieldMappingDetail .fieldDetail LABEL.parentObjectName { float: left; width: 100%; margin-bottom: 0px; }
+.fieldMappingDetail .fieldDetail LABEL { text-align: left; width: 70%; color: #004d00; }
+.fieldMappingDetail .fieldDetail .index-container LABEL { display: inline-block; text-align: right; margin-right: 10px;
+    font-style: italic; width: 30px; float: left; margin-bottom: 0px; }
+.fieldMappingDetail .fieldDetail .index-container .index-value { display: inline-block; text-align: right; font-size: 110%;
+  margin-right: 15px; font-weight: bold; font-style: normal; float: left; color: green; width: 20px; }
+.fieldMappingDetail .fieldDetail .index-container .index-value INPUT { font-weight: bold; color: green;
+  height: 20px; text-align: right; }
 .fieldMappingDetail .fieldDetail .dropdown { width:calc(100% - 71px);}
 .fieldMappingDetail .fieldDetail .dropdown-menu { padding:0px; width:100%; }
 .fieldMappingDetail .fieldDetail .dropdown-menu LI A { margin:0px; }
@@ -234,9 +242,11 @@
 .DataMapperUI .alert { font-size:12px; border: 0px transparent;}
 .DataMapperUI .alert-info { color: green; }
 
-.DataMapperUI .mappingFieldAction .form-group LABEL { float:left; clear:left; margin-right: 10px; width:20%; text-align:right; }
-.DataMapperUI .mappingFieldAction .form-group SELECT { float:left; clear:left; width:calc(100% - 30px); }
-.DataMapperUI .mappingFieldAction .form-group INPUT { float:left; width:50%; text-align:right; }
+.DataMapperUI .mappingFieldAction .form-group LABEL { float:left; clear:left; margin-right: 10px; width:20%;
+  text-align:right; }
+.DataMapperUI .mappingFieldAction .form-group SELECT { float: left; clear: left; width:calc(100% - 30px);
+  color: green; font-weight: bold; }
+.DataMapperUI .mappingFieldAction .form-group INPUT { float: left; width: 50%; text-align: right; color: green; }
 .DataMapperUI .mappingFieldAction .check-icon-disabled { font-size:14px; color: lightgray }
 .DataMapperUI .mappingFieldAction .check-icon-enabled { font-size:14px; color: green }
 .fieldMappingDetail .mappingFieldAction .linkContainer { padding-right:6px; }
@@ -255,6 +265,7 @@
 .MappingFieldSection .fieldDetailTooltip LABEL { color:white; }
 
 .DataMapperUI .TransitionSelection LABEL { width:100%; }
+.DataMapperUI .TransitionSelection .combobox { color: green; font-weight: bold; }
 .DataMapperUI .TransitionSelection .enumSection LABEL { width:calc(100% - 25px); margin-bottom:0; }
 .DataMapperUI .TransitionSelection SELECT { float: right; display: block; width: calc(100% - 65px); }
 
