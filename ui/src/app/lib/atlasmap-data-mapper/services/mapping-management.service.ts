@@ -110,7 +110,8 @@ export class MappingManagementService {
           if (this.cfg.isTraceEnabled()) {
             this.cfg.logger.trace(`Mapping Service Response: ${JSON.stringify(d)}`);
           }
-          MappingSerializer.deserializeMappingServiceJSON(d, mappingDefinition, this.cfg);
+          this.cfg.mappings = mappingDefinition;
+          MappingSerializer.deserializeMappingServiceJSON(d, this.cfg);
         }
         this.cfg.mappings.getAllMappings(true).forEach(m => this.updateTransition(m));
         await this.notifyMappingUpdated();

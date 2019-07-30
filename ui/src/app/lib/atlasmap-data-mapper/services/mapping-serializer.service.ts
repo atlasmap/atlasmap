@@ -106,12 +106,15 @@ export class MappingSerializer {
     return jsonMapping;
   }
 
-  static deserializeMappingServiceJSON(json: any, mappingDefinition: MappingDefinition, cfg: ConfigModel): void {
-    mappingDefinition.name = this.deserializeAtlasMappingName(json);
-    mappingDefinition.parsedDocs = mappingDefinition.parsedDocs.concat(MappingSerializer.deserializeDocs(json, mappingDefinition));
-    mappingDefinition.mappings = mappingDefinition.mappings.concat(MappingSerializer.deserializeMappings(json, cfg));
+  static deserializeMappingServiceJSON(json: any, cfg: ConfigModel): void {
+    if (!cfg.mappings) {
+      cfg.mappings = new MappingDefinition;
+    }
+    cfg.mappings.name = this.deserializeAtlasMappingName(json);
+    cfg.mappings.parsedDocs = cfg.mappings.parsedDocs.concat(MappingSerializer.deserializeDocs(json, cfg.mappings));
+    cfg.mappings.mappings = cfg.mappings.mappings.concat(MappingSerializer.deserializeMappings(json, cfg));
     for (const lookupTable of MappingSerializer.deserializeLookupTables(json)) {
-      mappingDefinition.addTable(lookupTable);
+      cfg.mappings.addTable(lookupTable);
     }
     for (const field of MappingSerializer.deserializeConstants(json)) {
       cfg.constantDoc.addField(field);
