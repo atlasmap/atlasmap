@@ -387,14 +387,12 @@ export class MappingManagementService {
    *
    * @param mappingModel
    */
-  removeMapping(mappingModel: MappingModel): Promise<boolean> {
-    return new Promise<boolean>((resolve) => {
+  async removeMapping(mappingModel: MappingModel): Promise<boolean> {
+    return new Promise<boolean>( async(resolve) => {
       const mappingWasRemoved: boolean = this.cfg.mappings.removeMapping(mappingModel);
       if (mappingWasRemoved) {
-        const saveHandler: Function = (async() => {
-          this.deselectMapping();
-          await this.saveCurrentMapping();
-        });
+        this.deselectMapping();
+        await this.saveCurrentMapping();
       } else {
         this.deselectMapping();
       }
