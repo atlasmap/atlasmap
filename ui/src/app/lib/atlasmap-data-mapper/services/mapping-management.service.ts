@@ -576,9 +576,11 @@ export class MappingManagementService {
     }
 
     const sourceMappedFields = mapping.getMappedFields(true);
-    const sourceMappedCollection = (mapping.isFullyMapped() && sourceMappedFields[0].field && sourceMappedFields[0].field.isInCollection());
+    const sourceMappedCollection = (mapping.isFullyMapped() && sourceMappedFields[0].field
+        && sourceMappedFields[0].field.isInCollection());
     const targetMappedFields = mapping.getMappedFields(false);
-    const targetMappedCollection = (targetMappedFields[0].field && targetMappedFields[0].field.isInCollection());
+    const targetMappedCollection = (mapping.isFullyMapped() && targetMappedFields[0].field
+        && targetMappedFields[0].field.isInCollection());
 
     if (sourceMappedCollection && targetMappedCollection) {
       mapping.transition.mode = TransitionMode.FOR_EACH;
