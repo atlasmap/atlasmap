@@ -384,6 +384,11 @@ export class MappingSerializer {
   }
 
   static deserializeMappingServiceJSON(json: any, mappingDefinition: MappingDefinition, cfg: ConfigModel): void {
+
+    // ref https://github.com/atlasmap/atlasmap/issues/1142
+    if (!cfg.mappings) {
+      cfg.mappings = mappingDefinition ? mappingDefinition : new MappingDefinition;
+    }
     if (json && json.AtlasMapping && json.AtlasMapping.name) {
       mappingDefinition.name = json.AtlasMapping.name;
     }

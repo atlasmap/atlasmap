@@ -552,79 +552,84 @@ export class MappingManagementService {
       field.collapsed = !field.collapsed;
       return;
     }
-    let fieldAdded = false;
+    let addField = false;
+    let removeField = false;
     let mapping: MappingModel = this.cfg.mappings.activeMapping;
-    let fieldRemoved = false;
 
-    if (mapping != null && mapping.hasMappedFields(field.isSource())) {
+    // Check compound selection and active mapping status to determine the action
+    if (mapping != null) {
+      if (mapping.hasMappedFields(field.isSource())) {
 
-      // If the user has performed a compound selection (ctrl/cmd-m1) of a previously unselected field
-      // then add it to the active mapping; otherwise remove it.
-      if (compoundSelection) {
-          if (mapping.isFieldMapped(field, field.isSource())) {
-            this.removeActiveMappingField(field, compoundSelection);
-            fieldRemoved = true;
+          // If the user has performed a compound selection (ctrl/cmd-m1) of a previously unselected field
+          // then add it to the active mapping; otherwise remove it.
+          if (compoundSelection) {
+              if (mapping.isFieldMapped(field, field.isSource())) {
+                removeField = true;
+              } else {
+                addField = true;
+              }
           } else {
-            this.addActiveMappingField(field);
-            fieldAdded = true;
+            if (!mapping.isFieldMapped(field, field.isSource())) {
+              if (!mapping.hasFullyMappedPair()) {
+                this.cfg.mappings.removeMapping(mapping);
+                this.deselectMapping();
+              }
+              mapping = null;
+            }
           }
-      } else {
-        mapping = null;
+        } else {
+          addField = true;
+        }
       }
-    }
 
-    if ((mapping == null) || (this.cfg.mappings.activeMapping && this.cfg.mappings.activeMapping.brandNewMapping)) {
+    // Select other existing mapping if selected field participates, or create a new one
+    if (mapping == null) {
       const mappingsForField: MappingModel[] = this.cfg.mappings.findMappingsForField(field);
 
       if (mappingsForField && mappingsForField.length === 1) {
         mapping = mappingsForField[0];
-        this.cfg.mappings.activeMapping = mapping;
+        this.selectMapping(mapping);
 
       // Source fields may be part of multiple mappings - trigger mapping required source observable thread.
       } else if (mappingsForField && mappingsForField.length > 1) {
         this.mappingSelectionRequiredSource.next(field);
         return;
-      }
-
-      if (mapping == null) {
-        this.addNewMapping(field, compoundSelection);
-        mapping = this.cfg.mappings.activeMapping;
-        fieldAdded = true;
+      } else {
+        mapping = new MappingModel();
+        this.selectMapping(mapping);
+        addField = true;
       }
     }
 
-    if (this.cfg.mappings.activeMapping && !this.cfg.mappings.activeMapping.hasFullyMappedPair()) {
-      this.addNewMapping(field, compoundSelection);
-      fieldAdded = true;
-    }
-
-    if (!fieldAdded && !fieldRemoved) {
+    if (!addField && !removeField) {
       this.selectMapping(mapping);
+      this.validateMappings();
       return;
     }
-
-    // Check to see if the field is a valid selection for this mapping
-    const exclusionReason: string = mapping.getFieldSelectionExclusionReason(field);
-    if (exclusionReason != null) {
-      this.cfg.errorService.mappingError('The field \'' + field.name + '\' cannot be selected, ' + exclusionReason + '.', null);
-      return;
-    }
-
-    mapping.brandNewMapping = false;
 
     const latestFieldPair: FieldMappingPair = mapping.getCurrentFieldMapping();
+    if (addField) {
+      const exclusionReason: string = mapping.getFieldSelectionExclusionReason(field);
+      if (exclusionReason != null) {
+        this.cfg.errorService.mappingError('The field \'' + field.name + '\' cannot be selected, ' + exclusionReason + '.', null);
+        return;
+      }
+      latestFieldPair.addField(field, field.isSource(), false);
+    }
+    mapping.brandNewMapping = false;
+
     if (latestFieldPair != null) {
       const lastMappedField: MappedField = latestFieldPair.getLastMappedField(field.isSource());
       if (lastMappedField != null && lastMappedField.isNoneField()) {
         lastMappedField.field = field;
       }
-      if (!fieldRemoved) {
+      if (!removeField) {
         if (compoundSelection || this.hasMultipleMappings(latestFieldPair)) {
           this.transitionMode(latestFieldPair, field);
         }
-        latestFieldPair.updateTransition(field.isSource(), compoundSelection, fieldRemoved, position, offset);
+        latestFieldPair.updateTransition(field.isSource(), compoundSelection, removeField, position, offset);
         this.selectMapping(mapping);
-        this.validateMappings();
+        this.saveCurrentMapping();
       }
     }
   }
