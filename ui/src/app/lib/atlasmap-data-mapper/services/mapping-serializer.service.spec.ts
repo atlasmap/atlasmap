@@ -173,15 +173,13 @@ describe('MappingSerializer', () => {
       fieldActionService.cfg = cfg;
       cfg.fieldActionService = fieldActionService;
       const mappingJson = JSON.parse(jasmine.getFixtures().read('atlasmapping-test.json'));
-      const mappingDefinition = new MappingDefinition();
-      MappingSerializer.deserializeMappingServiceJSON(mappingJson, mappingDefinition, cfg);
-      cfg.mappings = mappingDefinition;
-      mappingDefinition.updateMappingsFromDocuments(cfg);
-      expect(mappingDefinition.mappings.length).toEqual(Object.keys(mappingJson.AtlasMapping.mappings.mapping).length);
+      MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
+      cfg.mappings.updateMappingsFromDocuments(cfg);
+      expect(cfg.mappings.mappings.length).toEqual(Object.keys(mappingJson.AtlasMapping.mappings.mapping).length);
 
       const serialized = MappingSerializer.serializeMappings(cfg);
       // TODO constants, properties and field actions are not restored properly... need to investigate
       console.log(JSON.stringify(serialized, null, 2));
-      expect(Object.keys(serialized.AtlasMapping.mappings.mapping).length).toEqual(mappingDefinition.mappings.length);
+      expect(Object.keys(serialized.AtlasMapping.mappings.mapping).length).toEqual(cfg.mappings.mappings.length);
     }));
 });
