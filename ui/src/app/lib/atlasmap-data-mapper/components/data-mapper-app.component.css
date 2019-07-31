@@ -508,10 +508,13 @@
 
 /* conditional mapping */
 .DataMapperUI .expressionMarkup {
-  width:100%;
   min-width: 400px;
   height:29px;
   display: inline-block;
+  word-wrap: normal;
+  overflow-wrap: normal;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .DataMapperUI .expressionFieldLabel {
