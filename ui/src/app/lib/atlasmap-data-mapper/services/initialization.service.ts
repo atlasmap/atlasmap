@@ -123,6 +123,8 @@ export class InitializationService {
             }
           });
         } else {
+          this.logger.trace(`Fetching user document: name=${docdef.name}, id=${docdef.id},\
+isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionType}`);
           this.cfg.documentService.fetchDocument(docdef, this.cfg.initCfg.classPath).toPromise()
           .then(async(doc: DocumentDefinition) => {
 
@@ -133,6 +135,8 @@ export class InitializationService {
                 DataMapperUtil.removeItemFromArray(docdef, this.cfg.targetDocs);
               }
             }
+            this.logger.trace(`Fetched user document: name=${docdef.name}, id=${docdef.id},\
+isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionType}`);
             this.updateStatus();
           })
           .catch((error: any) => {
