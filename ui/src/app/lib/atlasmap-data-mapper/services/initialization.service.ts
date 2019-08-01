@@ -234,9 +234,9 @@ export class InitializationService {
             await this.fetchMappings(this.cfg.mappingFiles);
           } else {
             this.cfg.fileService.findMappingFiles('UI').toPromise()
-              .then(async(files: string[]) => {
+              .then( async(files: string[]) => {
+                // It's okay if no mapping files are found - resolve false so the caller will know.
                 if (!await this.fetchMappings(files)) {
-                  this.handleError('Unable to initialize mapping file.', null);
                   resolve(false);
                 }
               },
