@@ -176,13 +176,6 @@ export class InitializationService {
         return;
       }
 
-      // load field actions - do this even with no documents so the default field actions are loaded.
-      await this.cfg.fieldActionService.fetchFieldActions()
-      .catch((error: any) => {
-        this.handleError(error, null);
-        return;
-      });
-
       // load documents
       if (!this.cfg.isClassPathResolutionNeeded()) {
         this.fetchDocuments();
@@ -201,7 +194,7 @@ export class InitializationService {
             } else {
               this.handleError('Could not load Maven class path: ' + error.status + ' ' + error.statusText, error);
             }
-            resolve(false);
+            reject(error);
           });
       }
 
@@ -213,6 +206,13 @@ export class InitializationService {
           if (this.cfg.mappings === null) {
             this.cfg.mappings = new MappingDefinition();
           }
+
+          // load field actions - do this even with no documents so the default field actions are loaded.
+          await this.cfg.fieldActionService.fetchFieldActions()
+          .catch((error: any) => {
+            this.handleError('Failure to load field actions on initialization.', error);
+            return;
+          });
           this.updateStatus();
           resolve(true);
           return;
@@ -220,20 +220,30 @@ export class InitializationService {
 
         await this.processMappingsCatalogFiles(catalog);
 
+        // load both default and custom field actions
+        await this.cfg.fieldActionService.fetchFieldActions()
+        .catch((error: any) => {
+          this.handleError('Failure to load field actions on initialization.', error);
+          return;
+        });
+
         // load mappings
         if (this.cfg.mappings == null) {
           this.cfg.mappings = new MappingDefinition();
           if (this.cfg.mappingFiles.length > 0) {
-            await this.initMappings(this.cfg.mappingFiles);
+            await this.fetchMappings(this.cfg.mappingFiles);
           } else {
             this.cfg.fileService.findMappingFiles('UI').toPromise()
               .then(async(files: string[]) => {
-                await this.initMappings(files);
+                if (!await this.fetchMappings(files)) {
+                  this.handleError('Unable to initialize mapping file.', null);
+                  resolve(false);
+                }
               },
               (error: any) => {
                 if (error.status === 0) {
                   this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
-                  resolve(false);
+                  reject(error);
                 }
               }
             );
@@ -242,18 +252,6 @@ export class InitializationService {
         this.updateStatus();
         resolve(true);
       });
-      resolve(true);
-    });
-  }
-
-  /**
-   * Fetch and initialize user mappings from the runtime service.
-   *
-   * @param mappingFiles
-   */
-  async initMappings(mappingFiles: string[]): Promise<boolean> {
-    return new Promise<boolean>( async(resolve, reject) => {
-      await this.fetchMappings(mappingFiles);
       resolve(true);
     });
   }
@@ -305,11 +303,11 @@ export class InitializationService {
               'Unable to update the mappings file to the AtlasMap design runtime service.  ' +
                  error.status + ' ' + error.statusText, error);
           }
-          resolve(false);
+          reject(error);
         });
       } catch (error) {
         this.cfg.errorService.mappingError('Unable to decompress the aggregate mappings catalog buffer.\n', error);
-        resolve(false);
+        reject(error);
       }
     });
   }
@@ -321,22 +319,22 @@ export class InitializationService {
    */
   async updateCatalog(compressedCatalog: Uint8Array): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-        // Update .../target/mappings/adm-catalog-files.gz
-        const fileContent: Blob = new Blob([compressedCatalog], {type: 'application/octet-stream'});
-        this.cfg.fileService.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/0').toPromise()
-          .then(async(result: boolean) => {
-          resolve(true);
-        }).catch((error: any) => {
-          if (error.status === 0) {
-            this.cfg.errorService.mappingError(
-              'Fatal network error: Unable to connect to the AtlasMap design runtime service.', error);
-          } else {
-            this.cfg.errorService.mappingError(
-              'Unable to update the catalog mappings file to the AtlasMap design runtime service.  ' +
-                error.status + ' ' + error.statusText, error);
-            resolve(false);
-          }
-        });
+      // Update .../target/mappings/adm-catalog-files.gz
+      const fileContent: Blob = new Blob([compressedCatalog], {type: 'application/octet-stream'});
+      this.cfg.fileService.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/0').toPromise()
+        .then(async(result: boolean) => {
+        resolve(true);
+      }).catch((error: any) => {
+        if (error.status === 0) {
+          this.cfg.errorService.mappingError(
+            'Fatal network error: Unable to connect to the AtlasMap design runtime service.', error);
+        } else {
+          this.cfg.errorService.mappingError(
+            'Unable to update the catalog mappings file to the AtlasMap design runtime service.  ' +
+              error.status + ' ' + error.statusText, error);
+          resolve(false);
+        }
+      });
     });
   }
 
@@ -366,25 +364,31 @@ export class InitializationService {
             // UI file.
             this.cfg.fileService.findMappingFiles('UI').toPromise()
               .then( async(files: string[]) => {
+
+              await this.updateCatalog(compressedCatalog);
+              await this.cfg.fieldActionService.fetchFieldActions()
+              .catch((error: any) => {
+                this.handleError('Failure to load field actions.', error);
+              });
               if (catalogMappingsName !== files[0]) {
                 await this.updateMappings(mInfo);
               }
-              await this.updateCatalog(compressedCatalog);
               resolve(true);
             },
             (error: any) => {
               if (error.status === 0) {
                 this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
               }
-              resolve(false);
+              reject(error);
             }
           );
+        } else {
+          resolve(true);
         }
       } catch (error) {
         this.cfg.errorService.mappingError('Unable to decompress the aggregate mappings catalog buffer.\n', error);
-        resolve(false);
+        reject(error);
       }
-      resolve(true);
     });
   }
 
@@ -477,7 +481,7 @@ export class InitializationService {
         } else {
           this.handleError('Could not load mapping definitions.', error);
         }
-        resolve(false);
+        reject(error);
       });
     });
   }

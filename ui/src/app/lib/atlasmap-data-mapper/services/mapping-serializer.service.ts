@@ -504,6 +504,9 @@ export class MappingSerializer {
 
   private static deserializeDocs(json: any, mappingDefinition: MappingDefinition): DocumentDefinition[] {
     const docs: DocumentDefinition[] = [];
+    if (!json.AtlasMapping) {
+      return;
+    }
     for (const docRef of json.AtlasMapping.dataSource) {
       const doc: DocumentDefinition = new DocumentDefinition();
       doc.isSource = (docRef.dataSourceType === 'SOURCE');

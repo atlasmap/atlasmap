@@ -67,14 +67,13 @@ export class FieldActionService {
         .then((fetchedActionConfigs: FieldActionDefinition[]) => {
           this.actionDefinitions = fetchedActionConfigs;
           this.isInitialized = true;
-          resolve(true);
+          resolve(this.actionDefinitions.length > 0);
         }).catch((error: any) => {
           if (error.status === 0) {
             reject(`Fatal network error: Could not connect to AtlasMap design runtime service. (${error})`);
           } else {
             reject(`Could not load field action configs: (${error.message})`);
           }
-          resolve(false);
         });
     });
   }
