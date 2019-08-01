@@ -79,6 +79,9 @@ export class ErrorHandlerService {
 
   private addError(message: string, level: ErrorLevel, error: any): void {
     if (this.arrayDoesNotContainError(message)) {
+      if (error && error.message) {
+        message += ('\n' + error.message);
+      }
       const e = new ErrorInfo(message, level, error);
       this.cfg.errors.push(e);
     }

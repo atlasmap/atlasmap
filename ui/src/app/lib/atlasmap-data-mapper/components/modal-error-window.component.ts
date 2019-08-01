@@ -110,13 +110,13 @@ export class ModalErrorWindowComponent implements OnInit {
 
   dismissAll(): void {
     for (const e of this.getErrors()) {
-      if (this.cfg.mappings.activeMapping) {
+      if (this.cfg.mappings && this.cfg.mappings.activeMapping) {
         this.cfg.mappings.activeMapping.removeValidationError(e.identifier);
       }
       this.cfg.errorService.removeError(e.identifier);
     }
     for (const w of this.getWarnings()) {
-      if (this.cfg.mappings.activeMapping) {
+      if (this.cfg.mappings && this.cfg.mappings.activeMapping) {
         this.cfg.mappings.activeMapping.removeValidationError(w.identifier);
       }
       this.cfg.errorService.removeError(w.identifier);
