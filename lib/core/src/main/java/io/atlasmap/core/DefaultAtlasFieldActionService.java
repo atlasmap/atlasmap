@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -48,6 +51,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasFieldActionService.class);
     private List<ActionProcessor> actionProcessors = new ArrayList<>();
+    private ReadWriteLock actionProcessorsLock = new ReentrantReadWriteLock();
     private AtlasConversionService conversionService = null;
     private ActionResolver actionResolver = null;
 
@@ -66,9 +70,15 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
     }
 
     public void init(ClassLoader classLoader) {
-        actionProcessors.clear();
-        this.actionResolver = ActionResolver.getInstance(classLoader);
-        actionProcessors.addAll(loadFieldActions(classLoader));
+        Lock writeLock = actionProcessorsLock.writeLock();
+        try {
+            writeLock.lock();
+            actionProcessors.clear();
+            this.actionResolver = ActionResolver.getInstance(classLoader);
+            actionProcessors.addAll(loadFieldActions(classLoader));
+        } finally {
+            writeLock.unlock();
+        }
     }
 
     public List<ActionProcessor> loadFieldActions() {
@@ -417,7 +427,13 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
     @Override
     public List<ActionDetail> listActionDetails() {
-        return actionProcessors.stream().map(x->x.getActionDetail()).collect(Collectors.toList());
+        Lock readLock = this.actionProcessorsLock.readLock();
+        try {
+            readLock.lock();
+            return actionProcessors.stream().map(x->x.getActionDetail()).collect(Collectors.toList());
+        } finally {
+            readLock.unlock();
+        }
     }
 
     /*
@@ -467,17 +483,23 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
             }
         }
         List<ActionProcessor> matches = new ArrayList<>();
-        for (ActionProcessor processor : actionProcessors) {
-            ActionDetail detail = processor.getActionDetail();
-            if (customAction != null) {
-                if (customAction.getClassName().equals(detail.getClassName())
-                    && customAction.getMethodName().equals(detail.getMethod())) {
+        Lock readLock = actionProcessorsLock.readLock();
+        try {
+            readLock.lock();
+            for (ActionProcessor processor : actionProcessors) {
+                ActionDetail detail = processor.getActionDetail();
+                if (customAction != null) {
+                    if (customAction.getClassName().equals(detail.getClassName())
+                        && customAction.getMethodName().equals(detail.getMethod())) {
+                        matches.add(processor);
+                        break;
+                    }
+                } else if (processor.getActionClass() == action.getClass()) {
                     matches.add(processor);
-                    break;
                 }
-            } else if (processor.getActionClass() == action.getClass()) {
-                matches.add(processor);
             }
+        } finally {
+            readLock.unlock();
         }
 
         switch (matches.size()) {
