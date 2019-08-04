@@ -20,7 +20,7 @@
   <parent>
     <groupId>io.atlasmap</groupId>
     <artifactId>atlas-itests-parent</artifactId>
-    <version>1.42.0-SNAPSHOT</version>
+    <version>1.42.0.fuse-750003</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
