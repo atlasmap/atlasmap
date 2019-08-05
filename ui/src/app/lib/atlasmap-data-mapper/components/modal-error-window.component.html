@@ -10,6 +10,11 @@
             </span>
           </a>
           <h4 class="modal-title">{{ headerText }}</h4>
+          <h3>
+            <span class="pficon pficon-warning-triangle-o"> {{ getWarnings().length }}</span>
+            <span class="modal-error-count"> | </span>
+            <span class="pficon pficon-error-circle-o"> {{ getErrors().length }}</span>
+          </h3>
         </div>
         <div class="modal-error">
         </div>
