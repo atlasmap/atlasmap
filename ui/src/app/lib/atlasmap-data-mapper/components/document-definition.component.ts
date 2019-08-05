@@ -168,9 +168,10 @@ export class DocumentDefinitionComponent implements OnInit {
     const selectedFile = event.target.files[0];
     this.cfg.initCfg.initialized = false;
     this.cfg.initializationService.updateLoadingStatus('Importing Document ' + selectedFile.name);
-    this.cfg.documentService.processDocument(selectedFile, InspectionType.UNKNOWN, this.isSource);
-
-    this.cfg.fileService.exportMappingsCatalog(null);
+    this.cfg.documentService.processDocument(selectedFile, InspectionType.UNKNOWN, this.isSource)
+    .then(() => {
+      this.cfg.fileService.exportMappingsCatalog(null);
+     });
   }
 
   getFileSuffix() {
