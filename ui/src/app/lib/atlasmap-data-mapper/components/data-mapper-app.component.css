@@ -295,6 +295,7 @@
 .DataMapperUI .modal-footer .btn { margin-left:10px; }
 .DataMapperUI .modal-footer { margin:0; }
 .DataMapperUI .modal-message { padding:10px 20px; }
+.DataMapperUI .modal-error-count { font-weight: bold; font-size:20px; }
 
 .MappingSelectionComponent { margin-left:20px; margin-right:20px; width:500px; }
 .MappingSelectionComponent .MappingSelectionOptions { overflow:auto; }
