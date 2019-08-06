@@ -103,8 +103,8 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
 
   @HostListener ('click', ['$event'])
   onClick($event) {
-    if ($event.target.className.includes('expressionMarkup') && this.mouseOverTimeOut) {
-      this.tooltiptext = '';
+    this.tooltiptext = '';
+    if (this.mouseOverTimeOut) {
       clearTimeout(this.mouseOverTimeOut);
       this.mouseOverTimeOut = null;
     }
@@ -112,27 +112,30 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
 
   @HostListener ('mouseover', ['$event'])
   onMouseOver($event) {
-    if ($event.target.className.includes('expressionMarkup')) {
-      this.tooltiptext = 'Enter source fields for expr: e.g. IF (ISEMPTY(fieldA), fieldB, fieldC)';
-      const self = this;
+    this.tooltiptext = 'Enter source fields for expr: e.g. IF (ISEMPTY(fieldA), fieldB, fieldC)';
 
-      this.mouseOverTimeOut = setTimeout(function() {
-        self.tooltiptext = '';
-        this.mouseOverTimeOut = null;
-      }, 8000);
+    // Clear the onMouseLeave mouseOver timeout if it exists.
+    if (this.mouseOverTimeOut) {
+      clearTimeout(this.mouseOverTimeOut);
     }
   }
 
   @HostListener ('mouseleave', ['$event'])
   onMouseLeave($event) {
-    if ($event.target.className.includes('expressionMarkup') && this.mouseOverTimeOut) {
-      clearTimeout(this.mouseOverTimeOut);
-      this.mouseOverTimeOut = null;
-    }
+
+    const self = this;
+    this.mouseOverTimeOut = setTimeout(function() {
+      self.tooltiptext = '';
+      self.mouseOverTimeOut = null;
+      self.clearSearchMode();
+      self.clearAtText(self.getCaretPositionNodeId(self.atContainer));
+      self.markup.nativeElement.focus();
+    }, 1000);
   }
 
   @HostListener('keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
+
     if ('Enter' === event.key) {
       event.preventDefault();
     } else if ('Backspace' === event.key) {
@@ -150,6 +153,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
         this.updateSearchMode();
       }
     }
+    this.tooltiptext = '';
   }
 
   @HostListener('keypress', ['$event'])
