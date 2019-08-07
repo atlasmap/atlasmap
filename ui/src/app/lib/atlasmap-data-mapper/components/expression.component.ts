@@ -177,6 +177,8 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
       if (this.searchMode) {
         this.atContainer = window.getSelection().getRangeAt(0).startContainer;
         this.atIndex = window.getSelection().getRangeAt(0).startOffset;
+        this.searchFilter = '';
+        this.mappedFieldCandidates = this.executeSearch(this.searchFilter);
       }
     }
 
@@ -464,15 +466,12 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private updateSearchMode(): void {
-    const selectionRange = window.getSelection().getRangeAt(0);
-    if (selectionRange.startContainer.nodeValue.indexOf('@') === -1) {
-      this.clearSearchMode();
-      return;
-    }
     if (this.searchFilter.length === 0) {
       this.mappedFieldCandidates = [];
+      this.searchMode = false;
     } else {
       this.searchFilter = this.searchFilter.substr(0, this.searchFilter.length - 1);
+      this.mappedFieldCandidates = this.executeSearch(this.searchFilter);
     }
   }
 }
