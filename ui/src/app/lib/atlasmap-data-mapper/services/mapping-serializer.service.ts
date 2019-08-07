@@ -534,6 +534,10 @@ export class MappingSerializer {
   private static deserializeMappings(json: any, cfg: ConfigModel): MappingModel[] {
     const mappings: MappingModel[] = [];
     const docRefs: any = {};
+
+    if (!json || !json.AtlasMapping) {
+      return mappings;
+    }
     for (const docRef of json.AtlasMapping.dataSource) {
       docRefs[docRef.id] = docRef.uri;
     }
@@ -589,7 +593,7 @@ export class MappingSerializer {
 
   private static deserializeConstants(jsonMapping: any): Field[] {
     const fields: Field[] = [];
-    if (!jsonMapping.AtlasMapping || !jsonMapping.AtlasMapping.constants
+    if (!jsonMapping || !jsonMapping.AtlasMapping || !jsonMapping.AtlasMapping.constants
       || !jsonMapping.AtlasMapping.constants.constant) {
       return fields;
     }
@@ -606,7 +610,7 @@ export class MappingSerializer {
 
   private static deserializeProperties(jsonMapping: any): Field[] {
     const fields: Field[] = [];
-    if (!jsonMapping.AtlasMapping || !jsonMapping.AtlasMapping.properties
+    if (!jsonMapping || !jsonMapping.AtlasMapping || !jsonMapping.AtlasMapping.properties
       || !jsonMapping.AtlasMapping.properties.property) {
       return fields;
     }
@@ -623,7 +627,7 @@ export class MappingSerializer {
 
   private static deserializeLookupTables(jsonMapping: any): LookupTable[] {
     const tables: LookupTable[] = [];
-    if (!jsonMapping.AtlasMapping || !jsonMapping.AtlasMapping.lookupTables
+    if (!jsonMapping || !jsonMapping.AtlasMapping || !jsonMapping.AtlasMapping.lookupTables
       || !jsonMapping.AtlasMapping.lookupTables.lookupTable) {
       return tables;
     }

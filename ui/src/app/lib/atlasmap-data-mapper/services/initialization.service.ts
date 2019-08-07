@@ -166,6 +166,7 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
       this.cfg.initCfg.initialized = false;
       this.cfg.initCfg.mappingInitialized = false;
       this.cfg.mappings = null;
+      this.cfg.mappingFiles = [];
       this.cfg.sourceDocs = [];
       this.cfg.targetDocs = [];
 
