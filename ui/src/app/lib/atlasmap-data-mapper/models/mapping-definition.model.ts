@@ -220,7 +220,11 @@ export class MappingDefinition {
 
   updateDocumentNamespacesFromMappings(cfg: ConfigModel): void {
     const docs: DocumentDefinition[] = cfg.getDocs(false);
+
     for (const parsedDoc of this.parsedDocs) {
+      if (!parsedDoc) {
+        continue;
+      }
       if (parsedDoc.isSource) {
         continue;
       }
