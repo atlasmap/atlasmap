@@ -471,8 +471,9 @@ public class AtlasService {
     @Path("/ping")
     @ApiOperation(value = "Ping", notes = "Simple liveness check method used in liveness checks. Must not be protected via authetication.")
     @ApiResponses(@ApiResponse(code = 200, response = String.class, message = "Return 'pong'"))
-    public String ping() {
-        return "pong";
+    public Response ping() {
+	LOG.debug("Ping...  responding with 'pong'.");
+	return Response.ok().entity(toJson("pong")).build();
     }
 
     @PUT

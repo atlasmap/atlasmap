@@ -181,6 +181,17 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
         return;
       }
 
+      // Verify the runtime service is out there.
+      try {
+        if (!await this.cfg.mappingService.runtimeServiceActive()) {
+          this.handleError('The AtlasMap runtime service is not available.', null);
+          return;
+        }
+      } catch (error) {
+        this.handleError('The AtlasMap runtime service is not available.', null);
+        return;
+      }
+
       // load documents
       if (!this.cfg.isClassPathResolutionNeeded()) {
         this.fetchDocuments();

@@ -85,6 +85,30 @@ export class MappingManagementService {
     }
   }
 
+  /**
+   * Return true if the runtime service is available, false otherwise.
+   */
+  async runtimeServiceActive(): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'ping';
+      this.cfg.logger.trace('Runtime Service Ping Request');
+      this.http.get(url, { headers: this.headers }).toPromise().then((body: string) => {
+        if (this.cfg.isTraceEnabled()) {
+          this.cfg.logger.trace(`Runtime Service Ping Response: ${JSON.stringify(body)}`);
+        }
+        if (body) {
+          if (JSON.stringify(body).match('pong')) {
+            resolve(true);
+            return;
+          }
+        }
+        resolve(false);
+      }).catch((error: any) => {
+        reject(error);
+      });
+    });
+  }
+
   fetchMappings(mappingFileNames: string[], mappingDefinition: MappingDefinition): Observable<boolean> {
     return new Observable<boolean>((observer: any) => {
       if (mappingFileNames.length === 0) {
