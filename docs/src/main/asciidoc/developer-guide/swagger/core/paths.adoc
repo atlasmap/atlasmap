@@ -352,7 +352,7 @@ Simple liveness check method used in liveness checks. Must not be protected via 
 [options="header", cols=".^2a,.^14a,.^4a"]
 |===
 |HTTP Code|Description|Schema
-|**200**|Return 'pong'|string
+|**200**|Return 'pong'|No Content
 |===
 
 
