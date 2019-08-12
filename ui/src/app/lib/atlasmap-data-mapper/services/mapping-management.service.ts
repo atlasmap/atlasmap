@@ -369,7 +369,7 @@ export class MappingManagementService {
     }
     // Expression mapping
     if (mapping.transition.enableExpression && !field.isSource() && mapping.getMappedFields(false).length > 0) {
-      return 'Cannot add multiple target fields when conditional mapping is enabled.';
+      return 'cannot add multiple target fields when conditional mapping is enabled.';
     }
 
     // Check multiplicity restrictions
@@ -379,15 +379,15 @@ export class MappingManagementService {
     const otherDirection = !field.isSource() ? 'source' : 'target';
     if (mappedFields.length > 0) {
       if (field.isInCollection() || mappedFields[0].field.isInCollection()) {
-        return 'Collection field cannot be a part of compound selection.';
+        return 'a collection field cannot be a part of compound selection.';
       } else if (otherSideMappedFields.length > 1) {
-        return `Multiple ${direction} fields cannot be added into
-          mapping. Only one of Source field or Target field could be multiple.`;
+        return `multiple ${direction} fields cannot be added into this
+          mapping. Only one Source field or Target field could be made multiple.`;
       }
     } else {
       if (otherSideMappedFields.length > 1 && field.isInCollection()) {
-        return `Collection field cannot be selected for ${direction} field
-         when multiple ${otherDirection} fields are selected.`;
+        return `a collection field cannot be selected as a ${direction} field
+         when multiple ${otherDirection} fields are already selected.`;
       }
     }
 

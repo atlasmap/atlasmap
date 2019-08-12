@@ -15,6 +15,7 @@ limitations under the License.
 */
 import { Component, ViewChild, Input, HostListener, ElementRef, OnInit, OnDestroy, OnChanges } from '@angular/core';
 import { ConfigModel } from '../models/config.model';
+import { DataMapperUtil } from '../common/data-mapper-util';
 import { MappingModel, MappedField } from '../models/mapping.model';
 import { ExpressionModel, FieldNode, ExpressionUpdatedEvent, TextNode } from '../models/expression.model';
 import { Field } from '../models/field.model';
@@ -265,7 +266,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
         if (!this.configModel.mappingService.isFieldSelectable(activeMapping, field)) {
           continue;
         }
-        displayName = field.path;
+        displayName = DataMapperUtil.extractDisplayPath(field.path, 100);
         const formattedField: any = { 'field': field, 'displayName': displayName };
         formattedFields.push(formattedField);
       }

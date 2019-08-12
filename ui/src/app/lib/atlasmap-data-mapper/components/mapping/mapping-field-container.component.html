@@ -4,13 +4,15 @@
     [attr.draggable]="true" (dragstart)="startDrag($event, mappedField)" (drop)="endDrag($event, mappedField)"
     (dragenter)="dragEnterLeave($event, true)" (dragleave)="dragEnterLeave($event, false)" (dragover)="allowDrop($event)">
 
-    <div class="searchBox" *ngIf="displayFieldSearchBox()" >
-      <input type="text" #searchFilterBox id="{{inputId}}" style="border-color: #4d5258; color: green"
-        (keyup)="updateSearchFilter(searchFilterBox.value)" [typeahead]="dataSource" typeaheadWaitMs="200"
-        typeaheadOptionField="displayName" [typeaheadItemTemplate]="typeaheadTemplate" [ngModel]="searchFilter"
-        (typeaheadOnSelect)="selectionChanged($event)" [placeholder]="getSearchPlaceholder()">
-      <div class="clear"></div>
+    <div class="searchBoxWrapper" *ngIf="displayFieldSearchBox()">
+      <div class="searchBox">
+        <input type="text" #searchFilterBox id="{{inputId}}" (keyup)="updateSearchFilter(searchFilterBox.value)"
+          [typeahead]="dataSource" typeaheadWaitMs="200" typeaheadOptionField="displayName" [typeaheadItemTemplate]="typeaheadTemplate"
+          [ngModel]="searchFilter" (typeaheadOnSelect)="selectionChanged($event)" [placeholder]="getSearchPlaceholder()">
+        <div class="clear"></div>
+      </div>
     </div>
+
     <div *ngIf="displaySeparator()" style="margin-top:10px;">
       <transition-selection [cfg]="cfg" [mapping]="mapping" [modalWindow]="modalWindow"></transition-selection>
     </div>

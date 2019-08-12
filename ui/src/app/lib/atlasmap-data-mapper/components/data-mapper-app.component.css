@@ -145,7 +145,7 @@
 
 .DataMapperUI .conditional-expr-picker { font-size: 12px; position: absolute; z-index: 100; overflow: auto;
   text-shadow:0 1px 2px rgba(54,54,54,0.24); color: #4d5258; box-shadow: inset 0 2px 2px 0 rgba(0, 0, 0, 0.08);
-  border:solid 1px #bbbbbb; }
+  border:solid 1px #bbbbbb; max-width: 620px; background-color: white; }
 
 .DataMapperEditComponent INPUT, .DataMapperEditComponent .form-group SELECT { width:300px; }
 .DataMapperEditComponent .form-group TEXTAREA { margin:auto; }
@@ -260,9 +260,11 @@
 .mappingFieldContainer { background-color:#d3d3d3; padding: 10px; width: 100%; }
 .fieldMappingDetail .linkContainer { position: relative; width:100%; text-align:right; }
 
-.MappingFieldSection { background-color:white; padding: 6px 10px 6px 10px; margin: 5px; box-shadow:0 0 1px 1px rgba(51, 51, 51, 0.25); }
-.MappingFieldSection LABEL { color:#363636; }
-.MappingFieldSection .fieldDetailTooltip LABEL { color:white; }
+.DataMapperUI .MappingFieldSection { background-color: white; padding: 6px 10px 6px 10px; margin: 5px; box-shadow: 1px 1px 2px 2px rgba(51, 51, 51, 0.25); }
+.DataMapperUI .MappingFieldSection LABEL { color: #363636; }
+.DataMapperUI .MappingFieldSection .fieldDetailTooltip LABEL { color: white; }
+.DataMapperUI .MappingFieldSection .searchBoxWrapper { overflow-x: visible; }
+.DataMapperUI .MappingFieldSection .searchBoxWrapper .searchBox { border-color: #4d5258; color: green; z-index: 101; max-width: 400px; overflow-y: visible; }
 
 .DataMapperUI .TransitionSelection LABEL { width:100%; }
 .DataMapperUI .TransitionSelection .combobox { color: green; font-weight: bold; }

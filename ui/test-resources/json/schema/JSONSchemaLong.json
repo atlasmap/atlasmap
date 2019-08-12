@@ -1,0 +1,77 @@
+  {
+    "$schema": "http://json-schema.org/schema#",
+    "description": "Order",
+    "type": "object",
+    "properties": {
+      "order": {
+        "type": "object",
+        "properties": {
+          "address": {
+          "type": "object",
+          "properties": {
+            "street": { "type": "string" },
+            "city": { "type": "string" },
+            "state": { "type": "string" },
+            "zip": { "type": "string" }
+          }
+        },
+        "contact": {
+          "type": "object",
+          "properties": {
+            "firstName": { "type": "string" },
+            "lastName": { "type": "string" },
+            "phone": { "type": "string" }
+          }
+        },
+        "orderId": { "type": "string" }
+      }
+    },
+    "very_long_standard_primitive_names": {
+      "type": "object",
+      "properties": {
+        "very_long_property_level_is_here": {
+          "type": "object",
+          "properties": {
+            "very_long_std_string_primitive": { "type": "string" },
+            "very_long_std_boolean_primitive": { "type": "boolean" },
+            "very_long_std_number_primitive": { "type": "number" }
+          }
+	}
+      }
+    },
+    "very_long_std_primitive_arrays": {
+      "type": "object",
+      "properties": {
+        "very_long_property_level_is_here": {
+          "type": "object",
+          "properties": {   
+            "very_long_std_primitive_str_arr1": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "very_long_std_primitive_bln_arr2": {
+              "type": "array",
+              "items": { "type": "boolean" }
+            },
+            "very_long_std_primitive_num_arr3": {
+              "type": "array",
+              "items": { "type": "number" }
+            }
+          }
+        }
+      }
+    },
+    "addressList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "street": { "type": "string" },
+          "city": { "type": "string" },
+          "state": { "type": "string" },
+          "zip": { "type": "string" }
+        }
+      }
+    }
+    }
+  }

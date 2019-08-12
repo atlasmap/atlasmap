@@ -17,6 +17,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { ConfigModel } from '../../models/config.model';
+import { DataMapperUtil } from '../../common/data-mapper-util';
 import { MappingModel, MappedField } from '../../models/mapping.model';
 import { DocumentDefinition } from '../../models/document-definition.model';
 import { TransitionMode } from '../../models/transition.model';
@@ -190,7 +191,7 @@ export class MappingFieldContainerComponent implements OnInit {
         if (!this.cfg.mappingService.isFieldSelectable(activeMapping, field)) {
           continue;
         }
-        displayName = field.getFieldLabel(ConfigModel.getConfig().showTypes, true);
+        displayName = DataMapperUtil.extractDisplayPath(field.getFieldLabel(ConfigModel.getConfig().showTypes, true), 40);
         const formattedField: any = { 'field': field, 'displayName': displayName };
         formattedFields.push(formattedField);
       }
