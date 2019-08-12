@@ -141,4 +141,30 @@ export class DataMapperUtil {
     }
     return displayableString;
   }
+
+  /**
+   * Return a string path that fits into the width provided.  Capture as much of the leaf
+   * as possible, then as much of the beginning with the remaining space.
+   *
+   * @param path
+   * @param fieldWidth
+   */
+  static extractDisplayPath(path: string, fieldWidth: number): string {
+    const MAX_PATH_WIDTH = fieldWidth - 4;  // account for length of ellipsis
+
+    if (!path || MAX_PATH_WIDTH <= 0) {
+      return '';
+    }
+    if (path.length <= MAX_PATH_WIDTH) {
+      return path;
+    }
+    const segmentedPath = path.split('/');
+    const leaf = '/' + segmentedPath[segmentedPath.length - 1];
+    if (leaf.length >= MAX_PATH_WIDTH) {
+      return leaf.substr(0, MAX_PATH_WIDTH);
+    }
+    const delta = MAX_PATH_WIDTH - leaf.length;
+    return path.substr(0, delta) + '...' + leaf;
+  }
+
 }
