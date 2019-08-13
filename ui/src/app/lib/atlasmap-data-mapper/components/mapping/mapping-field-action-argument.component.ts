@@ -44,7 +44,7 @@ export class MappingFieldActionArgumentComponent {
    */
   contentChanged(): void {
     this.checkIconEnabled = true;
-    this.cfg.mappingService.validateMappings();
+    this.cfg.mappingService.notifyMappingUpdated();
   }
 
   /**
@@ -108,7 +108,7 @@ export class MappingFieldActionArgumentComponent {
       action.argumentValues[argValIndex].value = selectedArgValName;
       this.validateActionConfigParamSelection(action.argumentValues);
     }
-    this.cfg.mappingService.saveCurrentMapping();
+    this.cfg.mappingService.notifyMappingUpdated();
     this.checkIconEnabled = false;
     // this.enableCheck();
   }

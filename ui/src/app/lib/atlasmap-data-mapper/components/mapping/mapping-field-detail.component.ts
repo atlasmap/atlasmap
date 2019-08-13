@@ -56,7 +56,6 @@ export class MappingFieldDetailComponent implements OnInit {
     const action: FieldAction = new FieldAction();
     actionDefinition.populateFieldAction(action);
     this.mappedField.actions.push(action);
-    this.cfg.mappingService.saveCurrentMapping();
     this.cfg.mappingService.notifyMappingUpdated();
   }
 
@@ -109,7 +108,7 @@ export class MappingFieldDetailComponent implements OnInit {
         this.mapping, targetIndex, mappedField.field.isSource());
     }
     this.cfg.mappingService.moveMappedFieldTo(this.mapping, mappedField, insertionIndex);
-    this.cfg.mappingService.saveCurrentMapping();
+    this.cfg.mappingService.notifyMappingUpdated();
   }
 
   removeMappedField(mappedField: MappedField): void {

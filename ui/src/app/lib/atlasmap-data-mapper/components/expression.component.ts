@@ -89,7 +89,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
       // Only validate for inserted or appended text nodes.
       if ((!updatedEvent && this.getExpression().getLastNode() instanceof TextNode) ||
           (updatedEvent && updatedEvent.node instanceof TextNode)) {
-        this.configModel.mappingService.validateMappings();
+        this.configModel.mappingService.notifyMappingUpdated();
       }
     });
     this.updateExpressionMarkup();

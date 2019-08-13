@@ -96,7 +96,7 @@ export class NamespaceListComponent {
         this.cfg.getFirstXmlDoc(false).namespaces.push(newNamespace);
       }
       this.search(this.searchFilter);
-      this.cfg.mappingService.saveCurrentMapping();
+      this.cfg.mappingService.notifyMappingUpdated();
     };
     this.modalWindow.show();
   }

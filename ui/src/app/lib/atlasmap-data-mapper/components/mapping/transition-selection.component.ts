@@ -121,7 +121,7 @@ export class TransitionSelectionComponent implements OnInit {
     this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
       const c: LookupTableComponent = mw.nestedComponent as LookupTableComponent;
       c.saveTable();
-      this.cfg.mappingService.saveCurrentMapping();
+      this.cfg.mappingService.notifyMappingUpdated();
     };
     this.modalWindow.show();
   }
