@@ -55,7 +55,6 @@ export class MappingFieldActionComponent {
    */
   removeAction(action: FieldAction): void {
     this.mappedField.removeAction(action);
-    this.cfg.mappingService.saveCurrentMapping();
     this.cfg.mappingService.notifyMappingUpdated();
   }
 
@@ -84,7 +83,7 @@ export class MappingFieldActionComponent {
         }
       }
     }
-    this.cfg.mappingService.saveCurrentMapping();
+    this.cfg.mappingService.notifyMappingUpdated();
   }
 
   /**

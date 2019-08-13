@@ -149,32 +149,6 @@ export class MappingManagementService {
   }
 
   /**
-   * Save the current active mappings to the UI configuration mappings.  Restrict the saved mappings
-   * to fully mapped pairs (source/target) and source-side mappings with a transformation/ field action.
-   */
-  async saveCurrentMapping(): Promise<boolean> {
-    return new Promise<boolean>( async(resolve, reject) => {
-      if (!this.cfg.mappings) {
-        resolve(false);
-      }
-      const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
-      if ((activeMapping != null) && (this.cfg.mappings.mappings.indexOf(activeMapping) === -1)) {
-        this.cfg.mappings.mappings.push(activeMapping);
-      }
-      const newMappings: MappingModel[] = [];
-      for (const mapping of this.cfg.mappings.mappings) {
-        if (mapping.isFullyMapped() || mapping.hasFieldActions()) {
-          newMappings.push(mapping);
-        }
-      }
-      this.cfg.mappings.mappings = newMappings;
-      await this.cfg.mappingService.validateMappings();
-      this.mappingUpdatedSource.next();
-      resolve(true);
-    });
-  }
-
-  /**
    * Remove the specified mapping model from the mappings array and update the runtime.
    *
    * @param mappingModel
@@ -184,7 +158,7 @@ export class MappingManagementService {
       const mappingWasRemoved: boolean = this.cfg.mappings.removeMapping(mappingModel);
       if (mappingWasRemoved) {
         this.deselectMapping();
-        await this.saveCurrentMapping();
+        await this.notifyMappingUpdated();
       } else {
         this.deselectMapping();
       }
@@ -200,7 +174,7 @@ export class MappingManagementService {
       } else {
         this.updateTransition(mapping);
       }
-      await this.saveCurrentMapping();
+      await this.notifyMappingUpdated();
       resolve(true);
     });
   }
@@ -220,7 +194,7 @@ export class MappingManagementService {
     mappedFields.splice(mapping.getIndexForMappedField(insertedMappedField) - 1, 1);
     mappedFields.splice(targetIndex - 1, 0, insertedMappedField);
     this.clearTrailingPaddingFields(mappedFields);
-    this.saveCurrentMapping();
+    this.notifyMappingUpdated();
   }
 
   /**
@@ -309,7 +283,7 @@ export class MappingManagementService {
 
     if (!addField && !removeField) {
       this.selectMapping(mapping);
-      this.validateMappings();
+      this.notifyMappingUpdated();
       return;
     }
 
@@ -321,7 +295,9 @@ export class MappingManagementService {
       }
       mapping.addField(field, false);
       this.updateTransition(mapping, position, offset);
-      this.saveCurrentMapping();
+      if (mapping.sourceFields.length > 0 && mapping.targetFields.length > 0) {
+        this.notifyMappingUpdated();
+      }
       return;
     }
 
@@ -334,7 +310,7 @@ export class MappingManagementService {
       } else {
         this.updateTransition(mapping, position, offset);
       }
-      this.saveCurrentMapping();
+      this.notifyMappingUpdated();
     }
   }
 
@@ -411,7 +387,7 @@ export class MappingManagementService {
     if (selectedField != null) {
       mapping.addField(selectedField, false);
       this.updateTransition(mapping);
-      this.saveCurrentMapping();
+      this.notifyMappingUpdated();
     }
     this.selectMapping(mapping);
   }
@@ -526,7 +502,10 @@ export class MappingManagementService {
     }
   }
 
-  async validateMappings(): Promise<boolean> {
+  /**
+   * Invoke the runtime service to both validate and save the current active mapping.
+   */
+  private async validateMappings(): Promise<boolean> {
 
     return new Promise<boolean>((resolve, reject) => {
       if (this.cfg.initCfg.baseMappingServiceUrl === null || this.cfg.mappings === null) {
@@ -581,10 +560,22 @@ export class MappingManagementService {
     });
   }
 
+  /**
+   * Validate and save complete mappings.  Triggered either as an observable or directly.
+   */
   async notifyMappingUpdated(): Promise<boolean> {
     return new Promise<boolean>( async(resolve, reject) => {
-      if (this.cfg.mappings != null && this.cfg.mappings.activeMapping != null &&
-        this.cfg.mappings.activeMapping.isFullyMapped()) {
+      if (this.cfg.mappings) {
+
+        const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
+        if (activeMapping) {
+          if (!this.cfg.mappings.activeMapping.isFullyMapped()) {
+            resolve(false);
+          }
+          if (this.cfg.mappings.mappings.indexOf(activeMapping) === -1) {
+            this.cfg.mappings.mappings.push(activeMapping);
+          }
+        }
         await this.validateMappings();
       }
       this.mappingUpdatedSource.next();

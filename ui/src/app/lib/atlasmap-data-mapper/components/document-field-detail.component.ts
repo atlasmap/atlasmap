@@ -253,7 +253,7 @@ export class DocumentFieldDetailComponent {
 
       self.field.docDef.updateField(self.field, oldPath);
 
-      self.cfg.mappingService.saveCurrentMapping();
+      self.cfg.mappingService.notifyMappingUpdated();
     };
     this.modalWindow.show();
   }
@@ -272,7 +272,7 @@ export class DocumentFieldDetailComponent {
     this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
       self.cfg.mappings.removeFieldFromAllMappings(self.field);
       self.field.docDef.removeField(self.field);
-      self.cfg.mappingService.saveCurrentMapping();
+      self.cfg.mappingService.notifyMappingUpdated();
     };
     this.modalWindow.show();
   }

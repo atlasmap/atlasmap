@@ -229,7 +229,7 @@ export class ToolbarComponent implements OnInit {
     this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
       const templateComponent: TemplateEditComponent = mw.nestedComponent as TemplateEditComponent;
       this.cfg.mappings.templateText = templateComponent.templateText;
-      self.cfg.mappingService.saveCurrentMapping();
+      self.cfg.mappingService.notifyMappingUpdated();
     };
     this.modalWindow.show();
   }

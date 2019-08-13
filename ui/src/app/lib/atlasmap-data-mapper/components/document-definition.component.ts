@@ -267,7 +267,7 @@ export class DocumentDefinitionComponent implements OnInit {
                   DataMapperUtil.removeItemFromArray(doc, this.cfg.targetDocs);
                 }
               }
-              await self.cfg.mappingService.saveCurrentMapping();
+              await self.cfg.mappingService.notifyMappingUpdated();
               await self.cfg.fileService.exportMappingsCatalog(null);
             })
             .catch((error: any) => {
@@ -311,7 +311,7 @@ export class DocumentDefinitionComponent implements OnInit {
       } else {
         DataMapperUtil.removeItemFromArray(docDef, this.cfg.targetDocs);
       }
-      await this.cfg.mappingService.saveCurrentMapping();
+      await this.cfg.mappingService.notifyMappingUpdated();
       await this.cfg.fileService.exportMappingsCatalog(null);
     };
     this.modalWindow.show();
@@ -354,7 +354,7 @@ export class DocumentDefinitionComponent implements OnInit {
         const fieldComponent = mw.nestedComponent as FieldEditComponent;
         docDef.addField(fieldComponent.getField());
       }
-      self.cfg.mappingService.saveCurrentMapping();
+      self.cfg.mappingService.notifyMappingUpdated();
     };
     this.modalWindow.show();
   }
