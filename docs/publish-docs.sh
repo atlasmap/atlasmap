@@ -6,7 +6,7 @@ echo ================================
 ../mvnw -Phtml,pdf package && \
 ../mvnw -f pom-javadoc.xml -pl \!io.atlasmap:atlasmap-lib-all javadoc:aggregate && \
 cd ../ui && \
-../mvnw -Pcompodoc validate && \
+../mvnw -Pcompodoc package && \
 cd ../docs && \
 git clone -b gh-pages https://github.com/atlasmap/atlasmap.git gh-pages && \
 git config --global user.email "travis@atlasmap.io" && \
