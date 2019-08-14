@@ -291,9 +291,39 @@
                   <arguments>compodoc</arguments>
                 </configuration>
               </execution>
+              <execution>
+                <id>yarn build app</id>
+                <phase>none</phase>
+              </execution>
+              <execution>
+                <id>yarn build lib</id>
+                <phase>none</phase>
+              </execution>
+              <execution>
+                <id>yarn lint</id>
+                <phase>none</phase>
+              </execution>
+              <execution>
+                <id>yarn test</id>
+                <phase>none</phase>
+              </execution>
             </executions>
           </plugin>
-        <plugins>
+          <plugin>
+            <groupId>io.atlasmap</groupId>
+            <artifactId>atlasmap-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>generate-inspections</id>
+                <phase>none</phase>
+              </execution>
+              <execution>
+                <id>generate-field-actions</id>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
       </build>
     </profile>
   </profiles>
