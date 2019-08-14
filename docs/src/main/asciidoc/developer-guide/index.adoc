@@ -39,5 +39,7 @@ include::inc/_fieldAction.adoc[]
 
 == <<javadoc/index#, Java API Reference (Javadoc)>>
 
+== <<compodoc/index#, Angular Compodoc>>
+
 include::inc/_terminology.adoc[]
 
