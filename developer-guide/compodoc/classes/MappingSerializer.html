@@ -1,0 +1,2964 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>@atlasmap/atlasmap-data-mapper documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">@atlasmap/atlasmap-data-mapper documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content class">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Classes</li>
+  <li>MappingSerializer</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts</code>
+        </p>
+
+
+
+
+
+            <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#addFieldIfDoesntExist">addFieldIfDoesntExist</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#createInputFieldGroup">createInputFieldGroup</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Static</span>
+                                <a href="#deserializeAtlasMappingName">deserializeAtlasMappingName</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Static</span>
+                                <a href="#deserializeAudits">deserializeAudits</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#deserializeConstants">deserializeConstants</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#deserializeDocs">deserializeDocs</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Static</span>
+                                <a href="#deserializeFieldMapping">deserializeFieldMapping</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#deserializeFieldMappingFromType">deserializeFieldMappingFromType</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#deserializeLookupTables">deserializeLookupTables</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#deserializeMappings">deserializeMappings</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Static</span>
+                                <a href="#deserializeMappingServiceJSON">deserializeMappingServiceJSON</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#deserializeProperties">deserializeProperties</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#parseNewAction">parseNewAction</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#parseOldAction">parseOldAction</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#processActionArguments">processActionArguments</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#serializeConstants">serializeConstants</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#serializeDocuments">serializeDocuments</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Static</span>
+                                <a href="#serializeFieldMapping">serializeFieldMapping</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#serializeFields">serializeFields</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#serializeLookupTables">serializeLookupTables</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Static</span>
+                                <a href="#serializeMappings">serializeMappings</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#serializeProperties">serializeProperties</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+
+
+            <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addFieldIfDoesntExist"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Static</span>
+                            addFieldIfDoesntExist
+                        </b>
+                        <a href="#addFieldIfDoesntExist"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>addFieldIfDoesntExist(mapping: <a href="../classes/MappingModel.html">MappingModel</a>, field: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, isSource: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>, docRefs: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, cfg: <a href="../classes/ConfigModel.html">ConfigModel</a>, ignoreValue: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="650"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:650</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Default value</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mapping</td>
+                                    <td>
+                                                <code><a href="../classes/MappingModel.html" target="_self" >MappingModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>field</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>isSource</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>docRefs</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>cfg</td>
+                                    <td>
+                                                <code><a href="../classes/ConfigModel.html" target="_self" >ConfigModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>ignoreValue</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                        <code>true</code>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/MappedField.html" target="_self" >MappedField</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="createInputFieldGroup"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Static</span>
+                            createInputFieldGroup
+                        </b>
+                        <a href="#createInputFieldGroup"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>createInputFieldGroup(mapping: <a href="../classes/MappingModel.html">MappingModel</a>, field: any[])</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="252"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:252</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mapping</td>
+                                    <td>
+                                                <code><a href="../classes/MappingModel.html" target="_self" >MappingModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>field</td>
+                                    <td>
+                                            <code>any[]</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deserializeAtlasMappingName"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Static</span>
+                            deserializeAtlasMappingName
+                        </b>
+                        <a href="#deserializeAtlasMappingName"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>deserializeAtlasMappingName(json: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="132"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:132</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Return the AtlasMap mappings file name from the specified JSON buffer or an empty string.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>json</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deserializeAudits"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Static</span>
+                            deserializeAudits
+                        </b>
+                        <a href="#deserializeAudits"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>deserializeAudits(audits: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="232"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:232</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>audits</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/ErrorInfo.html" target="_self" >ErrorInfo[]</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deserializeConstants"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Static</span>
+                            deserializeConstants
+                        </b>
+                        <a href="#deserializeConstants"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>deserializeConstants(jsonMapping: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="594"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:594</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>jsonMapping</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/Field.html" target="_self" >Field[]</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deserializeDocs"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Static</span>
+                            deserializeDocs
+                        </b>
+                        <a href="#deserializeDocs"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>deserializeDocs(json: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, mappingDefinition: <a href="../classes/MappingDefinition.html">MappingDefinition</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="505"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:505</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>json</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>mappingDefinition</td>
+                                    <td>
+                                                <code><a href="../classes/MappingDefinition.html" target="_self" >MappingDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition[]</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deserializeFieldMapping"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Static</span>
+                            deserializeFieldMapping
+                        </b>
+                        <a href="#deserializeFieldMapping"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>deserializeFieldMapping(mappingJson: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, docRefs: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, cfg: <a href="../classes/ConfigModel.html">ConfigModel</a>, ignoreValue: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="140"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:140</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Default value</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mappingJson</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>docRefs</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>cfg</td>
+                                    <td>
+                                                <code><a href="../classes/ConfigModel.html" target="_self" >ConfigModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>ignoreValue</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                        <code>true</code>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/MappingModel.html" target="_self" >MappingModel</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deserializeFieldMappingFromType"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Static</span>
+                            deserializeFieldMappingFromType
+                        </b>
+                        <a href="#deserializeFieldMappingFromType"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>deserializeFieldMappingFromType(mapping: <a href="../classes/MappingModel.html">MappingModel</a>, fieldMapping: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, docRefs: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, cfg: <a href="../classes/ConfigModel.html">ConfigModel</a>, ignoreValue: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="568"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:568</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mapping</td>
+                                    <td>
+                                                <code><a href="../classes/MappingModel.html" target="_self" >MappingModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>fieldMapping</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>docRefs</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>cfg</td>
+                                    <td>
+                                                <code><a href="../classes/ConfigModel.html" target="_self" >ConfigModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>ignoreValue</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deserializeLookupTables"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Static</span>
+                            deserializeLookupTables
+                        </b>
+                        <a href="#deserializeLookupTables"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>deserializeLookupTables(jsonMapping: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="628"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:628</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>jsonMapping</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/LookupTable.html" target="_self" >LookupTable[]</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deserializeMappings"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Static</span>
+                            deserializeMappings
+                        </b>
+                        <a href="#deserializeMappings"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>deserializeMappings(json: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, cfg: <a href="../classes/ConfigModel.html">ConfigModel</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="534"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:534</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>json</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>cfg</td>
+                                    <td>
+                                                <code><a href="../classes/ConfigModel.html" target="_self" >ConfigModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/MappingModel.html" target="_self" >MappingModel[]</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deserializeMappingServiceJSON"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Static</span>
+                            deserializeMappingServiceJSON
+                        </b>
+                        <a href="#deserializeMappingServiceJSON"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>deserializeMappingServiceJSON(json: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, cfg: <a href="../classes/ConfigModel.html">ConfigModel</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="109"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:109</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>json</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>cfg</td>
+                                    <td>
+                                                <code><a href="../classes/ConfigModel.html" target="_self" >ConfigModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deserializeProperties"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Static</span>
+                            deserializeProperties
+                        </b>
+                        <a href="#deserializeProperties"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>deserializeProperties(jsonMapping: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="611"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:611</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>jsonMapping</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/Field.html" target="_self" >Field[]</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="parseNewAction"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Static</span>
+                            parseNewAction
+                        </b>
+                        <a href="#parseNewAction"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>parseNewAction(action: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, parsedActions: FieldAction[])</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="730"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:730</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>action</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>parsedActions</td>
+                                    <td>
+                                            <code>FieldAction[]</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="parseOldAction"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Static</span>
+                            parseOldAction
+                        </b>
+                        <a href="#parseOldAction"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>parseOldAction(action: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, parsedActions: FieldAction[])</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="705"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:705</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>action</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>parsedActions</td>
+                                    <td>
+                                            <code>FieldAction[]</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="processActionArguments"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Static</span>
+                            processActionArguments
+                        </b>
+                        <a href="#processActionArguments"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>processActionArguments(action: <a href="../classes/FieldAction.html">FieldAction</a>, cfg: <a href="../classes/ConfigModel.html">ConfigModel</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="383"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:383</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Serialize field action arguments.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>action</td>
+                                    <td>
+                                                <code><a href="../classes/FieldAction.html" target="_self" >FieldAction</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>cfg</td>
+                                    <td>
+                                                <code><a href="../classes/ConfigModel.html" target="_self" >ConfigModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="serializeConstants"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Static</span>
+                            serializeConstants
+                        </b>
+                        <a href="#serializeConstants"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>serializeConstants(docDef: <a href="../classes/DocumentDefinition.html">DocumentDefinition</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="326"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:326</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>docDef</td>
+                                    <td>
+                                                <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>any[]</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="serializeDocuments"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Static</span>
+                            serializeDocuments
+                        </b>
+                        <a href="#serializeDocuments"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>serializeDocuments(docs: <a href="../classes/DocumentDefinition.html">DocumentDefinition[]</a>, mappingDefinition: <a href="../classes/MappingDefinition.html">MappingDefinition</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="283"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:283</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>docs</td>
+                                    <td>
+                                                <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>mappingDefinition</td>
+                                    <td>
+                                                <code><a href="../classes/MappingDefinition.html" target="_self" >MappingDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>any[]</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="serializeFieldMapping"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Static</span>
+                            serializeFieldMapping
+                        </b>
+                        <a href="#serializeFieldMapping"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>serializeFieldMapping(cfg: <a href="../classes/ConfigModel.html">ConfigModel</a>, mapping: <a href="../classes/MappingModel.html">MappingModel</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, ignoreValue: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="63"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:63</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Default value</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>cfg</td>
+                                    <td>
+                                                <code><a href="../classes/ConfigModel.html" target="_self" >ConfigModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>mapping</td>
+                                    <td>
+                                                <code><a href="../classes/MappingModel.html" target="_self" >MappingModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>ignoreValue</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                        <code>true</code>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="serializeFields"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Static</span>
+                            serializeFields
+                        </b>
+                        <a href="#serializeFields"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>serializeFields(mapping: <a href="../classes/MappingModel.html">MappingModel</a>, isSource: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>, cfg: <a href="../classes/ConfigModel.html">ConfigModel</a>, ignoreValue: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="400"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:400</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Default value</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mapping</td>
+                                    <td>
+                                                <code><a href="../classes/MappingModel.html" target="_self" >MappingModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>isSource</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>cfg</td>
+                                    <td>
+                                                <code><a href="../classes/ConfigModel.html" target="_self" >ConfigModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>ignoreValue</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                        <code>false</code>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>any[]</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="serializeLookupTables"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Static</span>
+                            serializeLookupTables
+                        </b>
+                        <a href="#serializeLookupTables"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>serializeLookupTables(mappingDefinition: <a href="../classes/MappingDefinition.html">MappingDefinition</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="348"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:348</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mappingDefinition</td>
+                                    <td>
+                                                <code><a href="../classes/MappingDefinition.html" target="_self" >MappingDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>any[]</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="serializeMappings"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Static</span>
+                            serializeMappings
+                        </b>
+                        <a href="#serializeMappings"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>serializeMappings(cfg: <a href="../classes/ConfigModel.html">ConfigModel</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="32"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:32</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>cfg</td>
+                                    <td>
+                                                <code><a href="../classes/ConfigModel.html" target="_self" >ConfigModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="serializeProperties"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Static</span>
+                            serializeProperties
+                        </b>
+                        <a href="#serializeProperties"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>serializeProperties(docDef: <a href="../classes/DocumentDefinition.html">DocumentDefinition</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="337"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:337</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>docDef</td>
+                                    <td>
+                                                <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>any[]</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+
+
+
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { TransitionMode } from &#x27;../models/transition.model&#x27;;
+import { FieldActionArgument, FieldAction, FieldActionArgumentValue } from &#x27;../models/field-action.model&#x27;;
+import { MappingModel, MappedField } from &#x27;../models/mapping.model&#x27;;
+import { Field } from &#x27;../models/field.model&#x27;;
+import { MappingDefinition } from &#x27;../models/mapping-definition.model&#x27;;
+import { DocumentDefinition, NamespaceModel } from &#x27;../models/document-definition.model&#x27;;
+import { LookupTable, LookupTableEntry } from &#x27;../models/lookup-table.model&#x27;;
+import { DocumentType } from &#x27;../common/config.types&#x27;;
+import { ConfigModel } from &#x27;../models/config.model&#x27;;
+import { ErrorInfo, ErrorLevel } from &#x27;../models/error.model&#x27;;
+import { TransitionModel, TransitionDelimiter } from &#x27;../models/transition.model&#x27;;
+import { ExpressionModel } from &#x27;../models/expression.model&#x27;;
+
+export class MappingSerializer {
+
+  static serializeMappings(cfg: ConfigModel): any {
+    const mappingDefinition: MappingDefinition &#x3D; cfg.mappings;
+    let jsonMappings: any[] &#x3D; [];
+    for (const mapping of mappingDefinition.mappings.filter(m &#x3D;&gt; m.isFullyMapped())) {
+      try {
+        jsonMappings &#x3D; jsonMappings.concat(MappingSerializer.serializeFieldMapping(cfg, mapping, mapping.uuid));
+      } catch (e) {
+        const input: any &#x3D; { &#x27;mapping&#x27;: mapping, &#x27;mapping def&#x27;: mappingDefinition };
+        cfg.errorService.error(&#x27;Caught exception while attempting to serialize mapping, skipping. &#x27;, { &#x27;input&#x27;: input, &#x27;error&#x27;: e });
+      }
+    }
+
+    const serializedLookupTables: any[] &#x3D; MappingSerializer.serializeLookupTables(cfg.mappings);
+    const constantDescriptions: any[] &#x3D; MappingSerializer.serializeConstants(cfg.constantDoc);
+    const propertyDescriptions: any[] &#x3D; MappingSerializer.serializeProperties(cfg.propertyDoc);
+    const serializedDataSources: any &#x3D; MappingSerializer.serializeDocuments(cfg.sourceDocs.concat(cfg.targetDocs), mappingDefinition);
+
+    const payload: any &#x3D; {
+      &#x27;AtlasMapping&#x27;: {
+        &#x27;jsonType&#x27;: ConfigModel.mappingServicesPackagePrefix + &#x27;.AtlasMapping&#x27;,
+        &#x27;dataSource&#x27;: serializedDataSources,
+        &#x27;mappings&#x27;: { &#x27;mapping&#x27;: jsonMappings },
+        &#x27;name&#x27;: cfg.mappings.name,
+        &#x27;lookupTables&#x27;: { &#x27;lookupTable&#x27;: serializedLookupTables },
+        &#x27;constants&#x27;: { &#x27;constant&#x27;: constantDescriptions },
+        &#x27;properties&#x27;: { &#x27;property&#x27;: propertyDescriptions },
+      },
+    };
+    return payload;
+  }
+
+  static serializeFieldMapping(
+    cfg: ConfigModel, mapping: MappingModel,
+    id: string, ignoreValue: boolean &#x3D; true): any {
+    let inputFieldGroup &#x3D; {};
+    const jsonMappingType &#x3D; ConfigModel.mappingServicesPackagePrefix + &#x27;.Mapping&#x27;;
+    const serializedInputFields: any[] &#x3D; MappingSerializer.serializeFields(mapping, true, cfg, ignoreValue);
+    const serializedOutputFields: any[] &#x3D; MappingSerializer.serializeFields(mapping, false, cfg, ignoreValue);
+    let jsonMapping &#x3D; {};
+
+    if (mapping.getMappedFields(true).length &gt; 1) {
+      inputFieldGroup &#x3D; MappingSerializer.createInputFieldGroup(mapping, serializedInputFields);
+
+      jsonMapping &#x3D; {
+       &#x27;jsonType&#x27;: jsonMappingType,
+       &#x27;id&#x27;: id,
+       inputFieldGroup,
+       &#x27;outputField&#x27;: serializedOutputFields,
+      };
+    } else {
+      if (mapping.transition.isManyToOneMode()) {
+        let delimiter &#x3D; mapping.transition.getActualDelimiter();
+
+        if (mapping.transition.delimiter &#x3D;&#x3D;&#x3D; TransitionDelimiter.USER_DEFINED) {
+          delimiter &#x3D; mapping.transition.userDelimiter;
+        }
+        serializedInputFields[0].actions &#x3D; [{
+          &#x27;Concatenate&#x27; : {
+            &#x27;delimiter&#x27; : delimiter
+          }
+        }];
+      }
+      jsonMapping &#x3D; {
+        &#x27;jsonType&#x27;: jsonMappingType,
+        &#x27;id&#x27;: id,
+        &#x27;inputField&#x27; : serializedInputFields,
+        &#x27;outputField&#x27;: serializedOutputFields,
+      };
+    }
+
+    if (mapping.transition.isEnumerationMode()) {
+      jsonMapping[&#x27;mappingType&#x27;] &#x3D; &#x27;LOOKUP&#x27;;  /* @deprecated */
+      jsonMapping[&#x27;lookupTableName&#x27;] &#x3D; mapping.transition.lookupTableName;
+    }
+    return jsonMapping;
+  }
+
+  static deserializeMappingServiceJSON(json: any, cfg: ConfigModel): void {
+    if (!cfg.mappings) {
+      cfg.mappings &#x3D; new MappingDefinition;
+    }
+    cfg.mappings.name &#x3D; this.deserializeAtlasMappingName(json);
+    cfg.mappings.parsedDocs &#x3D; cfg.mappings.parsedDocs.concat(MappingSerializer.deserializeDocs(json, cfg.mappings));
+    cfg.mappings.mappings &#x3D; cfg.mappings.mappings.concat(MappingSerializer.deserializeMappings(json, cfg));
+    for (const lookupTable of MappingSerializer.deserializeLookupTables(json)) {
+      cfg.mappings.addTable(lookupTable);
+    }
+    for (const field of MappingSerializer.deserializeConstants(json)) {
+      cfg.constantDoc.addField(field);
+    }
+    for (const field of MappingSerializer.deserializeProperties(json)) {
+      cfg.propertyDoc.addField(field);
+    }
+  }
+
+  /**
+   * Return the AtlasMap mappings file name from the specified JSON buffer or an empty string.
+   *
+   * @param json
+   */
+  static deserializeAtlasMappingName(json: any): string {
+    if (json &amp;&amp; json.AtlasMapping &amp;&amp; json.AtlasMapping.name) {
+      return json.AtlasMapping.name;
+    } else {
+      return &#x27;&#x27;;
+    }
+  }
+
+  static deserializeFieldMapping(
+    mappingJson: any, docRefs: any, cfg: ConfigModel, ignoreValue: boolean &#x3D; true): MappingModel {
+    const mapping &#x3D; new MappingModel();
+    mapping.uuid &#x3D; mappingJson.id;
+    mapping.sourceFields &#x3D; [];
+    mapping.targetFields &#x3D; [];
+    mapping.transition.mode &#x3D; TransitionMode.ONE_TO_ONE;
+    const isLookupMapping &#x3D; (mappingJson.mappingType &#x3D;&#x3D;&#x3D; &#x27;LOOKUP&#x27;);
+
+    if (mappingJson.mappingType &amp;&amp; mappingJson.mappingType !&#x3D;&#x3D; &#x27;&#x27;) {
+      this.deserializeFieldMappingFromType(mapping, mappingJson, docRefs, cfg, ignoreValue);
+      return mapping;
+    }
+
+    let inputField &#x3D; [];
+
+    if (mappingJson.inputFieldGroup) {
+      inputField &#x3D; mappingJson.inputFieldGroup.field;
+
+      for (const field of inputField) {
+        MappingSerializer.addFieldIfDoesntExist(mapping, field, true, docRefs, cfg, ignoreValue);
+      }
+      mapping.transition.mode &#x3D; TransitionMode.MANY_TO_ONE;
+      cfg.mappings.updateMappedFieldsFromDocuments(mapping, cfg, null, true);
+
+      // Check for an InputFieldGroup containing a concatenate action inferring combine mode.
+      const firstAction &#x3D; mappingJson.inputFieldGroup.actions[0];
+      if (firstAction) {
+        if (firstAction.Expression || firstAction[&#x27;@type&#x27;] &#x3D;&#x3D;&#x3D; &#x27;Expression&#x27;) {
+          mapping.transition.enableExpression &#x3D; true;
+          mapping.transition.expression &#x3D; new ExpressionModel(mapping, cfg);
+          const expr &#x3D; firstAction.Expression ? firstAction.Expression.expression : firstAction[&#x27;expression&#x27;];
+          mapping.transition.expression.insertText(expr);
+        } else if (firstAction.Concatenate || firstAction[&#x27;@type&#x27;] &#x3D;&#x3D;&#x3D; &#x27;Concatenate&#x27;) {
+          const concatDelimiter &#x3D;
+            firstAction.Concatenamte ? firstAction.Concatenate.delimiter : firstAction[&#x27;delimiter&#x27;];
+          if (concatDelimiter) {
+            mapping.transition.mode &#x3D; TransitionMode.MANY_TO_ONE;
+            mapping.transition.delimiter &#x3D;
+              TransitionModel.getTransitionDelimiterFromActual(concatDelimiter);
+
+            if (mapping.transition.delimiter &#x3D;&#x3D;&#x3D; TransitionDelimiter.USER_DEFINED) {
+              mapping.transition.userDelimiter &#x3D; concatDelimiter;
+            }
+          }
+        }
+      }
+    } else {
+      inputField &#x3D; mappingJson.inputField;
+
+      for (const field of inputField) {
+        MappingSerializer.addFieldIfDoesntExist(mapping, field, true, docRefs, cfg, ignoreValue);
+      }
+
+      if (cfg.mappings) {
+        cfg.mappings.updateMappedFieldsFromDocuments(mapping, cfg, null, true);
+      }
+
+      if (inputField[0].actions &amp;&amp; inputField[0].actions[0]) {
+        // Check for an InputField containing a split action inferring separate mode.
+        const firstAction &#x3D; inputField[0].actions[0];
+        if (firstAction.Split || firstAction[&#x27;@type&#x27;] &#x3D;&#x3D;&#x3D; &#x27;Split&#x27;) {
+          const splitDelimiter &#x3D; firstAction.Split ? firstAction.Split.delimiter : firstAction[&#x27;delimiter&#x27;];
+          if (splitDelimiter) {
+            mapping.transition.mode &#x3D; TransitionMode.ONE_TO_MANY;
+            mapping.transition.delimiter &#x3D;
+              TransitionModel.getTransitionDelimiterFromActual(splitDelimiter);
+            if (mapping.transition.delimiter &#x3D;&#x3D;&#x3D; TransitionDelimiter.USER_DEFINED) {
+              mapping.transition.userDelimiter &#x3D; splitDelimiter;
+            }
+          }
+        } else if (firstAction.Expression || firstAction[&#x27;@type&#x27;] &#x3D;&#x3D;&#x3D; &#x27;Expression&#x27;) {
+          mapping.transition.enableExpression &#x3D; true;
+          mapping.transition.expression &#x3D; new ExpressionModel(mapping, cfg);
+          const expr &#x3D; firstAction.Expression ? firstAction.Expression.expression : firstAction[&#x27;expression&#x27;];
+          mapping.transition.expression.insertText(expr);
+        }
+      }
+    }
+
+    for (const field of mappingJson.outputField) {
+      MappingSerializer.addFieldIfDoesntExist(mapping, field, false, docRefs, cfg, ignoreValue);
+    }
+
+    if (isLookupMapping) {
+      mapping.transition.lookupTableName &#x3D; mappingJson.lookupTableName;
+      mapping.transition.mode &#x3D; TransitionMode.ENUM;
+    }
+
+    return mapping;
+  }
+
+  static deserializeAudits(audits: any): ErrorInfo[] {
+    const errors: ErrorInfo[] &#x3D; [];
+    if (!audits) {
+      return errors;
+    }
+    for (const audit of audits.audit) {
+      let errorLevel: ErrorLevel;
+      if (audit.status &#x3D;&#x3D;&#x3D; &#x27;ERROR&#x27;) {
+        errorLevel &#x3D; ErrorLevel.ERROR;
+      } else if (audit.status &#x3D;&#x3D;&#x3D; &#x27;WARN&#x27;) {
+        errorLevel &#x3D; ErrorLevel.WARN;
+      }
+      if (errorLevel) {
+        const msg &#x3D; audit.status + &#x27;[&#x27; + audit.path + &#x27;]: &#x27; + audit.message;
+        errors.push(new ErrorInfo(msg, errorLevel, audit.value));
+      }
+    }
+    return errors;
+  }
+
+  private static createInputFieldGroup(mapping: MappingModel, field: any[]): any {
+    const actions &#x3D; [];
+
+    if (mapping.transition.isManyToOneMode()) {
+      if (mapping.transition.enableExpression) {
+        actions[0] &#x3D; {
+          &#x27;Expression&#x27; : {
+            &#x27;expression&#x27; : mapping.transition.expression.toText()
+          }
+        };
+      } else {
+        let delimiter &#x3D; mapping.transition.getActualDelimiter();
+
+        if (mapping.transition.delimiter &#x3D;&#x3D;&#x3D; TransitionDelimiter.USER_DEFINED) {
+          delimiter &#x3D; mapping.transition.userDelimiter;
+        }
+        actions[0] &#x3D; {
+          &#x27;Concatenate&#x27; : {
+            &#x27;delimiter&#x27; : delimiter
+          }
+        };
+      }
+    }
+    const inputFieldGroup: any &#x3D; {
+        &#x27;jsonType&#x27;: ConfigModel.mappingServicesPackagePrefix + &#x27;.FieldGroup&#x27;,
+        actions,
+        field
+    };
+    return inputFieldGroup;
+  }
+
+  private static serializeDocuments(docs: DocumentDefinition[], mappingDefinition: MappingDefinition): any[] {
+    const serializedDocs: any[] &#x3D; [];
+    for (const doc of docs) {
+      const docType: string &#x3D; doc.isSource ? &#x27;SOURCE&#x27; : &#x27;TARGET&#x27;;
+      const serializedDoc: any &#x3D; {
+        &#x27;jsonType&#x27;: &#x27;io.atlasmap.v2.DataSource&#x27;,
+        &#x27;id&#x27;: doc.id,
+        &#x27;uri&#x27;: doc.uri,
+        &#x27;dataSourceType&#x27;: docType,
+      };
+      if (doc.characterEncoding !&#x3D; null) {
+        serializedDoc[&#x27;characterEncoding&#x27;] &#x3D; doc.characterEncoding;
+      }
+      if (doc.locale !&#x3D; null) {
+        serializedDoc[&#x27;locale&#x27;] &#x3D; doc.locale;
+      }
+      if (doc.type &#x3D;&#x3D;&#x3D; DocumentType.XML) {
+        serializedDoc[&#x27;jsonType&#x27;] &#x3D; &#x27;io.atlasmap.xml.v2.XmlDataSource&#x27;;
+        const namespaces: any[] &#x3D; [];
+        for (const ns of doc.namespaces) {
+          namespaces.push({
+            &#x27;alias&#x27;: ns.alias,
+            &#x27;uri&#x27;: ns.uri,
+            &#x27;locationUri&#x27;: ns.locationUri,
+            &#x27;targetNamespace&#x27;: ns.isTarget,
+          });
+        }
+        if (!doc.isSource) {
+          serializedDoc[&#x27;template&#x27;] &#x3D; mappingDefinition.templateText;
+        }
+        serializedDoc[&#x27;xmlNamespaces&#x27;] &#x3D; { &#x27;xmlNamespace&#x27;: namespaces };
+      } else if (doc.type &#x3D;&#x3D;&#x3D; DocumentType.JSON) {
+        if (!doc.isSource) {
+          serializedDoc[&#x27;template&#x27;] &#x3D; mappingDefinition.templateText;
+        }
+        serializedDoc[&#x27;jsonType&#x27;] &#x3D; &#x27;io.atlasmap.json.v2.JsonDataSource&#x27;;
+      }
+
+      serializedDocs.push(serializedDoc);
+    }
+    return serializedDocs;
+  }
+
+  private static serializeConstants(docDef: DocumentDefinition): any[] {
+    const constantDescriptions: any[] &#x3D; [];
+    for (const field of docDef.fields) {
+      // Use the constant value for the name.
+      constantDescriptions.push({
+        &#x27;name&#x27;: field.value, &#x27;value&#x27;: field.value, &#x27;fieldType&#x27;: field.type
+      });
+    }
+    return constantDescriptions;
+  }
+
+  private static serializeProperties(docDef: DocumentDefinition): any[] {
+    const propertyDescriptions: any[] &#x3D; [];
+    for (const field of docDef.fields) {
+      propertyDescriptions.push({
+        &#x27;name&#x27;: field.name,
+        &#x27;value&#x27;: field.value, &#x27;fieldType&#x27;: field.type
+      });
+    }
+    return propertyDescriptions;
+  }
+
+  private static serializeLookupTables(mappingDefinition: MappingDefinition): any[] {
+    const tables: LookupTable[] &#x3D; mappingDefinition.getTables();
+
+    if (!tables || !tables.length) {
+      return [];
+    }
+
+    const serializedTables: any[] &#x3D; [];
+    for (const table of tables) {
+      const lookupEntries: any[] &#x3D; [];
+      for (const entry of table.entries) {
+        const serializedEntry: any &#x3D; {
+          &#x27;sourceValue&#x27;: entry.sourceValue,
+          &#x27;sourceType&#x27;: entry.sourceType,
+          &#x27;targetValue&#x27;: entry.targetValue,
+          &#x27;targetType&#x27;: entry.targetType,
+        };
+        lookupEntries.push(serializedEntry);
+      }
+
+      const serializedTable: any &#x3D; {
+        &#x27;lookupEntry&#x27;: lookupEntries,
+        &#x27;name&#x27;: table.name,
+      };
+      serializedTables.push(serializedTable);
+    }
+    return serializedTables;
+  }
+
+  /**
+   * Serialize field action arguments.
+   *
+   * @param action
+   * @param cfg
+   */
+  private static processActionArguments(action: FieldAction, cfg: ConfigModel): any {
+    let actionArguments: any &#x3D; {};
+    for (const argValue of action.argumentValues) {
+      actionArguments[argValue.name] &#x3D; argValue.value;
+      const argumentConfig: FieldActionArgument &#x3D; action.definition.getArgumentForName(argValue.name);
+      if (argumentConfig &#x3D;&#x3D; null) {
+        cfg.errorService.error(&#x27;Cannot find action argument with name: &#x27; + argValue.name, action);
+         continue;
+      }
+      if (argumentConfig.type &#x3D;&#x3D;&#x3D; &#x27;INTEGER&#x27;) {
+        actionArguments[argValue.name] &#x3D; parseInt(argValue.value, 10);
+      }
+    }
+    actionArguments &#x3D; (Object.keys(actionArguments).length &#x3D;&#x3D;&#x3D; 0) ? null : actionArguments;
+    return actionArguments;
+  }
+
+  private static serializeFields(
+    mapping: MappingModel, isSource: boolean,
+    cfg: ConfigModel, ignoreValue: boolean &#x3D; false): any[] {
+    const fields: MappedField[] &#x3D; mapping.getMappedFields(isSource);
+    const fieldsJson: any[] &#x3D; [];
+    for (const mappedField of fields) {
+      if (!mappedField.field || mappedField.isPadField()) {
+        continue;
+      }
+
+      const field: Field &#x3D; mappedField.field;
+      const serializedField: any &#x3D; {
+        &#x27;jsonType&#x27;: field.serviceObject.jsonType,
+        &#x27;name&#x27;: field.name,
+        &#x27;path&#x27;: field.path,
+        &#x27;fieldType&#x27;: field.type,
+        &#x27;docId&#x27;: field.docDef.id,
+      };
+
+      if (isSource &amp;&amp; fields.length &#x3D;&#x3D;&#x3D; 1 &amp;&amp; mapping.transition.enableExpression) {
+        serializedField[&#x27;actions&#x27;] &#x3D; [ {
+          &#x27;Expression&#x27; : {
+            &#x27;expression&#x27; : mapping.transition.expression.toText()
+          }
+        } ];
+      }
+
+      if (mapping.transition.isOneToManyMode() &amp;&amp; field.isSource()) {
+        let delimiter &#x3D; mapping.transition.getActualDelimiter();
+
+        if (mapping.transition.delimiter &#x3D;&#x3D;&#x3D; TransitionDelimiter.USER_DEFINED) {
+          delimiter &#x3D; mapping.transition.userDelimiter;
+        }
+        serializedField[&#x27;actions&#x27;] &#x3D; [ {
+          &#x27;Split&#x27; : {
+            &#x27;delimiter&#x27; : delimiter
+          }
+        } ];
+      }
+
+      if (!ignoreValue || field.isPropertyOrConstant()) {
+        serializedField[&#x27;value&#x27;] &#x3D; field.value;
+      }
+      if (field.docDef.type &#x3D;&#x3D;&#x3D; DocumentType.XML || field.docDef.type &#x3D;&#x3D;&#x3D; DocumentType.JSON) {
+        serializedField[&#x27;userCreated&#x27;] &#x3D; field.userCreated;
+      } else if (field.docDef.type &#x3D;&#x3D;&#x3D; DocumentType.JAVA &amp;&amp; !field.isPrimitive) {
+        serializedField[&#x27;className&#x27;] &#x3D; field.classIdentifier;
+      }
+      if (field.isProperty()) {
+        serializedField[&#x27;jsonType&#x27;] &#x3D; ConfigModel.mappingServicesPackagePrefix + &#x27;.PropertyField&#x27;;
+        serializedField[&#x27;name&#x27;] &#x3D; field.path ? field.path : field.name;
+      } else if (field.isConstant()) {
+        serializedField[&#x27;jsonType&#x27;] &#x3D; ConfigModel.mappingServicesPackagePrefix + &#x27;.ConstantField&#x27;;
+        delete (serializedField[&#x27;name&#x27;]);
+      } else if (field.enumeration) {
+        serializedField[&#x27;jsonType&#x27;] &#x3D; &#x27;io.atlasmap.java.v2.JavaEnumField&#x27;;
+      }
+
+      let includeIndexes: boolean &#x3D; mapping.transition.isOneToManyMode() &amp;&amp; !isSource;
+      includeIndexes &#x3D; includeIndexes || (mapping.transition.isManyToOneMode() &amp;&amp; isSource);
+      if (includeIndexes) {
+        serializedField[&#x27;index&#x27;] &#x3D; mapping.getIndexForMappedField(mappedField) - 1;
+      }
+
+      if (mappedField.actions.length) {
+        const actions: any[] &#x3D; [];
+        let updatedActions &#x3D; 0;
+
+        for (const action of mappedField.actions) {
+          if (action.isSeparateOrCombineMode || action.definition.serviceObject.name &#x3D;&#x3D;&#x3D; &#x27;Split&#x27;) {
+            continue;
+          }
+          updatedActions++;
+
+          // Serialize custom field actions.
+          if (action.definition.isCustom) {
+              const customActionJson: any &#x3D; {};
+              let customActionBody &#x3D; {};
+              customActionBody[&#x27;name&#x27;] &#x3D; action.definition.serviceObject.name;
+              customActionBody[&#x27;className&#x27;] &#x3D; action.definition.serviceObject.className;
+              customActionBody[&#x27;methodName&#x27;] &#x3D; action.definition.serviceObject.method;
+              // customActionBody[&#x27;arguments&#x27;] &#x3D; MappingSerializer.processActionArguments(action, cfg);
+              customActionBody &#x3D; (Object.keys(customActionBody).length &#x3D;&#x3D;&#x3D; 0) ? null : customActionBody;
+              customActionJson[&#x27;CustomAction&#x27;] &#x3D; customActionBody;
+              actions.push(customActionJson);
+              continue;
+          }
+
+          let actionArguments: any &#x3D; {};
+          actionArguments &#x3D; MappingSerializer.processActionArguments(action, cfg);
+          const actionJson: any &#x3D; {};
+          actionJson[action.definition.name] &#x3D; actionArguments;
+          actions.push(actionJson);
+        }
+        if (updatedActions &gt; 0) {
+          serializedField[&#x27;actions&#x27;] &#x3D; actions;
+        }
+      }
+
+      fieldsJson.push(serializedField);
+    }
+
+    return fieldsJson;
+  }
+
+  private static deserializeDocs(json: any, mappingDefinition: MappingDefinition): DocumentDefinition[] {
+    const docs: DocumentDefinition[] &#x3D; [];
+    if (!json || !json.AtlasMapping) {
+      return;
+    }
+    for (const docRef of json.AtlasMapping.dataSource) {
+      const doc: DocumentDefinition &#x3D; new DocumentDefinition();
+      doc.isSource &#x3D; (docRef.dataSourceType &#x3D;&#x3D;&#x3D; &#x27;SOURCE&#x27;);
+      doc.uri &#x3D; docRef.uri;
+      doc.id &#x3D; docRef.id;
+      if (docRef.xmlNamespaces &amp;&amp; docRef.xmlNamespaces.xmlNamespace) {
+        for (const svcNS of docRef.xmlNamespaces.xmlNamespace) {
+          const ns: NamespaceModel &#x3D; new NamespaceModel();
+          ns.alias &#x3D; svcNS.alias;
+          ns.uri &#x3D; svcNS.uri;
+          ns.locationUri &#x3D; svcNS.locationUri;
+          ns.isTarget &#x3D; svcNS.targetNamespace;
+          ns.createdByUser &#x3D; true;
+          doc.namespaces.push(ns);
+        }
+      }
+      if (docRef.template) {
+        mappingDefinition.templateText &#x3D; docRef.template;
+      }
+      docs.push(doc);
+    }
+    return docs;
+  }
+
+  private static deserializeMappings(json: any, cfg: ConfigModel): MappingModel[] {
+    const mappings: MappingModel[] &#x3D; [];
+    const docRefs: any &#x3D; {};
+
+    if (!json || !json.AtlasMapping) {
+      return mappings;
+    }
+    for (const docRef of json.AtlasMapping.dataSource) {
+      docRefs[docRef.id] &#x3D; docRef.uri;
+    }
+    for (const fieldMapping of json.AtlasMapping.mappings.mapping) {
+      // for backward compatibility
+      const isCollectionMapping &#x3D; (fieldMapping.jsonType &#x3D;&#x3D;&#x3D; ConfigModel.mappingServicesPackagePrefix + &#x27;.Collection&#x27;);
+      if (isCollectionMapping) {
+        for (const innerFieldMapping of fieldMapping.mappings.mapping) {
+          mappings.push(MappingSerializer.deserializeFieldMapping(innerFieldMapping, docRefs, cfg));
+        }
+      } else {
+        mappings.push(MappingSerializer.deserializeFieldMapping(fieldMapping, docRefs, cfg));
+      }
+    }
+    return mappings;
+  }
+
+  /**
+   * @deprecated Deserialize a field mapping based on its mapping type.  This is deprecated in favor of
+   * concatenate/ split actions.
+   *
+   * @param mapping
+   * @param fieldMapping
+   * @param docRefs
+   * @param cfg
+   * @param ignoreValue
+   */
+  private static deserializeFieldMappingFromType(mapping: MappingModel,
+          fieldMapping: any, docRefs: any, cfg: ConfigModel, ignoreValue: boolean): void {
+    const isSeparateMapping &#x3D; (fieldMapping.mappingType &#x3D;&#x3D;&#x3D; &#x27;SEPARATE&#x27;);
+    const isLookupMapping &#x3D; (fieldMapping.mappingType &#x3D;&#x3D;&#x3D; &#x27;LOOKUP&#x27;);
+    const isCombineMapping &#x3D; (fieldMapping.mappingType &#x3D;&#x3D;&#x3D; &#x27;COMBINE&#x27;);
+
+    for (const field of fieldMapping.inputField) {
+       MappingSerializer.addFieldIfDoesntExist(mapping, field, true, docRefs, cfg, ignoreValue);
+    }
+    for (const field of fieldMapping.outputField) {
+       MappingSerializer.addFieldIfDoesntExist(mapping, field, false, docRefs, cfg, ignoreValue);
+    }
+    if (isSeparateMapping) {
+      mapping.transition.mode &#x3D; TransitionMode.ONE_TO_MANY;
+      mapping.transition.setSerializedDelimeterFromSerializedValue(fieldMapping.delimiter);
+    } else if (isCombineMapping) {
+      mapping.transition.mode &#x3D; TransitionMode.MANY_TO_ONE;
+      mapping.transition.setSerializedDelimeterFromSerializedValue(fieldMapping.delimiter);
+    } else if (isLookupMapping) {
+      mapping.transition.lookupTableName &#x3D; fieldMapping.lookupTableName;
+      mapping.transition.mode &#x3D; TransitionMode.ENUM;
+    } else {
+      mapping.transition.mode &#x3D; TransitionMode.ONE_TO_ONE;
+    }
+  }
+
+  private static deserializeConstants(jsonMapping: any): Field[] {
+    const fields: Field[] &#x3D; [];
+    if (!jsonMapping || !jsonMapping.AtlasMapping || !jsonMapping.AtlasMapping.constants
+      || !jsonMapping.AtlasMapping.constants.constant) {
+      return fields;
+    }
+    for (const constant of jsonMapping.AtlasMapping.constants.constant) {
+      const field: Field &#x3D; new Field();
+      field.name &#x3D; constant.name;
+      field.value &#x3D; constant.value;
+      field.type &#x3D; constant.fieldType;
+      field.userCreated &#x3D; true;
+      fields.push(field);
+    }
+    return fields;
+  }
+
+  private static deserializeProperties(jsonMapping: any): Field[] {
+    const fields: Field[] &#x3D; [];
+    if (!jsonMapping || !jsonMapping.AtlasMapping || !jsonMapping.AtlasMapping.properties
+      || !jsonMapping.AtlasMapping.properties.property) {
+      return fields;
+    }
+    for (const property of jsonMapping.AtlasMapping.properties.property) {
+      const field: Field &#x3D; new Field();
+      field.name &#x3D; property.name;
+      field.value &#x3D; property.value;
+      field.type &#x3D; property.fieldType;
+      field.userCreated &#x3D; true;
+      fields.push(field);
+    }
+    return fields;
+  }
+
+  private static deserializeLookupTables(jsonMapping: any): LookupTable[] {
+    const tables: LookupTable[] &#x3D; [];
+    if (!jsonMapping || !jsonMapping.AtlasMapping || !jsonMapping.AtlasMapping.lookupTables
+      || !jsonMapping.AtlasMapping.lookupTables.lookupTable) {
+      return tables;
+    }
+    for (const table of jsonMapping.AtlasMapping.lookupTables.lookupTable) {
+      const parsedTable: LookupTable &#x3D; new LookupTable();
+      parsedTable.name &#x3D; table.name;
+      for (const entry of table.lookupEntry) {
+        const parsedEntry: LookupTableEntry &#x3D; new LookupTableEntry();
+        parsedEntry.sourceValue &#x3D; entry.sourceValue;
+        parsedEntry.sourceType &#x3D; entry.sourceType;
+        parsedEntry.targetValue &#x3D; entry.targetValue;
+        parsedEntry.targetType &#x3D; entry.targetType;
+        parsedTable.entries.push(parsedEntry);
+      }
+      tables.push(parsedTable);
+    }
+    return tables;
+  }
+
+  private static addFieldIfDoesntExist(
+    mapping: MappingModel, field: any, isSource: boolean,
+    docRefs: any, cfg: ConfigModel, ignoreValue: boolean &#x3D; true): MappedField {
+    const mappedField: MappedField &#x3D; new MappedField();
+
+    mappedField.parsedData.parsedValueType &#x3D; field.fieldType;
+    mappedField.parsedData.parsedIndex &#x3D; &#x27;0&#x27;;
+    if (field.index !&#x3D; null) {
+      mappedField.parsedData.parsedIndex &#x3D; (field.index).toString();
+    }
+    if (field.jsonType &#x3D;&#x3D;&#x3D; (ConfigModel.mappingServicesPackagePrefix + &#x27;.PropertyField&#x27;)) {
+      mappedField.parsedData.parsedName &#x3D; field.name;
+      mappedField.parsedData.parsedPath &#x3D; field.name;
+      mappedField.parsedData.fieldIsProperty &#x3D; true;
+    } else if (field.jsonType &#x3D;&#x3D;&#x3D; (ConfigModel.mappingServicesPackagePrefix + &#x27;.ConstantField&#x27;)) {
+      mappedField.parsedData.fieldIsConstant &#x3D; true;
+      mappedField.parsedData.parsedValue &#x3D; field.value;
+      mappedField.parsedData.parsedPath &#x3D; field.path;
+    } else {
+      if (field.docId &#x3D;&#x3D; null) {
+        cfg.errorService.error(&#x27;Parsed mapping field does not have document id, dropping.&#x27;, field);
+        return null;
+      }
+      if (!ignoreValue) {
+        mappedField.parsedData.parsedValue &#x3D; field.value;
+      }
+      mappedField.parsedData.parsedName &#x3D; field.name;
+      mappedField.parsedData.parsedPath &#x3D; field.path;
+      mappedField.parsedData.parsedDocID &#x3D; field.docId;
+      mappedField.parsedData.parsedDocURI &#x3D; docRefs[field.docId];
+      if (field.userCreated) {
+        mappedField.parsedData.userCreated &#x3D; true;
+      }
+      if (mappedField.parsedData.parsedDocURI &#x3D;&#x3D; null) {
+        cfg.errorService.error(&#x27;Could not find document URI for parsed mapped field.&#x27;,
+          { &#x27;fieldJSON&#x27;: field, &#x27;knownDocs&#x27;: docRefs });
+        return null;
+      }
+      if (field.actions) {
+        for (const action of field.actions) {
+          if (action[&#x27;@type&#x27;]) {
+            MappingSerializer.parseNewAction(action, mappedField.parsedData.parsedActions);
+          } else {
+            MappingSerializer.parseOldAction(action, mappedField.parsedData.parsedActions);
+          }
+        }
+      }
+    }
+    mapping.addMappedField(mappedField, isSource);
+    return mappedField;
+  }
+
+  /**
+   * @deprecated actionName: {param:...} style has been deprecated. Use {&#x60;@type&#x60;: actionName} style action description.
+   */
+  private static parseOldAction(action: any, parsedActions: FieldAction[]) {
+    for (const actionName of Object.keys(action)) {
+      if (!action.hasOwnProperty(actionName)) {
+        return;
+      }
+      const parsedAction: FieldAction &#x3D; new FieldAction();
+      parsedAction.name &#x3D; actionName;
+      const actionParams: any &#x3D; action[actionName];
+      if (actionParams) {
+        for (const paramName of Object.keys(actionParams)) {
+          if (!actionParams.hasOwnProperty(paramName)) {
+            return;
+          }
+          const parsedArgumentValue: FieldActionArgumentValue &#x3D; new FieldActionArgumentValue();
+          parsedArgumentValue.name &#x3D; paramName;
+          let value &#x3D; actionParams[paramName];
+          value &#x3D; value &#x3D;&#x3D; null ? null : value.toString();
+          parsedArgumentValue.value &#x3D; value;
+          parsedAction.argumentValues.push(parsedArgumentValue);
+        }
+      }
+      parsedActions.push(parsedAction);
+    }
+  }
+
+  private static parseNewAction(action: any, parsedActions: FieldAction[]) {
+    const parsedAction: FieldAction &#x3D; new FieldAction();
+    parsedAction.name &#x3D; action[&#x27;@type&#x27;];
+    for (const [key, value] of Object.entries(action)) {
+      if (&#x27;@type&#x27; &#x3D;&#x3D;&#x3D; key) {
+        continue;
+      }
+      const parsedArgumentValue: FieldActionArgumentValue &#x3D; new FieldActionArgumentValue();
+      parsedArgumentValue.name &#x3D; key;
+      const valueString &#x3D; value &#x3D;&#x3D; null ? null : value.toString();
+      parsedArgumentValue.value &#x3D; valueString;
+      parsedAction.argumentValues.push(parsedArgumentValue);
+    }
+    parsedActions.push(parsedAction);
+  }
+}
+</code></pre>
+    </div>
+</div>
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'class';
+            var COMPODOC_CURRENT_PAGE_URL = 'MappingSerializer.html';
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

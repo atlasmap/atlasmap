@@ -1,0 +1,1204 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>@atlasmap/atlasmap-data-mapper documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">@atlasmap/atlasmap-data-mapper documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>MappingFieldActionArgumentComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li >
+            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li >
+            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-action-argument.component.ts</code>
+</p>
+
+
+
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>mapping-field-action-argument</code></td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./mapping-field-action-argument.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#checkIconEnabled">checkIconEnabled</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#acceptInput">acceptInput</a>
+                            </li>
+                            <li>
+                                <a href="#actionConfigParamSelectionChanged">actionConfigParamSelectionChanged</a>
+                            </li>
+                            <li>
+                                <a href="#contentChanged">contentChanged</a>
+                            </li>
+                            <li>
+                                <a href="#getActionConfigParamValues">getActionConfigParamValues</a>
+                            </li>
+                            <li>
+                                <a href="#getActionConfigParamVDefault">getActionConfigParamVDefault</a>
+                            </li>
+                            <li>
+                                <a href="#getLabel">getLabel</a>
+                            </li>
+                            <li>
+                                <a href="#getMappedFieldActions">getMappedFieldActions</a>
+                            </li>
+                            <li>
+                                <a href="#validateActionConfigParamSelection">validateActionConfigParamSelection</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Inputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#action">action</a>
+                            </li>
+                            <li>
+                                <a href="#actionIndex">actionIndex</a>
+                            </li>
+                            <li>
+                                <a href="#argConfig">argConfig</a>
+                            </li>
+                            <li>
+                                <a href="#argValIndex">argValIndex</a>
+                            </li>
+                            <li>
+                                <a href="#cfg">cfg</a>
+                            </li>
+                            <li>
+                                <a href="#mappedField">mappedField</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+
+    <section>
+    <h3 id="inputs">Inputs</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="action"></a>
+                        <b>action</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../classes/FieldAction.html" target="_self" >FieldAction</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-action-argument.component.ts:29</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="actionIndex"></a>
+                        <b>actionIndex</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-action-argument.component.ts:30</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="argConfig"></a>
+                        <b>argConfig</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../classes/FieldActionArgument.html" target="_self" >FieldActionArgument</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-action-argument.component.ts:32</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="argValIndex"></a>
+                        <b>argValIndex</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-action-argument.component.ts:31</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="cfg"></a>
+                        <b>cfg</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../classes/ConfigModel.html" target="_self" >ConfigModel</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-action-argument.component.ts:33</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="mappedField"></a>
+                        <b>mappedField</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../classes/MappedField.html" target="_self" >MappedField</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-action-argument.component.ts:34</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+    <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="acceptInput"></a>
+                    <span class="name">
+                        <b>
+                            acceptInput
+                        </b>
+                        <a href="#acceptInput"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>acceptInput(event: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="55"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-action-argument.component.ts:55</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>The user has selected the check icon at the end of the input text widget.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>event</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="actionConfigParamSelectionChanged"></a>
+                    <span class="name">
+                        <b>
+                            actionConfigParamSelectionChanged
+                        </b>
+                        <a href="#actionConfigParamSelectionChanged"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>actionConfigParamSelectionChanged(event: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="92"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-action-argument.component.ts:92</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>A mapping field action parameter selection has been made either from a pull-down menu
+or from user input to a text field.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>event</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="contentChanged"></a>
+                    <span class="name">
+                        <b>
+                            contentChanged
+                        </b>
+                        <a href="#contentChanged"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>contentChanged()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="45"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-action-argument.component.ts:45</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>The input text widget content has changed.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getActionConfigParamValues"></a>
+                    <span class="name">
+                        <b>
+                            getActionConfigParamValues
+                        </b>
+                        <a href="#getActionConfigParamValues"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getActionConfigParamValues(argConfig: <a href="../classes/FieldActionArgument.html">FieldActionArgument</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="64"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-action-argument.component.ts:64</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Return in a string array the parameter values for the specified field action argument.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>argConfig</td>
+                                    <td>
+                                                <code><a href="../classes/FieldActionArgument.html" target="_self" >FieldActionArgument</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>String[]</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getActionConfigParamVDefault"></a>
+                    <span class="name">
+                        <b>
+                            getActionConfigParamVDefault
+                        </b>
+                        <a href="#getActionConfigParamVDefault"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getActionConfigParamVDefault(argConfig: <a href="../classes/FieldActionArgument.html">FieldActionArgument</a>, actionIndex: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, argValIndex: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="125"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-action-argument.component.ts:125</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Return a string representing the default value for the field action argument pull-down.  If a mapped
+field already exists for this component then use that to determine the displayed valued in the
+pull-down; otherwise use the sequential configuration value based on the argument value index.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>argConfig</td>
+                                    <td>
+                                                <code><a href="../classes/FieldActionArgument.html" target="_self" >FieldActionArgument</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <ul>
+<li>argument configuration used if no mapped field exists</li>
+</ul>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>actionIndex</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <ul>
+<li>used when multiple actions are specified</li>
+</ul>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>argValIndex</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <ul>
+<li>index into the argument values for any one specific action.</li>
+</ul>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" target="_blank" >String</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getLabel"></a>
+                    <span class="name">
+                        <b>
+                            getLabel
+                        </b>
+                        <a href="#getLabel"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getLabel(argConfigName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="139"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-action-argument.component.ts:139</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Translate an internal label to a human legible form.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>argConfigName</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMappedFieldActions"></a>
+                    <span class="name">
+                        <b>
+                            getMappedFieldActions
+                        </b>
+                        <a href="#getMappedFieldActions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMappedFieldActions()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="38"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-action-argument.component.ts:38</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>FieldAction[]</code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="validateActionConfigParamSelection"></a>
+                    <span class="name">
+                        <b>
+                            validateActionConfigParamSelection
+                        </b>
+                        <a href="#validateActionConfigParamSelection"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>validateActionConfigParamSelection(acp: FieldActionArgumentValue[])</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="77"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-action-argument.component.ts:77</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Simply validate that the user isn&#39;t attempting a conversion to the original type.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>acp</td>
+                                    <td>
+                                            <code>FieldActionArgumentValue[]</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="checkIconEnabled"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            checkIconEnabled</b>
+                            <a href="#checkIconEnabled"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>false</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-action-argument.component.ts:36</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, Input } from &#x27;@angular/core&#x27;;
+import { DataMapperUtil } from &#x27;../../common/data-mapper-util&#x27;;
+import { MappedField } from &#x27;../../models/mapping.model&#x27;;
+import { ConfigModel } from &#x27;../../models/config.model&#x27;;
+import { FieldAction, FieldActionArgument, FieldActionArgumentValue } from &#x27;../../models/field-action.model&#x27;;
+
+@Component({
+  selector: &#x27;mapping-field-action-argument&#x27;,
+  templateUrl: &#x27;./mapping-field-action-argument.component.html&#x27;,
+})
+
+export class MappingFieldActionArgumentComponent {
+  @Input() action: FieldAction;
+  @Input() actionIndex: number;
+  @Input() argValIndex: number;
+  @Input() argConfig: FieldActionArgument;
+  @Input() cfg: ConfigModel;
+  @Input() mappedField: MappedField;
+
+  private checkIconEnabled &#x3D; false;
+
+  getMappedFieldActions(): FieldAction[] {
+    return this.mappedField.actions;
+  }
+
+  /**
+   * The input text widget content has changed.
+   */
+  contentChanged(): void {
+    this.checkIconEnabled &#x3D; true;
+    this.cfg.mappingService.notifyMappingUpdated();
+  }
+
+  /**
+   * The user has selected the check icon at the end of the input text widget.
+   *
+   * @param event
+   */
+  acceptInput(event: any): void {
+    this.actionConfigParamSelectionChanged(event);
+  }
+
+  /**
+   * Return in a string array the parameter values for the specified field action argument.
+   *
+   * @param argConfig
+   */
+  getActionConfigParamValues(argConfig: FieldActionArgument): String[] {
+    const acpv: String[] &#x3D; [];
+    for (const argument of argConfig.values) {
+      acpv.push(argument);
+    }
+    return acpv;
+  }
+
+  /**
+   * Simply validate that the user isn&#x27;t attempting a conversion to the original type.
+   *
+   * @param acp
+   */
+  validateActionConfigParamSelection(acp: FieldActionArgumentValue[]): void {
+    this.cfg.errorService.clearMappingErrors();
+    if (acp !&#x3D; null &amp;&amp; acp.length &#x3D;&#x3D;&#x3D; 2) {
+      if (acp[0].value &#x3D;&#x3D;&#x3D; acp[1].value) {
+        this.cfg.errorService.mappingError(&#x27;Please select differing \&#x27;from\&#x27; and \&#x27;to\&#x27; units in your conversion transformation.&#x27;, null);
+      }
+    }
+  }
+
+  /**
+   * A mapping field action parameter selection has been made either from a pull-down menu
+   * or from user input to a text field.
+   *
+   * @param event
+   */
+  actionConfigParamSelectionChanged(event: any): void {
+
+    // Make sure they&#x27;ve specified something.
+    if (!event.target.value || event.target.value.length &#x3D;&#x3D;&#x3D; 0) {
+      this.cfg.errorService.info(&#x27;You must specify a transformation argument value.&#x27;, null);
+      return;
+    }
+    this.mappedField.parsedData.userCreated &#x3D; true;
+
+    // Identify the pull-down
+    if (event.target.selectedOptions !&#x3D; null) {
+      const attributes: any &#x3D; event.target.selectedOptions.item(0).attributes;
+      const selectedArgValName: any &#x3D; attributes.getNamedItem(&#x27;value&#x27;).value;
+      const argValIndex: any &#x3D; attributes.getNamedItem(&#x27;argValIndex&#x27;).value;
+      const actionIndex: any &#x3D; attributes.getNamedItem(&#x27;actionIndex&#x27;).value;
+      const action: FieldAction &#x3D; this.mappedField.actions[actionIndex];
+      action.argumentValues[argValIndex].value &#x3D; selectedArgValName;
+      this.validateActionConfigParamSelection(action.argumentValues);
+    }
+    this.cfg.mappingService.notifyMappingUpdated();
+    this.checkIconEnabled &#x3D; false;
+    // this.enableCheck();
+  }
+
+  /**
+   * Return a string representing the default value for the field action argument pull-down.  If a mapped
+   * field already exists for this component then use that to determine the displayed valued in the
+   * pull-down; otherwise use the sequential configuration value based on the argument value index.
+   *
+   * @param argConfig - argument configuration used if no mapped field exists
+   * @param actionIndex - used when multiple actions are specified
+   * @param argValIndex - index into the argument values for any one specific action.
+   */
+  getActionConfigParamVDefault(argConfig: FieldActionArgument, actionIndex: number, argValIndex: number): String {
+    const action: FieldAction &#x3D; this.getMappedFieldActions()[actionIndex];
+    if (action !&#x3D; null &amp;&amp; action.argumentValues.length &gt; 0) {
+      return action.argumentValues[argValIndex].value;
+    } else {
+      return argConfig.values[argValIndex];
+    }
+  }
+
+  /**
+   * Translate an internal label to a human legible form.
+   *
+   * @param argConfigName
+   */
+  getLabel(argConfigName: string): string {
+    return DataMapperUtil.toDisplayable(argConfigName);
+  }
+
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;mappingFieldActionArgument&quot;&gt;
+  &lt;label style&#x3D;&quot;&quot;&gt;&lt;/label&gt;
+
+  &lt;div *ngIf&#x3D;&quot;argConfig.values !&#x3D; null &amp;&amp; argConfig.values.length &gt; 0; else textInput&quot;&gt;
+    &lt;label&gt;{{ getLabel(argConfig.name) }}&lt;/label&gt;
+    &lt;select (change)&#x3D;&quot;actionConfigParamSelectionChanged($event)&quot; [ngModel]&#x3D;&quot;getActionConfigParamVDefault(argConfig, actionIndex, argValIndex)&quot;&gt;
+      &lt;option *ngFor&#x3D;&quot;let actionConfigParamVal of getActionConfigParamValues(argConfig)&quot; [attr.argValIndex]&#x3D;&quot;argValIndex&quot;
+              [attr.actionIndex]&#x3D;&quot;actionIndex&quot; [attr.value]&#x3D;&quot;actionConfigParamVal&quot; style&#x3D;&quot;color: black;&quot;&gt;{{ actionConfigParamVal }}
+      &lt;/option&gt;
+    &lt;/select&gt;
+  &lt;/div&gt;
+
+  &lt;ng-template #textInput&gt;
+    &lt;label&gt;{{ getLabel(argConfig.name) }}: &lt;/label&gt;
+    &lt;div *ngIf&#x3D;&quot;argConfig.type &#x3D;&#x3D; &#x27;string&#x27;; else rightAlign&quot;&gt;
+      &lt;input type&#x3D;&quot;text&quot; class&#x3D;&quot;input-{{argConfig.name}}&quot; [(ngModel)]&#x3D;&quot;action.getArgumentValue(argConfig.name).value&quot;
+        (ngModelChange)&#x3D;&quot;contentChanged()&quot; (change)&#x3D;&quot;actionConfigParamSelectionChanged($event)&quot; style&#x3D;&quot;text-align:left;&quot;/&gt;
+    &lt;/div&gt;
+    &lt;ng-template #rightAlign&gt;
+      &lt;input type&#x3D;&quot;text&quot; class&#x3D;&quot;input-{{argConfig.name}}&quot; [(ngModel)]&#x3D;&quot;action.getArgumentValue(argConfig.name).value&quot;
+        (ngModelChange)&#x3D;&quot;contentChanged()&quot; (change)&#x3D;&quot;actionConfigParamSelectionChanged($event)&quot; style&#x3D;&quot;text-align:right;&quot;/&gt;
+    &lt;/ng-template&gt;
+
+    &lt;!-- Enable if performance of per-char validation becomes an issue.
+    &lt;div style&#x3D;&quot;float:left; margin-left: 5px;&quot;&gt;
+      &lt;div class&#x3D;&quot;check-icon-enabled&quot; *ngIf&#x3D;&quot;checkIconEnabled; else disableCheckIcon&quot;&gt;
+        &lt;i class&#x3D;&quot;glyphicon glyphicon-ok&quot; aria-hidden&#x3D;&quot;true&quot; (click)&#x3D;&quot;acceptInput($event)&quot;
+          tooltip&#x3D;&quot;Accept input&quot; placement&#x3D;&quot;left&quot;&gt;&lt;/i&gt;
+      &lt;/div&gt;
+      &lt;ng-template #disableCheckIcon&gt;
+        &lt;i class&#x3D;&quot;glyphicon glyphicon-ok check-icon-disabled&quot; aria-hidden&#x3D;&quot;true&quot;
+          tooltip&#x3D;&quot;Edit input to enable&quot; placement&#x3D;&quot;left&quot;&gt;&lt;/i&gt;
+      &lt;/ng-template&gt;
+    &lt;/div&gt;
+    --&gt;
+  &lt;/ng-template&gt;
+
+  &lt;div class&#x3D;&quot;clear&quot;&gt;&lt;/div&gt;
+
+&lt;/div&gt;
+</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="mappingFieldActionArgument">  <label style=""></label>  <div *ngIf="argConfig.values != null && argConfig.values.length > 0; else textInput">    <label>{{ getLabel(argConfig.name) }}</label>    <select (change)="actionConfigParamSelectionChanged($event)" [ngModel]="getActionConfigParamVDefault(argConfig, actionIndex, argValIndex)">      <option *ngFor="let actionConfigParamVal of getActionConfigParamValues(argConfig)" [attr.argValIndex]="argValIndex"              [attr.actionIndex]="actionIndex" [attr.value]="actionConfigParamVal" style="color: black;">{{ actionConfigParamVal }}      </option>    </select>  </div>  <ng-template #textInput>    <label>{{ getLabel(argConfig.name) }}: </label>    <div *ngIf="argConfig.type == \'string\'; else rightAlign">      <input type="text" class="input-{{argConfig.name}}" [(ngModel)]="action.getArgumentValue(argConfig.name).value"        (ngModelChange)="contentChanged()" (change)="actionConfigParamSelectionChanged($event)" style="text-align:left;"/>    </div>    <ng-template #rightAlign>      <input type="text" class="input-{{argConfig.name}}" [(ngModel)]="action.getArgumentValue(argConfig.name).value"        (ngModelChange)="contentChanged()" (change)="actionConfigParamSelectionChanged($event)" style="text-align:right;"/>    </ng-template>    <!-- Enable if performance of per-char validation becomes an issue.    <div style="float:left; margin-left: 5px;">      <div class="check-icon-enabled" *ngIf="checkIconEnabled; else disableCheckIcon">        <i class="glyphicon glyphicon-ok" aria-hidden="true" (click)="acceptInput($event)"          tooltip="Accept input" placement="left"></i>      </div>      <ng-template #disableCheckIcon>        <i class="glyphicon glyphicon-ok check-icon-disabled" aria-hidden="true"          tooltip="Edit input to enable" placement="left"></i>      </ng-template>    </div>    -->  </ng-template>  <div class="clear"></div></div></div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'atlasmap-dev-root'},{'name': 'AtlasmapNavbarComponent', 'selector': 'atlasmap-navbar'},{'name': 'ClassNameComponent', 'selector': 'class-name'},{'name': 'CollapsableHeaderComponent', 'selector': 'collapsable-header'},{'name': 'ConstantFieldEditComponent', 'selector': 'constant-field-edit'},{'name': 'DataMapperAppComponent', 'selector': 'data-mapper'},{'name': 'DataMapperAppExampleHostComponent', 'selector': 'data-mapper-example-host'},{'name': 'DataMapperErrorComponent', 'selector': 'data-mapper-error'},{'name': 'DocumentDefinitionComponent', 'selector': 'document-definition'},{'name': 'DocumentFieldDetailComponent', 'selector': 'document-field-detail'},{'name': 'EmptyModalBodyComponent', 'selector': 'empty-modal-body'},{'name': 'ExpressionComponent', 'selector': 'expression'},{'name': 'FieldEditComponent', 'selector': 'field-edit'},{'name': 'LineMachineComponent', 'selector': 'line-machine'},{'name': 'LookupTableComponent', 'selector': 'lookup-table'},{'name': 'MappingDetailComponent', 'selector': 'mapping-detail'},{'name': 'MappingFieldActionArgumentComponent', 'selector': 'mapping-field-action-argument'},{'name': 'MappingFieldActionComponent', 'selector': 'mapping-field-action'},{'name': 'MappingFieldContainerComponent', 'selector': 'mapping-field-container'},{'name': 'MappingFieldDetailComponent', 'selector': 'mapping-field-detail'},{'name': 'MappingListComponent', 'selector': 'mapping-list'},{'name': 'MappingListFieldComponent', 'selector': 'mapping-list-field'},{'name': 'MappingSelectionComponent', 'selector': 'mapping-selection'},{'name': 'MappingSelectionSectionComponent', 'selector': 'mapping-selection-section'},{'name': 'ModalErrorWindowComponent', 'selector': 'modal-error-window'},{'name': 'ModalWindowComponent', 'selector': 'modal-window'},{'name': 'NamespaceEditComponent', 'selector': 'namespace-edit'},{'name': 'NamespaceListComponent', 'selector': 'namespace-list'},{'name': 'PropertyFieldEditComponent', 'selector': 'property-field-edit'},{'name': 'TemplateEditComponent', 'selector': 'template-edit'},{'name': 'ToolbarComponent', 'selector': 'toolbar'},{'name': 'TransitionSelectionComponent', 'selector': 'transition-selection'}];
+    var DIRECTIVES = [{'name': 'FocusDirective', 'selector': '[focus]'}];
+    var ACTUAL_COMPONENT = {'name': 'MappingFieldActionArgumentComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'MappingFieldActionArgumentComponent.html';
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

@@ -1,0 +1,836 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>@atlasmap/atlasmap-data-mapper documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">@atlasmap/atlasmap-data-mapper documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>MappingDetailComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li >
+            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li >
+            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/lib/atlasmap-data-mapper/components/mapping/mapping-detail.component.ts</code>
+</p>
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+                    <code><a href="https://angular.io/api/core/OnDestroy" target="_blank" >OnDestroy</a></code>
+    </p>
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>mapping-detail</code></td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./mapping-detail.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#mappingSelectionRequiredSubscription">mappingSelectionRequiredSubscription</a>
+                            </li>
+                            <li>
+                                <a href="#sourcesHeader">sourcesHeader</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#getTitle">getTitle</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnDestroy">ngOnDestroy</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit">ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#removeMapping">removeMapping</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#selectMapping">selectMapping</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Inputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#cfg">cfg</a>
+                            </li>
+                            <li>
+                                <a href="#modalWindow">modalWindow</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+
+    <section>
+    <h3 id="inputs">Inputs</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="cfg"></a>
+                        <b>cfg</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../classes/ConfigModel.html" target="_self" >ConfigModel</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-detail.component.ts:35</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="modalWindow"></a>
+                        <b>modalWindow</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../components/ModalWindowComponent.html" target="_self" >ModalWindowComponent</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-detail.component.ts:36</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+    <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getTitle"></a>
+                    <span class="name">
+                        <b>
+                            getTitle
+                        </b>
+                        <a href="#getTitle"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getTitle()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="53"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-detail.component.ts:53</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnDestroy"></a>
+                    <span class="name">
+                        <b>
+                            ngOnDestroy
+                        </b>
+                        <a href="#ngOnDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnDestroy()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="49"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-detail.component.ts:49</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <b>
+                            ngOnInit
+                        </b>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="43"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-detail.component.ts:43</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="removeMapping"></a>
+                    <span class="name">
+                        <b>
+                            removeMapping
+                        </b>
+                        <a href="#removeMapping"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>removeMapping(event: MouseEvent)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="57"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-detail.component.ts:57</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>event</td>
+                                    <td>
+                                            <code>MouseEvent</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="selectMapping"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            selectMapping
+                        </b>
+                        <a href="#selectMapping"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>selectMapping(field: <a href="../classes/Field.html">Field</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="73"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-detail.component.ts:73</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>field</td>
+                                    <td>
+                                                <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="mappingSelectionRequiredSubscription"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            mappingSelectionRequiredSubscription</b>
+                            <a href="#mappingSelectionRequiredSubscription"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>Subscription</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-detail.component.ts:41</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="sourcesHeader"></a>
+                        <span class="name">
+                            <b>
+                            sourcesHeader</b>
+                            <a href="#sourcesHeader"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../components/CollapsableHeaderComponent.html" target="_self" >CollapsableHeaderComponent</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Decorators : </b>
+                            <br />
+                            <code>
+                                @ViewChild(&#x27;sourcesHeader&#x27;)<br />
+                            </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-detail.component.ts:39</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, Input, OnInit, OnDestroy, ViewChild } from &#x27;@angular/core&#x27;;
+
+import { ConfigModel } from &#x27;../../models/config.model&#x27;;
+import { Field } from &#x27;../../models/field.model&#x27;;
+import { MappingModel } from &#x27;../../models/mapping.model&#x27;;
+
+import { CollapsableHeaderComponent } from &#x27;../collapsable-header.component&#x27;;
+
+import { ModalWindowComponent } from &#x27;../modal-window.component&#x27;;
+import { MappingSelectionComponent } from &#x27;./mapping-selection.component&#x27;;
+import { Subscription } from &#x27;rxjs&#x27;;
+
+@Component({
+  selector: &#x27;mapping-detail&#x27;,
+  templateUrl: &#x27;./mapping-detail.component.html&#x27;,
+})
+
+export class MappingDetailComponent implements OnInit, OnDestroy {
+  @Input() cfg: ConfigModel;
+  @Input() modalWindow: ModalWindowComponent;
+
+  @ViewChild(&#x27;sourcesHeader&#x27;)
+  sourcesHeader: CollapsableHeaderComponent;
+
+  private mappingSelectionRequiredSubscription: Subscription;
+
+  ngOnInit(): void {
+    this.mappingSelectionRequiredSubscription &#x3D; this.cfg.mappingService.mappingSelectionRequired$.subscribe((field: Field) &#x3D;&gt; {
+      this.selectMapping(field);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.mappingSelectionRequiredSubscription.unsubscribe();
+  }
+
+  getTitle(): string {
+    return this.cfg.mappings.activeMapping.isLookupMode() ? &#x27;Lookup Mapping&#x27; : &#x27;Mapping Details&#x27;;
+  }
+
+  removeMapping(event: MouseEvent): void {
+    this.modalWindow.reset();
+    this.modalWindow.confirmButtonText &#x3D; &#x27;Remove&#x27;;
+    this.modalWindow.headerText &#x3D; &#x27;Remove Mapping?&#x27;;
+    this.modalWindow.message &#x3D; &#x27;Are you sure you want to remove the current mapping?&#x27;;
+    this.modalWindow.okButtonHandler &#x3D; (mw: ModalWindowComponent) &#x3D;&gt; {
+      const activeMapping &#x3D; this.cfg.mappings.activeMapping;
+      if (activeMapping.isLookupMode) {
+        this.cfg.mappings.removeTableByName(activeMapping.transition.lookupTableName);
+      }
+      this.cfg.mappingService.removeMapping(activeMapping);
+      this.cfg.showMappingDetailTray &#x3D; false;
+    };
+    this.modalWindow.show();
+  }
+
+  private selectMapping(field: Field): void {
+    const mappingsForField: MappingModel[] &#x3D; this.cfg.mappings.findMappingsForField(field);
+    const self: MappingDetailComponent &#x3D; this;
+    this.modalWindow.reset();
+    this.modalWindow.confirmButtonText &#x3D; &#x27;Select&#x27;;
+    this.modalWindow.headerText &#x3D; &#x27;Select Mapping&#x27;;
+    this.modalWindow.nestedComponentInitializedCallback &#x3D; (mw: ModalWindowComponent) &#x3D;&gt; {
+      const c: MappingSelectionComponent &#x3D; mw.nestedComponent as MappingSelectionComponent;
+      c.selectedField &#x3D; field;
+      c.cfg &#x3D; self.cfg;
+      c.mappings &#x3D; mappingsForField;
+      c.modalWindow &#x3D; this.modalWindow;
+    };
+    this.modalWindow.nestedComponentType &#x3D; MappingSelectionComponent;
+    this.modalWindow.okButtonHandler &#x3D; (mw: ModalWindowComponent) &#x3D;&gt; {
+      this.cfg.errorService.clearValidationErrors();
+      const c: MappingSelectionComponent &#x3D; mw.nestedComponent as MappingSelectionComponent;
+      const mapping: MappingModel &#x3D; c.getSelectedMapping();
+      self.cfg.mappingService.selectMapping(mapping);
+    };
+    this.modalWindow.cancelButtonHandler &#x3D; (mw: ModalWindowComponent) &#x3D;&gt; {
+      self.cfg.mappingService.selectMapping(null);
+    };
+    this.modalWindow.show();
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&#x27;fieldMappingDetail&#x27; *ngIf&#x3D;&quot;cfg.mappings &amp;&amp; cfg.mappings.activeMapping &amp;&amp; cfg.showMappingDetailTray&quot;&gt;
+
+  &lt;div class&#x3D;&quot;card-pf&quot;&gt;
+    &lt;div class&#x3D;&quot;card-pf-heading&quot;&gt;
+      &lt;h2 class&#x3D;&quot;card-pf-title clearfix&quot;&gt;
+        &lt;div class&#x3D;&quot;pull-left&quot;&gt;{{ getTitle() }}&lt;/div&gt;
+        &lt;i class&#x3D;&quot;fa fa-trash link pull-right&quot; aria-hidden&#x3D;&quot;true&quot; (click)&#x3D;&quot;removeMapping($event)&quot; tooltip&#x3D;&quot;Remove the current mapping&quot; placement&#x3D;&quot;left&quot;&gt;&lt;/i&gt;
+      &lt;/h2&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;fieldMappingDetail-body&quot;&gt;
+
+      {{ cfg.errorService.displayErrorBlock(cfg.mappings.activeMapping.getValidationWarnings()) }}
+      {{ cfg.errorService.displayErrorBlock(cfg.mappings.activeMapping.getValidationErrors()) }}
+      {{ cfg.mappings.activeMapping.clearValidationErrors() }}
+
+      {{ cfg.errorService.displayErrorBlock(cfg.mappings.activeMapping.getPreviewWarnings()) }}
+      {{ cfg.errorService.displayErrorBlock(cfg.mappings.activeMapping.getPreviewErrors()) }}
+      {{ cfg.mappings.activeMapping.clearPreviewErrors() }}
+
+      &lt;div class&#x3D;&quot;wizard-pf&quot; embed-in-page&#x3D;&quot;true&quot;&gt;
+        &lt;div class&#x3D;&quot;wizard-pf-body&quot;&gt;
+
+          &lt;!-- Sources row --&gt;
+          &lt;div class&#x3D;&quot;wizard-pf-row&quot;&gt;
+            &lt;div class&#x3D;&quot;wizard-pf-sidebar&quot;&gt;
+
+              &lt;div class&#x3D;&quot;mapping-detail-icon-container&quot;&gt;
+                &lt;span class&#x3D;&quot;fa-stack&quot;&gt;
+                  &lt;i class&#x3D;&quot;fa fa-circle-thin fa-stack-2x&quot;&gt;&lt;/i&gt;
+                  &lt;i class&#x3D;&quot;fa fa-hdd-o fa-stack-1x&quot;&gt;&lt;/i&gt;
+                &lt;/span&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class&#x3D;&quot;mapping-details-panel&quot;&gt;
+              &lt;collapsable-header title&#x3D;&quot;Sources&quot; #sourcesHeader class&#x3D;&quot;mapping-sources&quot;&gt;&lt;/collapsable-header&gt;
+              &lt;ng-container *ngIf&#x3D;&quot;!sourcesHeader.collapsed&quot;&gt;
+                &lt;div *ngIf&#x3D;&quot;cfg.mappings.activeMapping&quot;&gt;
+                  &lt;mapping-field-container [cfg]&#x3D;&quot;cfg&quot; [mapping]&#x3D;&quot;cfg.mappings.activeMapping&quot; [isSource]&#x3D;&quot;true&quot; [modalWindow]&#x3D;&quot;modalWindow&quot;&gt;
+                  &lt;/mapping-field-container&gt;
+                &lt;/div&gt;
+              &lt;/ng-container&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+
+          &lt;!-- Targets row --&gt;
+          &lt;div class&#x3D;&quot;wizard-pf-row&quot;&gt;
+            &lt;div class&#x3D;&quot;wizard-pf-sidebar&quot;&gt;
+
+              &lt;div class&#x3D;&quot;mapping-detail-icon-container-bottom&quot;&gt;
+                &lt;span class&#x3D;&quot;fa-stack&quot;&gt;
+                  &lt;i class&#x3D;&quot;fa fa-circle-thin fa-stack-2x&quot;&gt;&lt;/i&gt;
+                  &lt;i class&#x3D;&quot;fa fa-download fa-stack-1x&quot;&gt;&lt;/i&gt;
+                &lt;/span&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class&#x3D;&quot;mapping-details-panel&quot;&gt;
+              &lt;collapsable-header title&#x3D;&quot;Targets&quot; #targetsHeader&gt;&lt;/collapsable-header&gt;
+              &lt;ng-container *ngIf&#x3D;&quot;!targetsHeader.collapsed&quot;&gt;
+                &lt;div *ngIf&#x3D;&quot;cfg.mappings.activeMapping&quot;&gt;
+                  &lt;mapping-field-container [cfg]&#x3D;&quot;cfg&quot; [mapping]&#x3D;&quot;cfg.mappings.activeMapping&quot; [isSource]&#x3D;&quot;false&quot; [modalWindow]&#x3D;&quot;modalWindow&quot;&gt;
+                  &lt;/mapping-field-container&gt;
+                &lt;/div&gt;
+              &lt;/ng-container&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class=\'fieldMappingDetail\' *ngIf="cfg.mappings && cfg.mappings.activeMapping && cfg.showMappingDetailTray">  <div class="card-pf">    <div class="card-pf-heading">      <h2 class="card-pf-title clearfix">        <div class="pull-left">{{ getTitle() }}</div>        <i class="fa fa-trash link pull-right" aria-hidden="true" (click)="removeMapping($event)" tooltip="Remove the current mapping" placement="left"></i>      </h2>    </div>    <div class="fieldMappingDetail-body">      {{ cfg.errorService.displayErrorBlock(cfg.mappings.activeMapping.getValidationWarnings()) }}      {{ cfg.errorService.displayErrorBlock(cfg.mappings.activeMapping.getValidationErrors()) }}      {{ cfg.mappings.activeMapping.clearValidationErrors() }}      {{ cfg.errorService.displayErrorBlock(cfg.mappings.activeMapping.getPreviewWarnings()) }}      {{ cfg.errorService.displayErrorBlock(cfg.mappings.activeMapping.getPreviewErrors()) }}      {{ cfg.mappings.activeMapping.clearPreviewErrors() }}      <div class="wizard-pf" embed-in-page="true">        <div class="wizard-pf-body">          <!-- Sources row -->          <div class="wizard-pf-row">            <div class="wizard-pf-sidebar">              <div class="mapping-detail-icon-container">                <span class="fa-stack">                  <i class="fa fa-circle-thin fa-stack-2x"></i>                  <i class="fa fa-hdd-o fa-stack-1x"></i>                </span>              </div>            </div>            <div class="mapping-details-panel">              <collapsable-header title="Sources" #sourcesHeader class="mapping-sources"></collapsable-header>              <ng-container *ngIf="!sourcesHeader.collapsed">                <div *ngIf="cfg.mappings.activeMapping">                  <mapping-field-container [cfg]="cfg" [mapping]="cfg.mappings.activeMapping" [isSource]="true" [modalWindow]="modalWindow">                  </mapping-field-container>                </div>              </ng-container>            </div>          </div>          <!-- Targets row -->          <div class="wizard-pf-row">            <div class="wizard-pf-sidebar">              <div class="mapping-detail-icon-container-bottom">                <span class="fa-stack">                  <i class="fa fa-circle-thin fa-stack-2x"></i>                  <i class="fa fa-download fa-stack-1x"></i>                </span>              </div>            </div>            <div class="mapping-details-panel">              <collapsable-header title="Targets" #targetsHeader></collapsable-header>              <ng-container *ngIf="!targetsHeader.collapsed">                <div *ngIf="cfg.mappings.activeMapping">                  <mapping-field-container [cfg]="cfg" [mapping]="cfg.mappings.activeMapping" [isSource]="false" [modalWindow]="modalWindow">                  </mapping-field-container>                </div>              </ng-container>            </div>          </div>        </div>      </div>    </div>  </div></div></div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'atlasmap-dev-root'},{'name': 'AtlasmapNavbarComponent', 'selector': 'atlasmap-navbar'},{'name': 'ClassNameComponent', 'selector': 'class-name'},{'name': 'CollapsableHeaderComponent', 'selector': 'collapsable-header'},{'name': 'ConstantFieldEditComponent', 'selector': 'constant-field-edit'},{'name': 'DataMapperAppComponent', 'selector': 'data-mapper'},{'name': 'DataMapperAppExampleHostComponent', 'selector': 'data-mapper-example-host'},{'name': 'DataMapperErrorComponent', 'selector': 'data-mapper-error'},{'name': 'DocumentDefinitionComponent', 'selector': 'document-definition'},{'name': 'DocumentFieldDetailComponent', 'selector': 'document-field-detail'},{'name': 'EmptyModalBodyComponent', 'selector': 'empty-modal-body'},{'name': 'ExpressionComponent', 'selector': 'expression'},{'name': 'FieldEditComponent', 'selector': 'field-edit'},{'name': 'LineMachineComponent', 'selector': 'line-machine'},{'name': 'LookupTableComponent', 'selector': 'lookup-table'},{'name': 'MappingDetailComponent', 'selector': 'mapping-detail'},{'name': 'MappingFieldActionArgumentComponent', 'selector': 'mapping-field-action-argument'},{'name': 'MappingFieldActionComponent', 'selector': 'mapping-field-action'},{'name': 'MappingFieldContainerComponent', 'selector': 'mapping-field-container'},{'name': 'MappingFieldDetailComponent', 'selector': 'mapping-field-detail'},{'name': 'MappingListComponent', 'selector': 'mapping-list'},{'name': 'MappingListFieldComponent', 'selector': 'mapping-list-field'},{'name': 'MappingSelectionComponent', 'selector': 'mapping-selection'},{'name': 'MappingSelectionSectionComponent', 'selector': 'mapping-selection-section'},{'name': 'ModalErrorWindowComponent', 'selector': 'modal-error-window'},{'name': 'ModalWindowComponent', 'selector': 'modal-window'},{'name': 'NamespaceEditComponent', 'selector': 'namespace-edit'},{'name': 'NamespaceListComponent', 'selector': 'namespace-list'},{'name': 'PropertyFieldEditComponent', 'selector': 'property-field-edit'},{'name': 'TemplateEditComponent', 'selector': 'template-edit'},{'name': 'ToolbarComponent', 'selector': 'toolbar'},{'name': 'TransitionSelectionComponent', 'selector': 'transition-selection'}];
+    var DIRECTIVES = [{'name': 'FocusDirective', 'selector': '[focus]'}];
+    var ACTUAL_COMPONENT = {'name': 'MappingDetailComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'MappingDetailComponent.html';
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

@@ -1,0 +1,2987 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>@atlasmap/atlasmap-data-mapper documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">@atlasmap/atlasmap-data-mapper documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Injectables</li>
+  <li>DocumentManagementService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/lib/atlasmap-data-mapper/services/document-management.service.ts</code>
+        </p>
+
+
+
+
+            <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#cfg">cfg</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#headers">headers</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#mappingUpdatedSubscription">mappingUpdatedSubscription</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#createDocumentFetchRequest">createDocumentFetchRequest</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#extractJavaDocumentDefinition">extractJavaDocumentDefinition</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#extractJavaDocumentDefinitionFromInspectionResponse">extractJavaDocumentDefinitionFromInspectionResponse</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#extractJSONDocumentDefinition">extractJSONDocumentDefinition</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#extractJSONDocumentDefinitionFromInspectionResponse">extractJSONDocumentDefinitionFromInspectionResponse</a>
+                            </li>
+                            <li>
+                                <a href="#extractXMLDocumentDefinition">extractXMLDocumentDefinition</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#extractXMLDocumentDefinitionFromInspectionResponse">extractXMLDocumentDefinitionFromInspectionResponse</a>
+                            </li>
+                            <li>
+                                <a href="#fetchClassPath">fetchClassPath</a>
+                            </li>
+                            <li>
+                                <a href="#fetchDocument">fetchDocument</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Static</span>
+                                <a href="#generateExportBlockData">generateExportBlockData</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Static</span>
+                                <a href="#generateExportMappings">generateExportMappings</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Static</span>
+                                <a href="#generateExportMetaStr">generateExportMetaStr</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Static</span>
+                                <a href="#getMappingsInfo">getMappingsInfo</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#handleError">handleError</a>
+                            </li>
+                            <li>
+                                <a href="#initialize">initialize</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#isSelectedRootElement">isSelectedRootElement</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnDestroy">ngOnDestroy</a>
+                            </li>
+                            <li>
+                                <a href="#parseDocumentResponse">parseDocumentResponse</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#parseFieldFromDocument">parseFieldFromDocument</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#parseJavaFieldFromDocument">parseJavaFieldFromDocument</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#parseJSONFieldFromDocument">parseJSONFieldFromDocument</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#parseXMLFieldFromDocument">parseXMLFieldFromDocument</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#processDocument">processDocument</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Static</span>
+                                <a href="#sanitizeJSON">sanitizeJSON</a>
+                            </li>
+                            <li>
+                                <a href="#setLibraryToService">setLibraryToService</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="107" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:107</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>http</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="createDocumentFetchRequest"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            createDocumentFetchRequest
+                        </b>
+                        <a href="#createDocumentFetchRequest"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>createDocumentFetchRequest(docDef: <a href="../classes/DocumentDefinition.html">DocumentDefinition</a>, classPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="304"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:304</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>docDef</td>
+                                    <td>
+                                                <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>classPath</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="extractJavaDocumentDefinition"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            extractJavaDocumentDefinition
+                        </b>
+                        <a href="#extractJavaDocumentDefinition"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>extractJavaDocumentDefinition(body: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, docDef: <a href="../classes/DocumentDefinition.html">DocumentDefinition</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="481"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:481</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>body</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>docDef</td>
+                                    <td>
+                                                <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="extractJavaDocumentDefinitionFromInspectionResponse"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            extractJavaDocumentDefinitionFromInspectionResponse
+                        </b>
+                        <a href="#extractJavaDocumentDefinitionFromInspectionResponse"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>extractJavaDocumentDefinitionFromInspectionResponse(responseJson: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, docDef: <a href="../classes/DocumentDefinition.html">DocumentDefinition</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="470"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:470</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>responseJson</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>docDef</td>
+                                    <td>
+                                                <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="extractJSONDocumentDefinition"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            extractJSONDocumentDefinition
+                        </b>
+                        <a href="#extractJSONDocumentDefinition"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>extractJSONDocumentDefinition(body: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, docDef: <a href="../classes/DocumentDefinition.html">DocumentDefinition</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="393"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:393</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>body</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>docDef</td>
+                                    <td>
+                                                <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="extractJSONDocumentDefinitionFromInspectionResponse"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            extractJSONDocumentDefinitionFromInspectionResponse
+                        </b>
+                        <a href="#extractJSONDocumentDefinitionFromInspectionResponse"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>extractJSONDocumentDefinitionFromInspectionResponse(responseJson: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, docDef: <a href="../classes/DocumentDefinition.html">DocumentDefinition</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="382"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:382</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>responseJson</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>docDef</td>
+                                    <td>
+                                                <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="extractXMLDocumentDefinition"></a>
+                    <span class="name">
+                        <b>
+                            extractXMLDocumentDefinition
+                        </b>
+                        <a href="#extractXMLDocumentDefinition"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>extractXMLDocumentDefinition(body: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, docDef: <a href="../classes/DocumentDefinition.html">DocumentDefinition</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="427"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:427</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>body</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>docDef</td>
+                                    <td>
+                                                <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="extractXMLDocumentDefinitionFromInspectionResponse"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            extractXMLDocumentDefinitionFromInspectionResponse
+                        </b>
+                        <a href="#extractXMLDocumentDefinitionFromInspectionResponse"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>extractXMLDocumentDefinitionFromInspectionResponse(responseJson: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, docDef: <a href="../classes/DocumentDefinition.html">DocumentDefinition</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="416"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:416</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>responseJson</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>docDef</td>
+                                    <td>
+                                                <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fetchClassPath"></a>
+                    <span class="name">
+                        <b>
+                            fetchClassPath
+                        </b>
+                        <a href="#fetchClassPath"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>fetchClassPath()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="126"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:126</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;string&gt;</code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fetchDocument"></a>
+                    <span class="name">
+                        <b>
+                            fetchDocument
+                        </b>
+                        <a href="#fetchDocument"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>fetchDocument(docDef: <a href="../classes/DocumentDefinition.html">DocumentDefinition</a>, classPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="156"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:156</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>docDef</td>
+                                    <td>
+                                                <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>classPath</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/DocumentDefinition.html" target="_self" >Observable&lt;DocumentDefinition&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="generateExportBlockData"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Static</span>
+                            generateExportBlockData
+                        </b>
+                        <a href="#generateExportBlockData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>generateExportBlockData(buffer: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="82"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:82</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Capture the specified user JSON or XML document buffer into a general catalog JSON buffer.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>buffer</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="generateExportMappings"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Static</span>
+                            generateExportMappings
+                        </b>
+                        <a href="#generateExportMappings"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>generateExportMappings(buffer: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="64"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:64</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Capture the specified user mappings into a general catalog JSON buffer (exportMappings).</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>buffer</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="generateExportMetaStr"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Static</span>
+                            generateExportMetaStr
+                        </b>
+                        <a href="#generateExportMetaStr"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>generateExportMetaStr(docDef: <a href="../classes/DocumentDefinition.html">DocumentDefinition</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="98"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:98</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Capture the specified user document definition meta data into a general catalog JSON buffer.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>docDef</td>
+                                    <td>
+                                                <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMappingsInfo"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Static</span>
+                            getMappingsInfo
+                        </b>
+                        <a href="#getMappingsInfo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getMappingsInfo(buffer: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="56"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:56</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Restrict JSON parsing to the document management service.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>buffer</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="handleError"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            handleError
+                        </b>
+                        <a href="#handleError"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>handleError(message: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, error: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="609"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:609</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>message</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>error</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initialize"></a>
+                    <span class="name">
+                        <b>
+                            initialize
+                        </b>
+                        <a href="#initialize"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initialize()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="111"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:111</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isSelectedRootElement"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            isSelectedRootElement
+                        </b>
+                        <a href="#isSelectedRootElement"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>isSelectedRootElement(field: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, docDef: <a href="../classes/DocumentDefinition.html">DocumentDefinition</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="465"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:465</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>field</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>docDef</td>
+                                    <td>
+                                                <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnDestroy"></a>
+                    <span class="name">
+                        <b>
+                            ngOnDestroy
+                        </b>
+                        <a href="#ngOnDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnDestroy()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="122"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:122</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="parseDocumentResponse"></a>
+                    <span class="name">
+                        <b>
+                            parseDocumentResponse
+                        </b>
+                        <a href="#parseDocumentResponse"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>parseDocumentResponse(responseJson: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, docDef: <a href="../classes/DocumentDefinition.html">DocumentDefinition</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="350"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:350</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>responseJson</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>docDef</td>
+                                    <td>
+                                                <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="parseFieldFromDocument"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            parseFieldFromDocument
+                        </b>
+                        <a href="#parseFieldFromDocument"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>parseFieldFromDocument(field: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, parentField: <a href="../classes/Field.html">Field</a>, docDef: <a href="../classes/DocumentDefinition.html">DocumentDefinition</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="530"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:530</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>field</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>parentField</td>
+                                    <td>
+                                                <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>docDef</td>
+                                    <td>
+                                                <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="parseJavaFieldFromDocument"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            parseJavaFieldFromDocument
+                        </b>
+                        <a href="#parseJavaFieldFromDocument"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>parseJavaFieldFromDocument(field: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, parentField: <a href="../classes/Field.html">Field</a>, docDef: <a href="../classes/DocumentDefinition.html">DocumentDefinition</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="582"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:582</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>field</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>parentField</td>
+                                    <td>
+                                                <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>docDef</td>
+                                    <td>
+                                                <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="parseJSONFieldFromDocument"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            parseJSONFieldFromDocument
+                        </b>
+                        <a href="#parseJSONFieldFromDocument"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>parseJSONFieldFromDocument(field: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, parentField: <a href="../classes/Field.html">Field</a>, docDef: <a href="../classes/DocumentDefinition.html">DocumentDefinition</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="517"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:517</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>field</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>parentField</td>
+                                    <td>
+                                                <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>docDef</td>
+                                    <td>
+                                                <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="parseXMLFieldFromDocument"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            parseXMLFieldFromDocument
+                        </b>
+                        <a href="#parseXMLFieldFromDocument"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>parseXMLFieldFromDocument(field: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, parentField: <a href="../classes/Field.html">Field</a>, docDef: <a href="../classes/DocumentDefinition.html">DocumentDefinition</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="562"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:562</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>field</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>parentField</td>
+                                    <td>
+                                                <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>docDef</td>
+                                    <td>
+                                                <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="processDocument"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Async</span>
+                            processDocument
+                        </b>
+                        <a href="#processDocument"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>processDocument(selectedFile: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, inspectionType: <a href="../undefineds/InspectionType.html">InspectionType</a>, isSource: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="227"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:227</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Read the selected file and parse it with the format defined by the specified inspection type.  Call the
+initialization service to update the sources/ targets in both the runtime and the UI.  The runtime will
+parse/ validate the file.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>selectedFile</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>inspectionType</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/enumerations.html#InspectionType" target="_self" >InspectionType</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>isSource</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sanitizeJSON"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Static</span>
+                            sanitizeJSON
+                        </b>
+                        <a href="#sanitizeJSON"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>sanitizeJSON(buffer: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="42"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:42</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Use the JSON utility to translate the specified buffer into a JSON buffer - then replace any
+non-ascii character encodings with unicode escape sequences.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>buffer</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setLibraryToService"></a>
+                    <span class="name">
+                        <b>
+                            setLibraryToService
+                        </b>
+                        <a href="#setLibraryToService"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>setLibraryToService(binaryBuffer: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, callback: (success: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>,res: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="200"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:200</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Push a user-defined Java archive file (binary buffer) to the runtime.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>binaryBuffer</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>callback</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/function" target="_blank" >function</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="cfg"></a>
+                        <span class="name">
+                            <b>
+                            cfg</b>
+                            <a href="#cfg"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/ConfigModel.html" target="_self" >ConfigModel</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:31</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="headers"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            headers</b>
+                            <a href="#headers"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>new HttpHeaders({&#x27;Content-Type&#x27;: &#x27;application/json&#x27;})</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:33</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="mappingUpdatedSubscription"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            mappingUpdatedSubscription</b>
+                            <a href="#mappingUpdatedSubscription"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>Subscription</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/document-management.service.ts:34</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, OnDestroy } from &#x27;@angular/core&#x27;;
+import { HttpHeaders, HttpClient } from &#x27;@angular/common/http&#x27;;
+import { Observable } from &#x27;rxjs&#x27;;
+
+import { DocumentType, InspectionType, CollectionType } from &#x27;../common/config.types&#x27;;
+import { ConfigModel } from &#x27;../models/config.model&#x27;;
+import { Field, EnumValue } from &#x27;../models/field.model&#x27;;
+import { DocumentDefinition, NamespaceModel } from &#x27;../models/document-definition.model&#x27;;
+
+import { DataMapperUtil } from &#x27;../common/data-mapper-util&#x27;;
+import { Subscription } from &#x27;rxjs&#x27;;
+
+@Injectable()
+export class DocumentManagementService implements OnDestroy {
+  cfg: ConfigModel;
+
+  private headers &#x3D; new HttpHeaders({&#x27;Content-Type&#x27;: &#x27;application/json&#x27;});
+  private mappingUpdatedSubscription: Subscription;
+
+  /**
+   * Use the JSON utility to translate the specified buffer into a JSON buffer - then replace any
+   * non-ascii character encodings with unicode escape sequences.
+   *
+   * @param buffer
+   */
+  static sanitizeJSON(buffer: string): string {
+    let jsonBuffer &#x3D; buffer;
+    jsonBuffer &#x3D; JSON.stringify(buffer);
+    jsonBuffer &#x3D; jsonBuffer.replace(/[\u007F-\uFFFF]/g, function(chr) {
+      return &#x27;\\u&#x27; + (&#x27;0000&#x27; + chr.charCodeAt(0).toString(16)).substr(-4);
+    });
+    return jsonBuffer;
+  }
+
+  /**
+   * Restrict JSON parsing to the document management service.
+   *
+   * @param buffer
+   */
+  static getMappingsInfo(buffer: string): any {
+    return JSON.parse(buffer);
+  }
+
+  /**
+   * Capture the specified user mappings into a general catalog JSON buffer (exportMappings).
+   * @param buffer
+   */
+  static generateExportMappings(buffer: string): string {
+
+    if (buffer &#x3D;&#x3D;&#x3D; null || buffer.length &#x3D;&#x3D;&#x3D; 0) {
+      return &#x27;&#x27;;
+    }
+    const metaStr &#x3D; &#x60;   &quot;exportMappings&quot;:
+    {
+       \&quot;value\&quot;: &#x60; + this.sanitizeJSON(buffer) + &#x60;
+    },\n&#x60;;
+
+    return metaStr;
+  }
+
+  /**
+   * Capture the specified user JSON or XML document buffer into a general catalog JSON buffer.
+   *
+   * @param buffer
+   */
+  static generateExportBlockData(buffer: string): string {
+
+    if (buffer &#x3D;&#x3D;&#x3D; null || buffer.length &#x3D;&#x3D;&#x3D; 0) {
+        return &#x27;&#x27;;
+    }
+    const metaStr &#x3D; &#x60;
+          {
+             \&quot;value\&quot;: &#x60; + this.sanitizeJSON(buffer) + &#x60;
+          }&#x60;;
+    return metaStr;
+  }
+
+  /**
+   * Capture the specified user document definition meta data into a general catalog JSON buffer.
+   * @param docDef
+   */
+  static generateExportMetaStr(docDef: DocumentDefinition): string {
+    const metaStr &#x3D; &#x60;
+       {
+          \&quot;name\&quot;: \&quot;&#x60; + docDef.name + &#x60;\&quot;,
+          \&quot;documentType\&quot;: \&quot;&#x60; + docDef.type + &#x60;\&quot;,
+          \&quot;inspectionType\&quot;: \&quot;&#x60; + docDef.inspectionType + &#x60;\&quot;,
+          \&quot;isSource\&quot;: \&quot;&#x60; + docDef.isSource + &#x60;\&quot;
+       }&#x60;;
+    return metaStr;
+  }
+
+  constructor(private http: HttpClient) {}
+
+  initialize(): void {
+    this.mappingUpdatedSubscription
+      &#x3D; this.cfg.mappingService.mappingUpdated$.subscribe(mappingDefinition &#x3D;&gt; {
+      for (const d of this.cfg.getAllDocs()) {
+        if (d.initialized) {
+          d.updateFromMappings(this.cfg.mappings);
+        }
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.mappingUpdatedSubscription.unsubscribe();
+  }
+
+  fetchClassPath(): Observable&lt;string&gt; {
+    return new Observable&lt;string&gt;((observer: any) &#x3D;&gt; {
+      const requestBody &#x3D; {
+        &#x27;MavenClasspathRequest&#x27;: {
+          &#x27;jsonType&#x27;: ConfigModel.javaServicesPackagePrefix + &#x27;.MavenClasspathRequest&#x27;,
+          &#x27;pomXmlData&#x27;: this.cfg.initCfg.pomPayload,
+          &#x27;executeTimeout&#x27;: this.cfg.initCfg.classPathFetchTimeoutInMilliseconds,
+        },
+      };
+      const url: string &#x3D; this.cfg.initCfg.baseJavaInspectionServiceUrl + &#x27;mavenclasspath&#x27;;
+      if (this.cfg.isTraceEnabled()) {
+        this.cfg.logger.trace(&#x60;Classpath Service Request: ${JSON.stringify(requestBody)}&#x60;);
+      }
+      this.http.post(url, requestBody, { headers: this.headers }).toPromise()
+        .then((body: any) &#x3D;&gt; {
+          if (this.cfg.isTraceEnabled()) {
+            this.cfg.logger.trace(&#x60;Classpath Service Response: ${JSON.stringify(body)}&#x60;);
+          }
+          const classPath: string &#x3D; body.MavenClasspathResponse.classpath;
+          observer.next(classPath);
+          observer.complete();
+        })
+        .catch((error: any) &#x3D;&gt; {
+          observer.error(error);
+          observer.complete();
+        },
+      );
+    });
+  }
+
+  fetchDocument(docDef: DocumentDefinition, classPath: string): Observable&lt;DocumentDefinition&gt; {
+    return new Observable&lt;DocumentDefinition&gt;((observer: any) &#x3D;&gt; {
+      if (docDef.inspectionResult) {
+        const responseJson: any &#x3D; JSON.parse(docDef.inspectionResult);
+        this.parseDocumentResponse(responseJson, docDef);
+        observer.next(docDef);
+        observer.complete();
+        return;
+      }
+
+      const payload: any &#x3D; this.createDocumentFetchRequest(docDef, classPath);
+      let url: string &#x3D; this.cfg.initCfg.baseJavaInspectionServiceUrl + &#x27;class&#x27;;
+      if ((docDef.type &#x3D;&#x3D;&#x3D; DocumentType.XML) || (docDef.type &#x3D;&#x3D;&#x3D; DocumentType.XSD)) {
+        url &#x3D; this.cfg.initCfg.baseXMLInspectionServiceUrl + &#x27;inspect&#x27;;
+      } else if (docDef.type &#x3D;&#x3D;&#x3D; DocumentType.JSON) {
+        url &#x3D; this.cfg.initCfg.baseJSONInspectionServiceUrl + &#x27;inspect&#x27;;
+      }
+      if (this.cfg.isTraceEnabled()) {
+        this.cfg.logger.trace(&#x60;Document Service Request: ${JSON.stringify(payload)}&#x60;);
+      }
+      this.http.post(url, payload, { headers: this.headers }).toPromise()
+        .then((responseJson: any) &#x3D;&gt; {
+          if (this.cfg.isTraceEnabled()) {
+            this.cfg.logger.trace(&#x60;Document Service Response: ${JSON.stringify(responseJson)}&#x60;);
+          }
+          this.parseDocumentResponse(responseJson, docDef);
+          observer.next(docDef);
+          observer.complete();
+        })
+        .catch((error: any) &#x3D;&gt; {
+          observer.error(error);
+          docDef.errorOccurred &#x3D; true;
+          observer.next(docDef);
+          observer.complete();
+        },
+      );
+    });
+  }
+
+  /**
+   * Push a user-defined Java archive file (binary buffer) to the runtime.
+   *
+   * @param binaryBuffer
+   */
+  setLibraryToService(binaryBuffer: any, callback: (success: boolean, res: any) &#x3D;&gt; void): void {
+    const serviceHeaders &#x3D; new HttpHeaders(
+       {&#x27;Content-Type&#x27;: &#x27;application/octet-stream&#x27;});
+    const url &#x3D; this.cfg.initCfg.baseMappingServiceUrl + &#x27;library&#x27;;
+    this.cfg.logger.trace(&#x27;Set Library Service Request&#x27;);
+    const fileContent: Blob &#x3D; new Blob([binaryBuffer], {type: &#x27;application/octet-stream&#x27;});
+    this.http.put(url, fileContent, { headers: serviceHeaders }).toPromise().then((res: any) &#x3D;&gt; {
+      callback(true, res);
+      if (this.cfg.isTraceEnabled()) {
+        this.cfg.logger.trace(&#x60;Set Library Service Response: ${JSON.stringify(res)}&#x60;);
+        }
+    })
+    .catch((error: any) &#x3D;&gt; {
+      callback(false, error);
+      this.handleError(&#x27;Error occurred while uploading a JAR file to the server.&#x27;, error); },
+    );
+  }
+
+  /**
+   * Read the selected file and parse it with the format defined by the specified inspection type.  Call the
+   * initialization service to update the sources/ targets in both the runtime and the UI.  The runtime will
+   * parse/ validate the file.
+   *
+   * @param selectedFile
+   * @param inspectionType
+   * @param isSource
+   */
+  async processDocument(selectedFile: any, inspectionType: InspectionType, isSource: boolean) {
+      let fileBin &#x3D; null;
+      let fileText &#x3D; &#x27;&#x27;;
+      const reader &#x3D; new FileReader();
+
+      this.cfg.errorService.clearValidationErrors();
+
+      const userFileComps &#x3D; selectedFile.name.split(&#x27;.&#x27;);
+      const userFile &#x3D; userFileComps[0];
+      const userFileSuffix: string &#x3D; userFileComps[userFileComps.length - 1].toUpperCase();
+
+      if (userFileSuffix &#x3D;&#x3D;&#x3D; DocumentType.JAVA_ARCHIVE) {
+
+        // Wait for the async read of the selected binary document to be completed.
+        try {
+          fileBin &#x3D; await DataMapperUtil.readBinaryFile(selectedFile, reader);
+        } catch (error) {
+          this.cfg.errorService.mappingError(&#x27;Unable to import the specified schema document.&#x27;, error);
+          return;
+        }
+        if (inspectionType &#x3D;&#x3D;&#x3D; InspectionType.UNKNOWN) {
+          inspectionType &#x3D; InspectionType.JAVA_CLASS;
+        }
+      } else {
+
+        // Wait for the async read of the selected ascii document to be completed.
+        try {
+          fileText &#x3D; await DataMapperUtil.readFile(selectedFile, reader);
+        } catch (error) {
+          this.cfg.errorService.mappingError(&#x27;Unable to import the specified schema document.&#x27;, error);
+          return;
+        }
+
+        // Derive the format if not already defined.
+        if (inspectionType &#x3D;&#x3D;&#x3D; InspectionType.UNKNOWN) {
+          if ((userFileSuffix &#x3D;&#x3D;&#x3D; DocumentType.XSD) ||
+              (fileText.search(&#x27;SchemaSet&#x27;) &gt; -1) ||
+              (fileText.search(&#x27;\\$schema&#x27;) &gt; -1)) {
+            inspectionType &#x3D; InspectionType.SCHEMA;
+          } else {
+            inspectionType &#x3D; InspectionType.INSTANCE;
+          }
+        }
+      }
+
+      switch (userFileSuffix) {
+
+      case DocumentType.JSON:
+        this.cfg.initializationService.initializeUserDoc(fileText, userFile, DocumentType.JSON,
+          inspectionType, isSource);
+        break;
+
+      case DocumentType.JAVA_ARCHIVE:
+        this.cfg.initializationService.initializeUserDoc(fileBin, userFile, DocumentType.JAVA_ARCHIVE,
+          inspectionType, isSource);
+        this.cfg.errorService.info(selectedFile.name +
+          &#x27; import complete.  Select the plus icon on the Sources/Targets panel to enable specific classes.&#x27;, null);
+        return;
+
+      case &#x27;java&#x27;:
+        this.cfg.initializationService.initializeUserDoc(fileText, userFile, DocumentType.JAVA,
+          inspectionType, isSource);
+        break;
+
+      case DocumentType.XML:
+      case DocumentType.XSD:
+        this.cfg.initializationService.initializeUserDoc(fileText, userFile, userFileSuffix,
+          inspectionType, isSource);
+        break;
+
+      default:
+        this.handleError(&#x27;Unrecognized document suffix (&#x27; + userFileSuffix + &#x27;)&#x27;, null);
+      }
+      this.cfg.errorService.info(selectedFile.name + &#x27; &#x27; + userFileSuffix +
+        &#x27; import complete.&#x27;, null);
+  }
+
+  private createDocumentFetchRequest(docDef: DocumentDefinition, classPath: string): any {
+    if ((docDef.type &#x3D;&#x3D;&#x3D; DocumentType.XML) || (docDef.type &#x3D;&#x3D;&#x3D; DocumentType.XSD)) {
+      return {
+        &#x27;XmlInspectionRequest&#x27;: {
+          &#x27;jsonType&#x27;: &#x27;io.atlasmap.xml.v2.XmlInspectionRequest&#x27;,
+          &#x27;type&#x27;: docDef.inspectionType,
+          &#x27;xmlData&#x27;: docDef.inspectionSource,
+        },
+      };
+    }
+    if (docDef.type &#x3D;&#x3D;&#x3D; DocumentType.JSON) {
+      return {
+        &#x27;JsonInspectionRequest&#x27;: {
+          &#x27;jsonType&#x27;: &#x27;io.atlasmap.json.v2.JsonInspectionRequest&#x27;,
+          &#x27;type&#x27;: docDef.inspectionType,
+          &#x27;jsonData&#x27;: docDef.inspectionSource,
+        },
+      };
+    }
+    const className: string &#x3D; docDef.inspectionSource;
+    const payload: any &#x3D; {
+      &#x27;ClassInspectionRequest&#x27;: {
+        &#x27;jsonType&#x27;: ConfigModel.javaServicesPackagePrefix + &#x27;.ClassInspectionRequest&#x27;,
+        &#x27;classpath&#x27;: classPath,
+        &#x27;className&#x27;: className,
+        &#x27;disablePrivateOnlyFields&#x27;: this.cfg.initCfg.disablePrivateOnlyFields,
+        &#x27;disableProtectedOnlyFields&#x27;: this.cfg.initCfg.disableProtectedOnlyFields,
+        &#x27;disablePublicOnlyFields&#x27;: this.cfg.initCfg.disablePublicOnlyFields,
+        &#x27;disablePublicGetterSetterFields&#x27;: this.cfg.initCfg.disablePublicGetterSetterFields,
+      },
+    };
+    if (docDef.initModel.collectionType &amp;&amp; docDef.initModel.collectionType as CollectionType !&#x3D;&#x3D; CollectionType.NONE) {
+      payload[&#x27;ClassInspectionRequest&#x27;][&#x27;collectionType&#x27;] &#x3D; docDef.initModel.collectionType;
+      if (docDef.initModel.collectionClassName) {
+        payload[&#x27;ClassInspectionRequest&#x27;][&#x27;collectionClassName&#x27;] &#x3D; docDef.initModel.collectionClassName;
+      }
+    }
+    if (this.cfg.initCfg.fieldNameBlacklist &amp;&amp; this.cfg.initCfg.fieldNameBlacklist.length) {
+      payload[&#x27;ClassInspectionRequest&#x27;][&#x27;fieldNameBlacklist&#x27;] &#x3D; { &#x27;string&#x27;: this.cfg.initCfg.fieldNameBlacklist };
+    }
+    if (this.cfg.initCfg.classNameBlacklist &amp;&amp; this.cfg.initCfg.classNameBlacklist.length) {
+      payload[&#x27;ClassInspectionRequest&#x27;][&#x27;classNameBlacklist&#x27;] &#x3D; { &#x27;string&#x27;: this.cfg.initCfg.classNameBlacklist };
+    }
+    return payload;
+  }
+
+  parseDocumentResponse(responseJson: any, docDef: DocumentDefinition): void {
+    if (docDef.type &#x3D;&#x3D;&#x3D; DocumentType.JAVA) {
+      if (typeof responseJson.ClassInspectionResponse !&#x3D;&#x3D; &#x27;undefined&#x27;) {
+        this.extractJavaDocumentDefinitionFromInspectionResponse(responseJson, docDef);
+      } else if ((typeof responseJson.javaClass !&#x3D;&#x3D; &#x27;undefined&#x27;)
+        || (typeof responseJson.JavaClass !&#x3D;&#x3D; &#x27;undefined&#x27;)) {
+        this.extractJavaDocumentDefinition(responseJson, docDef);
+      } else {
+        this.handleError(&#x27;Unknown Java inspection result format&#x27;, responseJson);
+      }
+    } else if (docDef.type &#x3D;&#x3D;&#x3D; DocumentType.JSON) {
+      if (typeof responseJson.JsonInspectionResponse !&#x3D;&#x3D; &#x27;undefined&#x27;) {
+        this.extractJSONDocumentDefinitionFromInspectionResponse(responseJson, docDef);
+      } else if ((typeof responseJson.jsonDocument !&#x3D;&#x3D; &#x27;undefined&#x27;)
+        || (typeof responseJson.JsonDocument !&#x3D;&#x3D; &#x27;undefined&#x27;)) {
+        this.extractJSONDocumentDefinition(responseJson, docDef);
+      } else {
+        this.handleError(&#x27;Unknown JSON inspection result format&#x27;, responseJson);
+      }
+    } else {
+      if (typeof responseJson.XmlInspectionResponse !&#x3D;&#x3D; &#x27;undefined&#x27;) {
+        this.extractXMLDocumentDefinitionFromInspectionResponse(responseJson, docDef);
+      } else if ((typeof responseJson.xmlDocument !&#x3D;&#x3D; &#x27;undefined&#x27;)
+        || (typeof responseJson.XmlDocument !&#x3D;&#x3D; &#x27;undefined&#x27;)) {
+        this.extractXMLDocumentDefinition(responseJson, docDef);
+      } else {
+        this.handleError(&#x27;Unknown XML inspection result format&#x27;, responseJson);
+      }
+    }
+    docDef.initializeFromFields();
+  }
+
+  private extractJSONDocumentDefinitionFromInspectionResponse(responseJson: any, docDef: DocumentDefinition): void {
+    const body: any &#x3D; responseJson.JsonInspectionResponse;
+    if (body.errorMessage) {
+      this.handleError(&#x27;Could not load JSON document, error: &#x27; + body.errorMessage, null);
+      docDef.errorOccurred &#x3D; true;
+      return;
+    }
+
+    this.extractJSONDocumentDefinition(body, docDef);
+  }
+
+  private extractJSONDocumentDefinition(body: any, docDef: DocumentDefinition): void {
+    let jsonDocument: any;
+    if (typeof body.jsonDocument !&#x3D;&#x3D; &#x27;undefined&#x27;) {
+      jsonDocument &#x3D; body.jsonDocument;
+    } else {
+      jsonDocument &#x3D; body.JsonDocument;
+    }
+
+    if (!docDef.description) {
+      docDef.description &#x3D; docDef.id;
+    }
+    if (!docDef.name) {
+      docDef.name &#x3D; docDef.description;
+    }
+
+    docDef.characterEncoding &#x3D; jsonDocument.characterEncoding;
+    docDef.locale &#x3D; jsonDocument.locale;
+
+    for (const field of jsonDocument.fields.field) {
+      this.parseJSONFieldFromDocument(field, null, docDef);
+    }
+  }
+
+  private extractXMLDocumentDefinitionFromInspectionResponse(responseJson: any, docDef: DocumentDefinition): void {
+    const body: any &#x3D; responseJson.XmlInspectionResponse;
+    if (body.errorMessage) {
+      this.handleError(&#x27;Could not load XML document, error: &#x27; + body.errorMessage, null);
+      docDef.errorOccurred &#x3D; true;
+      return;
+    }
+
+    this.extractXMLDocumentDefinition(body, docDef);
+  }
+
+  extractXMLDocumentDefinition(body: any, docDef: DocumentDefinition): void {
+    let xmlDocument: any;
+    if (typeof body.xmlDocument !&#x3D;&#x3D; &#x27;undefined&#x27;) {
+      xmlDocument &#x3D; body.xmlDocument;
+    } else {
+      xmlDocument &#x3D; body.XmlDocument;
+    }
+
+    if (!docDef.description) {
+      docDef.description &#x3D; docDef.id;
+    }
+    if (!docDef.name) {
+      docDef.name &#x3D; docDef.description;
+    }
+
+    docDef.characterEncoding &#x3D; xmlDocument.characterEncoding;
+    docDef.locale &#x3D; xmlDocument.locale;
+
+    if (xmlDocument.xmlNamespaces &amp;&amp; xmlDocument.xmlNamespaces.xmlNamespace
+      &amp;&amp; xmlDocument.xmlNamespaces.xmlNamespace.length) {
+      for (const serviceNS of xmlDocument.xmlNamespaces.xmlNamespace) {
+        const ns: NamespaceModel &#x3D; new NamespaceModel();
+        ns.alias &#x3D; serviceNS.alias;
+        ns.uri &#x3D; serviceNS.uri;
+        ns.locationUri &#x3D; serviceNS.locationUri;
+        ns.isTarget &#x3D; serviceNS.targetNamespace;
+        docDef.namespaces.push(ns);
+      }
+    }
+
+    for (const field of xmlDocument.fields.field) {
+      if (!docDef.selectedRoot || this.isSelectedRootElement(field, docDef)) {
+        this.parseXMLFieldFromDocument(field, null, docDef);
+        break;
+      }
+    }
+  }
+
+  private isSelectedRootElement(field: any, docDef: DocumentDefinition): boolean {
+    return docDef.selectedRoot &amp;&amp; field &amp;&amp; field.name
+      &amp;&amp; docDef.selectedRoot &#x3D;&#x3D;&#x3D; (field.name.indexOf(&#x27;:&#x27;) !&#x3D;&#x3D; -1 ? field.name.split(&#x27;:&#x27;)[1] : field.name);
+  }
+
+  private extractJavaDocumentDefinitionFromInspectionResponse(responseJson: any, docDef: DocumentDefinition): void {
+    const body: any &#x3D; responseJson.ClassInspectionResponse;
+
+    if (body.errorMessage) {
+      this.handleError(&#x27;Could not load Java document, error: &#x27; + body.errorMessage, null);
+      docDef.errorOccurred &#x3D; true;
+      return;
+    }
+    this.extractJavaDocumentDefinition(body, docDef);
+  }
+
+  private extractJavaDocumentDefinition(body: any, docDef: DocumentDefinition): void {
+    const docIdentifier: string &#x3D; docDef.id;
+    const javaClass &#x3D; body.JavaClass ? body.JavaClass : body.javaClass;
+    if (!javaClass || javaClass.status &#x3D;&#x3D;&#x3D; &#x27;NOT_FOUND&#x27;) {
+      this.handleError(&#x27;Could not load JAVA document. Document is not found: &#x27; + docIdentifier, null);
+      docDef.errorOccurred &#x3D; true;
+      return;
+    }
+
+    if (!docDef.description) {
+      docDef.description &#x3D; javaClass.className;
+    }
+    if (!docDef.name) {
+      docDef.name &#x3D; javaClass.className;
+      // Make doc name the class name rather than fully qualified name
+      if (docDef.name &amp;&amp; docDef.name.indexOf(&#x27;.&#x27;) !&#x3D;&#x3D; -1) {
+        docDef.name &#x3D; docDef.name.substr(docDef.name.lastIndexOf(&#x27;.&#x27;) + 1);
+      }
+    }
+    if (javaClass.uri) {
+      docDef.uri &#x3D; javaClass.uri;
+    }
+
+    docDef.characterEncoding &#x3D; javaClass.characterEncoding;
+    docDef.locale &#x3D; javaClass.locale;
+
+    let rootField &#x3D; null;
+    if (javaClass.collectionType &amp;&amp; javaClass.collectionType !&#x3D;&#x3D; CollectionType.NONE.valueOf()) {
+      this.parseJavaFieldFromDocument(javaClass, null, docDef);
+      rootField &#x3D; docDef.fields[0];
+    }
+    for (const field of javaClass.javaFields.javaField) {
+      this.parseJavaFieldFromDocument(field, rootField, docDef);
+    }
+  }
+
+  private parseJSONFieldFromDocument(field: any, parentField: Field, docDef: DocumentDefinition): void {
+    const parsedField &#x3D; this.parseFieldFromDocument(field, parentField, docDef);
+    if (parsedField &#x3D;&#x3D; null) {
+      return;
+    }
+
+    if (field.jsonFields &amp;&amp; field.jsonFields.jsonField &amp;&amp; field.jsonFields.jsonField.length) {
+      for (const childField of field.jsonFields.jsonField) {
+        this.parseJSONFieldFromDocument(childField, parsedField, docDef);
+      }
+    }
+  }
+
+  private parseFieldFromDocument(field: any, parentField: Field, docDef: DocumentDefinition): Field {
+    if (field !&#x3D; null &amp;&amp; field.status &#x3D;&#x3D;&#x3D; &#x27;NOT_FOUND&#x27;) {
+      this.cfg.errorService.warn(&#x27;Ignoring unknown field: &#x27; + field.name
+        + &#x27; (&#x27; + field.className + &#x27;), parent class: &#x27; + docDef.name, null);
+      return null;
+    } else if (field !&#x3D; null &amp;&amp; field.status &#x3D;&#x3D;&#x3D; &#x27;BLACK_LIST&#x27;) {
+      return null;
+    }
+
+    const parsedField: Field &#x3D; new Field();
+    parsedField.name &#x3D; field.name;
+    parsedField.type &#x3D; field.fieldType;
+    parsedField.path &#x3D; field.path;
+    parsedField.isPrimitive &#x3D; field.fieldType !&#x3D;&#x3D; &#x27;COMPLEX&#x27;;
+    parsedField.serviceObject &#x3D; field;
+
+    if (&#x27;LIST&#x27; &#x3D;&#x3D;&#x3D; field.collectionType || &#x27;ARRAY&#x27; &#x3D;&#x3D;&#x3D; field.collectionType) {
+      parsedField.isCollection &#x3D; true;
+      if (&#x27;ARRAY&#x27; &#x3D;&#x3D;&#x3D; field.collectionType) {
+        parsedField.isArray &#x3D; true;
+      }
+    }
+
+    if (parentField !&#x3D; null) {
+      parentField.children.push(parsedField);
+    } else {
+      docDef.fields.push(parsedField);
+    }
+
+    return parsedField;
+  }
+
+  private parseXMLFieldFromDocument(field: any, parentField: Field, docDef: DocumentDefinition): void {
+    const parsedField &#x3D; this.parseFieldFromDocument(field, parentField, docDef);
+    if (parsedField &#x3D;&#x3D; null) {
+      return;
+    }
+
+    if (field.name.indexOf(&#x27;:&#x27;) !&#x3D;&#x3D; -1) {
+      parsedField.namespaceAlias &#x3D; field.name.split(&#x27;:&#x27;)[0];
+      parsedField.name &#x3D; field.name.split(&#x27;:&#x27;)[1];
+    }
+
+    parsedField.isAttribute &#x3D; (parsedField.path.indexOf(&#x27;@&#x27;) !&#x3D;&#x3D; -1);
+
+    if (field.xmlFields &amp;&amp; field.xmlFields.xmlField &amp;&amp; field.xmlFields.xmlField.length) {
+      for (const childField of field.xmlFields.xmlField) {
+        this.parseXMLFieldFromDocument(childField, parsedField, docDef);
+      }
+    }
+  }
+
+  private parseJavaFieldFromDocument(field: any, parentField: Field, docDef: DocumentDefinition): void {
+    const parsedField &#x3D; this.parseFieldFromDocument(field, parentField, docDef);
+    if (parsedField &#x3D;&#x3D; null) {
+      return;
+    }
+
+    // java fields have a special primitive property, so override the &quot;!&#x3D; COMPLEX&quot; math from parseFieldFromDocument()
+    parsedField.isPrimitive &#x3D; field.primitive;
+    parsedField.classIdentifier &#x3D; field.className;
+    parsedField.enumeration &#x3D; field.enumeration;
+
+    if (parsedField.enumeration &amp;&amp; field.javaEnumFields &amp;&amp; field.javaEnumFields.javaEnumField) {
+      for (const enumValue of field.javaEnumFields.javaEnumField) {
+        const parsedEnumValue: EnumValue &#x3D; new EnumValue();
+        parsedEnumValue.name &#x3D; enumValue.name;
+        parsedEnumValue.ordinal &#x3D; enumValue.ordinal;
+        parsedField.enumValues.push(parsedEnumValue);
+      }
+    }
+
+    if (field.javaFields &amp;&amp; field.javaFields.javaField &amp;&amp; field.javaFields.javaField.length) {
+      for (const childField of field.javaFields.javaField) {
+        this.parseJavaFieldFromDocument(childField, parsedField, docDef);
+      }
+    }
+  }
+
+  private handleError(message: string, error: any): void {
+    this.cfg.errorService.error(message, error);
+  }
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'DocumentManagementService.html';
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

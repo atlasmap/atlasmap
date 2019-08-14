@@ -1,0 +1,1628 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>@atlasmap/atlasmap-data-mapper documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">@atlasmap/atlasmap-data-mapper documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>FieldEditComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li >
+            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li >
+            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts</code>
+</p>
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="../interfaces/ModalWindowValidator.html" target="_self" >ModalWindowValidator</a></code>
+    </p>
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>field-edit</code></td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./field-edit.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#cfg">cfg</a>
+                            </li>
+                            <li>
+                                <a href="#dataSource">dataSource</a>
+                            </li>
+                            <li>
+                                <a href="#docDef">docDef</a>
+                            </li>
+                            <li>
+                                <a href="#editMode">editMode</a>
+                            </li>
+                            <li>
+                                <a href="#field">field</a>
+                            </li>
+                            <li>
+                                <a href="#fieldType">fieldType</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#focusEl">focusEl</a>
+                            </li>
+                            <li>
+                                <a href="#isSource">isSource</a>
+                            </li>
+                            <li>
+                                <a href="#isXML">isXML</a>
+                            </li>
+                            <li>
+                                <a href="#namespaceAlias">namespaceAlias</a>
+                            </li>
+                            <li>
+                                <a href="#namespaces">namespaces</a>
+                            </li>
+                            <li>
+                                <a href="#parentField">parentField</a>
+                            </li>
+                            <li>
+                                <a href="#parentFieldName">parentFieldName</a>
+                            </li>
+                            <li>
+                                <a href="#valueType">valueType</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#executeSearch">executeSearch</a>
+                            </li>
+                            <li>
+                                <a href="#fieldTypeSelectionChanged">fieldTypeSelectionChanged</a>
+                            </li>
+                            <li>
+                                <a href="#getField">getField</a>
+                            </li>
+                            <li>
+                                <a href="#getInitialFocusElement">getInitialFocusElement</a>
+                            </li>
+                            <li>
+                                <a href="#handleOnBlur">handleOnBlur</a>
+                            </li>
+                            <li>
+                                <a href="#initialize">initialize</a>
+                            </li>
+                            <li>
+                                <a href="#isDataValid">isDataValid</a>
+                            </li>
+                            <li>
+                                <a href="#namespaceSelectionChanged">namespaceSelectionChanged</a>
+                            </li>
+                            <li>
+                                <a href="#parentSelectionChanged">parentSelectionChanged</a>
+                            </li>
+                            <li>
+                                <a href="#valueTypeSelectionChanged">valueTypeSelectionChanged</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor()</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="45" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:45</a></div>
+                            </td>
+                        </tr>
+
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="executeSearch"></a>
+                    <span class="name">
+                        <b>
+                            executeSearch
+                        </b>
+                        <a href="#executeSearch"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>executeSearch(filter: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="120"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:120</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>filter</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>any[]</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fieldTypeSelectionChanged"></a>
+                    <span class="name">
+                        <b>
+                            fieldTypeSelectionChanged
+                        </b>
+                        <a href="#fieldTypeSelectionChanged"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>fieldTypeSelectionChanged(event: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="108"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:108</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>event</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getField"></a>
+                    <span class="name">
+                        <b>
+                            getField
+                        </b>
+                        <a href="#getField"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getField()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="140"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:140</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getInitialFocusElement"></a>
+                    <span class="name">
+                        <b>
+                            getInitialFocusElement
+                        </b>
+                        <a href="#getInitialFocusElement"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getInitialFocusElement()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="162"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:162</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://angular.io/api/core/ElementRef" target="_blank" >ElementRef</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="handleOnBlur"></a>
+                    <span class="name">
+                        <b>
+                            handleOnBlur
+                        </b>
+                        <a href="#handleOnBlur"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>handleOnBlur(event: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="93"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:93</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>event</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initialize"></a>
+                    <span class="name">
+                        <b>
+                            initialize
+                        </b>
+                        <a href="#initialize"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initialize(field: <a href="../classes/Field.html">Field</a>, docDef: <a href="../classes/DocumentDefinition.html">DocumentDefinition</a>, isAdd: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="53"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:53</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>field</td>
+                                    <td>
+                                                <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>docDef</td>
+                                    <td>
+                                                <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>isAdd</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isDataValid"></a>
+                    <span class="name">
+                        <b>
+                            isDataValid
+                        </b>
+                        <a href="#isDataValid"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>isDataValid()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="158"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:158</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="namespaceSelectionChanged"></a>
+                    <span class="name">
+                        <b>
+                            namespaceSelectionChanged
+                        </b>
+                        <a href="#namespaceSelectionChanged"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>namespaceSelectionChanged(event: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="116"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:116</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>event</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="parentSelectionChanged"></a>
+                    <span class="name">
+                        <b>
+                            parentSelectionChanged
+                        </b>
+                        <a href="#parentSelectionChanged"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>parentSelectionChanged(event: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="97"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:97</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>event</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="valueTypeSelectionChanged"></a>
+                    <span class="name">
+                        <b>
+                            valueTypeSelectionChanged
+                        </b>
+                        <a href="#valueTypeSelectionChanged"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>valueTypeSelectionChanged(event: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="112"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:112</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>event</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="cfg"></a>
+                        <span class="name">
+                            <b>
+                            cfg</b>
+                            <a href="#cfg"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/ConfigModel.html" target="_self" >ConfigModel</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>ConfigModel.getConfig()</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:32</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="dataSource"></a>
+                        <span class="name">
+                            <b>
+                            dataSource</b>
+                            <a href="#dataSource"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>Observable&lt;any&gt;</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:43</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="docDef"></a>
+                        <span class="name">
+                            <b>
+                            docDef</b>
+                            <a href="#docDef"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>null</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:42</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="editMode"></a>
+                        <span class="name">
+                            <b>
+                            editMode</b>
+                            <a href="#editMode"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>false</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:40</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="field"></a>
+                        <span class="name">
+                            <b>
+                            field</b>
+                            <a href="#field"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>new Field()</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:33</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="fieldType"></a>
+                        <span class="name">
+                            <b>
+                            fieldType</b>
+                            <a href="#fieldType"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>&#x27;element&#x27;</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:37</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="focusEl"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            focusEl</b>
+                            <a href="#focusEl"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://angular.io/api/core/ElementRef" target="_blank" >ElementRef</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Decorators : </b>
+                            <br />
+                            <code>
+                                @ViewChild(&#x27;value&#x27;)<br />
+                            </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="45" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:45</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="isSource"></a>
+                        <span class="name">
+                            <b>
+                            isSource</b>
+                            <a href="#isSource"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>false</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:36</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="isXML"></a>
+                        <span class="name">
+                            <b>
+                            isXML</b>
+                            <a href="#isXML"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>false</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:44</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="namespaceAlias"></a>
+                        <span class="name">
+                            <b>
+                            namespaceAlias</b>
+                            <a href="#namespaceAlias"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>&#x27;&#x27;</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:39</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="namespaces"></a>
+                        <span class="name">
+                            <b>
+                            namespaces</b>
+                            <a href="#namespaces"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/NamespaceModel.html" target="_self" >NamespaceModel[]</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>[]</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:41</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="parentField"></a>
+                        <span class="name">
+                            <b>
+                            parentField</b>
+                            <a href="#parentField"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:34</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="parentFieldName"></a>
+                        <span class="name">
+                            <b>
+                            parentFieldName</b>
+                            <a href="#parentFieldName"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" target="_blank" >String</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>null</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:35</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="valueType"></a>
+                        <span class="name">
+                            <b>
+                            valueType</b>
+                            <a href="#valueType"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>&#x27;STRING&#x27;</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/field-edit.component.ts:38</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, ViewChild, ElementRef } from &#x27;@angular/core&#x27;;
+
+import { DocumentDefinition, NamespaceModel } from &#x27;../models/document-definition.model&#x27;;
+import { Field } from &#x27;../models/field.model&#x27;;
+import { DocumentType } from &#x27;../common/config.types&#x27;;
+import { ConfigModel } from &#x27;../models/config.model&#x27;;
+import { Observable } from &#x27;rxjs&#x27;;
+import { ModalWindowValidator } from &#x27;./modal-window.component&#x27;;
+
+@Component({
+  selector: &#x27;field-edit&#x27;,
+  templateUrl: &#x27;./field-edit.component.html&#x27;,
+})
+
+export class FieldEditComponent implements ModalWindowValidator {
+  cfg: ConfigModel &#x3D; ConfigModel.getConfig();
+  field: Field &#x3D; new Field();
+  parentField: Field;
+  parentFieldName: String &#x3D; null;
+  isSource &#x3D; false;
+  fieldType: any &#x3D; &#x27;element&#x27;;
+  valueType: any &#x3D; &#x27;STRING&#x27;;
+  namespaceAlias &#x3D; &#x27;&#x27;;
+  editMode &#x3D; false;
+  namespaces: NamespaceModel[] &#x3D; [];
+  docDef: DocumentDefinition &#x3D; null;
+  dataSource: Observable&lt;any&gt;;
+  isXML &#x3D; false;
+  @ViewChild(&#x27;value&#x27;) private focusEl: ElementRef;
+
+  constructor() {
+    this.dataSource &#x3D; Observable.create((observer: any) &#x3D;&gt; {
+      observer.next(this.executeSearch(observer.outerValue));
+    });
+  }
+
+  initialize(field: Field, docDef: DocumentDefinition, isAdd: boolean): void {
+    this.docDef &#x3D; docDef;
+    this.editMode &#x3D; !isAdd;
+    this.field &#x3D; field &#x3D;&#x3D; null ? new Field() : field.copy();
+    this.valueType &#x3D; (this.field.type &#x3D;&#x3D; null) ? &#x27;STRING&#x27; : this.field.type;
+    this.parentField &#x3D; this.field.parentField;
+
+    if (this.docDef.type &#x3D;&#x3D;&#x3D; DocumentType.XML) {
+      this.isXML &#x3D; true;
+      this.fieldType &#x3D; this.field.isAttribute ? &#x27;attribute&#x27; : &#x27;element&#x27;;
+      this.parentField &#x3D; (this.field.parentField &#x3D;&#x3D; null) ? docDef.fields[0] : this.field.parentField;
+      const unqualifiedNS: NamespaceModel &#x3D; NamespaceModel.getUnqualifiedNamespace();
+      this.namespaceAlias &#x3D; unqualifiedNS.alias;
+      if (this.field.namespaceAlias) {
+        this.namespaceAlias &#x3D; this.field.namespaceAlias;
+      }
+      if (isAdd) { // on add, inherit namespace from parent field
+        this.namespaceAlias &#x3D; this.parentField.namespaceAlias &#x3D;&#x3D; null ? unqualifiedNS.alias : this.parentField.namespaceAlias;
+      }
+
+      this.namespaces &#x3D; [unqualifiedNS].concat(this.docDef.namespaces);
+
+      // if the field references a namespace that doesn&#x27;t exist, add a fake namespace option for the
+      // user to select if they desire to leave that bad namespace alias in place
+      let namespaceFound &#x3D; false;
+      for (const ns of this.namespaces) {
+        if (ns.alias &#x3D;&#x3D;&#x3D; this.namespaceAlias) {
+          namespaceFound &#x3D; true;
+          break;
+        }
+      }
+      if (!namespaceFound) {
+        const fakeNamespace: NamespaceModel &#x3D; new NamespaceModel();
+        fakeNamespace.alias &#x3D; this.namespaceAlias;
+        this.namespaces.push(fakeNamespace);
+      }
+    }
+    this.parentFieldName &#x3D; this.parentField.name;
+  }
+
+  handleOnBlur(event: any): void {
+    this.parentFieldName &#x3D; this.parentField.name;
+  }
+
+  parentSelectionChanged(event: any): void {
+    const oldParentField: Field &#x3D; this.parentField;
+    this.parentField &#x3D; event.item[&#x27;field&#x27;];
+    this.parentField &#x3D; (this.parentField &#x3D;&#x3D; null) ? oldParentField : this.parentField;
+    this.parentFieldName &#x3D; this.parentField.name;
+
+    // change namespace dropdown selecte option to match parent fields&#x27; namespace automatically
+    const unqualifiedNS: NamespaceModel &#x3D; NamespaceModel.getUnqualifiedNamespace();
+    this.namespaceAlias &#x3D; this.parentField.namespaceAlias &#x3D;&#x3D; null ? unqualifiedNS.alias : this.parentField.namespaceAlias;
+  }
+
+  fieldTypeSelectionChanged(event: any): void {
+    this.fieldType &#x3D; event.target.selectedOptions.item(0).attributes.getNamedItem(&#x27;value&#x27;).value;
+  }
+
+  valueTypeSelectionChanged(event: any): void {
+    this.valueType &#x3D; event.target.selectedOptions.item(0).attributes.getNamedItem(&#x27;value&#x27;).value;
+  }
+
+  namespaceSelectionChanged(event: any): void {
+    this.namespaceAlias &#x3D; event.target.selectedOptions.item(0).attributes.getNamedItem(&#x27;value&#x27;).value;
+  }
+
+  executeSearch(filter: string): any[] {
+    const formattedFields: any[] &#x3D; [];
+
+    for (const field of this.docDef.getAllFields()) {
+      if (!field.isParentField()) {
+        continue;
+      }
+      const displayName &#x3D; (field &#x3D;&#x3D; null) ? &#x27;&#x27; : field.getFieldLabel(ConfigModel.getConfig().showTypes, true);
+      const formattedField: any &#x3D; { &#x27;field&#x27;: field, &#x27;displayName&#x27;: displayName };
+      if (filter &#x3D;&#x3D; null || filter &#x3D;&#x3D;&#x3D; &#x27;&#x27;
+        || formattedField[&#x27;displayName&#x27;].toLowerCase().indexOf(filter.toLowerCase()) !&#x3D;&#x3D; -1) {
+        formattedFields.push(formattedField);
+      }
+      if (formattedFields.length &gt; 9) {
+        break;
+      }
+    }
+    return formattedFields;
+  }
+
+  getField(): Field {
+    this.field.displayName &#x3D; this.field.name;
+    this.field.parentField &#x3D; this.parentField;
+    this.field.type &#x3D; this.valueType;
+    this.field.userCreated &#x3D; true;
+    this.field.serviceObject.jsonType &#x3D; &#x27;io.atlasmap.json.v2.JsonField&#x27;;
+    if (this.docDef.type &#x3D;&#x3D;&#x3D; DocumentType.XML) {
+      this.field.isAttribute &#x3D; (this.fieldType &#x3D;&#x3D;&#x3D; &#x27;attribute&#x27;);
+      this.field.namespaceAlias &#x3D; this.namespaceAlias;
+      const unqualifiedNS: NamespaceModel &#x3D; NamespaceModel.getUnqualifiedNamespace();
+      if (this.namespaceAlias &#x3D;&#x3D;&#x3D; unqualifiedNS.alias) {
+        this.field.namespaceAlias &#x3D; null;
+      }
+      this.field.serviceObject.jsonType &#x3D; &#x27;io.atlasmap.xml.v2.XmlField&#x27;;
+    }
+    return this.field;
+  }
+
+  isDataValid(): boolean {
+    return ConfigModel.getConfig().isRequiredFieldValid(this.field.name, &#x27;Name&#x27;);
+  }
+
+  getInitialFocusElement(): ElementRef {
+    return this.focusEl;
+  }
+
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;!-- our template for type ahead --&gt;
+&lt;ng-template #typeaheadTemplate let-model&#x3D;&quot;item&quot; let-index&#x3D;&quot;index&quot;&gt;
+  &lt;h5 style&#x3D;&quot;font-style:italic;&quot; *ngIf&#x3D;&quot;model[&#x27;field&#x27;].docDef&quot;&gt;{{ model[&#x27;field&#x27;].docDef.name }}&lt;/h5&gt;
+  &lt;h5&gt;{{ model[&#x27;field&#x27;].path }}&lt;/h5&gt;
+&lt;/ng-template&gt;
+
+&lt;div class&#x3D;&quot;DataMapperEditComponent&quot;&gt;
+  &lt;div class&#x3D;&quot;form-group&quot;&gt;
+    &lt;label&gt;Parent&lt;/label&gt;
+    &lt;input type&#x3D;&quot;text&quot; [(ngModel)]&#x3D;&quot;parentFieldName&quot; [typeahead]&#x3D;&quot;dataSource&quot; typeaheadWaitMs&#x3D;&quot;200&quot; (typeaheadOnSelect)&#x3D;&quot;parentSelectionChanged($event)&quot;
+      (blur)&#x3D;&quot;handleOnBlur($event)&quot; typeaheadOptionField&#x3D;&quot;displayName&quot; [typeaheadItemTemplate]&#x3D;&quot;typeaheadTemplate&quot; disabled&#x3D;&quot;{{editMode}}&quot;&gt;
+  &lt;/div&gt;
+  &lt;div class&#x3D;&quot;form-group&quot;&gt;
+    &lt;label&gt;Name&lt;/label&gt;
+    &lt;input name&#x3D;&quot;value&quot; type&#x3D;&quot;text&quot; [(ngModel)]&#x3D;&quot;field.name&quot; #value /&gt;
+  &lt;/div&gt;
+  &lt;div class&#x3D;&quot;form-group&quot; *ngIf&#x3D;&quot;isXML&quot;&gt;
+    &lt;label&gt;Namespace&lt;/label&gt;
+    &lt;select (change)&#x3D;&quot;namespaceSelectionChanged($event);&quot; [ngModel]&#x3D;&quot;namespaceAlias&quot;&gt;
+      &lt;option *ngFor&#x3D;&quot;let ns of namespaces&quot; value&#x3D;&quot;{{ns.alias}}&quot; [selected]&#x3D;&quot;namespaceAlias &#x3D;&#x3D; ns.alias&quot;&gt;
+        {{ ns.getPrettyLabel() }}
+      &lt;/option&gt;
+    &lt;/select&gt;
+  &lt;/div&gt;
+  &lt;div class&#x3D;&quot;form-group&quot; *ngIf&#x3D;&quot;isXML&quot;&gt;
+    &lt;label&gt;Field Type&lt;/label&gt;
+    &lt;select (change)&#x3D;&quot;fieldTypeSelectionChanged($event);&quot; [ngModel]&#x3D;&quot;fieldType&quot;&gt;
+      &lt;option value&#x3D;&quot;element&quot;&gt;Element&lt;/option&gt;
+      &lt;option value&#x3D;&quot;attribute&quot;&gt;Attribute&lt;/option&gt;
+    &lt;/select&gt;
+  &lt;/div&gt;
+  &lt;div class&#x3D;&quot;form-group&quot;&gt;
+    &lt;label&gt;Value Type&lt;/label&gt;
+    &lt;select (change)&#x3D;&quot;valueTypeSelectionChanged($event);&quot; [ngModel]&#x3D;&quot;valueType&quot;&gt;
+      &lt;option value&#x3D;&quot;BOOLEAN&quot;&gt;Boolean&lt;/option&gt;
+      &lt;option value&#x3D;&quot;BYTE&quot;&gt;Byte&lt;/option&gt;
+      &lt;option value&#x3D;&quot;BYTE_ARRAY&quot;&gt;ByteArray&lt;/option&gt;
+      &lt;option value&#x3D;&quot;CHAR&quot;&gt;Char&lt;/option&gt;
+      &lt;option value&#x3D;&quot;COMPLEX&quot;&gt;Complex&lt;/option&gt;
+      &lt;option value&#x3D;&quot;DECIMAL&quot;&gt;Decimal&lt;/option&gt;
+      &lt;option value&#x3D;&quot;DOUBLE&quot;&gt;Double&lt;/option&gt;
+      &lt;option value&#x3D;&quot;FLOAT&quot;&gt;Float&lt;/option&gt;
+      &lt;option value&#x3D;&quot;INTEGER&quot;&gt;Integer&lt;/option&gt;
+      &lt;option value&#x3D;&quot;LONG&quot;&gt;Long&lt;/option&gt;
+      &lt;option value&#x3D;&quot;SHORT&quot;&gt;Short&lt;/option&gt;
+      &lt;option value&#x3D;&quot;STRING&quot;&gt;String&lt;/option&gt;
+      &lt;option value&#x3D;&quot;TIME&quot;&gt;Time&lt;/option&gt;
+      &lt;option value&#x3D;&quot;DATE&quot;&gt;Date&lt;/option&gt;
+      &lt;option value&#x3D;&quot;DATE_TIME&quot;&gt;DateTime&lt;/option&gt;
+      &lt;option value&#x3D;&quot;DATE_TZ&quot;&gt;DateTZ&lt;/option&gt;
+      &lt;option value&#x3D;&quot;TIME_TZ&quot;&gt;TimeTZ&lt;/option&gt;
+      &lt;option value&#x3D;&quot;DATE_TIME_TZ&quot;&gt;DateTimeTZ&lt;/option&gt;
+      &lt;option value&#x3D;&quot;UNSIGNED_BYTE&quot;&gt;Unsigned Byte&lt;/option&gt;
+      &lt;option value&#x3D;&quot;UNSIGNED_INTEGER&quot;&gt;Unsigned Integer&lt;/option&gt;
+      &lt;option value&#x3D;&quot;UNSIGNED_LONG&quot;&gt;Unsigned Long&lt;/option&gt;
+      &lt;option value&#x3D;&quot;UNSIGNED_SHORT&quot;&gt;Unsigned Short&lt;/option&gt;
+    &lt;/select&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><!-- our template for type ahead --><ng-template #typeaheadTemplate let-model="item" let-index="index">  <h5 style="font-style:italic;" *ngIf="model[\'field\'].docDef">{{ model[\'field\'].docDef.name }}</h5>  <h5>{{ model[\'field\'].path }}</h5></ng-template><div class="DataMapperEditComponent">  <div class="form-group">    <label>Parent</label>    <input type="text" [(ngModel)]="parentFieldName" [typeahead]="dataSource" typeaheadWaitMs="200" (typeaheadOnSelect)="parentSelectionChanged($event)"      (blur)="handleOnBlur($event)" typeaheadOptionField="displayName" [typeaheadItemTemplate]="typeaheadTemplate" disabled="{{editMode}}">  </div>  <div class="form-group">    <label>Name</label>    <input name="value" type="text" [(ngModel)]="field.name" #value />  </div>  <div class="form-group" *ngIf="isXML">    <label>Namespace</label>    <select (change)="namespaceSelectionChanged($event);" [ngModel]="namespaceAlias">      <option *ngFor="let ns of namespaces" value="{{ns.alias}}" [selected]="namespaceAlias == ns.alias">        {{ ns.getPrettyLabel() }}      </option>    </select>  </div>  <div class="form-group" *ngIf="isXML">    <label>Field Type</label>    <select (change)="fieldTypeSelectionChanged($event);" [ngModel]="fieldType">      <option value="element">Element</option>      <option value="attribute">Attribute</option>    </select>  </div>  <div class="form-group">    <label>Value Type</label>    <select (change)="valueTypeSelectionChanged($event);" [ngModel]="valueType">      <option value="BOOLEAN">Boolean</option>      <option value="BYTE">Byte</option>      <option value="BYTE_ARRAY">ByteArray</option>      <option value="CHAR">Char</option>      <option value="COMPLEX">Complex</option>      <option value="DECIMAL">Decimal</option>      <option value="DOUBLE">Double</option>      <option value="FLOAT">Float</option>      <option value="INTEGER">Integer</option>      <option value="LONG">Long</option>      <option value="SHORT">Short</option>      <option value="STRING">String</option>      <option value="TIME">Time</option>      <option value="DATE">Date</option>      <option value="DATE_TIME">DateTime</option>      <option value="DATE_TZ">DateTZ</option>      <option value="TIME_TZ">TimeTZ</option>      <option value="DATE_TIME_TZ">DateTimeTZ</option>      <option value="UNSIGNED_BYTE">Unsigned Byte</option>      <option value="UNSIGNED_INTEGER">Unsigned Integer</option>      <option value="UNSIGNED_LONG">Unsigned Long</option>      <option value="UNSIGNED_SHORT">Unsigned Short</option>    </select>  </div></div></div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'atlasmap-dev-root'},{'name': 'AtlasmapNavbarComponent', 'selector': 'atlasmap-navbar'},{'name': 'ClassNameComponent', 'selector': 'class-name'},{'name': 'CollapsableHeaderComponent', 'selector': 'collapsable-header'},{'name': 'ConstantFieldEditComponent', 'selector': 'constant-field-edit'},{'name': 'DataMapperAppComponent', 'selector': 'data-mapper'},{'name': 'DataMapperAppExampleHostComponent', 'selector': 'data-mapper-example-host'},{'name': 'DataMapperErrorComponent', 'selector': 'data-mapper-error'},{'name': 'DocumentDefinitionComponent', 'selector': 'document-definition'},{'name': 'DocumentFieldDetailComponent', 'selector': 'document-field-detail'},{'name': 'EmptyModalBodyComponent', 'selector': 'empty-modal-body'},{'name': 'ExpressionComponent', 'selector': 'expression'},{'name': 'FieldEditComponent', 'selector': 'field-edit'},{'name': 'LineMachineComponent', 'selector': 'line-machine'},{'name': 'LookupTableComponent', 'selector': 'lookup-table'},{'name': 'MappingDetailComponent', 'selector': 'mapping-detail'},{'name': 'MappingFieldActionArgumentComponent', 'selector': 'mapping-field-action-argument'},{'name': 'MappingFieldActionComponent', 'selector': 'mapping-field-action'},{'name': 'MappingFieldContainerComponent', 'selector': 'mapping-field-container'},{'name': 'MappingFieldDetailComponent', 'selector': 'mapping-field-detail'},{'name': 'MappingListComponent', 'selector': 'mapping-list'},{'name': 'MappingListFieldComponent', 'selector': 'mapping-list-field'},{'name': 'MappingSelectionComponent', 'selector': 'mapping-selection'},{'name': 'MappingSelectionSectionComponent', 'selector': 'mapping-selection-section'},{'name': 'ModalErrorWindowComponent', 'selector': 'modal-error-window'},{'name': 'ModalWindowComponent', 'selector': 'modal-window'},{'name': 'NamespaceEditComponent', 'selector': 'namespace-edit'},{'name': 'NamespaceListComponent', 'selector': 'namespace-list'},{'name': 'PropertyFieldEditComponent', 'selector': 'property-field-edit'},{'name': 'TemplateEditComponent', 'selector': 'template-edit'},{'name': 'ToolbarComponent', 'selector': 'toolbar'},{'name': 'TransitionSelectionComponent', 'selector': 'transition-selection'}];
+    var DIRECTIVES = [{'name': 'FocusDirective', 'selector': '[focus]'}];
+    var ACTUAL_COMPONENT = {'name': 'FieldEditComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'FieldEditComponent.html';
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

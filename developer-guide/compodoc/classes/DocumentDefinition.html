@@ -1,0 +1,3266 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>@atlasmap/atlasmap-data-mapper documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">@atlasmap/atlasmap-data-mapper documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content class">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Classes</li>
+  <li>DocumentDefinition</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts</code>
+        </p>
+
+
+
+
+
+            <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#_type">_type</a>
+                            </li>
+                            <li>
+                                <a href="#allFields">allFields</a>
+                            </li>
+                            <li>
+                                <a href="#characterEncoding">characterEncoding</a>
+                            </li>
+                            <li>
+                                <a href="#classPath">classPath</a>
+                            </li>
+                            <li>
+                                <a href="#complexFieldsByClassIdentifier">complexFieldsByClassIdentifier</a>
+                            </li>
+                            <li>
+                                <a href="#description">description</a>
+                            </li>
+                            <li>
+                                <a href="#enumFieldsByClassIdentifier">enumFieldsByClassIdentifier</a>
+                            </li>
+                            <li>
+                                <a href="#errorOccurred">errorOccurred</a>
+                            </li>
+                            <li>
+                                <a href="#fieldPaths">fieldPaths</a>
+                            </li>
+                            <li>
+                                <a href="#fields">fields</a>
+                            </li>
+                            <li>
+                                <a href="#fieldsByPath">fieldsByPath</a>
+                            </li>
+                            <li>
+                                <a href="#id">id</a>
+                            </li>
+                            <li>
+                                <a href="#initialized">initialized</a>
+                            </li>
+                            <li>
+                                <a href="#initModel">initModel</a>
+                            </li>
+                            <li>
+                                <a href="#inspectionResult">inspectionResult</a>
+                            </li>
+                            <li>
+                                <a href="#inspectionSource">inspectionSource</a>
+                            </li>
+                            <li>
+                                <a href="#inspectionType">inspectionType</a>
+                            </li>
+                            <li>
+                                <a href="#isPropertyOrConstant">isPropertyOrConstant</a>
+                            </li>
+                            <li>
+                                <a href="#isSource">isSource</a>
+                            </li>
+                            <li>
+                                <a href="#LEFT_BRACKET">LEFT_BRACKET</a>
+                            </li>
+                            <li>
+                                <a href="#locale">locale</a>
+                            </li>
+                            <li>
+                                <a href="#name">name</a>
+                            </li>
+                            <li>
+                                <a href="#namespaces">namespaces</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#padField">padField</a>
+                            </li>
+                            <li>
+                                <a href="#pathSeparator">pathSeparator</a>
+                            </li>
+                            <li>
+                                <a href="#RIGHT_BRACKET">RIGHT_BRACKET</a>
+                            </li>
+                            <li>
+                                <a href="#selectedRoot">selectedRoot</a>
+                            </li>
+                            <li>
+                                <a href="#showFields">showFields</a>
+                            </li>
+                            <li>
+                                <a href="#terminalFields">terminalFields</a>
+                            </li>
+                            <li>
+                                <a href="#uri">uri</a>
+                            </li>
+                            <li>
+                                <a href="#visibleInCurrentDocumentSearch">visibleInCurrentDocumentSearch</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#addField">addField</a>
+                            </li>
+                            <li>
+                                <a href="#clearFields">clearFields</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#discoverComplexFields">discoverComplexFields</a>
+                            </li>
+                            <li>
+                                <a href="#fieldExists">fieldExists</a>
+                            </li>
+                            <li>
+                                <a href="#getAllFields">getAllFields</a>
+                            </li>
+                            <li>
+                                <a href="#getComplexField">getComplexField</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Static</span>
+                                <a href="#getDocumentByIdentifier">getDocumentByIdentifier</a>
+                            </li>
+                            <li>
+                                <a href="#getEnumField">getEnumField</a>
+                            </li>
+                            <li>
+                                <a href="#getField">getField</a>
+                            </li>
+                            <li>
+                                <a href="#getFields">getFields</a>
+                            </li>
+                            <li>
+                                <a href="#getName">getName</a>
+                            </li>
+                            <li>
+                                <a href="#getNamespaceForAlias">getNamespaceForAlias</a>
+                            </li>
+                            <li>
+                                <a href="#getTerminalFields">getTerminalFields</a>
+                            </li>
+                            <li>
+                                <a href="#initializeFromFields">initializeFromFields</a>
+                            </li>
+                            <li>
+                                <a href="#isFieldsExist">isFieldsExist</a>
+                            </li>
+                            <li>
+                                <a href="#populateChildren">populateChildren</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#populateFieldData">populateFieldData</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#populateFieldParentPaths">populateFieldParentPaths</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#prepareComplexFields">prepareComplexFields</a>
+                            </li>
+                            <li>
+                                <a href="#removeField">removeField</a>
+                            </li>
+                            <li>
+                                <a href="#updateField">updateField</a>
+                            </li>
+                            <li>
+                                <a href="#updateFromMappings">updateFromMappings</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accessors</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#type">type</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+
+            <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="_type"></a>
+                        <span class="name">
+                            <b>
+                            _type</b>
+                            <a href="#_type"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../miscellaneous/enumerations.html#DocumentType" target="_self" >DocumentType</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="84" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:84</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="allFields"></a>
+                        <span class="name">
+                            <b>
+                            allFields</b>
+                            <a href="#allFields"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/Field.html" target="_self" >Field[]</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>[]</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="100" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:100</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="characterEncoding"></a>
+                        <span class="name">
+                            <b>
+                            characterEncoding</b>
+                            <a href="#characterEncoding"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>null</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="109" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:109</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="classPath"></a>
+                        <span class="name">
+                            <b>
+                            classPath</b>
+                            <a href="#classPath"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="95" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:95</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="complexFieldsByClassIdentifier"></a>
+                        <span class="name">
+                            <b>
+                            complexFieldsByClassIdentifier</b>
+                            <a href="#complexFieldsByClassIdentifier"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>literal type</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>{}</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="102" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:102</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="description"></a>
+                        <span class="name">
+                            <b>
+                            description</b>
+                            <a href="#description"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="86" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:86</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="enumFieldsByClassIdentifier"></a>
+                        <span class="name">
+                            <b>
+                            enumFieldsByClassIdentifier</b>
+                            <a href="#enumFieldsByClassIdentifier"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>literal type</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>{}</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="103" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:103</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="errorOccurred"></a>
+                        <span class="name">
+                            <b>
+                            errorOccurred</b>
+                            <a href="#errorOccurred"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>false</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="97" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:97</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="fieldPaths"></a>
+                        <span class="name">
+                            <b>
+                            fieldPaths</b>
+                            <a href="#fieldPaths"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>string[]</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>[]</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="105" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:105</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="fields"></a>
+                        <span class="name">
+                            <b>
+                            fields</b>
+                            <a href="#fields"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/Field.html" target="_self" >Field[]</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>[]</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="99" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:99</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="fieldsByPath"></a>
+                        <span class="name">
+                            <b>
+                            fieldsByPath</b>
+                            <a href="#fieldsByPath"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>literal type</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>{}</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="104" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:104</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="id"></a>
+                        <span class="name">
+                            <b>
+                            id</b>
+                            <a href="#id"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="83" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:83</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="initialized"></a>
+                        <span class="name">
+                            <b>
+                            initialized</b>
+                            <a href="#initialized"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>false</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="96" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:96</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="initModel"></a>
+                        <span class="name">
+                            <b>
+                            initModel</b>
+                            <a href="#initModel"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/DocumentInitializationModel.html" target="_self" >DocumentInitializationModel</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="82" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:82</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="inspectionResult"></a>
+                        <span class="name">
+                            <b>
+                            inspectionResult</b>
+                            <a href="#inspectionResult"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="90" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:90</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="inspectionSource"></a>
+                        <span class="name">
+                            <b>
+                            inspectionSource</b>
+                            <a href="#inspectionSource"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="89" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:89</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="inspectionType"></a>
+                        <span class="name">
+                            <b>
+                            inspectionType</b>
+                            <a href="#inspectionType"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../miscellaneous/enumerations.html#InspectionType" target="_self" >InspectionType</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="88" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:88</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="isPropertyOrConstant"></a>
+                        <span class="name">
+                            <b>
+                            isPropertyOrConstant</b>
+                            <a href="#isPropertyOrConstant"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="92" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:92</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="isSource"></a>
+                        <span class="name">
+                            <b>
+                            isSource</b>
+                            <a href="#isSource"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="91" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:91</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="LEFT_BRACKET"></a>
+                        <span class="name">
+                            <b>
+                            LEFT_BRACKET</b>
+                            <a href="#LEFT_BRACKET"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>&#x27;\x5b&#x27;</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="79" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:79</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="locale"></a>
+                        <span class="name">
+                            <b>
+                            locale</b>
+                            <a href="#locale"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>null</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="110" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:110</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="name"></a>
+                        <span class="name">
+                            <b>
+                            name</b>
+                            <a href="#name"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="85" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:85</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="namespaces"></a>
+                        <span class="name">
+                            <b>
+                            namespaces</b>
+                            <a href="#namespaces"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/NamespaceModel.html" target="_self" >NamespaceModel[]</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>[]</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="108" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:108</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="padField"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                                <span class="modifier">Static</span>
+                            padField</b>
+                            <a href="#padField"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>null</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="77" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:77</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="pathSeparator"></a>
+                        <span class="name">
+                            <b>
+                            pathSeparator</b>
+                            <a href="#pathSeparator"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>&#x27;/&#x27;</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="98" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:98</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="RIGHT_BRACKET"></a>
+                        <span class="name">
+                            <b>
+                            RIGHT_BRACKET</b>
+                            <a href="#RIGHT_BRACKET"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>&#x27;\x5d&#x27;</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="80" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:80</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="selectedRoot"></a>
+                        <span class="name">
+                            <b>
+                            selectedRoot</b>
+                            <a href="#selectedRoot"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="93" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:93</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="showFields"></a>
+                        <span class="name">
+                            <b>
+                            showFields</b>
+                            <a href="#showFields"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>true</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="106" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:106</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="terminalFields"></a>
+                        <span class="name">
+                            <b>
+                            terminalFields</b>
+                            <a href="#terminalFields"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/Field.html" target="_self" >Field[]</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>[]</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="101" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:101</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="uri"></a>
+                        <span class="name">
+                            <b>
+                            uri</b>
+                            <a href="#uri"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="87" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:87</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="visibleInCurrentDocumentSearch"></a>
+                        <span class="name">
+                            <b>
+                            visibleInCurrentDocumentSearch</b>
+                            <a href="#visibleInCurrentDocumentSearch"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>true</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="107" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:107</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+            <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addField"></a>
+                    <span class="name">
+                        <b>
+                            addField
+                        </b>
+                        <a href="#addField"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>addField(field: <a href="../classes/Field.html">Field</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="278"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:278</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>field</td>
+                                    <td>
+                                                <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="clearFields"></a>
+                    <span class="name">
+                        <b>
+                            clearFields
+                        </b>
+                        <a href="#clearFields"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>clearFields()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="333"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:333</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Clear all fields in this document.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="discoverComplexFields"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            discoverComplexFields
+                        </b>
+                        <a href="#discoverComplexFields"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>discoverComplexFields(fields: <a href="../classes/Field.html">Field[]</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="454"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:454</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>fields</td>
+                                    <td>
+                                                <code><a href="../classes/Field.html" target="_self" >Field[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fieldExists"></a>
+                    <span class="name">
+                        <b>
+                            fieldExists
+                        </b>
+                        <a href="#fieldExists"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>fieldExists(targetField: <a href="../classes/Field.html">Field</a>, targetFieldDocDefType: <a href="../undefineds/DocumentType.html">DocumentType</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="153"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:153</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Return true if the specified field name already exists in the specified document definition,
+false otherwise.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>targetField</td>
+                                    <td>
+                                                <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>targetFieldDocDefType</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/enumerations.html#DocumentType" target="_self" >DocumentType</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getAllFields"></a>
+                    <span class="name">
+                        <b>
+                            getAllFields
+                        </b>
+                        <a href="#getAllFields"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getAllFields()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="142"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:142</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/Field.html" target="_self" >Field[]</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getComplexField"></a>
+                    <span class="name">
+                        <b>
+                            getComplexField
+                        </b>
+                        <a href="#getComplexField"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getComplexField(classIdentifier: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="134"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:134</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>classIdentifier</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDocumentByIdentifier"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Static</span>
+                            getDocumentByIdentifier
+                        </b>
+                        <a href="#getDocumentByIdentifier"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getDocumentByIdentifier(documentId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, docs: <a href="../classes/DocumentDefinition.html">DocumentDefinition[]</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="112"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:112</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>documentId</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>docs</td>
+                                    <td>
+                                                <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getEnumField"></a>
+                    <span class="name">
+                        <b>
+                            getEnumField
+                        </b>
+                        <a href="#getEnumField"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getEnumField(classIdentifier: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="138"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:138</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>classIdentifier</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getField"></a>
+                    <span class="name">
+                        <b>
+                            getField
+                        </b>
+                        <a href="#getField"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getField(fieldPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="202"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:202</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>fieldPath</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getFields"></a>
+                    <span class="name">
+                        <b>
+                            getFields
+                        </b>
+                        <a href="#getFields"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getFields(fieldPaths: string[])</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="171"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:171</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>fieldPaths</td>
+                                    <td>
+                                            <code>string[]</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/Field.html" target="_self" >Field[]</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getName"></a>
+                    <span class="name">
+                        <b>
+                            getName
+                        </b>
+                        <a href="#getName"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getName(showTypes: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="182"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:182</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>showTypes</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getNamespaceForAlias"></a>
+                    <span class="name">
+                        <b>
+                            getNamespaceForAlias
+                        </b>
+                        <a href="#getNamespaceForAlias"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getNamespaceForAlias(alias: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="193"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:193</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>alias</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/NamespaceModel.html" target="_self" >NamespaceModel</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getTerminalFields"></a>
+                    <span class="name">
+                        <b>
+                            getTerminalFields
+                        </b>
+                        <a href="#getTerminalFields"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getTerminalFields()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="241"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:241</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/Field.html" target="_self" >Field[]</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initializeFromFields"></a>
+                    <span class="name">
+                        <b>
+                            initializeFromFields
+                        </b>
+                        <a href="#initializeFromFields"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initializeFromFields()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="245"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:245</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isFieldsExist"></a>
+                    <span class="name">
+                        <b>
+                            isFieldsExist
+                        </b>
+                        <a href="#isFieldsExist"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>isFieldsExist(fields: <a href="../classes/Field.html">Field[]</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="163"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:163</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>fields</td>
+                                    <td>
+                                                <code><a href="../classes/Field.html" target="_self" >Field[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="populateChildren"></a>
+                    <span class="name">
+                        <b>
+                            populateChildren
+                        </b>
+                        <a href="#populateChildren"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>populateChildren(field: <a href="../classes/Field.html">Field</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="299"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:299</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Return true if the passed field is terminal or children are detected, false otherwise.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>field</td>
+                                    <td>
+                                                <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <ul>
+<li>target field</li>
+</ul>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="populateFieldData"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            populateFieldData
+                        </b>
+                        <a href="#populateFieldData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>populateFieldData(field: <a href="../classes/Field.html">Field</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="417"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:417</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>field</td>
+                                    <td>
+                                                <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="populateFieldParentPaths"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            populateFieldParentPaths
+                        </b>
+                        <a href="#populateFieldParentPaths"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>populateFieldParentPaths(field: <a href="../classes/Field.html">Field</a>, parentPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, depth: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="395"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:395</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>field</td>
+                                    <td>
+                                                <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>parentPath</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>depth</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="prepareComplexFields"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            prepareComplexFields
+                        </b>
+                        <a href="#prepareComplexFields"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>prepareComplexFields()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="434"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:434</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="removeField"></a>
+                    <span class="name">
+                        <b>
+                            removeField
+                        </b>
+                        <a href="#removeField"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>removeField(field: <a href="../classes/Field.html">Field</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="350"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:350</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Remove the specified field from this document definition.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>field</td>
+                                    <td>
+                                                <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateField"></a>
+                    <span class="name">
+                        <b>
+                            updateField
+                        </b>
+                        <a href="#updateField"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>updateField(field: <a href="../classes/Field.html">Field</a>, oldPath: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="261"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:261</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>field</td>
+                                    <td>
+                                                <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>oldPath</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateFromMappings"></a>
+                    <span class="name">
+                        <b>
+                            updateFromMappings
+                        </b>
+                        <a href="#updateFromMappings"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>updateFromMappings(mappingDefinition: <a href="../classes/MappingDefinition.html">MappingDefinition</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="364"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:364</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mappingDefinition</td>
+                                    <td>
+                                                <code><a href="../classes/MappingDefinition.html" target="_self" >MappingDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+
+
+
+
+            <section>
+    <h3 id="accessors">
+        Accessors
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="type"></a>
+                        <span class="name"><b>type</b><a href="#type"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>type()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="130" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:130</a></div>
+                                </td>
+                            </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>set</b><code>type(type)</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="125" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:125</a></div>
+                                </td>
+                            </tr>
+                    <tr>
+                        <td class="col-md-4">
+
+                                <div class="io-description">
+                                        <b>Parameters :</b>
+                                        <table class="params">
+                                            <thead>
+                                                <tr>
+                                                    <td>Name</td>
+                                                    <td>Optional</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                            <td>type</td>
+                                                    
+                                                    
+                                                        <td>
+                                                                No
+                                                        </td>
+                                                        
+                                                    </tr>
+                                            </tbody>
+                                        </table>
+                                </div>
+                                <div>
+                                </div>
+                                <div class="io-description">
+                                    <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                                </div>
+                        </td>
+                    </tr>
+            </tbody>
+        </table>
+</section>
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Field } from &#x27;./field.model&#x27;;
+import { DocumentType, InspectionType } from &#x27;../common/config.types&#x27;;
+import { MappingDefinition } from &#x27;../models/mapping-definition.model&#x27;;
+import { DataMapperUtil } from &#x27;../common/data-mapper-util&#x27;;
+import { DocumentInitializationModel } from &#x27;../models/config.model&#x27;;
+
+export class NamespaceModel {
+  private static unqualifiedNamespace: NamespaceModel &#x3D; null;
+
+  alias: string &#x3D; null;
+  uri: string &#x3D; null;
+  locationUri: string &#x3D; null;
+  createdByUser &#x3D; false;
+  isTarget &#x3D; false;
+
+  static getUnqualifiedNamespace(): NamespaceModel {
+    if (NamespaceModel.unqualifiedNamespace &#x3D;&#x3D; null) {
+      const ns: NamespaceModel &#x3D; new NamespaceModel();
+      ns.alias &#x3D; &#x27;Unqualified&#x27;;
+      NamespaceModel.unqualifiedNamespace &#x3D; ns;
+    }
+    return NamespaceModel.unqualifiedNamespace;
+  }
+
+  getPrettyLabel(): string {
+    if (this &#x3D;&#x3D;&#x3D; NamespaceModel.getUnqualifiedNamespace()) {
+      return this.alias;
+    }
+    return (this.isTarget ? &#x27;Target&#x27; : this.alias)
+      + &#x27; [&#x27; + (this.uri &#x3D;&#x3D; null ? &#x27;NO URI&#x27; : this.uri) + &#x27;]&#x27;;
+  }
+
+  copy(): NamespaceModel {
+    const copy: NamespaceModel &#x3D; new NamespaceModel();
+    Object.assign(copy, this);
+    return copy;
+  }
+
+  copyFrom(that: NamespaceModel): void {
+    Object.assign(this, that);
+  }
+}
+
+export class PaddingField extends Field {
+  constructor(private _isSource: boolean) {
+    super();
+    this.name &#x3D; &#x27;&lt;padding field&gt;&#x27;;
+    this.classIdentifier &#x3D; &#x27;&lt;padding field&gt;&#x27;;
+    this.type &#x3D; &#x27;&#x27;;
+    this.displayName &#x3D; &#x27;&lt;padding field&gt;&#x27;;
+    this.path &#x3D; &#x27;&#x27;;
+  }
+
+  isSource(): boolean {
+    return this._isSource;
+  }
+
+}
+
+export class DocumentDefinition {
+  private static padField: Field &#x3D; null;
+
+  LEFT_BRACKET &#x3D; &#x27;\x5b&#x27;;
+  RIGHT_BRACKET &#x3D; &#x27;\x5d&#x27;;
+
+  initModel: DocumentInitializationModel;
+  id: string;
+  _type: DocumentType;
+  name: string;
+  description: string;
+  uri: string;
+  inspectionType: InspectionType;
+  inspectionSource: string;
+  inspectionResult: string;
+  isSource: boolean;
+  isPropertyOrConstant: boolean;
+  selectedRoot: string;
+
+  classPath: string;
+  initialized &#x3D; false;
+  errorOccurred &#x3D; false;
+  pathSeparator &#x3D; &#x27;/&#x27;;
+  fields: Field[] &#x3D; [];
+  allFields: Field[] &#x3D; [];
+  terminalFields: Field[] &#x3D; [];
+  complexFieldsByClassIdentifier: { [key: string]: Field; } &#x3D; {};
+  enumFieldsByClassIdentifier: { [key: string]: Field; } &#x3D; {};
+  fieldsByPath: { [key: string]: Field; } &#x3D; {};
+  fieldPaths: string[] &#x3D; [];
+  showFields &#x3D; true;
+  visibleInCurrentDocumentSearch &#x3D; true;
+  namespaces: NamespaceModel[] &#x3D; [];
+  characterEncoding: string &#x3D; null;
+  locale: string &#x3D; null;
+
+  static getDocumentByIdentifier(documentId: string, docs: DocumentDefinition[]): DocumentDefinition {
+    if (documentId &#x3D;&#x3D; null || docs &#x3D;&#x3D; null || !docs.length) {
+      return null;
+    }
+    for (const doc of docs) {
+      if (doc.id &#x3D;&#x3D;&#x3D; documentId) {
+        return doc;
+      }
+    }
+    return null;
+
+  }
+
+  set type(type: DocumentType) {
+    this._type &#x3D; type;
+    this.isPropertyOrConstant &#x3D; type &#x3D;&#x3D;&#x3D; DocumentType.CONSTANT || type &#x3D;&#x3D;&#x3D; DocumentType.PROPERTY;
+  }
+
+  get type(): DocumentType {
+    return this._type;
+  }
+
+  getComplexField(classIdentifier: string): Field {
+    return this.complexFieldsByClassIdentifier[classIdentifier];
+  }
+
+  getEnumField(classIdentifier: string): Field {
+    return this.enumFieldsByClassIdentifier[classIdentifier];
+  }
+
+  getAllFields(): Field[] {
+    return [].concat(this.allFields);
+  }
+
+  /**
+   * Return true if the specified field name already exists in the specified document definition,
+   * false otherwise.
+   *
+   * @param targetField
+   * @param targetFieldDocDefType
+   */
+  fieldExists(targetField: Field, targetFieldDocDefType: DocumentType): boolean {
+
+    for (const field of this.getAllFields()) {
+      if (field.name &#x3D;&#x3D;&#x3D; targetField.name &amp;&amp; field.docDef.type &#x3D;&#x3D;&#x3D; targetFieldDocDefType) {
+          return true;
+      }
+    }
+    return false;
+  }
+
+  isFieldsExist(fields: Field[]): boolean {
+    if (fields &#x3D;&#x3D; null || fields.length &#x3D;&#x3D;&#x3D; 0) {
+      return true;
+    }
+    const foundFields: Field[] &#x3D; this.getFields(Field.getFieldPaths(fields));
+    return (foundFields !&#x3D; null) &amp;&amp; (fields.length &#x3D;&#x3D;&#x3D; foundFields.length);
+  }
+
+  getFields(fieldPaths: string[]): Field[] {
+    const fields: Field[] &#x3D; [];
+    for (const fieldPath of fieldPaths) {
+      const field: Field &#x3D; this.getField(fieldPath);
+      if (field !&#x3D; null) {
+        fields.push(field);
+      }
+    }
+    return fields;
+  }
+
+  getName(showTypes: boolean): string {
+    let name &#x3D; this.name;
+    if (showTypes &amp;&amp; !this.isPropertyOrConstant) {
+      const type &#x3D; this.type;
+      if (type) {
+        name +&#x3D; &#x27; (&#x27; + type + &#x27;)&#x27;;
+      }
+    }
+    return name;
+  }
+
+  getNamespaceForAlias(alias: string): NamespaceModel {
+    for (const ns of this.namespaces) {
+      if (alias &#x3D;&#x3D;&#x3D; ns.alias) {
+        return ns;
+      }
+    }
+    return null;
+  }
+
+  getField(fieldPath: string): Field {
+    if (!fieldPath) {
+      return null;
+    }
+    let field: Field &#x3D; this.fieldsByPath[fieldPath];
+    // if we can&#x27;t find the field we&#x27;re looking for, find parent fields and populate their children
+    const pathSeparator: string &#x3D; this.pathSeparator;
+    let originalPath: string &#x3D; fieldPath;
+    // strip beginning path separator from path
+    if (originalPath !&#x3D; null &amp;&amp; originalPath.indexOf(pathSeparator) &#x3D;&#x3D;&#x3D; 0) {
+      originalPath &#x3D; originalPath.substring(1);
+    }
+    if (field &#x3D;&#x3D; null &amp;&amp; (originalPath.indexOf(pathSeparator) !&#x3D;&#x3D; -1)) {
+      let currentParentPath &#x3D; &#x27;&#x27;;
+      while (originalPath.indexOf(pathSeparator) !&#x3D;&#x3D; -1) {
+        const currentPathSection: string &#x3D; originalPath.substr(0, originalPath.indexOf(pathSeparator));
+        currentParentPath +&#x3D; pathSeparator + currentPathSection;
+        const parentField: Field &#x3D; this.fieldsByPath[currentParentPath];
+        if (parentField &#x3D;&#x3D; null) {
+          if (originalPath.indexOf(pathSeparator) !&#x3D;&#x3D; -1) {
+            originalPath &#x3D; originalPath.substr(originalPath.indexOf(pathSeparator) + 1);
+            continue;
+          } else {
+            break;
+          }
+          // https://github.com/atlasmap/atlasmap/issues/1128
+          // throw new Error(&#x27;Could not populate parent field with path \&#x27;&#x27;
+          //  + currentParentPath + &#x27;\&#x27; (for: &#x27; + fieldPath + &#x27;)&#x27;);
+        }
+        this.populateChildren(parentField);
+        if (originalPath.indexOf(pathSeparator) !&#x3D;&#x3D; -1) {
+          originalPath &#x3D; originalPath.substr(originalPath.indexOf(pathSeparator) + 1);
+        }
+      }
+      field &#x3D; this.fieldsByPath[fieldPath];
+    }
+    return field;
+  }
+
+  getTerminalFields(): Field[] {
+    return [].concat(this.terminalFields);
+  }
+
+  initializeFromFields(): void {
+    if (this.type &#x3D;&#x3D;&#x3D; DocumentType.JAVA) {
+      this.prepareComplexFields();
+    }
+
+    Field.alphabetizeFields(this.fields);
+
+    for (const field of this.fields) {
+      this.populateFieldParentPaths(field, null, 0);
+      this.populateFieldData(field);
+    }
+
+    this.fieldPaths.sort();
+    this.initialized &#x3D; true;
+  }
+
+  updateField(field: Field, oldPath: string): void {
+    Field.alphabetizeFields(this.fields);
+    if (!field.parentField || this.isPropertyOrConstant) {
+      this.populateFieldParentPaths(field, null, 0);
+    } else {
+      const pathSeparator: string &#x3D; this.pathSeparator;
+      this.populateFieldParentPaths(field, field.parentField.path + pathSeparator,
+        field.parentField.fieldDepth + 1);
+    }
+    if (oldPath !&#x3D; null &amp;&amp; this.fieldsByPath[oldPath] !&#x3D; null) {
+      delete (this.fieldsByPath[oldPath]);
+    }
+    DataMapperUtil.removeItemFromArray(field.path, this.fieldPaths);
+    this.populateFieldData(field);
+    this.fieldPaths.sort();
+  }
+
+  addField(field: Field): void {
+    if (!field.parentField || this.isPropertyOrConstant) {
+      this.fields.push(field);
+      Field.alphabetizeFields(this.fields);
+      this.populateFieldParentPaths(field, null, 0);
+    } else {
+      this.populateChildren(field.parentField);
+      field.parentField.children.push(field);
+      Field.alphabetizeFields(field.parentField.children);
+      const pathSeparator: string &#x3D; this.pathSeparator;
+      this.populateFieldParentPaths(field, field.parentField.path + pathSeparator,
+        field.parentField.fieldDepth + 1);
+    }
+    this.populateFieldData(field);
+    this.fieldPaths.sort();
+  }
+
+  /**
+   * Return true if the passed field is terminal or children are detected, false otherwise.
+   * @param field - target field
+   */
+  populateChildren(field: Field): boolean {
+
+    // populate complex fields
+    if (field.isTerminal() || (field.children.length &gt; 0)) {
+      return true;
+    }
+
+    let cachedField &#x3D; this.getComplexField(field.classIdentifier);
+    if (cachedField &#x3D;&#x3D; null) {
+      return false;
+    }
+
+    // copy cached field children
+    cachedField &#x3D; cachedField.copy();
+    const pathSeparator: string &#x3D; this.pathSeparator;
+    for (let childField of cachedField.children) {
+      childField &#x3D; childField.copy();
+      childField.parentField &#x3D; field;
+      this.populateFieldParentPaths(childField, field.path + pathSeparator, field.fieldDepth + 1);
+      this.populateFieldData(childField);
+      field.children.push(childField);
+    }
+
+    if (field.children.length &gt; 0) {
+      this.fieldPaths.sort();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Clear all fields in this document.
+   */
+  clearFields(): void {
+    this.initialized &#x3D; false;
+    this.fields &#x3D; [];
+    this.allFields &#x3D; [];
+    this.terminalFields &#x3D; [];
+    this.fieldPaths &#x3D; [];
+    this.namespaces &#x3D; [];
+    this.fieldsByPath &#x3D; {};
+    this.complexFieldsByClassIdentifier &#x3D; {};
+    this.enumFieldsByClassIdentifier &#x3D; {};
+  }
+
+  /**
+   * Remove the specified field from this document definition.
+   *
+   * @param field
+   */
+  removeField(field: Field): void {
+    if (field &#x3D;&#x3D; null) {
+      return;
+    }
+    DataMapperUtil.removeItemFromArray(field, this.fields);
+    DataMapperUtil.removeItemFromArray(field, this.allFields);
+    DataMapperUtil.removeItemFromArray(field, this.terminalFields);
+    DataMapperUtil.removeItemFromArray(field.path, this.fieldPaths);
+    delete (this.fieldsByPath[field.path]);
+    if (field.parentField !&#x3D; null) {
+      DataMapperUtil.removeItemFromArray(field, field.parentField.children);
+    }
+  }
+
+  updateFromMappings(mappingDefinition: MappingDefinition): void {
+
+    if (mappingDefinition &#x3D;&#x3D;&#x3D; null) {
+      return;
+    }
+
+    for (const field of this.allFields) {
+      field.partOfMapping &#x3D; false;
+      field.hasUnmappedChildren &#x3D; false;
+      field.partOfTransformation &#x3D; false;
+    }
+
+    // FIXME: some of this work is happening N times for N source/target docs, should only happen once.
+    for (const mapping of mappingDefinition.getAllMappings(true)) {
+      const mappingIsActive: boolean &#x3D; (mapping &#x3D;&#x3D;&#x3D; mappingDefinition.activeMapping);
+
+      for (const field of mapping.getAllFields()) {
+        let parentField &#x3D; field;
+        const partOfTransformation &#x3D; mapping.getMappedFieldForField(field).actions.length &gt; 0;
+        while (parentField !&#x3D; null) {
+          parentField.partOfMapping &#x3D; true;
+          parentField.partOfTransformation &#x3D; parentField.partOfTransformation || partOfTransformation;
+          parentField &#x3D; parentField.parentField;
+        }
+      }
+    }
+    for (const field of this.allFields) {
+      field.hasUnmappedChildren &#x3D; Field.fieldHasUnmappedChild(field);
+    }
+  }
+
+  private populateFieldParentPaths(field: Field, parentPath: string, depth: number): void {
+    if (parentPath &#x3D;&#x3D; null) {
+      parentPath &#x3D; this.pathSeparator;
+    }
+    field.path &#x3D; parentPath + field.getNameWithNamespace();
+    if (field.isCollection) {
+      field.path +&#x3D; field.isArray ? (this.LEFT_BRACKET + this.RIGHT_BRACKET) : &#x27;&lt;&gt;&#x27;;
+    }
+    if (field.isAttribute) {
+      field.path &#x3D; parentPath +&#x3D; &#x27;@&#x27; + field.name;
+    }
+    if (field.serviceObject) {
+      field.serviceObject.path &#x3D; field.path;
+    }
+    field.fieldDepth &#x3D; depth;
+    const pathSeparator: string &#x3D; this.pathSeparator;
+    for (const childField of field.children) {
+      childField.parentField &#x3D; field;
+      this.populateFieldParentPaths(childField, field.path + pathSeparator, depth + 1);
+    }
+  }
+
+  private populateFieldData(field: Field): void {
+    field.docDef &#x3D; this;
+    this.fieldPaths.push(field.path);
+    this.allFields.push(field);
+    this.fieldsByPath[field.path] &#x3D; field;
+    if (field.enumeration) {
+      this.enumFieldsByClassIdentifier[field.classIdentifier] &#x3D; field;
+    }
+    if (field.isTerminal()) {
+      this.terminalFields.push(field);
+    } else {
+      for (const childField of field.children) {
+        this.populateFieldData(childField);
+      }
+    }
+  }
+
+  private prepareComplexFields(): void {
+    const fields: Field[] &#x3D; this.fields;
+
+    // build complex field cache
+    this.discoverComplexFields(fields);
+
+    for (const key in this.complexFieldsByClassIdentifier) {
+      if (!this.complexFieldsByClassIdentifier.hasOwnProperty(key)) {
+        continue;
+      }
+      const cachedField: Field &#x3D; this.complexFieldsByClassIdentifier[key];
+      // remove children more than one level deep in cached fields
+      for (const childField of cachedField.children) {
+        childField.children &#x3D; [];
+      }
+      // alphebatize complex field&#x27;s childrein
+      Field.alphabetizeFields(cachedField.children);
+    }
+  }
+
+  private discoverComplexFields(fields: Field[]): void {
+    for (const field of fields) {
+      if (field.type !&#x3D;&#x3D; &#x27;COMPLEX&#x27;) {
+        continue;
+      }
+      if (field.serviceObject.status &#x3D;&#x3D;&#x3D; &#x27;SUPPORTED&#x27;) {
+        this.complexFieldsByClassIdentifier[field.classIdentifier] &#x3D; field.copy();
+      }
+      if (field.children) {
+        this.discoverComplexFields(field.children);
+      }
+    }
+  }
+
+}
+</code></pre>
+    </div>
+</div>
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'class';
+            var COMPODOC_CURRENT_PAGE_URL = 'DocumentDefinition.html';
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

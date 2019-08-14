@@ -1,0 +1,383 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>@atlasmap/atlasmap-data-mapper documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">@atlasmap/atlasmap-data-mapper documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content interface">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Interfaces</li>
+  <li>ModalWindowValidator</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/lib/atlasmap-data-mapper/components/modal-window.component.ts</code>
+        </p>
+
+
+
+        <section>
+            <h3 id="index">Index</h3>
+            <table class="table table-sm table-bordered index-table">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Methods</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#getInitialFocusElement">getInitialFocusElement</a>
+                                </li>
+                                <li>
+                                    <a href="#isDataValid">isDataValid</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+            <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getInitialFocusElement"></a>
+                    <span class="name">
+                        <b>
+                            getInitialFocusElement
+                        </b>
+                        <a href="#getInitialFocusElement"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getInitialFocusElement()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="29"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/modal-window.component.ts:29</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://angular.io/api/core/ElementRef" target="_blank" >ElementRef</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isDataValid"></a>
+                    <span class="name">
+                        <b>
+                            isDataValid
+                        </b>
+                        <a href="#isDataValid"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>isDataValid()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="28"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/modal-window.component.ts:28</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {
+  Component, Input, ViewChildren, QueryList, OnDestroy,
+  ViewContainerRef, Type, ComponentFactoryResolver, AfterViewInit, ChangeDetectorRef, ElementRef
+} from &#x27;@angular/core&#x27;;
+import { ConfigModel } from &#x27;../models/config.model&#x27;;
+import { Subscription } from &#x27;rxjs&#x27;;
+import { ModalErrorWindowComponent } from &#x27;./modal-error-window.component&#x27;;
+
+// source: http://www.w3schools.com/howto/howto_css_modals.asp
+
+export interface ModalWindowValidator {
+  isDataValid(): boolean;
+  getInitialFocusElement(): ElementRef;
+}
+
+@Component({
+  selector: &#x27;empty-modal-body&#x27;,
+  template: &#x27;&#x27;,
+})
+
+export class EmptyModalBodyComponent implements ModalWindowValidator {
+
+  isDataValid(): boolean {
+    return true;
+  }
+
+  getInitialFocusElement(): ElementRef {
+    return undefined;
+  }
+
+}
+
+@Component({
+  selector: &#x27;modal-window&#x27;,
+  templateUrl: &#x27;./modal-window.component.html&#x27;,
+})
+
+export class ModalWindowComponent implements AfterViewInit, OnDestroy {
+  @Input() headerText &#x3D; &#x27;&#x27;;
+  @Input() nestedComponentType: Type&lt;any&gt;;
+  @Input() nestedComponentInitializedCallback: Function;
+  @Input() okButtonHandler: Function;
+  @Input() cancelButtonHandler: Function;
+  @Input() cfg: ConfigModel;
+  @Input() modalErrorWindow: ModalErrorWindowComponent;
+
+  message: string &#x3D; null;
+  nestedComponent: ModalWindowValidator;
+  confirmButtonDisabled &#x3D; false;
+  confirmButtonText &#x3D; &#x27;OK&#x27;;
+  visible &#x3D; false;
+  fade &#x3D; false;
+
+  @ViewChildren(&#x27;dyn_target&#x27;, { read: ViewContainerRef }) myTarget: QueryList&lt;ViewContainerRef&gt;;
+
+  private componentLoaded &#x3D; false;
+  private myTargetChangesSubscription: Subscription;
+
+  constructor(private componentFactoryResolver: ComponentFactoryResolver, public detector: ChangeDetectorRef) { }
+
+  ngAfterViewInit() {
+    if (this.myTargetChangesSubscription) {
+      this.myTargetChangesSubscription.unsubscribe();
+    }
+
+    // from: http://stackoverflow.com/questions/40811809/add-component-dynamically-inside-an-ngif
+    this.myTargetChangesSubscription &#x3D; this.myTarget.changes.subscribe(changes &#x3D;&gt; {
+      setTimeout(() &#x3D;&gt; {
+        if (!this.componentLoaded &amp;&amp; this.visible &amp;&amp; this.myTarget &amp;&amp; (this.myTarget.toArray().length)) {
+          this.loadComponent();
+        }
+        setTimeout(() &#x3D;&gt; {
+          this.detector.detectChanges();
+        }, 10);
+      }, 10);
+    });
+  }
+
+  ngOnDestroy() {
+    this.myTargetChangesSubscription.unsubscribe();
+  }
+
+  loadComponent(): void {
+    const viewContainerRef: ViewContainerRef &#x3D; this.myTarget.toArray()[0];
+    viewContainerRef.clear();
+    const componentFactory &#x3D; this.componentFactoryResolver.resolveComponentFactory(this.nestedComponentType);
+    this.nestedComponent &#x3D; viewContainerRef.createComponent(componentFactory).instance as ModalWindowValidator;
+    if (this.nestedComponentInitializedCallback !&#x3D; null) {
+      this.nestedComponentInitializedCallback(this);
+    }
+    const initialFocusElement &#x3D; this.nestedComponent.getInitialFocusElement();
+    if (initialFocusElement) {
+      initialFocusElement.nativeElement.focus();
+    }
+  }
+
+  closeClicked(event: MouseEvent): void { this.buttonClicked(false); }
+  close(): void {
+    this.fade &#x3D; false;
+    setTimeout(() &#x3D;&gt; {
+      this.visible &#x3D; false;
+    }, 300);
+  }
+  show(): void {
+    this.visible &#x3D; true;
+    setTimeout(() &#x3D;&gt; {
+      this.fade &#x3D; true;
+    }, 100);
+  }
+
+  reset(): void {
+    this.nestedComponentInitializedCallback &#x3D; null;
+    this.confirmButtonDisabled &#x3D; false;
+    this.confirmButtonText &#x3D; &#x27;OK&#x27;;
+    this.message &#x3D; &#x27;&#x27;;
+    this.headerText &#x3D; &#x27;&#x27;;
+    this.componentLoaded &#x3D; false;
+    this.nestedComponentType &#x3D; EmptyModalBodyComponent;
+    this.okButtonHandler &#x3D; null;
+    this.cancelButtonHandler &#x3D; null;
+  }
+
+  private buttonClicked(okClicked: boolean): void {
+    if (okClicked) {
+      if (this.nestedComponent !&#x3D; null) {
+        this.cfg.errorService.clearValidationErrors();
+        if (!(this.nestedComponent.isDataValid())) {
+          return;
+        }
+      }
+      if (this.okButtonHandler) {
+        this.okButtonHandler(this);
+      }
+    } else { // cancel clicked
+      if (this.cancelButtonHandler) {
+        this.cancelButtonHandler(this);
+      }
+    }
+    this.close();
+  }
+
+}
+</code></pre>
+    </div>
+</div>
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
+            var COMPODOC_CURRENT_PAGE_URL = 'ModalWindowValidator.html';
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

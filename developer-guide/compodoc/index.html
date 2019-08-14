@@ -1,0 +1,134 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>@atlasmap/atlasmap-data-mapper documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+	      <link rel="stylesheet" href="./styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="./" class="navbar-brand">@atlasmap/atlasmap-data-mapper documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content getting-started">
+                   <div class="content-data">
+
+<h1 id="atlasmap-data-mapper-ui">AtlasMap Data Mapper UI</h1>
+<p><a href="https://maven-badges.herokuapp.com/maven-central/io.atlasmap/atlas-parent/"><img src="https://maven-badges.herokuapp.com/maven-central/io.atlasmap/atlas-parent/badge.svg?style=flat-square" alt="Runtime @ Maven Central" class="img-responsive"></a>
+<a href="https://badge.fury.io/js/%40atlasmap%2Fatlasmap-data-mapper"><img src="https://badge.fury.io/js/%40atlasmap%2Fatlasmap-data-mapper.svg" alt="UI @ NPM" class="img-responsive"></a>
+<a href="https://circleci.com/gh/atlasmap/atlasmap"><img src="https://circleci.com/gh/atlasmap/atlasmap.svg?style=shield" alt="CircleCI Badge" class="img-responsive"></a>
+<a href="https://www.codacy.com/app/atlasmapio/atlasmap?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=atlasmap/atlasmap&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/4acba1646e0a4cbabac3a76ad5df4df7" alt="Codacy Badge" class="img-responsive"></a>
+<a href="https://www.codacy.com/app/atlasmapio/atlasmap?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=atlasmap/atlasmap&amp;utm_campaign=Badge_Coverage"><img src="https://api.codacy.com/project/badge/Coverage/4acba1646e0a4cbabac3a76ad5df4df7" alt="Codacy Badge" class="img-responsive"></a></p>
+<p>The AtlasMap is a data mapping solution with interactive web based user interface, that simplifies configuring integrations between Java, XML, and JSON data sources. You can design your data mapping on the AtlasMap Data Mapper UI canvas, and then run that data mapping via runtime engine. AtlasMap Data Mapper UI is primarily designed to work within the <a href="https://syndesis.io/">Syndesis UI</a>.</p>
+<h2 id="atlasmap-documentation"><a href="http://docs.atlasmap.io/">AtlasMap Documentation</a></h2>
+<p>All developer related documentation can be found at <a href="http://docs.atlasmap.io/">AtlasMap Documentation</a></p>
+<h2 id="the-shortest-path-to-run-standalone-atlasmap">The shortest path to run standalone AtlasMap</h2>
+<ol>
+<li><p>Checkout AtlasMap repo from GitHub</p>
+<div><pre class="line-numbers"><code class="language-none">$ git clone https://github.com/atlasmap/atlasmap ${ATLASMAP}</code></pre></div></li>
+<li><p>Build AtlasMap runtime</p>
+<div><pre class="line-numbers"><code class="language-none">$ cd ${ATLASMAP}
+$ ./mvnw clean install</code></pre></div><p>or you can skip tests to get the build little bit faster</p>
+<div><pre class="line-numbers"><code class="language-none">$ ./mvnw clean install -DskipTests</code></pre></div></li>
+<li><p>Run AtlasMap standalone</p>
+<div><pre class="line-numbers"><code class="language-none">$ cd ${ATLASMAP}/standalone
+$ ../mvnw -Pitests spring-boot:run</code></pre></div></li>
+</ol>
+<p>Then AtlasMap UI is available at <a href="http://127.0.0.1:8585/">http://127.0.0.1:8585/</a> by default.</p>
+<h2 id="live-update-for-ui-development">Live update for UI development</h2>
+<p>While standalone AtlasMap is running by following above, you can also run an another AtlasMap UI instance at different port by <code>yarn start</code>. This enables live update for UI code so you can see the outcome of your UI code change without build&amp;restart manually.</p>
+<ol>
+<li><p><a href="https://yarnpkg.com/lang/en/docs/install/">Install Yarn</a></p>
+</li>
+<li><p>Install Data Mapper UI&#39;s dependencies</p>
+<div><pre class="line-numbers"><code class="language-none">$ cd ${ATLASMAP}/ui
+$ yarn install</code></pre></div></li>
+<li><p>Start Data Mapper UI</p>
+<div><pre class="line-numbers"><code class="language-none">$ yarn start</code></pre></div></li>
+</ol>
+<p>The <strong>yarn start</strong> command will attempt to automatically open your browser window, but if it doesn&#39;t, open it directly with this URL: <a href="http://localhost:3000">http://localhost:3000</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 0;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'getting-started';
+            var COMPODOC_CURRENT_PAGE_URL = 'index.html';
+       </script>
+
+       <script src="./js/libs/custom-elements.min.js"></script>
+       <script src="./js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="./js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="./js/menu-wc.js" defer></script>
+
+       <script src="./js/libs/bootstrap-native.js"></script>
+
+       <script src="./js/libs/es6-shim.min.js"></script>
+       <script src="./js/libs/EventDispatcher.js"></script>
+       <script src="./js/libs/promise.min.js"></script>
+       <script src="./js/libs/zepto.min.js"></script>
+
+       <script src="./js/compodoc.js"></script>
+
+       <script src="./js/tabs.js"></script>
+       <script src="./js/menu.js"></script>
+       <script src="./js/libs/clipboard.min.js"></script>
+       <script src="./js/libs/prism.js"></script>
+       <script src="./js/sourceCode.js"></script>
+          <script src="./js/search/search.js"></script>
+          <script src="./js/search/lunr.min.js"></script>
+          <script src="./js/search/search-lunr.js"></script>
+          <script src="./js/search/search_index.js"></script>
+       <script src="./js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

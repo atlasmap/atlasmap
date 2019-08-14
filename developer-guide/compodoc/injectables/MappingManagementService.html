@@ -1,0 +1,2769 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>@atlasmap/atlasmap-data-mapper documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">@atlasmap/atlasmap-data-mapper documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Injectables</li>
+  <li>MappingManagementService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts</code>
+        </p>
+
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>Handles mapping updates. It restores mapping status from backend and reflect in UI,
+and/or reflect mapping changes caused by the user action made in UI to the backend.</p>
+
+            </p>
+
+
+
+            <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#_cfg">_cfg</a>
+                            </li>
+                            <li>
+                                <a href="#debugMappingUpdatedSubscription">debugMappingUpdatedSubscription</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#headers">headers</a>
+                            </li>
+                            <li>
+                                <a href="#mappingPreviewError$">mappingPreviewError$</a>
+                            </li>
+                            <li>
+                                <a href="#mappingPreviewErrorSource">mappingPreviewErrorSource</a>
+                            </li>
+                            <li>
+                                <a href="#mappingPreviewInput$">mappingPreviewInput$</a>
+                            </li>
+                            <li>
+                                <a href="#mappingPreviewInputSource">mappingPreviewInputSource</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#mappingPreviewInputSubscription">mappingPreviewInputSubscription</a>
+                            </li>
+                            <li>
+                                <a href="#mappingPreviewOutput$">mappingPreviewOutput$</a>
+                            </li>
+                            <li>
+                                <a href="#mappingPreviewOutputSource">mappingPreviewOutputSource</a>
+                            </li>
+                            <li>
+                                <a href="#mappingSelectionRequired$">mappingSelectionRequired$</a>
+                            </li>
+                            <li>
+                                <a href="#mappingSelectionRequiredSource">mappingSelectionRequiredSource</a>
+                            </li>
+                            <li>
+                                <a href="#mappingUpdated$">mappingUpdated$</a>
+                            </li>
+                            <li>
+                                <a href="#mappingUpdatedSource">mappingUpdatedSource</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#mappingUpdatedSubscription">mappingUpdatedSubscription</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#addNewMapping">addNewMapping</a>
+                            </li>
+                            <li>
+                                <a href="#addPlaceholders">addPlaceholders</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#clearTrailingPaddingFields">clearTrailingPaddingFields</a>
+                            </li>
+                            <li>
+                                <a href="#deselectMapping">deselectMapping</a>
+                            </li>
+                            <li>
+                                <a href="#disableMappingPreview">disableMappingPreview</a>
+                            </li>
+                            <li>
+                                <a href="#enableMappingPreview">enableMappingPreview</a>
+                            </li>
+                            <li>
+                                <a href="#fetchMappings">fetchMappings</a>
+                            </li>
+                            <li>
+                                <a href="#fieldSelected">fieldSelected</a>
+                            </li>
+                            <li>
+                                <a href="#getFieldSelectionExclusionReason">getFieldSelectionExclusionReason</a>
+                            </li>
+                            <li>
+                                <a href="#isFieldSelectable">isFieldSelectable</a>
+                            </li>
+                            <li>
+                                <a href="#moveMappedFieldTo">moveMappedFieldTo</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#notifyMappingUpdated">notifyMappingUpdated</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#removeMapping">removeMapping</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#runtimeServiceActive">runtimeServiceActive</a>
+                            </li>
+                            <li>
+                                <a href="#selectMapping">selectMapping</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateMappedField">updateMappedField</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#updateTransition">updateTransition</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#validateMappings">validateMappings</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accessors</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#cfg">cfg</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+            <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(logger: NGXLogger, http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="63" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:63</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>logger</td>
+                                                  
+                                                        <td>
+                                                                    <code>NGXLogger</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>http</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addNewMapping"></a>
+                    <span class="name">
+                        <b>
+                            addNewMapping
+                        </b>
+                        <a href="#addNewMapping"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>addNewMapping(selectedField: <a href="../classes/Field.html">Field</a>, compoundSelection: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="382"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:382</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Instantiate a new mapping model and associate the selected field with it.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>selectedField</td>
+                                    <td>
+                                                <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>compoundSelection</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <ul>
+<li>indicates a compound-selection (ctrl/cmd-M1) if true, standard mouse click if false.</li>
+</ul>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addPlaceholders"></a>
+                    <span class="name">
+                        <b>
+                            addPlaceholders
+                        </b>
+                        <a href="#addPlaceholders"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>addPlaceholders(count: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, mapping: <a href="../classes/MappingModel.html">MappingModel</a>, basePadIndex: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, isSource: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="208"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:208</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Given an index range, fill in the mappings gap with place-holder fields.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>count</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <ul>
+<li>number of padding fields to add</li>
+</ul>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>mapping</td>
+                                    <td>
+                                                <code><a href="../classes/MappingModel.html" target="_self" >MappingModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <ul>
+<li>mapping to modify</li>
+</ul>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>basePadIndex</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <ul>
+<li>0 based</li>
+</ul>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>isSource</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="clearTrailingPaddingFields"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            clearTrailingPaddingFields
+                        </b>
+                        <a href="#clearTrailingPaddingFields"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>clearTrailingPaddingFields(mappedFields: MappedField[])</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="623"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:623</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Remove any trailing padding fields for the mapped field array.  This occurs when a user moves
+a mapped element above the last padding field.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mappedFields</td>
+                                    <td>
+                                            <code>MappedField[]</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deselectMapping"></a>
+                    <span class="name">
+                        <b>
+                            deselectMapping
+                        </b>
+                        <a href="#deselectMapping"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>deselectMapping()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="406"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:406</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="disableMappingPreview"></a>
+                    <span class="name">
+                        <b>
+                            disableMappingPreview
+                        </b>
+                        <a href="#disableMappingPreview"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>disableMappingPreview()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="494"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:494</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="enableMappingPreview"></a>
+                    <span class="name">
+                        <b>
+                            enableMappingPreview
+                        </b>
+                        <a href="#enableMappingPreview"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>enableMappingPreview()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="412"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:412</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fetchMappings"></a>
+                    <span class="name">
+                        <b>
+                            fetchMappings
+                        </b>
+                        <a href="#fetchMappings"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>fetchMappings(mappingFileNames: string[], mappingDefinition: <a href="../classes/MappingDefinition.html">MappingDefinition</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="112"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:112</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mappingFileNames</td>
+                                    <td>
+                                            <code>string[]</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>mappingDefinition</td>
+                                    <td>
+                                                <code><a href="../classes/MappingDefinition.html" target="_self" >MappingDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;boolean&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fieldSelected"></a>
+                    <span class="name">
+                        <b>
+                            fieldSelected
+                        </b>
+                        <a href="#fieldSelected"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>fieldSelected(field: <a href="../classes/Field.html">Field</a>, compoundSelection: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>, position?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, offset?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="222"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:222</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>field</td>
+                                    <td>
+                                                <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>compoundSelection</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>position</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>offset</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getFieldSelectionExclusionReason"></a>
+                    <span class="name">
+                        <b>
+                            getFieldSelectionExclusionReason
+                        </b>
+                        <a href="#getFieldSelectionExclusionReason"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getFieldSelectionExclusionReason(mapping: <a href="../classes/MappingModel.html">MappingModel</a>, field: <a href="../classes/Field.html">Field</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="317"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:317</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mapping</td>
+                                    <td>
+                                                <code><a href="../classes/MappingModel.html" target="_self" >MappingModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>field</td>
+                                    <td>
+                                                <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isFieldSelectable"></a>
+                    <span class="name">
+                        <b>
+                            isFieldSelectable
+                        </b>
+                        <a href="#isFieldSelectable"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>isFieldSelectable(mapping: <a href="../classes/MappingModel.html">MappingModel</a>, field: <a href="../classes/Field.html">Field</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="373"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:373</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mapping</td>
+                                    <td>
+                                                <code><a href="../classes/MappingModel.html" target="_self" >MappingModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>field</td>
+                                    <td>
+                                                <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="moveMappedFieldTo"></a>
+                    <span class="name">
+                        <b>
+                            moveMappedFieldTo
+                        </b>
+                        <a href="#moveMappedFieldTo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>moveMappedFieldTo(mapping: <a href="../classes/MappingModel.html">MappingModel</a>, insertedMappedField: <a href="../classes/MappedField.html">MappedField</a>, targetIndex: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="188"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:188</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Move existing MappedField in the mapping to specified index, involves field index updates.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mapping</td>
+                                    <td>
+                                                <code><a href="../classes/MappingModel.html" target="_self" >MappingModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>insertedMappedField</td>
+                                    <td>
+                                                <code><a href="../classes/MappedField.html" target="_self" >MappedField</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>targetIndex</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="notifyMappingUpdated"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Async</span>
+                            notifyMappingUpdated
+                        </b>
+                        <a href="#notifyMappingUpdated"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>notifyMappingUpdated()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="566"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:566</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Validate and save complete mappings.  Triggered either as an observable or directly.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Promise&lt;boolean&gt;</code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="removeMapping"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Async</span>
+                            removeMapping
+                        </b>
+                        <a href="#removeMapping"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>removeMapping(mappingModel: <a href="../classes/MappingModel.html">MappingModel</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="156"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:156</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Remove the specified mapping model from the mappings array and update the runtime.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mappingModel</td>
+                                    <td>
+                                                <code><a href="../classes/MappingModel.html" target="_self" >MappingModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Promise&lt;boolean&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="runtimeServiceActive"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Async</span>
+                            runtimeServiceActive
+                        </b>
+                        <a href="#runtimeServiceActive"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>runtimeServiceActive()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="91"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:91</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Return true if the runtime service is available, false otherwise.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Promise&lt;boolean&gt;</code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="selectMapping"></a>
+                    <span class="name">
+                        <b>
+                            selectMapping
+                        </b>
+                        <a href="#selectMapping"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>selectMapping(mappingModel: <a href="../classes/MappingModel.html">MappingModel</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="395"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:395</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mappingModel</td>
+                                    <td>
+                                                <code><a href="../classes/MappingModel.html" target="_self" >MappingModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateMappedField"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Async</span>
+                            updateMappedField
+                        </b>
+                        <a href="#updateMappedField"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateMappedField(mapping: <a href="../classes/MappingModel.html">MappingModel</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="169"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:169</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mapping</td>
+                                    <td>
+                                                <code><a href="../classes/MappingModel.html" target="_self" >MappingModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Promise&lt;boolean&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateTransition"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            updateTransition
+                        </b>
+                        <a href="#updateTransition"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateTransition(mapping: <a href="../classes/MappingModel.html">MappingModel</a>, position?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, offset?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="586"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:586</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mapping</td>
+                                    <td>
+                                                <code><a href="../classes/MappingModel.html" target="_self" >MappingModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>position</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>offset</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="validateMappings"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                            validateMappings
+                        </b>
+                        <a href="#validateMappings"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>validateMappings()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="508"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:508</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Invoke the runtime service to both validate and save the current active mapping.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Promise&lt;boolean&gt;</code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="_cfg"></a>
+                        <span class="name">
+                            <b>
+                            _cfg</b>
+                            <a href="#_cfg"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/ConfigModel.html" target="_self" >ConfigModel</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:42</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="debugMappingUpdatedSubscription"></a>
+                        <span class="name">
+                            <b>
+                            debugMappingUpdatedSubscription</b>
+                            <a href="#debugMappingUpdatedSubscription"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>Subscription</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:47</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="headers"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            headers</b>
+                            <a href="#headers"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>new HttpHeaders(
+    {&#x27;Content-Type&#x27;: &#x27;application/json; application/octet-stream&#x27;,
+     &#x27;Accept&#x27;:       &#x27;application/json; application/octet-stream&#x27;})</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="59" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:59</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="mappingPreviewError$"></a>
+                        <span class="name">
+                            <b>
+                            mappingPreviewError$</b>
+                            <a href="#mappingPreviewError$"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>this.mappingPreviewErrorSource.asObservable()</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="57" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:57</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="mappingPreviewErrorSource"></a>
+                        <span class="name">
+                            <b>
+                            mappingPreviewErrorSource</b>
+                            <a href="#mappingPreviewErrorSource"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>new Subject&lt;ErrorInfo[]&gt;()</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="56" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:56</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="mappingPreviewInput$"></a>
+                        <span class="name">
+                            <b>
+                            mappingPreviewInput$</b>
+                            <a href="#mappingPreviewInput$"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>this.mappingPreviewInputSource.asObservable()</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="53" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:53</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="mappingPreviewInputSource"></a>
+                        <span class="name">
+                            <b>
+                            mappingPreviewInputSource</b>
+                            <a href="#mappingPreviewInputSource"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>new Subject&lt;MappingModel&gt;()</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:52</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="mappingPreviewInputSubscription"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            mappingPreviewInputSubscription</b>
+                            <a href="#mappingPreviewInputSubscription"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>Subscription</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="62" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:62</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="mappingPreviewOutput$"></a>
+                        <span class="name">
+                            <b>
+                            mappingPreviewOutput$</b>
+                            <a href="#mappingPreviewOutput$"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>this.mappingPreviewOutputSource.asObservable()</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="55" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:55</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="mappingPreviewOutputSource"></a>
+                        <span class="name">
+                            <b>
+                            mappingPreviewOutputSource</b>
+                            <a href="#mappingPreviewOutputSource"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>new Subject&lt;MappingModel&gt;()</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:54</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="mappingSelectionRequired$"></a>
+                        <span class="name">
+                            <b>
+                            mappingSelectionRequired$</b>
+                            <a href="#mappingSelectionRequired$"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>this.mappingSelectionRequiredSource.asObservable()</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:50</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="mappingSelectionRequiredSource"></a>
+                        <span class="name">
+                            <b>
+                            mappingSelectionRequiredSource</b>
+                            <a href="#mappingSelectionRequiredSource"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>new Subject&lt;Field&gt;()</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:49</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="mappingUpdated$"></a>
+                        <span class="name">
+                            <b>
+                            mappingUpdated$</b>
+                            <a href="#mappingUpdated$"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>this.mappingUpdatedSource.asObservable()</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="45" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:45</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="mappingUpdatedSource"></a>
+                        <span class="name">
+                            <b>
+                            mappingUpdatedSource</b>
+                            <a href="#mappingUpdatedSource"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>new Subject&lt;void&gt;()</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:44</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="mappingUpdatedSubscription"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            mappingUpdatedSubscription</b>
+                            <a href="#mappingUpdatedSubscription"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>Subscription</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="63" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:63</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+            <section>
+    <h3 id="accessors">
+        Accessors
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="cfg"></a>
+                        <span class="name"><b>cfg</b><a href="#cfg"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>cfg()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="67" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:67</a></div>
+                                </td>
+                            </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>set</b><code>cfg(cfg)</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="71" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:71</a></div>
+                                </td>
+                            </tr>
+                    <tr>
+                        <td class="col-md-4">
+
+                                <div class="io-description">
+                                        <b>Parameters :</b>
+                                        <table class="params">
+                                            <thead>
+                                                <tr>
+                                                    <td>Name</td>
+                                                    <td>Optional</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                            <td>cfg</td>
+                                                    
+                                                    
+                                                        <td>
+                                                                No
+                                                        </td>
+                                                        
+                                                    </tr>
+                                            </tbody>
+                                        </table>
+                                </div>
+                                <div>
+                                </div>
+                                <div class="io-description">
+                                    <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                                </div>
+                        </td>
+                    </tr>
+            </tbody>
+        </table>
+</section>
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { HttpClient, HttpHeaders } from &#x27;@angular/common/http&#x27;;
+import { Injectable } from &#x27;@angular/core&#x27;;
+import { NGXLogger } from &#x27;ngx-logger&#x27;;
+
+import { Observable, Subscription, Subject, forkJoin } from &#x27;rxjs&#x27;;
+import { map, timeout } from &#x27;rxjs/operators&#x27;;
+
+import { ConfigModel } from &#x27;../models/config.model&#x27;;
+import { Field } from &#x27;../models/field.model&#x27;;
+import { MappingModel, MappedField } from &#x27;../models/mapping.model&#x27;;
+import { TransitionMode } from &#x27;../models/transition.model&#x27;;
+import { MappingDefinition } from &#x27;../models/mapping-definition.model&#x27;;
+import { ErrorInfo, ErrorLevel } from &#x27;../models/error.model&#x27;;
+
+import { MappingSerializer } from &#x27;./mapping-serializer.service&#x27;;
+import { DataMapperUtil } from &#x27;../common/data-mapper-util&#x27;;
+import { DocumentDefinition, PaddingField } from &#x27;../models/document-definition.model&#x27;;
+import { runInThisContext } from &#x27;vm&#x27;;
+
+/**
+ * Handles mapping updates. It restores mapping status from backend and reflect in UI,
+ * and/or reflect mapping changes caused by the user action made in UI to the backend.
+ */
+@Injectable()
+export class MappingManagementService {
+  _cfg: ConfigModel;
+
+  mappingUpdatedSource &#x3D; new Subject&lt;void&gt;();
+  mappingUpdated$ &#x3D; this.mappingUpdatedSource.asObservable();
+
+  debugMappingUpdatedSubscription: Subscription;
+
+  mappingSelectionRequiredSource &#x3D; new Subject&lt;Field&gt;();
+  mappingSelectionRequired$ &#x3D; this.mappingSelectionRequiredSource.asObservable();
+
+  mappingPreviewInputSource &#x3D; new Subject&lt;MappingModel&gt;();
+  mappingPreviewInput$ &#x3D; this.mappingPreviewInputSource.asObservable();
+  mappingPreviewOutputSource &#x3D; new Subject&lt;MappingModel&gt;();
+  mappingPreviewOutput$ &#x3D; this.mappingPreviewOutputSource.asObservable();
+  mappingPreviewErrorSource &#x3D; new Subject&lt;ErrorInfo[]&gt;();
+  mappingPreviewError$ &#x3D; this.mappingPreviewErrorSource.asObservable();
+
+  private headers &#x3D; new HttpHeaders(
+    {&#x27;Content-Type&#x27;: &#x27;application/json; application/octet-stream&#x27;,
+     &#x27;Accept&#x27;:       &#x27;application/json; application/octet-stream&#x27;});
+  private mappingPreviewInputSubscription: Subscription;
+  private mappingUpdatedSubscription: Subscription;
+
+  constructor(private logger: NGXLogger, private http: HttpClient) {}
+
+  get cfg() {
+    return this._cfg;
+  }
+
+  set cfg(cfg: ConfigModel) {
+    this._cfg &#x3D; cfg;
+    if (!this._cfg.logger) {
+      this._cfg.logger &#x3D; this.logger;
+    }
+    if (this._cfg.isDebugEnabled()) {
+      this.mappingUpdated$.subscribe(() &#x3D;&gt; {
+        if (!this.cfg.mappings) {
+          return;
+        }
+        if (this.cfg.mappings &amp;&amp; this.cfg.mappings.activeMapping) {
+          this.cfg.logger.debug(&#x27;mapping updated: &#x27; + JSON.stringify(MappingSerializer.serializeMappings(this.cfg)));
+        }
+      });
+    }
+  }
+
+  /**
+   * Return true if the runtime service is available, false otherwise.
+   */
+  async runtimeServiceActive(): Promise&lt;boolean&gt; {
+    return new Promise&lt;boolean&gt;((resolve, reject) &#x3D;&gt; {
+      const url: string &#x3D; this.cfg.initCfg.baseMappingServiceUrl + &#x27;ping&#x27;;
+      this.cfg.logger.trace(&#x27;Runtime Service Ping Request&#x27;);
+      this.http.get(url, { headers: this.headers }).toPromise().then((body: string) &#x3D;&gt; {
+        if (this.cfg.isTraceEnabled()) {
+          this.cfg.logger.trace(&#x60;Runtime Service Ping Response: ${JSON.stringify(body)}&#x60;);
+        }
+        if (body) {
+          if (JSON.stringify(body).match(&#x27;pong&#x27;)) {
+            resolve(true);
+            return;
+          }
+        }
+        resolve(false);
+      }).catch((error: any) &#x3D;&gt; {
+        reject(error);
+      });
+    });
+  }
+
+  fetchMappings(mappingFileNames: string[], mappingDefinition: MappingDefinition): Observable&lt;boolean&gt; {
+    return new Observable&lt;boolean&gt;((observer: any) &#x3D;&gt; {
+      if (mappingFileNames.length &#x3D;&#x3D;&#x3D; 0) {
+        observer.complete();
+        return;
+      }
+      const baseURL: string &#x3D; this.cfg.initCfg.baseMappingServiceUrl + &#x27;mapping/JSON/&#x27;;
+      const operations: Observable&lt;any&gt;[] &#x3D; [];
+      for (const mappingName of mappingFileNames) {
+        const url: string &#x3D; baseURL + mappingName;
+        this.cfg.logger.trace(&#x27;Mapping Service Request&#x27;);
+        const operation &#x3D; this.http.get(url).pipe(map((res: any) &#x3D;&gt; res));
+        operations.push(operation);
+      }
+
+      forkJoin(operations).toPromise().then( async(data: any[]) &#x3D;&gt; {
+        if (!data) {
+          observer.next(false);
+          observer.complete();
+          return;
+        }
+        for (const d of data) {
+          if (this.cfg.isTraceEnabled()) {
+            this.cfg.logger.trace(&#x60;Mapping Service Response: ${JSON.stringify(d)}&#x60;);
+          }
+          this.cfg.mappings &#x3D; mappingDefinition;
+          MappingSerializer.deserializeMappingServiceJSON(d, this.cfg);
+        }
+        this.cfg.mappings.getAllMappings(true).forEach(m &#x3D;&gt; this.updateTransition(m));
+        await this.notifyMappingUpdated();
+        observer.next(true);
+        observer.complete();
+      }).catch((error: any) &#x3D;&gt; {
+          observer.error(error);
+          observer.complete();
+        });
+    }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
+  }
+
+  /**
+   * Remove the specified mapping model from the mappings array and update the runtime.
+   *
+   * @param mappingModel
+   */
+  async removeMapping(mappingModel: MappingModel): Promise&lt;boolean&gt; {
+    return new Promise&lt;boolean&gt;( async(resolve) &#x3D;&gt; {
+      const mappingWasRemoved: boolean &#x3D; this.cfg.mappings.removeMapping(mappingModel);
+      if (mappingWasRemoved) {
+        this.deselectMapping();
+        await this.notifyMappingUpdated();
+      } else {
+        this.deselectMapping();
+      }
+      resolve(true);
+    });
+  }
+
+  async updateMappedField(mapping: MappingModel): Promise&lt;boolean&gt; {
+    return new Promise&lt;boolean&gt;( async(resolve) &#x3D;&gt; {
+      if (mapping.isEmpty()) {
+        this.cfg.mappings.removeMapping(mapping);
+        this.deselectMapping();
+      } else {
+        this.updateTransition(mapping);
+      }
+      await this.notifyMappingUpdated();
+      resolve(true);
+    });
+  }
+
+  /**
+   * Move existing MappedField in the mapping to specified index, involves field index updates.
+   * @param mapping
+   * @param insertedMappedField
+   * @param targetIndex
+   */
+  moveMappedFieldTo(mapping: MappingModel, insertedMappedField: MappedField, targetIndex: number): void {
+    if (mapping &#x3D;&#x3D; null) {
+      return;
+    }
+    insertedMappedField.parsedData.parsedIndex &#x3D; targetIndex.toString();
+    const mappedFields &#x3D; mapping.getMappedFields(insertedMappedField.isSource());
+    mappedFields.splice(mapping.getIndexForMappedField(insertedMappedField) - 1, 1);
+    mappedFields.splice(targetIndex - 1, 0, insertedMappedField);
+    this.clearTrailingPaddingFields(mappedFields);
+    this.notifyMappingUpdated();
+  }
+
+  /**
+   * Given an index range, fill in the mappings gap with place-holder fields.
+   *
+   * @param count - number of padding fields to add
+   * @param mapping - mapping to modify
+   * @param basePadIndex - 0 based
+   * @param isSource
+   */
+  addPlaceholders(count: number, mapping: MappingModel, basePadIndex: number, isSource: boolean) {
+    let padField &#x3D; null;
+    for (let i &#x3D; 0; i &lt; count; i++) {
+      padField &#x3D; new MappedField;
+      padField.field &#x3D; new PaddingField(isSource);
+      padField.parsedData.parsedIndex &#x3D; String(basePadIndex + i);
+      if (isSource) {
+        mapping.sourceFields.splice(basePadIndex + i, 0, padField);
+      } else {
+        mapping.targetFields.splice(basePadIndex + i, 0, padField);
+      }
+    }
+  }
+
+  fieldSelected(field: Field, compoundSelection: boolean, position?: string, offset?: number): void {
+
+    // Start out with a clean slate.
+    this.cfg.errorService.clearMappingErrors();
+    this.cfg.errorService.clearValidationErrors();
+    this.cfg.errorService.clearWarnings();
+
+    if (!field.isTerminal()) {
+      field.docDef.populateChildren(field);
+      field.docDef.updateFromMappings(this.cfg.mappings);
+      field.collapsed &#x3D; !field.collapsed;
+      return;
+    }
+    let addField &#x3D; false;
+    let removeField &#x3D; false;
+    let mapping: MappingModel &#x3D; this.cfg.mappings.activeMapping;
+
+    // Check compound selection and active mapping status to determine the action
+    if (mapping !&#x3D; null) {
+      if (mapping.hasMappedField(field.isSource())) {
+
+        // If the user has performed a compound selection (ctrl/cmd-m1) of a previously unselected field
+        // then add it to the active mapping; otherwise remove it.
+        if (compoundSelection) {
+            if (mapping.isFieldMapped(field)) {
+              removeField &#x3D; true;
+            } else {
+              addField &#x3D; true;
+            }
+        } else {
+          if (!mapping.isFieldMapped(field)) {
+            if (!mapping.isFullyMapped()) {
+              this.cfg.mappings.removeMapping(mapping);
+              this.deselectMapping();
+            }
+            mapping &#x3D; null;
+          }
+        }
+      } else {
+        addField &#x3D; true;
+      }
+    }
+
+    // Select other existing mapping if selected field participates, or create a new one
+    if (mapping &#x3D;&#x3D; null) {
+      const mappingsForField: MappingModel[] &#x3D; this.cfg.mappings.findMappingsForField(field);
+
+      if (mappingsForField &amp;&amp; mappingsForField.length &#x3D;&#x3D;&#x3D; 1) {
+        mapping &#x3D; mappingsForField[0];
+        this.selectMapping(mapping);
+
+      // Source fields may be part of multiple mappings - trigger mapping required source observable thread.
+      } else if (mappingsForField &amp;&amp; mappingsForField.length &gt; 1) {
+        this.mappingSelectionRequiredSource.next(field);
+        return;
+      } else {
+        mapping &#x3D; new MappingModel();
+        this.selectMapping(mapping);
+        addField &#x3D; true;
+      }
+    }
+
+    if (!addField &amp;&amp; !removeField) {
+      this.selectMapping(mapping);
+      this.notifyMappingUpdated();
+      return;
+    }
+
+    if (addField) {
+      const exclusionReason: string &#x3D; this.getFieldSelectionExclusionReason(mapping, field);
+      if (exclusionReason !&#x3D; null) {
+        this.cfg.errorService.mappingError(&#x27;The field \&#x27;&#x27; + field.name + &#x27;\&#x27; cannot be selected, &#x27; + exclusionReason + &#x27;.&#x27;, null);
+        return;
+      }
+      mapping.addField(field, false);
+      this.updateTransition(mapping, position, offset);
+      if (mapping.sourceFields.length &gt; 0 &amp;&amp; mapping.targetFields.length &gt; 0) {
+        this.notifyMappingUpdated();
+      }
+      return;
+    }
+
+    if (removeField) {
+      mapping.getMappedFieldForField(field);
+      mapping.removeField(field);
+      if (mapping.isEmpty()) {
+        this.cfg.mappings.removeMapping(mapping);
+        this.deselectMapping();
+      } else {
+        this.updateTransition(mapping, position, offset);
+      }
+      this.notifyMappingUpdated();
+    }
+  }
+
+  getFieldSelectionExclusionReason(mapping: MappingModel, field: Field): string {
+    if (mapping.getAllMappedFields().length &#x3D;&#x3D;&#x3D; 0) { // if mapping hasn&#x27;t had a field selected yet, allow it
+      return null;
+    }
+
+    if (!field.isTerminal()) {
+      return &#x27;field is a parent field&#x27;;
+    }
+
+    // Target fields may only be mapped once.
+    const existingMappedField &#x3D; mapping.getMappedTarget(field);
+    if (existingMappedField !&#x3D; null) {
+      const macPlatform: boolean &#x3D; /(MacPPC|MacIntel|Mac_PowerPC|Macintosh|Mac OS X)/.test(navigator.userAgent);
+      return &#x27;it is already the target of another mapping (&#x27; + existingMappedField + &#x27;). &#x27; +
+        &#x27;Use &#x27; + (macPlatform ? &#x27;CMD&#x27; : &#x27;CTRL&#x27;) + &#x27;-M1 to select multiple elements for \&#x27;Combine\&#x27; or \&#x27;Separate\&#x27; actions.&#x27;;
+    }
+
+    const lookupMode: boolean &#x3D; mapping.isLookupMode();
+
+    if (lookupMode) {
+      if (!field.enumeration) {
+        return &#x27;only Enumeration fields are valid for this mapping&#x27;;
+      }
+      return null;
+    }
+    // enums are not selectable in these modes
+    if (field.enumeration) {
+      return &#x27;Enumeration fields are not valid for this mapping&#x27;;
+    }
+    // Expression mapping
+    if (mapping.transition.enableExpression &amp;&amp; !field.isSource() &amp;&amp; mapping.getMappedFields(false).length &gt; 0) {
+      return &#x27;cannot add multiple target fields when conditional mapping is enabled.&#x27;;
+    }
+
+    // Check multiplicity restrictions
+    const mappedFields &#x3D; mapping.getMappedFields(field.isSource());
+    const otherSideMappedFields &#x3D; mapping.getMappedFields(!field.isSource());
+    const direction &#x3D; field.isSource() ? &#x27;source&#x27; : &#x27;target&#x27;;
+    const otherDirection &#x3D; !field.isSource() ? &#x27;source&#x27; : &#x27;target&#x27;;
+    if (mappedFields.length &gt; 0) {
+      if (field.isInCollection() || mappedFields[0].field.isInCollection()) {
+        return &#x27;a collection field cannot be a part of compound selection.&#x27;;
+      } else if (otherSideMappedFields.length &gt; 1) {
+        return &#x60;multiple ${direction} fields cannot be added into this
+          mapping. Only one Source field or Target field could be made multiple.&#x60;;
+      }
+    } else {
+      if (otherSideMappedFields.length &gt; 1 &amp;&amp; field.isInCollection()) {
+        return &#x60;a collection field cannot be selected as a ${direction} field
+         when multiple ${otherDirection} fields are already selected.&#x60;;
+      }
+    }
+
+    return null;
+  }
+
+  isFieldSelectable(mapping: MappingModel, field: Field): boolean {
+    return this.getFieldSelectionExclusionReason(mapping, field) &#x3D;&#x3D; null;
+  }
+
+  /**
+   * Instantiate a new mapping model and associate the selected field with it.
+   * @param selectedField
+   * @param compoundSelection - indicates a compound-selection (ctrl/cmd-M1) if true, standard mouse click if false.
+   */
+  addNewMapping(selectedField: Field, compoundSelection: boolean): void {
+    if (!compoundSelection) {
+      this.deselectMapping();
+    }
+    const mapping: MappingModel &#x3D; new MappingModel();
+    if (selectedField !&#x3D; null) {
+      mapping.addField(selectedField, false);
+      this.updateTransition(mapping);
+      this.notifyMappingUpdated();
+    }
+    this.selectMapping(mapping);
+  }
+
+  selectMapping(mappingModel: MappingModel) {
+    if (mappingModel &#x3D;&#x3D; null) {
+      this.deselectMapping();
+      return;
+    }
+    this.cfg.mappings.activeMapping &#x3D; mappingModel;
+    this.cfg.showMappingDetailTray &#x3D; true;
+    this.cfg.mappings.initializeMappingLookupTable(mappingModel);
+    this.mappingUpdatedSource.next();
+  }
+
+  deselectMapping(): void {
+    this.cfg.showMappingDetailTray &#x3D; false;
+    this.cfg.mappings.activeMapping &#x3D; null;
+    this.notifyMappingUpdated();
+  }
+
+  enableMappingPreview(): void {
+    if (this.cfg.initCfg.baseMappingServiceUrl &#x3D;&#x3D; null) {
+      // process mapping service not configured.
+      return;
+    }
+
+    this.mappingPreviewInputSubscription &#x3D; this.mappingPreviewInput$.subscribe(inputFieldMapping &#x3D;&gt; {
+      if (!inputFieldMapping || !inputFieldMapping.isFullyMapped()) {
+        return;
+      }
+      let hasValue &#x3D; false;
+      for (const sourceField of inputFieldMapping.getFields(true)) {
+        if (sourceField.value) {
+          hasValue &#x3D; true;
+          break;
+        }
+      }
+      if (!hasValue) {
+        return;
+      }
+
+      const payload: any &#x3D; {
+        &#x27;ProcessMappingRequest&#x27;: {
+          &#x27;jsonType&#x27;: ConfigModel.mappingServicesPackagePrefix + &#x27;.ProcessMappingRequest&#x27;,
+          &#x27;mapping&#x27;: MappingSerializer.serializeFieldMapping(this.cfg, inputFieldMapping, &#x27;preview&#x27;, false)
+        }
+      };
+      const docRefs: any &#x3D; {};
+      for (const docRef of this.cfg.getAllDocs()) {
+        docRefs[docRef.id] &#x3D; docRef.uri;
+      }
+
+      const url: string &#x3D; this.cfg.initCfg.baseMappingServiceUrl + &#x27;mapping/process&#x27;;
+      if (this.cfg.isTraceEnabled()) {
+        this.cfg.logger.trace(&#x60;Process Mapping Preview Request: ${JSON.stringify(payload)}&#x60;);
+      }
+      this.http.put(url, payload, { headers: this.headers }).toPromise().then((body: any) &#x3D;&gt; {
+        if (this.cfg.isTraceEnabled()) {
+          this.cfg.logger.trace(&#x60;Process Mapping Preview  Response: ${JSON.stringify(body)}&#x60;);
+        }
+        const answer &#x3D; MappingSerializer.deserializeFieldMapping(body.ProcessMappingResponse.mapping, docRefs, this.cfg, false);
+        for (const toWrite of inputFieldMapping.targetFields) {
+          for (const toRead of answer.targetFields) {
+            if (toWrite.field.docDef.id &#x3D;&#x3D;&#x3D; toRead.parsedData.parsedDocID
+                &amp;&amp; toWrite.field.path &#x3D;&#x3D;&#x3D; toRead.parsedData.parsedPath) {
+              // TODO let field component subscribe mappingPreviewOutputSource instead of doing this
+              toWrite.field.value &#x3D; toRead.parsedData.parsedValue;
+              const index &#x3D; answer.targetFields.indexOf(toRead);
+              if (index !&#x3D;&#x3D; -1) {
+                answer.targetFields.splice(index, 1);
+                break;
+              }
+            }
+          }
+        }
+        this.mappingPreviewOutputSource.next(answer);
+        const audits &#x3D; MappingSerializer.deserializeAudits(body.ProcessMappingResponse.audits);
+        if (this.cfg.mappings.activeMapping &#x3D;&#x3D;&#x3D; inputFieldMapping) {
+          // TODO let error service subscribe mappingPreviewErrorSource instead of doing this
+          this.cfg.mappings.activeMapping.previewErrors &#x3D; audits;
+        }
+        this.mappingPreviewErrorSource.next(audits);
+      }).catch((error: any) &#x3D;&gt; {
+        if (this.cfg.mappings &amp;&amp; this.cfg.mappings.activeMapping &amp;&amp;
+            this.cfg.mappings.activeMapping &#x3D;&#x3D;&#x3D; inputFieldMapping) {
+          // TODO let error service subscribe mappingPreviewErrorSource instead of doing this
+          this.cfg.mappings.activeMapping.previewErrors &#x3D; [new ErrorInfo(error, ErrorLevel.ERROR, null)];
+        }
+        this.mappingPreviewErrorSource.next([new ErrorInfo(error, ErrorLevel.ERROR, null)]);
+      });
+    });
+
+    this.mappingUpdatedSubscription &#x3D; this.mappingUpdated$.subscribe(() &#x3D;&gt; {
+      if (!this.cfg || !this.cfg.mappings || !this.cfg.mappings.activeMapping) {
+        return;
+      }
+      if (this.cfg.mappings.activeMapping.isFullyMapped()) {
+        this.mappingPreviewInputSource.next(this.cfg.mappings.activeMapping);
+      }
+    });
+  }
+
+  disableMappingPreview(): void {
+    if (this.mappingUpdatedSubscription) {
+      this.mappingUpdatedSubscription.unsubscribe();
+      this.mappingUpdatedSubscription &#x3D; undefined;
+    }
+    if (this.mappingPreviewInputSubscription) {
+      this.mappingPreviewInputSubscription.unsubscribe();
+      this.mappingPreviewInputSubscription &#x3D; undefined;
+    }
+  }
+
+  /**
+   * Invoke the runtime service to both validate and save the current active mapping.
+   */
+  private async validateMappings(): Promise&lt;boolean&gt; {
+
+    return new Promise&lt;boolean&gt;((resolve, reject) &#x3D;&gt; {
+      if (this.cfg.initCfg.baseMappingServiceUrl &#x3D;&#x3D;&#x3D; null || this.cfg.mappings &#x3D;&#x3D;&#x3D; null) {
+        // validation service not configured or required
+        resolve(false);
+        return;
+      }
+      const payload: any &#x3D; MappingSerializer.serializeMappings(this.cfg);
+      const url: string &#x3D; this.cfg.initCfg.baseMappingServiceUrl + &#x27;mapping/validate&#x27;;
+      if (this.cfg.isTraceEnabled()) {
+        this.cfg.logger.trace(&#x60;Validation Service Request: ${JSON.stringify(payload)}\n&#x60;);
+      }
+      this.http.put(url, payload, { headers: this.headers }).toPromise().then((body: any) &#x3D;&gt; {
+        if (this.cfg.isTraceEnabled()) {
+          this.cfg.logger.trace(&#x60;Validation Service Response: ${JSON.stringify(body)}\n&#x60;);
+        }
+        if (this.cfg.mappings &#x3D;&#x3D;&#x3D; null) {
+          resolve(false);
+          return;
+        }
+        const activeMappingErrors: ErrorInfo[] &#x3D; [];
+        const globalErrors: ErrorInfo[] &#x3D; [];
+        const mapping &#x3D; this.cfg.mappings.activeMapping;
+
+        // Only update active mapping and global ones, since validateMappings() is always invoked when mapping is updated.
+        // This should be eventually turned into mapping entry level validation.
+        // https://github.com/atlasmap/atlasmap-ui/issues/116
+        if (body &amp;&amp; body.Validations &amp;&amp; body.Validations.validation) {
+          for (const validation of body.Validations.validation) {
+            let level: ErrorLevel &#x3D; ErrorLevel.VALIDATION_ERROR;
+            if (validation.status &#x3D;&#x3D;&#x3D; &#x27;WARN&#x27;) {
+              level &#x3D; ErrorLevel.WARN;
+            } else if (validation.status &#x3D;&#x3D;&#x3D; &#x27;INFO&#x27;) {
+              level &#x3D; ErrorLevel.INFO;
+            }
+            const errorInfo &#x3D; new ErrorInfo(validation.message, level);
+            if (!validation.scope || validation.scope !&#x3D;&#x3D; &#x27;MAPPING&#x27; || !validation.id) {
+              globalErrors.push(errorInfo);
+            } else if (mapping &amp;&amp; mapping.uuid &amp;&amp; validation.id &#x3D;&#x3D;&#x3D; mapping.uuid) {
+              activeMappingErrors.push(errorInfo);
+            }
+          }
+        }
+        this.cfg.validationErrors &#x3D; globalErrors;
+        if (mapping) {
+          mapping.validationErrors &#x3D; activeMappingErrors;
+        }
+        resolve(true);
+      }).catch((error: any) &#x3D;&gt; {
+        this.cfg.logger.warn(&#x27;Unable to fetch validation data.&#x27;);
+      });
+    });
+  }
+
+  /**
+   * Validate and save complete mappings.  Triggered either as an observable or directly.
+   */
+  async notifyMappingUpdated(): Promise&lt;boolean&gt; {
+    return new Promise&lt;boolean&gt;( async(resolve, reject) &#x3D;&gt; {
+      if (this.cfg.mappings) {
+
+        const activeMapping: MappingModel &#x3D; this.cfg.mappings.activeMapping;
+        if (activeMapping) {
+          if (!this.cfg.mappings.activeMapping.isFullyMapped()) {
+            resolve(false);
+          }
+          if (this.cfg.mappings.mappings.indexOf(activeMapping) &#x3D;&#x3D;&#x3D; -1) {
+            this.cfg.mappings.mappings.push(activeMapping);
+          }
+        }
+        await this.validateMappings();
+      }
+      this.mappingUpdatedSource.next();
+      resolve(true);
+    });
+  }
+
+  private updateTransition(mapping: MappingModel, position?: string, offset?: number): void {
+    for (const field of mapping.getAllFields()) {
+      if (field.enumeration) {
+        mapping.transition.mode &#x3D; TransitionMode.ENUM;
+        return;
+      }
+    }
+
+    const sourceMappedFields &#x3D; mapping.getMappedFields(true);
+    const sourceMappedCollection &#x3D; (mapping.isFullyMapped() &amp;&amp; sourceMappedFields[0].field
+        &amp;&amp; sourceMappedFields[0].field.isInCollection());
+    const targetMappedFields &#x3D; mapping.getMappedFields(false);
+    const targetMappedCollection &#x3D; (mapping.isFullyMapped() &amp;&amp; targetMappedFields[0].field
+        &amp;&amp; targetMappedFields[0].field.isInCollection());
+
+    if (sourceMappedCollection &amp;&amp; targetMappedCollection) {
+      mapping.transition.mode &#x3D; TransitionMode.FOR_EACH;
+    } else if (sourceMappedFields.length &gt; 1 || sourceMappedCollection) {
+      mapping.transition.mode &#x3D; TransitionMode.MANY_TO_ONE;
+    } else if (targetMappedFields.length &gt; 1 || targetMappedCollection) {
+      mapping.transition.mode &#x3D; TransitionMode.ONE_TO_MANY;
+    } else {
+      mapping.transition.mode &#x3D; TransitionMode.ONE_TO_ONE;
+    }
+
+    // Update conditional expression field references if enabled.
+    if (mapping.transition.enableExpression &amp;&amp; mapping.transition.expression) {
+      mapping.transition.expression.updateFieldReference(mapping, position, offset);
+    }
+  }
+
+  /**
+   * Remove any trailing padding fields for the mapped field array.  This occurs when a user moves
+   * a mapped element above the last padding field.
+   *
+   * @param mappedFields
+   */
+  private clearTrailingPaddingFields(mappedFields: MappedField[]): void {
+    let index &#x3D; 0;
+    let mField &#x3D; null;
+
+    for (index &#x3D; mappedFields.length - 1; index &gt;&#x3D; 0; index--) {
+      mField &#x3D; mappedFields[index];
+      if (mField.isPadField()) {
+        DataMapperUtil.removeItemFromArray(mField, mappedFields);
+        continue;
+      }
+      break;
+    }
+  }
+
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'MappingManagementService.html';
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

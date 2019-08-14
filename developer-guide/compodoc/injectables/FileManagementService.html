@@ -1,0 +1,1600 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>@atlasmap/atlasmap-data-mapper documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">@atlasmap/atlasmap-data-mapper documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Injectables</li>
+  <li>FileManagementService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/lib/atlasmap-data-mapper/services/file-management.service.ts</code>
+        </p>
+
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>Handles file manipulation stored in the backend, including import/export via UI.</p>
+
+            </p>
+
+
+
+            <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#_cfg">_cfg</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#headers">headers</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#jsonBuffer">jsonBuffer</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#exportMappingsCatalog">exportMappingsCatalog</a>
+                            </li>
+                            <li>
+                                <a href="#findMappingFiles">findMappingFiles</a>
+                            </li>
+                            <li>
+                                <a href="#getCurrentADMCatalog">getCurrentADMCatalog</a>
+                            </li>
+                            <li>
+                                <a href="#getCurrentMappingCatalog">getCurrentMappingCatalog</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#getCurrentMappingJson">getCurrentMappingJson</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#getJsonBuf">getJsonBuf</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#getMappingId">getMappingId</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#handleError">handleError</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#importADMCatalog">importADMCatalog</a>
+                            </li>
+                            <li>
+                                <a href="#resetAll">resetAll</a>
+                            </li>
+                            <li>
+                                <a href="#setBinaryFileToService">setBinaryFileToService</a>
+                            </li>
+                            <li>
+                                <a href="#setMappingToService">setMappingToService</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accessors</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#cfg">cfg</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+            <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(logger: NGXLogger, http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:38</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>logger</td>
+                                                  
+                                                        <td>
+                                                                    <code>NGXLogger</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>http</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="exportMappingsCatalog"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Async</span>
+                            exportMappingsCatalog
+                        </b>
+                        <a href="#exportMappingsCatalog"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>exportMappingsCatalog(mappingsFileName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="213"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:213</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Update the current mapping files and export the current mappings catalog (ADM).</p>
+<p>Establish the file content in JSON format (mappings + schema + instance-schema), compress
+it (GZIP), update the runtime, then fetch the full ADM catalog ZIP file from the runtime
+and export it.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mappingsFileName</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Promise&lt;boolean&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findMappingFiles"></a>
+                    <span class="name">
+                        <b>
+                            findMappingFiles
+                        </b>
+                        <a href="#findMappingFiles"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>findMappingFiles(filter: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="53"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:53</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>filter</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;string[]&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getCurrentADMCatalog"></a>
+                    <span class="name">
+                        <b>
+                            getCurrentADMCatalog
+                        </b>
+                        <a href="#getCurrentADMCatalog"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getCurrentADMCatalog()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="108"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:108</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;Uint8Array&gt;</code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getCurrentMappingCatalog"></a>
+                    <span class="name">
+                        <b>
+                            getCurrentMappingCatalog
+                        </b>
+                        <a href="#getCurrentMappingCatalog"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getCurrentMappingCatalog()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="81"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:81</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Retrieve the current user data mappings catalog from the server as a GZIP compressed byte array buffer.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;Uint8Array&gt;</code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getCurrentMappingJson"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            getCurrentMappingJson
+                        </b>
+                        <a href="#getCurrentMappingJson"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getCurrentMappingJson()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="378"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:378</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Retrieve the current user AtlasMap data mappings from the server as an JSON buffer.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;string&gt;</code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getJsonBuf"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                            getJsonBuf
+                        </b>
+                        <a href="#getJsonBuf"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getJsonBuf()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="353"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:353</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Asynchronously retrieve the current user-defined AtlasMap mappings from the runtime server as an JSON buffer.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Promise&lt;boolean&gt;</code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMappingId"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            getMappingId
+                        </b>
+                        <a href="#getMappingId"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getMappingId()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="413"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:413</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="handleError"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            handleError
+                        </b>
+                        <a href="#handleError"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>handleError(message: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, error: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="417"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:417</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>message</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>error</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="importADMCatalog"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Async</span>
+                            importADMCatalog
+                        </b>
+                        <a href="#importADMCatalog"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>importADMCatalog(mappingsFileName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="312"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:312</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Perform a binary read of the specified catalog (.ADM) file and push it to the runtime.  The ADM file is
+in (ZIP) file format.  Once pushed, we can retrieve from runtime the extracted compressed (GZIP) mappings
+file catalog as well as the mappings JSON file.  These files exist separately for performance reasons.</p>
+<p>Once the runtime has its ADM catalog, catalog files and mappings file set then restart the DM.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mappingsFileName</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <ul>
+<li>ADM master ZIP catalog</li>
+</ul>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Promise&lt;boolean&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="resetAll"></a>
+                    <span class="name">
+                        <b>
+                            resetAll
+                        </b>
+                        <a href="#resetAll"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>resetAll()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="138"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:138</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Establish an observable function to delete mapping files on the runtime.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;boolean&gt;</code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setBinaryFileToService"></a>
+                    <span class="name">
+                        <b>
+                            setBinaryFileToService
+                        </b>
+                        <a href="#setBinaryFileToService"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>setBinaryFileToService(compressedBuffer: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="186"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:186</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>The user has either exported their mappings or imported new mappings.  Either way we&#39;re saving them on the server.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>compressedBuffer</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>url</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;boolean&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setMappingToService"></a>
+                    <span class="name">
+                        <b>
+                            setMappingToService
+                        </b>
+                        <a href="#setMappingToService"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>setMappingToService(jsonBuffer: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="162"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:162</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Commit the specified AtlasMapping JSON user mapping string to the runtime service.  The mappings
+are kept separate so they can be updated with minimal overhead.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>jsonBuffer</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;boolean&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="_cfg"></a>
+                        <span class="name">
+                            <b>
+                            _cfg</b>
+                            <a href="#_cfg"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/ConfigModel.html" target="_self" >ConfigModel</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:33</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="headers"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            headers</b>
+                            <a href="#headers"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>new HttpHeaders(
+    {&#x27;Content-Type&#x27;: &#x27;application/json; application/octet-stream&#x27;,
+     &#x27;Accept&#x27;:       &#x27;application/json; application/octet-stream&#x27;})</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:35</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="jsonBuffer"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            jsonBuffer</b>
+                            <a href="#jsonBuffer"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:38</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+            <section>
+    <h3 id="accessors">
+        Accessors
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="cfg"></a>
+                        <span class="name"><b>cfg</b><a href="#cfg"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>cfg()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:42</a></div>
+                                </td>
+                            </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>set</b><code>cfg(cfg)</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:46</a></div>
+                                </td>
+                            </tr>
+                    <tr>
+                        <td class="col-md-4">
+
+                                <div class="io-description">
+                                        <b>Parameters :</b>
+                                        <table class="params">
+                                            <thead>
+                                                <tr>
+                                                    <td>Name</td>
+                                                    <td>Optional</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                            <td>cfg</td>
+                                                    
+                                                    
+                                                        <td>
+                                                                No
+                                                        </td>
+                                                        
+                                                    </tr>
+                                            </tbody>
+                                        </table>
+                                </div>
+                                <div>
+                                </div>
+                                <div class="io-description">
+                                    <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                                </div>
+                        </td>
+                    </tr>
+            </tbody>
+        </table>
+</section>
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+
+import { ConfigModel } from &#x27;../models/config.model&#x27;;
+import { NGXLogger } from &#x27;ngx-logger&#x27;;
+import { deflate } from &#x27;pako&#x27;;
+import { HttpClient, HttpHeaders } from &#x27;@angular/common/http&#x27;;
+import { Observable, forkJoin } from &#x27;rxjs&#x27;;
+import { DataMapperUtil } from &#x27;../common/data-mapper-util&#x27;;
+import { map, timeout } from &#x27;rxjs/operators&#x27;;
+import { DocumentManagementService } from &#x27;./document-management.service&#x27;;
+import { InspectionType } from &#x27;../common/config.types&#x27;;
+
+/**
+ * Handles file manipulation stored in the backend, including import/export via UI.
+ */
+@Injectable()
+export class FileManagementService {
+  _cfg: ConfigModel;
+
+  private headers &#x3D; new HttpHeaders(
+    {&#x27;Content-Type&#x27;: &#x27;application/json; application/octet-stream&#x27;,
+     &#x27;Accept&#x27;:       &#x27;application/json; application/octet-stream&#x27;});
+  private jsonBuffer: string;
+
+  constructor(private logger: NGXLogger, private http: HttpClient) {}
+
+  get cfg() {
+    return this._cfg;
+  }
+
+  set cfg(cfg: ConfigModel) {
+    this._cfg &#x3D; cfg;
+    if (!this._cfg.logger) {
+      this._cfg.logger &#x3D; this.logger;
+    }
+  }
+
+  findMappingFiles(filter: string): Observable&lt;string[]&gt; {
+    return new Observable&lt;string[]&gt;((observer: any) &#x3D;&gt; {
+      const url &#x3D; this.cfg.initCfg.baseMappingServiceUrl + &#x27;mappings&#x27; + (filter &#x3D;&#x3D; null ? &#x27;&#x27; : &#x27;?filter&#x3D;&#x27; + filter);
+      this.cfg.logger.trace(&#x27;Mapping List Request&#x27;);
+      this.http.get(url, { headers: this.headers }).toPromise().then((body: any) &#x3D;&gt; {
+        if (this.cfg.isTraceEnabled()) {
+          this.cfg.logger.trace(&#x60;Mapping List Response: ${JSON.stringify(body)}&#x60;);
+        }
+        const entries: any[] &#x3D; body.StringMap.stringMapEntry;
+        const mappingFileNames: string[] &#x3D; [];
+        for (const entry of entries) {
+          mappingFileNames.push(entry.name);
+        }
+        observer.next(mappingFileNames);
+        observer.complete();
+      }).catch((error: any) &#x3D;&gt; {
+        if (error.status !&#x3D;&#x3D; DataMapperUtil.HTTP_STATUS_NO_CONTENT) {
+          this.handleError(&#x27;Error occurred while accessing the current mapping files from the runtime service.&#x27;, error);
+          observer.error(error);
+        }
+        observer.complete();
+      });
+    }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
+  }
+
+  /**
+   * Retrieve the current user data mappings catalog from the server as a GZIP compressed byte array buffer.
+   */
+  getCurrentMappingCatalog(): Observable&lt;Uint8Array&gt; {
+    const catalogName &#x3D; &#x27;adm-catalog-files.gz&#x27;;
+    return new Observable&lt;Uint8Array&gt;((observer: any) &#x3D;&gt; {
+      const baseURL: string &#x3D; this.cfg.initCfg.baseMappingServiceUrl + &#x27;mapping/GZ/&#x27;;
+      const url: string &#x3D; baseURL + catalogName;
+      this.cfg.logger.trace(&#x27;Mapping Catalog Request&#x27;);
+      const catHeaders &#x3D; new HttpHeaders(
+        { &#x27;Content-Type&#x27;:  &#x27;application/octet-stream&#x27;,
+          &#x27;Accept&#x27;:        &#x27;application/octet-stream&#x27;,
+          &#x27;Response-Type&#x27;: &#x27;application/octet-stream&#x27;
+        });
+      this.http.get(url, { headers: catHeaders, responseType: &#x27;arraybuffer&#x27; }).toPromise().then((body: any) &#x3D;&gt; {
+        if (this.cfg.isTraceEnabled()) {
+          this.cfg.logger.trace(&#x60;Mapping Catalog Response: ${JSON.stringify(body)}&#x60;);
+        }
+        observer.next(body);
+        observer.complete();
+      }).catch((error: any) &#x3D;&gt; {
+        if (error.status !&#x3D;&#x3D; DataMapperUtil.HTTP_STATUS_NO_CONTENT) {
+          this.handleError(&#x27;Error occurred while accessing the current mappings catalog from the runtime service.&#x27;, error);
+          observer.error(error);
+        }
+        observer.complete();
+      });
+    }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
+  }
+
+  getCurrentADMCatalog(): Observable&lt;Uint8Array&gt; {
+    const atlasmapCatalogName &#x3D; &#x27;atlasmap-catalog.adm&#x27;;
+    return new Observable&lt;Uint8Array&gt;((observer: any) &#x3D;&gt; {
+      const baseURL: string &#x3D; this.cfg.initCfg.baseMappingServiceUrl + &#x27;mapping/ZIP/&#x27;;
+      const url: string &#x3D; baseURL + atlasmapCatalogName;
+      this.cfg.logger.trace(&#x27;Mapping Catalog Request&#x27;);
+      const catHeaders &#x3D; new HttpHeaders(
+        { &#x27;Content-Type&#x27;:  &#x27;application/octet-stream&#x27;,
+          &#x27;Accept&#x27;:        &#x27;application/octet-stream&#x27;,
+          &#x27;Response-Type&#x27;: &#x27;application/octet-stream&#x27;
+        });
+      this.http.get(url, { headers: catHeaders, responseType: &#x27;arraybuffer&#x27; }).toPromise().then((body: any) &#x3D;&gt; {
+        if (this.cfg.isTraceEnabled()) {
+          this.cfg.logger.trace(&#x60;Mapping Catalog Response: ${JSON.stringify(body)}&#x60;);
+        }
+        observer.next(body);
+        observer.complete();
+      }).catch((error: any) &#x3D;&gt; {
+        if (error.status !&#x3D;&#x3D; DataMapperUtil.HTTP_STATUS_NO_CONTENT) {
+          this.handleError(&#x27;Error occurred while accessing the ADM catalog from the runtime service.&#x27;, error);
+          observer.error(error);
+        }
+        observer.complete();
+      });
+    }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
+  }
+
+  /**
+   * Establish an observable function to delete mapping files on the runtime.
+   */
+  resetAll(): Observable&lt;boolean&gt; {
+    return new Observable&lt;boolean&gt;((observer: any) &#x3D;&gt; {
+      const url &#x3D; this.cfg.initCfg.baseMappingServiceUrl + &#x27;mapping/RESET&#x27;;
+      this.cfg.logger.trace(&#x27;Mapping Service Request - Reset&#x27;);
+      this.http.delete(url, { headers: this.headers }).toPromise().then((res: any) &#x3D;&gt; {
+          if (this.cfg.isTraceEnabled()) {
+            this.cfg.logger.trace(&#x60;Mapping Service Response - Reset: ${JSON.stringify(res)}&#x60;);
+          }
+          observer.next(true);
+          observer.complete();
+          return res;
+        })
+        .catch((error: any) &#x3D;&gt; {
+          this.handleError(&#x27;Error occurred while resetting mappings.&#x27;, error); },
+      );
+    }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
+  }
+
+ /**
+  * Commit the specified AtlasMapping JSON user mapping string to the runtime service.  The mappings
+  * are kept separate so they can be updated with minimal overhead.
+  *
+  * @param buffer - JSON content
+  */
+  setMappingToService(jsonBuffer: string): Observable&lt;boolean&gt; {
+    return new Observable&lt;boolean&gt;((observer: any) &#x3D;&gt; {
+      const url &#x3D; this.cfg.initCfg.baseMappingServiceUrl + &#x27;mapping/JSON/&#x27; + this.getMappingId();
+      this.cfg.logger.trace(&#x27;Mapping Service Request&#x27;);
+      this.http.put(url, jsonBuffer, { headers: this.headers }).toPromise().then((res: any) &#x3D;&gt; {
+        if (this.cfg.isTraceEnabled()) {
+          this.cfg.logger.trace(&#x60;Mapping Service Response: ${JSON.stringify(res)}&#x60;);
+        }
+        observer.next(true);
+        observer.complete();
+      })
+      .catch((error: any) &#x3D;&gt; {
+        this.handleError(&#x27;Error occurred while establishing mappings from an imported JSON.&#x27;, error);
+        observer.error(error);
+        observer.complete();
+      });
+    });
+  }
+
+  /**
+   * The user has either exported their mappings or imported new mappings.  Either way we&#x27;re saving them on the server.
+   *
+   * @param compressedBuffer
+   */
+   setBinaryFileToService(compressedBuffer: any, url: string): Observable&lt;boolean&gt; {
+     return new Observable&lt;boolean&gt;((observer: any) &#x3D;&gt; {
+       this.cfg.logger.trace(&#x27;Set Compressed Mapping Service Request&#x27;);
+       this.http.put(url, compressedBuffer, { headers: this.headers }).toPromise().then((res: any) &#x3D;&gt; {
+          if (this.cfg.isTraceEnabled()) {
+            this.cfg.logger.trace(&#x60;Set Compressed Mapping Service Response: ${JSON.stringify(res)}&#x60;);
+          }
+          observer.next(true);
+          observer.complete();
+       })
+      .catch((error: any) &#x3D;&gt; {
+        this.handleError(&#x27;Error occurred while saving mapping.&#x27;, error);
+        observer.error(error);
+        observer.complete();
+      });
+    });
+   }
+
+  /**
+   * Update the current mapping files and export the current mappings catalog (ADM).
+   *
+   * Establish the file content in JSON format (mappings + schema + instance-schema), compress
+   * it (GZIP), update the runtime, then fetch the full ADM catalog ZIP file from the runtime
+   * and export it.
+   *
+   * @param event
+   */
+  async exportMappingsCatalog(mappingsFileName: string): Promise&lt;boolean&gt; {
+    return new Promise&lt;boolean&gt;(async(resolve, reject) &#x3D;&gt; {
+      let aggregateBuffer &#x3D; &#x27;   {\n&#x27;;
+      let userExport &#x3D; true;
+
+      try {
+        if (mappingsFileName &#x3D;&#x3D;&#x3D; null || mappingsFileName.length &#x3D;&#x3D;&#x3D; 0) {
+          mappingsFileName &#x3D; &#x27;atlasmap-mapping.adm&#x27;;
+          userExport &#x3D; false;
+        }
+
+        // Retrieve the JSON mappings buffer from the server.
+        if (await this.getJsonBuf()) {
+          aggregateBuffer +&#x3D; DocumentManagementService.generateExportMappings(this.jsonBuffer[0]);
+        }
+
+        let exportMeta &#x3D; &#x27;   &quot;exportMeta&quot;: [\n&#x27;;
+        let exportBlockData &#x3D; &#x27;      &quot;exportBlockData&quot;: [\n&#x27;;
+        let docCount &#x3D; 0;
+
+        // Establish two string arrays:
+        //   exportMeta - meta-data describing the instance or schema documents.
+        //   exportBlockData - the actual source of the instance/schema/mappings documents or the Java class name.
+        for (const doc of this.cfg.getAllDocs()) {
+          if (doc.inspectionSource !&#x3D;&#x3D; null &amp;&amp;
+               (doc.inspectionType &#x3D;&#x3D;&#x3D; InspectionType.INSTANCE) || (doc.inspectionType &#x3D;&#x3D;&#x3D; InspectionType.SCHEMA) ||
+                 (doc.inspectionType &#x3D;&#x3D;&#x3D; InspectionType.JAVA_CLASS) ) {
+            if (docCount &gt; 0) {
+              exportMeta +&#x3D; &#x27;,\n&#x27;;
+              exportBlockData +&#x3D; &#x27;,\n&#x27;;
+            }
+            exportMeta +&#x3D; DocumentManagementService.generateExportMetaStr(doc);
+            exportBlockData +&#x3D; DocumentManagementService.generateExportBlockData(doc.inspectionSource);
+            docCount++;
+          }
+        }
+        exportMeta +&#x3D; &#x27;   ],\n&#x27;;
+        exportBlockData +&#x3D; &#x27;   ]\n&#x27;;
+        aggregateBuffer +&#x3D; exportMeta;
+        aggregateBuffer +&#x3D; exportBlockData;
+        aggregateBuffer +&#x3D; &#x27;   }\n&#x27;;
+
+        // Compress the JSON buffer - write out as binary.
+        const binBuffer &#x3D; DataMapperUtil.str2bytes(aggregateBuffer);
+        try {
+          const compress &#x3D; deflate(binBuffer, {gzip: true});
+          let fileContent: Blob &#x3D; new Blob([compress], {type: &#x27;application/octet-stream&#x27;});
+
+          // Save the model mappings to the runtime.
+          this.setBinaryFileToService(fileContent,
+            this.cfg.initCfg.baseMappingServiceUrl + &#x27;mapping/GZ/&#x27; + this.getMappingId()).toPromise()
+            .then(async(result: boolean) &#x3D;&gt; {
+
+            // Fetch the full ADM catalog file from the runtime (ZIP) and export it to to the local
+            // downloads area.
+            if (userExport) {
+
+              this.getCurrentADMCatalog().subscribe( async(value: Uint8Array) &#x3D;&gt; {
+
+                // If value is null then no compressed mappings catalog is available on the server.
+                if (value !&#x3D;&#x3D; null) {
+                  fileContent &#x3D; new Blob([value], {type: &#x27;application/octet-stream&#x27;});
+                  if (!await DataMapperUtil.writeFile(fileContent, mappingsFileName)) {
+                    this.cfg.errorService.mappingError(&#x27;Unable to save the current data mappings.&#x27;, null);
+                  }
+                }
+                resolve(true);
+              });
+            }
+          }).catch((error: any) &#x3D;&gt; {
+            if (error.status &#x3D;&#x3D;&#x3D; 0) {
+              this.cfg.errorService.mappingError(
+                &#x27;Fatal network error: Unable to connect to the AtlasMap design runtime service.&#x27;, error);
+            } else {
+              this.cfg.errorService.mappingError(
+                &#x27;Unable to update the catalog mappings file to the AtlasMap design runtime service.  &#x27; +
+                  error.status + &#x27; &#x27; + error.statusText, error);
+            }
+          });
+        } catch (error1) {
+          this.cfg.errorService.mappingError(&#x27;Unable to compress the current data mappings.\n&#x27;, error1);
+          return;
+        }
+      } catch (error) {
+        this.cfg.errorService.mappingError(&#x27;Unable to export the current data mappings.&#x27;, error);
+        return;
+      }
+    });
+  }
+
+  /**
+   * Perform a binary read of the specified catalog (.ADM) file and push it to the runtime.  The ADM file is
+   * in (ZIP) file format.  Once pushed, we can retrieve from runtime the extracted compressed (GZIP) mappings
+   * file catalog as well as the mappings JSON file.  These files exist separately for performance reasons.
+   *
+   * Once the runtime has its ADM catalog, catalog files and mappings file set then restart the DM.
+   *
+   * @param mappingsFileName - ADM master ZIP catalog
+   */
+  async importADMCatalog(mappingsFileName: string): Promise&lt;boolean&gt; {
+    return new Promise&lt;boolean&gt;(async(resolve, reject) &#x3D;&gt; {
+      let fileBin &#x3D; null;
+      const reader &#x3D; new FileReader();
+
+      // Turn the imported ADM file into a binary octet stream.
+      try {
+        fileBin &#x3D; await DataMapperUtil.readBinaryFile(mappingsFileName, reader);
+      } catch (error) {
+        this.cfg.errorService.mappingError(&#x27;Unable to import the specified catalog file \&#x27;&#x27; + mappingsFileName + &#x27;\&#x27;&#x27;, error);
+        return;
+      }
+      const fileContent: Blob &#x3D; new Blob([fileBin], {type: &#x27;application/octet-stream&#x27;});
+
+      // Push the binary stream to the runtime.
+      this.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl +
+        &#x27;mapping/ZIP/&#x27; + this.getMappingId()).toPromise().then( async(result: boolean) &#x3D;&gt; {
+
+        try {
+          await this.cfg.initializationService.initialize();
+        } catch (error) {
+          this.cfg.errorService.mappingError(&#x27;Unable to import the catalog file: \n&#x27; + mappingsFileName +
+            &#x27;\n&#x27; + error.message, error);
+          return;
+        }
+      }).catch((error: any) &#x3D;&gt; {
+        if (error.status &#x3D;&#x3D;&#x3D; 0) {
+          this.cfg.errorService.mappingError(
+            &#x27;Fatal network error: Unable to connect to the AtlasMap design runtime service.&#x27;, error);
+        } else {
+          this.cfg.errorService.mappingError(
+            &#x27;Unable to send the ADM file to the runtime service.  &#x27; + error.status + &#x27; &#x27; + error.statusText, error);
+        }
+      });
+      resolve(true);
+    });
+  }
+
+  /**
+   * Asynchronously retrieve the current user-defined AtlasMap mappings from the runtime server as an JSON buffer.
+   */
+  private async getJsonBuf(): Promise&lt;boolean&gt; {
+    return new Promise&lt;boolean&gt;((resolve, reject) &#x3D;&gt; {
+      if (this.cfg.mappings &#x3D;&#x3D;&#x3D; null) {
+        resolve(false);
+      }
+      this.cfg.mappingFiles[0] &#x3D; this.cfg.mappings.name;
+      this.getCurrentMappingJson().toPromise().then((result: string) &#x3D;&gt; {
+        this.jsonBuffer &#x3D; result;
+        resolve(true);
+      }).catch((error: any) &#x3D;&gt; {
+        if (error.status &#x3D;&#x3D;&#x3D; 0) {
+          this.cfg.errorService.mappingError(
+            &#x27;Fatal network error: Unable to connect to the AtlasMap design runtime service.&#x27;, error);
+        } else {
+          this.cfg.errorService.mappingError(
+            &#x27;Unable to access current mapping definitions: &#x27; + error.status + &#x27; &#x27; + error.statusText, error);
+        }
+        resolve(false);
+      });
+    });
+  }
+
+  /**
+   * Retrieve the current user AtlasMap data mappings from the server as an JSON buffer.
+   */
+  private getCurrentMappingJson(): Observable&lt;string&gt; {
+    const mappingFileNames: string[] &#x3D; this.cfg.mappingFiles;
+    return new Observable&lt;string&gt;((observer: any) &#x3D;&gt; {
+      const baseURL: string &#x3D; this.cfg.initCfg.baseMappingServiceUrl + &#x27;mapping/JSON/&#x27;;
+      const operations: Observable&lt;any&gt;[] &#x3D; [];
+      for (const mappingName of mappingFileNames) {
+        const url: string &#x3D; baseURL + mappingName;
+        this.cfg.logger.trace(&#x27;Mapping Service Request&#x27;);
+        const jsonHeaders &#x3D; new HttpHeaders(
+          { &#x27;Content-Type&#x27;:  &#x27;application/json&#x27;,
+            &#x27;Accept&#x27;:        &#x27;application/json&#x27;,
+            &#x27;Response-Type&#x27;: &#x27;application/json&#x27;
+          });
+        const operation &#x3D; this.http.get(url, { headers: jsonHeaders, responseType: &#x27;text&#x27; }).pipe(map((res: any) &#x3D;&gt; res ));
+        operations.push(operation);
+      }
+
+      forkJoin(operations).toPromise().then((data: string[]) &#x3D;&gt; {
+        if (!data) {
+          observer.next(&#x27;no data&#x27;);
+          observer.complete();
+          return;
+        }
+        if (this.cfg.isTraceEnabled()) {
+          this.cfg.logger.trace(&#x60;Mapping Service Response: ${JSON.stringify(data)}&#x60;);
+        }
+        observer.next(data);
+        observer.complete();
+      }).catch((error: any) &#x3D;&gt; {
+        observer.error(error);
+        observer.complete();
+      });
+    });
+  }
+
+  private getMappingId(): string {
+    return (this.cfg.mappingFiles.length &gt; 0) ? this.cfg.mappingFiles[0] : &#x27;0&#x27;;
+  }
+
+  private handleError(message: string, error: any): void {
+    this.cfg.errorService.mappingError(message, error);
+    this.cfg.initCfg.initialized &#x3D; true;
+  }
+
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'FileManagementService.html';
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>
