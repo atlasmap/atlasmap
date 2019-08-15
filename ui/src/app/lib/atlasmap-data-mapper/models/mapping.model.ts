@@ -155,7 +155,7 @@ export class MappingModel {
   }
 
   /**
-   * Add a field to this field mapping pair.
+   * Add the specified field to this field mapping.
    *
    * @param field - field to add to the mapping
    * @param first - if true add the field to the beginning of the array, last otherwise.
@@ -171,9 +171,34 @@ export class MappingModel {
     return mappedField;
   }
 
+  /**
+   * Remove the specified field from this field mapping.
+   *
+   * @param field
+   */
   removeField(field: Field) {
     const mappedFields = this.getMappedFields(field.isSource());
     DataMapperUtil.removeItemFromArray(mappedFields.find(mf => mf.field === field), mappedFields);
+    if (this.getUserFieldCount(field) === 1) {
+      this.clearExtraPaddingFields(mappedFields, false);
+    }
+  }
+
+  /**
+   * Return the number of user-defined (non-padding) fields in this mapping.
+   *
+   * @param field
+   */
+  getUserFieldCount(field: Field): number {
+    const mappedFields = this.getMappedFields(field.isSource());
+    let userFieldCount = 0;
+
+    for (const mappedField of mappedFields) {
+      if (!mappedField.isPadField()) {
+        userFieldCount++;
+      }
+    }
+    return userFieldCount;
   }
 
   hasMappedField(isSource: boolean) {
@@ -343,4 +368,26 @@ export class MappingModel {
     }
   }
 
+  /**
+   * Remove any trailing padding fields for the mapped field array.  This occurs when a user moves
+   * a mapped element above the last padding field.
+   *
+   * @param mappedFields
+   * @param trailing - Remove trailing padding fields only
+   */
+  clearExtraPaddingFields(mappedFields: MappedField[], trailing: boolean): void {
+    let index = 0;
+    let mField = null;
+
+    for (index = mappedFields.length - 1; index >= 0; index--) {
+      mField = mappedFields[index];
+      if (mField.isPadField()) {
+        DataMapperUtil.removeItemFromArray(mField, mappedFields);
+        continue;
+      }
+      if (trailing) {
+        break;
+      }
+    }
+  }
 }
