@@ -155,7 +155,7 @@ export class MappingModel {
   }
 
   /**
-   * Add a field to this field mapping pair.
+   * Add the specified field to this field mapping.
    *
    * @param field - field to add to the mapping
    * @param first - if true add the field to the beginning of the array, last otherwise.
@@ -171,9 +171,31 @@ export class MappingModel {
     return mappedField;
   }
 
+  /**
+   * Remove the specified field from this field mapping.
+   *
+   * @param field
+   */
   removeField(field: Field) {
     const mappedFields = this.getMappedFields(field.isSource());
     DataMapperUtil.removeItemFromArray(mappedFields.find(mf => mf.field === field), mappedFields);
+  }
+
+  /**
+   * Return the number of user-defined (non-padding) fields in this mapping.
+   *
+   * @param field
+   */
+  getUserFieldCount(field: Field): number {
+    const mappedFields = this.getMappedFields(field.isSource());
+    let userFieldCount = 0;
+
+    for (const mappedField of mappedFields) {
+      if (!mappedField.isPadField()) {
+        userFieldCount++;
+      }
+    }
+    return userFieldCount;
   }
 
   hasMappedField(isSource: boolean) {

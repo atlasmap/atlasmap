@@ -193,7 +193,7 @@ export class MappingManagementService {
     const mappedFields = mapping.getMappedFields(insertedMappedField.isSource());
     mappedFields.splice(mapping.getIndexForMappedField(insertedMappedField) - 1, 1);
     mappedFields.splice(targetIndex - 1, 0, insertedMappedField);
-    this.clearTrailingPaddingFields(mappedFields);
+    this.clearExtraPaddingFields(mappedFields, true);
     this.notifyMappingUpdated();
   }
 
@@ -294,6 +294,7 @@ export class MappingManagementService {
         return;
       }
       mapping.addField(field, false);
+
       this.updateTransition(mapping, position, offset);
       if (mapping.sourceFields.length > 0 && mapping.targetFields.length > 0) {
         this.notifyMappingUpdated();
@@ -304,6 +305,9 @@ export class MappingManagementService {
     if (removeField) {
       mapping.getMappedFieldForField(field);
       mapping.removeField(field);
+      if (mapping.getUserFieldCount(field) === 1) {
+        this.clearExtraPaddingFields(mapping.getMappedFields(field.isSource()), false);
+      }
       if (mapping.isEmpty()) {
         this.cfg.mappings.removeMapping(mapping);
         this.deselectMapping();
@@ -506,8 +510,8 @@ export class MappingManagementService {
    * Invoke the runtime service to both validate and save the current active mapping.
    */
   private async validateMappings(): Promise<boolean> {
-
     return new Promise<boolean>((resolve, reject) => {
+      this.cfg.errorService.clearValidationErrors();
       if (this.cfg.initCfg.baseMappingServiceUrl === null || this.cfg.mappings === null) {
         // validation service not configured or required
         resolve(false);
@@ -565,24 +569,29 @@ export class MappingManagementService {
    */
   async notifyMappingUpdated(): Promise<boolean> {
     return new Promise<boolean>( async(resolve, reject) => {
+
       if (this.cfg.mappings) {
 
         const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
         if (activeMapping) {
-          if (!this.cfg.mappings.activeMapping.isFullyMapped()) {
-            resolve(false);
-          }
           if (this.cfg.mappings.mappings.indexOf(activeMapping) === -1) {
             this.cfg.mappings.mappings.push(activeMapping);
           }
+          await this.validateMappings();
         }
-        await this.validateMappings();
       }
       this.mappingUpdatedSource.next();
       resolve(true);
     });
   }
 
+  /**
+   * Update mode transition from a single mapping to multiple-mappings and back.
+   *
+   * @param mapping
+   * @param position
+   * @param offset
+   */
   private updateTransition(mapping: MappingModel, position?: string, offset?: number): void {
     for (const field of mapping.getAllFields()) {
       if (field.enumeration) {
@@ -619,8 +628,9 @@ export class MappingManagementService {
    * a mapped element above the last padding field.
    *
    * @param mappedFields
+   * @param trailing - Remove trailing padding fields only
    */
-  private clearTrailingPaddingFields(mappedFields: MappedField[]): void {
+  clearExtraPaddingFields(mappedFields: MappedField[], trailing: boolean): void {
     let index = 0;
     let mField = null;
 
@@ -630,8 +640,9 @@ export class MappingManagementService {
         DataMapperUtil.removeItemFromArray(mField, mappedFields);
         continue;
       }
-      break;
+      if (trailing) {
+        break;
+      }
     }
   }
-
 }
