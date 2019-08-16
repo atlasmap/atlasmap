@@ -193,7 +193,7 @@ export class MappingManagementService {
     const mappedFields = mapping.getMappedFields(insertedMappedField.isSource());
     mappedFields.splice(mapping.getIndexForMappedField(insertedMappedField) - 1, 1);
     mappedFields.splice(targetIndex - 1, 0, insertedMappedField);
-    mapping.clearExtraPaddingFields(mappedFields, true);
+    this.clearExtraPaddingFields(mappedFields, true);
     this.notifyMappingUpdated();
   }
 
@@ -305,6 +305,9 @@ export class MappingManagementService {
     if (removeField) {
       mapping.getMappedFieldForField(field);
       mapping.removeField(field);
+      if (mapping.getUserFieldCount(field) === 1) {
+        this.clearExtraPaddingFields(mapping.getMappedFields(field.isSource()), false);
+      }
       if (mapping.isEmpty()) {
         this.cfg.mappings.removeMapping(mapping);
         this.deselectMapping();
@@ -620,4 +623,26 @@ export class MappingManagementService {
     }
   }
 
+  /**
+   * Remove any trailing padding fields for the mapped field array.  This occurs when a user moves
+   * a mapped element above the last padding field.
+   *
+   * @param mappedFields
+   * @param trailing - Remove trailing padding fields only
+   */
+  clearExtraPaddingFields(mappedFields: MappedField[], trailing: boolean): void {
+    let index = 0;
+    let mField = null;
+
+    for (index = mappedFields.length - 1; index >= 0; index--) {
+      mField = mappedFields[index];
+      if (mField.isPadField()) {
+        DataMapperUtil.removeItemFromArray(mField, mappedFields);
+        continue;
+      }
+      if (trailing) {
+        break;
+      }
+    }
+  }
 }

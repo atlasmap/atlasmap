@@ -179,9 +179,6 @@ export class MappingModel {
   removeField(field: Field) {
     const mappedFields = this.getMappedFields(field.isSource());
     DataMapperUtil.removeItemFromArray(mappedFields.find(mf => mf.field === field), mappedFields);
-    if (this.getUserFieldCount(field) === 1) {
-      this.clearExtraPaddingFields(mappedFields, false);
-    }
   }
 
   /**
@@ -368,26 +365,4 @@ export class MappingModel {
     }
   }
 
-  /**
-   * Remove any trailing padding fields for the mapped field array.  This occurs when a user moves
-   * a mapped element above the last padding field.
-   *
-   * @param mappedFields
-   * @param trailing - Remove trailing padding fields only
-   */
-  clearExtraPaddingFields(mappedFields: MappedField[], trailing: boolean): void {
-    let index = 0;
-    let mField = null;
-
-    for (index = mappedFields.length - 1; index >= 0; index--) {
-      mField = mappedFields[index];
-      if (mField.isPadField()) {
-        DataMapperUtil.removeItemFromArray(mField, mappedFields);
-        continue;
-      }
-      if (trailing) {
-        break;
-      }
-    }
-  }
 }
