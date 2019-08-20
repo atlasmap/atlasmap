@@ -513,11 +513,11 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         Mapping m = new Mapping();
         Field source1 = new SimpleField();
         source1.setFieldType(FieldType.STRING);
-        source1.setIndex(0);
+        source1.setIndex(1);
         source1.setValue("one");
         Field source2 = new SimpleField();
         source2.setFieldType(FieldType.STRING);
-        source2.setIndex(1);
+        source2.setIndex(3);
         source2.setValue("two");
         Field source3 = new SimpleField();
         source3.setFieldType(FieldType.STRING);
@@ -536,7 +536,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         target.setFieldType(FieldType.STRING);
         m.getOutputField().add(target);
         context.processPreview(m);
-        assertEquals("one-two----six", target.getValue());
+        assertEquals("-one--two--six", target.getValue());
     }
 
     @Test
