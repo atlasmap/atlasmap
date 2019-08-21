@@ -53,6 +53,8 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
   private searchFilter = '';
   private searchMode = false;
   private expressionUpdatedSubscription: Subscription;
+  private candidateSrcElement = null;
+  private candidateIndex = 0;
 
   ngOnInit() {
     // Padding fields don't make sense for expression mapping
@@ -111,8 +113,8 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  @HostListener ('mouseover', ['$event'])
-  onMouseOver($event) {
+  onMouseover(event: any, index: number): void {
+    this.trackSelection(event, index);
     this.tooltiptext = 'Enter source fields for expr: e.g. IF (ISEMPTY(fieldA), fieldB, fieldC)';
 
     // Clear the onMouseLeave mouseOver timeout if it exists.
@@ -131,14 +133,52 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
       self.clearSearchMode();
       self.clearAtText(self.getCaretPositionNodeId(self.atContainer));
       self.markup.nativeElement.focus();
+      self.candidateSrcElement = null;
+      self.candidateIndex = 0;
     }, 1000);
   }
 
+  /**
+   * Track a candidate selection from either a mouse hover or arrow key navigation.
+   *
+   * @param event
+   * @param index
+   */
+  trackSelection(event: any, index: number): void {
+    this.candidateSrcElement = event.srcElement;
+    this.candidateIndex = index;
+  }
+
+  /**
+   * Update the candidate source element and reset the focus.
+   *
+   * @param sibling
+   */
+  private updateCandidate(sibling: any): void {
+    if (this.candidateSrcElement && sibling) {
+      this.candidateSrcElement.style.backgroundColor = 'white';
+      sibling.focus();
+      this.candidateSrcElement = sibling;
+      this.candidateSrcElement.style.backgroundColor = 'lightblue';
+    }
+  }
+
+  /**
+   * Handle key down events.  Note that the event received here is tied to the expression markup
+   * not the conditional expression picker.  That source element is tracked from the drop-down menu
+   * hover/ tab.
+   *
+   * @param event - expression keyboard event
+   */
   @HostListener('keydown', ['$event'])
-  onKeydown(event: KeyboardEvent) {
+  handleKeydown(event: any): void {
 
     if ('Enter' === event.key) {
       event.preventDefault();
+      if (this.candidateSrcElement) {
+        this.selectionChanged(event, this.candidateIndex);
+      }
+
     } else if ('Backspace' === event.key) {
       // TODO handle cursor position
       event.preventDefault();
@@ -153,12 +193,32 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
       if (this.searchMode) {
         this.updateSearchMode();
       }
+
+    } else if ('ArrowDown' === event.key) {
+      event.preventDefault();
+      this.updateCandidate(this.candidateSrcElement.nextElementSibling);
+
+    } else if ('ArrowUp' === event.key) {
+      event.preventDefault();
+      this.updateCandidate(this.candidateSrcElement.previousElementSibling);
+
+    } else if ('Tab' === event.key) {
+
+      if (!this.candidateSrcElement) {
+        this.candidateSrcElement = event.srcElement.nextElementSibling.firstElementChild;
+        this.candidateIndex = 0;
+        this.candidateSrcElement.style.backgroundColor = 'lightblue';
+      } else if (this.candidateSrcElement && this.candidateSrcElement.nextElementSibling) {
+        event.preventDefault();
+        this.updateCandidate(this.candidateSrcElement.nextElementSibling);
+      }
     }
     this.tooltiptext = '';
   }
 
   @HostListener('keypress', ['$event'])
   onKeypress(event: KeyboardEvent) {
+
     if (event.ctrlKey || event.metaKey || event.altKey) {
       return;
     }
@@ -302,6 +362,8 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
     }
     this.clearSearchMode();
     this.markup.nativeElement.focus();
+    this.candidateSrcElement = null;
+    this.candidateIndex = 0;
   }
 
   /**
