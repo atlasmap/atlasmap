@@ -37,7 +37,7 @@ public class ExpressionFieldAction implements AtlasFieldAction {
             try {
                 return args.get(Integer.parseInt(index));
             } catch (Throwable e) {
-                throw new ExpressionException("Invalid varibale: " + index);
+                throw new ExpressionException("Invalid variable: " + index);
             }
         });
     }
