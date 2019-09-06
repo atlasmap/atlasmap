@@ -46,8 +46,6 @@ export class TransitionModel {
   lookupTableName: string = null;
   expression: ExpressionModel;
   enableExpression = false;
-  // TODO Support multiplicity transformations other than Concatenate and Split
-  // https://github.com/atlasmap/atlasmap/issues/912
   transitionFieldAction: FieldAction;
 
   constructor() {
@@ -114,62 +112,11 @@ export class TransitionModel {
     return actionName;
   }
 
-  static getTransitionDelimiterPrettyName(delimiter: TransitionDelimiter): string {
-    for (const m of TransitionModel.delimiterModels) {
-      if (m.delimiter === delimiter) {
-        return m.prettyName;
-      }
-    }
-    return null;
-  }
-
-  static getTransitionDelimiterFromActual(actualDelimiter: string): TransitionDelimiter {
-    for (const m of TransitionModel.delimiterModels) {
-      if (m.actualDelimiter === actualDelimiter) {
-        return m.delimiter;
-      }
-    }
-    return TransitionDelimiter.USER_DEFINED;
-  }
-
-  getSerializedDelimeter(): string {
-    if (this.delimiter === TransitionDelimiter.USER_DEFINED) {
-      return this.userDelimiter;
-    }
-    for (const m of TransitionModel.delimiterModels) {
-      if (m.delimiter === this.delimiter) {
-        return m.serializedValue;
-      }
-    }
-    return null;
-  }
-
-  getActualDelimiter(): string {
-    if (this.delimiter === TransitionDelimiter.USER_DEFINED) {
-      return this.userDelimiter;
-    }
-    for (const m of TransitionModel.delimiterModels) {
-      if (m.delimiter === this.delimiter) {
-        return m.actualDelimiter;
-      }
-    }
-    return null;
-  }
-
-  setSerializedDelimeterFromSerializedValue(value: string): void {
-    for (const m of TransitionModel.delimiterModels) {
-      if (m.serializedValue === value) {
-        this.delimiter = m.delimiter;
-      }
-    }
-  }
-
   getPrettyName() {
-    const delimiterDesc: string = TransitionModel.getTransitionDelimiterPrettyName(this.delimiter);
     if (this.mode === TransitionMode.ONE_TO_MANY) {
-      return TransitionModel.getMappingModeName(this.mode) + ' (' + delimiterDesc + ')';
+      return TransitionModel.getMappingModeName(this.mode) + ' (' + this.transitionFieldAction.name + ')';
     } else if (this.mode === TransitionMode.MANY_TO_ONE) {
-      return TransitionModel.getMappingModeName(this.mode) + ' (' + delimiterDesc + ')';
+      return TransitionModel.getMappingModeName(this.mode) + ' (' + this.transitionFieldAction.name + ')';
     } else if (this.mode === TransitionMode.ENUM) {
       return 'Enum (table: ' + this.lookupTableName + ')';
     }

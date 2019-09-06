@@ -5,8 +5,24 @@
     <i class="fa fa-edit link" (click)="showLookupTable()"></i>
   </div>
 
-  <div *ngIf="mapping.transition.isManyToOneMode() || mapping.transition.isOneToManyMode()">
-    <label tooltip="Enter a separator delimiter character" >Separator:
+  <div class="form-group" *ngIf="mapping.transition.isManyToOneMode() || mapping.transition.isOneToManyMode()">
+    <label tooltip="Choose a multiplicity transformation">
+      <select (change)="configSelectionChanged($event);" [ngModel]="action.name" class="combobox">
+        <option *ngFor="let actionConfig of getMultiplicityActionConfigs()" [attr.actionIndex]="actionIndex"
+                        [attr.value]="actionConfig.name" style="color: black">{{ getLabel(actionConfig.name) }}</option>
+        </select>
+    </label>
+
+    <div class="argument" *ngFor="let argConfig of action.definition.arguments; let argValIndex = index">
+      <div *ngIf="!isIndexArg(argConfig.name, argValIndex)">
+
+        <mapping-field-action-argument [action]="action" [argConfig]="argConfig" [argValIndex]="argValIndex" [cfg]="cfg">
+        </mapping-field-action-argument>
+
+      </div>
+    </div>
+
+<!--
       <select class="combobox" name="separator" id="separator" [ngModel]="mapping.transition.delimiter">
         <ng-container *ngFor="let delimiter of delimiters" id="delimiter">
           <option *ngIf="modeIsSupported(delimiter)" value="{{ delimiter.delimiter }}" style="color: black;">
@@ -15,6 +31,6 @@
           </option>
         </ng-container>
       </select>
-    </label>
-
+-->
+  </div>
 </div>

@@ -18,8 +18,7 @@ import { Component, Input } from '@angular/core';
 import { DataMapperUtil } from '../../common/data-mapper-util';
 import { MappingModel, MappedField } from '../../models/mapping.model';
 import { ConfigModel } from '../../models/config.model';
-import { FieldAction, FieldActionArgument, FieldActionArgumentValue,
-         FieldActionDefinition } from '../../models/field-action.model';
+import { FieldAction, FieldActionDefinition, Multiplicity } from '../../models/field-action.model';
 
 @Component({
   selector: 'mapping-field-action',
@@ -31,6 +30,7 @@ export class MappingFieldActionComponent {
   @Input() mappedField: MappedField;
   @Input() isSource: boolean;
   @Input() mapping: MappingModel;
+  getLabel = DataMapperUtil.toDisplayable;
 
   getMappedFieldActions(): FieldAction[] {
     return this.mappedField.actions;
@@ -70,7 +70,7 @@ export class MappingFieldActionComponent {
     const action: FieldAction = this.getMappedFieldActions()[selectedActionIndex];
     if (action.name !== selectedActionName) {
       action.argumentValues = [];  // Invalidate the previously selected field action arguments.
-      const fieldActionDefinition = this.cfg.fieldActionService.getActionDefinitionForName(selectedActionName);
+      const fieldActionDefinition = this.cfg.fieldActionService.getActionDefinitionForName(selectedActionName, Multiplicity.ONE_TO_ONE);
       fieldActionDefinition.populateFieldAction(action);
 
       // If the field action configuration predefines argument values then populate the fields with
@@ -86,15 +86,4 @@ export class MappingFieldActionComponent {
     this.cfg.mappingService.notifyMappingUpdated();
   }
 
-  /**
-   * Translate an internal label to a human legible form.
-   * @param paramName
-   */
-  getLabel(paramName: string): string {
-    return DataMapperUtil.toDisplayable(paramName);
-  }
-
-  displayTransformationAction(action): boolean {
-    return (action.name !== 'Split');
-  }
 }

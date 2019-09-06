@@ -1,6 +1,6 @@
 <div class="mappingFieldContainer" *ngIf="mapping">
 
-  <div class="MappingFieldSection" *ngIf="displayFieldSearchBox() || displaySeparator()" on-mouseover='handleMouseOver($event)'
+  <div class="MappingFieldSection" *ngIf="displayFieldSearchBox() || displayTransitionSelection()" on-mouseover='handleMouseOver($event)'
     [attr.draggable]="true" (dragstart)="startDrag($event, mappedField)" (drop)="endDrag($event, mappedField)"
     (dragenter)="dragEnterLeave($event, true)" (dragleave)="dragEnterLeave($event, false)" (dragover)="allowDrop($event)">
 
@@ -13,8 +13,8 @@
       </div>
     </div>
 
-    <div *ngIf="displaySeparator()" style="margin-top:10px;">
-      <transition-selection [cfg]="cfg" [mapping]="mapping" [modalWindow]="modalWindow"></transition-selection>
+    <div *ngIf="displayTransitionSelection()" style="margin-top:10px;">
+      <transition-selection [cfg]="cfg" [mapping]="mapping" [modalWindow]="modalWindow" [action]="mapping.transition.transitionFieldAction"></transition-selection>
     </div>
   </div>
 

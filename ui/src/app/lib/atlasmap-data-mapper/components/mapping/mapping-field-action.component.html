@@ -1,14 +1,14 @@
 <div class="mappingFieldAction">
   <div class="actionContainer" *ngFor="let action of getMappedFieldActions(); let actionIndex = index">
 
-    <div *ngIf="displayTransformationAction(action)">
+    <div>
       <div class="form-group">
         <div class="clear"></div>
-        <select (change)="configSelectionChanged($event);" [ngModel]="action.name" *ngIf="!action.isSeparateOrCombineMode">
+        <select (change)="configSelectionChanged($event);" [ngModel]="action.name">
           <option *ngFor="let actionConfig of getActionConfigs()" [attr.actionIndex]="actionIndex"
                           [attr.value]="actionConfig.name" style="color: black">{{ getLabel(actionConfig.name) }}</option>
         </select>
-        <div style="float:right; margin-right: 5px;" *ngIf="!action.isSeparateOrCombineMode">
+        <div style="float:right; margin-right: 5px;">
           <i class="glyphicon glyphicon-remove" aria-hidden="true" (click)="removeAction(action)" style="font-size:14px"
             tooltip="Remove transformation" placement="left"></i>
         </div>

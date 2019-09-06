@@ -4,7 +4,6 @@ import { TestBed, inject } from '@angular/core/testing';
 import { MappingSerializer } from './mapping-serializer.service';
 import { ConfigModel } from '../models/config.model';
 import { ErrorHandlerService } from './error-handler.service';
-import { MappingDefinition } from '../models/mapping-definition.model';
 import { DocumentType } from '../common/config.types';
 import { DocumentDefinition } from '../models/document-definition.model';
 import { Field } from '../models/field.model';
@@ -173,6 +172,9 @@ describe('MappingSerializer', () => {
       fieldActionService.cfg = cfg;
       cfg.fieldActionService = fieldActionService;
       const mappingJson = JSON.parse(jasmine.getFixtures().read('atlasmapping-test.json'));
+      jasmine.getFixtures().fixturesPath = 'base/test-resources/fieldActions';
+      fieldActionService.cfg.preloadedFieldActionMetadata = JSON.parse(jasmine.getFixtures().read('atlasmap-field-action.json'));
+      fieldActionService.fetchFieldActions();
       MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
       cfg.mappings.updateMappingsFromDocuments(cfg);
       expect(cfg.mappings.mappings.length).toEqual(Object.keys(mappingJson.AtlasMapping.mappings.mapping).length);

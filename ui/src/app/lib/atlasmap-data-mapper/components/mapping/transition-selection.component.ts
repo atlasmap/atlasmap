@@ -16,11 +16,13 @@
 
 import { Component, Input, OnInit } from '@angular/core';
 
-import { TransitionDelimiter, TransitionModel, TransitionDelimiterModel } from '../../models/transition.model';
+import { TransitionDelimiter, TransitionMode } from '../../models/transition.model';
 import { ConfigModel } from '../../models/config.model';
 import { MappingModel } from '../../models/mapping.model';
 import { ModalWindowComponent } from '../modal-window.component';
 import { LookupTableComponent } from './lookup-table.component';
+import { FieldAction, FieldActionDefinition, Multiplicity } from '../../models/field-action.model';
+import { DataMapperUtil } from '../../common/data-mapper-util';
 
 @Component({
   selector: 'transition-selection',
@@ -31,13 +33,9 @@ export class TransitionSelectionComponent implements OnInit {
   @Input() cfg: ConfigModel;
   @Input() modalWindow: ModalWindowComponent;
   @Input() mapping: MappingModel;
+  @Input() action: FieldAction;
 
-  delimiters: TransitionDelimiterModel[];
-
-  constructor() {
-    TransitionModel.initialize();
-    this.delimiters = TransitionModel.delimiterModels;
-  }
+  getLabel = DataMapperUtil.toDisplayable;
 
   ngOnInit(): void {
     const that = this;
@@ -126,16 +124,47 @@ export class TransitionSelectionComponent implements OnInit {
     this.modalWindow.show();
   }
 
-  modeIsSupported(delimiterModel: TransitionDelimiterModel): boolean {
-    if (delimiterModel.delimiter === TransitionDelimiter.NONE) {
-      return false;
-    } else if (delimiterModel.delimiter === TransitionDelimiter.MULTI_SPACE) {
-      return this.mapping.transition.isOneToManyMode();
+  getMultiplicityActionConfigs(): FieldActionDefinition[] {
+    if (this.mapping.transition.mode === TransitionMode.ONE_TO_MANY) {
+      return this.cfg.fieldActionService.getActionsAppliesToField(this.mapping, true, Multiplicity.ONE_TO_MANY);
+    } else if (this.mapping.transition.mode === TransitionMode.MANY_TO_ONE) {
+      return this.cfg.fieldActionService.getActionsAppliesToField(this.mapping, true, Multiplicity.MANY_TO_ONE);
+    } else {
+      return [];
     }
-    return true;
   }
 
-  isUserDelimiter(delimiterModel: TransitionDelimiterModel) {
-    return (delimiterModel.delimiter === TransitionDelimiter.USER_DEFINED);
+  /**
+   * A mapping field action configuration selection has been made.  Note that action field arguments, if any,
+   * may be specified by either a text field or pull-down menu.
+   * @param event
+   */
+  configSelectionChanged(event: any) {
+    const attributes: any = event.target.selectedOptions.item(0).attributes;
+    const selectedActionName: any = attributes.getNamedItem('value').value;
+    const action: FieldAction = this.action;
+    if (action.name !== selectedActionName) {
+      action.argumentValues = [];  // Invalidate the previously selected field action arguments.
+      const multiplicity = this.mapping.transition.mode === TransitionMode.ONE_TO_MANY
+       ? Multiplicity.ONE_TO_MANY : Multiplicity.MANY_TO_ONE;
+      const fieldActionDefinition = this.cfg.fieldActionService.getActionDefinitionForName(selectedActionName, multiplicity);
+      fieldActionDefinition.populateFieldAction(action);
+
+      // If the field action configuration predefines argument values then populate the fields with
+      // default values.  Needed to support pull-down menus in action argument definitions.
+      if (action.argumentValues.values && action.argumentValues.length > 0
+        && fieldActionDefinition.arguments[0] && fieldActionDefinition.arguments[0].values
+        && fieldActionDefinition.arguments[0].values.length > 0) {
+        for (let i = 0; i < action.argumentValues.length; i++) {
+          action.argumentValues[i].value = fieldActionDefinition.arguments[i].values[i];
+        }
+      }
+    }
+    this.cfg.mappingService.notifyMappingUpdated();
   }
+
+  isIndexArg(argVal: string, index: number): boolean {
+    return (argVal === 'Index' && index === 0);
+  }
+
 }

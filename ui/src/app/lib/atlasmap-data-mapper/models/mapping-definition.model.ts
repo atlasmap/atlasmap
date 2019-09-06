@@ -18,7 +18,7 @@ import { MappingModel, MappedField } from './mapping.model';
 import { LookupTable } from '../models/lookup-table.model';
 import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
-import { FieldAction, FieldActionArgumentValue, FieldActionDefinition } from './field-action.model';
+import { FieldAction, FieldActionArgumentValue, FieldActionDefinition, Multiplicity } from './field-action.model';
 import { TransitionMode } from './transition.model';
 import { DocumentDefinition, PaddingField } from '../models/document-definition.model';
 
@@ -395,9 +395,9 @@ export class MappingDefinition {
         for (const action of mappedField.parsedData.parsedActions) {
           let actionDefinition = null;
           if (action.name === 'CustomAction') {
-            actionDefinition = cfg.fieldActionService.getActionDefinitionForName(action.argumentValues[0].value);
+            actionDefinition = cfg.fieldActionService.getActionDefinitionForName(action.argumentValues[0].value, Multiplicity.ONE_TO_ONE);
           } else {
-            actionDefinition = cfg.fieldActionService.getActionDefinitionForName(action.name);
+            actionDefinition = cfg.fieldActionService.getActionDefinitionForName(action.name, Multiplicity.ONE_TO_ONE);
           }
           if (actionDefinition == null) {
             cfg.errorService.error('Could not find field action definition for action \'' + action.name + '\'', null);

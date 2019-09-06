@@ -15,7 +15,7 @@
 */
 
 import { TransitionMode } from '../models/transition.model';
-import { FieldActionArgument, FieldAction, FieldActionArgumentValue } from '../models/field-action.model';
+import { FieldActionArgument, FieldAction, FieldActionArgumentValue, Multiplicity } from '../models/field-action.model';
 import { MappingModel, MappedField } from '../models/mapping.model';
 import { Field } from '../models/field.model';
 import { MappingDefinition } from '../models/mapping-definition.model';
@@ -24,7 +24,6 @@ import { LookupTable, LookupTableEntry } from '../models/lookup-table.model';
 import { DocumentType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
-import { TransitionModel, TransitionDelimiter } from '../models/transition.model';
 import { ExpressionModel } from '../models/expression.model';
 
 export class MappingSerializer {
@@ -70,7 +69,7 @@ export class MappingSerializer {
     let jsonMapping = {};
 
     if (mapping.getMappedFields(true).length > 1) {
-      inputFieldGroup = MappingSerializer.createInputFieldGroup(mapping, serializedInputFields);
+      inputFieldGroup = MappingSerializer.createInputFieldGroup(mapping, serializedInputFields, cfg);
 
       jsonMapping = {
        'jsonType': jsonMappingType,
@@ -79,18 +78,6 @@ export class MappingSerializer {
        'outputField': serializedOutputFields,
       };
     } else {
-      if (mapping.transition.isManyToOneMode()) {
-        let delimiter = mapping.transition.getActualDelimiter();
-
-        if (mapping.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
-          delimiter = mapping.transition.userDelimiter;
-        }
-        serializedInputFields[0].actions = [{
-          'Concatenate' : {
-            'delimiter' : delimiter
-          }
-        }];
-      }
       jsonMapping = {
         'jsonType': jsonMappingType,
         'id': id,
@@ -154,15 +141,15 @@ export class MappingSerializer {
     let inputField = [];
 
     if (mappingJson.inputFieldGroup) {
+      mapping.transition.mode = TransitionMode.MANY_TO_ONE;
       inputField = mappingJson.inputFieldGroup.field;
 
       for (const field of inputField) {
         MappingSerializer.addFieldIfDoesntExist(mapping, field, true, docRefs, cfg, ignoreValue);
       }
-      mapping.transition.mode = TransitionMode.MANY_TO_ONE;
       cfg.mappings.updateMappedFieldsFromDocuments(mapping, cfg, null, true);
 
-      // Check for an InputFieldGroup containing a concatenate action inferring combine mode.
+      // Check for an InputFieldGroup containing a many-to-one action
       const firstAction = mappingJson.inputFieldGroup.actions[0];
       if (firstAction) {
         if (firstAction.Expression || firstAction['@type'] === 'Expression') {
@@ -170,18 +157,11 @@ export class MappingSerializer {
           mapping.transition.expression = new ExpressionModel(mapping, cfg);
           const expr = firstAction.Expression ? firstAction.Expression.expression : firstAction['expression'];
           mapping.transition.expression.insertText(expr);
-        } else if (firstAction.Concatenate || firstAction['@type'] === 'Concatenate') {
-          const concatDelimiter =
-            firstAction.Concatenamte ? firstAction.Concatenate.delimiter : firstAction['delimiter'];
-          if (concatDelimiter) {
-            mapping.transition.mode = TransitionMode.MANY_TO_ONE;
-            mapping.transition.delimiter =
-              TransitionModel.getTransitionDelimiterFromActual(concatDelimiter);
-
-            if (mapping.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
-              mapping.transition.userDelimiter = concatDelimiter;
-            }
-          }
+        } else {
+          mapping.transition.mode = TransitionMode.MANY_TO_ONE;
+          const parsedAction = this.parseAction(firstAction);
+          parsedAction.definition = cfg.fieldActionService.getActionDefinitionForName(parsedAction.name, Multiplicity.MANY_TO_ONE);
+          mapping.transition.transitionFieldAction = parsedAction;
         }
       }
     } else {
@@ -193,27 +173,6 @@ export class MappingSerializer {
 
       if (cfg.mappings) {
         cfg.mappings.updateMappedFieldsFromDocuments(mapping, cfg, null, true);
-      }
-
-      if (inputField[0].actions && inputField[0].actions[0]) {
-        // Check for an InputField containing a split action inferring separate mode.
-        const firstAction = inputField[0].actions[0];
-        if (firstAction.Split || firstAction['@type'] === 'Split') {
-          const splitDelimiter = firstAction.Split ? firstAction.Split.delimiter : firstAction['delimiter'];
-          if (splitDelimiter) {
-            mapping.transition.mode = TransitionMode.ONE_TO_MANY;
-            mapping.transition.delimiter =
-              TransitionModel.getTransitionDelimiterFromActual(splitDelimiter);
-            if (mapping.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
-              mapping.transition.userDelimiter = splitDelimiter;
-            }
-          }
-        } else if (firstAction.Expression || firstAction['@type'] === 'Expression') {
-          mapping.transition.enableExpression = true;
-          mapping.transition.expression = new ExpressionModel(mapping, cfg);
-          const expr = firstAction.Expression ? firstAction.Expression.expression : firstAction['expression'];
-          mapping.transition.expression.insertText(expr);
-        }
       }
     }
 
@@ -249,7 +208,7 @@ export class MappingSerializer {
     return errors;
   }
 
-  private static createInputFieldGroup(mapping: MappingModel, field: any[]): any {
+  private static createInputFieldGroup(mapping: MappingModel, field: any[], cfg: ConfigModel): any {
     const actions = [];
 
     if (mapping.transition.isManyToOneMode()) {
@@ -260,16 +219,7 @@ export class MappingSerializer {
           }
         };
       } else {
-        let delimiter = mapping.transition.getActualDelimiter();
-
-        if (mapping.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
-          delimiter = mapping.transition.userDelimiter;
-        }
-        actions[0] = {
-          'Concatenate' : {
-            'delimiter' : delimiter
-          }
-        };
+        actions[0] = this.serializeAction(mapping.transition.transitionFieldAction, cfg);
       }
     }
     const inputFieldGroup: any = {
@@ -425,16 +375,7 @@ export class MappingSerializer {
       }
 
       if (mapping.transition.isOneToManyMode() && field.isSource()) {
-        let delimiter = mapping.transition.getActualDelimiter();
-
-        if (mapping.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
-          delimiter = mapping.transition.userDelimiter;
-        }
-        serializedField['actions'] = [ {
-          'Split' : {
-            'delimiter' : delimiter
-          }
-        } ];
+        serializedField['actions'] = [ this.serializeAction(mapping.transition.transitionFieldAction, cfg) ];
       }
 
       if (!ignoreValue || field.isPropertyOrConstant()) {
@@ -463,35 +404,14 @@ export class MappingSerializer {
 
       if (mappedField.actions.length) {
         const actions: any[] = [];
-        let updatedActions = 0;
 
         for (const action of mappedField.actions) {
-          if (action.isSeparateOrCombineMode || action.definition.serviceObject.name === 'Split') {
-            continue;
+          const actionJson = this.serializeAction(action, cfg);
+          if (actionJson) {
+            actions.push(actionJson);
           }
-          updatedActions++;
-
-          // Serialize custom field actions.
-          if (action.definition.isCustom) {
-              const customActionJson: any = {};
-              let customActionBody = {};
-              customActionBody['name'] = action.definition.serviceObject.name;
-              customActionBody['className'] = action.definition.serviceObject.className;
-              customActionBody['methodName'] = action.definition.serviceObject.method;
-              // customActionBody['arguments'] = MappingSerializer.processActionArguments(action, cfg);
-              customActionBody = (Object.keys(customActionBody).length === 0) ? null : customActionBody;
-              customActionJson['CustomAction'] = customActionBody;
-              actions.push(customActionJson);
-              continue;
-          }
-
-          let actionArguments: any = {};
-          actionArguments = MappingSerializer.processActionArguments(action, cfg);
-          const actionJson: any = {};
-          actionJson[action.definition.name] = actionArguments;
-          actions.push(actionJson);
         }
-        if (updatedActions > 0) {
+        if (actions.length > 0) {
           serializedField['actions'] = actions;
         }
       }
@@ -500,6 +420,27 @@ export class MappingSerializer {
     }
 
     return fieldsJson;
+  }
+
+  private static serializeAction(action: FieldAction, cfg: ConfigModel): any {
+    // Serialize custom field actions.
+    if (action.definition.isCustom) {
+      const customActionJson: any = {};
+      let customActionBody = {};
+      customActionBody['name'] = action.definition.serviceObject.name;
+      customActionBody['className'] = action.definition.serviceObject.className;
+      customActionBody['methodName'] = action.definition.serviceObject.method;
+      // customActionBody['arguments'] = MappingSerializer.processActionArguments(action, cfg);
+      customActionBody = (Object.keys(customActionBody).length === 0) ? null : customActionBody;
+      customActionJson['CustomAction'] = customActionBody;
+      return customActionJson;
+    }
+
+    let actionArguments: any = {};
+    actionArguments = MappingSerializer.processActionArguments(action, cfg);
+    const actionJson: any = {};
+    actionJson[action.definition.name] = actionArguments;
+    return actionJson;
   }
 
   private static deserializeDocs(json: any, mappingDefinition: MappingDefinition): DocumentDefinition[] {
@@ -567,27 +508,28 @@ export class MappingSerializer {
    */
   private static deserializeFieldMappingFromType(mapping: MappingModel,
           fieldMapping: any, docRefs: any, cfg: ConfigModel, ignoreValue: boolean): void {
-    const isSeparateMapping = (fieldMapping.mappingType === 'SEPARATE');
-    const isLookupMapping = (fieldMapping.mappingType === 'LOOKUP');
-    const isCombineMapping = (fieldMapping.mappingType === 'COMBINE');
+    if (fieldMapping.mappingType === 'SEPARATE') {
+      mapping.transition.mode = TransitionMode.ONE_TO_MANY;
+      mapping.transition.transitionFieldAction
+        = FieldAction.create(cfg.fieldActionService.getActionDefinitionForName('Split', Multiplicity.ONE_TO_MANY));
+      mapping.transition.transitionFieldAction.setArgumentValue('delimiter', fieldMapping.delimiter);
+    } else if (fieldMapping.mappingType === 'LOOKUP') {
+      mapping.transition.mode = TransitionMode.ENUM;
+      mapping.transition.lookupTableName = fieldMapping.lookupTableName;
+    } else if (fieldMapping.mappingType === 'COMBINE') {
+      mapping.transition.mode = TransitionMode.MANY_TO_ONE;
+      mapping.transition.transitionFieldAction
+        = FieldAction.create(cfg.fieldActionService.getActionDefinitionForName('Concatenate', Multiplicity.MANY_TO_ONE));
+      mapping.transition.transitionFieldAction.setArgumentValue('delimiter', fieldMapping.delimiter);
+    } else {
+      mapping.transition.mode = TransitionMode.ONE_TO_ONE;
+    }
 
     for (const field of fieldMapping.inputField) {
        MappingSerializer.addFieldIfDoesntExist(mapping, field, true, docRefs, cfg, ignoreValue);
     }
     for (const field of fieldMapping.outputField) {
        MappingSerializer.addFieldIfDoesntExist(mapping, field, false, docRefs, cfg, ignoreValue);
-    }
-    if (isSeparateMapping) {
-      mapping.transition.mode = TransitionMode.ONE_TO_MANY;
-      mapping.transition.setSerializedDelimeterFromSerializedValue(fieldMapping.delimiter);
-    } else if (isCombineMapping) {
-      mapping.transition.mode = TransitionMode.MANY_TO_ONE;
-      mapping.transition.setSerializedDelimeterFromSerializedValue(fieldMapping.delimiter);
-    } else if (isLookupMapping) {
-      mapping.transition.lookupTableName = fieldMapping.lookupTableName;
-      mapping.transition.mode = TransitionMode.ENUM;
-    } else {
-      mapping.transition.mode = TransitionMode.ONE_TO_ONE;
     }
   }
 
@@ -687,10 +629,22 @@ export class MappingSerializer {
       }
       if (field.actions) {
         for (const action of field.actions) {
-          if (action['@type']) {
-            MappingSerializer.parseNewAction(action, mappedField.parsedData.parsedActions);
-          } else {
-            MappingSerializer.parseOldAction(action, mappedField.parsedData.parsedActions);
+          const parsedAction = this.parseAction(action);
+          parsedAction.definition = cfg.fieldActionService.getActionDefinitionForName(parsedAction.name);
+          if (isSource && (action.Expression || action['@type'] === 'Expression')) {
+            mapping.transition.enableExpression = true;
+            mapping.transition.expression = new ExpressionModel(mapping, cfg);
+            const expr = action.Expression ? action.Expression.expression : action['expression'];
+            mapping.transition.expression.insertText(expr);
+          } else if (isSource && [Multiplicity.ONE_TO_MANY, Multiplicity.MANY_TO_ONE]
+           .includes(parsedAction.definition.multiplicity)) {
+             if (mapping.transition.transitionFieldAction) {
+               cfg.logger.warn(`Duplicated multiplicity transformations were detected:
+                ${mapping.transition.transitionFieldAction.name} is being overwritten by ${action.name} ...`);
+             }
+             mapping.transition.transitionFieldAction = parsedAction;
+           } else {
+            mappedField.parsedData.parsedActions.push(parsedAction);
           }
         }
       }
@@ -699,10 +653,18 @@ export class MappingSerializer {
     return mappedField;
   }
 
+  private static parseAction(action: any): FieldAction {
+    if (action['@type']) {
+      return MappingSerializer.parseNewAction(action);
+    } else {
+      return MappingSerializer.parseOldAction(action);
+    }
+  }
+
   /**
    * @deprecated actionName: {param:...} style has been deprecated. Use {`@type`: actionName} style action description.
    */
-  private static parseOldAction(action: any, parsedActions: FieldAction[]) {
+  private static parseOldAction(action: any): FieldAction {
     for (const actionName of Object.keys(action)) {
       if (!action.hasOwnProperty(actionName)) {
         return;
@@ -723,11 +685,11 @@ export class MappingSerializer {
           parsedAction.argumentValues.push(parsedArgumentValue);
         }
       }
-      parsedActions.push(parsedAction);
+      return parsedAction;
     }
   }
 
-  private static parseNewAction(action: any, parsedActions: FieldAction[]) {
+  private static parseNewAction(action: any): FieldAction {
     const parsedAction: FieldAction = new FieldAction();
     parsedAction.name = action['@type'];
     for (const [key, value] of Object.entries(action)) {
@@ -740,6 +702,6 @@ export class MappingSerializer {
       parsedArgumentValue.value = valueString;
       parsedAction.argumentValues.push(parsedArgumentValue);
     }
-    parsedActions.push(parsedAction);
+    return parsedAction;
   }
 }

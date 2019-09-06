@@ -19,6 +19,7 @@ import { DataMapperUtil } from '../../common/data-mapper-util';
 import { MappedField } from '../../models/mapping.model';
 import { ConfigModel } from '../../models/config.model';
 import { FieldAction, FieldActionArgument, FieldActionArgumentValue } from '../../models/field-action.model';
+import { TransitionDelimiterModel, TransitionModel, TransitionDelimiter } from '../../models/transition.model';
 
 @Component({
   selector: 'mapping-field-action-argument',
@@ -33,10 +34,16 @@ export class MappingFieldActionArgumentComponent {
   @Input() cfg: ConfigModel;
   @Input() mappedField: MappedField;
 
+  delimiters: TransitionDelimiterModel[];
   private checkIconEnabled = false;
 
+  constructor() {
+    TransitionModel.initialize();
+    this.delimiters = TransitionModel.delimiterModels;
+  }
+
   getMappedFieldActions(): FieldAction[] {
-    return this.mappedField.actions;
+    return this.mappedField ? this.mappedField.actions : [this.action];
   }
 
   /**
@@ -104,7 +111,7 @@ export class MappingFieldActionArgumentComponent {
       const selectedArgValName: any = attributes.getNamedItem('value').value;
       const argValIndex: any = attributes.getNamedItem('argValIndex').value;
       const actionIndex: any = attributes.getNamedItem('actionIndex').value;
-      const action: FieldAction = this.mappedField.actions[actionIndex];
+      const action: FieldAction = this.mappedField ? this.mappedField.actions[actionIndex] : this.action;
       action.argumentValues[argValIndex].value = selectedArgValName;
       this.validateActionConfigParamSelection(action.argumentValues);
     }
@@ -138,6 +145,17 @@ export class MappingFieldActionArgumentComponent {
    */
   getLabel(argConfigName: string): string {
     return DataMapperUtil.toDisplayable(argConfigName);
+  }
+
+  modeIsSupported(delimiterModel: TransitionDelimiterModel): boolean {
+    if ([TransitionDelimiter.NONE, TransitionDelimiter.USER_DEFINED].includes(delimiterModel.delimiter)) {
+      return false;
+    }
+    return true;
+  }
+
+  isUserDelimiter(delimiterModel: TransitionDelimiterModel) {
+    return (delimiterModel.delimiter === TransitionDelimiter.USER_DEFINED);
   }
 
 }

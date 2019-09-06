@@ -29,7 +29,6 @@ import io.atlasmap.v2.Format;
 import io.atlasmap.v2.GenerateUUID;
 import io.atlasmap.v2.IndexOf;
 import io.atlasmap.v2.LastIndexOf;
-import io.atlasmap.v2.Multiplicity;
 import io.atlasmap.v2.PadStringLeft;
 import io.atlasmap.v2.PadStringRight;
 import io.atlasmap.v2.Prepend;
@@ -62,7 +61,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
     }
 
     @AtlasActionProcessor
-    public static String concatenate(Concatenate concat, List<String> inputs) {
+    public static String concatenate(Concatenate concat, List<Object> inputs) {
         if (concat == null) {
             throw new IllegalArgumentException("Concatenate must be specified with a delimiter");
         }
@@ -96,7 +95,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
     }
 
     @AtlasActionProcessor
-    public static String format(Format format, List<String> input) {
+    public static String format(Format format, List<Object> input) {
         if (format == null || format.getTemplate() == null) {
             throw new IllegalArgumentException("Format must be specified with a template");
         }
@@ -196,12 +195,12 @@ public class StringComplexFieldActions implements AtlasFieldAction {
     }
 
     @AtlasActionProcessor
-    public static String[] split(Split split, String input) {
+    public static String[] split(Split split, Object input) {
         if (split == null || split.getDelimiter() == null) {
             throw new IllegalArgumentException("Split must be specified with a delimiter");
         }
 
-        return input == null ? null : input.split(split.getDelimiter());
+        return input == null ? null : input.toString().split(split.getDelimiter());
     }
 
     @AtlasActionProcessor

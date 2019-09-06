@@ -7,13 +7,13 @@ io.atlasmap.v2.Average
 io.atlasmap.v2.Camelize
 io.atlasmap.v2.Capitalize
 io.atlasmap.v2.Ceiling
-io.atlasmap.v2.CollectionSize
 io.atlasmap.v2.Concatenate
 io.atlasmap.v2.Contains
 io.atlasmap.v2.ConvertAreaUnit
 io.atlasmap.v2.ConvertDistanceUnit
 io.atlasmap.v2.ConvertMassUnit
 io.atlasmap.v2.ConvertVolumeUnit
+io.atlasmap.v2.Count
 io.atlasmap.v2.CurrentDate
 io.atlasmap.v2.CurrentDateTime
 io.atlasmap.v2.CurrentTime
