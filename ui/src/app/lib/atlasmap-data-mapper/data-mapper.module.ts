@@ -74,9 +74,9 @@ export { MappingSerializer } from './utils/mapping-serializer';
 
 import { ToErrorIconClassPipe } from './common/to-error-icon-class.pipe';
 import { ApiXsrfInterceptor, ApiHttpXsrfTokenExtractor } from './services/api-xsrf.service';
-import {AppRoutingModule} from "../../app-routing.module";
 import { FieldActionService } from './services/field-action.service';
 import { FileManagementService } from './services/file-management.service';
+import {AppRoutingModule} from "../../app-routing.module";
 
 export { DataMapperAppComponent } from './components/app/data-mapper-app.component';
 
@@ -100,9 +100,8 @@ export const loggerModuleForRoot: ModuleWithProviders = LoggerModule.forRoot(env
     bsDropdownModuleForRoot,
     httpClientXsrfModuleForRoot,
     alertModuleForRoot,
-    AppRoutingModule
-    alertModuleForRoot,
     loggerModuleForRoot,
+    AppRoutingModule,
   ],
   declarations: [
     DataMapperAppComponent,
@@ -144,7 +143,7 @@ export const loggerModuleForRoot: ModuleWithProviders = LoggerModule.forRoot(env
     ModalWindowComponent,
     ModalErrorWindowComponent,
     DataMapperAppComponent,
-    AlertModule
+    AlertModule,
   ],
   providers: [
     DocumentManagementService,

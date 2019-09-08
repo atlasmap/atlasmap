@@ -25,11 +25,12 @@ import { InitializationService } from '../services/initialization.service';
 import { DataMapperAppComponent } from './app/data-mapper-app.component';
 import { environment } from '../../../../environments/environment';
 import { Examples } from '../models/examples';
+import {MappingIdentifierService} from "../services/mapping-identifier.service";
 
 @Component({
   selector: 'data-mapper-example-host',
   template: '<data-mapper #dataMapperComponent></data-mapper>',
-  providers: [MappingManagementService, ErrorHandlerService, DocumentManagementService],
+  providers: [MappingManagementService, ErrorHandlerService, DocumentManagementService, MappingIdentifierService],
 })
 
 export class DataMapperAppExampleHostComponent implements OnInit {
@@ -37,11 +38,13 @@ export class DataMapperAppExampleHostComponent implements OnInit {
   @ViewChild('dataMapperComponent')
   dataMapperComponent: DataMapperAppComponent;
 
-  constructor(private initializationService: InitializationService) { }
+  constructor(private initializationService: InitializationService, private mappingIdentifierService: MappingIdentifierService) { }
 
   ngOnInit() {
     // initialize config information before initializing services
     const c: ConfigModel = this.initializationService.cfg;
+    //
+    c.mappingId = this.mappingIdentifierService.getCurrentMappingId();
 
     // store references to our services in our config model
 

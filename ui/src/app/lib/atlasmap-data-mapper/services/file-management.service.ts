@@ -80,7 +80,13 @@ export class FileManagementService {
    * Retrieve the current user data mappings catalog from the server as a GZIP compressed byte array buffer.
    */
   getCurrentMappingCatalog(): Observable<Uint8Array> {
-    const catalogName = 'adm-catalog-files.gz';
+    var catalogName = 'adm-catalog-files.gz';
+    // if mapping id not null, set catalog name adm-catalog-files- ${id}.gz
+    const mappingId = this.cfg.mappingId;
+    if (mappingId != null) {
+        catalogName = "adm-catalog-files-" + this.getMappingId() + ".gz";
+    }
+
     return new Observable<Uint8Array>((observer: any) => {
       const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/';
       const url: string = baseURL + catalogName;
@@ -446,13 +452,22 @@ export class FileManagementService {
   }
 
   private getMappingId(): string {
-    return (this.cfg.mappingFiles.length > 0) ? this.cfg.mappingFiles[0] : '0';
+    // if no mapping file present, build mapping id instead of returning
+    return (this.cfg.mappingFiles.length > 0) ? this.cfg.mappingFiles[0] : this.buildMappingName(this.cfg.mappingId);
   }
 
   private handleError(message: string, error: any): void {
     this.cfg.errorService.addError(new ErrorInfo({message: message, level: ErrorLevel.ERROR,
       scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
     this.cfg.initCfg.initialized = true;
+  }
+
+  private buildMappingName(mappingId: string){
+    if (mappingId == null){
+      return '0';
+    } else {
+      return 'UI-CUSTOM-' + mappingId + '.postfix';
+    }
   }
 
 }
