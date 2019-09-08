@@ -82,6 +82,7 @@ import io.swagger.annotations.ApiResponses;
 @Path("/")
 public class AtlasService {
 
+    static final String CUSTOM_MAPPING_NAME_PREFIX = "UI-CUSTOM";
     static final String ATLASMAP_ADM_PATH = "atlasmap.adm.path";
     static final String ATLASMAP_WORKSPACE = "atlasmap.workspace";
     private static final Logger LOG = LoggerFactory.getLogger(AtlasService.class);
@@ -383,6 +384,14 @@ public class AtlasService {
         case "JSON":
            return saveMapping(fromJson(mapping, AtlasMapping.class), uriInfo);
         case "GZ":
+
+            String atlasmapCatalogFilesName;
+            if (mappingId.contains(AtlasService.CUSTOM_MAPPING_NAME_PREFIX)){
+                atlasmapCatalogFilesName = "adm-catalog-files-" + mappingId + ".gz";
+            }else {
+                atlasmapCatalogFilesName = this.atlasmapCatalogFilesName;
+            }
+
             LOG.debug("  saveCompressedMappingRequest '{}' - ID: {}", atlasmapCatalogFilesName, mappingId);
             try {
                 createMappingFile(atlasmapCatalogFilesName, mapping);
@@ -597,6 +606,19 @@ public class AtlasService {
      * @throws IOException
      */
     private void createCompressedCatalog(String mappingId) throws IOException {
+        String atlasmapCatalogName;
+        String atlasmapCatalogFilesName;
+        System.out.println("this is the new version of the code");
+        // Handling multiple mappings when creating compressed catalog
+        if (mappingId.contains(AtlasService.CUSTOM_MAPPING_NAME_PREFIX)) {
+            atlasmapCatalogName = "atlasmap-catalog-" + mappingId + ".adm";
+            atlasmapCatalogFilesName = "adm-catalog-files-" + mappingId + ".gz";
+        }else{
+            // Default scenario
+            atlasmapCatalogName = this.atlasmapCatalogName;
+            atlasmapCatalogFilesName = this.atlasmapCatalogFilesName;
+        }
+
         String compressedCatalogName = mappingFolder + File.separator + atlasmapCatalogName;
         String compressedCatalogFilesName = mappingFolder + File.separator + atlasmapCatalogFilesName;
 
@@ -773,6 +795,10 @@ public class AtlasService {
 
     private String generateMappingFileName(String mappingName) {
         return String.format("atlasmapping-%s.json", mappingName);
+    }
+
+    private String generateCatalogFileName (String mappingId){
+        return String.format("atlasmap-catalog-files-%s.gz", mappingId);
     }
 
     private byte[] toJson(Object value) {
