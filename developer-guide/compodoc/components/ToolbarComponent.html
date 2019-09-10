@@ -306,8 +306,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="290"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:290</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="296"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:296</a></div>
                 </td>
             </tr>
 
@@ -347,8 +347,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="219"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:219</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="225"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:225</a></div>
                 </td>
             </tr>
 
@@ -565,8 +565,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="242"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:242</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="248"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:248</a></div>
                 </td>
             </tr>
 
@@ -633,8 +633,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="275"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:275</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="281"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:281</a></div>
                 </td>
             </tr>
 
@@ -702,8 +702,8 @@ service to establish the file content and to push it down to the server.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="286"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:286</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="292"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:292</a></div>
                 </td>
             </tr>
 
@@ -743,8 +743,8 @@ service to establish the file content and to push it down to the server.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="257"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:257</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="263"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:263</a></div>
                 </td>
             </tr>
 
@@ -812,8 +812,8 @@ support documents will be exported.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="186"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:186</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="192"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:192</a></div>
                 </td>
             </tr>
 
@@ -1069,8 +1069,8 @@ support documents will be exported.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="199"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:199</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="205"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:205</a></div>
                 </td>
             </tr>
 
@@ -1479,12 +1479,18 @@ export class ToolbarComponent implements OnInit {
     } else if (&#x27;resetAll&#x27; &#x3D;&#x3D;&#x3D; action) {
       this.resetAll();
     } else if (&#x27;enableExpression&#x27;) {
-      if (this.cfg.mappings &amp;&amp; this.cfg.mappings.activeMapping &amp;&amp; this.cfg.mappings.activeMapping
-          &amp;&amp; this.cfg.mappings.activeMapping.transition) {
-        if (this.cfg.mappings.activeMapping.transition.mode &#x3D;&#x3D;&#x3D; TransitionMode.ONE_TO_MANY) {
+      if (this.cfg.mappings &amp;&amp; this.cfg.mappings.activeMapping &amp;&amp; this.cfg.mappings.activeMapping.transition) {
+
+        if (this.cfg.mappings.activeMapping.getFirstCollectionField(false)) {
           this.cfg.errorService.warn(
-            &#x60;Cannot enable conditional mapping when multiple target fields are selected.
-             Please select only one target field and try again.&#x60;, null);
+           &#x60;Cannot establish a conditional mapping expression when referencing a target collection field.&#x60;, null);
+        } else if (this.cfg.mappings.activeMapping.getFirstCollectionField(true)) {
+         this.cfg.errorService.warn(
+           &#x60;Cannot establish a conditional mapping expression when referencing a source collection field.&#x60;, null);
+        } else if (this.cfg.mappings.activeMapping.transition.mode &#x3D;&#x3D;&#x3D; TransitionMode.ONE_TO_MANY) {
+          this.cfg.errorService.warn(
+           &#x60;Cannot establish a conditional mapping expression when multiple target fields are selected.
+            Please select only one target field and try again.&#x60;, null);
         } else {
           this.cfg.mappings.activeMapping.transition.enableExpression
             &#x3D; !this.cfg.mappings.activeMapping.transition.enableExpression;
