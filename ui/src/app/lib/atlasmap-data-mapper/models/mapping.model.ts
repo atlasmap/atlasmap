@@ -306,6 +306,16 @@ export class MappingModel {
     return paths;
   }
 
+  hasCollectionField(isSource: boolean): boolean {
+    const fields: Field[] = this.getFields(isSource);
+    for (const field of fields) {
+      if (field.isCollection) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   hasFieldActions(): boolean {
     for (const mappedField of this.getAllMappedFields()) {
       if (mappedField.actions.length > 0) {
