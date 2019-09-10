@@ -83,7 +83,7 @@ export class ErrorHandlerService {
         message += ('\n' + error.message);
       }
       const e = new ErrorInfo(message, level, error);
-      this.cfg.errors.push(e);
+      this.cfg.errors.unshift(e);
     }
   }
 
