@@ -46,13 +46,12 @@ public class ExpressionFieldActionTest {
         assertEquals(456, ExpressionFieldAction.process(action, Arrays.asList(789)));
     }
 
-    // https://github.com/atlasmap/atlasmap/issues/986
-    @Test(expected = ExpressionException.class)
+    @Test
     public void testIFIntegerZero() throws Exception {
         Expression action = new Expression();
         action.setExpression("IF(${0} == 0, 0, 1)");
         assertEquals(0, ExpressionFieldAction.process(action, Arrays.asList(0)));
-        assertEquals(1, ExpressionFieldAction.process(action, Arrays.asList(10)));
+        assertEquals(1, ExpressionFieldAction.process(action, Arrays.asList(1)));
     }
 
     @Test

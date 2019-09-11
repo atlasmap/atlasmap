@@ -142,9 +142,11 @@ export class ExpressionModel {
         return null;
       }
       const keyPos = lastNode.str.indexOf('@');
-      targetNodeIndex = this._nodes.indexOf(lastNode);
-      targetNode = lastNode;
-      targetNode.str = targetNode.str.substring(0, keyPos);
+      if (keyPos !== -1) {
+        targetNodeIndex = this._nodes.indexOf(lastNode);
+        targetNode = lastNode;
+        targetNode.str = targetNode.str.substring(0, keyPos);
+      }
     } else {
       const node = this._nodes.find(n => n.getUuid() === nodeId);
       if (!(node instanceof TextNode) || !endOffset) {
