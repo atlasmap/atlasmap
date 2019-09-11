@@ -124,7 +124,7 @@ TOKEN [IGNORE_CASE] :
 }
 
 // ----------------------------------------------------------------------------
-// Grammer
+// Grammar
 // ----------------------------------------------------------------------------
 Expression parse() :
 {
@@ -243,6 +243,11 @@ Expression comparisonExpression() :
                 "<=" right = addExpression() 
                 {
                     left = ComparisonExpression.createLessThanEqual(left, right);
+                }
+            |
+                "==" right = addExpression()
+                {
+                    left = ComparisonExpression.createEqual(left, right);
                 }
         )*
     ) 
@@ -408,7 +413,14 @@ ConstantExpression literal() :
             {
             	left = ConstantExpression.createFromDecimal(t.image);
             }    
-        ) 
+        )
+        |
+        (
+            t = <ZERO>
+            {
+                left = ConstantExpression.createFromDecimal(t.image);
+            }
+        )
         | 
         (
             t = <HEX_LITERAL>
