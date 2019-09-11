@@ -500,9 +500,11 @@ export class ExpressionModel {
         return null;
       }
       const keyPos &#x3D; lastNode.str.indexOf(&#x27;@&#x27;);
-      targetNodeIndex &#x3D; this._nodes.indexOf(lastNode);
-      targetNode &#x3D; lastNode;
-      targetNode.str &#x3D; targetNode.str.substring(0, keyPos);
+      if (keyPos !&#x3D;&#x3D; -1) {
+        targetNodeIndex &#x3D; this._nodes.indexOf(lastNode);
+        targetNode &#x3D; lastNode;
+        targetNode.str &#x3D; targetNode.str.substring(0, keyPos);
+      }
     } else {
       const node &#x3D; this._nodes.find(n &#x3D;&gt; n.getUuid() &#x3D;&#x3D;&#x3D; nodeId);
       if (!(node instanceof TextNode) || !endOffset) {
