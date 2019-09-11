@@ -55,6 +55,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
   private expressionUpdatedSubscription: Subscription;
   private candidateSrcElement = null;
   private candidateIndex = 0;
+  private lastUpdatedEvent = null;
 
   ngOnInit() {
     // Padding fields don't make sense for expression mapping
@@ -87,12 +88,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
     this.expressionUpdatedSubscription = this.getExpression().expressionUpdated$.subscribe((updatedEvent) => {
       this.updateExpressionMarkup();
       this.restoreCaretPosition(updatedEvent);
-
-      // Only validate for inserted or appended text nodes.
-      if ((!updatedEvent && this.getExpression().getLastNode() instanceof TextNode) ||
-          (updatedEvent && updatedEvent.node instanceof TextNode)) {
-        this.configModel.mappingService.notifyMappingUpdated();
-      }
+      this.lastUpdatedEvent = updatedEvent;
     });
     this.updateExpressionMarkup();
     this.moveCaretToEnd();
@@ -113,8 +109,8 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  onMouseover(event: any, index: number): void {
-    this.trackSelection(event, index);
+  @HostListener ('mouseover', ['$event'])
+  onMouseover($event) {
     this.tooltiptext = 'Enter source fields for expr: e.g. IF (ISEMPTY(fieldA), fieldB, fieldC)';
 
     // Clear the onMouseLeave mouseOver timeout if it exists.
@@ -135,6 +131,12 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
       self.markup.nativeElement.focus();
       self.candidateSrcElement = null;
       self.candidateIndex = 0;
+
+      // Only validate for inserted or appended text nodes.
+      if ((!self.lastUpdatedEvent && self.getExpression().getLastNode() instanceof TextNode) ||
+          (self.lastUpdatedEvent && self.lastUpdatedEvent.node instanceof TextNode)) {
+        self.configModel.mappingService.notifyMappingUpdated();
+      }
     }, 1000);
   }
 

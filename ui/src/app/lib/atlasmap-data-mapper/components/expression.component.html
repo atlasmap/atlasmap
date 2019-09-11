@@ -5,7 +5,7 @@
 <div class="conditional-expr-picker">
   <div class="list-group-item list-group-item-primary expressionSearchResult" focus required
     *ngFor="let c of mappedFieldCandidates; let activeIndex = index;" tabindex="0"
-      (keydown)="trackSelection($event, activeIndex)" (mouseover)="onMouseover($event, activeIndex)"
+      (keydown)="trackSelection($event, activeIndex)" (mouseover)="trackSelection($event, activeIndex)"
       (click)="selectionChanged($event, activeIndex)">{{ c.displayName }}
   </div>
 </div>
