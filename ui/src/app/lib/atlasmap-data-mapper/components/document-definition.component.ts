@@ -77,6 +77,21 @@ export class DocumentDefinitionComponent implements OnInit {
     return this.cfg.getDocs(this.isSource);
   }
 
+  /**
+   * Return the document definition associated with the specified document name.
+   *
+   * @param docName
+   */
+  getDocDef(docName: string): DocumentDefinition {
+    for (const docDef of this.cfg.getDocs(this.isSource)) {
+      const candidateDocName = docDef.getName(false) + '.' + docDef.type.toLowerCase();
+      if (candidateDocName.match(docName)) {
+        return docDef;
+      }
+    }
+    return null;
+  }
+
   getLineMachine(): LineMachineComponent {
     return this.lineMachine;
   }
@@ -159,19 +174,57 @@ export class DocumentDefinitionComponent implements OnInit {
   }
 
   /**
+   * Import the specified user-defined document.
+   *
+   * @param selectedFile
+   */
+  private async importDoc(selectedFile: any): Promise<boolean> {
+    return new Promise<boolean>( async(resolve, reject) => {
+      this.cfg.initCfg.initialized = false;
+      this.cfg.initializationService.updateLoadingStatus('Importing Document ' + selectedFile.name);
+      this.cfg.documentService.processDocument(selectedFile, InspectionType.UNKNOWN, this.isSource)
+      .then(() => {
+        this.cfg.fileService.exportMappingsCatalog(null);
+        resolve(true);
+      });
+    });
+  }
+
+  /**
    * Using the specified event, determine and read the selected file and call the document service to
-   * process it.  Also update the runtime catalog.
+   * process it.  Challenge the user if the file has already been loaded.  Also update the runtime catalog.
    *
    * @param event
    */
   async processDoc(event) {
+
+    if (event === null) {
+      return;
+    }
+    event.stopPropagation();
     const selectedFile = event.target.files[0];
-    this.cfg.initCfg.initialized = false;
-    this.cfg.initializationService.updateLoadingStatus('Importing Document ' + selectedFile.name);
-    this.cfg.documentService.processDocument(selectedFile, InspectionType.UNKNOWN, this.isSource)
-    .then(() => {
-      this.cfg.fileService.exportMappingsCatalog(null);
-     });
+    event.target.value = null;  // Allow the user to select the same file twice consecutively.
+
+    if (!selectedFile) {
+      return;
+    }
+
+    const docDef = this.getDocDef(selectedFile.name);
+    if (docDef) {
+      this.modalWindow.reset();
+      this.modalWindow.confirmButtonText = 'Overwrite';
+      this.modalWindow.headerText = 'Overwrite selected document?';
+      this.modalWindow.message = 'Are you sure you want to overwrite the selected document ' + selectedFile.name +
+        ' and remove any associated mappings?';
+      this.modalWindow.okButtonHandler = async() => {
+        await this.removeDocumentRef(docDef);
+        await this.importDoc(selectedFile);
+        return;
+      };
+      this.modalWindow.show();
+    } else {
+      await this.importDoc(selectedFile);
+    }
   }
 
   getFileSuffix() {
@@ -290,6 +343,25 @@ export class DocumentDefinitionComponent implements OnInit {
   }
 
   /**
+   * Remove a document from the UI and runtime.
+   *
+   * @param docDef
+   */
+  private async removeDocumentRef(docDef: DocumentDefinition): Promise<boolean> {
+    return new Promise<boolean>( async(resolve, reject) => {
+      this.cfg.mappings.removeDocumentReferenceFromAllMappings(docDef.id, this.cfg);
+      if (docDef.isSource) {
+        DataMapperUtil.removeItemFromArray(docDef, this.cfg.sourceDocs);
+      } else {
+        DataMapperUtil.removeItemFromArray(docDef, this.cfg.targetDocs);
+      }
+      await this.cfg.mappingService.notifyMappingUpdated();
+      await this.cfg.fileService.exportMappingsCatalog(null);
+      resolve(true);
+    });
+  }
+
+  /**
    * Remove an instance or schema document from a panel along with any associated mappings.
    * Display a confirmation dialog before removing the document definition.
    *
@@ -305,14 +377,7 @@ export class DocumentDefinitionComponent implements OnInit {
     this.modalWindow.headerText = 'Remove selected document?';
     this.modalWindow.message = 'Are you sure you want to remove the selected document and any associated mappings?';
     this.modalWindow.okButtonHandler = async() => {
-      this.cfg.mappings.removeDocumentReferenceFromAllMappings(docDef.id, this.cfg);
-      if (docDef.isSource) {
-        DataMapperUtil.removeItemFromArray(docDef, this.cfg.sourceDocs);
-      } else {
-        DataMapperUtil.removeItemFromArray(docDef, this.cfg.targetDocs);
-      }
-      await this.cfg.mappingService.notifyMappingUpdated();
-      await this.cfg.fileService.exportMappingsCatalog(null);
+      await this.removeDocumentRef(docDef);
     };
     this.modalWindow.show();
   }

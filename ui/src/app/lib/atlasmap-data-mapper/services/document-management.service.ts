@@ -224,7 +224,8 @@ export class DocumentManagementService implements OnDestroy {
    * @param inspectionType
    * @param isSource
    */
-  async processDocument(selectedFile: any, inspectionType: InspectionType, isSource: boolean) {
+  async processDocument(selectedFile: any, inspectionType: InspectionType, isSource: boolean): Promise<boolean> {
+    return new Promise<boolean>( async(resolve, reject) => {
       let fileBin = null;
       let fileText = '';
       const reader = new FileReader();
@@ -242,6 +243,7 @@ export class DocumentManagementService implements OnDestroy {
           fileBin = await DataMapperUtil.readBinaryFile(selectedFile, reader);
         } catch (error) {
           this.cfg.errorService.mappingError('Unable to import the specified schema document.', error);
+          resolve(false);
           return;
         }
         if (inspectionType === InspectionType.UNKNOWN) {
@@ -254,6 +256,7 @@ export class DocumentManagementService implements OnDestroy {
           fileText = await DataMapperUtil.readFile(selectedFile, reader);
         } catch (error) {
           this.cfg.errorService.mappingError('Unable to import the specified schema document.', error);
+          resolve(false);
           return;
         }
 
@@ -281,6 +284,7 @@ export class DocumentManagementService implements OnDestroy {
           inspectionType, isSource);
         this.cfg.errorService.info(selectedFile.name +
           ' import complete.  Select the plus icon on the Sources/Targets panel to enable specific classes.', null);
+        resolve(true);
         return;
 
       case 'java':
@@ -299,6 +303,8 @@ export class DocumentManagementService implements OnDestroy {
       }
       this.cfg.errorService.info(selectedFile.name + ' ' + userFileSuffix +
         ' import complete.', null);
+      resolve(true);
+    });
   }
 
   private createDocumentFetchRequest(docDef: DocumentDefinition, classPath: string): any {
