@@ -539,8 +539,8 @@ and/or reflect mapping changes caused by the user action made in UI to the backe
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="633"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:633</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="645"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:645</a></div>
                 </td>
             </tr>
 
@@ -2114,11 +2114,11 @@ import { MappingModel, MappedField } from &#x27;../models/mapping.model&#x27;;
 import { TransitionMode } from &#x27;../models/transition.model&#x27;;
 import { MappingDefinition } from &#x27;../models/mapping-definition.model&#x27;;
 import { ErrorInfo, ErrorLevel } from &#x27;../models/error.model&#x27;;
+import { FieldAction, Multiplicity } from &#x27;../models/field-action.model&#x27;;
 
 import { MappingSerializer } from &#x27;./mapping-serializer.service&#x27;;
 import { DataMapperUtil } from &#x27;../common/data-mapper-util&#x27;;
-import { DocumentDefinition, PaddingField } from &#x27;../models/document-definition.model&#x27;;
-import { runInThisContext } from &#x27;vm&#x27;;
+import { PaddingField } from &#x27;../models/document-definition.model&#x27;;
 
 /**
  * Handles mapping updates. It restores mapping status from backend and reflect in UI,
@@ -2698,8 +2698,20 @@ export class MappingManagementService {
       mapping.transition.mode &#x3D; TransitionMode.FOR_EACH;
     } else if (sourceMappedFields.length &gt; 1 || sourceMappedCollection) {
       mapping.transition.mode &#x3D; TransitionMode.MANY_TO_ONE;
+      if (!mapping.transition.transitionFieldAction
+       || mapping.transition.transitionFieldAction.definition.multiplicity !&#x3D;&#x3D; Multiplicity.MANY_TO_ONE) {
+        mapping.transition.transitionFieldAction
+         &#x3D; FieldAction.create(this.cfg.fieldActionService.getActionDefinitionForName(&#x27;Concatenate&#x27;, Multiplicity.MANY_TO_ONE));
+        mapping.transition.transitionFieldAction.setArgumentValue(&#x27;delimiter&#x27;, &#x27; &#x27;);
+      }
     } else if (targetMappedFields.length &gt; 1 || targetMappedCollection) {
       mapping.transition.mode &#x3D; TransitionMode.ONE_TO_MANY;
+      if (!mapping.transition.transitionFieldAction
+       || mapping.transition.transitionFieldAction.definition.multiplicity !&#x3D;&#x3D; Multiplicity.ONE_TO_MANY) {
+        mapping.transition.transitionFieldAction
+         &#x3D; FieldAction.create(this.cfg.fieldActionService.getActionDefinitionForName(&#x27;Split&#x27;, Multiplicity.ONE_TO_MANY));
+        mapping.transition.transitionFieldAction.setArgumentValue(&#x27;delimiter&#x27;, &#x27; &#x27;);
+      }
     } else {
       mapping.transition.mode &#x3D; TransitionMode.ONE_TO_ONE;
     }

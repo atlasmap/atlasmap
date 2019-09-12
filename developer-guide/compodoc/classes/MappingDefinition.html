@@ -1913,7 +1913,7 @@
 import { LookupTable } from &#x27;../models/lookup-table.model&#x27;;
 import { ConfigModel } from &#x27;../models/config.model&#x27;;
 import { Field } from &#x27;../models/field.model&#x27;;
-import { FieldAction, FieldActionArgumentValue, FieldActionDefinition } from &#x27;./field-action.model&#x27;;
+import { FieldAction, FieldActionArgumentValue, FieldActionDefinition, Multiplicity } from &#x27;./field-action.model&#x27;;
 import { TransitionMode } from &#x27;./transition.model&#x27;;
 import { DocumentDefinition, PaddingField } from &#x27;../models/document-definition.model&#x27;;
 
@@ -2290,9 +2290,9 @@ export class MappingDefinition {
         for (const action of mappedField.parsedData.parsedActions) {
           let actionDefinition &#x3D; null;
           if (action.name &#x3D;&#x3D;&#x3D; &#x27;CustomAction&#x27;) {
-            actionDefinition &#x3D; cfg.fieldActionService.getActionDefinitionForName(action.argumentValues[0].value);
+            actionDefinition &#x3D; cfg.fieldActionService.getActionDefinitionForName(action.argumentValues[0].value, Multiplicity.ONE_TO_ONE);
           } else {
-            actionDefinition &#x3D; cfg.fieldActionService.getActionDefinitionForName(action.name);
+            actionDefinition &#x3D; cfg.fieldActionService.getActionDefinitionForName(action.name, Multiplicity.ONE_TO_ONE);
           }
           if (actionDefinition &#x3D;&#x3D; null) {
             cfg.errorService.error(&#x27;Could not find field action definition for action \&#x27;&#x27; + action.name + &#x27;\&#x27;&#x27;, null);

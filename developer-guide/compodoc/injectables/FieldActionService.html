@@ -75,7 +75,7 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                <a href="#actionDefinitions">actionDefinitions</a>
+                                <a href="#actions">actions</a>
                             </li>
                             <li>
                                 <a href="#cfg">cfg</a>
@@ -100,6 +100,21 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
+                                <a href="#appliesToField">appliesToField</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#appliesToSourceField">appliesToSourceField</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#appliesToTargetField">appliesToTargetField</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#clearActionDefinitions">clearActionDefinitions</a>
+                            </li>
+                            <li>
                                     <span class="modifier">Private</span>
                                 <a href="#doFetchFieldActions">doFetchFieldActions</a>
                             </li>
@@ -116,6 +131,18 @@
                             </li>
                             <li>
                                 <a href="#getActionsAppliesToField">getActionsAppliesToField</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#getActualField">getActualField</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#matchesDate">matchesDate</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#matchesNumeric">matchesNumeric</a>
                             </li>
                             <li>
                                     <span class="modifier">Private</span>
@@ -144,7 +171,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:32</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:39</a></div>
                             </td>
                         </tr>
 
@@ -215,6 +242,363 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="appliesToField"></a>
+                    <span class="name">
+                        <b>
+                            appliesToField
+                        </b>
+                        <a href="#appliesToField"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>appliesToField(action: <a href="../classes/FieldActionDefinition.html">FieldActionDefinition</a>, mapping: <a href="../classes/MappingModel.html">MappingModel</a>, isSource: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="240"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:240</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Return true if the action&#39;s source/target types and collection types match the respective source/target
+field properties for source transformations, or matches the respective target field properties only for
+a target transformation.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>action</td>
+                                    <td>
+                                                <code><a href="../classes/FieldActionDefinition.html" target="_self" >FieldActionDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>mapping</td>
+                                    <td>
+                                                <code><a href="../classes/MappingModel.html" target="_self" >MappingModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>isSource</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="appliesToSourceField"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            appliesToSourceField
+                        </b>
+                        <a href="#appliesToSourceField"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>appliesToSourceField(action: <a href="../classes/FieldActionDefinition.html">FieldActionDefinition</a>, mapping: <a href="../classes/MappingModel.html">MappingModel</a>, selectedSourceField: <a href="../classes/Field.html">Field</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="277"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:277</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Check if it could be applied to source field.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>action</td>
+                                    <td>
+                                                <code><a href="../classes/FieldActionDefinition.html" target="_self" >FieldActionDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>mapping</td>
+                                    <td>
+                                                <code><a href="../classes/MappingModel.html" target="_self" >MappingModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>FieldMappingPair</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>selectedSourceField</td>
+                                    <td>
+                                                <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>selected source field</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="appliesToTargetField"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            appliesToTargetField
+                        </b>
+                        <a href="#appliesToTargetField"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>appliesToTargetField(action: <a href="../classes/FieldActionDefinition.html">FieldActionDefinition</a>, mapping: <a href="../classes/MappingModel.html">MappingModel</a>, selectedTargetField: <a href="../classes/Field.html">Field</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="302"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:302</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Check if it could be applied for target field. Target type may not change.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>action</td>
+                                    <td>
+                                                <code><a href="../classes/FieldActionDefinition.html" target="_self" >FieldActionDefinition</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>mapping</td>
+                                    <td>
+                                                <code><a href="../classes/MappingModel.html" target="_self" >MappingModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>FieldMappingPair</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>selectedTargetField</td>
+                                    <td>
+                                                <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>selected target field</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="clearActionDefinitions"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            clearActionDefinitions
+                        </b>
+                        <a href="#clearActionDefinitions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>clearActionDefinitions()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="355"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:355</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="doFetchFieldActions"></a>
                     <span class="name">
                         <b>
@@ -235,8 +619,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="104"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:104</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="140"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:140</a></div>
                 </td>
             </tr>
 
@@ -276,8 +660,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="132"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:132</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="167"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:167</a></div>
                 </td>
             </tr>
 
@@ -348,8 +732,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="39"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:39</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="46"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:46</a></div>
                 </td>
             </tr>
 
@@ -380,15 +764,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>getActionDefinitionForName(actionName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+<code>getActionDefinitionForName(actionName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, multiplicity?: <a href="../undefineds/Multiplicity.html">Multiplicity</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="81"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:81</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="110"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:110</a></div>
                 </td>
             </tr>
 
@@ -415,6 +799,18 @@
 
                                     <td>
                                         No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>multiplicity</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/enumerations.html#Multiplicity" target="_self" >Multiplicity</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
                                     </td>
 
 
@@ -450,15 +846,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>getActionsAppliesToField(mapping: <a href="../classes/MappingModel.html">MappingModel</a>, isSource: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+<code>getActionsAppliesToField(mapping: <a href="../classes/MappingModel.html">MappingModel</a>, isSource: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>, multiplicity: <a href="../undefineds/Multiplicity.html">Multiplicity</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="97"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:97</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="132"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:132</a></div>
                 </td>
             </tr>
 
@@ -509,6 +905,21 @@
                                     </td>
 
                                 </tr>
+                                <tr>
+                                    <td>multiplicity</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/enumerations.html#Multiplicity" target="_self" >Multiplicity</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                        <code>Multiplicity.ONE_TO_ONE</code>
+                                    </td>
+
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -516,6 +927,264 @@
                     </div>
                     <div class="io-description">
                         <b>Returns : </b>    <code>FieldActionDefinition[]</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getActualField"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            getActualField
+                        </b>
+                        <a href="#getActualField"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getActualField(mapping: <a href="../classes/MappingModel.html">MappingModel</a>, isSource: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="262"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:262</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Return the first non-padding field in either the source or target mappings.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mapping</td>
+                                    <td>
+                                                <code><a href="../classes/MappingModel.html" target="_self" >MappingModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>isSource</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/Field.html" target="_self" >Field</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="matchesDate"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            matchesDate
+                        </b>
+                        <a href="#matchesDate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>matchesDate(candidateType: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, selectedType: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="337"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:337</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Return true if the candidate type and selected type are generically a date, false otherwise.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>candidateType</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>selectedType</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="matchesNumeric"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            matchesNumeric
+                        </b>
+                        <a href="#matchesNumeric"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>matchesNumeric(candidateType: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, selectedType: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="349"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:349</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Return true if the candidate type and selected type are generically numeric, false otherwise.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>candidateType</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>selectedType</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
 
                     </div>
                     <div class="io-description">
@@ -542,15 +1211,15 @@
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>sortFieldActionDefinitions(definitions: FieldActionDefinition[])</code>
+                    <code>sortFieldActionDefinitions()</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="165"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:165</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="200"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:200</a></div>
                 </td>
             </tr>
 
@@ -559,39 +1228,8 @@
                 <td class="col-md-4">
 
                     <div class="io-description">
-                        <b>Parameters :</b>
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>definitions</td>
-                                    <td>
-                                            <code>FieldActionDefinition[]</code>
-                                    </td>
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
 
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>    <code>FieldActionDefinition[]</code>
-
-                    </div>
-                    <div class="io-description">
-                        
                     </div>
                 </td>
             </tr>
@@ -607,23 +1245,27 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-                        <a name="actionDefinitions"></a>
+                        <a name="actions"></a>
                         <span class="name">
                             <b>
-                            actionDefinitions</b>
-                            <a href="#actionDefinitions"><span class="icon ion-ios-link"></span></a>
+                            actions</b>
+                            <a href="#actions"><span class="icon ion-ios-link"></span></a>
                         </span>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                            <i>Type : </i>    <code>FieldActionDefinition[]</code>
-
+                            <i>Default value : </i><code>{
+    [Multiplicity.ONE_TO_ONE]: [],
+    [Multiplicity.ONE_TO_MANY]: [],
+    [Multiplicity.MANY_TO_ONE]: [],
+    [Multiplicity.ZERO_TO_ONE]: []
+  }</code>
                         </td>
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:28</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:29</a></div>
                             </td>
                         </tr>
 
@@ -655,7 +1297,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:27</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:28</a></div>
                             </td>
                         </tr>
 
@@ -684,7 +1326,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:30</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:37</a></div>
                             </td>
                         </tr>
 
@@ -710,7 +1352,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:29</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/field-action.service.ts:36</a></div>
                             </td>
                         </tr>
 
@@ -727,15 +1369,22 @@
 import { ConfigModel } from &#x27;../models/config.model&#x27;;
 import { NGXLogger } from &#x27;ngx-logger&#x27;;
 import { ErrorHandlerService } from &#x27;./error-handler.service&#x27;;
-import { FieldActionDefinition, FieldActionArgument } from &#x27;../models/field-action.model&#x27;;
+import { FieldActionDefinition, FieldActionArgument, Multiplicity } from &#x27;../models/field-action.model&#x27;;
 import { Observable } from &#x27;rxjs&#x27;;
 import { HttpClient, HttpHeaders } from &#x27;@angular/common/http&#x27;;
 import { MappingModel } from &#x27;../models/mapping.model&#x27;;
+import { Field } from &#x27;../models/field.model&#x27;;
 
 @Injectable()
 export class FieldActionService {
   cfg: ConfigModel &#x3D; ConfigModel.getConfig();
-  actionDefinitions: FieldActionDefinition[];
+  actions: { [key in Multiplicity]: FieldActionDefinition[]} &#x3D; {
+    [Multiplicity.ONE_TO_ONE]: [],
+    [Multiplicity.ONE_TO_MANY]: [],
+    [Multiplicity.MANY_TO_ONE]: [],
+    [Multiplicity.ZERO_TO_ONE]: []
+  };
+
   isInitialized &#x3D; false;
   private headers &#x3D; new HttpHeaders(
     {&#x27;Content-Type&#x27;: &#x27;application/json; application/octet-stream&#x27;,
@@ -749,12 +1398,19 @@ export class FieldActionService {
   async fetchFieldActions(): Promise&lt;boolean&gt; {
     return new Promise&lt;boolean&gt;((resolve, reject) &#x3D;&gt; {
       if (this.cfg.preloadedFieldActionMetadata) {
-        this.actionDefinitions &#x3D; [];
+        this.clearActionDefinitions();
         for (const actionDetail of this.cfg.preloadedFieldActionMetadata.ActionDetails.actionDetail) {
           const fieldActionDefinition &#x3D; this.extractFieldActionDefinition(actionDetail);
-          this.actionDefinitions.push(fieldActionDefinition);
+          if (!fieldActionDefinition.multiplicity) {
+            this.logger.debug(&#x60;Field action (${fieldActionDefinition.name}) is missing multiplicity, ingoring&#x60;);
+            continue;
+          }
+          if (fieldActionDefinition.name &#x3D;&#x3D;&#x3D; &#x27;Expression&#x27;) { // Expression is handled in special manner
+            continue;
+          }
+          this.actions[fieldActionDefinition.multiplicity].push(fieldActionDefinition);
         }
-        this.sortFieldActionDefinitions(this.actionDefinitions);
+        this.sortFieldActionDefinitions();
         this.isInitialized &#x3D; true;
         resolve(true);
         return;
@@ -775,9 +1431,24 @@ export class FieldActionService {
       // Fetch the field actions from the runtime service.
       this.doFetchFieldActions().toPromise()
         .then((fetchedActionConfigs: FieldActionDefinition[]) &#x3D;&gt; {
-          this.actionDefinitions &#x3D; fetchedActionConfigs;
+          if (fetchedActionConfigs.length &#x3D;&#x3D;&#x3D; 1) {
+            this.logger.debug(&#x27;No field action was returned from backend&#x27;);
+            resolve(false);
+          }
+          this.clearActionDefinitions();
+          fetchedActionConfigs.forEach(action &#x3D;&gt; {
+            if (!action.multiplicity) {
+              this.logger.debug(&#x60;Field action  (${action.name}) is missing multiplicity, ignoring&#x60;);
+              return;
+            }
+            if (action.name &#x3D;&#x3D;&#x3D; &#x27;Expression&#x27;) { // Expression is handled in special manner
+              return;
+            }
+            this.actions[action.multiplicity].push(action);
+          });
+          this.sortFieldActionDefinitions();
           this.isInitialized &#x3D; true;
-          resolve(this.actionDefinitions.length &gt; 0);
+          resolve(true);
         }).catch((error: any) &#x3D;&gt; {
           if (error.status &#x3D;&#x3D;&#x3D; 0) {
             reject(&#x60;Fatal network error: Could not connect to AtlasMap design runtime service. (${error})&#x60;);
@@ -788,11 +1459,17 @@ export class FieldActionService {
     });
   }
 
-  getActionDefinitionForName(actionName: string): FieldActionDefinition {
-    if (!this.actionDefinitions || !actionName) {
+  getActionDefinitionForName(actionName: string, multiplicity?: Multiplicity): FieldActionDefinition {
+    if (!this.actions || !actionName) {
       return null;
     }
-    for (const actionDef of this.actionDefinitions) {
+    let actions: FieldActionDefinition[] &#x3D; [];
+    if (multiplicity) {
+      actions &#x3D; this.actions[multiplicity];
+     } else {
+       Object.values(this.actions).forEach(arr &#x3D;&gt; actions &#x3D; actions.concat(arr));
+     }
+    for (const actionDef of actions) {
       if (actionName &#x3D;&#x3D;&#x3D; actionDef.name) {
         return actionDef;
       }
@@ -804,16 +1481,17 @@ export class FieldActionService {
    * Return the field action Definitions applicable to the specified field mapping pair.
    * @param mapping
    */
-  getActionsAppliesToField(mapping: MappingModel, isSource: boolean &#x3D; true): FieldActionDefinition[] {
-    if (!mapping || !this.actionDefinitions) {
+  getActionsAppliesToField(mapping: MappingModel, isSource: boolean &#x3D; true,
+  multiplicity: Multiplicity &#x3D; Multiplicity.ONE_TO_ONE): FieldActionDefinition[] {
+    if (!mapping || !this.actions) {
       return [];
     }
-    return this.actionDefinitions.filter(d &#x3D;&gt; d.appliesToField(mapping, isSource));
+    return this.actions[multiplicity].filter(d &#x3D;&gt; this.appliesToField(d, mapping, isSource));
   }
 
   private doFetchFieldActions(): Observable&lt;FieldActionDefinition[]&gt; {
     return new Observable&lt;FieldActionDefinition[]&gt;((observer: any) &#x3D;&gt; {
-      let actionConfigs: FieldActionDefinition[] &#x3D; [];
+      const actionConfigs: FieldActionDefinition[] &#x3D; [];
       const url: string &#x3D; this.cfg.initCfg.baseMappingServiceUrl + &#x27;fieldActions&#x27;;
       this.cfg.logger.trace(&#x27;Field Action Config Request&#x27;);
       this.http.get(url, { headers: this.headers }).toPromise().then((body: any) &#x3D;&gt; {
@@ -828,7 +1506,6 @@ export class FieldActionService {
             actionConfigs.push(fieldActionConfig);
           }
         }
-        actionConfigs &#x3D; this.sortFieldActionDefinitions(actionConfigs);
         observer.next(actionConfigs);
         observer.complete();
       }).catch((error: any) &#x3D;&gt; {
@@ -872,36 +1549,164 @@ export class FieldActionService {
     return fieldActionDefinition;
   }
 
-  private sortFieldActionDefinitions(definitions: FieldActionDefinition[]): FieldActionDefinition[] {
-    const sortedActionDefinitions: FieldActionDefinition[] &#x3D; [];
-    if (definitions &#x3D;&#x3D; null || definitions.length &#x3D;&#x3D;&#x3D; 0) {
-      return sortedActionDefinitions;
-    }
-
-    const defsByName: { [key: string]: FieldActionDefinition[]; } &#x3D; {};
-    const defNames: string[] &#x3D; [];
-    for (const fieldActionConfig of definitions) {
-      const name: string &#x3D; fieldActionConfig.name;
-      let sameNamedDefs: FieldActionDefinition[] &#x3D; defsByName[name];
-      if (!sameNamedDefs) {
-        sameNamedDefs &#x3D; [];
-        defNames.push(name);
+  private sortFieldActionDefinitions() {
+    Object.keys(this.actions).forEach(multiplicity &#x3D;&gt; {
+      const definitions &#x3D; this.actions[multiplicity];
+      const sortedActionDefinitions: FieldActionDefinition[] &#x3D; [];
+      if (definitions &#x3D;&#x3D; null || definitions.length &#x3D;&#x3D;&#x3D; 0) {
+        return;
       }
-      sameNamedDefs.push(fieldActionConfig);
-      defsByName[name] &#x3D; sameNamedDefs;
-    }
 
-    defNames.sort();
-
-    for (const name of defNames) {
-      const sameNamedDefs: FieldActionDefinition[] &#x3D; defsByName[name];
-      for (const fieldActionDefinition of sameNamedDefs) {
-        sortedActionDefinitions.push(fieldActionDefinition);
+      const defsByName: { [key: string]: FieldActionDefinition[]; } &#x3D; {};
+      const defNames: string[] &#x3D; [];
+      for (const fieldActionConfig of definitions) {
+        const name: string &#x3D; fieldActionConfig.name;
+        let sameNamedDefs: FieldActionDefinition[] &#x3D; defsByName[name];
+        if (!sameNamedDefs) {
+          sameNamedDefs &#x3D; [];
+          defNames.push(name);
+        }
+        sameNamedDefs.push(fieldActionConfig);
+        defsByName[name] &#x3D; sameNamedDefs;
       }
-    }
-    return sortedActionDefinitions;
+
+      defNames.sort();
+
+      for (const name of defNames) {
+        const sameNamedDefs: FieldActionDefinition[] &#x3D; defsByName[name];
+        for (const fieldActionDefinition of sameNamedDefs) {
+          sortedActionDefinitions.push(fieldActionDefinition);
+        }
+      }
+      this.actions[multiplicity] &#x3D; sortedActionDefinitions;
+    });
   }
 
+  /**
+   * Return true if the action&#x27;s source/target types and collection types match the respective source/target
+   * field properties for source transformations, or matches the respective target field properties only for
+   * a target transformation.
+   *
+   * @param mapping
+   */
+  appliesToField(action: FieldActionDefinition, mapping: MappingModel, isSource: boolean): boolean {
+
+    if (mapping &#x3D;&#x3D; null) {
+      return false;
+    }
+    const selectedSourceField: Field &#x3D; this.getActualField(mapping, true);
+    const selectedTargetField: Field &#x3D; this.getActualField(mapping, false);
+
+    if ((isSource &amp;&amp; selectedSourceField &#x3D;&#x3D; null) || (!isSource) &amp;&amp; selectedTargetField &#x3D;&#x3D; null) {
+      return false;
+    }
+
+    return isSource ? this.appliesToSourceField(action, mapping, selectedSourceField)
+     : this.appliesToTargetField(action, mapping, selectedTargetField);
+  }
+
+  /**
+   * Return the first non-padding field in either the source or target mappings.
+   *
+   * @param mapping
+   * @param isSource
+   */
+  private getActualField(mapping: MappingModel, isSource: boolean): Field {
+    let targetField: Field &#x3D; null;
+    for (targetField of mapping.getFields(isSource)) {
+      if ((targetField.name !&#x3D;&#x3D; &#x27;&lt;padding field&gt;&#x27;)) {
+        break;
+      }
+    }
+    return targetField;
+  }
+
+  /**
+   * Check if it could be applied to source field.
+   * @param mapping FieldMappingPair
+   * @param selectedSourceField selected source field
+   */
+  private appliesToSourceField(action: FieldActionDefinition, mapping: MappingModel, selectedSourceField: Field): boolean {
+
+    // Check for matching types - date.
+    if (this.matchesDate(action.sourceType, selectedSourceField.type)) {
+      return true;
+    }
+
+    // Check for matching types - numeric.
+    if (this.matchesNumeric(action.sourceType, selectedSourceField.type)) {
+      return true;
+    }
+
+    // First check if the source types match.
+    if ((action.sourceType &#x3D;&#x3D;&#x3D; &#x27;ANY&#x27;) || (selectedSourceField.type &#x3D;&#x3D;&#x3D; action.sourceType)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Check if it could be applied for target field. Target type may not change.
+   * @param mapping FieldMappingPair
+   * @param selectedTargetField selected target field
+   */
+  private appliesToTargetField(action: FieldActionDefinition, mapping: MappingModel, selectedTargetField: Field): boolean {
+    if (selectedTargetField &#x3D;&#x3D; null) {
+      return false;
+    }
+
+    if (action.multiplicity !&#x3D;&#x3D; Multiplicity.ONE_TO_ONE) {
+      return false;
+    }
+
+    // Check for matching types - date.
+    if (this.matchesDate(action.sourceType, selectedTargetField.type)
+     &amp;&amp; this.matchesDate(action.targetType, selectedTargetField.type)) {
+      return true;
+    }
+
+    // Check for matching types - numeric.
+    if (this.matchesNumeric(action.sourceType, selectedTargetField.type)
+     &amp;&amp; this.matchesNumeric(action.targetType, selectedTargetField.type)) {
+      return true;
+    }
+
+    if (action.sourceType !&#x3D;&#x3D; &#x27;ANY&#x27; &amp;&amp; action.sourceType !&#x3D;&#x3D; selectedTargetField.type) {
+      return false;
+    }
+
+    // All other types must match the selected field types with the candidate field action types.
+    return (action.targetType &#x3D;&#x3D;&#x3D; &#x27;ANY&#x27; || selectedTargetField.type &#x3D;&#x3D;&#x3D; action.targetType);
+  }
+
+  /**
+   * Return true if the candidate type and selected type are generically a date, false otherwise.
+   *
+   * @param candidateType
+   * @param selectedType
+   */
+  private matchesDate(candidateType: string, selectedType: string): boolean {
+    return ((candidateType &#x3D;&#x3D;&#x3D; &#x27;ANY&#x27;) ||
+      (candidateType &#x3D;&#x3D;&#x3D; &#x27;ANY_DATE&#x27; &amp;&amp;
+        [&#x27;DATE&#x27;, &#x27;DATE_TIME&#x27;, &#x27;DATE_TIME_TZ&#x27;, &#x27;TIME&#x27;].indexOf(selectedType) !&#x3D;&#x3D; -1));
+  }
+
+  /**
+   * Return true if the candidate type and selected type are generically numeric, false otherwise.
+   *
+   * @param candidateType
+   * @param selectedType
+   */
+  private matchesNumeric(candidateType: string, selectedType: string): boolean {
+    return ((candidateType &#x3D;&#x3D;&#x3D; &#x27;ANY&#x27;) ||
+      (candidateType &#x3D;&#x3D;&#x3D; &#x27;NUMBER&#x27; &amp;&amp;
+        [&#x27;LONG&#x27;, &#x27;INTEGER&#x27;, &#x27;FLOAT&#x27;, &#x27;DOUBLE&#x27;, &#x27;SHORT&#x27;, &#x27;BYTE&#x27;, &#x27;DECIMAL&#x27;, &#x27;NUMBER&#x27;].indexOf(selectedType) !&#x3D;&#x3D; -1));
+  }
+
+  private clearActionDefinitions() {
+    Object.keys(Multiplicity).forEach(m &#x3D;&gt; this.actions[m] &#x3D; []);
+  }
 }
 </code></pre>
     </div>

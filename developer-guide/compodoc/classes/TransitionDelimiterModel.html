@@ -366,8 +366,6 @@ export class TransitionModel {
   lookupTableName: string &#x3D; null;
   expression: ExpressionModel;
   enableExpression &#x3D; false;
-  // TODO Support multiplicity transformations other than Concatenate and Split
-  // https://github.com/atlasmap/atlasmap/issues/912
   transitionFieldAction: FieldAction;
 
   constructor() {
@@ -434,62 +432,11 @@ export class TransitionModel {
     return actionName;
   }
 
-  static getTransitionDelimiterPrettyName(delimiter: TransitionDelimiter): string {
-    for (const m of TransitionModel.delimiterModels) {
-      if (m.delimiter &#x3D;&#x3D;&#x3D; delimiter) {
-        return m.prettyName;
-      }
-    }
-    return null;
-  }
-
-  static getTransitionDelimiterFromActual(actualDelimiter: string): TransitionDelimiter {
-    for (const m of TransitionModel.delimiterModels) {
-      if (m.actualDelimiter &#x3D;&#x3D;&#x3D; actualDelimiter) {
-        return m.delimiter;
-      }
-    }
-    return TransitionDelimiter.USER_DEFINED;
-  }
-
-  getSerializedDelimeter(): string {
-    if (this.delimiter &#x3D;&#x3D;&#x3D; TransitionDelimiter.USER_DEFINED) {
-      return this.userDelimiter;
-    }
-    for (const m of TransitionModel.delimiterModels) {
-      if (m.delimiter &#x3D;&#x3D;&#x3D; this.delimiter) {
-        return m.serializedValue;
-      }
-    }
-    return null;
-  }
-
-  getActualDelimiter(): string {
-    if (this.delimiter &#x3D;&#x3D;&#x3D; TransitionDelimiter.USER_DEFINED) {
-      return this.userDelimiter;
-    }
-    for (const m of TransitionModel.delimiterModels) {
-      if (m.delimiter &#x3D;&#x3D;&#x3D; this.delimiter) {
-        return m.actualDelimiter;
-      }
-    }
-    return null;
-  }
-
-  setSerializedDelimeterFromSerializedValue(value: string): void {
-    for (const m of TransitionModel.delimiterModels) {
-      if (m.serializedValue &#x3D;&#x3D;&#x3D; value) {
-        this.delimiter &#x3D; m.delimiter;
-      }
-    }
-  }
-
   getPrettyName() {
-    const delimiterDesc: string &#x3D; TransitionModel.getTransitionDelimiterPrettyName(this.delimiter);
     if (this.mode &#x3D;&#x3D;&#x3D; TransitionMode.ONE_TO_MANY) {
-      return TransitionModel.getMappingModeName(this.mode) + &#x27; (&#x27; + delimiterDesc + &#x27;)&#x27;;
+      return TransitionModel.getMappingModeName(this.mode) + &#x27; (&#x27; + this.transitionFieldAction.name + &#x27;)&#x27;;
     } else if (this.mode &#x3D;&#x3D;&#x3D; TransitionMode.MANY_TO_ONE) {
-      return TransitionModel.getMappingModeName(this.mode) + &#x27; (&#x27; + delimiterDesc + &#x27;)&#x27;;
+      return TransitionModel.getMappingModeName(this.mode) + &#x27; (&#x27; + this.transitionFieldAction.name + &#x27;)&#x27;;
     } else if (this.mode &#x3D;&#x3D;&#x3D; TransitionMode.ENUM) {
       return &#x27;Enum (table: &#x27; + this.lookupTableName + &#x27;)&#x27;;
     }
