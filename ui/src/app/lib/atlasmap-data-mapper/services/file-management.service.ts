@@ -279,6 +279,7 @@ export class FileManagementService {
                 resolve(true);
               });
             }
+            resolve(true);
           }).catch((error: any) => {
             if (error.status === 0) {
               this.cfg.errorService.mappingError(
