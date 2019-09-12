@@ -13,9 +13,6 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { DocumentDefinition } from './document-definition.model';
-import { MappingModel } from './mapping.model';
-import { Field } from './field.model';
 
 export class FieldActionArgument {
   name: string = null;
@@ -46,31 +43,6 @@ export class FieldActionDefinition {
   multiplicity = Multiplicity.ONE_TO_ONE;
   serviceObject: any = new Object();
 
-  /**
-   * Return true if the action's source/target types and collection types match the respective source/target
-   * field properties for source transformations, or matches the respective target field properties only for
-   * a target transformation.
-   *
-   * Note - source-side only transformations are permitted so the target field may be undefined.
-   *
-   * @param mapping
-   */
-  appliesToField(mapping: MappingModel, isSource: boolean): boolean {
-
-    if (mapping == null) {
-      return false;
-    }
-    const selectedSourceField: Field = this.getActualField(mapping, true);
-    const selectedTargetField: Field = this.getActualField(mapping, false);
-
-    if ((isSource && selectedSourceField == null) || (!isSource) && selectedTargetField == null) {
-      return false;
-    }
-
-    return isSource ? this.appliesToSourceField(mapping, selectedSourceField)
-     : this.appliesToTargetField(mapping, selectedTargetField);
-  }
-
   populateFieldAction(action: FieldAction): void {
     action.name = this.name;
     action.definition = this;
@@ -99,137 +71,18 @@ export class FieldActionDefinition {
     return null;
   }
 
-  /**
-   * Return the first non-padding field in either the source or target mappings.
-   *
-   * @param mapping
-   * @param isSource
-   */
-  private getActualField(mapping: MappingModel, isSource: boolean): Field {
-    let targetField: Field = null;
-    for (targetField of mapping.getFields(isSource)) {
-      if ((targetField.name !== '<padding field>')) {
-        break;
-      }
-    }
-    return targetField;
-  }
-
-  /**
-   * Return true if the candidate type and selected type are generically a date, false otherwise.
-   *
-   * @param candidateType
-   * @param selectedType
-   */
-  private matchesDate(candidateType: string, selectedType: string): boolean {
-    return ((candidateType === 'ANY') ||
-      (candidateType === 'ANY_DATE' &&
-        ['DATE', 'DATE_TIME', 'DATE_TIME_TZ', 'TIME'].indexOf(selectedType) !== -1));
-  }
-
-  /**
-   * Return true if the candidate type and selected type are generically numeric, false otherwise.
-   *
-   * @param candidateType
-   * @param selectedType
-   */
-  private matchesNumeric(candidateType: string, selectedType: string): boolean {
-    return ((candidateType === 'ANY') ||
-      (candidateType === 'NUMBER' &&
-        ['LONG', 'INTEGER', 'FLOAT', 'DOUBLE', 'SHORT', 'BYTE', 'DECIMAL', 'NUMBER'].indexOf(selectedType) !== -1));
-  }
-
-  /**
-   * Check if it could be applied to source field.
-   * @param mapping FieldMappingPair
-   * @param selectedSourceField selected source field
-   */
-  private appliesToSourceField(mapping: MappingModel, selectedSourceField: Field): boolean {
-
-    if ([Multiplicity.ONE_TO_MANY, Multiplicity.ZERO_TO_ONE].includes(this.multiplicity)) {
-      return false;
-    } else if (this.multiplicity === Multiplicity.MANY_TO_ONE) {
-      // MANY_TO_ONE field action only applies to collection field or FieldGroup
-      return false;
-    }
-
-    // Check for matching types - date.
-    if (this.matchesDate(this.sourceType, selectedSourceField.type)) {
-      return true;
-    }
-
-    // Check for matching types - numeric.
-    if (this.matchesNumeric(this.sourceType, selectedSourceField.type)) {
-      return true;
-    }
-
-    // First check if the source types match.
-    if ((this.sourceType === 'ANY') || (selectedSourceField.type === this.sourceType)) {
-      return true;
-    }
-
-    return false;
-  }
-
-  /**
-   * Check if it could be applied for target field. Target type may not change.
-   * @param mapping FieldMappingPair
-   * @param selectedTargetField selected target field
-   */
-  private appliesToTargetField(mapping: MappingModel, selectedTargetField: Field): boolean {
-    if (selectedTargetField == null) {
-      return false;
-    }
-
-    if (this.multiplicity !== Multiplicity.ONE_TO_ONE) {
-      return false;
-    }
-
-    // Check for matching types - date.
-    if (this.matchesDate(this.sourceType, selectedTargetField.type) && this.matchesDate(this.targetType, selectedTargetField.type)) {
-      return true;
-    }
-
-    // Check for matching types - numeric.
-    if (this.matchesNumeric(this.sourceType, selectedTargetField.type) && this.matchesNumeric(this.targetType, selectedTargetField.type)) {
-      return true;
-    }
-
-    if (this.sourceType !== 'ANY' && this.sourceType !== selectedTargetField.type) {
-      return false;
-    }
-
-    // All other types must match the selected field types with the candidate field action types.
-    return (this.targetType === 'ANY' || selectedTargetField.type === this.targetType);
-  }
-
 }
 
 export class FieldAction {
-  static combineActionConfig: FieldActionDefinition = null;
-  static separateActionConfig: FieldActionDefinition = null;
-
-  isSeparateOrCombineMode = false;
   name: string;
   definition: FieldActionDefinition = null;
   argumentValues: FieldActionArgumentValue[] = [];
 
-  static createSeparateCombineFieldAction(separateMode: boolean) {
-    if (FieldAction.combineActionConfig == null) {
-      FieldAction.combineActionConfig = new FieldActionDefinition();
-      FieldAction.combineActionConfig.name = 'Concatenate';
-      FieldAction.separateActionConfig = new FieldActionDefinition();
-      FieldAction.separateActionConfig.name = 'Split';
-    }
-
-    const fieldAction: FieldAction = new FieldAction();
-    FieldAction.combineActionConfig.populateFieldAction(fieldAction);
-    if (separateMode) {
-      FieldAction.separateActionConfig.populateFieldAction(fieldAction);
-    }
-    fieldAction.isSeparateOrCombineMode = true;
-
-    return fieldAction;
+  static create(definition: FieldActionDefinition): FieldAction {
+    const instance = new FieldAction();
+    instance.definition = definition;
+    instance.name = definition.name;
+    return instance;
   }
 
   getArgumentValue(argumentName: string): FieldActionArgumentValue {

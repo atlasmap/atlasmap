@@ -20,13 +20,12 @@ import java.util.List;
 
 import io.atlasmap.spi.AtlasActionProcessor;
 import io.atlasmap.spi.AtlasFieldAction;
-import io.atlasmap.v2.CollectionSize;
 import io.atlasmap.v2.Contains;
+import io.atlasmap.v2.Count;
 import io.atlasmap.v2.Equals;
 import io.atlasmap.v2.IsNull;
 import io.atlasmap.v2.ItemAt;
 import io.atlasmap.v2.Length;
-import io.atlasmap.v2.Multiplicity;
 
 @SuppressWarnings({"squid:S3776",     // Cognitive complexity of method
     "squid:S1118",     // Add private constructor
@@ -35,12 +34,11 @@ import io.atlasmap.v2.Multiplicity;
 public class ObjectFieldActions implements AtlasFieldAction {
 
     @AtlasActionProcessor
-    public static Integer collectionSize(CollectionSize action, List<Object> inputs) {
+    public static Integer count(Count action, List<Object> inputs) {
         if (inputs == null) {
             return 0;
         }
-        Object[] array = inputs.toArray(new Object[0]);
-        return array.length;
+        return inputs.size();
     }
 
     @AtlasActionProcessor

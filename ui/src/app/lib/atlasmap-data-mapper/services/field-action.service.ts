@@ -17,15 +17,22 @@ import { Injectable } from '@angular/core';
 import { ConfigModel } from '../models/config.model';
 import { NGXLogger } from 'ngx-logger';
 import { ErrorHandlerService } from './error-handler.service';
-import { FieldActionDefinition, FieldActionArgument } from '../models/field-action.model';
+import { FieldActionDefinition, FieldActionArgument, Multiplicity } from '../models/field-action.model';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MappingModel } from '../models/mapping.model';
+import { Field } from '../models/field.model';
 
 @Injectable()
 export class FieldActionService {
   cfg: ConfigModel = ConfigModel.getConfig();
-  actionDefinitions: FieldActionDefinition[];
+  actions: { [key in Multiplicity]: FieldActionDefinition[]} = {
+    [Multiplicity.ONE_TO_ONE]: [],
+    [Multiplicity.ONE_TO_MANY]: [],
+    [Multiplicity.MANY_TO_ONE]: [],
+    [Multiplicity.ZERO_TO_ONE]: []
+  };
+
   isInitialized = false;
   private headers = new HttpHeaders(
     {'Content-Type': 'application/json; application/octet-stream',
@@ -39,12 +46,19 @@ export class FieldActionService {
   async fetchFieldActions(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       if (this.cfg.preloadedFieldActionMetadata) {
-        this.actionDefinitions = [];
+        this.clearActionDefinitions();
         for (const actionDetail of this.cfg.preloadedFieldActionMetadata.ActionDetails.actionDetail) {
           const fieldActionDefinition = this.extractFieldActionDefinition(actionDetail);
-          this.actionDefinitions.push(fieldActionDefinition);
+          if (!fieldActionDefinition.multiplicity) {
+            this.logger.debug(`Field action (${fieldActionDefinition.name}) is missing multiplicity, ingoring`);
+            continue;
+          }
+          if (fieldActionDefinition.name === 'Expression') { // Expression is handled in special manner
+            continue;
+          }
+          this.actions[fieldActionDefinition.multiplicity].push(fieldActionDefinition);
         }
-        this.sortFieldActionDefinitions(this.actionDefinitions);
+        this.sortFieldActionDefinitions();
         this.isInitialized = true;
         resolve(true);
         return;
@@ -65,9 +79,24 @@ export class FieldActionService {
       // Fetch the field actions from the runtime service.
       this.doFetchFieldActions().toPromise()
         .then((fetchedActionConfigs: FieldActionDefinition[]) => {
-          this.actionDefinitions = fetchedActionConfigs;
+          if (fetchedActionConfigs.length === 1) {
+            this.logger.debug('No field action was returned from backend');
+            resolve(false);
+          }
+          this.clearActionDefinitions();
+          fetchedActionConfigs.forEach(action => {
+            if (!action.multiplicity) {
+              this.logger.debug(`Field action  (${action.name}) is missing multiplicity, ignoring`);
+              return;
+            }
+            if (action.name === 'Expression') { // Expression is handled in special manner
+              return;
+            }
+            this.actions[action.multiplicity].push(action);
+          });
+          this.sortFieldActionDefinitions();
           this.isInitialized = true;
-          resolve(this.actionDefinitions.length > 0);
+          resolve(true);
         }).catch((error: any) => {
           if (error.status === 0) {
             reject(`Fatal network error: Could not connect to AtlasMap design runtime service. (${error})`);
@@ -78,11 +107,17 @@ export class FieldActionService {
     });
   }
 
-  getActionDefinitionForName(actionName: string): FieldActionDefinition {
-    if (!this.actionDefinitions || !actionName) {
+  getActionDefinitionForName(actionName: string, multiplicity?: Multiplicity): FieldActionDefinition {
+    if (!this.actions || !actionName) {
       return null;
     }
-    for (const actionDef of this.actionDefinitions) {
+    let actions: FieldActionDefinition[] = [];
+    if (multiplicity) {
+      actions = this.actions[multiplicity];
+     } else {
+       Object.values(this.actions).forEach(arr => actions = actions.concat(arr));
+     }
+    for (const actionDef of actions) {
       if (actionName === actionDef.name) {
         return actionDef;
       }
@@ -94,16 +129,17 @@ export class FieldActionService {
    * Return the field action Definitions applicable to the specified field mapping pair.
    * @param mapping
    */
-  getActionsAppliesToField(mapping: MappingModel, isSource: boolean = true): FieldActionDefinition[] {
-    if (!mapping || !this.actionDefinitions) {
+  getActionsAppliesToField(mapping: MappingModel, isSource: boolean = true,
+  multiplicity: Multiplicity = Multiplicity.ONE_TO_ONE): FieldActionDefinition[] {
+    if (!mapping || !this.actions) {
       return [];
     }
-    return this.actionDefinitions.filter(d => d.appliesToField(mapping, isSource));
+    return this.actions[multiplicity].filter(d => this.appliesToField(d, mapping, isSource));
   }
 
   private doFetchFieldActions(): Observable<FieldActionDefinition[]> {
     return new Observable<FieldActionDefinition[]>((observer: any) => {
-      let actionConfigs: FieldActionDefinition[] = [];
+      const actionConfigs: FieldActionDefinition[] = [];
       const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'fieldActions';
       this.cfg.logger.trace('Field Action Config Request');
       this.http.get(url, { headers: this.headers }).toPromise().then((body: any) => {
@@ -118,7 +154,6 @@ export class FieldActionService {
             actionConfigs.push(fieldActionConfig);
           }
         }
-        actionConfigs = this.sortFieldActionDefinitions(actionConfigs);
         observer.next(actionConfigs);
         observer.complete();
       }).catch((error: any) => {
@@ -162,34 +197,162 @@ export class FieldActionService {
     return fieldActionDefinition;
   }
 
-  private sortFieldActionDefinitions(definitions: FieldActionDefinition[]): FieldActionDefinition[] {
-    const sortedActionDefinitions: FieldActionDefinition[] = [];
-    if (definitions == null || definitions.length === 0) {
-      return sortedActionDefinitions;
-    }
-
-    const defsByName: { [key: string]: FieldActionDefinition[]; } = {};
-    const defNames: string[] = [];
-    for (const fieldActionConfig of definitions) {
-      const name: string = fieldActionConfig.name;
-      let sameNamedDefs: FieldActionDefinition[] = defsByName[name];
-      if (!sameNamedDefs) {
-        sameNamedDefs = [];
-        defNames.push(name);
+  private sortFieldActionDefinitions() {
+    Object.keys(this.actions).forEach(multiplicity => {
+      const definitions = this.actions[multiplicity];
+      const sortedActionDefinitions: FieldActionDefinition[] = [];
+      if (definitions == null || definitions.length === 0) {
+        return;
       }
-      sameNamedDefs.push(fieldActionConfig);
-      defsByName[name] = sameNamedDefs;
-    }
 
-    defNames.sort();
-
-    for (const name of defNames) {
-      const sameNamedDefs: FieldActionDefinition[] = defsByName[name];
-      for (const fieldActionDefinition of sameNamedDefs) {
-        sortedActionDefinitions.push(fieldActionDefinition);
+      const defsByName: { [key: string]: FieldActionDefinition[]; } = {};
+      const defNames: string[] = [];
+      for (const fieldActionConfig of definitions) {
+        const name: string = fieldActionConfig.name;
+        let sameNamedDefs: FieldActionDefinition[] = defsByName[name];
+        if (!sameNamedDefs) {
+          sameNamedDefs = [];
+          defNames.push(name);
+        }
+        sameNamedDefs.push(fieldActionConfig);
+        defsByName[name] = sameNamedDefs;
       }
-    }
-    return sortedActionDefinitions;
+
+      defNames.sort();
+
+      for (const name of defNames) {
+        const sameNamedDefs: FieldActionDefinition[] = defsByName[name];
+        for (const fieldActionDefinition of sameNamedDefs) {
+          sortedActionDefinitions.push(fieldActionDefinition);
+        }
+      }
+      this.actions[multiplicity] = sortedActionDefinitions;
+    });
   }
 
+  /**
+   * Return true if the action's source/target types and collection types match the respective source/target
+   * field properties for source transformations, or matches the respective target field properties only for
+   * a target transformation.
+   *
+   * @param mapping
+   */
+  appliesToField(action: FieldActionDefinition, mapping: MappingModel, isSource: boolean): boolean {
+
+    if (mapping == null) {
+      return false;
+    }
+    const selectedSourceField: Field = this.getActualField(mapping, true);
+    const selectedTargetField: Field = this.getActualField(mapping, false);
+
+    if ((isSource && selectedSourceField == null) || (!isSource) && selectedTargetField == null) {
+      return false;
+    }
+
+    return isSource ? this.appliesToSourceField(action, mapping, selectedSourceField)
+     : this.appliesToTargetField(action, mapping, selectedTargetField);
+  }
+
+  /**
+   * Return the first non-padding field in either the source or target mappings.
+   *
+   * @param mapping
+   * @param isSource
+   */
+  private getActualField(mapping: MappingModel, isSource: boolean): Field {
+    let targetField: Field = null;
+    for (targetField of mapping.getFields(isSource)) {
+      if ((targetField.name !== '<padding field>')) {
+        break;
+      }
+    }
+    return targetField;
+  }
+
+  /**
+   * Check if it could be applied to source field.
+   * @param mapping FieldMappingPair
+   * @param selectedSourceField selected source field
+   */
+  private appliesToSourceField(action: FieldActionDefinition, mapping: MappingModel, selectedSourceField: Field): boolean {
+
+    // Check for matching types - date.
+    if (this.matchesDate(action.sourceType, selectedSourceField.type)) {
+      return true;
+    }
+
+    // Check for matching types - numeric.
+    if (this.matchesNumeric(action.sourceType, selectedSourceField.type)) {
+      return true;
+    }
+
+    // First check if the source types match.
+    if ((action.sourceType === 'ANY') || (selectedSourceField.type === action.sourceType)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Check if it could be applied for target field. Target type may not change.
+   * @param mapping FieldMappingPair
+   * @param selectedTargetField selected target field
+   */
+  private appliesToTargetField(action: FieldActionDefinition, mapping: MappingModel, selectedTargetField: Field): boolean {
+    if (selectedTargetField == null) {
+      return false;
+    }
+
+    if (action.multiplicity !== Multiplicity.ONE_TO_ONE) {
+      return false;
+    }
+
+    // Check for matching types - date.
+    if (this.matchesDate(action.sourceType, selectedTargetField.type)
+     && this.matchesDate(action.targetType, selectedTargetField.type)) {
+      return true;
+    }
+
+    // Check for matching types - numeric.
+    if (this.matchesNumeric(action.sourceType, selectedTargetField.type)
+     && this.matchesNumeric(action.targetType, selectedTargetField.type)) {
+      return true;
+    }
+
+    if (action.sourceType !== 'ANY' && action.sourceType !== selectedTargetField.type) {
+      return false;
+    }
+
+    // All other types must match the selected field types with the candidate field action types.
+    return (action.targetType === 'ANY' || selectedTargetField.type === action.targetType);
+  }
+
+  /**
+   * Return true if the candidate type and selected type are generically a date, false otherwise.
+   *
+   * @param candidateType
+   * @param selectedType
+   */
+  private matchesDate(candidateType: string, selectedType: string): boolean {
+    return ((candidateType === 'ANY') ||
+      (candidateType === 'ANY_DATE' &&
+        ['DATE', 'DATE_TIME', 'DATE_TIME_TZ', 'TIME'].indexOf(selectedType) !== -1));
+  }
+
+  /**
+   * Return true if the candidate type and selected type are generically numeric, false otherwise.
+   *
+   * @param candidateType
+   * @param selectedType
+   */
+  private matchesNumeric(candidateType: string, selectedType: string): boolean {
+    return ((candidateType === 'ANY') ||
+      (candidateType === 'NUMBER' &&
+        ['LONG', 'INTEGER', 'FLOAT', 'DOUBLE', 'SHORT', 'BYTE', 'DECIMAL', 'NUMBER'].indexOf(selectedType) !== -1));
+  }
+
+  private clearActionDefinitions() {
+    Object.keys(Multiplicity).forEach(m => this.actions[m] = []);
+  }
 }

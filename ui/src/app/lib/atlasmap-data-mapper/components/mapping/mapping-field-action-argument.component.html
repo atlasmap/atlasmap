@@ -1,14 +1,27 @@
 <div class="mappingFieldActionArgument">
-  <label style=""></label>
+  <div *ngIf="argConfig.name == 'delimiter'; then dropdownDelimiter; else regular"></div>
 
-  <div *ngIf="argConfig.values != null && argConfig.values.length > 0; else textInput">
+  <ng-template #regular>
+    <ng-container *ngIf="argConfig.values != null && argConfig.values.length > 0; then dropdown; else textInput"></ng-container> 
+  </ng-template>
+  <ng-template #dropdown>
     <label>{{ getLabel(argConfig.name) }}</label>
     <select (change)="actionConfigParamSelectionChanged($event)" [ngModel]="getActionConfigParamVDefault(argConfig, actionIndex, argValIndex)">
       <option *ngFor="let actionConfigParamVal of getActionConfigParamValues(argConfig)" [attr.argValIndex]="argValIndex"
               [attr.actionIndex]="actionIndex" [attr.value]="actionConfigParamVal" style="color: black;">{{ actionConfigParamVal }}
       </option>
     </select>
-  </div>
+  </ng-template>
+  <ng-template #dropdownDelimiter>
+    <label>{{ getLabel(argConfig.name) }}</label>
+    <select name="separator" id="separator" [(ngModel)]="action.getArgumentValue(argConfig.name).value">
+      <ng-container *ngFor="let delimiter of delimiters" id="delimiter">
+        <option *ngIf="modeIsSupported(delimiter)" [value]="delimiter.actualDelimiter" style="color: black;">
+          {{ delimiter.prettyName }}
+        </option>
+      </ng-container>
+    </select>
+  </ng-template>
 
   <ng-template #textInput>
     <label>{{ getLabel(argConfig.name) }}: </label>

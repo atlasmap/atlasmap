@@ -19,7 +19,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ConfigModel } from '../../models/config.model';
 import { DataMapperUtil } from '../../common/data-mapper-util';
 import { MappingModel, MappedField } from '../../models/mapping.model';
-import { DocumentDefinition } from '../../models/document-definition.model';
 import { TransitionMode } from '../../models/transition.model';
 import { Observable } from 'rxjs';
 import { Field } from '../../models/field.model';
@@ -134,9 +133,10 @@ export class MappingFieldContainerComponent implements OnInit {
     this.cfg.currentDraggedField = null;
   }
 
-  displaySeparator(): boolean {
+  displayTransitionSelection(): boolean {
     return (this.isSource && !this.mapping.transition.enableExpression &&
-      (this.mapping.transition.isOneToManyMode() || this.mapping.transition.isManyToOneMode()));
+      (this.mapping.transition.isOneToManyMode() || this.mapping.transition.isManyToOneMode()
+      || this.mapping.transition.isEnumerationMode()));
   }
 
   displayFieldSearchBox(): boolean {

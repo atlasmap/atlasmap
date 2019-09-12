@@ -27,11 +27,11 @@ import { MappingModel, MappedField } from '../models/mapping.model';
 import { TransitionMode } from '../models/transition.model';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
+import { FieldAction, Multiplicity } from '../models/field-action.model';
 
 import { MappingSerializer } from './mapping-serializer.service';
 import { DataMapperUtil } from '../common/data-mapper-util';
-import { DocumentDefinition, PaddingField } from '../models/document-definition.model';
-import { runInThisContext } from 'vm';
+import { PaddingField } from '../models/document-definition.model';
 
 /**
  * Handles mapping updates. It restores mapping status from backend and reflect in UI,
@@ -611,8 +611,20 @@ export class MappingManagementService {
       mapping.transition.mode = TransitionMode.FOR_EACH;
     } else if (sourceMappedFields.length > 1 || sourceMappedCollection) {
       mapping.transition.mode = TransitionMode.MANY_TO_ONE;
+      if (!mapping.transition.transitionFieldAction
+       || mapping.transition.transitionFieldAction.definition.multiplicity !== Multiplicity.MANY_TO_ONE) {
+        mapping.transition.transitionFieldAction
+         = FieldAction.create(this.cfg.fieldActionService.getActionDefinitionForName('Concatenate', Multiplicity.MANY_TO_ONE));
+        mapping.transition.transitionFieldAction.setArgumentValue('delimiter', ' ');
+      }
     } else if (targetMappedFields.length > 1 || targetMappedCollection) {
       mapping.transition.mode = TransitionMode.ONE_TO_MANY;
+      if (!mapping.transition.transitionFieldAction
+       || mapping.transition.transitionFieldAction.definition.multiplicity !== Multiplicity.ONE_TO_MANY) {
+        mapping.transition.transitionFieldAction
+         = FieldAction.create(this.cfg.fieldActionService.getActionDefinitionForName('Split', Multiplicity.ONE_TO_MANY));
+        mapping.transition.transitionFieldAction.setArgumentValue('delimiter', ' ');
+      }
     } else {
       mapping.transition.mode = TransitionMode.ONE_TO_ONE;
     }

@@ -26,8 +26,8 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import io.atlasmap.v2.CollectionSize;
 import io.atlasmap.v2.Contains;
+import io.atlasmap.v2.Count;
 import io.atlasmap.v2.Equals;
 import io.atlasmap.v2.ItemAt;
 import io.atlasmap.v2.Length;
@@ -35,10 +35,10 @@ import io.atlasmap.v2.Length;
 public class ObjectFieldActionsTest {
 
     @Test
-    public void testCollectionSize() {
-        assertEquals(new Integer(0), ObjectFieldActions.collectionSize(new CollectionSize(), new ArrayList<>()));
+    public void testCount() {
+        assertEquals(new Integer(0), ObjectFieldActions.count(new Count(), new ArrayList<>()));
         Object[] array = new Object[] {false, "foo", 2};
-        assertEquals(new Integer(3), ObjectFieldActions.collectionSize(new CollectionSize(), Arrays.asList(array)));
+        assertEquals(new Integer(3), ObjectFieldActions.count(new Count(), Arrays.asList(array)));
     }
 
     @Test
