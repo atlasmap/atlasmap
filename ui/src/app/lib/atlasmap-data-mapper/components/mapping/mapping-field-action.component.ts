@@ -41,11 +41,11 @@ export class MappingFieldActionComponent {
   }
 
   actionsExistForField(): boolean {
-    return (this.cfg.fieldActionService.getActionsAppliesToField(this.mapping, this.isSource).length > 0);
+    return (this.cfg.fieldActionService.getActionsAppliesToField(this.mapping, this.isSource, Multiplicity.ONE_TO_ONE).length > 0);
   }
 
   getActionConfigs(): FieldActionDefinition[] {
-    return this.cfg.fieldActionService.getActionsAppliesToField(this.mapping, this.isSource);
+    return this.cfg.fieldActionService.getActionsAppliesToField(this.mapping, this.isSource, Multiplicity.ONE_TO_ONE);
   }
 
   /**

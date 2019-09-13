@@ -25,6 +25,7 @@ import io.atlasmap.spi.AtlasActionProcessor;
 import io.atlasmap.v2.Append;
 import io.atlasmap.v2.Concatenate;
 import io.atlasmap.v2.EndsWith;
+import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Format;
 import io.atlasmap.v2.GenerateUUID;
 import io.atlasmap.v2.IndexOf;
@@ -60,8 +61,8 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return input == null ? string : input.toString().concat(string);
     }
 
-    @AtlasActionProcessor
-    public static String concatenate(Concatenate concat, List<Object> inputs) {
+    @AtlasActionProcessor(sourceType = FieldType.ANY)
+    public static String concatenate(Concatenate concat, List<String> inputs) {
         if (concat == null) {
             throw new IllegalArgumentException("Concatenate must be specified with a delimiter");
         }
@@ -72,12 +73,12 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         String delim = concat.getDelimiter() == null ? "" : concat.getDelimiter();
         StringBuilder builder = new StringBuilder();
         boolean isFirst = true;
-        for (Object entry : inputs) {
+        for (String entry : inputs) {
             if (!isFirst) {
                 builder.append(delim);
             }
             if (entry != null) {
-                builder.append(entry.toString());
+                builder.append(entry);
             }
             isFirst =false;
         }
@@ -194,8 +195,8 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return input == null ? null : input.replaceFirst(match, newString == null ? "" : newString);
     }
 
-    @AtlasActionProcessor
-    public static String[] split(Split split, Object input) {
+    @AtlasActionProcessor(sourceType = FieldType.ANY)
+    public static String[] split(Split split, String input) {
         if (split == null || split.getDelimiter() == null) {
             throw new IllegalArgumentException("Split must be specified with a delimiter");
         }

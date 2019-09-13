@@ -276,7 +276,11 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         Type[] genericParameterTypes = method.getGenericParameterTypes();
         if (genericParameterTypes.length >= 2) {
             Class<?> sourceClass = method.getParameterTypes()[1];
-            det.setSourceType(toFieldType(sourceClass, method.getGenericParameterTypes()[1]));
+            if (annotation.sourceType() != FieldType.NONE) {
+                det.setSourceType(annotation.sourceType());
+            } else {
+                det.setSourceType(toFieldType(sourceClass, method.getGenericParameterTypes()[1]));
+            }
             CollectionType sourceCollection = toFieldCollectionType(sourceClass);
             CollectionType targetCollection = toFieldCollectionType(targetClass);
             if (sourceCollection != CollectionType.NONE) {

@@ -22,7 +22,6 @@ import java.time.ZonedDateTime;
 
 import io.atlasmap.spi.AtlasActionProcessor;
 import io.atlasmap.spi.AtlasFieldAction;
-import io.atlasmap.v2.Action;
 import io.atlasmap.v2.AddDays;
 import io.atlasmap.v2.AddSeconds;
 import io.atlasmap.v2.CurrentDate;
@@ -31,7 +30,7 @@ import io.atlasmap.v2.CurrentTime;
 import io.atlasmap.v2.DayOfMonth;
 import io.atlasmap.v2.DayOfWeek;
 import io.atlasmap.v2.DayOfYear;
-import io.atlasmap.v2.Multiplicity;
+import io.atlasmap.v2.FieldType;
 
 @SuppressWarnings({"squid:S3776",     // Cognitive complexity of method
     "squid:S1118",     // Add private constructor
@@ -39,7 +38,7 @@ import io.atlasmap.v2.Multiplicity;
     "squid:S3358" })   // Extract nested ternary
 public class DateFieldActions implements AtlasFieldAction {
 
-    @AtlasActionProcessor
+    @AtlasActionProcessor(sourceType = FieldType.ANY_DATE)
     public static ZonedDateTime addDays(AddDays addDays, ZonedDateTime input) {
         if (addDays == null) {
             throw new IllegalArgumentException("AddDays action must be specified");
@@ -51,7 +50,7 @@ public class DateFieldActions implements AtlasFieldAction {
         return input.plusDays(addDays.getDays() == null ? 0L : addDays.getDays());
     }
 
-    @AtlasActionProcessor
+    @AtlasActionProcessor(sourceType = FieldType.ANY_DATE)
     public static ZonedDateTime addSeconds(AddSeconds addSeconds, ZonedDateTime input) {
         if (addSeconds == null) {
             throw new IllegalArgumentException("AddSeconds action must be specified");
@@ -78,17 +77,17 @@ public class DateFieldActions implements AtlasFieldAction {
         return LocalTime.now().atDate(LocalDate.now()).atZone(ZoneId.systemDefault());
     }
 
-    @AtlasActionProcessor
+    @AtlasActionProcessor(sourceType = FieldType.ANY_DATE)
     public static Integer dayOfMonth(DayOfMonth action, ZonedDateTime input) {
         return input == null ? null : input.getDayOfMonth();
     }
 
-    @AtlasActionProcessor
+    @AtlasActionProcessor(sourceType = FieldType.ANY_DATE)
     public static Integer dayOfWeek(DayOfWeek action, ZonedDateTime input) {
         return input == null ? null : input.getDayOfWeek().getValue();
     }
 
-    @AtlasActionProcessor
+    @AtlasActionProcessor(sourceType = FieldType.ANY_DATE)
     public static Integer dayOfYear(DayOfYear action, ZonedDateTime input) {
         return input == null ? null : input.getDayOfYear();
     }
