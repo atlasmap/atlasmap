@@ -608,7 +608,6 @@ public class AtlasService {
     private void createCompressedCatalog(String mappingId) throws IOException {
         String atlasmapCatalogName;
         String atlasmapCatalogFilesName;
-        System.out.println("this is the new version of the code");
         // Handling multiple mappings when creating compressed catalog
         if (mappingId.contains(AtlasService.CUSTOM_MAPPING_NAME_PREFIX)) {
             atlasmapCatalogName = "atlasmap-catalog-" + mappingId + ".adm";
