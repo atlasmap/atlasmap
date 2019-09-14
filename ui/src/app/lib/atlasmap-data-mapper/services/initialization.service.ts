@@ -226,7 +226,7 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
         // If catalog is null then no compressed mappings catalog is available on the server.
         if (catalog === null) {
           if (this.cfg.mappings === null) {
-            this.cfg.mappings = new MappingDefinition();
+            this.cfg.mappings = new MappingDefinition(this.cfg.mappingId);
           }
 
           // load field actions - do this even with no documents so the default field actions are loaded.
@@ -253,7 +253,7 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
 
         // load mappings
         if (this.cfg.mappings == null) {
-          this.cfg.mappings = new MappingDefinition();
+          this.cfg.mappings = new MappingDefinition(this.cfg.mappingId);
           if (this.cfg.mappingFiles.length > 0) {
             await this.fetchMappings(this.cfg.mappingFiles);
           } else {

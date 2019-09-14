@@ -113,7 +113,7 @@ export class MappingSerializer {
 
   static deserializeMappingServiceJSON(json: any, cfg: ConfigModel): void {
     if (!cfg.mappings) {
-      cfg.mappings = new MappingDefinition;
+      cfg.mappings = new MappingDefinition(cfg.mappingId);
     }
     cfg.mappings.name = this.deserializeAtlasMappingName(json);
     cfg.mappings.parsedDocs = cfg.mappings.parsedDocs.concat(MappingSerializer.deserializeDocs(json, cfg.mappings));
