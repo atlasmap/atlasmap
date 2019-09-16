@@ -47,16 +47,18 @@ export class FieldActionService {
     return new Promise<boolean>((resolve, reject) => {
       if (this.cfg.preloadedFieldActionMetadata) {
         this.clearActionDefinitions();
-        for (const actionDetail of this.cfg.preloadedFieldActionMetadata.ActionDetails.actionDetail) {
-          const fieldActionDefinition = this.extractFieldActionDefinition(actionDetail);
-          if (!fieldActionDefinition.multiplicity) {
-            this.logger.debug(`Field action (${fieldActionDefinition.name}) is missing multiplicity, ingoring`);
-            continue;
+        if (this.cfg.preloadedFieldActionMetadata && this.cfg.preloadedFieldActionMetadata.ActionDetails) {
+          for (const actionDetail of this.cfg.preloadedFieldActionMetadata.ActionDetails.actionDetail) {
+            const fieldActionDefinition = this.extractFieldActionDefinition(actionDetail);
+            if (!fieldActionDefinition.multiplicity) {
+              this.logger.debug(`Field action (${fieldActionDefinition.name}) is missing multiplicity, ingoring`);
+              continue;
+            }
+            if (fieldActionDefinition.name === 'Expression') { // Expression is handled in special manner
+              continue;
+            }
+            this.actions[fieldActionDefinition.multiplicity].push(fieldActionDefinition);
           }
-          if (fieldActionDefinition.name === 'Expression') { // Expression is handled in special manner
-            continue;
-          }
-          this.actions[fieldActionDefinition.multiplicity].push(fieldActionDefinition);
         }
         this.sortFieldActionDefinitions();
         this.isInitialized = true;
@@ -87,9 +89,11 @@ export class FieldActionService {
           fetchedActionConfigs.forEach(action => {
             if (!action.multiplicity) {
               this.logger.debug(`Field action  (${action.name}) is missing multiplicity, ignoring`);
+              resolve(false);
               return;
             }
             if (action.name === 'Expression') { // Expression is handled in special manner
+              resolve(false);
               return;
             }
             this.actions[action.multiplicity].push(action);

@@ -136,6 +136,8 @@ export class LineMachineComponent implements OnInit, OnDestroy {
 
   clearLines(): void {
     this.lines = [];
+    this.lineBeingFormed = null;
+    this.drawingLine = false;
   }
 
   drawLine(event: MouseEvent): void {
@@ -169,6 +171,14 @@ export class LineMachineComponent implements OnInit, OnDestroy {
   redrawLinesForMappings(): void {
     if (!this.cfg.initCfg.initialized || !this.cfg.mappings) {
       this.clearLines();
+
+      // Clear any scroll deltas from the sources and targets panels.
+      if (this.docDefOutput) {
+        this.docDefInput.handleScroll(null);
+      }
+      if (this.docDefOutput) {
+        this.docDefOutput.handleScroll(null);
+      }
       return;
     }
     if (!this.cfg.mappings.activeMapping) {
