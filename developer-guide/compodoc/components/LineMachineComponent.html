@@ -612,8 +612,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="271"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:271</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="281"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:281</a></div>
                 </td>
             </tr>
 
@@ -747,8 +747,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="196"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:196</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="206"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:206</a></div>
                 </td>
             </tr>
 
@@ -817,8 +817,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="145"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:145</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="147"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:147</a></div>
                 </td>
             </tr>
 
@@ -899,8 +899,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="141"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:141</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="143"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:143</a></div>
                 </td>
             </tr>
 
@@ -971,8 +971,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="201"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:201</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="211"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:211</a></div>
                 </td>
             </tr>
 
@@ -1043,8 +1043,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="249"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:249</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="259"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:259</a></div>
                 </td>
             </tr>
 
@@ -1200,8 +1200,8 @@ the target field from that array element.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="152"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:152</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="154"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:154</a></div>
                 </td>
             </tr>
 
@@ -1433,8 +1433,8 @@ associated with the line.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="163"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:163</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="165"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:165</a></div>
                 </td>
             </tr>
 
@@ -1550,8 +1550,8 @@ associated with the line.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="169"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:169</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="171"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:171</a></div>
                 </td>
             </tr>
 
@@ -2008,6 +2008,8 @@ export class LineMachineComponent implements OnInit, OnDestroy {
 
   clearLines(): void {
     this.lines &#x3D; [];
+    this.lineBeingFormed &#x3D; null;
+    this.drawingLine &#x3D; false;
   }
 
   drawLine(event: MouseEvent): void {
@@ -2041,6 +2043,14 @@ export class LineMachineComponent implements OnInit, OnDestroy {
   redrawLinesForMappings(): void {
     if (!this.cfg.initCfg.initialized || !this.cfg.mappings) {
       this.clearLines();
+
+      // Clear any scroll deltas from the sources and targets panels.
+      if (this.docDefOutput) {
+        this.docDefInput.handleScroll(null);
+      }
+      if (this.docDefOutput) {
+        this.docDefOutput.handleScroll(null);
+      }
       return;
     }
     if (!this.cfg.mappings.activeMapping) {

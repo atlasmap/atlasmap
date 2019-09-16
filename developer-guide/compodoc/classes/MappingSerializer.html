@@ -2951,7 +2951,7 @@ export class MappingSerializer {
             mapping.transition.expression &#x3D; new ExpressionModel(mapping, cfg);
             const expr &#x3D; action.Expression ? action.Expression.expression : action[&#x27;expression&#x27;];
             mapping.transition.expression.insertText(expr);
-          } else if (isSource &amp;&amp; [Multiplicity.ONE_TO_MANY, Multiplicity.MANY_TO_ONE]
+          } else if (isSource &amp;&amp; parsedAction.definition &amp;&amp; [Multiplicity.ONE_TO_MANY, Multiplicity.MANY_TO_ONE]
            .includes(parsedAction.definition.multiplicity)) {
              if (mapping.transition.transitionFieldAction) {
                cfg.logger.warn(&#x60;Duplicated multiplicity transformations were detected:
