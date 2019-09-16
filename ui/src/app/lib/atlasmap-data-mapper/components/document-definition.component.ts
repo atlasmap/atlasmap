@@ -252,10 +252,16 @@ export class DocumentDefinitionComponent implements OnInit {
 
   /**
    * Handle scrolling in this document definition instance.  Avoid a circular dependence with the
-   * LineMachineComponent by dispatching a custom Angular mappings-line-redraw event.
+   * LineMachineComponent by dispatching a custom Angular mappings-line-redraw event.  If a null
+   * event is passed in then simply clear the scroll top value.
+   *
    * @param event
    */
   handleScroll(event: any) {
+    if (!event) {
+      this.scrollTop = 0;
+      return;
+    }
     this.scrollTop = event.target.scrollTop;
     this.redrawMappingLinesEvent.emit({_lmcInstance: this.lineMachine});
   }

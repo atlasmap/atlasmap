@@ -47,16 +47,18 @@ export class FieldActionService {
     return new Promise<boolean>((resolve, reject) => {
       if (this.cfg.preloadedFieldActionMetadata) {
         this.clearActionDefinitions();
-        for (const actionDetail of this.cfg.preloadedFieldActionMetadata.ActionDetails.actionDetail) {
-          const fieldActionDefinition = this.extractFieldActionDefinition(actionDetail);
-          if (!fieldActionDefinition.multiplicity) {
-            this.logger.debug(`Field action (${fieldActionDefinition.name}) is missing multiplicity, ingoring`);
-            continue;
+        if (this.cfg.preloadedFieldActionMetadata && this.cfg.preloadedFieldActionMetadata.ActionDetails) {
+          for (const actionDetail of this.cfg.preloadedFieldActionMetadata.ActionDetails.actionDetail) {
+            const fieldActionDefinition = this.extractFieldActionDefinition(actionDetail);
+            if (!fieldActionDefinition.multiplicity) {
+              this.logger.debug(`Field action (${fieldActionDefinition.name}) is missing multiplicity, ingoring`);
+              continue;
+            }
+            if (fieldActionDefinition.name === 'Expression') { // Expression is handled in special manner
+              continue;
+            }
+            this.actions[fieldActionDefinition.multiplicity].push(fieldActionDefinition);
           }
-          if (fieldActionDefinition.name === 'Expression') { // Expression is handled in special manner
-            continue;
-          }
-          this.actions[fieldActionDefinition.multiplicity].push(fieldActionDefinition);
         }
         this.sortFieldActionDefinitions();
         this.isInitialized = true;
