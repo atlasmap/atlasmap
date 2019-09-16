@@ -89,11 +89,9 @@ export class FieldActionService {
           fetchedActionConfigs.forEach(action => {
             if (!action.multiplicity) {
               this.logger.debug(`Field action  (${action.name}) is missing multiplicity, ignoring`);
-              resolve(false);
               return;
             }
             if (action.name === 'Expression') { // Expression is handled in special manner
-              resolve(false);
               return;
             }
             this.actions[action.multiplicity].push(action);
