@@ -4,11 +4,11 @@
 
     <i class="dropdown inline-block" [attr.class]="getCSSClass('enableExpression')" (click)="toolbarButtonClicked('enableExpression', $event);"
       tooltip='Enable/ Disable conditional mapping expression' placement="bottom"
-      style="float:left;font-weight:bold;margin-top:-6px;">f<sub>(x)</sub>
+      style="float:left;font-weight:bold;margin-top:-6px;margin-left:50px;">f<sub>(x)</sub>
     </i>
 
     <div *ngIf="conditionalMappingExpressionEnabled()" #conditionalExprBlock
-      class="dropdown inline-block pull-left" style="width:400px;" >
+      class="dropdown inline-block pull-left" style="width:400px;margin-left:10px" >
       <expression #expressionComponent [configModel]="cfg" [mapping]="cfg.mappings.activeMapping"></expression>
     </div>
 
