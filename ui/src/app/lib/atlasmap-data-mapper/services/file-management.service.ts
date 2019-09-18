@@ -329,6 +329,8 @@ export class FileManagementService {
         'mapping/ZIP/' + this.getMappingId()).toPromise().then( async(result: boolean) => {
 
         try {
+          this.cfg.mappings = null;
+          this.cfg.clearDocs();
           await this.cfg.initializationService.initialize();
         } catch (error) {
           this.cfg.errorService.mappingError('Unable to import the catalog file: \n' + mappingsFileName +
