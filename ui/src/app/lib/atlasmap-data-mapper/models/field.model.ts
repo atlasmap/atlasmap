@@ -194,6 +194,11 @@ export class Field {
     return (this.getCollectionParentField() != null);
   }
 
+  isInNestedCollection(): boolean {
+    const first = this.getCollectionParentField();
+    return first && first.parentField && first.parentField.getCollectionParentField() ? true : false;
+  }
+
   isSource(): boolean {
     return (this.docDef != null) && this.docDef.isSource;
   }

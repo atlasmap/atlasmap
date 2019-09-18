@@ -319,12 +319,15 @@ export class MappingManagementService {
   }
 
   getFieldSelectionExclusionReason(mapping: MappingModel, field: Field): string {
-    if (mapping.getAllMappedFields().length === 0) { // if mapping hasn't had a field selected yet, allow it
-      return null;
-    }
-
     if (!field.isTerminal()) {
       return 'field is a parent field';
+    }
+    if (field.isInNestedCollection()) {
+      return 'Nested collection is not supported';
+    }
+
+    if (mapping.getAllMappedFields().length === 0) { // if mapping hasn't had a field selected yet, allow it
+      return null;
     }
 
     // Target fields may only be mapped once.
