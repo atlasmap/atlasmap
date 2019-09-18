@@ -165,10 +165,6 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
       this.cfg.fieldActionService.isInitialized = false;
       this.cfg.initCfg.initialized = false;
       this.cfg.initCfg.mappingInitialized = false;
-      this.cfg.mappings = null;
-      this.cfg.mappingFiles = [];
-      this.cfg.sourceDocs = [];
-      this.cfg.targetDocs = [];
 
       if (this.cfg.mappingService == null) {
         this.cfg.errorService.warn('Mapping service is not configured, validation service will not be used.', null);
