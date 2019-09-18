@@ -490,8 +490,8 @@ and export it.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="379"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:379</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="381"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:381</a></div>
                 </td>
             </tr>
 
@@ -534,8 +534,8 @@ and export it.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="354"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:354</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="356"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:356</a></div>
                 </td>
             </tr>
 
@@ -577,8 +577,8 @@ and export it.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="414"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:414</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="416"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:416</a></div>
                 </td>
             </tr>
 
@@ -618,8 +618,8 @@ and export it.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="418"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:418</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="420"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/file-management.service.ts:420</a></div>
                 </td>
             </tr>
 
@@ -1442,6 +1442,8 @@ export class FileManagementService {
         &#x27;mapping/ZIP/&#x27; + this.getMappingId()).toPromise().then( async(result: boolean) &#x3D;&gt; {
 
         try {
+          this.cfg.mappings &#x3D; null;
+          this.cfg.clearDocs();
           await this.cfg.initializationService.initialize();
         } catch (error) {
           this.cfg.errorService.mappingError(&#x27;Unable to import the catalog file: \n&#x27; + mappingsFileName +
