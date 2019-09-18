@@ -216,6 +216,9 @@
                                 <a href="#isInCollection">isInCollection</a>
                             </li>
                             <li>
+                                <a href="#isInNestedCollection">isInNestedCollection</a>
+                            </li>
+                            <li>
                                 <a href="#isParentField">isParentField</a>
                             </li>
                             <li>
@@ -1348,8 +1351,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="201"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/field.model.ts:201</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="206"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/field.model.ts:206</a></div>
                 </td>
             </tr>
 
@@ -1471,8 +1474,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="205"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/field.model.ts:205</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="210"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/field.model.ts:210</a></div>
                 </td>
             </tr>
 
@@ -1736,8 +1739,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="229"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/field.model.ts:229</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="234"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/field.model.ts:234</a></div>
                 </td>
             </tr>
 
@@ -1777,6 +1780,45 @@
                 <td class="col-md-4">
                     <div class="io-line">Defined in <a href="" data-line="193"
                             class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/field.model.ts:193</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isInNestedCollection"></a>
+                    <span class="name">
+                        <b>
+                            isInNestedCollection
+                        </b>
+                        <a href="#isInNestedCollection"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>isInNestedCollection()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="197"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/field.model.ts:197</a></div>
                 </td>
             </tr>
 
@@ -1853,8 +1895,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="225"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/field.model.ts:225</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="230"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/field.model.ts:230</a></div>
                 </td>
             </tr>
 
@@ -1892,8 +1934,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="221"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/field.model.ts:221</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="226"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/field.model.ts:226</a></div>
                 </td>
             </tr>
 
@@ -1931,8 +1973,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="197"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/field.model.ts:197</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="202"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/field.model.ts:202</a></div>
                 </td>
             </tr>
 
@@ -2214,6 +2256,11 @@ export class Field {
 
   isInCollection(): boolean {
     return (this.getCollectionParentField() !&#x3D; null);
+  }
+
+  isInNestedCollection(): boolean {
+    const first &#x3D; this.getCollectionParentField();
+    return first &amp;&amp; first.parentField &amp;&amp; first.parentField.getCollectionParentField() ? true : false;
   }
 
   isSource(): boolean {

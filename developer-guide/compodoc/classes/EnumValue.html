@@ -350,6 +350,11 @@ export class Field {
     return (this.getCollectionParentField() !&#x3D; null);
   }
 
+  isInNestedCollection(): boolean {
+    const first &#x3D; this.getCollectionParentField();
+    return first &amp;&amp; first.parentField &amp;&amp; first.parentField.getCollectionParentField() ? true : false;
+  }
+
   isSource(): boolean {
     return (this.docDef !&#x3D; null) &amp;&amp; this.docDef.isSource;
   }
