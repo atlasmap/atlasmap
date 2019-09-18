@@ -210,6 +210,8 @@ export class ToolbarComponent implements OnInit {
     this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
       this.cfg.errorService.resetAll();
       this.cfg.fileService.resetAll().toPromise().then( async(result: boolean) => {
+        this.cfg.mappings = null;
+        this.cfg.clearDocs();
         await this.cfg.initializationService.initialize();
       }).catch((error: any) => {
         if (error.status === 0) {
