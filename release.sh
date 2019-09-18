@@ -123,8 +123,9 @@ npm version ${RELEASE_VERSION}
 npm publish
 popd
 
-echo "=========================================================="
-echo "Publishing Release Notes to GitHub...."
-echo "=========================================================="
-yarn add github-release-notes
-./node_modules/.bin/gren release --tags atlasmap-${RELEASE_VERSION} --override
+# For some reason following no longer works... instead run manually ./node_modules/.bin/gren release --tags atlasmap-${RELEASE_VERSION}..${PREVIOUS_VERSION} --override 
+# echo "=========================================================="
+# echo "Publishing Release Notes to GitHub...."
+# echo "=========================================================="
+# yarn add github-release-notes
+# ./node_modules/.bin/gren release --tags atlasmap-${RELEASE_VERSION} --override
