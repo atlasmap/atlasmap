@@ -72,6 +72,7 @@ export class MappingFieldDetailComponent implements OnInit {
       return true;
     }
     if (this.mappedField == null || this.mappedField.field == null
+      || this.mappedField.field.name === null
       || this.mappedField.field.name.length === 0
       || this.mappedField.field.docDef == null) {
       return false;

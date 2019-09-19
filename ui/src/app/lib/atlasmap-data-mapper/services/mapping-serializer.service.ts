@@ -402,24 +402,34 @@ export class MappingSerializer {
         serializedField['index'] = mapping.getIndexForMappedField(mappedField) - 1;
       }
 
-      if (mappedField.actions.length) {
-        const actions: any[] = [];
-
-        for (const action of mappedField.actions) {
-          const actionJson = this.serializeAction(action, cfg);
-          if (actionJson) {
-            actions.push(actionJson);
-          }
-        }
-        if (actions.length > 0) {
-          serializedField['actions'] = actions;
-        }
-      }
-
+      this.serializeActions( cfg, mappedField, serializedField );
       fieldsJson.push(serializedField);
     }
 
     return fieldsJson;
+  }
+
+  /**
+   * Walk the list of actions associated with the specified mapped field and serialize them into JSON.
+   *
+   * @param cfg
+   * @param mappedField
+   * @param serializedField
+   */
+  private static serializeActions( cfg: ConfigModel, mappedField: MappedField, serializedField: any ): void {
+    if ( mappedField.actions.length ) {
+      const actions: any[] = [];
+
+      for ( const action of mappedField.actions ) {
+        const actionJson = this.serializeAction( action, cfg );
+        if ( actionJson ) {
+          actions.push( actionJson );
+        }
+      }
+      if ( actions.length > 0 ) {
+        serializedField['actions'] = actions;
+      }
+    }
   }
 
   private static serializeAction(action: FieldAction, cfg: ConfigModel): any {
@@ -589,6 +599,38 @@ export class MappingSerializer {
     return tables;
   }
 
+  /**
+   * Walk the list of field actions found in the parsed data and restore them to the live mapping.
+   *
+   * @param field
+   * @param mappedField
+   * @param mapping
+   * @param cfg
+   * @param isSource
+   */
+  private static deserializeFieldActions( field: any, mappedField: MappedField, mapping: MappingModel, cfg: ConfigModel, isSource: boolean ): void {
+    for ( const action of field.actions ) {
+      const parsedAction = this.parseAction( action );
+      parsedAction.definition = cfg.fieldActionService.getActionDefinitionForName( parsedAction.name );
+
+      if ( isSource && ( action.Expression || action['@type'] === 'Expression' ) ) {
+        mapping.transition.enableExpression = true;
+        mapping.transition.expression = new ExpressionModel( mapping, cfg );
+        const expr = action.Expression ? action.Expression.expression : action['expression'];
+        mapping.transition.expression.insertText( expr );
+      } else if ( isSource && parsedAction.definition && [Multiplicity.ONE_TO_MANY, Multiplicity.MANY_TO_ONE]
+        .includes( parsedAction.definition.multiplicity ) ) {
+        if ( mapping.transition.transitionFieldAction ) {
+            cfg.logger.warn( `Duplicated multiplicity transformations were detected:
+              ${mapping.transition.transitionFieldAction.name} is being overwritten by ${action.name} ...` );
+        }
+        mapping.transition.transitionFieldAction = parsedAction;
+      } else {
+        mappedField.parsedData.parsedActions.push( parsedAction );
+      }
+    }
+  }
+
   private static addFieldIfDoesntExist(
     mapping: MappingModel, field: any, isSource: boolean,
     docRefs: any, cfg: ConfigModel, ignoreValue: boolean = true): MappedField {
@@ -602,7 +644,11 @@ export class MappingSerializer {
     if (field.jsonType === (ConfigModel.mappingServicesPackagePrefix + '.PropertyField')) {
       mappedField.parsedData.parsedName = field.name;
       mappedField.parsedData.parsedPath = field.name;
+      mappedField.parsedData.parsedValue = field.value;
       mappedField.parsedData.fieldIsProperty = true;
+      if ( field.actions ) {
+        this.deserializeFieldActions( field, mappedField, mapping, cfg, isSource );
+      }
     } else if (field.jsonType === (ConfigModel.mappingServicesPackagePrefix + '.ConstantField')) {
       mappedField.parsedData.fieldIsConstant = true;
       mappedField.parsedData.parsedValue = field.value;
@@ -628,25 +674,7 @@ export class MappingSerializer {
         return null;
       }
       if (field.actions) {
-        for (const action of field.actions) {
-          const parsedAction = this.parseAction(action);
-          parsedAction.definition = cfg.fieldActionService.getActionDefinitionForName(parsedAction.name);
-          if (isSource && (action.Expression || action['@type'] === 'Expression')) {
-            mapping.transition.enableExpression = true;
-            mapping.transition.expression = new ExpressionModel(mapping, cfg);
-            const expr = action.Expression ? action.Expression.expression : action['expression'];
-            mapping.transition.expression.insertText(expr);
-          } else if (isSource && parsedAction.definition && [Multiplicity.ONE_TO_MANY, Multiplicity.MANY_TO_ONE]
-           .includes(parsedAction.definition.multiplicity)) {
-             if (mapping.transition.transitionFieldAction) {
-               cfg.logger.warn(`Duplicated multiplicity transformations were detected:
-                ${mapping.transition.transitionFieldAction.name} is being overwritten by ${action.name} ...`);
-             }
-             mapping.transition.transitionFieldAction = parsedAction;
-           } else {
-            mappedField.parsedData.parsedActions.push(parsedAction);
-          }
-        }
+        this.deserializeFieldActions( field, mappedField, mapping, cfg, isSource );
       }
     }
     mapping.addMappedField(mappedField, isSource);
