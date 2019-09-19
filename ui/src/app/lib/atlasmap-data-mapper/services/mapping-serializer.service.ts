@@ -608,7 +608,8 @@ export class MappingSerializer {
    * @param cfg
    * @param isSource
    */
-  private static deserializeFieldActions( field: any, mappedField: MappedField, mapping: MappingModel, cfg: ConfigModel, isSource: boolean ): void {
+  private static deserializeFieldActions( field: any, mappedField: MappedField, mapping: MappingModel,
+                                          cfg: ConfigModel, isSource: boolean ): void {
     for ( const action of field.actions ) {
       const parsedAction = this.parseAction( action );
       parsedAction.definition = cfg.fieldActionService.getActionDefinitionForName( parsedAction.name );
