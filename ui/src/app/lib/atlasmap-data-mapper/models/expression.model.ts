@@ -75,7 +75,7 @@ export class FieldNode extends ExpressionNode {
   }
 
   toHTML(): string {
-    if (this.field) {
+    if (this.field && this.field.field) {
       return `<span contenteditable="false" id="${this.uuid}" title="${this.field.field.docDef.name}:${this.field.field.path}"
         class="expressionFieldLabel label label-default">${this.field.field.name}</span>`;
     } else {
