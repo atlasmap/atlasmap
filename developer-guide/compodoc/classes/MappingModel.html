@@ -2755,7 +2755,7 @@ export class MappingModel {
   }
 
   getIndexForMappedField(mappedField: MappedField): number {
-    if (!mappedField) {
+    if (!mappedField || !mappedField.field) {
       return null;
     }
     return this.getMappedFields(mappedField.field.isSource()).indexOf(mappedField) + 1;

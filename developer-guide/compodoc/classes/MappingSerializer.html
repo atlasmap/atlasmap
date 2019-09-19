@@ -109,6 +109,11 @@
                                 <a href="#deserializeDocs">deserializeDocs</a>
                             </li>
                             <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#deserializeFieldActions">deserializeFieldActions</a>
+                            </li>
+                            <li>
                                     <span class="modifier">Static</span>
                                 <a href="#deserializeFieldMapping">deserializeFieldMapping</a>
                             </li>
@@ -160,6 +165,11 @@
                                     <span class="modifier">Private</span>
                                     <span class="modifier">Static</span>
                                 <a href="#serializeAction">serializeAction</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#serializeActions">serializeActions</a>
                             </li>
                             <li>
                                     <span class="modifier">Private</span>
@@ -238,8 +248,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="592"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:592</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="635"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:635</a></div>
                 </td>
             </tr>
 
@@ -628,8 +638,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="536"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:536</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="546"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:546</a></div>
                 </td>
             </tr>
 
@@ -701,8 +711,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="446"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:446</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="456"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:456</a></div>
                 </td>
             </tr>
 
@@ -752,6 +762,129 @@
                     </div>
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition[]</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deserializeFieldActions"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Static</span>
+                            deserializeFieldActions
+                        </b>
+                        <a href="#deserializeFieldActions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>deserializeFieldActions(field: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, mappedField: <a href="../classes/MappedField.html">MappedField</a>, mapping: <a href="../classes/MappingModel.html">MappingModel</a>, cfg: <a href="../classes/ConfigModel.html">ConfigModel</a>, isSource: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="611"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:611</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Walk the list of field actions found in the parsed data and restore them to the live mapping.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>field</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>mappedField</td>
+                                    <td>
+                                                <code><a href="../classes/MappedField.html" target="_self" >MappedField</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>mapping</td>
+                                    <td>
+                                                <code><a href="../classes/MappingModel.html" target="_self" >MappingModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>cfg</td>
+                                    <td>
+                                                <code><a href="../classes/ConfigModel.html" target="_self" >ConfigModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>isSource</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
 
                     </div>
                     <div class="io-description">
@@ -904,8 +1037,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="509"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:509</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="519"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:519</a></div>
                 </td>
             </tr>
 
@@ -1025,8 +1158,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="570"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:570</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="580"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:580</a></div>
                 </td>
             </tr>
 
@@ -1098,8 +1231,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="475"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:475</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="485"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:485</a></div>
                 </td>
             </tr>
 
@@ -1267,8 +1400,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="553"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:553</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="563"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:563</a></div>
                 </td>
             </tr>
 
@@ -1340,8 +1473,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="656"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:656</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="685"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:685</a></div>
                 </td>
             </tr>
 
@@ -1413,8 +1546,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="692"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:692</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="721"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:721</a></div>
                 </td>
             </tr>
 
@@ -1486,8 +1619,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="667"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:667</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="696"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:696</a></div>
                 </td>
             </tr>
 
@@ -1646,8 +1779,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="425"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:425</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="435"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:435</a></div>
                 </td>
             </tr>
 
@@ -1697,6 +1830,105 @@
                     </div>
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="serializeActions"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Static</span>
+                            serializeActions
+                        </b>
+                        <a href="#serializeActions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>serializeActions(cfg: <a href="../classes/ConfigModel.html">ConfigModel</a>, mappedField: <a href="../classes/MappedField.html">MappedField</a>, serializedField: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="419"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.ts:419</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Walk the list of actions associated with the specified mapped field and serialize them into JSON.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>cfg</td>
+                                    <td>
+                                                <code><a href="../classes/ConfigModel.html" target="_self" >ConfigModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>mappedField</td>
+                                    <td>
+                                                <code><a href="../classes/MappedField.html" target="_self" >MappedField</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>serializedField</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
 
                     </div>
                     <div class="io-description">
@@ -2717,24 +2949,34 @@ export class MappingSerializer {
         serializedField[&#x27;index&#x27;] &#x3D; mapping.getIndexForMappedField(mappedField) - 1;
       }
 
-      if (mappedField.actions.length) {
-        const actions: any[] &#x3D; [];
-
-        for (const action of mappedField.actions) {
-          const actionJson &#x3D; this.serializeAction(action, cfg);
-          if (actionJson) {
-            actions.push(actionJson);
-          }
-        }
-        if (actions.length &gt; 0) {
-          serializedField[&#x27;actions&#x27;] &#x3D; actions;
-        }
-      }
-
+      this.serializeActions( cfg, mappedField, serializedField );
       fieldsJson.push(serializedField);
     }
 
     return fieldsJson;
+  }
+
+  /**
+   * Walk the list of actions associated with the specified mapped field and serialize them into JSON.
+   *
+   * @param cfg
+   * @param mappedField
+   * @param serializedField
+   */
+  private static serializeActions( cfg: ConfigModel, mappedField: MappedField, serializedField: any ): void {
+    if ( mappedField.actions.length ) {
+      const actions: any[] &#x3D; [];
+
+      for ( const action of mappedField.actions ) {
+        const actionJson &#x3D; this.serializeAction( action, cfg );
+        if ( actionJson ) {
+          actions.push( actionJson );
+        }
+      }
+      if ( actions.length &gt; 0 ) {
+        serializedField[&#x27;actions&#x27;] &#x3D; actions;
+      }
+    }
   }
 
   private static serializeAction(action: FieldAction, cfg: ConfigModel): any {
@@ -2904,6 +3146,39 @@ export class MappingSerializer {
     return tables;
   }
 
+  /**
+   * Walk the list of field actions found in the parsed data and restore them to the live mapping.
+   *
+   * @param field
+   * @param mappedField
+   * @param mapping
+   * @param cfg
+   * @param isSource
+   */
+  private static deserializeFieldActions( field: any, mappedField: MappedField, mapping: MappingModel,
+                                          cfg: ConfigModel, isSource: boolean ): void {
+    for ( const action of field.actions ) {
+      const parsedAction &#x3D; this.parseAction( action );
+      parsedAction.definition &#x3D; cfg.fieldActionService.getActionDefinitionForName( parsedAction.name );
+
+      if ( isSource &amp;&amp; ( action.Expression || action[&#x27;@type&#x27;] &#x3D;&#x3D;&#x3D; &#x27;Expression&#x27; ) ) {
+        mapping.transition.enableExpression &#x3D; true;
+        mapping.transition.expression &#x3D; new ExpressionModel( mapping, cfg );
+        const expr &#x3D; action.Expression ? action.Expression.expression : action[&#x27;expression&#x27;];
+        mapping.transition.expression.insertText( expr );
+      } else if ( isSource &amp;&amp; parsedAction.definition &amp;&amp; [Multiplicity.ONE_TO_MANY, Multiplicity.MANY_TO_ONE]
+        .includes( parsedAction.definition.multiplicity ) ) {
+        if ( mapping.transition.transitionFieldAction ) {
+            cfg.logger.warn( &#x60;Duplicated multiplicity transformations were detected:
+              ${mapping.transition.transitionFieldAction.name} is being overwritten by ${action.name} ...&#x60; );
+        }
+        mapping.transition.transitionFieldAction &#x3D; parsedAction;
+      } else {
+        mappedField.parsedData.parsedActions.push( parsedAction );
+      }
+    }
+  }
+
   private static addFieldIfDoesntExist(
     mapping: MappingModel, field: any, isSource: boolean,
     docRefs: any, cfg: ConfigModel, ignoreValue: boolean &#x3D; true): MappedField {
@@ -2917,7 +3192,11 @@ export class MappingSerializer {
     if (field.jsonType &#x3D;&#x3D;&#x3D; (ConfigModel.mappingServicesPackagePrefix + &#x27;.PropertyField&#x27;)) {
       mappedField.parsedData.parsedName &#x3D; field.name;
       mappedField.parsedData.parsedPath &#x3D; field.name;
+      mappedField.parsedData.parsedValue &#x3D; field.value;
       mappedField.parsedData.fieldIsProperty &#x3D; true;
+      if ( field.actions ) {
+        this.deserializeFieldActions( field, mappedField, mapping, cfg, isSource );
+      }
     } else if (field.jsonType &#x3D;&#x3D;&#x3D; (ConfigModel.mappingServicesPackagePrefix + &#x27;.ConstantField&#x27;)) {
       mappedField.parsedData.fieldIsConstant &#x3D; true;
       mappedField.parsedData.parsedValue &#x3D; field.value;
@@ -2943,25 +3222,7 @@ export class MappingSerializer {
         return null;
       }
       if (field.actions) {
-        for (const action of field.actions) {
-          const parsedAction &#x3D; this.parseAction(action);
-          parsedAction.definition &#x3D; cfg.fieldActionService.getActionDefinitionForName(parsedAction.name);
-          if (isSource &amp;&amp; (action.Expression || action[&#x27;@type&#x27;] &#x3D;&#x3D;&#x3D; &#x27;Expression&#x27;)) {
-            mapping.transition.enableExpression &#x3D; true;
-            mapping.transition.expression &#x3D; new ExpressionModel(mapping, cfg);
-            const expr &#x3D; action.Expression ? action.Expression.expression : action[&#x27;expression&#x27;];
-            mapping.transition.expression.insertText(expr);
-          } else if (isSource &amp;&amp; parsedAction.definition &amp;&amp; [Multiplicity.ONE_TO_MANY, Multiplicity.MANY_TO_ONE]
-           .includes(parsedAction.definition.multiplicity)) {
-             if (mapping.transition.transitionFieldAction) {
-               cfg.logger.warn(&#x60;Duplicated multiplicity transformations were detected:
-                ${mapping.transition.transitionFieldAction.name} is being overwritten by ${action.name} ...&#x60;);
-             }
-             mapping.transition.transitionFieldAction &#x3D; parsedAction;
-           } else {
-            mappedField.parsedData.parsedActions.push(parsedAction);
-          }
-        }
+        this.deserializeFieldActions( field, mappedField, mapping, cfg, isSource );
       }
     }
     mapping.addMappedField(mappedField, isSource);
