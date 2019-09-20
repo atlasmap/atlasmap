@@ -1,0 +1,937 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>@atlasmap/atlasmap-data-mapper documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">@atlasmap/atlasmap-data-mapper documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content class">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Classes</li>
+  <li>MappingUtil</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/lib/atlasmap-data-mapper/utils/mapping-util.ts</code>
+        </p>
+
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>Static routines for handling mappings.</p>
+
+            </p>
+
+
+
+
+            <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#getDocById">getDocById</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#isMappingStale">isMappingStale</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Static</span>
+                                <a href="#removeStaleMappings">removeStaleMappings</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Static</span>
+                                <a href="#updateDocumentNamespacesFromMappings">updateDocumentNamespacesFromMappings</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Static</span>
+                                <a href="#updateMappedFieldsFromDocuments">updateMappedFieldsFromDocuments</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Static</span>
+                                <a href="#updateMappingsFromDocuments">updateMappingsFromDocuments</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+
+
+            <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDocById"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Static</span>
+                            getDocById
+                        </b>
+                        <a href="#getDocById"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getDocById(documentId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, docs: <a href="../classes/DocumentDefinition.html">DocumentDefinition[]</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="223"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/utils/mapping-util.ts:223</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>documentId</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>docs</td>
+                                    <td>
+                                                <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/DocumentDefinition.html" target="_self" >DocumentDefinition</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isMappingStale"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Static</span>
+                            isMappingStale
+                        </b>
+                        <a href="#isMappingStale"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>isMappingStale(mapping: <a href="../classes/MappingModel.html">MappingModel</a>, sourceFieldPaths: string[], targetSourcePaths: string[])</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="181"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/utils/mapping-util.ts:181</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mapping</td>
+                                    <td>
+                                                <code><a href="../classes/MappingModel.html" target="_self" >MappingModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>sourceFieldPaths</td>
+                                    <td>
+                                            <code>string[]</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>targetSourcePaths</td>
+                                    <td>
+                                            <code>string[]</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="removeStaleMappings"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Static</span>
+                            removeStaleMappings
+                        </b>
+                        <a href="#removeStaleMappings"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>removeStaleMappings(cfg: <a href="../classes/ConfigModel.html">ConfigModel</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="160"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/utils/mapping-util.ts:160</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Check all mappings in the current context and remove if it refers to un-existing fields.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>cfg</td>
+                                    <td>
+                                                <code><a href="../classes/ConfigModel.html" target="_self" >ConfigModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>ConfigModel</p>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateDocumentNamespacesFromMappings"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Static</span>
+                            updateDocumentNamespacesFromMappings
+                        </b>
+                        <a href="#updateDocumentNamespacesFromMappings"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateDocumentNamespacesFromMappings(cfg: <a href="../classes/ConfigModel.html">ConfigModel</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="197"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/utils/mapping-util.ts:197</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>cfg</td>
+                                    <td>
+                                                <code><a href="../classes/ConfigModel.html" target="_self" >ConfigModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateMappedFieldsFromDocuments"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Static</span>
+                            updateMappedFieldsFromDocuments
+                        </b>
+                        <a href="#updateMappedFieldsFromDocuments"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateMappedFieldsFromDocuments(mapping: <a href="../classes/MappingModel.html">MappingModel</a>, cfg: <a href="../classes/ConfigModel.html">ConfigModel</a>, docMap: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, isSource: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="43"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/utils/mapping-util.ts:43</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mapping</td>
+                                    <td>
+                                                <code><a href="../classes/MappingModel.html" target="_self" >MappingModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>cfg</td>
+                                    <td>
+                                                <code><a href="../classes/ConfigModel.html" target="_self" >ConfigModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>docMap</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>isSource</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateMappingsFromDocuments"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Static</span>
+                            updateMappingsFromDocuments
+                        </b>
+                        <a href="#updateMappingsFromDocuments"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateMappingsFromDocuments(cfg: <a href="../classes/ConfigModel.html">ConfigModel</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="28"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/utils/mapping-util.ts:28</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>cfg</td>
+                                    <td>
+                                                <code><a href="../classes/ConfigModel.html" target="_self" >ConfigModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+
+
+
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { PaddingField, DocumentDefinition } from &#x27;../models/document-definition.model&#x27;;
+import { MappingModel, MappedField } from &#x27;../models/mapping.model&#x27;;
+import { ConfigModel } from &#x27;../models/config.model&#x27;;
+import { Field } from &#x27;../models/field.model&#x27;;
+import { Multiplicity } from &#x27;../models/field-action.model&#x27;;
+
+/**
+ * Static routines for handling mappings.
+ */
+export class MappingUtil {
+
+  static updateMappingsFromDocuments(cfg: ConfigModel): void {
+    const sourceDocMap &#x3D; cfg.getDocUriMap(cfg, true);
+    const targetDocMap &#x3D; cfg.getDocUriMap(cfg, false);
+
+    for (const mapping of cfg.mappings.mappings) {
+      MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, sourceDocMap, true);
+      MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, targetDocMap, false);
+    }
+    for (const doc of cfg.getAllDocs()) {
+      if (doc.id &#x3D;&#x3D; null) {
+        doc.id &#x3D; &#x27;DOC.&#x27; + doc.name + &#x27;.&#x27; + Math.floor((Math.random() * 1000000) + 1).toString();
+      }
+    }
+  }
+
+  static updateMappedFieldsFromDocuments(mapping: MappingModel, cfg: ConfigModel, docMap: any, isSource: boolean): void {
+    let mappedFields: MappedField[] &#x3D; mapping.getMappedFields(isSource);
+    let mappedFieldIndex &#x3D; -1;
+
+    for (const mappedField of mappedFields) {
+      let doc: DocumentDefinition &#x3D; null;
+      mappedFieldIndex +&#x3D; 1;
+
+      if (mappedField.parsedData.fieldIsProperty) {
+        doc &#x3D; cfg.propertyDoc;
+      } else if (mappedField.parsedData.fieldIsConstant) {
+        doc &#x3D; cfg.constantDoc;
+      } else {
+        if (docMap &#x3D;&#x3D;&#x3D; null) {
+          docMap &#x3D; cfg.getDocUriMap(cfg, isSource);
+        }
+        doc &#x3D; docMap[mappedField.parsedData.parsedDocURI] as DocumentDefinition;
+        if (doc &#x3D;&#x3D; null) {
+          if (mappedField.parsedData.parsedName !&#x3D; null) {
+            cfg.errorService.error(&#x27;Could not find document for mapped field \&#x27;&#x27; + mappedField.parsedData.parsedName +
+              &#x27;\&#x27; at URI &#x27; + mappedField.parsedData.parsedDocURI, null);
+          }
+          continue;
+        }
+
+        if (mappedField.parsedData.parsedDocID &#x3D;&#x3D; null) {
+          cfg.errorService.error(&#x27;Could not find doc ID for mapped field &#x27; + mappedField.parsedData.parsedName, null);
+          continue;
+        }
+        doc.id &#x3D; mappedField.parsedData.parsedDocID;
+      }
+      mappedField.field &#x3D; null;
+      if (!mappedField.parsedData.userCreated) {
+        mappedField.field &#x3D; doc.getField(mappedField.parsedData.parsedPath);
+      }
+      if (mappedField.field &#x3D;&#x3D; null) {
+        if (mappedField.parsedData.fieldIsConstant || mappedField.parsedData.fieldIsProperty) {
+          const constantField: Field &#x3D; new Field();
+          constantField.value &#x3D; mappedField.parsedData.parsedValue;
+          constantField.type &#x3D; mappedField.parsedData.parsedValueType;
+          constantField.displayName &#x3D; constantField.value;
+          constantField.name &#x3D; constantField.value;
+          constantField.path &#x3D; constantField.value;
+          constantField.userCreated &#x3D; true;
+          mappedField.field &#x3D; constantField;
+          doc.addField(constantField);
+        } else if (mappedField.parsedData.userCreated || mappedField.parsedData.parsedPath) {
+          const path: string &#x3D; mappedField.parsedData.parsedPath;
+
+          mappedField.field &#x3D; new Field();
+          mappedField.field.serviceObject.jsonType &#x3D; &#x27;io.atlasmap.xml.v2.XmlField&#x27;;
+          mappedField.field.path &#x3D; path;
+          mappedField.field.type &#x3D; mappedField.parsedData.parsedValueType;
+          mappedField.field.userCreated &#x3D; true;
+
+          const lastSeparator: number &#x3D; path.lastIndexOf(&#x27;/&#x27;);
+
+          const parentPath: string &#x3D; (lastSeparator &gt; 0) ? path.substring(0, lastSeparator) : null;
+          let fieldName: string &#x3D; (lastSeparator &#x3D;&#x3D;&#x3D; -1) ? path : path.substring(lastSeparator + 1);
+          let namespaceAlias: string &#x3D; null;
+          if (fieldName.indexOf(&#x27;:&#x27;) !&#x3D;&#x3D; -1) {
+            namespaceAlias &#x3D; fieldName.split(&#x27;:&#x27;)[0];
+            fieldName &#x3D; fieldName.split(&#x27;:&#x27;)[1];
+          }
+
+          mappedField.field.name &#x3D; fieldName;
+          mappedField.field.displayName &#x3D; fieldName;
+          mappedField.field.isAttribute &#x3D; (fieldName.indexOf(&#x27;@&#x27;) !&#x3D;&#x3D; -1);
+          mappedField.field.namespaceAlias &#x3D; namespaceAlias;
+
+          if (parentPath !&#x3D; null) {
+            mappedField.field.parentField &#x3D; doc.getField(parentPath);
+          }
+
+          doc.addField(mappedField.field);
+        } else {
+          cfg.errorService.error(&#x27;Could not find field from document for mapped field \&#x27;&#x27; + mappedField.parsedData.parsedName + &#x27;\&#x27;&#x27;,
+            { &#x27;mappedField&#x27;: mappedField, &#x27;doc&#x27;: doc });
+          return;
+        }
+      }
+
+      // Process field actions.
+      mappedField.actions &#x3D; [];
+      if (mappedField.parsedData.parsedActions.length &gt; 0) {
+
+        for (const action of mappedField.parsedData.parsedActions) {
+          let actionDefinition &#x3D; null;
+          if (action.name &#x3D;&#x3D;&#x3D; &#x27;CustomAction&#x27;) {
+            actionDefinition &#x3D; cfg.fieldActionService.getActionDefinitionForName(action.argumentValues[0].value, Multiplicity.ONE_TO_ONE);
+          } else {
+            actionDefinition &#x3D; cfg.fieldActionService.getActionDefinitionForName(action.name, Multiplicity.ONE_TO_ONE);
+          }
+          if (actionDefinition &#x3D;&#x3D; null) {
+            cfg.errorService.error(&#x27;Could not find field action definition for action \&#x27;&#x27; + action.name + &#x27;\&#x27;&#x27;, null);
+            continue;
+          }
+          actionDefinition.populateFieldAction(action);
+          mappedField.actions.push(action);
+        }
+      }
+
+      const zeroBasedIndex &#x3D; +mappedField.parsedData.parsedIndex;
+      mappedFields &#x3D; mapping.getMappedFields(isSource);
+      if (zeroBasedIndex &lt;&#x3D; mappedFieldIndex) {
+        mappedFields[zeroBasedIndex] &#x3D; mappedField;
+      } else {
+        cfg.mappingService.addPlaceholders(zeroBasedIndex - mappedFieldIndex, mapping, mappedFieldIndex, isSource);
+      }
+    }
+  }
+
+  /**
+   * Check all mappings in the current context and remove if it refers to un-existing fields.
+   *
+   * @param cfg ConfigModel
+   */
+  static removeStaleMappings(cfg: ConfigModel): void {
+    let index &#x3D; 0;
+    let sourceFieldPaths: string[] &#x3D; [];
+    for (const doc of cfg.getDocs(true)) {
+      sourceFieldPaths &#x3D; sourceFieldPaths.concat(Field.getFieldPaths(doc.getAllFields()));
+    }
+    let targetSourcePaths: string[] &#x3D; [];
+    for (const doc of cfg.getDocs(false)) {
+      targetSourcePaths &#x3D; targetSourcePaths.concat(Field.getFieldPaths(doc.getAllFields()));
+    }
+    while (index &lt; cfg.mappings.mappings.length) {
+      const mapping: MappingModel &#x3D; cfg.mappings.mappings[index];
+      const mappingIsStale: boolean &#x3D; this.isMappingStale(mapping, sourceFieldPaths, targetSourcePaths);
+      if (mappingIsStale) {
+        cfg.mappings.mappings.splice(index, 1);
+      } else {
+        index++;
+      }
+    }
+  }
+
+  private static isMappingStale(mapping: MappingModel, sourceFieldPaths: string[], targetSourcePaths: string[]): boolean {
+
+    for (const field of mapping.getFields(true)) {
+      if (!(field instanceof PaddingField) &amp;&amp; sourceFieldPaths.indexOf(field.path) &#x3D;&#x3D;&#x3D; -1) {
+        return true;
+      }
+    }
+    for (const field of mapping.getFields(false)) {
+      if (!(field instanceof PaddingField) &amp;&amp; targetSourcePaths.indexOf(field.path) &#x3D;&#x3D;&#x3D; -1) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  static updateDocumentNamespacesFromMappings(cfg: ConfigModel): void {
+    const docs: DocumentDefinition[] &#x3D; cfg.getDocs(false);
+
+    for (const parsedDoc of cfg.mappings.parsedDocs) {
+      if (!parsedDoc) {
+        continue;
+      }
+      if (parsedDoc.isSource) {
+        continue;
+      }
+      if (parsedDoc.namespaces.length &#x3D;&#x3D;&#x3D; 0) {
+        continue;
+      }
+
+      const doc &#x3D; this.getDocById(parsedDoc.id, docs);
+      if (doc &#x3D;&#x3D; null) {
+        cfg.errorService.error(&#x27;Could not find document with identifier \&#x27;&#x27; + parsedDoc.id
+          + &#x27;\&#x27; for namespace override.&#x27;,
+          { &#x27;identifier&#x27;: parsedDoc.id, &#x27;parsedDoc&#x27;: parsedDoc, &#x27;docs&#x27;: docs });
+        continue;
+      }
+
+      doc.namespaces &#x3D; [].concat(parsedDoc.namespaces);
+    }
+  }
+
+  private static getDocById(documentId: string, docs: DocumentDefinition[]): DocumentDefinition {
+    if (documentId &#x3D;&#x3D; null || docs &#x3D;&#x3D; null || !docs.length) {
+      return null;
+    }
+    for (const doc of docs) {
+      if (doc.id &#x3D;&#x3D;&#x3D; documentId) {
+        return doc;
+      }
+    }
+    return null;
+
+  }
+
+}
+</code></pre>
+    </div>
+</div>
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'class';
+            var COMPODOC_CURRENT_PAGE_URL = 'MappingUtil.html';
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

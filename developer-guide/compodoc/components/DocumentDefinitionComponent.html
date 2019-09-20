@@ -3162,7 +3162,7 @@ export class DocumentDefinitionComponent implements OnInit {
    */
   private async removeDocumentRef(docDef: DocumentDefinition): Promise&lt;boolean&gt; {
     return new Promise&lt;boolean&gt;( async(resolve, reject) &#x3D;&gt; {
-      this.cfg.mappings.removeDocumentReferenceFromAllMappings(docDef.id, this.cfg);
+      this.cfg.mappingService.removeDocumentReferenceFromAllMappings(docDef.id);
       if (docDef.isSource) {
         DataMapperUtil.removeItemFromArray(docDef, this.cfg.sourceDocs);
       } else {

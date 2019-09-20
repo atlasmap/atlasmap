@@ -2553,19 +2553,6 @@ export class DocumentDefinition {
   characterEncoding: string &#x3D; null;
   locale: string &#x3D; null;
 
-  static getDocumentByIdentifier(documentId: string, docs: DocumentDefinition[]): DocumentDefinition {
-    if (documentId &#x3D;&#x3D; null || docs &#x3D;&#x3D; null || !docs.length) {
-      return null;
-    }
-    for (const doc of docs) {
-      if (doc.id &#x3D;&#x3D;&#x3D; documentId) {
-        return doc;
-      }
-    }
-    return null;
-
-  }
-
   set type(type: DocumentType) {
     this._type &#x3D; type;
     this.isPropertyOrConstant &#x3D; type &#x3D;&#x3D;&#x3D; DocumentType.CONSTANT || type &#x3D;&#x3D;&#x3D; DocumentType.PROPERTY;

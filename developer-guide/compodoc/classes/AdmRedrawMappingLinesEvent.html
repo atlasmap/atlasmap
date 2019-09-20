@@ -128,7 +128,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="319" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/config.model.ts:319</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="333" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/config.model.ts:333</a></div>
                             </td>
                         </tr>
 
@@ -362,6 +362,20 @@ export class ConfigModel {
   getDocs(isSource: boolean): DocumentDefinition[] {
     const docs: DocumentDefinition[] &#x3D; this.getDocsWithoutPropertyDoc(isSource);
     return isSource ? [this.propertyDoc, this.constantDoc].concat(docs) : docs;
+  }
+
+  /**
+   * Return a uri:DocumentDefinition document map for either the sources or targets panel contents.
+   *
+   * @param cfg
+   * @param isSource
+   */
+  getDocUriMap(cfg: ConfigModel, isSource: boolean): {[key: string]: DocumentDefinition} {
+    const docMap: {[key: string]: DocumentDefinition} &#x3D; {};
+    for (const doc of cfg.getDocs(isSource)) {
+      docMap[doc.uri] &#x3D; doc;
+    }
+    return docMap;
   }
 
   /**

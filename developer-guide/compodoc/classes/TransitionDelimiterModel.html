@@ -115,7 +115,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/transition.model.ts:29</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/transition.model.ts:36</a></div>
                             </td>
                         </tr>
 
@@ -218,7 +218,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/transition.model.ts:29</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/transition.model.ts:36</a></div>
                             </td>
                         </tr>
 
@@ -250,7 +250,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/transition.model.ts:26</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/transition.model.ts:33</a></div>
                             </td>
                         </tr>
 
@@ -282,7 +282,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/transition.model.ts:28</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/transition.model.ts:35</a></div>
                             </td>
                         </tr>
 
@@ -314,7 +314,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/transition.model.ts:27</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/transition.model.ts:34</a></div>
                             </td>
                         </tr>
 
@@ -336,7 +336,14 @@
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { ExpressionModel } from &#x27;./expression.model&#x27;;
 import { FieldAction } from &#x27;./field-action.model&#x27;;
 
-export enum TransitionMode { ONE_TO_ONE, ONE_TO_MANY, ENUM, MANY_TO_ONE, FOR_EACH }
+export enum TransitionMode {
+  ONE_TO_ONE &#x3D; &#x27;ONE_TO_ONE&#x27;,
+  ONE_TO_MANY &#x3D; &#x27;ONE_TO_MANY&#x27;,
+  ENUM &#x3D; &#x27;ENUM&#x27;,
+  MANY_TO_ONE &#x3D; &#x27;MANY_TO_ONE&#x27;,
+  FOR_EACH &#x3D; &#x27;FOR_EACH&#x27;
+}
+
 export enum TransitionDelimiter {
   NONE, AMPERSAND, AT_SIGN, BACKSLASH, COLON, COMMA, DASH, EQUAL, HASH,
   MULTI_SPACE, PERIOD, PIPE, SEMICOLON, SLASH, SPACE, UNDERSCORE, USER_DEFINED

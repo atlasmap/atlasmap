@@ -60,13 +60,13 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <a href="modules/DataMapperModule.html" data-type="entity-link">DataMapperModule</a>
                                     <li class="chapter inner">
                                         <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                            'data-target="#components-links-module-DataMapperModule-d0c39ee1f8bf9ac479909f8bb32993b2"' : 'data-target="#xs-components-links-module-DataMapperModule-d0c39ee1f8bf9ac479909f8bb32993b2"' }>
+                                            'data-target="#components-links-module-DataMapperModule-86f8a2613bd60153f8df534121676335"' : 'data-target="#xs-components-links-module-DataMapperModule-86f8a2613bd60153f8df534121676335"' }>
                                             <span class="icon ion-md-cog"></span>
                                             <span>Components</span>
                                             <span class="icon ion-ios-arrow-down"></span>
                                         </div>
-                                        <ul class="links collapse" ${ isNormalMode ? 'id="components-links-module-DataMapperModule-d0c39ee1f8bf9ac479909f8bb32993b2"' :
-                                            'id="xs-components-links-module-DataMapperModule-d0c39ee1f8bf9ac479909f8bb32993b2"' }>
+                                        <ul class="links collapse" ${ isNormalMode ? 'id="components-links-module-DataMapperModule-86f8a2613bd60153f8df534121676335"' :
+                                            'id="xs-components-links-module-DataMapperModule-86f8a2613bd60153f8df534121676335"' }>
                                             <li class="link">
                                                 <a href="components/ClassNameComponent.html"
                                                     data-type="entity-link" data-context="sub-entity" data-context-id="modules">ClassNameComponent</a>
@@ -191,13 +191,13 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                     </li>
                                 <li class="chapter inner">
                                     <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                        'data-target="#directives-links-module-DataMapperModule-d0c39ee1f8bf9ac479909f8bb32993b2"' : 'data-target="#xs-directives-links-module-DataMapperModule-d0c39ee1f8bf9ac479909f8bb32993b2"' }>
+                                        'data-target="#directives-links-module-DataMapperModule-86f8a2613bd60153f8df534121676335"' : 'data-target="#xs-directives-links-module-DataMapperModule-86f8a2613bd60153f8df534121676335"' }>
                                         <span class="icon ion-md-code-working"></span>
                                         <span>Directives</span>
                                         <span class="icon ion-ios-arrow-down"></span>
                                     </div>
-                                    <ul class="links collapse" ${ isNormalMode ? 'id="directives-links-module-DataMapperModule-d0c39ee1f8bf9ac479909f8bb32993b2"' :
-                                        'id="xs-directives-links-module-DataMapperModule-d0c39ee1f8bf9ac479909f8bb32993b2"' }>
+                                    <ul class="links collapse" ${ isNormalMode ? 'id="directives-links-module-DataMapperModule-86f8a2613bd60153f8df534121676335"' :
+                                        'id="xs-directives-links-module-DataMapperModule-86f8a2613bd60153f8df534121676335"' }>
                                         <li class="link">
                                             <a href="directives/FocusDirective.html"
                                                 data-type="entity-link" data-context="sub-entity" data-context-id="modules">FocusDirective</a>
@@ -206,13 +206,13 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 </li>
                                 <li class="chapter inner">
                                     <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                        'data-target="#injectables-links-module-DataMapperModule-d0c39ee1f8bf9ac479909f8bb32993b2"' : 'data-target="#xs-injectables-links-module-DataMapperModule-d0c39ee1f8bf9ac479909f8bb32993b2"' }>
+                                        'data-target="#injectables-links-module-DataMapperModule-86f8a2613bd60153f8df534121676335"' : 'data-target="#xs-injectables-links-module-DataMapperModule-86f8a2613bd60153f8df534121676335"' }>
                                         <span class="icon ion-md-arrow-round-down"></span>
                                         <span>Injectables</span>
                                         <span class="icon ion-ios-arrow-down"></span>
                                     </div>
-                                    <ul class="links collapse" ${ isNormalMode ? 'id="injectables-links-module-DataMapperModule-d0c39ee1f8bf9ac479909f8bb32993b2"' :
-                                        'id="xs-injectables-links-module-DataMapperModule-d0c39ee1f8bf9ac479909f8bb32993b2"' }>
+                                    <ul class="links collapse" ${ isNormalMode ? 'id="injectables-links-module-DataMapperModule-86f8a2613bd60153f8df534121676335"' :
+                                        'id="xs-injectables-links-module-DataMapperModule-86f8a2613bd60153f8df534121676335"' }>
                                         <li class="link">
                                             <a href="injectables/DocumentManagementService.html"
                                                 data-type="entity-link" data-context="sub-entity" data-context-id="modules" }>DocumentManagementService</a>
@@ -241,13 +241,13 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 </li>
                                     <li class="chapter inner">
                                         <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                            'data-target="#pipes-links-module-DataMapperModule-d0c39ee1f8bf9ac479909f8bb32993b2"' : 'data-target="#xs-pipes-links-module-DataMapperModule-d0c39ee1f8bf9ac479909f8bb32993b2"' }>
+                                            'data-target="#pipes-links-module-DataMapperModule-86f8a2613bd60153f8df534121676335"' : 'data-target="#xs-pipes-links-module-DataMapperModule-86f8a2613bd60153f8df534121676335"' }>
                                             <span class="icon ion-md-add"></span>
                                             <span>Pipes</span>
                                             <span class="icon ion-ios-arrow-down"></span>
                                         </div>
-                                        <ul class="links collapse" ${ isNormalMode ? 'id="pipes-links-module-DataMapperModule-d0c39ee1f8bf9ac479909f8bb32993b2"' :
-                                            'id="xs-pipes-links-module-DataMapperModule-d0c39ee1f8bf9ac479909f8bb32993b2"' }>
+                                        <ul class="links collapse" ${ isNormalMode ? 'id="pipes-links-module-DataMapperModule-86f8a2613bd60153f8df534121676335"' :
+                                            'id="xs-pipes-links-module-DataMapperModule-86f8a2613bd60153f8df534121676335"' }>
                                             <li class="link">
                                                 <a href="pipes/ToErrorIconClassPipe.html"
                                                     data-type="entity-link" data-context="sub-entity" data-context-id="modules">ToErrorIconClassPipe</a>
@@ -354,6 +354,9 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <a href="classes/LookupTableEntry.html" data-type="entity-link">LookupTableEntry</a>
                             </li>
                             <li class="link">
+                                <a href="classes/LookupTableUtil.html" data-type="entity-link">LookupTableUtil</a>
+                            </li>
+                            <li class="link">
                                 <a href="classes/MappedField.html" data-type="entity-link">MappedField</a>
                             </li>
                             <li class="link">
@@ -367,6 +370,9 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                             </li>
                             <li class="link">
                                 <a href="classes/MappingSerializer.html" data-type="entity-link">MappingSerializer</a>
+                            </li>
+                            <li class="link">
+                                <a href="classes/MappingUtil.html" data-type="entity-link">MappingUtil</a>
                             </li>
                             <li class="link">
                                 <a href="classes/NamespaceModel.html" data-type="entity-link">NamespaceModel</a>

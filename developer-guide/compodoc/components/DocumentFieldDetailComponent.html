@@ -1778,7 +1778,7 @@ export class DocumentFieldDetailComponent {
     }
     this.modalWindow.message &#x3D; &#x27;Are you sure you want to remove \&#x27;&#x27; + this.field.displayName + &#x27;\&#x27;?&#x27;;
     this.modalWindow.okButtonHandler &#x3D; (mw: ModalWindowComponent) &#x3D;&gt; {
-      self.cfg.mappings.removeFieldFromAllMappings(self.field);
+      self.cfg.mappingService.removeFieldFromAllMappings(self.field);
       self.field.docDef.removeField(self.field);
       self.cfg.mappingService.notifyMappingUpdated();
     };
