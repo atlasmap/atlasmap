@@ -355,7 +355,7 @@ export class DocumentDefinitionComponent implements OnInit {
    */
   private async removeDocumentRef(docDef: DocumentDefinition): Promise<boolean> {
     return new Promise<boolean>( async(resolve, reject) => {
-      this.cfg.mappings.removeDocumentReferenceFromAllMappings(docDef.id, this.cfg);
+      this.cfg.mappingService.removeDocumentReferenceFromAllMappings(docDef.id);
       if (docDef.isSource) {
         DataMapperUtil.removeItemFromArray(docDef, this.cfg.sourceDocs);
       } else {

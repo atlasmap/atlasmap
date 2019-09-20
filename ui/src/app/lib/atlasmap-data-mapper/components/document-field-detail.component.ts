@@ -270,7 +270,7 @@ export class DocumentFieldDetailComponent {
     }
     this.modalWindow.message = 'Are you sure you want to remove \'' + this.field.displayName + '\'?';
     this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
-      self.cfg.mappings.removeFieldFromAllMappings(self.field);
+      self.cfg.mappingService.removeFieldFromAllMappings(self.field);
       self.field.docDef.removeField(self.field);
       self.cfg.mappingService.notifyMappingUpdated();
     };

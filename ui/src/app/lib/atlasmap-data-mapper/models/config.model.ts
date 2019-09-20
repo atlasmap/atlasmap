@@ -232,6 +232,20 @@ export class ConfigModel {
   }
 
   /**
+   * Return a uri:DocumentDefinition document map for either the sources or targets panel contents.
+   *
+   * @param cfg
+   * @param isSource
+   */
+  getDocUriMap(cfg: ConfigModel, isSource: boolean): {[key: string]: DocumentDefinition} {
+    const docMap: {[key: string]: DocumentDefinition} = {};
+    for (const doc of cfg.getDocs(isSource)) {
+      docMap[doc.uri] = doc;
+    }
+    return docMap;
+  }
+
+  /**
    * Clear source/target/mapping documents from the model.  Reset constant and property document definitions.
    */
   clearDocs(): void {

@@ -23,6 +23,7 @@ import { ModalWindowComponent } from '../modal-window.component';
 import { LookupTableComponent } from './lookup-table.component';
 import { FieldAction, FieldActionDefinition, Multiplicity } from '../../models/field-action.model';
 import { DataMapperUtil } from '../../common/data-mapper-util';
+import { LookupTable } from '../../models/lookup-table.model';
 
 @Component({
   selector: 'transition-selection',
@@ -98,6 +99,18 @@ export class TransitionSelectionComponent implements OnInit {
 
   modeIsEnum(): boolean {
     return this.mapping.transition.isEnumerationMode();
+  }
+
+getMappedValueCount(): number {
+    const tableName: string = this.mapping.transition.lookupTableName;
+    if (tableName == null) {
+      return 0;
+    }
+    const table: LookupTable = this.cfg.mappings.getTableByName(tableName);
+    if (!table || !table.entries) {
+      return 0;
+    }
+    return table.entries.length;
   }
 
   showLookupTable(): void {

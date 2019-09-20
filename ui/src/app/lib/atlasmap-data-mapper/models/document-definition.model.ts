@@ -109,19 +109,6 @@ export class DocumentDefinition {
   characterEncoding: string = null;
   locale: string = null;
 
-  static getDocumentByIdentifier(documentId: string, docs: DocumentDefinition[]): DocumentDefinition {
-    if (documentId == null || docs == null || !docs.length) {
-      return null;
-    }
-    for (const doc of docs) {
-      if (doc.id === documentId) {
-        return doc;
-      }
-    }
-    return null;
-
-  }
-
   set type(type: DocumentType) {
     this._type = type;
     this.isPropertyOrConstant = type === DocumentType.CONSTANT || type === DocumentType.PROPERTY;
