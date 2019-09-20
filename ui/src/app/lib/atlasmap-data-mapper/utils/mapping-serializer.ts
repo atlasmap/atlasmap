@@ -25,6 +25,7 @@ import { DocumentType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
 import { ExpressionModel } from '../models/expression.model';
+import { MappingUtil } from './mapping-util';
 
 export class MappingSerializer {
 
@@ -131,7 +132,7 @@ export class MappingSerializer {
     mapping.sourceFields = [];
     mapping.targetFields = [];
     mapping.transition.mode = TransitionMode.ONE_TO_ONE;
-    const isLookupMapping = (mappingJson.mappingType === 'LOOKUP');
+    const isLookupMapping = (mappingJson.mappingType === 'LOOKUP') || mappingJson.lookupTableName != null;
 
     if (mappingJson.mappingType && mappingJson.mappingType !== '') {
       this.deserializeFieldMappingFromType(mapping, mappingJson, docRefs, cfg, ignoreValue);
@@ -147,7 +148,7 @@ export class MappingSerializer {
       for (const field of inputField) {
         MappingSerializer.addFieldIfDoesntExist(mapping, field, true, docRefs, cfg, ignoreValue);
       }
-      cfg.mappings.updateMappedFieldsFromDocuments(mapping, cfg, null, true);
+      MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, null, true);
 
       // Check for an InputFieldGroup containing a many-to-one action
       const firstAction = mappingJson.inputFieldGroup.actions[0];
@@ -172,7 +173,7 @@ export class MappingSerializer {
       }
 
       if (cfg.mappings) {
-        cfg.mappings.updateMappedFieldsFromDocuments(mapping, cfg, null, true);
+        MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, null, true);
       }
     }
 
@@ -541,6 +542,7 @@ export class MappingSerializer {
     for (const field of fieldMapping.outputField) {
        MappingSerializer.addFieldIfDoesntExist(mapping, field, false, docRefs, cfg, ignoreValue);
     }
+    MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, null, true);
   }
 
   private static deserializeConstants(jsonMapping: any): Field[] {

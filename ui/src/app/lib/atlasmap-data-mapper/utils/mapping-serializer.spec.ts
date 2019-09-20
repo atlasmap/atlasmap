@@ -1,15 +1,16 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, inject } from '@angular/core/testing';
-import { MappingSerializer } from './mapping-serializer.service';
+import { MappingSerializer } from './mapping-serializer';
 import { ConfigModel } from '../models/config.model';
-import { ErrorHandlerService } from './error-handler.service';
+import { ErrorHandlerService } from '../services/error-handler.service';
 import { DocumentType } from '../common/config.types';
 import { DocumentDefinition } from '../models/document-definition.model';
 import { Field } from '../models/field.model';
 import { LoggerModule, NgxLoggerLevel, NGXLogger } from 'ngx-logger';
-import { MappingManagementService } from './mapping-management.service';
-import { FieldActionService } from './field-action.service';
+import { MappingManagementService } from '../services/mapping-management.service';
+import { FieldActionService } from '../services/field-action.service';
+import { MappingUtil } from './mapping-util';
 
 describe('MappingSerializer', () => {
   let cfg: ConfigModel;
@@ -176,7 +177,7 @@ describe('MappingSerializer', () => {
       fieldActionService.cfg.preloadedFieldActionMetadata = JSON.parse(jasmine.getFixtures().read('atlasmap-field-action.json'));
       fieldActionService.fetchFieldActions();
       MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
-      cfg.mappings.updateMappingsFromDocuments(cfg);
+      MappingUtil.updateMappingsFromDocuments(cfg);
       expect(cfg.mappings.mappings.length).toEqual(Object.keys(mappingJson.AtlasMapping.mappings.mapping).length);
 
       const serialized = MappingSerializer.serializeMappings(cfg);

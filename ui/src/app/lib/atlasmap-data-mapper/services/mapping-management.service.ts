@@ -29,9 +29,10 @@ import { MappingDefinition } from '../models/mapping-definition.model';
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
 import { FieldAction, Multiplicity } from '../models/field-action.model';
 
-import { MappingSerializer } from './mapping-serializer.service';
+import { MappingSerializer } from '../utils/mapping-serializer';
 import { DataMapperUtil } from '../common/data-mapper-util';
 import { PaddingField } from '../models/document-definition.model';
+import { LookupTableUtil } from '../utils/lookup-table-util';
 
 /**
  * Handles mapping updates. It restores mapping status from backend and reflect in UI,
@@ -406,7 +407,6 @@ export class MappingManagementService {
     }
     this.cfg.mappings.activeMapping = mappingModel;
     this.cfg.showMappingDetailTray = true;
-    this.cfg.mappings.initializeMappingLookupTable(mappingModel);
     this.mappingUpdatedSource.next();
   }
 
@@ -510,6 +510,38 @@ export class MappingManagementService {
   }
 
   /**
+   * Remove any mappings referencing the specified document ID.
+   *
+   * @param docId - Specified document ID
+   * @param cfg
+   */
+  removeDocumentReferenceFromAllMappings(docId: string) {
+    for (const mapping of this.cfg.mappings.getAllMappings(true)) {
+      for (const mappedField of mapping.getAllFields()) {
+        if (!(mappedField instanceof PaddingField) && (mappedField.docDef.id === docId)) {
+          this.removeFieldFromAllMappings(mappedField);
+          this.cfg.mappings.removeMapping(mapping);
+          if (mapping === this.cfg.mappings.activeMapping) {
+            this.cfg.mappingService.deselectMapping();
+          }
+        }
+      }
+    }
+  }
+
+  removeFieldFromAllMappings(field: Field): void {
+    for (const mapping of this.cfg.mappings.getAllMappings(true)) {
+      const mappedField: MappedField = mapping.getMappedFieldForField(field);
+      if (mappedField != null) {
+        mapping.removeMappedField(mappedField);
+        if (mapping.isEmpty()) {
+          this.cfg.mappings.removeMapping(mapping);
+        }
+      }
+    }
+  }
+
+  /**
    * Invoke the runtime service to both validate and save the current active mapping.
    */
   private async validateMappings(): Promise<boolean> {
@@ -599,6 +631,7 @@ export class MappingManagementService {
     for (const field of mapping.getAllFields()) {
       if (field.enumeration) {
         mapping.transition.mode = TransitionMode.ENUM;
+        LookupTableUtil.populateMappingLookupTable(this.cfg.mappings, mapping);
         return;
       }
     }
@@ -645,7 +678,7 @@ export class MappingManagementService {
    * @param mappedFields
    * @param trailing - Remove trailing padding fields only
    */
-  clearExtraPaddingFields(mappedFields: MappedField[], trailing: boolean): void {
+  private clearExtraPaddingFields(mappedFields: MappedField[], trailing: boolean): void {
     let index = 0;
     let mField = null;
 

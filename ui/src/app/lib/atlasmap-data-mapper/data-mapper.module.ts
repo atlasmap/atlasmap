@@ -68,7 +68,7 @@ export { MappingDefinition } from './models/mapping-definition.model';
 export { DocumentType, InspectionType } from './common/config.types';
 export { ConfigModel, DocumentInitializationModel } from './models/config.model';
 export { MappingModel } from './models/mapping.model';
-export { MappingSerializer } from './services/mapping-serializer.service';
+export { MappingSerializer } from './utils/mapping-serializer';
 
 import { ToErrorIconClassPipe } from './common/to-error-icon-class.pipe';
 import { ApiXsrfInterceptor, ApiHttpXsrfTokenExtractor } from './services/api-xsrf.service';

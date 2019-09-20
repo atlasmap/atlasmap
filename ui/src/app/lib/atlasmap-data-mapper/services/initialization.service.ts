@@ -27,10 +27,11 @@ import { MappingDefinition } from '../models/mapping-definition.model';
 import { ErrorHandlerService } from './error-handler.service';
 import { DocumentManagementService } from '../services/document-management.service';
 import { MappingManagementService } from '../services/mapping-management.service';
-
 import { FieldActionService } from './field-action.service';
 import { FileManagementService } from './file-management.service';
-import { MappingSerializer } from './mapping-serializer.service';
+import { LookupTableUtil } from '../utils/lookup-table-util';
+import { MappingSerializer } from '../utils/mapping-serializer';
+import { MappingUtil } from '../utils/mapping-util';
 
 @Injectable()
 export class InitializationService {
@@ -514,13 +515,13 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
 
     if ((documentCount === finishedDocCount) && this.cfg.fieldActionService.isInitialized) {
       if (this.cfg.mappings) {
-        this.cfg.mappings.detectTableIdentifiers();
-        this.cfg.mappings.updateDocumentNamespacesFromMappings(this.cfg);
-        this.cfg.mappings.updateMappingsFromDocuments(this.cfg);
+        LookupTableUtil.updateLookupTables(this.cfg.mappings);
+        MappingUtil.updateDocumentNamespacesFromMappings(this.cfg);
+        MappingUtil.updateMappingsFromDocuments(this.cfg);
         for (const d of this.cfg.getAllDocs()) {
           d.updateFromMappings(this.cfg.mappings);
         }
-        this.cfg.mappings.removeStaleMappings(this.cfg);
+        MappingUtil.removeStaleMappings(this.cfg);
       }
       this.updateLoadingStatus('Initialization complete.');
       this.cfg.initCfg.initialized = true;

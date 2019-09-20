@@ -16,7 +16,14 @@
 import { ExpressionModel } from './expression.model';
 import { FieldAction } from './field-action.model';
 
-export enum TransitionMode { ONE_TO_ONE, ONE_TO_MANY, ENUM, MANY_TO_ONE, FOR_EACH }
+export enum TransitionMode {
+  ONE_TO_ONE = 'ONE_TO_ONE',
+  ONE_TO_MANY = 'ONE_TO_MANY',
+  ENUM = 'ENUM',
+  MANY_TO_ONE = 'MANY_TO_ONE',
+  FOR_EACH = 'FOR_EACH'
+}
+
 export enum TransitionDelimiter {
   NONE, AMPERSAND, AT_SIGN, BACKSLASH, COLON, COMMA, DASH, EQUAL, HASH,
   MULTI_SPACE, PERIOD, PIPE, SEMICOLON, SLASH, SPACE, UNDERSCORE, USER_DEFINED

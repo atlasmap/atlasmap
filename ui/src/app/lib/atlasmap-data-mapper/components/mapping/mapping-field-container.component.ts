@@ -22,6 +22,7 @@ import { MappingModel, MappedField } from '../../models/mapping.model';
 import { TransitionMode } from '../../models/transition.model';
 import { Observable } from 'rxjs';
 import { Field } from '../../models/field.model';
+import { ModalWindowComponent } from '../modal-window.component';
 
 @Component({
   selector: 'mapping-field-container',
@@ -32,6 +33,7 @@ export class MappingFieldContainerComponent implements OnInit {
   @Input() cfg: ConfigModel;
   @Input() isSource = false;
   @Input() mapping: MappingModel;
+  @Input() modalWindow: ModalWindowComponent;
 
   inputId: String;
 
