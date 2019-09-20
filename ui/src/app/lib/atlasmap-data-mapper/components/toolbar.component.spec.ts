@@ -57,12 +57,7 @@ describe('Test toolbar components', () => {
     targetXml.inspectionResult = jasmine.getFixtures().read('atlasmap-inspection-mock-xml-schema-1.json');
     c.addDocument(targetXml);
     spyOn(c.mappingService, 'runtimeServiceActive').and.returnValues(true);
-    return initService.initialize().then(() => {
-      expect(c.sourceDocs[0].fields[0].path).toEqual('/addressList<>');
-      expect(c.targetDocs[0].fields[0].path).toEqual('/data');
-    }).catch((error) => {
-      fail(error);
-    });
+    return initService.initialize();
   });
 
   it(
