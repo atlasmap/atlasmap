@@ -1,6 +1,7 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, inject } from '@angular/core/testing';
+import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
 import { MappingSerializer } from './mapping-serializer';
 import { ConfigModel } from '../models/config.model';
 import { ErrorHandlerService } from '../services/error-handler.service';
@@ -11,12 +12,17 @@ import { LoggerModule, NgxLoggerLevel, NGXLogger } from 'ngx-logger';
 import { MappingManagementService } from '../services/mapping-management.service';
 import { FieldActionService } from '../services/field-action.service';
 import { MappingUtil } from './mapping-util';
+import { MappingModel } from '../models/mapping.model';
+import { TransitionMode } from '../models/transition.model';
+import { FieldAction, Multiplicity } from '../models/field-action.model';
 
 describe('MappingSerializer', () => {
   let cfg: ConfigModel;
   beforeEach(() => {
+    TestBed.resetTestEnvironment();
+    TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
     TestBed.configureTestingModule({
-      imports: [ LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG}) ],
+      imports: [LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG })],
       providers: [
         ErrorHandlerService,
         FieldActionService,
@@ -25,7 +31,11 @@ describe('MappingSerializer', () => {
       ],
     });
     cfg = ConfigModel.getConfig();
-    jasmine.getFixtures().fixturesPath = 'base/test-resources/mapping';
+    cfg.errorService = TestBed.get(ErrorHandlerService);
+    cfg.errorService.cfg = cfg;
+    cfg.fieldActionService = TestBed.get(FieldActionService);
+    cfg.fieldActionService.cfg = cfg;
+    cfg.logger = TestBed.get(NGXLogger);
 
     const twitter = new DocumentDefinition();
     twitter.type = DocumentType.JAVA;
@@ -164,25 +174,47 @@ describe('MappingSerializer', () => {
     cfg.targetDocs.push(xmlTarget);
   });
 
-  it('should deserialize & serialize mapping definition',
-    inject(
-      [ErrorHandlerService, FieldActionService],
-      (errorService: ErrorHandlerService, fieldActionService: FieldActionService) => {
-      errorService.cfg = cfg;
-      cfg.errorService = errorService;
-      fieldActionService.cfg = cfg;
-      cfg.fieldActionService = fieldActionService;
-      const mappingJson = JSON.parse(jasmine.getFixtures().read('atlasmapping-test.json'));
+  it('should deserialize & serialize mapping definition', (done) => {
+    inject([], () => {
       jasmine.getFixtures().fixturesPath = 'base/test-resources/fieldActions';
-      fieldActionService.cfg.preloadedFieldActionMetadata = JSON.parse(jasmine.getFixtures().read('atlasmap-field-action.json'));
-      fieldActionService.fetchFieldActions();
-      MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
-      MappingUtil.updateMappingsFromDocuments(cfg);
-      expect(cfg.mappings.mappings.length).toEqual(Object.keys(mappingJson.AtlasMapping.mappings.mapping).length);
+      cfg.preloadedFieldActionMetadata = JSON.parse(jasmine.getFixtures().read('atlasmap-field-action.json'));
+      return cfg.fieldActionService.fetchFieldActions().then(() => {
+        jasmine.getFixtures().fixturesPath = 'base/test-resources/mapping';
+        const mappingJson = JSON.parse(jasmine.getFixtures().read('atlasmapping-test.json'));
+        MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
+        MappingUtil.updateMappingsFromDocuments(cfg);
+        expect(cfg.mappings.mappings.length).toEqual(Object.keys(mappingJson.AtlasMapping.mappings.mapping).length);
 
-      const serialized = MappingSerializer.serializeMappings(cfg);
-      // TODO constants, properties and field actions are not restored properly... need to investigate
-      console.log(JSON.stringify(serialized, null, 2));
-      expect(Object.keys(serialized.AtlasMapping.mappings.mapping).length).toEqual(cfg.mappings.mappings.length);
-    }));
+        const serialized = MappingSerializer.serializeMappings(cfg);
+        console.log(JSON.stringify(serialized, null, 2));
+        expect(Object.keys(serialized.AtlasMapping.mappings.mapping).length).toEqual(cfg.mappings.mappings.length);
+        done();
+      }).catch((error) => {
+        fail(error);
+        done();
+      });
+    })();
+  });
+
+  it('should serialize many-to-one action', (done) => {
+    inject([], () => {
+      return cfg.fieldActionService.fetchFieldActions().then(() => {
+        const mapping = new MappingModel();
+        mapping.transition.mode = TransitionMode.MANY_TO_ONE;
+        mapping.transition.transitionFieldAction =
+          FieldAction.create(cfg.fieldActionService.getActionDefinitionForName('Concatenate', Multiplicity.MANY_TO_ONE));
+        const f = new Field();
+        f.path = '/Text';
+        f.docDef = cfg.getDocForIdentifier('twitter4j.Status', true);
+        mapping.addField(f, true);
+        const json = MappingSerializer.serializeFieldMapping(cfg, mapping, 'm1', true);
+        expect(Object.keys(json.inputField[0].actions[0])[0]).toEqual('Concatenate');
+        done();
+      }).catch((error) => {
+        fail(error);
+        done();
+      });
+    })();
+  });
+
 });

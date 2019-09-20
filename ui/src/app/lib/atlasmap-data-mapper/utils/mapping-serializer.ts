@@ -79,6 +79,22 @@ export class MappingSerializer {
        'outputField': serializedOutputFields,
       };
     } else {
+      if (mapping.transition.isManyToOneMode() || mapping.transition.isOneToManyMode()) {
+        let mAction: any;
+        if (mapping.transition.enableExpression) {
+          mAction = {
+            'Expression' : {
+              'expression' : mapping.transition.expression.toText()
+            }
+          };
+        } else {
+          mAction = this.serializeAction(mapping.transition.transitionFieldAction, cfg);
+        }
+        if (!serializedInputFields[0].actions) {
+          serializedInputFields[0].actions = [];
+        }
+        serializedInputFields[0].actions.unshift(mAction);
+      }
       jsonMapping = {
         'jsonType': jsonMappingType,
         'id': id,
