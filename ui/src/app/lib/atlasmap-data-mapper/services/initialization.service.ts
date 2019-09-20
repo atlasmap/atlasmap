@@ -27,10 +27,10 @@ import { MappingDefinition } from '../models/mapping-definition.model';
 import { ErrorHandlerService } from './error-handler.service';
 import { DocumentManagementService } from '../services/document-management.service';
 import { MappingManagementService } from '../services/mapping-management.service';
-import { MappingSerializer } from '../services/mapping-serializer.service';
 
 import { FieldActionService } from './field-action.service';
 import { FileManagementService } from './file-management.service';
+import { MappingSerializer } from './mapping-serializer.service';
 
 @Injectable()
 export class InitializationService {
@@ -174,6 +174,7 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
 
       if (!this.cfg.fieldActionService) {
         this.handleError('FieldActionService is not configured', null);
+        reject();
         return;
       }
 
@@ -181,10 +182,12 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
       try {
         if (!await this.cfg.mappingService.runtimeServiceActive()) {
           this.handleError('The AtlasMap runtime service is not available.', null);
+          reject();
           return;
         }
       } catch (error) {
         this.handleError('The AtlasMap runtime service is not available.', null);
+        reject(error);
         return;
       }
 
@@ -223,6 +226,7 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
           await this.cfg.fieldActionService.fetchFieldActions()
           .catch((error: any) => {
             this.handleError('Failure to load field actions on initialization.', error);
+            reject(error);
             return;
           });
           this.updateStatus();
@@ -236,6 +240,7 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
         await this.cfg.fieldActionService.fetchFieldActions()
         .catch((error: any) => {
           this.handleError('Failure to load field actions on initialization.', error);
+          reject(error);
           return;
         });
 

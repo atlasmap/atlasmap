@@ -5867,10 +5867,10 @@ istanbul@0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-jasmine-core@~2.6.2:
-  version "2.6.4"
-  resolved "https://registry.yarnpkg.com/jasmine-core/-/jasmine-core-2.6.4.tgz#dec926cd0a9fa287fb6db5c755fa487e74cecac5"
-  integrity sha1-3skmzQqfoof7bbXHVfpIfnTOysU=
+jasmine-core@2.7:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/jasmine-core/-/jasmine-core-2.7.0.tgz#50ff8c4f92d8ef5c0b2c1b846dd263ed85152091"
+  integrity sha1-UP+MT5LY71wLLBuEbdJj7YUVIJE=
 
 jasmine-core@~2.99.0:
   version "2.99.1"
