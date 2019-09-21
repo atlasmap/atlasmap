@@ -1,5 +1,6 @@
 package io.atlasmap.core;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
@@ -8,8 +9,10 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.Set;
@@ -343,7 +346,43 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
             private Object convertSourceObject(Object sourceObject) throws AtlasConversionException {
                 Class<?> paramType;
                 paramType = method.getParameterTypes()[1];
-                if (paramType.isInstance(sourceObject)) {
+                if (sourceObject == null) {
+                    return null;
+                }
+                CollectionType sourceCollectionType = toFieldCollectionType(sourceObject.getClass()) ;
+                if (sourceCollectionType != CollectionType.NONE) {
+                    List<Object> sourceList;
+                    
+                    if (sourceCollectionType == CollectionType.ARRAY) {
+                        sourceList = Arrays.asList(sourceObject);
+                    } else if (sourceCollectionType == CollectionType.LIST) {
+                        sourceList = (List<Object>)sourceObject;
+                    } else if (sourceCollectionType == CollectionType.MAP) {
+                        sourceList = new ArrayList(((Map)sourceObject).values());
+                    } else {
+                        sourceList = new ArrayList((Collection)sourceObject);
+                    }
+                    
+                    if (paramType.isArray()) {
+                        paramType.getComponentType();
+                    }
+                    Type itemType = method.getGenericParameterTypes()[1];
+                    Class<?> itemClass = paramType.isArray() ? paramType.getComponentType()
+                            : (Class<?>)((ParameterizedType) itemType).getActualTypeArguments()[0];
+                    for (int i=0; i<sourceList.size(); i++) {
+                        
+                        Object item = sourceList.get(i);
+                        if (item != null) {
+                            item = conversionService.convertType(item, null, itemClass, null);
+                        }
+                        sourceList.set(i, item);
+                    }
+                    if (paramType.isArray()) {
+                        return sourceList.toArray();
+                    } else {
+                        return sourceList;
+                    }
+                } else if (paramType.isInstance(sourceObject)) {
                     return sourceObject;
                 }
                 return conversionService.convertType(sourceObject, null, paramType, null);

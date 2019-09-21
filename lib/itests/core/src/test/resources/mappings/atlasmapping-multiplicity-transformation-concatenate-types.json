@@ -1,0 +1,171 @@
+{
+  "AtlasMapping": {
+    "jsonType": "io.atlasmap.v2.AtlasMapping",
+    "dataSource": [
+      {
+        "jsonType": "io.atlasmap.v2.DataSource",
+        "id": "io.atlasmap.java.test.TargetTestClass",
+        "uri": "atlas:java?className=io.atlasmap.java.test..TargetTestClass",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType": "io.atlasmap.v2.DataSource",
+        "id": "io.atlasmap.java.test.TargetTestClass",
+        "uri": "atlas:java?className=io.atlasmap.java.test.TargetTestClass",
+        "dataSourceType": "TARGET"
+      }
+    ],
+    "mappings": {
+      "mapping": [
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "inputFieldGroup": {
+            "jsonType": "io.atlasmap.v2.FieldGroup",
+            "actions": [
+              {
+                "delimiter": " ",
+                "@type": "Concatenate"
+              }
+            ],
+            "field": [
+              {
+                "jsonType": "io.atlasmap.java.v2.JavaField",
+                "docId": "io.atlasmap.java.test.TargetTestClass",
+                "index": 0,
+                "path": "/primitives/boxedStringField",
+                "fieldType": "STRING",
+                "name": "boxedStringField"
+              },
+              {
+                "jsonType": "io.atlasmap.java.v2.JavaField",
+                "docId": "io.atlasmap.java.test.TargetTestClass",
+                "index": 1,
+                "path": "/primitives/charField",
+                "fieldType": "CHAR",
+                "name": "charField"
+              },
+              {
+                "jsonType": "io.atlasmap.java.v2.JavaField",
+                "docId": "io.atlasmap.java.test.TargetTestClass",
+                "index": 2,
+                "path": "/primitives/intField",
+                "fieldType": "INTEGER",
+                "name": "intFIeld"
+              },
+              {
+                "jsonType": "io.atlasmap.java.v2.JavaField",
+                "docId": "io.atlasmap.java.test.TargetTestClass",
+                "index": 3,
+                "path": "/primitives/floatField",
+                "fieldType": "FLOAT",
+                "name": "floatField"
+              },
+              {
+                "jsonType": "io.atlasmap.java.v2.JavaField",
+                "docId": "io.atlasmap.java.test.TargetTestClass",
+                "index": 4,
+                "path": "/primitives/longField",
+                "fieldType": "LONG",
+                "name": "longField"
+              },
+              {
+                "jsonType": "io.atlasmap.java.v2.JavaField",
+                "docId": "io.atlasmap.java.test.TargetTestClass",
+                "index": 5,
+                "path": "/primitives/shortField",
+                "fieldType": "SHORT",
+                "name": "shortField"
+              },
+              {
+                "jsonType": "io.atlasmap.java.v2.JavaField",
+                "docId": "io.atlasmap.java.test.TargetTestClass",
+                "index": 6,
+                "path": "/primitives/doubleField",
+                "fieldType": "DOUBLE",
+                "name": "doubleField"
+              },
+              {
+                "jsonType": "io.atlasmap.java.v2.JavaField",
+                "docId": "io.atlasmap.java.test.TargetTestClass",
+                "index": 7,
+                "path": "/created",
+                "fieldType": "DATE_TIME",
+                "name": "created",
+                "className": "java.util.Date"
+              },
+              {
+                "jsonType": "io.atlasmap.java.v2.JavaField",
+                "docId": "io.atlasmap.java.test.TargetTestClass",
+                "index": 8,
+                "path": "/primitives/boxedCharField",
+                "fieldType": "CHAR",
+                "name": "boxedCharField"
+              },
+              {
+                "jsonType": "io.atlasmap.java.v2.JavaField",
+                "docId": "io.atlasmap.java.test.TargetTestClass",
+                "index": 9,
+                "path": "/primitives/boxedIntField",
+                "fieldType": "INTEGER",
+                "name": "boxedIntFIeld"
+              },
+              {
+                "jsonType": "io.atlasmap.java.v2.JavaField",
+                "docId": "io.atlasmap.java.test.TargetTestClass",
+                "index": 10,
+                "path": "/primitives/boxedFloatField",
+                "fieldType": "FLOAT",
+                "name": "boxedFloatField"
+              },
+              {
+                "jsonType": "io.atlasmap.java.v2.JavaField",
+                "docId": "io.atlasmap.java.test.TargetTestClass",
+                "index": 11,
+                "path": "/primitives/boxedLongField",
+                "fieldType": "LONG",
+                "name": "boxedLongField"
+              },
+              {
+                "jsonType": "io.atlasmap.java.v2.JavaField",
+                "docId": "io.atlasmap.java.test.TargetTestClass",
+                "index": 12,
+                "path": "/primitives/boxedShortField",
+                "fieldType": "SHORT",
+                "name": "boxedShortField"
+              },
+              {
+                "jsonType": "io.atlasmap.java.v2.JavaField",
+                "docId": "io.atlasmap.java.test.TargetTestClass",
+                "index": 13,
+                "path": "/primitives/boxedDoubleField",
+                "fieldType": "DOUBLE",
+                "name": "boxedDoubleField"
+              }
+            ]
+          },
+          "inputField": [],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.java.v2.JavaField",
+              "docId": "io.atlasmap.java.test.TargetTestClass",
+              "path": "/fullAddress",
+              "fieldType": "STRING",
+              "name": "fullAddress"
+            }
+          ],
+          "id": "mapping.713730"
+        }
+      ]
+    },
+    "lookupTables": {
+      "lookupTable": []
+    },
+    "constants": {
+      "constant": []
+    },
+    "properties": {
+      "property": []
+    },
+    "name": "UI.895894"
+  }
+}
