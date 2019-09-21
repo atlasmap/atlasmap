@@ -32,6 +32,8 @@ import io.atlasmap.core.AtlasMappingService;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.itests.core.issue.SourceClass;
 import io.atlasmap.itests.core.issue.TargetClass;
+import io.atlasmap.java.test.TargetFlatPrimitiveClass;
+import io.atlasmap.java.test.TargetTestClass;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.AuditStatus;
 
@@ -87,6 +89,38 @@ public class MultiplicityTransformationTest {
         assertEquals(new Integer(4000), intList.get(3));
         assertEquals(Double.valueOf(128.965), target.getTargetWeightDouble());
         assertEquals("kg", target.getTargetWeightUnit());
+    }
+
+    @Test
+    public void testConcatenateTypes() throws Exception {
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-concatenate-types.json");
+        AtlasMapping mapping = mappingService.loadMapping(url);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasSession session = context.createSession();
+        TargetTestClass source = new TargetTestClass();
+        source.setCreated(new java.util.Date());
+        TargetFlatPrimitiveClass primitives = new TargetFlatPrimitiveClass();
+        primitives.setBoxedStringField("boxedString");
+        primitives.setCharField('c');
+        primitives.setIntField(1);
+        primitives.setFloatField(1.3f);
+        primitives.setLongField(2L);
+        primitives.setShortField((short)2);
+        primitives.setDoubleField(3.1d);
+        primitives.setBoxedCharField(new Character('c'));
+        primitives.setBoxedIntField(new Integer(1));
+        primitives.setBoxedFloatField(new Float(1.3f));
+        primitives.setBoxedLongField(new Long(2L));
+        primitives.setBoxedShortField(new Short((short)2));
+        primitives.setBoxedDoubleField(new Double(3.1d));
+        source.setPrimitives(primitives);
+        session.setSourceDocument("io.atlasmap.java.test.TargetTestClass", source);
+        context.process(session);
+        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        Object output = session.getTargetDocument("io.atlasmap.java.test.TargetTestClass");
+        assertEquals(TargetTestClass.class, output.getClass());
+        TargetTestClass target = TargetTestClass.class.cast(output);
+        assertEquals("[" + target.getFullAddress() + "]", 14, target.getFullAddress().split(" ").length);
     }
 
     @Test
@@ -148,4 +182,5 @@ public class MultiplicityTransformationTest {
         assertEquals("last name is not empty", target.getTargetName());
         assertEquals("false", target.getTargetFirstName());
     }
+
 }
