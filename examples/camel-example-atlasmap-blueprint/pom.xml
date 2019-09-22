@@ -21,7 +21,7 @@
   <parent>
     <groupId>io.atlasmap.examples</groupId>
     <artifactId>atlasmap-examples</artifactId>
-    <version>1.40.2</version>
+    <version>1.40.2.fuse-740038</version>
     <relativePath>..</relativePath>
   </parent>
   <artifactId>camel-example-atlasmap-blueprint</artifactId>
