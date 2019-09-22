@@ -20,7 +20,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.atlasmap</groupId>
   <artifactId>atlasmapio</artifactId>
-  <version>1.39.6</version>
+  <version>1.39.6.fuse-731017</version>
   <packaging>pom</packaging>
   <name>AtlasMap Project</name>
   <description>AtlasMap Project</description>
