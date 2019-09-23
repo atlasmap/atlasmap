@@ -15,6 +15,7 @@ import { MappingUtil } from './mapping-util';
 import { MappingModel } from '../models/mapping.model';
 import { TransitionMode } from '../models/transition.model';
 import { FieldAction, Multiplicity } from '../models/field-action.model';
+import { ExpressionModel } from '../models/expression.model';
 
 describe('MappingSerializer', () => {
   let cfg: ConfigModel;
@@ -208,7 +209,78 @@ describe('MappingSerializer', () => {
         f.docDef = cfg.getDocForIdentifier('twitter4j.Status', true);
         mapping.addField(f, true);
         const json = MappingSerializer.serializeFieldMapping(cfg, mapping, 'm1', true);
+        expect(json.inputField[0].actions.length).toEqual(1);
         expect(Object.keys(json.inputField[0].actions[0])[0]).toEqual('Concatenate');
+        const f2 = new Field();
+        f2.path = '/User/Name';
+        f2.docDef = f.docDef;
+        mapping.addField(f, true);
+        const json2 = MappingSerializer.serializeFieldMapping(cfg, mapping, 'm1', true);
+        expect(json2.inputField).toBeFalsy();
+        expect(json2.inputFieldGroup.field.length).toEqual(2);
+        expect(json2.inputFieldGroup.field[0].actions).toBeFalsy();
+        expect(json2.inputFieldGroup.actions.length).toEqual(1);
+        expect(Object.keys(json2.inputFieldGroup.actions[0])[0]).toEqual('Concatenate');
+        done();
+      }).catch((error) => {
+        fail(error);
+        done();
+      });
+    })();
+  });
+
+  it('should serialize one-to-many action', (done) => {
+    inject([], () => {
+      return cfg.fieldActionService.fetchFieldActions().then(() => {
+        const mapping = new MappingModel();
+        mapping.transition.mode = TransitionMode.ONE_TO_MANY;
+        mapping.transition.transitionFieldAction =
+          FieldAction.create(cfg.fieldActionService.getActionDefinitionForName('Split', Multiplicity.ONE_TO_MANY));
+          const f = new Field();
+          f.path = '/Text';
+          f.docDef = cfg.getDocForIdentifier('twitter4j.Status', true);
+          mapping.addField(f, true);
+          const json = MappingSerializer.serializeFieldMapping(cfg, mapping, 'm1', true);
+          expect(json.inputField[0].actions.length).toEqual(1);
+          expect(Object.keys(json.inputField[0].actions[0])[0]).toEqual('Split');
+          done();
+      }).catch((error) => {
+        fail(error);
+        done();
+      });
+    })();
+  });
+
+  it('should serialize expression action', (done) => {
+    inject([], () => {
+      return cfg.fieldActionService.fetchFieldActions().then(() => {
+        const mapping = new MappingModel();
+        mapping.transition.mode = TransitionMode.ONE_TO_ONE;
+        mapping.transition.enableExpression = true;
+        mapping.transition.expression = new ExpressionModel(mapping, cfg);
+        mapping.transition.expression.insertText('{0}');
+        const f = new Field();
+        f.path = '/Text';
+        f.docDef = cfg.getDocForIdentifier('twitter4j.Status', true);
+        mapping.addField(f, true);
+        const json = MappingSerializer.serializeFieldMapping(cfg, mapping, 'm1', true);
+        expect(json.inputField[0].actions.length).toEqual(1);
+        expect(Object.keys(json.inputField[0].actions[0])[0]).toEqual('Expression');
+        expect(json.inputField[0].actions[0].Expression.expression).toEqual('{0}');
+        const f2 = new Field();
+        f2.path = '/User/Name';
+        f2.docDef = f.docDef;
+        mapping.addField(f2, true);
+        mapping.transition.mode = TransitionMode.MANY_TO_ONE;
+        mapping.transition.expression = new ExpressionModel(mapping, cfg);
+        mapping.transition.expression.insertText('{0} + {1}');
+        const json2 = MappingSerializer.serializeFieldMapping(cfg, mapping, 'm1', true);
+        expect(json2.inputField).toBeFalsy();
+        expect(json2.inputFieldGroup.field.length).toEqual(2);
+        expect(json2.inputFieldGroup.field[0].actions).toBeFalsy();
+        expect(json2.inputFieldGroup.actions.length).toEqual(1);
+        expect(Object.keys(json2.inputFieldGroup.actions[0])[0]).toEqual('Expression');
+        expect(json2.inputFieldGroup.actions[0].Expression.expression).toEqual('{0} + {1}');
         done();
       }).catch((error) => {
         fail(error);
