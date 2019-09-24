@@ -79,17 +79,17 @@ export class MappingSerializer {
        'outputField': serializedOutputFields,
       };
     } else {
-      if (mapping.transition.isManyToOneMode() || mapping.transition.isOneToManyMode()) {
-        let mAction: any;
-        if (mapping.transition.enableExpression) {
-          mAction = {
-            'Expression' : {
-              'expression' : mapping.transition.expression.toText()
-            }
-          };
-        } else {
-          mAction = this.serializeAction(mapping.transition.transitionFieldAction, cfg);
-        }
+      let mAction: any;
+      if (mapping.transition.enableExpression) {
+        mAction = {
+          'Expression' : {
+            'expression' : mapping.transition.expression.toText()
+          }
+        };
+      } else if (mapping.transition.isManyToOneMode() || mapping.transition.isOneToManyMode()) {
+        mAction = this.serializeAction(mapping.transition.transitionFieldAction, cfg);
+      }
+      if (mAction) {
         if (!serializedInputFields[0].actions) {
           serializedInputFields[0].actions = [];
         }
@@ -382,18 +382,6 @@ export class MappingSerializer {
         'fieldType': field.type,
         'docId': field.docDef.id,
       };
-
-      if (isSource && fields.length === 1 && mapping.transition.enableExpression) {
-        serializedField['actions'] = [ {
-          'Expression' : {
-            'expression' : mapping.transition.expression.toText()
-          }
-        } ];
-      }
-
-      if (mapping.transition.isOneToManyMode() && field.isSource()) {
-        serializedField['actions'] = [ this.serializeAction(mapping.transition.transitionFieldAction, cfg) ];
-      }
 
       if (!ignoreValue || field.isPropertyOrConstant()) {
         serializedField['value'] = field.value;
