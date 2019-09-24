@@ -197,6 +197,63 @@ describe('MappingSerializer', () => {
     })();
   });
 
+  it('should deserialize & serialize conditional expression mapping definitions', (done) => {
+      inject([], () => {
+      jasmine.getFixtures().fixturesPath = 'base/test-resources/fieldActions';
+      cfg.preloadedFieldActionMetadata = JSON.parse(jasmine.getFixtures().read('atlasmap-field-action.json'));
+      return cfg.fieldActionService.fetchFieldActions().then(() => {
+        cfg.mappings = null;
+        let fieldMapping = null;
+        jasmine.getFixtures().fixturesPath = 'base/test-resources/mapping';
+        const mappingJson = JSON.parse(jasmine.getFixtures().read('atlasmapping-expr-prop.json'));
+        let expressionIndex = 0;
+
+        // Find the expression input field group from the raw JSON.
+        for (fieldMapping of mappingJson.AtlasMapping.mappings.mapping) {
+
+          if (fieldMapping.inputFieldGroup) {
+            const firstAction = fieldMapping.inputFieldGroup.actions[0];
+            if (firstAction) {
+              if (firstAction.Expression || firstAction['@type'] === 'Expression') {
+                break;
+              }
+            }
+          }
+          expressionIndex++;
+        }
+
+        MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
+        MappingUtil.updateMappingsFromDocuments(cfg);
+        expect(cfg.mappings.mappings.length).toEqual(Object.keys(mappingJson.AtlasMapping.mappings.mapping).length);
+
+        const mapping = cfg.mappings.mappings[expressionIndex];
+        expect(mapping).toBeDefined();
+
+        const mfields = mapping.getMappedFields(true);
+        let i = 0;
+        for (const field of fieldMapping.inputFieldGroup.field) {
+
+          // Constants have only a path - no name.
+          if (!field.name) {
+            expect(mfields[i].parsedData.parsedPath).toEqual(field.path);
+          } else {
+            expect(mfields[i].parsedData.parsedName).toEqual(field.name);
+          }
+          i++;
+        }
+        expect(fieldMapping.inputFieldGroup.field[0].docId).toContain('DOC.Properties');
+
+        const serialized = MappingSerializer.serializeMappings(cfg);
+        console.log(JSON.stringify(serialized, null, 2));
+        expect(Object.keys(serialized.AtlasMapping.mappings.mapping).length).toEqual(cfg.mappings.mappings.length);
+        done();
+      }).catch((error) => {
+        fail(error);
+        done();
+      });
+    })();
+  });
+
   it('should serialize many-to-one action', (done) => {
     inject([], () => {
       return cfg.fieldActionService.fetchFieldActions().then(() => {
