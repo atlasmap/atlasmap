@@ -385,8 +385,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="77"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/expression.model.ts:77</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="74"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/expression.model.ts:74</a></div>
                 </td>
             </tr>
 
@@ -424,8 +424,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="73"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/expression.model.ts:73</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="70"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/expression.model.ts:70</a></div>
                 </td>
             </tr>
 
@@ -642,13 +642,10 @@ export class FieldNode extends ExpressionNode {
     if (!field) {
       this.field &#x3D; mapping.getMappedFieldForIndex((index + 1).toString(), true);
     }
-    if (!index) {
-      this.index &#x3D; this.mapping.getIndexForMappedField(this.field) - 1;
-    }
   }
 
   toText(): string {
-    return &#x27;${&#x27; + this.index + &#x27;}&#x27;;
+    return &#x27;${&#x27; + (this.mapping.getIndexForMappedField(this.field) - 1) + &#x27;}&#x27;;
   }
 
   toHTML(): string {
@@ -656,7 +653,8 @@ export class FieldNode extends ExpressionNode {
       return &#x60;&lt;span contenteditable&#x3D;&quot;false&quot; id&#x3D;&quot;${this.uuid}&quot; title&#x3D;&quot;${this.field.field.docDef.name}:${this.field.field.path}&quot;
         class&#x3D;&quot;expressionFieldLabel label label-default&quot;&gt;${this.field.field.name}&lt;/span&gt;&#x60;;
     } else {
-      return &#x60;&lt;span contenteditable&#x3D;&quot;false&quot; id&#x3D;&quot;${this.uuid}&quot; title&#x3D;&quot;Field index &#x27;${this.index}&#x27; is not available&quot;
+      return &#x60;&lt;span contenteditable&#x3D;&quot;false&quot; id&#x3D;&quot;${this.uuid}&quot;
+        title&#x3D;&quot;Field index &#x27;${this.mapping.getIndexForMappedField(this.field) - 1}&#x27; is not available&quot;
         class&#x3D;&quot;expressionFieldLabel label label-danger&quot;&gt;N/A&lt;/span&gt;&#x60;;
     }
   }
@@ -922,9 +920,10 @@ export class ExpressionModel {
       offset &#x3D; targetNode instanceof TextNode ? (targetNode as TextNode).str.length : 1;
     }
     if (targetNode instanceof FieldNode) {
-      const removed &#x3D; this._nodes.splice(targetNodeIndex, 1)[0] as FieldNode;
-      if (!this._nodes.find(n &#x3D;&gt; n instanceof FieldNode &amp;&amp; n.field &#x3D;&#x3D;&#x3D; removed.field)) {
-        lastFieldRefRemoved(removed.field);
+      const removed &#x3D; this._nodes.splice(targetNodeIndex, 1);
+      const targetFieldNode: FieldNode &#x3D; removed[0] as FieldNode;
+      if (!this._nodes.find(n &#x3D;&gt; n instanceof FieldNode &amp;&amp; n.field &#x3D;&#x3D;&#x3D; targetFieldNode.field)) {
+        lastFieldRefRemoved(targetFieldNode.field);
       }
       if (this._nodes.length &gt; targetNodeIndex) {
         if (this._nodes[targetNodeIndex - 1] instanceof TextNode
