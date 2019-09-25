@@ -49,16 +49,16 @@ jar cvf ../Bicycle.jar *
 ----
 
 . In the main tool bar, click 
-image:../images/Import-Data-Shape.png[Import].
+image:Import-Data-Shape.png[Import].
 
 . In the *Open* dialog, navigate to the `Bicycle.jar` file and click *Open*.
  
 . At the top of the *Source* panel, click  
-image:../images/PlusBlackBackground.png[+] 
+image:PlusBlackBackground.png[+] 
 to import the fields into the source panel. 
 +
 To display imported fields in the *Target* panel, you would click  
-image:../images/PlusBlackBackground.png[+] 
+image:PlusBlackBackground.png[+] 
 at the top of the *Target* panel. 
 
 . In the *Establish your class…* dialog, in the *Class package name* field, 
@@ -70,4 +70,4 @@ enter the class package name of the Java class. For example, in
 The fields that are in the imported Java class files appear in the 
 panel into which they were imported. 
 
-image:../images/ImportJavaClass5.png[Bicycle jar file]
+image:ImportJavaClass5.png[Bicycle jar file]

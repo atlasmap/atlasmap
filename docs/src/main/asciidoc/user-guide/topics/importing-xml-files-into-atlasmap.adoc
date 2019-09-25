@@ -73,7 +73,7 @@ transactions related to pets:
 To import this file into the AtlasMap *Target* panel:
 
 . At the top of the *Target* panel, click 
-image:../images/Import-Data-Shape.png[Import]. 
+image:Import-Data-Shape.png[Import]. 
 
 . In the *Open File* dialog, navigate to the `XMLSchema.xml` file and select it.
 . Click *Open*. 
@@ -81,4 +81,4 @@ image:../images/Import-Data-Shape.png[Import].
 AtlasMap displays the fields in the *Target* panel.  In the following image, 
 the fields are expanded to show more detail.
 
-image:../images/ImportXML2.png[Imported schema for pet transactions]
+image:ImportXML2.png[Imported schema for pet transactions]

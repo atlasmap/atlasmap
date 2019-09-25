@@ -8,7 +8,7 @@ The following topics provide a high-level overview of AtlasMap:
 * <<about-types-of-fields-in-atlasmap>>
 * <<about-types-of-mappings-in-atlasmap>>
 * <<about-transforming-a-field-in-atlasmap>>
-* <<alternatives-for-adding-source-values>>
+* <<alternatives-for-supplying-source-values-that-are-missing>>
 * <<descriptions-of-atlasmap-icons>>
 
 include::general-procedure-for-using-atlasmap-standalone.adoc[leveloffset=+1]
@@ -21,6 +21,6 @@ include::about-types-of-mappings-in-atlasmap.adoc[leveloffset=+1]
 
 include::about-transforming-a-field-in-atlasmap.adoc[leveloffset=+1]
 
-include::alternatives-for-adding-source-values.adoc[leveloffset=+1]
+include::alternatives-for-supplying-source-values-that-are-missing.adoc[leveloffset=+1]
 
 include::descriptions-of-atlasmap-icons.adoc[leveloffset=+1]

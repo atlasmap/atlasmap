@@ -80,7 +80,7 @@ defines properties for an `Order` object:
 To import this file into the AtlasMap Source panel:
 
 . At the top of the *Source* panel, click 
-image:../images/Import-Data-Shape.png[Import]. 
+image:Import-Data-Shape.png[Import]. 
 
 . In the *Open File* dialog, navigate to the `JSONSchema.json` file and select it.
 . Click *Open*. 

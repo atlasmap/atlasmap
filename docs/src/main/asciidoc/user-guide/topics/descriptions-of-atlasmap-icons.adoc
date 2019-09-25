@@ -12,19 +12,19 @@ and select what you want to show or hide.
 |Icon 
 |Description
 
-|image:../images/Solid-Blue-Circle.png[Filled Circle]
+|image:Solid-Blue-Circle.png[Filled Circle]
 |Completely mapped field
 
-|image:../images/Half-Blue-Circle.png[Half Filled Circle]
+|image:Half-Blue-Circle.png[Half Filled Circle]
 |Partially mapped field
 
-|image:../images/Collection-Icon.png[Collection Icon]
+|image:Collection-Icon.png[Collection Icon]
 |Collection field
 
-|image:../images/Solid-Folder-Complex-Type.png[Solid Folder]
+|image:Solid-Folder-Complex-Type.png[Solid Folder]
 |Complex type that you can expand
 
-|image:../images/Lightning-Icon.png[Lightning Bolt]
+|image:Lightning-Icon.png[Lightning Bolt]
 |There is a transformation that is being applied to this field.
 
 |===

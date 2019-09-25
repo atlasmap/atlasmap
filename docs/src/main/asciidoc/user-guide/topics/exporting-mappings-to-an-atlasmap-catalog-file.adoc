@@ -5,7 +5,7 @@ After all mappings are defined, save the mappings by exporting
 them to an AtlasMap `.adm` catalog file:
 
 . In the AtlasMap top tool bar, click 
-image:../images/ExportIcon.png[Export]. 
+image:ExportIcon.png[Export]. 
 +
 This captures your workspace in a `.adm` catalog file. 
 
@@ -19,6 +19,6 @@ AtlasMap places the exported file in the `Downloads` directory.
 [TIP]
 To set AtlasMap to the state at which you exported data mappings, 
 import a `.adm` catalog file by clicking 
-image:../images/Import-Data-Shape.png[Import]
+image:Import-Data-Shape.png[Import]
 in the AtlasMap top tool bar. Navigate to the `.adm` file 
 and click *Open*. 

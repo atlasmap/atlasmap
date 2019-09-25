@@ -31,7 +31,7 @@ to a mapping.
 .Procedure
 
 . If data types are not already visible, display them by clicking 
-image:images:EditorSettings.png[Editor settings] and then 
+image:EditorSettings.png[Editor settings] and then 
 *Show Types*. 
 +
 While this is not a requirement for specifying a condition, it is

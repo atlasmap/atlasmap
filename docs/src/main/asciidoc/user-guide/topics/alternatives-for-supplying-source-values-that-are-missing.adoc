@@ -1,0 +1,26 @@
+[id='alternatives-for-supplying-source-values-that-are-missing']
+= Alternatives for supplying source values that are missing
+
+When you are mapping fields, you might find that a source data shape 
+does not provide a value that a target data shape requires. 
+In these situations, AtlasMap provides two alternatives for specifying 
+source values that you can map to target fields: 
+
+* *Define a property*  — In AtlasMap, at the top of the *Source* panel, 
+to the right of *Properties*, click the + sign to display a dialog. 
+Enter the property name, the property's default value, and indicate the data type. 
+Note that at runtime, if there is an environment variable or a Java system 
+property with the same name as the property, it is possible for this 
+default value to be overridden. 
+Click *Save* to create a new terminal source field. 
+
+* *Define a constant* — In AtlasMap, near the top of the *Source* panel, 
+to the right of *Constants*, click the + sign to display a dialog. 
+Enter the value of the constant, and indicate the data type. 
+Click *Save* to create a new terminal source field. 
+
+For example, suppose that a target data shape defines a *Layout* field 
+whose value must be `HORIZONTAL` or `VERTICAL`. The source data shape does 
+not provide this field. You can create a constant. Specify `HORIZONTAL` 
+or `VERTICAL` as the value and accept `String` as the data type. 
+After you save the new constant, you can map it to the *Layout* target field. 
