@@ -18,7 +18,7 @@ To use AtlasMap standalone, the main steps are:
 
 .. Export the defined mappings to a `.adm` AtlasMap catalog file. 
 
-What can you do with an AtlasMap .adm file?
+What can you do with an AtlasMap `.adm` file?
 
 * Continue working on the mappings by importing the `.adm` file into AtlasMap.
 * Execute the mappings in a Camel application that uses the 

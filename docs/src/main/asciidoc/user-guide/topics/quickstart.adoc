@@ -29,13 +29,33 @@ For example:
 ----
 $ java -jar atlasmap-standalone-.1.42.3.jar
 ----
++
+[NOTE]
+====
+Although it is not a common situation, you can start AtlasMap and also 
+load mapping definitions if you have an AtlasMap `.adm` file. 
+An AtlasMap `.adm` file contains mapping definitions that were exported from AtlasMap.
+For example, suppose you want to start AtlasMap and 
+import the `/home/aslan/Downloads/atlas-mapping.adm` file. 
+Invoke a command such as the following:
+
+----
+$ java -Datlasmap.adm.path=/home/aslan/Downloads/atlas-mapping.adm -jar atlasmap-standalone-1.42.3.jar
+----
+====
 
 . In a browser, visit 
 link:http://127.0.0.1:8585/[]
-+
-The AtlasMap data mapper canvas displays with sample source and target data.
+to see the AtlasMap data mapper canvas.
 
 . Experiment with the data mapper: 
+.. At the top of the *Source* panel, click 
+image:Import-Data-Shape.png[Import] 
+to import a JSON or XML file that you can map fields from. 
+.. At the top of the *Target* panel, click 
+image:Import-Data-Shape.png[Import] 
+to import a different JSON or XML file that you can map fields to. 
+
 .. To map fields, click a source field and then click the target field 
 that you want to map it to.  
 .. With a data mapping selected, explore the optional transformations. 

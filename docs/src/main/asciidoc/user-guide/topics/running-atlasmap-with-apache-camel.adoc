@@ -21,4 +21,4 @@ uses `key` as a document ID and the corresponding value as the
 document payload.
 
 You can obtain the `camel-atlasmap` component here:   
-link:https://github.com/atlasmap/atlasmap/tree/master/camel/src/main/java/org/apache/camel[]
+link:http://central.maven.org/maven2/io/atlasmap/camel-atlasmap/1.42.3/camel-atlasmap-1.42.3.jar[]
