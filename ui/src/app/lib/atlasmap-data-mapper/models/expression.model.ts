@@ -65,13 +65,10 @@ export class FieldNode extends ExpressionNode {
     if (!field) {
       this.field = mapping.getMappedFieldForIndex((index + 1).toString(), true);
     }
-    if (!index) {
-      this.index = this.mapping.getIndexForMappedField(this.field) - 1;
-    }
   }
 
   toText(): string {
-    return '${' + this.index + '}';
+    return '${' + (this.mapping.getIndexForMappedField(this.field) - 1) + '}';
   }
 
   toHTML(): string {
@@ -79,7 +76,8 @@ export class FieldNode extends ExpressionNode {
       return `<span contenteditable="false" id="${this.uuid}" title="${this.field.field.docDef.name}:${this.field.field.path}"
         class="expressionFieldLabel label label-default">${this.field.field.name}</span>`;
     } else {
-      return `<span contenteditable="false" id="${this.uuid}" title="Field index '${this.index}' is not available"
+      return `<span contenteditable="false" id="${this.uuid}"
+        title="Field index '${this.mapping.getIndexForMappedField(this.field) - 1}' is not available"
         class="expressionFieldLabel label label-danger">N/A</span>`;
     }
   }
@@ -345,9 +343,10 @@ export class ExpressionModel {
       offset = targetNode instanceof TextNode ? (targetNode as TextNode).str.length : 1;
     }
     if (targetNode instanceof FieldNode) {
-      const removed = this._nodes.splice(targetNodeIndex, 1)[0] as FieldNode;
-      if (!this._nodes.find(n => n instanceof FieldNode && n.field === removed.field)) {
-        lastFieldRefRemoved(removed.field);
+      const removed = this._nodes.splice(targetNodeIndex, 1);
+      const targetFieldNode: FieldNode = removed[0] as FieldNode;
+      if (!this._nodes.find(n => n instanceof FieldNode && n.field === targetFieldNode.field)) {
+        lastFieldRefRemoved(targetFieldNode.field);
       }
       if (this._nodes.length > targetNodeIndex) {
         if (this._nodes[targetNodeIndex - 1] instanceof TextNode
