@@ -46,7 +46,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
   tooltiptext = '';
 
   // Need both the range object of the user text input and the index at the time the user typed '@'.
-  private atIndex = 0;
+  private atIndex = -1;
   private atContainer = null;
 
   private mouseOverTimeOut = null;
@@ -91,7 +91,6 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
       this.lastUpdatedEvent = updatedEvent;
     });
     this.updateExpressionMarkup();
-    this.moveCaretToEnd();
   }
 
   ngOnDestroy() {
@@ -374,6 +373,9 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
    * UUID position indicator.
    */
   private clearAtText(nodeId: string): TextNode {
+    if (this.atIndex === -1) {
+      return;
+    }
     const startOffset = this.atIndex;
     const endOffset = startOffset + this.searchFilter.length + 1;
     let updatedTextNode = null;
@@ -408,7 +410,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
    * Clear elements associated with mapped-field searching.
    */
   private clearSearchMode(): void {
-    this.atIndex = 0;
+    this.atIndex = -1;
     this.atContainer = null;
     this.searchMode = false;
     this.searchFilter = '';
