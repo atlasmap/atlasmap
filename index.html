@@ -524,65 +524,48 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">The AtlasMap Team</span><br>
 <span id="revnumber">version 1.43.0-SNAPSHOT,</span>
-<span id="revdate">2019-09-24</span>
+<span id="revdate">2019-09-25</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">AtlasMap User Guide</div>
 <ul class="sectlevel1">
-<li><a href="#basics">1. How to define an AtlasMap data mapping?</a>
+<li><a href="#quickstart">1. Quickly get started using AtlasMap standalone</a></li>
+<li><a href="#overview-of-atlasmap">2. Overview of AtlasMap</a>
 <ul class="sectlevel2">
-<li><a href="#field-types">1.1. Field Types</a>
-<ul class="sectlevel3">
-<li><a href="#terminal-field">1.1.1. Terminal field</a></li>
-<li><a href="#parent-field">1.1.2. Parent field</a></li>
-<li><a href="#collection-field">1.1.3. Collection field</a></li>
+<li><a href="#general-procedure-for-using-atlasmap-standalone">2.1. General procedure for using AtlasMap standalone</a></li>
+<li><a href="#about-atlasmap-and-syndesis">2.2. About AtlasMap and Syndesis</a></li>
+<li><a href="#about-types-of-fields-in-atlasmap">2.3. About types of fields in AtlasMap</a></li>
+<li><a href="#about-types-of-mappings-in-atlasmap">2.4. About types of mappings in AtlasMap</a></li>
+<li><a href="#about-transforming-a-field-in-atlasmap">2.5. About transforming a field in AtlasMap</a></li>
+<li><a href="#alternatives-for-supplying-source-values-that-are-missing">2.6. Alternatives for supplying source values that are missing</a></li>
+<li><a href="#descriptions-of-atlasmap-icons">2.7. Descriptions of AtlasMap icons</a></li>
 </ul>
 </li>
-<li><a href="#mapping-types">1.2. Mapping Types</a>
-<ul class="sectlevel3">
-<li><a href="#one-to-one">1.2.1. One to One</a></li>
-<li><a href="#many-to-one">1.2.2. Many to One</a></li>
-<li><a href="#one-to-many">1.2.3. One to Many</a></li>
-<li><a href="#for-each">1.2.4. For Each</a></li>
-</ul>
-</li>
-<li><a href="#transformation">1.3. Transformation</a></li>
-</ul>
-</li>
-<li><a href="#quickstart">2. Quickstart</a>
+<li><a href="#importing-data-files-into-atlasmap">3. Importing data files into AtlasMap</a>
 <ul class="sectlevel2">
-<li><a href="#running-atlasmap-data-mapper-ui-standalone">2.1. Running AtlasMap Data Mapper UI standalone</a></li>
-<li><a href="#running-atlasmap-data-mapping-with-apache-camel">2.2. Running AtlasMap data mapping with Apache Camel</a></li>
+<li><a href="#importing-json-files-into-atlasmap">3.1. Importing JSON files into AtlasMap</a></li>
+<li><a href="#importing-xml-files-into-atlasmap">3.2. Importing XML files into AtlasMap</a></li>
+<li><a href="#importing-java-archive-files-into-atlasmap">3.3. Importing Java archive files into AtlasMap</a></li>
 </ul>
 </li>
-<li><a href="#import-files-in-ui">3. Import Files in UI</a>
+<li><a href="#mapping-fields-in-atlasmap">4. Mapping fields in AtlasMap</a>
 <ul class="sectlevel2">
-<li><a href="#import-files-to-panel">3.1. Import XML/JSON schema or instance or Java class files</a></li>
-</ul>
-</li>
-<li><a href="#design-mappings-in-ui">4. Design Mappings in UI</a>
-<ul class="sectlevel2">
-<li><a href="#find-the-field-you-want-to-map">4.1. Find the data field that you want to map</a></li>
-<li><a href="#map-one-source-field-to-one-target-field">4.2. Map one source field to one target field</a></li>
+<li><a href="#find-the-field-you-want-to-map">4.1. Finding the data field that you want to map</a></li>
+<li><a href="#map-one-source-field-to-one-target-field">4.2. Mapping one source field to one target field</a></li>
 <li><a href="#example-missing-unwanted-data">4.3. Example of missing or unwanted data when combining or separating fields</a></li>
-<li><a href="#combine-multiple-source-fields-into-one-target-field">4.4. Combine multiple source fields into one target field</a></li>
-<li><a href="#separate-one-source-field-into-multiple-target-fields">4.5. Separate one source field into multiple target fields</a></li>
-<li><a href="#transform-target-data">4.6. Transform source or target data</a></li>
-<li><a href="#applying-conditions-to-mappings">4.7. Applying conditions to mappings</a></li>
-<li><a href="#view-mappings">4.8. View the mappings</a></li>
-<li><a href="#available-transformations">4.9. Descriptions of available transformations</a></li>
+<li><a href="#combine-multiple-source-fields-into-one-target-field">4.4. Combining multiple source fields into one target field</a></li>
+<li><a href="#separate-one-source-field-into-multiple-target-fields">4.5. Separating one source field into multiple target fields</a></li>
+<li><a href="#mapping-between-collections-and-non-collections">4.6. Mapping between collections and non-collections</a></li>
+<li><a href="#transform-target-data">4.7. Transforming source or target data</a></li>
+<li><a href="#applying-conditions-to-mappings">4.8. Applying conditions to mappings</a></li>
+<li><a href="#view-mappings">4.9. Viewing mappings</a></li>
+<li><a href="#available-transformations">4.10. Descriptions of available transformations</a></li>
+<li><a href="#creating-a-custom-transformation">4.11. Creating a custom transformation</a></li>
 </ul>
 </li>
-<li><a href="#export-files-in-ui">5. Export Files in UI</a>
-<ul class="sectlevel2">
-<li><a href="#export-files">5.1. Export AtlasMap Data Mapper Catalog File</a></li>
-</ul>
-</li>
-<li><a href="#reset-files-in-ui">6. Reset Files in UI</a>
-<ul class="sectlevel2">
-<li><a href="#reset-files">6.1. Reset the AtlasMap Data Mapper</a></li>
-</ul>
-</li>
+<li><a href="#exporting-mappings-to-an-atlasmap-catalog-file">5. Exporting mappings to an AtlasMap catalog file</a></li>
+<li><a href="#resetting-data-files-in-atlasmap">6. Resetting data files in AtlasMap</a></li>
+<li><a href="#running-atlasmap-with-apache-camel">7. Running AtlasMap with Apache Camel</a></li>
 </ul>
 </div>
 </div>
@@ -593,26 +576,360 @@ table.CodeRay td.code>pre{padding:0}
 <div id="introduction" class="paragraph">
 <p>AtlasMap is a data mapping solution with an interactive web based user interface.
 It simplifies configuration of an integration that handles different
-types of data represented by XML schema or instance files, JSON schema or instance files or Java class files.
-You design your data mapping and transformations in the AtlasMap Data Mapper UI canvas, and then execute that mapping
-by means of the AtlasMap runtime engine. We provide standard transformations or we
-support custom, user-defined transformations.  We also have a camel-atlasmap component which consumes an
-AtlasMap mapping definition which can process data mappings as a part of a Camel route.</p>
+types of data including:</p>
 </div>
-<div style="page-break-after: always;"></div>
+<div class="ulist">
+<ul>
+<li>
+<p>XML schema or instance files</p>
+</li>
+<li>
+<p>JSON schema or instance files</p>
+</li>
+<li>
+<p>Java class files</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To use AtlasMap, you import your data shape definition files, map source
+fields to target fields, optionally apply transformations or conditions,
+and then execute defined mappings by means of the AtlasMap runtime engine.
+AtlasMap provides standard transformations and
+supports the creation of custom, user-defined transformations.</p>
+</div>
+<div class="paragraph">
+<p>AtlasMap is available:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>As a standalone application</p>
+</li>
+<li>
+<p>Embedded in
+<a href="https://syndesis.io/">Syndesis</a>, which is an open-source integration platform</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>There is also a <code>camel-atlasmap</code> component that consumes an
+AtlasMap mapping definition and processes data mappings as a part of a Camel route.</p>
+</div>
+<div class="paragraph">
+<p>This user guide is organized as follows:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#quickstart">Quickly get started using AtlasMap standalone</a></p>
+</li>
+<li>
+<p><a href="#overview-of-atlasmap">Overview of AtlasMap</a></p>
+</li>
+<li>
+<p><a href="#importing-data-files-into-atlasmap">Importing data files into AtlasMap</a></p>
+</li>
+<li>
+<p><a href="#mapping-fields-in-atlasmap">Mapping fields in AtlasMap</a></p>
+</li>
+<li>
+<p><a href="#exporting-mappings-to-an-atlasmap-catalog-file">Exporting mappings to an AtlasMap catalog file</a></p>
+</li>
+<li>
+<p><a href="#resetting-data-files-in-atlasmap">Resetting data files in AtlasMap</a></p>
+</li>
+<li>
+<p><a href="#running-atlasmap-with-apache-camel">Running AtlasMap with Apache Camel</a></p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="basics">1. How to define an AtlasMap data mapping?</h2>
+<h2 id="quickstart">1. Quickly get started using AtlasMap standalone</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>AtlasMap focuses more on field-by-field mapping than whole document transformation. It allows users to choose individual fields from incoming documents, and map them to fields of the outgoing document <sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnote_1" title="View footnote.">1</a>]</sup>.
-So then, what is <code>field</code> in AtlasMap? Let&#8217;s see an example with XML:</p>
+<p>To run AtlasMap standalone:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Obtain the most recent AtlasMap version number:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Go to <a href="https://github.com/atlasmap/atlasmap/" class="bare">https://github.com/atlasmap/atlasmap/</a></p>
+</li>
+<li>
+<p>Scroll down to see the <code>maven central</code> icon with the latest
+version, for example:
+<span class="image"><img src="images/latest-maven-central-version-number.png" alt="maven central 1.42.3"></span>.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Download the AtlasMap standalone <code>.jar</code> file by invoking the
+<code>wget</code> command with the following format. Replace <code>$1.43.0-SNAPSHOT</code>
+with an actual version number.</p>
+<div class="listingblock">
+<div class="content">
+<pre>wget http://central.maven.org/maven2/io/atlasmap/atlasmap-standalone/${VERSION}/atlasmap-standalone-${VERSION}.jar</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Run AtlasMap standalone by invoking the <code>java</code> command with the
+following format:</p>
+<div class="listingblock">
+<div class="content">
+<pre>$ java -jar atlasmap-standalone-${VERSION}.jar</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ java -jar atlasmap-standalone-.1.42.3.jar</pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Although it is not a common situation, you can start AtlasMap and also
+load mapping definitions if you have an AtlasMap <code>.adm</code> file.
+An AtlasMap <code>.adm</code> file contains mapping definitions that were exported from AtlasMap.
+For example, suppose you want to start AtlasMap and
+import the <code>/home/aslan/Downloads/atlas-mapping.adm</code> file.
+Invoke a command such as the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ java -Datlasmap.adm.path=/home/aslan/Downloads/atlas-mapping.adm -jar atlasmap-standalone-1.42.3.jar</pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>In a browser, visit
+<a href="http://127.0.0.1:8585/" class="bare">http://127.0.0.1:8585/</a>
+to see the AtlasMap data mapper canvas.</p>
+</li>
+<li>
+<p>Experiment with the data mapper:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>At the top of the <strong>Source</strong> panel, click
+<span class="image"><img src="images/Import-Data-Shape.png" alt="Import"></span>
+to import a JSON or XML file that you can map fields from.</p>
+</li>
+<li>
+<p>At the top of the <strong>Target</strong> panel, click
+<span class="image"><img src="images/Import-Data-Shape.png" alt="Import"></span>
+to import a different JSON or XML file that you can map fields to.</p>
+</li>
+<li>
+<p>To map fields, click a source field and then click the target field
+that you want to map it to.</p>
+</li>
+<li>
+<p>With a data mapping selected, explore the optional transformations.</p>
+</li>
+<li>
+<p>To preview a data mapping result, click
+<span class="image"><img src="images/EditorSettings.png" alt="Editor Settings"></span>
+and select <strong>Show Mapping Preview</strong>. Enter sample data in source input fields.</p>
+</li>
+<li>
+<p>To save your work, click
+<span class="image"><img src="images/ExportIcon.png" alt="Export icon"></span> in the menu bar. This
+creates an AtlasMap <code>.adm</code> file in the <code>Downloads</code> directory.
+This file contains the mapping definitions.</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="overview-of-atlasmap">2. Overview of AtlasMap</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following topics provide a high-level overview of AtlasMap:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#general-procedure-for-using-atlasmap-standalone">General procedure for using AtlasMap standalone</a></p>
+</li>
+<li>
+<p><a href="#about-atlasmap-and-syndesis">About AtlasMap and Syndesis</a></p>
+</li>
+<li>
+<p><a href="#about-types-of-fields-in-atlasmap">About types of fields in AtlasMap</a></p>
+</li>
+<li>
+<p><a href="#about-types-of-mappings-in-atlasmap">About types of mappings in AtlasMap</a></p>
+</li>
+<li>
+<p><a href="#about-transforming-a-field-in-atlasmap">About transforming a field in AtlasMap</a></p>
+</li>
+<li>
+<p><a href="#alternatives-for-supplying-source-values-that-are-missing">Alternatives for supplying source values that are missing</a></p>
+</li>
+<li>
+<p><a href="#descriptions-of-atlasmap-icons">Descriptions of AtlasMap icons</a></p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="general-procedure-for-using-atlasmap-standalone">2.1. General procedure for using AtlasMap standalone</h3>
+<div class="paragraph">
+<p>To use AtlasMap standalone, the main steps are:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Download the AtlasMap standalone <code>.jar</code> file.</p>
+</li>
+<li>
+<p>Start running AtlasMap standalone.</p>
+</li>
+<li>
+<p>In the AtlasMap data mapping canvas:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Import a source data file.</p>
+</li>
+<li>
+<p>Import a target data file.</p>
+</li>
+<li>
+<p>Map fields as needed, optionally applying transformations and/or conditions.</p>
+</li>
+<li>
+<p>Export the defined mappings to a <code>.adm</code> AtlasMap catalog file.</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>What can you do with an AtlasMap <code>.adm</code> file?</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Continue working on the mappings by importing the <code>.adm</code> file into AtlasMap.</p>
+</li>
+<li>
+<p>Execute the mappings in a Camel application that uses the
+<code>camel-atlasmap</code> component, which consumes <code>.adm</code> files.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="about-atlasmap-and-syndesis">2.2. About AtlasMap and Syndesis</h3>
+<div class="paragraph">
+<p>The <a href="https://www.syndesis.io">Syndesis open-source integration platform</a>
+embeds AtlasMap.
+In a Syndesis integration, you add connections to applications
+that provide the data of interest to you. With connections in place,
+Syndesis offers an AtlasMap data mapper step. When you add a data mapper
+step, Syndesis displays the data mapper canvas with:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Source data fields that are provided by previous connections</p>
+</li>
+<li>
+<p>Target data fields that are required by the subsequent connection</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In other words, you do not import source and target data as you would
+in standalone AtlasMap. Likewise, when data mappings are complete,
+instead of exporting the mappings, you just click a button to indicate
+that you are done.</p>
+</div>
+<div class="paragraph">
+<p>When Syndesis embeds AtlasMap, it does not display the icons for
+importing and exporting data.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="about-types-of-fields-in-atlasmap">2.3. About types of fields in AtlasMap</h3>
+<div class="paragraph">
+<p>The AtlasMap user interface displays source fields and target fields
+and you define the field-to-field mappings that you need.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+At this time, AtlasMap does not provide whole document mapping.
+It is expected that a future release will support bulk mapping by
+detecting the same object structure in source and target files
+(<a href="https://github.com/atlasmap/atlasmap/issues/86">issue #86</a>).
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>An understanding of the different kinds of AtlasMap fields makes
+it easier for you to define the mappings you need. For the purposes of
+mapping, there are three field types:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Terminal</strong> — A terminal field is selectable. It can be the source or
+target in a mapping. During execution, a path to a terminal field
+identifies a value.</p>
+</li>
+<li>
+<p><strong>Parent</strong>  — A parent field is also referred to as a complex field.
+A parent field is expandable. Expanding a parent field displays
+its descendant fields. A parent field it not selectable and
+cannot be directly in a mapping.</p>
+</li>
+<li>
+<p><strong>Collection</strong>  — A collection field is also a terminal field.
+It is selectable and can be the source or target in a mapping.
+A collection field indicates a field that holds one or more
+objects that are all the same type. Internally, a collection
+field might be an array.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For example, consider this sample XML instance document:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;order&gt;</span>
-  <span class="tag">&lt;orderId</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">O123</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+  <span class="tag">&lt;orderId</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">O123</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
   <span class="tag">&lt;items&gt;</span>
     <span class="tag">&lt;item&gt;</span>
       <span class="tag">&lt;itemId&gt;</span>Orange<span class="tag">&lt;/itemId&gt;</span>
@@ -622,511 +939,553 @@ So then, what is <code>field</code> in AtlasMap? Let&#8217;s see an example with
       <span class="tag">&lt;itemId&gt;</span>Apple<span class="tag">&lt;/itemId&gt;</span>
       <span class="tag">&lt;quantity</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">2</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
     <span class="tag">&lt;/item&gt;</span>
-  <span class="tag">&lt;items&gt;</span>
+  <span class="tag">&lt;/items&gt;</span>
 <span class="tag">&lt;/order&gt;</span></code></pre>
 </div>
 </div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Terminal fields:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>/order/orderId/@value</code><br>
+<code>/order/items/item[0]/quantity/@value</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Parent fields:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>/order</code><br>
+<code>/order/orderId</code><br>
+<code>/order/items/item[0]</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Collection fields:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>/order/items/item[]/itemId</code><br>
+<code>/order/items/item[]/quantity/@value</code></p></td>
+</tr>
+</tbody>
+</table>
 <div class="paragraph">
-<p>In this XML instance document, <code>/order/items/item[0]/itemId</code> and <code>/order/orderId/@value</code> are terminal fields. In AtlasMap, only terminal fields can be selected to be added into a mapping. Other parent elements like <code>/order</code>, <code>/order/orderId</code>, <code>/order/items/item[0]</code> are not selectable. Instead it can be expanded to see descendant fields.</p>
-</div>
-<div class="sect2">
-<h3 id="field-types">1.1. Field Types</h3>
-<div class="paragraph">
-<p>There are roughly 3 types of fields that differentiate behavior.</p>
-</div>
-<div class="sect3">
-<h4 id="terminal-field">1.1.1. Terminal field</h4>
-<div class="paragraph">
-<p>Terminal field is selectable in AtlasMap Data Mapper UI and can participate in mapping directly. Its path identifies the value in the document payload.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="parent-field">1.1.2. Parent field</h4>
-<div class="paragraph">
-<p>Also called as Complex field. Parent field cannot participate in mapping directly, but it&#8217;s expandable in UI so user can see descendant fields.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="collection-field">1.1.3. Collection field</h4>
-<div class="paragraph">
-<p>Collection field is a kind of terminal field. It&#8217;s selectable and mappable. The difference is that either the collection field itself or any of its parent fields is a collection. In an example XML above, <code>item</code> is a collection which could be multiple. Therefore <code>/order/items/item[]/itemId</code> is a collection field. In a programming term, it&#8217;s just array, List, etc. One thing to keep in mind is that, "how many items are going to be delivered?" is not decided at design time. Each transaction should be able to deliver a different number of items with same mapping definition.</p>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="mapping-types">1.2. Mapping Types</h3>
-<div class="paragraph">
-<p>Looking from field multiplicity aspects, there are 4 types of mapping in AtlasMap.</p>
-</div>
-<div class="sect3">
-<h4 id="one-to-one">1.2.1. One to One</h4>
-<div class="paragraph">
-<p>Map from one source field to one target field.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="many-to-one">1.2.2. Many to One</h4>
-<div class="paragraph">
-<p>Map from multiple source fields to one target field. Many-to-One mapping requires one Many-to-One transformation to map multiple values into one. At this moment, we only support combining values with a delimiter. Other Many-to-One transformation will be added once (<a href="https://github.com/atlasmap/atlasmap/issues/912">#912</a>) is fixed.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="one-to-many">1.2.3. One to Many</h4>
-<div class="paragraph">
-<p>Map from one source field to multiple target fields. One-to-Many mapping requires one One-to-Many transformation to map one value into mutiple values. At this moment, we only support separating a value with a delimiter. Other One-to-Many transformation will be added once (<a href="https://github.com/atlasmap/atlasmap/issues/912">#912</a>) is fixed.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="for-each">1.2.4. For Each</h4>
-<div class="paragraph">
-<p>Map from one source collection field to one target collection field. It iterates One-to-One mapping for each element in the collection field.</p>
-</div>
+<p>When you define a mapping that uses this XML instance document as the
+source data,  you cannot know how many items will be in an order.
+However, the same mapping definition works for each transaction,
+regardless of the number of items in the order.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="transformation">1.3. Transformation</h3>
+<h3 id="about-types-of-mappings-in-atlasmap">2.4. About types of mappings in AtlasMap</h3>
 <div class="paragraph">
-<p>In addition to simply mapping the source field value to target field value, AtlasMap supports transformations that apply to both source and/or target field in the mapping. Transformation is a single function to be applied to a field value, such as <code>Uppercase</code> which changes all characters of the string field value to uppercase. You can add any number of transformations to the mapped field from <code>Mapping Detail</code> pane at right side in the UI.</p>
+<p>AtlasMap supports the following general types of mappings:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>One to one</strong>  — Map one source field to one target field.</p>
+</li>
+<li>
+<p><strong>Many to one</strong>  — Map multiple source fields to to one target field.
+You specify the delimiter character that AtlasMap inserts in the target
+field between the mapped source fields. The default delimiter is a space.</p>
+</li>
+<li>
+<p><strong>One to many</strong>  — Map one source field to multiple target fields.
+You specify the delimiter character that is in the source field.
+AtlasMap maps each delimited value to a the target field you select.</p>
+</li>
+<li>
+<p><strong>For each</strong> — Iteratively map one source collection field to one
+target collection field.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="about-transforming-a-field-in-atlasmap">2.5. About transforming a field in AtlasMap</h3>
+<div class="paragraph">
+<p>In a data mapping, you can apply a transformation to one or more fields.
+A transformation is a function that AtlasMap performs on the selected
+field. For example, suppose you select a source field and specify
+the <code>Uppercase</code> transformation. At runtime, AtlasMap converts the source
+field value to uppercase and inserts the uppercase value in the target field.</p>
 </div>
 <div class="paragraph">
-<p>Allowing transformations to be added for both source and target field might not immediately make sense. But let&#8217;s think about Many-to-One case, to combine <code>Street</code>, <code>City</code>, <code>State</code> into comma separated single string. If you want to uppercase only <code>State</code>, then you need to add on <code>State</code> source field. If you want to uppercase everything, then it&#8217;s easier to add just one <code>Uppercase</code> transformation on the target field as opposed to add it for each source fields. In other words we can call source field transformation as Pre-mapping, and the target field transformation as Post-mapping.</p>
+<p>To apply a transformation, select a source or target terminal field,
+click <strong>Add Transformation</strong> in the <strong>Mapping Details</strong> panel on the right,
+and select the transformation.</p>
 </div>
 <div class="paragraph">
-<p>Multiplicity transformations described above are special type of transformations which changes multiplicity. Multiplicity transformations can be added only when it&#8217;s One-to-Many or Many-to-One mapping.</p>
+<p>You can apply different transformations to different fields in the same mapping.</p>
 </div>
-<div style="page-break-after: always;"></div>
+<div class="paragraph">
+<p>In a one-to-one mapping, which maps one source field to one target field,
+it does not matter whether you apply the transformation to the source field
+or the target field. In a one-to-many or many-to-one mapping, consider
+what the target field value needs to be when you specify a transformation.
+For example, consider a many-to-one mapping that combines source fields
+for number, street, city, and state into one target address field.
+If you want the strings in the target address field to all be uppercase,
+select the target address field and apply the uppercase transformation.
+If only the state needs to be uppercase, select the source state field,
+and apply the uppercase transformation.</p>
+</div>
+<div class="paragraph">
+<p>You can think of a source field transformation as performing pre-processing,
+while a target field transformation performs post-processing.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="alternatives-for-supplying-source-values-that-are-missing">2.6. Alternatives for supplying source values that are missing</h3>
+<div class="paragraph">
+<p>When you are mapping fields, you might find that a source data shape
+does not provide a value that a target data shape requires.
+In these situations, AtlasMap provides two alternatives for specifying
+source values that you can map to target fields:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Define a property</strong>  — In AtlasMap, at the top of the <strong>Source</strong> panel,
+to the right of <strong>Properties</strong>, click the + sign to display a dialog.
+Enter the property name, the property&#8217;s default value, and indicate the data type.
+Note that at runtime, if there is an environment variable or a Java system
+property with the same name as the property, it is possible for this
+default value to be overridden.
+Click <strong>Save</strong> to create a new terminal source field.</p>
+</li>
+<li>
+<p><strong>Define a constant</strong> — In AtlasMap, near the top of the <strong>Source</strong> panel,
+to the right of <strong>Constants</strong>, click the + sign to display a dialog.
+Enter the value of the constant, and indicate the data type.
+Click <strong>Save</strong> to create a new terminal source field.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For example, suppose that a target data shape defines a <strong>Layout</strong> field
+whose value must be <code>HORIZONTAL</code> or <code>VERTICAL</code>. The source data shape does
+not provide this field. You can create a constant. Specify <code>HORIZONTAL</code>
+or <code>VERTICAL</code> as the value and accept <code>String</code> as the data type.
+After you save the new constant, you can map it to the <strong>Layout</strong> target field.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="descriptions-of-atlasmap-icons">2.7. Descriptions of AtlasMap icons</h3>
+<div class="paragraph">
+<p>The following table describes some of the AtlasMap icons. When you are
+familiar with the icons, you can hide mapping lines or data types
+to create a less busy display. To toggle what AtlasMap displays, click
+<span class="image"><img src="images/EditorSettings.png" alt="Editor Settings"></span>
+and select what you want to show or hide.</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Icon</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="images/Solid-Blue-Circle.png" alt="Filled Circle"></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Completely mapped field</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="images/Half-Blue-Circle.png" alt="Half Filled Circle"></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Partially mapped field</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="images/Collection-Icon.png" alt="Collection Icon"></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Collection field</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="images/Solid-Folder-Complex-Type.png" alt="Solid Folder"></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Complex type that you can expand</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="images/Lightning-Icon.png" alt="Lightning Bolt"></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">There is a transformation that is being applied to this field.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="quickstart">2. Quickstart</h2>
+<h2 id="importing-data-files-into-atlasmap">3. Importing data files into AtlasMap</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="running-atlasmap-data-mapper-ui-standalone">2.1. Running AtlasMap Data Mapper UI standalone</h3>
 <div class="paragraph">
-<p>Here is the shortest path to run standalone AtlasMap.</p>
+<p>Data mapping allows you to match fields in a source data shape to fields in a
+target data shape. The data shapes that AtlasMap can operate on are
+defined in JSON schema or instance documents, XML schema or instance documents,
+or Java classes.</p>
+</div>
+<div class="paragraph">
+<p>To map fields, you import data shape definition files into the AtlasMap
+<strong>Source</strong> and <strong>Target</strong> panels. You can import multiple files into each panel.
+For example, suppose you import three source files and one target file.
+You can map fields from all three source files to the single target file.</p>
+</div>
+<div class="paragraph">
+<p>The following topics provide examples of importing different
+data shape definitions:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#importing-json-files-into-atlasmap">Importing JSON files into AtlasMap</a></p>
+</li>
+<li>
+<p><a href="#importing-xml-files-into-atlasmap">Importing XML files into AtlasMap</a></p>
+</li>
+<li>
+<p><a href="#importing-java-archive-files-into-atlasmap">Importing Java archive files into AtlasMap</a></p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="importing-json-files-into-atlasmap">3.1. Importing JSON files into AtlasMap</h3>
+<div class="paragraph">
+<p>You can import a JSON schema file or a JSON instance file into
+AtlasMap. The procedure for importing each kind of file is the same.
+For example, the following JSON schema file, <code>JSONSchema.json</code>,
+defines properties for an <code>Order</code> object:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">$schema</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">http://json-schema.org/schema#</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Order</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">object</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">properties</span><span class="delimiter">&quot;</span></span>: {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">order</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">object</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">properties</span><span class="delimiter">&quot;</span></span>: {
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">address</span><span class="delimiter">&quot;</span></span>: {
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">object</span><span class="delimiter">&quot;</span></span>,
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">properties</span><span class="delimiter">&quot;</span></span>: {
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">street</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> },
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">city</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> },
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">state</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> },
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">zip</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> }
+          }
+        },
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">contact</span><span class="delimiter">&quot;</span></span>: {
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">object</span><span class="delimiter">&quot;</span></span>,
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">properties</span><span class="delimiter">&quot;</span></span>: {
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">firstName</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> },
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">lastName</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> },
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">phone</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> }
+          }
+        },
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">orderId</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> }
+      }
+    },
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">primitives</span><span class="delimiter">&quot;</span></span>: {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">object</span><span class="delimiter">&quot;</span></span>,
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">properties</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">stringPrimitive</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> },
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">booleanPrimitive</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">boolean</span><span class="delimiter">&quot;</span></span> },
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">numberPrimitive</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">number</span><span class="delimiter">&quot;</span></span> }
+      }
+    },
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">primitiveArrays</span><span class="delimiter">&quot;</span></span>: {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">object</span><span class="delimiter">&quot;</span></span>,
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">properties</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">stringArray</span><span class="delimiter">&quot;</span></span>: {
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">array</span><span class="delimiter">&quot;</span></span>,
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">items</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> }
+        },
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">booleanArray</span><span class="delimiter">&quot;</span></span>: {
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">array</span><span class="delimiter">&quot;</span></span>,
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">items</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">boolean</span><span class="delimiter">&quot;</span></span> }
+        },
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">numberArray</span><span class="delimiter">&quot;</span></span>: {
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">array</span><span class="delimiter">&quot;</span></span>,
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">items</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">number</span><span class="delimiter">&quot;</span></span> }
+        }
+      }
+    },
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">addressList</span><span class="delimiter">&quot;</span></span>: {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">array</span><span class="delimiter">&quot;</span></span>,
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">items</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">object</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">properties</span><span class="delimiter">&quot;</span></span>: {
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">street</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> },
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">city</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> },
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">state</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> },
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">zip</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> }
+        }
+      }
+    }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To import this file into the AtlasMap Source panel:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Download the AtlasMap standalone jar</p>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>wget http://central.maven.org/maven2/io/atlasmap/atlasmap-standalone/${VERSION}/atlasmap-standalone-${VERSION}.jar</code></pre>
-</div>
-</div>
+<p>At the top of the <strong>Source</strong> panel, click
+<span class="image"><img src="images/Import-Data-Shape.png" alt="Import"></span>.</p>
 </li>
 <li>
-<p>Run AtlasMap standalone</p>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>$ java [ -Datlasmap.adm.path=/path/to/example.adm ] -jar atlasmap-standalone-${VERSION}.jar</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now AtlasMap Data Mapper UI is available at <a href="http://127.0.0.1:8585/" class="bare">http://127.0.0.1:8585/</a>  The .adm file can be created with the export icon on the main toolbar.</p>
-</div>
+<p>In the <strong>Open File</strong> dialog, navigate to the <code>JSONSchema.json</code> file and select it.</p>
+</li>
+<li>
+<p>Click <strong>Open</strong>.</p>
 </li>
 </ol>
 </div>
+<div class="paragraph">
+<p>AtlasMap displays the fields in the <strong>Source</strong> panel:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ImportJSON3.png" alt="Order document"></span>.</p>
+</div>
 </div>
 <div class="sect2">
-<h3 id="running-atlasmap-data-mapping-with-apache-camel">2.2. Running AtlasMap data mapping with Apache Camel</h3>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-TODO
-</td>
-</tr>
-</table>
-</div>
+<h3 id="importing-xml-files-into-atlasmap">3.2. Importing XML files into AtlasMap</h3>
 <div class="paragraph">
-<p>camel-atlasmap endpoint use IN body as a default source document of mappings. If IN body is a <code>java.util.Map</code>, key is used as a Document ID and corresponding value is used as a Document payload.</p>
+<p>You can import an XML schema file or an XML instance file into
+AtlasMap. The procedure for importing each kind of file is the same.
+For example,
+the following XML schema file, <code>XMLSchema.xml</code>, defines a schema for
+transactions related to pets:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>...
-from("direct:start")
-   .to("atlas:atlas-mapping.adm")
-   .log("${body}")
-...</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;d:SchemaSet</span> <span class="attribute-name">xmlns:d</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://atlasmap.io/xml/schemaset/v2</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">xmlns:xsd</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.w3.org/2001/XMLSchema</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+    <span class="tag">&lt;xsd:schema</span> <span class="attribute-name">targetNamespace</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://syndesis.io/v1/swagger-connector-template/request</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">elementFormDefault</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">qualified</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+      <span class="tag">&lt;xsd:element</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">request</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+        <span class="tag">&lt;xsd:complexType&gt;</span>
+          <span class="tag">&lt;xsd:sequence&gt;</span>
+            <span class="tag">&lt;xsd:element</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">body</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+              <span class="tag">&lt;xsd:complexType&gt;</span>
+                <span class="tag">&lt;xsd:sequence&gt;</span>
+                  <span class="tag">&lt;xsd:element</span> <span class="attribute-name">ref</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Pet</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+                <span class="tag">&lt;/xsd:sequence&gt;</span>
+              <span class="tag">&lt;/xsd:complexType&gt;</span>
+            <span class="tag">&lt;/xsd:element&gt;</span>
+          <span class="tag">&lt;/xsd:sequence&gt;</span>
+        <span class="tag">&lt;/xsd:complexType&gt;</span>
+      <span class="tag">&lt;/xsd:element&gt;</span>
+    <span class="tag">&lt;/xsd:schema&gt;</span>
+    <span class="tag">&lt;d:AdditionalSchemas&gt;</span>
+      <span class="tag">&lt;xsd:schema&gt;</span>
+        <span class="tag">&lt;xsd:element</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Pet</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+          <span class="tag">&lt;xsd:complexType&gt;</span>
+            <span class="tag">&lt;xsd:sequence&gt;</span>
+              <span class="tag">&lt;xsd:element</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">xsd:decimal</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+              <span class="tag">&lt;xsd:element</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Category</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+                <span class="tag">&lt;xsd:complexType&gt;</span>
+                  <span class="tag">&lt;xsd:sequence&gt;</span>
+                    <span class="tag">&lt;xsd:element</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">xsd:decimal</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+                    <span class="tag">&lt;xsd:element</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">xsd:string</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+                  <span class="tag">&lt;/xsd:sequence&gt;</span>
+                <span class="tag">&lt;/xsd:complexType&gt;</span>
+              <span class="tag">&lt;/xsd:element&gt;</span>
+              <span class="tag">&lt;xsd:element</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">xsd:string</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+              <span class="tag">&lt;xsd:element</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">photoUrl</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+                <span class="tag">&lt;xsd:complexType&gt;</span>
+                  <span class="tag">&lt;xsd:sequence&gt;</span>
+                    <span class="tag">&lt;xsd:element</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">photoUrl</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">xsd:string</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">maxOccurs</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">unbounded</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">minOccurs</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">0</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+                  <span class="tag">&lt;/xsd:sequence&gt;</span>
+                <span class="tag">&lt;/xsd:complexType&gt;</span>
+              <span class="tag">&lt;/xsd:element&gt;</span>
+              <span class="tag">&lt;xsd:element</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">tag</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+                <span class="tag">&lt;xsd:complexType&gt;</span>
+                  <span class="tag">&lt;xsd:sequence&gt;</span>
+                    <span class="tag">&lt;xsd:element</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Tag</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">maxOccurs</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">unbounded</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">minOccurs</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">0</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+                      <span class="tag">&lt;xsd:complexType&gt;</span>
+                        <span class="tag">&lt;xsd:sequence&gt;</span>
+                          <span class="tag">&lt;xsd:element</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">xsd:decimal</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+                          <span class="tag">&lt;xsd:element</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">xsd:string</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+                        <span class="tag">&lt;/xsd:sequence&gt;</span>
+                      <span class="tag">&lt;/xsd:complexType&gt;</span>
+                    <span class="tag">&lt;/xsd:element&gt;</span>
+                  <span class="tag">&lt;/xsd:sequence&gt;</span>
+                <span class="tag">&lt;/xsd:complexType&gt;</span>
+              <span class="tag">&lt;/xsd:element&gt;</span>
+              <span class="tag">&lt;xsd:element</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">status</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">xsd:string</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+            <span class="tag">&lt;/xsd:sequence&gt;</span>
+          <span class="tag">&lt;/xsd:complexType&gt;</span>
+        <span class="tag">&lt;/xsd:element&gt;</span>
+      <span class="tag">&lt;/xsd:schema&gt;</span>
+    <span class="tag">&lt;/d:AdditionalSchemas&gt;</span>
+  <span class="tag">&lt;/d:SchemaSet&gt;</span></code></pre>
 </div>
 </div>
-<div style="page-break-after: always;"></div>
+<div class="paragraph">
+<p>To import this file into the AtlasMap <strong>Target</strong> panel:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>At the top of the <strong>Target</strong> panel, click
+<span class="image"><img src="images/Import-Data-Shape.png" alt="Import"></span>.</p>
+</li>
+<li>
+<p>In the <strong>Open File</strong> dialog, navigate to the <code>XMLSchema.xml</code> file and select it.</p>
+</li>
+<li>
+<p>Click <strong>Open</strong>.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>AtlasMap displays the fields in the <strong>Target</strong> panel.  In the following image,
+the fields are expanded to show more detail.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ImportXML2.png" alt="Imported schema for pet transactions"></span></p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="import-files-in-ui">3. Import Files in UI</h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="import-files-to-panel">3.1. Import XML/JSON schema or instance or Java class files</h3>
+<h3 id="importing-java-archive-files-into-atlasmap">3.3. Importing Java archive files into AtlasMap</h3>
 <div class="paragraph">
-<p>Data mapping fundamentally involes morphing one data shape into another.  A user
-defines these shapes using XML schemas, JSON notation or by establishing a simple Java
-class.  The following sections examine each file type independently.</p>
+<p>AtlasMap can import a Java archive file and display mappable fields in
+either the source or target panel. In the data mapper, each class-wide
+public entity in a class file that is in the imported JAR file becomes a
+mappable field.</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>JSON Schema File: <strong>JSONSchema.json</strong></p>
-</li>
-</ul>
+<div class="paragraph">
+<p>Arrays and data types are more discretely defined.</p>
+</div>
+<div class="paragraph">
+<p>Consider the following two files:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>  {
-    "$schema": "http://json-schema.org/schema#",
-    "description": "Order",
-    "type": "object",
-    "properties": {
-      "order": {
-        "type": "object",
-        "properties": {
-          "address": {
-          "type": "object",
-          "properties": {
-            "street": { "type": "string" },
-            "city": { "type": "string" },
-            "state": { "type": "string" },
-            "zip": { "type": "string" }
-          }
-        },
-        "contact": {
-          "type": "object",
-          "properties": {
-            "firstName": { "type": "string" },
-            "lastName": { "type": "string" },
-            "phone": { "type": "string" }
-          }
-        },
-        "orderId": { "type": "string" }
-      }
-    },
-    "primitives": {
-      "type": "object",
-      "properties": {
-        "stringPrimitive": { "type": "string" },
-        "booleanPrimitive": { "type": "boolean" },
-        "numberPrimitive": { "type": "number" }
-      }
-    },
-    "primitiveArrays": {
-      "type": "object",
-      "properties": {
-        "stringArray": {
-          "type": "array",
-          "items": { "type": "string" }
-        },
-        "booleanArray": {
-          "type": "array",
-          "items": { "type": "boolean" }
-        },
-        "numberArray": {
-          "type": "array",
-          "items": { "type": "number" }
-        }
-      }
-    },
-    "addressList": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "street": { "type": "string" },
-          "city": { "type": "string" },
-          "state": { "type": "string" },
-          "zip": { "type": "string" }
-        }
-      }
-    }
-    }
-  }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>To import this file into the AtlasMap Source panel, select the import icon at the top of the panel.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/ImportJSON1.png" alt="Import a JSON File to Source Panel"></span></p>
-</div>
-<div class="paragraph">
-<p>An <strong>Open File</strong> dialog appears.  Select the location for the JSONSchema.json file.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/ImportJSON2.png" alt="Import a JSON File to Source Panel - Open File Dialog"></span></p>
-</div>
-<div class="paragraph">
-<p>The fields now appear in the Source panel as you defined them in the imported JSON schema.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/ImportJSON3.png" alt="Import a JSON File to Source Panel - Import Complete"></span></p>
-</div>
-<div class="paragraph">
-<p>Now consider the import an XML schema into the Target panel.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>XML Schema File: <strong>XMLSchema.xml</strong></p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>&lt;d:SchemaSet xmlns:d="http://atlasmap.io/xml/schemaset/v2" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-    &lt;xsd:schema targetNamespace="http://syndesis.io/v1/swagger-connector-template/request" elementFormDefault="qualified"&gt;
-      &lt;xsd:element name="request"&gt;
-        &lt;xsd:complexType&gt;
-          &lt;xsd:sequence&gt;
-            &lt;xsd:element name="body"&gt;
-              &lt;xsd:complexType&gt;
-                &lt;xsd:sequence&gt;
-                  &lt;xsd:element ref="Pet" /&gt;
-                &lt;/xsd:sequence&gt;
-              &lt;/xsd:complexType&gt;
-            &lt;/xsd:element&gt;
-          &lt;/xsd:sequence&gt;
-        &lt;/xsd:complexType&gt;
-      &lt;/xsd:element&gt;
-    &lt;/xsd:schema&gt;
-    &lt;d:AdditionalSchemas&gt;
-      &lt;xsd:schema&gt;
-        &lt;xsd:element name="Pet"&gt;
-          &lt;xsd:complexType&gt;
-            &lt;xsd:sequence&gt;
-              &lt;xsd:element name="id" type="xsd:decimal" /&gt;
-              &lt;xsd:element name="Category"&gt;
-                &lt;xsd:complexType&gt;
-                  &lt;xsd:sequence&gt;
-                    &lt;xsd:element name="id" type="xsd:decimal" /&gt;
-                    &lt;xsd:element name="name" type="xsd:string" /&gt;
-                  &lt;/xsd:sequence&gt;
-                &lt;/xsd:complexType&gt;
-              &lt;/xsd:element&gt;
-              &lt;xsd:element name="name" type="xsd:string" /&gt;
-              &lt;xsd:element name="photoUrl"&gt;
-                &lt;xsd:complexType&gt;
-                  &lt;xsd:sequence&gt;
-                    &lt;xsd:element name="photoUrl" type="xsd:string" maxOccurs="unbounded" minOccurs="0" /&gt;
-                  &lt;/xsd:sequence&gt;
-                &lt;/xsd:complexType&gt;
-              &lt;/xsd:element&gt;
-              &lt;xsd:element name="tag"&gt;
-                &lt;xsd:complexType&gt;
-                  &lt;xsd:sequence&gt;
-                    &lt;xsd:element name="Tag" maxOccurs="unbounded" minOccurs="0"&gt;
-                      &lt;xsd:complexType&gt;
-                        &lt;xsd:sequence&gt;
-                          &lt;xsd:element name="id" type="xsd:decimal" /&gt;
-                          &lt;xsd:element name="name" type="xsd:string" /&gt;
-                        &lt;/xsd:sequence&gt;
-                      &lt;/xsd:complexType&gt;
-                    &lt;/xsd:element&gt;
-                  &lt;/xsd:sequence&gt;
-                &lt;/xsd:complexType&gt;
-              &lt;/xsd:element&gt;
-              &lt;xsd:element name="status" type="xsd:string" /&gt;
-            &lt;/xsd:sequence&gt;
-          &lt;/xsd:complexType&gt;
-        &lt;/xsd:element&gt;
-      &lt;/xsd:schema&gt;
-    &lt;/d:AdditionalSchemas&gt;
-  &lt;/d:SchemaSet&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In the data mapper, click the import icon at the top of the Target panel.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/ImportXML1.png" alt="Import an XML File to Target Panel"></span></p>
-</div>
-<div class="paragraph">
-<p>An <strong>Open File</strong> dialog appears.  Navigate to the XMLSchema.xml file and select it.
-The fields now appear in the Target panel as you defined them in the imported XML schema.  The fields
-are expanded to show more detail.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/ImportXML2.png" alt="Import of an XML File to Target Panel Complete"></span></p>
-</div>
-<div class="paragraph">
-<p>You import instance files in the same way. Instance files define a separate namespace, which also defines a few
-special attributes. For example:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>JSON Schema Instance File: <strong>JSONSchemaInst.json</strong></p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>   {
-        "order": {
-            "address": {
-                "street": "123 any st",
-                "city": "Austin",
-                "state": "TX",
-                "zip": "78626"
-            },
-            "contact": {
-                "firstName": "james",
-                "lastName": "smith",
-                "phone": "512-123-1234"
-            },
-            "orderId": "123"
-        },
-        "primitives": {
-            "stringPrimitive": "some value",
-            "booleanPrimitive": true,
-            "numberPrimitive": 24
-        },
-        "addressList": [
-            { "street": "123 any st", "city": "Austin", "state": "TX", "zip": "78626" },
-            { "street": "123 any st", "city": "Austin", "state": "TX", "zip": "78626" },
-            { "street": "123 any st", "city": "Austin", "state": "TX", "zip": "78626" },
-            { "street": "123 any st", "city": "Austin", "state": "TX", "zip": "78626" }
-        ]
-    }</code></pre>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>XML Schema Instance File: <strong>XMLSchemaInst.xml</strong></p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code> &lt;ns:XmlOE xmlns:ns="http://atlasmap.io/xml/test/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd "&gt;
-    &lt;ns:orderId&gt;ns:orderId&lt;/ns:orderId&gt;
-    &lt;ns:Address&gt;
-      &lt;ns:addressLine1&gt;ns:addressLine1&lt;/ns:addressLine1&gt;
-      &lt;ns:addressLine2&gt;ns:addressLine2&lt;/ns:addressLine2&gt;
-      &lt;ns:city&gt;ns:city&lt;/ns:city&gt;
-      &lt;ns:state&gt;ns:state&lt;/ns:state&gt;
-      &lt;ns:zipCode&gt;ns:zipCode&lt;/ns:zipCode&gt;
-    &lt;/ns:Address&gt;
-    &lt;ns:Contact&gt;
-      &lt;ns:firstName&gt;ns:firstName&lt;/ns:firstName&gt;
-      &lt;ns:lastName&gt;ns:lastName&lt;/ns:lastName&gt;
-      &lt;ns:phoneNumber&gt;ns:phoneNumber&lt;/ns:phoneNumber&gt;
-      &lt;ns:zipCode&gt;ns:zipCode&lt;/ns:zipCode&gt;
-    &lt;/ns:Contact&gt;
-  &lt;/ns:XmlOE&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Using the same procedure as before, import instance files into either the Source or Target panel.</p>
-</div>
-<div class="paragraph">
-<p>There does exist one other method for establishing mappable fields within the AtlasMap data mapper.
-A Java class can be established where each field is represented as a class-wide public entity.  Arrays
-and data types are more discretely defined.  For example:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Java File: <strong>Bicycle.java</strong></p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>package io.paul;
-import io.paul.GeoLocation;
+<pre class="CodeRay highlight"><code data-lang="java">Bicycle.java:
 
-public class Bicycle {
-    public int cadence;
-    public int gear;
-    public int speed;
-    public float[] seatHeight;
-    public String[] color;
-    public GeoLocation geoLocation;
+<span class="keyword">package</span> <span class="namespace">io.paul</span>;
+<span class="keyword">import</span> <span class="include">io.paul.GeoLocation</span>;
+
+<span class="directive">public</span> <span class="type">class</span> <span class="class">Bicycle</span> {
+    <span class="directive">public</span> <span class="type">int</span> cadence;
+    <span class="directive">public</span> <span class="type">int</span> gear;
+    <span class="directive">public</span> <span class="type">int</span> speed;
+    <span class="directive">public</span> <span class="type">float</span><span class="type">[]</span> seatHeight;
+    <span class="directive">public</span> <span class="predefined-type">String</span><span class="type">[]</span> color;
+    <span class="directive">public</span> GeoLocation geoLocation;
 }</code></pre>
 </div>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>Java File: <strong>GeoLocation.java</strong></p>
-</li>
-</ul>
-</div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>package io.paul;
+<pre class="CodeRay highlight"><code data-lang="java">GeoLocation.java:
+<span class="keyword">package</span> <span class="namespace">io.paul</span>;
 
-public class GeoLocation {
-    double lattitude;
-    double longitude;
+<span class="directive">public</span> <span class="type">class</span> <span class="class">GeoLocation</span> {
+    <span class="type">double</span> lattitude;
+    <span class="type">double</span> longitude;
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Compile the Java files and assemble the results into a Java archive file, for example, <code>Bicycle.jar</code> in the following lines:</p>
+<p>To import these files:</p>
 </div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Compile the Java files and assemble the results into a Java archive file.
+For example, invoke the following commands to create the <code>Bicycle.jar</code> file:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>javac -cp io.paul:. -d . GeoLocation.java Bicycle.java
-jar cvf ../Bicycle.jar *</code></pre>
+<pre>javac -cp io.paul:. -d . GeoLocation.java Bicycle.java
+jar cvf ../Bicycle.jar *</pre>
 </div>
+</div>
+</li>
+<li>
+<p>In the main tool bar, click
+<span class="image"><img src="images/Import-Data-Shape.png" alt="Import"></span>.</p>
+</li>
+<li>
+<p>In the <strong>Open</strong> dialog, navigate to the <code>Bicycle.jar</code> file and click <strong>Open</strong>.</p>
+</li>
+<li>
+<p>At the top of the <strong>Source</strong> panel, click
+<span class="image"><img src="images/PlusBlackBackground.png" alt="+"></span>
+to import the fields into the source panel.</p>
+<div class="paragraph">
+<p>To display imported fields in the <strong>Target</strong> panel, you would click
+<span class="image"><img src="images/PlusBlackBackground.png" alt="+"></span>
+at the top of the <strong>Target</strong> panel.</p>
+</div>
+</li>
+<li>
+<p>In the <strong>Establish your class…</strong> dialog, in the <strong>Class package name</strong> field,
+enter the class package name of the Java class. For example, in
+<code>Bicycle.jar</code> file, the class package name is <code>io.paul.Bicycle</code>.</p>
+</li>
+<li>
+<p>Click <strong>OK</strong>.  If you import the sample <code>Bicycle.jar</code> file into the the
+<strong>Source</strong> panel, you would now see something like the following.
+The fields that are in the imported Java class files appear in the
+panel into which they were imported.</p>
+</li>
+</ol>
 </div>
 <div class="paragraph">
-<p>Now you can import the <code>Bicycle.jar</code> archive into AtlasMap.  The import procedure is slightly different for
-Java class archives.  You must:</p>
-</div>
-<div class="paragraph">
-<p>Import the file into AtlasMap.  Select the import icon <strong>on the main tool bar</strong>, not on
-the panel.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/ImportJavaClass1.png" alt="Import a Java Class Archive File to Source Panel"></span></p>
-</div>
-<div class="paragraph">
-<p>An <strong>Open File</strong> dialog appears.  Navigate to the <code>Bicycle.jar</code> file and select it.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/ImportJavaClass2.png" alt="Import a Java Class Archive File to Source Panel - Open Dialog"></span></p>
-</div>
-<div class="paragraph">
-<p>Select the plus icon (+) on the Source or Target panel.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/ImportJavaClass3.png" alt="Enable a class package in a previously imported JAR"></span></p>
-</div>
-<div class="paragraph">
-<p>A dialog appears "Establish your class in the Sources panel."
-In the <strong>Class package name:</strong> input field, enter the class package name of the Java class you have defined.
-In the <code>Bicycle.jar</code> example, the class package name is <code>io.paul.Bicycle</code>.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/ImportJavaClass4.png" alt="Enable a class package in a previously imported JAR"></span></p>
-</div>
-<div class="paragraph">
-<p>You will now see the fields you created in your Java class file appear in the selected panel.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/ImportJavaClass5.png" alt="Class Package Enablement Complete"></span></p>
-</div>
-<div class="paragraph">
-<p>You have now defined the source and target data shapes.</p>
+<p><span class="image"><img src="images/ImportJavaClass5.png" alt="Bicycle jar file"></span></p>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="design-mappings-in-ui">4. Design Mappings in UI</h2>
+<h2 id="mapping-fields-in-atlasmap">4. Mapping fields in AtlasMap</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>The following topics provide details for mapping fields in AtlasMap:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#find-the-field-you-want-to-map">Finding the data field that you want to map</a></p>
+</li>
+<li>
+<p><a href="#map-one-source-field-to-one-target-field">Mapping one source field to one target field</a></p>
+</li>
+<li>
+<p><a href="#example-missing-unwanted-data">Example of missing or unwanted data when combining or separating fields</a></p>
+</li>
+<li>
+<p><a href="#combine-multiple-source-fields-into-one-target-field">Combining multiple source fields into one target field</a></p>
+</li>
+<li>
+<p><a href="#separate-one-source-field-into-multiple-target-fields">Separating one source field into multiple target fields</a></p>
+</li>
+<li>
+<p><a href="#mapping-between-collections-and-non-collections">Mapping between collections and non-collections</a></p>
+</li>
+<li>
+<p><a href="#transform-target-data">Transforming source or target data</a></p>
+</li>
+<li>
+<p><a href="#applying-conditions-to-mappings">Applying conditions to mappings</a></p>
+</li>
+<li>
+<p><a href="#view-mappings">Viewing mappings</a></p>
+</li>
+<li>
+<p><a href="#available-transformations">Descriptions of available transformations</a></p>
+</li>
+<li>
+<p><a href="#creating-a-custom-transformation">Creating a custom transformation</a></p>
+</li>
+</ul>
+</div>
 <div class="sect2">
-<h3 id="find-the-field-you-want-to-map">4.1. Find the data field that you want to map</h3>
+<h3 id="find-the-field-you-want-to-map">4.1. Finding the data field that you want to map</h3>
 <div class="paragraph">
 <p>In a relatively simple integration, mapping data fields is easy
 and intuitive. In more complex integrations or in integrations that handle
@@ -1180,7 +1539,7 @@ field that you want to map to.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="map-one-source-field-to-one-target-field">4.2. Map one source field to one target field</h3>
+<h3 id="map-one-source-field-to-one-target-field">4.2. Mapping one source field to one target field</h3>
 <div class="paragraph">
 <p>The default mapping behavior maps one source field to one target field.
 For example, map the <code>Name</code> field to the <code>CustomerName</code> field.</p>
@@ -1231,7 +1590,7 @@ in the <strong>Mapping Details</strong> panel.</p>
 </li>
 <li>
 <p>Hide the preview fields by clicking
-<span class="image"><img src="images/images/EditorSettings.png" alt="Editor settings"></span> again and selecting
+<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> again and selecting
 <strong>Show Mapping Preview</strong>.</p>
 </li>
 </ol>
@@ -1243,7 +1602,7 @@ in the <strong>Mapping Details</strong> panel.</p>
 <div class="paragraph">
 <p>You can also preview data mapping results in this view.
 If preview fields are not visible,
-click <span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> and select
+click EditorSettings.png[Editor settings] and select
 <strong>Show Mapping Preview</strong>. Enter data as described in the previous step.
 In the table of defined mappings, preview fields
 appear for only the selected mapping. To see preview fields for another
@@ -1352,7 +1711,7 @@ field has 8 ordered parts. Starting at 1, the index of each part is:</p>
 <div class="paragraph">
 <p>In the data mapper, to identify <em>apartment</em>, <em>zip+4</em>, and <em>country</em> as missing, you
 add padding fields at indexes 3, 7, and 8. See
-<a href="#separate-one-source-field-into-multiple-target-fields">Separate one source field into multiple target fields</a>.</p>
+<a href="#separate-one-source-field-into-multiple-target-fields">Separating one source field into multiple target fields</a>.</p>
 </div>
 <div class="paragraph">
 <p>Now suppose that you want to combine source fields for
@@ -1360,11 +1719,11 @@ add padding fields at indexes 3, 7, and 8. See
 target field. Further suppose that there are no source fields to provide content for
 <em>apartment</em>, <em>zip+4</em>, and <em>country</em>. In the data mapper, you need to
 identify these fields as missing. Again, you add padding fields
-at indexes 3, 7, and 8. See <a href="#combine-multiple-source-fields-into-one-target-field">Combine multiple source fields into one target field</a>.</p>
+at indexes 3, 7, and 8. See <a href="#combine-multiple-source-fields-into-one-target-field">Combining multiple source fields into one target field</a>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="combine-multiple-source-fields-into-one-target-field">4.4. Combine multiple source fields into one target field</h3>
+<h3 id="combine-multiple-source-fields-into-one-target-field">4.4. Combining multiple source fields into one target field</h3>
 <div class="paragraph">
 <p>In a data mapping, you can combine multiple source fields into one
 compound target field. For example, you can map the <code>FirstName</code> and <code>LastName</code>
@@ -1484,7 +1843,7 @@ mapping in the table to view preview fields for it.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="separate-one-source-field-into-multiple-target-fields">4.5. Separate one source field into multiple target fields</h3>
+<h3 id="separate-one-source-field-into-multiple-target-fields">4.5. Separating one source field into multiple target fields</h3>
 <div class="paragraph">
 <p>In a data mapping, you can separate a compound source field into multiple
 target fields. For  example, map the <code>Name</code> field to the <code>FirstName</code> and
@@ -1597,7 +1956,149 @@ mapping in the table to view preview fields for it.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="transform-target-data">4.6. Transform source or target data</h3>
+<h3 id="mapping-between-collections-and-non-collections">4.6. Mapping between collections and non-collections</h3>
+<div class="paragraph">
+<p>In the data mapper <strong>Source</strong> and <strong>Target</strong> panels:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="image"><img src="images/Collection-Icon.png" alt="Collection icon"></span>
+indicates a collection. If the collection contains one primitive type,
+you can map directly from or to that collection. If the collection
+contains two or more different types, the data mapper
+displays the collection’s child fields and you can map to or from the
+collection’s fields.</p>
+</li>
+<li>
+<p><span class="image"><img src="images/Solid-Folder-Complex-Type.png" alt="Folder icon"></span> indicates an
+expandable container that is a complex type. A complex type contains
+multiple fields of different types. A field in a complex type can be a
+type that is a collection, such as an array. You cannot map a complex
+type container itself. You can map only the fields that are in the complex type.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To toggle the display of data types, such as <code><strong>(COMPLEX)</strong></code>,
+<code><strong>STRING</strong></code>, <code><strong>INTEGER</strong></code>, in the upper right of the data mapper, click
+<span class="image"><img src="images/EditorSettings.png" alt="settings"></span> and click
+<strong>Show Types</strong>.</p>
+</div>
+<div class="paragraph">
+<p>The following table shows the default behavior when mapping
+between collection fields and non-collection fields.</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">When you map from this source</th>
+<th class="tableblock halign-left valign-top">To this target</th>
+<th class="tableblock halign-left valign-top">During execution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A collection. (No child fields appear in the data mapper.)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A field that is not in a collection.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The data mapper maps the value that is in the last element in the source collection to the target field.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A field that is in a collection.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A field that is not in a collection.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The data mapper maps the mapped field&#8217;s value that is in the last element in the source collection to the target field.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A field that is not in a collection.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A collection. (No child fields appear in the data mapper.)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The data mapper maps the value that is in the mapped source field to the first (and only) element in the collection.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A field that is not in a collection.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A field that is in a collection.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The data mapper maps the value that is in the mapped source field to the first (and only) element in the collection.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<div class="title">Changing default behavior when mapping from a collection field</div>
+<p>When you map from a collection field to a non-collection
+field, the default behavior is that the target field gets its
+value from the last element in the source collection.
+You can change this default behavior in the following
+ways:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>To map from the element that you choose, apply the <strong>Item At</strong>
+transformation to the source and specify an
+index. For example, to map the
+value that is in the first element that is in the collection,
+specify <code>0</code> for the index.</p>
+</li>
+<li>
+<p>To map all values that are in
+all elements that are in a
+source collection, apply the <strong>Concatenate</strong> transformation
+to the source collection or source collection field and optionally specify a delimiter.
+The default delimiter is a space. For example,
+consider this source collection:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>In the first element, the value in the <strong>city</strong> field
+is <strong>Boston</strong>.</p>
+</li>
+<li>
+<p>In the second element, the value in the <strong>city</strong> field
+is <strong>Paris</strong>.</p>
+</li>
+<li>
+<p>In the third element, the value in the <strong>city</strong> field
+is <strong>Tokyo</strong>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>During execution, the data mapper populates the target
+field with <code>Boston Paris Tokyo</code>.</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<div class="title">Changing default behavior when mapping from a non-collection field</div>
+<p>When you map from a non-collection field to a collection
+field, the default behavior is that the target collection contains
+one element, which contains the non-collection, source field
+value. You can change the default behavior
+when the source field contains a series of values that are
+separated by the same delimiter. For example, consider a
+non-collection, source <strong>cities</strong> field that contains:</p>
+</div>
+<div class="paragraph">
+<p><code>Boston Paris Tokyo</code></p>
+</div>
+<div class="paragraph">
+<p>You would map this to a target collection or to a
+target field that is in a collection.
+On the source <strong>cities</strong> field, add the <strong>Split</strong> transformation.
+During execution, the data mapper splits the value of the
+<strong>cities</strong> field at the space delimiter. The result is a
+collection that contains three elements. In the first
+element, the value of the <strong>city</strong> field is <code>Boston</code>. In the
+second element, the value of the <strong>city</strong> field is <code>Paris</code>.
+In the third element, the value of the <strong>city</strong> field is <code>Tokyo</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="transform-target-data">4.7. Transforming source or target data</h3>
 <div class="paragraph">
 <p>In the data mapper, after you define a mapping, you can transform
 any field in the mapping.
@@ -1605,49 +2106,39 @@ Transforming a data field defines how you want to store the data.
 For example, you could specify the <strong>Capitalize</strong> transformation to ensure that the first
 letter of a data value is uppercase.</p>
 </div>
-<div class="paragraph">
-<div class="title">Procedure</div>
-<p>Map the fields.  This can be a one-to-one mapping, a combination mapping, or a separation mapping.</p>
-</div>
 <div class="olist arabic">
+<div class="title">Procedure</div>
 <ol class="arabic">
 <li>
-<p><strong>Select the transformation icon.</strong></p>
-<div class="paragraph">
+<p>Map the fields. This can be a one-to-one mapping, a combination mapping,
+or a separation mapping.</p>
+</li>
+<li>
 <p>In the <strong>Mapping Details</strong> panel, under <strong>Sources</strong> or under <strong>Targets</strong>,
 in the box for the field that you want to transform, click the arrow to the left of the
 trash can icon.</p>
-</div>
 <div class="paragraph">
 <p><span class="image"><img src="images/Trans1.png" alt="Mapping details transformation button"></span></p>
 </div>
 <div class="paragraph">
 <p>This displays a pull-down where you can select the transformation
-that you want the data mapper to perform.  Note that the set of available transformations is type specific.</p>
+that you want the data mapper to perform.  The set of available transformations
+is type specific.</p>
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="images/Trans2.png" alt="Mapping details transformation button - available transformations"></span></p>
 </div>
 </li>
 <li>
-<p><strong>Select the transformation.</strong></p>
-<div class="paragraph">
 <p>Click the transformation that you want to perform.</p>
-</div>
 </li>
 <li>
-<p><strong>Specify arguments.</strong></p>
-<div class="paragraph">
-<p>If the transformation requires any input parameters, specify them
+<p>Optional. If the transformation requires any input parameters, specify them
 in the appropriate input fields.</p>
-</div>
 </li>
 <li>
-<p><strong>Repeat.</strong></p>
-<div class="paragraph">
-<p>To add another compound transformation, click the arrow to the left of the
+<p>Optional. To add another transformation, click the arrow to the left of the
 trash can icon again.</p>
-</div>
 </li>
 </ol>
 </div>
@@ -1655,112 +2146,9 @@ trash can icon again.</p>
 <div class="title">Additional resource</div>
 <p><a href="#available-transformations">Descriptions of available transformations</a></p>
 </div>
-<div class="paragraph">
-<p>In addition to the list of fixed transformations, users may define their own custom field
-action transformations.  These custom field actions are written in Java and are then imported
-into the AtlasMap data mapper.  Once established in a panel the transformation will appear
-in the standard list of transformations.  For example:</p>
-</div>
-<div class="olist arabic">
-<div class="title">Procedure</div>
-<ol class="arabic">
-<li>
-<p><strong>Create a transformation.</strong></p>
-<div class="paragraph">
-<p>This example custom transformation is applicable to <code>String</code> arguments.  It takes the argument specified in the Source panel
-transformation and prints it out on the Target side.  Implement the <code>AtlasFieldAction</code> class as follows:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>package io.atlasmap.service.my;
-
-import io.atlasmap.v2.*;
-import io.atlasmap.api.AtlasFieldAction;
-import io.atlasmap.spi.AtlasFieldActionInfo;
-
-public class PaulsFieldActions implements AtlasFieldAction {
-
-    @AtlasFieldActionInfo(name = "MyCustomFieldActionPaul", sourceType = FieldType.STRING,
-        targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE,
-        targetCollectionType = CollectionType.NONE)
-    public static String myCustomFieldAction(String input) {
-        return "Paul's custom field action: " + input;
-    }
-
-}</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p><strong>Build your Java archive file.</strong></p>
-<div class="paragraph">
-<p>The <code>io.atlasmap.v2</code>, <code>io.atlasmap.api</code> and <code>io.atlasmap.spi</code> target dependencies are most easily resolved
-through the use of a maven <code>pom.xml</code> file.  Use the same version number as the AtlasMap standalone JAR that you previously downloaded.</p>
-</div>
-</li>
-<li>
-<p><strong>Import your Java archive file.</strong></p>
-<div class="paragraph">
-<p>Click the import icon at the top of the AtlasMap main tool bar.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/Trans3.png" alt="Import custom field action JAR"></span></p>
-</div>
-<div class="paragraph">
-<p>Navigate to the JAR file containing your custom field action and select it.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/Trans4.png" alt="Import custom field action JAR"></span></p>
-</div>
-</li>
-<li>
-<p><strong>Enable your class</strong></p>
-<div class="paragraph">
-<p>Select the plus icon (+) to enable the class within your field action JAR file.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/Trans5.png" alt="Import custom field action JAR"></span></p>
-</div>
-<div class="paragraph">
-<p>A dialog appears "Establish your class in the Sources panel."
-In the <strong>Class package name:</strong> input field, enter the class package name of the Java class you have defined for your custom field action.
-In the <code>MyFieldAction.jar</code> example, the class package name is <code>io.atlasmap.service.my.PaulsFieldActions</code>.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/Trans6.png" alt="Import custom field action JAR"></span></p>
-</div>
-</li>
-<li>
-<p><strong>Select your custom transformation.</strong></p>
-<div class="paragraph">
-<p>Select the pull-down menu in the <strong>Targets</strong> window within the <strong>Mapping Details</strong> section.  You will notice that your
-custom field action now appears as a selectable field action transformation.  Select it.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/Trans7.png" alt="Import custom field action JAR"></span></p>
-</div>
-</li>
-<li>
-<p><strong>Test your custom field action.</strong></p>
-<div class="paragraph">
-<p>Select the <span class="image"><img src="images/EditorSettings.png" alt="Panel settings"></span> icon on the AtlasMap main tool bar.  Check the checkbox for <code>Show Mapping Preview</code>.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/Trans8.png" alt="Import custom field action JAR"></span></p>
-</div>
-<div class="paragraph">
-<p>In the Source panel there will exist an input field.  Type a string into it  (for example <code>test</code>).  Now focus
-your cursor in the <strong>Preview Results</strong> field in the Target panel.  You will see the same string.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/Trans9.png" alt="Import custom field action JAR"></span></p>
-</div>
-</li>
-</ol>
-</div>
 </div>
 <div class="sect2">
-<h3 id="applying-conditions-to-mappings">4.7. Applying conditions to mappings</h3>
+<h3 id="applying-conditions-to-mappings">4.8. Applying conditions to mappings</h3>
 <div class="paragraph">
 <p>In some integrations, it is helpful to add conditional
 processing to a mapping. For example, suppose that you are
@@ -2078,7 +2466,7 @@ Equal</p></td>
 </table>
 </div>
 <div class="sect2">
-<h3 id="view-mappings">4.8. View the mappings</h3>
+<h3 id="view-mappings">4.9. Viewing mappings</h3>
 <div class="paragraph">
 <p>While you are using the data mapper UI, you can view the mappings
 that are already defined. This lets you check whether the
@@ -2104,7 +2492,7 @@ target fields, click <span class="image"><img src="images/grid.png" alt="grid" t
 </div>
 </div>
 <div class="sect2">
-<h3 id="available-transformations">4.9. Descriptions of available transformations</h3>
+<h3 id="available-transformations">4.10. Descriptions of available transformations</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2509,86 +2897,256 @@ length of the string before the supplied <code>match</code> string.</p></td>
 </tbody>
 </table>
 </div>
+<div class="sect2">
+<h3 id="creating-a-custom-transformation">4.11. Creating a custom transformation</h3>
+<div class="paragraph">
+<p>In addition to the built-in transformations, you can define custom field
+action transformations. Write custom field actions in Java and then import them
+into the AtlasMap data mapper. After it is established in a source or target
+panel, the transformation appears
+in the list of transformations that are available for any field.</p>
+</div>
+<div class="olist arabic">
+<div class="title">Procedure</div>
+<ol class="arabic">
+<li>
+<p>Define a transformation in Java.</p>
+<div class="paragraph">
+<p>The following custom transformation is applicable to <code>String</code> arguments.
+It takes the argument specified in the source panel
+transformation and prints it on the target side.
+Implement the <code>AtlasFieldAction</code> class as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">package</span> <span class="namespace">io.atlasmap.service.my</span>;
+
+<span class="keyword">import</span> <span class="include">io.atlasmap.v2</span>.*;
+<span class="keyword">import</span> <span class="include">io.atlasmap.api.AtlasFieldAction</span>;
+<span class="keyword">import</span> <span class="include">io.atlasmap.spi.AtlasFieldActionInfo</span>;
+
+<span class="directive">public</span> <span class="type">class</span> <span class="class">PaulsFieldActions</span> <span class="directive">implements</span> AtlasFieldAction {
+
+    <span class="annotation">@AtlasFieldActionInfo</span>(name = <span class="string"><span class="delimiter">&quot;</span><span class="content">MyCustomFieldActionPaul</span><span class="delimiter">&quot;</span></span>, sourceType = FieldType.STRING,
+        targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE,
+        targetCollectionType = CollectionType.NONE)
+    <span class="directive">public</span> <span class="directive">static</span> <span class="predefined-type">String</span> myCustomFieldAction(<span class="predefined-type">String</span> input) {
+        <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Paul's custom field action: </span><span class="delimiter">&quot;</span></span> + input;
+    }
+
+}</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Build your Java archive file.</p>
+<div class="paragraph">
+<p>The <code>io.atlasmap.v2</code>, <code>io.atlasmap.api</code> and <code>io.atlasmap.spi</code> target
+dependencies are most easily resolved
+through the use of a maven <code>pom.xml</code> file.  Use the same version number as
+the AtlasMap standalone JAR file that you previously downloaded.</p>
+</div>
+</li>
+<li>
+<p>At the top of the AtlasMap main tool bar, click
+<span class="image"><img src="images/Import-Data-Shape.png" alt="Import"></span> to import your Java archive file.</p>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans3.png" alt="Import custom field action JAR"></span></p>
+</div>
+</li>
+<li>
+<p>Navigate to the JAR file that contains your custom transformation
+and select it.</p>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans4.png" alt="Import custom field action JAR"></span></p>
+</div>
+</li>
+<li>
+<p>To enable the class that defines the custom transformation,
+for this example, at the top of the <strong>Target</strong> panel,
+select the plus icon (+).</p>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans5.png" alt="Import custom field action JAR"></span></p>
+</div>
+</li>
+<li>
+<p>In the <strong>Class package name:</strong> field, enter the class package name of
+the Java class that defines the custom transformation.
+In the <code>MyFieldAction.jar</code> example, the class package
+name is <code>io.atlasmap.service.my.PaulsFieldActions</code>.</p>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans6.png" alt="Import custom field action JAR"></span></p>
+</div>
+</li>
+<li>
+<p>In the <strong>Mapping Details</strong> panel, in the <strong>Targets</strong> section,
+select the transformation pull-down menu to see that your
+custom transformation now appears as a selectable
+transformation. Select it.</p>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans7.png" alt="Import custom field action JAR"></span></p>
+</div>
+</li>
+<li>
+<p>To test your custom transformation:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>In the AtlasMap main tool bar, click
+<span class="image"><img src="images/EditorSettings.png" alt="Panel settings"></span>.</p>
+</li>
+<li>
+<p>Click <strong>Show Mapping Preview</strong>.</p>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans8.png" alt="Import custom field action JAR"></span></p>
+</div>
+</li>
+<li>
+<p>In the <strong>Source</strong> panel input field,
+type a string, for example, <code>test</code>.</p>
+</li>
+<li>
+<p>Notice the same string in the
+<strong>Preview Results</strong> field in the target panel.</p>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans9.png" alt="Import custom field action JAR"></span></p>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="export-files-in-ui">5. Export Files in UI</h2>
+<h2 id="exporting-mappings-to-an-atlasmap-catalog-file">5. Exporting mappings to an AtlasMap catalog file</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="export-files">5.1. Export AtlasMap Data Mapper Catalog File</h3>
 <div class="paragraph">
-<p>Once all required schema files and JARs have been imported and all mappings
-have been defined you can save your work using the <strong>export</strong> button.  The export
-button captures all of your workspace into an ADM (<code>.adm</code>) catalog file.  This
-file may be used with the <strong>import</strong> button to reinitialize AtlasMap to the state
-at which the export button was clicked.  The export button can be found on the
-main toolbar:</p>
+<p>After all mappings are defined, save the mappings by exporting
+them to an AtlasMap <code>.adm</code> catalog file:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>In the AtlasMap top tool bar, click
+<span class="image"><img src="images/ExportIcon.png" alt="Export"></span>.</p>
+<div class="paragraph">
+<p>This captures your workspace in a <code>.adm</code> catalog file.</p>
+</div>
+</li>
+<li>
+<p>In the <strong>Export mappings</strong> field, accept the default name or enter
+a name for the exported <code>.adm</code> file. The default name is <code>atlasmap-mapping.adm</code>.</p>
+</li>
+<li>
+<p>Click <strong>OK</strong>.</p>
+</li>
+</ol>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="images/Export1.png" alt="Export the current AtlasMap state"></span></p>
+<p>AtlasMap places the exported file in the <code>Downloads</code> directory.</p>
 </div>
-<div class="paragraph">
-<p>Once it is clicked, an <strong>Export mappings</strong> dialog appears.  A standard default name for the ADM file appears as a
-placeholder (<code>atlasmap-mapping.adm</code>).  You may override that file name as desired.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/Export2.png" alt="Export dialog"></span></p>
-</div>
-<div class="paragraph">
-<p>Once you click the <code>OK</code> button the catalog file will be written with the specified name to the
-local <code>Downloads</code> directory.</p>
-</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+To set AtlasMap to the state at which you exported data mappings,
+import a <code>.adm</code> catalog file by clicking
+<span class="image"><img src="images/Import-Data-Shape.png" alt="Import"></span>
+in the AtlasMap top tool bar. Navigate to the <code>.adm</code> file
+and click <strong>Open</strong>.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="reset-files-in-ui">6. Reset Files in UI</h2>
+<h2 id="resetting-data-files-in-atlasmap">6. Resetting data files in AtlasMap</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="reset-files">6.1. Reset the AtlasMap Data Mapper</h3>
 <div class="paragraph">
-<p>Upon initial installation of AtlasMap the user is presented with a blank canvas.
-No mappings are possible until the user imports files into the Source and Target panels.
-Once imported, users may remove imported files using the trash can icon:</p>
+<p>Initially, AtlasMap displays a blank canvas. You must import at least
+one data file into the <strong>Source</strong> panel and at least one data file into
+the <strong>Target</strong> panel. You can then map fields.</p>
+</div>
+<div class="paragraph">
+<p>After you import a data file, you can remove it from the data mapper
+canvas by clicking the trash icon, as in the following image:</p>
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="images/Reset1.png" alt="Remove the specified file"></span></p>
 </div>
 <div class="paragraph">
-<p>If a user wishes to remove <strong>all</strong> imported files as well as all mappings then select the
-<span class="image"><img src="images/EditorSettings.png" alt="Panel settings"></span> icon on the AtlasMap main tool bar and select <code>Reset All</code>
-from the pull down menu.</p>
+<p>To remove all imported files, as well as all data mappings:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>In the AtlasMap top menu bar, click
+<span class="image"><img src="images/EditorSettings.png" alt="Settings"></span>.</p>
+</li>
+<li>
+<p>In the popup menu, click <strong>Reset All</strong>.</p>
+</li>
+<li>
+<p>In the confirmation dialog, click <strong>Reset</strong>.</p>
+</li>
+</ol>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="images/Reset2.png" alt="Reset All"></span></p>
+<p>AtlasMap displays a blank canvas.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="running-atlasmap-with-apache-camel">7. Running AtlasMap with Apache Camel</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Developers who are familiar with Apache Camel can implement a
+Camel application that uses the <code>camel-atlasmap</code> component.
+A <code>camel-atlasmap</code> endpoint</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Can consume an AtlasMap <code>.adm</code> file</p>
+</li>
+<li>
+<p>Uses the content of <code>body</code> as the default source document for mappings</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>A challenge dialog will appear to verify that the user wants to remove all
-files.</p>
+<p>For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>from("direct:start")
+   .to("atlas:atlas-mapping.adm")
+   .log("${body}")</pre>
+</div>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="images/Reset3.png" alt="Reset challenge dialog"></span></p>
+<p>If  <code>body</code> contains a <code>java.util.Map</code> object, then <code>camel-atlasmap</code>
+uses <code>key</code> as a document ID and the corresponding value as the
+document payload.</p>
 </div>
 <div class="paragraph">
-<p>Once the <code>Reset</code> button is clicked AtlasMap is reset and the user is presented with a fresh blank canvas.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/Reset4.png" alt="Blank canvas"></span></p>
+<p>You can obtain the <code>camel-atlasmap</code> component here:
+<a href="http://central.maven.org/maven2/io/atlasmap/camel-atlasmap/1.42.3/camel-atlasmap-1.42.3.jar" class="bare">http://central.maven.org/maven2/io/atlasmap/camel-atlasmap/1.42.3/camel-atlasmap-1.42.3.jar</a></p>
 </div>
 </div>
-</div>
-</div>
-</div>
-<div id="footnotes">
-<hr>
-<div class="footnote" id="_footnote_1">
-<a href="#_footnoteref_1">1</a>. It doesn&#8217;t mean we won&#8217;t address whole document mapping at all. For example we have a plan to support bulk mapping by detecting the same object structure at both sides of documents (<a href="https://github.com/atlasmap/atlasmap/issues/86">#86</a>).
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.43.0-SNAPSHOT<br>
-Last updated 2019-09-24 20:19:30 UTC
+Last updated 2019-09-25 17:55:36 UTC
 </div>
 </div>
 </body>

@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.6.1">
-<title>Reset the AtlasMap Data Mapper</title>
+<title>About types of fields in AtlasMap</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -517,48 +517,115 @@ table.CodeRay td.code>pre{padding:0}
 .CodeRay .head .head{color:#f4f}
 </style>
 </head>
-<body id="reset-files" class="book">
+<body id="about-types-of-fields-in-atlasmap" class="book">
 <div id="header">
-<h1>Reset the AtlasMap Data Mapper</h1>
+<h1>About types of fields in AtlasMap</h1>
 </div>
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Upon initial installation of AtlasMap the user is presented with a blank canvas.
-No mappings are possible until the user imports files into the Source and Target panels.
-Once imported, users may remove imported files using the trash can icon:</p>
+<p>The AtlasMap user interface displays source fields and target fields
+and you define the field-to-field mappings that you need.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+At this time, AtlasMap does not provide whole document mapping.
+It is expected that a future release will support bulk mapping by
+detecting the same object structure in source and target files
+(<a href="https://github.com/atlasmap/atlasmap/issues/86">issue #86</a>).
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="images/Reset1.png" alt="Remove the specified file"></span></p>
+<p>An understanding of the different kinds of AtlasMap fields makes
+it easier for you to define the mappings you need. For the purposes of
+mapping, there are three field types:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Terminal</strong> — A terminal field is selectable. It can be the source or
+target in a mapping. During execution, a path to a terminal field
+identifies a value.</p>
+</li>
+<li>
+<p><strong>Parent</strong>  — A parent field is also referred to as a complex field.
+A parent field is expandable. Expanding a parent field displays
+its descendant fields. A parent field it not selectable and
+cannot be directly in a mapping.</p>
+</li>
+<li>
+<p><strong>Collection</strong>  — A collection field is also a terminal field.
+It is selectable and can be the source or target in a mapping.
+A collection field indicates a field that holds one or more
+objects that are all the same type. Internally, a collection
+field might be an array.</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>If a user wishes to remove <strong>all</strong> imported files as well as all mappings then select the
-<span class="image"><img src="images/EditorSettings.png" alt="Panel settings"></span> icon on the AtlasMap main tool bar and select <code>Reset All</code>
-from the pull down menu.</p>
+<p>For example, consider this sample XML instance document:</p>
 </div>
-<div class="paragraph">
-<p><span class="image"><img src="images/Reset2.png" alt="Reset All"></span></p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;order&gt;</span>
+  <span class="tag">&lt;orderId</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">O123</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+  <span class="tag">&lt;items&gt;</span>
+    <span class="tag">&lt;item&gt;</span>
+      <span class="tag">&lt;itemId&gt;</span>Orange<span class="tag">&lt;/itemId&gt;</span>
+      <span class="tag">&lt;quantity</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/item&gt;</span>
+    <span class="tag">&lt;item&gt;</span>
+      <span class="tag">&lt;itemId&gt;</span>Apple<span class="tag">&lt;/itemId&gt;</span>
+      <span class="tag">&lt;quantity</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">2</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/item&gt;</span>
+  <span class="tag">&lt;/items&gt;</span>
+<span class="tag">&lt;/order&gt;</span></code></pre>
 </div>
-<div class="paragraph">
-<p>A challenge dialog will appear to verify that the user wants to remove all
-files.</p>
 </div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Terminal fields:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>/order/orderId/@value</code><br>
+<code>/order/items/item[0]/quantity/@value</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Parent fields:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>/order</code><br>
+<code>/order/orderId</code><br>
+<code>/order/items/item[0]</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Collection fields:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>/order/items/item[]/itemId</code><br>
+<code>/order/items/item[]/quantity/@value</code></p></td>
+</tr>
+</tbody>
+</table>
 <div class="paragraph">
-<p><span class="image"><img src="images/Reset3.png" alt="Reset challenge dialog"></span></p>
-</div>
-<div class="paragraph">
-<p>Once the <code>Reset</code> button is clicked AtlasMap is reset and the user is presented with a fresh blank canvas.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/Reset4.png" alt="Blank canvas"></span></p>
+<p>When you define a mapping that uses this XML instance document as the
+source data,  you cannot know how many items will be in an order.
+However, the same mapping definition works for each transaction,
+regardless of the number of items in the order.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-09-24 20:19:30 UTC
+Last updated 2019-09-25 17:55:36 UTC
 </div>
 </div>
 </body>

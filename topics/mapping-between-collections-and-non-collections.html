@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.6.1">
-<title>How to define an AtlasMap data mapping?</title>
+<title>Mapping between collections and non-collections</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -517,142 +517,158 @@ table.CodeRay td.code>pre{padding:0}
 .CodeRay .head .head{color:#f4f}
 </style>
 </head>
-<body id="basics" class="book toc2 toc-left">
+<body id="mapping-between-collections-and-non-collections" class="book">
 <div id="header">
-<h1>How to define an AtlasMap data mapping?</h1>
-<div id="toc" class="toc2">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#field-types">Field Types</a>
-<ul class="sectlevel2">
-<li><a href="#terminal-field">Terminal field</a></li>
-<li><a href="#parent-field">Parent field</a></li>
-<li><a href="#collection-field">Collection field</a></li>
-</ul>
-</li>
-<li><a href="#mapping-types">Mapping Types</a>
-<ul class="sectlevel2">
-<li><a href="#one-to-one">One to One</a></li>
-<li><a href="#many-to-one">Many to One</a></li>
-<li><a href="#one-to-many">One to Many</a></li>
-<li><a href="#for-each">For Each</a></li>
-</ul>
-</li>
-<li><a href="#transformation">Transformation</a></li>
-</ul>
-</div>
+<h1>Mapping between collections and non-collections</h1>
 </div>
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>AtlasMap focuses more on field-by-field mapping than whole document transformation. It allows users to choose individual fields from incoming documents, and map them to fields of the outgoing document <sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnote_1" title="View footnote.">1</a>]</sup>.
-So then, what is <code>field</code> in AtlasMap? Let&#8217;s see an example with XML:</p>
+<p>In the data mapper <strong>Source</strong> and <strong>Target</strong> panels:</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;order&gt;</span>
-  <span class="tag">&lt;orderId</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">O123</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-  <span class="tag">&lt;items&gt;</span>
-    <span class="tag">&lt;item&gt;</span>
-      <span class="tag">&lt;itemId&gt;</span>Orange<span class="tag">&lt;/itemId&gt;</span>
-      <span class="tag">&lt;quantity</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
-    <span class="tag">&lt;/item&gt;</span>
-    <span class="tag">&lt;item&gt;</span>
-      <span class="tag">&lt;itemId&gt;</span>Apple<span class="tag">&lt;/itemId&gt;</span>
-      <span class="tag">&lt;quantity</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">2</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
-    <span class="tag">&lt;/item&gt;</span>
-  <span class="tag">&lt;items&gt;</span>
-<span class="tag">&lt;/order&gt;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In this XML instance document, <code>/order/items/item[0]/itemId</code> and <code>/order/orderId/@value</code> are terminal fields. In AtlasMap, only terminal fields can be selected to be added into a mapping. Other parent elements like <code>/order</code>, <code>/order/orderId</code>, <code>/order/items/item[0]</code> are not selectable. Instead it can be expanded to see descendant fields.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="field-types">Field Types</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>There are roughly 3 types of fields that differentiate behavior.</p>
-</div>
-<div class="sect2">
-<h3 id="terminal-field">Terminal field</h3>
-<div class="paragraph">
-<p>Terminal field is selectable in AtlasMap Data Mapper UI and can participate in mapping directly. Its path identifies the value in the document payload.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="parent-field">Parent field</h3>
-<div class="paragraph">
-<p>Also called as Complex field. Parent field cannot participate in mapping directly, but it&#8217;s expandable in UI so user can see descendant fields.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="collection-field">Collection field</h3>
-<div class="paragraph">
-<p>Collection field is a kind of terminal field. It&#8217;s selectable and mappable. The difference is that either the collection field itself or any of its parent fields is a collection. In an example XML above, <code>item</code> is a collection which could be multiple. Therefore <code>/order/items/item[]/itemId</code> is a collection field. In a programming term, it&#8217;s just array, List, etc. One thing to keep in mind is that, "how many items are going to be delivered?" is not decided at design time. Each transaction should be able to deliver a different number of items with same mapping definition.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="mapping-types">Mapping Types</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Looking from field multiplicity aspects, there are 4 types of mapping in AtlasMap.</p>
-</div>
-<div class="sect2">
-<h3 id="one-to-one">One to One</h3>
-<div class="paragraph">
-<p>Map from one source field to one target field.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="many-to-one">Many to One</h3>
-<div class="paragraph">
-<p>Map from multiple source fields to one target field. Many-to-One mapping requires one Many-to-One transformation to map multiple values into one. At this moment, we only support combining values with a delimiter. Other Many-to-One transformation will be added once (<a href="https://github.com/atlasmap/atlasmap/issues/912">#912</a>) is fixed.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="one-to-many">One to Many</h3>
-<div class="paragraph">
-<p>Map from one source field to multiple target fields. One-to-Many mapping requires one One-to-Many transformation to map one value into mutiple values. At this moment, we only support separating a value with a delimiter. Other One-to-Many transformation will be added once (<a href="https://github.com/atlasmap/atlasmap/issues/912">#912</a>) is fixed.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="for-each">For Each</h3>
-<div class="paragraph">
-<p>Map from one source collection field to one target collection field. It iterates One-to-One mapping for each element in the collection field.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="transformation">Transformation</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>In addition to simply mapping the source field value to target field value, AtlasMap supports transformations that apply to both source and/or target field in the mapping. Transformation is a single function to be applied to a field value, such as <code>Uppercase</code> which changes all characters of the string field value to uppercase. You can add any number of transformations to the mapped field from <code>Mapping Detail</code> pane at right side in the UI.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="image"><img src="images/Collection-Icon.png" alt="Collection icon"></span>
+indicates a collection. If the collection contains one primitive type,
+you can map directly from or to that collection. If the collection
+contains two or more different types, the data mapper
+displays the collection’s child fields and you can map to or from the
+collection’s fields.</p>
+</li>
+<li>
+<p><span class="image"><img src="images/Solid-Folder-Complex-Type.png" alt="Folder icon"></span> indicates an
+expandable container that is a complex type. A complex type contains
+multiple fields of different types. A field in a complex type can be a
+type that is a collection, such as an array. You cannot map a complex
+type container itself. You can map only the fields that are in the complex type.</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>Allowing transformations to be added for both source and target field might not immediately make sense. But let&#8217;s think about Many-to-One case, to combine <code>Street</code>, <code>City</code>, <code>State</code> into comma separated single string. If you want to uppercase only <code>State</code>, then you need to add on <code>State</code> source field. If you want to uppercase everything, then it&#8217;s easier to add just one <code>Uppercase</code> transformation on the target field as opposed to add it for each source fields. In other words we can call source field transformation as Pre-mapping, and the target field transformation as Post-mapping.</p>
+<p>To toggle the display of data types, such as <code><strong>(COMPLEX)</strong></code>,
+<code><strong>STRING</strong></code>, <code><strong>INTEGER</strong></code>, in the upper right of the data mapper, click
+<span class="image"><img src="images/EditorSettings.png" alt="settings"></span> and click
+<strong>Show Types</strong>.</p>
 </div>
 <div class="paragraph">
-<p>Multiplicity transformations described above are special type of transformations which changes multiplicity. Multiplicity transformations can be added only when it&#8217;s One-to-Many or Many-to-One mapping.</p>
+<p>The following table shows the default behavior when mapping
+between collection fields and non-collection fields.</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">When you map from this source</th>
+<th class="tableblock halign-left valign-top">To this target</th>
+<th class="tableblock halign-left valign-top">During execution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A collection. (No child fields appear in the data mapper.)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A field that is not in a collection.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The data mapper maps the value that is in the last element in the source collection to the target field.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A field that is in a collection.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A field that is not in a collection.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The data mapper maps the mapped field&#8217;s value that is in the last element in the source collection to the target field.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A field that is not in a collection.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A collection. (No child fields appear in the data mapper.)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The data mapper maps the value that is in the mapped source field to the first (and only) element in the collection.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A field that is not in a collection.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A field that is in a collection.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The data mapper maps the value that is in the mapped source field to the first (and only) element in the collection.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<div class="title">Changing default behavior when mapping from a collection field</div>
+<p>When you map from a collection field to a non-collection
+field, the default behavior is that the target field gets its
+value from the last element in the source collection.
+You can change this default behavior in the following
+ways:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>To map from the element that you choose, apply the <strong>Item At</strong>
+transformation to the source and specify an
+index. For example, to map the
+value that is in the first element that is in the collection,
+specify <code>0</code> for the index.</p>
+</li>
+<li>
+<p>To map all values that are in
+all elements that are in a
+source collection, apply the <strong>Concatenate</strong> transformation
+to the source collection or source collection field and optionally specify a delimiter.
+The default delimiter is a space. For example,
+consider this source collection:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>In the first element, the value in the <strong>city</strong> field
+is <strong>Boston</strong>.</p>
+</li>
+<li>
+<p>In the second element, the value in the <strong>city</strong> field
+is <strong>Paris</strong>.</p>
+</li>
+<li>
+<p>In the third element, the value in the <strong>city</strong> field
+is <strong>Tokyo</strong>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>During execution, the data mapper populates the target
+field with <code>Boston Paris Tokyo</code>.</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<div class="title">Changing default behavior when mapping from a non-collection field</div>
+<p>When you map from a non-collection field to a collection
+field, the default behavior is that the target collection contains
+one element, which contains the non-collection, source field
+value. You can change the default behavior
+when the source field contains a series of values that are
+separated by the same delimiter. For example, consider a
+non-collection, source <strong>cities</strong> field that contains:</p>
+</div>
+<div class="paragraph">
+<p><code>Boston Paris Tokyo</code></p>
+</div>
+<div class="paragraph">
+<p>You would map this to a target collection or to a
+target field that is in a collection.
+On the source <strong>cities</strong> field, add the <strong>Split</strong> transformation.
+During execution, the data mapper splits the value of the
+<strong>cities</strong> field at the space delimiter. The result is a
+collection that contains three elements. In the first
+element, the value of the <strong>city</strong> field is <code>Boston</code>. In the
+second element, the value of the <strong>city</strong> field is <code>Paris</code>.
+In the third element, the value of the <strong>city</strong> field is <code>Tokyo</code>.</p>
 </div>
 </div>
-</div>
-</div>
-<div id="footnotes">
-<hr>
-<div class="footnote" id="_footnote_1">
-<a href="#_footnoteref_1">1</a>. It doesn&#8217;t mean we won&#8217;t address whole document mapping at all. For example we have a plan to support bulk mapping by detecting the same object structure at both sides of documents (<a href="https://github.com/atlasmap/atlasmap/issues/86">#86</a>).
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-09-24 20:19:30 UTC
+Last updated 2019-09-25 17:55:36 UTC
 </div>
 </div>
 </body>

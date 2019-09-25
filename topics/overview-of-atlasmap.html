@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.6.1">
-<title>Separate one source field into multiple target fields</title>
+<title>Overview of AtlasMap</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -517,129 +517,68 @@ table.CodeRay td.code>pre{padding:0}
 .CodeRay .head .head{color:#f4f}
 </style>
 </head>
-<body id="separate-one-source-field-into-multiple-target-fields" class="book">
+<body id="overview-of-atlasmap" class="book">
 <div id="header">
-<h1>Separate one source field into multiple target fields</h1>
+<h1>Overview of AtlasMap</h1>
 </div>
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>In a data mapping, you can separate a compound source field into multiple
-target fields. For  example, map the <code>Name</code> field to the <code>FirstName</code> and
- <code>LastName</code> fields.</p>
+<p>The following topics provide a high-level overview of AtlasMap:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#general-procedure-for-using-atlasmap-standalone">[general-procedure-for-using-atlasmap-standalone]</a></p>
+</li>
+<li>
+<p><a href="#about-atlasmap-and-syndesis">[about-atlasmap-and-syndesis]</a></p>
+</li>
+<li>
+<p><a href="#about-types-of-fields-in-atlasmap">[about-types-of-fields-in-atlasmap]</a></p>
+</li>
+<li>
+<p><a href="#about-types-of-mappings-in-atlasmap">[about-types-of-mappings-in-atlasmap]</a></p>
+</li>
+<li>
+<p><a href="#about-transforming-a-field-in-atlasmap">[about-transforming-a-field-in-atlasmap]</a></p>
+</li>
+<li>
+<p><a href="#alternatives-for-supplying-source-values-that-are-missing">[alternatives-for-supplying-source-values-that-are-missing]</a></p>
+</li>
+<li>
+<p><a href="#descriptions-of-atlasmap-icons">[descriptions-of-atlasmap-icons]</a></p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<div class="title">Prerequisite</div>
-<p>For the source field, you must know what type of content is in each
-part of this compound field, the order and index of each part of the content,
-and the separator between parts, such as a space or comma. See
-<a href="#example-missing-unwanted-data">[example-missing-unwanted-data]</a>.</p>
-</div>
-<div class="olist arabic">
-<div class="title">Procedure</div>
-<ol class="arabic">
-<li>
-<p>In the <strong>Sources</strong> panel, click the field whose content you want to separate.</p>
-</li>
-<li>
-<p>In the <strong>Target</strong> panel, click the first field that you want to separate the
-source field data into.</p>
-</li>
-<li>
-<p>In the <strong>Target</strong> panel, for each additional target field that you want
-to contain some of the data from the source field, hover over the field and
-press <strong>CTRL-Mouse1</strong> (<strong>CMD-Mouse1</strong> on MacOS) to select it.</p>
-<div class="paragraph">
-<p>The data mapper automatically changes the field action to <strong>Separate</strong>.</p>
+<p>Unresolved directive in overview-of-atlasmap.adoc - include::general-procedure-for-using-atlasmap-standalone.adoc[leveloffset=+1]</p>
 </div>
 <div class="paragraph">
-<p>When you are done selecting target fields, you should see lines from the
-source field to each of the target fields.</p>
+<p>Unresolved directive in overview-of-atlasmap.adoc - include::about-atlasmap-and-syndesis.adoc[leveloffset=+1]</p>
 </div>
-</li>
-<li>
-<p>In the <strong>Mapping Details</strong> panel, in the <strong>Separator</strong> field,
-accept or select the character in the source field that indicates
-where to separate the source field values. The default is a space.</p>
-</li>
-<li>
-<p>In the <strong>Mapping Details</strong> panel, under <strong>Targets</strong>, ensure that the target
-fields are in the same order as the corresponding content in the
-compound source field.</p>
 <div class="paragraph">
-<p>If necessary, drag and drop target fields to achieve the same order.
-The data mapper automatically updates the index numbers to reflect the
-new order.</p>
+<p>Unresolved directive in overview-of-atlasmap.adoc - include::about-types-of-fields-in-atlasmap.adoc[leveloffset=+1]</p>
 </div>
-</li>
-<li>
-<p>If you mapped each part of the compound source field to a target
-field, then skip to the next step.</p>
 <div class="paragraph">
-<p>If the source field contains data that you do not need, then in the
-<strong>Mapping Details</strong> panel, edit the index of each
-target field so that it is the same as the index of the corresponding data
-in the compound source field. The data mapper automatically adds
-padding fields as needed to indicate unwanted data.</p>
+<p>Unresolved directive in overview-of-atlasmap.adoc - include::about-types-of-mappings-in-atlasmap.adoc[leveloffset=+1]</p>
 </div>
-</li>
-<li>
-<p>Optionally, preview the data mapping result:</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>In the upper right of the data mapper, click
-<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> and select
-<strong>Show Mapping Preview</strong> to display a text input field on the source
-field and read-only result fields on each target field.</p>
-</li>
-<li>
-<p>In the source field&#8217;s data input field, enter text. Be sure to enter
-the separator character between the parts of the field. Click outside
-the text box to display the mapping result in the read-only fields
-on the target fields.</p>
 <div class="paragraph">
-<p>If you reorder the target fields or add a transformation to a target field
-then the result fields on the target fields reflect this. If the data mapper
-detects any errors, it displays informative messages at the top of the
-<strong>Mapping Details</strong> panel.</p>
+<p>Unresolved directive in overview-of-atlasmap.adoc - include::about-transforming-a-field-in-atlasmap.adoc[leveloffset=+1]</p>
 </div>
-</li>
-<li>
-<p>Hide the preview fields by clicking
-<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> again and selecting
-<strong>Show Mapping Preview</strong>.</p>
 <div class="paragraph">
-<p>If you redisplay the preview fields, any data that you entered in them is
-still there and it remains there until you exit the data mapper.</p>
+<p>Unresolved directive in overview-of-atlasmap.adoc - include::alternatives-for-supplying-source-values-that-are-missing.adoc[leveloffset=+1]</p>
 </div>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p>To confirm that the mapping is correctly defined, click
-<span class="image"><img src="images/grid.png" alt="Grid"></span> to display defined mappings.
-A mapping that separates the value of a source field into
-multiple target fields looks like this:
-<span class="image"><img src="images/SeparateMapping.png" alt="Separate Fields Mapping"></span>.</p>
 <div class="paragraph">
-<p>You can also preview mapping results in this view. Click
-<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span>, select
-<strong>Show Mapping Preview</strong>, and enter text as described in the previous step.
-Preview fields appear for only the selected mapping. Click another
-mapping in the table to view preview fields for it.</p>
-</div>
-</li>
-</ol>
+<p>Unresolved directive in overview-of-atlasmap.adoc - include::descriptions-of-atlasmap-icons.adoc[leveloffset=+1]</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-09-24 20:19:30 UTC
+Last updated 2019-09-25 17:55:36 UTC
 </div>
 </div>
 </body>

@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.6.1">
-<title>Transform source or target data</title>
+<title>Importing JSON files into AtlasMap</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -517,179 +517,119 @@ table.CodeRay td.code>pre{padding:0}
 .CodeRay .head .head{color:#f4f}
 </style>
 </head>
-<body id="transform-target-data" class="book">
+<body id="importing-json-files-into-atlasmap" class="book">
 <div id="header">
-<h1>Transform source or target data</h1>
+<h1>Importing JSON files into AtlasMap</h1>
 </div>
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>In the data mapper, after you define a mapping, you can transform
-any field in the mapping.
-Transforming a data field defines how you want to store the data.
-For example, you could specify the <strong>Capitalize</strong> transformation to ensure that the first
-letter of a data value is uppercase.</p>
-</div>
-<div class="paragraph">
-<div class="title">Procedure</div>
-<p>Map the fields.  This can be a one-to-one mapping, a combination mapping, or a separation mapping.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>Select the transformation icon.</strong></p>
-<div class="paragraph">
-<p>In the <strong>Mapping Details</strong> panel, under <strong>Sources</strong> or under <strong>Targets</strong>,
-in the box for the field that you want to transform, click the arrow to the left of the
-trash can icon.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/Trans1.png" alt="Mapping details transformation button"></span></p>
-</div>
-<div class="paragraph">
-<p>This displays a pull-down where you can select the transformation
-that you want the data mapper to perform.  Note that the set of available transformations is type specific.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/Trans2.png" alt="Mapping details transformation button - available transformations"></span></p>
-</div>
-</li>
-<li>
-<p><strong>Select the transformation.</strong></p>
-<div class="paragraph">
-<p>Click the transformation that you want to perform.</p>
-</div>
-</li>
-<li>
-<p><strong>Specify arguments.</strong></p>
-<div class="paragraph">
-<p>If the transformation requires any input parameters, specify them
-in the appropriate input fields.</p>
-</div>
-</li>
-<li>
-<p><strong>Repeat.</strong></p>
-<div class="paragraph">
-<p>To add another compound transformation, click the arrow to the left of the
-trash can icon again.</p>
-</div>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<div class="title">Additional resource</div>
-<p><a href="#available-transformations">[available-transformations]</a></p>
-</div>
-<div class="paragraph">
-<p>In addition to the list of fixed transformations, users may define their own custom field
-action transformations.  These custom field actions are written in Java and are then imported
-into the AtlasMap data mapper.  Once established in a panel the transformation will appear
-in the standard list of transformations.  For example:</p>
-</div>
-<div class="olist arabic">
-<div class="title">Procedure</div>
-<ol class="arabic">
-<li>
-<p><strong>Create a transformation.</strong></p>
-<div class="paragraph">
-<p>This example custom transformation is applicable to <code>String</code> arguments.  It takes the argument specified in the Source panel
-transformation and prints it out on the Target side.  Implement the <code>AtlasFieldAction</code> class as follows:</p>
+<p>You can import a JSON schema file or a JSON instance file into
+AtlasMap. The procedure for importing each kind of file is the same.
+For example, the following JSON schema file, <code>JSONSchema.json</code>,
+defines properties for an <code>Order</code> object:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>package io.atlasmap.service.my;
-
-import io.atlasmap.v2.*;
-import io.atlasmap.api.AtlasFieldAction;
-import io.atlasmap.spi.AtlasFieldActionInfo;
-
-public class PaulsFieldActions implements AtlasFieldAction {
-
-    @AtlasFieldActionInfo(name = "MyCustomFieldActionPaul", sourceType = FieldType.STRING,
-        targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE,
-        targetCollectionType = CollectionType.NONE)
-    public static String myCustomFieldAction(String input) {
-        return "Paul's custom field action: " + input;
+<pre class="CodeRay highlight"><code data-lang="json">{
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">$schema</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">http://json-schema.org/schema#</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Order</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">object</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">properties</span><span class="delimiter">&quot;</span></span>: {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">order</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">object</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">properties</span><span class="delimiter">&quot;</span></span>: {
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">address</span><span class="delimiter">&quot;</span></span>: {
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">object</span><span class="delimiter">&quot;</span></span>,
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">properties</span><span class="delimiter">&quot;</span></span>: {
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">street</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> },
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">city</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> },
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">state</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> },
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">zip</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> }
+          }
+        },
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">contact</span><span class="delimiter">&quot;</span></span>: {
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">object</span><span class="delimiter">&quot;</span></span>,
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">properties</span><span class="delimiter">&quot;</span></span>: {
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">firstName</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> },
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">lastName</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> },
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">phone</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> }
+          }
+        },
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">orderId</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> }
+      }
+    },
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">primitives</span><span class="delimiter">&quot;</span></span>: {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">object</span><span class="delimiter">&quot;</span></span>,
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">properties</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">stringPrimitive</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> },
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">booleanPrimitive</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">boolean</span><span class="delimiter">&quot;</span></span> },
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">numberPrimitive</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">number</span><span class="delimiter">&quot;</span></span> }
+      }
+    },
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">primitiveArrays</span><span class="delimiter">&quot;</span></span>: {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">object</span><span class="delimiter">&quot;</span></span>,
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">properties</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">stringArray</span><span class="delimiter">&quot;</span></span>: {
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">array</span><span class="delimiter">&quot;</span></span>,
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">items</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> }
+        },
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">booleanArray</span><span class="delimiter">&quot;</span></span>: {
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">array</span><span class="delimiter">&quot;</span></span>,
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">items</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">boolean</span><span class="delimiter">&quot;</span></span> }
+        },
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">numberArray</span><span class="delimiter">&quot;</span></span>: {
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">array</span><span class="delimiter">&quot;</span></span>,
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">items</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">number</span><span class="delimiter">&quot;</span></span> }
+        }
+      }
+    },
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">addressList</span><span class="delimiter">&quot;</span></span>: {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">array</span><span class="delimiter">&quot;</span></span>,
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">items</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">object</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">properties</span><span class="delimiter">&quot;</span></span>: {
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">street</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> },
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">city</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> },
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">state</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> },
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">zip</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> }
+        }
+      }
     }
-
+    }
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>To import this file into the AtlasMap Source panel:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>At the top of the <strong>Source</strong> panel, click
+<span class="image"><img src="images/Import-Data-Shape.png" alt="Import"></span>.</p>
 </li>
 <li>
-<p><strong>Build your Java archive file.</strong></p>
-<div class="paragraph">
-<p>The <code>io.atlasmap.v2</code>, <code>io.atlasmap.api</code> and <code>io.atlasmap.spi</code> target dependencies are most easily resolved
-through the use of a maven <code>pom.xml</code> file.  Use the same version number as the AtlasMap standalone JAR that you previously downloaded.</p>
-</div>
+<p>In the <strong>Open File</strong> dialog, navigate to the <code>JSONSchema.json</code> file and select it.</p>
 </li>
 <li>
-<p><strong>Import your Java archive file.</strong></p>
-<div class="paragraph">
-<p>Click the import icon at the top of the AtlasMap main tool bar.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/Trans3.png" alt="Import custom field action JAR"></span></p>
-</div>
-<div class="paragraph">
-<p>Navigate to the JAR file containing your custom field action and select it.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/Trans4.png" alt="Import custom field action JAR"></span></p>
-</div>
-</li>
-<li>
-<p><strong>Enable your class</strong></p>
-<div class="paragraph">
-<p>Select the plus icon (+) to enable the class within your field action JAR file.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/Trans5.png" alt="Import custom field action JAR"></span></p>
-</div>
-<div class="paragraph">
-<p>A dialog appears "Establish your class in the Sources panel."
-In the <strong>Class package name:</strong> input field, enter the class package name of the Java class you have defined for your custom field action.
-In the <code>MyFieldAction.jar</code> example, the class package name is <code>io.atlasmap.service.my.PaulsFieldActions</code>.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/Trans6.png" alt="Import custom field action JAR"></span></p>
-</div>
-</li>
-<li>
-<p><strong>Select your custom transformation.</strong></p>
-<div class="paragraph">
-<p>Select the pull-down menu in the <strong>Targets</strong> window within the <strong>Mapping Details</strong> section.  You will notice that your
-custom field action now appears as a selectable field action transformation.  Select it.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/Trans7.png" alt="Import custom field action JAR"></span></p>
-</div>
-</li>
-<li>
-<p><strong>Test your custom field action.</strong></p>
-<div class="paragraph">
-<p>Select the <span class="image"><img src="images/EditorSettings.png" alt="Panel settings"></span> icon on the AtlasMap main tool bar.  Check the checkbox for <code>Show Mapping Preview</code>.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/Trans8.png" alt="Import custom field action JAR"></span></p>
-</div>
-<div class="paragraph">
-<p>In the Source panel there will exist an input field.  Type a string into it  (for example <code>test</code>).  Now focus
-your cursor in the <strong>Preview Results</strong> field in the Target panel.  You will see the same string.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/Trans9.png" alt="Import custom field action JAR"></span></p>
-</div>
+<p>Click <strong>Open</strong>.</p>
 </li>
 </ol>
+</div>
+<div class="paragraph">
+<p>AtlasMap displays the fields in the <strong>Source</strong> panel:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ImportJSON3.png" alt="Order document"></span>.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-09-24 20:19:30 UTC
+Last updated 2019-09-25 17:55:36 UTC
 </div>
 </div>
 </body>

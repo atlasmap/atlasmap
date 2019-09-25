@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.6.1">
-<title>Import XML/JSON schema or instance or Java class files</title>
+<title>General procedure for using AtlasMap standalone</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -517,373 +517,65 @@ table.CodeRay td.code>pre{padding:0}
 .CodeRay .head .head{color:#f4f}
 </style>
 </head>
-<body id="import-files-to-panel" class="book">
+<body id="general-procedure-for-using-atlasmap-standalone" class="book">
 <div id="header">
-<h1>Import XML/JSON schema or instance or Java class files</h1>
+<h1>General procedure for using AtlasMap standalone</h1>
 </div>
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Data mapping fundamentally involes morphing one data shape into another.  A user
-defines these shapes using XML schemas, JSON notation or by establishing a simple Java
-class.  The following sections examine each file type independently.</p>
+<p>To use AtlasMap standalone, the main steps are:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Download the AtlasMap standalone <code>.jar</code> file.</p>
+</li>
+<li>
+<p>Start running AtlasMap standalone.</p>
+</li>
+<li>
+<p>In the AtlasMap data mapping canvas:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Import a source data file.</p>
+</li>
+<li>
+<p>Import a target data file.</p>
+</li>
+<li>
+<p>Map fields as needed, optionally applying transformations and/or conditions.</p>
+</li>
+<li>
+<p>Export the defined mappings to a <code>.adm</code> AtlasMap catalog file.</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>What can you do with an AtlasMap <code>.adm</code> file?</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>JSON Schema File: <strong>JSONSchema.json</strong></p>
+<p>Continue working on the mappings by importing the <code>.adm</code> file into AtlasMap.</p>
 </li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>  {
-    "$schema": "http://json-schema.org/schema#",
-    "description": "Order",
-    "type": "object",
-    "properties": {
-      "order": {
-        "type": "object",
-        "properties": {
-          "address": {
-          "type": "object",
-          "properties": {
-            "street": { "type": "string" },
-            "city": { "type": "string" },
-            "state": { "type": "string" },
-            "zip": { "type": "string" }
-          }
-        },
-        "contact": {
-          "type": "object",
-          "properties": {
-            "firstName": { "type": "string" },
-            "lastName": { "type": "string" },
-            "phone": { "type": "string" }
-          }
-        },
-        "orderId": { "type": "string" }
-      }
-    },
-    "primitives": {
-      "type": "object",
-      "properties": {
-        "stringPrimitive": { "type": "string" },
-        "booleanPrimitive": { "type": "boolean" },
-        "numberPrimitive": { "type": "number" }
-      }
-    },
-    "primitiveArrays": {
-      "type": "object",
-      "properties": {
-        "stringArray": {
-          "type": "array",
-          "items": { "type": "string" }
-        },
-        "booleanArray": {
-          "type": "array",
-          "items": { "type": "boolean" }
-        },
-        "numberArray": {
-          "type": "array",
-          "items": { "type": "number" }
-        }
-      }
-    },
-    "addressList": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "street": { "type": "string" },
-          "city": { "type": "string" },
-          "state": { "type": "string" },
-          "zip": { "type": "string" }
-        }
-      }
-    }
-    }
-  }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>To import this file into the AtlasMap Source panel, select the import icon at the top of the panel.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/ImportJSON1.png" alt="Import a JSON File to Source Panel"></span></p>
-</div>
-<div class="paragraph">
-<p>An <strong>Open File</strong> dialog appears.  Select the location for the JSONSchema.json file.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/ImportJSON2.png" alt="Import a JSON File to Source Panel - Open File Dialog"></span></p>
-</div>
-<div class="paragraph">
-<p>The fields now appear in the Source panel as you defined them in the imported JSON schema.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/ImportJSON3.png" alt="Import a JSON File to Source Panel - Import Complete"></span></p>
-</div>
-<div class="paragraph">
-<p>Now consider the import an XML schema into the Target panel.</p>
-</div>
-<div class="ulist">
-<ul>
 <li>
-<p>XML Schema File: <strong>XMLSchema.xml</strong></p>
+<p>Execute the mappings in a Camel application that uses the
+<code>camel-atlasmap</code> component, which consumes <code>.adm</code> files.</p>
 </li>
 </ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>&lt;d:SchemaSet xmlns:d="http://atlasmap.io/xml/schemaset/v2" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-    &lt;xsd:schema targetNamespace="http://syndesis.io/v1/swagger-connector-template/request" elementFormDefault="qualified"&gt;
-      &lt;xsd:element name="request"&gt;
-        &lt;xsd:complexType&gt;
-          &lt;xsd:sequence&gt;
-            &lt;xsd:element name="body"&gt;
-              &lt;xsd:complexType&gt;
-                &lt;xsd:sequence&gt;
-                  &lt;xsd:element ref="Pet" /&gt;
-                &lt;/xsd:sequence&gt;
-              &lt;/xsd:complexType&gt;
-            &lt;/xsd:element&gt;
-          &lt;/xsd:sequence&gt;
-        &lt;/xsd:complexType&gt;
-      &lt;/xsd:element&gt;
-    &lt;/xsd:schema&gt;
-    &lt;d:AdditionalSchemas&gt;
-      &lt;xsd:schema&gt;
-        &lt;xsd:element name="Pet"&gt;
-          &lt;xsd:complexType&gt;
-            &lt;xsd:sequence&gt;
-              &lt;xsd:element name="id" type="xsd:decimal" /&gt;
-              &lt;xsd:element name="Category"&gt;
-                &lt;xsd:complexType&gt;
-                  &lt;xsd:sequence&gt;
-                    &lt;xsd:element name="id" type="xsd:decimal" /&gt;
-                    &lt;xsd:element name="name" type="xsd:string" /&gt;
-                  &lt;/xsd:sequence&gt;
-                &lt;/xsd:complexType&gt;
-              &lt;/xsd:element&gt;
-              &lt;xsd:element name="name" type="xsd:string" /&gt;
-              &lt;xsd:element name="photoUrl"&gt;
-                &lt;xsd:complexType&gt;
-                  &lt;xsd:sequence&gt;
-                    &lt;xsd:element name="photoUrl" type="xsd:string" maxOccurs="unbounded" minOccurs="0" /&gt;
-                  &lt;/xsd:sequence&gt;
-                &lt;/xsd:complexType&gt;
-              &lt;/xsd:element&gt;
-              &lt;xsd:element name="tag"&gt;
-                &lt;xsd:complexType&gt;
-                  &lt;xsd:sequence&gt;
-                    &lt;xsd:element name="Tag" maxOccurs="unbounded" minOccurs="0"&gt;
-                      &lt;xsd:complexType&gt;
-                        &lt;xsd:sequence&gt;
-                          &lt;xsd:element name="id" type="xsd:decimal" /&gt;
-                          &lt;xsd:element name="name" type="xsd:string" /&gt;
-                        &lt;/xsd:sequence&gt;
-                      &lt;/xsd:complexType&gt;
-                    &lt;/xsd:element&gt;
-                  &lt;/xsd:sequence&gt;
-                &lt;/xsd:complexType&gt;
-              &lt;/xsd:element&gt;
-              &lt;xsd:element name="status" type="xsd:string" /&gt;
-            &lt;/xsd:sequence&gt;
-          &lt;/xsd:complexType&gt;
-        &lt;/xsd:element&gt;
-      &lt;/xsd:schema&gt;
-    &lt;/d:AdditionalSchemas&gt;
-  &lt;/d:SchemaSet&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In the data mapper, click the import icon at the top of the Target panel.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/ImportXML1.png" alt="Import an XML File to Target Panel"></span></p>
-</div>
-<div class="paragraph">
-<p>An <strong>Open File</strong> dialog appears.  Navigate to the XMLSchema.xml file and select it.
-The fields now appear in the Target panel as you defined them in the imported XML schema.  The fields
-are expanded to show more detail.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/ImportXML2.png" alt="Import of an XML File to Target Panel Complete"></span></p>
-</div>
-<div class="paragraph">
-<p>You import instance files in the same way. Instance files define a separate namespace, which also defines a few
-special attributes. For example:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>JSON Schema Instance File: <strong>JSONSchemaInst.json</strong></p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>   {
-        "order": {
-            "address": {
-                "street": "123 any st",
-                "city": "Austin",
-                "state": "TX",
-                "zip": "78626"
-            },
-            "contact": {
-                "firstName": "james",
-                "lastName": "smith",
-                "phone": "512-123-1234"
-            },
-            "orderId": "123"
-        },
-        "primitives": {
-            "stringPrimitive": "some value",
-            "booleanPrimitive": true,
-            "numberPrimitive": 24
-        },
-        "addressList": [
-            { "street": "123 any st", "city": "Austin", "state": "TX", "zip": "78626" },
-            { "street": "123 any st", "city": "Austin", "state": "TX", "zip": "78626" },
-            { "street": "123 any st", "city": "Austin", "state": "TX", "zip": "78626" },
-            { "street": "123 any st", "city": "Austin", "state": "TX", "zip": "78626" }
-        ]
-    }</code></pre>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>XML Schema Instance File: <strong>XMLSchemaInst.xml</strong></p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code> &lt;ns:XmlOE xmlns:ns="http://atlasmap.io/xml/test/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd "&gt;
-    &lt;ns:orderId&gt;ns:orderId&lt;/ns:orderId&gt;
-    &lt;ns:Address&gt;
-      &lt;ns:addressLine1&gt;ns:addressLine1&lt;/ns:addressLine1&gt;
-      &lt;ns:addressLine2&gt;ns:addressLine2&lt;/ns:addressLine2&gt;
-      &lt;ns:city&gt;ns:city&lt;/ns:city&gt;
-      &lt;ns:state&gt;ns:state&lt;/ns:state&gt;
-      &lt;ns:zipCode&gt;ns:zipCode&lt;/ns:zipCode&gt;
-    &lt;/ns:Address&gt;
-    &lt;ns:Contact&gt;
-      &lt;ns:firstName&gt;ns:firstName&lt;/ns:firstName&gt;
-      &lt;ns:lastName&gt;ns:lastName&lt;/ns:lastName&gt;
-      &lt;ns:phoneNumber&gt;ns:phoneNumber&lt;/ns:phoneNumber&gt;
-      &lt;ns:zipCode&gt;ns:zipCode&lt;/ns:zipCode&gt;
-    &lt;/ns:Contact&gt;
-  &lt;/ns:XmlOE&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Using the same procedure as before, import instance files into either the Source or Target panel.</p>
-</div>
-<div class="paragraph">
-<p>There does exist one other method for establishing mappable fields within the AtlasMap data mapper.
-A Java class can be established where each field is represented as a class-wide public entity.  Arrays
-and data types are more discretely defined.  For example:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Java File: <strong>Bicycle.java</strong></p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>package io.paul;
-import io.paul.GeoLocation;
-
-public class Bicycle {
-    public int cadence;
-    public int gear;
-    public int speed;
-    public float[] seatHeight;
-    public String[] color;
-    public GeoLocation geoLocation;
-}</code></pre>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Java File: <strong>GeoLocation.java</strong></p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>package io.paul;
-
-public class GeoLocation {
-    double lattitude;
-    double longitude;
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Compile the Java files and assemble the results into a Java archive file, for example, <code>Bicycle.jar</code> in the following lines:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>javac -cp io.paul:. -d . GeoLocation.java Bicycle.java
-jar cvf ../Bicycle.jar *</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now you can import the <code>Bicycle.jar</code> archive into AtlasMap.  The import procedure is slightly different for
-Java class archives.  You must:</p>
-</div>
-<div class="paragraph">
-<p>Import the file into AtlasMap.  Select the import icon <strong>on the main tool bar</strong>, not on
-the panel.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/ImportJavaClass1.png" alt="Import a Java Class Archive File to Source Panel"></span></p>
-</div>
-<div class="paragraph">
-<p>An <strong>Open File</strong> dialog appears.  Navigate to the <code>Bicycle.jar</code> file and select it.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/ImportJavaClass2.png" alt="Import a Java Class Archive File to Source Panel - Open Dialog"></span></p>
-</div>
-<div class="paragraph">
-<p>Select the plus icon (+) on the Source or Target panel.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/ImportJavaClass3.png" alt="Enable a class package in a previously imported JAR"></span></p>
-</div>
-<div class="paragraph">
-<p>A dialog appears "Establish your class in the Sources panel."
-In the <strong>Class package name:</strong> input field, enter the class package name of the Java class you have defined.
-In the <code>Bicycle.jar</code> example, the class package name is <code>io.paul.Bicycle</code>.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/ImportJavaClass4.png" alt="Enable a class package in a previously imported JAR"></span></p>
-</div>
-<div class="paragraph">
-<p>You will now see the fields you created in your Java class file appear in the selected panel.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/ImportJavaClass5.png" alt="Class Package Enablement Complete"></span></p>
-</div>
-<div class="paragraph">
-<p>You have now defined the source and target data shapes.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-09-24 20:19:30 UTC
+Last updated 2019-09-25 17:55:36 UTC
 </div>
 </div>
 </body>

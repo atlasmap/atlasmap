@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.6.1">
-<title>Example of missing or unwanted data when combining or separating fields</title>
+<title>Alternatives for supplying source values that are missing</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -517,94 +517,51 @@ table.CodeRay td.code>pre{padding:0}
 .CodeRay .head .head{color:#f4f}
 </style>
 </head>
-<body id="example-missing-unwanted-data" class="book">
+<body id="alternatives-for-supplying-source-values-that-are-missing" class="book">
 <div id="header">
-<h1>Example of missing or unwanted data when combining or separating fields</h1>
+<h1>Alternatives for supplying source values that are missing</h1>
 </div>
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>In a data mapping, you might need to identify missing or unwanted data when a source or
-target field contains compound data. For example, consider a
-<code>long_address</code> field that has this format:</p>
+<p>When you are mapping fields, you might find that a source data shape
+does not provide a value that a target data shape requires.
+In these situations, AtlasMap provides two alternatives for specifying
+source values that you can map to target fields:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Define a property</strong>  — In AtlasMap, at the top of the <strong>Source</strong> panel,
+to the right of <strong>Properties</strong>, click the + sign to display a dialog.
+Enter the property name, the property&#8217;s default value, and indicate the data type.
+Note that at runtime, if there is an environment variable or a Java system
+property with the same name as the property, it is possible for this
+default value to be overridden.
+Click <strong>Save</strong> to create a new terminal source field.</p>
+</li>
+<li>
+<p><strong>Define a constant</strong> — In AtlasMap, near the top of the <strong>Source</strong> panel,
+to the right of <strong>Constants</strong>, click the + sign to display a dialog.
+Enter the value of the constant, and indicate the data type.
+Click <strong>Save</strong> to create a new terminal source field.</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p><em>number street apartment city state zip zip+4 country</em></p>
-</div>
-<div class="paragraph">
-<p>Suppose that you want to separate the <code>long_address</code> field into discrete
-fields for <code>number</code>, <code>street</code>, <code>city</code>, <code>state</code>, and <code>zip</code>. To do this,
-you select <code>long_address</code> as the source field and then select
-the target fields. You then add padding fields at the locations for the
-parts of the source field that you do not want. In this example, the
-unwanted parts are <em>apartment</em>, <em>zip+4</em>, and <em>country</em>.</p>
-</div>
-<div class="paragraph">
-<p>To identify the unwanted parts, you need to know the order
-of the parts. The order indicates an index for
-each part of the content in the compound field. For example, the <code>long_address</code>
-field has 8 ordered parts. Starting at 1, the index of each part is:</p>
-</div>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 16.6666%;">
-<col style="width: 83.3334%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>number</em></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>street</em></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>apartment</em></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>city</em></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>state</em></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>zip</em></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">7</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>zip+4</em></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">8</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>country</em></p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>In the data mapper, to identify <em>apartment</em>, <em>zip+4</em>, and <em>country</em> as missing, you
-add padding fields at indexes 3, 7, and 8. See
-<a href="#separate-one-source-field-into-multiple-target-fields">[separate-one-source-field-into-multiple-target-fields]</a>.</p>
-</div>
-<div class="paragraph">
-<p>Now suppose that you want to combine source fields for
-<code>number</code>, <code>street</code>, <code>city</code>, <code>state</code>, and <code>zip</code> into a <code>long_address</code>
-target field. Further suppose that there are no source fields to provide content for
-<em>apartment</em>, <em>zip+4</em>, and <em>country</em>. In the data mapper, you need to
-identify these fields as missing. Again, you add padding fields
-at indexes 3, 7, and 8. See <a href="#combine-multiple-source-fields-into-one-target-field">[combine-multiple-source-fields-into-one-target-field]</a>.</p>
+<p>For example, suppose that a target data shape defines a <strong>Layout</strong> field
+whose value must be <code>HORIZONTAL</code> or <code>VERTICAL</code>. The source data shape does
+not provide this field. You can create a constant. Specify <code>HORIZONTAL</code>
+or <code>VERTICAL</code> as the value and accept <code>String</code> as the data type.
+After you save the new constant, you can map it to the <strong>Layout</strong> target field.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-09-24 20:19:30 UTC
+Last updated 2019-09-25 17:55:36 UTC
 </div>
 </div>
 </body>
