@@ -1,0 +1,68 @@
+[id='about-types-of-fields-in-atlasmap']
+= About types of fields in AtlasMap 
+
+The AtlasMap user interface displays source fields and target fields 
+and you define the field-to-field mappings that you need.
+
+NOTE: At this time, AtlasMap does not provide whole document mapping. 
+It is expected that a future release will support bulk mapping by 
+detecting the same object structure in source and target files 
+(link:https://github.com/atlasmap/atlasmap/issues/86[issue #86]).
+
+An understanding of the different kinds of AtlasMap fields makes 
+it easier for you to define the mappings you need. For the purposes of 
+mapping, there are three field types: 
+
+* *Terminal* — A terminal field is selectable. It can be the source or 
+target in a mapping. During execution, a path to a terminal field 
+identifies a value. 
+* *Parent*  — A parent field is also referred to as a complex field. 
+A parent field is expandable. Expanding a parent field displays 
+its descendant fields. A parent field it not selectable and 
+cannot be directly in a mapping. 
+* *Collection*  — A collection field is also a terminal field. 
+It is selectable and can be the source or target in a mapping. 
+A collection field indicates a field that holds one or more 
+objects that are all the same type. Internally, a collection 
+field might be an array. 
+
+For example, consider this sample XML instance document: 
+
+[source,xml]
+----
+<order>
+  <orderId value="O123"/>
+  <items>
+    <item>
+      <itemId>Orange</itemId>
+      <quantity value="1"/>
+    </item>
+    <item>
+      <itemId>Apple</itemId>
+      <quantity value="2"/>
+    </item>
+  </items>
+</order>
+----
+
+[cols=2*,options="noheader"]
+|===
+|Terminal fields:
+|`/order/orderId/@value` + 
+`/order/items/item[0]/quantity/@value`
+
+|Parent fields:
+|`/order` +
+`/order/orderId` +
+`/order/items/item[0]`
+
+|Collection fields: 
+|`/order/items/item[]/itemId` +
+`/order/items/item[]/quantity/@value`
+
+|===
+
+When you define a mapping that uses this XML instance document as the 
+source data,  you cannot know how many items will be in an order. 
+However, the same mapping definition works for each transaction, 
+regardless of the number of items in the order.  

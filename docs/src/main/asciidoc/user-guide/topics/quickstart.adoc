@@ -1,35 +1,48 @@
 [[quickstart]]
-= Quickstart
+= Quickly get started using AtlasMap standalone
 
-== Running AtlasMap Data Mapper UI standalone
+To run AtlasMap standalone:
 
-Here is the shortest path to run standalone AtlasMap.
+. Obtain the most recent AtlasMap version number:
+.. Go to link:https://github.com/atlasmap/atlasmap/[]
+.. Scroll down to see the `maven central` icon with the latest
+version, for example:
+image:latest-maven-central-version-number.png[maven central 1.42.3].
 
-1. Download the AtlasMap standalone jar
+. Download the AtlasMap standalone `.jar` file by invoking the 
+`wget` command with the following format. Replace `${VERSION}`
+with an actual version number. 
 +
-```
+----
 wget http://central.maven.org/maven2/io/atlasmap/atlasmap-standalone/${VERSION}/atlasmap-standalone-${VERSION}.jar
-```
+----
+
+. Run AtlasMap standalone by invoking the `java` command with the
+following format:
 +
-2. Run AtlasMap standalone
+----
+$ java -jar atlasmap-standalone-${VERSION}.jar
+----
 +
-```
-$ java [ -Datlasmap.adm.path=/path/to/example.adm ] -jar atlasmap-standalone-${VERSION}.jar
-```
+For example: 
 +
+----
+$ java -jar atlasmap-standalone-.1.42.3.jar
+----
 
-Now AtlasMap Data Mapper UI is available at http://127.0.0.1:8585/  The .adm file can be created with the export icon on the main toolbar.
+. In a browser, visit 
+link:http://127.0.0.1:8585/[]
++
+The AtlasMap data mapper canvas displays with sample source and target data.
 
-== Running AtlasMap data mapping with Apache Camel
-
-NOTE: TODO
-
-camel-atlasmap endpoint use IN body as a default source document of mappings. If IN body is a `java.util.Map`, key is used as a Document ID and corresponding value is used as a Document payload.
-
-```
-...
-from("direct:start")
-   .to("atlas:atlas-mapping.adm")
-   .log("${body}")
-...
-```
+. Experiment with the data mapper: 
+.. To map fields, click a source field and then click the target field 
+that you want to map it to.  
+.. With a data mapping selected, explore the optional transformations. 
+.. To preview a data mapping result, click 
+image:EditorSettings.png[Editor Settings] 
+and select *Show Mapping Preview*. Enter sample data in source input fields. 
+.. To save your work, click 
+image:ExportIcon.png[Export icon] in the menu bar. This 
+creates an AtlasMap `.adm` file in the `Downloads` directory. 
+This file contains the mapping definitions. 

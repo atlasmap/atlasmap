@@ -1,0 +1,84 @@
+[id='importing-xml-files-into-atlasmap']
+= Importing XML files into AtlasMap 
+
+You can import an XML schema file or an XML instance file into 
+AtlasMap. The procedure for importing each kind of file is the same. 
+For example, 
+the following XML schema file, `XMLSchema.xml`, defines a schema for 
+transactions related to pets: 
+
+[source,xml]
+----
+<d:SchemaSet xmlns:d="http://atlasmap.io/xml/schemaset/v2" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:schema targetNamespace="http://syndesis.io/v1/swagger-connector-template/request" elementFormDefault="qualified">
+      <xsd:element name="request">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="body">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element ref="Pet" />
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+    <d:AdditionalSchemas>
+      <xsd:schema>
+        <xsd:element name="Pet">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="id" type="xsd:decimal" />
+              <xsd:element name="Category">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="id" type="xsd:decimal" />
+                    <xsd:element name="name" type="xsd:string" />
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="name" type="xsd:string" />
+              <xsd:element name="photoUrl">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="photoUrl" type="xsd:string" maxOccurs="unbounded" minOccurs="0" />
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="tag">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="Tag" maxOccurs="unbounded" minOccurs="0">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="id" type="xsd:decimal" />
+                          <xsd:element name="name" type="xsd:string" />
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="status" type="xsd:string" />
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:schema>
+    </d:AdditionalSchemas>
+  </d:SchemaSet>
+----
+
+To import this file into the AtlasMap *Target* panel:
+
+. At the top of the *Target* panel, click 
+image:../images/Import-Data-Shape.png[Import]. 
+
+. In the *Open File* dialog, navigate to the `XMLSchema.xml` file and select it.
+. Click *Open*. 
+
+AtlasMap displays the fields in the *Target* panel.  In the following image, 
+the fields are expanded to show more detail.
+
+image:../images/ImportXML2.png[Imported schema for pet transactions]

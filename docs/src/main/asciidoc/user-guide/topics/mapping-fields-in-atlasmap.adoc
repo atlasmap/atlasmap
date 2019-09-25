@@ -1,0 +1,39 @@
+[id='mapping-fields-in-atlasmap']
+= Mapping fields in AtlasMap 
+
+The following topics provide details for mapping fields in AtlasMap: 
+
+* <<find-the-field-you-want-to-map>>
+* <<map-one-source-field-to-one-target-field>>
+* <<example-missing-unwanted-data>>
+* <<combine-multiple-source-fields-into-one-target-field>>
+* <<separate-one-source-field-into-multiple-target-fields>>
+* <<mapping-between-collections-and-non-collections>>
+* <<transform-target-data>>
+* <<applying-conditions-to-mappings>>
+* <<view-mappings>>
+* <<available-transformations>>
+* <<creating-a-custom-transformation>>
+
+
+include::find-data-field-you-want-to-map.adoc[leveloffset=+1]
+
+include::map-one-source-field-to-one-target-field.adoc[leveloffset=+1]
+
+include::example-missing-unwanted-data.adoc[leveloffset=+1]
+
+include::combine-multiple-source-fields-into-one-target-field.adoc[leveloffset=+1]
+
+include::separate-one-source-field-into-multiple-target-fields.adoc[leveloffset=+1]
+
+include::mapping-between-collections-and-non-collections.adoc[leveloffset=+1]
+
+include::transform-target-data.adoc[leveloffset=+1]
+
+include::applying-conditions-to-mappings.adoc[leveloffset=+1]
+
+include::view-mappings.adoc[leveloffset=+1]
+
+include::available-transformations.adoc[leveloffset=+1]
+
+include::creating-a-custom-transformation.adoc[leveloffset=+1]

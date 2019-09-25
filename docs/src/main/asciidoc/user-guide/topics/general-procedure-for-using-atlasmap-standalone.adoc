@@ -1,0 +1,25 @@
+[id='general-procedure-for-using-atlasmap-standalone']
+= General procedure for using AtlasMap standalone
+
+To use AtlasMap standalone, the main steps are:
+
+
+. Download the AtlasMap standalone `.jar` file.  
+
+. Start running AtlasMap standalone. 
+
+. In the AtlasMap data mapping canvas:
+
+.. Import a source data file. 
+
+.. Import a target data file. 
+
+.. Map fields as needed, optionally applying transformations and/or conditions.
+
+.. Export the defined mappings to a `.adm` AtlasMap catalog file. 
+
+What can you do with an AtlasMap .adm file?
+
+* Continue working on the mappings by importing the `.adm` file into AtlasMap.
+* Execute the mappings in a Camel application that uses the 
+`camel-atlasmap` component, which consumes `.adm` files. 

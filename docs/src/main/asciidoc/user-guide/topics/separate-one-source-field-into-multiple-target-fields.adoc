@@ -1,5 +1,5 @@
 [id='separate-one-source-field-into-multiple-target-fields']
-= Separate one source field into multiple target fields
+= Separating one source field into multiple target fields
 
 In a data mapping, you can separate a compound source field into multiple
 target fields. For  example, map the `Name` field to the `FirstName` and

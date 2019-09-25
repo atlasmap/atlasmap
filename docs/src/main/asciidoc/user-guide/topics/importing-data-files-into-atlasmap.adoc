@@ -1,0 +1,25 @@
+[id='importing-data-files-into-atlasmap']
+= Importing data files into AtlasMap 
+
+Data mapping allows you to match fields in a source data shape to fields in a 
+target data shape. The data shapes that AtlasMap can operate on are 
+defined in JSON schema or instance documents, XML schema or instance documents, 
+or Java classes. 
+
+To map fields, you import data shape definition files into the AtlasMap 
+*Source* and *Target* panels. You can import multiple files into each panel. 
+For example, suppose you import three source files and one target file. 
+You can map fields from all three source files to the single target file. 
+
+The following topics provide examples of importing different 
+data shape definitions: 
+
+* <<importing-json-files-into-atlasmap>>
+* <<importing-xml-files-into-atlasmap>>
+* <<importing-java-archive-files-into-atlasmap>>
+
+include::importing-json-files-into-atlasmap.adoc[leveloffset=+1]
+
+include::importing-xml-files-into-atlasmap.adoc[leveloffset=+1]
+
+include::importing-java-archive-files-into-atlasmap.adoc[leveloffset=+1]

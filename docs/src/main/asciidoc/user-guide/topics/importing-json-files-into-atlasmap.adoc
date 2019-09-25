@@ -1,0 +1,90 @@
+[id='importing-json-files-into-atlasmap']
+= Importing JSON files into AtlasMap 
+
+You can import a JSON schema file or a JSON instance file into 
+AtlasMap. The procedure for importing each kind of file is the same. 
+For example, the following JSON schema file, `JSONSchema.json`, 
+defines properties for an `Order` object: 
+
+[source,json]
+----
+{
+    "$schema": "http://json-schema.org/schema#",
+    "description": "Order",
+    "type": "object",
+    "properties": {
+      "order": {
+        "type": "object",
+        "properties": {
+          "address": {
+          "type": "object",
+          "properties": {
+            "street": { "type": "string" },
+            "city": { "type": "string" },
+            "state": { "type": "string" },
+            "zip": { "type": "string" }
+          }
+        },
+        "contact": {
+          "type": "object",
+          "properties": {
+            "firstName": { "type": "string" },
+            "lastName": { "type": "string" },
+            "phone": { "type": "string" }
+          }
+        },
+        "orderId": { "type": "string" }
+      }
+    },
+    "primitives": {
+      "type": "object",
+      "properties": {
+        "stringPrimitive": { "type": "string" },
+        "booleanPrimitive": { "type": "boolean" },
+        "numberPrimitive": { "type": "number" }
+      }
+    },
+    "primitiveArrays": {
+      "type": "object",
+      "properties": {
+        "stringArray": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "booleanArray": {
+          "type": "array",
+          "items": { "type": "boolean" }
+        },
+        "numberArray": {
+          "type": "array",
+          "items": { "type": "number" }
+        }
+      }
+    },
+    "addressList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "street": { "type": "string" },
+          "city": { "type": "string" },
+          "state": { "type": "string" },
+          "zip": { "type": "string" }
+        }
+      }
+    }
+    }
+}
+----
+
+To import this file into the AtlasMap Source panel:
+
+. At the top of the *Source* panel, click 
+image:../images/Import-Data-Shape.png[Import]. 
+
+. In the *Open File* dialog, navigate to the `JSONSchema.json` file and select it.
+. Click *Open*. 
+
+AtlasMap displays the fields in the *Source* panel: 
+
+image:ImportJSON3.png[Order document].

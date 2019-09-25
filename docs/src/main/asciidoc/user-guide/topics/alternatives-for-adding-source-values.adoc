@@ -1,0 +1,29 @@
+[id='alternatives-for-adding-source-values']
+= Alternatives for adding source values
+
+When you are mapping fields, you might find that a source data shape 
+does not provide a value that a target data shape requires. 
+In these situations, AtlasMap provides two alternatives for specifying 
+source values that you can map to target fields: 
+
+* Define a property  — In AtlasMap, at the top of the *Source* panel, 
+to the right of *Properties*, click the + sign to display a dialog. 
+Enter the property name, the property value, and indicate the data type. 
+Click *Save* to create a new terminal source field. 
+
+* Define a constant — In AtlasMap, near the top of the *Source* panel, 
+to the right of *Constants*, click the + sign to display a dialog. 
+Enter the value of the constant, and indicate the data type. 
+Click *Save* to create a new terminal source field. 
+
+Whether you create a property or a constant depends on the application. 
+The only difference is that a property has a name as well as a value, 
+while a constant has only a value. 
+
+For example, suppose that a target data shape defines a *Layout* field 
+whose value must be `HORIZONTAL` or `VERTICAL`. The source data shape does 
+not provide this field. You can create a property. The property name can 
+be anything you choose but it is helpful to give it a name that makes 
+it clear that it can map to the *Layout* target field. Enter `HORIZONTAL` 
+or `VERTICAL` as the property value and accept `String` as the data type. 
+After you save the new property, you can map it to the *Layout* target field. 

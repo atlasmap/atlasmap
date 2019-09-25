@@ -1,0 +1,26 @@
+[id='overview-of-atlasmap']
+= Overview of AtlasMap 
+
+The following topics provide a high-level overview of AtlasMap: 
+
+* <<general-procedure-for-using-atlasmap-standalone>>
+* <<about-atlasmap-and-syndesis>>
+* <<about-types-of-fields-in-atlasmap>>
+* <<about-types-of-mappings-in-atlasmap>>
+* <<about-transforming-a-field-in-atlasmap>>
+* <<alternatives-for-adding-source-values>>
+* <<descriptions-of-atlasmap-icons>>
+
+include::general-procedure-for-using-atlasmap-standalone.adoc[leveloffset=+1]
+
+include::about-atlasmap-and-syndesis.adoc[leveloffset=+1]
+
+include::about-types-of-fields-in-atlasmap.adoc[leveloffset=+1]
+
+include::about-types-of-mappings-in-atlasmap.adoc[leveloffset=+1]
+
+include::about-transforming-a-field-in-atlasmap.adoc[leveloffset=+1]
+
+include::alternatives-for-adding-source-values.adoc[leveloffset=+1]
+
+include::descriptions-of-atlasmap-icons.adoc[leveloffset=+1]
