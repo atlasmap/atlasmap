@@ -1,0 +1,20 @@
+[id='about-atlasmap-and-syndesis']
+= About AtlasMap and Syndesis
+
+The link:https://www.syndesis.io[Syndesis open-source integration platform] 
+embeds AtlasMap. 
+In a Syndesis integration, you add connections to applications 
+that provide the data of interest to you. With connections in place, 
+Syndesis offers an AtlasMap data mapper step. When you add a data mapper 
+step, Syndesis displays the data mapper canvas with:
+
+* Source data fields that are provided by previous connections
+* Target data fields that are required by the subsequent connection
+
+In other words, you do not import source and target data as you would 
+in standalone AtlasMap. Likewise, when data mappings are complete, 
+instead of exporting the mappings, you just click a button to indicate 
+that you are done. 
+
+When Syndesis embeds AtlasMap, it does not display the icons for 
+importing and exporting data. 

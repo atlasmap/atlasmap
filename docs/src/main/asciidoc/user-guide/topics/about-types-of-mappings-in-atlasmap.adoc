@@ -1,0 +1,15 @@
+[id='about-types-of-mappings-in-atlasmap']
+= About types of mappings in AtlasMap 
+
+AtlasMap supports the following general types of mappings: 
+
+* *One to one*  — Map one source field to one target field.
+* *Many to one*  — Map multiple source fields to to one target field. 
+You specify the delimiter character that AtlasMap inserts in the target 
+field between the mapped source fields. The default delimiter is a space. 
+* *One to many*  — Map one source field to multiple target fields. 
+You specify the delimiter character that is in the source field. 
+AtlasMap maps each delimited value to a the target field you select.
+
+* *For each* — Iteratively map one source collection field to one 
+target collection field. 

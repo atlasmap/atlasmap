@@ -1,0 +1,30 @@
+[id='descriptions-of-atlasmap-icons']
+= Descriptions of AtlasMap icons 
+
+The following table describes some of the AtlasMap icons. When you are 
+familiar with the icons, you can hide mapping lines or data types 
+to create a less busy display. To toggle what AtlasMap displays, click
+image:../images/EditorSettings.png[Editor Settings]
+and select what you want to show or hide. 
+
+[cols=2*,options="header"]
+|===
+|Icon 
+|Description
+
+|image:Solid-Blue-Circle.png[Filled Circle]
+|Completely mapped field
+
+|image:Half-Blue-Circle.png[Half Filled Circle]
+|Partially mapped field
+
+|image:Collection-Icon.png[Collection Icon]
+|Collection field
+
+|image:Solid-Folder-Complex-Type.png[Solid Folder]
+|Complex type that you can expand
+
+|image:Lightning-Icon.png[Lightning Bolt]
+|There is a transformation that is being applied to this field.
+
+|===

@@ -1,0 +1,24 @@
+[id='running-atlasmap-with-apache-camel']
+= Running AtlasMap with Apache Camel
+
+Developers who are familiar with Apache Camel can implement a 
+Camel application that uses the `camel-atlasmap` component. 
+A `camel-atlasmap` endpoint 
+
+* Can consume an AtlasMap `.adm` file
+* Uses the content of `body` as the default source document for mappings
+
+For example: 
+
+----
+from("direct:start")
+   .to("atlas:atlas-mapping.adm")
+   .log("${body}")
+----
+
+If  `body` contains a `java.util.Map` object, then `camel-atlasmap` 
+uses `key` as a document ID and the corresponding value as the 
+document payload.
+
+You can obtain the `camel-atlasmap` component here:   
+link:http://central.maven.org/maven2/io/atlasmap/camel-atlasmap/1.42.3/camel-atlasmap-1.42.3.jar[]

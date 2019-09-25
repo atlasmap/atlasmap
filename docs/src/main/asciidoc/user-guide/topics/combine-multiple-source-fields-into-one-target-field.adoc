@@ -1,5 +1,5 @@
 [id='combine-multiple-source-fields-into-one-target-field']
-= Combine multiple source fields into one target field
+= Combining multiple source fields into one target field
 
 In a data mapping, you can combine multiple source fields into one
 compound target field. For example, you can map the `FirstName` and `LastName`

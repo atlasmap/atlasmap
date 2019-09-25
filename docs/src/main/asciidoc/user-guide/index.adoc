@@ -1,3 +1,4 @@
+
 [id='mapping-data']
 = AtlasMap User Guide
 The AtlasMap Team
@@ -9,7 +10,7 @@ The AtlasMap Team
 :doctype: book
 :icons: font
 
-ifndef::ebook-format[:leveloffset: 1]
+// ifndef::ebook-format[:leveloffset: 1]
 
 ifdef::basebackend-html[toc::[]]
 
@@ -19,54 +20,47 @@ ifdef::basebackend-html[toc::[]]
 
 AtlasMap is a data mapping solution with an interactive web based user interface.
 It simplifies configuration of an integration that handles different
-types of data represented by XML schema or instance files, JSON schema or instance files or Java class files.
-You design your data mapping and transformations in the AtlasMap Data Mapper UI canvas, and then execute that mapping
-by means of the AtlasMap runtime engine. We provide standard transformations or we
-support custom, user-defined transformations.  We also have a camel-atlasmap component which consumes an
-AtlasMap mapping definition which can process data mappings as a part of a Camel route.
+types of data including: 
 
-<<<
+* XML schema or instance files
+* JSON schema or instance files
+* Java class files
 
-include::topics/basics.adoc[]
+To use AtlasMap, you import your data shape definition files, map source
+fields to target fields, optionally apply transformations or conditions, 
+and then execute defined mappings by means of the AtlasMap runtime engine. 
+AtlasMap provides standard transformations and 
+supports the creation of custom, user-defined transformations.  
 
-<<<
+AtlasMap is available: 
 
-include::topics/quickstart.adoc[]
+* As a standalone application
+* Embedded in 
+link:https://syndesis.io/[Syndesis], which is an open-source integration platform
 
-<<<
+There is also a `camel-atlasmap` component that consumes an
+AtlasMap mapping definition and processes data mappings as a part of a Camel route.
 
-[[import-files-in-ui]]
-= Import Files in UI
+This user guide is organized as follows: 
 
-include::topics/import_files_to_panel.adoc[leveloffset=+1]
+* <<quickstart>>
+* <<overview-of-atlasmap>>
+* <<importing-data-files-into-atlasmap>>
+* <<mapping-fields-in-atlasmap>>
+* <<exporting-mappings-to-an-atlasmap-catalog-file>>
+* <<resetting-data-files-in-atlasmap>>
+* <<running-atlasmap-with-apache-camel>>
 
-[[design-mappings-in-ui]]
-= Design Mappings in UI
+include::topics/quickstart.adoc[leveloffset=+1]
 
-include::topics/find_data_field_you_want_to_map.adoc[leveloffset=+1]
+include::topics/overview-of-atlasmap.adoc[leveloffset=+1]
 
-include::topics/map_one_source_field_to_one_target_field.adoc[leveloffset=+1]
+include::topics/importing-data-files-into-atlasmap.adoc[leveloffset=+1]
 
-include::topics/example_missing_unwanted_data.adoc[leveloffset=+1]
+include::topics/mapping-fields-in-atlasmap.adoc[leveloffset=+1]
 
-include::topics/combine_multiple_source_fields_into_one_target_field.adoc[leveloffset=+1]
+include::topics/exporting-mappings-to-an-atlasmap-catalog-file.adoc[leveloffset=+1]
 
-include::topics/separate_one_source_field_into_multiple_target_fields.adoc[leveloffset=+1]
+include::topics/resetting-data-files-in-atlasmap.adoc[leveloffset=+1]
 
-include::topics/transform_target_data.adoc[leveloffset=+1]
-
-include::topics/applying_conditions_to_mappings.adoc[leveloffset=+1]
-
-include::topics/view_mappings.adoc[leveloffset=+1]
-
-include::topics/available_transformations.adoc[leveloffset=+1]
-
-[[export-files-in-ui]]
-= Export Files in UI
-
-include::topics/export_files.adoc[leveloffset=+1]
-
-[[reset-files-in-ui]]
-= Reset Files in UI
-
-include::topics/reset_files.adoc[leveloffset=+1]
+include::topics/running-atlasmap-with-apache-camel.adoc[leveloffset=+1]
