@@ -179,6 +179,7 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
                 AtlasModelFactory.copyField(xmlField, targetField, false);
                 XmlPath subPath = new XmlPath(targetField.getPath());
                 subPath.setVacantCollectionIndex(i);
+                targetField.setIndex(i);
                 targetField.setPath(subPath.toString());
                 fieldGroup.getField().add(targetField);
             }

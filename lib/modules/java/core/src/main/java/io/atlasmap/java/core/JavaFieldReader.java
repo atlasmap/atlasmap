@@ -158,6 +158,7 @@ public class JavaFieldReader implements AtlasFieldReader {
             AtlasModelFactory.copyField(origField, field, false);
             AtlasPath atlasPath = new AtlasPath(field.getPath());
             atlasPath.setVacantCollectionIndex(fieldGroup.getField().size());
+            field.setIndex(fieldGroup.getField().size());
             field.setPath(atlasPath.toString());
             fieldGroup.getField().add(field);
         }

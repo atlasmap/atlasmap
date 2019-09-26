@@ -103,6 +103,7 @@ public class JsonFieldReader implements AtlasFieldReader {
                 AtlasModelFactory.copyField(field, jsonField, false);
                 AtlasPath subPath = new AtlasPath(jsonField.getPath());
                 subPath.setVacantCollectionIndex(i);
+                jsonField.setIndex(i);
                 jsonField.setPath(subPath.toString());
                 Object v = handleValueNode(session, terminalNode, jsonField);
                 jsonField.setValue(v);

@@ -20,6 +20,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,6 +34,7 @@ import io.atlasmap.core.AtlasMappingService;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.itests.core.issue.SourceClass;
 import io.atlasmap.itests.core.issue.TargetClass;
+import io.atlasmap.java.test.SourceFlatPrimitiveClass;
 import io.atlasmap.java.test.TargetFlatPrimitiveClass;
 import io.atlasmap.java.test.TargetTestClass;
 import io.atlasmap.v2.AtlasMapping;
@@ -181,6 +184,33 @@ public class MultiplicityTransformationTest {
         assertEquals(456, target.getTargetInteger());
         assertEquals("last name is not empty", target.getTargetName());
         assertEquals("false", target.getTargetFirstName());
+    }
+
+
+    @Test
+    public void testAdd() throws Exception {
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-add.json");
+        AtlasMapping mapping = mappingService.loadMapping(url);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasSession session = context.createSession();
+        String sourceJson = new String(Files.readAllBytes(Paths.get(
+            Thread.currentThread().getContextClassLoader().getResource("data/json-source.json").toURI())));
+        session.setSourceDocument("json-source", sourceJson);
+        String sourceXml = new String(Files.readAllBytes(Paths.get(
+            Thread.currentThread().getContextClassLoader().getResource("data/xml-source.xml").toURI())));
+        session.setSourceDocument("xml-source", sourceXml);
+        SourceFlatPrimitiveClass sourceJava = new SourceFlatPrimitiveClass();
+        sourceJava.setIntArrayField(new int[] {1, 3, 5, 7});
+        session.setSourceDocument("java-source", sourceJava);
+        context.process(session);
+        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        Object output = session.getTargetDocument("io.atlasmap.java.test.TargetFlatPrimitiveClass");
+        assertEquals(TargetFlatPrimitiveClass.class, output.getClass());
+        TargetFlatPrimitiveClass target = TargetFlatPrimitiveClass.class.cast(output);
+        assertEquals(new Float((1+3+5+7)).floatValue(), target.getFloatField(), 1e-15);
+        assertEquals(new Double((1+3+5+7)).doubleValue(), target.getDoubleField(), 1e-15);
+        assertEquals(1+3+5+7, target.getLongField());
     }
 
 }
