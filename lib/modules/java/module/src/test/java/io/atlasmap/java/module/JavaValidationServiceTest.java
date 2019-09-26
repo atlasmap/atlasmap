@@ -327,7 +327,7 @@ public class JavaValidationServiceTest {
         }
         assertFalse(validationHelper.hasErrors());
         assertFalse(validationHelper.hasWarnings());
-        assertTrue(validationHelper.hasInfos());
+        assertFalse(validationHelper.hasInfos());
     }
 
     @Test
@@ -530,7 +530,7 @@ public class JavaValidationServiceTest {
 
         assertFalse(validationHelper.hasErrors());
         assertFalse(validationHelper.hasWarnings());
-        assertTrue(validationHelper.hasInfos());
+        assertFalse(validationHelper.hasInfos());
     }
 
     @Test

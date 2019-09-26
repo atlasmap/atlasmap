@@ -64,19 +64,6 @@ export class ErrorHandlerService {
       }
   }
 
-  /**
-   * Display a block of error messages (from validation for instance) by feeding them into the main
-   * error array.
-   *
-   * @param errorBlock
-   */
-  displayErrorBlock(errorBlock: ErrorInfo[]): void {
-    if (errorBlock[0] && this.arrayDoesNotContainError(errorBlock[0].message)) {
-      const mergedArray = [ ...this.cfg.errors, ...errorBlock ];
-      this.cfg.errors = mergedArray;
-    }
-  }
-
   private addError(message: string, level: ErrorLevel, error: any): void {
     if (this.arrayDoesNotContainError(message)) {
       if (error && error.message) {
