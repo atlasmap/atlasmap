@@ -1,0 +1,131 @@
+{
+  "AtlasMapping": {
+    "jsonType": "io.atlasmap.v2.AtlasMapping",
+    "dataSource": [
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "json-source",
+        "uri": "atlas:json:json-source",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType": "io.atlasmap.v2.DataSource",
+        "id": "xml-source",
+        "uri": "atlas:xml:xml-source",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType": "io.atlasmap.v2.DataSource",
+        "id": "java-source",
+        "uri": "atlas:java?className=io.atlasmap.java.test.SourceFlatPrimitiveClass",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType": "io.atlasmap.v2.DataSource",
+        "id": "io.atlasmap.java.test.TargetFlatPrimitiveClass",
+        "uri": "atlas:java?className=io.atlasmap.java.test.TargetFlatPrimitiveClass",
+        "dataSourceType": "TARGET"
+      }
+    ],
+    "mappings": {
+      "mapping": [
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "inputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "actions": [
+                {
+                  "@type": "Add"
+                }
+              ],
+              "docId": "json-source",
+              "index": 0,
+              "path": "/jsonIntegers<>",
+              "fieldType": "INTEGER",
+              "name": "jsonIntegers",
+              "userCreated": false
+            }
+          ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.java.v2.JavaField",
+              "docId": "io.atlasmap.java.test.TargetFlatPrimitiveClass",
+              "path": "/floatField",
+              "fieldType": "FLOAT",
+              "name": "floatField"
+            }
+          ],
+          "id": "mapping.64078"
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "inputField": [
+            {
+              "jsonType": "io.atlasmap.xml.v2.XmlField",
+              "actions": [
+                {
+                  "@type": "Add"
+                }
+              ],
+              "docId": "xml-source",
+              "index": 0,
+              "path": "/root/xmlIntegers<>",
+              "fieldType": "INTEGER",
+              "name": "xmlIntegers",
+              "userCreated": false
+            }
+          ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.java.v2.JavaField",
+              "docId": "io.atlasmap.java.test.TargetFlatPrimitiveClass",
+              "path": "/doubleField",
+              "fieldType": "DOUBLE",
+              "name": "doubleField"
+            }
+          ],
+          "id": "mapping.64078"
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "inputField": [
+            {
+              "jsonType": "io.atlasmap.java.v2.JavaField",
+              "actions": [
+                {
+                  "@type": "Add"
+                }
+              ],
+              "docId": "java-source",
+              "index": 0,
+              "path": "/intArrayField[]",
+              "fieldType": "INTEGER",
+              "name": "intArrayField"
+            }
+          ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.java.v2.JavaField",
+              "docId": "io.atlasmap.java.test.TargetFlatPrimitiveClass",
+              "path": "/longField",
+              "fieldType": "LONG",
+              "name": "longField"
+            }
+          ],
+          "id": "mapping.64078"
+        }
+      ]
+    },
+    "lookupTables": {
+      "lookupTable": []
+    },
+    "constants": {
+      "constant": []
+    },
+    "properties": {
+      "property": []
+    },
+    "name": "UI.176627"
+  }
+}
