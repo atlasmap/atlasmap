@@ -110,9 +110,6 @@
                                 <a href="#debug">debug</a>
                             </li>
                             <li>
-                                <a href="#displayErrorBlock">displayErrorBlock</a>
-                            </li>
-                            <li>
                                 <a href="#error">error</a>
                             </li>
                             <li>
@@ -175,8 +172,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="80"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:80</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="67"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:67</a></div>
                 </td>
             </tr>
 
@@ -271,8 +268,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="90"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:90</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="77"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:77</a></div>
                 </td>
             </tr>
 
@@ -494,79 +491,6 @@
                                     <td>error</td>
                                     <td>
                                                 <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
-
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="displayErrorBlock"></a>
-                    <span class="name">
-                        <b>
-                            displayErrorBlock
-                        </b>
-                        <a href="#displayErrorBlock"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-<code>displayErrorBlock(errorBlock: <a href="../classes/ErrorInfo.html">ErrorInfo[]</a>)</code>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="73"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:73</a></div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-description"><p>Display a block of error messages (from validation for instance) by feeding them into the main
-error array.</p>
-</div>
-
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>errorBlock</td>
-                                    <td>
-                                                <code><a href="../classes/ErrorInfo.html" target="_self" >ErrorInfo[]</a></code>
                                     </td>
 
                                     <td>
@@ -1202,19 +1126,6 @@ export class ErrorHandlerService {
           this.removeError(e.identifier);
         }
       }
-  }
-
-  /**
-   * Display a block of error messages (from validation for instance) by feeding them into the main
-   * error array.
-   *
-   * @param errorBlock
-   */
-  displayErrorBlock(errorBlock: ErrorInfo[]): void {
-    if (errorBlock[0] &amp;&amp; this.arrayDoesNotContainError(errorBlock[0].message)) {
-      const mergedArray &#x3D; [ ...this.cfg.errors, ...errorBlock ];
-      this.cfg.errors &#x3D; mergedArray;
-    }
   }
 
   private addError(message: string, level: ErrorLevel, error: any): void {
