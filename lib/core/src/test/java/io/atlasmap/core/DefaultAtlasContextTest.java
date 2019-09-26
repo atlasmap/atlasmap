@@ -563,9 +563,31 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         target3.setFieldType(FieldType.STRING);
         m.getOutputField().add(target3);
         Audits audits = context.processPreview(m);
-        assertEquals(audits.toString(), 0, audits.getAudit().size());
+        assertEquals(printAudit(audits), 0, audits.getAudit().size());
         assertEquals("one", target1.getValue());
         assertEquals("two", target2.getValue());
         assertEquals("four", target3.getValue());
+    }
+
+    @Test
+    public void testProcessPreviewSourceCollection() throws AtlasException {
+        Mapping m = new Mapping();
+        Field source = new SimpleField();
+        source.setFieldType(FieldType.STRING);
+        source.setIndex(0);
+        source.setPath("/this<>/is/collection");
+        source.setValue("one");
+        source.setActions(new ArrayList<>());
+        Concatenate action = new Concatenate();
+        action.setDelimiter(" ");
+        source.getActions().add(action);
+        m.getInputField().add(source);
+        Field target = new SimpleField();
+        target.setIndex(0);
+        target.setFieldType(FieldType.STRING);
+        m.getOutputField().add(target);
+        Audits audits = context.processPreview(m);
+        assertEquals(printAudit(audits), 0, audits.getAudit().size());
+        assertEquals("one", target.getValue());
     }
 }

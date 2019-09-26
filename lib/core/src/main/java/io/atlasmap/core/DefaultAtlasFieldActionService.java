@@ -344,31 +344,33 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
             }
 
             private Object convertSourceObject(Object sourceObject) throws AtlasConversionException {
-                Class<?> paramType;
-                paramType = method.getParameterTypes()[1];
                 if (sourceObject == null) {
                     return null;
                 }
+
+                Class<?> paramType;
+                paramType = method.getParameterTypes()[1];
+                CollectionType paramCollectionType = toFieldCollectionType(paramType);
                 CollectionType sourceCollectionType = toFieldCollectionType(sourceObject.getClass()) ;
-                if (sourceCollectionType != CollectionType.NONE) {
+                if (paramCollectionType != CollectionType.NONE) {
                     List<Object> sourceList;
-                    
-                    if (sourceCollectionType == CollectionType.ARRAY) {
-                        sourceList = Arrays.asList(sourceObject);
-                    } else if (sourceCollectionType == CollectionType.LIST) {
-                        sourceList = (List<Object>)sourceObject;
-                    } else if (sourceCollectionType == CollectionType.MAP) {
-                        sourceList = new ArrayList(((Map)sourceObject).values());
-                    } else {
-                        sourceList = new ArrayList((Collection)sourceObject);
-                    }
-                    
-                    if (paramType.isArray()) {
-                        paramType.getComponentType();
-                    }
                     Type itemType = method.getGenericParameterTypes()[1];
                     Class<?> itemClass = paramType.isArray() ? paramType.getComponentType()
-                            : (Class<?>)((ParameterizedType) itemType).getActualTypeArguments()[0];
+                        : (Class<?>)((ParameterizedType) itemType).getActualTypeArguments()[0];
+                    
+                    if (sourceCollectionType != CollectionType.NONE) {
+                        if (sourceCollectionType == CollectionType.ARRAY) {
+                            sourceList = Arrays.asList(sourceObject);
+                        } else if (sourceCollectionType == CollectionType.LIST) {
+                            sourceList = (List<Object>)sourceObject;
+                        } else if (sourceCollectionType == CollectionType.MAP) {
+                            sourceList = new ArrayList(((Map)sourceObject).values());
+                        } else {
+                            sourceList = new ArrayList((Collection)sourceObject);
+                        }
+                    } else {
+                        sourceList = Arrays.asList(sourceObject);
+                    }
                     for (int i=0; i<sourceList.size(); i++) {
                         
                         Object item = sourceList.get(i);

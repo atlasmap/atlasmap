@@ -21,6 +21,7 @@ import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Audit;
+import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.LookupEntry;
@@ -186,9 +187,9 @@ public abstract class BaseDefaultAtlasContextTest {
         }
     }
 
-    protected String printAudit(AtlasSession session) {
+    protected String printAudit(Audits audits) {
         StringBuilder buf = new StringBuilder("Audits: ");
-        for (Audit a : session.getAudits().getAudit()) {
+        for (Audit a : audits.getAudit()) {
             buf.append('[');
             buf.append(a.getStatus());
             buf.append(", message=");
@@ -196,5 +197,9 @@ public abstract class BaseDefaultAtlasContextTest {
             buf.append("], ");
         }
         return buf.toString();
+    }
+
+    protected String printAudit(AtlasSession session) {
+        return printAudit(session.getAudits());
     }
 }
