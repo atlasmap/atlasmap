@@ -319,7 +319,7 @@ public class XmlValidationServiceTest {
         }
         assertFalse(validationHelper.hasErrors());
         assertFalse(validationHelper.hasWarnings());
-        assertTrue(validationHelper.hasInfos());
+        assertFalse(validationHelper.hasInfos());
     }
 
     @Test

@@ -10,14 +10,6 @@
 
     <div class="fieldMappingDetail-body">
 
-      {{ cfg.errorService.displayErrorBlock(cfg.mappings.activeMapping.getValidationWarnings()) }}
-      {{ cfg.errorService.displayErrorBlock(cfg.mappings.activeMapping.getValidationErrors()) }}
-      {{ cfg.mappings.activeMapping.clearValidationErrors() }}
-
-      {{ cfg.errorService.displayErrorBlock(cfg.mappings.activeMapping.getPreviewWarnings()) }}
-      {{ cfg.errorService.displayErrorBlock(cfg.mappings.activeMapping.getPreviewErrors()) }}
-      {{ cfg.mappings.activeMapping.clearPreviewErrors() }}
-
       <div class="wizard-pf" embed-in-page="true">
         <div class="wizard-pf-body">
 

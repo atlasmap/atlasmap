@@ -197,7 +197,7 @@ public class JsonValidationServiceTest extends BaseJsonValidationServiceTest {
         }
         assertFalse(validationHelper.hasErrors());
         assertFalse(validationHelper.hasWarnings());
-        assertTrue(validationHelper.hasInfos());
+        assertFalse(validationHelper.hasInfos());
     }
 
     @Test

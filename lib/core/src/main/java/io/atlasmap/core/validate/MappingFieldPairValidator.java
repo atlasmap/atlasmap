@@ -159,12 +159,7 @@ public class MappingFieldPairValidator {
         for (AtlasConversionConcern atlasConversionConcern : converterAnno.concerns()) {
             String message = atlasConversionConcern.getMessage(converterAnno);
             if (AtlasConversionConcern.NONE.equals(atlasConversionConcern)) {
-                Validation validation = new Validation();
-                validation.setScope(ValidationScope.MAPPING);
-                validation.setId(mappingId);
-                validation.setMessage(message);
-                validation.setStatus(ValidationStatus.INFO);
-                validations.add(validation);
+                continue; // just supported - even INFO is verbose
             } else  if (atlasConversionConcern.equals(AtlasConversionConcern.RANGE)
                     || atlasConversionConcern.equals(AtlasConversionConcern.FORMAT)
                     || atlasConversionConcern.equals(AtlasConversionConcern.FRACTIONAL_PART)

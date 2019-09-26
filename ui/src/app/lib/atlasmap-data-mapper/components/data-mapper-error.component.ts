@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { ModalErrorWindowComponent } from './modal-error-window.component';
 
@@ -27,7 +27,7 @@ import { ConfigModel } from '../models/config.model';
   templateUrl: './data-mapper-error.component.html',
 })
 
-export class DataMapperErrorComponent {
+export class DataMapperErrorComponent implements OnInit {
   @Input() errorService: ErrorHandlerService;
   @Input() isValidation = false;
   @Input() modalErrorWindow: ModalErrorWindowComponent;
@@ -37,33 +37,33 @@ export class DataMapperErrorComponent {
   isOpen = true;
   cfg: ConfigModel = null;
 
+  ngOnInit() {
+    this.cfg = ConfigModel.getConfig();
+  }
+
   /**
    * Return true if an error window is necessary, false otherwise.
    */
   errorServiceRequired(): boolean {
-    const cfg = ConfigModel.getConfig();
-    return (this.errorService && (cfg.validationErrors.length > 0 || cfg.errors.length > 0));
+    return (this.errorService && (this.getAllErrors().length > 0));
   }
 
   getErrors(): ErrorInfo[] {
-    return this.isValidation ? ConfigModel.getConfig().validationErrors.filter(e => e.level >= ErrorLevel.ERROR)
-      : ConfigModel.getConfig().errors.filter(e => e.level >= ErrorLevel.ERROR);
+    return this.getAllErrors().filter(e => e.level >= ErrorLevel.ERROR);
   }
 
   getWarnings(): ErrorInfo[] {
-    return this.isValidation ? ConfigModel.getConfig().validationErrors.filter(e => e.level === ErrorLevel.WARN)
-      : ConfigModel.getConfig().errors.filter(e => e.level === ErrorLevel.WARN);
+    return this.getAllErrors().filter(e => e.level === ErrorLevel.WARN);
   }
 
   getInfos(): ErrorInfo[] {
-    return this.isValidation ? ConfigModel.getConfig().validationErrors.filter(e => e.level === ErrorLevel.INFO)
-      : ConfigModel.getConfig().errors.filter(e => e.level === ErrorLevel.INFO);
+    return this.getAllErrors().filter(e => e.level === ErrorLevel.INFO);
   }
 
   handleClick(event: any) {
     const errorIdentifier = event.target.attributes.getNamedItem('errorIdentifier');
     if (errorIdentifier && errorIdentifier.value) {
-      ConfigModel.getConfig().mappings.activeMapping.removeValidationError(errorIdentifier.value);
+      this.cfg.mappings.activeMapping.removeValidationError(errorIdentifier.value);
       this.errorService.removeError(errorIdentifier.value);
     }
   }
@@ -109,10 +109,6 @@ export class DataMapperErrorComponent {
     this.modalErrorWindow.show();
   }
 
-  getConfig(): ConfigModel {
-    return ConfigModel.getConfig();
-  }
-
   /**
    * The fixed error window only needs to show one error.  The full collection of errors is
    * available from the error modal window.
@@ -128,4 +124,12 @@ export class DataMapperErrorComponent {
   getFirstWarning(): ErrorInfo {
     return this.getWarnings()[0];
   }
+
+  private getAllErrors(): ErrorInfo[] {
+    return this.isValidation ? this.cfg.validationErrors
+      : (this.cfg.mappings.activeMapping
+        ? [...this.cfg.mappings.activeMapping.previewErrors, ...this.cfg.mappings.activeMapping.validationErrors, ...this.cfg.errors]
+        : this.cfg.errors);
+  }
+
 }
