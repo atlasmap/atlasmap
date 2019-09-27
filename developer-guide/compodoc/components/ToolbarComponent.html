@@ -306,8 +306,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="298"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:298</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="280"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:280</a></div>
                 </td>
             </tr>
 
@@ -347,8 +347,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="227"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:227</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="209"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:209</a></div>
                 </td>
             </tr>
 
@@ -565,8 +565,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="250"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:250</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="232"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:232</a></div>
                 </td>
             </tr>
 
@@ -633,8 +633,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="283"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:283</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="265"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:265</a></div>
                 </td>
             </tr>
 
@@ -702,8 +702,8 @@ service to establish the file content and to push it down to the server.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="294"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:294</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="276"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:276</a></div>
                 </td>
             </tr>
 
@@ -743,8 +743,8 @@ service to establish the file content and to push it down to the server.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="265"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:265</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="247"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:247</a></div>
                 </td>
             </tr>
 
@@ -812,8 +812,8 @@ support documents will be exported.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="192"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:192</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="174"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:174</a></div>
                 </td>
             </tr>
 
@@ -1069,8 +1069,8 @@ support documents will be exported.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="205"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:205</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="187"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/toolbar.component.ts:187</a></div>
                 </td>
             </tr>
 
@@ -1479,25 +1479,7 @@ export class ToolbarComponent implements OnInit {
     } else if (&#x27;resetAll&#x27; &#x3D;&#x3D;&#x3D; action) {
       this.resetAll();
     } else if (&#x27;enableExpression&#x27;) {
-      if (this.cfg.mappings &amp;&amp; this.cfg.mappings.activeMapping &amp;&amp; this.cfg.mappings.activeMapping.transition) {
-
-        if (this.cfg.mappings.activeMapping.getFirstCollectionField(false)) {
-          this.cfg.errorService.warn(
-           &#x60;Cannot establish a conditional mapping expression when referencing a target collection field.&#x60;, null);
-        } else if (this.cfg.mappings.activeMapping.getFirstCollectionField(true)) {
-         this.cfg.errorService.warn(
-           &#x60;Cannot establish a conditional mapping expression when referencing a source collection field.&#x60;, null);
-        } else if (this.cfg.mappings.activeMapping.transition.mode &#x3D;&#x3D;&#x3D; TransitionMode.ONE_TO_MANY) {
-          this.cfg.errorService.warn(
-           &#x60;Cannot establish a conditional mapping expression when multiple target fields are selected.
-            Please select only one target field and try again.&#x60;, null);
-        } else {
-          this.cfg.mappings.activeMapping.transition.enableExpression
-            &#x3D; !this.cfg.mappings.activeMapping.transition.enableExpression;
-        }
-      } else {
-        this.cfg.errorService.info(&#x27;Please select a mapping first.&#x27;, null);
-      }
+      this.cfg.mappingService.toggleExpressionMode();
     }
     // Use the initialization service to trigger the observable updateFromConfig method
     // in the parent data-mapper-app class.  This avoids materializing the lineMachine object
