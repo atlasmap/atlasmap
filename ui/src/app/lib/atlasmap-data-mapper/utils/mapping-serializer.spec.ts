@@ -266,8 +266,11 @@ describe('MappingSerializer', () => {
         f.docDef = cfg.getDocForIdentifier('twitter4j.Status', true);
         mapping.addField(f, true);
         const json = MappingSerializer.serializeFieldMapping(cfg, mapping, 'm1', true);
-        expect(json.inputField[0].actions.length).toEqual(1);
-        expect(Object.keys(json.inputField[0].actions[0])[0]).toEqual('Concatenate');
+        expect(json.inputField).toBeFalsy();
+        expect(json.inputFieldGroup.field.length).toEqual(1);
+        expect(json.inputFieldGroup.field[0].actions).toBeFalsy();
+        expect(json.inputFieldGroup.actions.length).toEqual(1);
+        expect(Object.keys(json.inputFieldGroup.actions[0])[0]).toEqual('Concatenate');
         const f2 = new Field();
         f2.path = '/User/Name';
         f2.docDef = f.docDef;

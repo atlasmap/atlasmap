@@ -16,6 +16,8 @@
  */
 package io.atlasmap.expression;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.HashMap;
 
 import io.atlasmap.expression.internal.ComparisonExpression;
@@ -130,6 +132,14 @@ public class ExpressionTest extends TestCase {
             properties.put(key, value);
         }
 
+        public void setBigIntegerProperty(String key, BigInteger value) {
+            properties.put(key, value);
+        }
+
+        public void setBigDecimalProperty(String key, BigDecimal value) {
+            properties.put(key, value);
+        }
+
         public <T> T getBodyAs(Class<T> type) throws ExpressionException {
             if (type == String.class) {
                 return type.cast(text);
@@ -215,6 +225,13 @@ public class ExpressionTest extends TestCase {
         assertSelector(message, "${floatProp} == 10", false);
         assertSelector(message, "${doubleProp} == 123", true);
         assertSelector(message, "${doubleProp} == 10", false);
+        assertSelector(message, "${bigIntegerProp} == 7", true);
+        assertSelector(message, "${bigIntegerProp} == 1", false);
+        assertSelector(message, "${bigIntegerProp} == 7.1", false);
+        assertSelector(message, "${bigDecimalProp} == 7.7", true);
+        assertSelector(message, "${bigDecimalProp} == 7.8", false);
+        assertSelector(message, "${bigDecimalProp} == 7", false);
+        assertSelector(message, "${bigDecimalProp} == 8", false);
     }
 
     public void testAndSelectors() throws Exception {
@@ -398,6 +415,9 @@ public class ExpressionTest extends TestCase {
         message.setStringProperty("punctuation", "!#$&()*+,-./:;<=>?@[\\]^`{|}~");
         message.setBooleanProperty("trueProp", true);
         message.setBooleanProperty("falseProp", false);
+
+        message.setBigIntegerProperty("bigIntegerProp", new BigInteger("7"));
+        message.setBigDecimalProperty("bigDecimalProp", new BigDecimal("7.7"));
         return message;
     }
 

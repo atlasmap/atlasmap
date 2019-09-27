@@ -69,7 +69,7 @@ export class MappingSerializer {
     const serializedOutputFields: any[] = MappingSerializer.serializeFields(mapping, false, cfg, ignoreValue);
     let jsonMapping = {};
 
-    if (mapping.getMappedFields(true).length > 1) {
+    if (mapping.transition.isManyToOneMode()) {
       inputFieldGroup = MappingSerializer.createInputFieldGroup(mapping, serializedInputFields, cfg);
 
       jsonMapping = {
@@ -628,8 +628,8 @@ export class MappingSerializer {
       } else if ( isSource && parsedAction.definition && [Multiplicity.ONE_TO_MANY, Multiplicity.MANY_TO_ONE]
         .includes( parsedAction.definition.multiplicity ) ) {
         if ( mapping.transition.transitionFieldAction ) {
-            cfg.logger.warn( `Duplicated multiplicity transformations were detected:
-              ${mapping.transition.transitionFieldAction.name} is being overwritten by ${action.name} ...` );
+            cfg.logger.warn( `Duplicated multiplicity transformations were detected: \
+              ${mapping.transition.transitionFieldAction.name} is being overwritten by ${parsedAction.name} ...` );
         }
         mapping.transition.transitionFieldAction = parsedAction;
       } else {

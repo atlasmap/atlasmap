@@ -16,6 +16,8 @@
  */
 package io.atlasmap.expression.internal;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -359,6 +361,10 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
                         lv = new Float(((Number)lv).floatValue());
                     } else if (rc == Double.class) {
                         lv = new Double(((Number)lv).doubleValue());
+                    } else if (rc == BigInteger.class) {
+                        lv = BigInteger.valueOf((Byte)lv);
+                    } else if (rc == BigDecimal.class) {
+                        lv = BigDecimal.valueOf((Byte)lv);
                     } else if (convertStringExpressions && rc == String.class) {
                         rv = Byte.valueOf((String)rv);
                     } else {
@@ -373,6 +379,10 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
                         lv = new Float(((Number)lv).floatValue());
                     } else if (rc == Double.class) {
                         lv = new Double(((Number)lv).doubleValue());
+                    } else if (rc == BigInteger.class) {
+                        lv = BigInteger.valueOf((Short)lv);
+                    } else if (rc == BigDecimal.class) {
+                        lv = BigDecimal.valueOf((Short)lv);
                     } else if (convertStringExpressions && rc == String.class) {
                         rv = Short.valueOf((String)rv);
                     } else {
@@ -385,6 +395,10 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
                         lv = new Float(((Number)lv).floatValue());
                     } else if (rc == Double.class) {
                         lv = new Double(((Number)lv).doubleValue());
+                    } else if (rc == BigInteger.class) {
+                        lv = BigInteger.valueOf((Integer)lv);
+                    } else if (rc == BigDecimal.class) {
+                        lv = BigDecimal.valueOf((Integer)lv);
                     } else if (convertStringExpressions && rc == String.class) {
                         rv = Integer.valueOf((String)rv);
                     } else {
@@ -397,6 +411,10 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
                         lv = new Float(((Number)lv).floatValue());
                     } else if (rc == Double.class) {
                         lv = new Double(((Number)lv).doubleValue());
+                    } else if (rc == BigInteger.class) {
+                        lv = BigInteger.valueOf((Long)lv);
+                    } else if (rc == BigDecimal.class) {
+                        lv = BigDecimal.valueOf((Long)lv);
                     } else if (convertStringExpressions && rc == String.class) {
                         rv = Long.valueOf((String)rv);
                     } else {
@@ -409,6 +427,11 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
                         rv = new Float(((Number)rv).floatValue());
                     } else if (rc == Double.class) {
                         lv = new Double(((Number)lv).doubleValue());
+                    } else if (rc == BigInteger.class) {
+                        rv = new BigDecimal((BigInteger)rv);
+                        lv = BigDecimal.valueOf((Float)lv);
+                    } else if (rc == BigDecimal.class) {
+                        lv = BigDecimal.valueOf((Float)lv);
                     } else if (convertStringExpressions && rc == String.class) {
                         rv = Float.valueOf((String)rv);
                     } else {
@@ -421,6 +444,11 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
                         rv = new Double(((Number)rv).doubleValue());
                     } else if (rc == Float.class) {
                         rv = new Double(((Number)rv).doubleValue());
+                    } else if (rc == BigInteger.class) {
+                        rv = new BigDecimal((BigInteger)rv);
+                        lv = BigDecimal.valueOf((Double)lv);
+                    } else if (rc == BigDecimal.class) {
+                        lv = BigDecimal.valueOf((Double)lv);
                     } else if (convertStringExpressions && rc == String.class) {
                         rv = Double.valueOf((String)rv);
                     } else {
@@ -442,10 +470,51 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
                         lv = Float.valueOf((String)lv);
                     } else if (rc == Double.class) {
                         lv = Double.valueOf((String)lv);
+                    } else if (rc == BigInteger.class) {
+                        lv = new BigInteger((String)lv);
+                    } else if (rc == BigDecimal.class) {
+                        lv = new BigDecimal((String)lv);
                     } else {
                         return Boolean.FALSE;
                     }
-
+                } else if (lc == BigInteger.class) {
+                    if (rc == Byte.class) {
+                        rv = BigInteger.valueOf(((Byte)rv));
+                    } else if (rc == Short.class) {
+                        rv = BigInteger.valueOf((Short)rv);
+                    } else if (rc == Integer.class) {
+                        rv = BigInteger.valueOf((Integer)rv);
+                    } else if (rc == Long.class) {
+                        rv = BigInteger.valueOf((Long)rv);
+                    } else if (rc == Float.class) {
+                        lv = new BigDecimal((BigInteger)lv);
+                        rv = BigDecimal.valueOf(((Float)rv));
+                    } else if (rc == Double.class) {
+                        lv = new BigDecimal((BigInteger)lv);
+                        rv = BigDecimal.valueOf((Double)rv);
+                    } else if (rc == BigDecimal.class) {
+                        lv = new BigDecimal((BigInteger)lv);
+                    } else if (rc != BigInteger.class) {
+                        return Boolean.FALSE;
+                    }
+                } else if (lc == BigDecimal.class) {
+                    if (rc == Byte.class) {
+                        rv = BigDecimal.valueOf((Byte)rv);
+                    } else if (rc == Short.class) {
+                        rv = BigDecimal.valueOf((Short)rv);
+                    } else if (rc == Integer.class) {
+                        rv = BigDecimal.valueOf((Integer)rv);
+                    } else if (rc == Long.class) {
+                        rv = BigDecimal.valueOf((Long)rv);
+                    } else if (rc == Float.class) {
+                        rv = BigDecimal.valueOf((Float)rv);
+                    } else if (rc == Double.class) {
+                        rv = BigDecimal.valueOf((Double)rv);
+                    } else if (rc == BigInteger.class) {
+                        rv = new BigDecimal((BigInteger)rv);
+                    } else if (rc != BigDecimal.class) {
+                        return Boolean.FALSE;
+                    }
                 } else {
                     return Boolean.FALSE;
                 }
