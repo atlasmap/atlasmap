@@ -163,25 +163,7 @@ export class ToolbarComponent implements OnInit {
     } else if ('resetAll' === action) {
       this.resetAll();
     } else if ('enableExpression') {
-      if (this.cfg.mappings && this.cfg.mappings.activeMapping && this.cfg.mappings.activeMapping.transition) {
-
-        if (this.cfg.mappings.activeMapping.getFirstCollectionField(false)) {
-          this.cfg.errorService.warn(
-           `Cannot establish a conditional mapping expression when referencing a target collection field.`, null);
-        } else if (this.cfg.mappings.activeMapping.getFirstCollectionField(true)) {
-         this.cfg.errorService.warn(
-           `Cannot establish a conditional mapping expression when referencing a source collection field.`, null);
-        } else if (this.cfg.mappings.activeMapping.transition.mode === TransitionMode.ONE_TO_MANY) {
-          this.cfg.errorService.warn(
-           `Cannot establish a conditional mapping expression when multiple target fields are selected.
-            Please select only one target field and try again.`, null);
-        } else {
-          this.cfg.mappings.activeMapping.transition.enableExpression
-            = !this.cfg.mappings.activeMapping.transition.enableExpression;
-        }
-      } else {
-        this.cfg.errorService.info('Please select a mapping first.', null);
-      }
+      this.cfg.mappingService.toggleExpressionMode();
     }
     // Use the initialization service to trigger the observable updateFromConfig method
     // in the parent data-mapper-app class.  This avoids materializing the lineMachine object

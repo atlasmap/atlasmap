@@ -541,6 +541,31 @@ export class MappingManagementService {
     }
   }
 
+  toggleExpressionMode() {
+    if (!this.cfg.mappings || !this.cfg.mappings.activeMapping || !this.cfg.mappings.activeMapping.transition) {
+      this.cfg.errorService.info('Please select a mapping first.', null);
+      return;
+    }
+    if (this.cfg.mappings.activeMapping.getFirstCollectionField(false)) {
+      this.cfg.errorService.warn(
+        `Cannot establish a conditional mapping expression when referencing a target collection field.`, null);
+      return;
+    } else if (this.cfg.mappings.activeMapping.getFirstCollectionField(true)) {
+      this.cfg.errorService.warn(
+        `Cannot establish a conditional mapping expression when referencing a source collection field.`, null);
+      return;
+    } else if (this.cfg.mappings.activeMapping.transition.mode === TransitionMode.ONE_TO_MANY) {
+      this.cfg.errorService.warn(
+        `Cannot establish a conditional mapping expression when multiple target fields are selected.
+        Please select only one target field and try again.`, null);
+      return;
+    }
+
+    this.cfg.mappings.activeMapping.transition.enableExpression
+      = !this.cfg.mappings.activeMapping.transition.enableExpression;
+    this.updateTransition(this.cfg.mappings.activeMapping);
+  }
+
   /**
    * Invoke the runtime service to both validate and save the current active mapping.
    */
@@ -645,10 +670,11 @@ export class MappingManagementService {
 
     if (sourceMappedCollection && targetMappedCollection) {
       mapping.transition.mode = TransitionMode.FOR_EACH;
-    } else if (sourceMappedFields.length > 1 || sourceMappedCollection) {
+    } else if (sourceMappedFields.length > 1 || sourceMappedCollection || mapping.transition.enableExpression) {
       mapping.transition.mode = TransitionMode.MANY_TO_ONE;
-      if (!mapping.transition.transitionFieldAction
-       || mapping.transition.transitionFieldAction.definition.multiplicity !== Multiplicity.MANY_TO_ONE) {
+      if (!mapping.transition.enableExpression
+       && ( !mapping.transition.transitionFieldAction
+         || mapping.transition.transitionFieldAction.definition.multiplicity !== Multiplicity.MANY_TO_ONE)) {
         mapping.transition.transitionFieldAction
          = FieldAction.create(this.cfg.fieldActionService.getActionDefinitionForName('Concatenate', Multiplicity.MANY_TO_ONE));
         mapping.transition.transitionFieldAction.setArgumentValue('delimiter', ' ');

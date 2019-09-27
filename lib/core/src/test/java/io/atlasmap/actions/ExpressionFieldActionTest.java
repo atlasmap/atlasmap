@@ -17,11 +17,12 @@ package io.atlasmap.actions;
 
 import static org.junit.Assert.assertEquals;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Arrays;
 
 import org.junit.Test;
 
-import io.atlasmap.expression.ExpressionException;
 import io.atlasmap.v2.Expression;
 
 public class ExpressionFieldActionTest {
@@ -173,4 +174,19 @@ public class ExpressionFieldActionTest {
         action.setExpression("   ");
         assertEquals(null, ExpressionFieldAction.process(action, null));
     }
+
+    @Test
+    public void testNumberField() throws Exception {
+        Expression action = new Expression();
+        Number integer = 1;
+        action.setExpression("IF(${0} == 1, '1', 'not 1')");
+        assertEquals("1", ExpressionFieldAction.process(action, Arrays.asList(integer)));
+        BigInteger bigInt = new BigInteger("1");
+        action.setExpression("IF(${0} == 1, 'bigint 1', 'not bigint 1')");
+        assertEquals("bigint 1", ExpressionFieldAction.process(action, Arrays.asList(bigInt)));
+        BigDecimal bigDec = new BigDecimal("1");
+        action.setExpression("IF(${0} == 1, 'bigdecimal 1', 'not bigdecimal 1')");
+        assertEquals("bigdecimal 1", ExpressionFieldAction.process(action, Arrays.asList(bigDec)));
+    }
+
 }
