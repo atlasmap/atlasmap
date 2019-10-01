@@ -127,7 +127,7 @@ export class DataMapperErrorComponent implements OnInit {
 
   private getAllErrors(): ErrorInfo[] {
     return this.isValidation ? this.cfg.validationErrors
-      : (this.cfg.mappings.activeMapping
+      : (this.cfg.mappings && this.cfg.mappings.activeMapping
         ? [...this.cfg.mappings.activeMapping.previewErrors, ...this.cfg.mappings.activeMapping.validationErrors, ...this.cfg.errors]
         : this.cfg.errors);
   }

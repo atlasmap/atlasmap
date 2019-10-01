@@ -69,8 +69,10 @@ export class ToolbarComponent implements OnInit {
         this.cfg.errorService.resetAll();
 
         // Clear out current user documents from the runtime service before processing the imported ADM.
-        this.cfg.fileService.resetAll().toPromise().then( async(result: boolean) => {
-          await this.processMappingsCatalog(userFile);
+        this.cfg.fileService.resetMappings().toPromise().then( async() => {
+          this.cfg.fileService.resetLibs().toPromise().then( async() => {
+            await this.processMappingsCatalog(userFile);
+          });
         }).catch((error: any) => {
           if (error.status === 0) {
             this.cfg.errorService.error('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
@@ -160,6 +162,8 @@ export class ToolbarComponent implements OnInit {
       }
     } else if ('showMappingPreview' === action) {
       this.cfg.showMappingPreview = !this.cfg.showMappingPreview;
+    } else if ('clearMappings' === action) {
+        this.clearMappings();
     } else if ('resetAll' === action) {
       this.resetAll();
     } else if ('enableExpression') {
@@ -181,6 +185,21 @@ export class ToolbarComponent implements OnInit {
   }
 
   /**
+   * Establish a modal window popup and if confirmed clear all mappings.
+   */
+  private clearMappings(): void {
+    this.modalWindow.reset();
+    this.modalWindow.confirmButtonText = 'Clear All Mappings';
+    this.modalWindow.headerText = 'Clear All Mappings?';
+    this.modalWindow.message = 'Are you sure you want to clear all mappings?';
+    this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
+      this.cfg.errorService.resetAll();
+      this.cfg.mappingService.removeAllMappings();
+    };
+    this.modalWindow.show();
+  }
+
+  /**
    * Establish a modal window popup and if confirmed remove all documents and imported JARs from
    * the server and reinitialize the DM.
    */
@@ -191,8 +210,11 @@ export class ToolbarComponent implements OnInit {
     this.modalWindow.message = 'Are you sure you want to reset all mappings and clear all imported documents?';
     this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
       this.cfg.errorService.resetAll();
-      this.cfg.fileService.resetAll().toPromise().then( async(result: boolean) => {
+      this.cfg.fileService.resetMappings().toPromise().then( async() => {
         this.cfg.mappings = null;
+        this.cfg.fileService.resetLibs().toPromise().then( async() => {
+          await this.cfg.initializationService.initialize();
+        });
         this.cfg.clearDocs();
         await this.cfg.initializationService.initialize();
       }).catch((error: any) => {

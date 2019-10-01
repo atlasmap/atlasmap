@@ -279,6 +279,23 @@ public class AtlasService {
 
         try {
             AtlasUtil.deleteDirectoryContents(mappingFolderPath.toFile());
+        } catch (Exception e) {
+            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
+        }
+        return Response.ok().build();
+    }
+
+    @DELETE
+    @Path("/mapping/resetLibs")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Remove All User-Defined JAR libraries", notes = "Remove all user-defined JAR files saved on the server")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "All user-defined JAR files were removed successfully"),
+        @ApiResponse(code = 204, message = "Unable to remove all user-defined JAR files")})
+    public Response resetUserLibs() {
+        LOG.debug("resetUserLibs");
+
+        try {
             java.nio.file.Path libFolderPath = Paths.get(libFolder);
             AtlasUtil.deleteDirectoryContents(libFolderPath.toFile());
         } catch (Exception e) {
