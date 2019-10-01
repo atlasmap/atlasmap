@@ -135,7 +135,7 @@ export class FileManagementService {
   /**
    * Establish an observable function to delete mapping files on the runtime.
    */
-  resetAll(): Observable<boolean> {
+  resetMappings(): Observable<boolean> {
     return new Observable<boolean>((observer: any) => {
       const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/RESET';
       this.cfg.logger.trace('Mapping Service Request - Reset');
@@ -149,6 +149,27 @@ export class FileManagementService {
         })
         .catch((error: any) => {
           this.handleError('Error occurred while resetting mappings.', error); },
+      );
+    }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
+  }
+
+  /**
+   * Establish an observable function to delete user-defined JAR library files on the runtime.
+   */
+  resetLibs(): Observable<boolean> {
+    return new Observable<boolean>((observer: any) => {
+      const url = this.cfg.initCfg.baseMappingServiceUrl + 'fieldActions/RESET_LIBS';
+      this.cfg.logger.trace('Mapping Service Request - Reset User-Defined Libraries');
+      this.http.delete(url, { headers: this.headers }).toPromise().then((res: any) => {
+          if (this.cfg.isTraceEnabled()) {
+            this.cfg.logger.trace(`Mapping Service Response - Reset Libs: ${JSON.stringify(res)}`);
+          }
+          observer.next(true);
+          observer.complete();
+          return res;
+        })
+        .catch((error: any) => {
+          this.handleError('Error occurred while resetting user-defined JAR libraries.', error); },
       );
     }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
   }

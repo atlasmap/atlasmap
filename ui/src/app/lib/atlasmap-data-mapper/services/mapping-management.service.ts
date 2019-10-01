@@ -167,6 +167,24 @@ export class MappingManagementService {
     });
   }
 
+  /**
+   * Remove all mappings from the current session.
+   */
+  async removeAllMappings(): Promise<boolean> {
+    return new Promise<boolean>( async(resolve) => {
+      for (const mapping of this.cfg.mappings.getAllMappings(true)) {
+        const mappingWasRemoved: boolean = this.cfg.mappings.removeMapping(mapping);
+        if (mappingWasRemoved) {
+          this.deselectMapping();
+        } else {
+          this.deselectMapping();
+        }
+      }
+      await this.notifyMappingUpdated();
+      resolve(true);
+    });
+  }
+
   async updateMappedField(mapping: MappingModel): Promise<boolean> {
     return new Promise<boolean>( async(resolve) => {
       if (mapping.isEmpty()) {

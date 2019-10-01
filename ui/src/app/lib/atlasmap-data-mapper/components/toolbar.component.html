@@ -128,17 +128,27 @@
           <i class="fa fa-check" *ngIf="cfg.showMappingPreview" class="pull-right"></i>
         </li>
         <i class="fa fa-check" *ngIf="cfg.showUnmappedFields" class="pull-right"></i>
-        <li role="menuitem" *ngIf="!cfg.initCfg.disableNavbar" (click)="toolbarButtonClicked('resetAll', $event);" class="clearfix">
+        <li role="menuitem" *ngIf="!cfg.initCfg.disableNavbar; else clearMappings" (click)="toolbarButtonClicked('resetAll', $event);"
+          class="clearfix">
           <div class="pull-left">
             <a class="dropdown-item" href="#"tooltip="Reset all mappings and clear all imported documents." placement="bottom">
               <label>
-                <i class="pficon pficon-restart" (click)="toolbarButtonClicked('resetAll', $event);"
-                  style="margin-left:22px;"></i>Reset All
+                <i class="pficon pficon-restart" style="margin-left:22px;"></i>Reset All
               </label>
             </a>
           </div>
-
         </li>
+        <ng-template #clearMappings>
+          <li role="menuitem"  (click)="toolbarButtonClicked('clearMappings', $event);" class="clearfix">
+          <div class="pull-left">
+            <a class="dropdown-item" href="#" tooltip="Clear all mappings." placement="bottom">
+              <label>
+                <i class="pficon pficon-restart" style="margin-left:22px;"></i>Clear All Mappings
+              </label>
+            </a>
+          </div>
+          </li>
+        </ng-template>
       </ul>
     </div>
   </div>
