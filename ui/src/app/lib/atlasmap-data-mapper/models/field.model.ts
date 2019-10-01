@@ -120,6 +120,22 @@ export class Field {
     Field.uuidCounter++;
   }
 
+  /**
+   * Expand all fields above the current field.
+   */
+  expandToRoot() {
+    let parent: Field = this;
+    while (parent != null) {
+      parent.collapsed = false;
+      if (parent.isPropertyOrConstant) {
+        if (parent.docDef) {
+          parent.docDef.showFields = true;
+        }
+      }
+      parent = parent.parentField;
+    }
+  }
+
   getNameWithNamespace(): string {
     if (!this.namespaceAlias) {
       return this.name;

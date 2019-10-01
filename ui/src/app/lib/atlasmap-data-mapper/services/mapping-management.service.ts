@@ -302,6 +302,12 @@ export class MappingManagementService {
 
     if (!addField && !removeField) {
       this.selectMapping(mapping);
+
+      const mappedFields = this.cfg.mappings.activeMapping.getAllMappedFields();
+      for (const mappedField of mappedFields) {
+        mappedField.field.expandToRoot();
+      }
+
       this.notifyMappingUpdated();
       return;
     }
