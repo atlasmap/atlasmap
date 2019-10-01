@@ -158,7 +158,7 @@ export class FileManagementService {
    */
   resetLibs(): Observable<boolean> {
     return new Observable<boolean>((observer: any) => {
-      const url = this.cfg.initCfg.baseMappingServiceUrl + 'fieldActions/RESET_LIBS';
+      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/resetLibs';
       this.cfg.logger.trace('Mapping Service Request - Reset User-Defined Libraries');
       this.http.delete(url, { headers: this.headers }).toPromise().then((res: any) => {
           if (this.cfg.isTraceEnabled()) {

@@ -286,7 +286,7 @@ public class AtlasService {
     }
 
     @DELETE
-    @Path("/fieldActions/RESET_LIBS")
+    @Path("/mapping/resetLibs")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Remove All User-Defined JAR libraries", notes = "Remove all user-defined JAR files saved on the server")
     @ApiResponses({

@@ -27,32 +27,6 @@ Retrieves a list of available field action
 * `application/json`
 
 
-[[_atlas-service-core-resetuserlibs]]
-=== Remove All User-Defined JAR libraries
-....
-DELETE /fieldActions/RESET_LIBS
-....
-
-
-==== Description
-Remove all user-defined JAR files saved on the server
-
-
-==== Responses
-
-[options="header", cols=".^2a,.^14a,.^4a"]
-|===
-|HTTP Code|Description|Schema
-|**200**|All user-defined JAR files were removed successfully|No Content
-|**204**|Unable to remove all user-defined JAR files|No Content
-|===
-
-
-==== Produces
-
-* `application/json`
-
-
 [[_atlas-service-core-uploadlibrary]]
 === Upload Library
 ....
@@ -128,6 +102,32 @@ Process Mapping by feeding input data
 ==== Consumes
 
 * `application/json`
+
+
+==== Produces
+
+* `application/json`
+
+
+[[_atlas-service-core-resetuserlibs]]
+=== Remove All User-Defined JAR libraries
+....
+DELETE /mapping/resetLibs
+....
+
+
+==== Description
+Remove all user-defined JAR files saved on the server
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|All user-defined JAR files were removed successfully|No Content
+|**204**|Unable to remove all user-defined JAR files|No Content
+|===
 
 
 ==== Produces
