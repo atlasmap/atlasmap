@@ -276,6 +276,22 @@ export class Field {
     Field.uuidCounter++;
   }
 
+  /**
+   * Expand all fields above the current field.
+   */
+  expandToRoot() {
+    let parent: Field &#x3D; this;
+    while (parent !&#x3D; null) {
+      parent.collapsed &#x3D; false;
+      if (parent.isPropertyOrConstant) {
+        if (parent.docDef) {
+          parent.docDef.showFields &#x3D; true;
+        }
+      }
+      parent &#x3D; parent.parentField;
+    }
+  }
+
   getNameWithNamespace(): string {
     if (!this.namespaceAlias) {
       return this.name;
