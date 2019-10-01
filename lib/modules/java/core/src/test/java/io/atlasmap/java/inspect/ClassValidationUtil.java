@@ -138,7 +138,7 @@ public class ClassValidationUtil {
         assertNotNull(flatClass.getJavaFields());
         assertNotNull(flatClass.getJavaFields().getJavaField());
         assertFalse(flatClass.getJavaFields().getJavaField().isEmpty());
-        assertEquals(new Integer(34), new Integer(flatClass.getJavaFields().getJavaField().size()));
+        assertEquals(new Integer(35), new Integer(flatClass.getJavaFields().getJavaField().size()));
         assertNotNull(flatClass.getJavaEnumFields());
         assertNotNull(flatClass.getJavaEnumFields().getJavaEnumField());
         assertTrue(flatClass.getJavaEnumFields().getJavaEnumField().isEmpty());
@@ -180,7 +180,7 @@ public class ClassValidationUtil {
                 validatePrimitiveField("string", "String", j);
                 break;
             default:
-                fail("Extra field detected: " + j.getName());
+                fail(String.format("Extra field detected: name:'%s', type:'%s'", j.getName(), j.getFieldType()));
             }
         }
     }
@@ -204,6 +204,9 @@ public class ClassValidationUtil {
         if (CollectionType.ARRAY.equals(j.getCollectionType())) {
             fieldText = "ArrayField";
             assertEquals(new Integer(1), j.getArrayDimensions());
+        } else if (CollectionType.LIST.equals(j.getCollectionType())) {
+            fieldText = "ListField";
+            assertNotNull(j.getCollectionClassName());
         }
 
         if (String.format("%s%s", lowName, fieldText).equals(j.getName())) {

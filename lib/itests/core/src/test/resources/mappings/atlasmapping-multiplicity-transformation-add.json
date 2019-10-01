@@ -99,6 +99,34 @@
               ],
               "docId": "java-source",
               "index": 0,
+              "path": "/boxedIntListField<>",
+              "fieldType": "INTEGER",
+              "name": "boxedIntListField"
+            }
+          ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.java.v2.JavaField",
+              "docId": "io.atlasmap.java.test.TargetFlatPrimitiveClass",
+              "path": "/intField",
+              "fieldType": "INTEGER",
+              "name": "intField"
+            }
+          ],
+          "id": "mapping.64078"
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "inputField": [
+            {
+              "jsonType": "io.atlasmap.java.v2.JavaField",
+              "actions": [
+                {
+                  "@type": "Add"
+                }
+              ],
+              "docId": "java-source",
+              "index": 0,
               "path": "/intArrayField[]",
               "fieldType": "INTEGER",
               "name": "intArrayField"
@@ -113,7 +141,7 @@
               "name": "longField"
             }
           ],
-          "id": "mapping.64078"
+          "id": "mapping.64079"
         }
       ]
     },

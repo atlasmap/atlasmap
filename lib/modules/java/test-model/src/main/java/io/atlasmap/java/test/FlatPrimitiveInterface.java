@@ -15,6 +15,8 @@
  */
 package io.atlasmap.java.test;
 
+import java.util.List;
+
 public interface FlatPrimitiveInterface {
 
     int getIntField();
@@ -152,4 +154,9 @@ public interface FlatPrimitiveInterface {
     String[] getBoxedStringArrayField();
 
     void setBoxedStringArrayField(String[] boxedStringArrayField);
+
+    List<Integer> getBoxedIntListField();
+
+    void setBoxedIntListField(List<Integer> boxedIntListField);
+
 }
