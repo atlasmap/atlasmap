@@ -188,7 +188,7 @@ public class ClassInspectionService {
         JavaClass javaClass = AtlasJavaModelFactory.createJavaClass();
         javaClass.setCollectionType(collectionType);
         String rootPath = AtlasPath.PATH_SEPARATOR;
-        if (collectionType == CollectionType.LIST || collectionType == CollectionType.LIST) {
+        if (collectionType == CollectionType.LIST) {
             rootPath += AtlasPath.PATH_LIST_START + AtlasPath.PATH_LIST_END;
         } else if (collectionType == CollectionType.ARRAY) {
             rootPath += AtlasPath.PATH_ARRAY_START + AtlasPath.PATH_ARRAY_END;
@@ -334,6 +334,10 @@ public class ClassInspectionService {
             field.setCollectionType(CollectionType.ARRAY);
             field.setArrayDimensions(detectArrayDimensions(returnType));
             returnType = detectArrayClass(returnType);
+        } else if (Collection.class.isAssignableFrom(returnType)) {
+            field.setCollectionType(CollectionType.LIST);
+            field.setCollectionClassName(returnType.getName());
+            returnType = detectListClassFromMethodReturn(m);
         }
 
         field.setClassName(returnType.getName());
@@ -408,6 +412,10 @@ public class ClassInspectionService {
             field.setCollectionType(CollectionType.ARRAY);
             field.setArrayDimensions(detectArrayDimensions(paramType));
             paramType = detectArrayClass(paramType);
+        } else if (Collection.class.isAssignableFrom(paramType)) {
+            field.setCollectionType(CollectionType.LIST);
+            field.setCollectionClassName(paramType.getName());
+            paramType = detectListClassFromMethodParameter(m);
         }
 
         field.setClassName(paramType.getName());
@@ -752,6 +760,26 @@ public class ClassInspectionService {
             return classLoader.loadClass(types.get(0));
         }
         return null;
+    }
+
+    private Class<?> detectListClassFromMethodReturn(Method m) {
+        return detectClassFromTypeArgument(m.getGenericReturnType());
+    }
+
+    private Class<?> detectListClassFromMethodParameter(Method m) {
+        return detectClassFromTypeArgument(m.getGenericParameterTypes()[0]);
+    }
+
+    private Class<?> detectClassFromTypeArgument(Type type) {
+        if (type == null || !(type instanceof ParameterizedType)) {
+            return Object.class;
+        }
+        ParameterizedType genericType = (ParameterizedType) type;
+        Type[] typeArgs = genericType.getActualTypeArguments();
+        if (typeArgs == null || typeArgs.length == 0) {
+            return Object.class;
+        }
+        return typeArgs[0] instanceof Class ? (Class<?>) typeArgs[0] : Object.class;
     }
 
     private Class<?> detectArrayClass(Class<?> clazz) {

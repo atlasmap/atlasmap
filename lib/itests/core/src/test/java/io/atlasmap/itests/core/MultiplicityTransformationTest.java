@@ -201,6 +201,7 @@ public class MultiplicityTransformationTest {
         session.setSourceDocument("xml-source", sourceXml);
         SourceFlatPrimitiveClass sourceJava = new SourceFlatPrimitiveClass();
         sourceJava.setIntArrayField(new int[] {1, 3, 5, 7});
+        sourceJava.setBoxedIntListField(Arrays.asList(new Integer[] {2, 4, 6, 8}));
         session.setSourceDocument("java-source", sourceJava);
         context.process(session);
         assertFalse(TestHelper.printAudit(session), session.hasErrors());
@@ -211,6 +212,7 @@ public class MultiplicityTransformationTest {
         assertEquals(new Float((1+3+5+7)).floatValue(), target.getFloatField(), 1e-15);
         assertEquals(new Double((1+3+5+7)).doubleValue(), target.getDoubleField(), 1e-15);
         assertEquals(1+3+5+7, target.getLongField());
+        assertEquals(2+4+6+8, target.getIntField());
     }
 
 }

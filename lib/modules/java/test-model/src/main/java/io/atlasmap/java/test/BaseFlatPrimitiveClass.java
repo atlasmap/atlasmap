@@ -15,7 +15,9 @@
  */
 package io.atlasmap.java.test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public abstract class BaseFlatPrimitiveClass {
 
@@ -36,6 +38,7 @@ public abstract class BaseFlatPrimitiveClass {
     protected Long boxedLongField;
     protected Short boxedShortField;
     protected String boxedStringField;
+
     protected int[] intArrayField;
     protected short[] shortArrayField;
     protected long[] longArrayField;
@@ -53,6 +56,8 @@ public abstract class BaseFlatPrimitiveClass {
     protected Character[] boxedCharArrayField;
     protected Byte[] boxedByteArrayField;
     protected String[] boxedStringArrayField;
+
+    protected List<Integer> boxedIntListField = new ArrayList<>();
 
     public int getIntField() {
         return intField;
@@ -326,6 +331,14 @@ public abstract class BaseFlatPrimitiveClass {
         this.boxedStringArrayField = boxedStringArrayField;
     }
 
+    public List<Integer> getBoxedIntListField() {
+        return boxedIntListField;
+    }
+
+    public void setBoxedIntListField(List<Integer> boxedIntListField) {
+        this.boxedIntListField = boxedIntListField;
+    }
+
     @Override
     public String toString() {
         return "BaseFlatPrimitiveClass [intField=" + intField + ", shortField=" + shortField + ", longField="
@@ -339,15 +352,18 @@ public abstract class BaseFlatPrimitiveClass {
                 + Arrays.toString(longArrayField) + ", doubleArrayField=" + Arrays.toString(doubleArrayField)
                 + ", floatArrayField=" + Arrays.toString(floatArrayField) + ", booleanArrayField="
                 + Arrays.toString(booleanArrayField) + ", charArrayField=" + Arrays.toString(charArrayField)
-                + ", byteArrayField=" + Arrays.toString(byteArrayField) + ", boxedIntArrayField="
-                + Arrays.toString(boxedIntArrayField) + ", boxedShortArrayField="
-                + Arrays.toString(boxedShortArrayField) + ", boxedLongArrayField="
-                + Arrays.toString(boxedLongArrayField) + ", boxedDoubleArrayField="
-                + Arrays.toString(boxedDoubleArrayField) + ", boxedFloatArrayField="
-                + Arrays.toString(boxedFloatArrayField) + ", boxedBooleanArrayField="
-                + Arrays.toString(boxedBooleanArrayField) + ", boxedCharArrayField="
-                + Arrays.toString(boxedCharArrayField) + ", boxedByteArrayField=" + Arrays.toString(boxedByteArrayField)
-                + ", boxedStringArrayField=" + Arrays.toString(boxedStringArrayField) + "]";
+                + ", byteArrayField=" + Arrays.toString(byteArrayField)
+                + ", boxedIntArrayField=" + Arrays.toString(boxedIntArrayField)
+                + ", boxedShortArrayField=" + Arrays.toString(boxedShortArrayField)
+                + ", boxedLongArrayField=" + Arrays.toString(boxedLongArrayField)
+                + ", boxedDoubleArrayField=" + Arrays.toString(boxedDoubleArrayField)
+                + ", boxedFloatArrayField=" + Arrays.toString(boxedFloatArrayField)
+                + ", boxedBooleanArrayField=" + Arrays.toString(boxedBooleanArrayField)
+                + ", boxedCharArrayField=" + Arrays.toString(boxedCharArrayField)
+                + ", boxedByteArrayField=" + Arrays.toString(boxedByteArrayField)
+                + ", boxedStringArrayField=" + Arrays.toString(boxedStringArrayField)
+                + ", boxedIntListField=" + Arrays.toString(boxedIntListField.toArray())
+                + "]";
     }
 
 }
