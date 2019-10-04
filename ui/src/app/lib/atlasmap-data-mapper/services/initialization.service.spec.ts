@@ -132,7 +132,7 @@ describe('InitializationService', () => {
           expect(mapping.targetFields.length).toEqual(1);
           const targetField = mapping.targetFields[0];
           expect(targetField.field).toBeTruthy();
-          expect(cfg.errors.length).toEqual(0, cfg.errors);
+          expect(cfg.errorService.getErrors().length).toEqual(0, cfg.errorService.getErrors());
           done();
         });
         return service.initialize();

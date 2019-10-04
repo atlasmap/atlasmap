@@ -49,8 +49,8 @@ export class NamespaceEditComponent implements ModalWindowValidator {
 
   isDataValid(): boolean {
     const configModel: ConfigModel = ConfigModel.getConfig();
-    let dataIsValid: boolean = configModel.isRequiredFieldValid(this.namespace.alias, 'Alias');
-    dataIsValid = configModel.isRequiredFieldValid(this.namespace.uri, 'URI') && dataIsValid;
+    let dataIsValid: boolean = configModel.errorService.isRequiredFieldValid(this.namespace.alias, 'Alias');
+    dataIsValid = configModel.errorService.isRequiredFieldValid(this.namespace.uri, 'URI') && dataIsValid;
     return dataIsValid;
   }
 

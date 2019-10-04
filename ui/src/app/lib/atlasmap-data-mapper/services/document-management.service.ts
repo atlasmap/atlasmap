@@ -25,6 +25,7 @@ import { DocumentDefinition, NamespaceModel } from '../models/document-definitio
 
 import { DataMapperUtil } from '../common/data-mapper-util';
 import { Subscription } from 'rxjs';
+import { ErrorScope, ErrorType, ErrorInfo, ErrorLevel } from '../models/error.model';
 
 @Injectable()
 export class DocumentManagementService implements OnDestroy {
@@ -242,7 +243,8 @@ export class DocumentManagementService implements OnDestroy {
         try {
           fileBin = await DataMapperUtil.readBinaryFile(selectedFile, reader);
         } catch (error) {
-          this.cfg.errorService.mappingError('Unable to import the specified schema document.', error);
+          this.cfg.errorService.addError(new ErrorInfo({message: 'Unable to import the specified schema document.',
+            level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.USER, object: error}));
           resolve(false);
           return;
         }
@@ -255,7 +257,8 @@ export class DocumentManagementService implements OnDestroy {
         try {
           fileText = await DataMapperUtil.readFile(selectedFile, reader);
         } catch (error) {
-          this.cfg.errorService.mappingError('Unable to import the specified schema document.', error);
+          this.cfg.errorService.addError(new ErrorInfo({message: 'Unable to import the specified schema document.',
+            level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.USER, object: error}));
           resolve(false);
           return;
         }
@@ -282,8 +285,9 @@ export class DocumentManagementService implements OnDestroy {
       case DocumentType.JAVA_ARCHIVE:
         this.cfg.initializationService.initializeUserDoc(fileBin, userFile, DocumentType.JAVA_ARCHIVE,
           inspectionType, isSource);
-        this.cfg.errorService.info(selectedFile.name +
-          ' import complete.  Select the plus icon on the Sources/Targets panel to enable specific classes.', null);
+        this.cfg.errorService.addError(new ErrorInfo({
+          message: `${selectedFile.name} import complete.  Select the plus icon on the Sources/Targets panel to enable specific classes.`,
+          level: ErrorLevel.INFO, scope: ErrorScope.APPLICATION, type: ErrorType.USER}));
         resolve(true);
         return;
 
@@ -301,8 +305,8 @@ export class DocumentManagementService implements OnDestroy {
       default:
         this.handleError('Unrecognized document suffix (' + userFileSuffix + ')', null);
       }
-      this.cfg.errorService.info(selectedFile.name + ' ' + userFileSuffix +
-        ' import complete.', null);
+      this.cfg.errorService.addError(new ErrorInfo({message: `${selectedFile.name} ${userFileSuffix} import complete.`,
+        level: ErrorLevel.INFO, scope: ErrorScope.APPLICATION, type: ErrorType.USER}));
       resolve(true);
     });
   }
@@ -535,8 +539,9 @@ export class DocumentManagementService implements OnDestroy {
 
   private parseFieldFromDocument(field: any, parentField: Field, docDef: DocumentDefinition): Field {
     if (field != null && field.status === 'NOT_FOUND') {
-      this.cfg.errorService.warn('Ignoring unknown field: ' + field.name
-        + ' (' + field.className + '), parent class: ' + docDef.name, null);
+      this.cfg.errorService.addError(new ErrorInfo({
+        message: `Ignoring unknown field: ${field.name} (${field.className}), parent class: ${docDef.name}`,
+        level: ErrorLevel.WARN, scope: ErrorScope.APPLICATION, type: ErrorType.USER}));
       return null;
     } else if (field != null && field.status === 'BLACK_LIST') {
       return null;
@@ -613,6 +618,7 @@ export class DocumentManagementService implements OnDestroy {
   }
 
   private handleError(message: string, error: any): void {
-    this.cfg.errorService.error(message, error);
+    this.cfg.errorService.addError(new ErrorInfo({message: message, level: ErrorLevel.ERROR,
+      scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
   }
 }

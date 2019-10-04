@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
 
-import { ChangeDetectorRef, QueryList, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { ModalWindowComponent, EmptyModalBodyComponent } from './modal-window.component';
 import { ModalErrorWindowComponent } from './modal-error-window.component';
@@ -12,6 +12,7 @@ import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/t
 import { ConstantFieldEditComponent } from './constant-field-edit.component';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { ModalErrorDetailComponent } from './modal-error-detail.component';
 
 describe('ModalWindowComponent', () => {
   let fixture: ComponentFixture<ModalWindowComponent>;
@@ -28,6 +29,7 @@ describe('ModalWindowComponent', () => {
         ConstantFieldEditComponent,
         DataMapperErrorComponent,
         EmptyModalBodyComponent,
+        ModalErrorDetailComponent,
         ModalErrorWindowComponent,
         ModalWindowComponent
       ],
@@ -43,7 +45,6 @@ describe('ModalWindowComponent', () => {
     comp = fixture.componentInstance;
     comp.cfg = new ConfigModel();
     comp.cfg.errorService = new ErrorHandlerService();
-    comp.cfg.errorService.cfg = comp.cfg;
     fixture.detectChanges();
   });
 

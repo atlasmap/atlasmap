@@ -63,7 +63,7 @@ export class PropertyFieldEditComponent implements ModalWindowValidator {
   }
 
   isDataValid(): boolean {
-    return ConfigModel.getConfig().isRequiredFieldValid(this.field.name, 'Name');
+    return ConfigModel.getConfig().errorService.isRequiredFieldValid(this.field.name, 'Name');
   }
 
   getInitialFocusElement(): ElementRef {

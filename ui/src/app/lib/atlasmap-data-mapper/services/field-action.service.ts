@@ -22,6 +22,7 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MappingModel } from '../models/mapping.model';
 import { Field } from '../models/field.model';
+import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from '../models/error.model';
 
 @Injectable()
 export class FieldActionService {
@@ -67,12 +68,14 @@ export class FieldActionService {
       }
 
       if (this.cfg.mappingService == null) {
-        this.cfg.errorService.warn('Mapping service is not provided. Field Actions will not be used.', null);
+        this.cfg.errorService.addError(new ErrorInfo({message: 'Mapping service is not provided. Field Actions will not be used.',
+          level: ErrorLevel.WARN, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL}));
         this.isInitialized = true;
         resolve(true);
         return;
       } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
-        this.cfg.errorService.warn('Mapping service URL is not provided. Field Actions will not be used.', null);
+        this.cfg.errorService.addError(new ErrorInfo({message: 'Mapping service URL is not provided. Field Actions will not be used.',
+        level: ErrorLevel.WARN, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL}));
         this.isInitialized = true;
         resolve(true);
         return;

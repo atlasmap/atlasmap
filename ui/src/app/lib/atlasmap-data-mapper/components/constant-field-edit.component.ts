@@ -64,7 +64,7 @@ export class ConstantFieldEditComponent implements ModalWindowValidator {
   }
 
   isDataValid(): boolean {
-    return ConfigModel.getConfig().isRequiredFieldValid(this.field.value, 'Value');
+    return ConfigModel.getConfig().errorService.isRequiredFieldValid(this.field.value, 'Value');
   }
 
   getInitialFocusElement(): ElementRef {

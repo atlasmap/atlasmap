@@ -14,63 +14,66 @@
     limitations under the License.
 */
 
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 
 import { ModalErrorWindowComponent } from './modal-error-window.component';
 
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
 import { ErrorHandlerService } from '../services/error-handler.service';
 import { ConfigModel } from '../models/config.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'data-mapper-error',
   templateUrl: './data-mapper-error.component.html',
 })
 
-export class DataMapperErrorComponent implements OnInit {
+export class DataMapperErrorComponent implements OnInit, OnDestroy {
   @Input() errorService: ErrorHandlerService;
-  @Input() isValidation = false;
   @Input() modalErrorWindow: ModalErrorWindowComponent;
 
-  private elem = null;
-  private mouseEventTimer = null;
   isOpen = true;
   cfg: ConfigModel = null;
 
+  private elem = null;
+  private mouseEventTimer = null;
+  private errors: ErrorInfo[] = [];
+  private errorSubscription: Subscription;
+
   ngOnInit() {
     this.cfg = ConfigModel.getConfig();
+    this.errorSubscription = this.errorService.subscribe((errors: ErrorInfo[]) => {
+      this.errors = errors;
+    });
+  }
+
+  ngOnDestroy() {
+    this.errorSubscription.unsubscribe();
   }
 
   /**
    * Return true if an error window is necessary, false otherwise.
    */
   errorServiceRequired(): boolean {
-    return (this.errorService && (this.getAllErrors().length > 0));
+    return (this.errorService
+      && (ErrorHandlerService.filterWith(this.errors, this.cfg.mappings ? this.cfg.mappings.activeMapping : null).length > 0));
   }
 
   getErrors(): ErrorInfo[] {
-    return this.getAllErrors().filter(e => e.level >= ErrorLevel.ERROR);
+    return ErrorHandlerService.filterWith(this.errors, this.cfg.mappings.activeMapping, ErrorLevel.ERROR);
   }
 
   getWarnings(): ErrorInfo[] {
-    return this.getAllErrors().filter(e => e.level === ErrorLevel.WARN);
+    return ErrorHandlerService.filterWith(this.errors, this.cfg.mappings.activeMapping, ErrorLevel.WARN);
   }
 
   getInfos(): ErrorInfo[] {
-    return this.getAllErrors().filter(e => e.level === ErrorLevel.INFO);
-  }
-
-  handleClick(event: any) {
-    const errorIdentifier = event.target.attributes.getNamedItem('errorIdentifier');
-    if (errorIdentifier && errorIdentifier.value) {
-      this.cfg.mappings.activeMapping.removeValidationError(errorIdentifier.value);
-      this.errorService.removeError(errorIdentifier.value);
-    }
+    return ErrorHandlerService.filterWith(this.errors, this.cfg.mappings.activeMapping, ErrorLevel.INFO);
   }
 
   handleAlertClose(e: ErrorInfo): void {
     this.isOpen = true;
-    this.errorService.removeError(e.identifier);
+    this.errorService.removeError(e.identifier, e.scope);
   }
 
   /**
@@ -106,6 +109,7 @@ export class DataMapperErrorComponent implements OnInit {
    */
   private showActiveErrors(): void {
     this.modalErrorWindow.reset();
+    this.modalErrorWindow.setErrors(ErrorHandlerService.filterWith(this.errors, this.cfg.mappings.activeMapping));
     this.modalErrorWindow.show();
   }
 
@@ -123,13 +127,6 @@ export class DataMapperErrorComponent implements OnInit {
    */
   getFirstWarning(): ErrorInfo {
     return this.getWarnings()[0];
-  }
-
-  private getAllErrors(): ErrorInfo[] {
-    return this.isValidation ? this.cfg.validationErrors
-      : (this.cfg.mappings && this.cfg.mappings.activeMapping
-        ? [...this.cfg.mappings.activeMapping.previewErrors, ...this.cfg.mappings.activeMapping.validationErrors, ...this.cfg.errors]
-        : this.cfg.errors);
   }
 
 }

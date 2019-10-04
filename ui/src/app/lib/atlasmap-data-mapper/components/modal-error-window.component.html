@@ -20,22 +20,7 @@
         </div>
         <div class="modal-body">
           <div class="modal-message">
-            <div class="alert alert-danger alert-dismissable" *ngFor="let w of getWarnings()">  
-              <a class="close" (click)="handleAlertClick($event)" (onClose)="handleAlertClose(w)" data-dismiss="alert">
-                <i class="pficon pficon-close" attr.errorIdentifier="{{ w.identifier }}"></i>
-              </a>
-              <span class="pficon pficon-warning-triangle-o"></span>
-              {{ w.message }}
-            </div>
-          
-            <div class="alert alert-danger alert-dismissable" *ngFor="let e of getErrors()">
-              <a class="close" (click)="handleAlertClick($event)" data-dismiss="alert">
-                <i class="pficon pficon-close" attr.errorIdentifier="{{ e.identifier }}"></i>
-              </a>
-              <span class="pficon pficon-error-circle-o"></span>
-              {{ e.message }}
-            </div>
-
+            <modal-error-detail [errors]="errors" [errorService]="cfg.errorService"></modal-error-detail>
           </div>
           <ng-template #dyn_target></ng-template>
         </div>

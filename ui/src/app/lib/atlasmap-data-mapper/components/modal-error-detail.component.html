@@ -1,0 +1,27 @@
+<ng-container>
+
+  <alert *ngFor="let i of getInfos()" type="info" dismissOnTimeout="8000" (onClose)="handleAlertClick($event)">
+    <span class="pficon pficon-info"></span>
+    <a class="close" (click)="handleAlertClick(i)" data-dismiss="alert">
+      <i class="pficon pficon-close" attr.errorIdentifier="{{ i.identifier }}"></i>
+    </a>
+    {{ i.message }}
+  </alert>
+
+  <div class="alert alert-danger alert-dismissable" *ngFor="let e of getErrors()">
+    <a class="close" (click)="handleAlertClick(e)" data-dismiss="alert">
+      <i class="pficon pficon-close" attr.errorIdentifier="{{ e.identifier }}"></i>
+    </a>
+    <span class="pficon pficon-error-circle-o"></span>
+    {{ e.message }}
+  </div>
+
+  <div class="alert alert-danger alert-dismissable" *ngFor="let w of getWarnings()">
+    <a class="close" (click)="handleAlertClick(w)" data-dismiss="alert">
+      <i class="pficon pficon-close" attr.errorIdentifier="{{ w.identifier }}"></i>
+    </a>
+    <span class="pficon pficon-warning-triangle-o"></span>
+    {{ w.message }}
+  </div>
+
+</ng-container>

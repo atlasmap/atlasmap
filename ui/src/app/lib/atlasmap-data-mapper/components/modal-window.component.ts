@@ -19,8 +19,9 @@ import {
   ViewContainerRef, Type, ComponentFactoryResolver, AfterViewInit, ChangeDetectorRef, ElementRef
 } from '@angular/core';
 import { ConfigModel } from '../models/config.model';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 import { ModalErrorWindowComponent } from './modal-error-window.component';
+import { ErrorInfo } from '../models/error.model';
 
 // source: http://www.w3schools.com/howto/howto_css_modals.asp
 
@@ -66,11 +67,14 @@ export class ModalWindowComponent implements AfterViewInit, OnDestroy {
   confirmButtonText = 'OK';
   visible = false;
   fade = false;
+  errors: ErrorInfo[] = [];
 
   @ViewChildren('dyn_target', { read: ViewContainerRef }) myTarget: QueryList<ViewContainerRef>;
 
   private componentLoaded = false;
   private myTargetChangesSubscription: Subscription;
+  private modalErrorSubject: Subject<ErrorInfo[]>;
+  private modalErrorSubscription: Subscription;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver, public detector: ChangeDetectorRef) { }
 
@@ -93,7 +97,15 @@ export class ModalWindowComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.myTargetChangesSubscription.unsubscribe();
+    if (this.myTargetChangesSubscription) {
+      this.myTargetChangesSubscription.unsubscribe();
+    }
+    if (this.modalErrorSubscription) {
+      this.modalErrorSubscription.unsubscribe();
+    }
+    if (this.modalErrorSubject) {
+      this.modalErrorSubject.complete();
+    }
   }
 
   loadComponent(): void {
@@ -108,12 +120,21 @@ export class ModalWindowComponent implements AfterViewInit, OnDestroy {
     if (initialFocusElement) {
       initialFocusElement.nativeElement.focus();
     }
+    if (this.modalErrorSubject && !this.modalErrorSubject.closed) {
+      this.modalErrorSubject.complete();
+    }
+    this.modalErrorSubject = this.cfg.errorService.createFormErrorChannel();
+    this.modalErrorSubscription = this.modalErrorSubject.subscribe((errors: ErrorInfo[]) => {
+      this.errors = errors;
+    });
   }
 
   closeClicked(event: MouseEvent): void { this.buttonClicked(false); }
   close(): void {
     this.fade = false;
     setTimeout(() => {
+      this.modalErrorSubject.complete();
+      this.errors = [];
       this.visible = false;
     }, 300);
   }
@@ -139,7 +160,7 @@ export class ModalWindowComponent implements AfterViewInit, OnDestroy {
   private buttonClicked(okClicked: boolean): void {
     if (okClicked) {
       if (this.nestedComponent != null) {
-        this.cfg.errorService.clearValidationErrors();
+        this.cfg.errorService.clearFormErrors();
         if (!(this.nestedComponent.isDataValid())) {
           return;
         }

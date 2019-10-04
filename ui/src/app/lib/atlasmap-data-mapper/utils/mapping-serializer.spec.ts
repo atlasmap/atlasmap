@@ -33,7 +33,6 @@ describe('MappingSerializer', () => {
     });
     cfg = ConfigModel.getConfig();
     cfg.errorService = TestBed.get(ErrorHandlerService);
-    cfg.errorService.cfg = cfg;
     cfg.fieldActionService = TestBed.get(FieldActionService);
     cfg.fieldActionService.cfg = cfg;
     cfg.logger = TestBed.get(NGXLogger);

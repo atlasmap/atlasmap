@@ -19,6 +19,7 @@ import { MappingModel, MappedField } from '../models/mapping.model';
 import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
 import { Multiplicity } from '../models/field-action.model';
+import { ErrorType, ErrorScope, ErrorInfo, ErrorLevel } from '../models/error.model';
 
 /**
  * Static routines for handling mappings.
@@ -59,14 +60,17 @@ export class MappingUtil {
         doc = docMap[mappedField.parsedData.parsedDocURI] as DocumentDefinition;
         if (doc == null) {
           if (mappedField.parsedData.parsedName != null) {
-            cfg.errorService.error('Could not find document for mapped field \'' + mappedField.parsedData.parsedName +
-              '\' at URI ' + mappedField.parsedData.parsedDocURI, null);
+            cfg.errorService.addError(new ErrorInfo({
+              message: `Could not find document for mapped field \'${mappedField.parsedData.parsedName}\' \
+at URI ${mappedField.parsedData.parsedDocURI}`,
+              level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL}));
           }
           continue;
         }
 
         if (mappedField.parsedData.parsedDocID == null) {
-          cfg.errorService.error('Could not find doc ID for mapped field ' + mappedField.parsedData.parsedName, null);
+          cfg.errorService.addError(new ErrorInfo({message: `Could not find doc ID for mapped field ${mappedField.parsedData.parsedName}`,
+            level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL}));
           continue;
         }
         doc.id = mappedField.parsedData.parsedDocID;
@@ -116,8 +120,10 @@ export class MappingUtil {
 
           doc.addField(mappedField.field);
         } else {
-          cfg.errorService.error('Could not find field from document for mapped field \'' + mappedField.parsedData.parsedName + '\'',
-            { 'mappedField': mappedField, 'doc': doc });
+          cfg.errorService.addError(new ErrorInfo({
+            message: `Could not find field from document for mapped field \'${mappedField.parsedData.parsedName}\'`,
+            level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL,
+            object: { 'mappedField': mappedField, 'doc': doc }}));
           return;
         }
       }
@@ -134,7 +140,8 @@ export class MappingUtil {
             actionDefinition = cfg.fieldActionService.getActionDefinitionForName(action.name, Multiplicity.ONE_TO_ONE);
           }
           if (actionDefinition == null) {
-            cfg.errorService.error('Could not find field action definition for action \'' + action.name + '\'', null);
+            cfg.errorService.addError(new ErrorInfo({message: `Could not find field action definition for action \'${action.name}\'`,
+              level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL}));
             continue;
           }
           actionDefinition.populateFieldAction(action);
@@ -210,9 +217,10 @@ export class MappingUtil {
 
       const doc = this.getDocById(parsedDoc.id, docs);
       if (doc == null) {
-        cfg.errorService.error('Could not find document with identifier \'' + parsedDoc.id
-          + '\' for namespace override.',
-          { 'identifier': parsedDoc.id, 'parsedDoc': parsedDoc, 'docs': docs });
+        cfg.errorService.addError(new ErrorInfo({
+          message: `Could not find document with identifier \'${parsedDoc.id}\' for namespace override.`,
+          level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL,
+          object: { 'identifier': parsedDoc.id, 'parsedDoc': parsedDoc, 'docs': docs }}));
         continue;
       }
 

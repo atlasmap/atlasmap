@@ -24,6 +24,7 @@ import { LookupTableComponent } from './lookup-table.component';
 import { FieldAction, FieldActionDefinition, Multiplicity } from '../../models/field-action.model';
 import { DataMapperUtil } from '../../common/data-mapper-util';
 import { LookupTable } from '../../models/lookup-table.model';
+import { ErrorScope, ErrorType, ErrorInfo, ErrorLevel } from '../../models/error.model';
 
 @Component({
   selector: 'transition-selection',
@@ -115,10 +116,10 @@ getMappedValueCount(): number {
 
   showLookupTable(): void {
     const mapping: MappingModel = this.cfg.mappings.activeMapping;
-    this.cfg.errorService.clearMappingErrors();
 
     if (!mapping.isFullyMapped()) {
-      this.cfg.errorService.mappingError('Please select source and target fields before mapping values.', null);
+      this.cfg.errorService.addError(new ErrorInfo({message: 'Please select source and target fields before mapping values.',
+        level: ErrorLevel.ERROR, scope: ErrorScope.MAPPING, type: ErrorType.USER, mapping: mapping}));
       return;
     }
     this.modalWindow.reset();

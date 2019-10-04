@@ -32,6 +32,7 @@ import { FileManagementService } from './file-management.service';
 import { LookupTableUtil } from '../utils/lookup-table-util';
 import { MappingSerializer } from '../utils/mapping-serializer';
 import { MappingUtil } from '../utils/mapping-util';
+import { ErrorScope, ErrorType, ErrorInfo, ErrorLevel } from '../models/error.model';
 
 @Injectable()
 export class InitializationService {
@@ -66,7 +67,6 @@ export class InitializationService {
     this.cfg.fieldActionService.cfg = this.cfg;
     this.cfg.fileService = this.fileService;
     this.cfg.fileService.cfg = this.cfg;
-    this.cfg.errorService.cfg = this.cfg;
     this.cfg.initializationService = this;
     this.cfg.logger = this.logger;
     ConfigModel.setConfig(this.cfg);
@@ -85,9 +85,13 @@ export class InitializationService {
     let docdef: DocumentDefinition = null;
     const javaArchive = (docType === DocumentType.JAVA_ARCHIVE);
     if (this.cfg.mappingService == null) {
-      this.cfg.errorService.warn('Mapping service is not configured, validation service will not be used.', null);
+      this.cfg.errorService.addError(new ErrorInfo({
+        message: 'Mapping service is not configured, validation service will not be used.',
+        level: ErrorLevel.WARN, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL}));
     } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
-      this.cfg.errorService.warn('Mapping service URL is not configured, validation service will not be used.', null);
+      this.cfg.errorService.addError(new ErrorInfo({
+        message: 'Mapping service URL is not configured, validation service will not be used.',
+        level: ErrorLevel.WARN, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL}));
     }
 
     // Clear out the existing document if importing the same name.
@@ -119,7 +123,7 @@ export class InitializationService {
             if (success) {
               await this.cfg.fieldActionService.fetchFieldActions()
               .catch((error: any) => {
-                this.handleError(error, null);
+                this.handleError(error);
               });
             }
           });
@@ -160,20 +164,23 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
 
   async initialize(): Promise<boolean> {
     return new Promise<boolean>(async(resolve, reject) => {
-      this.cfg.errorService.clearMappingErrors();
-      this.cfg.errorService.clearValidationErrors();
+      this.cfg.errorService.resetAll();
       this.cfg.fieldActionService.isInitialized = false;
       this.cfg.initCfg.initialized = false;
       this.cfg.initCfg.mappingInitialized = false;
 
       if (this.cfg.mappingService == null) {
-        this.cfg.errorService.warn('Mapping service is not configured, validation service will not be used.', null);
+        this.cfg.errorService.addError(new ErrorInfo({
+          message: 'Mapping service is not configured, validation service will not be used.',
+          level: ErrorLevel.WARN, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL}));
       } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
-        this.cfg.errorService.warn('Mapping service URL is not configured, validation service will not be used.', null);
+        this.cfg.errorService.addError(new ErrorInfo({
+          message: 'Mapping service URL is not configured, validation service will not be used.',
+          level: ErrorLevel.WARN, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL}));
       }
 
       if (!this.cfg.fieldActionService) {
-        this.handleError('FieldActionService is not configured', null);
+        this.handleError('FieldActionService is not configured');
         reject();
         return;
       }
@@ -181,12 +188,12 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
       // Verify the runtime service is out there.
       try {
         if (!await this.cfg.mappingService.runtimeServiceActive()) {
-          this.handleError('The AtlasMap runtime service is not available.', null);
+          this.handleError('The AtlasMap runtime service is not available.');
           reject();
           return;
         }
       } catch (error) {
-        this.handleError('The AtlasMap runtime service is not available.', null);
+        this.handleError('The AtlasMap runtime service is not available.');
         reject(error);
         return;
       }
@@ -278,12 +285,13 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
     try {
       mInfo = DocumentManagementService.getMappingsInfo(mappingsSchemaAggregate);
     } catch (error) {
-      this.cfg.errorService.mappingError('Unable to process mapping information from the data mappings file. ' +
-        '\n' + error.message, error);
+      this.cfg.errorService.addError(new ErrorInfo({
+        message: 'Unable to process mapping information from the data mappings file. ' + '\n' + error.message,
+        level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
       return null;
     }
 
-    this.cfg.errorService.clearValidationErrors();
+    this.cfg.errorService.resetAll();
 
     let metaFragment: any = null;
     let fragData = '';
@@ -313,17 +321,19 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
             resolve(true);
         }).catch((error: any) => {
           if (error.status === 0) {
-            this.cfg.errorService.mappingError(
-              'Fatal network error: Unable to connect to the AtlasMap design runtime service.', error);
+            this.cfg.errorService.addError(new ErrorInfo({
+              message: 'Fatal network error: Unable to connect to the AtlasMap design runtime service.',
+              level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
           } else {
-            this.cfg.errorService.mappingError(
-              'Unable to update the mappings file to the AtlasMap design runtime service.  ' +
-                 error.status + ' ' + error.statusText, error);
+            this.cfg.errorService.addError(new ErrorInfo({
+              message: `Unable to update the mappings file to the AtlasMap design runtime service. ${error.status} ${error.statusText}`,
+              level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
           }
           reject(error);
         });
       } catch (error) {
-        this.cfg.errorService.mappingError('Unable to decompress the aggregate mappings catalog buffer.\n', error);
+        this.cfg.errorService.addError(new ErrorInfo({message: 'Unable to decompress the aggregate mappings catalog buffer.',
+          level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
         reject(error);
       }
     });
@@ -343,12 +353,14 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
         resolve(true);
       }).catch((error: any) => {
         if (error.status === 0) {
-          this.cfg.errorService.mappingError(
-            'Fatal network error: Unable to connect to the AtlasMap design runtime service.', error);
+          this.cfg.errorService.addError(new ErrorInfo({
+            message: 'Fatal network error: Unable to connect to the AtlasMap design runtime service.',
+            level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
         } else {
-          this.cfg.errorService.mappingError(
-            'Unable to update the catalog mappings file to the AtlasMap design runtime service.  ' +
-              error.status + ' ' + error.statusText, error);
+          this.cfg.errorService.addError(new ErrorInfo({
+            message: `Unable to update the catalog mappings file to the AtlasMap design runtime service. \
+${error.status} ${error.statusText}`,
+            level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
           resolve(false);
         }
       });
@@ -403,7 +415,8 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
           resolve(true);
         }
       } catch (error) {
-        this.cfg.errorService.mappingError('Unable to decompress the aggregate mappings catalog buffer.\n', error);
+        this.cfg.errorService.addError(new ErrorInfo({message: 'Unable to decompress the aggregate mappings catalog buffer.',
+          level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
         reject(error);
       }
     });
@@ -445,17 +458,23 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
       const docName: string = docDef.name;
 
       if (docDef.type === DocumentType.JAVA_ARCHIVE && this.cfg.initCfg.baseJavaInspectionServiceUrl == null) {
-        this.cfg.errorService.warn('Java inspection service is not configured. Document will not be loaded: ' + docName, docDef);
+        this.cfg.errorService.addError(new ErrorInfo({
+          message: `Java inspection service is not configured. Document will not be loaded: ${docName}`,
+          level: ErrorLevel.WARN, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: docDef}));
         docDef.initialized = true;
         this.updateStatus();
         continue;
       } else if (docDef.type === DocumentType.XML && this.cfg.initCfg.baseXMLInspectionServiceUrl == null) {
-        this.cfg.errorService.warn('XML inspection service is not configured. Document will not be loaded: ' + docName, docDef);
+        this.cfg.errorService.addError(new ErrorInfo({
+          message: `XML inspection service is not configured. Document will not be loaded: ${docName}`,
+          level: ErrorLevel.WARN, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: docDef}));
         docDef.initialized = true;
         this.updateStatus();
         continue;
       } else if (docDef.type === DocumentType.JSON && this.cfg.initCfg.baseJSONInspectionServiceUrl == null) {
-        this.cfg.errorService.warn('JSON inspection service is not configured. Document will not be loaded: ' + docName, docDef);
+        this.cfg.errorService.addError(new ErrorInfo({
+          message: `JSON inspection service is not configured. Document will not be loaded: ${docName}`,
+          level: ErrorLevel.WARN, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: docDef}));
         docDef.initialized = true;
         this.updateStatus();
         continue;
@@ -532,9 +551,10 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
     }
   }
 
-  private handleError(message: string, error: any) {
+  private handleError(message: string, error?: any) {
     message = 'Data Mapper UI Initialization Error: ' + message;
-    this.cfg.errorService.error(message, error);
+    this.cfg.errorService.addError(new ErrorInfo({message: message, scope: ErrorScope.APPLICATION,
+      level: ErrorLevel.ERROR, type: ErrorType.INTERNAL, object: error}));
     this.updateLoadingStatus(message);
     this.cfg.initCfg.initializationErrorOccurred = true;
     this.cfg.initCfg.initialized = true;

@@ -6,14 +6,14 @@
     {{ i.message }}
   </alert>
 
-  <div class="alert alert-danger alert-dismissable" *ngIf="getWarnings().length">
-    <span class="pficon pficon-warning-triangle-o"></span>
-    {{ getFirstWarning().message }}
-  </div>
-
   <div class="alert alert-danger alert-dismissable" *ngIf="getErrors().length">
     <span class="pficon pficon-error-circle-o"></span>
     {{ getFirstError().message }}
+  </div>
+
+  <div class="alert alert-danger alert-dismissable" *ngIf="getWarnings().length">
+    <span class="pficon pficon-warning-triangle-o"></span>
+    {{ getFirstWarning().message }}
   </div>
 
 </div>

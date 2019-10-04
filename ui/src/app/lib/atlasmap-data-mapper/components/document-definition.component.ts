@@ -32,6 +32,7 @@ import { FieldEditComponent } from './field-edit.component';
 
 import { LineMachineComponent } from './line-machine.component';
 import { ModalWindowComponent } from './modal-window.component';
+import { ErrorScope, ErrorType, ErrorInfo, ErrorLevel } from '../models/error.model';
 
 @Component({
   selector: 'document-definition',
@@ -317,7 +318,8 @@ export class DocumentDefinitionComponent implements OnInit {
                 // Make any custom field actions active.
                 await self.cfg.fieldActionService.fetchFieldActions()
                 .catch((error: any) => {
-                  self.cfg.errorService.error(error, null);
+                  self.cfg.errorService.addError(new ErrorInfo({message: error, level: ErrorLevel.ERROR,
+                    scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL}));
                 });
 
                 if (doc.isSource) {
@@ -331,17 +333,23 @@ export class DocumentDefinitionComponent implements OnInit {
             })
             .catch((error: any) => {
               if (error.status === 0) {
-                self.cfg.errorService.error('Unable to fetch the Java class document ' + docdef.name + ' from the runtime service.', error);
+                self.cfg.errorService.addError(new ErrorInfo({
+                  message: `Unable to fetch the Java class document \'${docdef.name}\' from the runtime service.`,
+                  level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
               } else {
-                self.cfg.errorService.error('Could not load the Java class document \'' + docdef.id + '\'', error);
+                self.cfg.errorService.addError(new ErrorInfo({message: `Could not load the Java class document \'${docdef.id}\'`,
+                  level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
               }
             });
         })
         .catch((error: any) => {
           if (error.status === 0) {
-            self.cfg.errorService.error('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+            self.cfg.errorService.addError(new ErrorInfo({
+              message: 'Fatal network error: Could not connect to AtlasMap design runtime service.',
+              level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
           } else {
-            self.cfg.errorService.error('Could not load the Java class path.', error);
+            self.cfg.errorService.addError(new ErrorInfo({message: 'Could not load the Java class path.',
+              level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
           }
         });
     };
@@ -525,14 +533,17 @@ export class DocumentDefinitionComponent implements OnInit {
             try {
               this.markChildrenVisible(field);
             } catch (error) {
-              this.cfg.errorService.info(error.message, null);
+              this.cfg.errorService.addError(new ErrorInfo({message: error.message, level: ErrorLevel.INFO,
+                scope: ErrorScope.APPLICATION, type: ErrorType.USER}));
               break;
             }
 
             // The total number of matches is limited to allow the UI to perform.
             if (this.searchFieldCount++ >= this.maxSearchMatch) {
-              this.cfg.errorService.info('The maximum number of fields matching the specified search filter has beeen exceeded  ' +
-                'Try using a longer field filter.', null);
+              this.cfg.errorService.addError(new ErrorInfo({
+                message: 'The maximum number of fields matching the specified search filter has beeen exceeded  ' +
+                'Try using a longer field filter.',
+                level: ErrorLevel.INFO, scope: ErrorScope.APPLICATION, type: ErrorType.USER}));
               break;
             }
           }

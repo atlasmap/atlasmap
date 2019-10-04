@@ -48,7 +48,7 @@ export class ClassNameComponent implements ModalWindowValidator {
   }
 
   isDataValid(): boolean {
-    return ConfigModel.getConfig().isRequiredFieldValid(this.userClassName, 'Class name');
+    return this.cfg.errorService.isRequiredFieldValid(this.userClassName, 'Class name');
   }
 
   getInitialFocusElement(): ElementRef {

@@ -20,6 +20,7 @@ import { MappedField } from '../../models/mapping.model';
 import { ConfigModel } from '../../models/config.model';
 import { FieldAction, FieldActionArgument, FieldActionArgumentValue } from '../../models/field-action.model';
 import { TransitionDelimiterModel, TransitionModel, TransitionDelimiter } from '../../models/transition.model';
+import { ErrorScope, ErrorType, ErrorInfo, ErrorLevel } from '../../models/error.model';
 
 @Component({
   selector: 'mapping-field-action-argument',
@@ -82,10 +83,12 @@ export class MappingFieldActionArgumentComponent {
    * @param acp
    */
   validateActionConfigParamSelection(acp: FieldActionArgumentValue[]): void {
-    this.cfg.errorService.clearMappingErrors();
+    this.cfg.errorService.clearFieldErrors();
     if (acp != null && acp.length === 2) {
       if (acp[0].value === acp[1].value) {
-        this.cfg.errorService.mappingError('Please select differing \'from\' and \'to\' units in your conversion transformation.', null);
+        this.cfg.errorService.addError(new ErrorInfo({
+          message: 'Please select differing \'from\' and \'to\' units in your conversion transformation.',
+          level: ErrorLevel.ERROR, field: this.mappedField, scope: ErrorScope.FIELD, type: ErrorType.USER}));
       }
     }
   }
@@ -97,10 +100,12 @@ export class MappingFieldActionArgumentComponent {
    * @param event
    */
   actionConfigParamSelectionChanged(event: any): void {
-
+    this.cfg.errorService.clearFieldErrors();
     // Make sure they've specified something.
     if (!event.target.value || event.target.value.length === 0) {
-      this.cfg.errorService.info('You must specify a transformation argument value.', null);
+      this.cfg.errorService.addError(new ErrorInfo({
+        message: 'You must specify a transformation argument value.',
+        level: ErrorLevel.INFO, field: this.mappedField, scope: ErrorScope.FIELD, type: ErrorType.USER}));
       return;
     }
     this.mappedField.parsedData.userCreated = true;
