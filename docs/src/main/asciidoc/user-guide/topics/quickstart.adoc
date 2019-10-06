@@ -27,7 +27,7 @@ $ java -jar atlasmap-standalone-${VERSION}.jar
 For example: 
 +
 ----
-$ java -jar atlasmap-standalone-.1.42.3.jar
+$ java -jar atlasmap-standalone-1.42.3.jar
 ----
 +
 [NOTE]
