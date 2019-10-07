@@ -571,6 +571,10 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 
     private void processSourceFieldGroup(DefaultAtlasSession session, FieldGroup sourceFieldGroup) throws AtlasException {
         processSourceFieldMappings(session, sourceFieldGroup.getField());
+        if (session.head().getSourceField() instanceof FieldGroup) {
+            sourceFieldGroup.getField().clear();
+            sourceFieldGroup.getField().add(session.head().getSourceField());
+        }
         session.head().setSourceField(sourceFieldGroup);
         Field processed = applyFieldActions(session, session.head().getSourceField());
         session.head().setSourceField(processed);
@@ -579,13 +583,6 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     private void processSourceFieldMappings(DefaultAtlasSession session, List<Field> sourceFields)
             throws AtlasException {
         for (Field sourceField : sourceFields) {
-            AtlasPath sourcePath = new AtlasPath(sourceField.getPath());
-            if (sourcePath.hasCollection() && !sourcePath.isIndexedCollection() && sourceFields.size() > 1) {
-                    AtlasUtil.addAudit(session, sourceField.getDocId(),
-                            "It's not yet supported to have a collection field as a part of multiple source fields in a same mapping",
-                            sourceField.getPath(), AuditStatus.ERROR, null);
-                    return;
-            }
             session.head().setSourceField(sourceField);
             if (sourceField instanceof FieldGroup) {
                 processSourceFieldMappings(session, ((FieldGroup)sourceField).getField());
