@@ -583,17 +583,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         if (field instanceof FieldGroup) {
             fieldGroup = (FieldGroup) field;
             List<Object> values = new ArrayList<>();
-            for (Field subField : fieldGroup.getField()) {
-                Integer index = subField.getIndex();
-                if (index != null) {
-                    while (index >= values.size()) {
-                        values.add(null);
-                    }
-                    values.set(index, subField.getValue());
-                } else {
-                    values.add(subField.getValue());
-                }
-            }
+            extractFromFieldGroup(fieldGroup, values);
             sourceObject = values;
             sourceType = FieldType.NONE;
             if (values.size() > 0) {
@@ -724,4 +714,27 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         c[0] = Character.toLowerCase(c[0]);
         return new String(c);
     }
+
+    private void extractFromFieldGroup(FieldGroup fieldGroup, List<Object> values) {
+        if (fieldGroup == null || fieldGroup.getField() == null || fieldGroup.getField().isEmpty()) {
+            return;
+        }
+        for (Field subField : fieldGroup.getField()) {
+            if (subField instanceof FieldGroup) {
+                extractFromFieldGroup((FieldGroup)subField, values);
+                continue;
+            }
+            Integer index = subField.getIndex();
+            if (index != null) {
+                while (index >= values.size()) {
+                    values.add(null);
+                }
+                // TODO this might not work with nested collection
+                values.set(index, subField.getValue());
+            } else {
+                values.add(subField.getValue());
+            }
+        }
+    }
+
 }
