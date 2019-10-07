@@ -1,0 +1,102 @@
+{
+  "AtlasMapping": {
+    "jsonType": "io.atlasmap.v2.AtlasMapping",
+    "dataSource": [
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "-LqbL_NuYtpimSmmPVQR",
+        "uri": "atlas:json:-LqbL_NuYtpimSmmPVQR",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "-LqbLf8BYtpimSmmPVQR",
+        "uri": "atlas:json:-LqbLf8BYtpimSmmPVQR",
+        "dataSourceType": "TARGET",
+        "template": null
+      }
+    ],
+    "mappings": {
+      "mapping": [
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "id": "mapping.477524",
+          "inputFieldGroup": {
+            "jsonType": "io.atlasmap.v2.FieldGroup",
+            "actions": [
+              {
+                "Concatenate": {
+                  "delimiter": " "
+                }
+              }
+            ],
+            "field": [
+              {
+                "jsonType": "io.atlasmap.json.v2.JsonField",
+                "name": "task",
+                "path": "/<>/task",
+                "fieldType": "STRING",
+                "docId": "-LqbL_NuYtpimSmmPVQR",
+                "userCreated": false,
+                "index": 0
+              }
+            ]
+          },
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "name": "task",
+              "path": "/task",
+              "fieldType": "STRING",
+              "docId": "-LqbLf8BYtpimSmmPVQR",
+              "userCreated": false
+            }
+          ]
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "id": "mapping.499464",
+          "inputFieldGroup": {
+            "jsonType": "io.atlasmap.v2.FieldGroup",
+            "actions": [
+              {
+                "Add": null
+              }
+            ],
+            "field": [
+              {
+                "jsonType": "io.atlasmap.json.v2.JsonField",
+                "name": "id",
+                "path": "/<>/id",
+                "fieldType": "INTEGER",
+                "docId": "-LqbL_NuYtpimSmmPVQR",
+                "userCreated": false,
+                "index": 0
+              }
+            ]
+          },
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "name": "id",
+              "path": "/id",
+              "fieldType": "INTEGER",
+              "docId": "-LqbLf8BYtpimSmmPVQR",
+              "userCreated": false
+            }
+          ]
+        }
+      ]
+    },
+    "name": "UI.201742",
+    "lookupTables": {
+      "lookupTable": []
+    },
+    "constants": {
+      "constant": []
+    },
+    "properties": {
+      "property": []
+    }
+  }
+}
