@@ -3,9 +3,19 @@
 </div>
 
 <div class="conditional-expr-picker">
+
   <div class="list-group-item list-group-item-primary expressionSearchResult" focus required
     *ngFor="let c of mappedFieldCandidates; let activeIndex = index;" tabindex="0"
       (keydown)="trackSelection($event, activeIndex)" (mouseover)="trackSelection($event, activeIndex)"
-      (click)="selectionChanged($event, activeIndex)">{{ c.displayName }}
+      (click)="selectionChanged($event, activeIndex)">
+
+    <label class="searchDisplayDocumentItem" *ngIf="itemIsDocument(c); else fieldItem">
+      <i [ngClass]="getSourcePanelIconCSSClass(c)"></i>{{ ' ' + c.displayName }}
+    </label>
+
+    <ng-template #fieldItem>
+      <i class="searchDisplayFieldItem"></i>{{ c.displayName }}
+    </ng-template>
   </div>
+
 </div>
