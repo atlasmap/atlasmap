@@ -1,16 +1,30 @@
 <div class="mappingFieldContainer" *ngIf="mapping">
 
+  <ng-template #typeaheadTemplate let-model="item" typeaheadOptionField="displayName">
+
+    <label class="searchDisplayDocumentItem" *ngIf="itemIsDocument(model); else fieldItem">
+      <i [ngClass]="getPanelIconCSSClass(model)"></i>{{ '  ' + getDisplayName(model) }}
+    </label>
+
+    <ng-template #fieldItem>
+      <i class="searchDisplayFieldItem"></i>{{ getDisplayName(model) }}
+    </ng-template>
+
+  </ng-template>
+
   <div class="MappingFieldSection" *ngIf="displayFieldSearchBox() || displayTransitionSelection()" on-mouseover='handleMouseOver($event)'
     [attr.draggable]="true" (dragstart)="startDrag($event, mappedField)" (drop)="endDrag($event, mappedField)"
     (dragenter)="dragEnterLeave($event, true)" (dragleave)="dragEnterLeave($event, false)" (dragover)="allowDrop($event)">
 
     <div class="searchBoxWrapper" *ngIf="displayFieldSearchBox()">
       <div class="searchBox">
-        <input type="text" #searchFilterBox id="{{inputId}}" (keyup)="updateSearchFilter(searchFilterBox.value)"
-          [typeahead]="dataSource" typeaheadWaitMs="200" typeaheadOptionField="displayName" [typeaheadItemTemplate]="typeaheadTemplate"
-          [ngModel]="searchFilter" (typeaheadOnSelect)="selectionChanged($event)" [placeholder]="getSearchPlaceholder()">
-        <div class="clear"></div>
+
+        <input class="form-control" type="text" #searchFilterBox id="{{inputId}}" (keyup)="updateSearchFilter(searchFilterBox.value)"
+         [typeahead]="dataSource" typeaheadWaitMs="200" typeaheadOptionField="displayName" [typeaheadItemTemplate]="typeaheadTemplate"
+         [(ngModel)]="searchFilter" (typeaheadOnSelect)="selectionChanged($event)" [placeholder]="getSearchPlaceholder()">
+
       </div>
+      <div class="clear"></div>
     </div>
 
     <div *ngIf="displayTransitionSelection()" style="margin-top:10px;">

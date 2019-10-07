@@ -139,6 +139,10 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
     }, 1000);
   }
 
+  getSourcePanelIconCSSClass(c: any): string {
+    return (c.field) ? '' : 'fa fa-hdd-o';
+  }
+
   /**
    * Track a candidate selection from either a mouse hover or arrow key navigation.
    *
@@ -148,6 +152,10 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
   trackSelection(event: any, index: number): void {
     this.candidateSrcElement = event.srcElement;
     this.candidateIndex = index;
+  }
+
+  itemIsDocument(c: any): boolean {
+    return (!c.field);
   }
 
   /**
@@ -320,6 +328,9 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
     for (const docDef of this.configModel.getDocs(true)) {
       fields = fields.concat(docDef.getTerminalFields());
     }
+    let documentName = '';
+    let fieldCount = -1;
+    let formattedField = null;
     for (const field of fields) {
       let displayName = (field == null) ? '' : field.getFieldLabel(ConfigModel.getConfig().showTypes, true);
 
@@ -327,11 +338,23 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
         if (!this.configModel.mappingService.isFieldSelectable(activeMapping, field)) {
           continue;
         }
-        displayName = DataMapperUtil.extractDisplayPath(field.path, 100);
-        const formattedField: any = { 'field': field, 'displayName': displayName };
+        if (documentName !== field.docDef.name) {
+          if (fieldCount === 0) {
+            formattedFields.pop();
+            continue;
+          } else {
+            documentName = field.docDef.name;
+            formattedField = { 'field': null, 'displayName': documentName };
+            fieldCount = 0;
+          }
+        } else {
+          displayName = DataMapperUtil.extractDisplayPath(field.path, 100);
+          formattedField = { 'field': field, 'displayName': displayName };
+          fieldCount++;
+        }
         formattedFields.push(formattedField);
       }
-      if (formattedFields.length > 9) {
+      if (formattedFields.length > 19) {
         break;
       }
     }

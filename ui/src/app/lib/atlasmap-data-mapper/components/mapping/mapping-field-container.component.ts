@@ -54,8 +54,19 @@ export class MappingFieldContainerComponent implements OnInit {
     this.inputId = 'input-' + this.isSource ? 'source' : 'target';
   }
 
+  itemIsDocument(model: any): boolean {
+    return (!model.field);
+  }
+  getDisplayName(model: any): string {
+    return model.displayName;
+  }
+
   isPartialComponent(): boolean {
     return true;
+  }
+
+  getPanelIconCSSClass(model: any): string {
+    return (model.field) ? '' : (this.isSource ? 'fa fa-hdd-o' : 'fa fa-download');
   }
 
   handleMouseOver(evt1: MouseEvent): void {
@@ -180,12 +191,15 @@ export class MappingFieldContainerComponent implements OnInit {
    * @param filter
    */
   executeSearch(filter: string): any[] {
-    const formattedFields: any[] = [];
     let fields: Field[] = [];
     for (const docDef of this.cfg.getDocs(this.isSource)) {
       fields = fields.concat(docDef.getTerminalFields());
     }
     const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
+    let documentName = '';
+    const formattedFields: any[] = [];
+    let formattedField = null;
+    let fieldCount = -1;
     for (const field of fields) {
       let displayName = (field == null) ? '' : field.getFieldLabel(ConfigModel.getConfig().showTypes, true);
 
@@ -193,11 +207,23 @@ export class MappingFieldContainerComponent implements OnInit {
         if (!this.cfg.mappingService.isFieldSelectable(activeMapping, field)) {
           continue;
         }
-        displayName = DataMapperUtil.extractDisplayPath(field.getFieldLabel(ConfigModel.getConfig().showTypes, true), 40);
-        const formattedField: any = { 'field': field, 'displayName': displayName };
+        if (documentName !== field.docDef.name) {
+          if (fieldCount === 0) {
+            formattedFields.pop();
+            continue;
+          } else {
+            documentName = field.docDef.name;
+            formattedField = { 'field': null, 'displayName': documentName };
+            fieldCount = 0;
+          }
+        } else {
+          displayName = DataMapperUtil.extractDisplayPath(field.getFieldLabel(ConfigModel.getConfig().showTypes, true), 40);
+          formattedField = { 'field': field, 'displayName': displayName };
+          fieldCount++;
+        }
         formattedFields.push(formattedField);
       }
-      if (formattedFields.length > 9) {
+      if (formattedFields.length > 19) {
         break;
       }
     }
@@ -205,7 +231,9 @@ export class MappingFieldContainerComponent implements OnInit {
   }
 
   selectionChanged(event: any): void {
-    this.cfg.mappingService.fieldSelected(event.item['field'], true);
+    if (event.item['field']) {
+      this.cfg.mappingService.fieldSelected(event.item['field'], true);
+    }
     this.searchFilter = '';
   }
 
