@@ -240,7 +240,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
     if (this.searchMode) {
       if (event.key.match(/[a-z0-9]/i)) {
         this.searchFilter += event.key;
-        this.mappedFieldCandidates = this.executeSearch(this.searchFilter);
+        this.mappedFieldCandidates = this.configModel.mappingService.executeFieldSearch(this.configModel, this.searchFilter);
       }
     } else {
       this.searchMode = (event.key === '@') ? true : false;
@@ -248,7 +248,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
         this.atContainer = window.getSelection().getRangeAt(0).startContainer;
         this.atIndex = window.getSelection().getRangeAt(0).startOffset;
         this.searchFilter = '';
-        this.mappedFieldCandidates = this.executeSearch(this.searchFilter);
+        this.mappedFieldCandidates = this.configModel.mappingService.executeFieldSearch(this.configModel, this.searchFilter);
       }
     }
 
@@ -313,52 +313,6 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
       }
     }
     this.markup.nativeElement.focus();
-  }
-
-  /**
-   * Return an array of strings representing display names of active mapping fields based on the
-   * specified filter.
-   *
-   * @param filter
-   */
-  executeSearch(filter: string): any[] {
-    const activeMapping = this.configModel.mappings.activeMapping;
-    const formattedFields: any[] = [];
-    let fields: Field[] = [];
-    for (const docDef of this.configModel.getDocs(true)) {
-      fields = fields.concat(docDef.getTerminalFields());
-    }
-    let documentName = '';
-    let fieldCount = -1;
-    let formattedField = null;
-    for (const field of fields) {
-      let displayName = (field == null) ? '' : field.getFieldLabel(ConfigModel.getConfig().showTypes, true);
-
-      if (filter == null || filter === '' || displayName.toLowerCase().indexOf(filter.toLowerCase()) !== -1) {
-        if (!this.configModel.mappingService.isFieldSelectable(activeMapping, field)) {
-          continue;
-        }
-        if (documentName !== field.docDef.name) {
-          if (fieldCount === 0) {
-            formattedFields.pop();
-            continue;
-          } else {
-            documentName = field.docDef.name;
-            formattedField = { 'field': null, 'displayName': documentName };
-            fieldCount = 0;
-          }
-        } else {
-          displayName = DataMapperUtil.extractDisplayPath(field.path, 100);
-          formattedField = { 'field': field, 'displayName': displayName };
-          fieldCount++;
-        }
-        formattedFields.push(formattedField);
-      }
-      if (formattedFields.length > 19) {
-        break;
-      }
-    }
-    return formattedFields;
   }
 
   /**
@@ -561,7 +515,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
       this.searchMode = false;
     } else {
       this.searchFilter = this.searchFilter.substr(0, this.searchFilter.length - 1);
-      this.mappedFieldCandidates = this.executeSearch(this.searchFilter);
+      this.mappedFieldCandidates = this.configModel.mappingService.executeFieldSearch(this.configModel, this.searchFilter);
     }
   }
 }
