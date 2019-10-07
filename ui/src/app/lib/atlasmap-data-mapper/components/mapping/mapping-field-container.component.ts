@@ -46,7 +46,7 @@ export class MappingFieldContainerComponent implements OnInit {
 
   constructor() {
     this.dataSource = Observable.create((observer: any) => {
-      observer.next(this.executeSearch(this.searchFilter));
+      observer.next(this.cfg.mappingService.executeFieldSearch(this.cfg, this.searchFilter));
     });
   }
 
@@ -182,52 +182,6 @@ export class MappingFieldContainerComponent implements OnInit {
 
   getSearchPlaceholder(): string {
     return 'Begin typing to search for more ' + (this.isSource ? 'sources' : 'targets');
-  }
-
-  /**
-   * This search is triggered off of the observer created in the constructor.  Note that we display any
-   * field whose path matches but we capture only the field leaf name for display.
-   *
-   * @param filter
-   */
-  executeSearch(filter: string): any[] {
-    let fields: Field[] = [];
-    for (const docDef of this.cfg.getDocs(this.isSource)) {
-      fields = fields.concat(docDef.getTerminalFields());
-    }
-    const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
-    let documentName = '';
-    const formattedFields: any[] = [];
-    let formattedField = null;
-    let fieldCount = -1;
-    for (const field of fields) {
-      let displayName = (field == null) ? '' : field.getFieldLabel(ConfigModel.getConfig().showTypes, true);
-
-      if (filter == null || filter === '' || displayName.toLowerCase().indexOf(filter.toLowerCase()) !== -1) {
-        if (!this.cfg.mappingService.isFieldSelectable(activeMapping, field)) {
-          continue;
-        }
-        if (documentName !== field.docDef.name) {
-          if (fieldCount === 0) {
-            formattedFields.pop();
-            continue;
-          } else {
-            documentName = field.docDef.name;
-            formattedField = { 'field': null, 'displayName': documentName };
-            fieldCount = 0;
-          }
-        } else {
-          displayName = DataMapperUtil.extractDisplayPath(field.getFieldLabel(ConfigModel.getConfig().showTypes, true), 40);
-          formattedField = { 'field': field, 'displayName': displayName };
-          fieldCount++;
-        }
-        formattedFields.push(formattedField);
-      }
-      if (formattedFields.length > 19) {
-        break;
-      }
-    }
-    return formattedFields;
   }
 
   selectionChanged(event: any): void {

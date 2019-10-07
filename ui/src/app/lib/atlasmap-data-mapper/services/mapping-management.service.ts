@@ -743,4 +743,51 @@ export class MappingManagementService {
       }
     }
   }
+
+  /**
+   * Return an array of strings representing display names of mapping fields based on the
+   * specified filter.
+   *
+   * @param filter
+   */
+  executeFieldSearch(configModel: ConfigModel, filter: string): any[] {
+    const activeMapping = configModel.mappings.activeMapping;
+    const formattedFields: any[] = [];
+    let fields: Field[] = [];
+    for (const docDef of configModel.getDocs(true)) {
+      fields = fields.concat(docDef.getTerminalFields());
+    }
+    let documentName = '';
+    let fieldCount = -1;
+    let formattedField = null;
+
+    for (const field of fields) {
+      let displayName = (field == null) ? '' : field.getFieldLabel(configModel.showTypes, true);
+
+      if (filter == null || filter === '' || displayName.toLowerCase().indexOf(filter.toLowerCase()) !== -1) {
+        if (!configModel.mappingService.isFieldSelectable(activeMapping, field)) {
+          continue;
+        }
+        if (documentName !== field.docDef.name) {
+          if (fieldCount === 0) {
+            formattedFields.pop();
+            continue;
+          } else {
+            documentName = field.docDef.name;
+            formattedField = { 'field': null, 'displayName': documentName };
+            fieldCount = 0;
+            formattedFields.push(formattedField);
+          }
+        }
+        displayName = DataMapperUtil.extractDisplayPath(field.path, 100);
+        formattedField = { 'field': field, 'displayName': displayName };
+        fieldCount++;
+        formattedFields.push(formattedField);
+      }
+      if (formattedFields.length > 19) {
+        break;
+      }
+    }
+    return formattedFields;
+  }
 }
