@@ -176,9 +176,6 @@
                                 <a href="#endDrag">endDrag</a>
                             </li>
                             <li>
-                                <a href="#executeSearch">executeSearch</a>
-                            </li>
-                            <li>
                                 <a href="#getAddButtonLabel">getAddButtonLabel</a>
                             </li>
                             <li>
@@ -684,79 +681,6 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="executeSearch"></a>
-                    <span class="name">
-                        <b>
-                            executeSearch
-                        </b>
-                        <a href="#executeSearch"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-<code>executeSearch(filter: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="193"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-container.component.ts:193</a></div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-description"><p>This search is triggered off of the observer created in the constructor.  Note that we display any
-field whose path matches but we capture only the field leaf name for display.</p>
-</div>
-
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>filter</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>    <code>any[]</code>
-
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
                     <a name="getAddButtonLabel"></a>
                     <span class="name">
                         <b>
@@ -775,8 +699,8 @@ field whose path matches but we capture only the field leaf name for display.</p
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="253"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-container.component.ts:253</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="207"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-container.component.ts:207</a></div>
                 </td>
             </tr>
 
@@ -993,8 +917,8 @@ field whose path matches but we capture only the field leaf name for display.</p
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="249"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-container.component.ts:249</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="203"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-container.component.ts:203</a></div>
                 </td>
             </tr>
 
@@ -1102,8 +1026,8 @@ field whose path matches but we capture only the field leaf name for display.</p
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="240"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-container.component.ts:240</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="194"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-container.component.ts:194</a></div>
                 </td>
             </tr>
 
@@ -1289,8 +1213,8 @@ field whose path matches but we capture only the field leaf name for display.</p
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="257"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-container.component.ts:257</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="211"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-container.component.ts:211</a></div>
                 </td>
             </tr>
 
@@ -1359,8 +1283,8 @@ field whose path matches but we capture only the field leaf name for display.</p
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="233"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-container.component.ts:233</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="187"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/mapping-field-container.component.ts:187</a></div>
                 </td>
             </tr>
 
@@ -1816,7 +1740,7 @@ export class MappingFieldContainerComponent implements OnInit {
 
   constructor() {
     this.dataSource &#x3D; Observable.create((observer: any) &#x3D;&gt; {
-      observer.next(this.executeSearch(this.searchFilter));
+      observer.next(this.cfg.mappingService.executeFieldSearch(this.cfg, this.searchFilter));
     });
   }
 
@@ -1952,52 +1876,6 @@ export class MappingFieldContainerComponent implements OnInit {
 
   getSearchPlaceholder(): string {
     return &#x27;Begin typing to search for more &#x27; + (this.isSource ? &#x27;sources&#x27; : &#x27;targets&#x27;);
-  }
-
-  /**
-   * This search is triggered off of the observer created in the constructor.  Note that we display any
-   * field whose path matches but we capture only the field leaf name for display.
-   *
-   * @param filter
-   */
-  executeSearch(filter: string): any[] {
-    let fields: Field[] &#x3D; [];
-    for (const docDef of this.cfg.getDocs(this.isSource)) {
-      fields &#x3D; fields.concat(docDef.getTerminalFields());
-    }
-    const activeMapping: MappingModel &#x3D; this.cfg.mappings.activeMapping;
-    let documentName &#x3D; &#x27;&#x27;;
-    const formattedFields: any[] &#x3D; [];
-    let formattedField &#x3D; null;
-    let fieldCount &#x3D; -1;
-    for (const field of fields) {
-      let displayName &#x3D; (field &#x3D;&#x3D; null) ? &#x27;&#x27; : field.getFieldLabel(ConfigModel.getConfig().showTypes, true);
-
-      if (filter &#x3D;&#x3D; null || filter &#x3D;&#x3D;&#x3D; &#x27;&#x27; || displayName.toLowerCase().indexOf(filter.toLowerCase()) !&#x3D;&#x3D; -1) {
-        if (!this.cfg.mappingService.isFieldSelectable(activeMapping, field)) {
-          continue;
-        }
-        if (documentName !&#x3D;&#x3D; field.docDef.name) {
-          if (fieldCount &#x3D;&#x3D;&#x3D; 0) {
-            formattedFields.pop();
-            continue;
-          } else {
-            documentName &#x3D; field.docDef.name;
-            formattedField &#x3D; { &#x27;field&#x27;: null, &#x27;displayName&#x27;: documentName };
-            fieldCount &#x3D; 0;
-          }
-        } else {
-          displayName &#x3D; DataMapperUtil.extractDisplayPath(field.getFieldLabel(ConfigModel.getConfig().showTypes, true), 40);
-          formattedField &#x3D; { &#x27;field&#x27;: field, &#x27;displayName&#x27;: displayName };
-          fieldCount++;
-        }
-        formattedFields.push(formattedField);
-      }
-      if (formattedFields.length &gt; 19) {
-        break;
-      }
-    }
-    return formattedFields;
   }
 
   selectionChanged(event: any): void {

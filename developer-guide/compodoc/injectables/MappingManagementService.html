@@ -162,6 +162,9 @@ and/or reflect mapping changes caused by the user action made in UI to the backe
                                 <a href="#enableMappingPreview">enableMappingPreview</a>
                             </li>
                             <li>
+                                <a href="#executeFieldSearch">executeFieldSearch</a>
+                            </li>
+                            <li>
                                 <a href="#fetchMappings">fetchMappings</a>
                             </li>
                             <li>
@@ -739,6 +742,91 @@ a mapped element above the last padding field.</p>
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
 
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="executeFieldSearch"></a>
+                    <span class="name">
+                        <b>
+                            executeFieldSearch
+                        </b>
+                        <a href="#executeFieldSearch"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>executeFieldSearch(configModel: <a href="../classes/ConfigModel.html">ConfigModel</a>, filter: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="753"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts:753</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Return an array of strings representing display names of mapping fields based on the
+specified filter.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>configModel</td>
+                                    <td>
+                                                <code><a href="../classes/ConfigModel.html" target="_self" >ConfigModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>filter</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>any[]</code>
+
+                    </div>
+                    <div class="io-description">
+                        
                     </div>
                 </td>
             </tr>
@@ -3076,6 +3164,53 @@ export class MappingManagementService {
         break;
       }
     }
+  }
+
+  /**
+   * Return an array of strings representing display names of mapping fields based on the
+   * specified filter.
+   *
+   * @param filter
+   */
+  executeFieldSearch(configModel: ConfigModel, filter: string): any[] {
+    const activeMapping &#x3D; configModel.mappings.activeMapping;
+    const formattedFields: any[] &#x3D; [];
+    let fields: Field[] &#x3D; [];
+    for (const docDef of configModel.getDocs(true)) {
+      fields &#x3D; fields.concat(docDef.getTerminalFields());
+    }
+    let documentName &#x3D; &#x27;&#x27;;
+    let fieldCount &#x3D; -1;
+    let formattedField &#x3D; null;
+
+    for (const field of fields) {
+      let displayName &#x3D; (field &#x3D;&#x3D; null) ? &#x27;&#x27; : field.getFieldLabel(configModel.showTypes, true);
+
+      if (filter &#x3D;&#x3D; null || filter &#x3D;&#x3D;&#x3D; &#x27;&#x27; || displayName.toLowerCase().indexOf(filter.toLowerCase()) !&#x3D;&#x3D; -1) {
+        if (!configModel.mappingService.isFieldSelectable(activeMapping, field)) {
+          continue;
+        }
+        if (documentName !&#x3D;&#x3D; field.docDef.name) {
+          if (fieldCount &#x3D;&#x3D;&#x3D; 0) {
+            formattedFields.pop();
+            continue;
+          } else {
+            documentName &#x3D; field.docDef.name;
+            formattedField &#x3D; { &#x27;field&#x27;: null, &#x27;displayName&#x27;: documentName };
+            fieldCount &#x3D; 0;
+            formattedFields.push(formattedField);
+          }
+        }
+        displayName &#x3D; DataMapperUtil.extractDisplayPath(field.path, 100);
+        formattedField &#x3D; { &#x27;field&#x27;: field, &#x27;displayName&#x27;: displayName };
+        fieldCount++;
+        formattedFields.push(formattedField);
+      }
+      if (formattedFields.length &gt; 19) {
+        break;
+      }
+    }
+    return formattedFields;
   }
 }
 </code></pre>
