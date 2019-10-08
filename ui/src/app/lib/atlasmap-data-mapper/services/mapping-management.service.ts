@@ -657,12 +657,12 @@ export class MappingManagementService {
       if (this.cfg.mappings) {
 
         const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
-        if (activeMapping) {
-          if (this.cfg.mappings.mappings.indexOf(activeMapping) === -1) {
-            this.cfg.mappings.mappings.push(activeMapping);
-          }
-          await this.validateMappings();
+        if (activeMapping && (this.cfg.mappings.mappings.indexOf(activeMapping) === -1)) {
+          this.cfg.mappings.mappings.push(activeMapping);
         }
+
+        // Validate even if there is no active mapping.  It may be due to a mapping removal.
+        await this.validateMappings();
       }
       this.mappingUpdatedSource.next();
       resolve(true);
