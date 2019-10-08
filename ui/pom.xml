@@ -4,7 +4,7 @@
   <parent>
     <groupId>io.atlasmap</groupId>
     <artifactId>atlasmapio</artifactId>
-    <version>1.42.6</version>
+    <version>1.42.x-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
 
@@ -17,7 +17,7 @@
     <connection>scm:git:https://github.com/atlasmap/atlasmap-ui.git</connection>
     <developerConnection>scm:git:ssh://git@github.com:atlasmap/atlasmap-ui.git</developerConnection>
     <url>http://github.com/atlasmap/atlasmap-ui</url>
-    <tag>atlasmap-1.42.6</tag>
+    <tag>HEAD</tag>
   </scm>
   <organization>
     <name>JBoss by Red Hat</name>
