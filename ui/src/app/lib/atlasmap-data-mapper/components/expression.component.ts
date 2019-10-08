@@ -240,7 +240,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
     if (this.searchMode) {
       if (event.key.match(/[a-z0-9]/i)) {
         this.searchFilter += event.key;
-        this.mappedFieldCandidates = this.configModel.mappingService.executeFieldSearch(this.configModel, this.searchFilter);
+        this.mappedFieldCandidates = this.configModel.mappingService.executeFieldSearch(this.configModel, this.searchFilter, true);
       }
     } else {
       this.searchMode = (event.key === '@') ? true : false;
@@ -248,7 +248,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
         this.atContainer = window.getSelection().getRangeAt(0).startContainer;
         this.atIndex = window.getSelection().getRangeAt(0).startOffset;
         this.searchFilter = '';
-        this.mappedFieldCandidates = this.configModel.mappingService.executeFieldSearch(this.configModel, this.searchFilter);
+        this.mappedFieldCandidates = this.configModel.mappingService.executeFieldSearch(this.configModel, this.searchFilter, true);
       }
     }
 
@@ -515,7 +515,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
       this.searchMode = false;
     } else {
       this.searchFilter = this.searchFilter.substr(0, this.searchFilter.length - 1);
-      this.mappedFieldCandidates = this.configModel.mappingService.executeFieldSearch(this.configModel, this.searchFilter);
+      this.mappedFieldCandidates = this.configModel.mappingService.executeFieldSearch(this.configModel, this.searchFilter, true);
     }
   }
 }
