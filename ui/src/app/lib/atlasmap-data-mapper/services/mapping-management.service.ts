@@ -750,11 +750,11 @@ export class MappingManagementService {
    *
    * @param filter
    */
-  executeFieldSearch(configModel: ConfigModel, filter: string): any[] {
+  executeFieldSearch(configModel: ConfigModel, filter: string, isSource: boolean): any[] {
     const activeMapping = configModel.mappings.activeMapping;
     const formattedFields: any[] = [];
     let fields: Field[] = [];
-    for (const docDef of configModel.getDocs(true)) {
+    for (const docDef of configModel.getDocs(isSource)) {
       fields = fields.concat(docDef.getTerminalFields());
     }
     let documentName = '';
