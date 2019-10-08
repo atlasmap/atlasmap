@@ -762,7 +762,7 @@ a mapped element above the last padding field.</p>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>executeFieldSearch(configModel: <a href="../classes/ConfigModel.html">ConfigModel</a>, filter: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+<code>executeFieldSearch(configModel: <a href="../classes/ConfigModel.html">ConfigModel</a>, filter: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, isSource: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
                 </td>
             </tr>
 
@@ -808,6 +808,18 @@ specified filter.</p>
                                     <td>filter</td>
                                     <td>
                                                 <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>isSource</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
                                     </td>
 
                                     <td>
@@ -3172,11 +3184,11 @@ export class MappingManagementService {
    *
    * @param filter
    */
-  executeFieldSearch(configModel: ConfigModel, filter: string): any[] {
+  executeFieldSearch(configModel: ConfigModel, filter: string, isSource: boolean): any[] {
     const activeMapping &#x3D; configModel.mappings.activeMapping;
     const formattedFields: any[] &#x3D; [];
     let fields: Field[] &#x3D; [];
-    for (const docDef of configModel.getDocs(true)) {
+    for (const docDef of configModel.getDocs(isSource)) {
       fields &#x3D; fields.concat(docDef.getTerminalFields());
     }
     let documentName &#x3D; &#x27;&#x27;;

@@ -1740,7 +1740,7 @@ export class MappingFieldContainerComponent implements OnInit {
 
   constructor() {
     this.dataSource &#x3D; Observable.create((observer: any) &#x3D;&gt; {
-      observer.next(this.cfg.mappingService.executeFieldSearch(this.cfg, this.searchFilter));
+      observer.next(this.cfg.mappingService.executeFieldSearch(this.cfg, this.searchFilter, this.isSource));
     });
   }
 

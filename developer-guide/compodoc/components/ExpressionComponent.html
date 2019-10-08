@@ -2594,7 +2594,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
     if (this.searchMode) {
       if (event.key.match(/[a-z0-9]/i)) {
         this.searchFilter +&#x3D; event.key;
-        this.mappedFieldCandidates &#x3D; this.configModel.mappingService.executeFieldSearch(this.configModel, this.searchFilter);
+        this.mappedFieldCandidates &#x3D; this.configModel.mappingService.executeFieldSearch(this.configModel, this.searchFilter, true);
       }
     } else {
       this.searchMode &#x3D; (event.key &#x3D;&#x3D;&#x3D; &#x27;@&#x27;) ? true : false;
@@ -2602,7 +2602,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
         this.atContainer &#x3D; window.getSelection().getRangeAt(0).startContainer;
         this.atIndex &#x3D; window.getSelection().getRangeAt(0).startOffset;
         this.searchFilter &#x3D; &#x27;&#x27;;
-        this.mappedFieldCandidates &#x3D; this.configModel.mappingService.executeFieldSearch(this.configModel, this.searchFilter);
+        this.mappedFieldCandidates &#x3D; this.configModel.mappingService.executeFieldSearch(this.configModel, this.searchFilter, true);
       }
     }
 
@@ -2869,7 +2869,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
       this.searchMode &#x3D; false;
     } else {
       this.searchFilter &#x3D; this.searchFilter.substr(0, this.searchFilter.length - 1);
-      this.mappedFieldCandidates &#x3D; this.configModel.mappingService.executeFieldSearch(this.configModel, this.searchFilter);
+      this.mappedFieldCandidates &#x3D; this.configModel.mappingService.executeFieldSearch(this.configModel, this.searchFilter, true);
     }
   }
 }
