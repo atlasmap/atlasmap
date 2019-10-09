@@ -2164,25 +2164,30 @@ export class LineMachineComponent implements OnInit, OnDestroy {
     </div>
 
     <div class="tab-pane fade " id="c-templateData">
-        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;LineMachineComponent&quot; #lineMachineElement on-mousemove&#x3D;&quot;drawLine($event)&quot;
-  on-click&#x3D;&quot;handleLineClick($event)&quot; style&#x3D;&quot;height:100%; margin-top:6%;&quot;&gt;
-  &lt;svg style&#x3D;&quot;width:100%; height:100%;&quot;&gt;
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;LineMachineComponent&quot; #lineMachineElement on-mousemove&#x3D;&quot;drawLine($event)&quot; on-click&#x3D;&quot;handleLineClick($event)&quot;&gt;
+  &lt;svg&gt;
     &lt;defs&gt;
+
+      &lt;!-- selected lines --&gt;
       &lt;linearGradient id&#x3D;&#x27;line-gradient-active&#x27; gradientUnits&#x3D;&quot;userSpaceOnUse&quot;&gt;
-        &lt;stop stop-color&#x3D;&#x27;#0088ce&#x27; /&gt;
+        &lt;stop offset&#x3D;&quot;0&quot; stop-color&#x3D;&#x27;#0088ce&#x27; /&gt;
         &lt;stop offset&#x3D;&#x27;100%&#x27; stop-color&#x3D;&#x27;#0088ce&#x27; /&gt;
-        &lt;!-- was #bee1f4 --&gt;
       &lt;/linearGradient&gt;
+
+      &lt;!-- all other lines --&gt;
       &lt;linearGradient id&#x3D;&#x27;line-gradient-dormant&#x27; gradientUnits&#x3D;&quot;userSpaceOnUse&quot;&gt;
-        &lt;stop stop-color&#x3D;&#x27;#8b8d8f&#x27; /&gt;
+        &lt;stop offset&#x3D;&quot;0&quot; stop-color&#x3D;&#x27;#8b8d8f&#x27; /&gt;
         &lt;stop offset&#x3D;&#x27;100%&#x27; stop-color&#x3D;&#x27;#8b8d8f&#x27; /&gt;
-        &lt;!-- was #EEEEEE --&gt;
       &lt;/linearGradient&gt;
     &lt;/defs&gt;
-    &lt;svg:line *ngFor&#x3D;&quot;let l of lines&quot; [attr.x1]&#x3D;&quot;l.sourceX&quot; [attr.y1]&#x3D;&quot;l.sourceY&quot; [attr.x2]&#x3D;&quot;l.targetX&quot; [attr.y2]&#x3D;&quot;l.targetY&quot;
-      shape-rendering&#x3D;&quot;optimizeQuality&quot; [attr.style]&#x3D;&quot;l.style&quot;&gt;&lt;/svg:line&gt;
-    &lt;svg:line *ngIf&#x3D;&quot;lineBeingFormed &amp;&amp; lineBeingFormed.targetY&quot; [attr.x1]&#x3D;&quot;lineBeingFormed.sourceX&quot; [attr.y1]&#x3D;&quot;lineBeingFormed.sourceY&quot;
-      [attr.x2]&#x3D;&quot;lineBeingFormed.targetX&quot; [attr.y2]&#x3D;&quot;lineBeingFormed.targetY&quot; shape-rendering&#x3D;&quot;optimizeQuality&quot; [attr.style]&#x3D;&quot;lineBeingFormed.style&quot;&gt;&lt;/svg:line&gt;
+
+    &lt;svg:line *ngFor&#x3D;&quot;let l of lines&quot; [attr.x1]&#x3D;&quot;l.sourceX&quot; [attr.y1]&#x3D;&quot;l.sourceY&quot; [attr.x2]&#x3D;&quot;l.targetX&quot;
+      [attr.y2]&#x3D;&quot;l.targetY&quot; shape-rendering&#x3D;&quot;optimizeQuality&quot; [attr.style]&#x3D;&quot;l.style&quot;&gt;
+    &lt;/svg:line&gt;
+    &lt;svg:line *ngIf&#x3D;&quot;lineBeingFormed &amp;&amp; lineBeingFormed.targetY&quot; [attr.x1]&#x3D;&quot;lineBeingFormed.sourceX&quot;
+      [attr.y1]&#x3D;&quot;lineBeingFormed.sourceY&quot; [attr.x2]&#x3D;&quot;lineBeingFormed.targetX&quot; [attr.y2]&#x3D;&quot;lineBeingFormed.targetY&quot;
+      shape-rendering&#x3D;&quot;optimizeQuality&quot; [attr.style]&#x3D;&quot;lineBeingFormed.style&quot;&gt;
+    &lt;/svg:line&gt;
   &lt;/svg&gt;
 &lt;/div&gt;</code></pre>
     </div>
@@ -2213,7 +2218,7 @@ export class LineMachineComponent implements OnInit, OnDestroy {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><div class="LineMachineComponent" #lineMachineElement on-mousemove="drawLine($event)"  on-click="handleLineClick($event)" style="height:100%; margin-top:6%;">  <svg style="width:100%; height:100%;">    <defs>      <linearGradient id=\'line-gradient-active\' gradientUnits="userSpaceOnUse">        <stop stop-color=\'#0088ce\' />        <stop offset=\'100%\' stop-color=\'#0088ce\' />        <!-- was #bee1f4 -->      </linearGradient>      <linearGradient id=\'line-gradient-dormant\' gradientUnits="userSpaceOnUse">        <stop stop-color=\'#8b8d8f\' />        <stop offset=\'100%\' stop-color=\'#8b8d8f\' />        <!-- was #EEEEEE -->      </linearGradient>    </defs>    <svg:line *ngFor="let l of lines" [attr.x1]="l.sourceX" [attr.y1]="l.sourceY" [attr.x2]="l.targetX" [attr.y2]="l.targetY"      shape-rendering="optimizeQuality" [attr.style]="l.style"></svg:line>    <svg:line *ngIf="lineBeingFormed && lineBeingFormed.targetY" [attr.x1]="lineBeingFormed.sourceX" [attr.y1]="lineBeingFormed.sourceY"      [attr.x2]="lineBeingFormed.targetX" [attr.y2]="lineBeingFormed.targetY" shape-rendering="optimizeQuality" [attr.style]="lineBeingFormed.style"></svg:line>  </svg></div></div>'
+        var COMPONENT_TEMPLATE = '<div><div class="LineMachineComponent" #lineMachineElement on-mousemove="drawLine($event)" on-click="handleLineClick($event)">  <svg>    <defs>      <!-- selected lines -->      <linearGradient id=\'line-gradient-active\' gradientUnits="userSpaceOnUse">        <stop offset="0" stop-color=\'#0088ce\' />        <stop offset=\'100%\' stop-color=\'#0088ce\' />      </linearGradient>      <!-- all other lines -->      <linearGradient id=\'line-gradient-dormant\' gradientUnits="userSpaceOnUse">        <stop offset="0" stop-color=\'#8b8d8f\' />        <stop offset=\'100%\' stop-color=\'#8b8d8f\' />      </linearGradient>    </defs>    <svg:line *ngFor="let l of lines" [attr.x1]="l.sourceX" [attr.y1]="l.sourceY" [attr.x2]="l.targetX"      [attr.y2]="l.targetY" shape-rendering="optimizeQuality" [attr.style]="l.style">    </svg:line>    <svg:line *ngIf="lineBeingFormed && lineBeingFormed.targetY" [attr.x1]="lineBeingFormed.sourceX"      [attr.y1]="lineBeingFormed.sourceY" [attr.x2]="lineBeingFormed.targetX" [attr.y2]="lineBeingFormed.targetY"      shape-rendering="optimizeQuality" [attr.style]="lineBeingFormed.style">    </svg:line>  </svg></div></div>'
     var COMPONENTS = [{'name': 'AppComponent', 'selector': 'atlasmap-dev-root'},{'name': 'AtlasmapNavbarComponent', 'selector': 'atlasmap-navbar'},{'name': 'ClassNameComponent', 'selector': 'class-name'},{'name': 'CollapsableHeaderComponent', 'selector': 'collapsable-header'},{'name': 'ConstantFieldEditComponent', 'selector': 'constant-field-edit'},{'name': 'DataMapperAppComponent', 'selector': 'data-mapper'},{'name': 'DataMapperAppExampleHostComponent', 'selector': 'data-mapper-example-host'},{'name': 'DataMapperErrorComponent', 'selector': 'data-mapper-error'},{'name': 'DocumentDefinitionComponent', 'selector': 'document-definition'},{'name': 'DocumentFieldDetailComponent', 'selector': 'document-field-detail'},{'name': 'EmptyModalBodyComponent', 'selector': 'empty-modal-body'},{'name': 'ExpressionComponent', 'selector': 'expression'},{'name': 'FieldEditComponent', 'selector': 'field-edit'},{'name': 'LineMachineComponent', 'selector': 'line-machine'},{'name': 'LookupTableComponent', 'selector': 'lookup-table'},{'name': 'MappingDetailComponent', 'selector': 'mapping-detail'},{'name': 'MappingFieldActionArgumentComponent', 'selector': 'mapping-field-action-argument'},{'name': 'MappingFieldActionComponent', 'selector': 'mapping-field-action'},{'name': 'MappingFieldContainerComponent', 'selector': 'mapping-field-container'},{'name': 'MappingFieldDetailComponent', 'selector': 'mapping-field-detail'},{'name': 'MappingListComponent', 'selector': 'mapping-list'},{'name': 'MappingListFieldComponent', 'selector': 'mapping-list-field'},{'name': 'MappingSelectionComponent', 'selector': 'mapping-selection'},{'name': 'MappingSelectionSectionComponent', 'selector': 'mapping-selection-section'},{'name': 'ModalErrorWindowComponent', 'selector': 'modal-error-window'},{'name': 'ModalWindowComponent', 'selector': 'modal-window'},{'name': 'NamespaceEditComponent', 'selector': 'namespace-edit'},{'name': 'NamespaceListComponent', 'selector': 'namespace-list'},{'name': 'PropertyFieldEditComponent', 'selector': 'property-field-edit'},{'name': 'TemplateEditComponent', 'selector': 'template-edit'},{'name': 'ToolbarComponent', 'selector': 'toolbar'},{'name': 'TransitionSelectionComponent', 'selector': 'transition-selection'}];
     var DIRECTIVES = [{'name': 'FocusDirective', 'selector': '[focus]'}];
     var ACTUAL_COMPONENT = {'name': 'LineMachineComponent'};
