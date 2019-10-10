@@ -35,10 +35,16 @@ describe('InitializationService', () => {
     jasmine.getFixtures().fixturesPath = 'base/test-resources/inspected';
   });
 
+  afterAll(inject([InitializationService], (service: InitializationService) => {
+      service.cfg.clearDocs();
+      service.cfg.mappings.mappings = [];
+  }));
+
   it(
     'should load document definitions', (done) => {
       inject([InitializationService], (service: InitializationService) => {
         const c = service.cfg;
+        c.initCfg.baseMappingServiceUrl = 'dummy';
         c.initCfg.baseJSONInspectionServiceUrl = 'dummy';
         c.initCfg.baseXMLInspectionServiceUrl = 'dummy';
         const sourceJson = new DocumentInitializationModel();
@@ -79,4 +85,53 @@ describe('InitializationService', () => {
       })();
     });
 
+  it(
+    'should load mapping definition', (done) => {
+      inject([InitializationService], (service: InitializationService) => {
+        const cfg = service.cfg;
+        cfg.clearDocs();
+        cfg.initCfg.baseMappingServiceUrl = 'dummy';
+        cfg.initCfg.baseJSONInspectionServiceUrl = 'dummy';
+        cfg.initCfg.baseXMLInspectionServiceUrl = 'dummy';
+        const fixtures = jasmine.getFixtures();
+
+        fixtures.fixturesPath = 'base/test-resources/inspected';
+        const source = new DocumentInitializationModel();
+        source.isSource = true;
+        source.type = DocumentType.JSON;
+        source.inspectionType = InspectionType.SCHEMA;
+        source.id = 'old-action-source';
+        source.inspectionResult = fixtures.read('atlasmap-inspection-old-action-source.json');
+        cfg.addDocument(source);
+        const target = new DocumentInitializationModel();
+        target.isSource = false;
+        target.type = DocumentType.JSON;
+        target.inspectionType = InspectionType.SCHEMA;
+        target.id = 'old-action-target';
+        target.inspectionResult = fixtures.read('atlasmap-inspection-old-action-target.json');
+        cfg.addDocument(target);
+        fixtures.fixturesPath = 'base/test-resources/mapping';
+        cfg.preloadedMappingJson = fixtures.read('atlasmapping-old-action.json');
+
+        spyOn(cfg.mappingService, 'runtimeServiceActive').and.returnValues(true);
+        return service.initialize().then(() => {
+          expect(cfg.sourceDocs[0].fields.length).toEqual(1);
+          expect(cfg.sourceDocs[0].fields[0].path).toEqual('/<>');
+          expect(cfg.targetDocs[0].fields[0].path).toEqual('/id');
+          expect(cfg.mappings.mappings.length).toEqual(1);
+          const mapping = cfg.mappings.mappings[0];
+          expect(mapping.sourceFields.length).toEqual(1);
+          const sourceField = mapping.sourceFields[0];
+          expect(sourceField.field).toBeTruthy();
+          expect(mapping.targetFields.length).toEqual(1);
+          const targetField = mapping.targetFields[0];
+          expect(targetField.field).toBeTruthy();
+          expect(cfg.errors.length).toEqual(0, cfg.errors);
+          done();
+        }).catch((error) => {
+          fail(error);
+          done();
+        });
+      })();
+    });
 });
