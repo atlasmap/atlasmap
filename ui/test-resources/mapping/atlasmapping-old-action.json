@@ -1,0 +1,69 @@
+{
+  "AtlasMapping": {
+    "jsonType": "io.atlasmap.v2.AtlasMapping",
+    "dataSource": [
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "old-action-source",
+        "uri": "atlas:json:old-action-source",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "old-action-target",
+        "uri": "atlas:json:old-action-target",
+        "dataSourceType": "TARGET",
+        "template": null
+      }
+    ],
+    "mappings": {
+      "mapping": [
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "id": "mapping.411720",
+          "inputFieldGroup": {
+            "jsonType": "io.atlasmap.v2.FieldGroup",
+            "actions": [
+              {
+                "Concatenate": {
+                  "delimiter": " "
+                }
+              }
+            ],
+            "field": [
+              {
+                "jsonType": "io.atlasmap.json.v2.JsonField",
+                "name": "task",
+                "path": "/<>/task",
+                "fieldType": "STRING",
+                "docId": "old-action-source",
+                "userCreated": false,
+                "index": 0
+              }
+            ]
+          },
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "name": "task",
+              "path": "/task",
+              "fieldType": "STRING",
+              "docId": "old-action-target",
+              "userCreated": false
+            }
+          ]
+        }
+      ]
+    },
+    "name": "UI.647789",
+    "lookupTables": {
+      "lookupTable": []
+    },
+    "constants": {
+      "constant": []
+    },
+    "properties": {
+      "property": []
+    }
+  }
+}

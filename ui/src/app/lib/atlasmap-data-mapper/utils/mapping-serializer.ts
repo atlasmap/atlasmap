@@ -196,6 +196,7 @@ export class MappingSerializer {
     for (const field of mappingJson.outputField) {
       MappingSerializer.addFieldIfDoesntExist(mapping, field, false, docRefs, cfg, ignoreValue);
     }
+    MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, null, false);
 
     if (isLookupMapping) {
       mapping.transition.lookupTableName = mappingJson.lookupTableName;
