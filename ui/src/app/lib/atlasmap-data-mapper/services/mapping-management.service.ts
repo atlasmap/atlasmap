@@ -139,7 +139,6 @@ export class MappingManagementService {
           MappingSerializer.deserializeMappingServiceJSON(d, this.cfg);
         }
         this.cfg.mappings.getAllMappings(true).forEach(m => this.updateTransition(m));
-        await this.notifyMappingUpdated();
         observer.next(true);
         observer.complete();
       }).catch((error: any) => {
