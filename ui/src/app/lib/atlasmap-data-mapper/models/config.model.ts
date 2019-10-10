@@ -127,6 +127,7 @@ export class ConfigModel {
 
   mappings: MappingDefinition = null;
 
+  preloadedMappingJson: string;
   preloadedFieldActionMetadata: any;
 
   errors: ErrorInfo[] = [];

@@ -214,6 +214,10 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
           });
       }
 
+      if (this.cfg.preloadedMappingJson) {
+        MappingSerializer.deserializeMappingServiceJSON(JSON.parse(this.cfg.preloadedMappingJson), this.cfg);
+      }
+
       // Fetch adm-catalog-files.gz if it exists.
       this.cfg.fileService.getCurrentMappingCatalog().subscribe( async(catalog: Uint8Array) => {
 

@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "$schema": "http://json-schema.org/schema#",
+  "title": "SQL_PARAM_IN",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "required": true
+    },
+    "task": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

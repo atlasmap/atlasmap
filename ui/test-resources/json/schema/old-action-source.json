@@ -1,0 +1,22 @@
+{
+  "type": "array",
+  "$schema": "http://json-schema.org/schema#",
+  "items": {
+    "type": "object",
+    "title": "SQL_PARAM_OUT",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "required": true
+      },
+      "task": {
+        "type": "string",
+        "required": true
+      },
+      "completed": {
+        "type": "integer",
+        "required": true
+      }
+    }
+  }
+}
