@@ -489,9 +489,10 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
       }
 
       this.cfg.mappingService.fetchMappings(mappingFiles, this.cfg.mappings).toPromise()
-        .then((result: boolean) => {
+        .then( async(result: boolean) => {
         this.cfg.initCfg.mappingInitialized = true;
         this.updateStatus();
+        await this.cfg.mappingService.notifyMappingUpdated();
         resolve(true);
       }).catch((error: any) => {
         if (error.status === 0) {
