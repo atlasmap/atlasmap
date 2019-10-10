@@ -1956,7 +1956,7 @@ isSource&#x3D;${docdef.initModel.isSource}, inspection&#x3D;${docdef.initModel.i
         .then((result: boolean) &#x3D;&gt; {
         this.cfg.initCfg.mappingInitialized &#x3D; true;
         this.updateStatus();
-        resolve(true);
+        this.cfg.mappingService.notifyMappingUpdated().then(() &#x3D;&gt; resolve(true));
       }).catch((error: any) &#x3D;&gt; {
         if (error.status &#x3D;&#x3D;&#x3D; 0) {
           this.handleError(&#x27;Fatal network error: Could not connect to AtlasMap design runtime service.&#x27;, error);
