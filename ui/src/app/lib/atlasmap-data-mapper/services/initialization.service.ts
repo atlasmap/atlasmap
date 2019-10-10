@@ -489,11 +489,10 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
       }
 
       this.cfg.mappingService.fetchMappings(mappingFiles, this.cfg.mappings).toPromise()
-        .then( async(result: boolean) => {
+        .then((result: boolean) => {
         this.cfg.initCfg.mappingInitialized = true;
         this.updateStatus();
-        await this.cfg.mappingService.notifyMappingUpdated();
-        resolve(true);
+        this.cfg.mappingService.notifyMappingUpdated().then(() => resolve(true));
       }).catch((error: any) => {
         if (error.status === 0) {
           this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
