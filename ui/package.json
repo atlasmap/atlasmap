@@ -95,7 +95,7 @@
     "ngx-bootstrap": "^3.0.1",
     "ngx-logger": "3.3.13",
     "pako": "^1.0.5",
-    "patternfly": "3.51.2",
+    "patternfly": "3.59.4",
     "patternfly-bootstrap-combobox": "^1.1.6",
     "patternfly-ng": "^4.0.0",
     "protractor": "~5.2.2",
