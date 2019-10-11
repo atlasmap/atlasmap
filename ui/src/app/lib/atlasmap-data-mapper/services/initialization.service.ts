@@ -515,6 +515,7 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
     if ((documentCount === finishedDocCount) && this.cfg.fieldActionService.isInitialized) {
       if (this.cfg.preloadedMappingJson) {
         MappingSerializer.deserializeMappingServiceJSON(JSON.parse(this.cfg.preloadedMappingJson), this.cfg);
+        this.cfg.preloadedMappingJson = null;
       }
       if (this.cfg.mappings) {
         LookupTableUtil.updateLookupTables(this.cfg.mappings);
