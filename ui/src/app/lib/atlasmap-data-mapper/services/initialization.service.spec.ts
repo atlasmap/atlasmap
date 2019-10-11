@@ -13,6 +13,7 @@ import { FieldActionService } from './field-action.service';
 import { FileManagementService } from './file-management.service';
 import { DocumentInitializationModel } from '../models/config.model';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
+import { Observable, of } from 'rxjs';
 
 describe('InitializationService', () => {
   beforeEach(() => {
@@ -35,9 +36,11 @@ describe('InitializationService', () => {
     jasmine.getFixtures().fixturesPath = 'base/test-resources/inspected';
   });
 
-  afterAll(inject([InitializationService], (service: InitializationService) => {
+  afterEach(inject([InitializationService], (service: InitializationService) => {
       service.cfg.clearDocs();
-      service.cfg.mappings.mappings = [];
+      if (service.cfg.mappings) {
+        service.cfg.mappings.mappings = [];
+      }
   }));
 
   it(
@@ -94,6 +97,8 @@ describe('InitializationService', () => {
         cfg.initCfg.baseJSONInspectionServiceUrl = 'dummy';
         cfg.initCfg.baseXMLInspectionServiceUrl = 'dummy';
         const fixtures = jasmine.getFixtures();
+        fixtures.fixturesPath = 'base/test-resources/fieldActions';
+        cfg.preloadedFieldActionMetadata = fixtures.read('atlasmap-field-action.json');
 
         fixtures.fixturesPath = 'base/test-resources/inspected';
         const source = new DocumentInitializationModel();
@@ -114,7 +119,8 @@ describe('InitializationService', () => {
         cfg.preloadedMappingJson = fixtures.read('atlasmapping-old-action.json');
 
         spyOn(cfg.mappingService, 'runtimeServiceActive').and.returnValues(true);
-        return service.initialize().then(() => {
+        spyOn(cfg.fileService, 'getCurrentMappingCatalog').and.returnValue(of(null));
+        service.systemInitialized$.subscribe(() => {
           expect(cfg.sourceDocs[0].fields.length).toEqual(1);
           expect(cfg.sourceDocs[0].fields[0].path).toEqual('/<>');
           expect(cfg.targetDocs[0].fields[0].path).toEqual('/id');
@@ -128,10 +134,8 @@ describe('InitializationService', () => {
           expect(targetField.field).toBeTruthy();
           expect(cfg.errors.length).toEqual(0, cfg.errors);
           done();
-        }).catch((error) => {
-          fail(error);
-          done();
         });
+        return service.initialize();
       })();
     });
 });
