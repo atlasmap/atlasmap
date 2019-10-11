@@ -1596,7 +1596,7 @@ bootstrap-datepicker@^1.7.1:
   dependencies:
     jquery ">=1.7.1 <4.0.0"
 
-bootstrap-sass@^3.3.7:
+bootstrap-sass@^3.4.0:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/bootstrap-sass/-/bootstrap-sass-3.4.1.tgz#6843c73b1c258a0ac5cb2cc6f6f5285b664a8e9a"
   integrity sha512-p5rxsK/IyEDQm2CwiHxxUi0MZZtvVFbhWmyMOt4lLkA4bujDA1TGoKT0i1FKIWiugAdP+kK8T5KMDFIKQCLYIA==
@@ -1613,7 +1613,7 @@ bootstrap-slider@^9.9.0:
   resolved "https://registry.yarnpkg.com/bootstrap-slider/-/bootstrap-slider-9.10.0.tgz#1103d6bc00cfbfa8cfc9a2599ab518c55643da3f"
   integrity sha1-EQPWvADPv6jPyaJZmrUYxVZD2j8=
 
-bootstrap-switch@~3.3.4:
+bootstrap-switch@3.3.4:
   version "3.3.4"
   resolved "https://registry.yarnpkg.com/bootstrap-switch/-/bootstrap-switch-3.3.4.tgz#70e0aeb2a877c0dc766991de108e2170fc29a2ff"
   integrity sha1-cOCusqh3wNx2aZHeEI4hcPwpov8=
@@ -1623,10 +1623,10 @@ bootstrap-touchspin@~3.1.1:
   resolved "https://registry.yarnpkg.com/bootstrap-touchspin/-/bootstrap-touchspin-3.1.1.tgz#9779deac72aaf577e5e762b8512c747c871d9597"
   integrity sha1-l3nerHKq9Xfl52K4USx0fIcdlZc=
 
-bootstrap@3.3.x, bootstrap@^3.3, bootstrap@~3.3.7:
-  version "3.3.7"
-  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-3.3.7.tgz#5a389394549f23330875a3b150656574f8a9eb71"
-  integrity sha1-WjiTlFSfIzMIdaOxUGVldPip63E=
+bootstrap@^3.3, bootstrap@^3.4.1, bootstrap@~3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-3.4.1.tgz#c3a347d419e289ad11f4033e3c4132b87c081d72"
+  integrity sha512-yN5oZVmRCwe5aKwzRj6736nSmKDX7pLYwsXiCj/EYmo16hODaBiT4En5btW/jhBF/seV+XMx3aYwukYC3A49DA==
 
 bootstrap@^4.1.2:
   version "4.1.3"
@@ -5912,15 +5912,10 @@ jquery-match-height@^0.7.2:
   resolved "https://registry.yarnpkg.com/jquery-match-height/-/jquery-match-height-0.7.2.tgz#f8d9f3ba5314daab109cf07408674be204be5f0e"
   integrity sha1-+NnzulMU2qsQnPB0CGdL4gS+Xw4=
 
-"jquery@>= 2.1.x", jquery@>=1.7, jquery@>=1.7.0, "jquery@>=1.7.1 <4.0.0", jquery@>=1.8, "jquery@^1.8.3 || ^2.0 || ^3.0", jquery@^3.3.0:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
-  integrity sha512-Ubldcmxp5np52/ENotGxlLe6aGMvmF4R8S6tZjsP6Knsaxd/xp3Zrh50cG93lR6nPXyUFwzN3ZSOQI0wRJNdGg==
-
-jquery@~3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
-  integrity sha1-XE2d5lKvbNCncBVKYxu6ErAVx4c=
+jquery@>=1.7, jquery@>=1.7.0, "jquery@>=1.7.1 <4.0.0", jquery@>=1.8, "jquery@^1.8.3 || ^2.0 || ^3.0", jquery@^3.3.0, jquery@^3.4.1, jquery@~3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
+  integrity sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw==
 
 js-base64@^2.1.8:
   version "2.4.9"
@@ -7982,13 +7977,13 @@ patternfly-bootstrap-combobox@^1.1.6, patternfly-bootstrap-combobox@~1.1.7:
   resolved "https://registry.yarnpkg.com/patternfly-bootstrap-combobox/-/patternfly-bootstrap-combobox-1.1.7.tgz#6a5e3ccd1170c21b3c4b4aa168a7413e1ddbb6e1"
   integrity sha1-al48zRFwwhs8S0qhaKdBPh3btuE=
 
-patternfly-bootstrap-treeview@~2.1.0:
-  version "2.1.6"
-  resolved "https://registry.yarnpkg.com/patternfly-bootstrap-treeview/-/patternfly-bootstrap-treeview-2.1.6.tgz#146356e37987c56f9e86bd00299f1e333f262f73"
-  integrity sha512-wgrFmdte1yFelqNkpVXIJQ+ct91/MaIwMB/if7PLDGCqc0Ubrs/6N2P7AZAYEz3hOkarRWhR6PFe3AVmBhHm9A==
+patternfly-bootstrap-treeview@~2.1.10:
+  version "2.1.10"
+  resolved "https://registry.yarnpkg.com/patternfly-bootstrap-treeview/-/patternfly-bootstrap-treeview-2.1.10.tgz#f96043734bb4ecac951783e2745e3f9a8873ffd4"
+  integrity sha512-P9+iFu34CwX+R5Fd7/EWbxTug0q9mDj53PnZIIh5ie54KX2kD0+54lCWtpD9SVylDwDtDv3n3A6gbFVkx7HsuA==
   dependencies:
-    bootstrap "3.3.x"
-    jquery ">= 2.1.x"
+    bootstrap "^3.4.1"
+    jquery "^3.4.1"
 
 patternfly-ng@^4.0.0:
   version "4.5.1"
@@ -8003,21 +7998,21 @@ patternfly-ng@^4.0.0:
     ng2-dragula "^1.5.0"
     ngx-bootstrap "^3.0.0"
 
-patternfly@3.51.2:
-  version "3.51.2"
-  resolved "https://registry.yarnpkg.com/patternfly/-/patternfly-3.51.2.tgz#6a2cf76377495ebea8f1f17329bcf87e07f2f61a"
-  integrity sha1-aiz3Y3dJXr6o8fFzKbz4fgfy9ho=
+patternfly@3.59.4, patternfly@^3.28.0:
+  version "3.59.4"
+  resolved "https://registry.yarnpkg.com/patternfly/-/patternfly-3.59.4.tgz#455c8b73af5088893083467b8cd9918eee25000a"
+  integrity sha512-xkXTmmQFyscfQ/2Vbh8OUFQPPPCgncKb1FMwNwxUXgCjJRqohmkOAR8enMYGNVbFruzrZKxJVOdHnGduLlETDQ==
   dependencies:
-    bootstrap "~3.3.7"
+    bootstrap "~3.4.1"
     font-awesome "^4.7.0"
-    jquery "~3.2.1"
+    jquery "~3.4.1"
   optionalDependencies:
     "@types/c3" "^0.6.0"
     bootstrap-datepicker "^1.7.1"
-    bootstrap-sass "^3.3.7"
+    bootstrap-sass "^3.4.0"
     bootstrap-select "1.12.2"
     bootstrap-slider "^9.9.0"
-    bootstrap-switch "~3.3.4"
+    bootstrap-switch "3.3.4"
     bootstrap-touchspin "~3.1.1"
     c3 "~0.4.11"
     d3 "~3.5.17"
@@ -8033,39 +8028,7 @@ patternfly@3.51.2:
     moment "^2.19.1"
     moment-timezone "^0.4.1"
     patternfly-bootstrap-combobox "~1.1.7"
-    patternfly-bootstrap-treeview "~2.1.0"
-
-patternfly@^3.28.0:
-  version "3.54.8"
-  resolved "https://registry.yarnpkg.com/patternfly/-/patternfly-3.54.8.tgz#fd6c69714dc460575d2534c9f29017a58b442a83"
-  integrity sha512-6pGy2tBZRM7Cnxi3ziLPB4kbYO9mMzT8ZSU8bVZSux2d+j/o08XB50NU2l8djL0sEmsr8s4J06mwB3vTlAuUrg==
-  dependencies:
-    bootstrap "~3.3.7"
-    font-awesome "^4.7.0"
-    jquery "~3.2.1"
-  optionalDependencies:
-    "@types/c3" "^0.6.0"
-    bootstrap-datepicker "^1.7.1"
-    bootstrap-sass "^3.3.7"
-    bootstrap-select "1.12.2"
-    bootstrap-slider "^9.9.0"
-    bootstrap-switch "~3.3.4"
-    bootstrap-touchspin "~3.1.1"
-    c3 "~0.4.11"
-    d3 "~3.5.17"
-    datatables.net "^1.10.15"
-    datatables.net-colreorder "^1.4.1"
-    datatables.net-colreorder-bs "~1.3.2"
-    datatables.net-select "~1.2.0"
-    drmonty-datatables-colvis "~1.1.2"
-    eonasdan-bootstrap-datetimepicker "^4.17.47"
-    font-awesome-sass "^4.7.0"
-    google-code-prettify "~1.0.5"
-    jquery-match-height "^0.7.2"
-    moment "^2.19.1"
-    moment-timezone "^0.4.1"
-    patternfly-bootstrap-combobox "~1.1.7"
-    patternfly-bootstrap-treeview "~2.1.0"
+    patternfly-bootstrap-treeview "~2.1.10"
 
 pause-stream@0.0.11:
   version "0.0.11"
