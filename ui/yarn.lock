@@ -10491,10 +10491,10 @@ ts-simple-ast@12.4.0:
     tslib "^1.9.0"
     typescript "2.9.1"
 
-tsickle@0.33.1:
-  version "0.33.1"
-  resolved "https://registry.yarnpkg.com/tsickle/-/tsickle-0.33.1.tgz#eee4ebabeda3bcd8afc32cee34c822cbe3e839ec"
-  integrity sha512-SpW2G3PvDGs4a5sMXPlWnCWHWRviWjSlI3U0734e3fU3U39VAE0NPr8M3W1cuL/OU/YXheYipGeEwtIJ5k0NHQ==
+tsickle@0.34.2:
+  version "0.34.2"
+  resolved "https://registry.yarnpkg.com/tsickle/-/tsickle-0.34.2.tgz#cc06c5de19c9e639d7a7fd69c4c57253e52fa858"
+  integrity sha512-dQnEfBdVb9AUFr/27zC2C1fs1FVPUek+GoCvTS34ZbgEwV/RwS8dGZPiGx6bV+nlDlpIgTwLJHuHhj7kPdbDsg==
   dependencies:
     minimist "^1.2.0"
     mkdirp "^0.5.1"
