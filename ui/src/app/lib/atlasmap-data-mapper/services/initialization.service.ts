@@ -160,7 +160,6 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
 
   async initialize(): Promise<boolean> {
     return new Promise<boolean>(async(resolve, reject) => {
-      this.cfg.preloadedFieldActionMetadata = null;
       this.cfg.errorService.clearMappingErrors();
       this.cfg.errorService.clearValidationErrors();
       this.cfg.fieldActionService.isInitialized = false;
@@ -212,10 +211,6 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
             }
             reject(error);
           });
-      }
-
-      if (this.cfg.preloadedMappingJson) {
-        MappingSerializer.deserializeMappingServiceJSON(JSON.parse(this.cfg.preloadedMappingJson), this.cfg);
       }
 
       // Fetch adm-catalog-files.gz if it exists.
@@ -518,6 +513,9 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
     }
 
     if ((documentCount === finishedDocCount) && this.cfg.fieldActionService.isInitialized) {
+      if (this.cfg.preloadedMappingJson) {
+        MappingSerializer.deserializeMappingServiceJSON(JSON.parse(this.cfg.preloadedMappingJson), this.cfg);
+      }
       if (this.cfg.mappings) {
         LookupTableUtil.updateLookupTables(this.cfg.mappings);
         MappingUtil.updateDocumentNamespacesFromMappings(this.cfg);
