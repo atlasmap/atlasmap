@@ -49,7 +49,7 @@
     <javax.ws.rs.version>2.1</javax.ws.rs.version>
     <!-- Does this fix the NPE problem ?? <jetty-maven-plugin.version>9.4.2.v20170220</jetty-maven-plugin.version> -->
     <jetty-maven-plugin.version>9.4.5.v20170502</jetty-maven-plugin.version>
-    <jsonschema2pojo-maven-plugin.version>0.4.37</jsonschema2pojo-maven-plugin.version>
+    <jsonschema2pojo-maven-plugin.version>1.0.1</jsonschema2pojo-maven-plugin.version>
     <junit.version>4.12</junit.version>
     <karaf.version>4.1.7</karaf.version>
     <keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
