@@ -644,8 +644,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="534"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/initialization.service.ts:534</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="535"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/initialization.service.ts:535</a></div>
                 </td>
             </tr>
 
@@ -1154,8 +1154,8 @@ the DM runtime catalog is presented to update the canvas.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="543"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/initialization.service.ts:543</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="544"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/initialization.service.ts:544</a></div>
                 </td>
             </tr>
 
@@ -1979,6 +1979,7 @@ isSource&#x3D;${docdef.initModel.isSource}, inspection&#x3D;${docdef.initModel.i
     if ((documentCount &#x3D;&#x3D;&#x3D; finishedDocCount) &amp;&amp; this.cfg.fieldActionService.isInitialized) {
       if (this.cfg.preloadedMappingJson) {
         MappingSerializer.deserializeMappingServiceJSON(JSON.parse(this.cfg.preloadedMappingJson), this.cfg);
+        this.cfg.preloadedMappingJson &#x3D; null;
       }
       if (this.cfg.mappings) {
         LookupTableUtil.updateLookupTables(this.cfg.mappings);
