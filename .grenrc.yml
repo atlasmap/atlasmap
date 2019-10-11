@@ -9,7 +9,7 @@
     "Misc": ["cat/build", "cat/process", "cat/techdebt", "cat/techdoc"]
   }
   ignore-issues-with: [
-    "wontfix", "status/stale"
+    "wontfix", "status/stale", "dependencies"
   ]
   "template": {
         "issue": "- [{{text}}]({{url}}) {{name}}"
