@@ -35,7 +35,7 @@ describe('DocumentManagementService', () => {
       docDef.type = DocumentType.JAVA;
       docDef.inspectionResult = jasmine.getFixtures().read('atlasmap-inspection-twitter4j.Status.json');
       service.fetchDocument(docDef, null).subscribe(answer => {
-        expect(answer.fields.length).toBe(28);
+        expect(answer.fields.length).toBe(29);
         const text = answer.getField('/text');
         expect(text).toBeTruthy();
         expect(text.name).toBe('text');
@@ -46,7 +46,7 @@ describe('DocumentManagementService', () => {
         expect(user.name).toBe('user');
         expect(user.type).toBe('COMPLEX');
         expect(user.classIdentifier).toBe('twitter4j.User');
-        expect(user.children.length).toBe(52);
+        expect(user.children.length).toBe(57);
         const screenName = user.children.filter(child => child.name === 'screenName');
         expect(screenName.length).toBe(1);
         expect(screenName[0].name).toBe('screenName');
