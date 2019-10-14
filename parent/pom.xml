@@ -46,7 +46,7 @@
     <jackson.databind.version>2.8.11.3</jackson.databind.version>
     <jackson.version.range>[2.6,3)</jackson.version.range>
     <jacoco-maven-plugin.version>0.8.4</jacoco-maven-plugin.version>
-    <javax.ws.rs.version>2.1</javax.ws.rs.version>
+    <javax.ws.rs.version>2.1.1</javax.ws.rs.version>
     <!-- Does this fix the NPE problem ?? <jetty-maven-plugin.version>9.4.2.v20170220</jetty-maven-plugin.version> -->
     <jetty-maven-plugin.version>9.4.5.v20170502</jetty-maven-plugin.version>
     <jsonschema2pojo-maven-plugin.version>1.0.1</jsonschema2pojo-maven-plugin.version>
