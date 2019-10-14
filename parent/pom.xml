@@ -83,7 +83,7 @@
     <woodstox.version>4.4.1</woodstox.version>
     <xalan-bundle-version>2.7.2_3</xalan-bundle-version>
     <xsom.version>20140925</xsom.version>
-    <xmlunit.version>2.6.2</xmlunit.version>
+    <xmlunit.version>2.6.3</xmlunit.version>
   </properties>
 
   <repositories>
