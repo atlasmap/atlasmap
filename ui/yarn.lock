@@ -2184,16 +2184,7 @@ chalk@^1.1.1, chalk@^1.1.3:
     strip-ansi "^3.0.0"
     supports-color "^2.0.0"
 
-chalk@^2.0.1, chalk@^2.3.0, chalk@^2.3.1, chalk@^2.4.0, chalk@^2.4.1:
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.1.tgz#18c49ab16a037b6eb0152cc83e3471338215b66e"
-  integrity sha512-ObN6h1v2fTJSmUXoS3nMQ92LbDK9be4TV+6G+omQlGJFdcUX5heKi1LZ1YnRMIgwTLEj3E24bT6tYni50rlCfQ==
-  dependencies:
-    ansi-styles "^3.2.1"
-    escape-string-regexp "^1.0.5"
-    supports-color "^5.3.0"
-
-chalk@^2.4.2:
+chalk@^2.0.1, chalk@^2.3.0, chalk@^2.3.1, chalk@^2.4.0, chalk@^2.4.1, chalk@^2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.2.tgz#cd42541677a54333cf541a49108c1432b44c9424"
   integrity sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==
@@ -9080,14 +9071,15 @@ rx@^2.2.27:
   integrity sha1-Ia3H2A8CACr1Da6X/Z2/JIdV9WY=
 
 rxjs-tslint@^0.1.5:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/rxjs-tslint/-/rxjs-tslint-0.1.5.tgz#9cddba80633e155fb47f7f0a25a6e33971f7dbf9"
-  integrity sha512-odvEAx6VoZSJs5o9gWZ7SxgTuS8ldq0mr4qnprbr6flNtIt4DtNJSYJpBK0WEy0o+f1oe92XVHrmgco1e7Cpdw==
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/rxjs-tslint/-/rxjs-tslint-0.1.7.tgz#5ed841d1837cc0dc2187e5b57a2d45aa2af337e4"
+  integrity sha512-NnOfqutNfdT7VQnQm32JLYh2gDZjc0gdWZFtrxf/czNGkLKJ1nOO6jbKAFI09W0f9lCtv6P2ozxjbQH8TSPPFQ==
   dependencies:
     chalk "^2.4.0"
     optimist "^0.6.1"
     tslint "^5.9.1"
     tsutils "^2.25.0"
+    typescript ">=2.8.3"
 
 rxjs@6.3.3, rxjs@^6.0.0:
   version "6.3.3"
@@ -10536,6 +10528,11 @@ typescript@3.1.3, "typescript@>=3.1.1 <3.2":
   version "2.9.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.9.2.tgz#1cbf61d05d6b96269244eb6a3bce4bd914e0f00c"
   integrity sha512-Gr4p6nFNaoufRIY4NMdpQRNmgxVIGMs4Fcu/ujdYk3nAZqk7supzBE9idmvfZIlH/Cuj//dvi+019qEue9lV0w==
+
+typescript@>=2.8.3:
+  version "3.6.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.4.tgz#b18752bb3792bc1a0281335f7f6ebf1bbfc5b91d"
+  integrity sha512-unoCll1+l+YK4i4F8f22TaNVPRHcD9PA3yCuZ8g5e0qGqlVlJ/8FSateOLLSagn+Yg5+ZwuPkL8LFUc0Jcvksg==
 
 uglify-es@^3.3.4:
   version "3.3.9"
