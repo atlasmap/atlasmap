@@ -64,7 +64,7 @@
     "@angular/platform-browser-dynamic": "7.0.1",
     "@angular/router": "7.0.1",
     "@compodoc/compodoc": "^1.1.10",
-    "@types/jasmine": "^2.8.8",
+    "@types/jasmine": "^3.4.4",
     "@types/jasmine-jquery": "^1.5.32",
     "@types/jasminewd2": "^2.0.3",
     "@types/node": "^10.10.2",
