@@ -269,7 +269,7 @@ describe('MappingSerializer', () => {
         expect(json.inputFieldGroup.field.length).toEqual(1);
         expect(json.inputFieldGroup.field[0].actions).toBeFalsy();
         expect(json.inputFieldGroup.actions.length).toEqual(1);
-        expect(Object.keys(json.inputFieldGroup.actions[0])[0]).toEqual('Concatenate');
+        expect(json.inputFieldGroup.actions[0]['@type']).toEqual('Concatenate');
         const f2 = new Field();
         f2.path = '/User/Name';
         f2.docDef = f.docDef;
@@ -279,7 +279,7 @@ describe('MappingSerializer', () => {
         expect(json2.inputFieldGroup.field.length).toEqual(2);
         expect(json2.inputFieldGroup.field[0].actions).toBeFalsy();
         expect(json2.inputFieldGroup.actions.length).toEqual(1);
-        expect(Object.keys(json2.inputFieldGroup.actions[0])[0]).toEqual('Concatenate');
+        expect(json2.inputFieldGroup.actions[0]['@type']).toEqual('Concatenate');
         done();
       }).catch((error) => {
         fail(error);
@@ -301,7 +301,7 @@ describe('MappingSerializer', () => {
           mapping.addField(f, true);
           const json = MappingSerializer.serializeFieldMapping(cfg, mapping, 'm1', true);
           expect(json.inputField[0].actions.length).toEqual(1);
-          expect(Object.keys(json.inputField[0].actions[0])[0]).toEqual('Split');
+          expect(json.inputField[0].actions[0]['@type']).toEqual('Split');
           done();
       }).catch((error) => {
         fail(error);
@@ -324,8 +324,8 @@ describe('MappingSerializer', () => {
         mapping.addField(f, true);
         const json = MappingSerializer.serializeFieldMapping(cfg, mapping, 'm1', true);
         expect(json.inputField[0].actions.length).toEqual(1);
-        expect(Object.keys(json.inputField[0].actions[0])[0]).toEqual('Expression');
-        expect(json.inputField[0].actions[0].Expression.expression).toEqual('{0}');
+        expect(json.inputField[0].actions[0]['@type']).toEqual('Expression');
+        expect(json.inputField[0].actions[0].expression).toEqual('{0}');
         const f2 = new Field();
         f2.path = '/User/Name';
         f2.docDef = f.docDef;
@@ -338,8 +338,8 @@ describe('MappingSerializer', () => {
         expect(json2.inputFieldGroup.field.length).toEqual(2);
         expect(json2.inputFieldGroup.field[0].actions).toBeFalsy();
         expect(json2.inputFieldGroup.actions.length).toEqual(1);
-        expect(Object.keys(json2.inputFieldGroup.actions[0])[0]).toEqual('Expression');
-        expect(json2.inputFieldGroup.actions[0].Expression.expression).toEqual('{0} + {1}');
+        expect(json2.inputFieldGroup.actions[0]['@type']).toEqual('Expression');
+        expect(json2.inputFieldGroup.actions[0].expression).toEqual('{0} + {1}');
         done();
       }).catch((error) => {
         fail(error);
