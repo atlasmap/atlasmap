@@ -14,24 +14,41 @@
     limitations under the License.
 */
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 
 import { ConfigModel } from '../../models/config.model';
 import { Field } from '../../models/field.model';
 import { MappingModel, MappedField } from '../../models/mapping.model';
-import { DocumentDefinition } from '../../models/document-definition.model';
+import { ErrorInfo, ErrorScope, ErrorType } from '../../models/error.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'mapping-list',
   templateUrl: './mapping-list.component.html',
 })
 
-export class MappingListComponent {
+export class MappingListComponent implements OnInit, OnDestroy {
   @Input() cfg: ConfigModel;
 
   searchMode = false;
-  private searchFilter = '';
+  searchFilter = '';
+  validationErrors = new Map<MappingModel, ErrorInfo[]>();
   private searchResults: MappingModel[] = [];
+  private errorSubscription: Subscription;
+
+  ngOnInit() {
+    this.cfg.mappingService.notifyMappingUpdated();
+    this.storeErrors(this.cfg.errorService.getErrors());
+    this.errorSubscription = this.cfg.errorService.subscribe(errors => {
+      this.storeErrors(errors);
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.errorSubscription) {
+      this.errorSubscription.unsubscribe();
+    }
+  }
 
   getItemsCSSClass(): string {
     return 'items mappings' + (this.searchMode ? ' searchShown' : '');
@@ -125,4 +142,16 @@ export class MappingListComponent {
     }
   }
 
+  private storeErrors(errors: ErrorInfo[]) {
+    this.validationErrors = new Map<MappingModel, ErrorInfo[]>();
+    errors.forEach(e => {
+      if (e.scope !== ErrorScope.MAPPING || e.type !== ErrorType.VALIDATION || !e.mapping) {
+        return;
+      }
+      if (!this.validationErrors.has(e.mapping)) {
+        this.validationErrors.set(e.mapping, []);
+      }
+      this.validationErrors.get(e.mapping).push(e);
+    });
+  }
 }

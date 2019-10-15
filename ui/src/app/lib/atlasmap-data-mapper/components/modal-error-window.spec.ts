@@ -39,7 +39,6 @@ describe('ModalErrorWindowComponent', () => {
     comp = fixture.componentInstance;
     comp.cfg = new ConfigModel();
     comp.cfg.errorService = new ErrorHandlerService();
-    comp.cfg.errorService.cfg = comp.cfg;
     fixture.detectChanges();
   });
 });

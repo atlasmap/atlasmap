@@ -23,7 +23,7 @@ import { DocumentDefinition, NamespaceModel } from '../models/document-definitio
 import { LookupTable, LookupTableEntry } from '../models/lookup-table.model';
 import { DocumentType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
-import { ErrorInfo, ErrorLevel } from '../models/error.model';
+import { ErrorInfo, ErrorLevel, ErrorType, ErrorScope } from '../models/error.model';
 import { ExpressionModel } from '../models/expression.model';
 import { MappingUtil } from './mapping-util';
 
@@ -37,7 +37,9 @@ export class MappingSerializer {
         jsonMappings = jsonMappings.concat(MappingSerializer.serializeFieldMapping(cfg, mapping, mapping.uuid));
       } catch (e) {
         const input: any = { 'mapping': mapping, 'mapping def': mappingDefinition };
-        cfg.errorService.error('Caught exception while attempting to serialize mapping, skipping. ', { 'input': input, 'error': e });
+        cfg.errorService.addError(new ErrorInfo({message:
+          'Caught exception while attempting to serialize mapping, skipping. ',
+          level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: { 'input': input, 'error': e }}));
       }
     }
 
@@ -206,22 +208,15 @@ export class MappingSerializer {
     return mapping;
   }
 
-  static deserializeAudits(audits: any): ErrorInfo[] {
+  static deserializeAudits(audits: any, errorType: ErrorType): ErrorInfo[] {
     const errors: ErrorInfo[] = [];
     if (!audits) {
       return errors;
     }
     for (const audit of audits.audit) {
-      let errorLevel: ErrorLevel;
-      if (audit.status === 'ERROR') {
-        errorLevel = ErrorLevel.ERROR;
-      } else if (audit.status === 'WARN') {
-        errorLevel = ErrorLevel.WARN;
-      }
-      if (errorLevel) {
-        const msg = audit.status + '[' + audit.path + ']: ' + audit.message;
-        errors.push(new ErrorInfo(msg, errorLevel, audit.value));
-      }
+      const msg = audit.status + '[' + audit.path + ']: ' + audit.message;
+      errors.push(new ErrorInfo({message: msg, level: audit.status, scope: ErrorScope.MAPPING,
+        type: errorType, object: audit.audit.value}));
     }
     return errors;
   }
@@ -354,7 +349,8 @@ export class MappingSerializer {
       actionArguments[argValue.name] = argValue.value;
       const argumentConfig: FieldActionArgument = action.definition.getArgumentForName(argValue.name);
       if (argumentConfig == null) {
-        cfg.errorService.error('Cannot find action argument with name: ' + argValue.name, action);
+        cfg.errorService.addError(new ErrorInfo({message: `Cannot find action argument with name: ${argValue.name}`,
+          level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: action}));
          continue;
       }
       if (argumentConfig.type === 'INTEGER') {
@@ -663,7 +659,9 @@ export class MappingSerializer {
       mappedField.parsedData.parsedPath = field.path;
     } else {
       if (field.docId == null) {
-        cfg.errorService.error('Parsed mapping field does not have document id, dropping.', field);
+        cfg.errorService.addError(new ErrorInfo({
+          message: 'Parsed mapping field does not have document id, dropping.',
+          level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: field}));
         return null;
       }
       if (!ignoreValue) {
@@ -677,8 +675,10 @@ export class MappingSerializer {
         mappedField.parsedData.userCreated = true;
       }
       if (mappedField.parsedData.parsedDocURI == null) {
-        cfg.errorService.error('Could not find document URI for parsed mapped field.',
-          { 'fieldJSON': field, 'knownDocs': docRefs });
+        cfg.errorService.addError(new ErrorInfo({
+          message: 'Could not find document URI for parsed mapped field.',
+          level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL,
+          object: { 'fieldJSON': field, 'knownDocs': docRefs }}));
         return null;
       }
       if (field.actions) {

@@ -21,6 +21,7 @@ import { ModalWindowComponent } from './modal-window.component';
 import { TemplateEditComponent } from './template-edit.component';
 import { ExpressionComponent } from './expression.component';
 import { TransitionMode } from '../models/transition.model';
+import { ErrorScope, ErrorType, ErrorInfo, ErrorLevel } from '../models/error.model';
 
 @Component({
   selector: 'toolbar',
@@ -75,9 +76,13 @@ export class ToolbarComponent implements OnInit {
           });
         }).catch((error: any) => {
           if (error.status === 0) {
-            this.cfg.errorService.error('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+            this.cfg.errorService.addError(new ErrorInfo({
+              message: 'Fatal network error: Could not connect to AtlasMap design runtime service.',
+              level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
           } else {
-            this.cfg.errorService.error('Could not reset document definitions before import.', error);
+            this.cfg.errorService.addError(new ErrorInfo({
+              message: 'Could not reset document definitions before import.',
+              level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
           }
         });
     } else if (userFileSuffix === 'JAR') {
@@ -219,9 +224,12 @@ export class ToolbarComponent implements OnInit {
         await this.cfg.initializationService.initialize();
       }).catch((error: any) => {
         if (error.status === 0) {
-          this.cfg.errorService.error('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+          this.cfg.errorService.addError(new ErrorInfo({
+            message: 'Fatal network error: Could not connect to AtlasMap design runtime service.',
+            level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
         } else {
-          this.cfg.errorService.error('Could not reset mapping definitions.', error);
+          this.cfg.errorService.addError(new ErrorInfo({message: 'Could not reset mapping definitions.',
+            level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
         }
       });
     };

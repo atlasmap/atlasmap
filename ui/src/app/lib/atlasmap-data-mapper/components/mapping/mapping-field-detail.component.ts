@@ -19,6 +19,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ConfigModel } from '../../models/config.model';
 import { MappingModel, MappedField } from '../../models/mapping.model';
 import { FieldAction } from '../../models/field-action.model';
+import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from '../../models/error.model';
 
 @Component({
   selector: 'mapping-field-detail',
@@ -50,7 +51,8 @@ export class MappingFieldDetailComponent implements OnInit {
   addTransformation(): void {
     const actionDefinition = this.cfg.fieldActionService.getActionsAppliesToField(this.mapping, this.isSource)[0];
     if (actionDefinition == null) {
-      this.cfg.errorService.info('The selected field has no applicable transformation actions.', null);
+      this.cfg.errorService.addError(new ErrorInfo({message: 'The selected field has no applicable transformation actions.',
+        level: ErrorLevel.INFO, scope: ErrorScope.MAPPING, type: ErrorType.USER}));
       return;
     }
     const action: FieldAction = new FieldAction();

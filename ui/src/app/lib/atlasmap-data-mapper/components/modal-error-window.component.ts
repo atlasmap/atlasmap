@@ -15,11 +15,10 @@
 */
 
 import {
-  Component, Input, ViewChildren, QueryList, OnDestroy, OnInit,
-  ViewContainerRef, Type, ComponentFactoryResolver, AfterViewInit, ChangeDetectorRef, ElementRef
+  Component, ViewChildren, QueryList, OnInit,
+  ViewContainerRef, ChangeDetectorRef, ElementRef
 } from '@angular/core';
 import { ConfigModel } from '../models/config.model';
-import { Subscription } from 'rxjs';
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
 
 export interface ModalErrorWindowValidator {
@@ -33,30 +32,29 @@ export interface ModalErrorWindowValidator {
 })
 
 export class ModalErrorWindowComponent implements OnInit {
-  @Input() headerText = '';
-  @Input() nestedComponentType: Type<any>;
-  @Input() nestedComponentInitializedCallback: Function;
-  @Input() okButtonHandler: Function;
-  @Input() cancelButtonHandler: Function;
-  @Input() modalErrorWindow: ModalErrorWindowComponent;
-
   cfg: ConfigModel = null;
   message: string = null;
   nestedComponent: ModalErrorWindowValidator;
   confirmButtonDisabled = false;
+  headerText = 'Errors and Warnings - Current Active Mapping';
   buttonText = 'Dismiss All';
   visible = false;
   fade = false;
+  errors: ErrorInfo[];
 
   @ViewChildren('dyn_target', { read: ViewContainerRef }) myTarget: QueryList<ViewContainerRef>;
 
-  private componentLoaded = false;
-  private myTargetChangesSubscription: Subscription;
-
-  constructor(private componentFactoryResolver: ComponentFactoryResolver, public detector: ChangeDetectorRef) { }
+  constructor(public detector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.cfg = ConfigModel.getConfig();
+  }
+
+  setErrors(errors: ErrorInfo[]) {
+    this.errors = errors;
+    if (!this.errors || this.errors.length === 0) {
+      this.close();
+    }
   }
 
   close(): void {
@@ -67,11 +65,10 @@ export class ModalErrorWindowComponent implements OnInit {
   }
 
   somethingToShow(): boolean {
-    return (this.cfg.errors.length > 0);
+    return (this.errors && this.errors.length > 0);
   }
 
   show(): void {
-    this.headerText = 'Errors and Warnings - Current Active Mapping';
     this.message = '';
     this.visible = true;
     setTimeout(() => {
@@ -81,46 +78,18 @@ export class ModalErrorWindowComponent implements OnInit {
 
   reset(): void {
     this.message = 'Hello!';
-    this.headerText = '';
-    this.componentLoaded = false;
-    this.okButtonHandler = null;
-    this.cancelButtonHandler = null;
   }
 
   getErrors(): ErrorInfo[] {
-    return this.cfg.errors.filter(e => e.level >= ErrorLevel.ERROR);
+    return this.errors.filter(e => e.level === ErrorLevel.ERROR);
   }
 
   getWarnings(): ErrorInfo[] {
-    return this.cfg.errors.filter(e => e.level === ErrorLevel.WARN);
-  }
-
-  handleAlertClick(event: any) {
-    const errorIdentifier = event.target.attributes.getNamedItem('errorIdentifier');
-    if (errorIdentifier && errorIdentifier.value) {
-      if (this.cfg.mappings.activeMapping) {
-        this.cfg.mappings.activeMapping.removeValidationError(errorIdentifier.value);
-      }
-      this.cfg.errorService.removeError(errorIdentifier.value);
-    }
-    if (this.getErrors().length === 0 && this.getWarnings().length === 0) {
-      this.close();
-    }
+    return this.errors.filter(e => e.level === ErrorLevel.WARN);
   }
 
   dismissAll(): void {
-    for (const e of this.getErrors()) {
-      if (this.cfg.mappings && this.cfg.mappings.activeMapping) {
-        this.cfg.mappings.activeMapping.removeValidationError(e.identifier);
-      }
-      this.cfg.errorService.removeError(e.identifier);
-    }
-    for (const w of this.getWarnings()) {
-      if (this.cfg.mappings && this.cfg.mappings.activeMapping) {
-        this.cfg.mappings.activeMapping.removeValidationError(w.identifier);
-      }
-      this.cfg.errorService.removeError(w.identifier);
-    }
+    this.cfg.errorService.clearAllErrors();
     this.close();
   }
 }

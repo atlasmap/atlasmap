@@ -35,19 +35,21 @@
             <div class="sourceFieldNames fieldNames">
               <mapping-list-field *ngFor="let mappedField of getMappedFields(mapping, true)" [mappedField]="mappedField" [isSource]="true"
                 [isActive]="isActiveMapping(mapping)" [cfg]="cfg"></mapping-list-field>
-              <div class="clear"></div>
+              <span *ngIf="getMappedFields(mapping, true).length === 0">&nbsp;</span>
+              <span class="clear"></span>
             </div>
             <div class="targetFieldNames fieldNames">
               <mapping-list-field *ngFor="let mappedField of getMappedFields(mapping, false)" [mappedField]="mappedField" [isSource]="false"
                 [isActive]="isActiveMapping(mapping)" [cfg]="cfg"></mapping-list-field>
-              <div class="clear"></div>
+              <span *ngIf="getMappedFields(mapping, false).length === 0">&nbsp;</span>
+              <span class="clear"></span>
             </div>
             <div class="transition">
               <label>{{ mapping.transition.getPrettyName() }}</label>
-              <div class="clear"></div>
+              <span class="clear"></span>
             </div>
             <div class="error">
-              <span class="pficon" [ngClass]="mapping.validationErrors | toErrorIconClass" *ngIf="mapping.validationErrors.length"></span>
+              <span class="pficon" [ngClass]="validationErrors.get(mapping) | toErrorIconClass" *ngIf="validationErrors.get(mapping)"></span>
             </div>
             <div class="clear"></div>
           </div>

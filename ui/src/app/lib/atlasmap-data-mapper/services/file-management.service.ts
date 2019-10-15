@@ -24,6 +24,7 @@ import { DataMapperUtil } from '../common/data-mapper-util';
 import { map, timeout } from 'rxjs/operators';
 import { DocumentManagementService } from './document-management.service';
 import { InspectionType } from '../common/config.types';
+import { ErrorScope, ErrorType, ErrorInfo, ErrorLevel } from '../models/error.model';
 
 /**
  * Handles file manipulation stored in the backend, including import/export via UI.
@@ -294,7 +295,8 @@ export class FileManagementService {
                 if (value !== null) {
                   fileContent = new Blob([value], {type: 'application/octet-stream'});
                   if (!await DataMapperUtil.writeFile(fileContent, mappingsFileName)) {
-                    this.cfg.errorService.mappingError('Unable to save the current data mappings.', null);
+                    this.cfg.errorService.addError(new ErrorInfo({message: 'Unable to save the current data mappings.',
+                      level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL}));
                   }
                 }
                 resolve(true);
@@ -303,20 +305,24 @@ export class FileManagementService {
             resolve(true);
           }).catch((error: any) => {
             if (error.status === 0) {
-              this.cfg.errorService.mappingError(
-                'Fatal network error: Unable to connect to the AtlasMap design runtime service.', error);
+              this.cfg.errorService.addError(new ErrorInfo({
+                message: 'Fatal network error: Unable to connect to the AtlasMap design runtime service.',
+                level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
             } else {
-              this.cfg.errorService.mappingError(
-                'Unable to update the catalog mappings file to the AtlasMap design runtime service.  ' +
-                  error.status + ' ' + error.statusText, error);
+              this.cfg.errorService.addError(new ErrorInfo({
+                message: `Unable to update the catalog mappings file to the AtlasMap design runtime service.
+                  ${error.status} ${error.statusText}`,
+                level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
             }
           });
         } catch (error1) {
-          this.cfg.errorService.mappingError('Unable to compress the current data mappings.\n', error1);
+          this.cfg.errorService.addError(new ErrorInfo({message: 'Unable to compress the current data mappings.',
+            level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error1}));
           return;
         }
       } catch (error) {
-        this.cfg.errorService.mappingError('Unable to export the current data mappings.', error);
+        this.cfg.errorService.addError(new ErrorInfo({message: 'Unable to export the current data mappings.',
+          level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
         return;
       }
     });
@@ -340,7 +346,8 @@ export class FileManagementService {
       try {
         fileBin = await DataMapperUtil.readBinaryFile(mappingsFileName, reader);
       } catch (error) {
-        this.cfg.errorService.mappingError('Unable to import the specified catalog file \'' + mappingsFileName + '\'', error);
+        this.cfg.errorService.addError(new ErrorInfo({message: `Unable to import the specified catalog file \'${mappingsFileName}\'`,
+          level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
         return;
       }
       const fileContent: Blob = new Blob([fileBin], {type: 'application/octet-stream'});
@@ -354,17 +361,19 @@ export class FileManagementService {
           this.cfg.clearDocs();
           await this.cfg.initializationService.initialize();
         } catch (error) {
-          this.cfg.errorService.mappingError('Unable to import the catalog file: \n' + mappingsFileName +
-            '\n' + error.message, error);
+          this.cfg.errorService.addError(new ErrorInfo({message: `Unable to import the catalog file: ${mappingsFileName} ${error.message}`,
+            level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
           return;
         }
       }).catch((error: any) => {
         if (error.status === 0) {
-          this.cfg.errorService.mappingError(
-            'Fatal network error: Unable to connect to the AtlasMap design runtime service.', error);
+          this.cfg.errorService.addError(new ErrorInfo({
+            message: 'Fatal network error: Unable to connect to the AtlasMap design runtime service.',
+            level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
         } else {
-          this.cfg.errorService.mappingError(
-            'Unable to send the ADM file to the runtime service.  ' + error.status + ' ' + error.statusText, error);
+          this.cfg.errorService.addError(new ErrorInfo({
+            message: `Unable to send the ADM file to the runtime service.  ${error.status} ${error.statusText}`,
+            level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
         }
       });
       resolve(true);
@@ -385,11 +394,13 @@ export class FileManagementService {
         resolve(true);
       }).catch((error: any) => {
         if (error.status === 0) {
-          this.cfg.errorService.mappingError(
-            'Fatal network error: Unable to connect to the AtlasMap design runtime service.', error);
+          this.cfg.errorService.addError(new ErrorInfo({
+            message: 'Fatal network error: Unable to connect to the AtlasMap design runtime service.',
+            level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
         } else {
-          this.cfg.errorService.mappingError(
-            'Unable to access current mapping definitions: ' + error.status + ' ' + error.statusText, error);
+          this.cfg.errorService.addError(new ErrorInfo({
+            message: `Unable to access current mapping definitions: ${error.status} ${error.statusText}`,
+            level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
         }
         resolve(false);
       });
@@ -439,7 +450,8 @@ export class FileManagementService {
   }
 
   private handleError(message: string, error: any): void {
-    this.cfg.errorService.mappingError(message, error);
+    this.cfg.errorService.addError(new ErrorInfo({message: message, level: ErrorLevel.ERROR,
+      scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
     this.cfg.initCfg.initialized = true;
   }
 

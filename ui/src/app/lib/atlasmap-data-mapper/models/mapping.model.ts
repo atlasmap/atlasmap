@@ -16,7 +16,6 @@
 import { ConfigModel } from '../models/config.model';
 import { Field } from './field.model';
 import { TransitionModel } from './transition.model';
-import { ErrorInfo, ErrorLevel } from '../models/error.model';
 
 import { DataMapperUtil } from '../common/data-mapper-util';
 import { FieldAction } from './field-action.model';
@@ -85,55 +84,9 @@ export class MappingModel {
   targetFields: MappedField[] = [];
   transition: TransitionModel = new TransitionModel();
 
-  validationErrors: ErrorInfo[] = []; // must be immutable
-  previewErrors: ErrorInfo[] = []; // must be immutable
-
   constructor() {
     this.uuid = 'mapping.' + Math.floor((Math.random() * 1000000) + 1).toString();
     this.cfg = ConfigModel.getConfig();
-    Object.freeze(this.validationErrors);
-  }
-
-  addValidationError(message: string) {
-    const e = new ErrorInfo(message, ErrorLevel.VALIDATION_ERROR);
-    this.validationErrors = [...this.validationErrors, e];
-    Object.freeze(this.validationErrors);
-  }
-
-  clearValidationErrors(): void {
-    this.validationErrors = [];
-    Object.freeze(this.validationErrors);
-  }
-
-  getValidationErrors(): ErrorInfo[] {
-    return this.validationErrors.filter(e => e.level >= ErrorLevel.ERROR);
-  }
-
-  getValidationWarnings(): ErrorInfo[] {
-    return this.validationErrors.filter(e => e.level === ErrorLevel.WARN);
-  }
-
-  removeValidationError(identifier: string) {
-    this.validationErrors = this.validationErrors.filter(e => e.identifier !== identifier);
-    Object.freeze(this.validationErrors);
-  }
-
-  clearPreviewErrors(): void {
-    this.previewErrors = [];
-    Object.freeze(this.previewErrors);
-  }
-
-  getPreviewErrors(): ErrorInfo[] {
-    return this.previewErrors.filter(e => e.level >= ErrorLevel.ERROR);
-  }
-
-  getPreviewWarnings(): ErrorInfo[] {
-    return this.previewErrors.filter(e => e.level === ErrorLevel.WARN);
-  }
-
-  removePreviewError(identifier: string) {
-    this.previewErrors = this.previewErrors.filter(e => e.identifier !== identifier);
-    Object.freeze(this.previewErrors);
   }
 
   getFirstCollectionField(isSource: boolean): Field {

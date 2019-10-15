@@ -26,7 +26,7 @@ import { Field } from '../models/field.model';
 import { MappingModel, MappedField } from '../models/mapping.model';
 import { TransitionMode } from '../models/transition.model';
 import { MappingDefinition } from '../models/mapping-definition.model';
-import { ErrorInfo, ErrorLevel } from '../models/error.model';
+import { ErrorInfo, ErrorLevel, ErrorType, ErrorScope } from '../models/error.model';
 import { FieldAction, Multiplicity } from '../models/field-action.model';
 
 import { MappingSerializer } from '../utils/mapping-serializer';
@@ -239,11 +239,6 @@ export class MappingManagementService {
 
   fieldSelected(field: Field, compoundSelection: boolean, position?: string, offset?: number): void {
 
-    // Start out with a clean slate.
-    this.cfg.errorService.clearMappingErrors();
-    this.cfg.errorService.clearValidationErrors();
-    this.cfg.errorService.clearWarnings();
-
     if (!field.isTerminal()) {
       field.docDef.populateChildren(field);
       field.docDef.updateFromMappings(this.cfg.mappings);
@@ -314,7 +309,9 @@ export class MappingManagementService {
     if (addField) {
       const exclusionReason: string = this.getFieldSelectionExclusionReason(mapping, field);
       if (exclusionReason != null) {
-        this.cfg.errorService.mappingError('The field \'' + field.name + '\' cannot be selected, ' + exclusionReason + '.', null);
+        this.cfg.errorService.addError(new ErrorInfo({
+          message: `The field \'${field.name}\' cannot be selected, ${exclusionReason}.`,
+          level: ErrorLevel.ERROR, mapping: mapping, scope: ErrorScope.MAPPING, type: ErrorType.USER}));
         return;
       }
       mapping.addField(field, false);
@@ -495,19 +492,19 @@ export class MappingManagementService {
           }
         }
         this.mappingPreviewOutputSource.next(answer);
-        const audits = MappingSerializer.deserializeAudits(body.ProcessMappingResponse.audits);
+        const audits = MappingSerializer.deserializeAudits(body.ProcessMappingResponse.audits, ErrorType.PREVIEW);
         if (this.cfg.mappings.activeMapping === inputFieldMapping) {
-          // TODO let error service subscribe mappingPreviewErrorSource instead of doing this
-          this.cfg.mappings.activeMapping.previewErrors = audits;
+          audits.forEach(a => a.mapping = inputFieldMapping);
+          this.cfg.errorService.addError(...audits);
         }
         this.mappingPreviewErrorSource.next(audits);
       }).catch((error: any) => {
         if (this.cfg.mappings && this.cfg.mappings.activeMapping &&
             this.cfg.mappings.activeMapping === inputFieldMapping) {
-          // TODO let error service subscribe mappingPreviewErrorSource instead of doing this
-          this.cfg.mappings.activeMapping.previewErrors = [new ErrorInfo(error, ErrorLevel.ERROR, null)];
+          this.cfg.errorService.addError(new ErrorInfo({message: error, level: ErrorLevel.ERROR,
+            mapping: inputFieldMapping, scope: ErrorScope.MAPPING, type: ErrorType.PREVIEW}));
         }
-        this.mappingPreviewErrorSource.next([new ErrorInfo(error, ErrorLevel.ERROR, null)]);
+        this.mappingPreviewErrorSource.next([new ErrorInfo({message: error, level: ErrorLevel.ERROR})]);
       });
     });
 
@@ -566,21 +563,25 @@ export class MappingManagementService {
 
   toggleExpressionMode() {
     if (!this.cfg.mappings || !this.cfg.mappings.activeMapping || !this.cfg.mappings.activeMapping.transition) {
-      this.cfg.errorService.info('Please select a mapping first.', null);
+      this.cfg.errorService.addError(new ErrorInfo({
+        message: 'Please select a mapping first.', level: ErrorLevel.INFO, scope: ErrorScope.MAPPING, type: ErrorType.USER}));
       return;
     }
     if (this.cfg.mappings.activeMapping.getFirstCollectionField(false)) {
-      this.cfg.errorService.warn(
-        `Cannot establish a conditional mapping expression when referencing a target collection field.`, null);
+      this.cfg.errorService.addError(new ErrorInfo({
+        message: `Cannot establish a conditional mapping expression when referencing a target collection field.`,
+        level: ErrorLevel.WARN, scope: ErrorScope.MAPPING, type: ErrorType.USER, mapping: this.cfg.mappings.activeMapping}));
       return;
     } else if (this.cfg.mappings.activeMapping.getFirstCollectionField(true)) {
-      this.cfg.errorService.warn(
-        `Cannot establish a conditional mapping expression when referencing a source collection field.`, null);
+      this.cfg.errorService.addError(new ErrorInfo({
+        message: `Cannot establish a conditional mapping expression when referencing a source collection field.`,
+        level: ErrorLevel.WARN, scope: ErrorScope.MAPPING, type: ErrorType.USER, mapping: this.cfg.mappings.activeMapping}));
       return;
     } else if (this.cfg.mappings.activeMapping.transition.mode === TransitionMode.ONE_TO_MANY) {
-      this.cfg.errorService.warn(
-        `Cannot establish a conditional mapping expression when multiple target fields are selected.
-        Please select only one target field and try again.`, null);
+      this.cfg.errorService.addError(new ErrorInfo({
+        message: `Cannot establish a conditional mapping expression when multiple target fields are selected.
+        Please select only one target field and try again.`,
+        level: ErrorLevel.WARN, scope: ErrorScope.MAPPING, type: ErrorType.USER, mapping: this.cfg.mappings.activeMapping}));
       return;
     }
 
@@ -594,12 +595,12 @@ export class MappingManagementService {
    */
   private async validateMappings(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      this.cfg.errorService.clearValidationErrors();
       if (this.cfg.initCfg.baseMappingServiceUrl === null || this.cfg.mappings === null) {
         // validation service not configured or required
         resolve(false);
         return;
       }
+      this.cfg.errorService.clearValidationErrors();
       const payload: any = MappingSerializer.serializeMappings(this.cfg);
       const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/validate';
       if (this.cfg.isTraceEnabled()) {
@@ -613,33 +614,29 @@ export class MappingManagementService {
           resolve(false);
           return;
         }
-        const activeMappingErrors: ErrorInfo[] = [];
-        const globalErrors: ErrorInfo[] = [];
+        const errors: ErrorInfo[] = [];
         const mapping = this.cfg.mappings.activeMapping;
 
-        // Only update active mapping and global ones, since validateMappings() is always invoked when mapping is updated.
         // This should be eventually turned into mapping entry level validation.
         // https://github.com/atlasmap/atlasmap-ui/issues/116
         if (body && body.Validations && body.Validations.validation) {
           for (const validation of body.Validations.validation) {
-            let level: ErrorLevel = ErrorLevel.VALIDATION_ERROR;
-            if (validation.status === 'WARN') {
-              level = ErrorLevel.WARN;
-            } else if (validation.status === 'INFO') {
-              level = ErrorLevel.INFO;
+            const level: ErrorLevel = validation.status;
+            let scope: ErrorScope = validation.scope;
+            let validatedMapping: MappingModel;
+            if (!scope || scope !== ErrorScope.MAPPING || !validation.id) {
+              scope = ErrorScope.APPLICATION;
+            } else {
+              scope = ErrorScope.MAPPING;
+              if (this.cfg.mappings && this.cfg.mappings.mappings) {
+                validatedMapping = this.cfg.mappings.mappings.find(m => m.uuid === validation.id);
+              }
             }
-            const errorInfo = new ErrorInfo(validation.message, level);
-            if (!validation.scope || validation.scope !== 'MAPPING' || !validation.id) {
-              globalErrors.push(errorInfo);
-            } else if (mapping && mapping.uuid && validation.id === mapping.uuid) {
-              activeMappingErrors.push(errorInfo);
-            }
+            errors.push(new ErrorInfo({message: validation.message, level: level, scope: scope,
+              mapping: validatedMapping, type: ErrorType.VALIDATION}));
           }
         }
-        this.cfg.validationErrors = globalErrors;
-        if (mapping) {
-          mapping.validationErrors = activeMappingErrors;
-        }
+        this.cfg.errorService.addError(...errors);
         resolve(true);
       }).catch((error: any) => {
         this.cfg.logger.warn('Unable to fetch validation data.');

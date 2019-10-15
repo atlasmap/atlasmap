@@ -14,22 +14,50 @@
     limitations under the License.
 */
 
-export enum ErrorLevel { DEBUG, INFO, WARN, ERROR, VALIDATION_ERROR, MAPPING_ERROR }
+import { MappingModel, MappedField } from './mapping.model';
+
+export enum ErrorLevel {
+  DEBUG = 'DEBUG',
+  INFO = 'INFO',
+  WARN = 'WARN',
+  ERROR = 'ERROR'
+ }
+
+export enum ErrorScope {
+  APPLICATION = 'APPLICATION',
+  MAPPING = 'MAPPING',
+  FIELD = 'FIELD',
+  FORM = 'FORM'
+}
+
+export enum ErrorType {
+  INTERNAL = 'INTERNAL',
+  USER = 'USER',
+  VALIDATION = 'VALIDATION',
+  PREVIEW = 'PREVIEW',
+  FORM = 'FORM'
+}
 
 export class ErrorInfo {
   private static errorIdentifierCounter = 0;
+  private _identifier: string;
 
-  readonly identifier: string;
-  readonly message: string;
-  readonly level: ErrorLevel;
-  readonly error: any;
+  message: string;
+  level: ErrorLevel;
+  scope: ErrorScope;
+  type: ErrorType;
+  mapping: MappingModel;
+  field: MappedField;
+  object: any;
 
-  constructor(message: string, level: ErrorLevel, error?: any) {
-    this.identifier = ErrorInfo.errorIdentifierCounter.toString();
-    this.message = message;
-    this.level = level;
-    this.error = error;
+  constructor(init: Partial<ErrorInfo>) {
+    this._identifier = ErrorInfo.errorIdentifierCounter.toString();
     ErrorInfo.errorIdentifierCounter++;
+    Object.assign(this, init);
+  }
+
+  get identifier() {
+    return this._identifier;
   }
 
 }

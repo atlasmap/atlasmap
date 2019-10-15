@@ -16,66 +16,191 @@
 
 import { Injectable } from '@angular/core';
 
-import { ErrorInfo, ErrorLevel } from '../models/error.model';
+import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from '../models/error.model';
 import { ConfigModel } from '../models/config.model';
+import { Subject, Subscription } from 'rxjs';
+import { MappingModel } from '../models/mapping.model';
 
+/**
+ * ErrorHandlerService handles global errors, mapping validation errors, preview errors,
+ * mapped field level errors as well as instant form validation errors in a modal windows.
+ * Global errors, mapping validation errors, preview errors and mapped field level errors
+ * are stored in a same array at this moment. We might want to split them when we show
+ * them grouped by {@link ErrorType}.
+ * Errors with {@link ErrorScope.MAPPING} and {@link ErrorScope.FIELD} are cleared
+ * everytime active mapping is switched. {@link ErrorScope.FIELD} errors are mostly
+ * instant and cleared more frequently.
+ * Form validation errors are supposed to be instant. Channel should be created by
+ * {@link createFormErrorChannel()} when modal window is initialized, and should be
+ * completed when modal window is closed.
+ */
 @Injectable()
 export class ErrorHandlerService {
-  cfg: ConfigModel = null;
+  private errors: ErrorInfo[] = [];
+  private formErrors: ErrorInfo[] = [];
+  private errorUpdatedSource = new Subject<ErrorInfo[]>();
+  private formErrorUpdatedSource: Subject<ErrorInfo[]>;
 
-  debug(message: string, error: any) { this.addError(message, ErrorLevel.DEBUG, error); }
-  info(message: string, error: any) { this.addError(message, ErrorLevel.INFO, error); }
-  warn(message: string, error: any) { this.addError(message, ErrorLevel.WARN, error); }
-  error(message: string, error: any) { this.addError(message, ErrorLevel.ERROR, error); }
-  validationError(message: string, error: any) { this.addError(message, ErrorLevel.VALIDATION_ERROR, error); }
-  mappingError(message: string, error: any) { this.addError(message, ErrorLevel.MAPPING_ERROR, error); }
+  /**
+   * FIlter an array of {@link ErrorInfo} with specified condition.
+   * @param errors An array of {@link ErrorInfo} to filter
+   * @param mapping {@link MappingModel} to filter {@link ErrorScope.MAPPING} errors
+   * @param level {@link ErrorLevel} to filter with
+   */
+  static filterWith(errors: ErrorInfo[], mapping?: MappingModel, level?: ErrorLevel): ErrorInfo[] {
+    if (!errors || errors.length === 0) {
+      return [];
+    }
+    return errors.filter(e =>
+      (!e.mapping || (mapping && e.mapping === mapping))
+        && (!level || !e.level || e.level === level)
+    );
+  }
 
+  /**
+   * Add one or more {@link ErrorInfo} object(s) into error store.
+   * @param errors one or more {@link ErrorInfo} object(s)
+   */
+  addError(...errors: ErrorInfo[]): void {
+    errors.forEach(error => {
+      if (error.object && error.object.message) {
+        // TODO show error.object in more polished way... maybe with better error console
+        error.message += ('\n' + error.object.message);
+      }
+      const store = ErrorScope.FORM === error.scope ? this.formErrors : this.errors;
+      if (store.find(e => e.message === error.message)) {
+        return;
+      }
+      store.unshift(error);
+    });
+    this.emitUpdatedEvent();
+  }
+
+  /**
+   * Return all errors in the store.
+   * @return An array of {@link ErrorInfo}
+   */
+  getErrors(): ErrorInfo[] {
+    return Object.assign([], this.errors);
+  }
+
+  /**
+   * Remove one {@link ErrorInfo} by specifying ID.
+   * @param identifier Error ID
+   */
+  removeError(identifier: string, scope?: ErrorScope): void {
+    if (scope === ErrorScope.FORM && !this.formErrorUpdatedSource.closed) {
+      this.formErrors = this.excludeByIdentifier(this.formErrors, identifier);
+    } else {
+      this.errors = this.excludeByIdentifier(this.errors, identifier);
+    }
+    this.emitUpdatedEvent();
+  }
+
+  /**
+   * Clear all global/mapping errors as well as form validation erros and its Subject
+   * if it exists.
+   */
   resetAll(): void {
-    this.cfg.errors = [];
-    this.cfg.validationErrors = [];
-  }
-
-  removeError(identifier: string): void {
-    this.cfg.errors = this.cfg.errors.filter(e => e.identifier !== identifier);
-    this.cfg.validationErrors = this.cfg.validationErrors.filter(e => e.identifier !== identifier);
-  }
-
-  clearMappingErrors(): void {
-    for (const e of this.cfg.errors) {
-      if (e.level === ErrorLevel.MAPPING_ERROR) {
-        this.removeError(e.identifier);
-      }
+    this.clearAllErrors();
+    this.formErrors = [];
+    if (this.formErrorUpdatedSource && !this.formErrorUpdatedSource.closed) {
+      this.formErrorUpdatedSource.complete();
     }
   }
 
-  clearValidationErrors(): void {
-    for (const e of this.cfg.errors) {
-      if (e.level === ErrorLevel.VALIDATION_ERROR) {
-        this.removeError(e.identifier);
+  /**
+   * Remova all errors except form validation errors.
+   */
+  clearAllErrors() {
+    this.errors = [];
+    this.emitUpdatedEvent();
+  }
+
+  /**
+   * Remove all preview errors.
+   */
+  clearPreviewErrors(): void {
+    this.errors = this.errors.filter(e => e.type !== ErrorType.PREVIEW);
+    this.emitUpdatedEvent();
+  }
+
+  /**
+   * Remove all mapping validation errors.
+   */
+  clearValidationErrors(mapping?: MappingModel): void {
+    this.errors = this.errors.filter(e =>
+      e.type !== ErrorType.VALIDATION && (!mapping || !e.mapping || e.mapping !== mapping));
+    this.emitUpdatedEvent();
+  }
+
+  /**
+   * Remove all field scoped errors.
+   */
+  clearFieldErrors() {
+    this.errors = this.errors.filter(e => e.scope !== ErrorScope.FIELD);
+    this.emitUpdatedEvent();
+  }
+
+  /**
+   * Remove all form validation errors.
+   */
+  clearFormErrors() {
+    this.formErrors = [];
+    this.emitUpdatedEvent(ErrorScope.FORM);
+  }
+
+  /**
+   * Subscribe an error updated event. Observer will be notified
+   * when an error is added or removed.
+   * @param observer Observer
+   */
+  subscribe(observer: (errors: ErrorInfo[]) => void): Subscription {
+    return this.errorUpdatedSource.subscribe(observer);
+  }
+
+  /**
+   * Create a Subject for form validation error. This ErrorHandlerService assumes only
+   * one form validation happens at once, as it's used in modal window. Revisit this if there
+   * needs to be more than one channel and manage a list of {@link Subject}.
+   */
+  createFormErrorChannel(): Subject<ErrorInfo[]> {
+    if (this.formErrorUpdatedSource && !this.formErrorUpdatedSource.closed) {
+      this.formErrorUpdatedSource.complete();
+    }
+    this.formErrors = [];
+    this.formErrorUpdatedSource = new Subject();
+    this.formErrorUpdatedSource.subscribe({ complete: () => this.formErrors = [] });
+    return this.formErrorUpdatedSource;
+  }
+
+  /**
+   * Validate the specified field value in a form, generating a form validation error if not defined.
+   * @param value - A form field to validate
+   * @param fieldDescription - used in error diagnostic
+   */
+  isRequiredFieldValid(value: string, fieldDescription: string): boolean {
+    if (value == null || '' === value) {
+      const errorMessage: string = fieldDescription + ' is required.';
+      this.addError(new ErrorInfo({message: errorMessage, level: ErrorLevel.ERROR, scope: ErrorScope.FORM}));
+      this.emitUpdatedEvent(ErrorScope.FORM);
+      return false;
+    }
+    return true;
+  }
+
+  private emitUpdatedEvent(scope?: ErrorScope) {
+    if (ErrorScope.FORM === scope) {
+      if (this.formErrorUpdatedSource && !this.formErrorUpdatedSource.closed) {
+        this.formErrorUpdatedSource.next(this.formErrors);
       }
+    } else {
+      this.errorUpdatedSource.next(this.errors);
     }
   }
 
-  clearWarnings(): void {
-      for (const e of this.cfg.errors) {
-        if (e.level === ErrorLevel.WARN) {
-          this.removeError(e.identifier);
-        }
-      }
-  }
-
-  private addError(message: string, level: ErrorLevel, error: any): void {
-    if (this.arrayDoesNotContainError(message)) {
-      if (error && error.message) {
-        message += ('\n' + error.message);
-      }
-      const e = new ErrorInfo(message, level, error);
-      this.cfg.errors.unshift(e);
-    }
-  }
-
-  private arrayDoesNotContainError(message: string) {
-    return this.cfg.errors.filter(e => e.message === message).length === 0;
+  private excludeByIdentifier(errors: ErrorInfo[], identifier: string): ErrorInfo[] {
+    return errors.filter(e => e.identifier !== identifier);
   }
 
 }

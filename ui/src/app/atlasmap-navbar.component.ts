@@ -9,6 +9,7 @@ import { DocumentDefinition } from './lib/atlasmap-data-mapper/models/document-d
 import { InitializationService } from './lib/atlasmap-data-mapper/services/initialization.service';
 import { DocumentManagementService } from './lib/atlasmap-data-mapper/services/document-management.service';
 import { MappingManagementService } from './lib/atlasmap-data-mapper/services/mapping-management.service';
+import { ErrorType, ErrorScope, ErrorLevel, ErrorInfo } from './lib/atlasmap-data-mapper/models/error.model';
 
 @Component({
   selector: 'atlasmap-navbar',
@@ -139,24 +140,27 @@ export class AtlasmapNavbarComponent implements OnInit {
    *
    * @param event
    */
-  async processMappingsCatalog(event) {
+  async processMappingsCatalog(event: any) {
 
     // Wait for the async read of the selected mappings doc to be completed.
     try {
       this.fileData = await this.readFile(new Blob([event.target.files[0]]));
     } catch (error) {
-      this.cfg.errorService.mappingError('Unable to import the specified data mappings file: ' +
-        event.target.files[0].name + '\n' + error.message, error);
+      this.cfg.errorService.addError(new ErrorInfo({message:
+        `Unable to import the specified data mappings file: ${event.target.files[0].name} ${error.message}`,
+        level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.USER, object: error}));
       return;
     }
 
     // Inflate the buffer and push it to the server.
     try {
       this.cfg.initializationService.processMappingsCatalogFiles(this.fileData);
+      // tslint:disable:deprecation
       window.location.reload(true);
     } catch (error) {
-      this.cfg.errorService.mappingError('Unable to decompress the aggregate mappings file: \n' + event.target.files[0].name +
-       '\n' + error.message, error);
+      this.cfg.errorService.addError(new ErrorInfo({message:
+      `Unable to decompress the aggregate mappings file: ${event.target.files[0].name} ${error.message}`,
+      level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.USER, object: error}));
       return;
     }
   }

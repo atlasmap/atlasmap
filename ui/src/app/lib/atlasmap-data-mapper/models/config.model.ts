@@ -130,9 +130,6 @@ export class ConfigModel {
   preloadedMappingJson: string;
   preloadedFieldActionMetadata: any;
 
-  errors: ErrorInfo[] = [];
-  validationErrors: ErrorInfo[] = [];
-
   logger: NGXLogger;
 
   constructor() {
@@ -306,21 +303,6 @@ export class ConfigModel {
       if (!doc.initialized) {
         return false;
       }
-    }
-    return true;
-  }
-
-  /**
-   * Validate the specified field value, generating a validation error if not defined.
-   * @param value - field to validate
-   * @param fieldDescription - used in error diagnostic
-   */
-  isRequiredFieldValid(value: string, fieldDescription: string): boolean {
-
-    if (value == null || '' === value) {
-      const errorMessage: string = fieldDescription + ' is required.';
-      this.errorService.validationError(errorMessage, null);
-      return false;
     }
     return true;
   }

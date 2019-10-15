@@ -17,6 +17,7 @@ import { ConfigModel } from '../models/config.model';
 import { ErrorHandlerService } from '../services/error-handler.service';
 import { MappedField, MappingModel } from './mapping.model';
 import { Subject } from 'rxjs';
+import { ErrorScope, ErrorType, ErrorInfo, ErrorLevel } from './error.model';
 
 export class ExpressionUpdatedEvent {
   constructor(public node?: ExpressionNode, public offset?: number) {}
@@ -379,7 +380,8 @@ export class ExpressionModel {
       (targetNode as TextNode).str = offset === 0 ? targetString.substr(1)
         : targetString.substring(0, offset) + targetString.substring(offset + 1);
       if ((targetNode as TextNode).str.length === 0) {
-        this.cfg.errorService.info('At least one space is required between field references.', null);
+        this.cfg.errorService.addError(new ErrorInfo({message: 'At least one space is required between field references.',
+          level: ErrorLevel.ERROR, scope: ErrorScope.MAPPING, type: ErrorType.USER, mapping: this.mapping}));
         return;
       }
       updatedEvent.node = targetNode;
@@ -480,7 +482,8 @@ export class ExpressionModel {
       const index = parseInt(text.substring(position + 2, text.indexOf('}')), 10);
       fn = new FieldNode(this.mapping, null, index);
       if (fn.field === null) {
-        this.cfg.errorService.error('Unable to map expression index to field node.', index);
+        this.cfg.errorService.addError(new ErrorInfo({message: `Unable to map expression index "${index}" to field node.`,
+          level: ErrorLevel.ERROR, scope: ErrorScope.MAPPING, type: ErrorType.INTERNAL, mapping: this.mapping}));
       } else {
         answer.push(fn);
       }

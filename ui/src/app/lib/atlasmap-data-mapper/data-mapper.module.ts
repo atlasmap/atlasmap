@@ -31,6 +31,7 @@ import { DataMapperAppComponent } from './components/data-mapper-app.component';
 import { DataMapperErrorComponent } from './components/data-mapper-error.component';
 import { ModalWindowComponent, EmptyModalBodyComponent } from './components/modal-window.component';
 import { ModalErrorWindowComponent } from './components/modal-error-window.component';
+import { ModalErrorDetailComponent } from './components/modal-error-detail.component';
 import { ToolbarComponent } from './components/toolbar.component';
 import { TemplateEditComponent } from './components/template-edit.component';
 import { LineMachineComponent } from './components/line-machine.component';
@@ -106,6 +107,7 @@ export const loggerModuleForRoot: ModuleWithProviders = LoggerModule.forRoot(env
     MappingFieldContainerComponent,
     ModalWindowComponent,
     ModalErrorWindowComponent,
+    ModalErrorDetailComponent,
     DataMapperAppExampleHostComponent,
     MappingFieldActionComponent,
     MappingFieldActionArgumentComponent,

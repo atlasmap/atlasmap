@@ -24,7 +24,6 @@ describe('DocumentManagementService', () => {
   beforeEach(inject([DocumentManagementService], (service: DocumentManagementService) => {
     service.cfg = new ConfigModel();
     service.cfg.errorService = new ErrorHandlerService();
-    service.cfg.errorService.cfg = service.cfg;
     jasmine.getFixtures().fixturesPath = 'base/test-resources/inspected';
   }));
 

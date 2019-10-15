@@ -22,6 +22,7 @@ import { ConfigModel } from '../../models/config.model';
 import { Field } from '../../models/field.model';
 import { MappingModel } from '../../models/mapping.model';
 import { ModalWindowValidator } from '../modal-window.component';
+import { ErrorScope, ErrorType, ErrorInfo } from '../../models/error.model';
 
 export class LookupTableData {
   sourceEnumValue: string;
@@ -54,7 +55,8 @@ export class LookupTableComponent implements ModalWindowValidator {
 
     this.table = cfg.mappings.getTableByName(mapping.transition.lookupTableName);
     if (this.table == null) {
-      cfg.errorService.error('Could not find enum lookup table for mapping.', mapping);
+      cfg.errorService.addError(new ErrorInfo({message: 'Could not find enum lookup table for mapping.',
+        scope: ErrorScope.MAPPING, type: ErrorType.INTERNAL, mapping: mapping}));
     }
 
     const d: LookupTableData[] = [];
