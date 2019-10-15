@@ -74,7 +74,7 @@ describe('InitializationService', () => {
         targetXml.inspectionType = InspectionType.SCHEMA;
         targetXml.inspectionResult = jasmine.getFixtures().read('atlasmap-inspection-mock-xml-schema-1.json');
         c.addDocument(targetXml);
-        spyOn(c.mappingService, 'runtimeServiceActive').and.returnValues(true);
+        spyOn(c.mappingService, 'runtimeServiceActive').and.returnValue(Promise.resolve(true));
         return service.initialize().then(() => {
           expect(c.sourceDocs[0].fields[0].path).toEqual('/addressList<>');
           expect(c.sourceDocs[1].fields[0].path).toEqual('/data');
@@ -118,7 +118,7 @@ describe('InitializationService', () => {
         fixtures.fixturesPath = 'base/test-resources/mapping';
         cfg.preloadedMappingJson = fixtures.read('atlasmapping-old-action.json');
 
-        spyOn(cfg.mappingService, 'runtimeServiceActive').and.returnValues(true);
+        spyOn(cfg.mappingService, 'runtimeServiceActive').and.returnValue(Promise.resolve(true));
         spyOn(cfg.fileService, 'getCurrentMappingCatalog').and.returnValue(of(null));
         service.systemInitialized$.subscribe(() => {
           expect(cfg.sourceDocs[0].fields.length).toEqual(1);
