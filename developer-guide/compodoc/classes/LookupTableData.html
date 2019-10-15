@@ -127,7 +127,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/lookup-table.component.ts:29</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/lookup-table.component.ts:30</a></div>
                             </td>
                         </tr>
 
@@ -154,7 +154,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/lookup-table.component.ts:27</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/lookup-table.component.ts:28</a></div>
                             </td>
                         </tr>
 
@@ -181,7 +181,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/lookup-table.component.ts:28</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/mapping/lookup-table.component.ts:29</a></div>
                             </td>
                         </tr>
 
@@ -207,6 +207,7 @@ import { ConfigModel } from &#x27;../../models/config.model&#x27;;
 import { Field } from &#x27;../../models/field.model&#x27;;
 import { MappingModel } from &#x27;../../models/mapping.model&#x27;;
 import { ModalWindowValidator } from &#x27;../modal-window.component&#x27;;
+import { ErrorScope, ErrorType, ErrorInfo } from &#x27;../../models/error.model&#x27;;
 
 export class LookupTableData {
   sourceEnumValue: string;
@@ -239,7 +240,8 @@ export class LookupTableComponent implements ModalWindowValidator {
 
     this.table &#x3D; cfg.mappings.getTableByName(mapping.transition.lookupTableName);
     if (this.table &#x3D;&#x3D; null) {
-      cfg.errorService.error(&#x27;Could not find enum lookup table for mapping.&#x27;, mapping);
+      cfg.errorService.addError(new ErrorInfo({message: &#x27;Could not find enum lookup table for mapping.&#x27;,
+        scope: ErrorScope.MAPPING, type: ErrorType.INTERNAL, mapping: mapping}));
     }
 
     const d: LookupTableData[] &#x3D; [];

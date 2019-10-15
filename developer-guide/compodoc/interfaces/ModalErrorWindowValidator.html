@@ -118,8 +118,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="27"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/modal-error-window.component.ts:27</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="26"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/modal-error-window.component.ts:26</a></div>
                 </td>
             </tr>
 
@@ -157,8 +157,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="26"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/modal-error-window.component.ts:26</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="25"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/modal-error-window.component.ts:25</a></div>
                 </td>
             </tr>
 
@@ -181,11 +181,10 @@
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {
-  Component, Input, ViewChildren, QueryList, OnDestroy, OnInit,
-  ViewContainerRef, Type, ComponentFactoryResolver, AfterViewInit, ChangeDetectorRef, ElementRef
+  Component, ViewChildren, QueryList, OnInit,
+  ViewContainerRef, ChangeDetectorRef, ElementRef
 } from &#x27;@angular/core&#x27;;
 import { ConfigModel } from &#x27;../models/config.model&#x27;;
-import { Subscription } from &#x27;rxjs&#x27;;
 import { ErrorInfo, ErrorLevel } from &#x27;../models/error.model&#x27;;
 
 export interface ModalErrorWindowValidator {
@@ -199,30 +198,29 @@ export interface ModalErrorWindowValidator {
 })
 
 export class ModalErrorWindowComponent implements OnInit {
-  @Input() headerText &#x3D; &#x27;&#x27;;
-  @Input() nestedComponentType: Type&lt;any&gt;;
-  @Input() nestedComponentInitializedCallback: Function;
-  @Input() okButtonHandler: Function;
-  @Input() cancelButtonHandler: Function;
-  @Input() modalErrorWindow: ModalErrorWindowComponent;
-
   cfg: ConfigModel &#x3D; null;
   message: string &#x3D; null;
   nestedComponent: ModalErrorWindowValidator;
   confirmButtonDisabled &#x3D; false;
+  headerText &#x3D; &#x27;Errors and Warnings - Current Active Mapping&#x27;;
   buttonText &#x3D; &#x27;Dismiss All&#x27;;
   visible &#x3D; false;
   fade &#x3D; false;
+  errors: ErrorInfo[];
 
   @ViewChildren(&#x27;dyn_target&#x27;, { read: ViewContainerRef }) myTarget: QueryList&lt;ViewContainerRef&gt;;
 
-  private componentLoaded &#x3D; false;
-  private myTargetChangesSubscription: Subscription;
-
-  constructor(private componentFactoryResolver: ComponentFactoryResolver, public detector: ChangeDetectorRef) { }
+  constructor(public detector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.cfg &#x3D; ConfigModel.getConfig();
+  }
+
+  setErrors(errors: ErrorInfo[]) {
+    this.errors &#x3D; errors;
+    if (!this.errors || this.errors.length &#x3D;&#x3D;&#x3D; 0) {
+      this.close();
+    }
   }
 
   close(): void {
@@ -233,11 +231,10 @@ export class ModalErrorWindowComponent implements OnInit {
   }
 
   somethingToShow(): boolean {
-    return (this.cfg.errors.length &gt; 0);
+    return (this.errors &amp;&amp; this.errors.length &gt; 0);
   }
 
   show(): void {
-    this.headerText &#x3D; &#x27;Errors and Warnings - Current Active Mapping&#x27;;
     this.message &#x3D; &#x27;&#x27;;
     this.visible &#x3D; true;
     setTimeout(() &#x3D;&gt; {
@@ -247,46 +244,18 @@ export class ModalErrorWindowComponent implements OnInit {
 
   reset(): void {
     this.message &#x3D; &#x27;Hello!&#x27;;
-    this.headerText &#x3D; &#x27;&#x27;;
-    this.componentLoaded &#x3D; false;
-    this.okButtonHandler &#x3D; null;
-    this.cancelButtonHandler &#x3D; null;
   }
 
   getErrors(): ErrorInfo[] {
-    return this.cfg.errors.filter(e &#x3D;&gt; e.level &gt;&#x3D; ErrorLevel.ERROR);
+    return this.errors.filter(e &#x3D;&gt; e.level &#x3D;&#x3D;&#x3D; ErrorLevel.ERROR);
   }
 
   getWarnings(): ErrorInfo[] {
-    return this.cfg.errors.filter(e &#x3D;&gt; e.level &#x3D;&#x3D;&#x3D; ErrorLevel.WARN);
-  }
-
-  handleAlertClick(event: any) {
-    const errorIdentifier &#x3D; event.target.attributes.getNamedItem(&#x27;errorIdentifier&#x27;);
-    if (errorIdentifier &amp;&amp; errorIdentifier.value) {
-      if (this.cfg.mappings.activeMapping) {
-        this.cfg.mappings.activeMapping.removeValidationError(errorIdentifier.value);
-      }
-      this.cfg.errorService.removeError(errorIdentifier.value);
-    }
-    if (this.getErrors().length &#x3D;&#x3D;&#x3D; 0 &amp;&amp; this.getWarnings().length &#x3D;&#x3D;&#x3D; 0) {
-      this.close();
-    }
+    return this.errors.filter(e &#x3D;&gt; e.level &#x3D;&#x3D;&#x3D; ErrorLevel.WARN);
   }
 
   dismissAll(): void {
-    for (const e of this.getErrors()) {
-      if (this.cfg.mappings &amp;&amp; this.cfg.mappings.activeMapping) {
-        this.cfg.mappings.activeMapping.removeValidationError(e.identifier);
-      }
-      this.cfg.errorService.removeError(e.identifier);
-    }
-    for (const w of this.getWarnings()) {
-      if (this.cfg.mappings &amp;&amp; this.cfg.mappings.activeMapping) {
-        this.cfg.mappings.activeMapping.removeValidationError(w.identifier);
-      }
-      this.cfg.errorService.removeError(w.identifier);
-    }
+    this.cfg.errorService.clearAllErrors();
     this.close();
   }
 }

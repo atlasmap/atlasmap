@@ -166,8 +166,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="43"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/modal-window.component.ts:43</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="44"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/modal-window.component.ts:44</a></div>
                 </td>
             </tr>
 
@@ -205,8 +205,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="39"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/modal-window.component.ts:39</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="40"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/modal-window.component.ts:40</a></div>
                 </td>
             </tr>
 
@@ -233,8 +233,9 @@
   ViewContainerRef, Type, ComponentFactoryResolver, AfterViewInit, ChangeDetectorRef, ElementRef
 } from &#x27;@angular/core&#x27;;
 import { ConfigModel } from &#x27;../models/config.model&#x27;;
-import { Subscription } from &#x27;rxjs&#x27;;
+import { Subscription, Subject } from &#x27;rxjs&#x27;;
 import { ModalErrorWindowComponent } from &#x27;./modal-error-window.component&#x27;;
+import { ErrorInfo } from &#x27;../models/error.model&#x27;;
 
 // source: http://www.w3schools.com/howto/howto_css_modals.asp
 
@@ -280,11 +281,14 @@ export class ModalWindowComponent implements AfterViewInit, OnDestroy {
   confirmButtonText &#x3D; &#x27;OK&#x27;;
   visible &#x3D; false;
   fade &#x3D; false;
+  errors: ErrorInfo[] &#x3D; [];
 
   @ViewChildren(&#x27;dyn_target&#x27;, { read: ViewContainerRef }) myTarget: QueryList&lt;ViewContainerRef&gt;;
 
   private componentLoaded &#x3D; false;
   private myTargetChangesSubscription: Subscription;
+  private modalErrorSubject: Subject&lt;ErrorInfo[]&gt;;
+  private modalErrorSubscription: Subscription;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver, public detector: ChangeDetectorRef) { }
 
@@ -307,7 +311,15 @@ export class ModalWindowComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.myTargetChangesSubscription.unsubscribe();
+    if (this.myTargetChangesSubscription) {
+      this.myTargetChangesSubscription.unsubscribe();
+    }
+    if (this.modalErrorSubscription) {
+      this.modalErrorSubscription.unsubscribe();
+    }
+    if (this.modalErrorSubject) {
+      this.modalErrorSubject.complete();
+    }
   }
 
   loadComponent(): void {
@@ -322,12 +334,21 @@ export class ModalWindowComponent implements AfterViewInit, OnDestroy {
     if (initialFocusElement) {
       initialFocusElement.nativeElement.focus();
     }
+    if (this.modalErrorSubject &amp;&amp; !this.modalErrorSubject.closed) {
+      this.modalErrorSubject.complete();
+    }
+    this.modalErrorSubject &#x3D; this.cfg.errorService.createFormErrorChannel();
+    this.modalErrorSubscription &#x3D; this.modalErrorSubject.subscribe((errors: ErrorInfo[]) &#x3D;&gt; {
+      this.errors &#x3D; errors;
+    });
   }
 
   closeClicked(event: MouseEvent): void { this.buttonClicked(false); }
   close(): void {
     this.fade &#x3D; false;
     setTimeout(() &#x3D;&gt; {
+      this.modalErrorSubject.complete();
+      this.errors &#x3D; [];
       this.visible &#x3D; false;
     }, 300);
   }
@@ -353,7 +374,7 @@ export class ModalWindowComponent implements AfterViewInit, OnDestroy {
   private buttonClicked(okClicked: boolean): void {
     if (okClicked) {
       if (this.nestedComponent !&#x3D; null) {
-        this.cfg.errorService.clearValidationErrors();
+        this.cfg.errorService.clearFormErrors();
         if (!(this.nestedComponent.isDataValid())) {
           return;
         }
@@ -401,7 +422,7 @@ export class ModalWindowComponent implements AfterViewInit, OnDestroy {
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
         var COMPONENT_TEMPLATE = '<div></div>'
-    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'atlasmap-dev-root'},{'name': 'AtlasmapNavbarComponent', 'selector': 'atlasmap-navbar'},{'name': 'ClassNameComponent', 'selector': 'class-name'},{'name': 'CollapsableHeaderComponent', 'selector': 'collapsable-header'},{'name': 'ConstantFieldEditComponent', 'selector': 'constant-field-edit'},{'name': 'DataMapperAppComponent', 'selector': 'data-mapper'},{'name': 'DataMapperAppExampleHostComponent', 'selector': 'data-mapper-example-host'},{'name': 'DataMapperErrorComponent', 'selector': 'data-mapper-error'},{'name': 'DocumentDefinitionComponent', 'selector': 'document-definition'},{'name': 'DocumentFieldDetailComponent', 'selector': 'document-field-detail'},{'name': 'EmptyModalBodyComponent', 'selector': 'empty-modal-body'},{'name': 'ExpressionComponent', 'selector': 'expression'},{'name': 'FieldEditComponent', 'selector': 'field-edit'},{'name': 'LineMachineComponent', 'selector': 'line-machine'},{'name': 'LookupTableComponent', 'selector': 'lookup-table'},{'name': 'MappingDetailComponent', 'selector': 'mapping-detail'},{'name': 'MappingFieldActionArgumentComponent', 'selector': 'mapping-field-action-argument'},{'name': 'MappingFieldActionComponent', 'selector': 'mapping-field-action'},{'name': 'MappingFieldContainerComponent', 'selector': 'mapping-field-container'},{'name': 'MappingFieldDetailComponent', 'selector': 'mapping-field-detail'},{'name': 'MappingListComponent', 'selector': 'mapping-list'},{'name': 'MappingListFieldComponent', 'selector': 'mapping-list-field'},{'name': 'MappingSelectionComponent', 'selector': 'mapping-selection'},{'name': 'MappingSelectionSectionComponent', 'selector': 'mapping-selection-section'},{'name': 'ModalErrorWindowComponent', 'selector': 'modal-error-window'},{'name': 'ModalWindowComponent', 'selector': 'modal-window'},{'name': 'NamespaceEditComponent', 'selector': 'namespace-edit'},{'name': 'NamespaceListComponent', 'selector': 'namespace-list'},{'name': 'PropertyFieldEditComponent', 'selector': 'property-field-edit'},{'name': 'TemplateEditComponent', 'selector': 'template-edit'},{'name': 'ToolbarComponent', 'selector': 'toolbar'},{'name': 'TransitionSelectionComponent', 'selector': 'transition-selection'}];
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'atlasmap-dev-root'},{'name': 'AtlasmapNavbarComponent', 'selector': 'atlasmap-navbar'},{'name': 'ClassNameComponent', 'selector': 'class-name'},{'name': 'CollapsableHeaderComponent', 'selector': 'collapsable-header'},{'name': 'ConstantFieldEditComponent', 'selector': 'constant-field-edit'},{'name': 'DataMapperAppComponent', 'selector': 'data-mapper'},{'name': 'DataMapperAppExampleHostComponent', 'selector': 'data-mapper-example-host'},{'name': 'DataMapperErrorComponent', 'selector': 'data-mapper-error'},{'name': 'DocumentDefinitionComponent', 'selector': 'document-definition'},{'name': 'DocumentFieldDetailComponent', 'selector': 'document-field-detail'},{'name': 'EmptyModalBodyComponent', 'selector': 'empty-modal-body'},{'name': 'ExpressionComponent', 'selector': 'expression'},{'name': 'FieldEditComponent', 'selector': 'field-edit'},{'name': 'LineMachineComponent', 'selector': 'line-machine'},{'name': 'LookupTableComponent', 'selector': 'lookup-table'},{'name': 'MappingDetailComponent', 'selector': 'mapping-detail'},{'name': 'MappingFieldActionArgumentComponent', 'selector': 'mapping-field-action-argument'},{'name': 'MappingFieldActionComponent', 'selector': 'mapping-field-action'},{'name': 'MappingFieldContainerComponent', 'selector': 'mapping-field-container'},{'name': 'MappingFieldDetailComponent', 'selector': 'mapping-field-detail'},{'name': 'MappingListComponent', 'selector': 'mapping-list'},{'name': 'MappingListFieldComponent', 'selector': 'mapping-list-field'},{'name': 'MappingSelectionComponent', 'selector': 'mapping-selection'},{'name': 'MappingSelectionSectionComponent', 'selector': 'mapping-selection-section'},{'name': 'ModalErrorDetailComponent', 'selector': 'modal-error-detail'},{'name': 'ModalErrorWindowComponent', 'selector': 'modal-error-window'},{'name': 'ModalWindowComponent', 'selector': 'modal-window'},{'name': 'NamespaceEditComponent', 'selector': 'namespace-edit'},{'name': 'NamespaceListComponent', 'selector': 'namespace-list'},{'name': 'PropertyFieldEditComponent', 'selector': 'property-field-edit'},{'name': 'TemplateEditComponent', 'selector': 'template-edit'},{'name': 'ToolbarComponent', 'selector': 'toolbar'},{'name': 'TransitionSelectionComponent', 'selector': 'transition-selection'}];
     var DIRECTIVES = [{'name': 'FocusDirective', 'selector': '[focus]'}];
     var ACTUAL_COMPONENT = {'name': 'EmptyModalBodyComponent'};
 </script>

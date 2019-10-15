@@ -165,7 +165,7 @@ import { ErrorInfo, ErrorLevel } from &#x27;../models/error.model&#x27;;
 export class ToErrorIconClassPipe implements PipeTransform {
 
   transform(value: ErrorInfo[]): string {
-    if (value.some(e &#x3D;&gt; e.level &gt;&#x3D; ErrorLevel.ERROR)) {
+    if (value.some(e &#x3D;&gt; e.level &#x3D;&#x3D;&#x3D; ErrorLevel.ERROR)) {
       return &#x27;pficon pficon-error-circle-o&#x27;;
     } else if (value.some(e &#x3D;&gt; e.level &#x3D;&#x3D;&#x3D; ErrorLevel.WARN)) {
       return &#x27;pficon pficon-warning-triangle-o&#x27;;

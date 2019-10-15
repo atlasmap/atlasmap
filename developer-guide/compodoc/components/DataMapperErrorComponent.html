@@ -68,6 +68,7 @@
     </p>
     <p class="comment">
                     <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+                    <code><a href="https://angular.io/api/core/OnDestroy" target="_blank" >OnDestroy</a></code>
     </p>
 
 
@@ -130,6 +131,14 @@
                                 <a href="#elem">elem</a>
                             </li>
                             <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#errors">errors</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#errorSubscription">errorSubscription</a>
+                            </li>
+                            <li>
                                 <a href="#isOpen">isOpen</a>
                             </li>
                             <li>
@@ -152,10 +161,6 @@
                                 <a href="#errorServiceRequired">errorServiceRequired</a>
                             </li>
                             <li>
-                                    <span class="modifier">Private</span>
-                                <a href="#getAllErrors">getAllErrors</a>
-                            </li>
-                            <li>
                                 <a href="#getErrors">getErrors</a>
                             </li>
                             <li>
@@ -174,13 +179,13 @@
                                 <a href="#handleAlertClose">handleAlertClose</a>
                             </li>
                             <li>
-                                <a href="#handleClick">handleClick</a>
-                            </li>
-                            <li>
                                 <a href="#handleMouseEnter">handleMouseEnter</a>
                             </li>
                             <li>
                                 <a href="#handleMouseLeave">handleMouseLeave</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnDestroy">ngOnDestroy</a>
                             </li>
                             <li>
                                 <a href="#ngOnInit">ngOnInit</a>
@@ -203,9 +208,6 @@
                         <ul class="index-list">
                             <li>
                                 <a href="#errorService">errorService</a>
-                            </li>
-                            <li>
-                                <a href="#isValidation">isValidation</a>
                             </li>
                             <li>
                                 <a href="#modalErrorWindow">modalErrorWindow</a>
@@ -236,26 +238,6 @@
                     <td class="col-md-4">
                         <i>Type : </i>        <code><a href="../injectables/ErrorHandlerService.html" target="_self" >ErrorHandlerService</a></code>
 
-                    </td>
-                </tr>
-                        <tr>
-                            <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:31</a></div>
-                            </td>
-                        </tr>
-            </tbody>
-        </table>
-        <table class="table table-sm table-bordered">
-            <tbody>
-                <tr>
-                    <td class="col-md-4">
-                        <a name="isValidation"></a>
-                        <b>isValidation</b>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <i>Default value : </i><code>false</code>
                     </td>
                 </tr>
                         <tr>
@@ -317,8 +299,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="47"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:47</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="57"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:57</a></div>
                 </td>
             </tr>
 
@@ -330,47 +312,6 @@
 
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
-
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="getAllErrors"></a>
-                    <span class="name">
-                        <b>
-                            <span class="modifier">Private</span>
-                            getAllErrors
-                        </b>
-                        <a href="#getAllErrors"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>getAllErrors()</code>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="128"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:128</a></div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../classes/ErrorInfo.html" target="_self" >ErrorInfo[]</a></code>
 
                     </div>
                 </td>
@@ -399,8 +340,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="51"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:51</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="62"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:62</a></div>
                 </td>
             </tr>
 
@@ -438,8 +379,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="116"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:116</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="120"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:120</a></div>
                 </td>
             </tr>
 
@@ -480,8 +421,8 @@ available from the error modal window.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="124"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:124</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="128"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:128</a></div>
                 </td>
             </tr>
 
@@ -522,8 +463,8 @@ available from the error modal window.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="59"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:59</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="70"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:70</a></div>
                 </td>
             </tr>
 
@@ -561,8 +502,8 @@ available from the error modal window.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="55"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:55</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="66"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:66</a></div>
                 </td>
             </tr>
 
@@ -600,8 +541,8 @@ available from the error modal window.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="71"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:71</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="74"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:74</a></div>
                 </td>
             </tr>
 
@@ -652,76 +593,6 @@ available from the error modal window.</p>
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="handleClick"></a>
-                    <span class="name">
-                        <b>
-                            handleClick
-                        </b>
-                        <a href="#handleClick"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-<code>handleClick(event: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="63"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:63</a></div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>event</td>
-                                    <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
-
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
                     <a name="handleMouseEnter"></a>
                     <span class="name">
                         <b>
@@ -740,8 +611,8 @@ available from the error modal window.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="82"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:82</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="85"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:85</a></div>
                 </td>
             </tr>
 
@@ -813,8 +684,8 @@ for a half-second then the active errors modal will show all of the errors/ warn
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="97"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:97</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="100"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:100</a></div>
                 </td>
             </tr>
 
@@ -867,6 +738,45 @@ for a half-second then the active errors modal will show all of the errors/ warn
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="ngOnDestroy"></a>
+                    <span class="name">
+                        <b>
+                            ngOnDestroy
+                        </b>
+                        <a href="#ngOnDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnDestroy()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="50"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:50</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="ngOnInit"></a>
                     <span class="name">
                         <b>
@@ -885,8 +795,8 @@ for a half-second then the active errors modal will show all of the errors/ warn
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="40"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:40</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="43"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:43</a></div>
                 </td>
             </tr>
 
@@ -926,8 +836,8 @@ for a half-second then the active errors modal will show all of the errors/ warn
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="107"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:107</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="110"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:110</a></div>
                 </td>
             </tr>
 
@@ -976,7 +886,7 @@ for a half-second then the active errors modal will show all of the errors/ warn
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:38</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:36</a></div>
                             </td>
                         </tr>
 
@@ -1009,7 +919,68 @@ for a half-second then the active errors modal will show all of the errors/ warn
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:35</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:38</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="errors"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            errors</b>
+                            <a href="#errors"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/ErrorInfo.html" target="_self" >ErrorInfo[]</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>[]</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:40</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="errorSubscription"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            errorSubscription</b>
+                            <a href="#errorSubscription"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>Subscription</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:41</a></div>
                             </td>
                         </tr>
 
@@ -1035,7 +1006,7 @@ for a half-second then the active errors modal will show all of the errors/ warn
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:37</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:35</a></div>
                             </td>
                         </tr>
 
@@ -1068,7 +1039,7 @@ for a half-second then the active errors modal will show all of the errors/ warn
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:36</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-error.component.ts:39</a></div>
                             </td>
                         </tr>
 
@@ -1081,63 +1052,66 @@ for a half-second then the active errors modal will show all of the errors/ warn
 
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, Input, OnInit } from &#x27;@angular/core&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, Input, OnInit, OnDestroy } from &#x27;@angular/core&#x27;;
 
 import { ModalErrorWindowComponent } from &#x27;./modal-error-window.component&#x27;;
 
 import { ErrorInfo, ErrorLevel } from &#x27;../models/error.model&#x27;;
 import { ErrorHandlerService } from &#x27;../services/error-handler.service&#x27;;
 import { ConfigModel } from &#x27;../models/config.model&#x27;;
+import { Subscription } from &#x27;rxjs&#x27;;
 
 @Component({
   selector: &#x27;data-mapper-error&#x27;,
   templateUrl: &#x27;./data-mapper-error.component.html&#x27;,
 })
 
-export class DataMapperErrorComponent implements OnInit {
+export class DataMapperErrorComponent implements OnInit, OnDestroy {
   @Input() errorService: ErrorHandlerService;
-  @Input() isValidation &#x3D; false;
   @Input() modalErrorWindow: ModalErrorWindowComponent;
 
-  private elem &#x3D; null;
-  private mouseEventTimer &#x3D; null;
   isOpen &#x3D; true;
   cfg: ConfigModel &#x3D; null;
 
+  private elem &#x3D; null;
+  private mouseEventTimer &#x3D; null;
+  private errors: ErrorInfo[] &#x3D; [];
+  private errorSubscription: Subscription;
+
   ngOnInit() {
     this.cfg &#x3D; ConfigModel.getConfig();
+    this.errorSubscription &#x3D; this.errorService.subscribe((errors: ErrorInfo[]) &#x3D;&gt; {
+      this.errors &#x3D; errors;
+    });
+  }
+
+  ngOnDestroy() {
+    this.errorSubscription.unsubscribe();
   }
 
   /**
    * Return true if an error window is necessary, false otherwise.
    */
   errorServiceRequired(): boolean {
-    return (this.errorService &amp;&amp; (this.getAllErrors().length &gt; 0));
+    return (this.errorService
+      &amp;&amp; (ErrorHandlerService.filterWith(this.errors, this.cfg.mappings ? this.cfg.mappings.activeMapping : null).length &gt; 0));
   }
 
   getErrors(): ErrorInfo[] {
-    return this.getAllErrors().filter(e &#x3D;&gt; e.level &gt;&#x3D; ErrorLevel.ERROR);
+    return ErrorHandlerService.filterWith(this.errors, this.cfg.mappings.activeMapping, ErrorLevel.ERROR);
   }
 
   getWarnings(): ErrorInfo[] {
-    return this.getAllErrors().filter(e &#x3D;&gt; e.level &#x3D;&#x3D;&#x3D; ErrorLevel.WARN);
+    return ErrorHandlerService.filterWith(this.errors, this.cfg.mappings.activeMapping, ErrorLevel.WARN);
   }
 
   getInfos(): ErrorInfo[] {
-    return this.getAllErrors().filter(e &#x3D;&gt; e.level &#x3D;&#x3D;&#x3D; ErrorLevel.INFO);
-  }
-
-  handleClick(event: any) {
-    const errorIdentifier &#x3D; event.target.attributes.getNamedItem(&#x27;errorIdentifier&#x27;);
-    if (errorIdentifier &amp;&amp; errorIdentifier.value) {
-      this.cfg.mappings.activeMapping.removeValidationError(errorIdentifier.value);
-      this.errorService.removeError(errorIdentifier.value);
-    }
+    return ErrorHandlerService.filterWith(this.errors, this.cfg.mappings.activeMapping, ErrorLevel.INFO);
   }
 
   handleAlertClose(e: ErrorInfo): void {
     this.isOpen &#x3D; true;
-    this.errorService.removeError(e.identifier);
+    this.errorService.removeError(e.identifier, e.scope);
   }
 
   /**
@@ -1173,6 +1147,7 @@ export class DataMapperErrorComponent implements OnInit {
    */
   private showActiveErrors(): void {
     this.modalErrorWindow.reset();
+    this.modalErrorWindow.setErrors(ErrorHandlerService.filterWith(this.errors, this.cfg.mappings.activeMapping));
     this.modalErrorWindow.show();
   }
 
@@ -1192,13 +1167,6 @@ export class DataMapperErrorComponent implements OnInit {
     return this.getWarnings()[0];
   }
 
-  private getAllErrors(): ErrorInfo[] {
-    return this.isValidation ? this.cfg.validationErrors
-      : (this.cfg.mappings &amp;&amp; this.cfg.mappings.activeMapping
-        ? [...this.cfg.mappings.activeMapping.previewErrors, ...this.cfg.mappings.activeMapping.validationErrors, ...this.cfg.errors]
-        : this.cfg.errors);
-  }
-
 }
 </code></pre>
     </div>
@@ -1212,14 +1180,14 @@ export class DataMapperErrorComponent implements OnInit {
     {{ i.message }}
   &lt;/alert&gt;
 
-  &lt;div class&#x3D;&quot;alert alert-danger alert-dismissable&quot; *ngIf&#x3D;&quot;getWarnings().length&quot;&gt;
-    &lt;span class&#x3D;&quot;pficon pficon-warning-triangle-o&quot;&gt;&lt;/span&gt;
-    {{ getFirstWarning().message }}
-  &lt;/div&gt;
-
   &lt;div class&#x3D;&quot;alert alert-danger alert-dismissable&quot; *ngIf&#x3D;&quot;getErrors().length&quot;&gt;
     &lt;span class&#x3D;&quot;pficon pficon-error-circle-o&quot;&gt;&lt;/span&gt;
     {{ getFirstError().message }}
+  &lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;alert alert-danger alert-dismissable&quot; *ngIf&#x3D;&quot;getWarnings().length&quot;&gt;
+    &lt;span class&#x3D;&quot;pficon pficon-warning-triangle-o&quot;&gt;&lt;/span&gt;
+    {{ getFirstWarning().message }}
   &lt;/div&gt;
 
 &lt;/div&gt;</code></pre>
@@ -1251,8 +1219,8 @@ export class DataMapperErrorComponent implements OnInit {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><div class="DataMapperErrorComponent" *ngIf="errorServiceRequired()" on-mouseenter=\'handleMouseEnter($event)\'  on-mouseleave=\'handleMouseLeave($event)\'>  <alert *ngFor="let i of getInfos()" type="info" dismissOnTimeout="8000" (onClose)="handleAlertClose(i)">    <span class="pficon pficon-info"></span>    {{ i.message }}  </alert>  <div class="alert alert-danger alert-dismissable" *ngIf="getWarnings().length">    <span class="pficon pficon-warning-triangle-o"></span>    {{ getFirstWarning().message }}  </div>  <div class="alert alert-danger alert-dismissable" *ngIf="getErrors().length">    <span class="pficon pficon-error-circle-o"></span>    {{ getFirstError().message }}  </div></div></div>'
-    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'atlasmap-dev-root'},{'name': 'AtlasmapNavbarComponent', 'selector': 'atlasmap-navbar'},{'name': 'ClassNameComponent', 'selector': 'class-name'},{'name': 'CollapsableHeaderComponent', 'selector': 'collapsable-header'},{'name': 'ConstantFieldEditComponent', 'selector': 'constant-field-edit'},{'name': 'DataMapperAppComponent', 'selector': 'data-mapper'},{'name': 'DataMapperAppExampleHostComponent', 'selector': 'data-mapper-example-host'},{'name': 'DataMapperErrorComponent', 'selector': 'data-mapper-error'},{'name': 'DocumentDefinitionComponent', 'selector': 'document-definition'},{'name': 'DocumentFieldDetailComponent', 'selector': 'document-field-detail'},{'name': 'EmptyModalBodyComponent', 'selector': 'empty-modal-body'},{'name': 'ExpressionComponent', 'selector': 'expression'},{'name': 'FieldEditComponent', 'selector': 'field-edit'},{'name': 'LineMachineComponent', 'selector': 'line-machine'},{'name': 'LookupTableComponent', 'selector': 'lookup-table'},{'name': 'MappingDetailComponent', 'selector': 'mapping-detail'},{'name': 'MappingFieldActionArgumentComponent', 'selector': 'mapping-field-action-argument'},{'name': 'MappingFieldActionComponent', 'selector': 'mapping-field-action'},{'name': 'MappingFieldContainerComponent', 'selector': 'mapping-field-container'},{'name': 'MappingFieldDetailComponent', 'selector': 'mapping-field-detail'},{'name': 'MappingListComponent', 'selector': 'mapping-list'},{'name': 'MappingListFieldComponent', 'selector': 'mapping-list-field'},{'name': 'MappingSelectionComponent', 'selector': 'mapping-selection'},{'name': 'MappingSelectionSectionComponent', 'selector': 'mapping-selection-section'},{'name': 'ModalErrorWindowComponent', 'selector': 'modal-error-window'},{'name': 'ModalWindowComponent', 'selector': 'modal-window'},{'name': 'NamespaceEditComponent', 'selector': 'namespace-edit'},{'name': 'NamespaceListComponent', 'selector': 'namespace-list'},{'name': 'PropertyFieldEditComponent', 'selector': 'property-field-edit'},{'name': 'TemplateEditComponent', 'selector': 'template-edit'},{'name': 'ToolbarComponent', 'selector': 'toolbar'},{'name': 'TransitionSelectionComponent', 'selector': 'transition-selection'}];
+        var COMPONENT_TEMPLATE = '<div><div class="DataMapperErrorComponent" *ngIf="errorServiceRequired()" on-mouseenter=\'handleMouseEnter($event)\'  on-mouseleave=\'handleMouseLeave($event)\'>  <alert *ngFor="let i of getInfos()" type="info" dismissOnTimeout="8000" (onClose)="handleAlertClose(i)">    <span class="pficon pficon-info"></span>    {{ i.message }}  </alert>  <div class="alert alert-danger alert-dismissable" *ngIf="getErrors().length">    <span class="pficon pficon-error-circle-o"></span>    {{ getFirstError().message }}  </div>  <div class="alert alert-danger alert-dismissable" *ngIf="getWarnings().length">    <span class="pficon pficon-warning-triangle-o"></span>    {{ getFirstWarning().message }}  </div></div></div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'atlasmap-dev-root'},{'name': 'AtlasmapNavbarComponent', 'selector': 'atlasmap-navbar'},{'name': 'ClassNameComponent', 'selector': 'class-name'},{'name': 'CollapsableHeaderComponent', 'selector': 'collapsable-header'},{'name': 'ConstantFieldEditComponent', 'selector': 'constant-field-edit'},{'name': 'DataMapperAppComponent', 'selector': 'data-mapper'},{'name': 'DataMapperAppExampleHostComponent', 'selector': 'data-mapper-example-host'},{'name': 'DataMapperErrorComponent', 'selector': 'data-mapper-error'},{'name': 'DocumentDefinitionComponent', 'selector': 'document-definition'},{'name': 'DocumentFieldDetailComponent', 'selector': 'document-field-detail'},{'name': 'EmptyModalBodyComponent', 'selector': 'empty-modal-body'},{'name': 'ExpressionComponent', 'selector': 'expression'},{'name': 'FieldEditComponent', 'selector': 'field-edit'},{'name': 'LineMachineComponent', 'selector': 'line-machine'},{'name': 'LookupTableComponent', 'selector': 'lookup-table'},{'name': 'MappingDetailComponent', 'selector': 'mapping-detail'},{'name': 'MappingFieldActionArgumentComponent', 'selector': 'mapping-field-action-argument'},{'name': 'MappingFieldActionComponent', 'selector': 'mapping-field-action'},{'name': 'MappingFieldContainerComponent', 'selector': 'mapping-field-container'},{'name': 'MappingFieldDetailComponent', 'selector': 'mapping-field-detail'},{'name': 'MappingListComponent', 'selector': 'mapping-list'},{'name': 'MappingListFieldComponent', 'selector': 'mapping-list-field'},{'name': 'MappingSelectionComponent', 'selector': 'mapping-selection'},{'name': 'MappingSelectionSectionComponent', 'selector': 'mapping-selection-section'},{'name': 'ModalErrorDetailComponent', 'selector': 'modal-error-detail'},{'name': 'ModalErrorWindowComponent', 'selector': 'modal-error-window'},{'name': 'ModalWindowComponent', 'selector': 'modal-window'},{'name': 'NamespaceEditComponent', 'selector': 'namespace-edit'},{'name': 'NamespaceListComponent', 'selector': 'namespace-list'},{'name': 'PropertyFieldEditComponent', 'selector': 'property-field-edit'},{'name': 'TemplateEditComponent', 'selector': 'template-edit'},{'name': 'ToolbarComponent', 'selector': 'toolbar'},{'name': 'TransitionSelectionComponent', 'selector': 'transition-selection'}];
     var DIRECTIVES = [{'name': 'FocusDirective', 'selector': '[focus]'}];
     var ACTUAL_COMPONENT = {'name': 'DataMapperErrorComponent'};
 </script>

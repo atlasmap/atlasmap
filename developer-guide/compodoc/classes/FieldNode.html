@@ -156,7 +156,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="61" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/expression.model.ts:61</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="62" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/expression.model.ts:62</a></div>
                             </td>
                         </tr>
 
@@ -245,7 +245,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="63" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/expression.model.ts:63</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="64" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/expression.model.ts:64</a></div>
                             </td>
                         </tr>
 
@@ -279,7 +279,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="61" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/expression.model.ts:61</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="62" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/expression.model.ts:62</a></div>
                             </td>
                         </tr>
 
@@ -319,7 +319,7 @@
                             </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in         <code><a href="../classes/ExpressionNode.html#source" target="_self" >ExpressionNode:26</a></code>
+                                    <div class="io-line">Defined in         <code><a href="../classes/ExpressionNode.html#source" target="_self" >ExpressionNode:27</a></code>
 </div>
                             </td>
                         </tr>
@@ -348,7 +348,7 @@
                             </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in         <code><a href="../classes/ExpressionNode.html#source" target="_self" >ExpressionNode:27</a></code>
+                                    <div class="io-line">Defined in         <code><a href="../classes/ExpressionNode.html#source" target="_self" >ExpressionNode:28</a></code>
 </div>
                             </td>
                         </tr>
@@ -385,8 +385,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="74"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/expression.model.ts:74</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="75"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/expression.model.ts:75</a></div>
                 </td>
             </tr>
 
@@ -424,8 +424,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="70"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/expression.model.ts:70</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="71"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/expression.model.ts:71</a></div>
                 </td>
             </tr>
 
@@ -469,7 +469,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                        <div class="io-line">Defined in         <code><a href="../classes/ExpressionNode.html#source" target="_self" >ExpressionNode:33</a></code>
+                        <div class="io-line">Defined in         <code><a href="../classes/ExpressionNode.html#source" target="_self" >ExpressionNode:34</a></code>
 </div>
                 </td>
             </tr>
@@ -516,7 +516,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                        <div class="io-line">Defined in         <code><a href="../classes/ExpressionNode.html#source" target="_self" >ExpressionNode:38</a></code>
+                        <div class="io-line">Defined in         <code><a href="../classes/ExpressionNode.html#source" target="_self" >ExpressionNode:39</a></code>
 </div>
                 </td>
             </tr>
@@ -563,7 +563,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                        <div class="io-line">Defined in         <code><a href="../classes/ExpressionNode.html#source" target="_self" >ExpressionNode:37</a></code>
+                        <div class="io-line">Defined in         <code><a href="../classes/ExpressionNode.html#source" target="_self" >ExpressionNode:38</a></code>
 </div>
                 </td>
             </tr>
@@ -594,6 +594,7 @@
 import { ErrorHandlerService } from &#x27;../services/error-handler.service&#x27;;
 import { MappedField, MappingModel } from &#x27;./mapping.model&#x27;;
 import { Subject } from &#x27;rxjs&#x27;;
+import { ErrorScope, ErrorType, ErrorInfo, ErrorLevel } from &#x27;./error.model&#x27;;
 
 export class ExpressionUpdatedEvent {
   constructor(public node?: ExpressionNode, public offset?: number) {}
@@ -956,7 +957,8 @@ export class ExpressionModel {
       (targetNode as TextNode).str &#x3D; offset &#x3D;&#x3D;&#x3D; 0 ? targetString.substr(1)
         : targetString.substring(0, offset) + targetString.substring(offset + 1);
       if ((targetNode as TextNode).str.length &#x3D;&#x3D;&#x3D; 0) {
-        this.cfg.errorService.info(&#x27;At least one space is required between field references.&#x27;, null);
+        this.cfg.errorService.addError(new ErrorInfo({message: &#x27;At least one space is required between field references.&#x27;,
+          level: ErrorLevel.ERROR, scope: ErrorScope.MAPPING, type: ErrorType.USER, mapping: this.mapping}));
         return;
       }
       updatedEvent.node &#x3D; targetNode;
@@ -1057,7 +1059,8 @@ export class ExpressionModel {
       const index &#x3D; parseInt(text.substring(position + 2, text.indexOf(&#x27;}&#x27;)), 10);
       fn &#x3D; new FieldNode(this.mapping, null, index);
       if (fn.field &#x3D;&#x3D;&#x3D; null) {
-        this.cfg.errorService.error(&#x27;Unable to map expression index to field node.&#x27;, index);
+        this.cfg.errorService.addError(new ErrorInfo({message: &#x60;Unable to map expression index &quot;${index}&quot; to field node.&#x60;,
+          level: ErrorLevel.ERROR, scope: ErrorScope.MAPPING, type: ErrorType.INTERNAL, mapping: this.mapping}));
       } else {
         answer.push(fn);
       }

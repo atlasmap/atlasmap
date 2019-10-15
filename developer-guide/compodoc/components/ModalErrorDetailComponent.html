@@ -35,7 +35,7 @@
 
 <ol class="breadcrumb">
   <li>Components</li>
-  <li>CollapsableHeaderComponent</li>
+  <li>ModalErrorDetailComponent</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -58,7 +58,7 @@
     <h3>File</h3>
 </p>
 <p class="comment">
-    <code>src/app/lib/atlasmap-data-mapper/components/collapsable-header.component.ts</code>
+    <code>src/app/lib/atlasmap-data-mapper/components/modal-error-detail.component.ts</code>
 </p>
 
 
@@ -82,7 +82,7 @@
 
             <tr>
                 <td class="col-md-3">selector</td>
-                <td class="col-md-9"><code>collapsable-header</code></td>
+                <td class="col-md-9"><code>modal-error-detail</code></td>
             </tr>
 
 
@@ -90,7 +90,7 @@
 
             <tr>
                 <td class="col-md-3">templateUrl</td>
-                <td class="col-md-9"><code>./collapsable-header.component.html</code></td>
+                <td class="col-md-9"><code>./modal-error-detail.component.html</code></td>
             </tr>
 
 
@@ -118,10 +118,16 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                <a href="#getCSSClass">getCSSClass</a>
+                                <a href="#getErrors">getErrors</a>
                             </li>
                             <li>
-                                <a href="#handleMouseClick">handleMouseClick</a>
+                                <a href="#getInfos">getInfos</a>
+                            </li>
+                            <li>
+                                <a href="#getWarnings">getWarnings</a>
+                            </li>
+                            <li>
+                                <a href="#handleAlertClick">handleAlertClick</a>
                             </li>
                         </ul>
                     </td>
@@ -136,10 +142,10 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                <a href="#collapsed">collapsed</a>
+                                <a href="#errors">errors</a>
                             </li>
                             <li>
-                                <a href="#title">title</a>
+                                <a href="#errorService">errorService</a>
                             </li>
                         </ul>
                     </td>
@@ -159,18 +165,19 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-                        <a name="collapsed"></a>
-                        <b>collapsed</b>
+                        <a name="errors"></a>
+                        <b>errors</b>
                     </td>
                 </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Default value : </i><code>false</code>
+                        <i>Type : </i>        <code><a href="../classes/ErrorInfo.html" target="_self" >ErrorInfo[]</a></code>
+
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/collapsable-header.component.ts:26</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/modal-error-detail.component.ts:25</a></div>
                             </td>
                         </tr>
             </tbody>
@@ -179,19 +186,19 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-                        <a name="title"></a>
-                        <b>title</b>
+                        <a name="errorService"></a>
+                        <b>errorService</b>
                     </td>
                 </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                        <i>Type : </i>        <code><a href="../injectables/ErrorHandlerService.html" target="_self" >ErrorHandlerService</a></code>
 
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/collapsable-header.component.ts:25</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/modal-error-detail.component.ts:26</a></div>
                             </td>
                         </tr>
             </tbody>
@@ -209,26 +216,26 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="getCSSClass"></a>
+                    <a name="getErrors"></a>
                     <span class="name">
                         <b>
-                            getCSSClass
+                            getErrors
                         </b>
-                        <a href="#getCSSClass"><span class="icon ion-ios-link"></span></a>
+                        <a href="#getErrors"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>getCSSClass()</code>
+<code>getErrors()</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="32"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/collapsable-header.component.ts:32</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="28"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/modal-error-detail.component.ts:28</a></div>
                 </td>
             </tr>
 
@@ -237,7 +244,7 @@
                 <td class="col-md-4">
 
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                        <b>Returns : </b>        <code><a href="../classes/ErrorInfo.html" target="_self" >ErrorInfo[]</a></code>
 
                     </div>
                 </td>
@@ -248,26 +255,104 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="handleMouseClick"></a>
+                    <a name="getInfos"></a>
                     <span class="name">
                         <b>
-                            handleMouseClick
+                            getInfos
                         </b>
-                        <a href="#handleMouseClick"><span class="icon ion-ios-link"></span></a>
+                        <a href="#getInfos"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>handleMouseClick(event: MouseEvent)</code>
+<code>getInfos()</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="28"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/collapsable-header.component.ts:28</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="36"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/modal-error-detail.component.ts:36</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/ErrorInfo.html" target="_self" >ErrorInfo[]</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getWarnings"></a>
+                    <span class="name">
+                        <b>
+                            getWarnings
+                        </b>
+                        <a href="#getWarnings"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getWarnings()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="32"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/modal-error-detail.component.ts:32</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/ErrorInfo.html" target="_self" >ErrorInfo[]</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="handleAlertClick"></a>
+                    <span class="name">
+                        <b>
+                            handleAlertClick
+                        </b>
+                        <a href="#handleAlertClick"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>handleAlertClick(error: <a href="../classes/ErrorInfo.html">ErrorInfo</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="40"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/modal-error-detail.component.ts:40</a></div>
                 </td>
             </tr>
 
@@ -287,9 +372,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>event</td>
+                                    <td>error</td>
                                     <td>
-                                            <code>MouseEvent</code>
+                                                <code><a href="../classes/ErrorInfo.html" target="_self" >ErrorInfo</a></code>
                                     </td>
 
                                     <td>
@@ -321,32 +406,67 @@
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, Input } from &#x27;@angular/core&#x27;;
+import { ErrorInfo, ErrorLevel } from &#x27;../models/error.model&#x27;;
+import { ErrorHandlerService } from &#x27;../services/error-handler.service&#x27;;
 
 @Component({
-  selector: &#x27;collapsable-header&#x27;,
-  templateUrl: &#x27;./collapsable-header.component.html&#x27;,
+  selector: &#x27;modal-error-detail&#x27;,
+  templateUrl: &#x27;./modal-error-detail.component.html&#x27;,
 })
+export class ModalErrorDetailComponent {
+  @Input() errors: ErrorInfo[];
+  @Input() errorService: ErrorHandlerService;
 
-export class CollapsableHeaderComponent {
-  @Input() title: string;
-  @Input() collapsed &#x3D; false;
-
-  handleMouseClick(event: MouseEvent): void {
-    this.collapsed &#x3D; !this.collapsed;
+  getErrors(): ErrorInfo[] {
+    return this.errors.filter(e &#x3D;&gt; e.level &#x3D;&#x3D;&#x3D; ErrorLevel.ERROR);
   }
 
-  getCSSClass() {
-    return &#x27;arrow fa fa-angle-&#x27; + (this.collapsed ? &#x27;right&#x27; : &#x27;down&#x27;);
+  getWarnings(): ErrorInfo[] {
+    return this.errors.filter(e &#x3D;&gt; e.level &#x3D;&#x3D;&#x3D; ErrorLevel.WARN);
   }
+
+  getInfos(): ErrorInfo[] {
+    return this.errors.filter(e &#x3D;&gt; e.level &#x3D;&#x3D;&#x3D; ErrorLevel.INFO);
+  }
+
+  handleAlertClick(error: ErrorInfo) {
+    if (error &amp;&amp; error.identifier) {
+      this.errorService.removeError(error.identifier, error.scope);
+    }
+  }
+
 }
 </code></pre>
     </div>
 
     <div class="tab-pane fade " id="c-templateData">
-        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;CollapsableCardHeader&quot; (click)&#x3D;&quot;handleMouseClick($event)&quot;&gt;
-  &lt;h2 class&#x3D;&quot;card-pf-title&quot;&gt;
-    &lt;i [attr.class]&#x3D;&quot;getCSSClass()&quot;&gt;&lt;/i&gt;{{ title }}&lt;/h2&gt;
-&lt;/div&gt;</code></pre>
+        <pre class="line-numbers"><code class="language-html">&lt;ng-container&gt;
+
+  &lt;alert *ngFor&#x3D;&quot;let i of getInfos()&quot; type&#x3D;&quot;info&quot; dismissOnTimeout&#x3D;&quot;8000&quot; (onClose)&#x3D;&quot;handleAlertClick($event)&quot;&gt;
+    &lt;span class&#x3D;&quot;pficon pficon-info&quot;&gt;&lt;/span&gt;
+    &lt;a class&#x3D;&quot;close&quot; (click)&#x3D;&quot;handleAlertClick(i)&quot; data-dismiss&#x3D;&quot;alert&quot;&gt;
+      &lt;i class&#x3D;&quot;pficon pficon-close&quot; attr.errorIdentifier&#x3D;&quot;{{ i.identifier }}&quot;&gt;&lt;/i&gt;
+    &lt;/a&gt;
+    {{ i.message }}
+  &lt;/alert&gt;
+
+  &lt;div class&#x3D;&quot;alert alert-danger alert-dismissable&quot; *ngFor&#x3D;&quot;let e of getErrors()&quot;&gt;
+    &lt;a class&#x3D;&quot;close&quot; (click)&#x3D;&quot;handleAlertClick(e)&quot; data-dismiss&#x3D;&quot;alert&quot;&gt;
+      &lt;i class&#x3D;&quot;pficon pficon-close&quot; attr.errorIdentifier&#x3D;&quot;{{ e.identifier }}&quot;&gt;&lt;/i&gt;
+    &lt;/a&gt;
+    &lt;span class&#x3D;&quot;pficon pficon-error-circle-o&quot;&gt;&lt;/span&gt;
+    {{ e.message }}
+  &lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;alert alert-danger alert-dismissable&quot; *ngFor&#x3D;&quot;let w of getWarnings()&quot;&gt;
+    &lt;a class&#x3D;&quot;close&quot; (click)&#x3D;&quot;handleAlertClick(w)&quot; data-dismiss&#x3D;&quot;alert&quot;&gt;
+      &lt;i class&#x3D;&quot;pficon pficon-close&quot; attr.errorIdentifier&#x3D;&quot;{{ w.identifier }}&quot;&gt;&lt;/i&gt;
+    &lt;/a&gt;
+    &lt;span class&#x3D;&quot;pficon pficon-warning-triangle-o&quot;&gt;&lt;/span&gt;
+    {{ w.message }}
+  &lt;/div&gt;
+
+&lt;/ng-container&gt;</code></pre>
     </div>
 
 
@@ -375,10 +495,10 @@ export class CollapsableHeaderComponent {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><div class="CollapsableCardHeader" (click)="handleMouseClick($event)">  <h2 class="card-pf-title">    <i [attr.class]="getCSSClass()"></i>{{ title }}</h2></div></div>'
+        var COMPONENT_TEMPLATE = '<div><ng-container>  <alert *ngFor="let i of getInfos()" type="info" dismissOnTimeout="8000" (onClose)="handleAlertClick($event)">    <span class="pficon pficon-info"></span>    <a class="close" (click)="handleAlertClick(i)" data-dismiss="alert">      <i class="pficon pficon-close" attr.errorIdentifier="{{ i.identifier }}"></i>    </a>    {{ i.message }}  </alert>  <div class="alert alert-danger alert-dismissable" *ngFor="let e of getErrors()">    <a class="close" (click)="handleAlertClick(e)" data-dismiss="alert">      <i class="pficon pficon-close" attr.errorIdentifier="{{ e.identifier }}"></i>    </a>    <span class="pficon pficon-error-circle-o"></span>    {{ e.message }}  </div>  <div class="alert alert-danger alert-dismissable" *ngFor="let w of getWarnings()">    <a class="close" (click)="handleAlertClick(w)" data-dismiss="alert">      <i class="pficon pficon-close" attr.errorIdentifier="{{ w.identifier }}"></i>    </a>    <span class="pficon pficon-warning-triangle-o"></span>    {{ w.message }}  </div></ng-container></div>'
     var COMPONENTS = [{'name': 'AppComponent', 'selector': 'atlasmap-dev-root'},{'name': 'AtlasmapNavbarComponent', 'selector': 'atlasmap-navbar'},{'name': 'ClassNameComponent', 'selector': 'class-name'},{'name': 'CollapsableHeaderComponent', 'selector': 'collapsable-header'},{'name': 'ConstantFieldEditComponent', 'selector': 'constant-field-edit'},{'name': 'DataMapperAppComponent', 'selector': 'data-mapper'},{'name': 'DataMapperAppExampleHostComponent', 'selector': 'data-mapper-example-host'},{'name': 'DataMapperErrorComponent', 'selector': 'data-mapper-error'},{'name': 'DocumentDefinitionComponent', 'selector': 'document-definition'},{'name': 'DocumentFieldDetailComponent', 'selector': 'document-field-detail'},{'name': 'EmptyModalBodyComponent', 'selector': 'empty-modal-body'},{'name': 'ExpressionComponent', 'selector': 'expression'},{'name': 'FieldEditComponent', 'selector': 'field-edit'},{'name': 'LineMachineComponent', 'selector': 'line-machine'},{'name': 'LookupTableComponent', 'selector': 'lookup-table'},{'name': 'MappingDetailComponent', 'selector': 'mapping-detail'},{'name': 'MappingFieldActionArgumentComponent', 'selector': 'mapping-field-action-argument'},{'name': 'MappingFieldActionComponent', 'selector': 'mapping-field-action'},{'name': 'MappingFieldContainerComponent', 'selector': 'mapping-field-container'},{'name': 'MappingFieldDetailComponent', 'selector': 'mapping-field-detail'},{'name': 'MappingListComponent', 'selector': 'mapping-list'},{'name': 'MappingListFieldComponent', 'selector': 'mapping-list-field'},{'name': 'MappingSelectionComponent', 'selector': 'mapping-selection'},{'name': 'MappingSelectionSectionComponent', 'selector': 'mapping-selection-section'},{'name': 'ModalErrorDetailComponent', 'selector': 'modal-error-detail'},{'name': 'ModalErrorWindowComponent', 'selector': 'modal-error-window'},{'name': 'ModalWindowComponent', 'selector': 'modal-window'},{'name': 'NamespaceEditComponent', 'selector': 'namespace-edit'},{'name': 'NamespaceListComponent', 'selector': 'namespace-list'},{'name': 'PropertyFieldEditComponent', 'selector': 'property-field-edit'},{'name': 'TemplateEditComponent', 'selector': 'template-edit'},{'name': 'ToolbarComponent', 'selector': 'toolbar'},{'name': 'TransitionSelectionComponent', 'selector': 'transition-selection'}];
     var DIRECTIVES = [{'name': 'FocusDirective', 'selector': '[focus]'}];
-    var ACTUAL_COMPONENT = {'name': 'CollapsableHeaderComponent'};
+    var ACTUAL_COMPONENT = {'name': 'ModalErrorDetailComponent'};
 </script>
 <script src="../js/tree.js"></script>
 
@@ -413,7 +533,7 @@ export class CollapsableHeaderComponent {
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
-            var COMPODOC_CURRENT_PAGE_URL = 'CollapsableHeaderComponent.html';
+            var COMPODOC_CURRENT_PAGE_URL = 'ModalErrorDetailComponent.html';
        </script>
 
        <script src="../js/libs/custom-elements.min.js"></script>

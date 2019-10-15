@@ -118,8 +118,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="29"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/modal-window.component.ts:29</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="30"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/modal-window.component.ts:30</a></div>
                 </td>
             </tr>
 
@@ -157,8 +157,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="28"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/modal-window.component.ts:28</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="29"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/modal-window.component.ts:29</a></div>
                 </td>
             </tr>
 
@@ -185,8 +185,9 @@
   ViewContainerRef, Type, ComponentFactoryResolver, AfterViewInit, ChangeDetectorRef, ElementRef
 } from &#x27;@angular/core&#x27;;
 import { ConfigModel } from &#x27;../models/config.model&#x27;;
-import { Subscription } from &#x27;rxjs&#x27;;
+import { Subscription, Subject } from &#x27;rxjs&#x27;;
 import { ModalErrorWindowComponent } from &#x27;./modal-error-window.component&#x27;;
+import { ErrorInfo } from &#x27;../models/error.model&#x27;;
 
 // source: http://www.w3schools.com/howto/howto_css_modals.asp
 
@@ -232,11 +233,14 @@ export class ModalWindowComponent implements AfterViewInit, OnDestroy {
   confirmButtonText &#x3D; &#x27;OK&#x27;;
   visible &#x3D; false;
   fade &#x3D; false;
+  errors: ErrorInfo[] &#x3D; [];
 
   @ViewChildren(&#x27;dyn_target&#x27;, { read: ViewContainerRef }) myTarget: QueryList&lt;ViewContainerRef&gt;;
 
   private componentLoaded &#x3D; false;
   private myTargetChangesSubscription: Subscription;
+  private modalErrorSubject: Subject&lt;ErrorInfo[]&gt;;
+  private modalErrorSubscription: Subscription;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver, public detector: ChangeDetectorRef) { }
 
@@ -259,7 +263,15 @@ export class ModalWindowComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.myTargetChangesSubscription.unsubscribe();
+    if (this.myTargetChangesSubscription) {
+      this.myTargetChangesSubscription.unsubscribe();
+    }
+    if (this.modalErrorSubscription) {
+      this.modalErrorSubscription.unsubscribe();
+    }
+    if (this.modalErrorSubject) {
+      this.modalErrorSubject.complete();
+    }
   }
 
   loadComponent(): void {
@@ -274,12 +286,21 @@ export class ModalWindowComponent implements AfterViewInit, OnDestroy {
     if (initialFocusElement) {
       initialFocusElement.nativeElement.focus();
     }
+    if (this.modalErrorSubject &amp;&amp; !this.modalErrorSubject.closed) {
+      this.modalErrorSubject.complete();
+    }
+    this.modalErrorSubject &#x3D; this.cfg.errorService.createFormErrorChannel();
+    this.modalErrorSubscription &#x3D; this.modalErrorSubject.subscribe((errors: ErrorInfo[]) &#x3D;&gt; {
+      this.errors &#x3D; errors;
+    });
   }
 
   closeClicked(event: MouseEvent): void { this.buttonClicked(false); }
   close(): void {
     this.fade &#x3D; false;
     setTimeout(() &#x3D;&gt; {
+      this.modalErrorSubject.complete();
+      this.errors &#x3D; [];
       this.visible &#x3D; false;
     }, 300);
   }
@@ -305,7 +326,7 @@ export class ModalWindowComponent implements AfterViewInit, OnDestroy {
   private buttonClicked(okClicked: boolean): void {
     if (okClicked) {
       if (this.nestedComponent !&#x3D; null) {
-        this.cfg.errorService.clearValidationErrors();
+        this.cfg.errorService.clearFormErrors();
         if (!(this.nestedComponent.isDataValid())) {
           return;
         }

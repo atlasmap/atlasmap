@@ -59,6 +59,23 @@
             <code>src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts</code>
         </p>
 
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>ErrorHandlerService handles global errors, mapping validation errors, preview errors,
+mapped field level errors as well as instant form validation errors in a modal windows.
+Global errors, mapping validation errors, preview errors and mapped field level errors
+are stored in a same array at this moment. We might want to split them when we show
+them grouped by <a href="../miscellaneous/enumerations.html#ErrorType">ErrorType</a>.
+Errors with <a href="ErrorScope.MAPPING">ErrorScope.MAPPING</a> and <a href="ErrorScope.FIELD">ErrorScope.FIELD</a> are cleared
+everytime active mapping is switched. <a href="ErrorScope.FIELD">ErrorScope.FIELD</a> errors are mostly
+instant and cleared more frequently.
+Form validation errors are supposed to be instant. Channel should be created by
+<a href="createFormErrorChannel()">createFormErrorChannel()</a> when modal window is initialized, and should be
+completed when modal window is closed.</p>
+
+            </p>
 
 
 
@@ -75,7 +92,20 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                <a href="#cfg">cfg</a>
+                                    <span class="modifier">Private</span>
+                                <a href="#errors">errors</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#errorUpdatedSource">errorUpdatedSource</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#formErrors">formErrors</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#formErrorUpdatedSource">formErrorUpdatedSource</a>
                             </li>
                         </ul>
                     </td>
@@ -90,33 +120,43 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                    <span class="modifier">Private</span>
                                 <a href="#addError">addError</a>
                             </li>
                             <li>
-                                    <span class="modifier">Private</span>
-                                <a href="#arrayDoesNotContainError">arrayDoesNotContainError</a>
+                                <a href="#clearAllErrors">clearAllErrors</a>
                             </li>
                             <li>
-                                <a href="#clearMappingErrors">clearMappingErrors</a>
+                                <a href="#clearFieldErrors">clearFieldErrors</a>
+                            </li>
+                            <li>
+                                <a href="#clearFormErrors">clearFormErrors</a>
+                            </li>
+                            <li>
+                                <a href="#clearPreviewErrors">clearPreviewErrors</a>
                             </li>
                             <li>
                                 <a href="#clearValidationErrors">clearValidationErrors</a>
                             </li>
                             <li>
-                                <a href="#clearWarnings">clearWarnings</a>
+                                <a href="#createFormErrorChannel">createFormErrorChannel</a>
                             </li>
                             <li>
-                                <a href="#debug">debug</a>
+                                    <span class="modifier">Private</span>
+                                <a href="#emitUpdatedEvent">emitUpdatedEvent</a>
                             </li>
                             <li>
-                                <a href="#error">error</a>
+                                    <span class="modifier">Private</span>
+                                <a href="#excludeByIdentifier">excludeByIdentifier</a>
                             </li>
                             <li>
-                                <a href="#info">info</a>
+                                    <span class="modifier">Static</span>
+                                <a href="#filterWith">filterWith</a>
                             </li>
                             <li>
-                                <a href="#mappingError">mappingError</a>
+                                <a href="#getErrors">getErrors</a>
+                            </li>
+                            <li>
+                                <a href="#isRequiredFieldValid">isRequiredFieldValid</a>
                             </li>
                             <li>
                                 <a href="#removeError">removeError</a>
@@ -125,10 +165,7 @@
                                 <a href="#resetAll">resetAll</a>
                             </li>
                             <li>
-                                <a href="#validationError">validationError</a>
-                            </li>
-                            <li>
-                                <a href="#warn">warn</a>
+                                <a href="#subscribe">subscribe</a>
                             </li>
                         </ul>
                     </td>
@@ -155,7 +192,6 @@
                     <a name="addError"></a>
                     <span class="name">
                         <b>
-                            <span class="modifier">Private</span>
                             addError
                         </b>
                         <a href="#addError"><span class="icon ion-ios-link"></span></a>
@@ -164,22 +200,23 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>addError(message: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, level: <a href="../undefineds/ErrorLevel.html">ErrorLevel</a>, error: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+<code>addError(errors: <a href="../classes/ErrorInfo.html">ErrorInfo[]</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="67"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:67</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="64"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:64</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Add one or more <a href="../classes/ErrorInfo.html">ErrorInfo</a> object(s) into error store.</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -189,13 +226,14 @@
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>message</td>
+                                    <td>errors</td>
                                     <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                                <code><a href="../classes/ErrorInfo.html" target="_self" >ErrorInfo[]</a></code>
                                     </td>
 
                                     <td>
@@ -203,30 +241,10 @@
                                     </td>
 
 
-                                </tr>
-                                <tr>
-                                    <td>level</td>
                                     <td>
-                                                <code><a href="../miscellaneous/enumerations.html#ErrorLevel" target="_self" >ErrorLevel</a></code>
+                                        <p>one or more {</p>
+
                                     </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>error</td>
-                                    <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
                                 </tr>
                             </tbody>
                         </table>
@@ -248,69 +266,38 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="arrayDoesNotContainError"></a>
+                    <a name="clearAllErrors"></a>
                     <span class="name">
                         <b>
-                            <span class="modifier">Private</span>
-                            arrayDoesNotContainError
+                            clearAllErrors
                         </b>
-                        <a href="#arrayDoesNotContainError"><span class="icon ion-ios-link"></span></a>
+                        <a href="#clearAllErrors"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>arrayDoesNotContainError(message: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+<code>clearAllErrors()</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="77"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:77</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="115"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:115</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Remova all errors except form validation errors.</p>
+</div>
 
                     <div class="io-description">
-                        <b>Parameters :</b>
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>message</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
 
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
-
-                    </div>
-                    <div class="io-description">
-                        
                     </div>
                 </td>
             </tr>
@@ -320,32 +307,116 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="clearMappingErrors"></a>
+                    <a name="clearFieldErrors"></a>
                     <span class="name">
                         <b>
-                            clearMappingErrors
+                            clearFieldErrors
                         </b>
-                        <a href="#clearMappingErrors"><span class="icon ion-ios-link"></span></a>
+                        <a href="#clearFieldErrors"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>clearMappingErrors()</code>
+<code>clearFieldErrors()</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="43"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:43</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="140"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:140</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Remove all field scoped errors.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="clearFormErrors"></a>
+                    <span class="name">
+                        <b>
+                            clearFormErrors
+                        </b>
+                        <a href="#clearFormErrors"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>clearFormErrors()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="148"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:148</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Remove all form validation errors.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="clearPreviewErrors"></a>
+                    <span class="name">
+                        <b>
+                            clearPreviewErrors
+                        </b>
+                        <a href="#clearPreviewErrors"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>clearPreviewErrors()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="123"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:123</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Remove all preview errors.</p>
+</div>
 
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
@@ -370,99 +441,23 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>clearValidationErrors()</code>
+<code>clearValidationErrors(mapping?: <a href="../classes/MappingModel.html">MappingModel</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="51"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:51</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="131"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:131</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
-
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="clearWarnings"></a>
-                    <span class="name">
-                        <b>
-                            clearWarnings
-                        </b>
-                        <a href="#clearWarnings"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-<code>clearWarnings()</code>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="59"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:59</a></div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
-
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="debug"></a>
-                    <span class="name">
-                        <b>
-                            debug
-                        </b>
-                        <a href="#debug"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-<code>debug(message: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, error: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="26"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:26</a></div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
+                    <div class="io-description"><p>Remove all mapping validation errors.</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -476,25 +471,13 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>message</td>
+                                    <td>mapping</td>
                                     <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                                <code><a href="../classes/MappingModel.html" target="_self" >MappingModel</a></code>
                                     </td>
 
                                     <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>error</td>
-                                    <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
+                                        Yes
                                     </td>
 
 
@@ -519,26 +502,71 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="error"></a>
+                    <a name="createFormErrorChannel"></a>
                     <span class="name">
                         <b>
-                            error
+                            createFormErrorChannel
                         </b>
-                        <a href="#error"><span class="icon ion-ios-link"></span></a>
+                        <a href="#createFormErrorChannel"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>error(message: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, error: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+<code>createFormErrorChannel()</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="29"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:29</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="167"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:167</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Create a Subject for form validation error. This ErrorHandlerService assumes only
+one form validation happens at once, as it&#39;s used in modal window. Revisit this if there
+needs to be more than one channel and manage a list of <a href="Subject">Subject</a>.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/ErrorInfo.html" target="_self" >Subject&lt;ErrorInfo[]&gt;</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="emitUpdatedEvent"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            emitUpdatedEvent
+                        </b>
+                        <a href="#emitUpdatedEvent"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>emitUpdatedEvent(scope?: <a href="../undefineds/ErrorScope.html">ErrorScope</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="192"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:192</a></div>
                 </td>
             </tr>
 
@@ -558,25 +586,13 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>message</td>
+                                    <td>scope</td>
                                     <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                                <code><a href="../miscellaneous/enumerations.html#ErrorScope" target="_self" >ErrorScope</a></code>
                                     </td>
 
                                     <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>error</td>
-                                    <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
+                                        Yes
                                     </td>
 
 
@@ -601,26 +617,28 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="info"></a>
+                    <a name="excludeByIdentifier"></a>
                     <span class="name">
                         <b>
-                            info
+                            <span class="modifier">Private</span>
+                            excludeByIdentifier
                         </b>
-                        <a href="#info"><span class="icon ion-ios-link"></span></a>
+                        <a href="#excludeByIdentifier"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>info(message: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, error: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>excludeByIdentifier(errors: <a href="../classes/ErrorInfo.html">ErrorInfo[]</a>, identifier: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="27"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:27</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="202"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:202</a></div>
                 </td>
             </tr>
 
@@ -640,9 +658,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>message</td>
+                                    <td>errors</td>
                                     <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                                <code><a href="../classes/ErrorInfo.html" target="_self" >ErrorInfo[]</a></code>
                                     </td>
 
                                     <td>
@@ -652,9 +670,9 @@
 
                                 </tr>
                                 <tr>
-                                    <td>error</td>
+                                    <td>identifier</td>
                                     <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
                                     </td>
 
                                     <td>
@@ -669,7 +687,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+                        <b>Returns : </b>        <code><a href="../classes/ErrorInfo.html" target="_self" >ErrorInfo[]</a></code>
 
                     </div>
                     <div class="io-description">
@@ -683,32 +701,36 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="mappingError"></a>
+                    <a name="filterWith"></a>
                     <span class="name">
                         <b>
-                            mappingError
+                            <span class="modifier">Static</span>
+                            filterWith
                         </b>
-                        <a href="#mappingError"><span class="icon ion-ios-link"></span></a>
+                        <a href="#filterWith"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>mappingError(message: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, error: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>filterWith(errors: <a href="../classes/ErrorInfo.html">ErrorInfo[]</a>, mapping?: <a href="../classes/MappingModel.html">MappingModel</a>, level?: <a href="../undefineds/ErrorLevel.html">ErrorLevel</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="31"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:31</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="50"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:50</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>FIlter an array of <a href="../classes/ErrorInfo.html">ErrorInfo</a> with specified condition.</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -718,11 +740,164 @@
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>message</td>
+                                    <td>errors</td>
+                                    <td>
+                                                <code><a href="../classes/ErrorInfo.html" target="_self" >ErrorInfo[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <p>An array of {</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>mapping</td>
+                                    <td>
+                                                <code><a href="../classes/MappingModel.html" target="_self" >MappingModel</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                    <td>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>level</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/enumerations.html#ErrorLevel" target="_self" >ErrorLevel</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                    <td>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/ErrorInfo.html" target="_self" >ErrorInfo[]</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getErrors"></a>
+                    <span class="name">
+                        <b>
+                            getErrors
+                        </b>
+                        <a href="#getErrors"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getErrors()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="83"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:83</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Return all errors in the store.</p>
+</div>
+
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../classes/ErrorInfo.html" target="_self" >ErrorInfo[]</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>An array of {</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isRequiredFieldValid"></a>
+                    <span class="name">
+                        <b>
+                            isRequiredFieldValid
+                        </b>
+                        <a href="#isRequiredFieldValid"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>isRequiredFieldValid(value: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, fieldDescription: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="182"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:182</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Validate the specified field value in a form, generating a form validation error if not defined.</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>value</td>
                                     <td>
                                                 <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
                                     </td>
@@ -732,11 +907,17 @@
                                     </td>
 
 
+                                    <td>
+                                        <ul>
+<li>A form field to validate</li>
+</ul>
+
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td>error</td>
+                                    <td>fieldDescription</td>
                                     <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
                                     </td>
 
                                     <td>
@@ -744,6 +925,12 @@
                                     </td>
 
 
+                                    <td>
+                                        <ul>
+<li>used in error diagnostic</li>
+</ul>
+
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -751,7 +938,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
 
                     </div>
                     <div class="io-description">
@@ -776,21 +963,23 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>removeError(identifier: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+<code>removeError(identifier: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, scope?: <a href="../undefineds/ErrorScope.html">ErrorScope</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="38"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:38</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="91"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:91</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Remove one <a href="../classes/ErrorInfo.html">ErrorInfo</a> by specifying ID.</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -800,6 +989,7 @@
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -814,6 +1004,24 @@
                                     </td>
 
 
+                                    <td>
+                                        <p>Error ID</p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>scope</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/enumerations.html#ErrorScope" target="_self" >ErrorScope</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                    <td>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -853,14 +1061,17 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="33"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:33</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="104"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:104</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Clear all global/mapping errors as well as form validation erros and its Subject
+if it exists.</p>
+</div>
 
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
@@ -874,32 +1085,35 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="validationError"></a>
+                    <a name="subscribe"></a>
                     <span class="name">
                         <b>
-                            validationError
+                            subscribe
                         </b>
-                        <a href="#validationError"><span class="icon ion-ios-link"></span></a>
+                        <a href="#subscribe"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>validationError(message: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, error: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+<code>subscribe(observer: (errors: <a href="../classes/ErrorInfo.html">ErrorInfo[]</a>) => void)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="30"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:30</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="158"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:158</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Subscribe an error updated event. Observer will be notified
+when an error is added or removed.</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -909,13 +1123,14 @@
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>message</td>
+                                    <td>observer</td>
                                     <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/function" target="_blank" >function</a></code>
                                     </td>
 
                                     <td>
@@ -923,18 +1138,10 @@
                                     </td>
 
 
-                                </tr>
-                                <tr>
-                                    <td>error</td>
                                     <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                        <p>Observer</p>
+
                                     </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
                                 </tr>
                             </tbody>
                         </table>
@@ -942,89 +1149,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
-
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="warn"></a>
-                    <span class="name">
-                        <b>
-                            warn
-                        </b>
-                        <a href="#warn"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-<code>warn(message: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, error: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="28"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:28</a></div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>message</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>error</td>
-                                    <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+                        <b>Returns : </b>    <code>Subscription</code>
 
                     </div>
                     <div class="io-description">
@@ -1044,28 +1169,117 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-                        <a name="cfg"></a>
+                        <a name="errors"></a>
                         <span class="name">
                             <b>
-                            cfg</b>
-                            <a href="#cfg"><span class="icon ion-ios-link"></span></a>
+                                <span class="modifier">Private</span>
+                            errors</b>
+                            <a href="#errors"><span class="icon ion-ios-link"></span></a>
                         </span>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                            <i>Type : </i>        <code><a href="../classes/ConfigModel.html" target="_self" >ConfigModel</a></code>
+                            <i>Type : </i>        <code><a href="../classes/ErrorInfo.html" target="_self" >ErrorInfo[]</a></code>
 
                         </td>
                     </tr>
                     <tr>
                         <td class="col-md-4">
-                            <i>Default value : </i><code>null</code>
+                            <i>Default value : </i><code>[]</code>
                         </td>
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:24</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:39</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="errorUpdatedSource"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            errorUpdatedSource</b>
+                            <a href="#errorUpdatedSource"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>new Subject&lt;ErrorInfo[]&gt;()</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:41</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="formErrors"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            formErrors</b>
+                            <a href="#formErrors"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/ErrorInfo.html" target="_self" >ErrorInfo[]</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>[]</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:40</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="formErrorUpdatedSource"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            formErrorUpdatedSource</b>
+                            <a href="#formErrorUpdatedSource"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/ErrorInfo.html" target="_self" >Subject&lt;ErrorInfo[]&gt;</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/lib/atlasmap-data-mapper/services/error-handler.service.ts:42</a></div>
                             </td>
                         </tr>
 
@@ -1080,66 +1294,191 @@
     <div class="tab-pane fade  tab-source-code" id="c-source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
 
-import { ErrorInfo, ErrorLevel } from &#x27;../models/error.model&#x27;;
+import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from &#x27;../models/error.model&#x27;;
 import { ConfigModel } from &#x27;../models/config.model&#x27;;
+import { Subject, Subscription } from &#x27;rxjs&#x27;;
+import { MappingModel } from &#x27;../models/mapping.model&#x27;;
 
+/**
+ * ErrorHandlerService handles global errors, mapping validation errors, preview errors,
+ * mapped field level errors as well as instant form validation errors in a modal windows.
+ * Global errors, mapping validation errors, preview errors and mapped field level errors
+ * are stored in a same array at this moment. We might want to split them when we show
+ * them grouped by {@link ErrorType}.
+ * Errors with {@link ErrorScope.MAPPING} and {@link ErrorScope.FIELD} are cleared
+ * everytime active mapping is switched. {@link ErrorScope.FIELD} errors are mostly
+ * instant and cleared more frequently.
+ * Form validation errors are supposed to be instant. Channel should be created by
+ * {@link createFormErrorChannel()} when modal window is initialized, and should be
+ * completed when modal window is closed.
+ */
 @Injectable()
 export class ErrorHandlerService {
-  cfg: ConfigModel &#x3D; null;
+  private errors: ErrorInfo[] &#x3D; [];
+  private formErrors: ErrorInfo[] &#x3D; [];
+  private errorUpdatedSource &#x3D; new Subject&lt;ErrorInfo[]&gt;();
+  private formErrorUpdatedSource: Subject&lt;ErrorInfo[]&gt;;
 
-  debug(message: string, error: any) { this.addError(message, ErrorLevel.DEBUG, error); }
-  info(message: string, error: any) { this.addError(message, ErrorLevel.INFO, error); }
-  warn(message: string, error: any) { this.addError(message, ErrorLevel.WARN, error); }
-  error(message: string, error: any) { this.addError(message, ErrorLevel.ERROR, error); }
-  validationError(message: string, error: any) { this.addError(message, ErrorLevel.VALIDATION_ERROR, error); }
-  mappingError(message: string, error: any) { this.addError(message, ErrorLevel.MAPPING_ERROR, error); }
+  /**
+   * FIlter an array of {@link ErrorInfo} with specified condition.
+   * @param errors An array of {@link ErrorInfo} to filter
+   * @param mapping {@link MappingModel} to filter {@link ErrorScope.MAPPING} errors
+   * @param level {@link ErrorLevel} to filter with
+   */
+  static filterWith(errors: ErrorInfo[], mapping?: MappingModel, level?: ErrorLevel): ErrorInfo[] {
+    if (!errors || errors.length &#x3D;&#x3D;&#x3D; 0) {
+      return [];
+    }
+    return errors.filter(e &#x3D;&gt;
+      (!e.mapping || (mapping &amp;&amp; e.mapping &#x3D;&#x3D;&#x3D; mapping))
+        &amp;&amp; (!level || !e.level || e.level &#x3D;&#x3D;&#x3D; level)
+    );
+  }
 
+  /**
+   * Add one or more {@link ErrorInfo} object(s) into error store.
+   * @param errors one or more {@link ErrorInfo} object(s)
+   */
+  addError(...errors: ErrorInfo[]): void {
+    errors.forEach(error &#x3D;&gt; {
+      if (error.object &amp;&amp; error.object.message) {
+        // TODO show error.object in more polished way... maybe with better error console
+        error.message +&#x3D; (&#x27;\n&#x27; + error.object.message);
+      }
+      const store &#x3D; ErrorScope.FORM &#x3D;&#x3D;&#x3D; error.scope ? this.formErrors : this.errors;
+      if (store.find(e &#x3D;&gt; e.message &#x3D;&#x3D;&#x3D; error.message)) {
+        return;
+      }
+      store.unshift(error);
+    });
+    this.emitUpdatedEvent();
+  }
+
+  /**
+   * Return all errors in the store.
+   * @return An array of {@link ErrorInfo}
+   */
+  getErrors(): ErrorInfo[] {
+    return Object.assign([], this.errors);
+  }
+
+  /**
+   * Remove one {@link ErrorInfo} by specifying ID.
+   * @param identifier Error ID
+   */
+  removeError(identifier: string, scope?: ErrorScope): void {
+    if (scope &#x3D;&#x3D;&#x3D; ErrorScope.FORM &amp;&amp; !this.formErrorUpdatedSource.closed) {
+      this.formErrors &#x3D; this.excludeByIdentifier(this.formErrors, identifier);
+    } else {
+      this.errors &#x3D; this.excludeByIdentifier(this.errors, identifier);
+    }
+    this.emitUpdatedEvent();
+  }
+
+  /**
+   * Clear all global/mapping errors as well as form validation erros and its Subject
+   * if it exists.
+   */
   resetAll(): void {
-    this.cfg.errors &#x3D; [];
-    this.cfg.validationErrors &#x3D; [];
-  }
-
-  removeError(identifier: string): void {
-    this.cfg.errors &#x3D; this.cfg.errors.filter(e &#x3D;&gt; e.identifier !&#x3D;&#x3D; identifier);
-    this.cfg.validationErrors &#x3D; this.cfg.validationErrors.filter(e &#x3D;&gt; e.identifier !&#x3D;&#x3D; identifier);
-  }
-
-  clearMappingErrors(): void {
-    for (const e of this.cfg.errors) {
-      if (e.level &#x3D;&#x3D;&#x3D; ErrorLevel.MAPPING_ERROR) {
-        this.removeError(e.identifier);
-      }
+    this.clearAllErrors();
+    this.formErrors &#x3D; [];
+    if (this.formErrorUpdatedSource &amp;&amp; !this.formErrorUpdatedSource.closed) {
+      this.formErrorUpdatedSource.complete();
     }
   }
 
-  clearValidationErrors(): void {
-    for (const e of this.cfg.errors) {
-      if (e.level &#x3D;&#x3D;&#x3D; ErrorLevel.VALIDATION_ERROR) {
-        this.removeError(e.identifier);
+  /**
+   * Remova all errors except form validation errors.
+   */
+  clearAllErrors() {
+    this.errors &#x3D; [];
+    this.emitUpdatedEvent();
+  }
+
+  /**
+   * Remove all preview errors.
+   */
+  clearPreviewErrors(): void {
+    this.errors &#x3D; this.errors.filter(e &#x3D;&gt; e.type !&#x3D;&#x3D; ErrorType.PREVIEW);
+    this.emitUpdatedEvent();
+  }
+
+  /**
+   * Remove all mapping validation errors.
+   */
+  clearValidationErrors(mapping?: MappingModel): void {
+    this.errors &#x3D; this.errors.filter(e &#x3D;&gt;
+      e.type !&#x3D;&#x3D; ErrorType.VALIDATION &amp;&amp; (!mapping || !e.mapping || e.mapping !&#x3D;&#x3D; mapping));
+    this.emitUpdatedEvent();
+  }
+
+  /**
+   * Remove all field scoped errors.
+   */
+  clearFieldErrors() {
+    this.errors &#x3D; this.errors.filter(e &#x3D;&gt; e.scope !&#x3D;&#x3D; ErrorScope.FIELD);
+    this.emitUpdatedEvent();
+  }
+
+  /**
+   * Remove all form validation errors.
+   */
+  clearFormErrors() {
+    this.formErrors &#x3D; [];
+    this.emitUpdatedEvent(ErrorScope.FORM);
+  }
+
+  /**
+   * Subscribe an error updated event. Observer will be notified
+   * when an error is added or removed.
+   * @param observer Observer
+   */
+  subscribe(observer: (errors: ErrorInfo[]) &#x3D;&gt; void): Subscription {
+    return this.errorUpdatedSource.subscribe(observer);
+  }
+
+  /**
+   * Create a Subject for form validation error. This ErrorHandlerService assumes only
+   * one form validation happens at once, as it&#x27;s used in modal window. Revisit this if there
+   * needs to be more than one channel and manage a list of {@link Subject}.
+   */
+  createFormErrorChannel(): Subject&lt;ErrorInfo[]&gt; {
+    if (this.formErrorUpdatedSource &amp;&amp; !this.formErrorUpdatedSource.closed) {
+      this.formErrorUpdatedSource.complete();
+    }
+    this.formErrors &#x3D; [];
+    this.formErrorUpdatedSource &#x3D; new Subject();
+    this.formErrorUpdatedSource.subscribe({ complete: () &#x3D;&gt; this.formErrors &#x3D; [] });
+    return this.formErrorUpdatedSource;
+  }
+
+  /**
+   * Validate the specified field value in a form, generating a form validation error if not defined.
+   * @param value - A form field to validate
+   * @param fieldDescription - used in error diagnostic
+   */
+  isRequiredFieldValid(value: string, fieldDescription: string): boolean {
+    if (value &#x3D;&#x3D; null || &#x27;&#x27; &#x3D;&#x3D;&#x3D; value) {
+      const errorMessage: string &#x3D; fieldDescription + &#x27; is required.&#x27;;
+      this.addError(new ErrorInfo({message: errorMessage, level: ErrorLevel.ERROR, scope: ErrorScope.FORM}));
+      this.emitUpdatedEvent(ErrorScope.FORM);
+      return false;
+    }
+    return true;
+  }
+
+  private emitUpdatedEvent(scope?: ErrorScope) {
+    if (ErrorScope.FORM &#x3D;&#x3D;&#x3D; scope) {
+      if (this.formErrorUpdatedSource &amp;&amp; !this.formErrorUpdatedSource.closed) {
+        this.formErrorUpdatedSource.next(this.formErrors);
       }
+    } else {
+      this.errorUpdatedSource.next(this.errors);
     }
   }
 
-  clearWarnings(): void {
-      for (const e of this.cfg.errors) {
-        if (e.level &#x3D;&#x3D;&#x3D; ErrorLevel.WARN) {
-          this.removeError(e.identifier);
-        }
-      }
-  }
-
-  private addError(message: string, level: ErrorLevel, error: any): void {
-    if (this.arrayDoesNotContainError(message)) {
-      if (error &amp;&amp; error.message) {
-        message +&#x3D; (&#x27;\n&#x27; + error.message);
-      }
-      const e &#x3D; new ErrorInfo(message, level, error);
-      this.cfg.errors.unshift(e);
-    }
-  }
-
-  private arrayDoesNotContainError(message: string) {
-    return this.cfg.errors.filter(e &#x3D;&gt; e.message &#x3D;&#x3D;&#x3D; message).length &#x3D;&#x3D;&#x3D; 0;
+  private excludeByIdentifier(errors: ErrorInfo[], identifier: string): ErrorInfo[] {
+    return errors.filter(e &#x3D;&gt; e.identifier !&#x3D;&#x3D; identifier);
   }
 
 }

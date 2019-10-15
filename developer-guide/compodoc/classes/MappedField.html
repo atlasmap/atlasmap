@@ -156,7 +156,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/mapping.model.ts:42</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/mapping.model.ts:41</a></div>
                             </td>
                         </tr>
 
@@ -183,7 +183,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/mapping.model.ts:41</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/mapping.model.ts:40</a></div>
                             </td>
                         </tr>
 
@@ -215,7 +215,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/mapping.model.ts:40</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/mapping.model.ts:39</a></div>
                             </td>
                         </tr>
 
@@ -251,8 +251,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="66"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/mapping.model.ts:66</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="65"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/mapping.model.ts:65</a></div>
                 </td>
             </tr>
 
@@ -290,8 +290,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="70"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/mapping.model.ts:70</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="69"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/mapping.model.ts:69</a></div>
                 </td>
             </tr>
 
@@ -329,8 +329,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="74"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/mapping.model.ts:74</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="73"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/mapping.model.ts:73</a></div>
                 </td>
             </tr>
 
@@ -401,8 +401,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="44"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/mapping.model.ts:44</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="43"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/mapping.model.ts:43</a></div>
                 </td>
             </tr>
 
@@ -462,7 +462,6 @@
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { ConfigModel } from &#x27;../models/config.model&#x27;;
 import { Field } from &#x27;./field.model&#x27;;
 import { TransitionModel } from &#x27;./transition.model&#x27;;
-import { ErrorInfo, ErrorLevel } from &#x27;../models/error.model&#x27;;
 
 import { DataMapperUtil } from &#x27;../common/data-mapper-util&#x27;;
 import { FieldAction } from &#x27;./field-action.model&#x27;;
@@ -531,55 +530,9 @@ export class MappingModel {
   targetFields: MappedField[] &#x3D; [];
   transition: TransitionModel &#x3D; new TransitionModel();
 
-  validationErrors: ErrorInfo[] &#x3D; []; // must be immutable
-  previewErrors: ErrorInfo[] &#x3D; []; // must be immutable
-
   constructor() {
     this.uuid &#x3D; &#x27;mapping.&#x27; + Math.floor((Math.random() * 1000000) + 1).toString();
     this.cfg &#x3D; ConfigModel.getConfig();
-    Object.freeze(this.validationErrors);
-  }
-
-  addValidationError(message: string) {
-    const e &#x3D; new ErrorInfo(message, ErrorLevel.VALIDATION_ERROR);
-    this.validationErrors &#x3D; [...this.validationErrors, e];
-    Object.freeze(this.validationErrors);
-  }
-
-  clearValidationErrors(): void {
-    this.validationErrors &#x3D; [];
-    Object.freeze(this.validationErrors);
-  }
-
-  getValidationErrors(): ErrorInfo[] {
-    return this.validationErrors.filter(e &#x3D;&gt; e.level &gt;&#x3D; ErrorLevel.ERROR);
-  }
-
-  getValidationWarnings(): ErrorInfo[] {
-    return this.validationErrors.filter(e &#x3D;&gt; e.level &#x3D;&#x3D;&#x3D; ErrorLevel.WARN);
-  }
-
-  removeValidationError(identifier: string) {
-    this.validationErrors &#x3D; this.validationErrors.filter(e &#x3D;&gt; e.identifier !&#x3D;&#x3D; identifier);
-    Object.freeze(this.validationErrors);
-  }
-
-  clearPreviewErrors(): void {
-    this.previewErrors &#x3D; [];
-    Object.freeze(this.previewErrors);
-  }
-
-  getPreviewErrors(): ErrorInfo[] {
-    return this.previewErrors.filter(e &#x3D;&gt; e.level &gt;&#x3D; ErrorLevel.ERROR);
-  }
-
-  getPreviewWarnings(): ErrorInfo[] {
-    return this.previewErrors.filter(e &#x3D;&gt; e.level &#x3D;&#x3D;&#x3D; ErrorLevel.WARN);
-  }
-
-  removePreviewError(identifier: string) {
-    this.previewErrors &#x3D; this.previewErrors.filter(e &#x3D;&gt; e.identifier !&#x3D;&#x3D; identifier);
-    Object.freeze(this.previewErrors);
   }
 
   getFirstCollectionField(isSource: boolean): Field {
