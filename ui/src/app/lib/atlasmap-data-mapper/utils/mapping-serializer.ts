@@ -84,9 +84,8 @@ export class MappingSerializer {
       let mAction: any;
       if (mapping.transition.enableExpression) {
         mAction = {
-          'Expression' : {
-            'expression' : mapping.transition.expression.toText()
-          }
+          '@type': 'Expression',
+          'expression' : mapping.transition.expression.toText()
         };
       } else if (mapping.transition.isManyToOneMode() || mapping.transition.isOneToManyMode()) {
         mAction = this.serializeAction(mapping.transition.transitionFieldAction, cfg);
@@ -227,9 +226,8 @@ export class MappingSerializer {
     if (mapping.transition.isManyToOneMode()) {
       if (mapping.transition.enableExpression) {
         actions[0] = {
-          'Expression' : {
-            'expression' : mapping.transition.expression.toText()
-          }
+          '@type': 'Expression',
+          'expression' : mapping.transition.expression.toText()
         };
       } else {
         actions[0] = this.serializeAction(mapping.transition.transitionFieldAction, cfg);
@@ -344,7 +342,7 @@ export class MappingSerializer {
    * @param cfg
    */
   private static processActionArguments(action: FieldAction, cfg: ConfigModel): any {
-    let actionArguments: any = {};
+    const actionArguments: any = {};
     for (const argValue of action.argumentValues) {
       actionArguments[argValue.name] = argValue.value;
       const argumentConfig: FieldActionArgument = action.definition.getArgumentForName(argValue.name);
@@ -357,7 +355,6 @@ export class MappingSerializer {
         actionArguments[argValue.name] = parseInt(argValue.value, 10);
       }
     }
-    actionArguments = (Object.keys(actionArguments).length === 0) ? null : actionArguments;
     return actionArguments;
   }
 
@@ -435,23 +432,13 @@ export class MappingSerializer {
   }
 
   private static serializeAction(action: FieldAction, cfg: ConfigModel): any {
-    // Serialize custom field actions.
+    const actionJson: any = MappingSerializer.processActionArguments(action, cfg);
+    actionJson['@type'] = action.definition.name;
     if (action.definition.isCustom) {
-      const customActionJson: any = {};
-      let customActionBody = {};
-      customActionBody['name'] = action.definition.serviceObject.name;
-      customActionBody['className'] = action.definition.serviceObject.className;
-      customActionBody['methodName'] = action.definition.serviceObject.method;
-      // customActionBody['arguments'] = MappingSerializer.processActionArguments(action, cfg);
-      customActionBody = (Object.keys(customActionBody).length === 0) ? null : customActionBody;
-      customActionJson['CustomAction'] = customActionBody;
-      return customActionJson;
+      actionJson['name'] = action.definition.serviceObject.name;
+      actionJson['className'] = action.definition.serviceObject.className;
+      actionJson['methodName'] = action.definition.serviceObject.method;
     }
-
-    let actionArguments: any = {};
-    actionArguments = MappingSerializer.processActionArguments(action, cfg);
-    const actionJson: any = {};
-    actionJson[action.definition.name] = actionArguments;
     return actionJson;
   }
 
