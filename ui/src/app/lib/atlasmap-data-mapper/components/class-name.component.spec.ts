@@ -1,10 +1,13 @@
 /* tslint:disable:no-unused-variable */
 
-import { TestBed, async, inject } from '@angular/core/testing';
+import { TestBed, async, inject, ComponentFixture } from '@angular/core/testing';
+import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
 import { ClassNameComponent } from './class-name.component';
 
 describe('ClassNameComponent', () => {
   beforeEach(() => {
+    TestBed.resetTestEnvironment();
+    TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
     TestBed.configureTestingModule({
       providers: [ClassNameComponent],
     });
@@ -12,8 +15,7 @@ describe('ClassNameComponent', () => {
 
   it(
     'should ...',
-    inject([ClassNameComponent], (service: ClassNameComponent) => {
-      expect(service).toBeTruthy();
-    }),
-  );
+    inject([ClassNameComponent], (component: ClassNameComponent) => {
+      expect(component).toBeTruthy();
+    }));
 });

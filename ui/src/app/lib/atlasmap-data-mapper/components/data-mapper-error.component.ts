@@ -48,7 +48,9 @@ export class DataMapperErrorComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.errorSubscription.unsubscribe();
+    if (this.errorSubscription) {
+      this.errorSubscription.unsubscribe();
+    }
   }
 
   /**
