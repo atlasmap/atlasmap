@@ -9,7 +9,7 @@
   </div>
 </ng-template>
 
-<table style="width:100%; margin-top:3px; margin-bottom:3px">
+<table class="mappedFieldTable">
   <tr>
     <td>
       <div class="float-left">
@@ -23,7 +23,7 @@
 
   <tr>
     <td>
-      <div *ngIf="cfg.showMappingPreview && mappedField.field.path && isActive" style="width:97%;">
+      <div class="mappedFieldTablePreview" *ngIf="cfg.showMappingPreview && mappedField.field.path && isActive">
         <textarea class="form-control previewSourceTextarea" rows="1" *ngIf="isSource" id="preview-source" [(ngModel)]='mappedField.field.value'
           (blur)="cfg.mappingService.notifyMappingUpdated()" placeholder="Type sample data here"></textarea>
         <div *ngIf="!isSource" class="previewResultContainer">

@@ -5,16 +5,15 @@
         <div class="docName">
           <i class="fa {{ isSource ? 'fa-hdd-o' : 'fa-download' }}"></i>
           <label for="userfile">{{ sourcesTargetsLabel }}</label>
-          <div style="float:right;" *ngIf="!cfg.initCfg.disableNavbar">
-            <i [attr.class]="getPlusSquareIconCSSClass()" (click)="queryClassName($event)"
-              tooltip="Enable specific Java classes from your previously imported Java archive."
-              container="body" placement="left">
+          <div class="enableImportJavaClass" *ngIf="!cfg.initCfg.disableNavbar">
+            <i [attr.class]="getPlusSquareIconCSSClass()" (click)="queryClassName($event)" container="body" placement="left"
+              tooltip="Enable specific Java classes from your previously imported Java archive.">
             </i>
           </div>
-          <label *ngIf="!cfg.initCfg.disableNavbar" [attr.class]="getImportIconCSSClass()"
-            tooltip="Import instance or schema file" placement="left" style="float:right; margin-right:10px; margin-top:1px;">
-            <input type="file" accept="{{ getFileSuffix() }}" name="userfile" style="display:none" id="userfile"
-              (change)="processDoc($event)" placement="left">
+          <label id="importInstanceSchema" *ngIf="!cfg.initCfg.disableNavbar" [attr.class]="getImportIconCSSClass()"
+            tooltip="Import instance or schema file" placement="left">
+            <input type="file" accept="{{ getFileSuffix() }}" name="userfile" id="userfile" (change)="processDoc($event)"
+              placement="left">
           </label>
         </div>
         <i (click)="toggleSearch()" [attr.class]="getSearchIconCSSClass()" tooltip="Toggle field search window" placement="left"></i>
@@ -22,7 +21,7 @@
       </h2>
     </div>
 
-    <div *ngIf="searchMode" class="searchBox">
+    <div class="searchBox" *ngIf="searchMode">
       <input type="text" #searchFilterBox id="search-filter-box" [(ngModel)]="searchFilter" [focus]="true"
         [typeahead]="dataSource" typeaheadWaitMs="900" (typeaheadOnSelect)="selectionChanged($event)"
         (typeaheadNoResults)="selectionNoResults($event)" placeholder="Search">
@@ -30,34 +29,36 @@
       <div class="clear"></div>
     </div>
 
-    <div [attr.class]="searchMode ? 'fieldListSearchOpen' : 'fieldList'" style="overflow:auto;" (scroll)="handleScroll($event)">
+    <div [attr.class]="searchMode ? 'fieldListSearchOpen' : 'fieldList'" (scroll)="handleScroll($event)">
       <div class="panel-group" id="accordion-markup">
         <div *ngFor="let docDef of getDocs()" #docDetail class="panel panel-default" [attr.id]="docDef.name">
           <div class="panel-heading" *ngIf="isDocNameVisible(docDef)"
             (click)="toggleFieldVisibility(docDef)">
             <h4 class="panel-title">
-              <div style="float:left">
+              <div class="panelTitleHeader">
                 <i class="fa fa-angle-right docCollapseIcon" *ngIf="!docDef.showFields"></i>
                 <i class="fa fa-angle-down docCollapseIcon" *ngIf="docDef.showFields"></i>
                 <i class="fa {{ isSource ? 'fa-hdd-o' : 'fa-download' }}"></i>
-                <div style="display:inline-block; width:5px">&nbsp;</div>
+                <div class="nbsp">&nbsp;</div>
                 <label>{{ docDef.getName(cfg.showTypes) }}</label>
               </div>
-              <div style="float:right; font-size:16px;" *ngIf="!cfg.initCfg.disableNavbar && !isAddFieldAvailable(docDef)">
+              <div class="trashIcon" *ngIf="!cfg.initCfg.disableNavbar && !isAddFieldAvailable(docDef)">
                 <i class="fa fa-trash link pull-right" (click)="removeDocument(docDef, $event)" container="body"
                   tooltip="Remove instance or schema file {{ docDef.description }}" placement="top"></i>
               </div>
             </h4>
-            <div style="float:right;" *ngIf="isAddFieldAvailable(docDef)">
+            <div class="addFieldIcon" *ngIf="isAddFieldAvailable(docDef)">
               <i class="fa fa-plus link" (click)="addField(docDef, $event)"
                 tooltip="Create a {{ docDef.type == 'Property' ? 'property' : 'constant' }}" placement="top" container="body"></i>
             </div>
             <div class="clear"></div>
           </div>
           <div class="panel-collapse collapse in" *ngIf="docDef.showFields">
-            <document-field-detail #fieldDetail *ngFor="let f of docDef.fields" [modalWindow]="modalWindow" [field]="f" [cfg]="cfg" [lineMachine]="lineMachine"></document-field-detail>
+            <document-field-detail #fieldDetail *ngFor="let f of docDef.fields" [modalWindow]="modalWindow" [field]="f" [cfg]="cfg"
+              [lineMachine]="lineMachine">
+            </document-field-detail>
             <div class="panel-body" *ngIf="!searchMode && docDef.isPropertyOrConstant && (!docDef.fields || !docDef.fields.length)">
-              <label style="width:100%; padding:5px 16px; margin:0">
+              <label>
                 No {{ docDef.type == 'Property' ? 'properties' : 'constants' }} exist.
               </label>
             </div>
@@ -68,8 +69,7 @@
         </div>
       </div>
     </div>
-    <div class="card-pf-heading fieldsCount" *ngIf="!getFieldCount()" 
-      style="float:left; font-size:12px;font-style:italic;">No documents specified</div>
+    <div class="card-pf-heading fieldsCount emptyFieldsCount" *ngIf="!getFieldCount()">No documents specified</div>
     <div class="card-pf-heading fieldsCount" *ngIf="getFieldCount()">{{ getFieldCount() }} fields</div>
   </div>
 </div>

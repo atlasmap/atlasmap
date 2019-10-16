@@ -2,23 +2,23 @@
   *ngIf="fieldShouldBeVisible()" [attr.draggable]="field.isTerminal()" (dragstart)="startDrag($event)" (drop)="endDrag($event)"
   (dragenter)="dragEnterLeave($event, true)" (dragleave)="dragEnterLeave($event, false)" (dragover)="allowDrop($event)">
   <div [attr.class]='getCssClass()' (click)="handleMouseClick($event)" *ngIf="field.visibleInCurrentDocumentSearch">
-    <div style="float:left;">
-      <div style="display:inline-block; width:24px;" *ngIf="!field.isSource()">
+    <div class="panelField">
+      <div class="nonSource" *ngIf="!field.isSource()">
         <i [attr.class]='getMappingClass()'></i>
         <i [attr.class]='getTransformationClass()'></i>
       </div>
       <div class="spacer" [attr.style]="getSpacerWidth()">&nbsp;</div>
-      <div *ngIf="!field.isTerminal()" style="display:inline-block;">
+      <div class="inLineBlock" *ngIf="!field.isTerminal()">
         <i [attr.class]="getParentToggleClass()"></i>
         <i *ngIf="!field.isCollection" class="fa fa-folder parentFolder"></i>
         <i *ngIf="field.isCollection" class="fa fa-list-ul parentFolder"></i>
       </div>
-      <div *ngIf="field.isTerminal()" style="display:inline-block;">
+      <div class="inLineBlock" *ngIf="field.isTerminal()">
         <i [attr.class]="getFieldTypeIcon()"></i>
       </div>
     </div>
-    <div style="display:inline-block; width:5px">&nbsp;</div>
-    <div *ngIf="!field.docDef.populateChildren(field); else selectable" style="display:inline-block; color: gray;">
+    <div class="nbsp">&nbsp;</div>
+    <div class="children" *ngIf="!field.docDef.populateChildren(field); else selectable">
       <label>{{ field.getFieldLabel(cfg.showTypes, false) }}</label>
     </div>
 
@@ -26,25 +26,26 @@
       <label>{{ field.getFieldLabel(cfg.showTypes, false) }}</label>
     </ng-template>
 
-    <div style="float:right; width:24px; text-align:right;" *ngIf="field.isSource()">
+    <div class="sourceField" *ngIf="field.isSource()">
       <i [attr.class]='getTransformationClass()'></i>
       <i [attr.class]='getMappingClass()'></i>
     </div>
-    <div class="propertyFieldIcons" style="float:right; text-align:right" *ngIf="field.userCreated">
+
+    <div class="propertyFieldIcons" *ngIf="field.userCreated">
       <i class="fa fa-edit link" aria-hidden="true" (click)="editField($event);"></i>
       <i class="fa fa-trash link" aria-hidden="true" (click)="removeField($event);"></i>
     </div>
+
     <div class="clear"></div>
 
     <div *ngIf="field.isTerminal() && cfg.showMappingPreview && selected">
-      <table style="width:100%; margin-top:5px;">
+      <table class="mappingTable">
         <tr>
-          <td style="width:12px;"></td>
           <td>
             <textarea *ngIf="field.isSource()" rows="1" id="preview-source" class="form-control previewSourceTextarea" [(ngModel)]='field.value'
               (blur)="cfg.mappingService.notifyMappingUpdated()" placeholder="Type sample data here"></textarea>
             <div *ngIf="!field.isSource()">
-              <table style="width:100%">
+              <table class="previewResults">
                 <tr>
                   <td>
                     <label>

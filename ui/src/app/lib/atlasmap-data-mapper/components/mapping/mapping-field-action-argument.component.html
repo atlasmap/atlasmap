@@ -7,16 +7,16 @@
   <ng-template #dropdown>
     <label>{{ getLabel(argConfig.name) }}</label>
     <select (change)="actionConfigParamSelectionChanged($event)" [ngModel]="getActionConfigParamVDefault(argConfig, actionIndex, argValIndex)">
-      <option *ngFor="let actionConfigParamVal of getActionConfigParamValues(argConfig)" [attr.argValIndex]="argValIndex"
-              [attr.actionIndex]="actionIndex" [attr.value]="actionConfigParamVal" style="color: black;">{{ actionConfigParamVal }}
+      <option class="actionConfigStyleOptions" *ngFor="let actionConfigParamVal of getActionConfigParamValues(argConfig)" [attr.argValIndex]="argValIndex"
+              [attr.actionIndex]="actionIndex" [attr.value]="actionConfigParamVal">{{ actionConfigParamVal }}
       </option>
     </select>
   </ng-template>
   <ng-template #dropdownDelimiter>
     <label>{{ getLabel(argConfig.name) }}</label>
-    <select name="separator" id="separator" [(ngModel)]="action.getArgumentValue(argConfig.name).value">
+    <select class="actionDelimiter" name="separator" id="separator" [(ngModel)]="action.getArgumentValue(argConfig.name).value">
       <ng-container *ngFor="let delimiter of delimiters" id="delimiter">
-        <option *ngIf="modeIsSupported(delimiter)" [value]="delimiter.actualDelimiter" style="color: black;">
+        <option class="actionConfigStyleOptions" *ngIf="modeIsSupported(delimiter)" [value]="delimiter.actualDelimiter">
           {{ delimiter.prettyName }}
         </option>
       </ng-container>
@@ -26,16 +26,16 @@
   <ng-template #textInput>
     <label>{{ getLabel(argConfig.name) }}: </label>
     <div *ngIf="argConfig.type == 'string'; else rightAlign">
-      <input type="text" class="input-{{argConfig.name}}" [(ngModel)]="action.getArgumentValue(argConfig.name).value"
-        (ngModelChange)="contentChanged()" (change)="actionConfigParamSelectionChanged($event)" style="text-align:left;"/>
+      <input class="leftText" type="text" class="input-{{argConfig.name}}" [(ngModel)]="action.getArgumentValue(argConfig.name).value"
+        (ngModelChange)="contentChanged()" (change)="actionConfigParamSelectionChanged($event)"/>
     </div>
     <ng-template #rightAlign>
-      <input type="text" class="input-{{argConfig.name}}" [(ngModel)]="action.getArgumentValue(argConfig.name).value"
-        (ngModelChange)="contentChanged()" (change)="actionConfigParamSelectionChanged($event)" style="text-align:right;"/>
+      <input class="rightText" type="text" class="input-{{argConfig.name}}" [(ngModel)]="action.getArgumentValue(argConfig.name).value"
+        (ngModelChange)="contentChanged()" (change)="actionConfigParamSelectionChanged($event)"/>
     </ng-template>
 
     <!-- Enable if performance of per-char validation becomes an issue.
-    <div style="float:left; margin-left: 5px;">
+    <div s t y l e="float:left; margin-left: 5px;">
       <div class="check-icon-enabled" *ngIf="checkIconEnabled; else disableCheckIcon">
         <i class="glyphicon glyphicon-ok" aria-hidden="true" (click)="acceptInput($event)"
           tooltip="Accept input" placement="left"></i>

@@ -5,11 +5,11 @@
       <div class="form-group">
         <div class="clear"></div>
         <select (change)="configSelectionChanged($event);" [ngModel]="action.name">
-          <option *ngFor="let actionConfig of getActionConfigs()" [attr.actionIndex]="actionIndex"
-                          [attr.value]="actionConfig.name" style="color: black">{{ getLabel(actionConfig.name) }}</option>
+          <option class="actionConfigOptions" *ngFor="let actionConfig of getActionConfigs()" [attr.actionIndex]="actionIndex"
+            [attr.value]="actionConfig.name">{{ getLabel(actionConfig.name) }}</option>
         </select>
-        <div style="float:right; margin-right: 5px;">
-          <i class="glyphicon glyphicon-remove" aria-hidden="true" (click)="removeAction(action)" style="font-size:14px"
+        <div class="removeTransIcon">
+          <i class="glyphicon glyphicon-remove" aria-hidden="true" (click)="removeAction(action)"
             tooltip="Remove transformation" placement="left"></i>
         </div>
         <div class="clear"></div>
@@ -17,11 +17,9 @@
 
       <div class="form-group argument" *ngFor="let argConfig of action.definition.arguments; let argValIndex = index">
         <div *ngIf="!isIndexArg(argConfig.name, argValIndex)">
-
           <mapping-field-action-argument [action]="action" [argConfig]="argConfig" [actionIndex]="actionIndex"
             [argValIndex]="argValIndex" [cfg]="cfg" [mappedField]="mappedField">
           </mapping-field-action-argument>
-
         </div>
       </div>
     </div>
