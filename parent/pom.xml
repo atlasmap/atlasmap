@@ -63,7 +63,7 @@
     <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
     <maven-dependency-plugin.version>3.0.0</maven-dependency-plugin.version>
     <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
-    <maven-plugin-plugin.version>3.5</maven-plugin-plugin.version>
+    <maven-plugin-plugin.version>3.6.0</maven-plugin-plugin.version>
     <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <mockito.version>3.1.0</mockito.version>
