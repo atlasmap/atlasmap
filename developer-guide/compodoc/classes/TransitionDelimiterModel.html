@@ -440,10 +440,14 @@ export class TransitionModel {
   }
 
   getPrettyName() {
+    let transitionFieldActionName &#x3D; &#x27;&#x27;;
+    if (this.transitionFieldAction) {
+      transitionFieldActionName &#x3D; &#x27; (&#x27; + this.transitionFieldAction.name + &#x27;)&#x27;;
+    }
     if (this.mode &#x3D;&#x3D;&#x3D; TransitionMode.ONE_TO_MANY) {
-      return TransitionModel.getMappingModeName(this.mode) + &#x27; (&#x27; + this.transitionFieldAction.name + &#x27;)&#x27;;
+      return TransitionModel.getMappingModeName(this.mode) + transitionFieldActionName;
     } else if (this.mode &#x3D;&#x3D;&#x3D; TransitionMode.MANY_TO_ONE) {
-      return TransitionModel.getMappingModeName(this.mode) + &#x27; (&#x27; + this.transitionFieldAction.name + &#x27;)&#x27;;
+      return TransitionModel.getMappingModeName(this.mode) + transitionFieldActionName;
     } else if (this.mode &#x3D;&#x3D;&#x3D; TransitionMode.ENUM) {
       return &#x27;Enum (table: &#x27; + this.lookupTableName + &#x27;)&#x27;;
     }

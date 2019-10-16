@@ -1019,7 +1019,7 @@ export class MappingFieldDetailComponent implements OnInit {
     <div class="tab-pane fade " id="c-templateData">
         <pre class="line-numbers"><code class="language-html">&lt;!-- our template for type ahead --&gt;
 &lt;ng-template #typeaheadTemplate let-model&#x3D;&quot;item&quot; let-index&#x3D;&quot;index&quot;&gt;
-&lt;h5 style&#x3D;&quot;font-style: italic;&quot;&gt;{{ model[&#x27;field&#x27;].docDef &#x3D;&#x3D; null ?
+&lt;h5 class&#x3D;&quot;fieldDocName&quot;&gt;{{ model[&#x27;field&#x27;].docDef &#x3D;&#x3D; null ?
   &#x27;Not yet defined&#x27; : model[&#x27;field&#x27;].docDef.name }}&lt;/h5&gt;
 &lt;h5&gt;{{ model[&#x27;field&#x27;].path }}&lt;/h5&gt;
 &lt;/ng-template&gt;
@@ -1037,7 +1037,7 @@ export class MappingFieldDetailComponent implements OnInit {
 &lt;/div&gt;
 &lt;/ng-template&gt;
 
-&lt;div class&#x3D;&quot;fieldDetail&quot; style&#x3D;&quot;white-space: nowrap;&quot; *ngIf&#x3D;&quot;mappedField&quot;&gt;
+&lt;div class&#x3D;&quot;fieldDetail&quot; *ngIf&#x3D;&quot;mappedField&quot;&gt;
 
   &lt;label class&#x3D;&quot;parentObjectName&quot; *ngIf&#x3D;&quot;displayParentObject()&quot;&gt;
 
@@ -1052,13 +1052,13 @@ export class MappingFieldDetailComponent implements OnInit {
     &lt;/label&gt;
 
     &lt;!-- Index: --&gt;
-    &lt;div class&#x3D;&quot;index-container&quot; style&#x3D;&quot;float:right&quot;&gt;
+    &lt;div class&#x3D;&quot;index-container&quot;&gt;
       &lt;label tooltip&#x3D;&quot;To change the index ordinal value, drag and drop to the desired position.&quot;
         *ngIf&#x3D;&quot;displayIndex()&quot;&gt;Index:&lt;/label&gt;
 
       &lt;div class&#x3D;&quot;index-value&quot; *ngIf&#x3D;&quot;displayIndex()&quot;&gt;
         &lt;div *ngIf&#x3D;&quot;mappedField.isPadField(); else textInput&quot;&gt;
-          &lt;label style&#x3D;&quot;color: dark-gray; margin-bottom: 0px; font-style: normal;&quot;
+          &lt;label
             tooltip&#x3D;&quot;This pad field has been automatically created to represent indexing gaps.&quot;&gt;{{ mapping.getIndexForMappedField(mappedField) }}&lt;/label&gt;
         &lt;/div&gt;
         &lt;ng-template #textInput&gt;
@@ -1067,7 +1067,7 @@ export class MappingFieldDetailComponent implements OnInit {
             tooltip&#x3D;&quot;You may edit the index for this element directly.  Placeholders may be automatically inserted to account for any gaps in the indexing.&quot;&gt;
         &lt;/ng-template&gt;
       &lt;/div&gt;
-      &lt;div style&#x3D;&quot;float: left;&quot;&gt;
+      &lt;div class&#x3D;&quot;removeMappedelement&quot;&gt;
         &lt;i class&#x3D;&quot;pficon pficon-delete link&quot; aria-hidden&#x3D;&quot;true&quot; (click)&#x3D;&quot;removeMappedField(mappedField)&quot;
           tooltip&#x3D;&quot;Remove mapping element&quot; placement&#x3D;&quot;left&quot;&gt;&lt;/i&gt;
       &lt;/div&gt;
@@ -1077,15 +1077,14 @@ export class MappingFieldDetailComponent implements OnInit {
   &lt;div class&#x3D;&quot;clear&quot;&gt;&lt;/div&gt;
 
   &lt;!-- Add Transformation --&gt;
-  &lt;div style&#x3D;&quot;width: 100%;&quot; *ngIf&#x3D;&quot;!mappedField.isPadField()&quot;&gt;
-    &lt;div style&#x3D;&quot;float: left; padding-right: 5px; padding-top: 10px&quot; *ngIf&#x3D;&quot;isTransformCapable()&quot;&gt;
-      &lt;i class&#x3D;&quot;fa fa-bolt&quot; aria-hidden&#x3D;&quot;true&quot; (click)&#x3D;&quot;addTransformation()&quot;
-        tooltip&#x3D;&quot;Add transformation&quot; placement&#x3D;&quot;top&quot;&gt;
-        &lt;label style&#x3D;&quot;padding-left: 5px; padding-top: 0px; font-family: Helvetica;&quot;&gt;Add Transformation&lt;/label&gt;
+  &lt;div class&#x3D;&quot;addTransformation&quot; *ngIf&#x3D;&quot;!mappedField.isPadField()&quot;&gt;
+    &lt;div class&#x3D;&quot;addTransformationIcon&quot; *ngIf&#x3D;&quot;isTransformCapable()&quot;&gt;
+      &lt;i class&#x3D;&quot;fa fa-bolt&quot; aria-hidden&#x3D;&quot;true&quot; (click)&#x3D;&quot;addTransformation()&quot; tooltip&#x3D;&quot;Add transformation&quot; placement&#x3D;&quot;top&quot;&gt;
+        &lt;label&gt;Add Transformation&lt;/label&gt;
       &lt;/i&gt;
     &lt;/div&gt;
     &lt;div class&#x3D;&quot;clear&quot;&gt;&lt;/div&gt;
-  &lt;/div&gt;
+  &lt;/div&gt;  
 
 &lt;/div&gt;
 </code></pre>
@@ -1117,7 +1116,7 @@ export class MappingFieldDetailComponent implements OnInit {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><!-- our template for type ahead --><ng-template #typeaheadTemplate let-model="item" let-index="index"><h5 style="font-style: italic;">{{ model[\'field\'].docDef == null ?  \'Not yet defined\' : model[\'field\'].docDef.name }}</h5><h5>{{ model[\'field\'].path }}</h5></ng-template><!-- our template for tooltip popover --><ng-template #tolTemplate><div class="fieldDetailTooltip">  <label class="parentObjectName" *ngIf="displayParentObject()">    <i [ngClass]="sourceIconCSSClass"></i> {{ parentObjectName }}  </label>  <label>{{ getFieldPath() }}</label>  <label *ngIf="displayParentObject() && mappedField.field.type">({{ mappedField.field.type }})</label>  <div class="clear"></div></div></ng-template><div class="fieldDetail" style="white-space: nowrap;" *ngIf="mappedField">  <label class="parentObjectName" *ngIf="displayParentObject()">    <!-- icon -->    <span      class="pficon pficon-info" [tooltip]="tolTemplate" placement="right">    </span>    <!-- field name -->    <label class="label">      {{ mappedField.field.name }}    </label>    <!-- Index: -->    <div class="index-container" style="float:right">      <label tooltip="To change the index ordinal value, drag and drop to the desired position."        *ngIf="displayIndex()">Index:</label>      <div class="index-value" *ngIf="displayIndex()">        <div *ngIf="mappedField.isPadField(); else textInput">          <label style="color: dark-gray; margin-bottom: 0px; font-style: normal;"            tooltip="This pad field has been automatically created to represent indexing gaps.">{{ mapping.getIndexForMappedField(mappedField) }}</label>        </div>        <ng-template #textInput>          <input type="text" id="{{inputId}}" placement="top" [ngModel]="mapping.getIndexForMappedField(mappedField)"            typeaheadWaitMs="400" (change)="indexSelectionChanged($event, mappedField)"            tooltip="You may edit the index for this element directly.  Placeholders may be automatically inserted to account for any gaps in the indexing.">        </ng-template>      </div>      <div style="float: left;">        <i class="pficon pficon-delete link" aria-hidden="true" (click)="removeMappedField(mappedField)"          tooltip="Remove mapping element" placement="left"></i>      </div>    </div>  </label>  <div class="clear"></div>  <!-- Add Transformation -->  <div style="width: 100%;" *ngIf="!mappedField.isPadField()">    <div style="float: left; padding-right: 5px; padding-top: 10px" *ngIf="isTransformCapable()">      <i class="fa fa-bolt" aria-hidden="true" (click)="addTransformation()"        tooltip="Add transformation" placement="top">        <label style="padding-left: 5px; padding-top: 0px; font-family: Helvetica;">Add Transformation</label>      </i>    </div>    <div class="clear"></div>  </div></div></div>'
+        var COMPONENT_TEMPLATE = '<div><!-- our template for type ahead --><ng-template #typeaheadTemplate let-model="item" let-index="index"><h5 class="fieldDocName">{{ model[\'field\'].docDef == null ?  \'Not yet defined\' : model[\'field\'].docDef.name }}</h5><h5>{{ model[\'field\'].path }}</h5></ng-template><!-- our template for tooltip popover --><ng-template #tolTemplate><div class="fieldDetailTooltip">  <label class="parentObjectName" *ngIf="displayParentObject()">    <i [ngClass]="sourceIconCSSClass"></i> {{ parentObjectName }}  </label>  <label>{{ getFieldPath() }}</label>  <label *ngIf="displayParentObject() && mappedField.field.type">({{ mappedField.field.type }})</label>  <div class="clear"></div></div></ng-template><div class="fieldDetail" *ngIf="mappedField">  <label class="parentObjectName" *ngIf="displayParentObject()">    <!-- icon -->    <span      class="pficon pficon-info" [tooltip]="tolTemplate" placement="right">    </span>    <!-- field name -->    <label class="label">      {{ mappedField.field.name }}    </label>    <!-- Index: -->    <div class="index-container">      <label tooltip="To change the index ordinal value, drag and drop to the desired position."        *ngIf="displayIndex()">Index:</label>      <div class="index-value" *ngIf="displayIndex()">        <div *ngIf="mappedField.isPadField(); else textInput">          <label            tooltip="This pad field has been automatically created to represent indexing gaps.">{{ mapping.getIndexForMappedField(mappedField) }}</label>        </div>        <ng-template #textInput>          <input type="text" id="{{inputId}}" placement="top" [ngModel]="mapping.getIndexForMappedField(mappedField)"            typeaheadWaitMs="400" (change)="indexSelectionChanged($event, mappedField)"            tooltip="You may edit the index for this element directly.  Placeholders may be automatically inserted to account for any gaps in the indexing.">        </ng-template>      </div>      <div class="removeMappedelement">        <i class="pficon pficon-delete link" aria-hidden="true" (click)="removeMappedField(mappedField)"          tooltip="Remove mapping element" placement="left"></i>      </div>    </div>  </label>  <div class="clear"></div>  <!-- Add Transformation -->  <div class="addTransformation" *ngIf="!mappedField.isPadField()">    <div class="addTransformationIcon" *ngIf="isTransformCapable()">      <i class="fa fa-bolt" aria-hidden="true" (click)="addTransformation()" tooltip="Add transformation" placement="top">        <label>Add Transformation</label>      </i>    </div>    <div class="clear"></div>  </div>  </div></div>'
     var COMPONENTS = [{'name': 'AppComponent', 'selector': 'atlasmap-dev-root'},{'name': 'AtlasmapNavbarComponent', 'selector': 'atlasmap-navbar'},{'name': 'ClassNameComponent', 'selector': 'class-name'},{'name': 'CollapsableHeaderComponent', 'selector': 'collapsable-header'},{'name': 'ConstantFieldEditComponent', 'selector': 'constant-field-edit'},{'name': 'DataMapperAppComponent', 'selector': 'data-mapper'},{'name': 'DataMapperAppExampleHostComponent', 'selector': 'data-mapper-example-host'},{'name': 'DataMapperErrorComponent', 'selector': 'data-mapper-error'},{'name': 'DocumentDefinitionComponent', 'selector': 'document-definition'},{'name': 'DocumentFieldDetailComponent', 'selector': 'document-field-detail'},{'name': 'EmptyModalBodyComponent', 'selector': 'empty-modal-body'},{'name': 'ExpressionComponent', 'selector': 'expression'},{'name': 'FieldEditComponent', 'selector': 'field-edit'},{'name': 'LineMachineComponent', 'selector': 'line-machine'},{'name': 'LookupTableComponent', 'selector': 'lookup-table'},{'name': 'MappingDetailComponent', 'selector': 'mapping-detail'},{'name': 'MappingFieldActionArgumentComponent', 'selector': 'mapping-field-action-argument'},{'name': 'MappingFieldActionComponent', 'selector': 'mapping-field-action'},{'name': 'MappingFieldContainerComponent', 'selector': 'mapping-field-container'},{'name': 'MappingFieldDetailComponent', 'selector': 'mapping-field-detail'},{'name': 'MappingListComponent', 'selector': 'mapping-list'},{'name': 'MappingListFieldComponent', 'selector': 'mapping-list-field'},{'name': 'MappingSelectionComponent', 'selector': 'mapping-selection'},{'name': 'MappingSelectionSectionComponent', 'selector': 'mapping-selection-section'},{'name': 'ModalErrorDetailComponent', 'selector': 'modal-error-detail'},{'name': 'ModalErrorWindowComponent', 'selector': 'modal-error-window'},{'name': 'ModalWindowComponent', 'selector': 'modal-window'},{'name': 'NamespaceEditComponent', 'selector': 'namespace-edit'},{'name': 'NamespaceListComponent', 'selector': 'namespace-list'},{'name': 'PropertyFieldEditComponent', 'selector': 'property-field-edit'},{'name': 'TemplateEditComponent', 'selector': 'template-edit'},{'name': 'ToolbarComponent', 'selector': 'toolbar'},{'name': 'TransitionSelectionComponent', 'selector': 'transition-selection'}];
     var DIRECTIVES = [{'name': 'FocusDirective', 'selector': '[focus]'}];
     var ACTUAL_COMPONENT = {'name': 'MappingFieldDetailComponent'};

@@ -602,8 +602,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="149"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/transition.model.ts:149</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="153"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/transition.model.ts:153</a></div>
                 </td>
             </tr>
 
@@ -641,8 +641,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="145"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/transition.model.ts:145</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="149"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/transition.model.ts:149</a></div>
                 </td>
             </tr>
 
@@ -680,8 +680,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="141"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/transition.model.ts:141</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="145"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/transition.model.ts:145</a></div>
                 </td>
             </tr>
 
@@ -719,8 +719,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="133"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/transition.model.ts:133</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="137"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/transition.model.ts:137</a></div>
                 </td>
             </tr>
 
@@ -758,8 +758,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="137"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/transition.model.ts:137</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="141"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/transition.model.ts:141</a></div>
                 </td>
             </tr>
 
@@ -892,10 +892,14 @@ export class TransitionModel {
   }
 
   getPrettyName() {
+    let transitionFieldActionName &#x3D; &#x27;&#x27;;
+    if (this.transitionFieldAction) {
+      transitionFieldActionName &#x3D; &#x27; (&#x27; + this.transitionFieldAction.name + &#x27;)&#x27;;
+    }
     if (this.mode &#x3D;&#x3D;&#x3D; TransitionMode.ONE_TO_MANY) {
-      return TransitionModel.getMappingModeName(this.mode) + &#x27; (&#x27; + this.transitionFieldAction.name + &#x27;)&#x27;;
+      return TransitionModel.getMappingModeName(this.mode) + transitionFieldActionName;
     } else if (this.mode &#x3D;&#x3D;&#x3D; TransitionMode.MANY_TO_ONE) {
-      return TransitionModel.getMappingModeName(this.mode) + &#x27; (&#x27; + this.transitionFieldAction.name + &#x27;)&#x27;;
+      return TransitionModel.getMappingModeName(this.mode) + transitionFieldActionName;
     } else if (this.mode &#x3D;&#x3D;&#x3D; TransitionMode.ENUM) {
       return &#x27;Enum (table: &#x27; + this.lookupTableName + &#x27;)&#x27;;
     }
