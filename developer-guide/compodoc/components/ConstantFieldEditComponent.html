@@ -802,6 +802,9 @@ export class ConstantFieldEditComponent implements ModalWindowValidator {
    * and enable the save button otherwise.
    */
   valueExistsOnCreation(): boolean {
+    if (!this.modalWindowComponent || !this.modalWindowComponent.visible) {
+      return false;
+    }
     if (this.isClosing) {
       return false;
     }
