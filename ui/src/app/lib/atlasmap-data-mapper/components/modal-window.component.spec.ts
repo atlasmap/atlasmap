@@ -53,7 +53,7 @@ describe('ModalWindowComponent', () => {
   it('should be initialized with EmptyModalBodyComponent', (done) => {
     comp.reset();
     comp.nestedComponentInitializedCallback = (mw: ModalWindowComponent) => {
-      expect(comp.nestedComponent instanceof EmptyModalBodyComponent).toBeTruthy(comp.nestedComponent);
+      expect(comp.nestedComponent instanceof EmptyModalBodyComponent).toBeTruthy();
       expect(comp.nestedComponent.isDataValid()).toBeTruthy();
       expect(comp.nestedComponent.getInitialFocusElement()).toBe(undefined);
       done();
@@ -79,26 +79,36 @@ describe('ModalWindowComponent', () => {
 
   it('should invoke OK button handler', (done) => {
     comp.reset();
+    comp.nestedComponentInitializedCallback = (mw: ModalWindowComponent) => {
+      const okEl = fixture.debugElement.query(By.css('.btn-primary')).nativeElement;
+      okEl.click();
+    };
     comp.okButtonHandler = (mw: ModalWindowComponent) => {
+      expect(comp.nestedComponent instanceof EmptyModalBodyComponent).toBeTruthy();
+      expect(comp.nestedComponent.isDataValid()).toBeTruthy();
+      expect(comp.nestedComponent.getInitialFocusElement()).toBe(undefined);
       done();
     };
     comp.show();
     comp.ngAfterViewInit();
     fixture.detectChanges();
-    const okEl = fixture.debugElement.query(By.css('.btn-primary')).nativeElement;
-    okEl.click();
   });
 
   it('should invoke cancel button handler', (done) => {
     comp.reset();
+    comp.nestedComponentInitializedCallback = (mw: ModalWindowComponent) => {
+      const cancelEl = fixture.debugElement.query(By.css('.btn-default')).nativeElement;
+      cancelEl.click();
+    };
     comp.cancelButtonHandler = (mw: ModalWindowComponent) => {
+      expect(comp.nestedComponent instanceof EmptyModalBodyComponent).toBeTruthy();
+      expect(comp.nestedComponent.isDataValid()).toBeTruthy();
+      expect(comp.nestedComponent.getInitialFocusElement()).toBe(undefined);
       done();
     };
     comp.show();
     comp.ngAfterViewInit();
     fixture.detectChanges();
-    const cancelEl = fixture.debugElement.query(By.css('.btn-default')).nativeElement;
-    cancelEl.click();
   });
 
 });
