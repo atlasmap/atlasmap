@@ -66,7 +66,9 @@ export class LineMachineComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.mappingUpdatedSubscription.unsubscribe();
+    if (this.mappingUpdatedSubscription) {
+      this.mappingUpdatedSubscription.unsubscribe();
+    }
   }
 
   handleRedrawMappingLinesEvent(event: AdmRedrawMappingLinesEvent): void {

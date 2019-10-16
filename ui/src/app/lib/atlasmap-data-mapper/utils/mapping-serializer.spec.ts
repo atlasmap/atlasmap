@@ -16,6 +16,7 @@ import { MappingModel } from '../models/mapping.model';
 import { TransitionMode } from '../models/transition.model';
 import { FieldAction, Multiplicity } from '../models/field-action.model';
 import { ExpressionModel } from '../models/expression.model';
+import { MappingDefinition } from '../models/mapping-definition.model';
 
 describe('MappingSerializer', () => {
   let cfg: ConfigModel;
@@ -32,6 +33,8 @@ describe('MappingSerializer', () => {
       ],
     });
     cfg = ConfigModel.getConfig();
+    cfg.clearDocs();
+    cfg.mappings = new MappingDefinition();
     cfg.errorService = TestBed.get(ErrorHandlerService);
     cfg.fieldActionService = TestBed.get(FieldActionService);
     cfg.fieldActionService.cfg = cfg;
@@ -255,6 +258,8 @@ describe('MappingSerializer', () => {
 
   it('should serialize many-to-one action', (done) => {
     inject([], () => {
+      jasmine.getFixtures().fixturesPath = 'base/test-resources/fieldActions';
+      cfg.preloadedFieldActionMetadata = JSON.parse(jasmine.getFixtures().read('atlasmap-field-action.json'));
       return cfg.fieldActionService.fetchFieldActions().then(() => {
         const mapping = new MappingModel();
         mapping.transition.mode = TransitionMode.MANY_TO_ONE;
@@ -290,6 +295,8 @@ describe('MappingSerializer', () => {
 
   it('should serialize one-to-many action', (done) => {
     inject([], () => {
+      jasmine.getFixtures().fixturesPath = 'base/test-resources/fieldActions';
+      cfg.preloadedFieldActionMetadata = JSON.parse(jasmine.getFixtures().read('atlasmap-field-action.json'));
       return cfg.fieldActionService.fetchFieldActions().then(() => {
         const mapping = new MappingModel();
         mapping.transition.mode = TransitionMode.ONE_TO_MANY;
@@ -312,6 +319,8 @@ describe('MappingSerializer', () => {
 
   it('should serialize expression action', (done) => {
     inject([], () => {
+      jasmine.getFixtures().fixturesPath = 'base/test-resources/fieldActions';
+      cfg.preloadedFieldActionMetadata = JSON.parse(jasmine.getFixtures().read('atlasmap-field-action.json'));
       return cfg.fieldActionService.fetchFieldActions().then(() => {
         const mapping = new MappingModel();
         mapping.transition.mode = TransitionMode.ONE_TO_ONE;

@@ -78,7 +78,7 @@
     <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
     <node.version>v10.15.3</node.version>
     <npm.version>6.4.1</npm.version>
-    <yarn.version>v1.16.0</yarn.version>
+    <yarn.version>v1.19.1</yarn.version>
     <checkstyle.skip>true</checkstyle.skip>
   </properties>
 
