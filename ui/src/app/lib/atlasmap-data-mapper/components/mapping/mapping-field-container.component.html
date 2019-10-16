@@ -12,9 +12,10 @@
 
   </ng-template>
 
-  <div class="MappingFieldSection" *ngIf="displayFieldSearchBox() || displayTransitionSelection()" on-mouseover='handleMouseOver($event)'
-    [attr.draggable]="true" (dragstart)="startDrag($event, mappedField)" (drop)="endDrag($event, mappedField)"
-    (dragenter)="dragEnterLeave($event, true)" (dragleave)="dragEnterLeave($event, false)" (dragover)="allowDrop($event)">
+  <div class="MappingFieldSectionDisplay" *ngIf="displayFieldSearchBox() || displayTransitionSelection()"
+    on-mouseover='handleMouseOver($event)' [attr.draggable]="true" (dragstart)="startDrag($event, mappedField)"
+    (drop)="endDrag($event, mappedField)" (dragenter)="dragEnterLeave($event, true)"
+    (dragleave)="dragEnterLeave($event, false)" (dragover)="allowDrop($event)">
 
     <div class="searchBoxWrapper" *ngIf="displayFieldSearchBox()">
       <div class="searchBox">
@@ -27,7 +28,7 @@
       <div class="clear"></div>
     </div>
 
-    <div *ngIf="displayTransitionSelection()" style="margin-top:10px;">
+    <div class="transitionSelectionDisplay" *ngIf="displayTransitionSelection()">
       <transition-selection [cfg]="cfg" [mapping]="mapping" [modalWindow]="modalWindow" [action]="mapping.transition.transitionFieldAction"></transition-selection>
     </div>
   </div>

@@ -120,10 +120,14 @@ export class TransitionModel {
   }
 
   getPrettyName() {
+    let transitionFieldActionName = '';
+    if (this.transitionFieldAction) {
+      transitionFieldActionName = ' (' + this.transitionFieldAction.name + ')';
+    }
     if (this.mode === TransitionMode.ONE_TO_MANY) {
-      return TransitionModel.getMappingModeName(this.mode) + ' (' + this.transitionFieldAction.name + ')';
+      return TransitionModel.getMappingModeName(this.mode) + transitionFieldActionName;
     } else if (this.mode === TransitionMode.MANY_TO_ONE) {
-      return TransitionModel.getMappingModeName(this.mode) + ' (' + this.transitionFieldAction.name + ')';
+      return TransitionModel.getMappingModeName(this.mode) + transitionFieldActionName;
     } else if (this.mode === TransitionMode.ENUM) {
       return 'Enum (table: ' + this.lookupTableName + ')';
     }

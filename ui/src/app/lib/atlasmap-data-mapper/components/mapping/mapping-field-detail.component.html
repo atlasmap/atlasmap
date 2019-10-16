@@ -1,6 +1,6 @@
 <!-- our template for type ahead -->
 <ng-template #typeaheadTemplate let-model="item" let-index="index">
-<h5 style="font-style: italic;">{{ model['field'].docDef == null ?
+<h5 class="fieldDocName">{{ model['field'].docDef == null ?
   'Not yet defined' : model['field'].docDef.name }}</h5>
 <h5>{{ model['field'].path }}</h5>
 </ng-template>
@@ -18,7 +18,7 @@
 </div>
 </ng-template>
 
-<div class="fieldDetail" style="white-space: nowrap;" *ngIf="mappedField">
+<div class="fieldDetail" *ngIf="mappedField">
 
   <label class="parentObjectName" *ngIf="displayParentObject()">
 
@@ -33,13 +33,13 @@
     </label>
 
     <!-- Index: -->
-    <div class="index-container" style="float:right">
+    <div class="index-container">
       <label tooltip="To change the index ordinal value, drag and drop to the desired position."
         *ngIf="displayIndex()">Index:</label>
 
       <div class="index-value" *ngIf="displayIndex()">
         <div *ngIf="mappedField.isPadField(); else textInput">
-          <label style="color: dark-gray; margin-bottom: 0px; font-style: normal;"
+          <label
             tooltip="This pad field has been automatically created to represent indexing gaps.">{{ mapping.getIndexForMappedField(mappedField) }}</label>
         </div>
         <ng-template #textInput>
@@ -48,7 +48,7 @@
             tooltip="You may edit the index for this element directly.  Placeholders may be automatically inserted to account for any gaps in the indexing.">
         </ng-template>
       </div>
-      <div style="float: left;">
+      <div class="removeMappedelement">
         <i class="pficon pficon-delete link" aria-hidden="true" (click)="removeMappedField(mappedField)"
           tooltip="Remove mapping element" placement="left"></i>
       </div>
@@ -58,14 +58,13 @@
   <div class="clear"></div>
 
   <!-- Add Transformation -->
-  <div style="width: 100%;" *ngIf="!mappedField.isPadField()">
-    <div style="float: left; padding-right: 5px; padding-top: 10px" *ngIf="isTransformCapable()">
-      <i class="fa fa-bolt" aria-hidden="true" (click)="addTransformation()"
-        tooltip="Add transformation" placement="top">
-        <label style="padding-left: 5px; padding-top: 0px; font-family: Helvetica;">Add Transformation</label>
+  <div class="addTransformation" *ngIf="!mappedField.isPadField()">
+    <div class="addTransformationIcon" *ngIf="isTransformCapable()">
+      <i class="fa fa-bolt" aria-hidden="true" (click)="addTransformation()" tooltip="Add transformation" placement="top">
+        <label>Add Transformation</label>
       </i>
     </div>
     <div class="clear"></div>
-  </div>
+  </div>  
 
 </div>

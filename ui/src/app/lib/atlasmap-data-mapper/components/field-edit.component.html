@@ -1,6 +1,6 @@
 <!-- our template for type ahead -->
 <ng-template #typeaheadTemplate let-model="item" let-index="index">
-  <h5 style="font-style:italic;" *ngIf="model['field'].docDef">{{ model['field'].docDef.name }}</h5>
+  <h5 class="fieldDocDefName" *ngIf="model['field'].docDef">{{ model['field'].docDef.name }}</h5>
   <h5>{{ model['field'].path }}</h5>
 </ng-template>
 

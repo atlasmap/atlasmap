@@ -7,9 +7,10 @@
 
   <div class="form-group" *ngIf="mapping.transition.isManyToOneMode() || mapping.transition.isOneToManyMode()">
     <label tooltip="Choose a multiplicity transformation">
-      <select (change)="configSelectionChanged($event);" [ngModel]="action.name" class="combobox">
-        <option *ngFor="let actionConfig of getMultiplicityActionConfigs()" [attr.actionIndex]="actionIndex"
-                        [attr.value]="actionConfig.name" style="color: black">{{ getLabel(actionConfig.name) }}</option>
+      <select class="combobox" (change)="configSelectionChanged($event);" [ngModel]="action.name">
+        <option class= "multiplicityOption" *ngFor="let actionConfig of getMultiplicityActionConfigs()"
+          [attr.actionIndex]="actionIndex" [attr.value]="actionConfig.name">{{ getLabel(actionConfig.name) }}
+        </option>
         </select>
     </label>
 
@@ -25,7 +26,7 @@
 <!--
       <select class="combobox" name="separator" id="separator" [ngModel]="mapping.transition.delimiter">
         <ng-container *ngFor="let delimiter of delimiters" id="delimiter">
-          <option *ngIf="modeIsSupported(delimiter)" value="{{ delimiter.delimiter }}" style="color: black;">
+          <option *ngIf="modeIsSupported(delimiter)" value="{{ delimiter.delimiter }}" s t y le ="color: black;">
             <label *ngIf="isUserDelimiter(delimiter); else standardDelimiter">{{ mapping.transition.userDelimiter }}</label>
             <ng-template #standardDelimiter>{{ delimiter.prettyName }}</ng-template>
           </option>

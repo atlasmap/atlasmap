@@ -1,38 +1,37 @@
 <div class="toolbar clearfix">
 
   <div class="toolbar-icons pull-right">
+    <div class="fSubX">
+      <i class="dropdown inline-block" [attr.class]="getCSSClass('enableExpression')"
+        (click)="toolbarButtonClicked('enableExpression', $event);"
+        tooltip='Enable/ Disable conditional mapping expression' placement="bottom">f<sub>(x)</sub>
+      </i>
+    </div>
 
-    <i class="dropdown inline-block" [attr.class]="getCSSClass('enableExpression')" (click)="toolbarButtonClicked('enableExpression', $event);"
-      tooltip='Enable/ Disable conditional mapping expression' placement="bottom"
-      style="float:left;font-weight:bold;margin-top:-6px;margin-left:50px;">f<sub>(x)</sub>
-    </i>
-
-    <div *ngIf="conditionalMappingExpressionEnabled()" #conditionalExprBlock
-      class="dropdown inline-block pull-left" style="width:400px;margin-left:10px" >
+    <div class="dropdown inline-block pull-left conditionalExprBlock" *ngIf="conditionalMappingExpressionEnabled()">
       <expression #expressionComponent [configModel]="cfg" [mapping]="cfg.mappings.activeMapping"></expression>
     </div>
 
-    <i class="fa dropdown inline-block pull-left" style="font-size:24px; color:gray;">|</i>
+    <i class="fa dropdown inline-block pull-left toolbarIconSeparator">|</i>
 
-    <div *ngIf="!cfg.initCfg.disableNavbar" class="dropdown inline-block pull-left">
+    <div class="dropdown inline-block pull-left importADM" *ngIf="!cfg.initCfg.disableNavbar">
       <label [attr.class]="getCSSClass('importMappings')" *ngIf="!cfg.initCfg.disableNavbar"
-        tooltip="Import an AtlasMap mappings catalog file (.adm) or Java archive (.jar)." placement="bottom"
-          style="font-size:20px;margin-top:2px">
-        <input type="file" accept="{{ getFileSuffix() }}" name="usermappingsfile" style="display:none"
+        tooltip="Import an AtlasMap mappings catalog file (.adm) or Java archive (.jar)." placement="bottom">
+        <input type="file" accept="{{ getFileSuffix() }}" name="usermappingsfile"
          id="usermappingsfile" (change)="processImportedFile($event)">
       </label>
     </div>
 
-    <div *ngIf="!cfg.initCfg.disableNavbar" dropdown #dropdown="bs-dropdown" class="dropdown inline-block pull-left">
-      <i [attr.class]="getCSSClass('exportMappings')" dropdownToggle (click)="false" style="float:left;color: black;;margin-top:2px"
+    <div class="dropdown inline-block pull-left exportADM" *ngIf="!cfg.initCfg.disableNavbar" dropdown #dropdown="bs-dropdown">
+      <i [attr.class]="getCSSClass('exportMappings')" dropdownToggle (click)="false"
         tooltip="Export the current mappings and support files into a catalog (.adm) file." placement="bottom"></i>
       <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
-        <div style="font-size:14px; width:426px;">
+        <div>
           <a href="#">
-            <div style="margin-left:8px; margin-right:8px;">Export mappings
+            <div class="exportMappings">Export mappings
               <input type="text" (change)="handleMappingsInstanceName($event)" placeholder="atlasmap-mapping.adm"
                 (click)="handleExportClick($event)" [(ngModel)]="mappingsFileName"/>
-                <button type="button" style="margin-left:7px; margin-right:4px;" (click)="handleExportMapping($event)">OK</button>
+                <button class="exportOK" type="button" (click)="handleExportMapping($event)">OK</button>
                 <button type="button" (click)="handleExportMappingCancel()">Cancel</button>
             </div>
           </a>
@@ -40,10 +39,10 @@
       </ul>
     </div>
 
-    <i *ngIf="!cfg.initCfg.disableNavbar" class="fa" style="font-size:24px; color:gray;">|</i>
+    <i class="fa toolbarIconSeparator" *ngIf="!cfg.initCfg.disableNavbar">|</i>
 
     <i class="fa fa-plus link" (click)="toolbarButtonClicked('addMapping', $event);"
-       tooltip="Add new mapping" placement="bottom"></i>
+      tooltip="Add new mapping" placement="bottom"></i>
 
     <i [attr.class]="getCSSClass('editTemplate')" *ngIf="targetSupportsTemplate"
       (click)="toolbarButtonClicked('editTemplate', $event);"></i>
@@ -51,8 +50,8 @@
     <i [attr.class]="getCSSClass('showMappingTable')" (click)="toolbarButtonClicked('showMappingTable', $event);"
       tooltip="Show/hide mapping table" placement="bottom"></i>
 
-    <i *ngIf="cfg.getFirstXmlDoc(false)" [attr.class]="getCSSClass('showNamespaceTable')" (click)="toolbarButtonClicked('showNamespaceTable', $event);"
-      tooltip="Show/hide namespace table" placement="bottom"></i>
+    <i *ngIf="cfg.getFirstXmlDoc(false)" [attr.class]="getCSSClass('showNamespaceTable')"
+      (click)="toolbarButtonClicked('showNamespaceTable', $event);" tooltip="Show/hide namespace table" placement="bottom"></i>
 
     <i [attr.class]="getCSSClass('showDetails')" (click)="toolbarButtonClicked('showDetails', $event);" container="body"
       tooltip="Show/hide mapping details" placement="left"></i>
@@ -133,7 +132,7 @@
           <div class="pull-left">
             <a class="dropdown-item" href="#"tooltip="Reset all mappings and clear all imported documents." placement="bottom">
               <label>
-                <i class="pficon pficon-restart" style="margin-left:22px;"></i>Reset All
+                <i class="pficon pficon-restart"></i>Reset All
               </label>
             </a>
           </div>
@@ -143,7 +142,7 @@
           <div class="pull-left">
             <a class="dropdown-item" href="#" tooltip="Clear all mappings." placement="bottom">
               <label>
-                <i class="pficon pficon-restart" style="margin-left:22px;"></i>Clear All Mappings
+                <i class="pficon pficon-restart"></i>Clear All Mappings
               </label>
             </a>
           </div>

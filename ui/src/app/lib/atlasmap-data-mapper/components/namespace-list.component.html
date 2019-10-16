@@ -32,7 +32,7 @@
           <label class="alias">{{ namespace.isTarget ? 'Target (tns)' : namespace.alias }}</label>
           <label class="uri">{{ namespace.uri }}</label>
           <label class="locationUri">{{ namespace.locationUri }}</label>
-          <div class="actions" style="float:right">
+          <div class="actions">
             <i class="fa fa-edit link" aria-hidden="true" (click)="addEditNamespace(namespace, $event);"></i>
             <i class="fa fa-trash link" aria-hidden="true" (click)="removeNamespace(namespace, $event);"></i>
           </div>
