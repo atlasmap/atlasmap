@@ -67,7 +67,7 @@
     <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <mockito.version>3.1.0</mockito.version>
-    <okhttp.version>3.8.0</okhttp.version>
+    <okhttp.version>4.2.2</okhttp.version>
     <osgi.symbolic.name>${project.artifactId}</osgi.symbolic.name>
     <osgi.import.pkg>*</osgi.import.pkg>
     <resteasy-spring-boot-starter.version>1.0.1.Final</resteasy-spring-boot-starter.version>
