@@ -98,7 +98,7 @@
     "patternfly": "3.59.4",
     "patternfly-bootstrap-combobox": "^1.1.6",
     "patternfly-ng": "^4.0.0",
-    "protractor": "~5.2.2",
+    "protractor": "~5.4.2",
     "puppeteer": "^1.20.0",
     "rimraf": "^3.0.0",
     "rxjs-tslint": "^0.1.5",
