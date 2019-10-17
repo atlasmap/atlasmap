@@ -57,7 +57,7 @@
     <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
     <log4j2.version>2.12.1</log4j2.version>
     <osgi.include.resource>{maven-resources}</osgi.include.resource>
-    <resteasy.version>3.6.1.Final</resteasy.version>
+    <resteasy.version>3.9.0.Final</resteasy.version>
     <maven-version>3.6.2</maven-version>
     <maven-bundle-plugin.version>4.2.1</maven-bundle-plugin.version>
     <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
