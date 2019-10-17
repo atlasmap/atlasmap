@@ -7535,12 +7535,13 @@ ngx-bootstrap@^5.2.0:
   resolved "https://registry.yarnpkg.com/ngx-bootstrap/-/ngx-bootstrap-5.2.0.tgz#3b8fc064a2830af014292070066ac6e64749ba14"
   integrity sha512-fh+OmaEdxCZnVLQFLqexdw4Xv0Lp2Ueq7un52gF26lTENhTAypGWgf2c92HXzbp4W/B0tnwIZ9mzQPwdDMH91w==
 
-ngx-logger@3.3.13:
-  version "3.3.13"
-  resolved "https://registry.yarnpkg.com/ngx-logger/-/ngx-logger-3.3.13.tgz#d5705c114d4b4d29a1495dc4bd02e65ecdab6b3b"
-  integrity sha512-FKoLpcu3SSeufLlfZ4hlKjXgMGXxNTEfYt/mO0ZnBZw8ashmnfFT8g/3K25ZmDt620GUURt7AYLfl36DxBNSrw==
+ngx-logger@4.0.5:
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/ngx-logger/-/ngx-logger-4.0.5.tgz#47ae9745c92ad81cb418930467e235588a2debf3"
+  integrity sha512-RUvu6TeDga+nUFGMwGiUn+GTCwpshfF4rsfS02i8euGXE9Lq9PPPzHg10sgonPCYBYj4GAx+bdPRv8BQpRyldQ==
   dependencies:
     tslib "^1.9.0"
+    vlq "^1.0.0"
 
 nice-try@^1.0.4:
   version "1.0.5"
@@ -11455,6 +11456,11 @@ vlq@^0.2.2:
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/vlq/-/vlq-0.2.3.tgz#8f3e4328cf63b1540c0d67e1b2778386f8975b26"
   integrity sha512-DRibZL6DsNhIgYQ+wNdWDL2SL3bKPlVrRiBqV5yuMm++op8W4kGFtaQfCs4KEJn0wBZcHVHJ3eoywX8983k1ow==
+
+vlq@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/vlq/-/vlq-1.0.1.tgz#c003f6e7c0b4c1edd623fd6ee50bbc0d6a1de468"
+  integrity sha512-gQpnTgkubC6hQgdIcRdYGDSDc+SaujOdyesZQMv6JlfQee/9Mp0Qhnys6WxDWvQnL5WZdT7o2Ul187aSt0Rq+w==
 
 vm-browserify@0.0.4:
   version "0.0.4"
