@@ -1,0 +1,96 @@
+/*
+    Copyright (C) 2019 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+/* mapping-list, namespace-list */
+.DataMapperUI .dataMapperItemList  { border:1px solid black; border:1px solid #CAC9C9; margin-right:10px; height:100%; }
+.DataMapperUI .dataMapperItemList  LABEL { float:left; margin-bottom:0px; padding-left:5px; }
+.DataMapperUI .dataMapperItemList  .items { height:calc(100% - 125px); position:relative; overflow:scroll; overflow-x:hidden;
+    float:left; clear:left; width:100%; }
+.DataMapperUI .dataMapperItemList  .items.searchShown { height:calc(100% - 157px); }
+.DataMapperUI .dataMapperItemList .item { border-bottom:1px solid #d1d1d1; }
+.DataMapperUI .dataMapperItemList .item.even { background-color:rgba(201,201,201,0.10); }
+.DataMapperUI .dataMapperItemList .item.active { background-color:#39a5dc; color:white; }
+.DataMapperUI .dataMapperItemList .item.active .fieldPath I { color:white; text-shadow:0 1px 2px rgba(54,54,54,0.24); }
+.DataMapperUI .dataMapperItemList .searchBox {  }
+.DataMapperUI .dataMapperItemList .itemCount { padding:5px; font-size:10px; font-weight:bold;
+    text-align:right; margin:0; width:100%; border-top:1px solid #CAC9C9; padding-right:12px;
+    border-bottom:0px solid black; }
+.DataMapperUI .dataMapperItemList .itemCount { float:left; clear:left; }
+.DataMapperUI .dataMapperItemList .card-pf-title .name { display:inline-block; width:calc(100% - 45px); margin-left:3px; float:left; }
+.DataMapperUI .dataMapperItemList .card-pf-title .name I { margin-right:5px; vertical-align:baseline; }
+.DataMapperUI .dataMapperItemList .card-pf-title .name LABEL { float:none; padding-left:0px; }
+.DataMapperUI .dataMapperItemList .card-pf-title { border-bottom:1px solid #CAC9C9; margin:0; padding-top:20px; padding-bottom:20px; }
+.DataMapperUI .dataMapperItemList I.importExportIcon { float:right; }
+.DataMapperUI .dataMapperItemList I.searchBoxIcon { float:right; }
+.DataMapperUI .dataMapperItemList .rows { border-top:1px solid #d1d1d1; }
+.DataMapperUI .dataMapperItemList .rows.searchShown { }
+.DataMapperUI .dataMapperItemList .searchHeaderWrapper { width:100%; float:left; clear:left; position:relative; }
+.DataMapperUI .dataMapperItemList .rowTitles { background-color:white; width:calc(100% - 0px); overflow:scroll; overflow-x:hidden; padding: 2px 6px; }
+.DataMapperUI .dataMapperItemList .rowTitles.searchShown { }
+.DataMapperUI .dataMapperItemList .rowTitles LABEL { width:calc(40% - 20px); padding:5px 5px; float:left; margin-bottom:0px; }
+.DataMapperUI .dataMapperItemList .rowTitles LABEL I { margin-right:5px; vertical-align:baseline; text-shadow: 0 1px 2px rgba(3, 3, 3, 0.24); }
+.DataMapperUI .dataMapperItemList .itemRow { padding:5px 6px;}
+.DataMapperUI .dataMapperItemList .noSearchResults { font-weight:bolder; font-size:14px; text-align:center; padding:30px; }
+.DataMapperUI .dataMapperItemList .noSearchResults LABEL { float:none; }
+
+/* mapping-list */
+.DataMapperUI .mappingList .fieldNames { float:left; width:calc(40% - 20px);  }
+.DataMapperUI .mappingList .targetFieldNames { }
+.DataMapperUI .mappingList .fieldPath {  clear:left; }
+.DataMapperUI .mappingList .fieldPath I { margin-left:5px; font-size:12px; color:#0088ce; text-shadow: 0 1px 2px rgba(3, 3, 3, 0.24); }
+.DataMapperUI .mappingList .transition { float:left; width:calc(15% - 20px); }
+.DataMapperUI .mappingList .error { float:right; font-size:14px; }
+.DataMapperUI .mappingList .rowTitles LABEL.type { width:calc(15% - 20px); }
+
+/* namespace-list */
+.DataMapperUI .namespaceList LABEL.alias { width:calc(15% - 0px); }
+.DataMapperUI .namespaceList LABEL.uri { width:calc(30% - 0px); }
+.DataMapperUI .namespaceList LABEL.locationUri { width:calc(30% - 0px); }
+.DataMapperUI .namespaceList .actions { float:right; }
+.DataMapperUI .namespaceList .actions .fa { margin-left:2px; font-size:14px; }
+
+/* data preview */
+.DataMapperUI .previewSourceTextarea { width:100%; height:29px; }
+.DataMapperUI .previewResultContainer { position: relative; width: 100%; height: 29px; }
+.DataMapperUI .previewResultContainer:before {
+  box-sizing: border-box;
+  content: '';
+  top: 0;
+  left: 0;
+  position: absolute;
+  border-top: 14px solid transparent;
+  border-bottom: 14px solid transparent;
+  border-left: 14px solid #003b5d;
+}
+.DataMapperUI .previewResultContainer:after { box-sizing: border-box; }
+.DataMapperUI .previewResultContainer textarea {
+  min-height: 29px;
+  height: 100%;
+  width: 100%;
+  resize: none;
+  padding-top: 4px;
+  padding: 4px 4px 4px 22px;
+  line-height: 1.75;
+  border: none;
+  font-size: 12px;
+  color: black;
+}
+
+table.mappedFieldTable { width:100%; margin-top:3px; margin-bottom:3px; }
+table.mappedFieldTable .mappedFieldTablePreview { width:97%; }
+table.mappingTable { width:100%; margin-top:5px; }
+table.mappingTable tr { width:12px; }
+table.previewResults { width:100% }

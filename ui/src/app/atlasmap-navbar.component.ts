@@ -14,7 +14,7 @@ import { ErrorType, ErrorScope, ErrorLevel, ErrorInfo } from './lib/atlasmap-dat
 @Component({
   selector: 'atlasmap-navbar',
   templateUrl: './atlasmap-navbar.component.html',
-  styleUrls: ['./lib/atlasmap-data-mapper/components/data-mapper-app.component.css']
+  styleUrls: ['./lib/atlasmap-data-mapper/components/data-mapper-base.component.css']
 })
 
 export class AtlasmapNavbarComponent implements OnInit {
