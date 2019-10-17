@@ -39,7 +39,7 @@
     <from.image.version>1.3</from.image.version>
     <fabric8.mode>kubernetes</fabric8.mode>
     <temporary-docker-image>atlas-runtime-temporary</temporary-docker-image>
-    <docker.maven.plugin.version>0.23.0</docker.maven.plugin.version>
+    <docker.maven.plugin.version>3.0.11.fuse-710005</docker.maven.plugin.version>
     <license.dir>${project.basedir}/src/main/resources/license</license.dir>
     <license.output.dir>${project.build.directory}/licenses</license.output.dir>
   </properties>
