@@ -873,8 +873,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="169"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/data-mapper.module.ts:169</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="171"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/data-mapper.module.ts:171</a></div>
                 </td>
             </tr>
 
@@ -913,6 +913,7 @@
 
 import { NgModule, ModuleWithProviders, CUSTOM_ELEMENTS_SCHEMA } from &#x27;@angular/core&#x27;;
 import { CommonModule } from &#x27;@angular/common&#x27;;
+import { BrowserAnimationsModule } from &#x27;@angular/platform-browser/animations&#x27;;
 import { HttpClientModule, HttpClientXsrfModule, HttpXsrfTokenExtractor, HTTP_INTERCEPTORS } from &#x27;@angular/common/http&#x27;;
 import { FormsModule, ReactiveFormsModule } from &#x27;@angular/forms&#x27;;
 import { AlertModule, BsDropdownModule, TooltipModule, TypeaheadModule } from &#x27;ngx-bootstrap&#x27;;
@@ -986,6 +987,7 @@ export const loggerModuleForRoot: ModuleWithProviders &#x3D; LoggerModule.forRoo
 @NgModule({
   imports: [
     CommonModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
