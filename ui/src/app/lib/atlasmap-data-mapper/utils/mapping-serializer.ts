@@ -347,7 +347,7 @@ export class MappingSerializer {
       actionArguments[argValue.name] = argValue.value;
       const argumentConfig: FieldActionArgument = action.definition.getArgumentForName(argValue.name);
       if (argumentConfig == null) {
-        cfg.errorService.addError(new ErrorInfo({message: `Cannot find action argument with name: ${argValue.name}`,
+        cfg.errorService.addError(new ErrorInfo({message: `Cannot find action argument ${argValue.name}: ${argValue.value}`,
           level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: action}));
          continue;
       }

@@ -1,0 +1,39 @@
+/*
+    Copyright (C) 2019 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+/* general data-mapper-wide styles and variables */
+
+@-webkit-keyframes dm-fade-in { from {opacity:0} to {opacity:1} }
+@keyframes dm-fade-in { from {opacity:0} to {opacity:1} }
+
+@-webkit-keyframes dm-fade-out { from {opacity:1} to {opacity:0} }
+@keyframes dm-fade-out { from {opacity:1} to {opacity:0} }
+
+@-webkit-keyframes dm-swipe-right { from {margin-left:-100%;} to {margin-left:0%;} }
+@keyframes dm-swipe-right { from {margin-left:-100%;} to {margin-left:0%;} }
+
+@-webkit-keyframes dm-swipe-left { from {margin-left:0%;} to {margin-left:-100%;} }
+@keyframes dm-swipe-left { from {margin-left:0%;} to {margin-left:-100%;} }
+
+:root {
+  --current-active-color: green;
+  --disabled-element-color: rgb(175,175,175);
+  --dropdown-hover-color: rgb(54,54,54);
+  --field-label-color: #363636;
+  --item-color: #CAC9C9;
+  --selected-item-color: #5CBADF;
+  --selection-background-color: #F6F6F6;
+}
