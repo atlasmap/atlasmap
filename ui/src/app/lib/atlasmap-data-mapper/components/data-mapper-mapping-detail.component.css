@@ -281,3 +281,7 @@
     display: block;
 }
 
+/* lookup-table */
+.DataMapperUI .LookupTableComponent .lookupTableRow { margin:0px 10px 10px 5px; padding:5px 0px; }
+.DataMapperUI .LookupTableComponent LABEL { width:150px; margin-right:20px; overflow:hidden; vertical-align:bottom; }
+.DataMapperUI .LookupTableComponent SELECT { width:200px; vertical-align:super; }
