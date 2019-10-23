@@ -56,6 +56,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
   private candidateSrcElement = null;
   private candidateIndex = 0;
   private lastUpdatedEvent = null;
+  private textUpdated = false;
 
   ngOnInit() {
     // Padding fields don't make sense for expression mapping
@@ -132,11 +133,11 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
       self.candidateIndex = 0;
 
       // Only validate for inserted or appended text nodes.
-      if ((!self.lastUpdatedEvent && self.getExpression().getLastNode() instanceof TextNode) ||
-          (self.lastUpdatedEvent && self.lastUpdatedEvent.node instanceof TextNode)) {
+      if (self.textUpdated) {
         self.configModel.mappingService.notifyMappingUpdated();
       }
-    }, 1000);
+      self.textUpdated = false;
+    }, 500);
   }
 
   getSourcePanelIconCSSClass(c: any): string {
@@ -426,6 +427,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
     const range = window.getSelection().getRangeAt(0);
     const startContainer = range.startContainer;
     const startOffset = range.startOffset;
+    this.textUpdated = true;
     if (startContainer === this.markup.nativeElement) {
       if (startOffset === 0) {
         this.getExpression().insertText(key, this.getExpression().nodes[0].getUuid(), 0);
@@ -445,6 +447,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
 
   private removeTokenAtCaretPosition(before: boolean) {
     const selection = window.getSelection();
+    this.textUpdated = true;
     if (!selection.rangeCount) {
       if (this.getCaretPositionNodeId() === ExpressionComponent.trailerId) {
         if (before) {
