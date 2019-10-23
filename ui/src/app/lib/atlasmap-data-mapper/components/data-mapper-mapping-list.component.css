@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-@import 'data-mapper-common.component.css';
+@import 'data-mapper-base.component.css';
 
 /* mapping-list, namespace-list */
 .DataMapperUI .dataMapperItemList  { border:1px solid black; border:1px solid var(--item-color); margin-right:10px; height:100%; }
@@ -90,6 +90,16 @@
   font-size: 12px;
   color: black;
 }
+
+/* lookup-table */
+.DataMapperUI .LookupTableComponent .lookupTableRow { margin:0px 10px 10px 5px; padding:5px 0px; }
+.DataMapperUI .LookupTableComponent LABEL { width:150px; margin-right:20px; overflow:hidden; vertical-align:bottom; }
+.DataMapperUI .LookupTableComponent SELECT { width:200px; vertical-align:super; }
+
+/* lookup-table */
+.DataMapperUI .LookupTableComponent .lookupTableRow { margin:0px 10px 10px 5px; padding:5px 0px; }
+.DataMapperUI .LookupTableComponent LABEL { width:150px; margin-right:20px; overflow:hidden; vertical-align:bottom; }
+.DataMapperUI .LookupTableComponent SELECT { width:200px; vertical-align:super; }
 
 table.mappedFieldTable { width:100%; margin-top:3px; margin-bottom:3px; }
 table.mappedFieldTable .mappedFieldTablePreview { width:97%; }

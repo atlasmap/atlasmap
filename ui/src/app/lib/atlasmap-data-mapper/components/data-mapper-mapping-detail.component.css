@@ -14,12 +14,20 @@
     limitations under the License.
 */
 
-@import 'data-mapper-common.component.css';
+@import 'data-mapper-base.component.css';
+
+/* collapsable-header */
+.DataMapperUI .CollapsableCardHeader {  border-top:1px solid #d1d1d1; }
+.DataMapperUI .CollapsableCardHeader .card-pf-heading { border-bottom:0; padding-left:5px; }
+.DataMapperUI .sources .CollapsableCardHeader .card-pf-heading { border-top:0; }
+.DataMapperUI .CollapsableCardHeader .card-pf-title { font-size:16px; }
+.DataMapperUI .CollapsableCardHeader I { margin-right:0px; vertical-align:middle; width:24px; font-size:20px; }
 
 /* mapping-field-detail */
 .DataMapperUI .fieldDetail INPUT { padding:2px 2px; width:calc(100%);
   color: #4d5258; box-shadow: inset 0 2px 2px 0 rgba(0, 0, 0, 0.08); border:solid 1px #bbbbbb; }
 .DataMapperUI .fieldDetail LABEL.parentObjectName { float: left; width: 100%; margin-bottom: 0px; }
+.DataMapperUI .fieldDetail .parentObjectName .pficon-info { margin-right:4px; }
 .DataMapperUI .fieldDetail LABEL { text-align: left; width: 70%; }
 .DataMapperUI .fieldDetail .addTransformation { width: 100%; }
 .DataMapperUI .fieldDetail .addTransformation .addTransformationIcon { float: left; padding-right: 5px; padding-top: 10px; }

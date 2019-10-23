@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-@import 'data-mapper-common.component.css';
+@import 'data-mapper-base.component.css';
 
 .DataMapperUI .toolbar { margin:1px 0px; padding:10px; }
 .DataMapperUI .toolbar .toolbar-icons I { font-size:20px; margin-left:10px; vertical-align:middle; }
