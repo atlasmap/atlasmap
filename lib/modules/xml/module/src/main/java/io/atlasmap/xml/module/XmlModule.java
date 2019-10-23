@@ -27,6 +27,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import io.atlasmap.core.AtlasPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -202,7 +203,13 @@ public class XmlModule extends BaseAtlasModule {
                 XmlField targetSubField = new XmlField();
                 AtlasXmlModelFactory.copyField(targetField, targetSubField, false);
                 XmlPath subPath = new XmlPath(targetField.getPath());
-                subPath.setVacantCollectionIndex(i);
+                if (subPath.getCollectionSegmentCount() == 1) {
+                    //handle asymmetric case with single target
+                    subPath.setVacantCollectionIndex(i);
+                } else {
+                    //handle symmetric case with matching collection counts
+                    subPath.copyCollectionIndexes(new XmlPath(sourceSubField.getPath()));
+                }
                 targetSubField.setPath(subPath.toString());
                 targetFieldGroup.getField().add(targetSubField);
                 session.head().setSourceField(sourceSubField);

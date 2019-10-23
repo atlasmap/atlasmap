@@ -16,8 +16,7 @@
 package io.atlasmap.xml.core;
 
 import java.io.ByteArrayInputStream;
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -25,6 +24,7 @@ import java.util.Optional;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import io.atlasmap.core.AtlasPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -88,126 +88,137 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
             LOG.debug("Reading source value for field: " + xmlField.getPath());
         }
         Optional<XmlNamespaces> xmlNamespaces = getSourceNamespaces(session, xmlField);
-        XmlSegmentContext lastSegment = null;
-        List<Element> parentNodes = Arrays.asList(document.getDocumentElement());
         XmlPath path = new XmlPath(xmlField.getPath());
-        for (XmlSegmentContext sc : path.getXmlSegments(false)) {
-            lastSegment = sc;
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Now processing segment: " + sc.getName());
-            }
-            if (path.getParentSegmentOf(sc) == null || path.getParentSegmentOf(sc).isRoot()) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Skipping root segment: " + sc);
-                }
-                // processing root node part of path such as the "XOA" part of
-                // "/XOA/contact<>/firstName", skip.
-                continue;
-            }
-            parentNodes = extractSegment(parentNodes, sc, xmlNamespaces);
+        List<XmlField> fields = getFieldsForPath(session, xmlNamespaces, document.getDocumentElement(), field, path, 0);
+
+        if (path.hasCollection() && !path.isIndexedCollection()) {
+            FieldGroup fieldGroup = AtlasModelFactory.createFieldGroupFrom(field);
+            fieldGroup.getField().addAll(fields);
+            session.head().setSourceField(fieldGroup);
+            return fieldGroup;
+        } else if (fields.size() == 1) {
+            field.setValue(fields.get(0).getValue());
+            return field;
+        } else {
+            return field;
         }
-        if (lastSegment != null) {
-            readValue(session, parentNodes, lastSegment, xmlField);
-        }
-        return session.head().getSourceField();
     }
 
-    private List<Element> extractSegment(List<Element> parentNodes, XmlSegmentContext sc, Optional<XmlNamespaces> xmlNamespaces) throws AtlasException {
-        List<Element> answer = new LinkedList<>();
-        for (Element parentNode : parentNodes) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Parent element is currently: " + xmlHelper.writeDocumentToString(true, parentNode));
-            }
-            if (sc.isAttribute()) {
-                answer.add(parentNode);
-                continue;
-            }
+    private List<XmlField> getFieldsForPath(AtlasInternalSession session, Optional<XmlNamespaces> xmlNamespaces, Element node, Field field, XmlPath path, int depth) {
+        List<XmlField> xmlFields = new ArrayList<>();
+        List<XmlSegmentContext> segments = path.getXmlSegments(false);
 
-            String childrenElementName = sc.getName();
-            String namespaceAlias = sc.getNamespace();
-            Optional<String> namespace = getNamespace(xmlNamespaces, namespaceAlias);
+        if (segments.size() == depth) {
+            XmlField xmlField = new XmlField();
+            AtlasModelFactory.copyField(field, xmlField, false);
+            XmlSegmentContext lastSegment = segments.get(depth - 1);
+            copyValue(session, lastSegment, node, xmlField);
+            xmlFields.add(xmlField);
+        } else if (segments.size() > depth) {
+            XmlSegmentContext segment = segments.get(depth);
             if (LOG.isDebugEnabled()) {
-                LOG.debug("Looking for children elements with name: " + childrenElementName);
+                LOG.debug("Now processing segment: " + segment.getName());
             }
-            List<Element> children = XmlIOHelper.getChildrenWithNameStripAlias(childrenElementName, namespace, parentNode);
-            if (children == null || children.isEmpty()) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Skipping source value set, couldn't find children with name '" + childrenElementName
-                            + "', for segment: " + sc);
-                }
-                continue;
-            }
-            if (sc.getCollectionType() != CollectionType.NONE) {
-                Integer index = sc.getCollectionIndex();
-                if (index == null) {
-                    // TODO process collection
-                    answer.addAll(children);
-                    continue;
-                }
-                if (index >= children.size()) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("Skipping source value set, children list can't fit index " + index
-                                + ", children list size: " + children.size());
+            if (depth == 0) {
+                if (segment.getName().startsWith(XmlIOHelper.getNodeNameWithoutNamespaceAlias(node))) {
+                    Optional<String> namespace = Optional.empty();
+                    if (segment.getNamespace() != null) {
+                        namespace = getNamespace(xmlNamespaces, segment.getNamespace());
                     }
-                    continue;
+                    if (!namespace.isPresent() || namespace.get().equals(node.getNamespaceURI())) {
+                        // processing root node part of path such as the "XOA" part of
+                        // "/XOA/contact<>/firstName", skip.
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("Skipping root segment: " + segment);
+                        }
+                        if (segments.size() > 1) {
+                            depth = 1;
+                            segment = segments.get(depth);
+                        }
+                    }
                 }
-                answer.add(children.get(index));
+            }
+            String fieldName = segment.getName();
+            String fieldNamespace = segment.getNamespace();
+            Optional<String> namespace = getNamespace(xmlNamespaces, fieldNamespace);
+
+            if (segment.isAttribute() && segments.size() == depth + 1) {
+                //if last segment is attribute
+                List<XmlField> fields = getFieldsForPath(session, xmlNamespaces, node, field, path, depth + 1);
+                xmlFields.addAll(fields);
             } else {
-                answer.add(children.get(0));
+                List<Element> children = XmlIOHelper.getChildrenWithNameStripAlias(fieldName, namespace, node);
+                if (children == null || children.isEmpty()) {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Skipping source value set, couldn't find children with name '" + fieldName
+                            + "', for segment: " + segment);
+                    }
+                    return xmlFields;
+                }
+
+                if (segment.getCollectionType() != CollectionType.NONE) {
+                    Integer index = segment.getCollectionIndex();
+                    if (index == null) {
+                        //if index not included, iterate over all
+                        int arrayIndex = 0;
+                        for (Element arrayItem : children) {
+                            List<XmlField> arrayFields = getFieldsForPath(session, xmlNamespaces, arrayItem, field, path, depth + 1);
+                            for (XmlField arrayField : arrayFields) {
+                                AtlasPath subPath = new AtlasPath(arrayField.getPath());
+                                //include the array index within the path
+                                subPath.setCollectionIndex(depth + 1, arrayIndex);
+                                arrayField.setPath(subPath.toString());
+                            }
+                            xmlFields.addAll(arrayFields);
+                            arrayIndex++;
+                        }
+                    } else if (index < children.size()) {
+                        List<XmlField> fields = getFieldsForPath(session, xmlNamespaces, children.get(index), field, path, depth + 1);
+                        xmlFields.addAll(fields);
+                    } else if (LOG.isDebugEnabled()) {
+                        LOG.debug("Skipping source value set, children list can't fit index " + index
+                            + ", children list size: " + children.size());
+                    }
+                } else {
+                    List<XmlField> fields = getFieldsForPath(session, xmlNamespaces, children.get(0), field, path, depth + 1);
+                    xmlFields.addAll(fields);
+                }
             }
         }
-        return answer;
+
+        return xmlFields;
     }
 
-    private void readValue(AtlasInternalSession session, List<Element> parentNodes, XmlSegmentContext sc, XmlField xmlField) {
+    private void copyValue(AtlasInternalSession session, XmlSegmentContext sc, Element node, XmlField xmlField) {
         if (xmlField.getFieldType() == null) {
             xmlField.setFieldType(FieldType.STRING);
         }
 
-        XmlPath path = new XmlPath(xmlField.getPath());
-        FieldGroup fieldGroup = null;
-        if (path.hasCollection() && !path.isIndexedCollection()) {
-            fieldGroup = AtlasModelFactory.createFieldGroupFrom(xmlField);
-            session.head().setSourceField(fieldGroup);
+        String value;
+        if (sc.isAttribute()) {
+            String attributeName = sc.getQName();
+            value = node.getAttribute(attributeName);
+        } else {
+            value = node.getTextContent();
         }
 
-        for (int i=0; i<parentNodes.size(); i++) {
-            Element parentNode = parentNodes.get(i);
-            XmlField targetField = xmlField;
-            if (fieldGroup != null) {
-                targetField = new XmlField();
-                AtlasModelFactory.copyField(xmlField, targetField, false);
-                XmlPath subPath = new XmlPath(targetField.getPath());
-                subPath.setVacantCollectionIndex(i);
-                targetField.setIndex(i);
-                targetField.setPath(subPath.toString());
-                fieldGroup.getField().add(targetField);
-            }
+        if (value == null) {
+            return;
+        }
 
-            String value = parentNode.getTextContent();
-            if (sc.isAttribute()) {
-                String attributeName = sc.getQName();
-                value = parentNode.getAttribute(attributeName);
-            }
-
-            if (value == null) {
-                return;
-            }
-
-            if (targetField.getFieldType() == FieldType.STRING) {
-                targetField.setValue(value);
-            } else {
-                Object convertedValue;
-                try {
-                    convertedValue = conversionService.convertType(value, targetField.getFormat(),
-                            targetField.getFieldType(), null);
-                    targetField.setValue(convertedValue);
-                } catch (AtlasConversionException e) {
-                    AtlasUtil.addAudit(session, targetField.getDocId(),
-                            String.format("Failed to convert field value '%s' into type '%s'", value,
-                                    targetField.getFieldType()),
-                            targetField.getPath(), AuditStatus.ERROR, value);
-                }
+        if (xmlField.getFieldType() == FieldType.STRING) {
+            xmlField.setValue(value);
+        } else {
+            Object convertedValue;
+            try {
+                convertedValue = conversionService.convertType(value, xmlField.getFormat(),
+                    xmlField.getFieldType(), null);
+                xmlField.setValue(convertedValue);
+            } catch (AtlasConversionException e) {
+                AtlasUtil.addAudit(session, xmlField.getDocId(),
+                        String.format("Failed to convert field value '%s' into type '%s'", value,
+                            xmlField.getFieldType()),
+                    xmlField.getPath(), AuditStatus.ERROR, value);
             }
         }
     }

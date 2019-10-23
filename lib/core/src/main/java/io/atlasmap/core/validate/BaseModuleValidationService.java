@@ -16,6 +16,7 @@
 package io.atlasmap.core.validate;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -157,24 +158,32 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
                 List<Field> sourceFields = mapping.getInputField();
                 multipleFieldSelectionValidator.validate(validations, mappingId, FieldDirection.SOURCE, sourceFields);
                 sourceFields.forEach(sourceField -> {
-                    validateField(mappingId, sourceField, FieldDirection.SOURCE, validations);
+                    validateField(mappingId, null, sourceField, FieldDirection.SOURCE, validations);
                 });
             }
         } else if (getMode() == AtlasModuleMode.TARGET) {
             List<Field> targetFields = mapping.getOutputField();
             multipleFieldSelectionValidator.validate(validations, mappingId, FieldDirection.TARGET, targetFields);
-            targetFields.forEach(targetField -> {
-                validateField(mappingId, targetField, FieldDirection.TARGET, validations);
-            });
+
+            int i  = 0;
+            List<Field> sourceFields = mapping.getInputField();
+            for (Field targetField: targetFields) {
+                if (sourceFields.size() > i) {
+                    validateField(mappingId, sourceFields.get(i), targetField, FieldDirection.TARGET, validations);
+                } else {
+                    validateField(mappingId, null, targetField, FieldDirection.TARGET, validations);
+                }
+                i++;
+            }
         }
 
         if (getMode() == AtlasModuleMode.SOURCE) {
             validateFieldCombinations(mapping, validations);
-        }   
+        }
     }
 
     protected void validateFieldGroup(String mappingId, FieldGroup fieldGroup, FieldDirection direction, List<Validation> validations) {
-        fieldGroup.getField().forEach(f -> {validateField(mappingId, f, direction, validations);});
+        fieldGroup.getField().forEach(f -> {validateField(mappingId, null, f, direction, validations);});
     }
 
     protected void validateFieldCombinations(Mapping mapping, List<Validation> validations) {
@@ -204,24 +213,30 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
     }
 
     @SuppressWarnings("unchecked")
-    protected void validateField(String mappingId, Field field, FieldDirection direction, List<Validation> validations) {
-        if (field == null) {
+    protected void validateField(String mappingId, Field sourceField, Field targetField, FieldDirection direction, List<Validation> validations) {
+        if (targetField == null) {
             return;
         }
         if (direction == FieldDirection.TARGET) {
-            AtlasPath path = new AtlasPath(field.getPath());
-            if (path.getCollectionSegmentCount() > 1) {
-                Validation validation = new Validation();
-                validation.setScope(ValidationScope.MAPPING);
-                validation.setId(mappingId);
-                validation.setMessage(String.format("A Target field in a nested collections is not supported: [%s]",
-                    field.getPath()));
-                validation.setStatus(ValidationStatus.ERROR);
-                validations.add(validation);
+            AtlasPath sourcePath = null;
+            if (sourceField != null) {
+                sourcePath = new AtlasPath(sourceField.getPath());
+            }
+            AtlasPath targetPath = new AtlasPath(targetField.getPath());
+            if (sourcePath == null || (targetPath.getCollectionSegmentCount() != 1 && targetPath.getCollectionSegmentCount() != sourcePath.getCollectionSegmentCount())) {
+                if (targetPath.getCollectionSegmentCount() > 1) {
+                    Validation validation = new Validation();
+                    validation.setScope(ValidationScope.MAPPING);
+                    validation.setId(mappingId);
+                    validation.setMessage(String.format("Target must have the same collection count on the path as source or equal to 1: [%s]",
+                        targetField.getPath()));
+                    validation.setStatus(ValidationStatus.ERROR);
+                    validations.add(validation);
+                }
             }
         }
-        if (getFieldType().isAssignableFrom(field.getClass()) && matchDocIdOrNull(field.getDocId())) {
-            validateModuleField(mappingId, (T)field, direction, validations);
+        if (getFieldType().isAssignableFrom(targetField.getClass()) && matchDocIdOrNull(targetField.getDocId())) {
+            validateModuleField(mappingId, (T)targetField, direction, validations);
         }
     }
 
@@ -309,11 +324,11 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
                 validation.setStatus(ValidationStatus.ERROR);
                 validations.add(validation);
             }
-            validateField(mappingId, targetField, FieldDirection.TARGET, validations);
+            validateField(mappingId, null, targetField, FieldDirection.TARGET, validations);
         } else if (sourceFields != null) { // SOURCE
             for (Field sourceField : sourceFields) {
                 if (matchDocIdOrNull(sourceField.getDocId())) {
-                    validateField(mappingId, sourceField, FieldDirection.SOURCE, validations);
+                    validateField(mappingId, null, sourceField, FieldDirection.SOURCE, validations);
                 }
             }
         }
@@ -345,7 +360,7 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
                 validation.setStatus(ValidationStatus.ERROR);
                 validations.add(validation);
             }
-            validateField(mappingId, sourceField, FieldDirection.SOURCE, validations);
+            validateField(mappingId, null, sourceField, FieldDirection.SOURCE, validations);
 
             if (targetFields != null) {
                 // FIXME Run only for SOURCE to avoid duplicate validation...
@@ -357,7 +372,7 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         } else if (targetFields != null) { // TARGET
             for (Field targetField : targetFields) {
                 if (matchDocIdOrNull(targetField.getDocId())) {
-                    validateField(mappingId, targetField, FieldDirection.TARGET, validations);
+                    validateField(mappingId, null, targetField, FieldDirection.TARGET, validations);
                 }
             }
         }

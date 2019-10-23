@@ -222,7 +222,13 @@ public class JavaModule extends BaseAtlasModule {
                 Field targetSubField = targetField instanceof JavaEnumField ? new JavaEnumField() : new JavaField();
                 AtlasJavaModelFactory.copyField(targetField, targetSubField, false);
                 AtlasPath subPath = new AtlasPath(targetField.getPath());
-                subPath.setVacantCollectionIndex(i);
+                if (subPath.getCollectionSegmentCount() == 1) {
+                    //handle asymmetric case with single target
+                    subPath.setVacantCollectionIndex(i);
+                } else {
+                    //handle symmetric case with matching collection counts
+                    subPath.copyCollectionIndexes(new AtlasPath(sourceSubField.getPath()));
+                }
                 targetSubField.setPath(subPath.toString());
                 targetFieldGroup.getField().add(targetSubField);
                 session.head().setSourceField(sourceSubField);

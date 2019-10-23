@@ -95,7 +95,6 @@ public class JavaFieldReaderTest extends BaseJavaFieldReaderTest {
         assertNotNull(fieldGroup);
         assertEquals(2, fieldGroup.getField().size());
         assertEquals("123 any street", fieldGroup.getField().get(0).getValue());
-        assertNull(fieldGroup.getField().get(1).getValue());
         assertEquals(1, audits.size());
         assertEquals(AuditStatus.WARN, audits.get(0).getStatus());
         assertEquals("/[1]/address/addressLine1", audits.get(0).getPath());

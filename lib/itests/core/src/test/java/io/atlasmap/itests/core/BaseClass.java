@@ -16,20 +16,69 @@
 package io.atlasmap.itests.core;
 
 public abstract class BaseClass {
-    private String someField;
-    public String getSomeField() {
-        return someField;
-    }
-    public void setSomeField(String someField) {
-        this.someField = someField;
-    }
+
     static class SomeNestedClass {
         private String someField;
+        private SomeNestedClass[] someArray;
+        private SomeNestedClass[] someRenamedArray;
+
         public String getSomeField() {
             return someField;
         }
         public void setSomeField(String someField) {
             this.someField = someField;
         }
+
+        public SomeNestedClass() {
+
+        }
+
+        public SomeNestedClass(String someField) {
+            this.someField = someField;
+        }
+
+        public SomeNestedClass[] getSomeArray() {
+            return someArray;
+        }
+
+        public void setSomeArray(SomeNestedClass[] someArray) {
+            this.someArray = someArray;
+        }
+
+        public SomeNestedClass[] getSomeRenamedArray() {
+            return someRenamedArray;
+        }
+
+        public void setSomeRenamedArray(SomeNestedClass[] someRenamedArray) {
+            this.someRenamedArray = someRenamedArray;
+        }
+    }
+
+    private String someField;
+    private SomeNestedClass[] someArray;
+    private SomeNestedClass[] someRenamedArray;
+
+    public String getSomeField() {
+        return someField;
+    }
+
+    public void setSomeField(String someField) {
+        this.someField = someField;
+    }
+
+    public SomeNestedClass[] getSomeArray() {
+        return someArray;
+    }
+
+    public void setSomeArray(SomeNestedClass[] someArray) {
+        this.someArray = someArray;
+    }
+
+    public SomeNestedClass[] getSomeRenamedArray() {
+        return someRenamedArray;
+    }
+
+    public void setSomeRenamedArray(SomeNestedClass[] someRenamedArray) {
+        this.someRenamedArray = someRenamedArray;
     }
 }

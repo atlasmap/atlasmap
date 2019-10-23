@@ -27,7 +27,6 @@ describe('MappingManagementService', () => {
       f.parentField.isCollection = true;
       f.isPrimitive = true;
       expect(service.getFieldSelectionExclusionReason(null, f.parentField)).toContain('parent');
-      expect(service.getFieldSelectionExclusionReason(null, f)).toContain('Nested');
     }),
   );
 });

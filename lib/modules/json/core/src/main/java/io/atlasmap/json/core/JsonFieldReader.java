@@ -15,9 +15,11 @@
  */
 package io.atlasmap.json.core;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import io.atlasmap.v2.Json;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +63,7 @@ public class JsonFieldReader implements AtlasFieldReader {
     public Field read(AtlasInternalSession session) throws AtlasException {
         Field field = session.head().getSourceField();
         if (rootNode == null) {
-            AtlasUtil.addAudit(session, field.getDocId(), 
+            AtlasUtil.addAudit(session, field.getDocId(),
                 String.format("Cannot read a field '%s' of JSON document '%s', document is null",
                     field.getPath(), field.getDocId()),
                 field.getPath(), AuditStatus.ERROR, null);
@@ -69,122 +71,85 @@ public class JsonFieldReader implements AtlasFieldReader {
         }
 
         AtlasPath path = new AtlasPath(field.getPath());
-        FieldGroup fieldGroup = null;
+
+        List<JsonField> fields = getJsonFieldsForPath(session, rootNode, field, path, 0);
         if (path.hasCollection() && !path.isIndexedCollection()) {
-            fieldGroup = AtlasModelFactory.createFieldGroupFrom(field);
+            FieldGroup fieldGroup = AtlasModelFactory.createFieldGroupFrom(field);
+            fieldGroup.getField().addAll(fields);
             session.head().setSourceField(fieldGroup);
-        }
-
-        List<JsonNode> valueNodes = new LinkedList<>();
-        if (path.getSegments(true).size() >= 1) {
-            if (rootNode.size() == 1 && !path.hasCollectionRoot()
-                     && !path.getSegments(false).get(0).getExpression().startsWith(rootNode.fieldNames().next())) {
-                // peel off a rooted object
-                valueNodes.add(rootNode.elements().next());
-            } else if (path.hasCollectionRoot()) {
-                valueNodes.add(rootNode);
-                valueNodes = getValueNode(session, field, valueNodes, path.getRootSegment());
-            } else {
-                valueNodes.add(rootNode);
-            }
-
-            // need to walk the path....
-            for (SegmentContext segmentContext : path.getSegments(false)) {
-                if (valueNodes.size() == 0) {
-                    break;
-                }
-                valueNodes = getValueNode(session, field, valueNodes, segmentContext);
-            }
-        }
-        if (fieldGroup != null) {
-            for (int i=0; i<valueNodes.size(); i++) {
-                JsonNode terminalNode = valueNodes.get(i);
-                JsonField jsonField = new JsonField();
-                AtlasModelFactory.copyField(field, jsonField, false);
-                AtlasPath subPath = new AtlasPath(jsonField.getPath());
-                subPath.setVacantCollectionIndex(i);
-                jsonField.setIndex(i);
-                jsonField.setPath(subPath.toString());
-                Object v = handleValueNode(session, terminalNode, jsonField);
-                jsonField.setValue(v);
-                fieldGroup.getField().add(jsonField);
-            }
             return fieldGroup;
-        } else if (valueNodes.size() > 0){
-            JsonField jsonField = (JsonField)field;
-            Object v = handleValueNode(session, valueNodes.get(0), jsonField);
-            jsonField.setValue(v);
+        } else if (fields.size() == 1) {
+            field.setValue(fields.get(0).getValue());
+            return field;
+        } else {
+            return field;
         }
-        return field;
     }
 
-    private List<JsonNode> getValueNode(AtlasInternalSession session, Field field, List<JsonNode> parents, SegmentContext segmentContext) {
-        boolean isCollection = false;
-        String strippedNodeName = segmentContext.getName();
-        Integer index = null;
-        List<JsonNode> answer = new LinkedList<>();
+    private List<JsonField> getJsonFieldsForPath(AtlasInternalSession session, JsonNode node, Field field, AtlasPath path, int depth) throws AtlasException {
+        List<JsonField> fields = new ArrayList<>();
+        List<SegmentContext> segments = path.getSegments(true);
 
-        if (segmentContext.getCollectionType() != CollectionType.NONE) {
-            isCollection = true;
-            index = segmentContext.getCollectionIndex();
-            if (strippedNodeName.isEmpty()) {
-                for (JsonNode parent : parents) {
-                    if (parent == null) {
-                        continue;
-                    }
-                    if (!parent.isArray()) {
-                        answer.add(parent);
-                        continue;
-                    }
-                    if (index == null) {
-                        for (int i=0; i<parent.size(); i++) {
-                            answer.add(parent.get(i));
-                        }
-                    } else if (index >= 0 && index < parent.size()) {
-                        answer.add(parent.get(index));
-                    } else {
-                        String formatted = String.format("Detected out of range index for field p=%s, ignoring...", segmentContext.getExpression());
-                        AtlasUtil.addAudit(session, field.getDocId(), formatted, field.getPath(), AuditStatus.WARN, parent.asText());
-                    }
-                }
-                return answer;
-            }
-        }
-
-        for (JsonNode parent : parents) {
-            if (parent == null) {
-                continue;
-            }
-            JsonNode node = parent.get(strippedNodeName);
-            if (node == null) {
-                continue;
-            }
-            if (!isCollection) {
-                if (node.isArray()) {
-                    answer.add(node.get(0));
-                } else {
-                    answer.add(node);
-                }
-                continue;
-            } else if (!node.isArray()) {
-                answer.add(node);
-                continue;
-            }
-
-            // isCollection && node.isArray()
-            if (index == null) {
-                for (int i=0; i<node.size(); i++) {
-                    answer.add(node.get(i));
-                }
-            } else if (index >= 0 && index < node.size()) {
-                answer.add(node.get(index));
+        if (node.isValueNode() && segments.size() == depth) {
+            //if traversed the entire path and found value
+            JsonField jsonField = new JsonField();
+            AtlasModelFactory.copyField(field, jsonField, true);
+            Object value = handleValueNode(session, node, jsonField);
+            jsonField.setValue(value);
+            fields.add(jsonField);
+        } else if (segments.size() > depth) {
+            SegmentContext segmentContext;
+            JsonNode child;
+            if (depth == 0 && path.hasCollectionRoot()) {
+                child = node; //if root is a collection
+                segmentContext = segments.get(depth);
             } else {
-                String formatted = String.format("Detected out of range index for field p=%s, ignoring...", segmentContext.getExpression());
-                AtlasUtil.addAudit(session, field.getDocId(), formatted, field.getPath(), AuditStatus.WARN, node.asText());
-                LOG.warn(formatted);
+                if (depth == 0) {
+                    if (node.size() == 1 && !path.getSegments(false).get(0).getExpression().startsWith(rootNode.fieldNames().next())) {
+                        //peel off a rooted object, i.e. mapping /orderId works for document { source: { orderId: 123 } }
+                        node = node.elements().next();
+                    }
+
+                    if (segments.size() > 1) {
+                        depth = 1; //skip the root, if not a collection
+                    }
+                }
+                segmentContext = segments.get(depth);
+                String fieldName = segmentContext.getName();
+                child = node.get(fieldName);
+            }
+
+            if (child != null) {
+                if (child.isArray()) {
+                    if (segmentContext.getCollectionIndex() != null) {
+                        if (child.size() <= segmentContext.getCollectionIndex()) {
+                            //index out of range
+                            return fields;
+                        }
+                        List<JsonField> arrayFields = getJsonFieldsForPath(session, child.get(segmentContext.getCollectionIndex()), field, path, depth + 1);
+                        fields.addAll(arrayFields);
+                    } else {
+                        //if index not included, iterate over all
+                        int arrayIndex = 0;
+                        for (JsonNode arrayItem : child) {
+                            List<JsonField> arrayFields = getJsonFieldsForPath(session, arrayItem, field, path, depth + 1);
+                            for (JsonField arrayField : arrayFields) {
+                                AtlasPath subPath = new AtlasPath(arrayField.getPath());
+                                //include the array index within the path
+                                subPath.setCollectionIndex(depth, arrayIndex);
+                                arrayField.setPath(subPath.toString());
+                            }
+                            fields.addAll(arrayFields);
+                            arrayIndex++;
+                        }
+                    }
+                } else {
+                    List<JsonField> childFields = getJsonFieldsForPath(session, child, field, path, depth + 1);
+                    fields.addAll(childFields);
+                }
             }
         }
-        return answer;
+        return fields;
     }
 
     private Object handleValueNode(AtlasInternalSession session, JsonNode valueNode, JsonField jsonField) throws AtlasException {

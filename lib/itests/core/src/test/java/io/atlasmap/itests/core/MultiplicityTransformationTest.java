@@ -25,6 +25,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
+import io.atlasmap.v2.Audit;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -84,7 +85,7 @@ public class MultiplicityTransformationTest {
         assertEquals("one", list.get(0));
         assertEquals("two", list.get(1));
         assertEquals("three", list.get(2));
-        List<Integer> intList = target.getTargetIntegerList();  
+        List<Integer> intList = target.getTargetIntegerList();
         assertEquals(4, intList.size());
         assertEquals(new Integer(1), intList.get(0));
         assertEquals(new Integer(20), intList.get(1));
@@ -205,7 +206,11 @@ public class MultiplicityTransformationTest {
         session.setSourceDocument("java-source", sourceJava);
         context.process(session);
         assertFalse(TestHelper.printAudit(session), session.hasErrors());
-        assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        assertTrue(TestHelper.printAudit(session), session.hasWarns());
+        assertEquals(4, session.getAudits().getAudit().size());
+        for (Audit audit: session.getAudits().getAudit()) {
+            assertEquals("Setting index from 0 to null since there is a collection without index on the path", audit.getMessage());
+        }
         Object output = session.getTargetDocument("io.atlasmap.java.test.TargetFlatPrimitiveClass");
         assertEquals(TargetFlatPrimitiveClass.class, output.getClass());
         TargetFlatPrimitiveClass target = TargetFlatPrimitiveClass.class.cast(output);
