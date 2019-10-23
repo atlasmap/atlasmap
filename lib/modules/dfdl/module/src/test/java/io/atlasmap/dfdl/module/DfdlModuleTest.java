@@ -1,0 +1,37 @@
+package io.atlasmap.dfdl.module;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import io.atlasmap.v2.ConstantField;
+import io.atlasmap.v2.PropertyField;
+import io.atlasmap.v2.SimpleField;
+import io.atlasmap.xml.v2.XmlField;
+
+public class DfdlModuleTest {
+
+    private DfdlModule module = null;
+
+    @Before
+    public void setUp() {
+        module = new DfdlModule();
+    }
+
+    @After
+    public void tearDown() {
+        module = null;
+    }
+
+    @Test
+    public void testIsSupportedField() {
+        assertTrue(module.isSupportedField(new XmlField()));
+        assertFalse(module.isSupportedField(new PropertyField()));
+        assertFalse(module.isSupportedField(new ConstantField()));
+        assertTrue(module.isSupportedField(new SimpleField()));
+    }
+
+}

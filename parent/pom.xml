@@ -40,6 +40,7 @@
     <bcel-bundle-version>5.2_4</bcel-bundle-version>
     <build-helper-maven-plugin.version>3.0.0</build-helper-maven-plugin.version>
     <camel.version>2.21.5</camel.version>
+    <daffodil.version>2.4.0</daffodil.version>
     <fabric8-maven-plugin.version>4.3.1</fabric8-maven-plugin.version>
     <hamcrest.version>1.3</hamcrest.version>
     <jackson.version>2.10.1</jackson.version>
@@ -214,6 +215,31 @@
         <groupId>io.atlasmap</groupId>
         <artifactId>atlas-core</artifactId>
         <classifier>tests</classifier>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.atlasmap</groupId>
+        <artifactId>atlas-dfdl-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.atlasmap</groupId>
+        <artifactId>atlas-dfdl-model</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.atlasmap</groupId>
+        <artifactId>atlas-dfdl-module</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.atlasmap</groupId>
+        <artifactId>atlas-dfdl-service</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.atlasmap</groupId>
+        <artifactId>atlas-dfdl-test-model</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -403,6 +429,11 @@
         <groupId>org.apache.camel</groupId>
         <artifactId>camel-test-spring</artifactId>
         <version>${camel.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.daffodil</groupId>
+        <artifactId>daffodil-japi_2.12</artifactId>
+        <version>${daffodil.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.karaf</groupId>

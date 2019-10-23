@@ -17,6 +17,7 @@ package io.atlasmap.core;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,13 +78,13 @@ public class PropertyModule implements AtlasModule {
     public void readSourceValue(AtlasInternalSession session) throws AtlasException {
         Field sourceField = session.head().getSourceField();
         if (sourceField instanceof PropertyField) {
-                propertyStrategy.processPropertyField(session.getMapping(), (PropertyField) sourceField,
-                        session.getProperties());
+            propertyStrategy.processPropertyField(session.getMapping(), (PropertyField) sourceField,
+                    session.getProperties());
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Processed input propertyField sPath=" + sourceField.getPath() + " sV="
-                    + sourceField.getValue() + " sT=" + sourceField.getFieldType() + " docId: " + sourceField.getDocId());
+            LOG.debug("Processed input propertyField sPath=" + sourceField.getPath() + " sV=" + sourceField.getValue()
+                    + " sT=" + sourceField.getFieldType() + " docId: " + sourceField.getDocId());
         }
     }
 
@@ -190,6 +191,16 @@ public class PropertyModule implements AtlasModule {
     @Override
     public void setFieldActionService(AtlasFieldActionService atlasFieldActionService) {
         this.fieldActionService = atlasFieldActionService;
+    }
+
+    @Override
+    public String getUriDataType() {
+        return null;
+    }
+
+    @Override
+    public Map<String, String> getUriParameters() {
+        return null;
     }
 
 }

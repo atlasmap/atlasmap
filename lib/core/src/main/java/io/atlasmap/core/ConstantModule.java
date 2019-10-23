@@ -17,6 +17,7 @@ package io.atlasmap.core;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,16 +77,15 @@ public class ConstantModule implements AtlasModule {
         if (!(sourceField instanceof ConstantField)) {
             return;
         }
-        if (getConversionService() != null && sourceField.getFieldType() != null
-                && sourceField.getValue() != null) {
-            sourceField.setValue(getConversionService().convertType(sourceField.getValue(),
-                    null, getConversionService().classFromFieldType(sourceField.getFieldType()), null));
+        if (getConversionService() != null && sourceField.getFieldType() != null && sourceField.getValue() != null) {
+            sourceField.setValue(getConversionService().convertType(sourceField.getValue(), null,
+                    getConversionService().classFromFieldType(sourceField.getFieldType()), null));
         } else if (sourceField.getFieldType() == null) {
             sourceField.setFieldType(FieldType.STRING);
         }
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Processed source ConstantField sPath=" + sourceField.getPath() + " sV="
-                    + sourceField.getValue() + " sT=" + sourceField.getFieldType() + " docId: " + sourceField.getDocId());
+            LOG.debug("Processed source ConstantField sPath=" + sourceField.getPath() + " sV=" + sourceField.getValue()
+                    + " sT=" + sourceField.getFieldType() + " docId: " + sourceField.getDocId());
         }
     }
 
@@ -192,6 +192,16 @@ public class ConstantModule implements AtlasModule {
     @Override
     public void setFieldActionService(AtlasFieldActionService atlasFieldActionService) {
         this.fieldActionService = atlasFieldActionService;
+    }
+
+    @Override
+    public String getUriDataType() {
+        return null;
+    }
+
+    @Override
+    public Map<String, String> getUriParameters() {
+        return null;
     }
 
 }

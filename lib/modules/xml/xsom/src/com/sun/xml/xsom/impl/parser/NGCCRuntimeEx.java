@@ -203,8 +203,10 @@ public class NGCCRuntimeEx extends NGCCRuntime implements PatcherManager {
             EntityResolver er = parser.getEntityResolver();
             String systemId = null;
 
-            if (relativeUri!=null)
+            if (relativeUri!=null && baseUri != null)
                 systemId = Uri.resolve(baseUri,relativeUri);
+            else if (relativeUri != null)
+                systemId = relativeUri;
 
             if (er!=null) {
                 InputSource is = er.resolveEntity(namespaceURI,systemId);

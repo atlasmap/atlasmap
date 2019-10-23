@@ -9,7 +9,7 @@
     </File>
   </Appenders>
   <Loggers>
-    <Logger name="io.atlasmap" level="info" additivity="false">
+    <Logger name="io.atlasmap" level="trace" additivity="false">
       <AppenderRef ref="Console" />
       <AppenderRef ref="File" />
     </Logger>

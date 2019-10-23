@@ -19,8 +19,10 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -52,7 +54,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
@@ -134,6 +138,11 @@ public class XmlSchemaInspector {
     private XmlDocument xmlDocument;
     private AtlasXmlNamespaceContext namespaceContext;
     private String rootNamespace;
+    private ClassLoader classLoader;
+
+    public void setClassLoader(ClassLoader loader) {
+        this.classLoader = loader;
+    }
 
     public XmlDocument getXmlDocument() {
         return xmlDocument;
@@ -162,7 +171,9 @@ public class XmlSchemaInspector {
         namespaceContext = new AtlasXmlNamespaceContext();
         rootNamespace = null;
 
-        XSOMParser parser = new XSOMParser(SAXParserFactory.newInstance());
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        XSOMParser parser = new XSOMParser(factory);
+        parser.setEntityResolver(new XSOMClasspathEntityResolver(this.classLoader));
         parser.setAnnotationParser(new DomAnnotationParserFactory());
         parser.setErrorHandler(new XSOMErrorHandler());
         Transformer transformer = TransformerFactory.newInstance().newTransformer();
@@ -177,21 +188,21 @@ public class XmlSchemaInspector {
         } else if ("SchemaSet".equals(root.getLocalName())) {
             XPath xpath = XPathFactory.newInstance().newXPath();
             xpath.setNamespaceContext(namespaceContext);
-            NodeList subSchemas = (NodeList) xpath.evaluate(
-                    String.format("/%s:SchemaSet/%s:AdditionalSchemas/%s:schema",
-                            NS_PREFIX_SCHEMASET, NS_PREFIX_SCHEMASET, NS_PREFIX_XMLSCHEMA),
-                    doc, XPathConstants.NODESET);
-            for (int i=0; i<subSchemas.getLength(); i++) {
-                Element e = (Element)subSchemas.item(i);
+            NodeList subSchemas = (NodeList) xpath
+                    .evaluate(String.format("/%s:SchemaSet/%s:AdditionalSchemas/%s:schema", NS_PREFIX_SCHEMASET,
+                            NS_PREFIX_SCHEMASET, NS_PREFIX_XMLSCHEMA), doc, XPathConstants.NODESET);
+            for (int i = 0; i < subSchemas.getLength(); i++) {
+                Element e = (Element) subSchemas.item(i);
                 inheritNamespaces(e, false);
                 parser.parse(toInputStream(transformer, e));
             }
 
             Element rootSchema = (Element) xpath.evaluate(
-                    String.format("/%s:SchemaSet/%s:schema", NS_PREFIX_SCHEMASET, NS_PREFIX_XMLSCHEMA),
-                    doc, XPathConstants.NODE);
+                    String.format("/%s:SchemaSet/%s:schema", NS_PREFIX_SCHEMASET, NS_PREFIX_XMLSCHEMA), doc,
+                    XPathConstants.NODE);
             if (rootSchema == null) {
-                throw new XmlInspectionException("The root schema '/SchemaSet/schema' must be specified once and only once");
+                throw new XmlInspectionException(
+                        "The root schema '/SchemaSet/schema' must be specified once and only once");
             }
             rootNamespace = getTargetNamespace(rootSchema);
             if (rootNamespace != null && !rootNamespace.isEmpty()) {
@@ -206,9 +217,9 @@ public class XmlSchemaInspector {
                 namespaceContext.add("tns", rootNamespace);
             }
         } else {
-            throw new XmlInspectionException(String.format(
-                    "Unsupported document element '%s': root element must be 'schema' or 'SchemaSet'",
-                    root.getLocalName()));
+            throw new XmlInspectionException(
+                    String.format("Unsupported document element '%s': root element must be 'schema' or 'SchemaSet'",
+                            root.getLocalName()));
         }
 
         XSSchemaSet schemaSet = parser.getResult();
@@ -221,7 +232,7 @@ public class XmlSchemaInspector {
         if (attributes == null) {
             return "";
         }
-        Attr tns = (Attr)attributes.getNamedItem("targetNamespace");
+        Attr tns = (Attr) attributes.getNamedItem("targetNamespace");
         return tns != null ? tns.getValue() : "";
     }
 
@@ -230,7 +241,7 @@ public class XmlSchemaInspector {
         while (target != null) {
             NamedNodeMap attributes = target.getAttributes();
             if (attributes != null) {
-                for (int i=0; i<attributes.getLength(); i++) {
+                for (int i = 0; i < attributes.getLength(); i++) {
                     Attr attr = (Attr) attributes.item(i);
                     if ("xmlns".equals(attr.getPrefix()) && !"xmlns".equals(attr.getLocalName())) {
                         element.setAttribute(attr.getName(), attr.getValue());
@@ -321,8 +332,8 @@ public class XmlSchemaInspector {
         }
     }
 
-    private void printComplexType(XSComplexType complexType, String rootName, XmlComplexType xmlComplexType, Set<String> cachedComplexType)
-            throws Exception {
+    private void printComplexType(XSComplexType complexType, String rootName, XmlComplexType xmlComplexType,
+            Set<String> cachedComplexType) throws Exception {
         printAttributes(complexType, rootName, xmlComplexType);
         XSParticle particle = complexType.getContentType().asParticle();
         if (particle != null) {
@@ -330,8 +341,8 @@ public class XmlSchemaInspector {
         }
     }
 
-    private void printParticle(XSParticle particle, String rootName, XmlComplexType xmlComplexType, Set<String> cachedComplexType)
-            throws Exception {
+    private void printParticle(XSParticle particle, String rootName, XmlComplexType xmlComplexType,
+            Set<String> cachedComplexType) throws Exception {
         XSTerm term = particle.getTerm();
         if (term.isModelGroup()) {
             XSModelGroup group = term.asModelGroup();
@@ -344,8 +355,8 @@ public class XmlSchemaInspector {
         }
     }
 
-    private void printGroup(XSModelGroup modelGroup, String rootName, XmlComplexType xmlComplexType, Set<String> cachedComplexType)
-            throws Exception {
+    private void printGroup(XSModelGroup modelGroup, String rootName, XmlComplexType xmlComplexType,
+            Set<String> cachedComplexType) throws Exception {
         // this is the parent of the group
         for (XSParticle particle : modelGroup.getChildren()) {
             // Don't cache siblings to avoid https://github.com/atlasmap/atlasmap/issues/255
@@ -354,8 +365,8 @@ public class XmlSchemaInspector {
         }
     }
 
-    private void printGroupDecl(XSModelGroupDecl modelGroupDecl, String rootName,
-            XmlComplexType parentXmlComplexType, Set<String> cachedComplexType) throws Exception {
+    private void printGroupDecl(XSModelGroupDecl modelGroupDecl, String rootName, XmlComplexType parentXmlComplexType,
+            Set<String> cachedComplexType) throws Exception {
         printGroup(modelGroupDecl.getModelGroup(), rootName, parentXmlComplexType, cachedComplexType);
     }
 
@@ -550,10 +561,8 @@ public class XmlSchemaInspector {
                 return null;
             }
 
-            Optional<Entry<String, String>> entry =
-                    nsMap.entrySet().stream()
-                        .filter(e -> namespaceURI.equals(e.getValue()))
-                        .findFirst();
+            Optional<Entry<String, String>> entry = nsMap.entrySet().stream()
+                    .filter(e -> namespaceURI.equals(e.getValue())).findFirst();
             return entry.isPresent() ? entry.get().getKey() : null;
         }
 
@@ -563,10 +572,8 @@ public class XmlSchemaInspector {
                 return null;
             }
 
-            return nsMap.entrySet().stream()
-                .filter(e -> namespaceURI.equals(e.getValue()))
-                .map(Entry::getKey)
-                .collect(Collectors.toList()).iterator();
+            return nsMap.entrySet().stream().filter(e -> namespaceURI.equals(e.getValue())).map(Entry::getKey)
+                    .collect(Collectors.toList()).iterator();
         }
 
     }
@@ -590,4 +597,38 @@ public class XmlSchemaInspector {
 
     }
 
+    private class XSOMClasspathEntityResolver implements EntityResolver {
+        private ClassLoader classLoader;
+
+        public XSOMClasspathEntityResolver(ClassLoader loader) {
+            this.classLoader = loader != null ? loader : XSOMClasspathEntityResolver.class.getClassLoader();
+        }
+
+        @Override
+        public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+            if (publicId != null || systemId == null) {
+                return null;
+            }
+            URI uri;
+            try {
+                uri = new URI(systemId);
+            } catch (Exception e) {
+                return null;
+            }
+            if (uri.getScheme() != null || uri.getSchemeSpecificPart() == null) {
+                return null;
+            }
+            String path = uri.getSchemeSpecificPart();
+            if (path.startsWith(".") || path.startsWith(File.pathSeparator)) {
+                return null;
+            }
+
+            InputStream is = classLoader.getResourceAsStream(path);
+            if (is == null) {
+                return null;
+            }
+            return new InputSource(is);
+        }
+        
+    }
 }

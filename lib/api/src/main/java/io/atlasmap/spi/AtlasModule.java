@@ -16,6 +16,7 @@
 package io.atlasmap.spi;
 
 import java.util.List;
+import java.util.Map;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.v2.Field;
@@ -26,9 +27,9 @@ import io.atlasmap.v2.Field;
  */
 public interface AtlasModule {
 
-    void init();
+    void init() throws AtlasException;
 
-    void destroy();
+    void destroy() throws AtlasException;
 
     void setClassLoader(ClassLoader classLoader);
 
@@ -92,6 +93,10 @@ public interface AtlasModule {
     String getUri();
 
     void setUri(String uri);
+
+    String getUriDataType();
+
+    Map<String, String> getUriParameters();
 
     Boolean isStatisticsSupported();
 
