@@ -255,7 +255,8 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
         Optional<String> namespace = Optional.empty();
         if (xmlNamespaces.isPresent()) {
             for (XmlNamespace xmlNamespace : xmlNamespaces.get().getXmlNamespace()) {
-                if (xmlNamespace.getAlias().equals(namespaceAlias)) {
+                if ((xmlNamespace.getAlias() == null && namespaceAlias == null)
+                    || xmlNamespace.getAlias().equals(namespaceAlias)) {
                     namespace = Optional.of(xmlNamespace.getUri());
                     break;
                 }
