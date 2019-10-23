@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-@import 'data-mapper-common.component.css';
+@import 'data-mapper-base.component.css';
 
 /* mapping-list, namespace-list */
 .DataMapperUI .dataMapperItemList  { border:1px solid black; border:1px solid var(--item-color); margin-right:10px; height:100%; }

@@ -37,3 +37,39 @@
   --selected-item-color: #5CBADF;
   --selection-background-color: #F6F6F6;
 }
+
+.DataMapperUI { height:100%; width:100%; position:relative; }
+
+.DataMapperUI .alert { font-size:12px; border: 0px transparent;}
+.DataMapperUI .alert-info { color: var(--current-active-color); }
+.DataMapperUI .alert .close { font-size:18px; color:#888888; }
+.DataMapperUI .tooltip-inner { min-width: 160px; max-width:600px; color:white; text-align: center; }
+.DataMapperUI .clear { clear:both; height:0px; }
+.DataMapperUI .hidden { visibility:hidden; }
+.DataMapperUI I { display:inline-block; }
+.DataMapperUI I.link:hover, .DataMapperUI I.selected { color:var(--selected-item-color); cursor:pointer; }
+.DataMapperUI I.selectedIcon { color:var(--selected-item-color); }
+.DataMapperUI LABEL { font-weight:normal; }
+.DataMapperUI A:hover { color:#0088ce; cursor:pointer; text-decoration:none; }
+.DataMapperUI input[disabled] { color:var(--disabled-element-color); }
+.DataMapperUI .form-group { margin-left:auto; margin-right:auto; margin-bottom:10px; margin-top:10px; }
+.DataMapperUI .form-group LABEL { width:75px; }
+.DataMapperUI .form-group LABEL.disabled { color:var(--disabled-element-color); }
+.DataMapperUI .form-group SELECT { width:100px; }
+.DataMapperUI .card-pf { margin:0; padding-left:0; padding-right:0; height:100%;
+    -webkit-animation-name:dm-fade-in; -webkit-animation-duration:0.4s;
+    animation-name:dm-fade-in; animation-duration:0.4s; }
+.DataMapperUI .dm-swipe-left { -webkit-animation-name:dm-swipe-left; -webkit-animation-duration:0.4s;
+    animation-name:dm-swipe-left; animation-duration:0.4s; }
+.DataMapperUI .dm-swipe-right { -webkit-animation-name:dm-swipe-right; -webkit-animation-duration:0.4s;
+    animation-name:dm-swipe-right; animation-duration:0.4s; }
+.DataMapperUI .card-pf-title { font-size:20px; padding:0px 12px; }
+.DataMapperUI .card-pf-heading { margin:0; padding:0; }
+.DataMapperUI .card-pf-body { padding:0px; margin:0px; }
+
+/* search box */
+.DataMapperUI .searchBox { position:relative; }
+.DataMapperUI .searchBox INPUT { width:100%; border:1px solid #FBFBFB; border-bottom:1px solid var(--item-color); padding:5px 10px; float:left;}
+.DataMapperUI .searchBox INPUT:placeholder-shown { font-style:italic; }
+.DataMapperUI .searchBoxCloseIcon { position:absolute; right:10px; top:10px; }
+.DataMapperUI .noSearchResults { width:100%; padding:10px; text-align:center; }

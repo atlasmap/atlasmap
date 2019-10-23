@@ -14,7 +14,12 @@
     limitations under the License.
 */
 
-@import 'data-mapper-common.component.css';
+@import 'data-mapper-base.component.css';
+
+/* class-name */
+.DataMapperUI .ClassNameComponent INPUT, DataMapperUI .ClassNameComponent .form-group SELECT { width:300px; }
+.DataMapperUI .ClassNameComponent .form-group LABEL { width:300px; }
+.DataMapperUI .ClassNameComponent .form-group TEXTAREA { margin:auto; }
 
 /* document-definition */
 .DataMapperUI I.docCollapseIcon { width:10px; margin-left:5px; }
@@ -67,3 +72,4 @@
 .DataMapperUI .DocumentFieldDetailComponent .sourceField { float:right; width:24px; text-align:right; }
 
 .DataMapperUI .searchDisplayDocumentItem { font-size:14px; font-weight:bold; }
+
