@@ -2402,11 +2402,22 @@ export class AtlasmapNavbarComponent implements OnInit {
     limitations under the License.
 */
 
-@import &#x27;data-mapper-common.component.css&#x27;;
+@import &#x27;data-mapper-base.component.css&#x27;;
 @import &#x27;data-mapper-document.component.css&#x27;;
 @import &#x27;data-mapper-mapping-detail.component.css&#x27;;
 @import &#x27;data-mapper-mapping-list.component.css&#x27;;
+@import &#x27;data-mapper-modal.component.css&#x27;;
 @import &#x27;data-mapper-toolbar.component.css&#x27;;
+
+/* loading screen styles */
+.dataMapperBodyHidden { visibility:hidden; position:relative; height:0px; }
+.dataMapperBody { visibility:visible; height:100%; width: 100%; position:relative; margin-left: 0px; }
+
+.DataMapperLoadingMessage { position:absolute; height:100%; top:0%; left:0%; padding-top:20%; width:100%; text-align:center; }
+.DataMapperLoadingMessage .error { color:crimson; }
+.DataMapperLoadingMessage .spinner { vertical-align:text-bottom; }
+.DataMapperLoadingMessage LABEL { vertical-align:text-top; margin-right:3px; }
+.DataMapperLoadingMessage IMG { height:12px; width:12px; vertical-align:middle; }
 
 .DataMapperUI .atlasmapNavbar { }
 .DataMapperUI .atlasmapNavbar .dropdown { position: relative; display: inline-block; }
@@ -2437,6 +2448,34 @@ export class AtlasmapNavbarComponent implements OnInit {
 .DataMapperUI .DataMapperEditComponent INPUT, .DataMapperEditComponent .form-group SELECT { width:300px; }
 .DataMapperUI .DataMapperEditComponent .form-group TEXTAREA { margin:auto; }
 .DataMapperUI .DataMapperEditComponent .fieldDocDefName { font-style:italic; }
+
+/* data-mapper-error */
+.DataMapperUI .DataMapperErrorComponent {
+  display: block;
+  box-sizing: border-box;
+  border: 1px;
+  margin-top: 8px;
+  height: 54px;
+  position: fixed;
+  margin-bottom: 8px;
+  overflow: hidden;
+  overflow-x: hidden;
+  width: 40%;
+}
+
+/* data-mapper-error */
+.DataMapperUI .DataMapperErrorComponent {
+  display: block;
+  box-sizing: border-box;
+  border: 1px;
+  margin-top: 8px;
+  height: 54px;
+  position: fixed;
+  margin-bottom: 8px;
+  overflow: hidden;
+  overflow-x: hidden;
+  width: 40%;
+}
 
 /* line-machine */
 .DataMapperUI .LineMachineComponent { height:100%; margin-top:6%; }
