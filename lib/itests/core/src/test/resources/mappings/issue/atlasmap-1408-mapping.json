@@ -1,0 +1,106 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.xml.v2.XmlDataSource",
+      "id" : "swagger-request",
+      "uri" : "atlas:xml:swagger-request",
+      "dataSourceType" : "SOURCE",
+      "xmlNamespaces" : {
+        "xmlNamespace" : [ {
+          "uri" : "http://atlasmap.io/issues/1408"
+        } ]
+      }
+    }, {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "request",
+      "uri" : "atlas:json:request",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "actions" : [ {
+            "delimiter" : " ",
+            "@type" : "Split"
+          } ],
+          "docId" : "swagger-request",
+          "path" : "/SearchContactInformationRequest/prefContactInfoSearches/chTag",
+          "fieldType" : "STRING",
+          "name" : "chTag",
+          "userCreated" : false
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "request",
+          "index" : 0,
+          "path" : "/prefContactInfoSearches<>/chTag",
+          "fieldType" : "STRING",
+          "name" : "chTag",
+          "userCreated" : false
+        } ],
+        "id" : "mapping.177477"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "actions" : [ {
+            "delimiter" : " ",
+            "@type" : "Split"
+          } ],
+          "docId" : "swagger-request",
+          "path" : "/SearchContactInformationRequest/prefContactInfoSearches/memberId",
+          "fieldType" : "STRING",
+          "name" : "memberId",
+          "userCreated" : false
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "request",
+          "index" : 0,
+          "path" : "/prefContactInfoSearches<>/memberId",
+          "fieldType" : "STRING",
+          "name" : "memberId",
+          "userCreated" : false
+        } ],
+        "id" : "mapping.26539"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "actions" : [ {
+            "delimiter" : " ",
+            "@type" : "Split"
+          } ],
+          "docId" : "swagger-request",
+          "path" : "/SearchContactInformationRequest/prefContactInfoSearches/tag",
+          "fieldType" : "STRING",
+          "name" : "tag",
+          "userCreated" : false
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "request",
+          "index" : 0,
+          "path" : "/prefContactInfoSearches<>/tag",
+          "fieldType" : "STRING",
+          "name" : "tag",
+          "userCreated" : false
+        } ],
+        "id" : "mapping.871157"
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "constants" : {
+      "constant" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "UI.367564"
+  }
+}

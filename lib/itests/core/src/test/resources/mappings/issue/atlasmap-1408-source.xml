@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<SearchContactInformationRequest xmlns="http://atlasmap.io/issues/1408">
+  <prefContactInfoSearches>
+    <memberId>1</memberId>
+    <chTag>2</chTag>
+    <tag>3</tag>
+  </prefContactInfoSearches>
+</SearchContactInformationRequest>
