@@ -27,6 +27,7 @@
 .DataMapperUI .docDef #importInstanceSchema { float:right; margin-right:10px; margin-top:1px; }
 .DataMapperUI .docDef #importInstanceSchema INPUT { display:none }
 .DataMapperUI .docDef I.searchBoxIcon { float:right; }
+.DataMapperUI .docDef .fieldListSearchOpen { overflow:auto; }
 .DataMapperUI .docDef .card-pf-heading.fieldsCount.emptyFieldsCount { float:left; font-size:12px;font-style:italic; }
 .DataMapperUI .docDef .docName { overflow:hidden; display:inline-block; width:calc(100% - 25px); margin-left:3px; float:left; }
 .DataMapperUI .docDef .docName I { margin-right:5px; vertical-align:baseline; margin-bottom:4px; }

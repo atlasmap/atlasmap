@@ -267,7 +267,14 @@ export class DocumentDefinitionComponent implements OnInit {
     this.redrawMappingLinesEvent.emit({_lmcInstance: this.lineMachine});
   }
 
+  /**
+   * Toggle the panel search box.
+   */
   toggleSearch(): void {
+
+    // When adding or removing the search box you need to adjust the line geometry.
+    this.redrawMappingLinesEvent.emit({_lmcInstance: this.lineMachine});
+
     this.searchMode = !this.searchMode;
     this.search(this.searchMode ? this.searchFilter : '');
   }
@@ -476,6 +483,7 @@ export class DocumentDefinitionComponent implements OnInit {
     if (!event) {
       this.search(this.searchFilter);
     }
+    this.redrawMappingLinesEvent.emit({_lmcInstance: this.lineMachine});
   }
 
   /**
@@ -550,8 +558,10 @@ export class DocumentDefinitionComponent implements OnInit {
         }
       }
     }
+    this.redrawMappingLinesEvent.emit({_lmcInstance: this.lineMachine});
     return formattedFields;  // required by typeahead - not used
   }
+
   valueExistsOnCreation(): boolean {
     return false;
   }
