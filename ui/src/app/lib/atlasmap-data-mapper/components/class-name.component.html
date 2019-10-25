@@ -3,8 +3,8 @@
   <div class="form-group">
     <label>Class package name:
       <input type="text" [(ngModel)]="userClassName" class="form-control"
-        tooltip="Enter the class package name you wish to enable.  This class must be part of a JAR file you have already imported."
-        placement="right" #class />
+        tooltip="Enter the class package name you wish to enable.  It must be part of a JAR you have already imported."
+        placement="top" #class />
     </label>
     <label>Collection Type:
       <select #collectionType (change)="collectionTypeSelectionChanged($event);" [ngModel]="userCollectionType">

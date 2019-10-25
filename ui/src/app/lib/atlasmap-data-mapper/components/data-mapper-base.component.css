@@ -52,7 +52,7 @@
 .DataMapperUI LABEL { font-weight:normal; }
 .DataMapperUI A:hover { color:#0088ce; cursor:pointer; text-decoration:none; }
 .DataMapperUI input[disabled] { color:var(--disabled-element-color); }
-.DataMapperUI .form-group { margin-left:auto; margin-right:auto; margin-bottom:10px; margin-top:10px; }
+.DataMapperUI .form-group { margin: 10px auto 10px auto; }
 .DataMapperUI .form-group LABEL { width:75px; }
 .DataMapperUI .form-group LABEL.disabled { color:var(--disabled-element-color); }
 .DataMapperUI .form-group SELECT { width:100px; }

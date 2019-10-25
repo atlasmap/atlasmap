@@ -39,8 +39,8 @@
   margin-right: 15px; font-weight: bold; font-style: normal; float: left; color:var(--current-active-color); width: 20px; }
 .DataMapperUI .fieldDetail .index-container .index-value INPUT { font-weight: bold; color:var(--current-active-color);
   height: 20px; text-align: right; }
-.DataMapperUI .fieldDetail .index-container .index-value LABEL { margin-bottom: 0px; font-style: normal; }
-.DataMapperUI .fieldDetail .index-container .removeMappedelement { float: left; }
+.DataMapperUI .fieldDetail .index-container .index-value LABEL { margin-bottom: 0px; font-style: normal; margin-left: 8px}
+.DataMapperUI .fieldDetail .index-container .removeMappedelement { float: left; margin-right:0; }
 .DataMapperUI .fieldDetail .dropdown { width:calc(100% - 71px);}
 .DataMapperUI .fieldDetail .dropdown-menu { padding:0px; width:100%; }
 .DataMapperUI .fieldDetail .dropdown-menu LI A { margin:0px; }
@@ -49,6 +49,7 @@
 .DataMapperUI .fieldDetail .dropdown-menu button.active { background-color:#F5F5F5; }
 .DataMapperUI .fieldDetail { white-space: nowrap; }
 .DataMapperUI .fieldDetail .parentObjectName { font-style:italic; }
+.DataMapperUI .fieldDetail .parentObjectName LABEL { width:calc(30%); display:inline; }
 .DataMapperUI .fieldDetail .parentObjectName I { font-size:12px; vertical-align:text-bottom; margin-right:2px; }
 .DataMapperUI .fieldDetail .fieldDocName { font-style: italic; }
 
