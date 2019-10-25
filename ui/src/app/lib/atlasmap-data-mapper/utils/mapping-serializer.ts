@@ -344,6 +344,9 @@ export class MappingSerializer {
   private static processActionArguments(action: FieldAction, cfg: ConfigModel): any {
     const actionArguments: any = {};
     for (const argValue of action.argumentValues) {
+      if (action.definition.isCustom && ['methodName', 'className', 'name'].includes(argValue.name)) {
+        continue;
+      }
       actionArguments[argValue.name] = argValue.value;
       const argumentConfig: FieldActionArgument = action.definition.getArgumentForName(argValue.name);
       if (argumentConfig == null) {
@@ -433,11 +436,13 @@ export class MappingSerializer {
 
   private static serializeAction(action: FieldAction, cfg: ConfigModel): any {
     const actionJson: any = MappingSerializer.processActionArguments(action, cfg);
-    actionJson['@type'] = action.definition.name;
     if (action.definition.isCustom) {
+      actionJson['@type'] = 'CustomAction';
       actionJson['name'] = action.definition.serviceObject.name;
       actionJson['className'] = action.definition.serviceObject.className;
       actionJson['methodName'] = action.definition.serviceObject.method;
+    } else {
+      actionJson['@type'] = action.definition.name;
     }
     return actionJson;
   }
