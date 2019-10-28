@@ -1501,10 +1501,10 @@ export class ToolbarComponent implements OnInit {
   toolbarButtonClicked(action: string, event: any): void {
     event.preventDefault();
     if (&#x27;showDetails&#x27; &#x3D;&#x3D;&#x3D; action) {
-      if (this.cfg.mappings.activeMapping &#x3D;&#x3D; null) {
-        this.cfg.mappingService.addNewMapping(null, false);
+      if (this.cfg.showMappingDetailTray) {
+        this.cfg.showMappingDetailTray &#x3D; false;
       } else {
-        this.cfg.mappingService.deselectMapping();
+        this.cfg.showMappingDetailTray &#x3D; true;
       }
     } else if (&#x27;editTemplate&#x27; &#x3D;&#x3D;&#x3D; action) {
       this.editTemplate();
