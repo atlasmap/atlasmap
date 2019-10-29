@@ -1,0 +1,17 @@
+{
+  "name": "@atlasmap/ui-monorepo",
+  "version": "0.0.0",
+  "description": "Atlasmap UI monorepo",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "^3.18.3"
+  },
+  "scripts": {
+    "build": "lerna run --stream build",
+    "watch": "lerna run --parallel --no-bail start -- --verbose"
+  }
+}
