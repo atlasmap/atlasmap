@@ -60,7 +60,7 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts</code>
+            <code>src/app/lib/atlasmap-data-mapper/components/app/line-machine.component.ts</code>
         </p>
 
 
@@ -139,7 +139,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:29</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/app/line-machine.component.ts:29</a></div>
                             </td>
                         </tr>
 
@@ -166,7 +166,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:30</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/app/line-machine.component.ts:30</a></div>
                             </td>
                         </tr>
 
@@ -198,7 +198,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:33</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/app/line-machine.component.ts:33</a></div>
                             </td>
                         </tr>
 
@@ -225,7 +225,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:34</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/app/line-machine.component.ts:34</a></div>
                             </td>
                         </tr>
 
@@ -252,7 +252,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:35</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/app/line-machine.component.ts:35</a></div>
                             </td>
                         </tr>
 
@@ -279,7 +279,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:31</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/app/line-machine.component.ts:31</a></div>
                             </td>
                         </tr>
 
@@ -306,7 +306,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/line-machine.component.ts:32</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/app/line-machine.component.ts:32</a></div>
                             </td>
                         </tr>
 
@@ -328,12 +328,12 @@
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, OnDestroy, ViewChild } from &#x27;@angular/core&#x27;;
 import { DomSanitizer, SafeStyle } from &#x27;@angular/platform-browser&#x27;;
 
-import { ConfigModel, AdmRedrawMappingLinesEvent } from &#x27;../models/config.model&#x27;;
-import { MappingModel } from &#x27;../models/mapping.model&#x27;;
-import { Field } from &#x27;../models/field.model&#x27;;
+import { ConfigModel, AdmRedrawMappingLinesEvent } from &#x27;../../models/config.model&#x27;;
+import { MappingModel } from &#x27;../../models/mapping.model&#x27;;
+import { Field } from &#x27;../../models/field.model&#x27;;
 
-import { DocumentDefinitionComponent } from &#x27;./document-definition.component&#x27;;
-import { DocumentFieldDetailComponent } from &#x27;./document-field-detail.component&#x27;;
+import { DocumentDefinitionComponent } from &#x27;../document/document-definition.component&#x27;;
+import { DocumentFieldDetailComponent } from &#x27;../document/document-field-detail.component&#x27;;
 import { Subscription } from &#x27;rxjs&#x27;;
 
 export class LineModel {

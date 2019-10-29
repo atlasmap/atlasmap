@@ -96,7 +96,7 @@
 
             <tr>
                 <td class="col-md-3">styleUrls</td>
-                <td class="col-md-9"><code>./lib/atlasmap-data-mapper/components/data-mapper-app.component.css</code></td>
+                <td class="col-md-9"><code>./lib/atlasmap-data-mapper/components/app/data-mapper-app.component.css</code></td>
             </tr>
 
 
@@ -1980,7 +1980,7 @@ import { ErrorType, ErrorScope, ErrorLevel, ErrorInfo } from &#x27;./lib/atlasma
 @Component({
   selector: &#x27;atlasmap-navbar&#x27;,
   templateUrl: &#x27;./atlasmap-navbar.component.html&#x27;,
-  styleUrls: [&#x27;./lib/atlasmap-data-mapper/components/data-mapper-app.component.css&#x27;]
+  styleUrls: [&#x27;./lib/atlasmap-data-mapper/components/app/data-mapper-app.component.css&#x27;]
 })
 
 export class AtlasmapNavbarComponent implements OnInit {
@@ -2384,7 +2384,7 @@ export class AtlasmapNavbarComponent implements OnInit {
 
     <div class="tab-pane fade " id="c-styleData">
                 <p class="comment">
-                    <code>./lib/atlasmap-data-mapper/components/data-mapper-app.component.css</code>
+                    <code>./lib/atlasmap-data-mapper/components/app/data-mapper-app.component.css</code>
                 </p>
                 <pre class="line-numbers"><code class="language-scss">/*
     Copyright (C) 2019 Red Hat, Inc.
@@ -2402,12 +2402,12 @@ export class AtlasmapNavbarComponent implements OnInit {
     limitations under the License.
 */
 
-@import &#x27;data-mapper-base.component.css&#x27;;
-@import &#x27;data-mapper-document.component.css&#x27;;
-@import &#x27;data-mapper-mapping-detail.component.css&#x27;;
-@import &#x27;data-mapper-mapping-list.component.css&#x27;;
-@import &#x27;data-mapper-modal.component.css&#x27;;
-@import &#x27;data-mapper-toolbar.component.css&#x27;;
+@import &#x27;../data-mapper-base.component.css&#x27;;
+@import &#x27;../document/data-mapper-document.component.css&#x27;;
+@import &#x27;../mapping-detail/data-mapper-mapping-detail.component.css&#x27;;
+@import &#x27;../mapping-list/data-mapper-mapping-list.component.css&#x27;;
+@import &#x27;../modal/data-mapper-modal.component.css&#x27;;
+@import &#x27;../toolbar/data-mapper-toolbar.component.css&#x27;;
 
 /* loading screen styles */
 .dataMapperBodyHidden { visibility:hidden; position:relative; height:0px; }
