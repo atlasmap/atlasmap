@@ -22,7 +22,7 @@ import { DocumentManagementService } from '../services/document-management.servi
 import { MappingManagementService } from '../services/mapping-management.service';
 import { InitializationService } from '../services/initialization.service';
 
-import { DataMapperAppComponent } from './data-mapper-app.component';
+import { DataMapperAppComponent } from './app/data-mapper-app.component';
 import { environment } from '../../../../environments/environment';
 import { Examples } from '../models/examples';
 
