@@ -3,7 +3,7 @@
   <parent>
     <groupId>io.atlasmap</groupId>
     <artifactId>atlas-xml-parent</artifactId>
-    <version>1.42.10</version>
+    <version>1.42.x-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
