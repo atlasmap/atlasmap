@@ -319,6 +319,7 @@ export class MappingManagementService {
       this.updateTransition(mapping, position, offset);
       if (mapping.sourceFields.length > 0 && mapping.targetFields.length > 0) {
         this.notifyMappingUpdated();
+        this.cfg.redrawMappingLinesEvent.emit({_lmcInstance: this.cfg.lmcInstance});
       }
       return;
     }
@@ -336,6 +337,7 @@ export class MappingManagementService {
         this.updateTransition(mapping, position, offset);
       }
       this.notifyMappingUpdated();
+      this.cfg.redrawMappingLinesEvent.emit({_lmcInstance: this.cfg.lmcInstance});
     }
   }
 

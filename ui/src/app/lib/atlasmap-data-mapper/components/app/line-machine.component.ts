@@ -60,8 +60,9 @@ export class LineMachineComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.mappingUpdatedSubscription = this.cfg.mappingService.mappingUpdated$.subscribe(() => {
       this.mappingChanged();
-      this.docDefInput.setLineMachine(this);
-      this.docDefOutput.setLineMachine(this);
+      this.docDefInput.setLineMachineEventObserver(this);
+      this.docDefOutput.setLineMachineEventObserver(this);
+      this.cfg.lmcInstance = this;
     });
   }
 

@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { Component, Input, ViewChildren, ElementRef, EventEmitter, QueryList, ViewChild, OnInit } from '@angular/core';
+import { Component, Input, ViewChildren, ElementRef, QueryList, ViewChild, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { DocumentType, InspectionType } from '../../common/config.types';
@@ -51,9 +51,7 @@ export class DocumentDefinitionComponent implements OnInit {
   dataSource: Observable<any>;
 
   private searchFieldCount = 0;
-  private lineMachine: LineMachineComponent = null;
   private maxSearchMatch = 10000;
-  private redrawMappingLinesEvent = new EventEmitter<AdmRedrawMappingLinesEvent>(true);
   private searchMode = false;
   private searchFilter = '';
   private scrollTop = 0;
@@ -93,15 +91,10 @@ export class DocumentDefinitionComponent implements OnInit {
     return null;
   }
 
-  getLineMachine(): LineMachineComponent {
-    return this.lineMachine;
-  }
-
-  setLineMachine(lm: LineMachineComponent): void {
-    this.lineMachine = lm;
-    if (this.redrawMappingLinesEvent.observers.length === 0) {
-      this.redrawMappingLinesEvent.subscribe((event: AdmRedrawMappingLinesEvent) =>
-        this.lineMachine.handleRedrawMappingLinesEvent(event));
+  setLineMachineEventObserver(lm: LineMachineComponent): void {
+    if (this.cfg.redrawMappingLinesEvent.observers.length === 0) {
+      this.cfg.redrawMappingLinesEvent.subscribe((event: AdmRedrawMappingLinesEvent) =>
+      this.cfg.lmcInstance.handleRedrawMappingLinesEvent(event));
     }
   }
 
@@ -264,7 +257,7 @@ export class DocumentDefinitionComponent implements OnInit {
       return;
     }
     this.scrollTop = event.target.scrollTop;
-    this.redrawMappingLinesEvent.emit({_lmcInstance: this.lineMachine});
+    this.cfg.redrawMappingLinesEvent.emit({_lmcInstance: this.cfg.lmcInstance});
   }
 
   /**
@@ -273,7 +266,7 @@ export class DocumentDefinitionComponent implements OnInit {
   toggleSearch(): void {
 
     // When adding or removing the search box you need to adjust the line geometry.
-    this.redrawMappingLinesEvent.emit({_lmcInstance: this.lineMachine});
+    this.cfg.redrawMappingLinesEvent.emit({_lmcInstance: this.cfg.lmcInstance});
 
     this.searchMode = !this.searchMode;
     this.search(this.searchMode ? this.searchFilter : '');
@@ -454,7 +447,7 @@ export class DocumentDefinitionComponent implements OnInit {
 
   toggleFieldVisibility(docDef: DocumentDefinition): void {
     docDef.showFields = !docDef.showFields;
-    this.redrawMappingLinesEvent.emit({_lmcInstance: this.lineMachine});
+    this.cfg.redrawMappingLinesEvent.emit({_lmcInstance: this.cfg.lmcInstance});
   }
 
   isAddFieldAvailable(docDef: DocumentDefinition): boolean {
@@ -483,7 +476,7 @@ export class DocumentDefinitionComponent implements OnInit {
     if (!event) {
       this.search(this.searchFilter);
     }
-    this.redrawMappingLinesEvent.emit({_lmcInstance: this.lineMachine});
+    this.cfg.redrawMappingLinesEvent.emit({_lmcInstance: this.cfg.lmcInstance});
   }
 
   /**
@@ -558,7 +551,7 @@ export class DocumentDefinitionComponent implements OnInit {
         }
       }
     }
-    this.redrawMappingLinesEvent.emit({_lmcInstance: this.lineMachine});
+    this.cfg.redrawMappingLinesEvent.emit({_lmcInstance: this.cfg.lmcInstance});
     return formattedFields;  // required by typeahead - not used
   }
 
