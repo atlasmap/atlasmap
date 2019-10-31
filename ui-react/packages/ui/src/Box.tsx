@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { FunctionComponent } from 'react';
 import { css, StyleSheet } from '@patternfly/react-styles';
 
 const BoxStyles = StyleSheet.create({
@@ -7,14 +7,20 @@ const BoxStyles = StyleSheet.create({
     width: 200,
     overflow: 'hidden',
     display: 'inline-block',
-    background: 'white',
-    position: 'absolute'
+    background: 'white'
   },
   inner: {
   }
 });
 
-export const Box: React.FunctionComponent = ({ children }) => {
+export interface IBoxProps {
+  foo?: string;
+}
+
+/**
+ * `Box` sample doc
+ */
+export const Box: FunctionComponent<IBoxProps> = ({ children }) => {
   return (
     <div className={css(BoxStyles.outer)}>
       <div className={css(BoxStyles.inner)}>

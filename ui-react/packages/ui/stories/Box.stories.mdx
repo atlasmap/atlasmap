@@ -1,12 +1,12 @@
-import { text } from '@storybook/addon-knobs';
-import * as React from 'react';
-import { storiesOf } from '@storybook/react';
+import { Meta, Props } from "@storybook/addon-docs/blocks";
+import { text } from "@storybook/addon-knobs";
 import { Box } from '@src';
 
-const stories = storiesOf('Components', module);
+<Meta title="Box" />
 
-stories.add('Box', () => (
-  <Box>
+<Box>
     {text('Sample content', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi at deserunt dolor eos est impedit ipsa, laboriosam laborum nisi officia officiis quis reiciendis repellendus reprehenderit sapiente sint sunt totam vitae!')}
-  </Box>
-));
+</Box>
+
+
+<Props of={Box} />
