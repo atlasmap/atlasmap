@@ -258,10 +258,8 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
             await this.fetchMappings(this.cfg.mappingFiles);
           } else {
             // filter according to mappingId
-            var filter = 'UI-DEFAULT'; // Added DEFAULT to avoid returning custom mappings
-            if (this.cfg.mappingId != null){
-              filter = 'UI-CUSTOM-' + this.cfg.mappingId;
-            }
+            // The postfix to differentiate btw UI.1 and UI.11
+            var filter = 'UI.' + this.cfg.mappingId + MappingDefinition.MAPPING_NAME_POSTFIX;
             this.cfg.fileService.findMappingFiles(filter).toPromise()
               .then( async(files: string[]) => {
                 // It's okay if no mapping files are found - resolve false so the caller will know.
