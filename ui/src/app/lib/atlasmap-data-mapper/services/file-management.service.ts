@@ -113,7 +113,7 @@ export class FileManagementService {
   }
 
   getCurrentADMCatalog(): Observable<Uint8Array> {
-    const atlasmapCatalogName = 'atlasmap-catalog.adm';
+    const atlasmapCatalogName = 'atlasmap-catalog-' + this.cfg.mappingId + '.adm';
     return new Observable<Uint8Array>((observer: any) => {
       const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/ZIP/';
       const url: string = baseURL + atlasmapCatalogName;
