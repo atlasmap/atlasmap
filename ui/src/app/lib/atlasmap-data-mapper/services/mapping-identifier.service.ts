@@ -1,16 +1,19 @@
-import { Injectable } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import {Injectable} from '@angular/core';
+import {Router, ActivatedRoute, Params} from '@angular/router';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class MappingIdentifierService {
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute) {
+  }
 
-  getCurrentMappingId():string{
-    var mappingid = this.route.snapshot.paramMap.get('id');
-    //If not set, return default
-    return mappingid;
-}
+  getCurrentMappingId(): number {
+    var urlMappingId = this.route.snapshot.paramMap.get('id');
+    let mappingId: number = +urlMappingId;
+    if (isNaN(mappingId) || mappingId == null) {
+      // Default mapping id
+      return 0;
+    }
+    return mappingId;
+  }
 }
