@@ -132,7 +132,7 @@ export class ConfigModel {
   preloadedFieldActionMetadata: any;
 
   //declare in initCfg instead?
-  mappingId: string;
+  mappingId: number;
 
   logger: NGXLogger;
 

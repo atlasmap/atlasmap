@@ -82,7 +82,7 @@ import io.swagger.annotations.ApiResponses;
 @Path("/")
 public class AtlasService {
 
-    static final String CUSTOM_MAPPING_NAME_PREFIX = "UI-CUSTOM";
+    static final String MAPPING_NAME_PREFIX = "UI.";
     static final String ATLASMAP_ADM_PATH = "atlasmap.adm.path";
     static final String ATLASMAP_WORKSPACE = "atlasmap.workspace";
     private static final Logger LOG = LoggerFactory.getLogger(AtlasService.class);
@@ -385,13 +385,7 @@ public class AtlasService {
            return saveMapping(fromJson(mapping, AtlasMapping.class), uriInfo);
         case "GZ":
 
-            String atlasmapCatalogFilesName;
-            if (mappingId.contains(AtlasService.CUSTOM_MAPPING_NAME_PREFIX)){
-                atlasmapCatalogFilesName = "adm-catalog-files-" + mappingId + ".gz";
-            }else {
-                atlasmapCatalogFilesName = this.atlasmapCatalogFilesName;
-            }
-
+            String atlasmapCatalogFilesName = "adm-catalog-files-" + mappingId + ".gz";
             LOG.debug("  saveCompressedMappingRequest '{}' - ID: {}", atlasmapCatalogFilesName, mappingId);
             try {
                 createMappingFile(atlasmapCatalogFilesName, mapping);
@@ -609,14 +603,9 @@ public class AtlasService {
         String atlasmapCatalogName;
         String atlasmapCatalogFilesName;
         // Handling multiple mappings when creating compressed catalog
-        if (mappingId.contains(AtlasService.CUSTOM_MAPPING_NAME_PREFIX)) {
-            atlasmapCatalogName = "atlasmap-catalog-" + mappingId + ".adm";
-            atlasmapCatalogFilesName = "adm-catalog-files-" + mappingId + ".gz";
-        }else{
-            // Default scenario
-            atlasmapCatalogName = this.atlasmapCatalogName;
-            atlasmapCatalogFilesName = this.atlasmapCatalogFilesName;
-        }
+        atlasmapCatalogName = "atlasmap-catalog-" + mappingId + ".adm";
+        atlasmapCatalogFilesName = "adm-catalog-files-" + mappingId + ".gz";
+
 
         String compressedCatalogName = mappingFolder + File.separator + atlasmapCatalogName;
         String compressedCatalogFilesName = mappingFolder + File.separator + atlasmapCatalogFilesName;

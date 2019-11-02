@@ -453,7 +453,7 @@ export class FileManagementService {
 
   private getMappingId(): string {
     // if no mapping file present, build mapping id instead of returning
-    return (this.cfg.mappingFiles.length > 0) ? this.cfg.mappingFiles[0] : this.buildMappingName(this.cfg.mappingId);
+    return this.cfg.mappingId.toString();
   }
 
   private handleError(message: string, error: any): void {
@@ -462,12 +462,12 @@ export class FileManagementService {
     this.cfg.initCfg.initialized = true;
   }
 
-  private buildMappingName(mappingId: string){
-    if (mappingId == null){
-      return '0';
-    } else {
-      return 'UI-CUSTOM-' + mappingId + '.postfix';
-    }
-  }
+  // private buildMappingName(mappingId: string){
+  //   if (mappingId == null){
+  //     return '0';
+  //   } else {
+  //     return  mappingId.toString() ;
+  //   }
+  // }
 
 }

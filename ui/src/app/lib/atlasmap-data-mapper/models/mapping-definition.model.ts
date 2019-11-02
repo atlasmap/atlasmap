@@ -27,19 +27,15 @@ export class MappingDefinition {
   activeMapping: MappingModel = null;
   parsedDocs: DocumentDefinition[] = [];
   templateText: string = null;
-  static DEFAULT_MAPPING_NAME_PREFIX = 'UI-DEFAULT';
-  static CUSTOM_MAPPING_NAME_PREFIX = 'UI-CUSTOM';
+  static MAPPING_NAME_PREFIX = 'UI.';
+  static MAPPING_NAME_POSTFIX = '.default'
   static const
   private tables: LookupTable[] = [];
   private tablesBySourceTargetKey: { [key: string]: LookupTable; } = {};
   private tablesByName: { [key: string]: LookupTable; } = {};
 
-  constructor(mappingId: string) {
-    if (mappingId == null) {
-      this.name = MappingDefinition.DEFAULT_MAPPING_NAME_PREFIX + '.' + Math.floor((Math.random() * 1000000) + 1).toString();
-    }else {
-      this.name = MappingDefinition.CUSTOM_MAPPING_NAME_PREFIX + '-' + mappingId  + '.postfix';
-    }
+  constructor(mappingId: number) {
+    this.name = MappingDefinition.MAPPING_NAME_PREFIX + mappingId +  MappingDefinition.MAPPING_NAME_POSTFIX;
   }
 
   templateExists(): boolean {
