@@ -27,6 +27,9 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -48,6 +51,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import io.atlasmap.v2.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,6 +87,7 @@ import io.swagger.annotations.ApiResponses;
 public class AtlasService {
 
     static final String MAPPING_NAME_PREFIX = "UI.";
+    static final String MAPPING_NAME_SUFFIX = ".default";
     static final String ATLASMAP_ADM_PATH = "atlasmap.adm.path";
     static final String ATLASMAP_WORKSPACE = "atlasmap.workspace";
     private static final Logger LOG = LoggerFactory.getLogger(AtlasService.class);
@@ -151,7 +156,7 @@ public class AtlasService {
                 atlasDir.mkdirs();
             }
 
-            resetMappings();
+            resetMappings(0); // resets default mapping (id = 0)
             Files.copy(admPath.toAbsolutePath(),
                 Paths.get(mappingFolderPath.toAbsolutePath().toString() + File.separator + atlasmapCatalogName),
                 StandardCopyOption.REPLACE_EXISTING);
@@ -262,14 +267,17 @@ public class AtlasService {
     }
 
     @DELETE
-    @Path("/mapping/RESET")
+    @Path("/mapping/RESET/{mappingId}")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Remove All Mappings", notes = "Remove all mapping files saved on the server")
     @ApiResponses({
         @ApiResponse(code = 200, message = "All mapping files were removed successfully"),
         @ApiResponse(code = 204, message = "Unable to remove all mapping files")})
-    public Response resetMappings() {
+    public Response resetMappings(@ApiParam("Mapping ID") @PathParam("mappingId") Integer mappingId) {
         LOG.debug("resetMappings");
+        if (mappingId == null){
+            mappingId = 0;
+        }
 
         java.nio.file.Path mappingFolderPath = Paths.get(mappingFolder);
         File[] mappings = mappingFolderPath.toFile().listFiles();
@@ -278,12 +286,29 @@ public class AtlasService {
             return Response.ok().build();
         }
 
+        List <String> filesToDelete = getMappingFileNames(mappingId);
+        mappings = Arrays.stream(mappings)
+            .filter(file -> filesToDelete.contains(file.getName()))
+            .toArray(File[]::new);
+
         try {
-            AtlasUtil.deleteDirectoryContents(mappingFolderPath.toFile());
+
+            for (File mappingFile: mappings) {
+                AtlasUtil.deleteDirectory(mappingFile);
+            }
+
         } catch (Exception e) {
             throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
         }
         return Response.ok().build();
+    }
+
+    private List<String> getMappingFileNames(Integer mappingId) {
+        List <String> mappingFileNames = new ArrayList<>();
+        mappingFileNames.add(generateMappingFileNameFromId(mappingId, MappingFileType.ADM));
+        mappingFileNames.add(generateMappingFileNameFromId(mappingId, MappingFileType.GZ));
+        mappingFileNames.add(generateMappingFileNameFromId(mappingId, MappingFileType.JSON));
+        return mappingFileNames;
     }
 
     @DELETE
@@ -785,8 +810,19 @@ public class AtlasService {
         return String.format("atlasmapping-%s.json", mappingName);
     }
 
-    private String generateCatalogFileName (String mappingId){
-        return String.format("atlasmap-catalog-files-%s.gz", mappingId);
+    private String generateMappingFileNameFromId(int mappingId, MappingFileType mappingFileType){
+        switch (mappingFileType){
+            case GZ:
+                return String.format("adm-catalog-files-%s.gz", mappingId);
+
+            case ADM:
+                return String.format("atlasmap-catalog-%s.adm", mappingId);
+
+            case JSON:
+                return String.format("atlasmapping-%s%s%s.json", MAPPING_NAME_PREFIX, mappingId, MAPPING_NAME_SUFFIX);
+        }
+
+        throw new WebApplicationException("Unrecognized Catalog File Type: " + mappingFileType, Status.INTERNAL_SERVER_ERROR);
     }
 
     private byte[] toJson(Object value) {

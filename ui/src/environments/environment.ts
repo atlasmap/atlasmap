@@ -16,9 +16,9 @@ export const environment = {
     defaultTokenValue: 'awesome',
   },
   backendUrls: {
-    atlasServiceUrl: '/v2/atlas/',
-    javaInspectionServiceUrl: '/v2/atlas/java/',
-    xmlInspectionServiceUrl: '/v2/atlas/xml/',
-    jsonInspectionServiceUrl: '/v2/atlas/json/',
+    atlasServiceUrl: 'http://localhost:8585/v2/atlas/',
+    javaInspectionServiceUrl: 'http://localhost:8585/v2/atlas/java/',
+    xmlInspectionServiceUrl: 'http://localhost:8585/v2/atlas/xml/',
+    jsonInspectionServiceUrl: 'http://localhost:8585/v2/atlas/json/',
   },
 };
