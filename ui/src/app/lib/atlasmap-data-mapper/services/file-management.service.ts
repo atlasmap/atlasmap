@@ -144,7 +144,7 @@ export class FileManagementService {
    */
   resetMappings(): Observable<boolean> {
     return new Observable<boolean>((observer: any) => {
-      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/RESET';
+      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/RESET/' + this.cfg.mappingId;
       this.cfg.logger.trace('Mapping Service Request - Reset');
       this.http.delete(url, { headers: this.headers }).toPromise().then((res: any) => {
           if (this.cfg.isTraceEnabled()) {
