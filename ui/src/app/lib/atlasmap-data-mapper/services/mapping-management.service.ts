@@ -42,6 +42,8 @@ import { LookupTableUtil } from '../utils/lookup-table-util';
 export class MappingManagementService {
   _cfg: ConfigModel;
 
+  lineRefreshSource = new Subject<void>();
+  lineRefresh$ = this.lineRefreshSource.asObservable();
   mappingUpdatedSource = new Subject<void>();
   mappingUpdated$ = this.mappingUpdatedSource.asObservable();
 
@@ -640,8 +642,19 @@ export class MappingManagementService {
         resolve(true);
       }).catch((error: any) => {
         this.cfg.logger.warn('Unable to fetch validation data.');
+        resolve(false);
       });
     });
+  }
+
+  /**
+   * Notify the line machine to update the lines between panels.  Most widgets require a
+   * small delay to allow the panel to complete forming so add it here.
+   */
+  notifyLineRefresh(): void {
+    setTimeout(() => {
+      this.lineRefreshSource.next();
+    }, 1);
   }
 
   /**
@@ -661,6 +674,7 @@ export class MappingManagementService {
         await this.validateMappings();
       }
       this.mappingUpdatedSource.next();
+      this.notifyLineRefresh();
       resolve(true);
     });
   }

@@ -14,13 +14,13 @@
     limitations under the License.
 */
 
-import { Component, Input, ViewChildren, ElementRef, EventEmitter, QueryList, ViewChild, OnInit } from '@angular/core';
+import { Component, Input, ViewChildren, ElementRef, QueryList, ViewChild, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { DocumentType, InspectionType } from '../../common/config.types';
 import { DataMapperUtil } from '../../common/data-mapper-util';
 
-import { ConfigModel, AdmRedrawMappingLinesEvent } from '../../models/config.model';
+import { ConfigModel } from '../../models/config.model';
 import { Field } from '../../models/field.model';
 import { DocumentDefinition } from '../../models/document-definition.model';
 
@@ -51,9 +51,7 @@ export class DocumentDefinitionComponent implements OnInit {
   dataSource: Observable<any>;
 
   private searchFieldCount = 0;
-  private lineMachine: LineMachineComponent = null;
   private maxSearchMatch = 10000;
-  private redrawMappingLinesEvent = new EventEmitter<AdmRedrawMappingLinesEvent>(true);
   private searchMode = false;
   private searchFilter = '';
   private scrollTop = 0;
@@ -91,18 +89,6 @@ export class DocumentDefinitionComponent implements OnInit {
       }
     }
     return null;
-  }
-
-  getLineMachine(): LineMachineComponent {
-    return this.lineMachine;
-  }
-
-  setLineMachine(lm: LineMachineComponent): void {
-    this.lineMachine = lm;
-    if (this.redrawMappingLinesEvent.observers.length === 0) {
-      this.redrawMappingLinesEvent.subscribe((event: AdmRedrawMappingLinesEvent) =>
-        this.lineMachine.handleRedrawMappingLinesEvent(event));
-    }
   }
 
   getDocDefElementPosition(docDef: DocumentDefinition): any {
@@ -252,9 +238,8 @@ export class DocumentDefinitionComponent implements OnInit {
   }
 
   /**
-   * Handle scrolling in this document definition instance.  Avoid a circular dependence with the
-   * LineMachineComponent by dispatching a custom Angular mappings-line-redraw event.  If a null
-   * event is passed in then simply clear the scroll top value.
+   * Handle scrolling in this document definition instance.  If a null event is passed in
+   * then simply clear the scroll top value.
    *
    * @param event
    */
@@ -264,7 +249,7 @@ export class DocumentDefinitionComponent implements OnInit {
       return;
     }
     this.scrollTop = event.target.scrollTop;
-    this.redrawMappingLinesEvent.emit({_lmcInstance: this.lineMachine});
+    this.cfg.mappingService.notifyLineRefresh();
   }
 
   /**
@@ -272,8 +257,9 @@ export class DocumentDefinitionComponent implements OnInit {
    */
   toggleSearch(): void {
 
-    // When adding or removing the search box you need to adjust the line geometry.
-    this.redrawMappingLinesEvent.emit({_lmcInstance: this.lineMachine});
+    // When adding or removing the search box you need to adjust the line geometry.  Delay
+    // just long enough for the box to be drawn.
+    this.cfg.mappingService.notifyLineRefresh();
 
     this.searchMode = !this.searchMode;
     this.search(this.searchMode ? this.searchFilter : '');
@@ -454,7 +440,7 @@ export class DocumentDefinitionComponent implements OnInit {
 
   toggleFieldVisibility(docDef: DocumentDefinition): void {
     docDef.showFields = !docDef.showFields;
-    this.redrawMappingLinesEvent.emit({_lmcInstance: this.lineMachine});
+    this.cfg.mappingService.notifyLineRefresh();
   }
 
   isAddFieldAvailable(docDef: DocumentDefinition): boolean {
@@ -483,7 +469,7 @@ export class DocumentDefinitionComponent implements OnInit {
     if (!event) {
       this.search(this.searchFilter);
     }
-    this.redrawMappingLinesEvent.emit({_lmcInstance: this.lineMachine});
+    this.cfg.mappingService.notifyLineRefresh();
   }
 
   /**
@@ -558,7 +544,7 @@ export class DocumentDefinitionComponent implements OnInit {
         }
       }
     }
-    this.redrawMappingLinesEvent.emit({_lmcInstance: this.lineMachine});
+    this.cfg.mappingService.notifyLineRefresh();
     return formattedFields;  // required by typeahead - not used
   }
 
