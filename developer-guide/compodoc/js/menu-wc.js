@@ -292,9 +292,6 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                         </div>
                         <ul class="links collapse " ${ isNormalMode ? 'id="classes-links"' : 'id="xs-classes-links"' }>
                             <li class="link">
-                                <a href="classes/AdmRedrawMappingLinesEvent.html" data-type="entity-link">AdmRedrawMappingLinesEvent</a>
-                            </li>
-                            <li class="link">
                                 <a href="classes/ConfigModel.html" data-type="entity-link">ConfigModel</a>
                             </li>
                             <li class="link">

@@ -559,8 +559,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="216"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/document/document-field-detail.component.ts:216</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="212"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/document/document-field-detail.component.ts:212</a></div>
                 </td>
             </tr>
 
@@ -816,8 +816,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="197"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/document/document-field-detail.component.ts:197</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="193"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/document/document-field-detail.component.ts:193</a></div>
                 </td>
             </tr>
 
@@ -886,8 +886,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="285"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/document/document-field-detail.component.ts:285</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="281"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/document/document-field-detail.component.ts:281</a></div>
                 </td>
             </tr>
 
@@ -1042,8 +1042,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="280"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/document/document-field-detail.component.ts:280</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="276"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/document/document-field-detail.component.ts:276</a></div>
                 </td>
             </tr>
 
@@ -1266,8 +1266,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="261"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/document/document-field-detail.component.ts:261</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="257"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/document/document-field-detail.component.ts:257</a></div>
                 </td>
             </tr>
 
@@ -1511,7 +1511,7 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="289" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/document/document-field-detail.component.ts:289</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="285" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/document/document-field-detail.component.ts:285</a></div>
                                 </td>
                             </tr>
 
@@ -1695,11 +1695,7 @@ export class DocumentFieldDetailComponent {
    */
   handleMouseClick(event: MouseEvent): void {
     this.cfg.mappingService.fieldSelected(this.field, event.ctrlKey || event.metaKey);
-    if (this.lineMachine !&#x3D; null) {
-      setTimeout(() &#x3D;&gt; {
-        this.lineMachine.redrawLinesForMappings();
-      }, 1);
-    }
+    this.cfg.mappingService.notifyLineRefresh();
   }
 
   getFieldDetailComponent(field: Field): DocumentFieldDetailComponent {

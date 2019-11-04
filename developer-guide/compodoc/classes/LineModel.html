@@ -328,7 +328,7 @@
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, OnDestroy, ViewChild } from &#x27;@angular/core&#x27;;
 import { DomSanitizer, SafeStyle } from &#x27;@angular/platform-browser&#x27;;
 
-import { ConfigModel, AdmRedrawMappingLinesEvent } from &#x27;../../models/config.model&#x27;;
+import { ConfigModel } from &#x27;../../models/config.model&#x27;;
 import { MappingModel } from &#x27;../../models/mapping.model&#x27;;
 import { Field } from &#x27;../../models/field.model&#x27;;
 
@@ -364,27 +364,20 @@ export class LineMachineComponent implements OnInit, OnDestroy {
   @ViewChild(&#x27;lineMachineElement&#x27;) lineMachineElement: ElementRef;
 
   private yOffset &#x3D; 3;
-  private mappingUpdatedSubscription: Subscription;
+  private lineRefreshSubscription: Subscription;
 
   constructor(private sanitizer: DomSanitizer, public detector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.mappingUpdatedSubscription &#x3D; this.cfg.mappingService.mappingUpdated$.subscribe(() &#x3D;&gt; {
+    this.lineRefreshSubscription &#x3D; this.cfg.mappingService.lineRefresh$.subscribe(() &#x3D;&gt; {
       this.mappingChanged();
-      this.docDefInput.setLineMachine(this);
-      this.docDefOutput.setLineMachine(this);
     });
   }
 
   ngOnDestroy() {
-    if (this.mappingUpdatedSubscription) {
-      this.mappingUpdatedSubscription.unsubscribe();
+    if (this.lineRefreshSubscription) {
+      this.lineRefreshSubscription.unsubscribe();
     }
-  }
-
-  handleRedrawMappingLinesEvent(event: AdmRedrawMappingLinesEvent): void {
-    const lmcInstance: LineMachineComponent &#x3D; event._lmcInstance;
-    lmcInstance.redrawLinesForMappings();
   }
 
   /**
