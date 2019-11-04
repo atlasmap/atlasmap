@@ -14,6 +14,7 @@
     limitations under the License.
 */
 
+import { EventEmitter } from '@angular/core';
 import { NGXLogger, NgxLoggerLevel } from 'ngx-logger';
 import { environment } from '../../../../environments/environment';
 import { MappingDefinition } from './mapping-definition.model';
@@ -129,7 +130,6 @@ export class ConfigModel {
 
   preloadedMappingJson: string;
   preloadedFieldActionMetadata: any;
-
   logger: NGXLogger;
 
   constructor() {
@@ -307,11 +307,4 @@ export class ConfigModel {
     return true;
   }
 
-}
-
-/**
- * Place all custom events here.
- */
-export class AdmRedrawMappingLinesEvent {
-  _lmcInstance: any;
 }

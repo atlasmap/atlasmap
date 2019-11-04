@@ -17,7 +17,7 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
-import { ConfigModel, AdmRedrawMappingLinesEvent } from '../../models/config.model';
+import { ConfigModel } from '../../models/config.model';
 import { MappingModel } from '../../models/mapping.model';
 import { Field } from '../../models/field.model';
 
@@ -53,27 +53,20 @@ export class LineMachineComponent implements OnInit, OnDestroy {
   @ViewChild('lineMachineElement') lineMachineElement: ElementRef;
 
   private yOffset = 3;
-  private mappingUpdatedSubscription: Subscription;
+  private lineRefreshSubscription: Subscription;
 
   constructor(private sanitizer: DomSanitizer, public detector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.mappingUpdatedSubscription = this.cfg.mappingService.mappingUpdated$.subscribe(() => {
+    this.lineRefreshSubscription = this.cfg.mappingService.lineRefresh$.subscribe(() => {
       this.mappingChanged();
-      this.docDefInput.setLineMachine(this);
-      this.docDefOutput.setLineMachine(this);
     });
   }
 
   ngOnDestroy() {
-    if (this.mappingUpdatedSubscription) {
-      this.mappingUpdatedSubscription.unsubscribe();
+    if (this.lineRefreshSubscription) {
+      this.lineRefreshSubscription.unsubscribe();
     }
-  }
-
-  handleRedrawMappingLinesEvent(event: AdmRedrawMappingLinesEvent): void {
-    const lmcInstance: LineMachineComponent = event._lmcInstance;
-    lmcInstance.redrawLinesForMappings();
   }
 
   /**

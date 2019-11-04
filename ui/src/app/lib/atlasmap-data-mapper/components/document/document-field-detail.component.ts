@@ -187,11 +187,7 @@ export class DocumentFieldDetailComponent {
    */
   handleMouseClick(event: MouseEvent): void {
     this.cfg.mappingService.fieldSelected(this.field, event.ctrlKey || event.metaKey);
-    if (this.lineMachine != null) {
-      setTimeout(() => {
-        this.lineMachine.redrawLinesForMappings();
-      }, 1);
-    }
+    this.cfg.mappingService.notifyLineRefresh();
   }
 
   getFieldDetailComponent(field: Field): DocumentFieldDetailComponent {
