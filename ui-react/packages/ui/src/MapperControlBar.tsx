@@ -8,16 +8,22 @@ import {
 } from '@patternfly/react-icons';
 
 export interface IMapperControlBarProps {
-
+  onZoomIn: () => void,
+  onZoomOut: () => void,
+  onZoomReset: () => void,
 }
 
-export const MapperControlBar: FunctionComponent<IMapperControlBarProps> = () => {
+export const MapperControlBar: FunctionComponent<IMapperControlBarProps> = ({
+  onZoomIn,
+  onZoomOut,
+  onZoomReset
+}) => {
   const controlButtons = useMemo(() => createTopologyControlButtons({
     zoomIn: true,
     zoomInIcon: <SearchPlusIcon />,
     zoomInTip: 'Zoom In',
     zoomInAriaLabel: ' ',
-    zoomInCallback: () => void(0),
+    zoomInCallback: onZoomIn,
     zoomInDisabled: false,
     zoomInHidden: false,
 
@@ -25,11 +31,11 @@ export const MapperControlBar: FunctionComponent<IMapperControlBarProps> = () =>
     zoomOutIcon: <SearchMinusIcon />,
     zoomOutTip: 'Zoom Out',
     zoomOutAriaLabel: ' ',
-    zoomOutCallback: () => void(0),
+    zoomOutCallback: onZoomOut,
     zoomOutDisabled: false,
     zoomOutHidden: false,
 
-    fitToScreen: true,
+    fitToScreen: false,
     fitToScreenIcon: <ExpandArrowsAltIcon />,
     fitToScreenTip: 'Fit to Screen',
     fitToScreenAriaLabel: ' ',
@@ -41,7 +47,7 @@ export const MapperControlBar: FunctionComponent<IMapperControlBarProps> = () =>
     resetViewIcon: <ExpandIcon />,
     resetViewTip: 'Reset View',
     resetViewAriaLabel: ' ',
-    resetViewCallback: () => void(0),
+    resetViewCallback: onZoomReset,
     resetViewDisabled: false,
     resetViewHidden: false,
 
