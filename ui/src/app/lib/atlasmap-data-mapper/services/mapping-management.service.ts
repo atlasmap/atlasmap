@@ -648,7 +648,7 @@ export class MappingManagementService {
   }
 
   /**
-   * Notify the line machine to update the lines between panels.  Most widgets require a 
+   * Notify the line machine to update the lines between panels.  Most widgets require a
    * small delay to allow the panel to complete forming so add it here.
    */
   notifyLineRefresh(): void {
