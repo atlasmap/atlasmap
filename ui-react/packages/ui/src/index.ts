@@ -1,5 +1,5 @@
 export * from './Box';
 export * from './Mapper';
-export * from './MapperCanvas';
+export * from './SourceTargetMapper';
 export * from './MapperControlBar';
 export * from './MapperToolbar';

@@ -25,7 +25,8 @@ export const useDimensions = ({
    liveMeasure = true
  }: UseDimensionsArgs = {}): [
   MutableRefObject<HTMLDivElement | null>,
-  Dimension
+  Dimension,
+  () => void
 ] => {
   const [dimensions, setDimensions] = useState<Dimension>({
     width: 0,
@@ -39,12 +40,16 @@ export const useDimensions = ({
   });
   const ref = useRef<HTMLDivElement>(null);
 
-  const measure = useCallback(() =>
-    window.requestAnimationFrame(() => {
-      if (ref.current) {
-        setDimensions(getDimensionObject(ref.current))
+  const measure = useCallback(() => {
+      const requestId = requestAnimationFrame(() => {
+        if (ref.current) {
+          setDimensions(getDimensionObject(ref.current))
+        }
+      });
+      return () => {
+        cancelAnimationFrame(requestId);
       }
-    }),
+    },
     [ref, setDimensions]
   );
 
@@ -63,6 +68,6 @@ export const useDimensions = ({
     };
   }, [liveMeasure, measure]);
 
-  return [ref, dimensions];
+  return [ref, dimensions, measure];
 };
 

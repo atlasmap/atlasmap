@@ -1,57 +1,53 @@
+import { MapperProvider } from '@src/MapperContext';
 import React, {
   FunctionComponent,
   useCallback,
+  useEffect,
   useState,
-  WheelEvent,
 } from 'react';
 import { TopologyView } from '@patternfly/react-topology';
-import { MapperControlBar } from '@src/MapperControlBar';
 import { MapperToolbar } from '@src/MapperToolbar';
-import { MapperCanvas } from '@src/MapperCanvas';
+import { SourceTargetMapper } from '@src/SourceTargetMapper';
 import { useDimensions } from '@src/useDimensions';
+import { MappingDetails } from '@src/MappingDetails';
 
 export interface IMapperProps {}
 
 export const Mapper: FunctionComponent<IMapperProps> = () => {
-  const [ref, { width, height }] = useDimensions();
-  const [zoom, setZoom] = useState(1);
+  const [ref, { width, height }, measure] = useDimensions();
+  const [mappingDetails, setMappingDetails] = useState<string | null>(null);
 
-  const updateZoom = useCallback((tick: number) => {
-    setZoom((currentZoom) => currentZoom + tick)
-  }, [zoom, setZoom]);
-
-  const handleWheel = useCallback(
-    (e: WheelEvent) => {
-      updateZoom(e.deltaY * -0.001);
-      e.stopPropagation();
-    },
-    [updateZoom]
+  const closeMappingDetails = useCallback(() => setMappingDetails(null), [
+    setMappingDetails,
+  ]);
+  const showMappingDetails = useCallback(
+    (mapping: string) => setMappingDetails(mapping),
+    [setMappingDetails]
   );
-  const handleZoomIn = useCallback(() => {
-    updateZoom(0.2);
-  }, [updateZoom]);
-  const handleZoomOut = useCallback(() => {
-    updateZoom(-0.2);
-  }, [updateZoom]);
-  const handleZoomReset = useCallback(() => {
-    setZoom(1);
-  }, [setZoom]);
+  const sideBar = (
+    <MappingDetails show={!!mappingDetails} onClose={closeMappingDetails}>
+      {mappingDetails}
+    </MappingDetails>
+  );
+
+  useEffect(() => {
+    const timeout = setTimeout(() => measure(), 150);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [measure, mappingDetails]);
 
   return (
-    <TopologyView
-      controlBar={
-        <MapperControlBar
-          onZoomIn={handleZoomIn}
-          onZoomOut={handleZoomOut}
-          onZoomReset={handleZoomReset}
-        />
-      }
-      viewToolbar={<MapperToolbar />}
-      onWheel={handleWheel}
-    >
-      <div ref={ref} style={{ height: '100%', flex: '1' }}>
-        {width && <MapperCanvas width={width} height={height} zoom={zoom} />}
-      </div>
-    </TopologyView>
+    <MapperProvider showMappingDetails={showMappingDetails}>
+      <TopologyView
+        viewToolbar={<MapperToolbar />}
+        sideBar={sideBar}
+        sideBarOpen={!!mappingDetails}
+      >
+        <div ref={ref} style={{ height: '100%', flex: '1' }}>
+          {width && <SourceTargetMapper width={width} height={height} />}
+        </div>
+      </TopologyView>
+    </MapperProvider>
   );
 };
