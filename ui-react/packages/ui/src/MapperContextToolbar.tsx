@@ -1,49 +1,29 @@
-import React, { FunctionComponent, useCallback, useState } from 'react';
+import {
+  CodeIcon,
+  ExchangeAltIcon,
+  ExportIcon,
+  ImportIcon,
+  TableIcon,
+} from '@patternfly/react-icons';
+import React, { FunctionComponent } from 'react';
 import {
   Button,
-  Select,
-  SelectOption,
-  SelectVariant, TextInput,
   Toolbar,
   ToolbarGroup,
   ToolbarItem,
   Tooltip,
 } from '@patternfly/react-core';
-import {
-  ImportIcon,
-  ExportIcon,
-  PlusIcon,
-  TableIcon,
-  CodeIcon,
-  ExchangeAltIcon,
-  CogIcon,
-} from '@patternfly/react-icons';
 
-export interface IMapperToolbarProps {}
+export interface IMapperContextToolbarProps {}
 
-export const MapperToolbar: FunctionComponent<
-  IMapperToolbarProps
+export const MapperContextToolbar: FunctionComponent<
+  IMapperContextToolbarProps
 > = () => {
-  const [isSettingsExpanded, setIsSettingsExpanded] = useState(false);
-  const toggleIsSettingsExpanded = useCallback(
-    () => setIsSettingsExpanded(!isSettingsExpanded),
-    [isSettingsExpanded, setIsSettingsExpanded]
-  );
   return (
     <Toolbar
       className="view-toolbar pf-u-px-md pf-u-py-md"
       style={{ borderBottom: '1px solid #ccc' }}
     >
-      <ToolbarGroup style={{ flex: 1 }}>
-        <ToolbarItem>
-          <Button variant={'plain'} aria-label="Enable/ Disable conditional mapping expression" disabled={true}>
-            <i>f<sub>(x)</sub></i>
-          </Button>
-        </ToolbarItem>
-        <ToolbarItem style={{ flex: 1 }}>
-          <TextInput />
-        </ToolbarItem>
-      </ToolbarGroup>
       <ToolbarGroup>
         <ToolbarItem>
           <Tooltip
@@ -79,17 +59,7 @@ export const MapperToolbar: FunctionComponent<
         </ToolbarItem>
       </ToolbarGroup>
       <ToolbarGroup>
-        <ToolbarItem>
-          <Tooltip
-            position={'auto'}
-            enableFlip={true}
-            content={<div>Add new mapping</div>}
-          >
-            <Button variant={'plain'} aria-label="Add new mapping">
-              <PlusIcon />
-            </Button>
-          </Tooltip>
-        </ToolbarItem>
+
         <ToolbarItem>
           <Tooltip
             position={'auto'}
@@ -122,33 +92,6 @@ export const MapperToolbar: FunctionComponent<
               <ExchangeAltIcon />
             </Button>
           </Tooltip>
-        </ToolbarItem>
-        <ToolbarItem>
-          <Select
-            variant={SelectVariant.checkbox}
-            aria-label={'Settings'}
-            onToggle={toggleIsSettingsExpanded}
-            onSelect={() => false}
-            selections={''}
-            isExpanded={isSettingsExpanded}
-            placeholderText={'Settings'}
-            toggleIcon={<CogIcon />}
-          >
-            <SelectOption key={'Show Types'} value={'Show Types'} />
-            <SelectOption key={'Show Lines'} value={'Show Lines'} />
-            <SelectOption
-              key={'Show Mapped Fields'}
-              value={'Show Mapped Fields'}
-            />
-            <SelectOption
-              key={'Show Unmapped Fields'}
-              value={'Show Unmapped Fields'}
-            />
-            <SelectOption
-              key={'Show Mapping Preview'}
-              value={'Show Mapping Preview'}
-            />
-          </Select>
         </ToolbarItem>
       </ToolbarGroup>
     </Toolbar>

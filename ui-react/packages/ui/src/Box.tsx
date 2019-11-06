@@ -2,7 +2,8 @@ import React, {
   useCallback,
   UIEvent,
   forwardRef,
-  PropsWithChildren
+  PropsWithChildren,
+  WheelEvent
 } from 'react';
 import { css, StyleSheet } from '@patternfly/react-styles';
 
@@ -53,12 +54,16 @@ export const Box =  forwardRef<HTMLDivElement, PropsWithChildren<IBoxProps>>(({
     onChanges && onChanges();
   }, [onChanges]);
 
+  const handleWheel = (e: WheelEvent) => {
+    e.stopPropagation()
+  };
+
   return (
     <div
       className={css(BoxStyles.outer)}
     >
       <div className={css(BoxStyles.header)}>{header}</div>
-      <div className={css(BoxStyles.body)} onScroll={onScroll} ref={ref}>
+      <div className={css(BoxStyles.body)} onScroll={onScroll} onWheel={handleWheel} ref={ref}>
         {children}
       </div>
       <div className={css(BoxStyles.footer)}>{footer}</div>

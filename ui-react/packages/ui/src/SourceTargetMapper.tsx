@@ -72,7 +72,21 @@ const as = [
   'z',
 ];
 const bs = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
-const mappings = [['A', '10'], ['B', '1'], ['e', '5'], ['Z', '7'], ['X', '3']];
+const mappings = [
+  ['A', '10'],
+  ['B', '1'],
+  ['d', '9'],
+  ['e', '5'],
+  ['f', '5'],
+  ['h', '2'],
+  ['j', '2'],
+  ['m', '7'],
+  ['Q', '8'],
+  ['X', '0'],
+  ['X', '3'],
+  ['X', '6'],
+  ['Z', '7'],
+];
 
 export const SourceTargetMapper: React.FunctionComponent<
   IMappingCanvasProps
@@ -89,14 +103,14 @@ export const SourceTargetMapper: React.FunctionComponent<
     () =>
       scaleLinear()
         .range([0, width])
-        .domain([0, width * zoom]),
+        .domain([0, width /* * zoom*/]),
     [width, zoom]
   );
   const y = useMemo(
     () =>
       scaleLinear()
         .range([height, 0])
-        .domain([height * zoom, 0]),
+        .domain([height /* * zoom*/, 0]),
     [width, zoom]
   );
 
@@ -108,17 +122,17 @@ export const SourceTargetMapper: React.FunctionComponent<
     .y(d => y.invert(d[1]));
 
   const gutter = 50;
-  const boxWidth = x.invert(width / 2 - gutter * 2);
-  const boxHeight = x.invert(height - gutter * 2);
-  const startY = y.invert(gutter);
-  const boxAstartX = x.invert(gutter);
-  const boxBstartX = x.invert(width / 2 + gutter);
+  const boxWidth = Math.max(200, width / 2 - gutter * 2);
+  const boxHeight = Math.max(300, height - gutter * 3);
+  const startY = gutter;
+  const boxAstartX = gutter;
+  const boxBstartX = Math.max(width / 2, boxWidth + gutter) + gutter;
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
   }, []);
 
-  const [lines, setLines] = useState<string[]>([]);
+  const [lines, setLines] = useState<{ d: string, stroke: string }[]>([]);
 
   const fieldsRef = useRef<{ [id: string]: HTMLDivElement }>({});
   const addRef = (ref: HTMLDivElement, id: string) => {
@@ -135,48 +149,51 @@ export const SourceTargetMapper: React.FunctionComponent<
       const bParentRect = bBox.getBoundingClientRect();
 
       const newLines = mappings
-        .map(([a, b]) => {
+        .map(([a, b], idx) => {
           const aRef = fieldsRef.current[a];
           const bRef = fieldsRef.current[b];
           if (aRef && bRef) {
             const aRect = aRef.getBoundingClientRect();
             const bRect = bRef.getBoundingClientRect();
             const isSourceOnTheLeft = aRect.left < bRect.left + bRect.width;
-            return link({
-              source: [
-                aRect.left +
-                  (isSourceOnTheLeft ? aBox.offsetWidth : 0) -
-                  svgOffset.current.offsetLeft,
-                Math.min(
-                  Math.max(
-                    aRect.top - svgOffset.current.offsetTop + aRect.height / 2,
-                    aParentRect.top - svgOffset.current.offsetTop
-                  ),
-                  aBox.clientHeight +
-                    aParentRect.top -
-                    svgOffset.current.offsetTop
-                ),
-              ],
-              target: [
-                bRect.left +
-                  (isSourceOnTheLeft ? 0 : bBox.offsetWidth) -
-                  svgOffset.current.offsetLeft,
-                Math.min(
-                  Math.max(
-                    bRect.top - svgOffset.current.offsetTop + bRect.height / 2,
-                    bParentRect.top - svgOffset.current.offsetTop
-                  ),
-                  bBox.clientHeight +
-                    bParentRect.top -
-                    svgOffset.current.offsetTop
-                ),
-              ],
-            });
+            return {
+              d: link({
+                     source: [
+                       aRect.left +
+                       (isSourceOnTheLeft ? aBox.offsetWidth : 0) -
+                       svgOffset.current.offsetLeft,
+                       Math.min(
+                       Math.max(
+                       aRect.top - svgOffset.current.offsetTop + aRect.height / 2,
+                       aParentRect.top - svgOffset.current.offsetTop
+                       ),
+                       aBox.clientHeight +
+                       aParentRect.top -
+                       svgOffset.current.offsetTop
+                       ),
+                     ],
+                     target: [
+                       bRect.left +
+                       (isSourceOnTheLeft ? 0 : bBox.offsetWidth) -
+                       svgOffset.current.offsetLeft,
+                       Math.min(
+                       Math.max(
+                       bRect.top - svgOffset.current.offsetTop + bRect.height / 2,
+                       bParentRect.top - svgOffset.current.offsetTop
+                       ),
+                       bBox.clientHeight +
+                       bParentRect.top -
+                       svgOffset.current.offsetTop
+                       ),
+                     ],
+                   }),
+              stroke: colors(idx)
+            };
           }
           return null;
         })
-        .filter(a => a) as Array<string>;
-      setLines(newLines);
+        .filter(a => a);
+      setLines(newLines as any);
     }
   }, [mappings, fieldsRef, svgOffset, aBoxRef, bBoxRef]);
 
@@ -205,72 +222,77 @@ export const SourceTargetMapper: React.FunctionComponent<
 
   return (
     <svg
-      viewBox={`0 0 ${width} ${height}`}
       onDragOver={handleDragOver}
       ref={svgRef}
       style={{ width: '100%', height: '100%' }}
     >
-      <g transform={'translate(0,0)'}>
-        {lines.map((d, idx) => (
-          <path
-            key={idx}
-            d={d}
-            stroke={colors(idx)}
-            strokeWidth={3}
-            fill={'none'}
-          />
-        ))}
+      {lines.map(({d, stroke}, idx) => (
+        <path
+          key={idx}
+          d={d}
+          stroke={stroke}
+          strokeWidth={3}
+          fill={'none'}
+        />
+      ))}
 
-        <foreignObject
-          width={boxWidth}
-          height={boxHeight}
-          x={boxAstartX}
-          y={startY}
+      <foreignObject
+        width={x.invert(boxWidth)}
+        height={x.invert(boxHeight)}
+        x={x.invert(boxAstartX)}
+        y={x.invert(startY)}
+      >
+        <Box
+          header={<h1>Source</h1>}
+          footer={<p>{as.length} fields</p>}
+          ref={aBoxRef}
+          onChanges={calcLines}
         >
-          <Box
-            header={<h1>Source</h1>}
-            footer={<p>{as.length} fields</p>}
-            ref={aBoxRef}
-            onChanges={calcLines}
-          >
-            {as.map(id => (
-              <div
-                onClick={() => showMappingDetails(id)}
-                style={{ padding: '0.3rem', borderBottom: '1px solid #eee' }}
-                key={id}
-                ref={el => el && addRef(el, id)}
-              >
-                {id}
-              </div>
-            ))}
-          </Box>
-        </foreignObject>
+          {as.map(id => (
+            <div
+              onClick={() => showMappingDetails(id)}
+              style={{
+                padding: '0.3rem',
+                borderBottom: '1px solid #eee',
+                fontSize: `${zoom}rem`,
+              }}
+              key={id}
+              ref={el => el && addRef(el, id)}
+            >
+              {id} lorem dolor ipsum
+            </div>
+          ))}
+        </Box>
+      </foreignObject>
 
-        <foreignObject
-          width={boxWidth}
-          height={boxHeight}
-          x={boxBstartX}
-          y={startY}
+      <foreignObject
+        width={x.invert(boxWidth)}
+        height={x.invert(boxHeight)}
+        x={x.invert(boxBstartX)}
+        y={x.invert(startY)}
+      >
+        <Box
+          header={<h1>Target</h1>}
+          footer={<p>{bs.length} fields</p>}
+          ref={bBoxRef}
+          onChanges={calcLines}
         >
-          <Box
-            header={<h1>Target</h1>}
-            footer={<p>{bs.length} fields</p>}
-            ref={bBoxRef}
-            onChanges={calcLines}
-          >
-            {bs.map(id => (
-              <div
-                onClick={() => showMappingDetails(id)}
-                style={{ padding: '0.3rem', borderBottom: '1px solid #eee' }}
-                key={id}
-                ref={el => el && addRef(el, id)}
-              >
-                {id}
-              </div>
-            ))}
-          </Box>
-        </foreignObject>
-      </g>
+          {bs.map(id => (
+            <div
+              onClick={() => showMappingDetails(id)}
+              style={{
+                padding: '0.3rem',
+                borderBottom: '1px solid #eee',
+                fontSize: `${zoom}rem`,
+              }}
+              key={id}
+              ref={el => el && addRef(el, id)}
+            >
+              {id} lorem dolor ipsum
+            </div>
+          ))}
+        </Box>
+      </foreignObject>
     </svg>
   );
 };
