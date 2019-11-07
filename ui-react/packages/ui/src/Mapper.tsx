@@ -6,16 +6,20 @@ import React, {
   WheelEvent,
 } from 'react';
 import { TopologyView } from '@patternfly/react-topology';
-import { SourceTargetMapper } from '@src/SourceTargetMapper';
+import { FieldsGroup, Mapping, SourceTargetMapper } from '@src/SourceTargetMapper';
 import { useDimensions } from '@src/useDimensions';
 import { MappingDetails } from '@src/MappingDetails';
 import { MapperProvider } from '@src/MapperContext';
 import { MapperViewToolbar } from '@src/MapperViewToolbar';
 import { MapperContextToolbar } from '@src/MapperContextToolbar';
 
-export interface IMapperProps {}
+export interface IMapperProps {
+  sources: FieldsGroup[];
+  targets: FieldsGroup[];
+  mappings: Mapping[];
+}
 
-export const Mapper: FunctionComponent<IMapperProps> = () => {
+export const Mapper: FunctionComponent<IMapperProps> = ({ sources, mappings, targets }) => {
   const [ref, { width, height }, measure] = useDimensions();
   const [mappingDetails, setMappingDetails] = useState<string | null>(null);
 
@@ -23,7 +27,7 @@ export const Mapper: FunctionComponent<IMapperProps> = () => {
 
   const updateZoom = useCallback(
     (tick: number) => {
-      setZoom(currentZoom => currentZoom + tick);
+      setZoom(currentZoom => Math.max(0.2, Math.min(2, currentZoom + tick)));
     },
     [zoom, setZoom]
   );
@@ -86,7 +90,14 @@ export const Mapper: FunctionComponent<IMapperProps> = () => {
           onWheel={handleWheel}
         >
           {width && (
-            <SourceTargetMapper width={width} height={height} zoom={zoom} />
+            <SourceTargetMapper
+              width={width}
+              height={height}
+              zoom={zoom}
+              sources={sources}
+              mappings={mappings}
+              targets={targets}
+            />
           )}
         </div>
       </TopologyView>
