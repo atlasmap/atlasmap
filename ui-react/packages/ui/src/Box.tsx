@@ -9,22 +9,21 @@ import { css, StyleSheet } from '@patternfly/react-styles';
 
 const BoxStyles = StyleSheet.create({
   outer: {
-    border: '1px solid black',
-    borderRadius: '0.3rem',
     width: '100%',
     height: '100%',
-    overflow: 'hidden',
     display: 'flex',
     flexFlow: 'column',
-    background: 'white',
+    padding: '1rem',
   },
   header: {
     flex: '0 1 0',
-    padding: '0.5rem 1rem'
+    paddingBottom: '0.5rem'
   },
   body: {
-    flex: '1',
-    overflowY: 'scroll',
+    flex: '0 0 1',
+    height: '100%',
+    display: 'flex',
+    flexFlow: 'column'
   },
   footer: {
     flex: '0 1 0',
@@ -37,7 +36,7 @@ const BoxStyles = StyleSheet.create({
 export interface IBoxProps {
   header?: React.ReactElement;
   footer?: React.ReactElement;
-  onChanges?: () => void;
+  onLayout?: () => void;
 }
 
 /**
@@ -47,12 +46,12 @@ export const Box =  forwardRef<HTMLDivElement, PropsWithChildren<IBoxProps>>(({
   header,
   footer,
   children,
-  onChanges,
+  onLayout,
 }, ref) => {
   const onScroll = useCallback((e: UIEvent<HTMLDivElement>) => {
     e.stopPropagation();
-    onChanges && onChanges();
-  }, [onChanges]);
+    onLayout && onLayout();
+  }, [onLayout]);
 
   const handleWheel = (e: WheelEvent) => {
     e.stopPropagation()

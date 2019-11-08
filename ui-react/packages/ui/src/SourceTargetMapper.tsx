@@ -1,7 +1,10 @@
+import { Title } from '@patternfly/react-core';
 import { Box } from '@src/Box';
 import { Canvas } from '@src/Canvas';
 import { CanvasLink, CanvasLinkCoord } from '@src/CanvasLink';
 import { CanvasObject } from '@src/CanvasObject';
+import { FieldGroupList } from '@src/FieldGroupList';
+import { FieldGroup } from '@src/FieldsGroup';
 import { useMappingDetails } from '@src/MapperContext';
 import React, {
   ReactElement,
@@ -11,18 +14,20 @@ import React, {
   useState,
 } from 'react';
 import { scaleSequential } from 'd3-scale';
-import { interpolateMagma } from 'd3-scale-chromatic';
+import { interpolateRainbow } from 'd3-scale-chromatic';
 
 type FieldId = string;
+type GroupId = string;
 
-export interface Field {
+export interface FieldElement {
   id: FieldId;
   element: ReactElement;
 }
 
 export interface FieldsGroup {
-  title: string;
-  fields: Field[];
+  id: GroupId;
+  title: ReactElement | string;
+  fields: (FieldElement | FieldsGroup)[];
 }
 
 export interface Mapping {
@@ -54,24 +59,29 @@ export const SourceTargetMapper: React.FunctionComponent<
     offsetTop: 0,
     offsetLeft: 0,
   });
+
+  const fieldsRef = useRef<{ [id: string]: { ref: HTMLDivElement, groupId: string } }>({});
+  const addFieldRef = (ref: HTMLDivElement, fieldId: FieldId, groupId: string) => {
+    fieldsRef.current[fieldId] = { ref, groupId };
+  };
+  const fieldsGroupRef = useRef<{ [id: string]: HTMLElement }>({});
+  const addFieldsGroupRef = (ref: HTMLElement, id: string) => {
+    fieldsGroupRef.current[id] = ref;
+  };
   const aBoxRef = useRef<HTMLDivElement | null>(null);
   const bBoxRef = useRef<HTMLDivElement | null>(null);
 
-  const colors = scaleSequential(interpolateMagma).domain([0, mappings.length]);
+  const colors = scaleSequential(interpolateRainbow).domain([0, mappings.length]);
 
-  const gutter = 50;
-  const boxWidth = Math.max(200, width / 2 - gutter * 2);
+  const gutter = 20;
+  const boxWidth = Math.max(200, width / 2 - gutter * 3);
   const boxHeight = Math.max(300, height - gutter * 3);
   const startY = gutter;
   const boxAstartX = gutter;
-  const boxBstartX = Math.max(width / 2, boxWidth + gutter) + gutter;
+  const boxBstartX = Math.max(width / 2, boxWidth + gutter) + gutter * 2;
 
   const [lines, setLines] = useState<SourceTargetLine[]>([]);
 
-  const fieldsRef = useRef<{ [id: string]: HTMLDivElement }>({});
-  const addRef = (ref: HTMLDivElement, id: FieldId) => {
-    fieldsRef.current[id] = ref;
-  };
 
   const showMappingDetails = useMappingDetails();
 
@@ -79,11 +89,37 @@ export const SourceTargetMapper: React.FunctionComponent<
     const aBox = aBoxRef.current;
     const bBox = bBoxRef.current;
     if (aBox && bBox) {
-      const aParentRect = aBox.getBoundingClientRect();
-      const bParentRect = bBox.getBoundingClientRect();
+      const aBoxRect = aBox.getBoundingClientRect();
+      const bBoxRect = bBox.getBoundingClientRect();
+      const isSourceOnTheLeft =
+        aBoxRect.left < bBoxRect.right;
+
+      const makeCoords = (
+        connectOnRight: boolean,
+        isVisible: boolean,
+        box: HTMLElement,
+        boxRect: ClientRect | DOMRect,
+        elRect: ClientRect | DOMRect,
+        parentRect: ClientRect | DOMRect,
+      ) => ({
+        x:
+          (connectOnRight ? boxRect.right : boxRect.left) -
+          svgOffset.current.offsetLeft,
+        y: Math.min(
+          Math.max(
+            (isVisible ? elRect.top : parentRect.top) -
+            svgOffset.current.offsetTop +
+            (isVisible ? elRect.height : parentRect.height) / 2,
+            boxRect.top - svgOffset.current.offsetTop
+          ),
+          box.clientHeight +
+          boxRect.top -
+          svgOffset.current.offsetTop
+        ),
+      });
 
       const newLines = mappings.reduce<SourceTargetLine[]>(
-        (lines, { sourceFields, targetFields }, idx) => {
+        (lines, {sourceFields, targetFields}, idx) => {
           const color = colors(idx);
           const mappingLines = sourceFields.reduce(
             (lines, source) => {
@@ -98,63 +134,36 @@ export const SourceTargetMapper: React.FunctionComponent<
           );
           return [
             ...lines,
-            ...mappingLines
+            ...(mappingLines
               .map(([a, b]): SourceTargetLine | null => {
-                const aRef = fieldsRef.current[a];
-                const bRef = fieldsRef.current[b];
-                if (aRef && bRef) {
+                const {ref: aRef, groupId: aGroupId} = fieldsRef.current[a] || {};
+                const {ref: bRef, groupId: bGroupId} = fieldsRef.current[b] || {};
+                const aParentRef = fieldsGroupRef.current[aGroupId];
+                const bParentRef = fieldsGroupRef.current[bGroupId];
+                if (aRef && bRef && aParentRef && bParentRef) {
                   const aRect = aRef.getBoundingClientRect();
                   const bRect = bRef.getBoundingClientRect();
-                  const isSourceOnTheLeft =
-                    aRect.left < bRect.left + bRect.width;
+                  const aParentRect = aParentRef.getBoundingClientRect();
+                  const bParentRect = bParentRef.getBoundingClientRect();
+                  const isAVisible = (aRef.parentNode as HTMLElement).clientHeight > 0;
+                  const isBVisible = (bRef.parentNode as HTMLElement).clientHeight > 0;
+
                   return {
-                    start: {
-                      x:
-                        aRect.left +
-                        (isSourceOnTheLeft ? aBox.offsetWidth : 0) -
-                        svgOffset.current.offsetLeft,
-                      y: Math.min(
-                        Math.max(
-                          aRect.top -
-                            svgOffset.current.offsetTop +
-                            aRect.height / 2,
-                          aParentRect.top - svgOffset.current.offsetTop
-                        ),
-                        aBox.clientHeight +
-                          aParentRect.top -
-                          svgOffset.current.offsetTop
-                      ),
-                    },
-                    end: {
-                      x:
-                        bRect.left +
-                        (isSourceOnTheLeft ? 0 : bBox.offsetWidth) -
-                        svgOffset.current.offsetLeft,
-                      y: Math.min(
-                        Math.max(
-                          bRect.top -
-                            svgOffset.current.offsetTop +
-                            bRect.height / 2,
-                          bParentRect.top - svgOffset.current.offsetTop
-                        ),
-                        bBox.clientHeight +
-                          bParentRect.top -
-                          svgOffset.current.offsetTop
-                      ),
-                    },
+                    start: makeCoords(isSourceOnTheLeft, isAVisible, aBox, aBoxRect, aRect, aParentRect),
+                    end: makeCoords(!isSourceOnTheLeft, isBVisible, bBox, bBoxRect, bRect, bParentRect),
                     color,
                   };
                 }
                 return null;
               })
-              .filter(a => a) as SourceTargetLine[],
+              .filter(a => a) as SourceTargetLine[]),
           ];
         },
         []
       );
       setLines(newLines);
     }
-  }, [mappings, fieldsRef, svgOffset, aBoxRef, bBoxRef]);
+  }, [mappings, fieldsRef, fieldsGroupRef, svgOffset, aBoxRef, bBoxRef]);
 
   useEffect(() => {
     const requestId = requestAnimationFrame(() => {
@@ -179,6 +188,30 @@ export const SourceTargetMapper: React.FunctionComponent<
     };
   }, [svgRef, svgOffset]);
 
+  const makeFieldGroup = (type: string, { id, title, fields }: FieldsGroup) => (
+    <FieldGroup key={id} id={id} title={title} onLayout={calcLines} ref={el => el && addFieldsGroupRef(el, `${type}-${id}`)}>
+      {fields.map((f, fdx) => (
+        <div
+          onClick={() => (f as FieldElement).element && showMappingDetails(f.id)}
+          style={{
+            padding: `calc(0.3rem * ${zoom}) 0`,
+            borderTop: '1px solid #eee',
+            borderBottom: '1px solid #eee',
+            marginTop: '-1px',
+            fontSize: `${zoom}rem`,
+          }}
+          key={f.id || fdx}
+          ref={el => el && f.id && addFieldRef(el, f.id, `${type}-${id}`)}
+        >
+          {(f as FieldElement).element || makeFieldGroup(type, f as FieldsGroup)}
+        </div>
+      ))}
+    </FieldGroup>
+  );
+
+  const makeSourceFieldGroup = (f: FieldsGroup) => makeFieldGroup('source', f);
+  const makeTargetFieldGroup = (f: FieldsGroup) => makeFieldGroup('target', f);
+
   return (
     <Canvas ref={svgRef} width={width} height={height} zoom={zoom}>
       {lines.map(({ start, end, color }, idx) => (
@@ -192,30 +225,14 @@ export const SourceTargetMapper: React.FunctionComponent<
         y={startY}
       >
         <Box
-          header={<h1>Source</h1>}
+          header={<Title size={'2xl'} headingLevel={'h2'}>Source</Title>}
           footer={<p>{sources.length} fields</p>}
           ref={aBoxRef}
-          onChanges={calcLines}
+          onLayout={calcLines}
         >
-          {sources.map(({ title, fields }, idx) => (
-            <div key={idx}>
-              <h2>{title}</h2>
-              {fields.map((f) =>
-                <div
-                  onClick={() => showMappingDetails(f.id)}
-                  style={{
-                    padding: '0.3rem',
-                    borderBottom: '1px solid #eee',
-                    fontSize: `${zoom}rem`,
-                  }}
-                  key={f.id}
-                  ref={el => el && addRef(el, f.id)}
-                >
-                  {f.element}
-                </div>
-              )}
-            </div>
-          ))}
+          <FieldGroupList>
+            {sources.map(makeSourceFieldGroup)}
+          </FieldGroupList>
         </Box>
       </CanvasObject>
 
@@ -226,30 +243,14 @@ export const SourceTargetMapper: React.FunctionComponent<
         y={startY}
       >
         <Box
-          header={<h1>Target</h1>}
+          header={<Title size={'2xl'} headingLevel={'h2'}>Target</Title>}
           footer={<p>{targets.length} fields</p>}
           ref={bBoxRef}
-          onChanges={calcLines}
+          onLayout={calcLines}
         >
-          {targets.map(({ title, fields }, idx) => (
-            <div key={idx}>
-              <h2>{title}</h2>
-              {fields.map((f) =>
-                <div
-                  onClick={() => showMappingDetails(f.id)}
-                  style={{
-                    padding: '0.3rem',
-                    borderBottom: '1px solid #eee',
-                    fontSize: `${zoom}rem`,
-                  }}
-                  key={f.id}
-                  ref={el => el && addRef(el, f.id)}
-                >
-                  {f.element}
-                </div>
-              )}
-            </div>
-          ))}
+          <FieldGroupList>
+            {targets.map(makeTargetFieldGroup)}
+          </FieldGroupList>
         </Box>
       </CanvasObject>
     </Canvas>

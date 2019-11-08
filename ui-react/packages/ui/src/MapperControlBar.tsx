@@ -5,11 +5,6 @@ import {
   SearchMinusIcon,
   ExpandArrowsAltIcon,
   ExpandIcon,
-  LineIcon,
-  PluggedIcon,
-  UnpluggedIcon,
-  MapIcon,
-  RemoveFormatIcon
 } from '@patternfly/react-icons';
 
 export interface IMapperControlBarProps {
@@ -64,49 +59,7 @@ export const MapperControlBar: FunctionComponent<IMapperControlBarProps> = ({
     legendDisabled: false,
     legendHidden: false,
 
-    customButtons: [
-      {
-        id: 'showtypes',
-        icon: <RemoveFormatIcon />,
-        tooltip: 'Show types',
-        ariaLabel: ' ',
-        callback: () => void(0),
-        disabled: false,
-        hidden: false
-      }, {
-        id: 'showlines',
-        icon: <LineIcon />,
-        tooltip: 'Show types',
-        ariaLabel: ' ',
-        callback: () => void(0),
-        disabled: false,
-        hidden: false
-      }, {
-        id: 'showmapped',
-        icon: <PluggedIcon />,
-        tooltip: 'Show mapped fields',
-        ariaLabel: ' ',
-        callback: () => void(0),
-        disabled: false,
-        hidden: false
-      }, {
-        id: 'showunmapped',
-        icon: <UnpluggedIcon />,
-        tooltip: 'Show unmapped fields',
-        ariaLabel: ' ',
-        callback: () => void(0),
-        disabled: false,
-        hidden: false
-      }, {
-        id: 'showpreview',
-        icon: <MapIcon />,
-        tooltip: 'Show mapping preview',
-        ariaLabel: ' ',
-        callback: () => void(0),
-        disabled: false,
-        hidden: false
-      },
-    ]
+    customButtons: []
   }), []);
 
   return (
