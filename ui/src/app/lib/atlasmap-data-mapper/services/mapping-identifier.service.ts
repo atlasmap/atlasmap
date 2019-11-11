@@ -9,6 +9,10 @@ export class MappingIdentifierService {
 
   getCurrentMappingId(): number {
     var urlMappingId = this.route.snapshot.paramMap.get('id');
+    if (urlMappingId == null){
+      return 0;
+    }
+
     let mappingId: number = +urlMappingId;
     if (isNaN(mappingId) || mappingId == null) {
       // Default mapping id
