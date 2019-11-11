@@ -1,4 +1,4 @@
-import { useCanvasInfo } from '@src/CanvasContext';
+import { useCanvasInfo } from '@src/canvas/CanvasContext';
 import React, { FunctionComponent } from 'react';
 
 export interface ICanvasObjectProps {

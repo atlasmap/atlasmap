@@ -1,6 +1,13 @@
-import { Canvas } from '@src/Canvas';
-import { MapperControlBar } from '@src/MapperControlBar';
+import { TopologyView } from '@patternfly/react-topology';
+import { Canvas } from '@src/canvas';
 import { FieldsGroup, Mapping } from '@src/models';
+import { SourceTargetMapper } from '@src/views';
+import { useDimensions } from '@src/useDimensions';
+import { MappingDetails } from '@src/MappingDetails';
+import { MapperControlBar } from '@src/mapper/MapperControlBar';
+import { MapperProvider } from '@src/mapper/MapperContext';
+import { MapperViewToolbar } from '@src/mapper/MapperViewToolbar';
+import { MapperContextToolbar } from '@src/mapper/MapperContextToolbar';
 import React, {
   FunctionComponent,
   useCallback,
@@ -8,13 +15,6 @@ import React, {
   useState,
   WheelEvent,
 } from 'react';
-import { TopologyView } from '@patternfly/react-topology';
-import { SourceTargetMapper } from '@src/SourceTargetMapper';
-import { useDimensions } from '@src/useDimensions';
-import { MappingDetails } from '@src/MappingDetails';
-import { MapperProvider } from '@src/MapperContext';
-import { MapperViewToolbar } from '@src/MapperViewToolbar';
-import { MapperContextToolbar } from '@src/MapperContextToolbar';
 
 export interface IMapperProps {
   sources: FieldsGroup[];
@@ -22,7 +22,11 @@ export interface IMapperProps {
   mappings: Mapping[];
 }
 
-export const Mapper: FunctionComponent<IMapperProps> = ({ sources, mappings, targets }) => {
+export const Mapper: FunctionComponent<IMapperProps> = ({
+  sources,
+  mappings,
+  targets,
+}) => {
   const [ref, { width, height }, measure] = useDimensions();
   const [mappingDetails, setMappingDetails] = useState<string | null>(null);
 
@@ -69,7 +73,7 @@ export const Mapper: FunctionComponent<IMapperProps> = ({ sources, mappings, tar
 
   useEffect(() => {
     const timeout = setTimeout(measure, 150);
-    return () => clearTimeout(timeout)
+    return () => clearTimeout(timeout);
   }, [measure, mappingDetails]);
 
   return (

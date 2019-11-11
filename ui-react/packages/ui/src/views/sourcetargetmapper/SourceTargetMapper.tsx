@@ -1,13 +1,11 @@
 import { Title } from '@patternfly/react-core';
-import { Box } from '@src/Box';
-import { useCanvasInfo } from '@src/CanvasContext';
-import { CanvasLink } from '@src/CanvasLink';
-import { CanvasObject } from '@src/CanvasObject';
-import { FieldGroupList } from '@src/FieldGroupList';
-import { FieldGroup } from '@src/FieldsGroup';
+import { CanvasLink, CanvasObject, useCanvasInfo } from '@src/canvas';
 import { FieldElement, FieldsGroup, Mapping } from '@src/models';
 import { useDimensions } from '@src/useDimensions';
 import { useMappingLines } from '@src/useMappingLines';
+import { Box } from '@src/views/sourcetargetmapper/Box';
+import { FieldGroupList } from '@src/views/sourcetargetmapper/FieldGroupList';
+import { FieldGroup } from '@src/views/sourcetargetmapper/FieldGroup';
 import React, { FunctionComponent } from 'react';
 
 export interface IMappingCanvasProps {

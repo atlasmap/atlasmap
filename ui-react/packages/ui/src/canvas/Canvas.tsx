@@ -1,10 +1,9 @@
-import { CanvasProvider } from '@src/CanvasContext';
+import { CanvasProvider } from '@src/canvas/CanvasContext';
 import React, {
   FunctionComponent,
   useCallback, useEffect,
   useRef,
 } from 'react';
-
 
 export interface ICanvasProps {
   width: number;

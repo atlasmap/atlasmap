@@ -3,7 +3,8 @@ import React, {
   UIEvent,
   forwardRef,
   PropsWithChildren,
-  WheelEvent
+  WheelEvent,
+  ReactElement
 } from 'react';
 import { css, StyleSheet } from '@patternfly/react-styles';
 
@@ -34,8 +35,8 @@ const BoxStyles = StyleSheet.create({
 });
 
 export interface IBoxProps {
-  header?: React.ReactElement;
-  footer?: React.ReactElement;
+  header?: ReactElement | string;
+  footer?: ReactElement | string;
   onLayout?: () => void;
 }
 

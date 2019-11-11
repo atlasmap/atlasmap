@@ -1,4 +1,4 @@
-import { useCanvasInfo } from '@src/CanvasContext';
+import { useCanvasInfo } from '@src/canvas/CanvasContext';
 import { CanvasLinkCoord } from '@src/models';
 import { linkHorizontal } from 'd3-shape';
 import React, { FunctionComponent, useMemo } from 'react';

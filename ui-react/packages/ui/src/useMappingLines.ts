@@ -1,4 +1,4 @@
-import { useCanvasInfo } from '@src/CanvasContext';
+import { useCanvasInfo } from '@src/canvas';
 import { FieldId, Mapping, SourceTargetLine } from '@src/models';
 import { scaleSequential } from 'd3-scale';
 import { interpolateRainbow } from 'd3-scale-chromatic';
