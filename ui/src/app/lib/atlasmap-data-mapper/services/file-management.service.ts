@@ -453,12 +453,4 @@ export class FileManagementService {
     this.cfg.initCfg.initialized = true;
   }
 
-  // private buildMappingName(mappingId: string){
-  //   if (mappingId == null){
-  //     return '0';
-  //   } else {
-  //     return  mappingId.toString() ;
-  //   }
-  // }
-
 }
