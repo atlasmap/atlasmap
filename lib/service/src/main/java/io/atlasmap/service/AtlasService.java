@@ -82,6 +82,9 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
+import static io.atlasmap.v2.MappingFileType.ADM;
+import static io.atlasmap.v2.MappingFileType.GZ;
+
 @Api
 @Path("/")
 public class AtlasService {
@@ -146,8 +149,8 @@ public class AtlasService {
         LOG.debug("Initializing with user specified catalog ADM path {}", atlasmapAdmPath);
         try {
             java.nio.file.Path admPath = Paths.get(atlasmapAdmPath);
-            java.nio.file.Path mappingFolderPath = Paths.get(mappingFolder);
-            File atlasDir = new File(mappingFolder);
+            java.nio.file.Path mappingFolderPath = Paths.get(getMappingSubDirectory(0));
+            File atlasDir = new File(getMappingSubDirectory(0));
             if (!atlasDir.exists()) {
                 atlasDir.mkdirs();
             }
@@ -158,10 +161,10 @@ public class AtlasService {
 
             resetMappings(0); // resets default mapping (id = 0)
             Files.copy(admPath.toAbsolutePath(),
-                Paths.get(mappingFolderPath.toAbsolutePath().toString() + File.separator + atlasmapCatalogName),
+                Paths.get(mappingFolderPath.toAbsolutePath().toString() + File.separator + generateMappingFileNameFromId(0, ADM)),
                 StandardCopyOption.REPLACE_EXISTING);
 
-            extractCompressedCatalog();
+            extractCompressedCatalog(0);
 
         } catch (Exception e) {
             LOG.error("Error processing the AtlasMap catalog file " + atlasmapAdmPath + "\n" +
@@ -247,10 +250,10 @@ public class AtlasService {
     @ApiResponses({
         @ApiResponse(code = 200, message = "Specified mapping file was removed successfully"),
         @ApiResponse(code = 204, message = "Mapping file was not found")})
-    public Response removeMappingRequest(@ApiParam("Mapping ID") @PathParam("mappingId") String mappingId) {
+    public Response removeMappingRequest(@ApiParam("Mapping ID") @PathParam("mappingId") Integer mappingId) {
 
         java.nio.file.Path mappingFilePath = Paths
-                .get(mappingFolder + File.separator + generateMappingFileName(mappingId));
+                .get(getMappingSubDirectory(mappingId) + File.separator + generateMappingFileNameFromId(mappingId, MappingFileType.JSON));
         File mappingFile = mappingFilePath.toFile();
 
         if (mappingFile == null || !mappingFile.exists()) {
@@ -274,12 +277,9 @@ public class AtlasService {
         @ApiResponse(code = 200, message = "All mapping files were removed successfully"),
         @ApiResponse(code = 204, message = "Unable to remove all mapping files")})
     public Response resetMappings(@ApiParam("Mapping ID") @PathParam("mappingId") Integer mappingId) {
-        LOG.debug("resetMappings");
-        if (mappingId == null){
-            mappingId = 0;
-        }
+        LOG.debug("resetMappings {} ", mappingId);
 
-        java.nio.file.Path mappingFolderPath = Paths.get(mappingFolder);
+        java.nio.file.Path mappingFolderPath = Paths.get(getMappingSubDirectory(mappingId));
         File[] mappings = mappingFolderPath.toFile().listFiles();
 
         if (mappings == null) {
@@ -305,7 +305,7 @@ public class AtlasService {
 
     private List<String> getMappingFileNames(Integer mappingId) {
         List <String> mappingFileNames = new ArrayList<>();
-        mappingFileNames.add(generateMappingFileNameFromId(mappingId, MappingFileType.ADM));
+        mappingFileNames.add(generateMappingFileNameFromId(mappingId, ADM));
         mappingFileNames.add(generateMappingFileNameFromId(mappingId, MappingFileType.GZ));
         mappingFileNames.add(generateMappingFileNameFromId(mappingId, MappingFileType.JSON));
         return mappingFileNames;
@@ -339,8 +339,8 @@ public class AtlasService {
         @ApiResponse(code = 204, message = "Mapping file was not found"),
         @ApiResponse(code = 500, message = "Mapping file access error")})
     public Response getMappingRequest(
-      @ApiParam("Mapping Format") @PathParam("mappingFormat") String mappingFormat,
-      @ApiParam("Mapping ID") @PathParam("mappingId") String mappingId) {
+      @ApiParam("Mapping Format") @PathParam("mappingFormat") MappingFileType mappingFormat,
+      @ApiParam("Mapping ID") @PathParam("mappingId") Integer mappingId) {
         LOG.debug("getMappingRequest: {} '{}'", mappingFormat, mappingId);
         File mappingFile = getMappingFile(mappingFormat, mappingId);
 
@@ -352,7 +352,7 @@ public class AtlasService {
         LOG.debug("getMappingRequest: {} '{}'", mappingFormat, mappingFilePath);
 
         switch (mappingFormat) {
-        case "JSON":
+        case JSON:
             AtlasMapping atlasMapping = null;
             try {
                 atlasMapping = Json.mapper().readValue(new File(mappingFilePath), AtlasMapping.class);
@@ -365,8 +365,8 @@ public class AtlasService {
                 LOG.debug(new String(serialized));
             }
             return Response.ok().entity(serialized).build();
-        case "GZ":
-        case "ZIP":
+        case GZ:
+        case ZIP:
             byte[] binData = null;
             try {
                 FileInputStream inputStream = new FileInputStream(mappingFilePath);
@@ -395,25 +395,25 @@ public class AtlasService {
         @ApiResponse(code = 200, message = "Succeeded"),
         @ApiResponse(code = 500, message = "Mapping file save error")})
     public Response createMappingRequest(InputStream mapping,
-      @ApiParam("Mapping Format") @PathParam("mappingFormat") String mappingFormat,
-      @ApiParam("Mapping ID") @PathParam("mappingId") String mappingId,
+      @ApiParam("Mapping Format") @PathParam("mappingFormat") MappingFileType mappingFormat,
+      @ApiParam("Mapping ID") @PathParam("mappingId") Integer mappingId,
       @Context UriInfo uriInfo) {
         LOG.debug("createMappingRequest (save) with format '{}'", mappingFormat);
         UriBuilder builder = uriInfo.getAbsolutePathBuilder();
-        File mappingDir = new File(mappingFolder);
+        File mappingDir = new File(getMappingSubDirectory(mappingId));
         if (!mappingDir.exists()) {
             mappingDir.mkdirs();
         }
 
         switch (mappingFormat) {
-        case "JSON":
-           return saveMapping(fromJson(mapping, AtlasMapping.class), uriInfo);
-        case "GZ":
+        case JSON:
+           return saveMapping(mappingId, fromJson(mapping, AtlasMapping.class), uriInfo);
+        case GZ:
 
-            String atlasmapCatalogFilesName = "adm-catalog-files-" + mappingId + ".gz";
+            String atlasmapCatalogFilesName = generateMappingFileNameFromId(mappingId, MappingFileType.GZ);
             LOG.debug("  saveCompressedMappingRequest '{}' - ID: {}", atlasmapCatalogFilesName, mappingId);
             try {
-                createMappingFile(atlasmapCatalogFilesName, mapping);
+                createMappingFile(mappingId, atlasmapCatalogFilesName, mapping);
                 createCompressedCatalog(mappingId);
             } catch (Exception e) {
                 LOG.error("Error saving compressed mapping documents.\n" + e.getMessage(), e);
@@ -421,22 +421,27 @@ public class AtlasService {
             }
             builder.path(atlasmapCatalogFilesName);
             return Response.ok().location(builder.build()).build();
-        case "ZIP":
+        case ZIP:
+            String atlasmapCatalogName = generateMappingFileNameFromId(mappingId, ADM);
             LOG.debug("  saveCompressedADMRequest '{}'", atlasmapCatalogName);
             try {
-                createMappingFile(atlasmapCatalogName, mapping);
-                extractCompressedCatalog();
+                createMappingFile(mappingId, atlasmapCatalogName, mapping);
+                extractCompressedCatalog(mappingId);
             } catch (Exception e) {
                 LOG.error("Error saving compressed mapping documents.\n" + e.getMessage(), e);
                 throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
             }
             builder.path(atlasmapCatalogName);
             return Response.ok().location(builder.build()).build();
-        case "XML":
+        case XML:
             throw new WebApplicationException("XML mapping format is no longer supported. Please use JSON format instead.");
         default:
             throw new WebApplicationException("Unrecognized mapping format: " + mappingFormat, Status.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private String getMappingSubDirectory(Integer mappingId) {
+        return this.mappingFolder + File.separator + mappingId;
     }
 
     @POST
@@ -449,24 +454,26 @@ public class AtlasService {
     @ApiResponses(@ApiResponse(code = 200, message = "Succeeded"))
     public Response updateMappingRequest(
             InputStream mapping,
-            @ApiParam("Mapping ID") @PathParam("mappingId") String mappingId,
+            @ApiParam("Mapping ID") @PathParam("mappingId") Integer mappingId,
             @Context UriInfo uriInfo) {
-        return saveMapping(fromJson(mapping, AtlasMapping.class), uriInfo);
+        return saveMapping(mappingId, fromJson(mapping, AtlasMapping.class), uriInfo);
     }
 
     @PUT
-    @Path("/mapping/validate")
+    @Path("/mapping/validate/{mappingId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Validate Mapping", notes = "Validate mapping file")
     @ApiImplicitParams(@ApiImplicitParam(
             name = "mapping", value = "Mapping file content", dataType = "io.atlasmap.v2.AtlasMapping"))
     @ApiResponses(@ApiResponse(code = 200, response = Validations.class, message = "Return a validation result"))
-    public Response validateMappingRequest(InputStream mapping, @Context UriInfo uriInfo) {
+    public Response validateMappingRequest(InputStream mapping,
+                                           @ApiParam("Mapping ID") @PathParam("mappingId") Integer mappingId,
+                                           @Context UriInfo uriInfo) {
         try {
             AtlasMapping atlasMapping = fromJson(mapping, AtlasMapping.class);
             LOG.debug("Validate mappings: {}", atlasMapping.getName());
-            return validateMapping(atlasMapping, uriInfo);
+            return validateMapping(mappingId, atlasMapping, uriInfo);
         } catch (AtlasException | IOException e) {
             throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
         }
@@ -547,9 +554,9 @@ public class AtlasService {
         return this.libraryLoader;
     }
 
-    protected Response validateMapping(AtlasMapping mapping, UriInfo uriInfo) throws IOException, AtlasException {
+    protected Response validateMapping(Integer mappingId, AtlasMapping mapping, UriInfo uriInfo) throws IOException, AtlasException {
 
-        File mappingFile = createMappingFile(mapping.getName());
+        File mappingFile = createMappingFile(mappingId, mapping.getName());
         try {
             Json.mapper().writeValue(mappingFile, mapping);
         } catch (Exception e) {
@@ -570,9 +577,9 @@ public class AtlasService {
         return Response.ok().entity(toJson(validations)).build();
     }
 
-    protected Response saveMapping(AtlasMapping mapping, UriInfo uriInfo) {
+    protected Response saveMapping(Integer mappingId, AtlasMapping mapping, UriInfo uriInfo) {
         try {
-            Json.mapper().writeValue(createMappingFile(mapping.getName()), mapping);
+            Json.mapper().writeValue(createMappingFile(mappingId, mapping.getName()), mapping);
         } catch (Exception e) {
             String msg = "Error saving mapping " + mapping.getName() + " to file: " + e.getMessage();
             LOG.error(msg, e);
@@ -585,12 +592,12 @@ public class AtlasService {
         return Response.ok().location(builder.build()).build();
     }
 
-    private File createMappingFile(String mappingName) {
-        File dir = new File(mappingFolder);
+    private File createMappingFile(Integer mappingId, String mappingName) {
+        File dir = new File(getMappingSubDirectory(mappingId));
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        String fileName = mappingFolder + File.separator + generateMappingFileName(mappingName);
+        String fileName = getMappingSubDirectory(mappingId) + File.separator + generateMappingFileName(mappingName);
         LOG.debug("Creating mapping file '{}'", fileName);
         return new File(fileName);
     }
@@ -624,16 +631,16 @@ public class AtlasService {
      * @param mappingId
      * @throws IOException
      */
-    private void createCompressedCatalog(String mappingId) throws IOException {
+    private void createCompressedCatalog(Integer mappingId) throws IOException {
         String atlasmapCatalogName;
         String atlasmapCatalogFilesName;
         // Handling multiple mappings when creating compressed catalog
-        atlasmapCatalogName = "atlasmap-catalog-" + mappingId + ".adm";
-        atlasmapCatalogFilesName = "adm-catalog-files-" + mappingId + ".gz";
+        atlasmapCatalogName = generateMappingFileNameFromId(mappingId, ADM);
+        atlasmapCatalogFilesName = generateMappingFileNameFromId(mappingId, MappingFileType.GZ);
 
 
-        String compressedCatalogName = mappingFolder + File.separator + atlasmapCatalogName;
-        String compressedCatalogFilesName = mappingFolder + File.separator + atlasmapCatalogFilesName;
+        String compressedCatalogName = getMappingSubDirectory(mappingId) + File.separator + atlasmapCatalogName;
+        String compressedCatalogFilesName = getMappingSubDirectory(mappingId) + File.separator + atlasmapCatalogFilesName;
 
         try {
            // AtlasMap mapping XML + Binary, compressed instance/schema/mappings + java libraries ->
@@ -644,7 +651,7 @@ public class AtlasService {
            ZipEntry catEntry = null;
 
            // atlasmapping-UI.nnnnnn.json
-           File mappingFile = getMappingFile("JSON", mappingId);
+           File mappingFile = getMappingFile(MappingFileType.JSON, mappingId);
 
            if (mappingFile != null) {
                String mappingFileName = mappingFile.getName();
@@ -709,9 +716,10 @@ public class AtlasService {
      *
      * @throws IOException
      */
-    private void extractCompressedCatalog() throws IOException {
+    private void extractCompressedCatalog(Integer mappingId) throws IOException {
         byte[] buffer = new byte[2048];
-        String catalogName = mappingFolder + File.separator + atlasmapCatalogName;
+        String catalogName = getMappingSubDirectory(mappingId) + File.separator + generateMappingFileNameFromId(mappingId, ADM);
+        String atlasmapCatalogFilesName = generateMappingFileNameFromId(mappingId, GZ);
         String catEntryname;
 
         try {
@@ -721,14 +729,14 @@ public class AtlasService {
 
             while ((catEntry = zipIn.getNextEntry()) != null) {
                 catEntryname = catEntry.getName();
-                if (catEntryname.contains(atlasmapCatalogFilesName)) {
-                    out = new BufferedOutputStream(new FileOutputStream(mappingFolder + File.separator + atlasmapCatalogFilesName));
+                if (catEntryname.contains("adm-catalog-files")) {
+                    out = new BufferedOutputStream(new FileOutputStream(getMappingSubDirectory(mappingId) + File.separator + atlasmapCatalogFilesName));
                 }
                 else if (catEntryname.contains(".jar")) {
                     out = new BufferedOutputStream(new FileOutputStream(baseFolder + File.separator + catEntryname));
                 }
                 else if (catEntryname.contains(atlasmapGenericMappingsName)) {
-                    out = new BufferedOutputStream(new FileOutputStream(mappingFolder + File.separator +
+                    out = new BufferedOutputStream(new FileOutputStream(getMappingSubDirectory(mappingId) + File.separator +
                         catEntryname));
                 }
                 else {
@@ -759,8 +767,8 @@ public class AtlasService {
      * @param mapping
      * @throws IOException
      */
-    private void createMappingFile(String fileName, InputStream mapping) throws IOException {
-        String outputFilePath = mappingFolder + File.separator + fileName;
+    private void createMappingFile(Integer mappingId, String fileName, InputStream mapping) throws IOException {
+        String outputFilePath = getMappingSubDirectory(mappingId) + File.separator + fileName;
         LOG.debug("Creating mapping file '{}'", outputFilePath);
         FileOutputStream outputStream = new FileOutputStream(outputFilePath);
 
@@ -788,17 +796,10 @@ public class AtlasService {
      * @param mappingId
      * @return
      */
-    private File getMappingFile(String mappingFormat, String mappingId) {
+    private File getMappingFile(MappingFileType mappingFormat, Integer mappingId) {
         File mappingFile = null;
         java.nio.file.Path mappingFilePath = null;
-
-        if (mappingFormat.equals("JSON")) {
-            mappingFilePath = Paths.get(mappingFolder + File.separator + generateMappingFileName(mappingId));
-        }
-        else {
-            mappingFilePath = Paths.get(mappingFolder + File.separator + mappingId);
-        }
-
+        mappingFilePath = Paths.get(getMappingSubDirectory(mappingId) + File.separator + generateMappingFileNameFromId(mappingId, mappingFormat));
         mappingFile = mappingFilePath.toFile();
         if (!mappingFile.exists()) {
             return null;
@@ -810,11 +811,11 @@ public class AtlasService {
         return String.format("atlasmapping-%s.json", mappingName);
     }
 
-    private String generateMappingFileNameFromId(int mappingId, MappingFileType mappingFileType){
+    private String generateMappingFileNameFromId(Integer mappingId, MappingFileType mappingFileType){
         switch (mappingFileType){
             case GZ:
                 return String.format("adm-catalog-files-%s.gz", mappingId);
-
+            case ZIP:
             case ADM:
                 return String.format("atlasmap-catalog-%s.adm", mappingId);
 
