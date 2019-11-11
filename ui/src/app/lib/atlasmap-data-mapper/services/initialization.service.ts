@@ -351,7 +351,7 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
     return new Promise<boolean>((resolve, reject) => {
       // Update .../target/mappings/adm-catalog-files.gz
       const fileContent: Blob = new Blob([compressedCatalog], {type: 'application/octet-stream'});
-      this.cfg.fileService.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/0').toPromise()
+      this.cfg.fileService.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/' + this.cfg.mappingId).toPromise()
         .then(async(result: boolean) => {
         resolve(true);
       }).catch((error: any) => {
