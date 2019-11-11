@@ -6,6 +6,8 @@ export interface ICanvasContext {
   width: number;
   height: number;
   zoom: number;
+  offsetTop: number;
+  offsetLeft: number;
 }
 const CanvasContext = createContext<ICanvasContext | null>(null);
 
@@ -15,12 +17,12 @@ export const CanvasProvider: FunctionComponent<ICanvasContext> = ({children, ...
   </CanvasContext.Provider>
 );
 
-export function useCanvasDomain() {
+export function useCanvasInfo() {
   const context = useContext(CanvasContext);
   if (!context) {
     throw new Error('A CanvasProvider wrapper is required to use this hook.');
   }
-  const { width, height, zoom } = context;
+  const { width, height, zoom, offsetLeft, offsetTop } = context;
 
   const xDomain = useMemo(
     () =>
@@ -37,5 +39,5 @@ export function useCanvasDomain() {
     [width, zoom]
   );
 
-  return { xDomain, yDomain };
+  return { width, height, zoom, xDomain, yDomain, offsetLeft, offsetTop };
 }

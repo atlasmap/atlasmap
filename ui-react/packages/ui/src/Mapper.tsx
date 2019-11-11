@@ -1,12 +1,15 @@
+import { Canvas } from '@src/Canvas';
 import { MapperControlBar } from '@src/MapperControlBar';
+import { FieldsGroup, Mapping } from '@src/models';
 import React, {
   FunctionComponent,
-  useCallback, useEffect,
+  useCallback,
+  useEffect,
   useState,
   WheelEvent,
 } from 'react';
 import { TopologyView } from '@patternfly/react-topology';
-import { FieldsGroup, Mapping, SourceTargetMapper } from '@src/SourceTargetMapper';
+import { SourceTargetMapper } from '@src/SourceTargetMapper';
 import { useDimensions } from '@src/useDimensions';
 import { MappingDetails } from '@src/MappingDetails';
 import { MapperProvider } from '@src/MapperContext';
@@ -90,14 +93,13 @@ export const Mapper: FunctionComponent<IMapperProps> = ({ sources, mappings, tar
           onWheel={handleWheel}
         >
           {width && (
-            <SourceTargetMapper
-              width={width}
-              height={height}
-              zoom={zoom}
-              sources={sources}
-              mappings={mappings}
-              targets={targets}
-            />
+            <Canvas width={width} height={height} zoom={zoom}>
+              <SourceTargetMapper
+                sources={sources}
+                mappings={mappings}
+                targets={targets}
+              />
+            </Canvas>
           )}
         </div>
       </TopologyView>

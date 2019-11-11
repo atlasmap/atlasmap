@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     overflowY: 'auto',
     overflowX: 'hidden',
     flex: '1',
-    height: '100%'
+    height: '100%',
   }
 });
 

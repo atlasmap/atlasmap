@@ -1,11 +1,8 @@
-import { useCanvasDomain } from '@src/CanvasContext';
+import { useCanvasInfo } from '@src/CanvasContext';
+import { CanvasLinkCoord } from '@src/models';
 import { linkHorizontal } from 'd3-shape';
 import React, { FunctionComponent, useMemo } from 'react';
 
-export type CanvasLinkCoord = {
-  x: number;
-  y: number;
-};
 
 export interface ICanvasLinkProps {
   start: CanvasLinkCoord;
@@ -20,7 +17,7 @@ export const CanvasLink: FunctionComponent<ICanvasLinkProps> = ({
   color = 'grey',
   width = 3,
 }) => {
-  const { xDomain, yDomain } = useCanvasDomain();
+  const { xDomain, yDomain } = useCanvasInfo();
 
   const link = useMemo(
     () =>

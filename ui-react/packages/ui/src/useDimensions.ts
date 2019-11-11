@@ -1,22 +1,5 @@
 import { useState, useCallback, useLayoutEffect, useRef, MutableRefObject } from 'react';
 
-function getDimensionObject(node: HTMLElement) {
-  const rect = node.getBoundingClientRect();
-
-  return {
-    width: rect.width,
-    height: rect.height,
-    top: "x" in rect ? rect.x : rect.top,
-    left: "y" in rect ? rect.y : rect.left,
-    x: "x" in rect ? rect.x : rect.left,
-    y: "y" in rect ? rect.y : rect.top,
-    right: rect.right,
-    bottom: rect.bottom
-  };
-}
-
-export type Dimension = ReturnType<typeof getDimensionObject>;
-
 export interface UseDimensionsArgs {
   liveMeasure?: boolean;
 }
@@ -25,10 +8,10 @@ export const useDimensions = ({
    liveMeasure = true
  }: UseDimensionsArgs = {}): [
   MutableRefObject<HTMLDivElement | null>,
-  Dimension,
+  ClientRect | DOMRect,
   () => void
 ] => {
-  const [dimensions, setDimensions] = useState<Dimension>({
+  const [dimensions, setDimensions] = useState<ClientRect | DOMRect>({
     width: 0,
     height: 0,
     top: 0,
@@ -43,7 +26,7 @@ export const useDimensions = ({
   const measure = useCallback(() => {
       const requestId = requestAnimationFrame(() => {
         if (ref.current) {
-          setDimensions(getDimensionObject(ref.current))
+          setDimensions(ref.current.getBoundingClientRect())
         }
       });
       return () => {
