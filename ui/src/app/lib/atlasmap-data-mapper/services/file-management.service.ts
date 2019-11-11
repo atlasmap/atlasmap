@@ -80,16 +80,9 @@ export class FileManagementService {
    * Retrieve the current user data mappings catalog from the server as a GZIP compressed byte array buffer.
    */
   getCurrentMappingCatalog(): Observable<Uint8Array> {
-    var catalogName = 'adm-catalog-files.gz';
-    // if mapping id not null, set catalog name adm-catalog-files- ${id}.gz
-    const mappingId = this.cfg.mappingId;
-    if (mappingId != null) {
-        catalogName = "adm-catalog-files-" + this.getMappingId() + ".gz";
-    }
-
     return new Observable<Uint8Array>((observer: any) => {
       const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/';
-      const url: string = baseURL + catalogName;
+      const url: string = baseURL + this.getMappingId();
       this.cfg.logger.trace('Mapping Catalog Request');
       const catHeaders = new HttpHeaders(
         { 'Content-Type':  'application/octet-stream',
@@ -113,10 +106,9 @@ export class FileManagementService {
   }
 
   getCurrentADMCatalog(): Observable<Uint8Array> {
-    const atlasmapCatalogName = 'atlasmap-catalog-' + this.cfg.mappingId + '.adm';
     return new Observable<Uint8Array>((observer: any) => {
       const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/ZIP/';
-      const url: string = baseURL + atlasmapCatalogName;
+      const url: string = baseURL + this.getMappingId();
       this.cfg.logger.trace('Mapping Catalog Request');
       const catHeaders = new HttpHeaders(
         { 'Content-Type':  'application/octet-stream',
@@ -451,9 +443,8 @@ export class FileManagementService {
     });
   }
 
-  private getMappingId(): string {
-    // if no mapping file present, build mapping id instead of returning
-    return this.cfg.mappingId.toString();
+  private getMappingId(): number {
+    return this.cfg.mappingId;
   }
 
   private handleError(message: string, error: any): void {
