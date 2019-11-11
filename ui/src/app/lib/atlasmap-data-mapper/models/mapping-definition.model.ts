@@ -22,14 +22,15 @@ import { DocumentDefinition } from '../models/document-definition.model';
 import { DataMapperUtil } from '../common/data-mapper-util';
 
 export class MappingDefinition {
+  static MAPPING_NAME_PREFIX = 'UI.';
+  static MAPPING_NAME_POSTFIX = '.default';
+
   name: string = null;
   mappings: MappingModel[] = [];
   activeMapping: MappingModel = null;
   parsedDocs: DocumentDefinition[] = [];
   templateText: string = null;
-  static MAPPING_NAME_PREFIX = 'UI.';
-  static MAPPING_NAME_POSTFIX = '.default'
-  static const
+
   private tables: LookupTable[] = [];
   private tablesBySourceTargetKey: { [key: string]: LookupTable; } = {};
   private tablesByName: { [key: string]: LookupTable; } = {};

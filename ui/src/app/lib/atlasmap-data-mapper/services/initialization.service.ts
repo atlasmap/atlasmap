@@ -259,7 +259,7 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
           } else {
             // filter according to mappingId
             // The postfix to differentiate btw UI.1 and UI.11
-            var filter = 'UI.' + this.cfg.mappingId + MappingDefinition.MAPPING_NAME_POSTFIX;
+            const filter = 'UI.' + this.cfg.mappingId + MappingDefinition.MAPPING_NAME_POSTFIX;
             this.cfg.fileService.findMappingFiles(filter).toPromise()
               .then( async(files: string[]) => {
                 // It's okay if no mapping files are found - resolve false so the caller will know.
@@ -351,7 +351,8 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
     return new Promise<boolean>((resolve, reject) => {
       // Update .../target/mappings/adm-catalog-files.gz
       const fileContent: Blob = new Blob([compressedCatalog], {type: 'application/octet-stream'});
-      this.cfg.fileService.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/' + this.cfg.mappingId).toPromise()
+      this.cfg.fileService.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/'
+        + this.cfg.mappingId).toPromise()
         .then(async(result: boolean) => {
         resolve(true);
       }).catch((error: any) => {

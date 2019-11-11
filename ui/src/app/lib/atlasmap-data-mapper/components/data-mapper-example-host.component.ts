@@ -25,7 +25,7 @@ import { InitializationService } from '../services/initialization.service';
 import { DataMapperAppComponent } from './app/data-mapper-app.component';
 import { environment } from '../../../../environments/environment';
 import { Examples } from '../models/examples';
-import {MappingIdentifierService} from "../services/mapping-identifier.service";
+import {MappingIdentifierService} from '../services/mapping-identifier.service';
 
 @Component({
   selector: 'data-mapper-example-host',
