@@ -15,6 +15,7 @@
  */
 package io.atlasmap.service;
 
+import static io.atlasmap.v2.MappingFileType.JSON;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -83,7 +84,7 @@ public class AtlasServiceTest {
 
     @Test
     public void testGetMapping() {
-        Response resp = service.getMappingRequest("JSON", "junit3");
+        Response resp = service.getMappingRequest(JSON, 3);
         assertEquals(byte[].class, resp.getEntity().getClass());
     }
 
