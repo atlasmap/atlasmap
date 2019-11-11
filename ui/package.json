@@ -103,7 +103,7 @@
     "rimraf": "^3.0.0",
     "rxjs-tslint": "^0.1.5",
     "tether": "1.4.7",
-    "ts-node": "~8.4.1",
+    "ts-node": "~8.5.0",
     "tsickle": "0.34.2",
     "tslib": "^1.7.1",
     "tslint": "~5.20.0",
