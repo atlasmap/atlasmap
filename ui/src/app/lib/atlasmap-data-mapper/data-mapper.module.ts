@@ -76,7 +76,7 @@ import { ToErrorIconClassPipe } from './common/to-error-icon-class.pipe';
 import { ApiXsrfInterceptor, ApiHttpXsrfTokenExtractor } from './services/api-xsrf.service';
 import { FieldActionService } from './services/field-action.service';
 import { FileManagementService } from './services/file-management.service';
-import {AppRoutingModule} from "../../app-routing.module";
+import {AppRoutingModule} from '../../app-routing.module';
 
 export { DataMapperAppComponent } from './components/app/data-mapper-app.component';
 
