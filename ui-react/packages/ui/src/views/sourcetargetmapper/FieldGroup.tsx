@@ -6,13 +6,12 @@ import {
 import { FolderOpenIcon, FolderCloseIcon } from '@patternfly/react-icons';
 import { css, StyleSheet } from '@patternfly/react-styles';
 import { useCanvas } from '@src';
-import { MappingNode, MappingGroup, MappingNodeType, Rect } from '@src/models';
-import { useDimensions } from '@src/useDimensions';
+import { MappingNode, MappingGroup, MappingNodeType } from '@src/models';
 import { FieldElement } from '@src/views/sourcetargetmapper/FieldElement';
 import React, {
   FunctionComponent,
   useCallback,
-  useEffect,
+  useEffect, useRef,
   useState,
 } from 'react';
 
@@ -31,24 +30,26 @@ export interface IFieldGroupProps {
   isVisible: boolean;
   group: MappingGroup;
   type: MappingNodeType;
-  parentRect: Rect;
-  boxRect: Rect;
+  parentRef?: HTMLElement | null;
+  boxRef?: HTMLElement | null;
 }
 export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
   isVisible,
   group,
   type,
-  parentRect,
-  boxRect,
+  parentRef = null,
+  boxRef = null,
 }) => {
   const { redraw } = useCanvas();
-  const [ref, dimensions] = useDimensions();
+  const ref = useRef<HTMLElement | null>(null);
   const [isExpanded, setIsExpanded] = useState(true);
   const toggleExpand = useCallback(() => setIsExpanded(!isExpanded), [
     isExpanded,
     setIsExpanded,
   ]);
-  useEffect(redraw, [isExpanded]);
+  useEffect(() => {
+    redraw();
+  }, [isExpanded]);
   return (
     <AccordionItem>
       <AccordionToggle
@@ -71,23 +72,23 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
             <FieldElement
               key={f.id}
               type={type}
-              parentRect={
+              parentRef={
                 isVisible && isExpanded
-                  ? dimensions
-                  : isVisible
-                  ? dimensions
-                  : parentRect
+                  ? ref.current
+                  : isVisible || !parentRef
+                  ? ref.current
+                  : parentRef
               }
-              boxRect={boxRect}
+              boxRef={boxRef}
               node={f as MappingNode}
             />
           ) : (
             <FieldGroup
               isVisible={isVisible && isExpanded}
               type={type}
-              parentRect={isVisible ? dimensions : parentRect}
+              parentRef={isVisible || !parentRef ? ref.current : parentRef}
               group={f as MappingGroup}
-              boxRect={boxRect}
+              boxRef={boxRef}
               key={f.id}
             />
           )

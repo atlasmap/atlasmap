@@ -1,26 +1,28 @@
 import { useCanvas } from '@src';
 import { useMappingNode } from '@src/canvas/CanvasLinks';
-import { MappingNode, MappingNodeType, Rect } from '@src/models';
+import { MappingNode, MappingNodeType } from '@src/models';
 import React, { FunctionComponent, useCallback, useRef } from 'react';
 
 export interface IFieldElementProps {
   node: MappingNode;
   type: MappingNodeType;
-  parentRect: Rect;
-  boxRect: Rect;
+  parentRef: HTMLElement | null;
+  boxRef: HTMLElement | null;
 }
 
 export const FieldElement: FunctionComponent<IFieldElementProps> = ({
   node,
   type,
-  parentRect,
-  boxRect,
+  parentRef,
+  boxRef,
 }) => {
   const { zoom, offsetLeft, offsetTop } = useCanvas();
   const ref = useRef<HTMLDivElement | null>(null);
   const setLineNode = useMappingNode();
   const getCoords = useCallback(() => {
-    if (ref.current) {
+    if (ref.current && parentRef && boxRef) {
+      let parentRect = parentRef.getBoundingClientRect();
+      let boxRect = boxRef.getBoundingClientRect();
       let dimensions = ref.current.getBoundingClientRect();
       dimensions = dimensions.height > 0 ? dimensions : parentRect;
       return {
@@ -37,12 +39,9 @@ export const FieldElement: FunctionComponent<IFieldElementProps> = ({
       return { x: 0, y: 0 };
     }
   }, [
-    parentRect,
+    parentRef,
     type,
-    boxRect.right,
-    boxRect.left,
-    boxRect.top,
-    boxRect.height,
+    boxRef,
     offsetLeft,
     offsetTop,
   ]);

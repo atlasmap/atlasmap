@@ -13,8 +13,6 @@ export const interactiveExample = () => (
     <FieldGroup
       isVisible={true}
       type={'source'}
-      parentRect={new DOMRect()}
-      boxRect={new DOMRect()}
       group={{
         fields: [],
         id: 'text-id',

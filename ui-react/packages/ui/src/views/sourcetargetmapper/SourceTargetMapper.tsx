@@ -1,12 +1,11 @@
 import { Title } from '@patternfly/react-core';
 import { CanvasLinksProvider, CanvasObject, useCanvas } from '@src/canvas';
 import { Mapping, MappingGroup } from '@src/models';
-import { useDimensions } from '@src/useDimensions';
 import { Box } from '@src/views/sourcetargetmapper/Box';
 import { FieldGroupList } from '@src/views/sourcetargetmapper/FieldGroupList';
 import { FieldGroup } from '@src/views/sourcetargetmapper/FieldGroup';
 import { Links } from '@src/views/sourcetargetmapper/Links';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useRef } from 'react';
 
 export interface IMappingCanvasProps {
   sources: MappingGroup[];
@@ -21,8 +20,8 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
 }) => {
   const { width, height, zoom } = useCanvas();
 
-  const [sourceRef, sourceDimensions] = useDimensions();
-  const [targetRef, targetDimensions] = useDimensions();
+  const sourceRef = useRef<HTMLDivElement | null>(null);
+  const targetRef = useRef<HTMLDivElement | null>(null);
 
   const gutter = 20;
   const boxWidth = Math.max(200, width / 2 - gutter * 3);
@@ -60,8 +59,7 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
                   isVisible={true}
                   group={s}
                   key={s.id}
-                  boxRect={sourceDimensions}
-                  parentRect={sourceDimensions}
+                  boxRef={sourceRef.current}
                   type={'source'}
                 />
               );
@@ -95,8 +93,7 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
                   isVisible={true}
                   group={t}
                   key={t.id}
-                  boxRect={targetDimensions}
-                  parentRect={targetDimensions}
+                  boxRef={targetRef.current}
                   type={'target'}
                 />
               );

@@ -59,7 +59,6 @@ export function useCanvasLinks(linkedNodes: SourceTargetNodes[]) {
   const [links, setLinks] = useState<SourceTargetLine[]>([]);
 
   const calculateLinks = useCallback(() => {
-    console.log('calculateLinks');
     const updatedLinks = linkedNodes
       .map(
         ({
