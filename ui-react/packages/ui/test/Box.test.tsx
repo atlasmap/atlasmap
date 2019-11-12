@@ -5,6 +5,6 @@ import { Box } from '@src';
 describe('Box tests', () => {
   test('should rende a todo', async () => {
     const { getByText } = render(<Box />);
-    getByText('todo')
-  })
-})
+    getByText('todo');
+  });
+});

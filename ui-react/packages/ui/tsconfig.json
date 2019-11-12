@@ -20,7 +20,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
       "@src": ["src/index.ts"],
       "@src/*": ["src/*"],
@@ -28,6 +28,7 @@
       "@assets/*": ["node_modules/@patternfly/react-core/dist/styles/assets/*"]
     },
     "jsx": "react",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   }
 }
