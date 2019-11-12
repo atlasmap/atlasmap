@@ -2,11 +2,14 @@ import React from 'react';
 import { createContext, FunctionComponent, useContext } from 'react';
 
 export interface IMapperContext {
-  showMappingDetails: (mapping: string) => void
+  showMappingDetails: (mapping: string) => void;
 }
 const MapperContext = createContext<IMapperContext | null>(null);
 
-export const MapperProvider: FunctionComponent<IMapperContext> = ({ showMappingDetails, children }) => (
+export const MapperProvider: FunctionComponent<IMapperContext> = ({
+  showMappingDetails,
+  children,
+}) => (
   <MapperContext.Provider value={{ showMappingDetails }}>
     {children}
   </MapperContext.Provider>

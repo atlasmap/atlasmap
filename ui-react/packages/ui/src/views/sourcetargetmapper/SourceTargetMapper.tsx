@@ -17,7 +17,7 @@ export interface IMappingCanvasProps {
 export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
   sources,
   targets,
-  mappings
+  mappings,
 }) => {
   const { width, height, zoom } = useCanvas();
 

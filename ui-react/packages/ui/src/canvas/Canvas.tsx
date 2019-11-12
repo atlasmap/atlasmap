@@ -1,9 +1,6 @@
 import { CanvasProvider } from '@src/canvas/CanvasContext';
 import { useDimensions } from '@src/useDimensions';
-import React, {
-  FunctionComponent,
-  useCallback
-} from 'react';
+import React, { FunctionComponent, useCallback } from 'react';
 
 export interface ICanvasProps {
   width: number;
@@ -11,7 +8,12 @@ export interface ICanvasProps {
   zoom: number;
 }
 
-export const Canvas: FunctionComponent<ICanvasProps> = (({ children, width, height, zoom }) => {
+export const Canvas: FunctionComponent<ICanvasProps> = ({
+  children,
+  width,
+  height,
+  zoom,
+}) => {
   const [ref, dimensions] = useDimensions<SVGSVGElement>();
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -34,4 +36,4 @@ export const Canvas: FunctionComponent<ICanvasProps> = (({ children, width, heig
       </svg>
     </CanvasProvider>
   );
-});
+};

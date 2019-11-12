@@ -4,7 +4,7 @@ import { Mapping } from '@src/models';
 import React, { FunctionComponent } from 'react';
 
 export interface ILinksProps {
-  mappings: Mapping[]
+  mappings: Mapping[];
 }
 export const Links: FunctionComponent<ILinksProps> = ({ mappings }) => {
   const { links } = useMappingLinks({ mappings });
@@ -14,5 +14,5 @@ export const Links: FunctionComponent<ILinksProps> = ({ mappings }) => {
         <CanvasLink key={idx} start={start} end={end} color={color} />
       ))}
     </g>
-  )
+  );
 };

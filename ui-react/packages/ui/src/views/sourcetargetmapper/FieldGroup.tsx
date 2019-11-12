@@ -71,7 +71,13 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
             <FieldElement
               key={f.id}
               type={type}
-              parentRect={isVisible ? dimensions : parentRect}
+              parentRect={
+                isVisible && isExpanded
+                  ? dimensions
+                  : isVisible
+                  ? dimensions
+                  : parentRect
+              }
               boxRect={boxRect}
               node={f as MappingNode}
             />

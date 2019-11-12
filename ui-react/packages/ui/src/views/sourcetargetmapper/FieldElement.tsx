@@ -1,11 +1,7 @@
 import { useCanvas } from '@src';
 import { useMappingNode } from '@src/canvas/CanvasLinks';
 import { MappingNode, MappingNodeType, Rect } from '@src/models';
-import React, {
-  FunctionComponent,
-  useCallback,
-  useRef,
-} from 'react';
+import React, { FunctionComponent, useCallback, useRef } from 'react';
 
 export interface IFieldElementProps {
   node: MappingNode;
@@ -20,7 +16,7 @@ export const FieldElement: FunctionComponent<IFieldElementProps> = ({
   parentRect,
   boxRect,
 }) => {
-  const { width, height, zoom, offsetLeft, offsetTop } = useCanvas();
+  const { zoom, offsetLeft, offsetTop } = useCanvas();
   const ref = useRef<HTMLDivElement | null>(null);
   const setLineNode = useMappingNode();
   const getCoords = useCallback(() => {
@@ -28,13 +24,10 @@ export const FieldElement: FunctionComponent<IFieldElementProps> = ({
       let dimensions = ref.current.getBoundingClientRect();
       dimensions = dimensions.height > 0 ? dimensions : parentRect;
       return {
-        x:
-          (type === 'source' ? boxRect.right : boxRect.left) - offsetLeft,
+        x: (type === 'source' ? boxRect.right : boxRect.left) - offsetLeft,
         y: Math.min(
           Math.max(
-            dimensions.top -
-              offsetTop +
-              dimensions.height / 2,
+            dimensions.top - offsetTop + dimensions.height / 2,
             boxRect.top - offsetTop
           ),
           boxRect.height + boxRect.top - offsetTop
@@ -43,7 +36,16 @@ export const FieldElement: FunctionComponent<IFieldElementProps> = ({
     } else {
       return { x: 0, y: 0 };
     }
-  }, [node, ref, parentRect, boxRect, offsetTop, offsetLeft, width, height]);
+  }, [
+    parentRect,
+    type,
+    boxRect.right,
+    boxRect.left,
+    boxRect.top,
+    boxRect.height,
+    offsetLeft,
+    offsetTop,
+  ]);
   setLineNode(node.id, getCoords);
   return (
     <div

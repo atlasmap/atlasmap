@@ -4,10 +4,12 @@ export interface IUseMaterializedDragProps {
   onDrag?: (x: number, y: number) => void;
 }
 
-export function useMaterializedDrag<T = HTMLElement>({ onDrag }: IUseMaterializedDragProps = {}) {
+export function useMaterializedDrag<T = HTMLElement>({
+  onDrag,
+}: IUseMaterializedDragProps = {}) {
   const elRef = useRef<T | null>(null);
 
-  const dragStartCoords = useRef<{ x: number, y: number }>({ x: 0, y: 0 });
+  const dragStartCoords = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
   const handleDragStart = useCallback(
     (e: DragEvent<HTMLDivElement>) => {
@@ -22,7 +24,7 @@ export function useMaterializedDrag<T = HTMLElement>({ onDrag }: IUseMaterialize
 
   const handleDrag = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
-      let { x, y, } = dragStartCoords.current;
+      let { x, y } = dragStartCoords.current;
       x = x + e.clientX;
       y = y + e.clientY;
       onDrag && onDrag(x, y);
@@ -34,6 +36,6 @@ export function useMaterializedDrag<T = HTMLElement>({ onDrag }: IUseMaterialize
     draggable: true,
     ref: elRef,
     onDrag: handleDrag,
-    onDragStart: handleDragStart
+    onDragStart: handleDragStart,
   };
 }

@@ -5,7 +5,8 @@ import React, {
   forwardRef,
   PropsWithChildren,
   WheelEvent,
-  ReactElement, HTMLAttributes,
+  ReactElement,
+  HTMLAttributes,
 } from 'react';
 import { css, StyleSheet } from '@patternfly/react-styles';
 
@@ -51,7 +52,7 @@ export const Box = forwardRef<HTMLDivElement, PropsWithChildren<IBoxProps>>(
         e.stopPropagation();
         redraw();
       },
-      [onLayout]
+      [redraw]
     );
 
     const handleWheel = (e: WheelEvent) => {

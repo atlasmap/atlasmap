@@ -3,7 +3,6 @@ import { Coords } from '@src/models';
 import { linkHorizontal } from 'd3-shape';
 import React, { FunctionComponent, useMemo } from 'react';
 
-
 export interface ICanvasLinkProps {
   start: Coords;
   end: Coords;

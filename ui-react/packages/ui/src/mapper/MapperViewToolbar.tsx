@@ -1,7 +1,14 @@
-import { LineIcon, MapIcon, PluggedIcon, RemoveFormatIcon, UnpluggedIcon } from '@patternfly/react-icons';
+import {
+  LineIcon,
+  MapIcon,
+  PluggedIcon,
+  RemoveFormatIcon,
+  UnpluggedIcon,
+} from '@patternfly/react-icons';
 import React, { FunctionComponent } from 'react';
 import {
-  Button, Checkbox,
+  Button,
+  Checkbox,
   Toolbar,
   ToolbarGroup,
   ToolbarItem,
@@ -12,7 +19,7 @@ export interface IMapperToolbarProps {}
 export const MapperViewToolbar: FunctionComponent<IMapperToolbarProps> = () => {
   return (
     <Toolbar
-      className='view-toolbar pf-u-px-md pf-u-py-md'
+      className="view-toolbar pf-u-px-md pf-u-py-md"
       style={{ borderBottom: '1px solid #ccc' }}
     >
       <ToolbarGroup style={{ flex: 1 }}>
@@ -43,49 +50,28 @@ export const MapperViewToolbar: FunctionComponent<IMapperToolbarProps> = () => {
           <TextInput aria-label={'Conditional mapping expression'} />
         </ToolbarItem>*/}
         <ToolbarItem>
-          <Button variant={'plain'} aria-label='Show types'>
-            <Checkbox
-              id={'id'}
-              label={
-              <RemoveFormatIcon/>
-            } />
+          <Button variant={'plain'} aria-label="Show types">
+            <Checkbox id={'id'} label={<RemoveFormatIcon />} />
           </Button>
         </ToolbarItem>
         <ToolbarItem>
-          <Button variant={'plain'} aria-label='Show types'>
-            <Checkbox
-              id={'id'}
-              label={
-              <LineIcon/>
-            } />
+          <Button variant={'plain'} aria-label="Show types">
+            <Checkbox id={'id'} label={<LineIcon />} />
           </Button>
         </ToolbarItem>
         <ToolbarItem>
-          <Button variant={'plain'} aria-label='Show mapped fields'>
-            <Checkbox
-              id={'id'}
-              label={
-              <PluggedIcon/>
-            } />
+          <Button variant={'plain'} aria-label="Show mapped fields">
+            <Checkbox id={'id'} label={<PluggedIcon />} />
           </Button>
         </ToolbarItem>
         <ToolbarItem>
-          <Button variant={'plain'} aria-label='Show unmapped fields'>
-            <Checkbox
-              id={'id'}
-              label={
-              <UnpluggedIcon/>
-            } />
+          <Button variant={'plain'} aria-label="Show unmapped fields">
+            <Checkbox id={'id'} label={<UnpluggedIcon />} />
           </Button>
         </ToolbarItem>
         <ToolbarItem>
-          <Button variant={'plain'} aria-label='Show mapping preview'>
-            <Checkbox
-              id={'id'}
-              label= {
-              <MapIcon/>
-              }
-            />
+          <Button variant={'plain'} aria-label="Show mapping preview">
+            <Checkbox id={'id'} label={<MapIcon />} />
           </Button>
         </ToolbarItem>
       </ToolbarGroup>

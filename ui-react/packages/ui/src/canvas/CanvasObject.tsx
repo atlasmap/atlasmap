@@ -7,7 +7,13 @@ export interface ICanvasObjectProps {
   x: number;
   y: number;
 }
-export const CanvasObject: FunctionComponent<ICanvasObjectProps> = ({ children, width, height, x, y }) => {
+export const CanvasObject: FunctionComponent<ICanvasObjectProps> = ({
+  children,
+  width,
+  height,
+  x,
+  y,
+}) => {
   const { xDomain, yDomain } = useCanvas();
 
   return (

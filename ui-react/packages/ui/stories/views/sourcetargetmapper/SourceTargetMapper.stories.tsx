@@ -8,7 +8,15 @@ export default {
 };
 
 export const sample = () => (
-  <Canvas width={number('width', 800)} height={number('height', 600)} zoom={number('zoom', 1)}>
-    <SourceTargetMapper sources={sources} targets={targets} mappings={mappings} />
+  <Canvas
+    width={number('width', 800)}
+    height={number('height', 600)}
+    zoom={number('zoom', 1)}
+  >
+    <SourceTargetMapper
+      sources={sources}
+      targets={targets}
+      mappings={mappings}
+    />
   </Canvas>
 );

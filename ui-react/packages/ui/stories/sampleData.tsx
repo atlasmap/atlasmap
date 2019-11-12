@@ -32,7 +32,10 @@ export const sources = [
   {
     id: 'Foo',
     title: 'Foo',
-    fields: [{ id: 'A', element: <p>A some random word</p> }, { id: 'a', element: <p>a some random word</p> }],
+    fields: [
+      { id: 'A', element: <p>A some random word</p> },
+      { id: 'a', element: <p>a some random word</p> },
+    ],
   },
   {
     id: 'Foo 1',
@@ -51,10 +54,10 @@ export const sources = [
             fields: [
               { id: 'C - 2 - a', element: <p>C - 2 - a some random word</p> },
               { id: 'C - 2 - b', element: <p>C - 2 - b some random word</p> },
-            ]
+            ],
           },
           { id: 'C - 3', element: <p>C - 3 some random word</p> },
-        ]
+        ],
       },
     ],
   },
@@ -100,12 +103,18 @@ export const sources = [
   {
     id: 'Bar 3',
     title: 'Bar 3',
-    fields: [{ id: 'J', element: <p>J some random word</p> }, { id: 'j', element: <p>j some random word</p> }],
+    fields: [
+      { id: 'J', element: <p>J some random word</p> },
+      { id: 'j', element: <p>j some random word</p> },
+    ],
   },
   {
     id: 'Bar 4',
     title: 'Bar 4',
-    fields: [{ id: 'K', element: <p>K some random word</p> }, { id: 'k', element: <p>k some random word</p> }],
+    fields: [
+      { id: 'K', element: <p>K some random word</p> },
+      { id: 'k', element: <p>k some random word</p> },
+    ],
   },
   {
     id: 'Bar 5',
@@ -138,7 +147,10 @@ export const sources = [
   {
     id: 'Baz 2',
     title: 'Baz 2',
-    fields: [{ id: 'Q', element: <p>Q some random word</p> }, { id: 'q', element: <p>q some random word</p> }],
+    fields: [
+      { id: 'Q', element: <p>Q some random word</p> },
+      { id: 'q', element: <p>q some random word</p> },
+    ],
   },
   {
     id: 'Baz 3',
@@ -201,7 +213,7 @@ export const targets = [
         fields: [
           { id: 'Qux - 1 - 1', element: <p>1- 1 some random word</p> },
           { id: 'Qux - 1 - 2', element: <p>1- 2 some random word</p> },
-        ]
+        ],
       },
       { id: '2', element: <p>2 some random word</p> },
       { id: '3', element: <p>3 some random word</p> },

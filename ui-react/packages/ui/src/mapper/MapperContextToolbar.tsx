@@ -59,7 +59,6 @@ export const MapperContextToolbar: FunctionComponent<
         </ToolbarItem>
       </ToolbarGroup>
       <ToolbarGroup>
-
         <ToolbarItem>
           <Tooltip
             position={'auto'}

@@ -36,7 +36,7 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
     (tick: number) => {
       setZoom(currentZoom => Math.max(0.2, Math.min(2, currentZoom + tick)));
     },
-    [zoom, setZoom]
+    [setZoom]
   );
 
   const handleWheel = useCallback(

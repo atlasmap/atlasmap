@@ -8,8 +8,8 @@ const styles = StyleSheet.create({
     overflowX: 'hidden',
     flex: '1',
     height: '100%',
-    fontSize: 'inherit'
-  }
+    fontSize: 'inherit',
+  },
 });
 
 export const FieldGroupList: FunctionComponent = ({ children }) => (
