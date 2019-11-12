@@ -1,6 +1,6 @@
 import { TopologyView } from '@patternfly/react-topology';
 import { Canvas } from '@src/canvas';
-import { FieldsGroup, Mapping } from '@src/models';
+import { MappingGroup, Mapping } from '@src/models';
 import { SourceTargetMapper } from '@src/views';
 import { useDimensions } from '@src/useDimensions';
 import { MappingDetails } from '@src/MappingDetails';
@@ -17,8 +17,8 @@ import React, {
 } from 'react';
 
 export interface IMapperProps {
-  sources: FieldsGroup[];
-  targets: FieldsGroup[];
+  sources: MappingGroup[];
+  targets: MappingGroup[];
   mappings: Mapping[];
 }
 

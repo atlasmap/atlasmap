@@ -1,17 +1,20 @@
-import { useState, useCallback, useLayoutEffect, useRef, MutableRefObject } from 'react';
+import { Rect } from '@src/models';
+import {
+  useState,
+  useCallback,
+  useLayoutEffect,
+  useRef,
+  MutableRefObject,
+} from 'react';
 
 export interface UseDimensionsArgs {
   liveMeasure?: boolean;
 }
 
-export const useDimensions = ({
-   liveMeasure = true
- }: UseDimensionsArgs = {}): [
-  MutableRefObject<HTMLDivElement | null>,
-  ClientRect | DOMRect,
-  () => void
-] => {
-  const [dimensions, setDimensions] = useState<ClientRect | DOMRect>({
+export function useDimensions<T = HTMLDivElement>({
+  liveMeasure = true,
+}: UseDimensionsArgs = {}): [MutableRefObject<T | null>, Rect, () => void] {
+  const [dimensions, setDimensions] = useState<Rect>({
     width: 0,
     height: 0,
     top: 0,
@@ -21,36 +24,35 @@ export const useDimensions = ({
     right: 0,
     bottom: 0,
   });
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<T>(null);
 
   const measure = useCallback(() => {
-      const requestId = requestAnimationFrame(() => {
-        if (ref.current) {
-          setDimensions(ref.current.getBoundingClientRect())
-        }
-      });
-      return () => {
-        cancelAnimationFrame(requestId);
+    const requestId = requestAnimationFrame(() => {
+      if (ref.current) {
+        setDimensions(
+          ((ref.current as unknown) as HTMLElement).getBoundingClientRect()
+        );
       }
-    },
-    [ref, setDimensions]
-  );
+    });
+    return () => {
+      cancelAnimationFrame(requestId);
+    };
+  }, [ref, setDimensions]);
 
   useLayoutEffect(() => {
     measure();
 
     if (liveMeasure) {
-      window.addEventListener("resize", measure);
-      window.addEventListener("scroll", measure);
+      window.addEventListener('resize', measure);
+      window.addEventListener('scroll', measure);
     }
     return () => {
       if (liveMeasure) {
-        window.removeEventListener("resize", measure);
-        window.removeEventListener("scroll", measure);
+        window.removeEventListener('resize', measure);
+        window.removeEventListener('scroll', measure);
       }
     };
   }, [liveMeasure, measure]);
 
   return [ref, dimensions, measure];
-};
-
+}

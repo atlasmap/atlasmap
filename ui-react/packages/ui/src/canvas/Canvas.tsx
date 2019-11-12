@@ -1,8 +1,8 @@
 import { CanvasProvider } from '@src/canvas/CanvasContext';
+import { useDimensions } from '@src/useDimensions';
 import React, {
   FunctionComponent,
-  useCallback, useEffect,
-  useRef,
+  useCallback
 } from 'react';
 
 export interface ICanvasProps {
@@ -12,40 +12,22 @@ export interface ICanvasProps {
 }
 
 export const Canvas: FunctionComponent<ICanvasProps> = (({ children, width, height, zoom }) => {
-  const svgRef = useRef<SVGSVGElement | null>(null);
-  const svgOffset = useRef<{ offsetTop: number; offsetLeft: number }>({
-    offsetTop: 0,
-    offsetLeft: 0,
-  });
-
+  const [ref, dimensions] = useDimensions<SVGSVGElement>();
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
   }, []);
-
-  useEffect(() => {
-    const requestId = requestAnimationFrame(() => {
-      if (svgRef.current) {
-        const { top, left } = svgRef.current.getBoundingClientRect();
-        svgOffset.current.offsetTop = top;
-        svgOffset.current.offsetLeft = left;
-      }
-    });
-    return () => {
-      cancelAnimationFrame(requestId);
-    };
-  }, [svgRef, svgOffset]);
 
   return (
     <CanvasProvider
       width={width}
       height={height}
       zoom={zoom}
-      offsetLeft={svgOffset.current.offsetLeft}
-      offsetTop={svgOffset.current.offsetTop}
+      offsetLeft={dimensions.left}
+      offsetTop={dimensions.top}
     >
       <svg
         onDragOver={handleDragOver}
-        ref={svgRef}
+        ref={ref}
         style={{ width: '100%', height: '100%' }}
       >
         {children}

@@ -1,4 +1,4 @@
-import { useCanvasInfo } from '@src/canvas/CanvasContext';
+import { useCanvas } from '@src/canvas/CanvasContext';
 import React, { FunctionComponent } from 'react';
 
 export interface ICanvasObjectProps {
@@ -8,7 +8,7 @@ export interface ICanvasObjectProps {
   y: number;
 }
 export const CanvasObject: FunctionComponent<ICanvasObjectProps> = ({ children, width, height, x, y }) => {
-  const { xDomain, yDomain } = useCanvasInfo();
+  const { xDomain, yDomain } = useCanvas();
 
   return (
     <foreignObject

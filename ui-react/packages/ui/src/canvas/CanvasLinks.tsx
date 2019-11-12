@@ -1,0 +1,106 @@
+import { useCanvas } from '@src/canvas/CanvasContext';
+import { Coords } from '@src/models';
+import React, {
+  createContext,
+  FunctionComponent,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+
+export type SourceTargetNodes = {
+  color: string;
+  start: string;
+  end: string;
+};
+
+export type SourceTargetLine = {
+  color: string;
+  start: Coords;
+  end: Coords;
+};
+
+export interface LinkNodes {
+  [id: string]: () => Coords;
+}
+
+interface ILinksContext {
+  nodes: LinkNodes;
+  setLineNode: (id: string, getCoords: () => Coords) => void;
+}
+const LinksContext = createContext<ILinksContext | null>(null);
+
+export const CanvasLinksProvider: FunctionComponent = ({ children }) => {
+  const nodes = useRef<LinkNodes>({});
+  const setLineNode = useCallback(
+    (id: string, getCoords: () => Coords) => {
+      nodes.current[id] = getCoords;
+    },
+    [nodes]
+  );
+
+  return (
+    <LinksContext.Provider value={{ nodes: nodes.current, setLineNode }}>
+      {children}
+    </LinksContext.Provider>
+  );
+};
+
+export function useCanvasLinks(linkedNodes: SourceTargetNodes[]) {
+  const { addRedrawListener, removeRedrawListener } = useCanvas();
+  const context = useContext(LinksContext);
+  if (!context) {
+    throw new Error('A LinksProvider wrapper is required to use this hook.');
+  }
+
+  const { nodes } = context;
+  const [links, setLinks] = useState<SourceTargetLine[]>([]);
+
+  const calculateLinks = useCallback(() => {
+    console.log('calculateLinks');
+    const updatedLinks = linkedNodes
+      .map(
+        ({
+          color,
+          start: sourceId,
+          end: targetId,
+        }): SourceTargetLine | null => {
+          const source = nodes[sourceId];
+          const target = nodes[targetId];
+          if (source && target) {
+            return {
+              start: source(),
+              end: target(),
+              color,
+            };
+          }
+          return null;
+        }
+      )
+      .filter(a => a) as SourceTargetLine[];
+    setLinks(updatedLinks);
+  }, [nodes, linkedNodes, setLinks]);
+
+  useEffect(() => {
+    addRedrawListener(calculateLinks);
+    return () => {
+      removeRedrawListener(calculateLinks);
+    };
+  }, [addRedrawListener, removeRedrawListener, calculateLinks]);
+
+  return {
+    links,
+    calculateLinks,
+  };
+}
+
+export function useMappingNode() {
+  const context = useContext(LinksContext);
+  if (!context) {
+    throw new Error('A LinksProvider wrapper is required to use this hook.');
+  }
+  const { setLineNode } = context;
+  return setLineNode;
+}

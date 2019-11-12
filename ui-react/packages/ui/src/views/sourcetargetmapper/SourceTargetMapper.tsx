@@ -1,23 +1,25 @@
 import { Title } from '@patternfly/react-core';
-import { CanvasLink, CanvasObject, useCanvasInfo } from '@src/canvas';
-import { FieldElement, FieldsGroup, Mapping } from '@src/models';
+import { CanvasLinksProvider, CanvasObject, useCanvas } from '@src/canvas';
+import { Mapping, MappingGroup } from '@src/models';
 import { useDimensions } from '@src/useDimensions';
-import { useMappingLines } from '@src/useMappingLines';
 import { Box } from '@src/views/sourcetargetmapper/Box';
 import { FieldGroupList } from '@src/views/sourcetargetmapper/FieldGroupList';
 import { FieldGroup } from '@src/views/sourcetargetmapper/FieldGroup';
+import { Links } from '@src/views/sourcetargetmapper/Links';
 import React, { FunctionComponent } from 'react';
 
 export interface IMappingCanvasProps {
-  sources: FieldsGroup[];
-  targets: FieldsGroup[];
+  sources: MappingGroup[];
+  targets: MappingGroup[];
   mappings: Mapping[];
 }
 
-export const SourceTargetMapper: FunctionComponent<
-  IMappingCanvasProps
-> = ({ sources, targets, mappings }) => {
-  const { width, height, zoom } = useCanvasInfo();
+export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
+  sources,
+  targets,
+  mappings
+}) => {
+  const { width, height, zoom } = useCanvas();
 
   const [sourceRef, sourceDimensions] = useDimensions();
   const [targetRef, targetDimensions] = useDimensions();
@@ -29,47 +31,9 @@ export const SourceTargetMapper: FunctionComponent<
   const sourceStartX = gutter;
   const targetStartX = Math.max(width / 2, boxWidth + gutter) + gutter * 2;
 
-  const { lines, calcLines, addFieldRef, addFieldsGroupRef } = useMappingLines({
-    sourcesContainerRect: sourceDimensions,
-    targetsContainerRect: targetDimensions,
-    mappings
-  });
-
-  const makeFieldGroup = (type: string, { id, title, fields }: FieldsGroup) => (
-    <FieldGroup
-      key={id}
-      id={id}
-      title={title}
-      onLayout={calcLines}
-      ref={el => el && addFieldsGroupRef(el, `${type}-${id}`)}
-    >
-      {fields.map((f, fdx) => (
-        <div
-          style={{
-            padding: `calc(0.3rem * ${zoom}) 0`,
-            borderTop: '1px solid #eee',
-            borderBottom: '1px solid #eee',
-            marginTop: '-1px',
-            fontSize: `${zoom}rem`,
-          }}
-          key={f.id || fdx}
-          ref={el => el && f.id && addFieldRef(el, f.id, `${type}-${id}`)}
-        >
-          {(f as FieldElement).element ||
-            makeFieldGroup(type, f as FieldsGroup)}
-        </div>
-      ))}
-    </FieldGroup>
-  );
-
-  const makeSourceFieldGroup = (f: FieldsGroup) => makeFieldGroup('source', f);
-  const makeTargetFieldGroup = (f: FieldsGroup) => makeFieldGroup('target', f);
-
   return (
-    <>
-      {lines.map(({ start, end, color }, idx) => (
-        <CanvasLink key={idx} start={start} end={end} color={color} />
-      ))}
+    <CanvasLinksProvider>
+      <Links mappings={mappings} />
 
       <CanvasObject
         width={boxWidth}
@@ -85,9 +49,24 @@ export const SourceTargetMapper: FunctionComponent<
           }
           footer={<p>{sources.length} fields</p>}
           ref={sourceRef}
-          onLayout={calcLines}
+          style={{
+            fontSize: `${zoom}rem`,
+          }}
         >
-          <FieldGroupList>{sources.map(makeSourceFieldGroup)}</FieldGroupList>
+          <FieldGroupList>
+            {sources.map(s => {
+              return (
+                <FieldGroup
+                  isVisible={true}
+                  group={s}
+                  key={s.id}
+                  boxRect={sourceDimensions}
+                  parentRect={sourceDimensions}
+                  type={'source'}
+                />
+              );
+            })}
+          </FieldGroupList>
         </Box>
       </CanvasObject>
 
@@ -105,11 +84,26 @@ export const SourceTargetMapper: FunctionComponent<
           }
           footer={<p>{targets.length} fields</p>}
           ref={targetRef}
-          onLayout={calcLines}
+          style={{
+            fontSize: `${zoom}rem`,
+          }}
         >
-          <FieldGroupList>{targets.map(makeTargetFieldGroup)}</FieldGroupList>
+          <FieldGroupList>
+            {targets.map(t => {
+              return (
+                <FieldGroup
+                  isVisible={true}
+                  group={t}
+                  key={t.id}
+                  boxRect={targetDimensions}
+                  parentRect={targetDimensions}
+                  type={'target'}
+                />
+              );
+            })}
+          </FieldGroupList>
         </Box>
       </CanvasObject>
-    </>
+    </CanvasLinksProvider>
   );
 };

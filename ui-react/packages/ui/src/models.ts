@@ -1,33 +1,24 @@
 import { ReactElement } from 'react';
 
-export type CanvasLinkCoord = {
+export type Coords = {
   x: number;
   y: number;
 };
-
-export type FieldId = string;
-
-export type GroupId = string;
-
-export interface FieldElement {
-  id: FieldId;
+export type Rect = ClientRect | DOMRect;
+export type MappingNodeID = string;
+export type MappingNodeType = 'source' | 'target';
+export type MappingGroupId = string;
+export interface MappingNode {
+  id: MappingNodeID;
   element: ReactElement;
 }
-
-export interface FieldsGroup {
-  id: GroupId;
+export interface MappingGroup {
+  id: MappingGroupId;
   title: ReactElement | string;
-  fields: (FieldElement | FieldsGroup)[];
+  fields: (MappingNode | MappingGroup)[];
 }
-
 export interface Mapping {
   id: string;
-  sourceFields: FieldId[];
-  targetFields: FieldId[];
+  sourceFields: MappingNodeID[];
+  targetFields: MappingNodeID[];
 }
-
-export type SourceTargetLine = {
-  start: CanvasLinkCoord;
-  end: CanvasLinkCoord;
-  color: string;
-};

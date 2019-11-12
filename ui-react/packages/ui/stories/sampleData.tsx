@@ -1,5 +1,33 @@
 import React from 'react';
 
+export const mappings = [
+  {
+    id: 'a',
+    sourceFields: ['A'],
+    targetFields: ['10'],
+  },
+  {
+    id: 'b',
+    sourceFields: ['b', 'C - 1', 'C - 2 - a', 'Z'],
+    targetFields: ['Qux - 1 - 2'],
+  },
+  {
+    id: 'c',
+    sourceFields: ['h'],
+    targetFields: ['3', '4', '5'],
+  },
+  {
+    id: 'd',
+    sourceFields: ['n', 'H'],
+    targetFields: ['7'],
+  },
+  {
+    id: 'e',
+    sourceFields: ['F'],
+    targetFields: ['7'],
+  },
+];
+
 export const sources = [
   {
     id: 'Foo',
@@ -192,33 +220,5 @@ export const targets = [
       { id: '9', element: <p>9 some random word</p> },
       { id: '10', element: <p>10 some random word</p> },
     ],
-  },
-];
-
-export const mappings = [
-  {
-    id: 'a',
-    sourceFields: ['A'],
-    targetFields: ['10'],
-  },
-  {
-    id: 'b',
-    sourceFields: ['b', 'C - 1', 'C - 2 - a', 'Z'],
-    targetFields: ['Qux - 1 - 2'],
-  },
-  {
-    id: 'c',
-    sourceFields: ['h'],
-    targetFields: ['3', '4', '5'],
-  },
-  {
-    id: 'd',
-    sourceFields: ['n', 'H'],
-    targetFields: ['7'],
-  },
-  {
-    id: 'e',
-    sourceFields: ['F'],
-    targetFields: ['7'],
   },
 ];
