@@ -11,7 +11,8 @@ import { FieldElement } from '@src/views/sourcetargetmapper/FieldElement';
 import React, {
   FunctionComponent,
   useCallback,
-  useEffect, useRef,
+  useEffect,
+  useRef,
   useState,
 } from 'react';
 
@@ -49,7 +50,7 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
   ]);
   useEffect(() => {
     redraw();
-  }, [isExpanded]);
+  }, [isExpanded, redraw]);
   return (
     <AccordionItem>
       <AccordionToggle

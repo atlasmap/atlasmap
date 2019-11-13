@@ -1,10 +1,6 @@
-import { useCanvas } from '@src';
 import React, {
-  useCallback,
-  UIEvent,
   forwardRef,
   PropsWithChildren,
-  WheelEvent,
   ReactElement,
   HTMLAttributes,
 } from 'react';
@@ -13,10 +9,10 @@ import { css, StyleSheet } from '@patternfly/react-styles';
 const BoxStyles = StyleSheet.create({
   outer: {
     width: '100%',
-    height: '100%',
     display: 'flex',
     flexFlow: 'column',
     padding: '1rem',
+    userSelect: 'none',
   },
   header: {
     flex: '0 1 0',
@@ -24,7 +20,6 @@ const BoxStyles = StyleSheet.create({
   },
   body: {
     flex: '0 0 1',
-    height: '100%',
     display: 'flex',
     flexFlow: 'column',
   },
@@ -46,26 +41,11 @@ export interface IBoxProps extends HTMLAttributes<HTMLDivElement> {
  */
 export const Box = forwardRef<HTMLDivElement, PropsWithChildren<IBoxProps>>(
   ({ header, footer, children, onLayout, ...props }, ref) => {
-    const { redraw } = useCanvas();
-    const onScroll = useCallback(
-      (e: UIEvent<HTMLDivElement>) => {
-        e.stopPropagation();
-        redraw();
-      },
-      [redraw]
-    );
-
-    const handleWheel = (e: WheelEvent) => {
-      e.stopPropagation();
-    };
-
     return (
       <div className={css(BoxStyles.outer)}>
         <div className={css(BoxStyles.header)}>{header}</div>
         <div
           className={css(BoxStyles.body)}
-          onScroll={onScroll}
-          onWheel={handleWheel}
           ref={ref}
           {...props}
         >

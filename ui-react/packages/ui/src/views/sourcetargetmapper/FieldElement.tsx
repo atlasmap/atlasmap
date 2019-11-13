@@ -1,5 +1,5 @@
-import { useCanvas } from '@src';
 import { useMappingNode } from '@src/canvas/CanvasLinks';
+import { useBoundingCanvasRect } from '@src/canvas/useBoundingCanvasRect';
 import { MappingNode, MappingNodeType } from '@src/models';
 import React, { FunctionComponent, useCallback, useRef } from 'react';
 
@@ -16,44 +16,33 @@ export const FieldElement: FunctionComponent<IFieldElementProps> = ({
   parentRef,
   boxRef,
 }) => {
-  const { zoom, offsetLeft, offsetTop } = useCanvas();
   const ref = useRef<HTMLDivElement | null>(null);
+  const getBoundingCanvasRect = useBoundingCanvasRect();
   const setLineNode = useMappingNode();
   const getCoords = useCallback(() => {
     if (ref.current && parentRef && boxRef) {
-      let parentRect = parentRef.getBoundingClientRect();
-      let boxRect = boxRef.getBoundingClientRect();
-      let dimensions = ref.current.getBoundingClientRect();
+      let parentRect = getBoundingCanvasRect(parentRef);
+      let boxRect = getBoundingCanvasRect(boxRef);
+      let dimensions = getBoundingCanvasRect(ref.current);
       dimensions = dimensions.height > 0 ? dimensions : parentRect;
       return {
-        x: (type === 'source' ? boxRect.right : boxRect.left) - offsetLeft,
+        x: type === 'source' ? boxRect.right : boxRect.left,
         y: Math.min(
-          Math.max(
-            dimensions.top - offsetTop + dimensions.height / 2,
-            boxRect.top - offsetTop
-          ),
-          boxRect.height + boxRect.top - offsetTop
+          Math.max(dimensions.top + dimensions.height / 2, boxRect.top),
+          boxRect.height + boxRect.top
         ),
       };
     } else {
       return { x: 0, y: 0 };
     }
-  }, [
-    parentRef,
-    type,
-    boxRef,
-    offsetLeft,
-    offsetTop,
-  ]);
+  }, [ref, parentRef, type, boxRef, getBoundingCanvasRect]);
   setLineNode(node.id, getCoords);
   return (
     <div
       ref={ref}
       style={{
-        padding: `calc(0.3rem * ${zoom}) 0`,
-        borderTop: '1px solid #eee',
+        padding: '0.3rem',
         borderBottom: '1px solid #eee',
-        marginTop: '-1px',
       }}
     >
       {node.element}

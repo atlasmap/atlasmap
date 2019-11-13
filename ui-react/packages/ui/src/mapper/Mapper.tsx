@@ -1,6 +1,6 @@
 import { TopologyView } from '@patternfly/react-topology';
 import { Canvas } from '@src/canvas';
-import { MappingGroup, Mapping } from '@src/models';
+import { MappingGroup, Mapping, Coords } from '@src/models';
 import { SourceTargetMapper } from '@src/views';
 import { useDimensions } from '@src/useDimensions';
 import { MappingDetails } from '@src/MappingDetails';
@@ -12,9 +12,11 @@ import React, {
   FunctionComponent,
   useCallback,
   useEffect,
+  useMemo,
   useState,
   WheelEvent,
 } from 'react';
+import { useDrag } from 'react-use-gesture';
 
 export interface IMapperProps {
   sources: MappingGroup[];
@@ -27,10 +29,23 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
   mappings,
   targets,
 }) => {
-  const [ref, { width, height }, measure] = useDimensions();
+  const [dimensionsRef, { width, height }, measure] = useDimensions();
   const [mappingDetails, setMappingDetails] = useState<string | null>(null);
 
   const [zoom, setZoom] = useState(1);
+
+  const [isPanning, setIsPanning] = useState(false);
+  const [{ x: panX, y: panY }, setPan] = useState<Coords>({ x: 0, y: 0 });
+  const resetPan = useCallback(() => {
+    setPan({ x: 0, y: 0 });
+  }, [setPan]);
+  const bind = useDrag(
+    ({ movement: [x, y], first, last, args: [panX, panY] }) => {
+      if (first) setIsPanning(true);
+      if (last) setIsPanning(false);
+      setPan({ x: x + panX, y: y + panY });
+    }
+  );
 
   const updateZoom = useCallback(
     (tick: number) => {
@@ -52,9 +67,10 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
   const handleZoomOut = useCallback(() => {
     updateZoom(-0.2);
   }, [updateZoom]);
-  const handleZoomReset = useCallback(() => {
+  const handleViewReset = useCallback(() => {
     setZoom(1);
-  }, [setZoom]);
+    resetPan();
+  }, [setZoom, resetPan]);
 
   const closeMappingDetails = useCallback(() => {
     setMappingDetails(null);
@@ -76,28 +92,42 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
     return () => clearTimeout(timeout);
   }, [measure, mappingDetails]);
 
+  const contextToolbar = useMemo(() => <MapperContextToolbar />, []);
+  const viewToolbar = useMemo(() => <MapperViewToolbar />, []);
+  const controlBar = useMemo(
+    () => (
+      <MapperControlBar
+        onZoomIn={handleZoomIn}
+        onZoomOut={handleZoomOut}
+        onZoomReset={handleViewReset}
+      />
+    ),
+    [handleViewReset, handleZoomIn, handleZoomOut]
+  );
   return (
     <MapperProvider showMappingDetails={showMappingDetails}>
       <TopologyView
-        contextToolbar={<MapperContextToolbar />}
-        viewToolbar={<MapperViewToolbar />}
-        controlBar={
-          <MapperControlBar
-            onZoomIn={handleZoomIn}
-            onZoomOut={handleZoomOut}
-            onZoomReset={handleZoomReset}
-          />
-        }
+        contextToolbar={contextToolbar}
+        viewToolbar={viewToolbar}
+        controlBar={controlBar}
         sideBar={sideBar}
         sideBarOpen={!!mappingDetails}
       >
         <div
-          ref={ref}
+          ref={dimensionsRef}
           style={{ height: '100%', flex: '1' }}
           onWheel={handleWheel}
+          {...bind(panX, panY)}
         >
           {width && (
-            <Canvas width={width} height={height} zoom={zoom}>
+            <Canvas
+              width={width}
+              height={height}
+              zoom={zoom}
+              panX={panX}
+              panY={panY}
+              isPanning={isPanning}
+            >
               <SourceTargetMapper
                 sources={sources}
                 mappings={mappings}
