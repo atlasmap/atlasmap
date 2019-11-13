@@ -255,15 +255,12 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
         if (this.cfg.mappings == null) {
           this.cfg.mappings = new MappingDefinition(this.cfg.mappingId);
           if (this.cfg.mappingFiles.length > 0) {
-            await this.fetchMappings(this.cfg.mappingFiles);
+            await this.fetchMappingById(this.cfg.mappingId);
           } else {
-            // filter according to mappingId
-            // The postfix to differentiate btw UI.1 and UI.11
-            const filter = 'UI.' + this.cfg.mappingId + MappingDefinition.MAPPING_NAME_POSTFIX;
-            this.cfg.fileService.findMappingFiles(filter).toPromise()
+            this.cfg.fileService.findMappingFiles('UI').toPromise()
               .then( async(files: string[]) => {
                 // It's okay if no mapping files are found - resolve false so the caller will know.
-                if (!await this.fetchMappings(files)) {
+                if (!await this.fetchMappingById(this.cfg.mappingId)) {
                   resolve(false);
                 }
               },
@@ -390,7 +387,8 @@ ${error.status} ${error.statusText}`,
         // Reinitialize the model mappings.
         if (mInfo && mInfo.exportMappings) {
           const catalogMappingsName = MappingSerializer.deserializeAtlasMappingName(
-            DocumentManagementService.getMappingsInfo(mInfo.exportMappings.value));
+            DocumentManagementService.getMappingsInfo(mInfo.exportMappings.value),
+            this.cfg.mappingId);
 
             // If the live UI mappings name does not match the UI mappings name extracted from the
             // catalog file then use the mappings from the catalog file.  Otherwise use the live
@@ -516,6 +514,28 @@ ${error.status} ${error.statusText}`,
         this.updateStatus();
         this.cfg.mappingService.notifyMappingUpdated().then(() => resolve(true));
       }).catch((error: any) => {
+        if (error.status === 0) {
+          this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+        } else {
+          this.handleError('Could not load mapping definitions.', error);
+        }
+        reject(error);
+      });
+    });
+  }
+
+  async fetchMappingById(mappingId: any): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      if (mappingId == null) {
+        resolve(false);
+      }
+
+      this.cfg.mappingService.fetchMappings([mappingId], this.cfg.mappings).toPromise()
+        .then((result: boolean) => {
+          this.cfg.initCfg.mappingInitialized = true;
+          this.updateStatus();
+          this.cfg.mappingService.notifyMappingUpdated().then(() => resolve(true));
+        }).catch((error: any) => {
         if (error.status === 0) {
           this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
         } else {

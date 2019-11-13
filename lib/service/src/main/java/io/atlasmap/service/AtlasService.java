@@ -195,14 +195,15 @@ public class AtlasService {
     }
 
     @GET
-    @Path("/mappings")
+    @Path("/mappings/{mappingId}")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "List Mappings", notes = "Retrieves a list of mapping file name saved on the server")
     @ApiResponses(@ApiResponse(code = 200, response = StringMap.class, message = "Return a list of a pair of mapping file name and content"))
-    public Response listMappings(@Context UriInfo uriInfo, @QueryParam("filter") final String filter) {
+    public Response listMappings(@Context UriInfo uriInfo, @QueryParam("filter") final String filter,
+                                 @ApiParam("Mapping ID") @PathParam("mappingId") Integer mappingId) {
         StringMap sMap = new StringMap();
         LOG.debug("listMappings with filter '{}'", filter);
-        java.nio.file.Path mappingFolderPath = Paths.get(mappingFolder);
+        java.nio.file.Path mappingFolderPath = Paths.get(getMappingSubDirectory(mappingId));
         File[] mappings = mappingFolderPath.toFile().listFiles(new FilenameFilter() {
 
             @Override
