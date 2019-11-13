@@ -14,9 +14,8 @@ import React, {
   useEffect,
   useMemo,
   useState,
-  WheelEvent,
 } from 'react';
-import { useDrag } from 'react-use-gesture';
+import { useGesture } from 'react-use-gesture';
 
 export interface IMapperProps {
   sources: MappingGroup[];
@@ -29,6 +28,7 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
   mappings,
   targets,
 }) => {
+  const [freeView, setFreeView] = useState(false);
   const [dimensionsRef, { width, height }, measure] = useDimensions();
   const [mappingDetails, setMappingDetails] = useState<string | null>(null);
 
@@ -39,13 +39,21 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
   const resetPan = useCallback(() => {
     setPan({ x: 0, y: 0 });
   }, [setPan]);
-  const bind = useDrag(
-    ({ movement: [x, y], first, last, args: [panX, panY] }) => {
-      if (first) setIsPanning(true);
-      if (last) setIsPanning(false);
-      setPan({ x: x + panX, y: y + panY });
-    }
-  );
+  const bind = useGesture({
+    onDrag: ({ movement: [x, y], first, last, memo = [panX, panY] }) => {
+      if (freeView) {
+        if (first) setIsPanning(true);
+        if (last) setIsPanning(false);
+        setPan({ x: x + memo[0], y: y + memo[1] });
+      }
+      return memo;
+    },
+    onWheel: ({ delta }) => {
+      if (freeView) {
+        updateZoom(delta[1] * -0.001);
+      }
+    },
+  });
 
   const updateZoom = useCallback(
     (tick: number) => {
@@ -54,13 +62,6 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
     [setZoom]
   );
 
-  const handleWheel = useCallback(
-    (e: WheelEvent) => {
-      updateZoom(e.deltaY * -0.001);
-      e.stopPropagation();
-    },
-    [updateZoom]
-  );
   const handleZoomIn = useCallback(() => {
     updateZoom(0.2);
   }, [updateZoom]);
@@ -93,7 +94,13 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
   }, [measure, mappingDetails]);
 
   const contextToolbar = useMemo(() => <MapperContextToolbar />, []);
-  const viewToolbar = useMemo(() => <MapperViewToolbar />, []);
+  const toggleFreeView = useCallback(() => setFreeView(!freeView), [freeView, setFreeView]);
+  const viewToolbar = useMemo(
+    () => (
+      <MapperViewToolbar freeView={freeView} toggleFreeView={toggleFreeView} />
+    ),
+    [freeView, toggleFreeView]
+  );
   const controlBar = useMemo(
     () => (
       <MapperControlBar
@@ -109,29 +116,29 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
       <TopologyView
         contextToolbar={contextToolbar}
         viewToolbar={viewToolbar}
-        controlBar={controlBar}
+        controlBar={freeView ? controlBar : undefined}
         sideBar={sideBar}
         sideBarOpen={!!mappingDetails}
       >
         <div
           ref={dimensionsRef}
           style={{ height: '100%', flex: '1' }}
-          onWheel={handleWheel}
-          {...bind(panX, panY)}
+          {...bind()}
         >
           {width && (
             <Canvas
               width={width}
               height={height}
-              zoom={zoom}
-              panX={panX}
-              panY={panY}
-              isPanning={isPanning}
+              zoom={freeView ? zoom : 1}
+              panX={freeView ? panX : 0}
+              panY={freeView ? panY : 0}
+              isPanning={freeView ? isPanning : false}
             >
               <SourceTargetMapper
                 sources={sources}
                 mappings={mappings}
                 targets={targets}
+                freeView={freeView}
               />
             </Canvas>
           )}

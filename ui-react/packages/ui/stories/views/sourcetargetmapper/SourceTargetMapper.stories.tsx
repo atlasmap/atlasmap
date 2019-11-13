@@ -20,6 +20,7 @@ export const sample = () => (
       sources={sources}
       targets={targets}
       mappings={mappings}
+      freeView={true}
     />
   </Canvas>
 );

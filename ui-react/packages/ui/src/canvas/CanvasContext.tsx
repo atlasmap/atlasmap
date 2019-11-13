@@ -70,7 +70,7 @@ export const CanvasProvider: FunctionComponent<ICanvasProviderProps> = ({
     return () => {
       cancelAnimationFrame(requestId);
     };
-  }, [lastUpdate, redraw]);
+  }, [width, height, zoom, offsetLeft, offsetTop, panX, panY, redraw]);
 
   return (
     <CanvasContext.Provider

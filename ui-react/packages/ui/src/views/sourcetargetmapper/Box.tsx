@@ -1,3 +1,4 @@
+import { useCanvas } from '@src';
 import React, {
   forwardRef,
   PropsWithChildren,
@@ -9,6 +10,7 @@ import { css, StyleSheet } from '@patternfly/react-styles';
 const BoxStyles = StyleSheet.create({
   outer: {
     width: '100%',
+    height: '100%',
     display: 'flex',
     flexFlow: 'column',
     padding: '1rem',
@@ -22,6 +24,7 @@ const BoxStyles = StyleSheet.create({
     flex: '0 0 1',
     display: 'flex',
     flexFlow: 'column',
+    height: '100%',
   },
   footer: {
     flex: '0 1 0',
@@ -41,12 +44,15 @@ export interface IBoxProps extends HTMLAttributes<HTMLDivElement> {
  */
 export const Box = forwardRef<HTMLDivElement, PropsWithChildren<IBoxProps>>(
   ({ header, footer, children, onLayout, ...props }, ref) => {
+    const { redraw } = useCanvas();
     return (
       <div className={css(BoxStyles.outer)}>
         <div className={css(BoxStyles.header)}>{header}</div>
         <div
           className={css(BoxStyles.body)}
           ref={ref}
+          onWheel={redraw}
+          onScroll={redraw}
           {...props}
         >
           {children}
