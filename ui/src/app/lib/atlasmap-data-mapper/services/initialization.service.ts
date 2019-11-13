@@ -257,10 +257,7 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
           if (this.cfg.mappingFiles.length > 0) {
             await this.fetchMappings(this.cfg.mappingFiles);
           } else {
-            // filter according to mappingId
-            // The postfix to differentiate btw UI.1 and UI.11
-            const filter = 'UI.' + this.cfg.mappingId + MappingDefinition.MAPPING_NAME_POSTFIX;
-            this.cfg.fileService.findMappingFiles(filter).toPromise()
+            this.cfg.fileService.findMappingFiles('UI').toPromise()
               .then( async(files: string[]) => {
                 // It's okay if no mapping files are found - resolve false so the caller will know.
                 if (!await this.fetchMappings(files)) {

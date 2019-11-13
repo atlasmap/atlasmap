@@ -53,7 +53,8 @@ export class FileManagementService {
 
   findMappingFiles(filter: string): Observable<string[]> {
     return new Observable<string[]>((observer: any) => {
-      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mappings' + (filter == null ? '' : '?filter=' + filter);
+      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mappings/' + this.cfg.mappingId
+        + (filter == null ? '' : '?filter=' + filter);
       this.cfg.logger.trace('Mapping List Request');
       this.http.get(url, { headers: this.headers }).toPromise().then((body: any) => {
         if (this.cfg.isTraceEnabled()) {
