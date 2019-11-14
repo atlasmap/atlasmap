@@ -1,11 +1,11 @@
 import { SourceTargetNodes, useCanvasLinks } from '@src/canvas';
-import { Mapping } from '@src/models';
+import { IMappings } from '@src/models';
 import { scaleSequential } from 'd3-scale';
 import { interpolateRainbow } from 'd3-scale-chromatic';
 import { useMemo } from 'react';
 
 export interface IUseMappingsLinksArgs {
-  mappings: Mapping[];
+  mappings: IMappings[];
 }
 export function useMappingLinks({ mappings }: IUseMappingsLinksArgs) {
   const colors = useMemo(

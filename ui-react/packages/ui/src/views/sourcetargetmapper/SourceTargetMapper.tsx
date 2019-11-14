@@ -1,6 +1,6 @@
 import { Title } from '@patternfly/react-core';
 import { CanvasLinksProvider, CanvasObject, useCanvas } from '@src/canvas';
-import { Coords, Mapping, MappingGroup } from '@src/models';
+import { Coords, IMappings, IFieldsGroup } from '@src/models';
 import { useDimensions } from '@src/useDimensions';
 import { Box } from '@src/views/sourcetargetmapper/Box';
 import { FieldGroupList } from '@src/views/sourcetargetmapper/FieldGroupList';
@@ -11,9 +11,9 @@ import { useDrag } from 'react-use-gesture';
 import clamp from 'lodash.clamp'
 
 export interface IMappingCanvasProps {
-  sources: MappingGroup[];
-  targets: MappingGroup[];
-  mappings: Mapping[];
+  sources: IFieldsGroup[];
+  targets: IFieldsGroup[];
+  mappings: IMappings[];
   freeView: boolean;
 }
 

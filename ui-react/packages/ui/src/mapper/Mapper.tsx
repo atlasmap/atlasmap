@@ -1,6 +1,6 @@
 import { TopologyView } from '@patternfly/react-topology';
 import { Canvas } from '@src/canvas';
-import { MappingGroup, Mapping, Coords } from '@src/models';
+import { IFieldsGroup, IMappings, Coords } from '@src/models';
 import { SourceTargetMapper } from '@src/views';
 import { useDimensions } from '@src/useDimensions';
 import { MappingDetails } from '@src/MappingDetails';
@@ -18,9 +18,9 @@ import React, {
 import { useGesture } from 'react-use-gesture';
 
 export interface IMapperProps {
-  sources: MappingGroup[];
-  targets: MappingGroup[];
-  mappings: Mapping[];
+  sources: IFieldsGroup[];
+  targets: IFieldsGroup[];
+  mappings: IMappings[];
 }
 
 export const Mapper: FunctionComponent<IMapperProps> = ({

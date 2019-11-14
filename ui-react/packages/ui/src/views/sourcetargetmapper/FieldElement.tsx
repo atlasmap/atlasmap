@@ -1,7 +1,7 @@
 import { css, StyleSheet } from '@patternfly/react-styles';
 import { useMappingNode } from '@src/canvas/CanvasLinks';
 import { useBoundingCanvasRect } from '@src/canvas/useBoundingCanvasRect';
-import { MappingNode, MappingNodeType } from '@src/models';
+import { IFieldsNode, NodeType } from '@src/models';
 import React, { FunctionComponent, useCallback, useRef } from 'react';
 
 const styles = StyleSheet.create({
@@ -13,8 +13,8 @@ const styles = StyleSheet.create({
 });
 
 export interface IFieldElementProps {
-  node: MappingNode;
-  type: MappingNodeType;
+  node: IFieldsNode;
+  type: NodeType;
   parentRef: HTMLElement | null;
   boxRef: HTMLElement | null;
   rightAlign?: boolean;

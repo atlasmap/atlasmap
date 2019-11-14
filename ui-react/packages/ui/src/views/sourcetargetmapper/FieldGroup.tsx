@@ -6,7 +6,7 @@ import {
 import { FolderOpenIcon, FolderCloseIcon } from '@patternfly/react-icons';
 import { css, StyleSheet } from '@patternfly/react-styles';
 import { useCanvas } from '@src';
-import { MappingNode, MappingGroup, MappingNodeType } from '@src/models';
+import { IFieldsNode, IFieldsGroup, NodeType } from '@src/models';
 import { FieldElement } from '@src/views/sourcetargetmapper/FieldElement';
 import React, {
   FunctionComponent,
@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
   buttonRightAlign: {
     direction: 'rtl',
     '& > span': {
+      direction: 'ltr',
       flex: 1
     }
   },
@@ -47,8 +48,8 @@ const styles = StyleSheet.create({
 
 export interface IFieldGroupProps {
   isVisible: boolean;
-  group: MappingGroup;
-  type: MappingNodeType;
+  group: IFieldsGroup;
+  type: NodeType;
   parentRef?: HTMLElement | null;
   boxRef?: HTMLElement | null;
   rightAlign?: boolean;
@@ -92,7 +93,7 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
         className={css(styles.content, rightAlign && styles.contentRightAligned)}
       >
         {group.fields.map(f =>
-          (f as MappingNode).element ? (
+          (f as IFieldsNode).element ? (
             <FieldElement
               key={f.id}
               type={type}
@@ -104,7 +105,7 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
                   : parentRef
               }
               boxRef={boxRef}
-              node={f as MappingNode}
+              node={f as IFieldsNode}
               rightAlign={rightAlign}
             />
           ) : (
@@ -112,7 +113,7 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
               isVisible={isVisible && isExpanded}
               type={type}
               parentRef={isVisible || !parentRef ? ref.current : parentRef}
-              group={f as MappingGroup}
+              group={f as IFieldsGroup}
               boxRef={boxRef}
               rightAlign={rightAlign}
               key={f.id}

@@ -5,20 +5,20 @@ export type Coords = {
   y: number;
 };
 export type Rect = ClientRect | DOMRect;
-export type MappingNodeID = string;
-export type MappingNodeType = 'source' | 'target';
-export type MappingGroupId = string;
-export interface MappingNode {
-  id: MappingNodeID;
+export type NodeId = string;
+export type NodeType = 'source' | 'target';
+export type GroupId = string;
+export interface IFieldsNode {
+  id: NodeId;
   element: ReactElement;
 }
-export interface MappingGroup {
-  id: MappingGroupId;
+export interface IFieldsGroup {
+  id: GroupId;
   title: ReactElement | string;
-  fields: (MappingNode | MappingGroup)[];
+  fields: (IFieldsNode | IFieldsGroup)[];
 }
-export interface Mapping {
+export interface IMappings {
   id: string;
-  sourceFields: MappingNodeID[];
-  targetFields: MappingNodeID[];
+  sourceFields: NodeId[];
+  targetFields: NodeId[];
 }
