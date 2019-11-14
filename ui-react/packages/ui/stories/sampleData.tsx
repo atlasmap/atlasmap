@@ -8,23 +8,68 @@ export const mappings = [
   },
   {
     id: 'b',
-    sourceFields: ['b', 'C - 1', 'C - 2 - a', 'Z'],
+    sourceFields: ['A', 'b', 'C - 1', 'C - 2 - a', 'Z'],
     targetFields: ['Qux - 1 - 2'],
   },
   {
     id: 'c',
     sourceFields: ['h'],
-    targetFields: ['3', '4', '5'],
+    targetFields: ['3', '4', '9'],
   },
   {
     id: 'd',
     sourceFields: ['n', 'H'],
-    targetFields: ['7'],
+    targetFields: ['Qux - 1 - 1'],
   },
   {
     id: 'e',
     sourceFields: ['F'],
-    targetFields: ['7'],
+    targetFields: ['5'],
+  },
+  {
+    id: 'f',
+    sourceFields: ['Z'],
+    targetFields: ['3'],
+  },
+  {
+    id: 'g',
+    sourceFields: ['h'],
+    targetFields: ['5'],
+  },
+  {
+    id: 'h',
+    sourceFields: ['t'],
+    targetFields: ['5'],
+  },
+  {
+    id: 'j',
+    sourceFields: ['T'],
+    targetFields: ['5'],
+  },
+  {
+    id: 'k',
+    sourceFields: ['j'],
+    targetFields: ['5'],
+  },
+  {
+    id: 'l',
+    sourceFields: ['w'],
+    targetFields: ['5'],
+  },
+  {
+    id: 'm',
+    sourceFields: ['j'],
+    targetFields: ['5'],
+  },
+  {
+    id: 'n',
+    sourceFields: ['w'],
+    targetFields: ['5'],
+  },
+  {
+    id: 'o',
+    sourceFields: ['w'],
+    targetFields: ['5'],
   },
 ];
 

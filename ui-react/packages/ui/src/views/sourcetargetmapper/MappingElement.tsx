@@ -6,54 +6,64 @@ import React, { FunctionComponent, useCallback, useRef } from 'react';
 
 const styles = StyleSheet.create({
   element: {
-    padding: '0.3rem',
-    borderBottom: '1px solid #eee',
+    width: '80px',
+    background: '#fff',
+    borderRadius: '5px',
+    padding: '1rem',
+    margin: '1rem',
+    border: '1px solid #ddd',
+    textAlign: 'center'
   },
-  rightAlign: {
-    transform: 'scaleX(-1)'
-  }
 });
 
-export interface IFieldElementProps {
+export interface IMappingElementProps {
   node: IFieldsNode;
   type: ElementType;
-  parentRef: HTMLElement | null;
   boxRef: HTMLElement | null;
-  rightAlign?: boolean;
 }
 
-export const FieldElement: FunctionComponent<IFieldElementProps> = ({
+export const MappingElement: FunctionComponent<IMappingElementProps> = ({
   node,
   type,
-  parentRef,
   boxRef,
-  rightAlign = false
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const getBoundingCanvasRect = useBoundingCanvasRect();
   const setLineNode = useMappingNode();
   const getCoords = useCallback(() => {
-    if (ref.current && parentRef && boxRef) {
-      let parentRect = getBoundingCanvasRect(parentRef);
+    if (ref.current && boxRef) {
       let boxRect = getBoundingCanvasRect(boxRef);
       let dimensions = getBoundingCanvasRect(ref.current);
-      dimensions = dimensions.height > 0 ? dimensions : parentRect;
       return {
-        x: type === 'source' ? boxRect.right : boxRect.left,
+        left: dimensions.left,
+        right: dimensions.right,
         y: Math.min(
           Math.max(dimensions.top + dimensions.height / 2, boxRect.top),
           boxRect.height + boxRect.top
         ),
       };
     } else {
-      return { x: 0, y: 0 };
+      return { left: 0, right: 0, y: 0 };
     }
-  }, [ref, parentRef, type, boxRef, getBoundingCanvasRect]);
-  setLineNode(node.id, getCoords);
+  }, [ref, type, boxRef, getBoundingCanvasRect]);
+  setLineNode(`to-${node.id}`, () => {
+    const { left, y } = getCoords();
+    return {
+      x: left,
+      y,
+    }
+  });
+  setLineNode(`from-${node.id}`, () => {
+    const { right, y } = getCoords();
+    return {
+      x: right,
+      y,
+    }
+  });
   return (
     <div
       ref={ref}
-      className={css(styles.element, rightAlign && styles.rightAlign)}
+      className={css(styles.element)}
     >
       {node.element}
     </div>

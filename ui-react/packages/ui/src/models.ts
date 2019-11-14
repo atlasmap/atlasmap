@@ -5,11 +5,11 @@ export type Coords = {
   y: number;
 };
 export type Rect = ClientRect | DOMRect;
-export type NodeId = string;
-export type FieldType = 'source' | 'target';
+export type ElementId = string;
+export type ElementType = 'source' | 'target' | 'mapping';
 export type GroupId = string;
 export interface IFieldsNode {
-  id: NodeId;
+  id: ElementId;
   element: ReactElement;
 }
 export interface IFieldsGroup {
@@ -19,6 +19,6 @@ export interface IFieldsGroup {
 }
 export interface IMappings {
   id: string;
-  sourceFields: NodeId[];
-  targetFields: NodeId[];
+  sourceFields: ElementId[];
+  targetFields: ElementId[];
 }

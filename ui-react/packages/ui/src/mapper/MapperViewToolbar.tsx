@@ -4,13 +4,12 @@ import {
   OptionsMenu,
   OptionsMenuItem,
   OptionsMenuItemGroup, OptionsMenuPosition,
-  OptionsMenuToggle,
+  OptionsMenuToggle, TextInput,
   Toolbar,
   ToolbarGroup,
   ToolbarItem,
-  Tooltip,
 } from '@patternfly/react-core';
-import { AddCircleOIcon, CaretDownIcon, CaretUpIcon } from '@patternfly/react-icons';
+import { CaretDownIcon, CaretUpIcon } from '@patternfly/react-icons';
 export interface IMapperToolbarProps {
   freeView: boolean;
   toggleFreeView: () => void;
@@ -64,18 +63,8 @@ export const MapperViewToolbar: FunctionComponent<IMapperToolbarProps> = ({
       style={{ borderBottom: '1px solid #ccc' }}
     >
       <ToolbarGroup style={{ flex: 1 }}>
-        <ToolbarItem style={{ flex: 1 }}>
-          <Tooltip
-            position={'auto'}
-            enableFlip={true}
-            content={<div>Add new mapping</div>}
-          >
-            <Button aria-label='Add new mapping' variant={'plain'}>
-              <AddCircleOIcon aria-hidden={true} /> Add new mapping
-            </Button>
-          </Tooltip>
-        </ToolbarItem>
-        {/*<ToolbarItem>
+
+        <ToolbarItem>
           <Button
             variant={'plain'}
             aria-label='Enable/ Disable conditional mapping expression'
@@ -89,7 +78,7 @@ export const MapperViewToolbar: FunctionComponent<IMapperToolbarProps> = ({
 
         <ToolbarItem style={{ flex: 1 }}>
           <TextInput aria-label={'Conditional mapping expression'} />
-        </ToolbarItem>*/}
+        </ToolbarItem>
         <ToolbarItem>
           <OptionsMenu
             id='mapper-options'

@@ -14,20 +14,24 @@ export function useMappingLinks({ mappings }: IUseMappingsLinksArgs) {
   );
 
   const linkedNodes = mappings.reduce<SourceTargetNodes[]>(
-    (lines, { sourceFields, targetFields }, idx) => {
+    (lines, { id, sourceFields, targetFields }, idx) => {
       const color = colors(idx);
-      const mappingLines = sourceFields.reduce<SourceTargetNodes[]>(
-        (lines, start) => {
-          const linesFromSource = targetFields.map(end => ({
-            start,
-            end,
-            color,
-          }));
-          return [...lines, ...linesFromSource];
-        },
-        []
-      );
-      return [...lines, ...mappingLines];
+      const sourcesToMappings = sourceFields.map(source => ({
+        start: source,
+        end: `to-${id}`,
+        color
+      }));
+      const mappingsToTargets = targetFields.map(target => ({
+        start: `from-${id}`,
+        end: target,
+        color
+      }));
+
+      return [
+        ...lines,
+        ...sourcesToMappings,
+        ...mappingsToTargets,
+      ]
     },
     []
   );

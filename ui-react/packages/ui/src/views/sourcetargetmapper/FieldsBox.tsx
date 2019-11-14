@@ -1,6 +1,6 @@
 import { Title } from '@patternfly/react-core';
 import { CanvasObject } from '@src';
-import { Coords, IFieldsGroup, FieldType } from '@src/models';
+import { Coords, IFieldsGroup, ElementType } from '@src/models';
 import { Box } from '@src/views/sourcetargetmapper/Box';
 import { FieldGroup } from '@src/views/sourcetargetmapper/FieldGroup';
 import { FieldGroupList } from '@src/views/sourcetargetmapper/FieldGroupList';
@@ -12,7 +12,7 @@ export interface IFieldsBoxProps extends HTMLAttributes<HTMLDivElement> {
   position: Coords;
   scrollable: boolean;
   fields: IFieldsGroup[];
-  type: FieldType;
+  type: ElementType;
   title: string;
   rightAlign?: boolean;
 }
