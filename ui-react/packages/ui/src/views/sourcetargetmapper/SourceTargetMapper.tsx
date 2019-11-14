@@ -1,106 +1,94 @@
-import { Title } from '@patternfly/react-core';
-import { CanvasLinksProvider, CanvasObject, useCanvas } from '@src/canvas';
-import { Mapping, MappingGroup } from '@src/models';
-import { Box } from '@src/views/sourcetargetmapper/Box';
-import { FieldGroupList } from '@src/views/sourcetargetmapper/FieldGroupList';
-import { FieldGroup } from '@src/views/sourcetargetmapper/FieldGroup';
+import { CanvasLinksProvider, useCanvas } from '@src/canvas';
+import { useMovable } from '@src/common';
+import { Coords, IMappings, IFieldsGroup } from '@src/models';
+import { useDimensions } from '@src/common/useDimensions';
+import { FieldsBox } from '@src/views/sourcetargetmapper/FieldsBox';
 import { Links } from '@src/views/sourcetargetmapper/Links';
-import React, { FunctionComponent, useRef } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 
 export interface IMappingCanvasProps {
-  sources: MappingGroup[];
-  targets: MappingGroup[];
-  mappings: Mapping[];
+  sources: IFieldsGroup[];
+  targets: IFieldsGroup[];
+  mappings: IMappings[];
+  freeView: boolean;
 }
 
 export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
   sources,
   targets,
   mappings,
+  freeView,
 }) => {
-  const { width, height, zoom } = useCanvas();
+  const { width, height, redraw } = useCanvas();
 
-  const sourceRef = useRef<HTMLDivElement | null>(null);
-  const targetRef = useRef<HTMLDivElement | null>(null);
+  const [sourceAreaRef, sourceAreaDimensions, measureSource] = useDimensions();
+  const [targetAreaRef, targetAreaDimensions, measureTarget] = useDimensions();
 
   const gutter = 20;
+  const boxHeight = height - gutter * 2;
   const boxWidth = Math.max(200, width / 2 - gutter * 3);
-  const boxHeight = Math.max(300, height - gutter * 3);
-  const startY = gutter;
-  const sourceStartX = gutter;
-  const targetStartX = Math.max(width / 2, boxWidth + gutter) + gutter * 2;
+  const initialSourceCoords = { x: gutter, y: gutter };
+  const [sourceCoords, setSourceCoords] = useState<Coords>(initialSourceCoords);
+  const initialTargetCoords = {
+    x: Math.max(width / 2, boxWidth + gutter) + gutter * 2,
+    y: gutter,
+  };
+  const [targetCoords, setTargetCoords] = useState<Coords>(initialTargetCoords);
+
+  const bindSource = useMovable({
+    enabled: freeView,
+    initialPosition: sourceCoords,
+    onDrag: (coords: Coords) => {
+      setSourceCoords(coords);
+      redraw();
+    },
+    xBoundaries: [-Infinity, targetCoords.x - boxWidth - gutter],
+  });
+
+  const bindTarget = useMovable({
+    enabled: freeView,
+    initialPosition: targetCoords,
+    onDrag: (coords: Coords) => {
+      setTargetCoords(coords);
+      redraw();
+    },
+    xBoundaries: [sourceCoords.x + boxWidth + gutter, +Infinity],
+  });
+
+  useEffect(() => {
+    measureSource();
+    measureTarget();
+    redraw();
+  }, [freeView, measureTarget, measureSource]);
 
   return (
     <CanvasLinksProvider>
+      <FieldsBox
+        width={boxWidth}
+        height={freeView ? sourceAreaDimensions.height : boxHeight}
+        position={freeView ? sourceCoords : initialSourceCoords}
+        scrollable={!freeView}
+        fields={sources}
+        type={'source'}
+        title={'Source'}
+        ref={sourceAreaRef}
+        {...bindSource()}
+      />
+
+      <FieldsBox
+        width={boxWidth}
+        height={freeView ? targetAreaDimensions.height : boxHeight}
+        position={freeView ? targetCoords : initialTargetCoords}
+        scrollable={!freeView}
+        fields={targets}
+        type={'target'}
+        title={'Target'}
+        rightAlign={true}
+        ref={targetAreaRef}
+        {...bindTarget()}
+      />
+
       <Links mappings={mappings} />
-
-      <CanvasObject
-        width={boxWidth}
-        height={boxHeight}
-        x={sourceStartX}
-        y={startY}
-      >
-        <Box
-          header={
-            <Title size={'2xl'} headingLevel={'h2'}>
-              Source
-            </Title>
-          }
-          footer={<p>{sources.length} fields</p>}
-          ref={sourceRef}
-          style={{
-            fontSize: `${zoom}rem`,
-          }}
-        >
-          <FieldGroupList>
-            {sources.map(s => {
-              return (
-                <FieldGroup
-                  isVisible={true}
-                  group={s}
-                  key={s.id}
-                  boxRef={sourceRef.current}
-                  type={'source'}
-                />
-              );
-            })}
-          </FieldGroupList>
-        </Box>
-      </CanvasObject>
-
-      <CanvasObject
-        width={boxWidth}
-        height={boxHeight}
-        x={targetStartX}
-        y={startY}
-      >
-        <Box
-          header={
-            <Title size={'2xl'} headingLevel={'h2'}>
-              Target
-            </Title>
-          }
-          footer={<p>{targets.length} fields</p>}
-          ref={targetRef}
-          style={{
-            fontSize: `${zoom}rem`,
-          }}
-        >
-          <FieldGroupList>
-            {targets.map(t => {
-              return (
-                <FieldGroup
-                  isVisible={true}
-                  group={t}
-                  key={t.id}
-                  boxRef={targetRef.current}
-                  type={'target'}
-                />
-              );
-            })}
-          </FieldGroupList>
-        </Box>
-      </CanvasObject>
     </CanvasLinksProvider>
   );
 };

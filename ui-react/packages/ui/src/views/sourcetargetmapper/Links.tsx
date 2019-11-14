@@ -1,10 +1,10 @@
 import { CanvasLink } from '@src';
 import { useMappingLinks } from '@src/mapper/useMappingLinks';
-import { Mapping } from '@src/models';
+import { IMappings } from '@src/models';
 import React, { FunctionComponent } from 'react';
 
 export interface ILinksProps {
-  mappings: Mapping[];
+  mappings: IMappings[];
 }
 export const Links: FunctionComponent<ILinksProps> = ({ mappings }) => {
   const { links } = useMappingLinks({ mappings });

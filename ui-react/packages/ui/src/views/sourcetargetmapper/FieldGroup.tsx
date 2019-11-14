@@ -6,32 +6,53 @@ import {
 import { FolderOpenIcon, FolderCloseIcon } from '@patternfly/react-icons';
 import { css, StyleSheet } from '@patternfly/react-styles';
 import { useCanvas } from '@src';
-import { MappingNode, MappingGroup, MappingNodeType } from '@src/models';
+import { IFieldsNode, IFieldsGroup, FieldType } from '@src/models';
 import { FieldElement } from '@src/views/sourcetargetmapper/FieldElement';
 import React, {
   FunctionComponent,
   useCallback,
-  useEffect, useRef,
+  useEffect,
+  useRef,
   useState,
 } from 'react';
 
 const styles = StyleSheet.create({
   button: {
     paddingRight: '0.5rem !important',
+    direction: 'ltr',
+  },
+  buttonRightAlign: {
+    direction: 'rtl',
+    '& > span': {
+      direction: 'ltr',
+      flex: 1
+    }
   },
   content: {
     marginRight:
       'calc(-1 * var(--pf-c-accordion__expanded-content-body--PaddingRight)) !important',
     fontSize: 'inherit !important',
   },
+  contentRightAligned: {
+    paddingRight: 'var(--pf-c-accordion__expanded-content-body--PaddingRight) !important'
+  },
+  buttonContentRightAligned: {
+    transform: 'scaleX(-1)',
+    display: 'inline-block',
+    textAlign: 'left',
+    width: '100%',
+    order: 1,
+    paddingLeft: 'var(--pf-c-accordion__toggle--PaddingRight)'
+  }
 });
 
 export interface IFieldGroupProps {
   isVisible: boolean;
-  group: MappingGroup;
-  type: MappingNodeType;
+  group: IFieldsGroup;
+  type: FieldType;
   parentRef?: HTMLElement | null;
   boxRef?: HTMLElement | null;
+  rightAlign?: boolean;
 }
 export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
   isVisible,
@@ -39,6 +60,7 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
   type,
   parentRef = null,
   boxRef = null,
+  rightAlign = false
 }) => {
   const { redraw } = useCanvas();
   const ref = useRef<HTMLElement | null>(null);
@@ -49,26 +71,29 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
   ]);
   useEffect(() => {
     redraw();
-  }, [isExpanded]);
+  }, [isExpanded, redraw]);
   return (
     <AccordionItem>
       <AccordionToggle
         onClick={toggleExpand}
         isExpanded={isExpanded}
         id={`source-field-group-${group.id}-toggle`}
-        className={css(styles.button)}
+        className={css(styles.button, rightAlign && styles.buttonRightAlign)}
       >
-        <span ref={ref}>
+        <span
+          ref={ref}
+          className={css(rightAlign && styles.buttonContentRightAligned)}
+        >
           {isExpanded ? <FolderOpenIcon /> : <FolderCloseIcon />} {group.title}
         </span>
       </AccordionToggle>
       <AccordionContent
         id={`source-field-group-${group.id}-content`}
         isHidden={!isExpanded}
-        className={css(styles.content)}
+        className={css(styles.content, rightAlign && styles.contentRightAligned)}
       >
         {group.fields.map(f =>
-          (f as MappingNode).element ? (
+          (f as IFieldsNode).element ? (
             <FieldElement
               key={f.id}
               type={type}
@@ -80,15 +105,17 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
                   : parentRef
               }
               boxRef={boxRef}
-              node={f as MappingNode}
+              node={f as IFieldsNode}
+              rightAlign={rightAlign}
             />
           ) : (
             <FieldGroup
               isVisible={isVisible && isExpanded}
               type={type}
               parentRef={isVisible || !parentRef ? ref.current : parentRef}
-              group={f as MappingGroup}
+              group={f as IFieldsGroup}
               boxRef={boxRef}
+              rightAlign={rightAlign}
               key={f.id}
             />
           )

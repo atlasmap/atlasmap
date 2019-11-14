@@ -17,6 +17,8 @@ export interface ICanvasContext {
   zoom: number;
   offsetTop: number;
   offsetLeft: number;
+  panX: number;
+  panY: number;
   lastUpdate: number;
   redraw: () => void;
   redrawCallbacks: RedrawCallbacks;
@@ -31,6 +33,8 @@ export interface ICanvasProviderProps {
   zoom: number;
   offsetTop: number;
   offsetLeft: number;
+  panX: number;
+  panY: number;
 }
 export const CanvasProvider: FunctionComponent<ICanvasProviderProps> = ({
   children,
@@ -39,6 +43,8 @@ export const CanvasProvider: FunctionComponent<ICanvasProviderProps> = ({
   zoom,
   offsetTop,
   offsetLeft,
+  panX,
+  panY,
 }) => {
   const [lastUpdate, setLastUpdate] = useState(Date.now());
   const redraw = useCallback(() => {
@@ -64,7 +70,7 @@ export const CanvasProvider: FunctionComponent<ICanvasProviderProps> = ({
     return () => {
       cancelAnimationFrame(requestId);
     };
-  }, [width, height, zoom, offsetTop, offsetLeft, redraw]);
+  }, [width, height, zoom, offsetLeft, offsetTop, panX, panY, redraw]);
 
   return (
     <CanvasContext.Provider
@@ -74,6 +80,8 @@ export const CanvasProvider: FunctionComponent<ICanvasProviderProps> = ({
         zoom,
         offsetTop,
         offsetLeft,
+        panX,
+        panY,
         redrawCallbacks: redrawCallbacks.current,
         addRedrawListener,
         removeRedrawListener,
@@ -97,6 +105,8 @@ export function useCanvas() {
     zoom,
     offsetLeft,
     offsetTop,
+    panX,
+    panY,
     redraw,
     lastUpdate,
     addRedrawListener,
@@ -107,15 +117,16 @@ export function useCanvas() {
     () =>
       scaleLinear()
         .range([0, width])
-        .domain([0, width /* * zoom*/]),
-    [width]
+        .domain([0, width * zoom])
+    ,
+    [width, zoom]
   );
   const yDomain = useMemo(
     () =>
       scaleLinear()
         .range([height, 0])
-        .domain([height /* * zoom*/, 0]),
-    [height]
+        .domain([height * zoom, 0]),
+    [height, zoom]
   );
 
   return {
@@ -126,6 +137,8 @@ export function useCanvas() {
     yDomain,
     offsetLeft,
     offsetTop,
+    panX,
+    panY,
     redraw,
     lastUpdate,
     addRedrawListener,
