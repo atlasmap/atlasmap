@@ -387,7 +387,8 @@ ${error.status} ${error.statusText}`,
         // Reinitialize the model mappings.
         if (mInfo && mInfo.exportMappings) {
           const catalogMappingsName = MappingSerializer.deserializeAtlasMappingName(
-            DocumentManagementService.getMappingsInfo(mInfo.exportMappings.value));
+            DocumentManagementService.getMappingsInfo(mInfo.exportMappings.value),
+            this.cfg.mappingId);
 
             // If the live UI mappings name does not match the UI mappings name extracted from the
             // catalog file then use the mappings from the catalog file.  Otherwise use the live
