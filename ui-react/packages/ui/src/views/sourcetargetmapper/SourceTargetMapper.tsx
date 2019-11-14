@@ -23,7 +23,7 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
   mappings,
   freeView
 }) => {
-  const { width, height } = useCanvas();
+  const { width, height, redraw } = useCanvas();
 
   const [sourceAreaRef, sourceAreaDimensions, measureSource] = useDimensions();
   const [targetAreaRef, targetAreaDimensions, measureTarget] = useDimensions();
@@ -46,6 +46,7 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
           x: clamp(x + memo[0], -Infinity, targetCoords.x - boxWidth - gutter),
           y: y + memo[1]
         });
+        redraw();
       }
       return memo;
     }
@@ -59,6 +60,7 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
           x: clamp(x + memo[0], sourceCoords.x + boxWidth + gutter, +Infinity),
           y: y + memo[1]
         });
+        redraw();
       }
       return memo;
     }
@@ -67,6 +69,7 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
   useEffect(() => {
     measureSource();
     measureTarget();
+    redraw();
   }, [freeView, measureTarget, measureSource])
 
   return (
@@ -131,6 +134,7 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
             }
             footer={<p>{targets.length} fields</p>}
             ref={targetFieldsRef}
+            rightAlign={true}
           >
             <FieldGroupList>
               {targets.map(t => {
@@ -141,6 +145,7 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
                     key={t.id}
                     boxRef={targetFieldsRef.current}
                     type={'target'}
+                    rightAlign={true}
                   />
                 );
               })}

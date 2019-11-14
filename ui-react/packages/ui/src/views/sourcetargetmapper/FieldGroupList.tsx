@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
     flex: '1',
     height: '100%',
     fontSize: 'inherit',
+    direction: 'rtl'
   },
 });
 

@@ -19,12 +19,30 @@ import React, {
 const styles = StyleSheet.create({
   button: {
     paddingRight: '0.5rem !important',
+    direction: 'ltr',
+  },
+  buttonRightAlign: {
+    direction: 'rtl',
+    '& > span': {
+      flex: 1
+    }
   },
   content: {
     marginRight:
       'calc(-1 * var(--pf-c-accordion__expanded-content-body--PaddingRight)) !important',
     fontSize: 'inherit !important',
   },
+  contentRightAligned: {
+    paddingRight: 'var(--pf-c-accordion__expanded-content-body--PaddingRight) !important'
+  },
+  buttonContentRightAligned: {
+    transform: 'scaleX(-1)',
+    display: 'inline-block',
+    textAlign: 'left',
+    width: '100%',
+    order: 1,
+    paddingLeft: 'var(--pf-c-accordion__toggle--PaddingRight)'
+  }
 });
 
 export interface IFieldGroupProps {
@@ -33,6 +51,7 @@ export interface IFieldGroupProps {
   type: MappingNodeType;
   parentRef?: HTMLElement | null;
   boxRef?: HTMLElement | null;
+  rightAlign?: boolean;
 }
 export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
   isVisible,
@@ -40,6 +59,7 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
   type,
   parentRef = null,
   boxRef = null,
+  rightAlign = false
 }) => {
   const { redraw } = useCanvas();
   const ref = useRef<HTMLElement | null>(null);
@@ -57,16 +77,19 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
         onClick={toggleExpand}
         isExpanded={isExpanded}
         id={`source-field-group-${group.id}-toggle`}
-        className={css(styles.button)}
+        className={css(styles.button, rightAlign && styles.buttonRightAlign)}
       >
-        <span ref={ref}>
+        <span
+          ref={ref}
+          className={css(rightAlign && styles.buttonContentRightAligned)}
+        >
           {isExpanded ? <FolderOpenIcon /> : <FolderCloseIcon />} {group.title}
         </span>
       </AccordionToggle>
       <AccordionContent
         id={`source-field-group-${group.id}-content`}
         isHidden={!isExpanded}
-        className={css(styles.content)}
+        className={css(styles.content, rightAlign && styles.contentRightAligned)}
       >
         {group.fields.map(f =>
           (f as MappingNode).element ? (
@@ -82,6 +105,7 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
               }
               boxRef={boxRef}
               node={f as MappingNode}
+              rightAlign={rightAlign}
             />
           ) : (
             <FieldGroup
@@ -90,6 +114,7 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
               parentRef={isVisible || !parentRef ? ref.current : parentRef}
               group={f as MappingGroup}
               boxRef={boxRef}
+              rightAlign={rightAlign}
               key={f.id}
             />
           )

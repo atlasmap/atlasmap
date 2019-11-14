@@ -1,13 +1,23 @@
+import { css, StyleSheet } from '@patternfly/react-styles';
 import { useMappingNode } from '@src/canvas/CanvasLinks';
 import { useBoundingCanvasRect } from '@src/canvas/useBoundingCanvasRect';
 import { MappingNode, MappingNodeType } from '@src/models';
 import React, { FunctionComponent, useCallback, useRef } from 'react';
+
+const styles = StyleSheet.create({
+  rightAlign: {
+    padding: '0.3rem',
+    borderBottom: '1px solid #eee',
+    transform: 'scaleX(-1)'
+  }
+});
 
 export interface IFieldElementProps {
   node: MappingNode;
   type: MappingNodeType;
   parentRef: HTMLElement | null;
   boxRef: HTMLElement | null;
+  rightAlign?: boolean;
 }
 
 export const FieldElement: FunctionComponent<IFieldElementProps> = ({
@@ -15,6 +25,7 @@ export const FieldElement: FunctionComponent<IFieldElementProps> = ({
   type,
   parentRef,
   boxRef,
+  rightAlign = false
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const getBoundingCanvasRect = useBoundingCanvasRect();
@@ -40,10 +51,7 @@ export const FieldElement: FunctionComponent<IFieldElementProps> = ({
   return (
     <div
       ref={ref}
-      style={{
-        padding: '0.3rem',
-        borderBottom: '1px solid #eee',
-      }}
+      className={css(rightAlign && styles.rightAlign)}
     >
       {node.element}
     </div>
