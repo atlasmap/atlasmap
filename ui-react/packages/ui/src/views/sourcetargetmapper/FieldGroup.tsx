@@ -6,7 +6,7 @@ import {
 import { FolderOpenIcon, FolderCloseIcon } from '@patternfly/react-icons';
 import { css, StyleSheet } from '@patternfly/react-styles';
 import { useCanvas } from '@src';
-import { IFieldsNode, IFieldsGroup, NodeType } from '@src/models';
+import { IFieldsNode, IFieldsGroup, FieldType } from '@src/models';
 import { FieldElement } from '@src/views/sourcetargetmapper/FieldElement';
 import React, {
   FunctionComponent,
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
 export interface IFieldGroupProps {
   isVisible: boolean;
   group: IFieldsGroup;
-  type: NodeType;
+  type: FieldType;
   parentRef?: HTMLElement | null;
   boxRef?: HTMLElement | null;
   rightAlign?: boolean;

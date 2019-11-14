@@ -1,20 +1,22 @@
 import { css, StyleSheet } from '@patternfly/react-styles';
 import { useMappingNode } from '@src/canvas/CanvasLinks';
 import { useBoundingCanvasRect } from '@src/canvas/useBoundingCanvasRect';
-import { IFieldsNode, NodeType } from '@src/models';
+import { IFieldsNode, FieldType } from '@src/models';
 import React, { FunctionComponent, useCallback, useRef } from 'react';
 
 const styles = StyleSheet.create({
-  rightAlign: {
+  element: {
     padding: '0.3rem',
     borderBottom: '1px solid #eee',
+  },
+  rightAlign: {
     transform: 'scaleX(-1)'
   }
 });
 
 export interface IFieldElementProps {
   node: IFieldsNode;
-  type: NodeType;
+  type: FieldType;
   parentRef: HTMLElement | null;
   boxRef: HTMLElement | null;
   rightAlign?: boolean;
@@ -51,7 +53,7 @@ export const FieldElement: FunctionComponent<IFieldElementProps> = ({
   return (
     <div
       ref={ref}
-      className={css(rightAlign && styles.rightAlign)}
+      className={css(styles.element, rightAlign && styles.rightAlign)}
     >
       {node.element}
     </div>

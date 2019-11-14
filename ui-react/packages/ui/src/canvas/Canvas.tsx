@@ -1,6 +1,6 @@
 import { CanvasProvider } from '@src/canvas/CanvasContext';
 import { CanvasTransforms } from '@src/canvas/CanvasTransforms';
-import { useDimensions } from '@src/useDimensions';
+import { useDimensions } from '@src/common/useDimensions';
 import React, { FunctionComponent, useCallback } from 'react';
 
 export interface ICanvasProps {

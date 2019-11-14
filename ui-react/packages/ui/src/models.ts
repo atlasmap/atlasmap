@@ -6,7 +6,7 @@ export type Coords = {
 };
 export type Rect = ClientRect | DOMRect;
 export type NodeId = string;
-export type NodeType = 'source' | 'target';
+export type FieldType = 'source' | 'target';
 export type GroupId = string;
 export interface IFieldsNode {
   id: NodeId;

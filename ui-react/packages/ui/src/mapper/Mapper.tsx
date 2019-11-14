@@ -2,7 +2,7 @@ import { TopologyView } from '@patternfly/react-topology';
 import { Canvas } from '@src/canvas';
 import { IFieldsGroup, IMappings, Coords } from '@src/models';
 import { SourceTargetMapper } from '@src/views';
-import { useDimensions } from '@src/useDimensions';
+import { useDimensions } from '@src/common/useDimensions';
 import { MappingDetails } from '@src/MappingDetails';
 import { MapperControlBar } from '@src/mapper/MapperControlBar';
 import { MapperProvider } from '@src/mapper/MapperContext';
