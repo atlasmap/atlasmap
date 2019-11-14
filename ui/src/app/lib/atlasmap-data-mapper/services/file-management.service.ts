@@ -410,12 +410,12 @@ export class FileManagementService {
    * Retrieve the current user AtlasMap data mappings from the server as an JSON buffer.
    */
   private getCurrentMappingJson(): Observable<string> {
-    const mappingFileNames: string[] = this.cfg.mappingFiles;
+    const mappingIds: number[] = [this.cfg.mappingId];
     return new Observable<string>((observer: any) => {
       const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON/';
       const operations: Observable<any>[] = [];
-      for (const mappingName of mappingFileNames) {
-        const url: string = baseURL + mappingName;
+      for (const mappingId of mappingIds) {
+        const url: string = baseURL + mappingId;
         this.cfg.logger.trace('Mapping Service Request');
         const jsonHeaders = new HttpHeaders(
           { 'Content-Type':  'application/json',
