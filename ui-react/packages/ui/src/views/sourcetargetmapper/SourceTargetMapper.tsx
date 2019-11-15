@@ -5,11 +5,13 @@ import { Coords, IFieldsGroup, IMappings } from '../../models';
 import { FieldsBox } from './FieldsBox';
 import { Links } from './Links';
 import { MappingsBox } from './MappingsBox';
+import { SourceTargetMapperProvider } from './SourceTargetMapperContext';
 
 export interface IMappingCanvasProps {
   sources: IFieldsGroup[];
   targets: IFieldsGroup[];
   mappings: IMappings[];
+  selectedMapping?: string;
   freeView: boolean;
 }
 
@@ -17,6 +19,7 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
   sources,
   targets,
   mappings,
+  selectedMapping,
   freeView,
 }) => {
   const { width, height, redraw, addRedrawListener, removeRedrawListener, yDomain } = useCanvas();
@@ -27,8 +30,8 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
 
   const gutter = 20;
   const boxHeight = height - gutter * 2;
-  const sourceTargetBoxesWidth = Math.max(200, width / 7 * 3 - gutter * 2);
-  const mappingBoxWidth = Math.max(100, width / 7);
+  const sourceTargetBoxesWidth = Math.max(250, width / 7 * 3 - gutter * 2);
+  const mappingBoxWidth = Math.max(200, width / 7);
 
   const initialSourceCoords = { x: gutter, y: gutter };
   const [sourceCoords, setSourceCoords] = useState<Coords>(initialSourceCoords);
@@ -91,45 +94,47 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
   }, [freeView, redraw]);
 
   return (
-    <CanvasLinksProvider>
-      <FieldsBox
-        width={sourceTargetBoxesWidth}
-        height={freeView ? yDomain(sourceAreaDimensions.height) : boxHeight}
-        position={freeView ? sourceCoords : initialSourceCoords}
-        scrollable={!freeView}
-        fields={sources}
-        type={'source'}
-        title={'Source'}
-        ref={sourceAreaRef}
-        {...bindSource()}
-      />
+    <SourceTargetMapperProvider selectedMapping={selectedMapping}>
+      <CanvasLinksProvider>
+        <FieldsBox
+          width={sourceTargetBoxesWidth}
+          height={freeView ? yDomain(sourceAreaDimensions.height) : boxHeight}
+          position={freeView ? sourceCoords : initialSourceCoords}
+          scrollable={!freeView}
+          fields={sources}
+          type={'source'}
+          title={'Source'}
+          ref={sourceAreaRef}
+          {...bindSource()}
+        />
 
-      <MappingsBox
-        width={mappingBoxWidth}
-        height={freeView ? yDomain(mappingAreaDimensions.height) : boxHeight}
-        position={freeView ? mappingCoords : initialMappingCoords}
-        scrollable={!freeView}
-        mappings={mappings}
-        type={'mapping'}
-        title={'Mapping'}
-        ref={mappingAreaRef}
-        {...bindMapping()}
-      />
+        <MappingsBox
+          width={mappingBoxWidth}
+          height={freeView ? yDomain(mappingAreaDimensions.height) : boxHeight}
+          position={freeView ? mappingCoords : initialMappingCoords}
+          scrollable={!freeView}
+          mappings={mappings}
+          type={'mapping'}
+          title={'Mapping'}
+          ref={mappingAreaRef}
+          {...bindMapping()}
+        />
 
-      <FieldsBox
-        width={sourceTargetBoxesWidth}
-        height={freeView ? yDomain(targetAreaDimensions.height) : boxHeight}
-        position={freeView ? targetCoords : initialTargetCoords}
-        scrollable={!freeView}
-        fields={targets}
-        type={'target'}
-        title={'Target'}
-        rightAlign={true}
-        ref={targetAreaRef}
-        {...bindTarget()}
-      />
+        <FieldsBox
+          width={sourceTargetBoxesWidth}
+          height={freeView ? yDomain(targetAreaDimensions.height) : boxHeight}
+          position={freeView ? targetCoords : initialTargetCoords}
+          scrollable={!freeView}
+          fields={targets}
+          type={'target'}
+          title={'Target'}
+          rightAlign={true}
+          ref={targetAreaRef}
+          {...bindTarget()}
+        />
 
-      <Links mappings={mappings} />
-    </CanvasLinksProvider>
+        <Links mappings={mappings} />
+      </CanvasLinksProvider>
+    </SourceTargetMapperProvider>
   );
 };

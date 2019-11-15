@@ -56,7 +56,11 @@ export const MappingsBox = forwardRef<HTMLDivElement, IMappingsBoxProps>(({
             ref={ref}
             style={{
               height: scrollable ? '100%' : undefined,
-              overflowY: 'auto'
+              overflowY: 'auto',
+              display: 'flex',
+              flexFlow: 'column',
+              width: '100%',
+              padding: '0 0.5rem'
             }}
             {...props}
           >

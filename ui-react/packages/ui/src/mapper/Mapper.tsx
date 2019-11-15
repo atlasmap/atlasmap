@@ -30,7 +30,7 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
 }) => {
   const [freeView, setFreeView] = useState(false);
   const [dimensionsRef, { width, height }, measure] = useDimensions();
-  const [mappingDetails, setMappingDetails] = useState<string | null>(null);
+  const [mappingDetails, setMappingDetails] = useState<string>();
 
   const [zoom, setZoom] = useState(1);
 
@@ -74,7 +74,7 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
   }, [setZoom, resetPan]);
 
   const closeMappingDetails = useCallback(() => {
-    setMappingDetails(null);
+    setMappingDetails(undefined);
   }, [setMappingDetails]);
   const showMappingDetails = useCallback(
     (mapping: string) => {
@@ -140,6 +140,7 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
                 mappings={mappings}
                 targets={targets}
                 freeView={freeView}
+                selectedMapping={mappingDetails}
               />
             </Canvas>
           )}
