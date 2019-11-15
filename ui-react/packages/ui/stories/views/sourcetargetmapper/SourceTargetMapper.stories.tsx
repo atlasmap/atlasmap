@@ -14,6 +14,7 @@ export const sample = () => (
     zoom={number('zoom', 1)}
     panX={number('Pan x', 0)}
     panY={number('Pan x', 0)}
+    allowPanning={boolean('Allow panning', false)}
     isPanning={boolean('Is panning', false)}
   >
     <SourceTargetMapper

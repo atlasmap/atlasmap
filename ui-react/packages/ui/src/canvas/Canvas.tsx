@@ -9,6 +9,7 @@ export interface ICanvasProps {
   zoom: number;
   panX: number;
   panY: number;
+  allowPanning: boolean;
   isPanning: boolean;
 }
 
@@ -19,6 +20,7 @@ export const Canvas: FunctionComponent<ICanvasProps> = ({
   zoom,
   panX,
   panY,
+  allowPanning,
   isPanning,
 }) => {
   const [ref, dimensions] = useDimensions<SVGSVGElement>();
@@ -42,8 +44,8 @@ export const Canvas: FunctionComponent<ICanvasProps> = ({
         style={{
           width: '100%',
           height: '100%',
-          cursor: isPanning ? 'grabbing' : 'grab',
-          userSelect: isPanning ? 'none' : 'auto',
+          cursor: allowPanning ? (isPanning ? 'grabbing' : 'grab') : undefined,
+          userSelect: allowPanning && isPanning ? 'none' : 'auto',
         }}
       >
         <CanvasTransforms>{children}</CanvasTransforms>

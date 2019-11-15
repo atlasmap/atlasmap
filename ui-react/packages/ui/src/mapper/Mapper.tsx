@@ -132,6 +132,7 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
               zoom={freeView ? zoom : 1}
               panX={freeView ? panX : 0}
               panY={freeView ? panY : 0}
+              allowPanning={freeView}
               isPanning={freeView ? isPanning : false}
             >
               <SourceTargetMapper
