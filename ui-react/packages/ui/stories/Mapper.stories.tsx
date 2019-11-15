@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mapper } from '@src';
+import { Mapper } from '../src/mapper';
 import { mappings, sources, targets } from './sampleData';
 
 export default {

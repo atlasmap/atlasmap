@@ -5,9 +5,6 @@ import {
 } from '@patternfly/react-core';
 import { FolderOpenIcon, FolderCloseIcon } from '@patternfly/react-icons';
 import { css, StyleSheet } from '@patternfly/react-styles';
-import { useCanvas } from '@src';
-import { IFieldsNode, IFieldsGroup, FieldType } from '@src/models';
-import { FieldElement } from '@src/views/sourcetargetmapper/FieldElement';
 import React, {
   FunctionComponent,
   useCallback,
@@ -15,6 +12,9 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { useCanvas } from '../../canvas';
+import { ElementType, IFieldsGroup, IFieldsNode } from '../../models';
+import { FieldElement } from './FieldElement';
 
 const styles = StyleSheet.create({
   button: {
@@ -25,34 +25,36 @@ const styles = StyleSheet.create({
     direction: 'rtl',
     '& > span': {
       direction: 'ltr',
-      flex: 1
+      flex: 1,
+      order: 1,
     }
-  },
-  content: {
-    marginRight:
-      'calc(-1 * var(--pf-c-accordion__expanded-content-body--PaddingRight)) !important',
-    fontSize: 'inherit !important',
-  },
-  contentRightAligned: {
-    paddingRight: 'var(--pf-c-accordion__expanded-content-body--PaddingRight) !important'
   },
   buttonContentRightAligned: {
     transform: 'scaleX(-1)',
     display: 'inline-block',
     textAlign: 'left',
     width: '100%',
-    order: 1,
-    paddingLeft: 'var(--pf-c-accordion__toggle--PaddingRight)'
-  }
+  },
+  content: {
+    fontSize: 'inherit !important',
+    '& > div': {
+      padding: 'var(--pf-c-accordion__expanded-content-body--PaddingTop) 0.5rem var(--pf-c-accordion__expanded-content-body--PaddingBottom) 0.5rem !important'
+    }
+  },
+  contentRightAligned: {
+    '& > div': {
+    }
+  },
 });
 
 export interface IFieldGroupProps {
   isVisible: boolean;
   group: IFieldsGroup;
-  type: FieldType;
+  type: ElementType;
   parentRef?: HTMLElement | null;
   boxRef?: HTMLElement | null;
   rightAlign?: boolean;
+  level?: number;
 }
 export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
   isVisible,
@@ -60,11 +62,12 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
   type,
   parentRef = null,
   boxRef = null,
-  rightAlign = false
+  rightAlign = false,
+  level = 0
 }) => {
   const { redraw } = useCanvas();
   const ref = useRef<HTMLElement | null>(null);
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(level === 0);
   const toggleExpand = useCallback(() => setIsExpanded(!isExpanded), [
     isExpanded,
     setIsExpanded,
@@ -117,6 +120,7 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
               boxRef={boxRef}
               rightAlign={rightAlign}
               key={f.id}
+              level={level + 1}
             />
           )
         )}

@@ -1,7 +1,7 @@
-import { CanvasProvider } from '@src/canvas/CanvasContext';
-import { CanvasTransforms } from '@src/canvas/CanvasTransforms';
-import { useDimensions } from '@src/common/useDimensions';
 import React, { FunctionComponent, useCallback } from 'react';
+import { useDimensions } from '../common';
+import { CanvasProvider } from './CanvasContext';
+import { CanvasTransforms } from './CanvasTransforms';
 
 export interface ICanvasProps {
   width: number;
@@ -9,6 +9,7 @@ export interface ICanvasProps {
   zoom: number;
   panX: number;
   panY: number;
+  allowPanning: boolean;
   isPanning: boolean;
 }
 
@@ -19,6 +20,7 @@ export const Canvas: FunctionComponent<ICanvasProps> = ({
   zoom,
   panX,
   panY,
+  allowPanning,
   isPanning,
 }) => {
   const [ref, dimensions] = useDimensions<SVGSVGElement>();
@@ -42,8 +44,8 @@ export const Canvas: FunctionComponent<ICanvasProps> = ({
         style={{
           width: '100%',
           height: '100%',
-          cursor: isPanning ? 'grabbing' : 'grab',
-          userSelect: isPanning ? 'none' : 'auto',
+          cursor: allowPanning ? (isPanning ? 'grabbing' : 'grab') : undefined,
+          userSelect: allowPanning && isPanning ? 'none' : 'auto',
         }}
       >
         <CanvasTransforms>{children}</CanvasTransforms>

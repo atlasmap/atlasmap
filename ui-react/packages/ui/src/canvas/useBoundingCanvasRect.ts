@@ -1,5 +1,5 @@
-import { useCanvas } from '@src';
 import { useCallback } from 'react';
+import { useCanvas } from './CanvasContext';
 
 export function useBoundingCanvasRect() {
   const { xDomain, yDomain, offsetLeft, offsetTop, panX, panY } = useCanvas();

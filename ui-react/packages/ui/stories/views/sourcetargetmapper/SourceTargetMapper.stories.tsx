@@ -1,6 +1,7 @@
 import { boolean, number } from '@storybook/addon-knobs';
 import React from 'react';
-import { Canvas, SourceTargetMapper } from '@src';
+import { Canvas } from '../../../src/canvas';
+import { SourceTargetMapper } from '../../../src/views/sourcetargetmapper';
 import { mappings, sources, targets } from '../../sampleData';
 
 export default {
@@ -14,6 +15,7 @@ export const sample = () => (
     zoom={number('zoom', 1)}
     panX={number('Pan x', 0)}
     panY={number('Pan x', 0)}
+    allowPanning={boolean('Allow panning', false)}
     isPanning={boolean('Is panning', false)}
   >
     <SourceTargetMapper

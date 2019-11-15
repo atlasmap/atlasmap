@@ -1,6 +1,6 @@
-import { Coords } from '@src/models';
 import { useDrag } from 'react-use-gesture';
 import clamp from 'lodash.clamp'
+import { Coords } from '../models';
 
 const defaultBoundaries: [number, number] = [-Infinity, +Infinity];
 

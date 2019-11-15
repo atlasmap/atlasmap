@@ -1,15 +1,17 @@
-import { CanvasLinksProvider, useCanvas } from '@src/canvas';
-import { useMovable } from '@src/common';
-import { Coords, IMappings, IFieldsGroup } from '@src/models';
-import { useDimensions } from '@src/common/useDimensions';
-import { FieldsBox } from '@src/views/sourcetargetmapper/FieldsBox';
-import { Links } from '@src/views/sourcetargetmapper/Links';
 import React, { FunctionComponent, useEffect, useState } from 'react';
+import { CanvasLinksProvider, useCanvas } from '../../canvas';
+import { useDimensions, useMovable } from '../../common';
+import { Coords, IFieldsGroup, IMappings } from '../../models';
+import { FieldsBox } from './FieldsBox';
+import { Links } from './Links';
+import { MappingsBox } from './MappingsBox';
+import { SourceTargetMapperProvider } from './SourceTargetMapperContext';
 
 export interface IMappingCanvasProps {
   sources: IFieldsGroup[];
   targets: IFieldsGroup[];
   mappings: IMappings[];
+  selectedMapping?: string;
   freeView: boolean;
 }
 
@@ -17,20 +19,31 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
   sources,
   targets,
   mappings,
+  selectedMapping,
   freeView,
 }) => {
-  const { width, height, redraw } = useCanvas();
+  const { width, height, redraw, addRedrawListener, removeRedrawListener, yDomain } = useCanvas();
 
   const [sourceAreaRef, sourceAreaDimensions, measureSource] = useDimensions();
+  const [mappingAreaRef, mappingAreaDimensions, measureMapping] = useDimensions();
   const [targetAreaRef, targetAreaDimensions, measureTarget] = useDimensions();
 
   const gutter = 20;
   const boxHeight = height - gutter * 2;
-  const boxWidth = Math.max(200, width / 2 - gutter * 3);
+  const sourceTargetBoxesWidth = Math.max(250, width / 7 * 3 - gutter * 2);
+  const mappingBoxWidth = Math.max(200, width / 7);
+
   const initialSourceCoords = { x: gutter, y: gutter };
   const [sourceCoords, setSourceCoords] = useState<Coords>(initialSourceCoords);
+
+  const initialMappingCoords = {
+    x: initialSourceCoords.x + sourceTargetBoxesWidth + gutter,
+    y: gutter,
+  };
+  const [mappingCoords, setMappingCoords] = useState<Coords>(initialMappingCoords);
+
   const initialTargetCoords = {
-    x: Math.max(width / 2, boxWidth + gutter) + gutter * 2,
+    x: initialMappingCoords.x + mappingBoxWidth + gutter,
     y: gutter,
   };
   const [targetCoords, setTargetCoords] = useState<Coords>(initialTargetCoords);
@@ -42,7 +55,17 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
       setSourceCoords(coords);
       redraw();
     },
-    xBoundaries: [-Infinity, targetCoords.x - boxWidth - gutter],
+    xBoundaries: [-Infinity, mappingCoords.x - sourceTargetBoxesWidth - gutter],
+  });
+
+  const bindMapping = useMovable({
+    enabled: freeView,
+    initialPosition: mappingCoords,
+    onDrag: (coords: Coords) => {
+      setMappingCoords(coords);
+      redraw();
+    },
+    xBoundaries: [sourceCoords.x + sourceTargetBoxesWidth + gutter, targetCoords.x - sourceTargetBoxesWidth - gutter],
   });
 
   const bindTarget = useMovable({
@@ -52,43 +75,66 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
       setTargetCoords(coords);
       redraw();
     },
-    xBoundaries: [sourceCoords.x + boxWidth + gutter, +Infinity],
+    xBoundaries: [mappingCoords.x + mappingBoxWidth + gutter, +Infinity],
   });
 
   useEffect(() => {
-    measureSource();
-    measureTarget();
+    addRedrawListener(measureSource);
+    addRedrawListener(measureTarget);
+    addRedrawListener(measureMapping);
+    return () => {
+      removeRedrawListener(measureSource);
+      removeRedrawListener(measureTarget);
+      removeRedrawListener(measureMapping);
+    }
+  }, [addRedrawListener, removeRedrawListener, measureMapping, measureSource, measureTarget]);
+
+  useEffect(() => {
     redraw();
-  }, [freeView, measureTarget, measureSource]);
+  }, [freeView, redraw]);
 
   return (
-    <CanvasLinksProvider>
-      <FieldsBox
-        width={boxWidth}
-        height={freeView ? sourceAreaDimensions.height : boxHeight}
-        position={freeView ? sourceCoords : initialSourceCoords}
-        scrollable={!freeView}
-        fields={sources}
-        type={'source'}
-        title={'Source'}
-        ref={sourceAreaRef}
-        {...bindSource()}
-      />
+    <SourceTargetMapperProvider selectedMapping={selectedMapping}>
+      <CanvasLinksProvider>
+        <FieldsBox
+          width={sourceTargetBoxesWidth}
+          height={freeView ? yDomain(sourceAreaDimensions.height) : boxHeight}
+          position={freeView ? sourceCoords : initialSourceCoords}
+          scrollable={!freeView}
+          fields={sources}
+          type={'source'}
+          title={'Source'}
+          ref={sourceAreaRef}
+          {...bindSource()}
+        />
 
-      <FieldsBox
-        width={boxWidth}
-        height={freeView ? targetAreaDimensions.height : boxHeight}
-        position={freeView ? targetCoords : initialTargetCoords}
-        scrollable={!freeView}
-        fields={targets}
-        type={'target'}
-        title={'Target'}
-        rightAlign={true}
-        ref={targetAreaRef}
-        {...bindTarget()}
-      />
+        <MappingsBox
+          width={mappingBoxWidth}
+          height={freeView ? yDomain(mappingAreaDimensions.height) : boxHeight}
+          position={freeView ? mappingCoords : initialMappingCoords}
+          scrollable={!freeView}
+          mappings={mappings}
+          type={'mapping'}
+          title={'Mapping'}
+          ref={mappingAreaRef}
+          {...bindMapping()}
+        />
 
-      <Links mappings={mappings} />
-    </CanvasLinksProvider>
+        <FieldsBox
+          width={sourceTargetBoxesWidth}
+          height={freeView ? yDomain(targetAreaDimensions.height) : boxHeight}
+          position={freeView ? targetCoords : initialTargetCoords}
+          scrollable={!freeView}
+          fields={targets}
+          type={'target'}
+          title={'Target'}
+          rightAlign={true}
+          ref={targetAreaRef}
+          {...bindTarget()}
+        />
+
+        <Links mappings={mappings} />
+      </CanvasLinksProvider>
+    </SourceTargetMapperProvider>
   );
 };

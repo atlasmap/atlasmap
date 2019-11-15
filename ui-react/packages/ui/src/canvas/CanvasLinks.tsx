@@ -1,5 +1,3 @@
-import { useCanvas } from '@src/canvas/CanvasContext';
-import { Coords } from '@src/models';
 import React, {
   createContext,
   FunctionComponent,
@@ -9,6 +7,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { Coords } from '../models';
+import { useCanvas } from './CanvasContext';
 
 export type SourceTargetNodes = {
   color: string;
