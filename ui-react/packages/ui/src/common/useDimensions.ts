@@ -27,20 +27,17 @@ export function useDimensions<T = HTMLDivElement>({
   const ref = useRef<T>(null);
 
   const measure = useCallback(() => {
-    const requestId = requestAnimationFrame(() => {
-      if (ref.current) {
-        setDimensions(
-          ((ref.current as unknown) as HTMLElement).getBoundingClientRect()
-        );
-      }
-    });
-    return () => {
-      cancelAnimationFrame(requestId);
-    };
+    if (ref.current) {
+      setDimensions(
+        ((ref.current as unknown) as HTMLElement).getBoundingClientRect()
+      );
+    }
   }, [ref, setDimensions]);
 
   useLayoutEffect(() => {
-    measure();
+    const requestId = requestAnimationFrame(() => {
+      measure();
+    });
 
     if (liveMeasure) {
       window.addEventListener('resize', measure);
@@ -50,6 +47,9 @@ export function useDimensions<T = HTMLDivElement>({
       if (liveMeasure) {
         window.removeEventListener('resize', measure);
         window.removeEventListener('scroll', measure);
+      }
+      if (requestId) {
+        cancelAnimationFrame(requestId);
       }
     };
   }, [liveMeasure, measure]);

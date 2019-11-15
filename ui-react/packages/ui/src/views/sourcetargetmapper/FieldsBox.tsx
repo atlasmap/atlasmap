@@ -47,7 +47,6 @@ export const FieldsBox = forwardRef<HTMLDivElement, IFieldsBoxProps>(({
               {title}
             </Title>
           }
-          footer={<p>{fields.length} fields</p>}
           rightAlign={rightAlign}
           ref={fieldsRef}
         >

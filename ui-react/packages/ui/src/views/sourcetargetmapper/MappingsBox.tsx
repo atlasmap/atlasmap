@@ -46,7 +46,6 @@ export const MappingsBox = forwardRef<HTMLDivElement, IMappingsBoxProps>(({
               {title}
             </Title>
           }
-          footer={<p>{mappings.length} mappings</p>}
           rightAlign={rightAlign}
           ref={mappingsRef}
           style={{

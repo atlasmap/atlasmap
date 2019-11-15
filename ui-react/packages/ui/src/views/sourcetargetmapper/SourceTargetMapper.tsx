@@ -19,7 +19,7 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
   mappings,
   freeView,
 }) => {
-  const { width, height, redraw } = useCanvas();
+  const { width, height, redraw, addRedrawListener, removeRedrawListener, yDomain } = useCanvas();
 
   const [sourceAreaRef, sourceAreaDimensions, measureSource] = useDimensions();
   const [mappingAreaRef, mappingAreaDimensions, measureMapping] = useDimensions();
@@ -76,17 +76,25 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
   });
 
   useEffect(() => {
-    measureSource();
-    measureTarget();
-    measureMapping();
+    addRedrawListener(measureSource);
+    addRedrawListener(measureTarget);
+    addRedrawListener(measureMapping);
+    return () => {
+      removeRedrawListener(measureSource);
+      removeRedrawListener(measureTarget);
+      removeRedrawListener(measureMapping);
+    }
+  }, [addRedrawListener, removeRedrawListener, measureMapping, measureSource, measureTarget]);
+
+  useEffect(() => {
     redraw();
-  }, [freeView, measureTarget, measureSource, measureMapping, redraw]);
+  }, [freeView, redraw]);
 
   return (
     <CanvasLinksProvider>
       <FieldsBox
         width={sourceTargetBoxesWidth}
-        height={freeView ? sourceAreaDimensions.height : boxHeight}
+        height={freeView ? yDomain(sourceAreaDimensions.height) : boxHeight}
         position={freeView ? sourceCoords : initialSourceCoords}
         scrollable={!freeView}
         fields={sources}
@@ -98,7 +106,7 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
 
       <MappingsBox
         width={mappingBoxWidth}
-        height={freeView ? mappingAreaDimensions.height : boxHeight}
+        height={freeView ? yDomain(mappingAreaDimensions.height) : boxHeight}
         position={freeView ? mappingCoords : initialMappingCoords}
         scrollable={!freeView}
         mappings={mappings}
@@ -110,7 +118,7 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
 
       <FieldsBox
         width={sourceTargetBoxesWidth}
-        height={freeView ? targetAreaDimensions.height : boxHeight}
+        height={freeView ? yDomain(targetAreaDimensions.height) : boxHeight}
         position={freeView ? targetCoords : initialTargetCoords}
         scrollable={!freeView}
         fields={targets}
