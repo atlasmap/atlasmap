@@ -80,7 +80,7 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
     measureTarget();
     measureMapping();
     redraw();
-  }, [freeView, measureTarget, measureSource, measureMapping]);
+  }, [freeView, measureTarget, measureSource, measureMapping, redraw]);
 
   return (
     <CanvasLinksProvider>

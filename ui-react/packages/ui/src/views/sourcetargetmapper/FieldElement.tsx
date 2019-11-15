@@ -5,11 +5,11 @@ import { ElementType, IFieldsNode } from '../../models';
 
 const styles = StyleSheet.create({
   element: {
-    padding: '0.3rem',
-    borderBottom: '1px solid #eee',
+    padding: 'var(--pf-c-accordion__toggle--PaddingTop) var(--pf-c-accordion__toggle--PaddingRight) var(--pf-c-accordion__toggle--PaddingBottom) calc(var(--pf-c-accordion__toggle--PaddingLeft))',
   },
   rightAlign: {
-    transform: 'scaleX(-1)'
+    transform: 'scaleX(-1)',
+    padding: 'var(--pf-c-accordion__toggle--PaddingTop) var(--pf-c-accordion__toggle--PaddingLeft) var(--pf-c-accordion__toggle--PaddingBottom) var(--pf-c-accordion__toggle--PaddingRight)',
   }
 });
 
