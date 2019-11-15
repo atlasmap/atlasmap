@@ -1,6 +1,7 @@
 import { boolean, number } from '@storybook/addon-knobs';
 import React from 'react';
-import { Canvas, SourceTargetMapper } from '@src';
+import { Canvas } from '../../../src/canvas';
+import { SourceTargetMapper } from '../../../src/views/sourcetargetmapper';
 import { mappings, sources, targets } from '../../sampleData';
 
 export default {

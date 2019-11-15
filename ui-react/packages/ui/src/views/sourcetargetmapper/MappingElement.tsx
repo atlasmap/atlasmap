@@ -1,8 +1,7 @@
 import { css, StyleSheet } from '@patternfly/react-styles';
-import { useMappingNode } from '@src/canvas/CanvasLinks';
-import { useBoundingCanvasRect } from '@src/canvas/useBoundingCanvasRect';
-import { IFieldsNode, ElementType } from '@src/models';
 import React, { FunctionComponent, useCallback, useRef } from 'react';
+import { useBoundingCanvasRect, useMappingNode } from '../../canvas';
+import { ElementType, IFieldsNode } from '../../models';
 
 const styles = StyleSheet.create({
   element: {

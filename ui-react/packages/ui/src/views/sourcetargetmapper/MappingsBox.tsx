@@ -1,11 +1,11 @@
 import { Title } from '@patternfly/react-core';
-import { CanvasObject } from '@src';
-import { Coords, ElementType, IMappings } from '@src/models';
-import { Box } from '@src/views/sourcetargetmapper/Box';
-import { MappingElement } from '@src/views/sourcetargetmapper/MappingElement';
 import React, { forwardRef, HTMLAttributes, useRef } from 'react';
+import { CanvasObject } from '../../canvas';
+import { Coords, ElementType, IMappings } from '../../models';
+import { Box } from './Box';
+import { MappingElement } from './MappingElement';
 
-export interface IFieldsBoxProps extends HTMLAttributes<HTMLDivElement> {
+export interface IMappingsBoxProps extends HTMLAttributes<HTMLDivElement> {
   width: number;
   height: number;
   position: Coords;
@@ -15,7 +15,7 @@ export interface IFieldsBoxProps extends HTMLAttributes<HTMLDivElement> {
   title: string;
   rightAlign?: boolean;
 }
-export const MappingsBox = forwardRef<HTMLDivElement, IFieldsBoxProps>(({
+export const MappingsBox = forwardRef<HTMLDivElement, IMappingsBoxProps>(({
   width,
   height,
   position,

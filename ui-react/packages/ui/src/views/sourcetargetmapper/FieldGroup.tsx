@@ -5,9 +5,6 @@ import {
 } from '@patternfly/react-core';
 import { FolderOpenIcon, FolderCloseIcon } from '@patternfly/react-icons';
 import { css, StyleSheet } from '@patternfly/react-styles';
-import { useCanvas } from '@src';
-import { IFieldsNode, IFieldsGroup, ElementType } from '@src/models';
-import { FieldElement } from '@src/views/sourcetargetmapper/FieldElement';
 import React, {
   FunctionComponent,
   useCallback,
@@ -15,6 +12,9 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { useCanvas } from '../../canvas';
+import { ElementType, IFieldsGroup, IFieldsNode } from '../../models';
+import { FieldElement } from './FieldElement';
 
 const styles = StyleSheet.create({
   button: {

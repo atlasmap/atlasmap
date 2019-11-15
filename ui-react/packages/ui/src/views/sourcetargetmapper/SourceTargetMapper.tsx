@@ -1,11 +1,10 @@
-import { CanvasLinksProvider, useCanvas } from '@src/canvas';
-import { useMovable } from '@src/common';
-import { Coords, IMappings, IFieldsGroup } from '@src/models';
-import { useDimensions } from '@src/common/useDimensions';
-import { FieldsBox } from '@src/views/sourcetargetmapper/FieldsBox';
-import { Links } from '@src/views/sourcetargetmapper/Links';
-import { MappingsBox } from '@src/views/sourcetargetmapper/MappingsBox';
 import React, { FunctionComponent, useEffect, useState } from 'react';
+import { CanvasLinksProvider, useCanvas } from '../../canvas';
+import { useDimensions, useMovable } from '../../common';
+import { Coords, IFieldsGroup, IMappings } from '../../models';
+import { FieldsBox } from './FieldsBox';
+import { Links } from './Links';
+import { MappingsBox } from './MappingsBox';
 
 export interface IMappingCanvasProps {
   sources: IFieldsGroup[];

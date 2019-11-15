@@ -1,13 +1,4 @@
 import { TopologyView } from '@patternfly/react-topology';
-import { Canvas } from '@src/canvas';
-import { IFieldsGroup, IMappings, Coords } from '@src/models';
-import { SourceTargetMapper } from '@src/views';
-import { useDimensions } from '@src/common/useDimensions';
-import { MappingDetails } from '@src/MappingDetails';
-import { MapperControlBar } from '@src/mapper/MapperControlBar';
-import { MapperProvider } from '@src/mapper/MapperContext';
-import { MapperViewToolbar } from '@src/mapper/MapperViewToolbar';
-import { MapperContextToolbar } from '@src/mapper/MapperContextToolbar';
 import React, {
   FunctionComponent,
   useCallback,
@@ -16,6 +7,15 @@ import React, {
   useState,
 } from 'react';
 import { useGesture } from 'react-use-gesture';
+import { Canvas } from '../canvas';
+import { useDimensions } from '../common';
+import { Coords, IFieldsGroup, IMappings } from '../models';
+import { SourceTargetMapper } from '../views/sourcetargetmapper';
+import { MapperProvider } from './MapperContext';
+import { MapperContextToolbar } from './MapperContextToolbar';
+import { MapperControlBar } from './MapperControlBar';
+import { MapperViewToolbar } from './MapperViewToolbar';
+import { MappingDetails } from './MappingDetails';
 
 export interface IMapperProps {
   sources: IFieldsGroup[];

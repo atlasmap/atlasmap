@@ -1,5 +1,5 @@
-import { useCanvas } from '@src';
 import React, { FunctionComponent } from 'react';
+import { useCanvas } from './CanvasContext';
 
 export const CanvasTransforms: FunctionComponent = ({ children }) => {
   const { panX, panY, zoom,/* width, height, xDomain, yDomain*/ } = useCanvas();

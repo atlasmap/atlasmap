@@ -1,6 +1,6 @@
 import React from 'react';
 import { text } from '@storybook/addon-knobs';
-import { FieldGroupList } from '../../../src/views/sourcetargetmapper/FieldGroupList';
+import { FieldGroupList } from '../../../src/views/sourcetargetmapper';
 
 export default {
   title: 'Views/Source Target Mapper/Components/FieldGroupList',

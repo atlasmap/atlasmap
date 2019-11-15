@@ -4,34 +4,30 @@ import { useMemo } from 'react';
 import { SourceTargetNodes, useCanvasLinks } from '../../canvas';
 import { IMappings } from '../../models';
 
-export interface IUseMappingsLinksArgs {
+export interface IUseSourceTargetLinksArgs {
   mappings: IMappings[];
 }
-export function useMappingLinks({ mappings }: IUseMappingsLinksArgs) {
+export function useSourceTargetLinks({ mappings }: IUseSourceTargetLinksArgs) {
   const colors = useMemo(
     () => scaleSequential(interpolateRainbow).domain([0, mappings.length]),
     [mappings]
   );
 
   const linkedNodes = mappings.reduce<SourceTargetNodes[]>(
-    (lines, { id, sourceFields, targetFields }, idx) => {
+    (lines, { sourceFields, targetFields }, idx) => {
       const color = colors(idx);
-      const sourcesToMappings = sourceFields.map(source => ({
-        start: source,
-        end: `to-${id}`,
-        color
-      }));
-      const mappingsToTargets = targetFields.map(target => ({
-        start: `from-${id}`,
-        end: target,
-        color
-      }));
-
-      return [
-        ...lines,
-        ...sourcesToMappings,
-        ...mappingsToTargets,
-      ]
+      const mappingLines = sourceFields.reduce<SourceTargetNodes[]>(
+        (lines, start) => {
+          const linesFromSource = targetFields.map(end => ({
+            start,
+            end,
+            color,
+          }));
+          return [...lines, ...linesFromSource];
+        },
+        []
+      );
+      return [...lines, ...mappingLines];
     },
     []
   );

@@ -1,4 +1,3 @@
-import { Rect } from '@src/models';
 import {
   useState,
   useCallback,
@@ -6,6 +5,7 @@ import {
   useRef,
   MutableRefObject,
 } from 'react';
+import { Rect } from '../models';
 
 export interface UseDimensionsArgs {
   liveMeasure?: boolean;

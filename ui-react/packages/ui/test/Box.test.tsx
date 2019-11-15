@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { render } from '@test/setup';
-import { Box } from '@src';
+import { Box } from '../src/views/sourcetargetmapper';
+import { render } from './setup';
 
 describe('Box tests', () => {
   test('should rende a todo', async () => {

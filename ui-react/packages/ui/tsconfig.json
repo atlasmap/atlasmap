@@ -21,12 +21,6 @@
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
     "baseUrl": ".",
-    "paths": {
-      "@src": ["src/index.ts"],
-      "@src/*": ["src/*"],
-      "@test/*": ["test/*"],
-      "@assets/*": ["node_modules/@patternfly/react-core/dist/styles/assets/*"]
-    },
     "jsx": "react",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true

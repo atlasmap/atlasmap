@@ -1,10 +1,10 @@
 import { Title } from '@patternfly/react-core';
-import { CanvasObject } from '@src';
-import { Coords, IFieldsGroup, ElementType } from '@src/models';
-import { Box } from '@src/views/sourcetargetmapper/Box';
-import { FieldGroup } from '@src/views/sourcetargetmapper/FieldGroup';
-import { FieldGroupList } from '@src/views/sourcetargetmapper/FieldGroupList';
 import React, { forwardRef, HTMLAttributes, useRef } from 'react';
+import { CanvasObject } from '../../canvas';
+import { Coords, ElementType, IFieldsGroup } from '../../models';
+import { Box } from './Box';
+import { FieldGroup } from './FieldGroup';
+import { FieldGroupList } from './FieldGroupList';
 
 export interface IFieldsBoxProps extends HTMLAttributes<HTMLDivElement> {
   width: number;
