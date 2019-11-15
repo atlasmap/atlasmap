@@ -28,19 +28,20 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
 
   const gutter = 20;
   const boxHeight = height - gutter * 2;
-  const boxWidth = Math.max(200, width / 3 - gutter * 2);
+  const sourceTargetBoxesWidth = Math.max(200, width / 7 * 3 - gutter * 2);
+  const mappingBoxWidth = Math.max(100, width / 7);
 
   const initialSourceCoords = { x: gutter, y: gutter };
   const [sourceCoords, setSourceCoords] = useState<Coords>(initialSourceCoords);
 
   const initialMappingCoords = {
-    x: Math.max(width / 3 - gutter, boxWidth + gutter) + gutter,
+    x: initialSourceCoords.x + sourceTargetBoxesWidth + gutter,
     y: gutter,
   };
   const [mappingCoords, setMappingCoords] = useState<Coords>(initialMappingCoords);
 
   const initialTargetCoords = {
-    x: (Math.max(width / 3 - gutter, boxWidth + gutter) + gutter) * 2,
+    x: initialMappingCoords.x + mappingBoxWidth + gutter,
     y: gutter,
   };
   const [targetCoords, setTargetCoords] = useState<Coords>(initialTargetCoords);
@@ -52,7 +53,7 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
       setSourceCoords(coords);
       redraw();
     },
-    xBoundaries: [-Infinity, mappingCoords.x - boxWidth - gutter],
+    xBoundaries: [-Infinity, mappingCoords.x - sourceTargetBoxesWidth - gutter],
   });
 
   const bindMapping = useMovable({
@@ -62,7 +63,7 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
       setMappingCoords(coords);
       redraw();
     },
-    xBoundaries: [sourceCoords.x + boxWidth + gutter, targetCoords.x - boxWidth - gutter],
+    xBoundaries: [sourceCoords.x + sourceTargetBoxesWidth + gutter, targetCoords.x - sourceTargetBoxesWidth - gutter],
   });
 
   const bindTarget = useMovable({
@@ -72,7 +73,7 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
       setTargetCoords(coords);
       redraw();
     },
-    xBoundaries: [mappingCoords.x + boxWidth + gutter, +Infinity],
+    xBoundaries: [mappingCoords.x + mappingBoxWidth + gutter, +Infinity],
   });
 
   useEffect(() => {
@@ -85,7 +86,7 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
   return (
     <CanvasLinksProvider>
       <FieldsBox
-        width={boxWidth}
+        width={sourceTargetBoxesWidth}
         height={freeView ? sourceAreaDimensions.height : boxHeight}
         position={freeView ? sourceCoords : initialSourceCoords}
         scrollable={!freeView}
@@ -97,7 +98,7 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
       />
 
       <MappingsBox
-        width={boxWidth}
+        width={mappingBoxWidth}
         height={freeView ? mappingAreaDimensions.height : boxHeight}
         position={freeView ? mappingCoords : initialMappingCoords}
         scrollable={!freeView}
@@ -109,7 +110,7 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
       />
 
       <FieldsBox
-        width={boxWidth}
+        width={sourceTargetBoxesWidth}
         height={freeView ? targetAreaDimensions.height : boxHeight}
         position={freeView ? targetCoords : initialTargetCoords}
         scrollable={!freeView}
