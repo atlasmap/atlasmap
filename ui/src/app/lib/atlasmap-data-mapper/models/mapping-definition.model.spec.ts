@@ -1,19 +1,19 @@
 /* tslint:disable:no-unused-variable */
 
-import { TestBed, async, inject } from '@angular/core/testing';
 import { MappingDefinition } from './mapping-definition.model';
 
 describe('MappingDefinition', () => {
+  let mappingDefinition: MappingDefinition;
+  const expectedMappingName = 'UI.0.default';
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [MappingDefinition],
-    });
+    mappingDefinition = new MappingDefinition(0);
   });
 
   it(
-    'should ...',
-    inject([MappingDefinition], (service: MappingDefinition) => {
-      expect(service).toBeTruthy();
-    }),
+    'should have name UI.0.default',
+    () => {
+      expect(mappingDefinition.name).toEqual(expectedMappingName);
+    }
+
   );
 });

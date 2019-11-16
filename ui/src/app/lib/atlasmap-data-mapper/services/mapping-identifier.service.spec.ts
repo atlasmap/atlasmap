@@ -1,12 +1,26 @@
 import { TestBed } from '@angular/core/testing';
 
 import { MappingIdentifierService } from './mapping-identifier.service';
+import {ActivatedRoute} from '@angular/router';
 
 describe('MappingIdentifierService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  const testActivatedRoute = ({
+    paramMap: ({
+      id: 0
+    })
+  } as any) as ActivatedRoute;
+
+  const testMappingIdentifierService = new MappingIdentifierService(testActivatedRoute);
+
+  beforeEach(() => TestBed.configureTestingModule({
+    providers: [
+      {provide: MappingIdentifierService, useValue: testMappingIdentifierService},
+      {provide: ActivatedRoute, useValue: testActivatedRoute}
+    ],
+  }));
 
   it('should be created', () => {
-    const service: MappingIdentifierService = TestBed.get(MappingIdentifierService);
-    expect(service).toBeTruthy();
+
+    expect(testMappingIdentifierService).toBeTruthy();
   });
 });
