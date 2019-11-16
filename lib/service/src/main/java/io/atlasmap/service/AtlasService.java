@@ -722,6 +722,7 @@ public class AtlasService {
         String catalogName = getMappingSubDirectory(mappingId) + File.separator + generateMappingFileNameFromId(mappingId, ADM);
         String atlasmapCatalogFilesName = generateMappingFileNameFromId(mappingId, GZ);
         String catEntryname;
+        String jsonCatEntryName = null;
 
         try {
             ZipInputStream zipIn = new ZipInputStream(new FileInputStream(catalogName));
@@ -731,14 +732,17 @@ public class AtlasService {
             while ((catEntry = zipIn.getNextEntry()) != null) {
                 catEntryname = catEntry.getName();
                 if (catEntryname.contains("adm-catalog-files")) {
-                    out = new BufferedOutputStream(new FileOutputStream(getMappingSubDirectory(mappingId) + File.separator + atlasmapCatalogFilesName));
+                    out = new BufferedOutputStream(new FileOutputStream(getMappingSubDirectory(mappingId) +
+                        File.separator + atlasmapCatalogFilesName));
                 }
                 else if (catEntryname.contains(".jar")) {
                     out = new BufferedOutputStream(new FileOutputStream(baseFolder + File.separator + catEntryname));
                 }
                 else if (catEntryname.contains(atlasmapGenericMappingsName)) {
-                    out = new BufferedOutputStream(new FileOutputStream(getMappingSubDirectory(mappingId) + File.separator +
+                    out = new BufferedOutputStream(new FileOutputStream(getMappingSubDirectory(mappingId) +
+                        File.separator +
                         catEntryname));
+                    jsonCatEntryName = catEntryname;
                 }
                 else {
                     continue;
@@ -755,6 +759,23 @@ public class AtlasService {
                 }
             }
             zipIn.close();
+
+            // If ZIP contains Json file, rename AtlasMapping inside it to be consistent with mappingId
+            if (jsonCatEntryName != null) {
+                String oldMappingFilePath = getMappingSubDirectory(mappingId) + File.separator + jsonCatEntryName;
+                File oldMappingFile = new File(oldMappingFilePath);
+                // Rename AtlasMapping
+                String newMappingName = "UI." + mappingId + ".default";
+                AtlasMapping oldAtlasMapping = Json.mapper().readValue(oldMappingFile, AtlasMapping.class);
+                oldAtlasMapping.setName(newMappingName);
+                // Write new mapping to new mapping file
+                Json.mapper().writeValue(createMappingFile(mappingId, newMappingName), oldAtlasMapping);
+                // Delete old mapping json
+                oldMappingFile.delete();
+                // Delete ADM file since its contents are no longer valid
+                File admFileToDelete = new File (catalogName);
+                admFileToDelete.delete();
+            }
 
         } catch (IOException e) {
             throw new IOException(e.getMessage());
