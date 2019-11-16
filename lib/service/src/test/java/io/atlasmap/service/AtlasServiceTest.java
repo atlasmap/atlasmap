@@ -74,7 +74,7 @@ public class AtlasServiceTest {
     @Test
     public void testListMappings() throws Exception {
         Response resp = service.listMappings(
-                generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/mappings"), null);
+                generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/mappings"), null, null);
         StringMap sMap = Json.mapper().readValue((byte[])resp.getEntity(), StringMap.class);
         LOG.info("Found " + sMap.getStringMapEntry().size() + " objects");
         for (StringMapEntry s : sMap.getStringMapEntry()) {
