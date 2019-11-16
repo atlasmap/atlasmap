@@ -390,8 +390,6 @@ ${error.status} ${error.statusText}`,
             DocumentManagementService.getMappingsInfo(mInfo.exportMappings.value),
             this.cfg.mappingId);
 
-            // If the live UI mappings name does not match the UI mappings name extracted from the
-            // catalog file then use the mappings from the catalog file.  Otherwise use the live
             // UI file.
             this.cfg.fileService.findMappingFiles('UI').toPromise()
               .then( async(files: string[]) => {
@@ -401,9 +399,12 @@ ${error.status} ${error.statusText}`,
               .catch((error: any) => {
                 this.handleError('Failure to load field actions.', error);
               });
-              if (catalogMappingsName !== files[0]) {
-                await this.updateMappings(mInfo);
-              }
+
+              // This is no longer valid since there will be only one mapping definition at the current route
+              // and it will cause a conflict in case of an imported ADM
+              // if (catalogMappingsName !== files[0]) {
+              //   await this.updateMappings(mInfo);
+              // }
               resolve(true);
             },
             (error: any) => {
