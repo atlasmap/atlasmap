@@ -13,11 +13,12 @@ import React, {
   FunctionComponent,
   useCallback,
   useRef,
-  MouseEvent, useEffect
+  MouseEvent,
+  useEffect,
 } from 'react';
 import { useDrop } from 'react-dnd';
 import { useBoundingCanvasRect, useCanvas, useMappingNode } from '../../canvas';
-import { IMappings } from '../../models';
+import { ElementId, ElementType, IMappings } from '../../models';
 import { IFieldElementDragSource } from './FieldElement';
 
 const styles = StyleSheet.create({
@@ -52,6 +53,7 @@ export interface IMappingElementProps {
   selectMapping: (id: string) => void;
   deselectMapping: () => void;
   editMapping: () => void;
+  addToMapping: (elementId: ElementId, elementType: ElementType, mappingId: string) => void;
 }
 
 export const MappingElement: FunctionComponent<IMappingElementProps> = ({
@@ -61,6 +63,7 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
   selectMapping,
   deselectMapping,
   editMapping,
+  addToMapping
 }) => {
   const { redraw } = useCanvas();
   const ref = useRef<HTMLDivElement | null>(null);
@@ -102,7 +105,7 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
 
   const [{ isOver, canDrop }, dropRef] = useDrop<IFieldElementDragSource, void, { isOver: boolean; canDrop: boolean; }>({
     accept: ['source', 'target'],
-    drop: function() { console.log(arguments) } ,
+    drop: (item) => addToMapping(item.id, item.type, node.id),
     collect: monitor => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),

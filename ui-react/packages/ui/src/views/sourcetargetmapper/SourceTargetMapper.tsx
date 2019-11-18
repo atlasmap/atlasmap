@@ -3,7 +3,7 @@ import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { CanvasLinksProvider, useCanvas } from '../../canvas';
 import { useDimensions, useMovable } from '../../common';
-import { Coords, IFieldsGroup, IMappings } from '../../models';
+import { Coords, ElementId, ElementType, IFieldsGroup, IMappings } from '../../models';
 import { FieldGroup } from './FieldGroup';
 import { FieldGroupList } from './FieldGroupList';
 import { Links } from './Links';
@@ -20,6 +20,7 @@ export interface IMappingCanvasProps {
   selectMapping: (id: string) => void;
   deselectMapping: () => void;
   editMapping: () => void;
+  addToMapping: (elementId: ElementId, elementType: ElementType, mappingId: string) => void;
 }
 
 export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
@@ -32,6 +33,7 @@ materializedMappings,
   selectMapping,
   deselectMapping,
   editMapping,
+  addToMapping
 }) => {
   const { width, height, redraw, addRedrawListener, removeRedrawListener, yDomain } = useCanvas();
 
@@ -158,6 +160,7 @@ materializedMappings,
                     selectMapping={selectMapping}
                     deselectMapping={deselectMapping}
                     editMapping={editMapping}
+                    addToMapping={addToMapping}
                   />
                 );
               })}

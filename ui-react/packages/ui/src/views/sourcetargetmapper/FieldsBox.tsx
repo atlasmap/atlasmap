@@ -36,7 +36,8 @@ export const FieldsBox = forwardRef<HTMLDivElement, IMappingsBoxProps>(({
         ref={ref}
         style={{
           height: scrollable ? '100%' : undefined,
-          opacity: hidden ? 0 : 1
+          opacity: hidden ? 0 : 1,
+          padding: '0 0.5rem'
         }}
         {...props}
       >
@@ -49,18 +50,17 @@ export const FieldsBox = forwardRef<HTMLDivElement, IMappingsBoxProps>(({
           rightAlign={rightAlign}
           ref={mappingsRef}
           style={{
-            alignItems: 'center'
+            alignItems: 'center',
           }}
         >
           <div
             ref={ref}
             style={{
               height: scrollable ? '100%' : undefined,
-              overflowY: 'auto',
+              overflow: 'visible',
               display: 'flex',
               flexFlow: 'column',
               width: '100%',
-              padding: '0 0.5rem'
             }}
             {...props}
           >

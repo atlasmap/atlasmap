@@ -9,7 +9,7 @@ import React, {
 import { useGesture } from 'react-use-gesture';
 import { Canvas } from '../canvas';
 import { useDimensions } from '../common';
-import { Coords, IFieldsGroup, IMappings } from '../models';
+import { Coords, ElementId, ElementType, IFieldsGroup, IMappings } from '../models';
 import { SourceTargetMapper } from '../views/sourcetargetmapper';
 import { MapperContextToolbar } from './MapperContextToolbar';
 import { MapperControlBar } from './MapperControlBar';
@@ -20,12 +20,14 @@ export interface IMapperProps {
   sources: IFieldsGroup[];
   targets: IFieldsGroup[];
   mappings: IMappings[];
+  addToMapping: (elementId: ElementId, elementType: ElementType, mappingId: string) => void;
 }
 
 export const Mapper: FunctionComponent<IMapperProps> = ({
   sources,
   mappings,
   targets,
+  addToMapping
 }) => {
   const [freeView, setFreeView] = useState(false);
   const [materializedMappings, setMaterializedMappings] = useState(true);
@@ -81,9 +83,11 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
 
   const selectMapping = useCallback(
     (mapping: string) => {
-      setSelectedMapping(mapping);
+      if (!isEditingMapping) {
+        setSelectedMapping(mapping);
+      }
     },
-    [setSelectedMapping]
+    [setSelectedMapping, isEditingMapping]
   );
 
   const deselectMapping = useCallback(
@@ -176,6 +180,7 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
               selectMapping={selectMapping}
               deselectMapping={deselectMapping}
               editMapping={editMapping}
+              addToMapping={addToMapping}
             />
           </Canvas>
         )}

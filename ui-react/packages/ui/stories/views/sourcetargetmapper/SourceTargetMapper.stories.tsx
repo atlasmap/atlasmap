@@ -29,6 +29,7 @@ export const sample = () => (
       selectMapping={action('selectMapping')}
       deselectMapping={action('deselectMapping')}
       editMapping={action('editMapping')}
+      addToMapping={action('addToMapping')}
     />
   </Canvas>
 );

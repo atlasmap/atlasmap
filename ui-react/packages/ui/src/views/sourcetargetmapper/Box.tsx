@@ -13,7 +13,6 @@ const styles = StyleSheet.create({
     height: '100%',
     display: 'flex',
     flexFlow: 'column',
-    padding: '1rem',
     userSelect: 'none'
   },
   header: {
@@ -21,7 +20,7 @@ const styles = StyleSheet.create({
     paddingBottom: '0.5rem',
   },
   body: {
-    flex: '0 0 1',
+    flex: '1',
     display: 'flex',
     flexFlow: 'column',
     height: '100%',
