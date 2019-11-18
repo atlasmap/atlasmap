@@ -14,6 +14,9 @@ import {
   Tooltip,
 } from '@patternfly/react-core';
 
+import { FilePicker } from 'react-file-picker';
+import { processImportedFile } from './MapperUtilsToolbar';
+
 export interface IMapperContextToolbarProps {}
 
 export const MapperContextToolbar: FunctionComponent<
@@ -36,9 +39,15 @@ export const MapperContextToolbar: FunctionComponent<
               </div>
             }
           >
+          <FilePicker
+            extensions={['adm', 'jar']}
+            onChange={(selectedFile: File) => processImportedFile( {selectedFile} )}
+            onError={(errMsg: any) => console.error(errMsg)}
+          >
             <Button variant={'plain'} aria-label="Import mappings">
               <ImportIcon />
             </Button>
+          </FilePicker>
           </Tooltip>
         </ToolbarItem>
         <ToolbarItem>
