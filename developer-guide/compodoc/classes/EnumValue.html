@@ -366,9 +366,16 @@ export class Field {
     return (this.getCollectionParentField() !&#x3D; null);
   }
 
-  isInNestedCollection(): boolean {
-    const first &#x3D; this.getCollectionParentField();
-    return first &amp;&amp; first.parentField &amp;&amp; first.parentField.getCollectionParentField() ? true : false;
+  getCollectionCount(): number {
+    let count &#x3D; 0;
+    let field: Field &#x3D; this;
+    while (field !&#x3D; null) {
+      if (field.isCollection) {
+        count++;
+      }
+      field &#x3D; field.parentField;
+    }
+    return count;
   }
 
   isSource(): boolean {
