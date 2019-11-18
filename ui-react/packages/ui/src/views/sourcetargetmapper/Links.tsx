@@ -7,9 +7,10 @@ import { useSourceTargetLinks } from './useSourceTargetLinks';
 export interface ILinksProps {
   mappings: IMappings[];
   materializedMappings: boolean;
+  selectedMapping: string | undefined;
 }
-export const Links: FunctionComponent<ILinksProps> = ({ mappings, materializedMappings }) => {
-  const { links: smtLinks } = useMappingLinks({ mappings });
+export const Links: FunctionComponent<ILinksProps> = ({ mappings, materializedMappings, selectedMapping }) => {
+  const { links: smtLinks } = useMappingLinks({ mappings, selectedMapping });
   const { links: stLinks } = useSourceTargetLinks({ mappings });
   return (
     <g>

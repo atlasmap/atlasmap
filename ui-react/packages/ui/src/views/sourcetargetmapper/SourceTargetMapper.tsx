@@ -4,25 +4,31 @@ import { useDimensions, useMovable } from '../../common';
 import { Coords, IFieldsGroup, IMappings } from '../../models';
 import { FieldsBox } from './FieldsBox';
 import { Links } from './Links';
+import { MappingElement } from './MappingElement';
 import { MappingsBox } from './MappingsBox';
-import { SourceTargetMapperProvider } from './SourceTargetMapperContext';
 
 export interface IMappingCanvasProps {
   sources: IFieldsGroup[];
   targets: IFieldsGroup[];
   mappings: IMappings[];
-  selectedMapping?: string;
-  materializedMappings?: boolean;
+  materializedMappings: boolean;
   freeView: boolean;
+  selectedMapping: string | undefined;
+  selectMapping: (id: string) => void;
+  deselectMapping: () => void;
+  editMapping: () => void;
 }
 
 export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
   sources,
   targets,
   mappings,
-  selectedMapping,
-                                                                             materializedMappings = true,
+materializedMappings,
   freeView,
+  selectedMapping,
+  selectMapping,
+  deselectMapping,
+  editMapping,
 }) => {
   const { width, height, redraw, addRedrawListener, removeRedrawListener, yDomain } = useCanvas();
 
@@ -93,54 +99,71 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
 
   useEffect(() => {
     redraw();
-  }, [freeView, materializedMappings, redraw]);
+  }, [freeView, materializedMappings, redraw, selectedMapping]);
 
   return (
-    <SourceTargetMapperProvider selectedMapping={selectedMapping}>
-      <CanvasLinksProvider>
-        <FieldsBox
-          width={sourceTargetBoxesWidth}
-          height={freeView ? yDomain(sourceAreaDimensions.height) : boxHeight}
-          position={freeView ? sourceCoords : initialSourceCoords}
-          scrollable={!freeView}
-          fields={sources}
-          type={'source'}
-          title={'Source'}
-          ref={sourceAreaRef}
-          {...bindSource()}
-        />
+    <CanvasLinksProvider>
+      <FieldsBox
+        width={sourceTargetBoxesWidth}
+        height={freeView ? yDomain(sourceAreaDimensions.height) : boxHeight}
+        position={freeView ? sourceCoords : initialSourceCoords}
+        scrollable={!freeView}
+        fields={sources}
+        type={'source'}
+        title={'Source'}
+        ref={sourceAreaRef}
+        {...bindSource()}
+      />
 
-        <MappingsBox
-          width={mappingBoxWidth}
-          height={freeView ? yDomain(mappingAreaDimensions.height) : boxHeight}
-          position={freeView ? mappingCoords : initialMappingCoords}
-          scrollable={!freeView}
-          mappings={mappings}
-          type={'mapping'}
-          title={'Mapping'}
-          ref={mappingAreaRef}
-          hidden={!materializedMappings}
-          {...bindMapping()}
-        />
+      <MappingsBox
+        width={mappingBoxWidth}
+        height={freeView ? yDomain(mappingAreaDimensions.height) : boxHeight}
+        position={freeView ? mappingCoords : initialMappingCoords}
+        scrollable={!freeView}
+        type={'mapping'}
+        title={'Mapping'}
+        ref={mappingAreaRef}
+        hidden={!materializedMappings}
+        {...bindMapping()}
+      >
+        {({ ref }) => (
+          <>
+            {mappings.map(m => {
+              return (
+                <MappingElement
+                  key={m.id}
+                  node={m}
+                  type={'mapping'}
+                  boxRef={ref}
+                  selectedMapping={selectedMapping}
+                  selectMapping={selectMapping}
+                  deselectMapping={deselectMapping}
+                  editMapping={editMapping}
+                />
+              );
+            })}
+          </>
+        )}
+      </MappingsBox>
 
-        <FieldsBox
-          width={sourceTargetBoxesWidth}
-          height={freeView ? yDomain(targetAreaDimensions.height) : boxHeight}
-          position={freeView ? targetCoords : initialTargetCoords}
-          scrollable={!freeView}
-          fields={targets}
-          type={'target'}
-          title={'Target'}
-          rightAlign={true}
-          ref={targetAreaRef}
-          {...bindTarget()}
-        />
+      <FieldsBox
+        width={sourceTargetBoxesWidth}
+        height={freeView ? yDomain(targetAreaDimensions.height) : boxHeight}
+        position={freeView ? targetCoords : initialTargetCoords}
+        scrollable={!freeView}
+        fields={targets}
+        type={'target'}
+        title={'Target'}
+        rightAlign={true}
+        ref={targetAreaRef}
+        {...bindTarget()}
+      />
 
-        <Links
-          mappings={mappings}
-          materializedMappings={materializedMappings}
-        />
-      </CanvasLinksProvider>
-    </SourceTargetMapperProvider>
+      <Links
+        mappings={mappings}
+        materializedMappings={materializedMappings}
+        selectedMapping={selectedMapping}
+      />
+    </CanvasLinksProvider>
   );
 };

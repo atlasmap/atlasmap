@@ -11,7 +11,6 @@ import { Canvas } from '../canvas';
 import { useDimensions } from '../common';
 import { Coords, IFieldsGroup, IMappings } from '../models';
 import { SourceTargetMapper } from '../views/sourcetargetmapper';
-import { MapperProvider } from './MapperContext';
 import { MapperContextToolbar } from './MapperContextToolbar';
 import { MapperControlBar } from './MapperControlBar';
 import { MapperViewToolbar } from './MapperViewToolbar';
@@ -30,13 +29,14 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
 }) => {
   const [freeView, setFreeView] = useState(false);
   const [materializedMappings, setMaterializedMappings] = useState(true);
-  const [dimensionsRef, { width, height }, measure] = useDimensions();
-  const [mappingDetails, setMappingDetails] = useState<string>();
-
+  const [selectedMapping, setSelectedMapping] = useState<string>();
+  const [isEditingMapping, setisEditingMapping] = useState(false);
   const [zoom, setZoom] = useState(1);
-
   const [isPanning, setIsPanning] = useState(false);
   const [{ x: panX, y: panY }, setPan] = useState<Coords>({ x: 0, y: 0 });
+
+  const [dimensionsRef, { width, height }, measure] = useDimensions();
+
   const resetPan = useCallback(() => {
     setPan({ x: 0, y: 0 });
   }, [setPan]);
@@ -75,24 +75,43 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
   }, [setZoom, resetPan]);
 
   const closeMappingDetails = useCallback(() => {
-    setMappingDetails(undefined);
-  }, [setMappingDetails]);
-  const showMappingDetails = useCallback(
+    setSelectedMapping(undefined);
+    setisEditingMapping(false)
+  }, [setSelectedMapping, setisEditingMapping]);
+
+  const selectMapping = useCallback(
     (mapping: string) => {
-      setMappingDetails(mapping);
+      setSelectedMapping(mapping);
     },
-    [setMappingDetails]
+    [setSelectedMapping]
   );
+
+  const deselectMapping = useCallback(
+    () => {
+      setSelectedMapping(undefined);
+    },
+    [setSelectedMapping]
+  );
+
+  const editMapping = useCallback(
+    () => {
+      if (selectedMapping) {
+        setisEditingMapping(true)
+      }
+    },
+    [selectedMapping, setisEditingMapping]
+  );
+
   const sideBar = (
-    <MappingDetails show={!!mappingDetails} onClose={closeMappingDetails}>
-      {mappingDetails}
+    <MappingDetails show={isEditingMapping} onClose={closeMappingDetails}>
+      {selectedMapping}
     </MappingDetails>
   );
 
   useEffect(() => {
     const timeout = setTimeout(measure, 150);
     return () => clearTimeout(timeout);
-  }, [measure, mappingDetails]);
+  }, [measure, selectedMapping]);
 
   const contextToolbar = useMemo(() => <MapperContextToolbar />, []);
   const toggleFreeView = useCallback(() => setFreeView(!freeView), [
@@ -125,41 +144,42 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
     [handleViewReset, handleZoomIn, handleZoomOut]
   );
   return (
-    <MapperProvider showMappingDetails={showMappingDetails}>
-      <TopologyView
-        contextToolbar={contextToolbar}
-        viewToolbar={viewToolbar}
-        controlBar={freeView ? controlBar : undefined}
-        sideBar={sideBar}
-        sideBarOpen={!!mappingDetails}
+    <TopologyView
+      contextToolbar={contextToolbar}
+      viewToolbar={viewToolbar}
+      controlBar={freeView ? controlBar : undefined}
+      sideBar={sideBar}
+      sideBarOpen={isEditingMapping}
+    >
+      <div
+        ref={dimensionsRef}
+        style={{ height: '100%', flex: '1' }}
+        {...bind()}
       >
-        <div
-          ref={dimensionsRef}
-          style={{ height: '100%', flex: '1' }}
-          {...bind()}
-        >
-          {width && (
-            <Canvas
-              width={width}
-              height={height}
-              zoom={freeView ? zoom : 1}
-              panX={freeView ? panX : 0}
-              panY={freeView ? panY : 0}
-              allowPanning={freeView}
-              isPanning={freeView ? isPanning : false}
-            >
-              <SourceTargetMapper
-                sources={sources}
-                mappings={mappings}
-                targets={targets}
-                freeView={freeView}
-                selectedMapping={mappingDetails}
-                materializedMappings={materializedMappings}
-              />
-            </Canvas>
-          )}
-        </div>
-      </TopologyView>
-    </MapperProvider>
+        {width && (
+          <Canvas
+            width={width}
+            height={height}
+            zoom={freeView ? zoom : 1}
+            panX={freeView ? panX : 0}
+            panY={freeView ? panY : 0}
+            allowPanning={freeView}
+            isPanning={freeView ? isPanning : false}
+          >
+            <SourceTargetMapper
+              sources={sources}
+              mappings={mappings}
+              targets={targets}
+              freeView={freeView}
+              materializedMappings={materializedMappings}
+              selectedMapping={selectedMapping}
+              selectMapping={selectMapping}
+              deselectMapping={deselectMapping}
+              editMapping={editMapping}
+            />
+          </Canvas>
+        )}
+      </div>
+    </TopologyView>
   );
 };

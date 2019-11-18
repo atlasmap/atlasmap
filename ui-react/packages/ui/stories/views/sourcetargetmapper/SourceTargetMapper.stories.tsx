@@ -1,4 +1,5 @@
-import { boolean, number } from '@storybook/addon-knobs';
+import { action } from '@storybook/addon-actions';
+import { boolean, number, text } from '@storybook/addon-knobs';
 import React from 'react';
 import { Canvas } from '../../../src/canvas';
 import { SourceTargetMapper } from '../../../src/views/sourcetargetmapper';
@@ -23,6 +24,11 @@ export const sample = () => (
       targets={targets}
       mappings={mappings}
       freeView={true}
+      materializedMappings={boolean('Show mappings column', true)}
+      selectedMapping={text('Selected mapping', '')}
+      selectMapping={action('selectMapping')}
+      deselectMapping={action('deselectMapping')}
+      editMapping={action('editMapping')}
     />
   </Canvas>
 );

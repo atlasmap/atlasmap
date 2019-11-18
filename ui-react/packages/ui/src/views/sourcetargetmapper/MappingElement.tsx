@@ -16,9 +16,7 @@ import React, {
   MouseEvent
 } from 'react';
 import { useBoundingCanvasRect, useMappingNode } from '../../canvas';
-import { useMappingDetails } from '../../mapper/MapperContext';
 import { ElementType, IMappings } from '../../models';
-import { useSourceTargetMapper } from './SourceTargetMapperContext';
 
 const styles = StyleSheet.create({
   element: {
@@ -43,19 +41,21 @@ export interface IMappingElementProps {
   node: IMappings;
   type: ElementType;
   boxRef: HTMLElement | null;
+  selectedMapping: string | undefined;
+  selectMapping: (id: string) => void;
+  deselectMapping: () => void;
+  editMapping: () => void;
 }
 
 export const MappingElement: FunctionComponent<IMappingElementProps> = ({
   node,
   type,
   boxRef,
+  selectedMapping,
+  selectMapping,
+  deselectMapping,
+  editMapping,
 }) => {
-  const {
-    focusMapping,
-    blurMapping,
-    focusedMapping,
-  } = useSourceTargetMapper();
-  const showMappingDetails = useMappingDetails();
   const ref = useRef<HTMLDivElement | null>(null);
   const getBoundingCanvasRect = useBoundingCanvasRect();
   const setLineNode = useMappingNode();
@@ -89,24 +89,24 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
       y,
     };
   });
-  const isSelected = node.id === focusedMapping;
+  const isSelected = node.id === selectedMapping;
 
   const handleSelect = useCallback(
     () => {
       if (isSelected) {
-        blurMapping()
+        deselectMapping()
       } else {
-        focusMapping(node.id);
+        selectMapping(node.id);
       }
     },
-    [isSelected, node]
+    [isSelected, node, deselectMapping, selectMapping]
   );
   const handleEdit = useCallback(
     (e: MouseEvent) => {
       e.stopPropagation();
-      showMappingDetails(node.id);
+      editMapping();
     },
-    [showMappingDetails, node]
+    [editMapping]
   );
   const mappingTypeLeft = node.sourceFields.length <= 1 ? 'One' : 'Many';
   const mappingTypeRight = node.targetFields.length <= 1 ? 'One' : 'Many';
