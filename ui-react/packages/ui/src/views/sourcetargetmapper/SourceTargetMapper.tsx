@@ -1,11 +1,14 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
+import { DndProvider } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import { CanvasLinksProvider, useCanvas } from '../../canvas';
 import { useDimensions, useMovable } from '../../common';
 import { Coords, IFieldsGroup, IMappings } from '../../models';
-import { FieldsBox } from './FieldsBox';
+import { FieldGroup } from './FieldGroup';
+import { FieldGroupList } from './FieldGroupList';
 import { Links } from './Links';
 import { MappingElement } from './MappingElement';
-import { MappingsBox } from './MappingsBox';
+import { FieldsBox } from './FieldsBox';
 
 export interface IMappingCanvasProps {
   sources: IFieldsGroup[];
@@ -102,68 +105,102 @@ materializedMappings,
   }, [freeView, materializedMappings, redraw, selectedMapping]);
 
   return (
-    <CanvasLinksProvider>
-      <FieldsBox
-        width={sourceTargetBoxesWidth}
-        height={freeView ? yDomain(sourceAreaDimensions.height) : boxHeight}
-        position={freeView ? sourceCoords : initialSourceCoords}
-        scrollable={!freeView}
-        fields={sources}
-        type={'source'}
-        title={'Source'}
-        ref={sourceAreaRef}
-        {...bindSource()}
-      />
+    <DndProvider backend={HTML5Backend}>
+      <CanvasLinksProvider>
+        <FieldsBox
+          width={sourceTargetBoxesWidth}
+          height={freeView ? yDomain(sourceAreaDimensions.height) : boxHeight}
+          position={freeView ? sourceCoords : initialSourceCoords}
+          scrollable={!freeView}
+          title={'Source'}
+          ref={sourceAreaRef}
+          hidden={false}
+          {...bindSource()}
+        >
+          {({ref}) => (
+            <FieldGroupList>
+              {sources.map(s => {
+                return (
+                  <FieldGroup
+                    isVisible={true}
+                    group={s}
+                    key={s.id}
+                    boxRef={ref}
+                    type={'source'}
+                    rightAlign={false}
+                  />
+                );
+              })}
+            </FieldGroupList>
+          )
+          }
+        </FieldsBox>
 
-      <MappingsBox
-        width={mappingBoxWidth}
-        height={freeView ? yDomain(mappingAreaDimensions.height) : boxHeight}
-        position={freeView ? mappingCoords : initialMappingCoords}
-        scrollable={!freeView}
-        type={'mapping'}
-        title={'Mapping'}
-        ref={mappingAreaRef}
-        hidden={!materializedMappings}
-        {...bindMapping()}
-      >
-        {({ ref }) => (
-          <>
-            {mappings.map(m => {
-              return (
-                <MappingElement
-                  key={m.id}
-                  node={m}
-                  type={'mapping'}
-                  boxRef={ref}
-                  selectedMapping={selectedMapping}
-                  selectMapping={selectMapping}
-                  deselectMapping={deselectMapping}
-                  editMapping={editMapping}
-                />
-              );
-            })}
-          </>
-        )}
-      </MappingsBox>
+        <FieldsBox
+          width={mappingBoxWidth}
+          height={freeView ? yDomain(mappingAreaDimensions.height) : boxHeight}
+          position={freeView ? mappingCoords : initialMappingCoords}
+          scrollable={!freeView}
+          title={'Mapping'}
+          ref={mappingAreaRef}
+          hidden={!materializedMappings}
+          {...bindMapping()}
+        >
+          {({ ref }) => (
+            <>
+              {mappings.map(m => {
+                return (
+                  <MappingElement
+                    key={m.id}
+                    node={m}
+                    boxRef={ref}
+                    selectedMapping={selectedMapping}
+                    selectMapping={selectMapping}
+                    deselectMapping={deselectMapping}
+                    editMapping={editMapping}
+                  />
+                );
+              })}
+            </>
+          )}
+        </FieldsBox>
 
-      <FieldsBox
-        width={sourceTargetBoxesWidth}
-        height={freeView ? yDomain(targetAreaDimensions.height) : boxHeight}
-        position={freeView ? targetCoords : initialTargetCoords}
-        scrollable={!freeView}
-        fields={targets}
-        type={'target'}
-        title={'Target'}
-        rightAlign={true}
-        ref={targetAreaRef}
-        {...bindTarget()}
-      />
+        <FieldsBox
+          width={sourceTargetBoxesWidth}
+          height={freeView ? yDomain(targetAreaDimensions.height) : boxHeight}
+          position={freeView ? targetCoords : initialTargetCoords}
+          scrollable={!freeView}
+          title={'Target'}
+          rightAlign={true}
+          ref={targetAreaRef}
+          hidden={false}
+          {...bindTarget()}
+        >
+          {({ref}) => (
+            <FieldGroupList>
+              {targets.map(s => {
+                return (
+                  <FieldGroup
+                    isVisible={true}
+                    group={s}
+                    key={s.id}
+                    boxRef={ref}
+                    type={'target'}
+                    rightAlign={true}
+                  />
+                );
+              })}
+            </FieldGroupList>
+          )
+          }
+        </FieldsBox>
 
-      <Links
-        mappings={mappings}
-        materializedMappings={materializedMappings}
-        selectedMapping={selectedMapping}
-      />
-    </CanvasLinksProvider>
+        <Links
+          mappings={mappings}
+          materializedMappings={materializedMappings}
+          selectedMapping={selectedMapping}
+        />
+      </CanvasLinksProvider>
+    </DndProvider>
   );
 };

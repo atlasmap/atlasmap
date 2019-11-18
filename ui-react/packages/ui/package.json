@@ -121,6 +121,8 @@
   "dependencies": {
     "@types/lodash.clamp": "^4.0.6",
     "lodash.clamp": "^4.0.3",
+    "react-dnd": "^9.4.0",
+    "react-dnd-html5-backend": "^9.4.0",
     "react-use-gestures": "*"
   }
 }

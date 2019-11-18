@@ -43,7 +43,13 @@ export function useMappingLinks({ mappings, selectedMapping }: IUseMappingsLinks
         ...lines,
       ]
     },
-    []
+    [
+      {
+        start: 'dragsource',
+        end: 'dragtarget',
+        color: 'var(--pf-global--success-color--100)'
+      }
+    ]
   ),
     [colors, mappings, selectedMapping]
   );
