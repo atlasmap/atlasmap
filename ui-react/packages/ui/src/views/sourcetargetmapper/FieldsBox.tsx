@@ -1,33 +1,31 @@
 import { Title } from '@patternfly/react-core';
-import React, { forwardRef, HTMLAttributes, useRef } from 'react';
+import React, { forwardRef, HTMLAttributes, ReactElement, useRef } from 'react';
 import { CanvasObject } from '../../canvas';
-import { Coords, ElementType, IFieldsGroup } from '../../models';
+import { Coords } from '../../models';
 import { Box } from './Box';
-import { FieldGroup } from './FieldGroup';
-import { FieldGroupList } from './FieldGroupList';
 
-export interface IFieldsBoxProps extends HTMLAttributes<HTMLDivElement> {
+export interface IMappingsBoxProps extends HTMLAttributes<HTMLDivElement> {
   width: number;
   height: number;
   position: Coords;
   scrollable: boolean;
-  fields: IFieldsGroup[];
-  type: ElementType;
   title: string;
   rightAlign?: boolean;
+  hidden?: boolean;
+  children: (props: { ref: HTMLElement | null }) => ReactElement;
 }
-export const FieldsBox = forwardRef<HTMLDivElement, IFieldsBoxProps>(({
+export const FieldsBox = forwardRef<HTMLDivElement, IMappingsBoxProps>(({
   width,
   height,
   position,
   scrollable,
-  fields,
-  type,
   title,
   rightAlign = false,
+  hidden = false,
+  children,
   ...props
 }, ref) => {
-  const fieldsRef = useRef<HTMLDivElement | null>(null);
+  const mappingsRef = useRef<HTMLDivElement | null>(null);
   return (
     <CanvasObject
       width={width}
@@ -37,33 +35,37 @@ export const FieldsBox = forwardRef<HTMLDivElement, IFieldsBoxProps>(({
       <div
         ref={ref}
         style={{
-          height: scrollable ? '100%' : undefined
+          height: scrollable ? '100%' : undefined,
+          opacity: hidden ? 0 : 1,
+          padding: '0 0.5rem'
         }}
         {...props}
       >
         <Box
           header={
-            <Title size={'2xl'} headingLevel={'h2'}>
+            <Title size={'2xl'} headingLevel={'h2'} style={{ textAlign: 'center' }}>
               {title}
             </Title>
           }
           rightAlign={rightAlign}
-          ref={fieldsRef}
+          ref={mappingsRef}
+          style={{
+            alignItems: 'center',
+          }}
         >
-          <FieldGroupList>
-            {fields.map(s => {
-              return (
-                <FieldGroup
-                  isVisible={true}
-                  group={s}
-                  key={s.id}
-                  boxRef={fieldsRef.current}
-                  type={type}
-                  rightAlign={rightAlign}
-                />
-              );
-            })}
-          </FieldGroupList>
+          <div
+            ref={ref}
+            style={{
+              height: scrollable ? '100%' : undefined,
+              overflow: 'visible',
+              display: 'flex',
+              flexFlow: 'column',
+              width: '100%',
+            }}
+            {...props}
+          >
+            {children({ ref: mappingsRef.current })}
+          </div>
         </Box>
       </div>
     </CanvasObject>

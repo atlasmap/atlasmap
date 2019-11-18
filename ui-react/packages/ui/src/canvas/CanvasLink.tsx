@@ -42,20 +42,24 @@ export const CanvasLink: FunctionComponent<ICanvasLinkProps> = ({
         y={start.y - r / 2}
         width={r}
         height={r}
-        stroke={color}
-        strokeWidth={s}
-        fill={'#ffffff'}
         transform={`rotate(45 ${csx} ${start.y})`}
+        style={{
+          stroke: color,
+          strokeWidth: s,
+          fill: '#fff'
+        }}
       />
       <rect
         x={cex - r / 2}
         y={end.y - r / 2}
         width={r}
         height={r}
-        stroke={color}
-        strokeWidth={s}
-        fill={'#ffffff'}
         transform={`rotate(45 ${cex} ${end.y})`}
+        style={{
+          stroke: color,
+          strokeWidth: s,
+          fill: '#fff'
+        }}
       />
     </g>
   ) : null;

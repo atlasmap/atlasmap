@@ -17,6 +17,7 @@ export type SourceTargetNodes = {
 };
 
 export type SourceTargetLine = {
+  id: string;
   color: string;
   start: Coords;
   end: Coords;
@@ -29,6 +30,7 @@ export interface LinkNodes {
 interface ILinksContext {
   nodes: LinkNodes;
   setLineNode: (id: string, getCoords: () => Coords) => void;
+  unsetLineNode: (id: string) => void;
 }
 const LinksContext = createContext<ILinksContext | null>(null);
 
@@ -41,8 +43,15 @@ export const CanvasLinksProvider: FunctionComponent = ({ children }) => {
     [nodes]
   );
 
+  const unsetLineNode = useCallback(
+    (id: string) => {
+      delete nodes.current[id];
+    },
+    [nodes]
+  );
+
   return (
-    <LinksContext.Provider value={{ nodes: nodes.current, setLineNode }}>
+    <LinksContext.Provider value={{ nodes: nodes.current, setLineNode, unsetLineNode }}>
       {children}
     </LinksContext.Provider>
   );
@@ -70,6 +79,7 @@ export function useCanvasLinks(linkedNodes: SourceTargetNodes[]) {
           const target = nodes[targetId];
           if (source && target) {
             return {
+              id: `${sourceId}-${targetId}`,
               start: source(),
               end: target(),
               color,
@@ -100,6 +110,6 @@ export function useMappingNode() {
   if (!context) {
     throw new Error('A LinksProvider wrapper is required to use this hook.');
   }
-  const { setLineNode } = context;
-  return setLineNode;
+  const { setLineNode, unsetLineNode } = context;
+  return { setLineNode, unsetLineNode };
 }
