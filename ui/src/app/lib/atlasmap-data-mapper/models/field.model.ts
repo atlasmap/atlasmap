@@ -210,9 +210,16 @@ export class Field {
     return (this.getCollectionParentField() != null);
   }
 
-  isInNestedCollection(): boolean {
-    const first = this.getCollectionParentField();
-    return first && first.parentField && first.parentField.getCollectionParentField() ? true : false;
+  getCollectionCount(): number {
+    let count = 0;
+    let field: Field = this;
+    while (field != null) {
+      if (field.isCollection) {
+        count++;
+      }
+      field = field.parentField;
+    }
+    return count;
   }
 
   isSource(): boolean {

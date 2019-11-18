@@ -146,10 +146,10 @@ public class AtlasPath {
         boolean hasIndexedCollection = false;
         for (SegmentContext sc : this.segmentContexts) {
             if (sc.getCollectionType() != CollectionType.NONE) {
-                if (sc.getCollectionIndex() == null) {
-                    return false;
+                if (sc.getCollectionIndex() != null) {
+                    hasIndexedCollection = true;
                 }
-                hasIndexedCollection = true;
+
             }
         }
         return hasIndexedCollection;
@@ -166,9 +166,35 @@ public class AtlasPath {
         return this.segmentContexts.set(segmentIndex, sc.rebuild());
     }
 
-    // FIXME need to rework for nested collection - https://github.com/atlasmap/atlasmap/issues/435
+    public void copyCollectionIndexes(AtlasPath sourcePath) {
+        int targetCollectionCount = getCollectionSegmentCount();
+        int sourceCollectionCount = sourcePath.getCollectionSegmentCount();
+        if (targetCollectionCount != sourceCollectionCount) {
+            throw new IllegalArgumentException(String.format("Source has %d collections, whereas target has %d" +
+                    " collections on the path. Target must have the same collection count as source or equal to 1.", sourceCollectionCount,
+                targetCollectionCount));
+        }
+
+        List<SegmentContext> targetSegments = getSegments(true);
+        int targetIndex = 0;
+        for (SegmentContext sourceSegment : sourcePath.getSegments(true)) {
+            if (sourceSegment.getCollectionType() != CollectionType.NONE && sourceSegment.getCollectionIndex() != null) {
+                while (targetSegments.size() > targetIndex) {
+                    SegmentContext targetSegment = targetSegments.get(targetIndex);
+                    if (targetSegment.getCollectionType() != CollectionType.NONE) {
+                        setCollectionIndex(targetIndex, sourceSegment.getCollectionIndex());
+                        targetIndex++;
+                        break;
+                    } else {
+                        targetIndex++;
+                    }
+                }
+            }
+        }
+    }
+
     public SegmentContext setVacantCollectionIndex(Integer collectionIndex) {
-        for (int i=0; i<this.segmentContexts.size(); i++) {
+        for (int i = 0; i < this.segmentContexts.size(); i++) {
             SegmentContext sc = segmentContexts.get(i);
             if (sc.getCollectionType() != CollectionType.NONE && sc.getCollectionIndex() == null) {
                 return setCollectionIndex(i, collectionIndex);

@@ -102,7 +102,7 @@ public final class XmlIOHelper {
         }
     }
 
-    private static String getNodeNameWithoutNamespaceAlias(Node child) {
+    public static String getNodeNameWithoutNamespaceAlias(Node child) {
         String nodeName = child.getNodeName();
         int index = nodeName.indexOf(":");
         if (index >= 0) {

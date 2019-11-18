@@ -16,6 +16,7 @@
 package io.atlasmap.java.core;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -137,102 +138,39 @@ public class ClassHelper {
                 clazz.getName(), methodName, paramTypeClassName));
     }
 
-    public static List<Object> getParentObjectsForPath(AtlasInternalSession session, Object targetObject, AtlasPath pathUtil)
-            throws AtlasException {
-        try {
-            if (targetObject == null) {
-                return null;
+    public static Method lookupGetterMethod(Object object, String name) {
+        List<String> getters = getterMethodNames(name);
+        Method getterMethod = null;
+        for (String getter : getters) {
+            try {
+                getterMethod = detectGetterMethod(object.getClass(), getter);
+                break;
+            } catch (NoSuchMethodException e) {
+                // exhaust options
             }
-
-            if (pathUtil == null) {
-                return Arrays.asList(targetObject);
-            }
-
-            if (pathUtil.isRoot() && !pathUtil.hasCollectionRoot()) {
-                return Arrays.asList(targetObject);
-            }
-
-            AtlasPath parentPath = pathUtil.getLastSegmentParentPath();
-            if (parentPath == null) {
-                parentPath = pathUtil;
-            }
-
-            List<Object> parents = new LinkedList<>();
-            parents.add(targetObject);
-            if (pathUtil.hasCollectionRoot()) {
-                // handling topmost collection
-                SegmentContext rootSegment = pathUtil.getRootSegment();
-                List<Object> children = new LinkedList<>();
-                Integer index = rootSegment.getCollectionIndex();
-                if (index == null) {
-                    if (targetObject instanceof Collection) {
-                        children.addAll((Collection<?>)targetObject);
-                    } else if (targetObject.getClass().isArray()) {
-                        children = Arrays.asList((Object[])targetObject);
-                    } else {
-                        children.add(targetObject);
-                    }
-                } else if (rootSegment.getCollectionType() == CollectionType.LIST) {
-                    children.add(((Collection<?>) targetObject).toArray(new Object[0])[index]);
-                } else if (rootSegment.getCollectionType() == CollectionType.ARRAY) {
-                    children.add(Array.get(targetObject, index));
-                }
-                parents = children;
-            }
-
-            for (SegmentContext segment : parentPath.getSegments(false)) {
-                List<String> getters = getterMethodNames(segment.getName());
-                Method getterMethod = null;
-                for (String getter : getters) {
-                    try {
-                        getterMethod = detectGetterMethod(parents.get(0).getClass(), getter);
-                        break;
-                    } catch (NoSuchMethodException e) {
-                        // exhaust options
-                    }
-                }
-
-                if (getterMethod == null) {
-                    throw new NoSuchMethodException("Unable to detect getter method for " + segment);
-                }
-
-                getterMethod.setAccessible(true);
-                List<Object> children = new LinkedList<>();
-                for (Object parentObject : parents) {
-                    if (parentObject == null) {
-                        children.add(null);
-                        AtlasUtil.addAudit(session, null, String.format(
-                                "Assigning null value for path=%s due to null parent", pathUtil),
-                                pathUtil.toString(), AuditStatus.WARN, null);
-                        continue;
-                    }
-                    Object child = getterMethod.invoke(parentObject);
-                    if (segment.getCollectionType() == CollectionType.NONE) {
-                        children.add(child);
-                    } else {
-                        Integer index = segment.getCollectionIndex();
-                        if (index == null) {
-                            if (child instanceof Collection) {
-                                children.addAll((Collection<?>)child);
-                            } else if (child.getClass().isArray()) {
-                                children = Arrays.asList(child);
-                            } else {
-                                children.add(child);
-                            }
-                        } else if (segment.getCollectionType() == CollectionType.ARRAY) {
-                            children.add(((Collection<?>) parentObject).toArray(new Object[0])[index]);
-                        } else if (segment.getCollectionType() == CollectionType.LIST) {
-                            children.add(Array.get(parentObject, index));
-                        }
-                    }
-                }
-                parents = children;
-            }
-
-            return parents;
-        } catch (Exception e) {
-            throw new AtlasException(e);
         }
+
+        if (getterMethod == null) {
+            return null;
+        } else {
+            getterMethod.setAccessible(true);
+            return getterMethod;
+        }
+    }
+
+    public static Field lookupJavaField(Object source, String fieldName) {
+        Class<?> targetClazz = source != null ? source.getClass() : null;
+        while (targetClazz != null && targetClazz != Object.class) {
+            try {
+                Field field = targetClazz.getDeclaredField(fieldName);
+                field.setAccessible(true);
+                return field;
+            } catch (Exception e) {
+                e.getMessage(); // ignore
+                targetClazz = targetClazz.getSuperclass();
+            }
+        }
+        return null;
     }
 
 }

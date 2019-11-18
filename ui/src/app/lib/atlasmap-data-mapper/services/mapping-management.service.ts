@@ -345,9 +345,6 @@ export class MappingManagementService {
     if (!field.isTerminal()) {
       return 'field is a parent field';
     }
-    if (field.isInNestedCollection()) {
-      return 'Nested collection is not supported';
-    }
 
     if (mapping.getAllMappedFields().length === 0) { // if mapping hasn't had a field selected yet, allow it
       return null;
@@ -394,6 +391,14 @@ export class MappingManagementService {
       if (otherSideMappedFields.length > 1 && field.isInCollection()) {
         return `a collection field cannot be selected as a ${direction} field
          when multiple ${otherDirection} fields are already selected.`;
+      }
+    }
+
+    if (field.isInCollection()) {
+      if (otherSideMappedFields.length > 0) {
+        if (field.getCollectionCount() !== otherSideMappedFields[0].field.getCollectionCount()) {
+          return `source and target must have the same nested collection count on the path.`;
+        }
       }
     }
 
