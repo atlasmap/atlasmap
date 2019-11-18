@@ -1,6 +1,14 @@
-import { Button, Level, LevelItem, } from '@patternfly/react-core';
+import {
+  BaseSizes,
+  Button,
+  Level,
+  LevelItem,
+  Title,
+  Tooltip,
+  TooltipPosition,
+} from '@patternfly/react-core';
 import { css, StyleSheet } from '@patternfly/react-styles';
-import { EditIcon } from '@patternfly/react-icons';
+import { EditIcon, OutlinedQuestionCircleIcon, CaretRightIcon, CaretDownIcon } from '@patternfly/react-icons';
 import React, {
   FunctionComponent,
   useCallback,
@@ -9,7 +17,7 @@ import React, {
 } from 'react';
 import { useBoundingCanvasRect, useMappingNode } from '../../canvas';
 import { useMappingDetails } from '../../mapper/MapperContext';
-import { ElementType, IFieldsNode } from '../../models';
+import { ElementType, IMappings } from '../../models';
 import { useSourceTargetMapper } from './SourceTargetMapperContext';
 
 const styles = StyleSheet.create({
@@ -18,12 +26,12 @@ const styles = StyleSheet.create({
     width: '100%',
     background: '#fff',
     borderRadius: '5px',
-    padding: '0.5rem 0 0.5rem 1.5rem',
+    padding: '0.5rem 0 0.5rem 0.5rem',
     marginBottom: '1rem',
     border: '3px solid #fff',
     cursor: 'pointer',
     'font-weight': 'var(--pf-global--FontWeight--bold)',
-    transition: 'all 0.2s',
+    transition: 'all 0.35s',
   },
   selected: {
     fontSize: '1.5rem',
@@ -32,7 +40,7 @@ const styles = StyleSheet.create({
 });
 
 export interface IMappingElementProps {
-  node: IFieldsNode;
+  node: IMappings;
   type: ElementType;
   boxRef: HTMLElement | null;
 }
@@ -81,15 +89,17 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
       y,
     };
   });
+  const isSelected = node.id === focusedMapping;
+
   const handleSelect = useCallback(
     () => {
-      if (focusedMapping === node.id) {
+      if (isSelected) {
         blurMapping()
       } else {
         focusMapping(node.id);
       }
     },
-    [focusMapping, node]
+    [isSelected, node]
   );
   const handleEdit = useCallback(
     (e: MouseEvent) => {
@@ -98,7 +108,9 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
     },
     [showMappingDetails, node]
   );
-  const isSelected = node.id === focusedMapping;
+  const mappingTypeLeft = node.sourceFields.length <= 1 ? 'One' : 'Many';
+  const mappingTypeRight = node.targetFields.length <= 1 ? 'One' : 'Many';
+
   return (
     <div
       ref={ref}
@@ -110,7 +122,39 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
     >
       <Level>
         <LevelItem style={{flex: '1'}}>
-          {node.element}
+          <Title size={BaseSizes.lg}>
+            {isSelected ? <CaretDownIcon />: <CaretRightIcon/>}
+            {' '}
+            {`${mappingTypeLeft} to ${mappingTypeRight} (Split)`}
+          </Title>
+          {isSelected && <div>
+            <br />
+            <Title size={BaseSizes.md}>Sources</Title>
+            {node.sourceFields.map((s, idx) =>
+              <p key={idx}>
+                {s.name}{' '}
+                <Tooltip
+                  position={TooltipPosition.top}
+                  content={s.tip}
+                >
+                  <OutlinedQuestionCircleIcon />
+                </Tooltip>
+              </p>
+            )}
+            <br />
+            <Title size={BaseSizes.md}>Targets</Title>
+            {node.targetFields.map((s, idx) =>
+              <p key={idx}>
+                {s.name}{' '}
+                <Tooltip
+                  position={TooltipPosition.top}
+                  content={s.tip}
+                >
+                  <OutlinedQuestionCircleIcon />
+                </Tooltip>
+              </p>
+            )}
+          </div>}
         </LevelItem>
         {isSelected && <LevelItem>
           <Button variant={'plain'} onClick={handleEdit}>

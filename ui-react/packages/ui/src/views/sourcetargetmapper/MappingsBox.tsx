@@ -14,6 +14,7 @@ export interface IMappingsBoxProps extends HTMLAttributes<HTMLDivElement> {
   type: ElementType;
   title: string;
   rightAlign?: boolean;
+  hidden?: boolean;
 }
 export const MappingsBox = forwardRef<HTMLDivElement, IMappingsBoxProps>(({
   width,
@@ -24,6 +25,7 @@ export const MappingsBox = forwardRef<HTMLDivElement, IMappingsBoxProps>(({
   type,
   title,
   rightAlign = false,
+  hidden = false,
   ...props
 }, ref) => {
   const mappingsRef = useRef<HTMLDivElement | null>(null);
@@ -36,7 +38,8 @@ export const MappingsBox = forwardRef<HTMLDivElement, IMappingsBoxProps>(({
       <div
         ref={ref}
         style={{
-          height: scrollable ? '100%' : undefined
+          height: scrollable ? '100%' : undefined,
+          opacity: hidden ? 0 : 1
         }}
         {...props}
       >
@@ -67,10 +70,8 @@ export const MappingsBox = forwardRef<HTMLDivElement, IMappingsBoxProps>(({
           {mappings.map(m => {
             return (
               <MappingElement
-                node={{
-                  id: m.id,
-                  element: <>{`${m.sourceFields.length}:${m.targetFields.length}`}</>
-                }}
+                key={m.id}
+                node={m}
                 type={'mapping'}
                 boxRef={mappingsRef.current}
               />

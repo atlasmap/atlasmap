@@ -29,6 +29,7 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
   targets,
 }) => {
   const [freeView, setFreeView] = useState(false);
+  const [materializedMappings, setMaterializedMappings] = useState(true);
   const [dimensionsRef, { width, height }, measure] = useDimensions();
   const [mappingDetails, setMappingDetails] = useState<string>();
 
@@ -94,12 +95,24 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
   }, [measure, mappingDetails]);
 
   const contextToolbar = useMemo(() => <MapperContextToolbar />, []);
-  const toggleFreeView = useCallback(() => setFreeView(!freeView), [freeView, setFreeView]);
+  const toggleFreeView = useCallback(() => setFreeView(!freeView), [
+    freeView,
+    setFreeView,
+  ]);
+  const toggleMaterializedMappings = useCallback(
+    () => setMaterializedMappings(!materializedMappings),
+    [setMaterializedMappings, materializedMappings]
+  );
   const viewToolbar = useMemo(
     () => (
-      <MapperViewToolbar freeView={freeView} toggleFreeView={toggleFreeView} />
+      <MapperViewToolbar
+        freeView={freeView}
+        toggleFreeView={toggleFreeView}
+        materializedMappings={materializedMappings}
+        toggleMaterializedMappings={toggleMaterializedMappings}
+      />
     ),
-    [freeView, toggleFreeView]
+    [freeView, materializedMappings, toggleFreeView, toggleMaterializedMappings]
   );
   const controlBar = useMemo(
     () => (
@@ -141,6 +154,7 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
                 targets={targets}
                 freeView={freeView}
                 selectedMapping={mappingDetails}
+                materializedMappings={materializedMappings}
               />
             </Canvas>
           )}

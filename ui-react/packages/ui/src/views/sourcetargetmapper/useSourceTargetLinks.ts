@@ -19,8 +19,8 @@ export function useSourceTargetLinks({ mappings }: IUseSourceTargetLinksArgs) {
       const mappingLines = sourceFields.reduce<SourceTargetNodes[]>(
         (lines, start) => {
           const linesFromSource = targetFields.map(end => ({
-            start,
-            end,
+            start: start.id,
+            end: end.id,
             color,
           }));
           return [...lines, ...linesFromSource];

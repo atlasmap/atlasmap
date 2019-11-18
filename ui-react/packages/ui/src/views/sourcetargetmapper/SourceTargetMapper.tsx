@@ -12,6 +12,7 @@ export interface IMappingCanvasProps {
   targets: IFieldsGroup[];
   mappings: IMappings[];
   selectedMapping?: string;
+  materializedMappings?: boolean;
   freeView: boolean;
 }
 
@@ -20,6 +21,7 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
   targets,
   mappings,
   selectedMapping,
+                                                                             materializedMappings = true,
   freeView,
 }) => {
   const { width, height, redraw, addRedrawListener, removeRedrawListener, yDomain } = useCanvas();
@@ -28,22 +30,22 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
   const [mappingAreaRef, mappingAreaDimensions, measureMapping] = useDimensions();
   const [targetAreaRef, targetAreaDimensions, measureTarget] = useDimensions();
 
-  const gutter = 20;
+  const gutter = 30;
   const boxHeight = height - gutter * 2;
-  const sourceTargetBoxesWidth = Math.max(250, width / 7 * 3 - gutter * 2);
-  const mappingBoxWidth = Math.max(200, width / 7);
+  const sourceTargetBoxesWidth = Math.max(250, width / 6 * 2 - gutter * 2);
+  const mappingBoxWidth = Math.max(300, width / 6 - gutter);
 
   const initialSourceCoords = { x: gutter, y: gutter };
   const [sourceCoords, setSourceCoords] = useState<Coords>(initialSourceCoords);
 
   const initialMappingCoords = {
-    x: initialSourceCoords.x + sourceTargetBoxesWidth + gutter,
+    x: initialSourceCoords.x + sourceTargetBoxesWidth + gutter * 3,
     y: gutter,
   };
   const [mappingCoords, setMappingCoords] = useState<Coords>(initialMappingCoords);
 
   const initialTargetCoords = {
-    x: initialMappingCoords.x + mappingBoxWidth + gutter,
+    x: initialMappingCoords.x + mappingBoxWidth + gutter * 3,
     y: gutter,
   };
   const [targetCoords, setTargetCoords] = useState<Coords>(initialTargetCoords);
@@ -91,7 +93,7 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
 
   useEffect(() => {
     redraw();
-  }, [freeView, redraw]);
+  }, [freeView, materializedMappings, redraw]);
 
   return (
     <SourceTargetMapperProvider selectedMapping={selectedMapping}>
@@ -117,6 +119,7 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
           type={'mapping'}
           title={'Mapping'}
           ref={mappingAreaRef}
+          hidden={!materializedMappings}
           {...bindMapping()}
         />
 
@@ -133,7 +136,10 @@ export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
           {...bindTarget()}
         />
 
-        <Links mappings={mappings} />
+        <Links
+          mappings={mappings}
+          materializedMappings={materializedMappings}
+        />
       </CanvasLinksProvider>
     </SourceTargetMapperProvider>
   );

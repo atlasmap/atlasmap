@@ -20,16 +20,16 @@ export function useMappingLinks({ mappings }: IUseMappingsLinksArgs) {
     (lines, { id, sourceFields, targetFields }, idx) => {
       const isMappingSelected = id === focusedMapping;
       const color = focusedMapping ? (
-        isMappingSelected ? '#06c' : '#ddd'
+        isMappingSelected ? '#06c' : '#ccc'
       ) : colors(idx);
       const sourcesToMappings = sourceFields.map(source => ({
-        start: source,
+        start: source.id,
         end: `to-${id}`,
         color
       }));
       const mappingsToTargets = targetFields.map(target => ({
         start: `from-${id}`,
-        end: target,
+        end: target.id,
         color
       }));
 

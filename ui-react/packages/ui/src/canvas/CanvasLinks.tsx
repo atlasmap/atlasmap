@@ -17,6 +17,7 @@ export type SourceTargetNodes = {
 };
 
 export type SourceTargetLine = {
+  id: string;
   color: string;
   start: Coords;
   end: Coords;
@@ -70,6 +71,7 @@ export function useCanvasLinks(linkedNodes: SourceTargetNodes[]) {
           const target = nodes[targetId];
           if (source && target) {
             return {
+              id: `${sourceId}-${targetId}`,
               start: source(),
               end: target(),
               color,

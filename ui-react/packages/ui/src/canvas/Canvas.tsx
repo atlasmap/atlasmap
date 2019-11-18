@@ -1,7 +1,19 @@
+import { css, StyleSheet } from '@patternfly/react-styles';
 import React, { FunctionComponent, useCallback } from 'react';
 import { useDimensions } from '../common';
 import { CanvasProvider } from './CanvasContext';
 import { CanvasTransforms } from './CanvasTransforms';
+
+
+const styles = StyleSheet.create({
+  svg: {
+    width: '100%',
+    height: '100%',
+    '& path': {
+      transition: 'stroke 0.35s'
+    }
+  }
+});
 
 export interface ICanvasProps {
   width: number;
@@ -41,9 +53,8 @@ export const Canvas: FunctionComponent<ICanvasProps> = ({
       <svg
         onDragOver={handleDragOver}
         ref={ref}
+        className={css(styles.svg)}
         style={{
-          width: '100%',
-          height: '100%',
           cursor: allowPanning ? (isPanning ? 'grabbing' : 'grab') : undefined,
           userSelect: allowPanning && isPanning ? 'none' : 'auto',
         }}
