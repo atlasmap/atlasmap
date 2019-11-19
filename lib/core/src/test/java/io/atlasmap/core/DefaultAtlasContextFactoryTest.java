@@ -391,5 +391,15 @@ public class DefaultAtlasContextFactoryTest {
             return null;
         }
 
+        @Override
+        public String getUriDataType() {
+            return null;
+        }
+
+        @Override
+        public Map<String, String> getUriParameters() {
+            return null;
+        }
+
     }
 }

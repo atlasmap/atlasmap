@@ -28,7 +28,7 @@
   </parent>
 
   <artifactId>atlas-xml-service</artifactId>
-  <name>Atlas :: Xml Service</name>
+  <name>Atlas :: XML Service</name>
   <packaging>bundle</packaging>
 
   <properties>

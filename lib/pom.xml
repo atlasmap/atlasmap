@@ -39,6 +39,7 @@
     <module>modules/java</module>
     <module>modules/json</module>
     <module>modules/xml</module>
+    <module>modules/dfdl</module>
     <module>itests</module>
     <module>dist</module>
   </modules>

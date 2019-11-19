@@ -1,0 +1,120 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "java-source",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.TargetTestClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType": "io.atlasmap.xml.v2.XmlDataSource",
+      "id": "dfdl-csv-source",
+      "uri": "atlas:dfdl:csv?atlas.dfdl.csv.delimiter=%2C&atlas.dfdl.csv.header=header1%2Cheader2%2Cheader3",
+      "xmlNamespaces" : {
+        "xmlNamespace" : [ {
+          "alias" : "ns",
+          "uri" : "http://atlasmap.io/dfdl/csv"
+        } ]
+      },
+      "dataSourceType": "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "java-target",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.TargetTestClass",
+      "dataSourceType" : "TARGET"
+    }, {
+      "jsonType": "io.atlasmap.xml.v2.XmlDataSource",
+      "id": "dfdl-csv-target",
+      "uri": "atlas:dfdl:csv?atlas.dfdl.csv.delimiter=%2C&atlas.dfdl.csv.header=header1%2Cheader2%2Cheader3",
+      "xmlNamespaces" : {
+        "xmlNamespace" : [ {
+          "alias" : "ns",
+          "uri" : "http://atlasmap.io/dfdl/csv"
+        } ]
+      },
+      "dataSourceType": "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "docId" : "dfdl-csv-source",
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "path" : "/ns:file/record<>/header1"
+        } ],
+        "outputField" : [ {
+          "docId" : "java-target",
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "path" : "/contactList<>/firstName"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "docId" : "dfdl-csv-source",
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "path" : "/ns:file/record<>/header2"
+        } ],
+        "outputField" : [ {
+          "docId" : "java-target",
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "path" : "/contactList<>/lastName"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "docId" : "dfdl-csv-source",
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "path" : "/ns:file/record<>/header3"
+        } ],
+        "outputField" : [ {
+          "docId" : "java-target",
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "path" : "/contactList<>/phoneNumber"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "docId" : "java-source",
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "path" : "/contactList<>/firstName"
+        } ],
+        "outputField" : [ {
+          "docId" : "dfdl-csv-target",
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "path" : "/ns:file/record<>/header1"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "docId" : "java-source",
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "path" : "/contactList<>/lastName"
+        } ],
+        "outputField" : [ {
+          "docId" : "dfdl-csv-target",
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "path" : "/ns:file/record<>/header2"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "docId" : "java-source",
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "path" : "/contactList<>/phoneNumber"
+        } ],
+        "outputField" : [ {
+          "docId" : "dfdl-csv-target",
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "path" : "/ns:file/record<>/header3"
+        } ]
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "core.unit.test"
+  }
+}

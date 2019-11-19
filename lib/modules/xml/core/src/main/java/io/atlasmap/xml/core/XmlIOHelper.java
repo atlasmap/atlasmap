@@ -87,7 +87,6 @@ public final class XmlIOHelper {
                 return "";
             }
             Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
             StringWriter writer = new StringWriter();
             transformer.transform(new DOMSource(node), new StreamResult(writer));
 

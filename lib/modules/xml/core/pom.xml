@@ -30,7 +30,7 @@
       <artifactId>atlas-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.sun.xsom</groupId>
+      <groupId>io.atlasmap.com.sun.xsom</groupId>
       <artifactId>xsom</artifactId>
     </dependency>
     <dependency>

@@ -16,7 +16,10 @@
 package io.atlasmap.core;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.management.openmbean.TabularData;
 
@@ -49,15 +52,17 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
     private AtlasModuleMode atlasModuleMode = AtlasModuleMode.UNSET;
     private String docId;
     private String uri;
+    private String uriDataType;
+    private Map<String,String> uriParameters = new HashMap<>();
     private ClassLoader classLoader;
 
     @Override
-    public void init() {
+    public void init() throws AtlasException {
         // no-op now
     }
 
     @Override
-    public void destroy() {
+    public void destroy() throws AtlasException {
         // no-op now
     }
 
@@ -196,6 +201,18 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
     @Override
     public void setUri(String uri) {
         this.uri = uri;
+        this.uriDataType = AtlasUtil.getUriDataType(uri);
+        this.uriParameters = AtlasUtil.getUriParameters(uri);
+    }
+
+    @Override
+    public String getUriDataType() {
+        return this.uriDataType;
+    }
+
+    @Override
+    public Map<String, String> getUriParameters() {
+        return Collections.unmodifiableMap(uriParameters);
     }
 
     @Override

@@ -28,6 +28,9 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -44,6 +47,8 @@ import io.atlasmap.xml.v2.AtlasXmlModelFactory;
 import io.atlasmap.xml.v2.XmlField;
 
 public class XmlFieldWriterTest {
+
+    private static final String header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n";
 
     private XmlFieldWriter writer = null;
 
@@ -178,7 +183,7 @@ public class XmlFieldWriterTest {
     }
 
     public void checkResult(String s) throws Exception {
-        String expected = s;
+        String expected = header + s;
         if (document == null) {
             throw new Exception("document is not initialized.");
         }
@@ -549,8 +554,7 @@ public class XmlFieldWriterTest {
     }
 
     private AtlasInternalSession readFromFile(String fieldPath, FieldType fieldType, Path path) throws Exception {
-        String input = new String(Files.readAllBytes(path));
-        reader.setDocument(input, false);
+        reader.setDocument(getDocumentFromPath(path, false));
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         xmlField.setPath(fieldPath);
         xmlField.setPrimitive(Boolean.TRUE);
@@ -564,6 +568,13 @@ public class XmlFieldWriterTest {
         when(session.getAudits()).thenReturn(audits);
         reader.read(session);
         return session;
+    }
+
+    private Document getDocumentFromPath(Path path, boolean namespaced) throws Exception {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(namespaced);
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        return builder.parse(path.toFile());
     }
 
     private void validateRangeOutMinValue(FieldType fieldType, String fileName, Object testObject,

@@ -26,6 +26,7 @@ import static org.mockito.Mockito.when;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -35,7 +36,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.junit.Test;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.DefaultAtlasConversionService;
@@ -58,8 +64,8 @@ public class XmlFieldReaderTest {
 
     @Test
     public void testReadDocumentSetElementValueAsString() throws Exception {
-        String doc = getDocumentString("src/test/resources/simple_example.xml");
-        reader.setDocument(doc, false);
+        Document doc = getDocumentFromFile("src/test/resources/simple_example.xml", false);
+        reader.setDocument(doc);
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         xmlField.setPath("/orders/order/id");
 
@@ -74,8 +80,8 @@ public class XmlFieldReaderTest {
 
     @Test
     public void testReadDocumentSetValueFromAttrAsString() throws Exception {
-        String doc = getDocumentString("src/test/resources/simple_example.xml");
-        reader.setDocument(doc, false);
+        Document doc = getDocumentFromFile("src/test/resources/simple_example.xml", false);
+        reader.setDocument(doc);
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         xmlField.setPath("/orders/@totalCost");
 
@@ -90,8 +96,8 @@ public class XmlFieldReaderTest {
 
     @Test
     public void testReadDocumentSetElementValueComplex() throws Exception {
-        String doc = getDocumentString("src/test/resources/complex_example.xml");
-        reader.setDocument(doc, false);
+        Document doc = getDocumentFromFile("src/test/resources/complex_example.xml", false);
+        reader.setDocument(doc);
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         xmlField.setPath("/orders/order[3]/id[1]");
 
@@ -106,8 +112,8 @@ public class XmlFieldReaderTest {
 
     @Test
     public void testReadDocumentSetAttributeValueAsString() throws Exception {
-        String doc = getDocumentString("src/test/resources/simple_example.xml");
-        reader.setDocument(doc, false);
+        Document doc = getDocumentFromFile("src/test/resources/simple_example.xml", false);
+        reader.setDocument(doc);
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         xmlField.setPath("/orders/order/id/@custId");
         assertNull(xmlField.getValue());
@@ -121,8 +127,8 @@ public class XmlFieldReaderTest {
 
     @Test
     public void testReadDocumentSetAttributeValueComplex() throws Exception {
-        String doc = getDocumentString("src/test/resources/complex_example.xml");
-        reader.setDocument(doc, false);
+        Document doc = getDocumentFromFile("src/test/resources/complex_example.xml", false);
+        reader.setDocument(doc);
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         xmlField.setPath("/orders/order[2]/id[1]/@custId");
         assertNull(xmlField.getValue());
@@ -136,8 +142,8 @@ public class XmlFieldReaderTest {
 
     @Test
     public void testReadDocumentWithSingleNamespaceSetElementValueAsString() throws Exception {
-        String doc = getDocumentString("src/test/resources/simple_example_single_ns.xml");
-        reader.setDocument(doc, true);
+        Document doc = getDocumentFromFile("src/test/resources/simple_example_single_ns.xml", true);
+        reader.setDocument(doc);
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         xmlField.setPath("/x:orders/order/id");
         assertNull(xmlField.getValue());
@@ -151,8 +157,8 @@ public class XmlFieldReaderTest {
 
     @Test
     public void testReadDocumentWithMultipleNamespaceSetElementValueAsString() throws Exception {
-        String doc = getDocumentString("src/test/resources/simple_example_multiple_ns.xml");
-        reader.setDocument(doc, true);
+        Document doc = getDocumentFromFile("src/test/resources/simple_example_multiple_ns.xml", true);
+        reader.setDocument(doc);
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         xmlField.setPath("/x:orders/order/y:id/@custId");
         assertNull(xmlField.getValue());
@@ -166,8 +172,8 @@ public class XmlFieldReaderTest {
 
     @Test
     public void testReadDocumentWithMultipleNamespaceComplex() throws Exception {
-        String doc = getDocumentString("src/test/resources/complex_example_ns.xml");
-        reader.setDocument(doc, true);
+        Document doc = getDocumentFromFile("src/test/resources/complex_example_ns.xml", true);
+        reader.setDocument(doc);
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         xmlField.setPath("/orders/order[2]/id[1]/@y:custId");
         assertNull(xmlField.getValue());
@@ -181,8 +187,8 @@ public class XmlFieldReaderTest {
 
     @Test
     public void testReadDocumentElementWithMultipleNamespaceComplex() throws Exception {
-        String doc = getDocumentString("src/test/resources/complex_example_multiple_ns.xml");
-        reader.setDocument(doc, true);
+        Document doc = getDocumentFromFile("src/test/resources/complex_example_multiple_ns.xml", true);
+        reader.setDocument(doc);
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         xmlField.setPath("/orders/q:order[0]/id[0]/@y:custId");
         String docId = "docId";
@@ -224,8 +230,8 @@ public class XmlFieldReaderTest {
 
     @Test
     public void testReadDocumentElementWithMultipleNamespaceComplexConstructorArg() throws Exception {
-        String doc = getDocumentString("src/test/resources/complex_example_multiple_ns.xml");
-        reader.setDocument(doc, true);
+        Document doc = getDocumentFromFile("src/test/resources/complex_example_multiple_ns.xml", true);
+        reader.setDocument(doc);
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         xmlField.setPath("/orders/q:order/id/@y:custId");
         String docId = "docId";
@@ -238,7 +244,7 @@ public class XmlFieldReaderTest {
         namespaces.put("http://www.example.com/x/", "");
 
         XmlFieldReader multipleNamespacesReader = new XmlFieldReader(XmlFieldReader.class.getClassLoader(), DefaultAtlasConversionService.getInstance(), namespaces);
-        multipleNamespacesReader.setDocument(doc, true);
+        multipleNamespacesReader.setDocument(doc);
         AtlasInternalSession session = mock(AtlasInternalSession.class);
         mockDataSources(docId, session);
         when(session.head()).thenReturn(mock(Head.class));
@@ -257,8 +263,8 @@ public class XmlFieldReaderTest {
 
     @Test
     public void testReadDocumentMultipleFieldsSetElementValuesComplex() throws Exception {
-        String doc = getDocumentString("src/test/resources/complex_example.xml");
-        reader.setDocument(doc, false);
+        Document doc = getDocumentFromFile("src/test/resources/complex_example.xml", false);
+        reader.setDocument(doc);
         LinkedList<XmlField> fieldList = new LinkedList<>();
 
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
@@ -288,8 +294,8 @@ public class XmlFieldReaderTest {
 
     @Test
     public void testReadDocumentMisMatchedFieldNameAT416() throws Exception {
-        String doc = getDocumentString("src/test/resources/simple_example.xml");
-        reader.setDocument(doc, false);
+        Document doc = getDocumentFromFile("src/test/resources/simple_example.xml", false);
+        reader.setDocument(doc);
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         // correct field name should be id or id[1]
         xmlField.setPath("/orders/order/id1");
@@ -303,8 +309,8 @@ public class XmlFieldReaderTest {
 
     @Test
     public void testReadDocumentMixedNamespacesNoNSDocument() throws Exception {
-        String doc = getDocumentString("src/test/resources/simple_example.xml");
-        reader.setDocument(doc, false);
+        Document doc = getDocumentFromFile("src/test/resources/simple_example.xml", false);
+        reader.setDocument(doc);
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         // there is no namespace on the document but there is this field....
         xmlField.setPath("/ns:orders/order/id");
@@ -319,8 +325,8 @@ public class XmlFieldReaderTest {
 
     @Test
     public void testReadDocumentMixedNamespacesNoNSOnPaths() throws Exception {
-        String doc = getDocumentString("src/test/resources/simple_example_single_ns.xml");
-        reader.setDocument(doc, true);
+        Document doc = getDocumentFromFile("src/test/resources/simple_example_single_ns.xml", true);
+        reader.setDocument(doc);
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         // there is a namespace on the document but there is not on the paths....
         xmlField.setPath("/orders/order/id");
@@ -335,7 +341,7 @@ public class XmlFieldReaderTest {
 
     @Test
     public void testNullDocument() throws Exception {
-        reader.setDocument(null, false);
+        reader.setDocument(null);
         AtlasInternalSession session = mock(AtlasInternalSession.class);
         when(session.head()).thenReturn(mock(Head.class));
         when(session.head().getSourceField()).thenReturn(new XmlField());
@@ -348,7 +354,7 @@ public class XmlFieldReaderTest {
 
     @Test
     public void testEmptyDocument() throws Exception {
-        reader.setDocument("", false);
+        reader.setDocument(getDocumentFromString("", false));
         AtlasInternalSession session = mock(AtlasInternalSession.class);
         when(session.head()).thenReturn(mock(Head.class));
         when(session.head().getSourceField()).thenReturn(new XmlField());
@@ -360,8 +366,8 @@ public class XmlFieldReaderTest {
     }
 
     public void testThrowExceptionOnNullAmlFeilds() throws Exception {
-        String doc = getDocumentString("src/test/resources/complex_example.xml");
-        reader.setDocument(doc, false);
+        Document doc = getDocumentFromFile("src/test/resources/complex_example.xml", false);
+        reader.setDocument(doc);
         XmlField fieldList = null;
         AtlasInternalSession session = mock(AtlasInternalSession.class);
         when(session.head()).thenReturn(mock(Head.class));
@@ -371,8 +377,8 @@ public class XmlFieldReaderTest {
 
     @Test(expected = AtlasException.class)
     public void testThrowExceptionOnNullXmlField() throws Exception {
-        String doc = getDocumentString("src/test/resources/complex_example.xml");
-        reader.setDocument(doc, false);
+        Document doc = getDocumentFromFile("src/test/resources/complex_example.xml", false);
+        reader.setDocument(doc);
         XmlField xmlField = null;
         AtlasInternalSession session = mock(AtlasInternalSession.class);
         when(session.head()).thenReturn(mock(Head.class));
@@ -631,13 +637,29 @@ public class XmlFieldReaderTest {
         validateRangeOutValue(FieldType.BYTE, "test-read-field-byte-string.xml", "abcd");
     }
 
-    private String getDocumentString(String uri) throws IOException {
-        File f = new File(uri);
-        FileInputStream fis = new FileInputStream(f);
-        byte[] buf = new byte[(int) f.length()];
-        fis.read(buf);
-        fis.close();
-        return new String(buf);
+    private Document getDocumentFromFile(String uri, boolean namespaced) throws Exception {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(namespaced);
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        return builder.parse(new File(uri));
+    }
+
+    private Document getDocumentFromString(String body, boolean namespaced) throws Exception {
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setNamespaceAware(namespaced);
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            return builder.parse(new InputSource(new StringReader(body)));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private Document getDocumentFromPath(Path path, boolean namespaced) throws Exception {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(namespaced);
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        return builder.parse(path.toFile());
     }
 
     private void validateBoundaryValue(FieldType fieldType, String fileName, Object testObject) throws Exception {
@@ -651,8 +673,7 @@ public class XmlFieldReaderTest {
     }
 
     private AtlasInternalSession readFromFile(String fieldPath, FieldType fieldType, Path path) throws Exception {
-        String input = new String(Files.readAllBytes(path));
-        reader.setDocument(input, false);
+        reader.setDocument(getDocumentFromPath(path, false));
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         xmlField.setPath(fieldPath);
         xmlField.setPrimitive(Boolean.TRUE);

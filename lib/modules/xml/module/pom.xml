@@ -25,7 +25,7 @@
   </parent>
   <artifactId>atlas-xml-module</artifactId>
   <packaging>bundle</packaging>
-  <name>Atlas :: Xml Module</name>
+  <name>Atlas :: XML Module</name>
 
   <properties>
     <osgi.export.pkg>io.atlasmap.xml.module</osgi.export.pkg>

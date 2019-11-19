@@ -15,17 +15,13 @@
  */
 package io.atlasmap.xml.module;
 
-import java.io.StringWriter;
+import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import io.atlasmap.core.AtlasPath;
 import org.slf4j.Logger;
@@ -47,6 +43,7 @@ import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.xml.core.XmlFieldReader;
 import io.atlasmap.xml.core.XmlFieldWriter;
+import io.atlasmap.xml.core.XmlIOHelper;
 import io.atlasmap.xml.core.XmlPath;
 import io.atlasmap.xml.v2.AtlasXmlModelFactory;
 import io.atlasmap.xml.v2.XmlDataSource;
@@ -59,6 +56,14 @@ import io.atlasmap.xml.v2.XmlNamespaces;
 public class XmlModule extends BaseAtlasModule {
     private static final Logger LOG = LoggerFactory.getLogger(XmlModule.class);
 
+    private XmlIOHelper ioHelper;
+
+    @Override
+    public void init() throws AtlasException {
+        super.init();
+        this.ioHelper = new XmlIOHelper(this.getClassLoader());
+    }
+
     @Override
     public void processPreValidation(AtlasInternalSession atlasSession) throws AtlasException {
         if (atlasSession == null || atlasSession.getMapping() == null) {
@@ -66,10 +71,7 @@ public class XmlModule extends BaseAtlasModule {
             throw new AtlasValidationException("Invalid session");
         }
 
-        XmlValidationService xmlValidationService = new XmlValidationService(getConversionService(), getFieldActionService());
-        xmlValidationService.setMode(getMode());
-        xmlValidationService.setDocId(getDocId());
-        List<Validation> xmlValidations = xmlValidationService.validateMapping(atlasSession.getMapping());
+        List<Validation> xmlValidations = createValidationService().validateMapping(atlasSession.getMapping());
         atlasSession.getValidations().getValidation().addAll(xmlValidations);
 
         if (LOG.isDebugEnabled()) {
@@ -79,6 +81,13 @@ public class XmlModule extends BaseAtlasModule {
         if (LOG.isDebugEnabled()) {
             LOG.debug("{}: processPreValidation completed", getDocId());
         }
+    }
+
+    protected XmlValidationService createValidationService() {
+        XmlValidationService xmlValidationService = new XmlValidationService(getConversionService(), getFieldActionService());
+        xmlValidationService.setMode(getMode());
+        xmlValidationService.setDocId(getDocId());
+        return xmlValidationService;
     }
 
     @Override
@@ -91,26 +100,47 @@ public class XmlModule extends BaseAtlasModule {
                     "Null or non-String source document: docId='%s'", getDocId()),
                     null, AuditStatus.WARN, null);
         } else {
-            Map<String, String> sourceUriParams = AtlasUtil.getUriParameters(getUri());
             enableNamespaces = true;
-            for (String key : sourceUriParams.keySet()) {
-                if ("disableNamespaces".equals(key) && ("true".equals(sourceUriParams.get("disableNamespaces")))) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("Disabling namespace support");
-                    }
-                    enableNamespaces = false;
+            String param = this.getUriParameters().get("disableNamespaces");
+            if (param != null && "true".equalsIgnoreCase(param)) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Disabling namespace support");
                 }
+                enableNamespaces = false;
             }
             sourceDocumentString = String.class.cast(sourceDocument);
         }
+        Document sourceXmlDocument = convertToXmlDocument(sourceDocumentString, enableNamespaces);
         XmlFieldReader reader = new XmlFieldReader(getClassLoader(), getConversionService());
-        reader.setDocument(sourceDocumentString, enableNamespaces);
+        reader.setDocument(sourceXmlDocument);
         session.setFieldReader(getDocId(), reader);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("{}: processPreSourceExecution completed", getDocId());
         }
     }
+
+    /**
+     * Convert a source document into XML. The modules extending this class can
+     * override this to convert some format into XML so that XML field reader can read it.
+     * @param source some document which can be converted to XML
+     * @return converted
+     */
+    protected Document convertToXmlDocument(String source, boolean namespaced) throws AtlasException {
+        if (source == null || source.isEmpty()) {
+            return null;
+        }
+
+        try {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            dbf.setNamespaceAware(namespaced); // this must be done to use namespaces
+            DocumentBuilder b = dbf.newDocumentBuilder();
+            return b.parse(new ByteArrayInputStream(source.getBytes("UTF-8")));
+        } catch (Exception e) {
+            LOG.warn("Failed to parse XML document", e);
+            return null;
+        }
+    };
 
     @Override
     public void processPreTargetExecution(AtlasInternalSession session) throws AtlasException {
@@ -211,6 +241,10 @@ public class XmlModule extends BaseAtlasModule {
                     subPath.copyCollectionIndexes(new XmlPath(sourceSubField.getPath()));
                 }
                 targetSubField.setPath(subPath.toString());
+                // Attempt to Auto-detect field type based on input value
+                if (targetSubField.getFieldType() == null && sourceSubField.getValue() != null) {
+                    targetSubField.setFieldType(getConversionService().fieldTypeFromClass(sourceSubField.getValue().getClass()));
+                }
                 targetFieldGroup.getField().add(targetSubField);
                 session.head().setSourceField(sourceSubField);
                 session.head().setTargetField(targetSubField);
@@ -267,7 +301,8 @@ public class XmlModule extends BaseAtlasModule {
     public void processPostTargetExecution(AtlasInternalSession session) throws AtlasException {
         XmlFieldWriter writer = session.getFieldWriter(getDocId(), XmlFieldWriter.class);
         if (writer != null && writer.getDocument() != null) {
-            session.setTargetDocument(getDocId(), convertDocumentToString(writer.getDocument()));
+            String targetDocumentString = convertFromXmlDocument(writer.getDocument());
+            session.setTargetDocument(getDocId(), targetDocumentString);
         } else {
             AtlasUtil.addAudit(session, getDocId(), String
                     .format("No target document created for DataSource:[id=%s, uri=%s]", getDocId(), this.getUri()),
@@ -280,6 +315,16 @@ public class XmlModule extends BaseAtlasModule {
         }
     }
 
+    /**
+     * Convert a target XML document into some format. The modules extending this class can
+     * override this to convert interim XML document written by XML field writer into final format.
+     * @param xml XML document written by XML field writer
+     * @return converted
+     */
+    protected String convertFromXmlDocument(Document xml) throws AtlasException {
+        return getXmlIOHelper().writeDocumentToString(false, xml);
+    }
+
     @Override
     public Boolean isSupportedField(Field field) {
         if (super.isSupportedField(field)) {
@@ -288,27 +333,13 @@ public class XmlModule extends BaseAtlasModule {
         return field instanceof XmlField;
     }
 
-    private String convertDocumentToString(Document document) throws AtlasException {
-        DocumentBuilderFactory domFact = DocumentBuilderFactory.newInstance();
-        domFact.setNamespaceAware(true);
-
-        StringWriter writer = null;
-        try {
-            DOMSource domSource = new DOMSource(document);
-            writer = new StringWriter();
-            StreamResult result = new StreamResult(writer);
-            TransformerFactory tf = TransformerFactory.newInstance();
-            Transformer transformer = tf.newTransformer();
-            transformer.transform(domSource, result);
-            return writer.toString();
-        } catch (TransformerException e) {
-            LOG.error(String.format("Error converting Xml document to string msg=%s", e.getMessage()), e);
-            throw new AtlasException(e.getMessage(), e);
-        }
-    }
-
     @Override
     public Field cloneField(Field field) throws AtlasException {
         return AtlasXmlModelFactory.cloneField(field);
     }
+
+    protected XmlIOHelper getXmlIOHelper() {
+        return this.ioHelper;
+    }
+
 }

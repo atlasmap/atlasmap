@@ -28,7 +28,7 @@ public class DefaultAtlasContextTest {
     public void testModuleInit() {
         DefaultAtlasContextFactory factory = DefaultAtlasContextFactory.getInstance();
         assertNotNull(factory.getModuleInfoRegistry());
-        assertEquals(new Integer(3), new Integer(factory.getModuleInfoRegistry().size()));
+        assertEquals(new Integer(4), new Integer(factory.getModuleInfoRegistry().size()));
     }
 
 }

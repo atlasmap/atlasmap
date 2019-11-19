@@ -15,14 +15,10 @@
  */
 package io.atlasmap.xml.core;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import io.atlasmap.core.AtlasPath;
 import org.slf4j.Logger;
@@ -223,19 +219,8 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
         }
     }
 
-    public void setDocument(String docString, boolean namespaced) throws AtlasException {
-        if (docString == null || docString.isEmpty()) {
-            return;
-        }
-
-        try {
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            dbf.setNamespaceAware(namespaced); // this must be done to use namespaces
-            DocumentBuilder b = dbf.newDocumentBuilder();
-            this.document = b.parse(new ByteArrayInputStream(docString.getBytes("UTF-8")));
-        } catch (Exception e) {
-            LOG.warn("Failed to parse XML document", e);
-        }
+    public void setDocument(Document document) throws AtlasException {
+        this.document = document;
     }
 
     private Optional<XmlNamespaces> getSourceNamespaces(AtlasInternalSession session, XmlField xmlField) {

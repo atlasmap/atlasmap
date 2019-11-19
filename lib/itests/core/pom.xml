@@ -58,6 +58,14 @@
       <artifactId>atlas-json-module</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-dfdl-module</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-dfdl-test-model</artifactId>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>

@@ -311,7 +311,7 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
                 documentBuilderFactory.setNamespaceAware(true);
             }
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            if (seedDocument != null) {
+            if (seedDocument != null && !seedDocument.isEmpty()) {
                 Document document = documentBuilder.parse(new ByteArrayInputStream(seedDocument.getBytes("UTF-8")));
 
                 Element rootNode = document.getDocumentElement();
