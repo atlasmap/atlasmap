@@ -1,5 +1,5 @@
 {
-  "name": "@atlasmap/atlasmap-standalone",
+  "name": "@atlasmap/standalone",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
