@@ -1,0 +1,273 @@
+<?xml version="1.0"?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 2010-2014 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    http://glassfish.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <groupId>io.atlasmap</groupId>
+        <artifactId>atlas-xml-parent</artifactId>
+        <version>1.43.0-SNAPSHOT</version>
+        <relativePath>..</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>io.atlasmap.com.sun.xsom</groupId>
+    <artifactId>xsom</artifactId>
+    <name>XSOM</name>
+    <description>XML Schema Object Model (XSOM) is a Java library that allows applications to easily parse XML Schema
+        documents and inspect information in them. It is expected to be useful for applications that need to take XML
+        Schema as an input.
+    </description>
+    <url>http://xsom.java.net/</url>
+    <packaging>jar</packaging>
+    <licenses>
+        <license>
+            <name>CDDL v1.1 / GPL v2 dual license</name>
+            <url>http://glassfish.java.net/public/CDDL+GPL_1_1.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <issueManagement>
+        <system>JIRA</system>
+        <url>http://java.net/jira/browse/XSOM</url>
+    </issueManagement>
+    <scm>
+        <url>http://java.net/projects/xsom/sources/sources/show/trunk</url>
+        <connection>scm:svn:https://svn.java.net/svn/xsom~sources/trunk</connection>
+        <developerConnection>scm:svn:https://svn.java.net/svn/xsom~sources/trunk</developerConnection>
+    </scm>
+    <organization>
+        <name>Oracle</name>
+        <url>http://www.oracle.com/</url>
+    </organization>
+    <developers>
+        <developer>
+            <id>snajper</id>
+            <name>Martin Grebac</name>
+            <email>martin.grebac@oracle.com</email>
+        </developer>
+        <developer>
+            <id>lexi</id>
+            <name>Aleksei Valikov</name>
+            <email>valikov@gmx.net</email>
+        </developer>
+    </developers>
+    <dependencies>
+        <dependency>
+            <groupId>relaxngDatatype</groupId>
+            <artifactId>relaxngDatatype</artifactId>
+            <version>20020414</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <sourceDirectory>src</sourceDirectory>
+        <testSourceDirectory>test</testSourceDirectory>
+        <resources>
+            <resource>
+                <directory>src</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>test</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </testResource>
+        </testResources>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <formats>
+                        <format>xml</format>
+                    </formats>
+                    <check>
+                        <totalLineRate>45</totalLineRate>
+                        <packageLineRate>45</packageLineRate>
+                        <haltOnFailure>true</haltOnFailure>
+                    </check>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>build/src</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.14</version>
+                <configuration>
+                    <argLine>${proxyArgLine}</argLine>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <skip>${findbugs.skip}</skip>
+                    <threshold>${findbugs.threshold}</threshold>
+                    <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
+                    <excludeFilterFile>
+                        ${findbugs.exclude}
+                    </excludeFilterFile>
+                    <fork>true</fork>
+                    <jvmArgs>-Xms64m -Xmx256m</jvmArgs>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.glassfish.findbugs</groupId>
+                        <artifactId>findbugs</artifactId>
+                        <version>1.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.glassfish.copyright</groupId>
+                <artifactId>glassfish-copyright-maven-plugin</artifactId>
+                <version>1.29</version>
+                <configuration>
+                    <templateFile>copyright.txt</templateFile>
+                    <excludeFile>copyright-exclude</excludeFile>
+                    <!-- skip files not under SCM-->
+                    <scmOnly>true</scmOnly>
+                    <!-- turn off warnings -->
+                    <warn>true</warn>
+                    <!-- for use with repair -->
+                    <update>false</update>
+                    <!-- check that year is correct -->
+                    <ignoreYear>false</ignoreYear>
+                </configuration>
+            </plugin>
+
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <inherited>true</inherited>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>1.5</source>
+                        <target>1.5</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+    <profiles>
+        <profile>
+            <id>regenerate-sources</id>
+            <build>
+                <plugins>
+                <plugin>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.1</version>
+                    <executions>
+                        <execution>
+                            <phase>generate-sources</phase>
+                            <configuration>
+                                <tasks>
+                                    <taskdef name="licence" classname="com.sun.tools.LicenceTask">
+                                        <classpath>
+                                            <pathelement path="lib/lic.jar" />
+                                        </classpath>
+                                    </taskdef>
+
+                                    <!--<mkdir dir="build/automata" />-->
+
+                                    <!-- delete old files to avoid corruption -->
+                                    <delete dir="src/com/sun/xml/xsom/impl/parser/state" />
+                                    <mkdir dir="src/com/sun/xml/xsom/impl/parser/state" />
+
+                                    <property name="relaxngcc-jar" value="lib/relaxngcc.jar" />
+                                    <java jar="${relaxngcc-jar}" fork="true">
+                                        <arg value="--target" />
+                                        <arg path="src/com/sun/xml/xsom/impl/parser/state" />
+                                        <arg path="src/xmlschema.rng" />
+                                    </java>
+                                    <licence licence="licenceheader.txt">
+                                        <fileset dir="src/" includes="com/sun/xml/xsom/impl/parser/state/*.java" />
+                                    </licence>
+                                </tasks>
+                            </configuration>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+    <properties>
+        <findbugs.skip>false</findbugs.skip>
+        <findbugs.threshold>Low</findbugs.threshold>
+        <findbugs.exclude />
+    </properties>
+
+</project>

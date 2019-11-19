@@ -82,7 +82,6 @@
     <twitter4j.version>4.0.7</twitter4j.version>
     <woodstox.version>4.4.1</woodstox.version>
     <xalan-bundle-version>2.7.2_3</xalan-bundle-version>
-    <xsom.version>20140925</xsom.version>
     <xmlunit.version>2.6.3</xmlunit.version>
   </properties>
 
@@ -185,11 +184,6 @@
         <artifactId>selenium-remote-driver</artifactId>
         <version>${selenium.version}</version>
         <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>com.sun.xsom</groupId>
-        <artifactId>xsom</artifactId>
-        <version>${xsom.version}</version>
       </dependency>
       <dependency>
         <groupId>io.atlasmap</groupId>
@@ -340,6 +334,11 @@
       <dependency>
         <groupId>io.atlasmap</groupId>
         <artifactId>camel-atlasmap</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.atlasmap.com.sun.xsom</groupId>
+        <artifactId>xsom</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

@@ -31,6 +31,7 @@
   <modules>
     <module>model</module>
     <module>test-model</module>
+    <module>xsom</module>
     <module>core</module>
     <module>module</module>
     <module>service</module>
