@@ -21,13 +21,15 @@ export interface IMapperProps {
   targets: IFieldsGroup[];
   mappings: IMappings[];
   addToMapping: (elementId: ElementId, elementType: ElementType, mappingId: string) => void;
+  importAtlasFile: (selectedFile: File) => void;
 }
 
 export const Mapper: FunctionComponent<IMapperProps> = ({
   sources,
   mappings,
   targets,
-  addToMapping
+  addToMapping,
+  importAtlasFile
 }) => {
   const [freeView, setFreeView] = useState(false);
   const [materializedMappings, setMaterializedMappings] = useState(true);
@@ -117,7 +119,7 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
     return () => clearTimeout(timeout);
   }, [measure, selectedMapping]);
 
-  const contextToolbar = useMemo(() => <MapperContextToolbar />, []);
+  const contextToolbar = useMemo(() => <MapperContextToolbar importAtlasFile={importAtlasFile}/>, []);
   const toggleFreeView = useCallback(() => setFreeView(!freeView), [
     freeView,
     setFreeView,

@@ -15,13 +15,16 @@ import {
 } from '@patternfly/react-core';
 
 import { FilePicker } from 'react-file-picker';
-import { processImportedFile } from './MapperUtilsToolbar';
+// import { processImportedFile } from './MapperUtilsToolbar';
 
-export interface IMapperContextToolbarProps {}
+
+export interface IMapperContextToolbarProps {
+  importAtlasFile: (selectedFile: File) => void;
+}
 
 export const MapperContextToolbar: FunctionComponent<
   IMapperContextToolbarProps
-> = () => {
+> = (importAtlasFile) => {
   return (
     <Toolbar
       className="view-toolbar pf-u-px-md pf-u-py-md"
@@ -41,7 +44,8 @@ export const MapperContextToolbar: FunctionComponent<
           >
           <FilePicker
             extensions={['adm', 'jar']}
-            onChange={(selectedFile: File) => processImportedFile( {selectedFile} )}
+            // onChange={(selectedFile: File) => processImportedFile( {selectedFile} )}
+            onChange={(selectedFile: File) => importAtlasFile(selectedFile)}
             onError={(errMsg: any) => console.error(errMsg)}
           >
             <Button variant={'plain'} aria-label="Import mappings">

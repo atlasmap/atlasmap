@@ -47,6 +47,7 @@ const App: React.FC = () => {
       targets={targetDocs.map(fromDocumentDefinitionToFieldGroup)}
       mappings={[]}
       addToMapping={() => void(0)}
+      importAtlasFile={() => void(0)}
     />
   );
 };
