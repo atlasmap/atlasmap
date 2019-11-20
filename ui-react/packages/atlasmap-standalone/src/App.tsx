@@ -1,7 +1,36 @@
-import { useAtlasmap } from '@atlasmap/provider';
-import { Mapper } from '@atlasmap/ui';
+import { useAtlasmap, DocumentDefinition, Field } from '@atlasmap/provider';
+import { Mapper, IFieldsGroup, IFieldsNode } from '@atlasmap/ui';
 import React from 'react';
 import './App.css';
+
+function fromFieldToIFieldsGroup(field: Field): IFieldsGroup {
+  return {
+    id: field.uuid,
+    title: field.name,
+    fields: field.children.map(fromFieldToIFields)
+  }
+}
+
+function fromFieldToIFieldsNode(field: Field): IFieldsNode {
+  return {
+    id: field.uuid,
+    element: <>{field.name}</>
+  }
+}
+
+function fromFieldToIFields(field: Field): IFieldsGroup | IFieldsNode {
+  return field.children.length > 0
+    ? fromFieldToIFieldsGroup(field)
+    : fromFieldToIFieldsNode(field);
+}
+
+function fromDocumentDefinitionToFieldGroup(def: DocumentDefinition): IFieldsGroup {
+  return {
+    id: def.id,
+    fields: def.fields.map(fromFieldToIFields),
+    title: def.name
+  };
+}
 
 const App: React.FC = () => {
   const { sourceDocs, targetDocs } = useAtlasmap({
@@ -14,8 +43,8 @@ const App: React.FC = () => {
   console.log('Target docs', targetDocs);
   return (
     <Mapper
-      sources={[]}
-      targets={[]}
+      sources={sourceDocs.map(fromDocumentDefinitionToFieldGroup)}
+      targets={targetDocs.map(fromDocumentDefinitionToFieldGroup)}
       mappings={[]}
       addToMapping={() => void(0)}
     />
