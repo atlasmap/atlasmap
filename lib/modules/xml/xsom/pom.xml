@@ -189,7 +189,7 @@
             <plugin>
                 <groupId>org.glassfish.copyright</groupId>
                 <artifactId>glassfish-copyright-maven-plugin</artifactId>
-                <version>1.29</version>
+                <version>2.3</version>
                 <configuration>
                     <templateFile>copyright.txt</templateFile>
                     <excludeFile>copyright-exclude</excludeFile>
