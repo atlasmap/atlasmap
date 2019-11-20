@@ -32,8 +32,8 @@ export class LookupTableUtil {
       && m.getFields(false).length === 1)) {
       return;
     }
-    let inputClassIdentifier: string = null;
-    let outputClassIdentifier: string = null;
+    let inputClassIdentifier: string | undefined;
+    let outputClassIdentifier: string | undefined;
 
     const inputField: Field = m.getFields(true)[0];
     if (inputField) {
@@ -84,12 +84,8 @@ export class LookupTableUtil {
   }
 
   private static getFirstMappingForLookupTable(mappingDefinition: MappingDefinition, lookupTableName: string): MappingModel {
-    for (const m of mappingDefinition.mappings) {
-      if (m.transition.lookupTableName === lookupTableName) {
-        return m;
-      }
-    }
-    return null;
+    // TODO: check this non null operator
+    return mappingDefinition.mappings.find(m => m.transition.lookupTableName === lookupTableName)!;
   }
 
 }

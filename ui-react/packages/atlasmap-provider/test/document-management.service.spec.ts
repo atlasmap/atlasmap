@@ -3,11 +3,11 @@
 import { TestBed, async, inject } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { DocumentManagementService } from './document-management.service';
-import { ErrorHandlerService } from './error-handler.service';
-import { InspectionType, DocumentType } from '../common/config.types';
-import { DocumentDefinition } from '../models/document-definition.model';
-import { ConfigModel } from '../models/config.model';
+import { DocumentManagementService } from '../src/services/document-management.service';
+import { ErrorHandlerService } from '../src/services/error-handler.service';
+import { InspectionType, DocumentType } from '../src/common/config.types';
+import { DocumentDefinition } from '../src/models/document-definition.model';
+import { ConfigModel } from '../src/models/config.model';
 
 describe('DocumentManagementService', () => {
   beforeEach(() => {

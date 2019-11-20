@@ -2,9 +2,9 @@
 
 import { TestBed, async, inject } from '@angular/core/testing';
 import { LoggerModule, NGXLogger, NgxLoggerLevel } from 'ngx-logger';
-import { MappingManagementService } from './mapping-management.service';
-import { ErrorHandlerService } from './error-handler.service';
-import { Field } from '../models/field.model';
+import { MappingManagementService } from '../src/services/mapping-management.service';
+import { ErrorHandlerService } from '../src/services/error-handler.service';
+import { Field } from '../src/models/field.model';
 
 describe('MappingManagementService', () => {
   beforeEach(() => {

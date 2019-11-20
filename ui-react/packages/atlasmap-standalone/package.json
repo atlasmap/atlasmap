@@ -3,11 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@atlasmap/provider": "*",
     "@atlasmap/ui": "*",
     "@types/jest": "24.0.21",
     "@types/node": "12.12.3",
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.3",
+    "http-proxy-middleware": "^0.20.0",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-scripts": "3.2.0",

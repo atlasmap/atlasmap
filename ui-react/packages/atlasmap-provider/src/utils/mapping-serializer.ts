@@ -30,7 +30,8 @@ import { MappingUtil } from './mapping-util';
 export class MappingSerializer {
 
   static serializeMappings(cfg: ConfigModel): any {
-    const mappingDefinition: MappingDefinition = cfg.mappings;
+    // TODO: check this non null operator
+    const mappingDefinition: MappingDefinition = cfg.mappings!;
     let jsonMappings: any[] = [];
     for (const mapping of mappingDefinition.mappings.filter(m => m.isFullyMapped())) {
       try {
@@ -43,7 +44,8 @@ export class MappingSerializer {
       }
     }
 
-    const serializedLookupTables: any[] = MappingSerializer.serializeLookupTables(cfg.mappings);
+    // TODO: check this non null operator
+    const serializedLookupTables: any[] = MappingSerializer.serializeLookupTables(cfg.mappings!);
     const constantDescriptions: any[] = MappingSerializer.serializeConstants(cfg.constantDoc);
     const propertyDescriptions: any[] = MappingSerializer.serializeProperties(cfg.propertyDoc);
     const serializedDataSources: any = MappingSerializer.serializeDocuments(cfg.sourceDocs.concat(cfg.targetDocs), mappingDefinition);
@@ -53,7 +55,7 @@ export class MappingSerializer {
         'jsonType': ConfigModel.mappingServicesPackagePrefix + '.AtlasMapping',
         'dataSource': serializedDataSources,
         'mappings': { 'mapping': jsonMappings },
-        'name': cfg.mappings.name,
+        'name': cfg.mappings!.name, // TODO: check this non null operator
         'lookupTables': { 'lookupTable': serializedLookupTables },
         'constants': { 'constant': constantDescriptions },
         'properties': { 'property': propertyDescriptions },
@@ -69,7 +71,7 @@ export class MappingSerializer {
     const jsonMappingType = ConfigModel.mappingServicesPackagePrefix + '.Mapping';
     const serializedInputFields: any[] = MappingSerializer.serializeFields(mapping, true, cfg, ignoreValue);
     const serializedOutputFields: any[] = MappingSerializer.serializeFields(mapping, false, cfg, ignoreValue);
-    let jsonMapping = {};
+    let jsonMapping: {[key: string]: any} = {};
 
     if (mapping.transition.isManyToOneMode()) {
       inputFieldGroup = MappingSerializer.createInputFieldGroup(mapping, serializedInputFields, cfg);
@@ -116,7 +118,7 @@ export class MappingSerializer {
       cfg.mappings = new MappingDefinition;
     }
     cfg.mappings.name = this.deserializeAtlasMappingName(json);
-    cfg.mappings.parsedDocs = cfg.mappings.parsedDocs.concat(MappingSerializer.deserializeDocs(json, cfg.mappings));
+    cfg.mappings.parsedDocs = cfg.mappings.parsedDocs.concat(MappingSerializer.deserializeDocs(json, cfg.mappings)!); // TODO: check this non null operator
     cfg.mappings.mappings = cfg.mappings.mappings.concat(MappingSerializer.deserializeMappings(json, cfg));
     for (const lookupTable of MappingSerializer.deserializeLookupTables(json)) {
       cfg.mappings.addTable(lookupTable);
@@ -178,7 +180,8 @@ export class MappingSerializer {
         } else {
           mapping.transition.mode = TransitionMode.MANY_TO_ONE;
           const parsedAction = this.parseAction(firstAction);
-          parsedAction.definition = cfg.fieldActionService.getActionDefinitionForName(parsedAction.name, Multiplicity.MANY_TO_ONE);
+          // TODO: check this non null operator
+          parsedAction.definition = cfg.fieldActionService.getActionDefinitionForName(parsedAction.name, Multiplicity.MANY_TO_ONE)!;
           mapping.transition.transitionFieldAction = parsedAction;
         }
       }
@@ -401,7 +404,8 @@ export class MappingSerializer {
       let includeIndexes: boolean = mapping.transition.isOneToManyMode() && !isSource;
       includeIndexes = includeIndexes || (mapping.transition.isManyToOneMode() && isSource);
       if (includeIndexes) {
-        serializedField['index'] = mapping.getIndexForMappedField(mappedField) - 1;
+        // TODO: check this non null operator
+        serializedField['index'] = mapping.getIndexForMappedField(mappedField)! - 1;
       }
 
       this.serializeActions( cfg, mappedField, serializedField );
@@ -447,10 +451,10 @@ export class MappingSerializer {
     return actionJson;
   }
 
-  private static deserializeDocs(json: any, mappingDefinition: MappingDefinition): DocumentDefinition[] {
+  private static deserializeDocs(json: any, mappingDefinition: MappingDefinition): DocumentDefinition[] | null {
     const docs: DocumentDefinition[] = [];
     if (!json || !json.AtlasMapping) {
-      return;
+      return null;
     }
     for (const docRef of json.AtlasMapping.dataSource) {
       const doc: DocumentDefinition = new DocumentDefinition();
@@ -515,7 +519,7 @@ export class MappingSerializer {
     if (fieldMapping.mappingType === 'SEPARATE') {
       mapping.transition.mode = TransitionMode.ONE_TO_MANY;
       mapping.transition.transitionFieldAction
-        = FieldAction.create(cfg.fieldActionService.getActionDefinitionForName('Split', Multiplicity.ONE_TO_MANY));
+        = FieldAction.create(cfg.fieldActionService.getActionDefinitionForName('Split', Multiplicity.ONE_TO_MANY)!); // TODO: check this non null operator
       mapping.transition.transitionFieldAction.setArgumentValue('delimiter', fieldMapping.delimiter);
     } else if (fieldMapping.mappingType === 'LOOKUP') {
       mapping.transition.mode = TransitionMode.ENUM;
@@ -523,7 +527,7 @@ export class MappingSerializer {
     } else if (fieldMapping.mappingType === 'COMBINE') {
       mapping.transition.mode = TransitionMode.MANY_TO_ONE;
       mapping.transition.transitionFieldAction
-        = FieldAction.create(cfg.fieldActionService.getActionDefinitionForName('Concatenate', Multiplicity.MANY_TO_ONE));
+        = FieldAction.create(cfg.fieldActionService.getActionDefinitionForName('Concatenate', Multiplicity.MANY_TO_ONE)!); // TODO: check this non null operator
       mapping.transition.transitionFieldAction.setArgumentValue('delimiter', fieldMapping.delimiter);
     } else {
       mapping.transition.mode = TransitionMode.ONE_TO_ONE;
@@ -607,7 +611,7 @@ export class MappingSerializer {
                                           cfg: ConfigModel, isSource: boolean ): void {
     for ( const action of field.actions ) {
       const parsedAction = this.parseAction( action );
-      parsedAction.definition = cfg.fieldActionService.getActionDefinitionForName( parsedAction.name );
+      parsedAction.definition = cfg.fieldActionService.getActionDefinitionForName( parsedAction.name)!; // TODO: check this non null operator
 
       if ( isSource && ( action.Expression || action['@type'] === 'Expression' ) ) {
         mapping.transition.enableExpression = true;
@@ -617,7 +621,7 @@ export class MappingSerializer {
       } else if ( isSource && parsedAction.definition && [Multiplicity.ONE_TO_MANY, Multiplicity.MANY_TO_ONE]
         .includes( parsedAction.definition.multiplicity ) ) {
         if ( mapping.transition.transitionFieldAction ) {
-            cfg.logger.warn( `Duplicated multiplicity transformations were detected: \
+            cfg.logger!.warn( `Duplicated multiplicity transformations were detected: \
               ${mapping.transition.transitionFieldAction.name} is being overwritten by ${parsedAction.name} ...` );
         }
         mapping.transition.transitionFieldAction = parsedAction;
@@ -629,7 +633,7 @@ export class MappingSerializer {
 
   private static addFieldIfDoesntExist(
     mapping: MappingModel, field: any, isSource: boolean,
-    docRefs: any, cfg: ConfigModel, ignoreValue: boolean = true): MappedField {
+    docRefs: any, cfg: ConfigModel, ignoreValue: boolean = true): MappedField | null {
     const mappedField: MappedField = new MappedField();
 
     mappedField.parsedData.parsedValueType = field.fieldType;
@@ -685,17 +689,18 @@ export class MappingSerializer {
     if (action['@type']) {
       return MappingSerializer.parseNewAction(action);
     } else {
-      return MappingSerializer.parseOldAction(action);
+      // TODO: check this non null operator
+      return MappingSerializer.parseOldAction(action)!;
     }
   }
 
   /**
    * @deprecated actionName: {param:...} style has been deprecated. Use {`@type`: actionName} style action description.
    */
-  private static parseOldAction(action: any): FieldAction {
+  private static parseOldAction(action: any): FieldAction | null {
     for (const actionName of Object.keys(action)) {
       if (!action.hasOwnProperty(actionName)) {
-        return;
+        return null;
       }
       const parsedAction: FieldAction = new FieldAction();
       parsedAction.name = actionName;
@@ -703,7 +708,7 @@ export class MappingSerializer {
       if (actionParams) {
         for (const paramName of Object.keys(actionParams)) {
           if (!actionParams.hasOwnProperty(paramName)) {
-            return;
+            return null;
           }
           const parsedArgumentValue: FieldActionArgumentValue = new FieldActionArgumentValue();
           parsedArgumentValue.name = paramName;
@@ -715,6 +720,7 @@ export class MappingSerializer {
       }
       return parsedAction;
     }
+    return null;
   }
 
   private static parseNewAction(action: any): FieldAction {
@@ -726,7 +732,7 @@ export class MappingSerializer {
       }
       const parsedArgumentValue: FieldActionArgumentValue = new FieldActionArgumentValue();
       parsedArgumentValue.name = key;
-      const valueString = value == null ? null : value.toString();
+      const valueString = value == null ? null : (value as any).toString();
       parsedArgumentValue.value = valueString;
       parsedAction.argumentValues.push(parsedArgumentValue);
     }

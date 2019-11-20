@@ -21,11 +21,11 @@ import { LookupTable } from './lookup-table.model';
 import { MappingModel } from './mapping.model';
 
 export class MappingDefinition {
-  name: string = null;
+  name: string | null = null;
   mappings: MappingModel[] = [];
-  activeMapping: MappingModel = null;
+  activeMapping: MappingModel | null = null;
   parsedDocs: DocumentDefinition[] = [];
-  templateText: string = null;
+  templateText: string | null = null;
 
   private tables: LookupTable[] = [];
   private tablesBySourceTargetKey: { [key: string]: LookupTable; } = {};
@@ -79,7 +79,7 @@ export class MappingDefinition {
   }
 
   getAllMappings(includeActiveMapping: boolean): MappingModel[] {
-    const mappings: MappingModel[] = [].concat(this.mappings);
+    const mappings: MappingModel[] = [...this.mappings];
     if (includeActiveMapping) {
       if (this.activeMapping == null) {
         return mappings;

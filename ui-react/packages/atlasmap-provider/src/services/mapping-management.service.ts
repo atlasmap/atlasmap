@@ -14,12 +14,10 @@
     limitations under the License.
 */
 
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
-
-import { Observable, Subscription, Subject, forkJoin } from 'rxjs';
-import { map, timeout } from 'rxjs/operators';
+import ky from 'ky';
+import log from 'loglevel';
+import { Observable, Subscription, Subject, forkJoin, from } from 'rxjs';
+import { timeout } from 'rxjs/operators';
 
 import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
@@ -38,16 +36,15 @@ import { LookupTableUtil } from '../utils/lookup-table-util';
  * Handles mapping updates. It restores mapping status from backend and reflect in UI,
  * and/or reflect mapping changes caused by the user action made in UI to the backend.
  */
-@Injectable()
 export class MappingManagementService {
-  _cfg: ConfigModel;
+  _cfg!: ConfigModel;
 
   lineRefreshSource = new Subject<void>();
   lineRefresh$ = this.lineRefreshSource.asObservable();
   mappingUpdatedSource = new Subject<void>();
   mappingUpdated$ = this.mappingUpdatedSource.asObservable();
 
-  debugMappingUpdatedSubscription: Subscription;
+  debugMappingUpdatedSubscription?: Subscription;
 
   mappingSelectionRequiredSource = new Subject<Field>();
   mappingSelectionRequired$ = this.mappingSelectionRequiredSource.asObservable();
@@ -59,13 +56,10 @@ export class MappingManagementService {
   mappingPreviewErrorSource = new Subject<ErrorInfo[]>();
   mappingPreviewError$ = this.mappingPreviewErrorSource.asObservable();
 
-  private headers = new HttpHeaders(
-    {'Content-Type': 'application/json; application/octet-stream',
-     'Accept':       'application/json; application/octet-stream'});
-  private mappingPreviewInputSubscription: Subscription;
-  private mappingUpdatedSubscription: Subscription;
+  private mappingPreviewInputSubscription?: Subscription;
+  private mappingUpdatedSubscription?: Subscription;
 
-  constructor(private logger: NGXLogger, private http: HttpClient) {}
+  constructor(private api: typeof ky) {}
 
   get cfg() {
     return this._cfg;
@@ -74,15 +68,15 @@ export class MappingManagementService {
   set cfg(cfg: ConfigModel) {
     this._cfg = cfg;
     if (!this._cfg.logger) {
-      this._cfg.logger = this.logger;
+      this._cfg.logger = log.getLogger('mapping-management');
     }
-    if (this._cfg.isDebugEnabled()) {
+    if (this._cfg.logger.getLevel() <= this._cfg.logger.levels.DEBUG) {
       this.mappingUpdated$.subscribe(() => {
         if (!this.cfg.mappings) {
           return;
         }
         if (this.cfg.mappings && this.cfg.mappings.activeMapping) {
-          this.cfg.logger.debug('mapping updated: ' + JSON.stringify(MappingSerializer.serializeMappings(this.cfg)));
+          this.cfg.logger!.info('mapping updated: ' + JSON.stringify(MappingSerializer.serializeMappings(this.cfg)));
         }
       });
     }
@@ -94,11 +88,9 @@ export class MappingManagementService {
   async runtimeServiceActive(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'ping';
-      this.cfg.logger.trace('Runtime Service Ping Request');
-      this.http.get(url, { headers: this.headers }).toPromise().then((body: string) => {
-        if (this.cfg.isTraceEnabled()) {
-          this.cfg.logger.trace(`Runtime Service Ping Response: ${JSON.stringify(body)}`);
-        }
+      this.cfg.logger!.debug('Runtime Service Ping Request');
+      this.api.get(url).json().then((body: any) => {
+        this.cfg.logger!.debug(`Runtime Service Ping Response: ${JSON.stringify(body)}`);
         if (body) {
           if (JSON.stringify(body).match('pong')) {
             resolve(true);
@@ -122,8 +114,8 @@ export class MappingManagementService {
       const operations: Observable<any>[] = [];
       for (const mappingName of mappingFileNames) {
         const url: string = baseURL + mappingName;
-        this.cfg.logger.trace('Mapping Service Request');
-        const operation = this.http.get(url).pipe(map((res: any) => res));
+        this.cfg.logger!.debug('Mapping Service Request');
+        const operation = from(this.api.get(url));
         operations.push(operation);
       }
 
@@ -134,13 +126,11 @@ export class MappingManagementService {
           return;
         }
         for (const d of data) {
-          if (this.cfg.isTraceEnabled()) {
-            this.cfg.logger.trace(`Mapping Service Response: ${JSON.stringify(d)}`);
-          }
+          this.cfg.logger!.debug(`Mapping Service Response: ${JSON.stringify(d)}`);
           this.cfg.mappings = mappingDefinition;
           MappingSerializer.deserializeMappingServiceJSON(d, this.cfg);
         }
-        this.cfg.mappings.getAllMappings(true).forEach(m => this.updateTransition(m));
+        this.cfg.mappings!.getAllMappings(true).forEach(m => this.updateTransition(m)); // TODO: check this non null operator
         observer.next(true);
         observer.complete();
       }).catch((error: any) => {
@@ -157,7 +147,7 @@ export class MappingManagementService {
    */
   async removeMapping(mappingModel: MappingModel): Promise<boolean> {
     return new Promise<boolean>( async(resolve) => {
-      const mappingWasRemoved: boolean = this.cfg.mappings.removeMapping(mappingModel);
+      const mappingWasRemoved: boolean = this.cfg.mappings!.removeMapping(mappingModel); // TODO: check this non null operator
       if (mappingWasRemoved) {
         this.deselectMapping();
         await this.notifyMappingUpdated();
@@ -173,8 +163,9 @@ export class MappingManagementService {
    */
   async removeAllMappings(): Promise<boolean> {
     return new Promise<boolean>( async(resolve) => {
-      for (const mapping of this.cfg.mappings.getAllMappings(true)) {
-        const mappingWasRemoved: boolean = this.cfg.mappings.removeMapping(mapping);
+      // TODO: check these non null operator on the mappings
+      for (const mapping of this.cfg.mappings!.getAllMappings(true)) {
+        const mappingWasRemoved: boolean = this.cfg.mappings!.removeMapping(mapping);
         if (mappingWasRemoved) {
           this.deselectMapping();
         } else {
@@ -189,7 +180,7 @@ export class MappingManagementService {
   async updateMappedField(mapping: MappingModel): Promise<boolean> {
     return new Promise<boolean>( async(resolve) => {
       if (mapping.isEmpty()) {
-        this.cfg.mappings.removeMapping(mapping);
+        this.cfg.mappings!.removeMapping(mapping); // TODO: check this non null operator
         this.deselectMapping();
       } else {
         this.updateTransition(mapping);
@@ -211,7 +202,8 @@ export class MappingManagementService {
     }
     insertedMappedField.parsedData.parsedIndex = targetIndex.toString();
     const mappedFields = mapping.getMappedFields(insertedMappedField.isSource());
-    mappedFields.splice(mapping.getIndexForMappedField(insertedMappedField) - 1, 1);
+    // TODO: check this non null operator
+    mappedFields.splice(mapping.getIndexForMappedField(insertedMappedField)! - 1, 1);
     mappedFields.splice(targetIndex - 1, 0, insertedMappedField);
     this.clearExtraPaddingFields(mappedFields, true);
     this.notifyMappingUpdated();
@@ -243,16 +235,16 @@ export class MappingManagementService {
 
     if (!field.isTerminal()) {
       field.docDef.populateChildren(field);
-      field.docDef.updateFromMappings(this.cfg.mappings);
+      field.docDef.updateFromMappings(this.cfg.mappings!); // TODO: check this non null operator
       field.collapsed = !field.collapsed;
       return;
     }
     let addField = false;
     let removeField = false;
-    let mapping: MappingModel = this.cfg.mappings.activeMapping;
+    let mapping: MappingModel | null = this.cfg.mappings!.activeMapping; // TODO: check this non null operator
 
     // Check compound selection and active mapping status to determine the action
-    if (mapping != null) {
+    if (mapping !== null) {
       if (mapping.hasMappedField(field.isSource())) {
 
         // If the user has performed a compound selection (ctrl/cmd-m1) of a previously unselected field
@@ -266,7 +258,7 @@ export class MappingManagementService {
         } else {
           if (!mapping.isFieldMapped(field)) {
             if (!mapping.isFullyMapped()) {
-              this.cfg.mappings.removeMapping(mapping);
+              this.cfg.mappings!.removeMapping(mapping); // TODO: check this non null operator
               this.deselectMapping();
             }
             mapping = null;
@@ -279,7 +271,7 @@ export class MappingManagementService {
 
     // Select other existing mapping if selected field participates, or create a new one
     if (mapping == null) {
-      const mappingsForField: MappingModel[] = this.cfg.mappings.findMappingsForField(field);
+      const mappingsForField: MappingModel[] = this.cfg.mappings!.findMappingsForField(field); // TODO: check this non null operator
 
       if (mappingsForField && mappingsForField.length === 1) {
         mapping = mappingsForField[0];
@@ -299,9 +291,10 @@ export class MappingManagementService {
     if (!addField && !removeField) {
       this.selectMapping(mapping);
 
-      const mappedFields = this.cfg.mappings.activeMapping.getAllMappedFields();
+      const mappedFields = this.cfg.mappings!.activeMapping!.getAllMappedFields(); // TODO: check this non null operator
       for (const mappedField of mappedFields) {
-        mappedField.field.expandToRoot();
+        // TODO: check this non null operator
+        mappedField.field!.expandToRoot();
       }
 
       this.notifyMappingUpdated();
@@ -309,7 +302,7 @@ export class MappingManagementService {
     }
 
     if (addField) {
-      const exclusionReason: string = this.getFieldSelectionExclusionReason(mapping, field);
+      const exclusionReason = this.getFieldSelectionExclusionReason(mapping, field);
       if (exclusionReason != null) {
         this.cfg.errorService.addError(new ErrorInfo({
           message: `The field \'${field.name}\' cannot be selected, ${exclusionReason}.`,
@@ -332,7 +325,7 @@ export class MappingManagementService {
         this.clearExtraPaddingFields(mapping.getMappedFields(field.isSource()), false);
       }
       if (mapping.isEmpty()) {
-        this.cfg.mappings.removeMapping(mapping);
+        this.cfg.mappings!.removeMapping(mapping); // TODO: check this non null operator
         this.deselectMapping();
       } else {
         this.updateTransition(mapping, position, offset);
@@ -341,7 +334,7 @@ export class MappingManagementService {
     }
   }
 
-  getFieldSelectionExclusionReason(mapping: MappingModel, field: Field): string {
+  getFieldSelectionExclusionReason(mapping: MappingModel, field: Field): string | null {
     if (!field.isTerminal()) {
       return 'field is a parent field';
     }
@@ -381,7 +374,8 @@ export class MappingManagementService {
     const direction = field.isSource() ? 'source' : 'target';
     const otherDirection = !field.isSource() ? 'source' : 'target';
     if (mappedFields.length > 0) {
-      if (field.isInCollection() || mappedFields[0].field.isInCollection()) {
+      // TODO: check this non null operator
+      if (field.isInCollection() || mappedFields[0].field!.isInCollection()) {
         return 'a collection field cannot be a part of compound selection.';
       } else if (otherSideMappedFields.length > 1) {
         return `multiple ${direction} fields cannot be added into this
@@ -396,7 +390,8 @@ export class MappingManagementService {
 
     if (field.isInCollection()) {
       if (otherSideMappedFields.length > 0) {
-        if (field.getCollectionCount() !== otherSideMappedFields[0].field.getCollectionCount()) {
+        // TODO: check this non null operator
+        if (field.getCollectionCount() !== otherSideMappedFields[0].field!.getCollectionCount()) {
           return `source and target must have the same nested collection count on the path.`;
         }
       }
@@ -432,14 +427,14 @@ export class MappingManagementService {
       this.deselectMapping();
       return;
     }
-    this.cfg.mappings.activeMapping = mappingModel;
+    this.cfg.mappings!.activeMapping = mappingModel; // TODO: check this non null operator
     this.cfg.showMappingDetailTray = true;
     this.mappingUpdatedSource.next();
   }
 
   deselectMapping(): void {
     this.cfg.showMappingDetailTray = false;
-    this.cfg.mappings.activeMapping = null;
+    this.cfg.mappings!.activeMapping = null; // TODO: check this non null operator
     this.notifyMappingUpdated();
   }
 
@@ -476,20 +471,18 @@ export class MappingManagementService {
       }
 
       const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/process';
-      if (this.cfg.isTraceEnabled()) {
-        this.cfg.logger.trace(`Process Mapping Preview Request: ${JSON.stringify(payload)}`);
-      }
-      this.http.put(url, payload, { headers: this.headers }).toPromise().then((body: any) => {
-        if (this.cfg.isTraceEnabled()) {
-          this.cfg.logger.trace(`Process Mapping Preview  Response: ${JSON.stringify(body)}`);
-        }
+      this.cfg.logger!.debug(`Process Mapping Preview Request: ${JSON.stringify(payload)}`);
+      this.api.put(url, { json: payload }).json().then((body: any) => {
+        this.cfg.logger!.debug(`Process Mapping Preview  Response: ${JSON.stringify(body)}`);
         const answer = MappingSerializer.deserializeFieldMapping(body.ProcessMappingResponse.mapping, docRefs, this.cfg, false);
         for (const toWrite of inputFieldMapping.targetFields) {
           for (const toRead of answer.targetFields) {
-            if (toWrite.field.docDef.id === toRead.parsedData.parsedDocID
-                && toWrite.field.path === toRead.parsedData.parsedPath) {
+            // TODO: check these non null operator
+            if (toWrite.field!.docDef.id === toRead.parsedData.parsedDocID
+                && toWrite.field!.path === toRead.parsedData.parsedPath) {
               // TODO let field component subscribe mappingPreviewOutputSource instead of doing this
-              toWrite.field.value = toRead.parsedData.parsedValue;
+              // TODO: check this non null operator
+              toWrite.field!.value = toRead.parsedData.parsedValue!;
               const index = answer.targetFields.indexOf(toRead);
               if (index !== -1) {
                 answer.targetFields.splice(index, 1);
@@ -500,7 +493,8 @@ export class MappingManagementService {
         }
         this.mappingPreviewOutputSource.next(answer);
         const audits = MappingSerializer.deserializeAudits(body.ProcessMappingResponse.audits, ErrorType.PREVIEW);
-        if (this.cfg.mappings.activeMapping === inputFieldMapping) {
+        // TODO: check this non null operator
+        if (this.cfg.mappings!.activeMapping === inputFieldMapping) {
           audits.forEach(a => a.mapping = inputFieldMapping);
           this.cfg.errorService.addError(...audits);
         }
@@ -543,12 +537,12 @@ export class MappingManagementService {
    * @param cfg
    */
   removeDocumentReferenceFromAllMappings(docId: string) {
-    for (const mapping of this.cfg.mappings.getAllMappings(true)) {
+    for (const mapping of this.cfg.mappings!.getAllMappings(true)) {
       for (const mappedField of mapping.getAllFields()) {
         if (!(mappedField instanceof PaddingField) && (mappedField.docDef.id === docId)) {
           this.removeFieldFromAllMappings(mappedField);
-          this.cfg.mappings.removeMapping(mapping);
-          if (mapping === this.cfg.mappings.activeMapping) {
+          this.cfg.mappings!.removeMapping(mapping); // TODO: check this non null operator
+          if (mapping === this.cfg.mappings!.activeMapping) { // TODO: check this non null operator
             this.cfg.mappingService.deselectMapping();
           }
         }
@@ -557,12 +551,13 @@ export class MappingManagementService {
   }
 
   removeFieldFromAllMappings(field: Field): void {
-    for (const mapping of this.cfg.mappings.getAllMappings(true)) {
-      const mappedField: MappedField = mapping.getMappedFieldForField(field);
+    // TODO: check this non null operator
+    for (const mapping of this.cfg.mappings!.getAllMappings(true)) {
+      const mappedField = mapping.getMappedFieldForField(field);
       if (mappedField != null) {
         mapping.removeMappedField(mappedField);
         if (mapping.isEmpty()) {
-          this.cfg.mappings.removeMapping(mapping);
+          this.cfg.mappings!.removeMapping(mapping); // TODO: check this non null operator
         }
       }
     }
@@ -601,7 +596,7 @@ export class MappingManagementService {
    * Invoke the runtime service to both validate and save the current active mapping.
    */
   private async validateMappings(): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
+    return new Promise<boolean>((resolve) => {
       if (this.cfg.initCfg.baseMappingServiceUrl === null || this.cfg.mappings === null) {
         // validation service not configured or required
         resolve(false);
@@ -610,19 +605,14 @@ export class MappingManagementService {
       this.cfg.errorService.clearValidationErrors();
       const payload: any = MappingSerializer.serializeMappings(this.cfg);
       const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/validate';
-      if (this.cfg.isTraceEnabled()) {
-        this.cfg.logger.trace(`Validation Service Request: ${JSON.stringify(payload)}\n`);
-      }
-      this.http.put(url, payload, { headers: this.headers }).toPromise().then((body: any) => {
-        if (this.cfg.isTraceEnabled()) {
-          this.cfg.logger.trace(`Validation Service Response: ${JSON.stringify(body)}\n`);
-        }
+      this.cfg.logger!.debug(`Validation Service Request: ${JSON.stringify(payload)}\n`);
+      this.api.put(url, { json: payload }).json().then((body: any) => {
+        this.cfg.logger!.debug(`Validation Service Response: ${JSON.stringify(body)}\n`);
         if (this.cfg.mappings === null) {
           resolve(false);
           return;
         }
         const errors: ErrorInfo[] = [];
-        const mapping = this.cfg.mappings.activeMapping;
 
         // This should be eventually turned into mapping entry level validation.
         // https://github.com/atlasmap/atlasmap-ui/issues/116
@@ -630,13 +620,13 @@ export class MappingManagementService {
           for (const validation of body.Validations.validation) {
             const level: ErrorLevel = validation.status;
             let scope: ErrorScope = validation.scope;
-            let validatedMapping: MappingModel;
+            let validatedMapping: MappingModel | undefined = undefined;
             if (!scope || scope !== ErrorScope.MAPPING || !validation.id) {
               scope = ErrorScope.APPLICATION;
             } else {
               scope = ErrorScope.MAPPING;
               if (this.cfg.mappings && this.cfg.mappings.mappings) {
-                validatedMapping = this.cfg.mappings.mappings.find(m => m.uuid === validation.id);
+                validatedMapping = this.cfg.mappings.mappings.find(m => m.uuid === validation.id)!; // TODO: check this non null operator
               }
             }
             errors.push(new ErrorInfo({message: validation.message, level: level, scope: scope,
@@ -645,8 +635,8 @@ export class MappingManagementService {
         }
         this.cfg.errorService.addError(...errors);
         resolve(true);
-      }).catch((error: any) => {
-        this.cfg.logger.warn('Unable to fetch validation data.');
+      }).catch(() => {
+        this.cfg.logger!.warn('Unable to fetch validation data.');
         resolve(false);
       });
     });
@@ -666,11 +656,11 @@ export class MappingManagementService {
    * Validate and save complete mappings.  Triggered either as an observable or directly.
    */
   async notifyMappingUpdated(): Promise<boolean> {
-    return new Promise<boolean>( async(resolve, reject) => {
+    return new Promise<boolean>( async(resolve) => {
 
       if (this.cfg.mappings) {
 
-        const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
+        const activeMapping: MappingModel = this.cfg.mappings.activeMapping!; // TODO: check this non null operator
         if (activeMapping && (this.cfg.mappings.mappings.indexOf(activeMapping) === -1)) {
           this.cfg.mappings.mappings.push(activeMapping);
         }
@@ -695,7 +685,7 @@ export class MappingManagementService {
     for (const field of mapping.getAllFields()) {
       if (field.enumeration) {
         mapping.transition.mode = TransitionMode.ENUM;
-        LookupTableUtil.populateMappingLookupTable(this.cfg.mappings, mapping);
+        LookupTableUtil.populateMappingLookupTable(this.cfg.mappings!, mapping); // TODO: check this non null operator
         return;
       }
     }
@@ -715,7 +705,7 @@ export class MappingManagementService {
        && ( !mapping.transition.transitionFieldAction
          || mapping.transition.transitionFieldAction.definition.multiplicity !== Multiplicity.MANY_TO_ONE)) {
         mapping.transition.transitionFieldAction
-         = FieldAction.create(this.cfg.fieldActionService.getActionDefinitionForName('Concatenate', Multiplicity.MANY_TO_ONE));
+         = FieldAction.create(this.cfg.fieldActionService.getActionDefinitionForName('Concatenate', Multiplicity.MANY_TO_ONE)!); // TODO: check this non null operator
         mapping.transition.transitionFieldAction.setArgumentValue('delimiter', ' ');
       }
     } else if (targetMappedFields.length > 1 || targetMappedCollection) {
@@ -723,7 +713,7 @@ export class MappingManagementService {
       if (!mapping.transition.transitionFieldAction
        || mapping.transition.transitionFieldAction.definition.multiplicity !== Multiplicity.ONE_TO_MANY) {
         mapping.transition.transitionFieldAction
-         = FieldAction.create(this.cfg.fieldActionService.getActionDefinitionForName('Split', Multiplicity.ONE_TO_MANY));
+         = FieldAction.create(this.cfg.fieldActionService.getActionDefinitionForName('Split', Multiplicity.ONE_TO_MANY)!); // TODO: check this non null operator
         mapping.transition.transitionFieldAction.setArgumentValue('delimiter', ' ');
       }
     } else {
@@ -766,7 +756,7 @@ export class MappingManagementService {
    * @param filter
    */
   executeFieldSearch(configModel: ConfigModel, filter: string, isSource: boolean): any[] {
-    const activeMapping = configModel.mappings.activeMapping;
+    const activeMapping = configModel.mappings!.activeMapping!; // TODO: check this non null operator
     const formattedFields: any[] = [];
     let fields: Field[] = [];
     for (const docDef of configModel.getDocs(isSource)) {

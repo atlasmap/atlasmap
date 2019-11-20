@@ -14,6 +14,7 @@
     limitations under the License.
 */
 
+import ky from 'ky';
 import { Observable } from 'rxjs';
 
 import { DocumentType, InspectionType, CollectionType } from '../common/config.types';
@@ -26,9 +27,11 @@ import { Subscription } from 'rxjs';
 import { ErrorScope, ErrorType, ErrorInfo, ErrorLevel } from '../models/error.model';
 
 export class DocumentManagementService {
-  cfg: ConfigModel;
+  cfg!: ConfigModel;
 
-  private mappingUpdatedSubscription: Subscription;
+  private mappingUpdatedSubscription!: Subscription;
+
+  private headers = {'Content-Type': 'application/json'};
 
   /**
    * Use the JSON utility to translate the specified buffer into a JSON buffer - then replace any
@@ -103,14 +106,14 @@ export class DocumentManagementService {
     return metaStr;
   }
 
-  constructor(private http: HttpClient) {}
+  constructor(private api: typeof ky) {}
 
   initialize(): void {
     this.mappingUpdatedSubscription
-      = this.cfg.mappingService.mappingUpdated$.subscribe(mappingDefinition => {
+      = this.cfg.mappingService.mappingUpdated$.subscribe(() => {
       for (const d of this.cfg.getAllDocs()) {
         if (d.initialized) {
-          d.updateFromMappings(this.cfg.mappings);
+          d.updateFromMappings(this.cfg.mappings!); // TODO: check this non null operator
         }
       }
     });
@@ -130,14 +133,10 @@ export class DocumentManagementService {
         },
       };
       const url: string = this.cfg.initCfg.baseJavaInspectionServiceUrl + 'mavenclasspath';
-      if (this.cfg.isTraceEnabled()) {
-        this.cfg.logger.trace(`Classpath Service Request: ${JSON.stringify(requestBody)}`);
-      }
-      this.http.post(url, requestBody, { headers: this.headers }).toPromise()
+      this.cfg.logger!.debug(`Classpath Service Request: ${JSON.stringify(requestBody)}`);
+      this.api.post(url, { json: requestBody, headers: this.headers }).json()
         .then((body: any) => {
-          if (this.cfg.isTraceEnabled()) {
-            this.cfg.logger.trace(`Classpath Service Response: ${JSON.stringify(body)}`);
-          }
+          this.cfg.logger!.debug(`Classpath Service Response: ${JSON.stringify(body)}`);
           const classPath: string = body.MavenClasspathResponse.classpath;
           observer.next(classPath);
           observer.complete();
@@ -167,14 +166,10 @@ export class DocumentManagementService {
       } else if (docDef.type === DocumentType.JSON) {
         url = this.cfg.initCfg.baseJSONInspectionServiceUrl + 'inspect';
       }
-      if (this.cfg.isTraceEnabled()) {
-        this.cfg.logger.trace(`Document Service Request: ${JSON.stringify(payload)}`);
-      }
-      this.http.post(url, payload, { headers: this.headers }).toPromise()
+      this.cfg.logger!.debug(`Document Service Request: ${JSON.stringify(payload)}`);
+      this.api.post(url, { json: payload, headers: this.headers }).json()
         .then((responseJson: any) => {
-          if (this.cfg.isTraceEnabled()) {
-            this.cfg.logger.trace(`Document Service Response: ${JSON.stringify(responseJson)}`);
-          }
+          this.cfg.logger!.debug(`Document Service Response: ${JSON.stringify(responseJson)}`);
           this.parseDocumentResponse(responseJson, docDef);
           observer.next(docDef);
           observer.complete();
@@ -195,16 +190,12 @@ export class DocumentManagementService {
    * @param binaryBuffer
    */
   setLibraryToService(binaryBuffer: any, callback: (success: boolean, res: any) => void): void {
-    const serviceHeaders = new HttpHeaders(
-       {'Content-Type': 'application/octet-stream'});
     const url = this.cfg.initCfg.baseMappingServiceUrl + 'library';
-    this.cfg.logger.trace('Set Library Service Request');
+    this.cfg.logger!.debug('Set Library Service Request');
     const fileContent: Blob = new Blob([binaryBuffer], {type: 'application/octet-stream'});
-    this.http.put(url, fileContent, { headers: serviceHeaders }).toPromise().then((res: any) => {
+    this.api.put(url, { body: fileContent }).blob().then((res: any) => {
       callback(true, res);
-      if (this.cfg.isTraceEnabled()) {
-        this.cfg.logger.trace(`Set Library Service Response: ${JSON.stringify(res)}`);
-        }
+      this.cfg.logger!.debug(`Set Library Service Response: ${JSON.stringify(res)}`);
     })
     .catch((error: any) => {
       callback(false, error);
@@ -222,7 +213,7 @@ export class DocumentManagementService {
    * @param isSource
    */
   async processDocument(selectedFile: any, inspectionType: InspectionType, isSource: boolean): Promise<boolean> {
-    return new Promise<boolean>( async(resolve, reject) => {
+    return new Promise<boolean>( async(resolve) => {
       let fileBin = null;
       let fileText = '';
       const reader = new FileReader();
@@ -520,7 +511,7 @@ export class DocumentManagementService {
     }
   }
 
-  private parseJSONFieldFromDocument(field: any, parentField: Field, docDef: DocumentDefinition): void {
+  private parseJSONFieldFromDocument(field: any, parentField: Field | null, docDef: DocumentDefinition): void {
     const parsedField = this.parseFieldFromDocument(field, parentField, docDef);
     if (parsedField == null) {
       return;
@@ -533,7 +524,7 @@ export class DocumentManagementService {
     }
   }
 
-  private parseFieldFromDocument(field: any, parentField: Field, docDef: DocumentDefinition): Field {
+  private parseFieldFromDocument(field: any, parentField: Field | null, docDef: DocumentDefinition): Field | null {
     if (field != null && field.status === 'NOT_FOUND') {
       this.cfg.errorService.addError(new ErrorInfo({
         message: `Ignoring unknown field: ${field.name} (${field.className}), parent class: ${docDef.name}`,
@@ -566,7 +557,7 @@ export class DocumentManagementService {
     return parsedField;
   }
 
-  private parseXMLFieldFromDocument(field: any, parentField: Field, docDef: DocumentDefinition): void {
+  private parseXMLFieldFromDocument(field: any, parentField: Field | null, docDef: DocumentDefinition): void {
     const parsedField = this.parseFieldFromDocument(field, parentField, docDef);
     if (parsedField == null) {
       return;
@@ -586,7 +577,7 @@ export class DocumentManagementService {
     }
   }
 
-  private parseJavaFieldFromDocument(field: any, parentField: Field, docDef: DocumentDefinition): void {
+  private parseJavaFieldFromDocument(field: any, parentField: Field | null, docDef: DocumentDefinition): void {
     const parsedField = this.parseFieldFromDocument(field, parentField, docDef);
     if (parsedField == null) {
       return;

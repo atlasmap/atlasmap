@@ -22,22 +22,22 @@ import { FieldAction } from './field-action.model';
 import { PaddingField } from './document-definition.model';
 
 export class MappedFieldParsingData {
-  parsedName: string = null;
-  parsedPath: string = null;
-  parsedValue: string = null;
-  parsedDocID: string = null;
-  parsedDocURI: string = null;
-  parsedIndex: string = null;
+  parsedName: string | null = null;
+  parsedPath: string | null = null;
+  parsedValue: string | null = null;
+  parsedDocID: string | null = null;
+  parsedDocURI: string | null = null;
+  parsedIndex: string | null = null;
   fieldIsProperty = false;
   fieldIsConstant = false;
-  parsedValueType: string = null;
+  parsedValueType: string | null = null;
   parsedActions: FieldAction[] = [];
   userCreated = false;
 }
 
 export class MappedField {
   parsedData: MappedFieldParsingData = new MappedFieldParsingData();
-  field: Field;
+  field: Field | null;
   actions: FieldAction[] = [];
 
   static sortMappedFieldsByPath(mappedFields: MappedField[]): MappedField[] {
@@ -67,7 +67,7 @@ export class MappedField {
   }
 
   isSource(): boolean {
-    return this.field.isSource();
+    return this.field ? this.field.isSource() : false;
   }
 
   removeAction(action: FieldAction): void {
@@ -89,9 +89,9 @@ export class MappingModel {
     this.cfg = ConfigModel.getConfig();
   }
 
-  getFirstCollectionField(isSource: boolean): Field {
+  getFirstCollectionField(isSource: boolean): Field | null {
     for (const f of isSource ? this.sourceFields : this.targetFields) {
-      if (f.field.isInCollection()) {
+      if (f.field && f.field.isInCollection()) {
         return f.field;
       }
     }
@@ -100,7 +100,7 @@ export class MappingModel {
 
   isLookupMode(): boolean {
     for (const f of this.sourceFields.concat(this.targetFields)) {
-      if (f.field.enumeration) {
+      if (f.field && f.field.enumeration) {
         return true;
       }
     }
@@ -168,10 +168,11 @@ export class MappingModel {
   }
 
   removeMappedField(mappedField: MappedField): void {
-    DataMapperUtil.removeItemFromArray(mappedField, this.getMappedFields(mappedField.field.isSource()));
+    // TODO: check this non null operator
+    DataMapperUtil.removeItemFromArray(mappedField, this.getMappedFields(mappedField.field!.isSource()));
   }
 
-  getMappedFieldForField(field: Field): MappedField {
+  getMappedFieldForField(field: Field): MappedField | null {
     for (const mappedField of this.getMappedFields(field.isSource())) {
       if (mappedField.field === field) {
         return mappedField;
@@ -180,7 +181,7 @@ export class MappingModel {
     return null;
   }
 
-  getMappedFieldForIndex(index: string, isSource: boolean): MappedField {
+  getMappedFieldForIndex(index: string, isSource: boolean): MappedField | null {
     if (!index) {
       return null;
     }
@@ -191,7 +192,7 @@ export class MappingModel {
     return mappedFields[+index - 1];
   }
 
-  getIndexForMappedField(mappedField: MappedField): number {
+  getIndexForMappedField(mappedField: MappedField): number | null {
     if (!mappedField || !mappedField.field) {
       return null;
     }
@@ -221,7 +222,7 @@ export class MappingModel {
     return isSource ? this.sourceFields : this.targetFields;
   }
 
-  getLastMappedField(isSource: boolean): MappedField {
+  getLastMappedField(isSource: boolean): MappedField | null {
     const fields: MappedField[] = this.getMappedFields(isSource);
     if ((fields != null) && (fields.length > 0)) {
       return fields[fields.length - 1];
@@ -296,8 +297,9 @@ export class MappingModel {
    *
    * @param field
    */
-  public getMappedTarget(field: Field): string {
-    const mappings: MappingModel[] = this.cfg.mappings.mappings;
+  public getMappedTarget(field: Field): string | null {
+    // TODO: check this non null operator
+    const mappings: MappingModel[] = this.cfg.mappings!.mappings;
 
     if (field.isSource()) {
       return null;
@@ -308,14 +310,16 @@ export class MappingModel {
       }
 
       for (const mappedOutputField of m.targetFields) {
-        if (mappedOutputField.field.docDef === field.docDef
-          && mappedOutputField.field.path === field.path) {
+        // TODO: check this non null operator
+        if (mappedOutputField.field!.docDef === field.docDef
+          && mappedOutputField.field!.path === field.path) {
           if (m.isFieldMapped(field)) {
-            return m.sourceFields[0].field.name;
+            return m.sourceFields[0].field!.name;
           }
         }
       }
     }
+    return null;
   }
 
 }

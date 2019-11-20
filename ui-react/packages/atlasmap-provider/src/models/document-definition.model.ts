@@ -21,11 +21,11 @@ import { DataMapperUtil } from '../common/data-mapper-util';
 import { DocumentInitializationModel } from './config.model';
 
 export class NamespaceModel {
-  private static unqualifiedNamespace: NamespaceModel = null;
+  private static unqualifiedNamespace: NamespaceModel;
 
-  alias: string = null;
-  uri: string = null;
-  locationUri: string = null;
+  alias: string;
+  uri: string;
+  locationUri: string;
   createdByUser = false;
   isTarget = false;
 
@@ -74,7 +74,7 @@ export class PaddingField extends Field {
 }
 
 export class DocumentDefinition {
-  private static padField: Field = null;
+  private static padField: Field;
 
   LEFT_BRACKET = '\x5b';
   RIGHT_BRACKET = '\x5d';
@@ -106,8 +106,8 @@ export class DocumentDefinition {
   showFields = true;
   visibleInCurrentDocumentSearch = true;
   namespaces: NamespaceModel[] = [];
-  characterEncoding: string = null;
-  locale: string = null;
+  characterEncoding: string;
+  locale: string;
 
   set type(type: DocumentType) {
     this._type = type;
@@ -127,7 +127,7 @@ export class DocumentDefinition {
   }
 
   getAllFields(): Field[] {
-    return [].concat(this.allFields);
+    return [...this.allFields];
   }
 
   /**
@@ -158,7 +158,7 @@ export class DocumentDefinition {
   getFields(fieldPaths: string[]): Field[] {
     const fields: Field[] = [];
     for (const fieldPath of fieldPaths) {
-      const field: Field = this.getField(fieldPath);
+      const field = this.getField(fieldPath);
       if (field != null) {
         fields.push(field);
       }
@@ -178,15 +178,11 @@ export class DocumentDefinition {
   }
 
   getNamespaceForAlias(alias: string): NamespaceModel {
-    for (const ns of this.namespaces) {
-      if (alias === ns.alias) {
-        return ns;
-      }
-    }
-    return null;
+    // TODO: check this non null operator
+    return this.namespaces.find(ns => alias === ns.alias)!;
   }
 
-  getField(fieldPath: string): Field {
+  getField(fieldPath: string): Field | null {
     if (!fieldPath) {
       return null;
     }
@@ -226,7 +222,7 @@ export class DocumentDefinition {
   }
 
   getTerminalFields(): Field[] {
-    return [].concat(this.terminalFields);
+    return [...this.terminalFields];
   }
 
   initializeFromFields(): void {
@@ -362,11 +358,10 @@ export class DocumentDefinition {
 
     // FIXME: some of this work is happening N times for N source/target docs, should only happen once.
     for (const mapping of mappingDefinition.getAllMappings(true)) {
-      const mappingIsActive: boolean = (mapping === mappingDefinition.activeMapping);
-
       for (const field of mapping.getAllFields()) {
         let parentField = field;
-        const partOfTransformation = mapping.getMappedFieldForField(field).actions.length > 0;
+        // TODO: check this non null operator
+        const partOfTransformation = mapping.getMappedFieldForField(field)!.actions.length > 0;
         while (parentField != null) {
           parentField.partOfMapping = true;
           parentField.partOfTransformation = parentField.partOfTransformation || partOfTransformation;
@@ -379,7 +374,7 @@ export class DocumentDefinition {
     }
   }
 
-  private populateFieldParentPaths(field: Field, parentPath: string, depth: number): void {
+  private populateFieldParentPaths(field: Field, parentPath: string | null, depth: number): void {
     if (parentPath == null) {
       parentPath = this.pathSeparator;
     }

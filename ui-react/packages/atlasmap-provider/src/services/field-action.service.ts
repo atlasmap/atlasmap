@@ -13,18 +13,14 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Injectable } from '@angular/core';
 import { ConfigModel } from '../models/config.model';
-import { NGXLogger } from 'ngx-logger';
-import { ErrorHandlerService } from './error-handler.service';
 import { FieldActionDefinition, FieldActionArgument, Multiplicity } from '../models/field-action.model';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import ky from 'ky';
 import { MappingModel } from '../models/mapping.model';
 import { Field } from '../models/field.model';
 import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from '../models/error.model';
 
-@Injectable()
 export class FieldActionService {
   cfg: ConfigModel = ConfigModel.getConfig();
   actions: { [key in Multiplicity]: FieldActionDefinition[]} = {
@@ -35,14 +31,11 @@ export class FieldActionService {
   };
 
   isInitialized = false;
-  private headers = new HttpHeaders(
+  private headers =
     {'Content-Type': 'application/json; application/octet-stream',
-     'Accept':       'application/json; application/octet-stream'});
+     'Accept':       'application/json; application/octet-stream'};
 
-  constructor(
-    private errorService: ErrorHandlerService,
-    private logger: NGXLogger,
-    private http: HttpClient) {}
+  constructor(private api: typeof ky) {}
 
   async fetchFieldActions(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
@@ -52,7 +45,7 @@ export class FieldActionService {
           for (const actionDetail of this.cfg.preloadedFieldActionMetadata.ActionDetails.actionDetail) {
             const fieldActionDefinition = this.extractFieldActionDefinition(actionDetail);
             if (!fieldActionDefinition.multiplicity) {
-              this.logger.debug(`Field action (${fieldActionDefinition.name}) is missing multiplicity, ingoring`);
+              this.cfg.logger!.info(`Field action (${fieldActionDefinition.name}) is missing multiplicity, ingoring`);
               continue;
             }
             if (fieldActionDefinition.name === 'Expression') { // Expression is handled in special manner
@@ -85,13 +78,13 @@ export class FieldActionService {
       this.doFetchFieldActions().toPromise()
         .then((fetchedActionConfigs: FieldActionDefinition[]) => {
           if (fetchedActionConfigs.length === 1) {
-            this.logger.debug('No field action was returned from backend');
+            this.cfg.logger!.info('No field action was returned from backend');
             resolve(false);
           }
           this.clearActionDefinitions();
           fetchedActionConfigs.forEach(action => {
             if (!action.multiplicity) {
-              this.logger.debug(`Field action  (${action.name}) is missing multiplicity, ignoring`);
+              this.cfg.logger!.info(`Field action  (${action.name}) is missing multiplicity, ignoring`);
               return;
             }
             if (action.name === 'Expression') { // Expression is handled in special manner
@@ -112,7 +105,7 @@ export class FieldActionService {
     });
   }
 
-  getActionDefinitionForName(actionName: string, multiplicity?: Multiplicity): FieldActionDefinition {
+  getActionDefinitionForName(actionName: string, multiplicity?: Multiplicity): FieldActionDefinition | null {
     if (!this.actions || !actionName) {
       return null;
     }
@@ -133,6 +126,8 @@ export class FieldActionService {
   /**
    * Return the field action Definitions applicable to the specified field mapping pair.
    * @param mapping
+   * @param isSource
+   * @param multiplicity
    */
   getActionsAppliesToField(mapping: MappingModel, isSource: boolean = true,
   multiplicity: Multiplicity = Multiplicity.ONE_TO_ONE): FieldActionDefinition[] {
@@ -146,11 +141,9 @@ export class FieldActionService {
     return new Observable<FieldActionDefinition[]>((observer: any) => {
       const actionConfigs: FieldActionDefinition[] = [];
       const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'fieldActions';
-      this.cfg.logger.trace('Field Action Config Request');
-      this.http.get(url, { headers: this.headers }).toPromise().then((body: any) => {
-        if (this.cfg.isTraceEnabled()) {
-          this.cfg.logger.trace(`Field Action Config Response: ${JSON.stringify(body)}`);
-        }
+      this.cfg.logger!.debug('Field Action Config Request');
+      this.api.get(url, { headers: this.headers }).json().then((body: any) => {
+        this.cfg.logger!.debug(`Field Action Config Response: ${JSON.stringify(body)}`);
         if (body && body.ActionDetails
           && body.ActionDetails.actionDetail
           && body.ActionDetails.actionDetail.length) {
@@ -170,9 +163,7 @@ export class FieldActionService {
   }
 
   private extractFieldActionDefinition(actionDetail: any): FieldActionDefinition {
-    if (this.cfg.isDebugEnabled()) {
-      this.cfg.logger.debug(`Deserializing field action definition: ${JSON.stringify(actionDetail)}`);
-    }
+    this.cfg.logger!.info(`Deserializing field action definition: ${JSON.stringify(actionDetail)}`);
 
     const fieldActionDefinition = new FieldActionDefinition();
     fieldActionDefinition.name = actionDetail.name;
@@ -203,7 +194,7 @@ export class FieldActionService {
   }
 
   private sortFieldActionDefinitions() {
-    Object.keys(this.actions).forEach(multiplicity => {
+    (Object.keys(this.actions) as [keyof typeof Multiplicity]).forEach((multiplicity) => {
       const definitions = this.actions[multiplicity];
       const sortedActionDefinitions: FieldActionDefinition[] = [];
       if (definitions == null || definitions.length === 0) {
@@ -240,7 +231,9 @@ export class FieldActionService {
    * field properties for source transformations, or matches the respective target field properties only for
    * a target transformation.
    *
+   * @param action
    * @param mapping
+   * @param isSource
    */
   appliesToField(action: FieldActionDefinition, mapping: MappingModel, isSource: boolean): boolean {
 
@@ -265,21 +258,20 @@ export class FieldActionService {
    * @param isSource
    */
   private getActualField(mapping: MappingModel, isSource: boolean): Field {
-    let targetField: Field = null;
-    for (targetField of mapping.getFields(isSource)) {
-      if ((targetField.name !== '<padding field>')) {
-        break;
-      }
-    }
-    return targetField;
+    const targetField = mapping
+      .getFields(isSource)
+      .find(f => f.name !== '<padding field>');
+    // TODO: maybe throw an exception instead of assuming the field will be found?
+    return targetField!;
   }
 
   /**
    * Check if it could be applied to source field.
-   * @param mapping FieldMappingPair
+   * @param action
+   * @param _
    * @param selectedSourceField selected source field
    */
-  private appliesToSourceField(action: FieldActionDefinition, mapping: MappingModel, selectedSourceField: Field): boolean {
+  private appliesToSourceField(action: FieldActionDefinition, _: MappingModel, selectedSourceField: Field): boolean {
 
     // Check for matching types - date.
     if (this.matchesDate(action.sourceType, selectedSourceField.type)) {
@@ -301,10 +293,11 @@ export class FieldActionService {
 
   /**
    * Check if it could be applied for target field. Target type may not change.
-   * @param mapping FieldMappingPair
+   * @param action
+   * @param _
    * @param selectedTargetField selected target field
    */
-  private appliesToTargetField(action: FieldActionDefinition, mapping: MappingModel, selectedTargetField: Field): boolean {
+  private appliesToTargetField(action: FieldActionDefinition, _: MappingModel, selectedTargetField: Field): boolean {
     if (selectedTargetField == null) {
       return false;
     }
@@ -358,6 +351,6 @@ export class FieldActionService {
   }
 
   private clearActionDefinitions() {
-    Object.keys(Multiplicity).forEach(m => this.actions[m] = []);
+    (Object.keys(Multiplicity) as [keyof typeof Multiplicity]).forEach(m => this.actions[m] = []);
   }
 }

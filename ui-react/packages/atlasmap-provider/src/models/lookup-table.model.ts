@@ -51,7 +51,7 @@ export class LookupTable {
     return this.sourceIdentifier + ':' + this.targetIdentifier;
   }
 
-  getEntryForSource(sourceValue: string, autocreate: boolean): LookupTableEntry {
+  getEntryForSource(sourceValue: string, autocreate: boolean): LookupTableEntry | null {
     for (const entry of this.entries) {
       if (entry.sourceValue === sourceValue) {
         return entry;

@@ -14,6 +14,7 @@
     limitations under the License.
 */
 
+import { Logger } from 'loglevel';
 import { MappingDefinition } from './mapping-definition.model';
 import { DocumentDefinition } from './document-definition.model';
 
@@ -21,7 +22,6 @@ import { ErrorHandlerService } from '../services/error-handler.service';
 import { DocumentManagementService } from '../services/document-management.service';
 import { MappingManagementService } from '../services/mapping-management.service';
 import { InitializationService } from '../services/initialization.service';
-import { ErrorInfo } from '../models/error.model';
 
 import { DocumentType, InspectionType, CollectionType } from '../common/config.types';
 import { FieldActionService } from '../services/field-action.service';
@@ -34,21 +34,21 @@ export class DataMapperInitializationModel {
   admHttpTimeout = 30000;  // 30 seconds
   initializationErrorOccurred = false;
 
-  baseJavaInspectionServiceUrl: string;
-  baseXMLInspectionServiceUrl: string;
-  baseJSONInspectionServiceUrl: string;
-  baseMappingServiceUrl: string;
+  baseJavaInspectionServiceUrl?: string;
+  baseXMLInspectionServiceUrl?: string;
+  baseJSONInspectionServiceUrl?: string;
+  baseMappingServiceUrl?: string;
 
-  xsrfHeaderName: string;
-  xsrfCookieName: string;
-  xsrfDefaultTokenValue: string;
+  xsrfHeaderName?: string;
+  xsrfCookieName?: string;
+  xsrfDefaultTokenValue?: string;
 
   /* class path fetching configuration */
   classPathFetchTimeoutInMilliseconds = 30000;
   // if classPath is specified, maven call to resolve pom will be skipped
-  pomPayload: string;
+  pomPayload?: string;
 
-  classPath: string;
+  classPath?: string;
 
   /* inspection service filtering flags */
   fieldNameBlacklist: string[] = [];
@@ -81,8 +81,8 @@ export class DocumentInitializationModel {
   inspectionSource: string;
   inspectionResult: string;
   selectedRoot: string;
-  collectionType: CollectionType;
-  collectionClassName: string;
+  collectionType?: CollectionType;
+  collectionClassName?: string;
 }
 
 export class ConfigModel {
@@ -118,11 +118,11 @@ export class ConfigModel {
   constantDoc: DocumentDefinition = new DocumentDefinition();
   mappingFiles: string[] = [];
 
-  mappings: MappingDefinition = null;
+  mappings: MappingDefinition | null = null;
 
-  preloadedMappingJson: string;
+  preloadedMappingJson: string | null = null;
   preloadedFieldActionMetadata: any;
-  logger: NGXLogger;
+  logger?: Logger;
 
   constructor() {
     this.propertyDoc.type = DocumentType.PROPERTY;
@@ -154,14 +154,6 @@ export class ConfigModel {
 
   get showMappingPreview(): boolean {
     return this._showMappingPreview;
-  }
-
-  isDebugEnabled(): boolean {
-    return [NgxLoggerLevel.DEBUG, NgxLoggerLevel.TRACE].includes(this.logger.getConfigSnapshot().level);
-  }
-
-  isTraceEnabled(): boolean {
-    return this.logger.getConfigSnapshot().level === NgxLoggerLevel.TRACE;
   }
 
   addDocument(docInitModel: DocumentInitializationModel): DocumentDefinition {
@@ -213,7 +205,7 @@ export class ConfigModel {
   }
 
   getDocsWithoutPropertyDoc(isSource: boolean): DocumentDefinition[] {
-    return [].concat(isSource ? this.sourceDocs : this.targetDocs);
+    return isSource ? [...this.sourceDocs] : [...this.targetDocs];
   }
 
   getDocs(isSource: boolean): DocumentDefinition[] {
@@ -267,23 +259,15 @@ export class ConfigModel {
     return false;
   }
 
-  getDocForIdentifier(documentId: string, isSource: boolean): DocumentDefinition {
-    for (const d of this.getDocs(isSource)) {
-      if (d.id === documentId) {
-        return d;
-      }
-    }
-    return null;
+  getDocForIdentifier(documentId: string, isSource: boolean): DocumentDefinition | null {
+    // TODO: check this non null operator
+    return this.getDocs(isSource).find(d => d.id === documentId)!;
   }
 
-  getFirstXmlDoc(isSource: boolean) {
+  getFirstXmlDoc(isSource: boolean): DocumentDefinition {
     const docs: DocumentDefinition[] = this.getDocsWithoutPropertyDoc(isSource);
-    for (const doc of docs) {
-      if (doc.type === DocumentType.XML) {
-        return doc;
-      }
-    }
-    return null;
+    // TODO: check this non null operator
+    return docs.find(doc => doc.type === DocumentType.XML)!;
   }
 
   getAllDocs(): DocumentDefinition[] {

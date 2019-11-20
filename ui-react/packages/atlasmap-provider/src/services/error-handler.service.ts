@@ -14,10 +14,7 @@
     limitations under the License.
 */
 
-import { Injectable } from '@angular/core';
-
 import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from '../models/error.model';
-import { ConfigModel } from '../models/config.model';
 import { Subject, Subscription } from 'rxjs';
 import { MappingModel } from '../models/mapping.model';
 
@@ -34,12 +31,11 @@ import { MappingModel } from '../models/mapping.model';
  * {@link createFormErrorChannel()} when modal window is initialized, and should be
  * completed when modal window is closed.
  */
-@Injectable()
 export class ErrorHandlerService {
   private errors: ErrorInfo[] = [];
   private formErrors: ErrorInfo[] = [];
   private errorUpdatedSource = new Subject<ErrorInfo[]>();
-  private formErrorUpdatedSource: Subject<ErrorInfo[]>;
+  private formErrorUpdatedSource: Subject<ErrorInfo[]> | undefined;
 
   /**
    * FIlter an array of {@link ErrorInfo} with specified condition.
@@ -89,7 +85,7 @@ export class ErrorHandlerService {
    * @param identifier Error ID
    */
   removeError(identifier: string, scope?: ErrorScope): void {
-    if (scope === ErrorScope.FORM && !this.formErrorUpdatedSource.closed) {
+    if (scope === ErrorScope.FORM && this.formErrorUpdatedSource && !this.formErrorUpdatedSource.closed) {
       this.formErrors = this.excludeByIdentifier(this.formErrors, identifier);
     } else {
       this.errors = this.excludeByIdentifier(this.errors, identifier);

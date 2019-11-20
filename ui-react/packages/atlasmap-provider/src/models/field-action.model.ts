@@ -15,15 +15,15 @@
 */
 
 export class FieldActionArgument {
-  name: string = null;
+  name: string;
   type = 'STRING';
   values = null;
   serviceObject: any = new Object();
 }
 
 export class FieldActionArgumentValue {
-  name: string = null;
-  value: string = null;
+  name: string;
+  value: string;
 }
 
 export enum Multiplicity {
@@ -54,28 +54,24 @@ export class FieldActionDefinition {
 
         // Default the input field to 0 for numerics
         if (['LONG', 'INTEGER', 'FLOAT', 'DOUBLE', 'SHORT', 'BYTE', 'DECIMAL', 'NUMBER'].indexOf(arg.type) !== -1) {
-          action.setArgumentValue(arg.name, '0');
+          action.setArgumentValue(arg.name!, '0'); // TODO: check this non null operator
         } else {
-          action.setArgumentValue(arg.name, '');
+          action.setArgumentValue(arg.name!, ''); // TODO: check this non null operator
         }
       }
     }
   }
 
   getArgumentForName(name: string): FieldActionArgument {
-    for (const argument of this.arguments) {
-      if (argument.name === name) {
-        return argument;
-      }
-    }
-    return null;
+    // TODO: check this non null operator
+    return this.arguments.find(argument => argument.name === name)!;
   }
 
 }
 
 export class FieldAction {
   name: string;
-  definition: FieldActionDefinition = null;
+  definition: FieldActionDefinition;
   argumentValues: FieldActionArgumentValue[] = [];
 
   static create(definition: FieldActionDefinition): FieldAction {

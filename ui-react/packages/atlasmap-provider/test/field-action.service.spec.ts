@@ -5,12 +5,12 @@ import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@ang
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { LoggerModule, NGXLogger, NgxLoggerLevel } from 'ngx-logger';
-import { FieldActionService } from './field-action.service';
-import { ErrorHandlerService } from './error-handler.service';
-import { Multiplicity, FieldActionDefinition } from '../models/field-action.model';
-import { MappingModel } from '../models/mapping.model';
-import { Field } from '../models/field.model';
-import { ConfigModel } from '../models/config.model';
+import { FieldActionService } from '../src/services/field-action.service';
+import { ErrorHandlerService } from '../src/services/error-handler.service';
+import { Multiplicity, FieldActionDefinition } from '../src/models/field-action.model';
+import { MappingModel } from '../src/models/mapping.model';
+import { Field } from '../src/models/field.model';
+import { ConfigModel } from '../src/models/config.model';
 
 describe('FieldActionService', () => {
   beforeEach(() => {

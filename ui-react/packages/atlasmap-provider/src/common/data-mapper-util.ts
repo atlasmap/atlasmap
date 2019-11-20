@@ -51,7 +51,7 @@ export class DataMapperUtil {
     const result: string[] = [];
 
     if (inStr === null || inStr.length === 0 || splitMarker === null || splitMarkerLen === 0) {
-      return null;
+      return [];
     }
     while (splitLoc !== -1) {
       splitLoc = inStr.indexOf(splitMarker);
@@ -83,8 +83,8 @@ export class DataMapperUtil {
    * @param reader
    */
   static async readFile(fileName: any, reader: any): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-      reader.onload = (event: any) => {
+    return new Promise<string>((resolve) => {
+      reader.onload = () => {
         const fileBody = reader.result;
         resolve(fileBody);
       };
@@ -99,8 +99,8 @@ export class DataMapperUtil {
    * @param reader - reader object
    */
   static async readBinaryFile(fileName: any, reader: any): Promise<Int8Array> {
-    return new Promise<Int8Array>((resolve, reject) => {
-      reader.onload = (event: any) => {
+    return new Promise<Int8Array>((resolve) => {
+      reader.onload = () => {
         const fileBody = new Int8Array(reader.result);
         resolve(fileBody);
       };
@@ -116,7 +116,7 @@ export class DataMapperUtil {
    * @param fName
    */
   static async writeFile(fileContent: Blob, fName: any): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
+    return new Promise<boolean>((resolve) => {
       saveAs(fileContent, fName);
       resolve(true);
     });

@@ -14,7 +14,6 @@
     limitations under the License.
 */
 import { ConfigModel } from './config.model';
-import { ErrorHandlerService } from '../services/error-handler.service';
 import { MappedField, MappingModel } from './mapping.model';
 import { Subject } from 'rxjs';
 import { ErrorScope, ErrorType, ErrorInfo, ErrorLevel } from './error.model';
@@ -25,7 +24,7 @@ export class ExpressionUpdatedEvent {
 
 export abstract class ExpressionNode {
   protected static sequence = 0;
-  protected uuid;
+  protected uuid: string;
 
   constructor(prefix: string) {
     this.uuid = prefix + ExpressionNode.sequence++;
@@ -61,15 +60,17 @@ export class FieldNode extends ExpressionNode {
 
   static readonly PREFIX = 'expression-field-';
 
-  constructor(private mapping: MappingModel, public field?: MappedField, private index?: number) {
+  constructor(private mapping: MappingModel, public field?: MappedField, index: number = 0) {
     super(FieldNode.PREFIX);
     if (!field) {
-      this.field = mapping.getMappedFieldForIndex((index + 1).toString(), true);
+      // TODO: check this non null operator
+      this.field = mapping.getMappedFieldForIndex((index + 1).toString(), true)!;
     }
   }
 
   toText(): string {
-    return '${' + (this.mapping.getIndexForMappedField(this.field) - 1) + '}';
+    // TODO: check this non null operator
+    return '${' + (this.mapping.getIndexForMappedField(this.field!)! - 1) + '}';
   }
 
   toHTML(): string {
@@ -77,8 +78,9 @@ export class FieldNode extends ExpressionNode {
       return `<span contenteditable="false" id="${this.uuid}" title="${this.field.field.docDef.name}:${this.field.field.path}"
         class="expressionFieldLabel label label-default">${this.field.field.name}</span>`;
     } else {
+      // TODO: check this non null operator
       return `<span contenteditable="false" id="${this.uuid}"
-        title="Field index '${this.mapping.getIndexForMappedField(this.field) - 1}' is not available"
+        title="Field index '${this.mapping.getIndexForMappedField(this.field!)! - 1}' is not available"
         class="expressionFieldLabel label label-danger">N/A</span>`;
     }
   }
@@ -132,9 +134,8 @@ export class ExpressionModel {
    * @param startOffset
    * @param endOffset
    */
-  clearText(nodeId?: string, startOffset?: number, endOffset?: number): TextNode {
-    let targetNode: TextNode;
-    let targetNodeIndex = 0;
+  clearText(nodeId?: string, startOffset?: number, endOffset?: number): TextNode | null {
+    let targetNode: TextNode | null = null;
     if (!nodeId) {
       const lastNode = this.getLastNode();
       if (!(lastNode instanceof TextNode)) {
@@ -142,7 +143,6 @@ export class ExpressionModel {
       }
       const keyPos = lastNode.str.indexOf('@');
       if (keyPos !== -1) {
-        targetNodeIndex = this._nodes.indexOf(lastNode);
         targetNode = lastNode;
         targetNode.str = targetNode.str.substring(0, keyPos);
       }
@@ -152,8 +152,8 @@ export class ExpressionModel {
         return null;
       }
       targetNode = node;
-      targetNodeIndex = this._nodes.indexOf(targetNode);
-      const cleanStr = targetNode.str.replace(targetNode.str.substring(startOffset, endOffset), '');
+      // TODO: check this non null operator
+      const cleanStr = targetNode.str.replace(targetNode.str.substring(startOffset!, endOffset), '');
       targetNode.str = cleanStr;
     }
     this.updateCache();
@@ -198,7 +198,6 @@ export class ExpressionModel {
       if (!last) {
         this._nodes.push(...newNodes);
       } else if (last instanceof TextNode && newNodes[0] instanceof TextNode) {
-        const lastTextNode = last as TextNode;
         (last as TextNode).str += (newNodes[0] as TextNode).str;
         newNodes.splice(0, 1, last);
         this._nodes.splice(this.getLastNodeIndex(), 1, ...newNodes);
@@ -215,7 +214,8 @@ export class ExpressionModel {
     // Requires position handling
     const updatedEvent = new ExpressionUpdatedEvent();
     const targetNode = this._nodes.find(n => n.getUuid() === insertPosition);
-    const targetNodeIndex = this._nodes.indexOf(targetNode);
+    // TODO: check this non null operator
+    const targetNodeIndex = this._nodes.indexOf(targetNode!);
 
     if (targetNode instanceof TextNode) {
       if (offset === undefined || offset === null || offset < 0) {
@@ -318,7 +318,8 @@ export class ExpressionModel {
       if (last instanceof FieldNode) {
         const removed = this._nodes.pop() as FieldNode;
         if (!this._nodes.find(n => n instanceof FieldNode && n.field === removed.field)) {
-          lastFieldRefRemoved(removed.field);
+          // TODO: check this non null operator
+          lastFieldRefRemoved(removed.field!);
         }
       } else if (last instanceof TextNode) {
         if (last.str.length > 0) {
@@ -333,9 +334,10 @@ export class ExpressionModel {
     }
 
     // Requires position handling
-    let updatedEvent = new ExpressionUpdatedEvent();
+    let updatedEvent: ExpressionUpdatedEvent | undefined = new ExpressionUpdatedEvent();
     let targetNode = this._nodes.find(n => n.getUuid() === tokenPosition);
-    let targetNodeIndex = this._nodes.indexOf(targetNode);
+    // TODO: check this non null operator
+    let targetNodeIndex = this._nodes.indexOf(targetNode!);
     if (!targetNode || offset === -1) {
       if (targetNodeIndex < 1) {
         return;
@@ -347,7 +349,8 @@ export class ExpressionModel {
       const removed = this._nodes.splice(targetNodeIndex, 1);
       const targetFieldNode: FieldNode = removed[0] as FieldNode;
       if (!this._nodes.find(n => n instanceof FieldNode && n.field === targetFieldNode.field)) {
-        lastFieldRefRemoved(targetFieldNode.field);
+        // TODO: check this non null operator
+        lastFieldRefRemoved(targetFieldNode.field!);
       }
       if (this._nodes.length > targetNodeIndex) {
         if (this._nodes[targetNodeIndex - 1] instanceof TextNode
@@ -377,8 +380,9 @@ export class ExpressionModel {
       }
     } else {
       const targetString = (targetNode as TextNode).str;
+      // TODO: check this non null operator
       (targetNode as TextNode).str = offset === 0 ? targetString.substr(1)
-        : targetString.substring(0, offset) + targetString.substring(offset + 1);
+        : targetString.substring(0, offset) + targetString.substring(offset! + 1);
       if ((targetNode as TextNode).str.length === 0) {
         this.cfg.errorService.addError(new ErrorInfo({message: 'At least one space is required between field references.',
           level: ErrorLevel.ERROR, scope: ErrorScope.MAPPING, type: ErrorType.USER, mapping: this.mapping}));
@@ -411,16 +415,17 @@ export class ExpressionModel {
    * and unselected source fields are removed from expression.
    *
    * @param mapping Corresponding MappingModel object
+   * @param insertPosition
+   * @param offset
    */
   updateFieldReference(mapping: MappingModel, insertPosition?: string, offset?: number) {
     const mappedFields = mapping.getUserMappedFields(true);
-    const toAdd: MappedField[] = [];
-    const toRemove: MappedField[] = [];
     let fieldNodes = this._nodes.filter(n => n instanceof FieldNode) as FieldNode[];
 
     // Remove the field from the expression if unmapped.
     for (const node of fieldNodes) {
-      if (mappedFields.includes(node.field)) {
+      // TODO: check this non null operator
+      if (mappedFields.includes(node.field!)) {
         continue;
       }
       const index = this._nodes.indexOf(node);
@@ -480,7 +485,7 @@ export class ExpressionModel {
         answer.push(new TextNode(text.substring(0, position)));
       }
       const index = parseInt(text.substring(position + 2, text.indexOf('}')), 10);
-      fn = new FieldNode(this.mapping, null, index);
+      fn = new FieldNode(this.mapping, undefined, index);
       if (fn.field === null) {
         this.cfg.errorService.addError(new ErrorInfo({message: `Unable to map expression index "${index}" to field node.`,
           level: ErrorLevel.ERROR, scope: ErrorScope.MAPPING, type: ErrorType.INTERNAL, mapping: this.mapping}));

@@ -13,6 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import log from 'loglevel';
+log.setDefaultLevel(log.levels.TRACE);
 import { inflate } from 'pako';
 import { Subject, Observable } from 'rxjs';
 
@@ -32,7 +34,6 @@ import { MappingSerializer } from '../utils/mapping-serializer';
 import { MappingUtil } from '../utils/mapping-util';
 import { ErrorScope, ErrorType, ErrorInfo, ErrorLevel } from '../models/error.model';
 
-@Injectable()
 export class InitializationService {
   cfg: ConfigModel = ConfigModel.getConfig();
 
@@ -65,7 +66,7 @@ export class InitializationService {
     this.cfg.fileService = this.fileService;
     this.cfg.fileService.cfg = this.cfg;
     this.cfg.initializationService = this;
-    this.cfg.logger = this.logger;
+    this.cfg.logger = log.getLogger('config');
     ConfigModel.setConfig(this.cfg);
   }
 
@@ -79,7 +80,7 @@ export class InitializationService {
    * @param isSource
    */
   async initializeUserDoc(docBody: any, docName: string, docType: DocumentType, inspectionType: InspectionType, isSource: boolean) {
-    let docdef: DocumentDefinition = null;
+    let docdef: DocumentDefinition;
     const javaArchive = (docType === DocumentType.JAVA_ARCHIVE);
     if (this.cfg.mappingService == null) {
       this.cfg.errorService.addError(new ErrorInfo({
@@ -92,7 +93,7 @@ export class InitializationService {
     }
 
     // Clear out the existing document if importing the same name.
-    if (docdef = this.cfg.getDocForIdentifier(docName, isSource)) {
+    if (docdef = this.cfg.getDocForIdentifier(docName, isSource)!) {
       if (isSource) {
         DataMapperUtil.removeItemFromArray(docdef, this.cfg.sourceDocs);
       } else {
@@ -107,7 +108,7 @@ export class InitializationService {
         docdef = this.addNonJavaDocument(docName, docType, inspectionType, docBody, isSource);
       }
       docdef.name = docName;
-      docdef.updateFromMappings(this.cfg.mappings);
+      docdef.updateFromMappings(this.cfg.mappings!); // TODO: check this non null operator
     }
 
     this.cfg.documentService.fetchClassPath().toPromise()
@@ -116,7 +117,7 @@ export class InitializationService {
 
         // Push the user-defined java archive file to the runtime service.
         if (javaArchive) {
-          this.cfg.documentService.setLibraryToService(docBody, async(success, res) => {
+          this.cfg.documentService.setLibraryToService(docBody, async(success) => {
             if (success) {
               await this.cfg.fieldActionService.fetchFieldActions()
               .catch((error: any) => {
@@ -125,7 +126,7 @@ export class InitializationService {
             }
           });
         } else {
-          this.logger.trace(`Fetching user document: name=${docdef.name}, id=${docdef.id},\
+          log.debug(`Fetching user document: name=${docdef.name}, id=${docdef.id},\
 isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionType}`);
           this.cfg.documentService.fetchDocument(docdef, this.cfg.initCfg.classPath).toPromise()
           .then(async(doc: DocumentDefinition) => {
@@ -137,7 +138,7 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
                 DataMapperUtil.removeItemFromArray(docdef, this.cfg.targetDocs);
               }
             }
-            this.logger.trace(`Fetched user document: name=${docdef.name}, id=${docdef.id},\
+            log.debug(`Fetched user document: name=${docdef.name}, id=${docdef.id},\
 isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionType}`);
             this.updateStatus();
           })
@@ -314,7 +315,7 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
     return new Promise<boolean>((resolve, reject) => {
       try {
         this.cfg.fileService.setMappingToService(mInfo.exportMappings.value).toPromise()
-          .then(async(result: boolean) => {
+          .then(async() => {
             resolve(true);
         }).catch((error: any) => {
           if (error.status === 0) {
@@ -342,11 +343,11 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
    * @param compressedCatalog
    */
   async updateCatalog(compressedCatalog: Uint8Array): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
+    return new Promise<boolean>((resolve) => {
       // Update .../target/mappings/adm-catalog-files.gz
       const fileContent: Blob = new Blob([compressedCatalog], {type: 'application/octet-stream'});
       this.cfg.fileService.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/0').toPromise()
-        .then(async(result: boolean) => {
+        .then(async() => {
         resolve(true);
       }).catch((error: any) => {
         if (error.status === 0) {
@@ -477,8 +478,9 @@ ${error.status} ${error.statusText}`,
         continue;
       }
 
-      this.cfg.documentService.fetchDocument(docDef, this.cfg.initCfg.classPath).toPromise()
-        .then((doc: DocumentDefinition) => {
+      // TODO: check this non null operator
+      this.cfg.documentService.fetchDocument(docDef, this.cfg.initCfg.classPath!).toPromise()
+        .then(() => {
           this.updateStatus();
         })
         .catch((error: any) => {
@@ -503,8 +505,8 @@ ${error.status} ${error.statusText}`,
         resolve(false);
       }
 
-      this.cfg.mappingService.fetchMappings(mappingFiles, this.cfg.mappings).toPromise()
-        .then((result: boolean) => {
+      this.cfg.mappingService.fetchMappings(mappingFiles, this.cfg.mappings!).toPromise() // TODO: check this non null operator
+        .then(() => {
         this.cfg.initCfg.mappingInitialized = true;
         this.updateStatus();
         this.cfg.mappingService.notifyMappingUpdated().then(() => resolve(true));

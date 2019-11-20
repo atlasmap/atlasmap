@@ -2,9 +2,9 @@
 
 import { TestBed, async, inject } from '@angular/core/testing';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
-import { ErrorHandlerService } from './error-handler.service';
-import { ErrorInfo, ErrorScope, ErrorType, ErrorLevel } from '../models/error.model';
-import { MappingModel } from '../models/mapping.model';
+import { ErrorHandlerService } from '../src/services/error-handler.service';
+import { ErrorInfo, ErrorScope, ErrorType, ErrorLevel } from '../src/models/error.model';
+import { MappingModel } from '../src/models/mapping.model';
 import { CompileTemplateMetadata } from '@angular/compiler';
 
 describe('ErrorHandlerService', () => {

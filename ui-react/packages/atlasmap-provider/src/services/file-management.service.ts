@@ -13,15 +13,13 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Injectable } from '@angular/core';
-
+import ky from 'ky';
 import { ConfigModel } from '../models/config.model';
-import { NGXLogger } from 'ngx-logger';
-import { deflate } from 'pako';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, forkJoin } from 'rxjs';
+import { gzip } from 'pako';
+import log from 'loglevel';
+import { Observable, forkJoin, from } from 'rxjs';
 import { DataMapperUtil } from '../common/data-mapper-util';
-import { map, timeout } from 'rxjs/operators';
+import { timeout } from 'rxjs/operators';
 import { DocumentManagementService } from './document-management.service';
 import { InspectionType } from '../common/config.types';
 import { ErrorScope, ErrorType, ErrorInfo, ErrorLevel } from '../models/error.model';
@@ -29,16 +27,10 @@ import { ErrorScope, ErrorType, ErrorInfo, ErrorLevel } from '../models/error.mo
 /**
  * Handles file manipulation stored in the backend, including import/export via UI.
  */
-@Injectable()
 export class FileManagementService {
-  _cfg: ConfigModel;
+  _cfg!: ConfigModel;
 
-  private headers = new HttpHeaders(
-    {'Content-Type': 'application/json; application/octet-stream',
-     'Accept':       'application/json; application/octet-stream'});
-  private jsonBuffer: string;
-
-  constructor(private logger: NGXLogger, private http: HttpClient) {}
+  constructor(private api: typeof ky) {}
 
   get cfg() {
     return this._cfg;
@@ -47,18 +39,16 @@ export class FileManagementService {
   set cfg(cfg: ConfigModel) {
     this._cfg = cfg;
     if (!this._cfg.logger) {
-      this._cfg.logger = this.logger;
+      this._cfg.logger = log.getLogger('file-management');
     }
   }
 
   findMappingFiles(filter: string): Observable<string[]> {
     return new Observable<string[]>((observer: any) => {
       const url = this.cfg.initCfg.baseMappingServiceUrl + 'mappings' + (filter == null ? '' : '?filter=' + filter);
-      this.cfg.logger.trace('Mapping List Request');
-      this.http.get(url, { headers: this.headers }).toPromise().then((body: any) => {
-        if (this.cfg.isTraceEnabled()) {
-          this.cfg.logger.trace(`Mapping List Response: ${JSON.stringify(body)}`);
-        }
+      this.cfg.logger!.debug('Mapping List Request');
+      this.api.get(url).json().then((body: any) => {
+        this.cfg.logger!.debug(`Mapping List Response: ${JSON.stringify(body)}`);
         const entries: any[] = body.StringMap.stringMapEntry;
         const mappingFileNames: string[] = [];
         for (const entry of entries) {
@@ -84,16 +74,14 @@ export class FileManagementService {
     return new Observable<Uint8Array>((observer: any) => {
       const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/';
       const url: string = baseURL + catalogName;
-      this.cfg.logger.trace('Mapping Catalog Request');
-      const catHeaders = new HttpHeaders(
+      this.cfg.logger!.debug('Mapping Catalog Request');
+      const headers =
         { 'Content-Type':  'application/octet-stream',
           'Accept':        'application/octet-stream',
           'Response-Type': 'application/octet-stream'
-        });
-      this.http.get(url, { headers: catHeaders, responseType: 'arraybuffer' }).toPromise().then((body: any) => {
-        if (this.cfg.isTraceEnabled()) {
-          this.cfg.logger.trace(`Mapping Catalog Response: ${JSON.stringify(body)}`);
-        }
+        };
+      this.api.get(url, { headers }).arrayBuffer().then((body: any) => {
+        this.cfg.logger!.debug(`Mapping Catalog Response: ${JSON.stringify(body)}`);
         observer.next(body);
         observer.complete();
       }).catch((error: any) => {
@@ -111,16 +99,9 @@ export class FileManagementService {
     return new Observable<Uint8Array>((observer: any) => {
       const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/ZIP/';
       const url: string = baseURL + atlasmapCatalogName;
-      this.cfg.logger.trace('Mapping Catalog Request');
-      const catHeaders = new HttpHeaders(
-        { 'Content-Type':  'application/octet-stream',
-          'Accept':        'application/octet-stream',
-          'Response-Type': 'application/octet-stream'
-        });
-      this.http.get(url, { headers: catHeaders, responseType: 'arraybuffer' }).toPromise().then((body: any) => {
-        if (this.cfg.isTraceEnabled()) {
-          this.cfg.logger.trace(`Mapping Catalog Response: ${JSON.stringify(body)}`);
-        }
+      this.cfg.logger!.debug('Mapping Catalog Request');
+      this.api.get(url).arrayBuffer().then((body: any) => {
+        this.cfg.logger!.debug(`Mapping Catalog Response: ${JSON.stringify(body)}`);
         observer.next(body);
         observer.complete();
       }).catch((error: any) => {
@@ -139,11 +120,9 @@ export class FileManagementService {
   resetMappings(): Observable<boolean> {
     return new Observable<boolean>((observer: any) => {
       const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/RESET';
-      this.cfg.logger.trace('Mapping Service Request - Reset');
-      this.http.delete(url, { headers: this.headers }).toPromise().then((res: any) => {
-          if (this.cfg.isTraceEnabled()) {
-            this.cfg.logger.trace(`Mapping Service Response - Reset: ${JSON.stringify(res)}`);
-          }
+      this.cfg.logger!.debug('Mapping Service Request - Reset');
+      this.api.delete(url).arrayBuffer().then((res: any) => {
+          this.cfg.logger!.debug(`Mapping Service Response - Reset: ${JSON.stringify(res)}`);
           observer.next(true);
           observer.complete();
           return res;
@@ -160,11 +139,9 @@ export class FileManagementService {
   resetLibs(): Observable<boolean> {
     return new Observable<boolean>((observer: any) => {
       const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/resetLibs';
-      this.cfg.logger.trace('Mapping Service Request - Reset User-Defined Libraries');
-      this.http.delete(url, { headers: this.headers }).toPromise().then((res: any) => {
-          if (this.cfg.isTraceEnabled()) {
-            this.cfg.logger.trace(`Mapping Service Response - Reset Libs: ${JSON.stringify(res)}`);
-          }
+      this.cfg.logger!.debug('Mapping Service Request - Reset User-Defined Libraries');
+      this.api.delete(url).arrayBuffer().then((res: any) => {
+          this.cfg.logger!.debug(`Mapping Service Response - Reset Libs: ${JSON.stringify(res)}`);
           observer.next(true);
           observer.complete();
           return res;
@@ -184,11 +161,9 @@ export class FileManagementService {
   setMappingToService(jsonBuffer: string): Observable<boolean> {
     return new Observable<boolean>((observer: any) => {
       const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON/' + this.getMappingId();
-      this.cfg.logger.trace('Mapping Service Request');
-      this.http.put(url, jsonBuffer, { headers: this.headers }).toPromise().then((res: any) => {
-        if (this.cfg.isTraceEnabled()) {
-          this.cfg.logger.trace(`Mapping Service Response: ${JSON.stringify(res)}`);
-        }
+      this.cfg.logger!.debug('Mapping Service Request');
+      this.api.put(url, {body: jsonBuffer}).arrayBuffer().then((res: any) => {
+        this.cfg.logger!.debug(`Mapping Service Response: ${JSON.stringify(res)}`);
         observer.next(true);
         observer.complete();
       })
@@ -207,11 +182,9 @@ export class FileManagementService {
    */
    setBinaryFileToService(compressedBuffer: any, url: string): Observable<boolean> {
      return new Observable<boolean>((observer: any) => {
-       this.cfg.logger.trace('Set Compressed Mapping Service Request');
-       this.http.put(url, compressedBuffer, { headers: this.headers }).toPromise().then((res: any) => {
-          if (this.cfg.isTraceEnabled()) {
-            this.cfg.logger.trace(`Set Compressed Mapping Service Response: ${JSON.stringify(res)}`);
-          }
+       this.cfg.logger!.debug('Set Compressed Mapping Service Request');
+       this.api.put(url, { body: compressedBuffer }).arrayBuffer().then((res: any) => {
+          this.cfg.logger!.debug(`Set Compressed Mapping Service Response: ${JSON.stringify(res)}`);
           observer.next(true);
           observer.complete();
        })
@@ -232,8 +205,8 @@ export class FileManagementService {
    *
    * @param event
    */
-  async exportMappingsCatalog(mappingsFileName: string): Promise<boolean> {
-    return new Promise<boolean>(async(resolve, reject) => {
+  async exportMappingsCatalog(mappingsFileName: string): Promise<true> {
+    return new Promise<true>(async(resolve) => {
       let aggregateBuffer = '   {\n';
       let userExport = true;
 
@@ -244,8 +217,9 @@ export class FileManagementService {
         }
 
         // Retrieve the JSON mappings buffer from the server.
-        if (await this.getJsonBuf()) {
-          aggregateBuffer += DocumentManagementService.generateExportMappings(this.jsonBuffer[0]);
+        const jsonBuffer = await this.getJsonBuf();
+        if (jsonBuffer) {
+          aggregateBuffer += DocumentManagementService.generateExportMappings(jsonBuffer[0]);
         }
 
         let exportMeta = '   "exportMeta": [\n';
@@ -277,13 +251,13 @@ export class FileManagementService {
         // Compress the JSON buffer - write out as binary.
         const binBuffer = DataMapperUtil.str2bytes(aggregateBuffer);
         try {
-          const compress = deflate(binBuffer, {gzip: true});
+          const compress = gzip(binBuffer);
           let fileContent: Blob = new Blob([compress], {type: 'application/octet-stream'});
 
           // Save the model mappings to the runtime.
           this.setBinaryFileToService(fileContent,
             this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/' + this.getMappingId()).toPromise()
-            .then(async(result: boolean) => {
+            .then(async() => {
 
             // Fetch the full ADM catalog file from the runtime (ZIP) and export it to to the local
             // downloads area.
@@ -338,7 +312,7 @@ export class FileManagementService {
    * @param mappingsFileName - ADM master ZIP catalog
    */
   async importADMCatalog(mappingsFileName: string): Promise<boolean> {
-    return new Promise<boolean>(async(resolve, reject) => {
+    return new Promise<boolean>(async(resolve) => {
       let fileBin = null;
       const reader = new FileReader();
 
@@ -354,7 +328,7 @@ export class FileManagementService {
 
       // Push the binary stream to the runtime.
       this.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl +
-        'mapping/ZIP/' + this.getMappingId()).toPromise().then( async(result: boolean) => {
+        'mapping/ZIP/' + this.getMappingId()).toPromise().then( async() => {
 
         try {
           this.cfg.mappings = null;
@@ -383,27 +357,29 @@ export class FileManagementService {
   /**
    * Asynchronously retrieve the current user-defined AtlasMap mappings from the runtime server as an JSON buffer.
    */
-  private async getJsonBuf(): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
+  private async getJsonBuf(): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
       if (this.cfg.mappings === null) {
-        resolve(false);
+        reject();
+      } else {
+        this.cfg.mappingFiles[0] = this.cfg.mappings.name!;
+        this.getCurrentMappingJson().toPromise().then((result: string) => {
+          resolve(result);
+        }).catch((error: any) => {
+          if (error.status === 0) {
+            this.cfg.errorService.addError(new ErrorInfo({
+              message: 'Fatal network error: Unable to connect to the AtlasMap design runtime service.',
+              level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error
+            }));
+          } else {
+            this.cfg.errorService.addError(new ErrorInfo({
+              message: `Unable to access current mapping definitions: ${error.status} ${error.statusText}`,
+              level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error
+            }));
+          }
+          reject();
+        });
       }
-      this.cfg.mappingFiles[0] = this.cfg.mappings.name;
-      this.getCurrentMappingJson().toPromise().then((result: string) => {
-        this.jsonBuffer = result;
-        resolve(true);
-      }).catch((error: any) => {
-        if (error.status === 0) {
-          this.cfg.errorService.addError(new ErrorInfo({
-            message: 'Fatal network error: Unable to connect to the AtlasMap design runtime service.',
-            level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
-        } else {
-          this.cfg.errorService.addError(new ErrorInfo({
-            message: `Unable to access current mapping definitions: ${error.status} ${error.statusText}`,
-            level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
-        }
-        resolve(false);
-      });
     });
   }
 
@@ -417,13 +393,8 @@ export class FileManagementService {
       const operations: Observable<any>[] = [];
       for (const mappingName of mappingFileNames) {
         const url: string = baseURL + mappingName;
-        this.cfg.logger.trace('Mapping Service Request');
-        const jsonHeaders = new HttpHeaders(
-          { 'Content-Type':  'application/json',
-            'Accept':        'application/json',
-            'Response-Type': 'application/json'
-          });
-        const operation = this.http.get(url, { headers: jsonHeaders, responseType: 'text' }).pipe(map((res: any) => res ));
+        this.cfg.logger!.debug('Mapping Service Request');
+        const operation = from(this.api.get(url).text());
         operations.push(operation);
       }
 
@@ -433,9 +404,7 @@ export class FileManagementService {
           observer.complete();
           return;
         }
-        if (this.cfg.isTraceEnabled()) {
-          this.cfg.logger.trace(`Mapping Service Response: ${JSON.stringify(data)}`);
-        }
+        this.cfg.logger!.debug(`Mapping Service Response: ${JSON.stringify(data)}`);
         observer.next(data);
         observer.complete();
       }).catch((error: any) => {

@@ -30,7 +30,8 @@ export class MappingUtil {
     const sourceDocMap = cfg.getDocUriMap(cfg, true);
     const targetDocMap = cfg.getDocUriMap(cfg, false);
 
-    for (const mapping of cfg.mappings.mappings) {
+    // TODO: check this non null operator
+    for (const mapping of cfg.mappings!.mappings) {
       MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, sourceDocMap, true);
       MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, targetDocMap, false);
     }
@@ -46,7 +47,7 @@ export class MappingUtil {
     let mappedFieldIndex = -1;
 
     for (const mappedField of mappedFields) {
-      let doc: DocumentDefinition = null;
+      let doc: DocumentDefinition | null = null;
       mappedFieldIndex += 1;
 
       if (mappedField.parsedData.fieldIsProperty) {
@@ -57,7 +58,8 @@ export class MappingUtil {
         if (docMap === null) {
           docMap = cfg.getDocUriMap(cfg, isSource);
         }
-        doc = docMap[mappedField.parsedData.parsedDocURI] as DocumentDefinition;
+        // TODO: check this non null operator
+        doc = docMap[mappedField.parsedData.parsedDocURI!] as DocumentDefinition;
         if (doc == null) {
           if (mappedField.parsedData.parsedName != null) {
             cfg.errorService.addError(new ErrorInfo({
@@ -77,13 +79,14 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
       }
       mappedField.field = null;
       if (!mappedField.parsedData.userCreated) {
-        mappedField.field = doc.getField(mappedField.parsedData.parsedPath);
+        // TODO: check this non null operator
+        mappedField.field = doc.getField(mappedField.parsedData.parsedPath!);
       }
       if (mappedField.field == null) {
         if (mappedField.parsedData.fieldIsConstant || mappedField.parsedData.fieldIsProperty) {
           const constantField: Field = new Field();
-          constantField.value = mappedField.parsedData.parsedValue;
-          constantField.type = mappedField.parsedData.parsedValueType;
+          constantField.value = mappedField.parsedData.parsedValue!; // TODO: check this non null operator
+          constantField.type = mappedField.parsedData.parsedValueType!; // TODO: check this non null operator
           constantField.displayName = constantField.value;
           constantField.name = constantField.value;
           constantField.path = constantField.value;
@@ -91,19 +94,19 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
           mappedField.field = constantField;
           doc.addField(constantField);
         } else if (mappedField.parsedData.userCreated || mappedField.parsedData.parsedPath) {
-          const path: string = mappedField.parsedData.parsedPath;
+          const path: string = mappedField.parsedData.parsedPath!; // TODO: check this non null operator
 
           mappedField.field = new Field();
           mappedField.field.serviceObject.jsonType = 'io.atlasmap.xml.v2.XmlField';
           mappedField.field.path = path;
-          mappedField.field.type = mappedField.parsedData.parsedValueType;
+          mappedField.field.type = mappedField.parsedData.parsedValueType!; // TODO: check this non null operator
           mappedField.field.userCreated = true;
 
           const lastSeparator: number = path.lastIndexOf('/');
 
-          const parentPath: string = (lastSeparator > 0) ? path.substring(0, lastSeparator) : null;
-          let fieldName: string = (lastSeparator === -1) ? path : path.substring(lastSeparator + 1);
-          let namespaceAlias: string = null;
+          const parentPath = (lastSeparator > 0) ? path.substring(0, lastSeparator) : null;
+          let fieldName = (lastSeparator === -1) ? path : path.substring(lastSeparator + 1);
+          let namespaceAlias: string | null = null;
           if (fieldName.indexOf(':') !== -1) {
             namespaceAlias = fieldName.split(':')[0];
             fieldName = fieldName.split(':')[1];
@@ -115,7 +118,8 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
           mappedField.field.namespaceAlias = namespaceAlias;
 
           if (parentPath != null) {
-            mappedField.field.parentField = doc.getField(parentPath);
+            // TODO: check this non null operator
+            mappedField.field.parentField = doc.getField(parentPath)!;
           }
 
           doc.addField(mappedField.field);
@@ -149,7 +153,7 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
         }
       }
 
-      const zeroBasedIndex = +mappedField.parsedData.parsedIndex;
+      const zeroBasedIndex = +mappedField.parsedData.parsedIndex!; // TODO: check this non null operator
       mappedFields = mapping.getMappedFields(isSource);
       if (zeroBasedIndex <= mappedFieldIndex) {
         mappedFields[zeroBasedIndex] = mappedField;
@@ -174,11 +178,12 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
     for (const doc of cfg.getDocs(false)) {
       targetSourcePaths = targetSourcePaths.concat(Field.getFieldPaths(doc.getAllFields()));
     }
-    while (index < cfg.mappings.mappings.length) {
-      const mapping: MappingModel = cfg.mappings.mappings[index];
+    // TODO: check these non null operator
+    while (index < cfg.mappings!.mappings.length) {
+      const mapping: MappingModel = cfg.mappings!.mappings[index];
       const mappingIsStale: boolean = this.isMappingStale(mapping, sourceFieldPaths, targetSourcePaths);
       if (mappingIsStale) {
-        cfg.mappings.mappings.splice(index, 1);
+        cfg.mappings!.mappings.splice(index, 1);
       } else {
         index++;
       }
@@ -204,7 +209,8 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
   static updateDocumentNamespacesFromMappings(cfg: ConfigModel): void {
     const docs: DocumentDefinition[] = cfg.getDocs(false);
 
-    for (const parsedDoc of cfg.mappings.parsedDocs) {
+    // TODO: check this non null operator
+    for (const parsedDoc of cfg.mappings!.parsedDocs) {
       if (!parsedDoc) {
         continue;
       }
@@ -224,11 +230,11 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
         continue;
       }
 
-      doc.namespaces = [].concat(parsedDoc.namespaces);
+      doc.namespaces = [...parsedDoc.namespaces];
     }
   }
 
-  private static getDocById(documentId: string, docs: DocumentDefinition[]): DocumentDefinition {
+  private static getDocById(documentId: string, docs: DocumentDefinition[]): DocumentDefinition | null {
     if (documentId == null || docs == null || !docs.length) {
       return null;
     }

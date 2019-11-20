@@ -25,12 +25,12 @@ export class EnumValue {
 export class Field {
   private static uuidCounter = 0;
 
-  name: string = null;
-  classIdentifier: string = null;
+  name: string;
+  classIdentifier: string;
   displayName: string;
-  path: string = null;
-  type: string = null;
-  value: string = null;
+  path: string;
+  type: string;
+  value: string;
   serviceObject: any = new Object();
   parentField: Field;
   partOfMapping = false;
@@ -40,7 +40,7 @@ export class Field {
   enumValues: EnumValue[] = [];
   children: Field[] = [];
   fieldDepth = 0;
-  uuid: string = null;
+  uuid: string;
   collapsed = true;
   hasUnmappedChildren = false;
   isCollection = false;
@@ -48,8 +48,8 @@ export class Field {
   isAttribute = false;
   isPrimitive = false;
   userCreated = false;
-  docDef: DocumentDefinition = null;
-  namespaceAlias: string = null;
+  docDef: DocumentDefinition;
+  namespaceAlias: string | null;
 
   static fieldHasUnmappedChild(field: Field): boolean {
     if (field == null) {
@@ -83,12 +83,8 @@ export class Field {
   }
 
   static getField(fieldPath: string, fields: Field[]): Field {
-    for (const field of fields) {
-      if (fieldPath === field.path) {
-        return field;
-      }
-    }
-    return null;
+    // TODO: check this non null operator
+    return fields.find(field => fieldPath === field.path)!;
   }
 
   static alphabetizeFields(fields: Field[]): void {
@@ -195,6 +191,7 @@ export class Field {
     }
   }
 
+  // @ts-ignore
   getCollectionParentField(): Field {
     let parent: Field = this;
     while (parent != null) {
@@ -203,7 +200,6 @@ export class Field {
       }
       parent = parent.parentField;
     }
-    return null;
   }
 
   isInCollection(): boolean {
@@ -226,7 +222,7 @@ export class Field {
     return (this.docDef != null) && this.docDef.isSource;
   }
 
-  getCollectionType(): string {
+  getCollectionType(): string | null {
     return this.isCollection ? (this.isArray ? 'ARRAY' : 'LIST') : null;
   }
 

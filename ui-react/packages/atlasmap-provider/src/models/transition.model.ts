@@ -31,12 +31,12 @@ export enum TransitionDelimiter {
 
 export class TransitionDelimiterModel {
   delimiter: TransitionDelimiter = TransitionDelimiter.SPACE;
-  serializedValue: string = null;
-  prettyName: string = null;
+  serializedValue: string | null = null;
+  prettyName: string | null = null;
   actualDelimiter = '';
 
   constructor(
-    delimiter: TransitionDelimiter, serializedValue: string, prettyName: string, actualDelimiter) {
+    delimiter: TransitionDelimiter, serializedValue: string | null, prettyName: string, actualDelimiter: string) {
     this.delimiter = delimiter;
     this.serializedValue = serializedValue;
     this.prettyName = prettyName;
@@ -50,10 +50,10 @@ export class TransitionModel {
   mode: TransitionMode = TransitionMode.ONE_TO_ONE;
   delimiter: TransitionDelimiter = TransitionDelimiter.SPACE;
   userDelimiter = '';
-  lookupTableName: string = null;
-  expression: ExpressionModel;
+  lookupTableName: string | null = null;
+  expression!: ExpressionModel;
   enableExpression = false;
-  transitionFieldAction: FieldAction;
+  transitionFieldAction!: FieldAction;
 
   constructor() {
     TransitionModel.initialize();
