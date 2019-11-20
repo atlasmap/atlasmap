@@ -1,0 +1,114 @@
+{
+  "name": "@atlasmap/provider",
+  "description": "",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/atlasmap-provider.esm.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test",
+    "test-with-coverage": "tsdx test --coverage --coverageReporters=text-lcov | coveralls",
+    "lint": "tsdx lint",
+    "format": "prettier --write 'src/**/*.{js,ts,tsx,json}' 'test/**/*.{js,ts,tsx,json}' 'stories/**/*.{js,ts,tsx,json}'",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  },
+  "peerDependencies": {
+    "file-saver": "2.0.2",
+    "pako": "^1.0.5",
+    "react": ">=16",
+    "rxjs": "^6.2.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.2",
+    "@storybook/addon-actions": "^5.2.3",
+    "@storybook/addon-docs": "^5.2.5",
+    "@storybook/addon-knobs": "^5.2.3",
+    "@storybook/addon-links": "^5.2.3",
+    "@storybook/addon-viewport": "^5.2.3",
+    "@storybook/addons": "^5.2.3",
+    "@storybook/preset-typescript": "^1.1.0",
+    "@storybook/react": "^5.2.3",
+    "@testing-library/jest-dom": "^4.1.1",
+    "@testing-library/react": "^9.3.1",
+    "@types/file-saver": "^2.0.1",
+    "@types/jest": "^24.0.21",
+    "@types/pako": "^1.0.1",
+    "@types/react": "^16.9.5",
+    "@types/react-dom": "^16.9.1",
+    "@types/storybook__react": "^4.0.2",
+    "babel-loader": "^8.0.6",
+    "eslint-config-react-app": "5.0.2",
+    "eslint-plugin-react-hooks": "^2.1.2",
+    "file-saver": "2.0.2",
+    "husky": "^3.0.8",
+    "ky": "^0.16.0",
+    "loglevel": "^1.6.6",
+    "pako": "^1.0.5",
+    "react": "^16.11.0",
+    "react-docgen-typescript-loader": "^3.3.0",
+    "react-dom": "^16.10.2",
+    "rxjs": "^6.2.2",
+    "ts-loader": "^6.2.0",
+    "tsconfig-paths-webpack-plugin": "^3.2.0",
+    "tsdx": "^0.11.0",
+    "tslib": "^1.10.0",
+    "typescript": "~3.6.0"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js",
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/__mocks__/fileMock.js",
+      "@src": "<rootDir>/src/index.ts",
+      "@src/(.*)": "<rootDir>/src/$1",
+      "@test/(.*)": "<rootDir>/test/$1"
+    },
+    "testEnvironment": "jsdom",
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    }
+  },
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "ecmaFeatures": {
+        "modules": true
+      },
+      "jsx": true,
+      "useJSXTextNode": true,
+      "sourceType": "module"
+    },
+    "extends": [
+      "prettier",
+      "prettier/@typescript-eslint"
+    ],
+    "plugins": [
+      "@typescript-eslint",
+      "react-hooks"
+    ],
+    "rules": {
+      "@typescript-eslint/explicit-function-return-type": "off",
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn"
+    }
+  },
+  "dependencies": {}
+}
