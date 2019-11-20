@@ -33,3 +33,9 @@ When the Data Mapper UI Bootstraps, a series of service calls are made to the ma
 The document service is used to fetch our source/target document information (name of doc, fields). After these are parsed from the service, they are stored in the ConfigModel's inputDoc and outputDoc DocumentDefinition models.
 
 The mapping service is used to fetch our mappings for the fields mapped from the source to the target document. These mappings (and related lookup tables) are parsed by the management service and stored in the ConfigModel's mappings MappingDefinition model. 
+
+=== Mapping State
+
+As you add fields into mapping, mapping transitions to a different state. Here is a state machine diagram for current mapping state transition.
+
+image:AtlasMap_Mapping_State.svg[]
