@@ -76,8 +76,8 @@
     <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
     <maven-source-plugin.version>3.2.0</maven-source-plugin.version>
     <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
-    <node.version>v10.15.3</node.version>
-    <npm.version>6.4.1</npm.version>
+    <node.version>v10.17.0</node.version>
+    <npm.version>6.11.3</npm.version>
     <yarn.version>v1.19.1</yarn.version>
     <checkstyle.skip>true</checkstyle.skip>
   </properties>
