@@ -76,10 +76,10 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
   ]);
 
   const handleChildLines = useCallback(() => {
-    if (!isExpanded && ref.current && boxRef) {
-      let dimensions = getBoundingCanvasRect(ref.current);
-      let boxRect = getBoundingCanvasRect(boxRef);
+    if (!isExpanded) {
       const getCoords = () => {
+        let dimensions = getBoundingCanvasRect(ref.current!);
+        let boxRect = getBoundingCanvasRect(boxRef!);
         return {
           x: type === 'source' ? boxRect.right : boxRect.left,
           y: Math.min(
