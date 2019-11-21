@@ -4,7 +4,7 @@ import React from 'react';
 import './App.css';
 
 const App: React.FC = () => {
-  const { sources, targets, mappings, pending, error } = useAtlasmap({
+  const { sources, targets, mappings, pending, error, importAtlasFile } = useAtlasmap({
     baseJavaInspectionServiceUrl: '/v2/atlas/java/',
     baseXMLInspectionServiceUrl: '/v2/atlas/xml/',
     baseJSONInspectionServiceUrl: '/v2/atlas/json/',
@@ -21,6 +21,7 @@ const App: React.FC = () => {
       addToMapping={() => void(0)}
       pending={pending}
       error={error}
+      importAtlasFile={importAtlasFile}
     />
   );
 };
