@@ -26,6 +26,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf().csrfTokenRepository(new AtlasMapXsrfRepository());
+        httpSecurity
+          .headers().frameOptions().disable()
+          .and().csrf().csrfTokenRepository(new AtlasMapXsrfRepository());
     }
 }
