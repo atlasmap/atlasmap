@@ -8,6 +8,8 @@ import { FileManagementService } from './services/file-management.service';
 import { InitializationService } from './services/initialization.service';
 import { MappingManagementService } from './services/mapping-management.service';
 
+const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
+
 export interface IUseAtlasmapArgs {
   baseJavaInspectionServiceUrl: string;
   baseXMLInspectionServiceUrl: string;
@@ -23,8 +25,6 @@ export function useAtlasmap({
 }: IUseAtlasmapArgs) {
   const [sourceDocs, setSourceDocs] = useState<DocumentDefinition[]>([]);
   const [targetDocs, setTargetDocs] = useState<DocumentDefinition[]>([]);
-
-  const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
 
   const initializationService = useMemo(
     () =>
