@@ -1,6 +1,7 @@
 import ky from 'ky';
 import { useEffect, useMemo, useState } from 'react';
 import { DocumentDefinition } from './models/document-definition.model';
+import { MappingDefinition } from './models/mapping-definition.model';
 import { DocumentManagementService } from './services/document-management.service';
 import { ErrorHandlerService } from './services/error-handler.service';
 import { FieldActionService } from './services/field-action.service';
@@ -25,6 +26,7 @@ export function useAtlasmap({
 }: IUseAtlasmapArgs) {
   const [sourceDocs, setSourceDocs] = useState<DocumentDefinition[]>([]);
   const [targetDocs, setTargetDocs] = useState<DocumentDefinition[]>([]);
+  const [mappingDefinition, setMappingDefinition] = useState<MappingDefinition>(new MappingDefinition());
 
   const initializationService = useMemo(
     () =>
@@ -49,6 +51,7 @@ export function useAtlasmap({
     initializationService.systemInitialized$.subscribe(() => {
       setSourceDocs(initializationService.cfg.sourceDocs);
       setTargetDocs(initializationService.cfg.targetDocs);
+      setMappingDefinition(initializationService.cfg.mappings || new MappingDefinition());
     });
 
     initializationService.initialize();
@@ -64,5 +67,5 @@ export function useAtlasmap({
     baseMappingServiceUrl,
   ]);
 
-  return { sourceDocs, targetDocs };
+  return { sourceDocs, targetDocs, mappingDefinition };
 }

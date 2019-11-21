@@ -33,7 +33,7 @@ function fromDocumentDefinitionToFieldGroup(def: DocumentDefinition): IFieldsGro
 }
 
 const App: React.FC = () => {
-  const { sourceDocs, targetDocs } = useAtlasmap({
+  const { sourceDocs, targetDocs, mappingDefinition } = useAtlasmap({
     baseJavaInspectionServiceUrl: '/v2/atlas/java/',
     baseXMLInspectionServiceUrl: '/v2/atlas/xml/',
     baseJSONInspectionServiceUrl: '/v2/atlas/json/',
@@ -41,6 +41,7 @@ const App: React.FC = () => {
   });
   console.log('Source docs', sourceDocs);
   console.log('Target docs', targetDocs);
+  console.log('Mapping definition', mappingDefinition);
   return (
     <Mapper
       sources={sourceDocs.map(fromDocumentDefinitionToFieldGroup)}
