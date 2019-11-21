@@ -28,6 +28,8 @@ export const sample = () => createElement(() => {
       targets={targets}
       mappings={mappings}
       addToMapping={addToMapping}
+      pending={false}
+      error={false}
     />
   );
 });

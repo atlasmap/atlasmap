@@ -1,3 +1,5 @@
+import { EmptyState, EmptyStateIcon, EmptyStateVariant, Title } from '@patternfly/react-core';
+import { Spinner } from '@patternfly/react-core/dist/js/experimental';
 import { TopologyView } from '@patternfly/react-topology';
 import React, {
   FunctionComponent,
@@ -21,13 +23,17 @@ export interface IMapperProps {
   targets: IFieldsGroup[];
   mappings: IMappings[];
   addToMapping: (elementId: ElementId, elementType: ElementType, mappingId: string) => void;
+  pending: boolean;
+  error: boolean;
 }
 
 export const Mapper: FunctionComponent<IMapperProps> = ({
   sources,
   mappings,
   targets,
-  addToMapping
+  addToMapping,
+  pending,
+  error
 }) => {
   const [freeView, setFreeView] = useState(false);
   const [materializedMappings, setMaterializedMappings] = useState(true);
@@ -160,7 +166,14 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
         style={{ height: '100%', flex: '1' }}
         {...bind()}
       >
-        {width && (
+        {pending && (
+          <EmptyState variant={EmptyStateVariant.full}>
+            <EmptyStateIcon variant="container" component={Spinner} />
+            <Title size="lg">Loading</Title>
+          </EmptyState>
+        )}
+        {error && <p>Error</p>}
+        {!pending && !error && width && (
           <Canvas
             width={width}
             height={height}

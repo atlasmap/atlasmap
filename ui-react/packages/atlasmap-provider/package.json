@@ -110,5 +110,7 @@
       "react-hooks/exhaustive-deps": "warn"
     }
   },
-  "dependencies": {}
+  "dependencies": {
+    "@atlasmap/ui": "*"
+  }
 }

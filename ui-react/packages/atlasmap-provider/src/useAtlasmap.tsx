@@ -1,5 +1,7 @@
 import ky from 'ky';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useReducer } from 'react';
+import { timer } from 'rxjs';
+import { debounce } from 'rxjs/operators';
 import { DocumentDefinition } from './models/document-definition.model';
 import { MappingDefinition } from './models/mapping-definition.model';
 import { DocumentManagementService } from './services/document-management.service';
@@ -8,6 +10,7 @@ import { FieldActionService } from './services/field-action.service';
 import { FileManagementService } from './services/file-management.service';
 import { InitializationService } from './services/initialization.service';
 import { MappingManagementService } from './services/mapping-management.service';
+import { fromDocumentDefinitionToFieldGroup, fromMappingDefinitionToIMappings } from './utils/to-ui-models-util';
 
 const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
 
@@ -18,15 +21,62 @@ export interface IUseAtlasmapArgs {
   baseMappingServiceUrl: string;
 }
 
+interface State {
+  pending: boolean,
+  error: boolean,
+  sourceDocs: DocumentDefinition[],
+  targetDocs: DocumentDefinition[],
+  mappingDefinition: MappingDefinition
+}
+
+interface Action {
+  type: 'loading' | 'loaded' | 'error'
+  payload?: ActionPayload
+}
+
+interface ActionPayload {
+  sourceDocs?: DocumentDefinition[],
+  targetDocs?: DocumentDefinition[],
+  mappingDefinition?: MappingDefinition
+}
+
+const init = (): State => ({
+  pending: false,
+  error: false,
+  sourceDocs: [] as DocumentDefinition[],
+  targetDocs: [] as DocumentDefinition[],
+  mappingDefinition: new MappingDefinition(),
+});
+
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case 'loading':
+      return {
+        ...state,
+        pending: true,
+        error: false
+      };
+    case 'loaded':
+      return {
+        ...state,
+        ...action.payload,
+        pending: false,
+        error: false
+      };
+    case 'error':
+      return init();
+    default:
+      throw new Error();
+  }
+}
+
 export function useAtlasmap({
   baseJavaInspectionServiceUrl,
   baseXMLInspectionServiceUrl,
   baseJSONInspectionServiceUrl,
   baseMappingServiceUrl,
 }: IUseAtlasmapArgs) {
-  const [sourceDocs, setSourceDocs] = useState<DocumentDefinition[]>([]);
-  const [targetDocs, setTargetDocs] = useState<DocumentDefinition[]>([]);
-  const [mappingDefinition, setMappingDefinition] = useState<MappingDefinition>(new MappingDefinition());
+  const [state, dispatch] = useReducer(reducer, {}, init);
 
   const initializationService = useMemo(
     () =>
@@ -40,25 +90,32 @@ export function useAtlasmap({
     []
   );
 
-  const c = initializationService.cfg;
+  initializationService.cfg.initCfg.baseJavaInspectionServiceUrl = baseJavaInspectionServiceUrl;
+  initializationService.cfg.initCfg.baseXMLInspectionServiceUrl = baseXMLInspectionServiceUrl;
+  initializationService.cfg.initCfg.baseJSONInspectionServiceUrl = baseJSONInspectionServiceUrl;
+  initializationService.cfg.initCfg.baseMappingServiceUrl = baseMappingServiceUrl;
 
-  c.initCfg.baseJavaInspectionServiceUrl = baseJavaInspectionServiceUrl;
-  c.initCfg.baseXMLInspectionServiceUrl = baseXMLInspectionServiceUrl;
-  c.initCfg.baseJSONInspectionServiceUrl = baseJSONInspectionServiceUrl;
-  c.initCfg.baseMappingServiceUrl = baseMappingServiceUrl;
-
-  initializationService.systemInitialized$.subscribe(() => {
-    setSourceDocs(initializationService.cfg.sourceDocs);
-    setTargetDocs(initializationService.cfg.targetDocs);
-
-  });
-
-  c.mappingService.mappingUpdated$.subscribe(() => {
-    setMappingDefinition(initializationService.cfg.mappings || new MappingDefinition());
+  const initialzation$ = initializationService.systemInitializedSource.pipe(debounce(() => timer(500)));
+  initialzation$.subscribe(() => {
+    if (initializationService.cfg.initCfg.initialized) {
+      if (!initializationService.cfg.initCfg.initializationErrorOccurred) {
+        dispatch({
+          type: 'loaded',
+          payload: {
+            sourceDocs: [...initializationService.cfg.sourceDocs],
+            targetDocs: [...initializationService.cfg.targetDocs],
+            mappingDefinition: initializationService.cfg.mappings || new MappingDefinition(),
+          }
+        });
+      } else {
+        dispatch({ type: 'error' });
+      }
+    }
   });
 
   useEffect(() => {
     initializationService.initialize();
+    dispatch({ type: 'loading' });
     return () => {
       initializationService.resetConfig();
     };
@@ -66,5 +123,11 @@ export function useAtlasmap({
     initializationService,
   ]);
 
-  return { sourceDocs, targetDocs, mappingDefinition };
+  return useMemo(() => ({
+    pending: state.pending,
+    error: state.error,
+    sources: state.sourceDocs.map(fromDocumentDefinitionToFieldGroup),
+    targets: state.targetDocs.map(fromDocumentDefinitionToFieldGroup),
+    mappings: fromMappingDefinitionToIMappings(state.mappingDefinition)
+  }), [state]);
 }
