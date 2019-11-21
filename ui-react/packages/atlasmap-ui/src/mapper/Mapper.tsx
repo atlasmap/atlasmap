@@ -56,7 +56,7 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
         updateZoom(delta[1] * -0.001);
       }
     },
-  });
+  }, { dragDelay: true });
 
   const updateZoom = useCallback(
     (tick: number) => {

@@ -115,7 +115,7 @@ export class MappingManagementService {
       for (const mappingName of mappingFileNames) {
         const url: string = baseURL + mappingName;
         this.cfg.logger!.debug('Mapping Service Request');
-        const operation = from(this.api.get(url));
+        const operation = from(this.api.get(url).json());
         operations.push(operation);
       }
 

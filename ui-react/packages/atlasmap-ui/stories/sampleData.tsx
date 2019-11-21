@@ -935,12 +935,12 @@ export const mappings = [
     id: 'a',
     sourceFields: [
       {
-        id: 'JSONSchemaSource-/order/address/city',
+        id: 'JSONInstanceSource-/order/address/city',
         name: 'city',
         tip: '/order/address/city',
       },
       {
-        id: 'JSONSchemaSource-/order/address/state',
+        id: 'JSONInstanceSource-/order/address/state',
         name: 'state',
         tip: '/order/address/state',
       },

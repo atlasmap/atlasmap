@@ -12,7 +12,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useCanvas } from '../../canvas';
+import { useBoundingCanvasRect, useCanvas, useMappingNode } from '../../canvas';
 import { ElementType, IFieldsGroup, IFieldsNode } from '../../models';
 import { FieldElement } from './FieldElement';
 
@@ -66,15 +66,44 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
   level = 0,
 }) => {
   const { redraw } = useCanvas();
+  const getBoundingCanvasRect = useBoundingCanvasRect();
+  const { setLineNode } = useMappingNode();
   const ref = useRef<HTMLElement | null>(null);
   const [isExpanded, setIsExpanded] = useState(level === 0);
   const toggleExpand = useCallback(() => setIsExpanded(!isExpanded), [
     isExpanded,
     setIsExpanded,
   ]);
+
+  const handleChildLines = useCallback(() => {
+    if (!isExpanded) {
+      const getCoords = () => {
+        let dimensions = getBoundingCanvasRect(ref.current!);
+        let boxRect = getBoundingCanvasRect(boxRef!);
+        return {
+          x: type === 'source' ? boxRect.right : boxRect.left,
+          y: Math.min(
+            Math.max(dimensions.top + dimensions.height / 2, boxRect.top),
+            boxRect.height + boxRect.top
+          ),
+        }
+      };
+      const traverseChildren = (f: IFieldsGroup | IFieldsNode) => {
+        if ((f as IFieldsNode).element) {
+          setLineNode(f.id, getCoords);
+        } else {
+          (f as IFieldsGroup).fields.forEach(traverseChildren);
+        }
+      }
+      group.fields.forEach(traverseChildren);
+    }
+  }, [boxRef, getBoundingCanvasRect, group.fields, isExpanded, setLineNode, type]);
+
   useEffect(() => {
+    handleChildLines();
     redraw();
-  }, [isExpanded, redraw]);
+  }, [handleChildLines, redraw]);
+
   return (
     <AccordionItem>
       <AccordionToggle
@@ -95,7 +124,7 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
         isHidden={!isExpanded}
         className={css(styles.content, rightAlign && styles.contentRightAligned)}
       >
-        {group.fields.map(f =>
+        {isExpanded && group.fields.map(f =>
           (f as IFieldsNode).element ? (
             <FieldElement
               key={f.id}
