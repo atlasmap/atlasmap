@@ -104,7 +104,7 @@ materializedMappings,
 
   useEffect(() => {
     redraw();
-  }, [freeView, materializedMappings, redraw, selectedMapping]);
+  }, [freeView, materializedMappings, redraw, selectedMapping, sources, targets, mappings]);
 
   return (
     <DndProvider backend={HTML5Backend}>

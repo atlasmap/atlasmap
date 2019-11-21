@@ -1,5 +1,5 @@
-import { useAtlasmap, DocumentDefinition, Field } from '@atlasmap/provider';
-import { Mapper, IFieldsGroup, IFieldsNode } from '@atlasmap/ui';
+import { useAtlasmap, DocumentDefinition, Field, MappingDefinition, MappedField } from '@atlasmap/provider';
+import { Mapper, IFieldsGroup, IFieldsNode, IMappings, IMappingField } from '@atlasmap/ui';
 import React from 'react';
 import './App.css';
 
@@ -32,6 +32,24 @@ function fromDocumentDefinitionToFieldGroup(def: DocumentDefinition): IFieldsGro
   };
 }
 
+function fromMappedFieldToIMappingField(field: MappedField): IMappingField {
+  return {
+    id: field.field!.uuid,
+    name: field.field!.name,
+    tip: field.field!.path
+  }
+}
+
+function fromMappingDefinitionToIMappings(def: MappingDefinition): IMappings[] {
+  return def.mappings.map(m => {
+    return {
+      id: m.uuid,
+      sourceFields: m.getMappedFields(true).map(fromMappedFieldToIMappingField),
+      targetFields: m.getMappedFields(false).map(fromMappedFieldToIMappingField),
+    }
+  })
+}
+
 const App: React.FC = () => {
   const { sourceDocs, targetDocs, mappingDefinition } = useAtlasmap({
     baseJavaInspectionServiceUrl: '/v2/atlas/java/',
@@ -46,11 +64,10 @@ const App: React.FC = () => {
     <Mapper
       sources={sourceDocs.map(fromDocumentDefinitionToFieldGroup)}
       targets={targetDocs.map(fromDocumentDefinitionToFieldGroup)}
-      mappings={[]}
+      mappings={fromMappingDefinitionToIMappings(mappingDefinition)}
       addToMapping={() => void(0)}
     />
   );
 };
 
 export default App;
-

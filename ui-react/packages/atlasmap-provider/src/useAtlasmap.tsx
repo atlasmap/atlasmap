@@ -47,24 +47,23 @@ export function useAtlasmap({
   c.initCfg.baseJSONInspectionServiceUrl = baseJSONInspectionServiceUrl;
   c.initCfg.baseMappingServiceUrl = baseMappingServiceUrl;
 
+  initializationService.systemInitialized$.subscribe(() => {
+    setSourceDocs(initializationService.cfg.sourceDocs);
+    setTargetDocs(initializationService.cfg.targetDocs);
+
+  });
+
+  c.mappingService.mappingUpdated$.subscribe(() => {
+    setMappingDefinition(initializationService.cfg.mappings || new MappingDefinition());
+  });
+
   useEffect(() => {
-    initializationService.systemInitialized$.subscribe(() => {
-      setSourceDocs(initializationService.cfg.sourceDocs);
-      setTargetDocs(initializationService.cfg.targetDocs);
-      setMappingDefinition(initializationService.cfg.mappings || new MappingDefinition());
-    });
-
     initializationService.initialize();
-
     return () => {
       initializationService.resetConfig();
     };
   }, [
     initializationService,
-    baseJavaInspectionServiceUrl,
-    baseXMLInspectionServiceUrl,
-    baseJSONInspectionServiceUrl,
-    baseMappingServiceUrl,
   ]);
 
   return { sourceDocs, targetDocs, mappingDefinition };
