@@ -1,11 +1,16 @@
 import ky from 'ky';
-import { useEffect, useMemo, useReducer } from 'react';
+import { useCallback, useEffect, useMemo, useReducer } from 'react';
 import { timer } from 'rxjs';
 import { debounce } from 'rxjs/operators';
 import { InspectionType } from './common/config.types';
 import { ConfigModel } from './models/config.model';
 import { DocumentDefinition } from './models/document-definition.model';
-import { ErrorScope, ErrorType, ErrorInfo, ErrorLevel } from './models/error.model';
+import {
+  ErrorScope,
+  ErrorType,
+  ErrorInfo,
+  ErrorLevel,
+} from './models/error.model';
 import { MappingDefinition } from './models/mapping-definition.model';
 import { DocumentManagementService } from './services/document-management.service';
 import { ErrorHandlerService } from './services/error-handler.service';
@@ -13,7 +18,10 @@ import { FieldActionService } from './services/field-action.service';
 import { FileManagementService } from './services/file-management.service';
 import { InitializationService } from './services/initialization.service';
 import { MappingManagementService } from './services/mapping-management.service';
-import { fromDocumentDefinitionToFieldGroup, fromMappingDefinitionToIMappings } from './utils/to-ui-models-util';
+import {
+  fromDocumentDefinitionToFieldGroup,
+  fromMappingDefinitionToIMappings,
+} from './utils/to-ui-models-util';
 
 const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
 
@@ -35,31 +43,56 @@ async function processMappingsCatalog(selectedFile: any, cfg: ConfigModel) {
 export function importAtlasFile(selectedFile: File) {
   const cfg = ConfigModel.getConfig();
   const userFileComps = selectedFile.name.split('.');
-  const userFileSuffix: string = userFileComps[userFileComps.length - 1].toUpperCase();
+  const userFileSuffix: string = userFileComps[
+    userFileComps.length - 1
+  ].toUpperCase();
 
   if (userFileSuffix === 'ADM') {
-
     cfg.errorService.resetAll();
 
     // Clear out current user documents from the backend service before processing the
     // imported ADM.
-    cfg.fileService.resetMappings().toPromise().then( async() => {
-      cfg.fileService.resetLibs().toPromise().then( async() => {
-        await processMappingsCatalog(selectedFile, cfg);
+    cfg.fileService
+      .resetMappings()
+      .toPromise()
+      .then(async () => {
+        cfg.fileService
+          .resetLibs()
+          .toPromise()
+          .then(async () => {
+            await processMappingsCatalog(selectedFile, cfg);
+          });
+      })
+      .catch((error: any) => {
+        if (error.status === 0) {
+          cfg.errorService.addError(
+            new ErrorInfo({
+              message:
+                'Fatal network error: Could not connect to AtlasMap design runtime service.',
+              level: ErrorLevel.ERROR,
+              scope: ErrorScope.APPLICATION,
+              type: ErrorType.INTERNAL,
+              object: error,
+            })
+          );
+        } else {
+          cfg.errorService.addError(
+            new ErrorInfo({
+              message: 'Could not reset document definitions before import.',
+              level: ErrorLevel.ERROR,
+              scope: ErrorScope.APPLICATION,
+              type: ErrorType.INTERNAL,
+              object: error,
+            })
+          );
+        }
       });
-    }).catch((error: any) => {
-      if (error.status === 0) {
-        cfg.errorService.addError(new ErrorInfo({
-          message: 'Fatal network error: Could not connect to AtlasMap design runtime service.',
-          level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
-      } else {
-        cfg.errorService.addError(new ErrorInfo({
-          message: 'Could not reset document definitions before import.',
-          level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
-      }
-    });
   } else if (userFileSuffix === 'JAR') {
-    cfg.documentService.processDocument(selectedFile, InspectionType.JAVA_CLASS, false);
+    cfg.documentService.processDocument(
+      selectedFile,
+      InspectionType.JAVA_CLASS,
+      false
+    );
   }
 }
 
@@ -71,22 +104,22 @@ export interface IUseAtlasmapArgs {
 }
 
 interface State {
-  pending: boolean,
-  error: boolean,
-  sourceDocs: DocumentDefinition[],
-  targetDocs: DocumentDefinition[],
-  mappingDefinition: MappingDefinition
+  pending: boolean;
+  error: boolean;
+  sourceDocs: DocumentDefinition[];
+  targetDocs: DocumentDefinition[];
+  mappingDefinition: MappingDefinition;
 }
 
 interface Action {
-  type: 'loading' | 'loaded' | 'error'
-  payload?: ActionPayload
+  type: 'loading' | 'loaded' | 'error';
+  payload?: ActionPayload;
 }
 
 interface ActionPayload {
-  sourceDocs?: DocumentDefinition[],
-  targetDocs?: DocumentDefinition[],
-  mappingDefinition?: MappingDefinition
+  sourceDocs?: DocumentDefinition[];
+  targetDocs?: DocumentDefinition[];
+  mappingDefinition?: MappingDefinition;
 }
 
 const init = (): State => ({
@@ -103,14 +136,14 @@ function reducer(state: State, action: Action): State {
       return {
         ...state,
         pending: true,
-        error: false
+        error: false,
       };
     case 'loaded':
       return {
         ...state,
         ...action.payload,
         pending: false,
-        error: false
+        error: false,
       };
     case 'error':
       return init();
@@ -144,40 +177,56 @@ export function useAtlasmap({
   initializationService.cfg.initCfg.baseJSONInspectionServiceUrl = baseJSONInspectionServiceUrl;
   initializationService.cfg.initCfg.baseMappingServiceUrl = baseMappingServiceUrl;
 
-  const initialzation$ = initializationService.systemInitializedSource.pipe(debounce(() => timer(500)));
-  initialzation$.subscribe(() => {
-    if (initializationService.cfg.initCfg.initialized) {
-      if (!initializationService.cfg.initCfg.initializationErrorOccurred) {
-        dispatch({
-          type: 'loaded',
-          payload: {
-            sourceDocs: [...initializationService.cfg.sourceDocs],
-            targetDocs: [...initializationService.cfg.targetDocs],
-            mappingDefinition: initializationService.cfg.mappings || new MappingDefinition(),
-          }
-        });
-      } else {
-        dispatch({ type: 'error' });
-      }
-    }
-  });
-
   useEffect(() => {
     initializationService.initialize();
+
+    const initializationObservable = initializationService.systemInitializedSource.pipe(
+      debounce(() => timer(500))
+    );
+
+    const subscription = initializationObservable.subscribe(() => {
+      if (initializationService.cfg.initCfg.initialized) {
+        if (!initializationService.cfg.initCfg.initializationErrorOccurred) {
+          dispatch({
+            type: 'loaded',
+            payload: {
+              sourceDocs: [...initializationService.cfg.sourceDocs],
+              targetDocs: [...initializationService.cfg.targetDocs],
+              mappingDefinition:
+                initializationService.cfg.mappings || new MappingDefinition(),
+            },
+          });
+        } else {
+          dispatch({ type: 'error' });
+        }
+      }
+    });
+
     dispatch({ type: 'loading' });
+
     return () => {
       initializationService.resetConfig();
+      subscription.unsubscribe();
     };
-  }, [
-    initializationService,
-  ]);
+  }, [initializationService]);
 
-  return useMemo(() => ({
-    pending: state.pending,
-    error: state.error,
-    sources: state.sourceDocs.map(fromDocumentDefinitionToFieldGroup),
-    targets: state.targetDocs.map(fromDocumentDefinitionToFieldGroup),
-    mappings: fromMappingDefinitionToIMappings(state.mappingDefinition),
-    importAtlasFile
-  }), [state]);
+  const handleImportAtlasFile = useCallback(
+    (file: File) => {
+      dispatch({ type: 'loading' });
+      importAtlasFile(file);
+    },
+    [dispatch]
+  );
+
+  return useMemo(
+    () => ({
+      pending: state.pending,
+      error: state.error,
+      sources: state.sourceDocs.map(fromDocumentDefinitionToFieldGroup),
+      targets: state.targetDocs.map(fromDocumentDefinitionToFieldGroup),
+      mappings: fromMappingDefinitionToIMappings(state.mappingDefinition),
+      importAtlasFile: handleImportAtlasFile,
+    }),
+    [state]
+  );
 }

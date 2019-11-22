@@ -49,9 +49,6 @@ export const CanvasProvider: FunctionComponent<ICanvasProviderProps> = ({
   const [lastUpdate, setLastUpdate] = useState(Date.now());
   const redraw = useCallback(() => {
     setLastUpdate(Date.now());
-    redrawCallbacks.current.forEach(cb => {
-      requestAnimationFrame(cb);
-    });
   }, [setLastUpdate]);
   const redrawCallbacks = useRef<RedrawCallbacks>([]);
   const addRedrawListener = useCallback(
@@ -73,6 +70,15 @@ export const CanvasProvider: FunctionComponent<ICanvasProviderProps> = ({
       cancelAnimationFrame(requestId);
     };
   }, [width, height, zoom, offsetLeft, offsetTop, panX, panY, redraw]);
+
+  useEffect(() => {
+    const requestId = requestAnimationFrame(() =>
+      redrawCallbacks.current.forEach(cb => cb())
+    );
+    return () => {
+      cancelAnimationFrame(requestId);
+    };
+  }, [lastUpdate, redrawCallbacks]);
 
   return (
     <CanvasContext.Provider

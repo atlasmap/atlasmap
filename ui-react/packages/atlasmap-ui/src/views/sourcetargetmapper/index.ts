@@ -5,6 +5,7 @@ export * from './FieldGroup';
 export * from './FieldGroupList';
 export * from './Links';
 export * from './MappingElement';
+export * from './MappingList';
 export * from './FieldsBox';
 export * from './SourceTargetMapper';
 export * from './useMappingLinks';
