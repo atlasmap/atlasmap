@@ -165,7 +165,11 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
     >
       <div
         ref={dimensionsRef}
-        style={{ height: '100%', flex: '1' }}
+        style={{
+          height: '100%',
+          flex: '1',
+          overflow: 'hidden'
+        }}
         {...bind()}
       >
         {pending && (

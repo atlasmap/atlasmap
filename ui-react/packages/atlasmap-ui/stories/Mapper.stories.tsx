@@ -1,3 +1,4 @@
+import { action } from '@storybook/addon-actions';
 import React, { createElement, useState } from 'react';
 import { Mapper } from '../src/mapper';
 import { ElementId, ElementType, IMappings } from '../src/models';
@@ -28,6 +29,7 @@ export const sample = () => createElement(() => {
       targets={targets}
       mappings={mappings}
       addToMapping={addToMapping}
+      importAtlasFile={action('importAtlasFile')}
       pending={false}
       error={false}
     />

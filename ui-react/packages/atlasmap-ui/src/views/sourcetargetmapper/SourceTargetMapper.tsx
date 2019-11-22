@@ -9,6 +9,7 @@ import { FieldGroupList } from './FieldGroupList';
 import { Links } from './Links';
 import { MappingElement } from './MappingElement';
 import { FieldsBox } from './FieldsBox';
+import { MappingList } from './MappingList';
 
 export interface IMappingCanvasProps {
   sources: IFieldsGroup[];
@@ -149,7 +150,7 @@ materializedMappings,
           {...bindMapping()}
         >
           {({ ref }) => (
-            <>
+            <MappingList>
               {mappings.map(m => {
                 return (
                   <MappingElement
@@ -164,7 +165,7 @@ materializedMappings,
                   />
                 );
               })}
-            </>
+            </MappingList>
           )}
         </FieldsBox>
 
