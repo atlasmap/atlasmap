@@ -25,6 +25,7 @@ export interface IMapperProps {
   addToMapping: (elementId: ElementId, elementType: ElementType, mappingId: string) => void;
   pending: boolean;
   error: boolean;
+  importAtlasFile: (selectedFile: File) => void;
 }
 
 export const Mapper: FunctionComponent<IMapperProps> = ({
@@ -33,7 +34,8 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
   targets,
   addToMapping,
   pending,
-  error
+  error,
+  importAtlasFile
 }) => {
   const [freeView, setFreeView] = useState(false);
   const [materializedMappings, setMaterializedMappings] = useState(true);
@@ -123,7 +125,7 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
     return () => clearTimeout(timeout);
   }, [measure, selectedMapping]);
 
-  const contextToolbar = useMemo(() => <MapperContextToolbar />, []);
+  const contextToolbar = useMemo(() => <MapperContextToolbar importAtlasFile={importAtlasFile}/>, []);
   const toggleFreeView = useCallback(() => setFreeView(!freeView), [
     freeView,
     setFreeView,
