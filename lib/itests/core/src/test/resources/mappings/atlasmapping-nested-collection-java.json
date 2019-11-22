@@ -67,26 +67,43 @@
           "name" : "someField"
         } ],
         "id" : "3-3"
-      },
-        {
-          "jsonType" : "io.atlasmap.v2.Mapping",
-          "mappingType" : "MAP",
-          "inputField" : [ {
-            "jsonType" : "io.atlasmap.java.v2.JavaField",
-            "docId" : "io.atlasmap.itests.core.SourceClass",
-            "path" : "/someArray[]/someArray[]/someArray[]/someField",
-            "fieldType" : "STRING",
-            "name" : "someField"
-          } ],
-          "outputField" : [ {
-            "jsonType" : "io.atlasmap.java.v2.JavaField",
-            "docId" : "io.atlasmap.itests.core.TargetClass",
-            "path" : "/someRenamedArray[]/someArray[]/someRenamedArray[]/someField",
-            "fieldType" : "STRING",
-            "name" : "someField"
-          } ],
-          "id" : "3-3renamed"
-        }]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.SourceClass",
+          "path" : "/someArray[]/someArray[]/someArray[]/someField",
+          "fieldType" : "STRING",
+          "name" : "someField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.TargetClass",
+          "path" : "/someRenamedArray[]/someArray[]/someRenamedArray[]/someField",
+          "fieldType" : "STRING",
+          "name" : "someField"
+        } ],
+        "id" : "3-3renamed"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.SourceClass",
+          "path" : "/someArray[]/someArray[]/someArray[]/someField",
+          "fieldType" : "STRING",
+          "name" : "someField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.TargetClass",
+          "path" : "/someArray[]/someField",
+          "fieldType" : "STRING",
+          "name" : "someField"
+        } ],
+        "id" : "3-1"
+      }]
     },
     "name" : "UI.639710"
   }

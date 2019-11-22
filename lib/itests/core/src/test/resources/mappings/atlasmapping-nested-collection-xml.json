@@ -93,6 +93,26 @@
           "userCreated" : false
         } ],
         "id" : "3-3renamed"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "XMLInstanceNestedCollection",
+          "path" : "/firstArray<>/secondArray<>/thirdArray<>/value",
+          "fieldType" : "STRING",
+          "name" : "value",
+          "userCreated" : false
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "XMLInstanceNestedCollection",
+          "path" : "/root/firstArray<>/value",
+          "fieldType" : "STRING",
+          "name" : "value",
+          "userCreated" : false
+        } ],
+        "id" : "3-1"
       }]
     },
     "lookupTables" : {

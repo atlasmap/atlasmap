@@ -397,7 +397,10 @@ export class MappingManagementService {
     if (field.isInCollection()) {
       if (otherSideMappedFields.length > 0) {
         if (field.getCollectionCount() !== otherSideMappedFields[0].field.getCollectionCount()) {
-          return `source and target must have the same nested collection count on the path.`;
+          const target = field.isSource() ? otherSideMappedFields[0].field : field;
+          if (target.getCollectionCount() !== 1) {
+            return `source and target must have the same nested collection count or target must have a single nested collection on the path.`;
+          }
         }
       }
     }

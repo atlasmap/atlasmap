@@ -234,8 +234,25 @@ public class NestedCollectionXmlTest {
             "</firstArrayRenamed></root>", output);
     }
 
+    @Test
+    public void testAsymmetricPaths1stAnd2ndAnd3rdNestedCollectionToSingleCollection() throws Exception {
+        String output = processXmlNestedCollection(Arrays.asList("3-1"));
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><root>" +
+            "<firstArray><value>thirdArrayValue0-0-0</value></firstArray>" +
+            "<firstArray><value>thirdArrayValue0-0-1</value></firstArray>" +
+            "<firstArray><value>thirdArrayValue0-1-0</value></firstArray>" +
+            "<firstArray><value>thirdArrayValue0-1-1</value></firstArray>" +
+            "<firstArray><value>thirdArrayValue0-1-2</value></firstArray>" +
+            "<firstArray><value>thirdArrayValue1-0-0</value></firstArray>" +
+            "<firstArray><value>thirdArrayValue1-0-1</value></firstArray>" +
+            "<firstArray><value>thirdArrayValue1-0-2</value></firstArray>" +
+            "<firstArray><value>thirdArrayValue1-1-0</value></firstArray>" +
+            "<firstArray><value>thirdArrayValue1-1-1</value></firstArray>" +
+            "</root>", output);
+    }
+
     private String processXmlNestedCollection(List<String> mappingsToProcess) throws AtlasException, IOException, URISyntaxException {
-        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-nested-collection-symmetric-xml.json");
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-nested-collection-xml.json");
         AtlasMapping mapping = mappingService.loadMapping(url);
         mapping.getMappings().getMapping().removeIf(m -> !mappingsToProcess.contains(((Mapping) m).getId()));
         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
