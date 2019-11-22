@@ -33,6 +33,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 public class NestedCollectionJavaTest {
@@ -122,6 +123,26 @@ public class NestedCollectionJavaTest {
         assert3rdLevelRenamedCollection(target);
     }
 
+    @Test
+    public void testAsymmetricPaths1stAnd2ndAnd3rdLevelNestedCollectionToSingleCollection() throws Exception {
+        TargetClass target = processNestedJavaCollection(Arrays.asList("3-1"));
+
+        assertEquals(6, target.getSomeArray().length);
+        assertEquals("array000", target.getSomeArray()[0].getSomeField());
+        assertEquals("array001", target.getSomeArray()[1].getSomeField());
+        assertEquals("array002", target.getSomeArray()[2].getSomeField());
+        assertNull(target.getSomeArray()[3].getSomeField()); //array01.someArray is null, thus adding null for a null parent
+        assertEquals("array100", target.getSomeArray()[4].getSomeField());
+        assertEquals("array101", target.getSomeArray()[5].getSomeField());
+        assertNull(target.getSomeField());
+        assertNull(target.getSomeArray()[0].getSomeArray());
+        assertNull(target.getSomeArray()[1].getSomeArray());
+        assertNull(target.getSomeArray()[2].getSomeArray());
+        assertNull(target.getSomeArray()[3].getSomeArray());
+        assertNull(target.getSomeArray()[4].getSomeArray());
+        assertNull(target.getSomeArray()[5].getSomeArray());
+    }
+
     private void assert1stLevelCollection(TargetClass target) {
         assertEquals(3, target.getSomeArray().length);
         assertEquals("array0", target.getSomeArray()[0].getSomeField());
@@ -139,19 +160,29 @@ public class NestedCollectionJavaTest {
     }
 
     private void assert3rdLevelCollection(TargetClass target) {
+        assertEquals(3, target.getSomeArray()[0].getSomeArray()[0].getSomeArray().length);
+        assertEquals("array000", target.getSomeArray()[0].getSomeArray()[0].getSomeArray()[0].getSomeField());
+        assertEquals("array001", target.getSomeArray()[0].getSomeArray()[0].getSomeArray()[1].getSomeField());
+        assertEquals("array002", target.getSomeArray()[0].getSomeArray()[0].getSomeArray()[2].getSomeField());
+
         assertEquals(2, target.getSomeArray()[1].getSomeArray()[0].getSomeArray().length);
         assertEquals("array100", target.getSomeArray()[1].getSomeArray()[0].getSomeArray()[0].getSomeField());
         assertEquals("array101", target.getSomeArray()[1].getSomeArray()[0].getSomeArray()[1].getSomeField());
     }
 
     private void assert3rdLevelRenamedCollection(TargetClass target) {
+        assertEquals(3, target.getSomeRenamedArray()[0].getSomeArray()[0].getSomeRenamedArray().length);
+        assertEquals("array000", target.getSomeRenamedArray()[0].getSomeArray()[0].getSomeRenamedArray()[0].getSomeField());
+        assertEquals("array001", target.getSomeRenamedArray()[0].getSomeArray()[0].getSomeRenamedArray()[1].getSomeField());
+        assertEquals("array002", target.getSomeRenamedArray()[0].getSomeArray()[0].getSomeRenamedArray()[2].getSomeField());
+
         assertEquals(2, target.getSomeRenamedArray()[1].getSomeArray()[0].getSomeRenamedArray().length);
         assertEquals("array100", target.getSomeRenamedArray()[1].getSomeArray()[0].getSomeRenamedArray()[0].getSomeField());
         assertEquals("array101", target.getSomeRenamedArray()[1].getSomeArray()[0].getSomeRenamedArray()[1].getSomeField());
     }
 
     private TargetClass processNestedJavaCollection(List<String> mappingsToProcess) throws AtlasException {
-        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-nested-collection-symmetric-java.json");
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-nested-collection-java.json");
         AtlasMapping mapping = mappingService.loadMapping(url);
         mapping.getMappings().getMapping().removeIf(m -> !mappingsToProcess.contains(((Mapping) m).getId()));
         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
@@ -176,14 +207,19 @@ public class NestedCollectionJavaTest {
         };
         sc.setSomeArray(someArray);
 
-        array0.setSomeArray(new BaseClass.SomeNestedClass[] {new BaseClass.SomeNestedClass("array00"), new BaseClass.SomeNestedClass("array01")});
+        BaseClass.SomeNestedClass array00 = new BaseClass.SomeNestedClass("array00");
+        array00.setSomeArray(new BaseClass.SomeNestedClass[] { new BaseClass.SomeNestedClass("array000"),
+            new BaseClass.SomeNestedClass("array001"), new BaseClass.SomeNestedClass("array002")});
+
+        array0.setSomeArray(new BaseClass.SomeNestedClass[] {array00, new BaseClass.SomeNestedClass("array01")});
 
         BaseClass.SomeNestedClass array10 = new BaseClass.SomeNestedClass("array10");
         array1.setSomeArray(new BaseClass.SomeNestedClass[] { array10 });
 
         array2.setSomeArray(new BaseClass.SomeNestedClass[0]);
 
-        array10.setSomeArray(new BaseClass.SomeNestedClass[] { new BaseClass.SomeNestedClass("array100"), new BaseClass.SomeNestedClass("array101")});
+        array10.setSomeArray(new BaseClass.SomeNestedClass[] { new BaseClass.SomeNestedClass("array100"),
+            new BaseClass.SomeNestedClass("array101")});
 
         return sc;
     }
