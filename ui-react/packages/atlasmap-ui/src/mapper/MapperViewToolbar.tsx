@@ -17,6 +17,7 @@ export interface IMapperToolbarProps {
   toggleFreeView: () => void;
   materializedMappings: boolean;
   toggleMaterializedMappings: () => void;
+  resetAll: () => void;
 }
 
 export const MapperViewToolbar: FunctionComponent<IMapperToolbarProps> = ({
@@ -24,6 +25,7 @@ export const MapperViewToolbar: FunctionComponent<IMapperToolbarProps> = ({
   toggleFreeView,
   materializedMappings,
   toggleMaterializedMappings,
+  resetAll
 }) => {
   const menuItems = [
     <OptionsMenuItemGroup key="first group" aria-label="Sort Column">
@@ -48,6 +50,12 @@ export const MapperViewToolbar: FunctionComponent<IMapperToolbarProps> = ({
       <OptionsMenuItem>Show mapped fields</OptionsMenuItem>
       <OptionsMenuItem>Show unmapped fields</OptionsMenuItem>
       <OptionsMenuItem>Show mapping preview</OptionsMenuItem>
+      <OptionsMenuItem
+        // class="pficon pficon-restart"
+        onSelect={resetAll}
+      >
+        Reset All
+      </OptionsMenuItem>
     </OptionsMenuItemGroup>,
   ];
   const [isOptionsMenuExpanded, setIsOptionsMenuExpanded] = useState(false);

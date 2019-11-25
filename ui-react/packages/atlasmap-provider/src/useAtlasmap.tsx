@@ -14,7 +14,7 @@ import {
   fromDocumentDefinitionToFieldGroup,
   fromMappingDefinitionToIMappings,
 } from './utils/to-ui-models-util';
-import { importAtlasFile } from './components/toolbar/MapperUtilsToolbar';
+import { importAtlasFile, resetAtlasmap } from './components/toolbar/MapperUtilsToolbar';
 
 const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
 
@@ -140,6 +140,13 @@ export function useAtlasmap({
     [dispatch]
   );
 
+  const handleResetAtlasmap = useCallback(
+    () => {
+      resetAtlasmap();
+    },
+    []
+  );
+
   return useMemo(
     () => ({
       pending: state.pending,
@@ -148,6 +155,7 @@ export function useAtlasmap({
       targets: state.targetDocs.map(fromDocumentDefinitionToFieldGroup),
       mappings: fromMappingDefinitionToIMappings(state.mappingDefinition),
       importAtlasFile: handleImportAtlasFile,
+      resetAtlasmap: handleResetAtlasmap,
     }),
     [state]
   );

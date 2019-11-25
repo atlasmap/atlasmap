@@ -83,3 +83,29 @@ export function importAtlasFile(selectedFile: File) {
   }
 }
 
+/**
+ * Remove all documents and imported JARs from the server.
+ */
+export function resetAtlasmap() {
+  const cfg = ConfigModel.getConfig();
+  cfg.errorService.resetAll();
+  cfg.fileService.resetMappings().toPromise().then( async() => {
+    cfg.mappings = null;
+    cfg.fileService.resetLibs().toPromise().then( async() => {
+      await cfg.initializationService.initialize();
+    });
+    cfg.clearDocs();
+    await cfg.initializationService.initialize();
+  }).catch((error: any) => {
+    if (error.status === 0) {
+      cfg.errorService.addError(new ErrorInfo({
+        message: 'Fatal network error: Could not connect to AtlasMap design runtime service.',
+        level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
+    } else {
+      cfg.errorService.addError(new ErrorInfo({message: 'Could not reset mapping definitions.',
+        level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
+    }
+  });
+
+}
+
