@@ -9,7 +9,7 @@ export default {
 
 export const interactiveExample = () => (
   <FieldGroupList>
-    <FieldGroup
+    {() => <FieldGroup
       isVisible={true}
       type={'source'}
       group={{
@@ -17,6 +17,7 @@ export const interactiveExample = () => (
         id: 'text-id',
         title: text('Group title', 'Sample title'),
       }}
-    />
+      boxRef={null}
+    />}
   </FieldGroupList>
 );

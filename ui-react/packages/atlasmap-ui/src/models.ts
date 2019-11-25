@@ -1,5 +1,3 @@
-import { ReactElement } from 'react';
-
 export type Coords = {
   x: number;
   y: number;
@@ -10,11 +8,11 @@ export type ElementType = 'source' | 'target';
 export type GroupId = string;
 export interface IFieldsNode {
   id: ElementId;
-  element: ReactElement;
+  name: string;
 }
 export interface IFieldsGroup {
   id: GroupId;
-  title: ReactElement | string;
+  title: string;
   fields: (IFieldsNode | IFieldsGroup)[];
 }
 export interface IMappingField {

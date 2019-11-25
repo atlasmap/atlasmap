@@ -1,6 +1,7 @@
 import { css, StyleSheet } from '@patternfly/react-styles';
-import React, { FunctionComponent, useCallback, useRef } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useRef } from 'react';
 import { useDrag } from 'react-dnd';
+import { getEmptyImage } from 'react-dnd-html5-backend'
 import { useBoundingCanvasRect, useMappingNode } from '../../canvas';
 import { ElementId, ElementType, IFieldsNode } from '../../models';
 
@@ -28,6 +29,7 @@ export interface IFieldElementProps {
 export interface IFieldElementDragSource {
   id: ElementId;
   type: ElementType;
+  name: string;
 }
 
 export const FieldElement: FunctionComponent<IFieldElementProps> = ({
@@ -60,12 +62,12 @@ export const FieldElement: FunctionComponent<IFieldElementProps> = ({
   }, [ref, parentRef, type, boxRef, getBoundingCanvasRect]);
 
 
-  const [{ opacity }, dragRef] = useDrag<
+  const [{ opacity }, dragRef, preview] = useDrag<
     IFieldElementDragSource,
     undefined,
     { opacity: number }
     >({
-    item: { id: node.id, type },
+    item: { id: node.id, type, name: node.name },
     collect: monitor => ({
       opacity: monitor.isDragging() ? 0.4 : 1,
     }),
@@ -80,13 +82,17 @@ export const FieldElement: FunctionComponent<IFieldElementProps> = ({
     ref.current = el;
   };
 
+  useEffect(() => {
+    preview(getEmptyImage(), { captureDraggingState: true })
+  }, [preview]);
+
   return (
     <div
       ref={handleRef}
       className={css(styles.element, rightAlign && styles.rightAlign)}
       style={{ opacity }}
     >
-      {node.element}
+      {node.name}
     </div>
   );
 };

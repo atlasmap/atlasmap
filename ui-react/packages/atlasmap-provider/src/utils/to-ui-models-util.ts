@@ -13,7 +13,7 @@ function fromFieldToIFieldsGroup(field: Field): IFieldsGroup {
 function fromFieldToIFieldsNode(field: Field): IFieldsNode {
   return {
     id: `${field.docDef.uri}:${field.docDef.isSource ? 'source' : 'target'}:${field.uuid}`,
-    element: <>{field.getFieldLabel(false, false)}</>
+    name: field.getFieldLabel(false, false)
   }
 }
 

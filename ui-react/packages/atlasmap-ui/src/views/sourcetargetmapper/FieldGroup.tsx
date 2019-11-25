@@ -89,7 +89,7 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
         }
       };
       const traverseChildren = (f: IFieldsGroup | IFieldsNode) => {
-        if ((f as IFieldsNode).element) {
+        if ((f as IFieldsNode).name) {
           setLineNode(f.id, getCoords);
         } else {
           (f as IFieldsGroup).fields.forEach(traverseChildren);
@@ -125,7 +125,7 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
         className={css(styles.content, rightAlign && styles.contentRightAligned)}
       >
         {isExpanded && group.fields.map(f =>
-          (f as IFieldsNode).element ? (
+          (f as IFieldsNode).name ? (
             <FieldElement
               key={f.id}
               type={type}

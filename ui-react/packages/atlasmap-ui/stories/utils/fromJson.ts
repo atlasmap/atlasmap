@@ -1,4 +1,3 @@
-import React from 'react';
 import { IFieldsGroup } from '../../src/models';
 
 interface JsonField {
@@ -48,7 +47,7 @@ export interface JsonObject {
 export function jsonToFieldGroup(json: JsonObject, idPrefix: string): IFieldsGroup[] {
   const fromElement = (jf: JsonField) => ({
     id: `${idPrefix}-${jf.path}`,
-    element: <>{jf.name}</>
+    name: jf.name
   });
   const fromGroup = (f: Field): IFieldsGroup => ({
     title: f.name,
