@@ -3,7 +3,14 @@ import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { CanvasLinksProvider, useCanvas } from '../../canvas';
 import { useDimensions, useMovable } from '../../common';
-import { Coords, ElementId, ElementType, IFieldsGroup, IMappings } from '../../models';
+import {
+  Coords,
+  ElementId,
+  ElementType,
+  IFieldsGroup,
+  IMappings,
+} from '../../models';
+import { DragLayer } from './DragLayer';
 import { FieldGroup } from './FieldGroup';
 import { FieldGroupList } from './FieldGroupList';
 import { Links } from './Links';
@@ -21,30 +28,45 @@ export interface IMappingCanvasProps {
   selectMapping: (id: string) => void;
   deselectMapping: () => void;
   editMapping: () => void;
-  addToMapping: (elementId: ElementId, elementType: ElementType, mappingId: string) => void;
+  addToMapping: (
+    elementId: ElementId,
+    elementType: ElementType,
+    mappingId: string
+  ) => void;
 }
 
 export const SourceTargetMapper: FunctionComponent<IMappingCanvasProps> = ({
   sources,
   targets,
   mappings,
-materializedMappings,
+  materializedMappings,
   freeView,
   selectedMapping,
   selectMapping,
   deselectMapping,
   editMapping,
-  addToMapping
+  addToMapping,
 }) => {
-  const { width, height, redraw, addRedrawListener, removeRedrawListener, yDomain } = useCanvas();
+  const {
+    width,
+    height,
+    redraw,
+    addRedrawListener,
+    removeRedrawListener,
+    yDomain,
+  } = useCanvas();
 
   const [sourceAreaRef, sourceAreaDimensions, measureSource] = useDimensions();
-  const [mappingAreaRef, mappingAreaDimensions, measureMapping] = useDimensions();
+  const [
+    mappingAreaRef,
+    mappingAreaDimensions,
+    measureMapping,
+  ] = useDimensions();
   const [targetAreaRef, targetAreaDimensions, measureTarget] = useDimensions();
 
   const gutter = 30;
   const boxHeight = height - gutter * 2;
-  const sourceTargetBoxesWidth = Math.max(250, width / 6 * 2 - gutter * 2);
+  const sourceTargetBoxesWidth = Math.max(250, (width / 6) * 2 - gutter * 2);
   const mappingBoxWidth = Math.max(300, width / 6 - gutter);
 
   const initialSourceCoords = { x: gutter, y: gutter };
@@ -54,7 +76,9 @@ materializedMappings,
     x: initialSourceCoords.x + sourceTargetBoxesWidth + gutter * 3,
     y: gutter,
   };
-  const [mappingCoords, setMappingCoords] = useState<Coords>(initialMappingCoords);
+  const [mappingCoords, setMappingCoords] = useState<Coords>(
+    initialMappingCoords
+  );
 
   const initialTargetCoords = {
     x: initialMappingCoords.x + mappingBoxWidth + gutter * 3,
@@ -79,7 +103,10 @@ materializedMappings,
       setMappingCoords(coords);
       redraw();
     },
-    xBoundaries: [sourceCoords.x + sourceTargetBoxesWidth + gutter, targetCoords.x - sourceTargetBoxesWidth - gutter],
+    xBoundaries: [
+      sourceCoords.x + sourceTargetBoxesWidth + gutter,
+      targetCoords.x - sourceTargetBoxesWidth - gutter,
+    ],
   });
 
   const bindTarget = useMovable({
@@ -100,12 +127,26 @@ materializedMappings,
       removeRedrawListener(measureSource);
       removeRedrawListener(measureTarget);
       removeRedrawListener(measureMapping);
-    }
-  }, [addRedrawListener, removeRedrawListener, measureMapping, measureSource, measureTarget]);
+    };
+  }, [
+    addRedrawListener,
+    removeRedrawListener,
+    measureMapping,
+    measureSource,
+    measureTarget,
+  ]);
 
   useEffect(() => {
     redraw();
-  }, [freeView, materializedMappings, redraw, selectedMapping, sources, targets, mappings]);
+  }, [
+    freeView,
+    materializedMappings,
+    redraw,
+    selectedMapping,
+    sources,
+    targets,
+    mappings,
+  ]);
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -120,23 +161,21 @@ materializedMappings,
           hidden={false}
           {...bindSource()}
         >
-          {({ref}) => (
-            <FieldGroupList>
-              {sources.map(s => {
-                return (
+          {sources.map(s => {
+            return (
+              <FieldGroupList key={s.id}>
+                {({ ref }) => (
                   <FieldGroup
                     isVisible={true}
                     group={s}
-                    key={s.id}
                     boxRef={ref}
                     type={'source'}
                     rightAlign={false}
                   />
-                );
-              })}
-            </FieldGroupList>
-          )
-          }
+                )}
+              </FieldGroupList>
+            );
+          })}
         </FieldsBox>
 
         <FieldsBox
@@ -149,24 +188,26 @@ materializedMappings,
           hidden={!materializedMappings}
           {...bindMapping()}
         >
-          {({ ref }) => (
-            <MappingList>
-              {mappings.map(m => {
-                return (
-                  <MappingElement
-                    key={m.id}
-                    node={m}
-                    boxRef={ref}
-                    selectedMapping={selectedMapping}
-                    selectMapping={selectMapping}
-                    deselectMapping={deselectMapping}
-                    editMapping={editMapping}
-                    addToMapping={addToMapping}
-                  />
-                );
-              })}
-            </MappingList>
-          )}
+          <MappingList>
+            {({ ref }) => (
+              <>
+                {mappings.map(m => {
+                  return (
+                    <MappingElement
+                      key={m.id}
+                      node={m}
+                      boxRef={ref}
+                      selectedMapping={selectedMapping}
+                      selectMapping={selectMapping}
+                      deselectMapping={deselectMapping}
+                      editMapping={editMapping}
+                      addToMapping={addToMapping}
+                    />
+                  );
+                })}
+              </>
+            )}
+          </MappingList>
         </FieldsBox>
 
         <FieldsBox
@@ -180,23 +221,21 @@ materializedMappings,
           hidden={false}
           {...bindTarget()}
         >
-          {({ref}) => (
-            <FieldGroupList>
-              {targets.map(s => {
-                return (
+          {targets.map(s => {
+            return (
+              <FieldGroupList key={s.id}>
+                {({ ref }) => (
                   <FieldGroup
                     isVisible={true}
                     group={s}
-                    key={s.id}
                     boxRef={ref}
                     type={'target'}
                     rightAlign={true}
                   />
-                );
-              })}
-            </FieldGroupList>
-          )
-          }
+                )}
+              </FieldGroupList>
+            );
+          })}
         </FieldsBox>
 
         <Links
@@ -204,6 +243,8 @@ materializedMappings,
           materializedMappings={materializedMappings}
           selectedMapping={selectedMapping}
         />
+
+        <DragLayer />
       </CanvasLinksProvider>
     </DndProvider>
   );

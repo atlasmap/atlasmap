@@ -1,5 +1,5 @@
 import { Title } from '@patternfly/react-core';
-import React, { forwardRef, HTMLAttributes, ReactElement, useRef } from 'react';
+import React, { forwardRef, HTMLAttributes } from 'react';
 import { CanvasObject } from '../../canvas';
 import { Coords } from '../../models';
 import { Box } from './Box';
@@ -12,7 +12,6 @@ export interface IMappingsBoxProps extends HTMLAttributes<HTMLDivElement> {
   title: string;
   rightAlign?: boolean;
   hidden?: boolean;
-  children: (props: { ref: HTMLElement | null }) => ReactElement;
 }
 export const FieldsBox = forwardRef<HTMLDivElement, IMappingsBoxProps>(({
   width,
@@ -25,7 +24,6 @@ export const FieldsBox = forwardRef<HTMLDivElement, IMappingsBoxProps>(({
   children,
   ...props
 }, ref) => {
-  const mappingsRef = useRef<HTMLDivElement | null>(null);
   return (
     <CanvasObject
       width={width}
@@ -48,7 +46,6 @@ export const FieldsBox = forwardRef<HTMLDivElement, IMappingsBoxProps>(({
             </Title>
           }
           rightAlign={rightAlign}
-          ref={mappingsRef}
           style={{
             alignItems: 'center',
           }}
@@ -64,7 +61,7 @@ export const FieldsBox = forwardRef<HTMLDivElement, IMappingsBoxProps>(({
             }}
             {...props}
           >
-            {children({ ref: mappingsRef.current })}
+            {children}
           </div>
         </Box>
       </div>

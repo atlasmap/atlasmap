@@ -1,4 +1,3 @@
-import React from 'react';
 import { IFieldsGroup } from '../../src/models';
 
 interface Restrictions {
@@ -60,7 +59,7 @@ export interface XMLObject {
 export function xmlToFieldGroup(xml: XMLObject, idPrefix: string) {
   const fromElement = (jf: XmlField) => ({
     id: `${idPrefix}-${jf.path}`,
-    element: <>{jf.name}</>
+    name: jf.name
   });
 
   const fromGroup = (f: Field): IFieldsGroup => ({

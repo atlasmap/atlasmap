@@ -1,6 +1,6 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, HTMLAttributes } from 'react';
 
-export interface ICanvasObjectProps {
+export interface ICanvasObjectProps extends HTMLAttributes<SVGForeignObjectElement> {
   width: number;
   height: number;
   x: number;
@@ -12,6 +12,7 @@ export const CanvasObject: FunctionComponent<ICanvasObjectProps> = ({
   height,
   x,
   y,
+  ...props
 }) => {
   return (
     <foreignObject
@@ -19,6 +20,7 @@ export const CanvasObject: FunctionComponent<ICanvasObjectProps> = ({
       height={height}
       x={x}
       y={y}
+      {...props}
     >
       {children}
     </foreignObject>

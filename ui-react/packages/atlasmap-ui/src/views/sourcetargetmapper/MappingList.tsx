@@ -1,5 +1,5 @@
 import { css, StyleSheet } from '@patternfly/react-styles';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, ReactElement, useRef } from 'react';
 
 const styles = StyleSheet.create({
   content: {
@@ -10,10 +10,19 @@ const styles = StyleSheet.create({
   },
 });
 
-export const MappingList: FunctionComponent = ({ children }) => (
-  <div
-    className={css(styles.content)}
-  >
-    { children }
-  </div>
-);
+
+export interface IMappingList {
+  children: (props: { ref: HTMLElement | null }) => ReactElement;
+}
+
+export const MappingList: FunctionComponent<IMappingList> = ({ children }) => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  return (
+    <div
+      className={css(styles.content)}
+      ref={ref}
+    >
+      {children({ ref: ref.current })}
+    </div>
+  );
+}

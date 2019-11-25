@@ -1,4 +1,3 @@
-import React from 'react';
 import { IFieldsGroup } from '../../src/models';
 
 interface Modifiers {
@@ -72,7 +71,7 @@ export interface JavaObject {
 export function javaToFieldGroup(java: JavaObject, idPrefix: string) {
   const fromElement = (jf: JavaField) => ({
     id: `${idPrefix}-${jf.path}`,
-    element: <>{jf.name}</>
+    name: jf.name
   });
   const fromGroup = (f: JavaField): IFieldsGroup => ({
     title: f.name,
