@@ -10,6 +10,8 @@ import {
   Toolbar,
   ToolbarGroup,
   ToolbarItem,
+  Tooltip,
+  TooltipPosition,
 } from '@patternfly/react-core';
 import { CaretDownIcon, CaretUpIcon } from '@patternfly/react-icons';
 export interface IMapperToolbarProps {
@@ -51,10 +53,22 @@ export const MapperViewToolbar: FunctionComponent<IMapperToolbarProps> = ({
       <OptionsMenuItem>Show unmapped fields</OptionsMenuItem>
       <OptionsMenuItem>Show mapping preview</OptionsMenuItem>
       <OptionsMenuItem
-        // class="pficon pficon-restart"
         onSelect={resetAll}
       >
-        Reset All
+        <Tooltip
+          position={TooltipPosition.left}
+          enableFlip={true}
+          content={
+            <div>
+              Reset all mappings and clear all imported documents.
+            </div>
+          }
+        >
+          <span>
+            <CaretUpIcon aria-hidden={true} />
+            Reset All
+          </span>
+        </Tooltip>
       </OptionsMenuItem>
     </OptionsMenuItemGroup>,
   ];
