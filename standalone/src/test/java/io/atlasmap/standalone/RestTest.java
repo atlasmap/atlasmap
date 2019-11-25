@@ -24,7 +24,7 @@ import java.nio.charset.StandardCharsets;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.context.embedded.LocalServerPort;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -69,7 +69,7 @@ public class RestTest {
         Request request = new Request.Builder()
             .url("http://127.0.0.1:" + port + "/v2/atlas/json/inspect")
             .header("ATLASMAP-XSRF-TOKEN", "awesome")
-            .post(RequestBody.create(APPLICATION_JSON, resource("atlasmap-json-inspection.json")))
+            .post(RequestBody.create(resource("atlasmap-json-inspection.json"), APPLICATION_JSON))
             .build();
         try (Response response = CLIENT.newCall(request).execute()) {
             assertThat(response.isSuccessful()).isTrue();
@@ -82,7 +82,7 @@ public class RestTest {
     public void testJsonInspectWithoutXsrfProtectionToken() throws Exception {
         Request request = new Request.Builder()
                 .url("http://127.0.0.1:" + port + "/v2/atlas/json/inspect")
-                .post(RequestBody.create(APPLICATION_JSON, resource("atlasmap-json-inspection.json")))
+                .post(RequestBody.create(resource("atlasmap-json-inspection.json"), APPLICATION_JSON))
                 .build();
         try (Response response = CLIENT.newCall(request).execute()) {
             assertThat(response.isSuccessful()).isFalse();
