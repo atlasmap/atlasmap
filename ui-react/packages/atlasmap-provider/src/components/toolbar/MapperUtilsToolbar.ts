@@ -89,13 +89,13 @@ export function importAtlasFile(selectedFile: File) {
 export function resetAtlasmap() {
   const cfg = ConfigModel.getConfig();
   cfg.errorService.resetAll();
-  cfg.fileService.resetMappings().toPromise().then( async() => {
+  return cfg.fileService.resetMappings().toPromise().then( async() => {
     cfg.mappings = null;
     cfg.fileService.resetLibs().toPromise().then( async() => {
       await cfg.initializationService.initialize();
     });
     cfg.clearDocs();
-    await cfg.initializationService.initialize();
+    return cfg.initializationService.initialize();
   }).catch((error: any) => {
     if (error.status === 0) {
       cfg.errorService.addError(new ErrorInfo({

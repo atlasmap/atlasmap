@@ -34,7 +34,7 @@ interface State {
 }
 
 interface Action {
-  type: 'loading' | 'loaded' | 'error';
+  type: 'reset' | 'loading' | 'loaded' | 'error';
   payload?: ActionPayload;
 }
 
@@ -54,6 +54,12 @@ const init = (): State => ({
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
+    case 'reset':
+      return {
+        ...state,
+        pending: false,
+        error: false,
+      };
     case 'loading':
       return {
         ...state,
@@ -142,9 +148,10 @@ export function useAtlasmap({
 
   const handleResetAtlasmap = useCallback(
     () => {
+      dispatch({ type: 'reset' });
       resetAtlasmap();
     },
-    []
+    [dispatch]
   );
 
   return useMemo(

@@ -1,32 +1,58 @@
-import { useDrag } from 'react-use-gesture';
 import clamp from 'lodash.clamp'
+import { useEffect } from 'react';
+import { useDrag } from 'react-use-gesture';
+import { useCanvas } from '../canvas';
 import { Coords } from '../models';
 
-const defaultBoundaries: [number, number] = [-Infinity, +Infinity];
-
 export interface IUseMovableArgs {
+  id: string;
   enabled: boolean;
   initialPosition: Coords;
+  width: number;
+  height: number;
   onDrag: (coords: Coords) => void;
-  xBoundaries?: [number, number],
-  yBoundaries?: [number, number]
+  xBoundaries?: [number, number];
+  yBoundaries?: [number, number];
 }
 
 export function useMovable({
+  id,
   enabled,
   initialPosition,
+  width,
+  height,
   onDrag,
-  xBoundaries = defaultBoundaries,
-  yBoundaries = defaultBoundaries
 }: IUseMovableArgs) {
+
+  const { rects, addRect, removeRect } = useCanvas();
+
+  useEffect(() => {
+    addRect({ id, ...initialPosition, width, height });
+    return () => removeRect(id);
+  }, [id, initialPosition, width, height, addRect, removeRect]);
+
   return useDrag(
-    ({ event, movement: [x, y], memo = [initialPosition.x, initialPosition.y] }) => {
+    ({
+      event,
+      movement: [mX, mY],
+      memo = [initialPosition.x, initialPosition.y],
+    }) => {
       if (enabled) {
         event!.stopPropagation();
-        onDrag({
-          x: clamp(x + memo[0], xBoundaries[0], xBoundaries[1]),
-          y: clamp(y + memo[1], yBoundaries[0], yBoundaries[1]),
-        });
+        const otherRects = rects
+          .filter(r => r.id !== id);
+        const leftBoundary = otherRects.reduce(
+          (boundary, r) => r.x > memo[0] ? boundary : Math.max(boundary, r.x + r.width),
+          -Infinity
+        );
+        const rightBoundary = otherRects.reduce(
+          (boundary, r) => r.x < memo[0] ? boundary : Math.min(boundary, r.x - width),
+          +Infinity
+        );
+        const x = clamp(memo[0] + mX, leftBoundary, rightBoundary);
+        const y = memo[1] + mY;
+        onDrag({ x, y });
+        addRect({ id, x, y, width, height });
       }
       return memo;
     }

@@ -1,19 +1,20 @@
 import { Title } from '@patternfly/react-core';
-import React, { forwardRef, HTMLAttributes } from 'react';
-import { CanvasObject } from '../../canvas';
+import React, { FunctionComponent, HTMLAttributes, useEffect } from 'react';
+import { CanvasObject, useCanvas } from '../../canvas';
+import { useDimensions } from '../../common';
 import { Coords } from '../../models';
 import { Box } from './Box';
 
 export interface IMappingsBoxProps extends HTMLAttributes<HTMLDivElement> {
   width: number;
-  height: number;
+  height?: number;
   position: Coords;
   scrollable: boolean;
   title: string;
   rightAlign?: boolean;
   hidden?: boolean;
 }
-export const FieldsBox = forwardRef<HTMLDivElement, IMappingsBoxProps>(({
+export const FieldsBox: FunctionComponent<IMappingsBoxProps> = ({
   width,
   height,
   position,
@@ -23,11 +24,27 @@ export const FieldsBox = forwardRef<HTMLDivElement, IMappingsBoxProps>(({
   hidden = false,
   children,
   ...props
-}, ref) => {
+}) => {
+  const [ref, dimensions, measure ] = useDimensions();
+  const { yDomain, addRedrawListener, removeRedrawListener } = useCanvas();
+
+  useEffect(() => {
+    addRedrawListener(measure);
+    return () => {
+      removeRedrawListener(measure);
+    };
+  }, [
+    addRedrawListener,
+    removeRedrawListener,
+    measure,
+  ]);
+
   return (
     <CanvasObject
+      id={title}
       width={width}
-      height={height}
+      height={height || yDomain(dimensions.height)}
+      movable={!scrollable}
       {...position}
     >
       <div
@@ -67,4 +84,4 @@ export const FieldsBox = forwardRef<HTMLDivElement, IMappingsBoxProps>(({
       </div>
     </CanvasObject>
   )
-});
+};

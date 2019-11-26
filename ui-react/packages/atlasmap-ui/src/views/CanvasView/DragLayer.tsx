@@ -25,6 +25,7 @@ export const DragLayer: FunctionComponent = () => {
 
   return !isDragging || !currentOffset || !initialOffset ? null : (
     <CanvasObject
+      id={'draglayer'}
       width={dimensions.width}
       height={dimensions.height}
       x={currentOffset.x - offsetLeft - dimensions.width / 2}

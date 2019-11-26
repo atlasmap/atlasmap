@@ -220,7 +220,6 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
 
       // Fetch adm-catalog-files.gz if it exists.
       this.cfg.fileService.getCurrentMappingCatalog().subscribe( async(catalog: Uint8Array) => {
-
         // If catalog is null then no compressed mappings catalog is available on the server.
         if (catalog === null) {
           if (this.cfg.mappings === null) {

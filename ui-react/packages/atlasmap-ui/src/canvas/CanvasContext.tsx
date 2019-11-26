@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import { createContext, FunctionComponent, useContext } from 'react';
 import { scaleLinear } from 'd3-scale';
+import { Rect, Rects } from '../models';
 
 type RedrawCallback = () => unknown;
 type RedrawCallbacks = Array<RedrawCallback>;
@@ -24,6 +25,9 @@ export interface ICanvasContext {
   redrawCallbacks: RedrawCallbacks;
   addRedrawListener: (callback: RedrawCallback) => void;
   removeRedrawListener: (callback: RedrawCallback) => void;
+  rects: Rects;
+  addRect: (rect: Rect) => void;
+  removeRect: (id: string) => void;
 }
 const CanvasContext = createContext<ICanvasContext | null>(null);
 
@@ -46,6 +50,15 @@ export const CanvasProvider: FunctionComponent<ICanvasProviderProps> = ({
   panX,
   panY,
 }) => {
+  const rects = useRef<Rects>([]);
+  const addRect = (rect: Rect) => {
+    removeRect(rect.id);
+    rects.current = [...rects.current, rect];
+  };
+  const removeRect = (id: string) => {
+    rects.current = rects.current.filter(r => r.id !== id);
+  };
+
   const [lastUpdate, setLastUpdate] = useState(Date.now());
   const redraw = useCallback(() => {
     setLastUpdate(Date.now());
@@ -95,6 +108,9 @@ export const CanvasProvider: FunctionComponent<ICanvasProviderProps> = ({
         removeRedrawListener,
         redraw,
         lastUpdate,
+        rects: rects.current,
+        addRect,
+        removeRect
       }}
     >
       {children}
@@ -119,6 +135,9 @@ export function useCanvas() {
     lastUpdate,
     addRedrawListener,
     removeRedrawListener,
+    rects,
+    addRect,
+    removeRect
   } = context;
 
   const xDomain = useMemo(
@@ -151,5 +170,8 @@ export function useCanvas() {
     lastUpdate,
     addRedrawListener,
     removeRedrawListener,
+    rects,
+    addRect,
+    removeRect
   };
 }

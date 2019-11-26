@@ -5,7 +5,7 @@ import {
   useRef,
   MutableRefObject,
 } from 'react';
-import { Rect } from '../models';
+import { BrowserRect } from '../models';
 
 export interface UseDimensionsArgs {
   liveMeasure?: boolean;
@@ -13,8 +13,8 @@ export interface UseDimensionsArgs {
 
 export function useDimensions<T = HTMLDivElement>({
   liveMeasure = true,
-}: UseDimensionsArgs = {}): [MutableRefObject<T | null>, Rect, () => void] {
-  const [dimensions, setDimensions] = useState<Rect>({
+}: UseDimensionsArgs = {}): [MutableRefObject<T | null>, BrowserRect, () => void] {
+  const [dimensions, setDimensions] = useState<BrowserRect>({
     width: 0,
     height: 0,
     top: 0,

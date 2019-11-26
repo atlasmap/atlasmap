@@ -10,8 +10,6 @@ import {
   Toolbar,
   ToolbarGroup,
   ToolbarItem,
-  Tooltip,
-  TooltipPosition,
 } from '@patternfly/react-core';
 import { CaretDownIcon, CaretUpIcon } from '@patternfly/react-icons';
 export interface IMapperToolbarProps {
@@ -19,15 +17,13 @@ export interface IMapperToolbarProps {
   toggleFreeView: () => void;
   materializedMappings: boolean;
   toggleMaterializedMappings: () => void;
-  resetAll: () => void;
 }
 
-export const MapperViewToolbar: FunctionComponent<IMapperToolbarProps> = ({
+export const ViewToolbar: FunctionComponent<IMapperToolbarProps> = ({
   freeView,
   toggleFreeView,
   materializedMappings,
   toggleMaterializedMappings,
-  resetAll
 }) => {
   const menuItems = [
     <OptionsMenuItemGroup key="first group" aria-label="Sort Column">
@@ -52,24 +48,6 @@ export const MapperViewToolbar: FunctionComponent<IMapperToolbarProps> = ({
       <OptionsMenuItem>Show mapped fields</OptionsMenuItem>
       <OptionsMenuItem>Show unmapped fields</OptionsMenuItem>
       <OptionsMenuItem>Show mapping preview</OptionsMenuItem>
-      <OptionsMenuItem
-        onSelect={resetAll}
-      >
-        <Tooltip
-          position={TooltipPosition.left}
-          enableFlip={true}
-          content={
-            <div>
-              Reset all mappings and clear all imported documents.
-            </div>
-          }
-        >
-          <span>
-            <CaretUpIcon aria-hidden={true} />
-            Reset All
-          </span>
-        </Tooltip>
-      </OptionsMenuItem>
     </OptionsMenuItemGroup>,
   ];
   const [isOptionsMenuExpanded, setIsOptionsMenuExpanded] = useState(false);

@@ -1,5 +1,4 @@
 export * from './Mapper';
 export * from './MapperContextToolbar';
-export * from './MapperControlBar';
-export * from './MapperViewToolbar';
+export * from '../views/CanvasView/ControlBar';
 export * from './MappingDetails';

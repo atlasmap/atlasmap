@@ -30,6 +30,7 @@ export const sample = () => createElement(() => {
       mappings={mappings}
       addToMapping={addToMapping}
       importAtlasFile={action('importAtlasFile')}
+      resetAtlasmap={action('resetAtlasmap')}
       pending={false}
       error={false}
     />
