@@ -1,1 +1,1 @@
-export * from './sourcetargetmapper';
+export * from './CanvasView';

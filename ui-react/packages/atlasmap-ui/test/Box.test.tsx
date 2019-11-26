@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box } from '../src/views/sourcetargetmapper';
+import { Box } from '../src/views/CanvasView';
 import { render } from './setup';
 
 describe('Box tests', () => {

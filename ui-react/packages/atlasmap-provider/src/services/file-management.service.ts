@@ -80,9 +80,13 @@ export class FileManagementService {
           'Accept':        'application/octet-stream',
           'Response-Type': 'application/octet-stream'
         };
-      this.api.get(url, { headers }).arrayBuffer().then((body: any) => {
+      this.api.get(url, { headers }).arrayBuffer().then((body: ArrayBuffer) => {
         this.cfg.logger!.debug(`Mapping Catalog Response: ${JSON.stringify(body)}`);
-        observer.next(body);
+        if (body.byteLength) {
+          observer.next(body);
+        } else {
+          observer.next(null)
+        }
         observer.complete();
       }).catch((error: any) => {
         if (error.status !== DataMapperUtil.HTTP_STATUS_NO_CONTENT) {
@@ -100,9 +104,13 @@ export class FileManagementService {
       const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/ZIP/';
       const url: string = baseURL + atlasmapCatalogName;
       this.cfg.logger!.debug('Mapping Catalog Request');
-      this.api.get(url).arrayBuffer().then((body: any) => {
+      this.api.get(url).arrayBuffer().then((body: ArrayBuffer) => {
         this.cfg.logger!.debug(`Mapping Catalog Response: ${JSON.stringify(body)}`);
-        observer.next(body);
+        if (body.byteLength) {
+          observer.next(body);
+        } else {
+          observer.next(null)
+        }
         observer.complete();
       }).catch((error: any) => {
         if (error.status !== DataMapperUtil.HTTP_STATUS_NO_CONTENT) {

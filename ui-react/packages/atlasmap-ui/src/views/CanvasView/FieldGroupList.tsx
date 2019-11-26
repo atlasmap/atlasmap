@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
     maxHeight: '100%',
     minHeight: '40px',
     flex: '0 1 auto',
+    boxShadow: 'var(--pf-global--BoxShadow--md)',
   },
   accordion: {
     padding: 0

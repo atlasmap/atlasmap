@@ -16,7 +16,7 @@ export interface IMapperControlBarProps {
   onZoomReset: () => void;
 }
 
-export const MapperControlBar: FunctionComponent<IMapperControlBarProps> = ({
+export const ControlBar: FunctionComponent<IMapperControlBarProps> = ({
   onZoomIn,
   onZoomOut,
   onZoomReset,

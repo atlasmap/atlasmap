@@ -1,32 +1,51 @@
-import { EmptyState, EmptyStateIcon, EmptyStateVariant, Title } from '@patternfly/react-core';
+import {
+  EmptyState,
+  EmptyStateIcon,
+  EmptyStateVariant,
+  Title,
+} from '@patternfly/react-core';
 import { Spinner } from '@patternfly/react-core/dist/js/experimental';
 import { TopologyView } from '@patternfly/react-topology';
 import React, {
-  FunctionComponent,
+  FunctionComponent, ReactNode,
   useCallback,
   useEffect,
-  useMemo,
+  useMemo, useRef,
   useState,
 } from 'react';
-import { useGesture } from 'react-use-gesture';
-import { Canvas } from '../canvas';
-import { useDimensions } from '../common';
-import { Coords, ElementId, ElementType, IFieldsGroup, IMappings } from '../models';
-import { SourceTargetMapper } from '../views/sourcetargetmapper';
+import { ElementId, ElementType, IFieldsGroup, IMappings } from '../models';
+import { CanvasView } from '../views/CanvasView';
 import { MapperContextToolbar } from './MapperContextToolbar';
-import { MapperControlBar } from './MapperControlBar';
-import { MapperViewToolbar } from './MapperViewToolbar';
 import { MappingDetails } from './MappingDetails';
 
 export interface IMapperProps {
   sources: IFieldsGroup[];
   targets: IFieldsGroup[];
   mappings: IMappings[];
-  addToMapping: (elementId: ElementId, elementType: ElementType, mappingId: string) => void;
+  addToMapping: (
+    elementId: ElementId,
+    elementType: ElementType,
+    mappingId: string
+  ) => void;
   pending: boolean;
   error: boolean;
   importAtlasFile: (selectedFile: File) => void;
   resetAtlasmap: () => void;
+}
+
+function useLatestValue(): [ReactNode | undefined, (el: ReactNode) => void] {
+  const [element, setElement] = useState<ReactNode | undefined>();
+  const previousElement = useRef<ReactNode | null>();
+  const handleSetElement = useCallback(
+    (newElement: ReactNode) => {
+      if (previousElement.current !== newElement) {
+        previousElement.current = newElement;
+        setElement(previousElement.current);
+      }
+    },
+    [setElement, previousElement]
+  );
+  return [element, handleSetElement];
 }
 
 export const Mapper: FunctionComponent<IMapperProps> = ({
@@ -37,59 +56,15 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
   pending,
   error,
   importAtlasFile,
-  resetAtlasmap
+  resetAtlasmap,
 }) => {
-  const [freeView, setFreeView] = useState(false);
-  const [materializedMappings, setMaterializedMappings] = useState(true);
   const [selectedMapping, setSelectedMapping] = useState<string>();
   const [isEditingMapping, setisEditingMapping] = useState(false);
-  const [zoom, setZoom] = useState(1);
-  const [isPanning, setIsPanning] = useState(false);
-  const [{ x: panX, y: panY }, setPan] = useState<Coords>({ x: 0, y: 0 });
 
-  const [dimensionsRef, { width, height }, measure] = useDimensions();
-
-  const resetPan = useCallback(() => {
-    setPan({ x: 0, y: 0 });
-  }, [setPan]);
-  const bind = useGesture({
-    onDrag: ({ movement: [x, y], first, last, memo = [panX, panY] }) => {
-      if (freeView) {
-        if (first) setIsPanning(true);
-        if (last) setIsPanning(false);
-        setPan({ x: x + memo[0], y: y + memo[1] });
-      }
-      return memo;
-    },
-    onWheel: ({ delta }) => {
-      if (freeView) {
-        updateZoom(delta[1] * -0.001);
-      }
-    },
-  }, { dragDelay: true });
-
-  const updateZoom = useCallback(
-    (tick: number) => {
-      setZoom(currentZoom => Math.max(0.2, Math.min(2, currentZoom + tick)));
-    },
-    [setZoom]
-  );
-
-  const handleZoomIn = useCallback(() => {
-    updateZoom(0.2);
-  }, [updateZoom]);
-  const handleZoomOut = useCallback(() => {
-    updateZoom(-0.2);
-  }, [updateZoom]);
-  const handleViewReset = useCallback(() => {
-    setZoom(1);
-    resetPan();
-  }, [setZoom, resetPan]);
 
   const closeMappingDetails = useCallback(() => {
-    setSelectedMapping(undefined);
-    setisEditingMapping(false)
-  }, [setSelectedMapping, setisEditingMapping]);
+    setisEditingMapping(false);
+  }, [setisEditingMapping]);
 
   const selectMapping = useCallback(
     (mapping: string) => {
@@ -100,21 +75,15 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
     [setSelectedMapping, isEditingMapping]
   );
 
-  const deselectMapping = useCallback(
-    () => {
-      setSelectedMapping(undefined);
-    },
-    [setSelectedMapping]
-  );
+  const deselectMapping = useCallback(() => {
+    setSelectedMapping(undefined);
+  }, [setSelectedMapping]);
 
-  const editMapping = useCallback(
-    () => {
-      if (selectedMapping) {
-        setisEditingMapping(true)
-      }
-    },
-    [selectedMapping, setisEditingMapping]
-  );
+  const editMapping = useCallback(() => {
+    if (selectedMapping) {
+      setisEditingMapping(true);
+    }
+  }, [selectedMapping, setisEditingMapping]);
 
   const sideBar = (
     <MappingDetails show={isEditingMapping} onClose={closeMappingDetails}>
@@ -123,94 +92,57 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
   );
 
   useEffect(() => {
-    const timeout = setTimeout(measure, 150);
+    const timeout = setTimeout(
+      () => {
+        window.dispatchEvent(new Event('resize'));
+      },
+      isEditingMapping ? 150 : 0
+    );
     return () => clearTimeout(timeout);
-  }, [measure, selectedMapping]);
+  }, [isEditingMapping]);
 
-  const contextToolbar = useMemo(() => <MapperContextToolbar importAtlasFile={importAtlasFile}/>, []);
-  const toggleFreeView = useCallback(() => setFreeView(!freeView), [
-    freeView,
-    setFreeView,
-  ]);
-  const toggleMaterializedMappings = useCallback(
-    () => setMaterializedMappings(!materializedMappings),
-    [setMaterializedMappings, materializedMappings]
-  );
-  const resetAll = useCallback(
-    () => resetAtlasmap(),
-    [resetAtlasmap]
-  );
-  const viewToolbar = useMemo(
+  const contextToolbar = useMemo(
     () => (
-      <MapperViewToolbar
-        freeView={freeView}
-        toggleFreeView={toggleFreeView}
-        materializedMappings={materializedMappings}
-        toggleMaterializedMappings={toggleMaterializedMappings}
-        resetAll={resetAll}
+      <MapperContextToolbar
+        importAtlasFile={importAtlasFile}
+        resetAtlasmap={resetAtlasmap}
       />
     ),
-    [freeView, materializedMappings, toggleFreeView, toggleMaterializedMappings, resetAll]
+    [importAtlasFile, resetAtlasmap]
   );
-  const controlBar = useMemo(
-    () => (
-      <MapperControlBar
-        onZoomIn={handleZoomIn}
-        onZoomOut={handleZoomOut}
-        onZoomReset={handleViewReset}
-      />
-    ),
-    [handleViewReset, handleZoomIn, handleZoomOut]
-  );
+
+  const [viewToolbar, setViewToolbar] = useLatestValue();
+  const [controlBar, setControlBar] = useLatestValue();
+
   return (
     <TopologyView
       contextToolbar={contextToolbar}
       viewToolbar={viewToolbar}
-      controlBar={freeView ? controlBar : undefined}
+      controlBar={controlBar}
       sideBar={sideBar}
       sideBarOpen={isEditingMapping}
     >
-      <div
-        ref={dimensionsRef}
-        style={{
-          height: '100%',
-          flex: '1',
-          overflow: 'hidden'
-        }}
-        {...bind()}
-      >
-        {pending && (
-          <EmptyState variant={EmptyStateVariant.full}>
-            <EmptyStateIcon variant="container" component={Spinner} />
-            <Title size="lg">Loading</Title>
-          </EmptyState>
-        )}
-        {error && <p>Error</p>}
-        {!pending && !error && width && (
-          <Canvas
-            width={width}
-            height={height}
-            zoom={freeView ? zoom : 1}
-            panX={freeView ? panX : 0}
-            panY={freeView ? panY : 0}
-            allowPanning={freeView}
-            isPanning={freeView ? isPanning : false}
-          >
-            <SourceTargetMapper
-              sources={sources}
-              mappings={mappings}
-              targets={targets}
-              freeView={freeView}
-              materializedMappings={materializedMappings}
-              selectedMapping={selectedMapping}
-              selectMapping={selectMapping}
-              deselectMapping={deselectMapping}
-              editMapping={editMapping}
-              addToMapping={addToMapping}
-            />
-          </Canvas>
-        )}
-      </div>
+      {pending && (
+        <EmptyState variant={EmptyStateVariant.full}>
+          <EmptyStateIcon variant="container" component={Spinner} />
+          <Title size="lg">Loading</Title>
+        </EmptyState>
+      )}
+      {error && <p>Error</p>}
+      {!pending && !error && (
+        <CanvasView
+          sources={sources}
+          mappings={mappings}
+          targets={targets}
+          selectedMapping={selectedMapping}
+          selectMapping={selectMapping}
+          deselectMapping={deselectMapping}
+          editMapping={editMapping}
+          addToMapping={addToMapping}
+          setViewToolbar={setViewToolbar}
+          setControlBar={setControlBar}
+        />
+      )}
     </TopologyView>
   );
 };

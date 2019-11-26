@@ -1,6 +1,6 @@
 import React from 'react';
 import { text } from '@storybook/addon-knobs';
-import { Box } from '../../../src/views/sourcetargetmapper';
+import { Box } from '../../../src/views/CanvasView';
 
 export default {
   title: 'Views/Source Target Mapper/Components/Box',

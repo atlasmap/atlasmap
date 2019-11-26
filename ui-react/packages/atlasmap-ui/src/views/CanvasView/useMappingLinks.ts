@@ -1,6 +1,6 @@
 import { scaleSequential } from 'd3-scale';
 import { interpolateRainbow } from 'd3-scale-chromatic';
-import { useMemo } from 'react';
+import { useLayoutEffect, useMemo } from 'react';
 import { SourceTargetNodes, useCanvasLinks } from '../../canvas';
 import { IMappings } from '../../models';
 
@@ -9,7 +9,6 @@ export interface IUseMappingsLinksArgs {
   selectedMapping: string | undefined;
 }
 export function useMappingLinks({ mappings, selectedMapping }: IUseMappingsLinksArgs) {
-
   const colors = useMemo(
     () => scaleSequential(interpolateRainbow).domain([0, mappings.length]),
     [mappings]
@@ -53,5 +52,9 @@ export function useMappingLinks({ mappings, selectedMapping }: IUseMappingsLinks
   ),
     [colors, mappings, selectedMapping]
   );
-  return useCanvasLinks(linkedNodes);
+  const { links, calculateLinks } = useCanvasLinks(linkedNodes);
+  useLayoutEffect(() => {
+    calculateLinks();
+  }, [calculateLinks, mappings, selectedMapping]);
+  return { links };
 }

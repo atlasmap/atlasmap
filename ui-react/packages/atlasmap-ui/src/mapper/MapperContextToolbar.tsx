@@ -18,11 +18,12 @@ import { FilePicker } from 'react-file-picker';
 
 export interface IMapperContextToolbarProps {
   importAtlasFile: (selectedFile: File) => void;
+  resetAtlasmap: () => void;
 }
 
 export const MapperContextToolbar: FunctionComponent<
   IMapperContextToolbarProps
-> = ({importAtlasFile}) => {
+> = ({ importAtlasFile, resetAtlasmap }) => {
   return (
     <Toolbar
       className="view-toolbar pf-u-px-md pf-u-py-md"
@@ -40,16 +41,15 @@ export const MapperContextToolbar: FunctionComponent<
               </div>
             }
           >
-          <FilePicker
-            extensions={['adm', 'jar']}
-            onChange={(selectedFile: File) => importAtlasFile(selectedFile)}
-
-            onError={(errMsg: any) => console.error(errMsg)}
-          >
-            <Button variant={'plain'} aria-label="Import mappings">
-              <ImportIcon />
-            </Button>
-          </FilePicker>
+            <FilePicker
+              extensions={['adm', 'jar']}
+              onChange={(selectedFile: File) => importAtlasFile(selectedFile)}
+              onError={(errMsg: any) => console.error(errMsg)}
+            >
+              <Button variant={'plain'} aria-label="Import mappings">
+                <ImportIcon />
+              </Button>
+            </FilePicker>
           </Tooltip>
         </ToolbarItem>
         <ToolbarItem>
@@ -63,8 +63,28 @@ export const MapperContextToolbar: FunctionComponent<
               </div>
             }
           >
-            <Button variant={'plain'} aria-label="Export mappings">
+            <Button
+              variant={'plain'}
+              aria-label="Export mappings"
+            >
               <ExportIcon />
+            </Button>
+          </Tooltip>
+        </ToolbarItem>
+        <ToolbarItem>
+          <Tooltip
+            position={'auto'}
+            enableFlip={true}
+            content={
+              <div>Reset all mappings and clear all imported documents</div>
+            }
+          >
+            <Button
+              variant={'plain'}
+              aria-label="Reset all"
+              onClick={resetAtlasmap}
+            >
+              Reset all
             </Button>
           </Tooltip>
         </ToolbarItem>
