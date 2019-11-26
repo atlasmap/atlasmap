@@ -60,7 +60,7 @@
     <osgi.include.resource>{maven-resources}</osgi.include.resource>
     <resteasy.version>4.4.1.Final</resteasy.version>
     <resteasy-jaxrs.version>3.9.3.Final</resteasy-jaxrs.version>
-    <maven-version>3.6.2</maven-version>
+    <maven-version>3.6.3</maven-version>
     <maven-bundle-plugin.version>4.2.1</maven-bundle-plugin.version>
     <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
     <maven-dependency-plugin.version>3.1.1</maven-dependency-plugin.version>
