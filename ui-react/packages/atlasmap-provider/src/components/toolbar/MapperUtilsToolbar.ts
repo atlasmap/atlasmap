@@ -12,6 +12,26 @@ import { DocumentManagementService } from '../../services/document-management.se
 import { ErrorHandlerService } from '../../services/error-handler.service';
 import { FileManagementService } from '../../services/file-management.service';
 
+ /**
+  * The user has requested their current mappings be exported.  Use the mapping management
+  * service to establish the file content and to push it down to the server.
+  *
+  * @param event
+  */
+export function exportAtlasFile(event: any) {
+  const cfg = ConfigModel.getConfig();
+  const defaultExportAtlasFileName = 'atlasmap-mapping.adm';
+
+  // Extract from event...
+  // let fileName = event.target...;
+  console.log(event);
+  let fileName = '';
+  if (fileName.length === 0) {
+    fileName = defaultExportAtlasFileName;
+  }
+  cfg.fileService.exportMappingsCatalog(fileName);
+}
+
 /**
  * A user has selected a compressed mappings catalog file to be imported into the canvas.
  *

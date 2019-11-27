@@ -17,13 +17,14 @@ import {
 import { FilePicker } from 'react-file-picker';
 
 export interface IMapperContextToolbarProps {
+  exportAtlasFile: (event: any) => void;
   importAtlasFile: (selectedFile: File) => void;
   resetAtlasmap: () => void;
 }
 
 export const MapperContextToolbar: FunctionComponent<
   IMapperContextToolbarProps
-> = ({ importAtlasFile, resetAtlasmap }) => {
+> = ({ exportAtlasFile, importAtlasFile, resetAtlasmap }) => {
   return (
     <Toolbar
       className="view-toolbar pf-u-px-md pf-u-py-md"
@@ -41,15 +42,15 @@ export const MapperContextToolbar: FunctionComponent<
               </div>
             }
           >
-            <FilePicker
-              extensions={['adm', 'jar']}
-              onChange={(selectedFile: File) => importAtlasFile(selectedFile)}
-              onError={(errMsg: any) => console.error(errMsg)}
-            >
-              <Button variant={'plain'} aria-label="Import mappings">
-                <ImportIcon />
-              </Button>
-            </FilePicker>
+          <FilePicker
+            extensions={['adm', 'jar']}
+            onChange={(selectedFile: File) => importAtlasFile(selectedFile)}
+            onError={(errMsg: any) => console.error(errMsg)}
+          >
+            <Button variant={'plain'} aria-label="Import mappings">
+              <ImportIcon />
+            </Button>
+          </FilePicker>
           </Tooltip>
         </ToolbarItem>
         <ToolbarItem>
@@ -63,9 +64,8 @@ export const MapperContextToolbar: FunctionComponent<
               </div>
             }
           >
-            <Button
-              variant={'plain'}
-              aria-label="Export mappings"
+            <Button variant={'plain'} aria-label="Export mappings"
+              onClick={(event: any) => exportAtlasFile(event)}
             >
               <ExportIcon />
             </Button>
