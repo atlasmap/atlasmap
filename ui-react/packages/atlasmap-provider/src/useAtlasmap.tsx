@@ -138,13 +138,6 @@ export function useAtlasmap({
     };
   }, [initializationService]);
 
-  const handleExportAtlasFile = useCallback(
-    (file: File) => {
-      exportAtlasFile(file);
-    },
-    [dispatch]
-  );
-
   const handleImportAtlasFile = useCallback(
     (file: File) => {
       dispatch({ type: 'loading' });
@@ -168,7 +161,7 @@ export function useAtlasmap({
       sources: state.sourceDocs.map(fromDocumentDefinitionToFieldGroup),
       targets: state.targetDocs.map(fromDocumentDefinitionToFieldGroup),
       mappings: fromMappingDefinitionToIMappings(state.mappingDefinition),
-      exportAtlasFile: handleExportAtlasFile,
+      exportAtlasFile: exportAtlasFile,
       importAtlasFile: handleImportAtlasFile,
       resetAtlasmap: handleResetAtlasmap,
     }),
