@@ -29,6 +29,7 @@ export interface IMapperProps {
   ) => void;
   pending: boolean;
   error: boolean;
+  exportAtlasFile: (event: any) => void;
   importAtlasFile: (selectedFile: File) => void;
   resetAtlasmap: () => void;
 }
@@ -55,6 +56,7 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
   addToMapping,
   pending,
   error,
+  exportAtlasFile,
   importAtlasFile,
   resetAtlasmap,
 }) => {
@@ -101,15 +103,12 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
     return () => clearTimeout(timeout);
   }, [isEditingMapping]);
 
-  const contextToolbar = useMemo(
-    () => (
-      <MapperContextToolbar
-        importAtlasFile={importAtlasFile}
-        resetAtlasmap={resetAtlasmap}
-      />
-    ),
-    [importAtlasFile, resetAtlasmap]
-  );
+  const contextToolbar = useMemo(() => 
+    <MapperContextToolbar
+      exportAtlasFile={exportAtlasFile}
+      importAtlasFile={importAtlasFile}
+      resetAtlasmap={resetAtlasmap}
+    />, [exportAtlasFile, importAtlasFile, resetAtlasmap]);
 
   const [viewToolbar, setViewToolbar] = useLatestValue();
   const [controlBar, setControlBar] = useLatestValue();

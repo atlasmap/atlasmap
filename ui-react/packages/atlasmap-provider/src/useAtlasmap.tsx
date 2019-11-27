@@ -14,7 +14,7 @@ import {
   fromDocumentDefinitionToFieldGroup,
   fromMappingDefinitionToIMappings,
 } from './utils/to-ui-models-util';
-import { importAtlasFile, resetAtlasmap } from './components/toolbar/MapperUtilsToolbar';
+import { exportAtlasFile, importAtlasFile, resetAtlasmap } from './components/toolbar/MapperUtilsToolbar';
 
 const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
 
@@ -138,6 +138,13 @@ export function useAtlasmap({
     };
   }, [initializationService]);
 
+  const handleExportAtlasFile = useCallback(
+    (file: File) => {
+      exportAtlasFile(file);
+    },
+    [dispatch]
+  );
+
   const handleImportAtlasFile = useCallback(
     (file: File) => {
       dispatch({ type: 'loading' });
@@ -161,6 +168,7 @@ export function useAtlasmap({
       sources: state.sourceDocs.map(fromDocumentDefinitionToFieldGroup),
       targets: state.targetDocs.map(fromDocumentDefinitionToFieldGroup),
       mappings: fromMappingDefinitionToIMappings(state.mappingDefinition),
+      exportAtlasFile: handleExportAtlasFile,
       importAtlasFile: handleImportAtlasFile,
       resetAtlasmap: handleResetAtlasmap,
     }),
