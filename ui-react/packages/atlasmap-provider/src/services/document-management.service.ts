@@ -53,8 +53,12 @@ export class DocumentManagementService {
    *
    * @param buffer
    */
-  static getMappingsInfo(buffer: string): any {
-    return JSON.parse(buffer);
+  static getMappingsInfo(buffer: any): any {
+    if (typeof buffer === 'string') {
+      return JSON.parse(<string>buffer);
+    } else {
+      return buffer;
+    }
   }
 
   /**
