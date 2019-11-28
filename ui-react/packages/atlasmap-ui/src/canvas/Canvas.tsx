@@ -21,7 +21,7 @@ export interface ICanvasProps extends HTMLAttributes<SVGSVGElement> {
   isPanning: boolean;
   zoom: number;
   offsetLeft: number;
-  offsetRight: number;
+  offsetTop: number;
   allowPanning: boolean;
 }
 
@@ -34,7 +34,7 @@ export const Canvas: FunctionComponent<ICanvasProps> = ({
   isPanning,
   zoom,
   offsetLeft,
-  offsetRight,
+  offsetTop,
   allowPanning,
   ...props
 }) => {
@@ -45,7 +45,7 @@ export const Canvas: FunctionComponent<ICanvasProps> = ({
       height={height}
       zoom={zoom}
       offsetLeft={offsetLeft}
-      offsetTop={offsetRight}
+      offsetTop={offsetTop}
       panX={panX}
       panY={panY}
     >

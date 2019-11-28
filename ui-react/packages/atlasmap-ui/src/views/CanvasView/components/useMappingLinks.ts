@@ -1,8 +1,8 @@
 import { scaleSequential } from 'd3-scale';
 import { interpolateRainbow } from 'd3-scale-chromatic';
 import { useLayoutEffect, useMemo } from 'react';
-import { SourceTargetNodes, useCanvasLinks } from '../../canvas';
-import { IMappings } from '../../models';
+import { SourceTargetNodes, useCanvasLinks } from '../../../canvas';
+import { IMappings } from '../../../models';
 
 export interface IUseMappingsLinksArgs {
   mappings: IMappings[];
@@ -19,7 +19,7 @@ export function useMappingLinks({ mappings, selectedMapping }: IUseMappingsLinks
     (lines, { id, sourceFields, targetFields }, idx) => {
       const isMappingSelected = id === selectedMapping;
       const color = selectedMapping ? (
-        isMappingSelected ? '#06c' : '#ccc'
+        isMappingSelected ? 'var(--pf-global--primary-color--100)' : '#ccc'
       ) : colors(idx);
       const sourcesToMappings = sourceFields.map(source => ({
         start: source.id,
@@ -46,7 +46,7 @@ export function useMappingLinks({ mappings, selectedMapping }: IUseMappingsLinks
       {
         start: 'dragsource',
         end: 'dragtarget',
-        color: 'var(--pf-global--success-color--100)'
+        color: 'var(--pf-global--primary-color--100)'
       }
     ]
   ),

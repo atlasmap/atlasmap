@@ -2,8 +2,8 @@ import { css, StyleSheet } from '@patternfly/react-styles';
 import React, { FunctionComponent, useCallback, useEffect, useRef } from 'react';
 import { useDrag } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend'
-import { useBoundingCanvasRect, useMappingNode } from '../../canvas';
-import { ElementId, ElementType, IFieldsNode } from '../../models';
+import { useBoundingCanvasRect, useMappingNode } from '../../../canvas';
+import { ElementId, ElementType, IFieldsNode } from '../../../models';
 
 const styles = StyleSheet.create({
   element: {

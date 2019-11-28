@@ -1,14 +1,22 @@
 import {
   BaseSizes,
   Button,
-  Level,
-  LevelItem,
+  Card,
+  CardActions,
+  CardBody,
+  CardHead,
+  CardHeader,
   Title,
   Tooltip,
   TooltipPosition,
 } from '@patternfly/react-core';
 import { css, StyleSheet } from '@patternfly/react-styles';
-import { EditIcon, OutlinedQuestionCircleIcon, CaretRightIcon, CaretDownIcon } from '@patternfly/react-icons';
+import {
+  EditIcon,
+  OutlinedQuestionCircleIcon,
+  CaretRightIcon,
+  CaretDownIcon,
+} from '@patternfly/react-icons';
 import React, {
   FunctionComponent,
   useCallback,
@@ -17,33 +25,29 @@ import React, {
   useEffect,
 } from 'react';
 import { useDrop } from 'react-dnd';
-import { useBoundingCanvasRect, useCanvas, useMappingNode } from '../../canvas';
-import { ElementId, ElementType, IMappings } from '../../models';
+import {
+  useBoundingCanvasRect,
+  useCanvas,
+  useMappingNode,
+} from '../../../canvas';
+import { ElementId, ElementType, IMappings } from '../../../models';
 import { IFieldElementDragSource } from './FieldElement';
 
 const styles = StyleSheet.create({
   element: {
-    boxShadow: 'var(--pf-global--BoxShadow--md)',
-    width: '100%',
-    background: '#fff',
-    borderRadius: '5px',
-    padding: '0.5rem 0 0.5rem 0.5rem',
-    marginBottom: '1rem',
-    border: '3px solid #fff',
-    cursor: 'pointer',
-    'font-weight': 'var(--pf-global--FontWeight--bold)',
     transition: 'all 0.35s',
+    marginBottom: '1rem',
+    border: '2px solid transparent',
   },
   selected: {
-    fontSize: '1.5rem',
-    borderColor: 'var(--pf-global--primary-color--100)',
+    borderColor: 'var(--pf-global--primary-color--100) !important',
   },
   dropTarget: {
-    backgroundColor: 'var(--pf-global--success-color--100)',
+    borderColor: 'var(--pf-global--primary-color--100) !important',
   },
   canDrop: {
-    borderColor: 'var(--pf-global--success-color--100)'
-  }
+    borderColor: 'var(--pf-global--success-color--100) !important',
+  },
 });
 
 export interface IMappingElementProps {
@@ -53,7 +57,11 @@ export interface IMappingElementProps {
   selectMapping: (id: string) => void;
   deselectMapping: () => void;
   editMapping: () => void;
-  addToMapping: (elementId: ElementId, elementType: ElementType, mappingId: string) => void;
+  addToMapping: (
+    elementId: ElementId,
+    elementType: ElementType,
+    mappingId: string
+  ) => void;
 }
 
 export const MappingElement: FunctionComponent<IMappingElementProps> = ({
@@ -63,7 +71,7 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
   selectMapping,
   deselectMapping,
   editMapping,
-  addToMapping
+  addToMapping,
 }) => {
   const { redraw } = useCanvas();
   const ref = useRef<HTMLDivElement | null>(null);
@@ -103,9 +111,13 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
     };
   };
 
-  const [{ isOver, canDrop }, dropRef] = useDrop<IFieldElementDragSource, void, { isOver: boolean; canDrop: boolean; }>({
+  const [{ isOver, canDrop }, dropRef] = useDrop<
+    IFieldElementDragSource,
+    void,
+    { isOver: boolean; canDrop: boolean }
+  >({
     accept: ['source', 'target'],
-    drop: (item) => addToMapping(item.id, item.type, node.id),
+    drop: item => addToMapping(item.id, item.type, node.id),
     collect: monitor => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),
@@ -113,14 +125,25 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
     canDrop: (props, monitor) => {
       const type = monitor.getItemType();
       if (node.sourceFields.length === 1 && node.targetFields.length === 1) {
-        if (type === 'source' && !node.sourceFields.find(f => f.id === props.id)) {
+        if (
+          type === 'source' &&
+          !node.sourceFields.find(f => f.id === props.id)
+        ) {
           return true;
         } else if (!node.targetFields.find(f => f.id === props.id)) {
           return true;
         }
-      } else if (type === 'source' && node.targetFields.length === 1 && !node.sourceFields.find(f => f.id === props.id)) {
+      } else if (
+        type === 'source' &&
+        node.targetFields.length === 1 &&
+        !node.sourceFields.find(f => f.id === props.id)
+      ) {
         return true;
-      } else if (type === 'target' && node.sourceFields.length === 1 && !node.targetFields.find(f => f.id === props.id)) {
+      } else if (
+        type === 'target' &&
+        node.sourceFields.length === 1 &&
+        !node.targetFields.find(f => f.id === props.id)
+      ) {
         return true;
       }
       return false;
@@ -129,9 +152,12 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
       const type = monitor.getItemType();
       const canDrop = monitor.canDrop();
       if (canDrop) {
-        setLineNode('dragtarget', type === 'source' ? getFromSourceCoords : getToTargetCoords);
+        setLineNode(
+          'dragtarget',
+          type === 'source' ? getFromSourceCoords : getToTargetCoords
+        );
       }
-    }
+    },
   });
 
   setLineNode(`to-${node.id}`, getFromSourceCoords);
@@ -146,16 +172,13 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
 
   const isSelected = node.id === selectedMapping;
 
-  const handleSelect = useCallback(
-    () => {
-      if (isSelected) {
-        deselectMapping()
-      } else {
-        selectMapping(node.id);
-      }
-    },
-    [isSelected, node, deselectMapping, selectMapping]
-  );
+  const handleSelect = useCallback(() => {
+    if (isSelected) {
+      deselectMapping();
+    } else {
+      selectMapping(node.id);
+    }
+  }, [isSelected, node, deselectMapping, selectMapping]);
   const handleEdit = useCallback(
     (e: MouseEvent) => {
       e.stopPropagation();
@@ -172,58 +195,56 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
   };
 
   return (
-    <div
-      ref={handleRef}
-      className={css(
-        styles.element,
-        isSelected && styles.selected,
-        isOver && canDrop && styles.dropTarget,
-        canDrop && styles.canDrop
-      )}
-      onClick={handleSelect}
-    >
-      <Level>
-        <LevelItem style={{flex: '1'}}>
-          <Title size={BaseSizes.lg}>
-            {isSelected ? <CaretDownIcon />: <CaretRightIcon/>}
-            {' '}
-            {`${mappingTypeLeft} to ${mappingTypeRight} (Split)`}
-          </Title>
-          {isSelected && <div>
-            <br />
+    <div ref={handleRef}>
+      <Card
+        className={css(
+          styles.element,
+          isSelected && styles.selected,
+          canDrop && styles.canDrop,
+          canDrop && isOver && styles.dropTarget
+        )}
+        onClick={handleSelect}
+        isCompact={true}
+      >
+        <CardHead>
+          <CardActions>
+            {isSelected && (
+              <Button variant={'plain'} onClick={handleEdit}>
+                <EditIcon />
+              </Button>
+            )}
+          </CardActions>
+          <CardHeader>
+            <Button variant={'link'}>
+              {isSelected ? <CaretDownIcon /> : <CaretRightIcon />}{' '}
+              {`${mappingTypeLeft} to ${mappingTypeRight} (Split)`}
+            </Button>
+          </CardHeader>
+        </CardHead>
+        {isSelected && (
+          <CardBody>
             <Title size={BaseSizes.md}>Sources</Title>
-            {node.sourceFields.map((s, idx) =>
+            {node.sourceFields.map((s, idx) => (
               <p key={idx}>
                 {s.name}{' '}
-                <Tooltip
-                  position={TooltipPosition.top}
-                  content={s.tip}
-                >
+                <Tooltip position={TooltipPosition.top} content={s.tip}>
                   <OutlinedQuestionCircleIcon />
                 </Tooltip>
               </p>
-            )}
+            ))}
             <br />
             <Title size={BaseSizes.md}>Targets</Title>
-            {node.targetFields.map((s, idx) =>
+            {node.targetFields.map((s, idx) => (
               <p key={idx}>
                 {s.name}{' '}
-                <Tooltip
-                  position={TooltipPosition.top}
-                  content={s.tip}
-                >
+                <Tooltip position={TooltipPosition.top} content={s.tip}>
                   <OutlinedQuestionCircleIcon />
                 </Tooltip>
               </p>
-            )}
-          </div>}
-        </LevelItem>
-        {isSelected && <LevelItem>
-          <Button variant={'plain'} onClick={handleEdit}>
-            <EditIcon />
-          </Button>
-        </LevelItem>}
-      </Level>
+            ))}
+          </CardBody>
+        )}
+      </Card>
     </div>
   );
 };

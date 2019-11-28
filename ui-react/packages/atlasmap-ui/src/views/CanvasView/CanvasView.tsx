@@ -1,30 +1,11 @@
-import React, {
-  FunctionComponent, ReactNode,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import React, { FunctionComponent } from 'react';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import { useGesture } from 'react-use-gesture';
-import { Canvas, CanvasLinksProvider } from '../../canvas';
+import { CanvasLinksProvider } from '../../canvas';
 import { useDimensions } from '../../common';
-import {
-  Coords,
-  ElementId,
-  ElementType,
-  IFieldsGroup,
-  IMappings,
-} from '../../models';
-import { ControlBar } from './ControlBar';
-import { DragLayer } from './DragLayer';
-import { FieldGroup } from './FieldGroup';
-import { FieldGroupList } from './FieldGroupList';
-import { Links } from './Links';
-import { ViewToolbar } from './ViewToolbar';
-import { MappingElement } from './MappingElement';
-import { FieldsBox } from './FieldsBox';
-import { MappingList } from './MappingList';
+import { ElementId, ElementType, IFieldsGroup, IMappings, } from '../../models';
+import { CanvasViewCanvas } from './CanvasViewCanvas';
+import { DragLayer, FieldGroup, FieldGroupList, FieldsBox, Links, MappingElement, MappingList } from './components';
 
 export interface ICanvasViewProps {
   sources: IFieldsGroup[];
@@ -39,8 +20,6 @@ export interface ICanvasViewProps {
     elementType: ElementType,
     mappingId: string
   ) => void;
-  setViewToolbar: (el: ReactNode) => void;
-  setControlBar: (el: ReactNode) => void;
 }
 
 export const CanvasView: FunctionComponent<ICanvasViewProps> = ({
@@ -51,9 +30,7 @@ export const CanvasView: FunctionComponent<ICanvasViewProps> = ({
   selectMapping,
   deselectMapping,
   editMapping,
-  addToMapping,
-  setViewToolbar,
-  setControlBar
+  addToMapping
 }) => {
   const [dimensionsRef, { width, height, top, left }] = useDimensions();
   const gutter = 30;
@@ -71,131 +48,41 @@ export const CanvasView: FunctionComponent<ICanvasViewProps> = ({
     y: gutter,
   };
 
-  const [freeView, setFreeView] = useState(false);
-  const [materializedMappings, setMaterializedMappings] = useState(true);
-
-  const toggleFreeView = useCallback(() =>
-    setFreeView(!freeView),
-    [
-    freeView,
-    setFreeView,
-  ]);
-  const toggleMaterializedMappings = useCallback(
-    () => setMaterializedMappings(!materializedMappings),
-    [setMaterializedMappings, materializedMappings]
-  );
-
-  const [zoom, setZoom] = useState(1);
-  const [isPanning, setIsPanning] = useState(false);
-  const [{ x: panX, y: panY }, setPan] = useState<Coords>({ x: 0, y: 0 });
-  const bind = useGesture(
-    {
-      onDrag: ({ movement: [x, y], first, last, memo = [panX, panY] }) => {
-        if (freeView) {
-          if (first) setIsPanning(true);
-          if (last) setIsPanning(false);
-          setPan({ x: x + memo[0], y: y + memo[1] });
-        }
-        return memo;
-      },
-      onWheel: ({ delta }) => {
-        if (freeView) {
-          updateZoom(delta[1] * -0.001);
-        }
-      },
-    },
-    { dragDelay: true }
-  );
-
-  const updateZoom = useCallback(
-    (tick: number) => {
-      setZoom(currentZoom => Math.max(0.2, Math.min(2, currentZoom + tick)));
-    },
-    [setZoom]
-  );
-
-  const resetPan = useCallback(() => {
-    setPan({ x: 0, y: 0 });
-  }, [setPan]);
-
-  const handleZoomIn = useCallback(() => {
-    updateZoom(0.2);
-  }, [updateZoom]);
-  const handleZoomOut = useCallback(() => {
-    updateZoom(-0.2);
-  }, [updateZoom]);
-  const handleViewReset = useCallback(() => {
-    setZoom(1);
-    resetPan();
-  }, [setZoom, resetPan]);
-
-  const viewToolbar = useMemo(
-    () => (
-      <ViewToolbar
-        freeView={freeView}
-        toggleFreeView={toggleFreeView}
-        materializedMappings={materializedMappings}
-        toggleMaterializedMappings={toggleMaterializedMappings}
-      />
-    ),
-    [freeView, materializedMappings, toggleFreeView, toggleMaterializedMappings]
-  );
-
-  const controlBar = useMemo(
-    () => (
-      <ControlBar
-        onZoomIn={handleZoomIn}
-        onZoomOut={handleZoomOut}
-        onZoomReset={handleViewReset}
-      />
-    ),
-    [handleViewReset, handleZoomIn, handleZoomOut]
-  );
-
-  setViewToolbar(viewToolbar);
-  setControlBar(freeView ? controlBar : undefined);
-
   return (
     <DndProvider backend={HTML5Backend}>
-      <div
-        ref={dimensionsRef}
-        style={{
-          height: '100%',
-          flex: '1',
-          overflow: 'hidden',
-        }}
-      >
-        <CanvasLinksProvider>
-          <Canvas
+      <CanvasLinksProvider>
+        <div
+          ref={dimensionsRef}
+          style={{
+            height: '100%',
+            flex: '1',
+            overflow: 'hidden',
+          }}
+        >
+          <CanvasViewCanvas
             width={width}
             height={height}
             offsetLeft={left}
-            offsetRight={top}
-            allowPanning={freeView}
-            isPanning={freeView ? isPanning : false}
-            panX={freeView ? panX : 0}
-            panY={freeView ? panY : 0}
-            zoom={freeView ? zoom : 1}
-            {...bind()}
+            offsetTop={top}
           >
             <FieldsBox
-              width={sourceTargetBoxesWidth}
-              height={freeView ? undefined : boxHeight}
+              initialWidth={sourceTargetBoxesWidth}
+              initialHeight={boxHeight}
               position={initialSourceCoords}
-              scrollable={!freeView}
               title={'Source'}
               hidden={false}
             >
               {sources.map(s => {
                 return (
-                  <FieldGroupList key={s.id}>
-                    {({ ref }) => (
+                  <FieldGroupList key={s.id} title={s.title}>
+                    {({ ref, isExpanded }) => (
                       <FieldGroup
                         isVisible={true}
                         group={s}
                         boxRef={ref}
                         type={'source'}
                         rightAlign={false}
+                        parentExpanded={isExpanded}
                       />
                     )}
                   </FieldGroupList>
@@ -204,12 +91,10 @@ export const CanvasView: FunctionComponent<ICanvasViewProps> = ({
             </FieldsBox>
 
             <FieldsBox
-              width={mappingBoxWidth}
-              height={freeView ? undefined : boxHeight}
+              initialWidth={mappingBoxWidth}
+              initialHeight={boxHeight}
               position={initialMappingCoords}
-              scrollable={!freeView}
               title={'Mapping'}
-              hidden={!materializedMappings}
             >
               <MappingList>
                 {({ ref }) => (
@@ -234,24 +119,24 @@ export const CanvasView: FunctionComponent<ICanvasViewProps> = ({
             </FieldsBox>
 
             <FieldsBox
-              width={sourceTargetBoxesWidth}
-              height={freeView ? undefined : boxHeight}
+              initialWidth={sourceTargetBoxesWidth}
+              initialHeight={boxHeight}
               position={initialTargetCoords}
-              scrollable={!freeView}
               title={'Target'}
               rightAlign={true}
               hidden={false}
             >
-              {targets.map(s => {
+              {targets.map(t => {
                 return (
-                  <FieldGroupList key={s.id}>
-                    {({ ref }) => (
+                  <FieldGroupList key={t.id} title={t.title} rightAlign={true}>
+                    {({ ref, isExpanded }) => (
                       <FieldGroup
                         isVisible={true}
-                        group={s}
+                        group={t}
                         boxRef={ref}
                         type={'target'}
                         rightAlign={true}
+                        parentExpanded={isExpanded}
                       />
                     )}
                   </FieldGroupList>
@@ -261,14 +146,13 @@ export const CanvasView: FunctionComponent<ICanvasViewProps> = ({
 
             <Links
               mappings={mappings}
-              materializedMappings={materializedMappings}
               selectedMapping={selectedMapping}
             />
 
             <DragLayer />
-          </Canvas>
-        </CanvasLinksProvider>
-      </div>
+          </CanvasViewCanvas>
+        </div>
+      </CanvasLinksProvider>
     </DndProvider>
   );
 };

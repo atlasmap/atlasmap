@@ -8,7 +8,7 @@ export default {
 };
 
 export const interactiveExample = () => (
-  <FieldGroupList>
+  <FieldGroupList title={text('Title', 'Document title')}>
     {() => (
       <>
         {text(

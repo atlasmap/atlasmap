@@ -5,7 +5,7 @@ import React, {
   HTMLAttributes, useCallback,
 } from 'react';
 import { css, StyleSheet } from '@patternfly/react-styles';
-import { useCanvas } from '../../canvas';
+import { useCanvas } from '../../../canvas';
 
 const styles = StyleSheet.create({
   outer: {

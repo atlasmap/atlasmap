@@ -1,20 +1,19 @@
-import {
-  EmptyState,
-  EmptyStateIcon,
-  EmptyStateVariant,
-  Title,
-} from '@patternfly/react-core';
-import { Spinner } from '@patternfly/react-core/dist/js/experimental';
 import { TopologyView } from '@patternfly/react-topology';
 import React, {
-  FunctionComponent, ReactNode,
+  FunctionComponent,
   useCallback,
   useEffect,
-  useMemo, useRef,
+  useMemo,
   useState,
 } from 'react';
+import { Loading } from '../common';
 import { ElementId, ElementType, IFieldsGroup, IMappings } from '../models';
-import { CanvasView } from '../views/CanvasView';
+import {
+  CanvasView,
+  CanvasViewControlBar,
+  CanvasViewProvider,
+  CanvasViewToolbar,
+} from '../views/CanvasView';
 import { MapperContextToolbar } from './MapperContextToolbar';
 import { MappingDetails } from './MappingDetails';
 
@@ -34,21 +33,6 @@ export interface IMapperProps {
   resetAtlasmap: () => void;
 }
 
-function useLatestValue(): [ReactNode | undefined, (el: ReactNode) => void] {
-  const [element, setElement] = useState<ReactNode | undefined>();
-  const previousElement = useRef<ReactNode | null>();
-  const handleSetElement = useCallback(
-    (newElement: ReactNode) => {
-      if (previousElement.current !== newElement) {
-        previousElement.current = newElement;
-        setElement(previousElement.current);
-      }
-    },
-    [setElement, previousElement]
-  );
-  return [element, handleSetElement];
-}
-
 export const Mapper: FunctionComponent<IMapperProps> = ({
   sources,
   mappings,
@@ -62,7 +46,6 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
 }) => {
   const [selectedMapping, setSelectedMapping] = useState<string>();
   const [isEditingMapping, setisEditingMapping] = useState(false);
-
 
   const closeMappingDetails = useCallback(() => {
     setisEditingMapping(false);
@@ -110,38 +93,30 @@ export const Mapper: FunctionComponent<IMapperProps> = ({
       resetAtlasmap={resetAtlasmap}
     />, [exportAtlasFile, importAtlasFile, resetAtlasmap]);
 
-  const [viewToolbar, setViewToolbar] = useLatestValue();
-  const [controlBar, setControlBar] = useLatestValue();
-
   return (
-    <TopologyView
-      contextToolbar={contextToolbar}
-      viewToolbar={viewToolbar}
-      controlBar={controlBar}
-      sideBar={sideBar}
-      sideBarOpen={isEditingMapping}
-    >
-      {pending && (
-        <EmptyState variant={EmptyStateVariant.full}>
-          <EmptyStateIcon variant="container" component={Spinner} />
-          <Title size="lg">Loading</Title>
-        </EmptyState>
-      )}
-      {error && <p>Error</p>}
-      {!pending && !error && (
-        <CanvasView
-          sources={sources}
-          mappings={mappings}
-          targets={targets}
-          selectedMapping={selectedMapping}
-          selectMapping={selectMapping}
-          deselectMapping={deselectMapping}
-          editMapping={editMapping}
-          addToMapping={addToMapping}
-          setViewToolbar={setViewToolbar}
-          setControlBar={setControlBar}
-        />
-      )}
-    </TopologyView>
+    <CanvasViewProvider>
+      <TopologyView
+        contextToolbar={contextToolbar}
+        viewToolbar={<CanvasViewToolbar />}
+        controlBar={<CanvasViewControlBar />}
+        sideBar={sideBar}
+        sideBarOpen={isEditingMapping}
+      >
+        {pending && <Loading />}
+        {error && <p>Error</p>}
+        {!pending && !error && (
+          <CanvasView
+            sources={sources}
+            mappings={mappings}
+            targets={targets}
+            selectedMapping={selectedMapping}
+            selectMapping={selectMapping}
+            deselectMapping={deselectMapping}
+            editMapping={editMapping}
+            addToMapping={addToMapping}
+          />
+        )}
+      </TopologyView>
+    </CanvasViewProvider>
   );
 };

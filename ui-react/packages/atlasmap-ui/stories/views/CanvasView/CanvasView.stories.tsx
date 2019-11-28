@@ -18,7 +18,5 @@ export const sample = () => (
     deselectMapping={action('deselectMapping')}
     editMapping={action('editMapping')}
     addToMapping={action('addToMapping')}
-    setViewToolbar={action('setViewToolbar')}
-    setControlBar={action('setControlBar')}
   />
 );

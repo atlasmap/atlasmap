@@ -1,5 +1,5 @@
 import React from 'react';
-import { text } from '@storybook/addon-knobs';
+import { boolean, text } from '@storybook/addon-knobs';
 import { FieldGroup, FieldGroupList } from '../../../src/views/CanvasView';
 
 export default {
@@ -8,7 +8,7 @@ export default {
 };
 
 export const interactiveExample = () => (
-  <FieldGroupList>
+  <FieldGroupList title={text('Title', 'Document title')}>
     {() => <FieldGroup
       isVisible={true}
       type={'source'}
@@ -18,6 +18,7 @@ export const interactiveExample = () => (
         title: text('Group title', 'Sample title'),
       }}
       boxRef={null}
+      parentExpanded={boolean('Parent expanded', true)}
     />}
   </FieldGroupList>
 );

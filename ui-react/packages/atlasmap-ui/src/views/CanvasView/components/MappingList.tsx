@@ -4,7 +4,7 @@ import React, { FunctionComponent, ReactElement, useRef } from 'react';
 const styles = StyleSheet.create({
   content: {
     overflowY: 'auto',
-    overflowX: 'hidden',
+    overflowX: 'visible',
     flex: '1',
     height: '100%',
   },
