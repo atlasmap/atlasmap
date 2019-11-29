@@ -1,4 +1,3 @@
-import React from 'react';
 import { IFieldsGroup, IFieldsNode, IMappingField, IMappings } from '@atlasmap/ui';
 import { DocumentDefinition, Field, MappedField, MappingDefinition } from '..';
 

@@ -2,7 +2,7 @@ import { css, StyleSheet } from '@patternfly/react-styles';
 import React, { FunctionComponent, ReactElement, useEffect, useRef } from 'react';
 import { useCanvas } from '../../../canvas';
 import { useCanvasViewLayoutContext } from '../CanvasViewLayoutProvider';
-import { FieldsBox } from './index';
+import { FieldsBox } from './FieldsBox';
 
 const styles = StyleSheet.create({
   content: {

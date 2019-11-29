@@ -17,14 +17,14 @@ import {
 import { FilePicker } from 'react-file-picker';
 
 export interface IAtlasmapContextToolbarProps {
-  exportAtlasFile: (event: any) => void;
-  importAtlasFile: (selectedFile: File) => void;
-  resetAtlasmap: () => void;
+  onExportAtlasFile: (event: any) => void;
+  onImportAtlasFile: (selectedFile: File) => void;
+  onResetAtlasmap: () => void;
 }
 
 export const AtlasmapContextToolbar: FunctionComponent<
   IAtlasmapContextToolbarProps
-> = ({ importAtlasFile, resetAtlasmap, exportAtlasFile }) => {
+> = ({ onImportAtlasFile, onResetAtlasmap, onExportAtlasFile }) => {
   return (
     <Toolbar
       className="view-toolbar pf-u-px-md pf-u-py-md"
@@ -44,7 +44,7 @@ export const AtlasmapContextToolbar: FunctionComponent<
           >
             <FilePicker
               extensions={['adm', 'jar']}
-              onChange={(selectedFile: File) => importAtlasFile(selectedFile)}
+              onChange={(selectedFile: File) => onImportAtlasFile(selectedFile)}
               onError={(errMsg: any) => console.error(errMsg)}
             >
               <Button variant={'plain'} aria-label="Import mappings">
@@ -65,7 +65,7 @@ export const AtlasmapContextToolbar: FunctionComponent<
             }
           >
             <Button variant={'plain'} aria-label="Export mappings"
-              onClick={(event: any) => exportAtlasFile(event)}
+              onClick={(event: any) => onExportAtlasFile(event)}
             >
               <ExportIcon />
             </Button>
@@ -82,7 +82,7 @@ export const AtlasmapContextToolbar: FunctionComponent<
             <Button
               variant={'plain'}
               aria-label="Reset all"
-              onClick={resetAtlasmap}
+              onClick={onResetAtlasmap}
             >
               Reset all
             </Button>

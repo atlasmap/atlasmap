@@ -5,3 +5,4 @@ export * from './CanvasLinks';
 export * from './CanvasObject';
 export * from './CanvasTransforms';
 export * from './useBoundingCanvasRect';
+export * from './useMovable';

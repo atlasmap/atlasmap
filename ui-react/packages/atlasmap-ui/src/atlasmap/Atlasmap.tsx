@@ -35,6 +35,7 @@ export interface IAtlasmapProps {
   ) => void;
   pending: boolean;
   error: boolean;
+  onExportAtlasFile: (event: any) => void;
   onImportAtlasFile: (selectedFile: File) => void;
   onResetAtlasmap: () => void;
   onSourceSearch: (content: string) => void;
@@ -48,6 +49,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   addToMapping,
   pending,
   error,
+  onExportAtlasFile,
   onImportAtlasFile,
   onResetAtlasmap,
   onSourceSearch,
@@ -98,8 +100,9 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   const contextToolbar = useMemo(
     () => (
       <AtlasmapContextToolbar
-        importAtlasFile={onImportAtlasFile}
-        resetAtlasmap={onResetAtlasmap}
+        onExportAtlasFile={onExportAtlasFile}
+        onImportAtlasFile={onImportAtlasFile}
+        onResetAtlasmap={onResetAtlasmap}
       />
     ),
     [onImportAtlasFile, onResetAtlasmap]

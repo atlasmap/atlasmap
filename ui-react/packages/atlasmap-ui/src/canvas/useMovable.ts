@@ -1,7 +1,7 @@
 import clamp from 'lodash.clamp'
 import { useEffect } from 'react';
 import { useDrag } from 'react-use-gesture';
-import { useCanvas } from '../canvas';
+import { useCanvas } from './CanvasContext';
 import { Coords } from '../models';
 
 export interface IUseMovableArgs {
