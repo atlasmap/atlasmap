@@ -3,7 +3,7 @@ import {
   Button,
   Card,
   CardActions,
-  CardBody,
+  CardBody, CardFooter,
   CardHead,
   CardHeader,
   Title,
@@ -48,6 +48,15 @@ const styles = StyleSheet.create({
   canDrop: {
     borderColor: 'var(--pf-global--success-color--100) !important',
   },
+  head: {
+    padding: '0.5rem !important',
+  },
+  footer: {
+    borderTop: '1px solid #eee',
+    paddingTop: '0.5rem',
+    paddingBottom: '0.5rem',
+    direction: 'ltr',
+  },
 });
 
 export interface IMappingElementProps {
@@ -62,6 +71,7 @@ export interface IMappingElementProps {
     elementType: ElementType,
     mappingId: string
   ) => void;
+  mappingType: string;
 }
 
 export const MappingElement: FunctionComponent<IMappingElementProps> = ({
@@ -72,6 +82,7 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
   deselectMapping,
   editMapping,
   addToMapping,
+  mappingType
 }) => {
   const { redraw } = useCanvas();
   const ref = useRef<HTMLDivElement | null>(null);
@@ -163,14 +174,15 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
   setLineNode(`to-${node.id}`, getFromSourceCoords);
   setLineNode(`from-${node.id}`, getToTargetCoords);
 
+  const isSelected = node.id === selectedMapping;
+
   useEffect(() => {
     if (!isOver) {
       unsetLineNode('dragtarget');
     }
     redraw();
-  }, [isOver]);
+  }, [isOver, isSelected]);
 
-  const isSelected = node.id === selectedMapping;
 
   const handleSelect = useCallback(() => {
     if (isSelected) {
@@ -206,7 +218,7 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
         onClick={handleSelect}
         isCompact={true}
       >
-        <CardHead>
+        <CardHead className={css(styles.head)}>
           <CardActions>
             {isSelected && (
               <Button variant={'plain'} onClick={handleEdit}>
@@ -217,7 +229,7 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
           <CardHeader>
             <Button variant={'link'}>
               {isSelected ? <CaretDownIcon /> : <CaretRightIcon />}{' '}
-              {`${mappingTypeLeft} to ${mappingTypeRight} (Split)`}
+              {`${mappingTypeLeft} to ${mappingTypeRight}`}
             </Button>
           </CardHeader>
         </CardHead>
@@ -244,6 +256,9 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
             ))}
           </CardBody>
         )}
+        <CardFooter className={css(styles.footer)}>
+          Mapping type: {mappingType}
+        </CardFooter>
       </Card>
     </div>
   );

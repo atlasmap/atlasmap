@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   bodyRightAligned: {
+    direction: 'rtl',
     transform: 'scaleX(-1)'
   },
   footer: {
@@ -53,7 +54,7 @@ export const Box = forwardRef<HTMLDivElement, PropsWithChildren<IBoxProps>>(
     }, [redraw]);
     return (
       <div className={css(styles.outer)}>
-        <div className={css(styles.header)}>{header}</div>
+        {header && <div className={css(styles.header)}>{header}</div>}
         <div
           className={css(styles.body, rightAlign && styles.bodyRightAligned)}
           ref={ref}
@@ -62,7 +63,7 @@ export const Box = forwardRef<HTMLDivElement, PropsWithChildren<IBoxProps>>(
         >
           {children}
         </div>
-        <div className={css(styles.footer)}>{footer}</div>
+        {footer && <div className={css(styles.footer)}>{footer}</div>}
       </div>
     );
   }

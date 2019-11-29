@@ -91,7 +91,7 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
             ),
           };
         }
-        return { x: 0, y: 0 };
+        return null;
       };
       const traverseChildren = (f: IFieldsGroup | IFieldsNode) => {
         if ((f as IFieldsNode).name) {

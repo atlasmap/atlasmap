@@ -22,7 +22,6 @@ export interface ICanvasContext {
   panY: number;
   lastUpdate: number;
   redraw: () => void;
-  redrawCallbacks: RedrawCallbacks;
   addRedrawListener: (callback: RedrawCallback) => void;
   removeRedrawListener: (callback: RedrawCallback) => void;
   rects: Rects;
@@ -103,7 +102,6 @@ export const CanvasProvider: FunctionComponent<ICanvasProviderProps> = ({
         offsetLeft,
         panX,
         panY,
-        redrawCallbacks: redrawCallbacks.current,
         addRedrawListener,
         removeRedrawListener,
         redraw,

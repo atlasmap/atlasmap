@@ -9,7 +9,7 @@ import {
   ExpandArrowsAltIcon,
   ExpandIcon,
 } from '@patternfly/react-icons';
-import { useCanvasViewContext } from './CanvasViewProvider';
+import { useCanvasViewContext } from '../CanvasViewProvider';
 
 export const CanvasViewControlBar: FunctionComponent = () => {
 

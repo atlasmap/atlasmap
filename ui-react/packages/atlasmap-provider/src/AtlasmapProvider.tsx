@@ -1,5 +1,6 @@
+import { IFieldsGroup, IMappings } from '@atlasmap/ui/src';
 import ky from 'ky';
-import { useCallback, useEffect, useMemo, useReducer } from 'react';
+import React, { createContext, FunctionComponent, useCallback, useContext, useEffect, useMemo, useReducer } from 'react';
 import { timer } from 'rxjs';
 import { debounce } from 'rxjs/operators';
 import { DocumentDefinition } from './models/document-definition.model';
@@ -10,6 +11,7 @@ import { FieldActionService } from './services/field-action.service';
 import { FileManagementService } from './services/file-management.service';
 import { InitializationService } from './services/initialization.service';
 import { MappingManagementService } from './services/mapping-management.service';
+import { search } from './utils/filter-fields';
 import {
   fromDocumentDefinitionToFieldGroup,
   fromMappingDefinitionToIMappings,
@@ -18,7 +20,13 @@ import { exportAtlasFile, importAtlasFile, resetAtlasmap } from './components/to
 
 const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
 
-export interface IUseAtlasmapArgs {
+interface IAtlasmapContext extends State {
+  dispatch: (value: Action) => void;
+}
+
+const AtlasmapContext = createContext<IAtlasmapContext | null>(null);
+
+export interface IAtlasmapProviderProps {
   baseJavaInspectionServiceUrl: string;
   baseXMLInspectionServiceUrl: string;
   baseJSONInspectionServiceUrl: string;
@@ -80,12 +88,13 @@ function reducer(state: State, action: Action): State {
   }
 }
 
-export function useAtlasmap({
+export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   baseJavaInspectionServiceUrl,
   baseXMLInspectionServiceUrl,
   baseJSONInspectionServiceUrl,
   baseMappingServiceUrl,
-}: IUseAtlasmapArgs) {
+  children
+}) => {
   const [state, dispatch] = useReducer(reducer, {}, init);
 
   const initializationService = useMemo(
@@ -138,6 +147,52 @@ export function useAtlasmap({
     };
   }, [initializationService]);
 
+  return (
+    <AtlasmapContext.Provider value={{
+      ...state,
+      dispatch
+    }}>
+      {children}
+    </AtlasmapContext.Provider>
+  )
+}
+
+export interface IUseAtlasmapArgs {
+  sourceFilter?: string;
+  targetFilter?: string;
+}
+
+export function useAtlasmap({
+  sourceFilter,
+  targetFilter
+}: IUseAtlasmapArgs = {}): {
+  pending: boolean;
+  error: boolean;
+  sources: IFieldsGroup[];
+  targets: IFieldsGroup[];
+  mappings: IMappings[];
+  importAtlasFile: (file: File) => void;
+  resetAtlasmap: () => void;
+} {
+  const context = useContext(AtlasmapContext);
+  if (!context) {
+    throw new Error(
+      `useAtlasmap must be used inside an AtlasmapProvider component`,
+    )
+  }
+
+  const {
+    dispatch,
+    pending,
+    error,
+    sourceDocs,
+    targetDocs,
+    mappingDefinition,
+  } = context;
+
+  search(sourceFilter, true);
+  search(targetFilter, false);
+
   const handleImportAtlasFile = useCallback(
     (file: File) => {
       dispatch({ type: 'loading' });
@@ -156,15 +211,15 @@ export function useAtlasmap({
 
   return useMemo(
     () => ({
-      pending: state.pending,
-      error: state.error,
-      sources: state.sourceDocs.map(fromDocumentDefinitionToFieldGroup),
-      targets: state.targetDocs.map(fromDocumentDefinitionToFieldGroup),
-      mappings: fromMappingDefinitionToIMappings(state.mappingDefinition),
+      pending: pending,
+      error: error,
+      sources: sourceDocs.map(fromDocumentDefinitionToFieldGroup).filter(d => d) as IFieldsGroup[],
+      targets: targetDocs.map(fromDocumentDefinitionToFieldGroup).filter(d => d) as IFieldsGroup[],
+      mappings: fromMappingDefinitionToIMappings(mappingDefinition),
       exportAtlasFile: exportAtlasFile,
       importAtlasFile: handleImportAtlasFile,
       resetAtlasmap: handleResetAtlasmap,
     }),
-    [state]
+    [error, handleImportAtlasFile, handleResetAtlasmap, mappingDefinition, pending, sourceDocs, targetDocs, sourceFilter, targetFilter]
   );
 }

@@ -23,12 +23,12 @@ function fromFieldToIFields(field: Field): IFieldsGroup | IFieldsNode {
     : fromFieldToIFieldsNode(field);
 }
 
-export function fromDocumentDefinitionToFieldGroup(def: DocumentDefinition): IFieldsGroup {
-  return {
+export function fromDocumentDefinitionToFieldGroup(def: DocumentDefinition): IFieldsGroup | null {
+  return def.visibleInCurrentDocumentSearch ? {
     id: def.id,
     fields: def.fields.map(fromFieldToIFields),
     title: def.name
-  };
+  } : null;
 }
 
 function fromMappedFieldToIMappingField(isSource: boolean, field: MappedField): IMappingField {

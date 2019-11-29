@@ -1,5 +1,4 @@
-import { Title } from '@patternfly/react-core';
-import React, { FunctionComponent, HTMLAttributes, useEffect } from 'react';
+import React, { FunctionComponent, HTMLAttributes, ReactElement, useEffect } from 'react';
 import { CanvasObject, useCanvas } from '../../../canvas';
 import { useDimensions } from '../../../common';
 import { Coords } from '../../../models';
@@ -7,17 +6,19 @@ import { useCanvasViewContext } from '../CanvasViewProvider';
 import { Box } from './Box';
 
 export interface IMappingsBoxProps extends HTMLAttributes<HTMLDivElement> {
+  id: string;
   initialWidth: number;
   initialHeight: number;
   position: Coords;
-  title: string;
+  header: ReactElement | string;
   rightAlign?: boolean;
 }
 export const FieldsBox: FunctionComponent<IMappingsBoxProps> = ({
+  id,
   initialWidth,
   initialHeight,
   position,
-  title,
+  header,
   rightAlign = false,
   children,
   ...props
@@ -42,7 +43,7 @@ export const FieldsBox: FunctionComponent<IMappingsBoxProps> = ({
 
   return (
     <CanvasObject
-      id={title}
+      id={id}
       width={initialWidth}
       height={scrollable ? initialHeight : yDomain(dimensions.height)}
       movable={!scrollable}
@@ -57,11 +58,7 @@ export const FieldsBox: FunctionComponent<IMappingsBoxProps> = ({
         {...props}
       >
         <Box
-          header={
-            <Title size={'2xl'} headingLevel={'h2'} style={{ textAlign: 'center' }}>
-              {title}
-            </Title>
-          }
+          header={header}
           rightAlign={rightAlign}
           style={{
             alignItems: 'center',

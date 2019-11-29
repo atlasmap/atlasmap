@@ -16,15 +16,15 @@ import {
 
 import { FilePicker } from 'react-file-picker';
 
-export interface IMapperContextToolbarProps {
+export interface IAtlasmapContextToolbarProps {
   exportAtlasFile: (event: any) => void;
   importAtlasFile: (selectedFile: File) => void;
   resetAtlasmap: () => void;
 }
 
-export const MapperContextToolbar: FunctionComponent<
-  IMapperContextToolbarProps
-> = ({ exportAtlasFile, importAtlasFile, resetAtlasmap }) => {
+export const AtlasmapContextToolbar: FunctionComponent<
+  IAtlasmapContextToolbarProps
+> = ({ importAtlasFile, resetAtlasmap, exportAtlasFile }) => {
   return (
     <Toolbar
       className="view-toolbar pf-u-px-md pf-u-py-md"
@@ -42,15 +42,15 @@ export const MapperContextToolbar: FunctionComponent<
               </div>
             }
           >
-          <FilePicker
-            extensions={['adm', 'jar']}
-            onChange={(selectedFile: File) => importAtlasFile(selectedFile)}
-            onError={(errMsg: any) => console.error(errMsg)}
-          >
-            <Button variant={'plain'} aria-label="Import mappings">
-              <ImportIcon />
-            </Button>
-          </FilePicker>
+            <FilePicker
+              extensions={['adm', 'jar']}
+              onChange={(selectedFile: File) => importAtlasFile(selectedFile)}
+              onError={(errMsg: any) => console.error(errMsg)}
+            >
+              <Button variant={'plain'} aria-label="Import mappings">
+                <ImportIcon />
+              </Button>
+            </FilePicker>
           </Tooltip>
         </ToolbarItem>
         <ToolbarItem>

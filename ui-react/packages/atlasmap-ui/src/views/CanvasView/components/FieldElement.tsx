@@ -42,7 +42,7 @@ export const FieldElement: FunctionComponent<IFieldElementProps> = ({
   const ref = useRef<HTMLDivElement | null>(null);
 
   const getBoundingCanvasRect = useBoundingCanvasRect();
-  const { setLineNode } = useMappingNode();
+  const { setLineNode, unsetLineNode } = useMappingNode();
   const getCoords = useCallback(() => {
     if (ref.current && parentRef && boxRef) {
       let parentRect = getBoundingCanvasRect(parentRef);
@@ -75,7 +75,13 @@ export const FieldElement: FunctionComponent<IFieldElementProps> = ({
       setLineNode('dragsource', getCoords);
     }
   });
-  setLineNode(node.id, getCoords);
+
+  useEffect(() => {
+    setLineNode(node.id, getCoords);
+    return () => {
+      unsetLineNode(node.id);
+    }
+  }, [getCoords, node, setLineNode, unsetLineNode]);
 
   const handleRef = (el: HTMLDivElement) => {
     dragRef(el);

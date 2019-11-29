@@ -12,7 +12,7 @@ import {
   ToolbarItem,
 } from '@patternfly/react-core';
 import { CaretDownIcon, CaretUpIcon } from '@patternfly/react-icons';
-import { useCanvasViewContext } from './CanvasViewProvider';
+import { useCanvasViewContext } from '../CanvasViewProvider';
 
 export const CanvasViewToolbar: FunctionComponent = () => {
   const {
