@@ -171,6 +171,7 @@ export function useAtlasmap({
   sources: IFieldsGroup[];
   targets: IFieldsGroup[];
   mappings: IMappings[];
+  exportAtlasFile: () => void;
   importAtlasFile: (file: File) => void;
   resetAtlasmap: () => void;
 } {

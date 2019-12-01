@@ -27,7 +27,6 @@ import React, {
 import { useDrop } from 'react-dnd';
 import {
   useBoundingCanvasRect,
-  useCanvas,
   useMappingNode,
 } from '../../../canvas';
 import { ElementId, ElementType, IMappings } from '../../../models';
@@ -50,6 +49,10 @@ const styles = StyleSheet.create({
   },
   head: {
     padding: '0.5rem !important',
+  },
+  bodyHidden: {
+    height: 0,
+    overflow: 'hidden',
   },
   footer: {
     borderTop: '1px solid #eee',
@@ -84,7 +87,6 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
   addToMapping,
   mappingType
 }) => {
-  const { redraw } = useCanvas();
   const ref = useRef<HTMLDivElement | null>(null);
 
   const getBoundingCanvasRect = useBoundingCanvasRect();
@@ -180,7 +182,6 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
     if (!isOver) {
       unsetLineNode('dragtarget');
     }
-    redraw();
   }, [isOver, isSelected]);
 
 
@@ -233,29 +234,27 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
             </Button>
           </CardHeader>
         </CardHead>
-        {isSelected && (
-          <CardBody>
-            <Title size={BaseSizes.md}>Sources</Title>
-            {node.sourceFields.map((s, idx) => (
-              <p key={idx}>
-                {s.name}{' '}
-                <Tooltip position={TooltipPosition.top} content={s.tip}>
-                  <OutlinedQuestionCircleIcon />
-                </Tooltip>
-              </p>
-            ))}
-            <br />
-            <Title size={BaseSizes.md}>Targets</Title>
-            {node.targetFields.map((s, idx) => (
-              <p key={idx}>
-                {s.name}{' '}
-                <Tooltip position={TooltipPosition.top} content={s.tip}>
-                  <OutlinedQuestionCircleIcon />
-                </Tooltip>
-              </p>
-            ))}
-          </CardBody>
-        )}
+        <CardBody className={css(!isSelected && styles.bodyHidden)}>
+          <Title size={BaseSizes.md}>Sources</Title>
+          {node.sourceFields.map((s, idx) => (
+            <p key={idx}>
+              {s.name}{' '}
+              <Tooltip position={TooltipPosition.top} content={s.tip}>
+                <OutlinedQuestionCircleIcon />
+              </Tooltip>
+            </p>
+          ))}
+          <br />
+          <Title size={BaseSizes.md}>Targets</Title>
+          {node.targetFields.map((s, idx) => (
+            <p key={idx}>
+              {s.name}{' '}
+              <Tooltip position={TooltipPosition.top} content={s.tip}>
+                <OutlinedQuestionCircleIcon />
+              </Tooltip>
+            </p>
+          ))}
+        </CardBody>
         <CardFooter className={css(styles.footer)}>
           Mapping type: {mappingType}
         </CardFooter>

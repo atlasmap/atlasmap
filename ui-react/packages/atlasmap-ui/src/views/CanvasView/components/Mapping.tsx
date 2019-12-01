@@ -1,6 +1,5 @@
 import { css, StyleSheet } from '@patternfly/react-styles';
-import React, { FunctionComponent, ReactElement, useEffect, useRef } from 'react';
-import { useCanvas } from '../../../canvas';
+import React, { FunctionComponent, ReactElement, useRef } from 'react';
 import { useCanvasViewLayoutContext } from '../CanvasViewLayoutProvider';
 import { FieldsBox } from './FieldsBox';
 
@@ -19,13 +18,7 @@ export interface IMappingProps {
 
 export const Mapping: FunctionComponent<IMappingProps> = ({ children }) => {
   const { mappingWidth, boxHeight, initialMappingCoords } = useCanvasViewLayoutContext();
-  const { redraw } = useCanvas();
   const ref = useRef<HTMLDivElement | null>(null);
-  useEffect(() => {
-    if (ref.current) {
-      redraw();
-    }
-  }, [redraw]);
   return (
     <FieldsBox
       id={'mappings'}

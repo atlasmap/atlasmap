@@ -21,8 +21,8 @@ const styles = StyleSheet.create({
 export interface IFieldElementProps {
   node: IFieldsNode;
   type: ElementType;
-  parentRef: HTMLElement | null;
-  boxRef: HTMLElement | null;
+  getParentRef: () => HTMLElement | null;
+  getBoxRef: () => HTMLElement | null;
   rightAlign?: boolean;
 }
 
@@ -35,8 +35,8 @@ export interface IFieldElementDragSource {
 export const FieldElement: FunctionComponent<IFieldElementProps> = ({
   node,
   type,
-  parentRef,
-  boxRef,
+  getParentRef,
+  getBoxRef,
   rightAlign = false,
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -44,6 +44,8 @@ export const FieldElement: FunctionComponent<IFieldElementProps> = ({
   const getBoundingCanvasRect = useBoundingCanvasRect();
   const { setLineNode, unsetLineNode } = useMappingNode();
   const getCoords = useCallback(() => {
+    const parentRef = getParentRef();
+    const boxRef = getBoxRef();
     if (ref.current && parentRef && boxRef) {
       let parentRect = getBoundingCanvasRect(parentRef);
       let boxRect = getBoundingCanvasRect(boxRef);
@@ -56,11 +58,11 @@ export const FieldElement: FunctionComponent<IFieldElementProps> = ({
           boxRect.height + boxRect.top
         ),
       };
-    } else {
-      return { x: 0, y: 0 };
     }
-  }, [ref, parentRef, type, boxRef, getBoundingCanvasRect]);
-
+    // if (node.id === 'io.paul.Bicycle-/serialId')
+    // console.log(node.id, ref.current, parentRef, boxRef)
+    return null;
+  }, [getBoundingCanvasRect, getBoxRef, getParentRef, type]);
 
   const [{ opacity }, dragRef, preview] = useDrag<
     IFieldElementDragSource,
@@ -81,7 +83,7 @@ export const FieldElement: FunctionComponent<IFieldElementProps> = ({
     return () => {
       unsetLineNode(node.id);
     }
-  }, [getCoords, node, setLineNode, unsetLineNode]);
+  }, [node, setLineNode, unsetLineNode, getCoords]);
 
   const handleRef = (el: HTMLDivElement) => {
     dragRef(el);

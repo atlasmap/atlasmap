@@ -8,11 +8,11 @@ import { css, StyleSheet } from '@patternfly/react-styles';
 import React, {
   FunctionComponent,
   useCallback,
-  useEffect,
+  useEffect, useMemo,
   useRef,
   useState,
 } from 'react';
-import { useBoundingCanvasRect, useCanvas, useMappingNode } from '../../../canvas';
+import { useBoundingCanvasRect, useMappingNode } from '../../../canvas';
 import { ElementType, IFieldsGroup, IFieldsNode } from '../../../models';
 import { FieldElement } from './FieldElement';
 
@@ -51,8 +51,8 @@ export interface IFieldGroupProps {
   isVisible: boolean;
   group: IFieldsGroup;
   type: ElementType;
-  parentRef?: HTMLElement | null;
-  boxRef?: HTMLElement | null;
+  getParentRef?: () => HTMLElement | null;
+  getBoxRef: () => HTMLElement | null;
   rightAlign?: boolean;
   level?: number;
   parentExpanded: boolean;
@@ -61,13 +61,12 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
   isVisible,
   group,
   type,
-  parentRef = null,
-  boxRef = null,
+  getParentRef,
+  getBoxRef,
   rightAlign = false,
   level = 0,
   parentExpanded
 }) => {
-  const { redraw } = useCanvas();
   const getBoundingCanvasRect = useBoundingCanvasRect();
   const { setLineNode } = useMappingNode();
   const ref = useRef<HTMLDivElement | null>(null);
@@ -77,51 +76,53 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
     setIsExpanded,
   ]);
 
+  const getChildCoords = useCallback(() => {
+    const boxRef = getBoxRef();
+    if (ref.current && boxRef) {
+      let dimensions = getBoundingCanvasRect(ref.current);
+      let boxRect = getBoundingCanvasRect(boxRef);
+      return {
+        x: type === 'source' ? boxRect.right : boxRect.left,
+        y: Math.min(
+          Math.max(dimensions.top + dimensions.height / 2, boxRect.top),
+          boxRect.height + boxRect.top
+        ),
+      };
+    }
+    return null;
+  }, [getBoxRef, getBoundingCanvasRect, type]);
+
   const handleChildLines = useCallback(() => {
     if (!isExpanded) {
-      const getCoords = () => {
-        if (ref.current && boxRef) {
-          let dimensions = getBoundingCanvasRect(ref.current);
-          let boxRect = getBoundingCanvasRect(boxRef);
-          return {
-            x: type === 'source' ? boxRect.right : boxRect.left,
-            y: Math.min(
-              Math.max(dimensions.top + dimensions.height / 2, boxRect.top),
-              boxRect.height + boxRect.top
-            ),
-          };
-        }
-        return null;
-      };
       const traverseChildren = (f: IFieldsGroup | IFieldsNode) => {
         if ((f as IFieldsNode).name) {
-          setLineNode(f.id, getCoords);
+          setLineNode(f.id, getChildCoords);
         } else {
           (f as IFieldsGroup).fields.forEach(traverseChildren);
         }
       };
       group.fields.forEach(traverseChildren);
     }
-  }, [boxRef, getBoundingCanvasRect, group.fields, isExpanded, setLineNode, type]);
+  }, [getChildCoords, group.fields, isExpanded, setLineNode]);
 
   useEffect(() => {
     handleChildLines();
-    redraw();
-  }, [handleChildLines, redraw, parentExpanded]);
+  }, [handleChildLines, parentExpanded]);
 
-  const content = isExpanded && group.fields.map(f =>
+  const content = useMemo(() =>
+    isExpanded && group.fields.map(f =>
     (f as IFieldsNode).name ? (
       <FieldElement
         key={f.id}
         type={type}
-        parentRef={
+        getParentRef={() =>
           isVisible && isExpanded
             ? ref.current
-            : isVisible || !parentRef
+            : isVisible || !getParentRef
             ? ref.current
-            : parentRef
+            : getParentRef()
         }
-        boxRef={boxRef}
+        getBoxRef={getBoxRef}
         node={f as IFieldsNode}
         rightAlign={rightAlign}
       />
@@ -129,16 +130,17 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
       <FieldGroup
         isVisible={isVisible && isExpanded}
         type={type}
-        parentRef={isVisible || !parentRef ? ref.current : parentRef}
+        getParentRef={() => isVisible || !getParentRef ? ref.current : getParentRef()}
         group={f as IFieldsGroup}
-        boxRef={boxRef}
+        getBoxRef={getBoxRef}
         rightAlign={rightAlign}
         key={f.id}
         level={level + 1}
         parentExpanded={parentExpanded}
       />
     )
-  );
+  ), [getBoxRef, group.fields, isExpanded, isVisible, level, parentExpanded, getParentRef, rightAlign, type]);
+
 
   return level === 0 ? <div ref={ref}>{content}</div> : (
     <AccordionItem>

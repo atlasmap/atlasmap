@@ -2,10 +2,9 @@ import React, {
   forwardRef,
   PropsWithChildren,
   ReactElement,
-  HTMLAttributes, useCallback,
+  HTMLAttributes,
 } from 'react';
 import { css, StyleSheet } from '@patternfly/react-styles';
-import { useCanvas } from '../../../canvas';
 
 const styles = StyleSheet.create({
   outer: {
@@ -48,17 +47,12 @@ export interface IBoxProps extends HTMLAttributes<HTMLDivElement> {
  */
 export const Box = forwardRef<HTMLDivElement, PropsWithChildren<IBoxProps>>(
   ({ header, footer, children, onLayout, rightAlign = false, ...props }, ref) => {
-    const { redraw } = useCanvas();
-    const handleEvents = useCallback(() => {
-      requestAnimationFrame(redraw);
-    }, [redraw]);
     return (
       <div className={css(styles.outer)}>
         {header && <div className={css(styles.header)}>{header}</div>}
         <div
           className={css(styles.body, rightAlign && styles.bodyRightAligned)}
           ref={ref}
-          onScroll={handleEvents}
           {...props}
         >
           {children}

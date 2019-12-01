@@ -12,7 +12,7 @@ export const interactiveExample = () => (
     title={text('Title', 'Document title')}
     footer={text('Footer', 'Document footer')}
   >
-    {() => <FieldGroup
+    {({ getRef }) => <FieldGroup
       isVisible={true}
       type={'source'}
       group={{
@@ -20,7 +20,7 @@ export const interactiveExample = () => (
         id: 'text-id',
         title: text('Group title', 'Sample title'),
       }}
-      boxRef={null}
+      getBoxRef={getRef}
       parentExpanded={boolean('Parent expanded', true)}
     />}
   </Document>

@@ -134,11 +134,11 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
               {sources.map(s => {
                 return (
                   <Document key={s.id} title={s.title} footer={'Source document'}>
-                    {({ ref, isExpanded }) => (
+                    {({ getRef, isExpanded }) => (
                       <FieldGroup
                         isVisible={true}
                         group={s}
-                        boxRef={ref}
+                        getBoxRef={getRef}
                         type={'source'}
                         rightAlign={false}
                         parentExpanded={isExpanded}
@@ -182,11 +182,11 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
               {targets.map(t => {
                 return (
                   <Document key={t.id} title={t.title} rightAlign={true} footer={'Target document'}>
-                    {({ ref, isExpanded }) => (
+                    {({ getRef, isExpanded }) => (
                       <FieldGroup
                         isVisible={true}
                         group={t}
-                        boxRef={ref}
+                        getBoxRef={getRef}
                         type={'target'}
                         rightAlign={true}
                         parentExpanded={isExpanded}

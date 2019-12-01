@@ -30,6 +30,7 @@ export const sample = () => createElement(() => {
       mappings={mappings}
       addToMapping={addToMapping}
       onImportAtlasFile={action('importAtlasFile')}
+      onExportAtlasFile={action('exportAtlasFile')}
       onResetAtlasmap={action('resetAtlasmap')}
       onSourceSearch={action('onSourceSearch')}
       onTargetSearch={action('onTargetSearch')}

@@ -10,8 +10,7 @@ import {
 } from '@patternfly/react-core';
 import { CaretDownIcon, CaretRightIcon, EditIcon } from '@patternfly/react-icons';
 import { css, StyleSheet } from '@patternfly/react-styles';
-import React, { FunctionComponent, ReactElement, useEffect, useRef, useState } from 'react';
-import { useCanvas } from '../../../canvas';
+import React, { FunctionComponent, ReactElement, useRef, useState } from 'react';
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -62,16 +61,15 @@ const styles = StyleSheet.create({
 export interface IDocumentProps {
   title: ReactElement | string;
   footer: ReactElement | string;
-  children: (props: { ref: HTMLElement | null, isExpanded: boolean }) => ReactElement;
+  children: (props: { getRef: () => HTMLElement | null, isExpanded: boolean }) => ReactElement;
   rightAlign?: boolean;
 }
 
 export const Document: FunctionComponent<IDocumentProps> = ({ title, footer, children, rightAlign = false }) => {
-  const { redraw } = useCanvas();
   const ref = useRef<HTMLDivElement | null>(null);
   const [isExpanded, setIsExpanded] = useState(true);
   const toggleIsExpanded = () => setIsExpanded(!isExpanded);
-  useEffect(redraw, [isExpanded]);
+  const getRef = () => ref.current;
   return (
     <div ref={ref} className={css(styles.wrapper, isExpanded && styles.wrapperIsExpanded)}>
       <Card isCompact={true} className={css(styles.card)}>
@@ -96,7 +94,7 @@ export const Document: FunctionComponent<IDocumentProps> = ({ title, footer, chi
         <CardBody className={css(styles.body, !isExpanded && styles.bodyIsHidden)}>
           <div className={css(styles.body, !isExpanded && styles.bodyIsHidden)}>
             <Accordion asDefinitionList={false} className={css(styles.accordion)}>
-              {children({ ref: ref.current, isExpanded })}
+              {children({ getRef, isExpanded })}
             </Accordion>
           </div>
         </CardBody>
