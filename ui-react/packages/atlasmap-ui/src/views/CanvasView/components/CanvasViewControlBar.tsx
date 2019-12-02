@@ -2,25 +2,30 @@ import {
   createTopologyControlButtons,
   TopologyControlBar,
 } from '@patternfly/react-topology';
-import React, { FunctionComponent, useMemo } from 'react';
+import React, { FunctionComponent, useCallback, useMemo } from 'react';
 import {
   SearchPlusIcon,
   SearchMinusIcon,
   ExpandArrowsAltIcon,
   ExpandIcon,
 } from '@patternfly/react-icons';
+import { useCanvasViewContext } from '../CanvasViewProvider';
 
-export interface IMapperControlBarProps {
-  onZoomIn: () => void;
-  onZoomOut: () => void;
-  onZoomReset: () => void;
-}
+export const CanvasViewControlBar: FunctionComponent = () => {
 
-export const ControlBar: FunctionComponent<IMapperControlBarProps> = ({
-  onZoomIn,
-  onZoomOut,
-  onZoomReset,
-}) => {
+  const { updateZoom, resetZoom, resetPan } = useCanvasViewContext();
+
+  const handleZoomIn = useCallback(() => {
+    updateZoom(0.2);
+  }, [updateZoom]);
+  const handleZoomOut = useCallback(() => {
+    updateZoom(-0.2);
+  }, [updateZoom]);
+  const handleViewReset = useCallback(() => {
+    resetZoom();
+    resetPan();
+  }, [resetZoom, resetPan]);
+
   const controlButtons = useMemo(
     () =>
       createTopologyControlButtons({
@@ -28,7 +33,7 @@ export const ControlBar: FunctionComponent<IMapperControlBarProps> = ({
         zoomInIcon: <SearchPlusIcon />,
         zoomInTip: 'Zoom In',
         zoomInAriaLabel: ' ',
-        zoomInCallback: onZoomIn,
+        zoomInCallback: handleZoomIn,
         zoomInDisabled: false,
         zoomInHidden: false,
 
@@ -36,7 +41,7 @@ export const ControlBar: FunctionComponent<IMapperControlBarProps> = ({
         zoomOutIcon: <SearchMinusIcon />,
         zoomOutTip: 'Zoom Out',
         zoomOutAriaLabel: ' ',
-        zoomOutCallback: onZoomOut,
+        zoomOutCallback: handleZoomOut,
         zoomOutDisabled: false,
         zoomOutHidden: false,
 
@@ -52,7 +57,7 @@ export const ControlBar: FunctionComponent<IMapperControlBarProps> = ({
         resetViewIcon: <ExpandIcon />,
         resetViewTip: 'Reset View',
         resetViewAriaLabel: ' ',
-        resetViewCallback: onZoomReset,
+        resetViewCallback: handleViewReset,
         resetViewDisabled: false,
         resetViewHidden: false,
 
@@ -66,7 +71,7 @@ export const ControlBar: FunctionComponent<IMapperControlBarProps> = ({
 
         customButtons: [],
       }),
-    [onZoomIn, onZoomOut, onZoomReset]
+    [handleZoomIn, handleZoomOut, handleViewReset]
   );
 
   return <TopologyControlBar controlButtons={controlButtons} />;

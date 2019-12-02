@@ -24,31 +24,24 @@ export type SourceTargetLine = {
 };
 
 export interface LinkNodes {
-  [id: string]: () => Coords;
+  [id: string]: () => Coords | null;
 }
 
 interface ILinksContext {
   nodes: LinkNodes;
-  setLineNode: (id: string, getCoords: () => Coords) => void;
+  setLineNode: (id: string, getCoords: () => Coords | null) => void;
   unsetLineNode: (id: string) => void;
 }
 const LinksContext = createContext<ILinksContext | null>(null);
 
 export const CanvasLinksProvider: FunctionComponent = ({ children }) => {
   const nodes = useRef<LinkNodes>({});
-  const setLineNode = useCallback(
-    (id: string, getCoords: () => Coords) => {
-      nodes.current[id] = getCoords;
-    },
-    [nodes]
-  );
-
-  const unsetLineNode = useCallback(
-    (id: string) => {
-      delete nodes.current[id];
-    },
-    [nodes]
-  );
+  const setLineNode = (id: string, getCoords: () => Coords | null) => {
+    nodes.current[id] = getCoords;
+  };
+  const unsetLineNode = (id: string) => {
+    delete nodes.current[id];
+  };
 
   return (
     <LinksContext.Provider value={{ nodes: nodes.current, setLineNode, unsetLineNode }}>
@@ -78,12 +71,16 @@ export function useCanvasLinks(linkedNodes: SourceTargetNodes[]) {
           const source = nodes[sourceId];
           const target = nodes[targetId];
           if (source && target) {
-            return {
-              id: `${sourceId}-${targetId}`,
-              start: source(),
-              end: target(),
-              color,
-            };
+            const start = source();
+            const end = target();
+            if (start && end) {
+              return {
+                id: `${sourceId}-${targetId}`,
+                start,
+                end,
+                color,
+              };
+            }
           }
           return null;
         }

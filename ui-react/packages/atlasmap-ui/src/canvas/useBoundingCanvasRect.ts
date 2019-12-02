@@ -3,8 +3,8 @@ import { useCanvas } from './CanvasContext';
 
 export function useBoundingCanvasRect() {
   const { xDomain, yDomain, offsetLeft, offsetTop, panX, panY } = useCanvas();
-  const getBoundingCanvasRect = useCallback(
-    (element: Element) => {
+  return useCallback(
+    (element: Element): DOMRect => {
       const rect = element.getBoundingClientRect() as DOMRect;
       const canvasRect = {
         x: xDomain(rect.x - offsetLeft - panX),
@@ -15,10 +15,9 @@ export function useBoundingCanvasRect() {
         right: xDomain(rect.right - offsetLeft - panX),
         bottom: yDomain(rect.bottom - offsetTop - panY),
         left: xDomain(rect.left - offsetLeft - panX),
-      };
+      } as DOMRect;
       return canvasRect;
     },
     [offsetLeft, offsetTop, panX, panY, xDomain, yDomain]
   );
-  return getBoundingCanvasRect;
 }

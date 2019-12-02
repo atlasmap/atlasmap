@@ -18,13 +18,12 @@ import { FileManagementService } from '../../services/file-management.service';
   *
   * @param event
   */
-export function exportAtlasFile(event: any) {
+export function exportAtlasFile() {
   const cfg = ConfigModel.getConfig();
   const defaultExportAtlasFileName = 'atlasmap-mapping.adm';
 
   // Extract from event...
   // let fileName = event.target...;
-  console.log(event);
   let fileName = '';
   if (fileName.length === 0) {
     fileName = defaultExportAtlasFileName;

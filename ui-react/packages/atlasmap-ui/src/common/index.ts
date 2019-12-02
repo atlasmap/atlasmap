@@ -1,2 +1,3 @@
+export * from './Loading';
 export * from './useDimensions';
-export * from './useMovable';
+export * from './useLatestValue';

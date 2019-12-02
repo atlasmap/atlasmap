@@ -16,15 +16,15 @@ import {
 
 import { FilePicker } from 'react-file-picker';
 
-export interface IMapperContextToolbarProps {
-  exportAtlasFile: (event: any) => void;
-  importAtlasFile: (selectedFile: File) => void;
-  resetAtlasmap: () => void;
+export interface IAtlasmapContextToolbarProps {
+  onExportAtlasFile: (event: any) => void;
+  onImportAtlasFile: (selectedFile: File) => void;
+  onResetAtlasmap: () => void;
 }
 
-export const MapperContextToolbar: FunctionComponent<
-  IMapperContextToolbarProps
-> = ({ exportAtlasFile, importAtlasFile, resetAtlasmap }) => {
+export const AtlasmapContextToolbar: FunctionComponent<
+  IAtlasmapContextToolbarProps
+> = ({ onImportAtlasFile, onResetAtlasmap, onExportAtlasFile }) => {
   return (
     <Toolbar
       className="view-toolbar pf-u-px-md pf-u-py-md"
@@ -42,15 +42,15 @@ export const MapperContextToolbar: FunctionComponent<
               </div>
             }
           >
-          <FilePicker
-            extensions={['adm', 'jar']}
-            onChange={(selectedFile: File) => importAtlasFile(selectedFile)}
-            onError={(errMsg: any) => console.error(errMsg)}
-          >
-            <Button variant={'plain'} aria-label="Import mappings">
-              <ImportIcon />
-            </Button>
-          </FilePicker>
+            <FilePicker
+              extensions={['adm', 'jar']}
+              onChange={(selectedFile: File) => onImportAtlasFile(selectedFile)}
+              onError={(errMsg: any) => console.error(errMsg)}
+            >
+              <Button variant={'plain'} aria-label="Import mappings">
+                <ImportIcon />
+              </Button>
+            </FilePicker>
           </Tooltip>
         </ToolbarItem>
         <ToolbarItem>
@@ -65,7 +65,7 @@ export const MapperContextToolbar: FunctionComponent<
             }
           >
             <Button variant={'plain'} aria-label="Export mappings"
-              onClick={(event: any) => exportAtlasFile(event)}
+              onClick={(event: any) => onExportAtlasFile(event)}
             >
               <ExportIcon />
             </Button>
@@ -82,7 +82,7 @@ export const MapperContextToolbar: FunctionComponent<
             <Button
               variant={'plain'}
               aria-label="Reset all"
-              onClick={resetAtlasmap}
+              onClick={onResetAtlasmap}
             >
               Reset all
             </Button>

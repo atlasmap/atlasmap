@@ -3,7 +3,6 @@ import React, {
   useEffect,
   useMemo,
   useRef,
-  useState,
 } from 'react';
 import { createContext, FunctionComponent, useContext } from 'react';
 import { scaleLinear } from 'd3-scale';
@@ -20,9 +19,6 @@ export interface ICanvasContext {
   offsetLeft: number;
   panX: number;
   panY: number;
-  lastUpdate: number;
-  redraw: () => void;
-  redrawCallbacks: RedrawCallbacks;
   addRedrawListener: (callback: RedrawCallback) => void;
   removeRedrawListener: (callback: RedrawCallback) => void;
   rects: Rects;
@@ -59,10 +55,6 @@ export const CanvasProvider: FunctionComponent<ICanvasProviderProps> = ({
     rects.current = rects.current.filter(r => r.id !== id);
   };
 
-  const [lastUpdate, setLastUpdate] = useState(Date.now());
-  const redraw = useCallback(() => {
-    setLastUpdate(Date.now());
-  }, [setLastUpdate]);
   const redrawCallbacks = useRef<RedrawCallbacks>([]);
   const addRedrawListener = useCallback(
     (cb: RedrawCallback) => {
@@ -77,21 +69,18 @@ export const CanvasProvider: FunctionComponent<ICanvasProviderProps> = ({
     [redrawCallbacks]
   );
 
-  useEffect(() => {
-    const requestId = requestAnimationFrame(redraw);
-    return () => {
-      cancelAnimationFrame(requestId);
-    };
-  }, [width, height, zoom, offsetLeft, offsetTop, panX, panY, redraw]);
+  useEffect(function effectLoop() {
+    let frame = requestAnimationFrame(function loop() {
+      frame = requestAnimationFrame(loop);
 
-  useEffect(() => {
-    const requestId = requestAnimationFrame(() =>
-      redrawCallbacks.current.forEach(cb => cb())
-    );
-    return () => {
-      cancelAnimationFrame(requestId);
+      for (let i = 0, len = redrawCallbacks.current.length; i < len; i++) {
+        redrawCallbacks.current[i]();
+      }
+    });
+    return function cancelEffectLoop() {
+      cancelAnimationFrame(frame);
     };
-  }, [lastUpdate, redrawCallbacks]);
+  }, []);
 
   return (
     <CanvasContext.Provider
@@ -103,11 +92,8 @@ export const CanvasProvider: FunctionComponent<ICanvasProviderProps> = ({
         offsetLeft,
         panX,
         panY,
-        redrawCallbacks: redrawCallbacks.current,
         addRedrawListener,
         removeRedrawListener,
-        redraw,
-        lastUpdate,
         rects: rects.current,
         addRect,
         removeRect
@@ -126,18 +112,7 @@ export function useCanvas() {
   const {
     width,
     height,
-    zoom,
-    offsetLeft,
-    offsetTop,
-    panX,
-    panY,
-    redraw,
-    lastUpdate,
-    addRedrawListener,
-    removeRedrawListener,
-    rects,
-    addRect,
-    removeRect
+    zoom
   } = context;
 
   const xDomain = useMemo(
@@ -157,21 +132,8 @@ export function useCanvas() {
   );
 
   return {
-    width,
-    height,
-    zoom,
+    ...context,
     xDomain,
-    yDomain,
-    offsetLeft,
-    offsetTop,
-    panX,
-    panY,
-    redraw,
-    lastUpdate,
-    addRedrawListener,
-    removeRedrawListener,
-    rects,
-    addRect,
-    removeRect
+    yDomain
   };
 }

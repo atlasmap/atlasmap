@@ -1,29 +1,28 @@
 import { useAtlasmap } from '@atlasmap/provider';
-import { Mapper } from '@atlasmap/ui';
-import React from 'react';
+import { Atlasmap } from '@atlasmap/ui';
+import React, { useState } from 'react';
 import './App.css';
 
 const App: React.FC = () => {
-  const { sources, targets, mappings, pending, error, exportAtlasFile, importAtlasFile, resetAtlasmap } = useAtlasmap({
-    baseJavaInspectionServiceUrl: '/v2/atlas/java/',
-    baseXMLInspectionServiceUrl: '/v2/atlas/xml/',
-    baseJSONInspectionServiceUrl: '/v2/atlas/json/',
-    baseMappingServiceUrl: '/v2/atlas/',
+  const [sourceFilter, setSourceFilter] = useState<string | undefined>();
+  const [targetFilter, setTargetFilter] = useState<string | undefined>();
+  const { sources, targets, mappings, pending, error, importAtlasFile, resetAtlasmap, exportAtlasFile } = useAtlasmap({
+    sourceFilter,
+    targetFilter
   });
-  console.log('Sources', sources);
-  console.log('Targets', targets);
-  console.log('Mappings', mappings);
   return (
-    <Mapper
+    <Atlasmap
       sources={sources}
       targets={targets}
       mappings={mappings}
       addToMapping={() => void(0)}
       pending={pending}
       error={error}
-      exportAtlasFile={exportAtlasFile}
-      importAtlasFile={importAtlasFile}
-      resetAtlasmap={resetAtlasmap}
+      onImportAtlasFile={importAtlasFile}
+      onResetAtlasmap={resetAtlasmap}
+      onSourceSearch={setSourceFilter}
+      onTargetSearch={setTargetFilter}
+      onExportAtlasFile={exportAtlasFile}
     />
   );
 };

@@ -12,19 +12,16 @@ import {
   ToolbarItem,
 } from '@patternfly/react-core';
 import { CaretDownIcon, CaretUpIcon } from '@patternfly/react-icons';
-export interface IMapperToolbarProps {
-  freeView: boolean;
-  toggleFreeView: () => void;
-  materializedMappings: boolean;
-  toggleMaterializedMappings: () => void;
-}
+import { useCanvasViewContext } from '../CanvasViewProvider';
 
-export const ViewToolbar: FunctionComponent<IMapperToolbarProps> = ({
-  freeView,
-  toggleFreeView,
-  materializedMappings,
-  toggleMaterializedMappings,
-}) => {
+export const CanvasViewToolbar: FunctionComponent = () => {
+  const {
+    freeView,
+    toggleFreeView,
+    materializedMappings,
+    toggleMaterializedMappings,
+  } = useCanvasViewContext();
+
   const menuItems = [
     <OptionsMenuItemGroup key="first group" aria-label="Sort Column">
       <OptionsMenuItem

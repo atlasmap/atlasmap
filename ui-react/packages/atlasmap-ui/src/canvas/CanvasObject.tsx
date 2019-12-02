@@ -1,7 +1,6 @@
 import React, { FunctionComponent, HTMLAttributes, useEffect, useState } from 'react';
-import { useMovable } from '../common';
 import { Coords } from '../models';
-import { useCanvas } from './CanvasContext';
+import { useMovable } from './useMovable';
 
 export interface ICanvasObjectProps extends HTMLAttributes<SVGForeignObjectElement> {
   id: string;
@@ -21,7 +20,6 @@ export const CanvasObject: FunctionComponent<ICanvasObjectProps> = ({
   movable = true,
   ...props
 }) => {
-  const { redraw } = useCanvas();
   const [coords, setCoords] = useState<Coords>({ x, y });
   useEffect(() => {
     setCoords({ x, y });
@@ -34,17 +32,16 @@ export const CanvasObject: FunctionComponent<ICanvasObjectProps> = ({
     height,
     onDrag: (coords: Coords) => {
       setCoords(coords);
-      redraw();
     },
     // xBoundaries: [-Infinity, mappingCoords.x - sourceTargetBoxesWidth - gutter],
   });
-  useEffect(redraw, [movable]);
   return (
     <foreignObject
       width={width}
       height={height}
       x={movable ? coords.x : x}
       y={movable ? coords.y : y}
+      style={{ overflow: 'visible' }}
       {...props}
     >
       <div {...bind()} style={{ height: '100%' }}>

@@ -1,6 +1,6 @@
 import { action } from '@storybook/addon-actions';
 import React, { createElement, useState } from 'react';
-import { Mapper } from '../src/mapper';
+import { Atlasmap } from '../src/atlasmap';
 import { ElementId, ElementType, IMappings } from '../src/models';
 import { mappings as sampleMappings, sources, targets } from './sampleData';
 
@@ -24,13 +24,16 @@ export const sample = () => createElement(() => {
     setMappings(updatedMappings)
   };
   return (
-    <Mapper
+    <Atlasmap
       sources={sources}
       targets={targets}
       mappings={mappings}
       addToMapping={addToMapping}
-      importAtlasFile={action('importAtlasFile')}
-      resetAtlasmap={action('resetAtlasmap')}
+      onImportAtlasFile={action('importAtlasFile')}
+      onExportAtlasFile={action('exportAtlasFile')}
+      onResetAtlasmap={action('resetAtlasmap')}
+      onSourceSearch={action('onSourceSearch')}
+      onTargetSearch={action('onTargetSearch')}
       pending={false}
       error={false}
     />
