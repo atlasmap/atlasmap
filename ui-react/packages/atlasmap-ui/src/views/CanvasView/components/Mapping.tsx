@@ -1,6 +1,7 @@
 import { css, StyleSheet } from '@patternfly/react-styles';
 import React, { FunctionComponent, ReactElement, useRef } from 'react';
 import { useCanvasViewLayoutContext } from '../CanvasViewLayoutProvider';
+import { useCanvasViewContext } from '../CanvasViewProvider';
 import { FieldsBox } from './FieldsBox';
 
 const styles = StyleSheet.create({
@@ -17,6 +18,7 @@ export interface IMappingProps {
 }
 
 export const Mapping: FunctionComponent<IMappingProps> = ({ children }) => {
+  const { materializedMappings } = useCanvasViewContext();
   const { mappingWidth, boxHeight, initialMappingCoords } = useCanvasViewLayoutContext();
   const ref = useRef<HTMLDivElement | null>(null);
   return (
@@ -26,7 +28,7 @@ export const Mapping: FunctionComponent<IMappingProps> = ({ children }) => {
       initialHeight={boxHeight}
       position={initialMappingCoords}
       header={'Mapping'}
-      hidden={false}
+      hidden={!materializedMappings}
     >
       <div
         className={css(styles.content)}
