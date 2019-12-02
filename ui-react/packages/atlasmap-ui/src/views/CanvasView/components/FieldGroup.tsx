@@ -56,6 +56,7 @@ export interface IFieldGroupProps {
   rightAlign?: boolean;
   level?: number;
   parentExpanded: boolean;
+  initiallyExpanded?: boolean;
 }
 export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
   isVisible,
@@ -65,7 +66,8 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
   getBoxRef,
   rightAlign = false,
   level = 0,
-  parentExpanded
+  parentExpanded,
+  initiallyExpanded
 }) => {
   const getBoundingCanvasRect = useBoundingCanvasRect();
   const { setLineNode } = useMappingNode();
@@ -75,6 +77,12 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
     isExpanded,
     setIsExpanded,
   ]);
+
+  useEffect(() => {
+    if (initiallyExpanded !== undefined) {
+      setIsExpanded(initiallyExpanded)
+    }
+  }, [initiallyExpanded]);
 
   const getChildCoords = useCallback(() => {
     const boxRef = getBoxRef();
@@ -110,7 +118,7 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
   }, [handleChildLines, parentExpanded]);
 
   const content = useMemo(() =>
-    isExpanded && group.fields.map(f =>
+    group.fields.map(f =>
     (f as IFieldsNode).name ? (
       <FieldElement
         key={f.id}
@@ -137,6 +145,7 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
         key={f.id}
         level={level + 1}
         parentExpanded={parentExpanded}
+        initiallyExpanded={initiallyExpanded}
       />
     )
   ), [getBoxRef, group.fields, isExpanded, isVisible, level, parentExpanded, getParentRef, rightAlign, type]);

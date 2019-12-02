@@ -50,10 +50,6 @@ const styles = StyleSheet.create({
   head: {
     padding: '0.5rem !important',
   },
-  bodyHidden: {
-    height: 0,
-    overflow: 'hidden',
-  },
   footer: {
     borderTop: '1px solid #eee',
     paddingTop: '0.5rem',
@@ -234,7 +230,7 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
             </Button>
           </CardHeader>
         </CardHead>
-        <CardBody className={css(!isSelected && styles.bodyHidden)}>
+        {isSelected && <CardBody>
           <Title size={BaseSizes.md}>Sources</Title>
           {node.sourceFields.map((s, idx) => (
             <p key={idx}>
@@ -254,7 +250,7 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
               </Tooltip>
             </p>
           ))}
-        </CardBody>
+        </CardBody>}
         <CardFooter className={css(styles.footer)}>
           Mapping type: {mappingType}
         </CardFooter>

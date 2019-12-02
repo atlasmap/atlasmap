@@ -7,10 +7,26 @@ import {
   CardFooter,
   CardHead,
   CardHeader,
+  Dropdown,
+  DropdownItem, DropdownItemIcon,
+  DropdownSeparator,
+  DropdownToggle,
+  DropdownToggleAction,
 } from '@patternfly/react-core';
-import { CaretDownIcon, CaretRightIcon, EditIcon } from '@patternfly/react-icons';
+import {
+  CaretDownIcon,
+  CaretRightIcon,
+  TrashIcon,
+  FolderCloseIcon,
+  FolderOpenIcon,
+} from '@patternfly/react-icons';
 import { css, StyleSheet } from '@patternfly/react-styles';
-import React, { FunctionComponent, ReactElement, useRef, useState } from 'react';
+import React, {
+  FunctionComponent,
+  ReactElement, useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -22,14 +38,14 @@ const styles = StyleSheet.create({
     minHeight: '148px',
   },
   card: {
-    height: '100%'
+    height: '100%',
   },
   title: {
     direction: 'ltr',
     padding: '0.5rem !important',
   },
   titleRightAligned: {
-    transform: 'scaleX(-1)'
+    transform: 'scaleX(-1)',
   },
   body: {
     overflowY: 'auto',
@@ -41,11 +57,11 @@ const styles = StyleSheet.create({
   },
   bodyIsHidden: {
     height: 0,
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   accordion: {
     padding: '0 !important',
-    'box-shadow': 'none'
+    'box-shadow': 'none',
   },
   footer: {
     borderTop: '1px solid #eee',
@@ -54,54 +70,111 @@ const styles = StyleSheet.create({
     direction: 'ltr',
   },
   footerRightAligned: {
-    transform: 'scaleX(-1)'
+    transform: 'scaleX(-1)',
   },
 });
 
 export interface IDocumentProps {
   title: ReactElement | string;
   footer: ReactElement | string;
-  children: (props: { getRef: () => HTMLElement | null, isExpanded: boolean }) => ReactElement;
+  children: (props: {
+    getRef: () => HTMLElement | null;
+    isExpanded: boolean;
+    expandFields: boolean | undefined,
+  }) => ReactElement;
   rightAlign?: boolean;
 }
 
-export const Document: FunctionComponent<IDocumentProps> = ({ title, footer, children, rightAlign = false }) => {
+export const Document: FunctionComponent<IDocumentProps> = ({
+  title,
+  footer,
+  children,
+  rightAlign = false,
+}) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const [isExpanded, setIsExpanded] = useState(true);
   const toggleIsExpanded = () => setIsExpanded(!isExpanded);
+  const [showActions, setShowActions] = useState(false);
+  const toggleActions = (open: boolean) => setShowActions(open);
+  const [expandFields, setExpandField] = useState<boolean | undefined>(undefined);
+  const handleCollapseField = () => setExpandField(false);
+  const handleExpandField = () => setExpandField(true);
+
+  useEffect(() => {
+    if (expandFields !== undefined) {
+      setExpandField(undefined);
+    }
+  }, [expandFields]);
+
   const getRef = () => ref.current;
   return (
-    <div ref={ref} className={css(styles.wrapper, isExpanded && styles.wrapperIsExpanded)}>
+    <div
+      ref={ref}
+      className={css(styles.wrapper, isExpanded && styles.wrapperIsExpanded)}
+    >
       <Card isCompact={true} className={css(styles.card)}>
         <CardHead
           className={css(styles.title, rightAlign && styles.titleRightAligned)}
         >
           <CardActions>
-            <Button variant={'plain'}>
-              <EditIcon />
-            </Button>
+            <Dropdown
+              toggle={
+                <DropdownToggle
+                  splitButtonItems={[
+                    <DropdownToggleAction key="action" onClick={handleExpandField}>
+                      <FolderOpenIcon />
+                    </DropdownToggleAction>
+                  ]}
+                  splitButtonVariant="action"
+                  onToggle={toggleActions}
+                />
+              }
+              isOpen={showActions}
+              position={'right'}
+              dropdownItems={[
+                <DropdownItem variant={'icon'} key={'collapse'} onClick={handleCollapseField}>
+                  <DropdownItemIcon>
+                    <FolderCloseIcon />
+                  </DropdownItemIcon>
+                  Collapse all
+                </DropdownItem>,
+                <DropdownSeparator />,
+                <DropdownItem variant={'icon'} key={'delete'}>
+                  <DropdownItemIcon>
+                    <TrashIcon />
+                  </DropdownItemIcon>
+                  Remove instance or schema file
+                </DropdownItem>,
+              ]}
+            />
           </CardActions>
-          <CardHeader
-            onClick={toggleIsExpanded}
-            style={{ width: '70%' }}
-          >
+          <CardHeader onClick={toggleIsExpanded} style={{ width: '70%' }}>
             <Button variant={'link'}>
-              {isExpanded ? <CaretDownIcon /> : <CaretRightIcon />}{' '}
-              {title}
+              {isExpanded ? <CaretDownIcon /> : <CaretRightIcon />} {title}
             </Button>
           </CardHeader>
         </CardHead>
-        <CardBody className={css(styles.body, !isExpanded && styles.bodyIsHidden)}>
+        <CardBody
+          className={css(styles.body, !isExpanded && styles.bodyIsHidden)}
+        >
           <div className={css(styles.body, !isExpanded && styles.bodyIsHidden)}>
-            <Accordion asDefinitionList={false} className={css(styles.accordion)}>
-              {children({ getRef, isExpanded })}
+            <Accordion
+              asDefinitionList={false}
+              className={css(styles.accordion)}
+            >
+              {children({ getRef, isExpanded, expandFields })}
             </Accordion>
           </div>
         </CardBody>
-        <CardFooter className={css(styles.footer, rightAlign && styles.footerRightAligned)}>
+        <CardFooter
+          className={css(
+            styles.footer,
+            rightAlign && styles.footerRightAligned
+          )}
+        >
           {footer}
         </CardFooter>
       </Card>
     </div>
   );
-}
+};

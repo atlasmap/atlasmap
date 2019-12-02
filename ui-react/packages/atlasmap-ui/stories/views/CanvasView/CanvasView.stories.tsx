@@ -4,7 +4,8 @@ import React from 'react';
 import {
   CanvasView,
   Document,
-  FieldGroup, FieldsBoxHeader,
+  FieldGroup,
+  FieldsBoxHeader,
   Links,
   Mapping,
   MappingElement,
@@ -39,7 +40,7 @@ export const sample = () => {
         {sources.map(s => {
           return (
             <Document key={s.id} title={s.title} footer={'Source document'}>
-              {({ getRef, isExpanded }) => (
+              {({ getRef, isExpanded, expandFields }) => (
                 <FieldGroup
                   isVisible={true}
                   group={s}
@@ -47,6 +48,7 @@ export const sample = () => {
                   type={'source'}
                   rightAlign={false}
                   parentExpanded={isExpanded}
+                  initiallyExpanded={expandFields}
                 />
               )}
             </Document>
@@ -87,7 +89,7 @@ export const sample = () => {
         {targets.map(t => {
           return (
             <Document key={t.id} title={t.title} rightAlign={true} footer={'Target document'}>
-              {({ getRef, isExpanded }) => (
+              {({ getRef, isExpanded, expandFields }) => (
                 <FieldGroup
                   isVisible={true}
                   group={t}
@@ -95,6 +97,7 @@ export const sample = () => {
                   type={'target'}
                   rightAlign={true}
                   parentExpanded={isExpanded}
+                  initiallyExpanded={expandFields}
                 />
               )}
             </Document>

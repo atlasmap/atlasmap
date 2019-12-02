@@ -62,6 +62,7 @@ export const FieldsBox: FunctionComponent<IMappingsBoxProps> = ({
           rightAlign={rightAlign}
           style={{
             alignItems: 'center',
+            overflow: 'hidden'
           }}
         >
           <div

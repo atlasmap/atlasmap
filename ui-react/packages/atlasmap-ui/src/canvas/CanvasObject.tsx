@@ -41,6 +41,7 @@ export const CanvasObject: FunctionComponent<ICanvasObjectProps> = ({
       height={height}
       x={movable ? coords.x : x}
       y={movable ? coords.y : y}
+      style={{ overflow: 'visible' }}
       {...props}
     >
       <div {...bind()} style={{ height: '100%' }}>

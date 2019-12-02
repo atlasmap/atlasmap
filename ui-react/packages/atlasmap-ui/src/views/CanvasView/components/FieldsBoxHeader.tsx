@@ -1,6 +1,12 @@
 import {
   Button,
   ButtonVariant,
+  Dropdown,
+  DropdownItem,
+  DropdownItemIcon,
+  DropdownSeparator,
+  DropdownToggle,
+  DropdownToggleAction,
   InputGroup,
   Level,
   LevelItem,
@@ -10,12 +16,12 @@ import {
   Tooltip,
 } from '@patternfly/react-core';
 import {
-  AddCircleOIcon,
   FilterIcon,
-  ImportIcon,
   SearchIcon,
+  ImportIcon,
+  AddCircleOIcon,
 } from '@patternfly/react-icons';
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useCallback, useState } from 'react';
 
 export interface IFieldsBoxHeaderProps {
   title: string;
@@ -30,8 +36,12 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
   onImport,
   onJavaClasses,
 }) => {
+  const [showActions, setShowActions] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
-  const toggleSearch = () => setShowSearch(!showSearch);
+  const toggleActions = (open: boolean) => setShowActions(open);
+  const toggleSearch = useCallback(() => setShowSearch(!showSearch), [
+    showSearch,
+  ]);
 
   return (
     <Stack>
@@ -41,49 +51,61 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
             {title}
           </LevelItem>
           <LevelItem>
-            <Tooltip
-              position={'auto'}
-              enableFlip={true}
-              content={<div>Import instance or schema file</div>}
-            >
-              <Button variant="plain" aria-label="Action" onClick={onImport}>
-                <ImportIcon />
-              </Button>
-            </Tooltip>
-
-            <Tooltip
-              position={'auto'}
-              enableFlip={true}
-              content={
-                <div>
-                  Enable specific Java classes from your previously imported
-                  Java archive.
-                </div>
+            <Dropdown
+              toggle={
+                <DropdownToggle
+                  splitButtonItems={[
+                    <DropdownToggleAction key="action" onClick={toggleSearch}>
+                      <FilterIcon />
+                    </DropdownToggleAction>,
+                  ]}
+                  splitButtonVariant={'action'}
+                  onToggle={toggleActions}
+                />
               }
-            >
-              <Button
-                variant="plain"
-                aria-label="Enable Java classes"
-                onClick={onJavaClasses}
-              >
-                <AddCircleOIcon />
-              </Button>
-            </Tooltip>
-
-            <Tooltip
-              position={'auto'}
-              enableFlip={true}
-              content={<div>Toggle field search window</div>}
-            >
-              <Button
-                variant="plain"
-                aria-label="Toggle field search"
-                onClick={toggleSearch}
-                isActive={showSearch}
-              >
-                <FilterIcon />
-              </Button>
-            </Tooltip>
+              isOpen={showActions}
+              position={'right'}
+              dropdownItems={[
+                <DropdownItem
+                  variant={'icon'}
+                  key={'import'}
+                  onClick={onImport}
+                >
+                  <DropdownItemIcon>
+                    <ImportIcon />
+                  </DropdownItemIcon>
+                  <Tooltip
+                    position={'auto'}
+                    enableFlip={true}
+                    content={<div>Import instance or schema file</div>}
+                  >
+                    <div>Import</div>
+                  </Tooltip>
+                </DropdownItem>,
+                <DropdownSeparator />,
+                <DropdownItem
+                  variant={'icon'}
+                  key={'java-classes'}
+                  onClick={onJavaClasses}
+                >
+                  <DropdownItemIcon>
+                    <AddCircleOIcon />
+                  </DropdownItemIcon>
+                  <Tooltip
+                    position={'auto'}
+                    enableFlip={true}
+                    content={
+                      <div>
+                        Enable specific Java classes from your previously
+                        imported Java archive.
+                      </div>
+                    }
+                  >
+                    <div>Enable Java classes</div>
+                  </Tooltip>
+                </DropdownItem>,
+              ]}
+            />
           </LevelItem>
         </Level>
       </StackItem>

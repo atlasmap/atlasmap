@@ -14,7 +14,8 @@ import {
   CanvasViewProvider,
   CanvasViewToolbar,
   Document,
-  FieldGroup, FieldsBoxHeader,
+  FieldGroup,
+  FieldsBoxHeader,
   Links,
   Mapping,
   MappingElement,
@@ -134,7 +135,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
               {sources.map(s => {
                 return (
                   <Document key={s.id} title={s.title} footer={'Source document'}>
-                    {({ getRef, isExpanded }) => (
+                    {({ getRef, isExpanded, expandFields }) => (
                       <FieldGroup
                         isVisible={true}
                         group={s}
@@ -142,6 +143,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
                         type={'source'}
                         rightAlign={false}
                         parentExpanded={isExpanded}
+                        initiallyExpanded={expandFields}
                       />
                     )}
                   </Document>
@@ -182,7 +184,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
               {targets.map(t => {
                 return (
                   <Document key={t.id} title={t.title} rightAlign={true} footer={'Target document'}>
-                    {({ getRef, isExpanded }) => (
+                    {({ getRef, isExpanded, expandFields }) => (
                       <FieldGroup
                         isVisible={true}
                         group={t}
@@ -190,6 +192,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
                         type={'target'}
                         rightAlign={true}
                         parentExpanded={isExpanded}
+                        initiallyExpanded={expandFields}
                       />
                     )}
                   </Document>
