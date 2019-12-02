@@ -16,6 +16,7 @@ export const Target: FunctionComponent<ITargetProps> = ({ children, header }) =>
       position={initialTargetCoords}
       header={header}
       rightAlign={true}
+      hidden={false}
     >
       {children}
     </FieldsBox>

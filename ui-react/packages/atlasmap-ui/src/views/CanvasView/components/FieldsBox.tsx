@@ -11,6 +11,7 @@ export interface IMappingsBoxProps extends HTMLAttributes<HTMLDivElement> {
   initialHeight: number;
   position: Coords;
   header: ReactElement | string;
+  hidden: boolean;
   rightAlign?: boolean;
 }
 export const FieldsBox: FunctionComponent<IMappingsBoxProps> = ({
@@ -20,12 +21,12 @@ export const FieldsBox: FunctionComponent<IMappingsBoxProps> = ({
   position,
   header,
   rightAlign = false,
+  hidden,
   children,
   ...props
 }) => {
-  const { freeView, materializedMappings } = useCanvasViewContext();
+  const { freeView } = useCanvasViewContext();
   const scrollable = !freeView;
-  const hidden = !materializedMappings;
 
   const [ref, dimensions, measure ] = useDimensions();
   const { yDomain, addRedrawListener, removeRedrawListener } = useCanvas();

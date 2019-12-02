@@ -8,12 +8,22 @@ import {
   SearchMinusIcon,
   ExpandArrowsAltIcon,
   ExpandIcon,
+  PficonDragdropIcon,
+  LinkIcon,
+  InfoIcon,
+  ConnectedIcon,
+  DisconnectedIcon, EyeIcon
 } from '@patternfly/react-icons';
 import { useCanvasViewContext } from '../CanvasViewProvider';
 
 export const CanvasViewControlBar: FunctionComponent = () => {
-
-  const { updateZoom, resetZoom, resetPan } = useCanvasViewContext();
+  const { updateZoom,
+    resetZoom,
+    resetPan,
+    freeView,
+    toggleFreeView,
+    toggleMaterializedMappings,
+  } = useCanvasViewContext();
 
   const handleZoomIn = useCallback(() => {
     updateZoom(0.2);
@@ -29,7 +39,7 @@ export const CanvasViewControlBar: FunctionComponent = () => {
   const controlButtons = useMemo(
     () =>
       createTopologyControlButtons({
-        zoomIn: true,
+        zoomIn: freeView,
         zoomInIcon: <SearchPlusIcon />,
         zoomInTip: 'Zoom In',
         zoomInAriaLabel: ' ',
@@ -37,7 +47,7 @@ export const CanvasViewControlBar: FunctionComponent = () => {
         zoomInDisabled: false,
         zoomInHidden: false,
 
-        zoomOut: true,
+        zoomOut: freeView,
         zoomOutIcon: <SearchMinusIcon />,
         zoomOutTip: 'Zoom Out',
         zoomOutAriaLabel: ' ',
@@ -53,7 +63,7 @@ export const CanvasViewControlBar: FunctionComponent = () => {
         fitToScreenDisabled: false,
         fitToScreenHidden: false,
 
-        resetView: true,
+        resetView: freeView,
         resetViewIcon: <ExpandIcon />,
         resetViewTip: 'Reset View',
         resetViewAriaLabel: ' ',
@@ -69,10 +79,51 @@ export const CanvasViewControlBar: FunctionComponent = () => {
         legendDisabled: false,
         legendHidden: false,
 
-        customButtons: [],
+        customButtons: [
+          {
+            id: 'Free view mode',
+            icon: <PficonDragdropIcon />,
+            tooltip: 'Free view mode',
+            ariaLabel: ' ',
+            callback: toggleFreeView
+          },
+          {
+            id: 'Toggle mappings column',
+            icon: <LinkIcon />,
+            tooltip: 'Toggle mappings column',
+            ariaLabel: ' ',
+            callback: toggleMaterializedMappings
+          },
+          {
+            id: 'Show types',
+            icon: <InfoIcon />,
+            tooltip: 'Show types',
+            ariaLabel: ' ',
+          },
+          {
+            id: 'Show mapped fields',
+            icon: <ConnectedIcon />,
+            tooltip: 'Show mapped fields',
+            ariaLabel: ' ',
+          },
+          {
+            id: 'Show unmapped fields',
+            icon: <DisconnectedIcon />,
+            tooltip: 'Show unmapped fields',
+            ariaLabel: ' ',
+          },
+          {
+            id: 'Show mapping preview',
+            icon: <EyeIcon />,
+            tooltip: 'Show mapping preview',
+            ariaLabel: ' ',
+          },
+        ],
       }),
-    [handleZoomIn, handleZoomOut, handleViewReset]
+    [handleZoomIn, handleZoomOut, handleViewReset, toggleFreeView, toggleMaterializedMappings]
   );
 
-  return <TopologyControlBar controlButtons={controlButtons} />;
+  return (
+    <TopologyControlBar controlButtons={controlButtons} />
+  );
 };

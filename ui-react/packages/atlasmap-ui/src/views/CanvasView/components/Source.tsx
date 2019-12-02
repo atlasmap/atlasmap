@@ -19,6 +19,7 @@ export const Source: FunctionComponent<ISourceProps> = ({ children, header }) =>
       initialHeight={boxHeight}
       position={initialSourceCoords}
       header={header}
+      hidden={false}
     >
       {children}
     </FieldsBox>
