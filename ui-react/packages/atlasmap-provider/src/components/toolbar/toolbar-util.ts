@@ -1,16 +1,13 @@
 import { InspectionType } from '../../common/config.types';
 import { ConfigModel } from '../../models/config.model';
-import { DocumentDefinition } from '../../models/document-definition.model';
 import {
   ErrorScope,
   ErrorType,
   ErrorInfo,
   ErrorLevel,
 } from '../../models/error.model';
-import { MappingDefinition } from '../../models/mapping-definition.model';
-import { DocumentManagementService } from '../../services/document-management.service';
 import { ErrorHandlerService } from '../../services/error-handler.service';
-import { FileManagementService } from '../../services/file-management.service';
+import { importInstanceSchema } from '../../components/document/document-util';
 
  /**
   * The user has requested their current mappings be exported.  Use the mapping management
@@ -35,6 +32,7 @@ export function exportAtlasFile() {
  * A user has selected a compressed mappings catalog file to be imported into the canvas.
  *
  * @param selectedFile
+ * @param cfg
  */
 async function processMappingsCatalog(selectedFile: any, cfg: ConfigModel) {
   cfg.initializationService.updateLoadingStatus('Importing AtlasMap Catalog');
@@ -42,17 +40,13 @@ async function processMappingsCatalog(selectedFile: any, cfg: ConfigModel) {
 }
 
 /**
- * The user has imported a file (mapping catalog or Java archive).
+ * Import an ADM catalog file or a user JAR file.
  *
- * @param event
+ * @param selectedFile 
+ * @param userFileSuffix 
+ * @param cfg 
  */
-export function importAtlasFile(selectedFile: File) {
-  const cfg = ConfigModel.getConfig();
-  const userFileComps = selectedFile.name.split('.');
-  const userFileSuffix: string = userFileComps[
-    userFileComps.length - 1
-  ].toUpperCase();
-
+function importAtlasGlobalFile(selectedFile: File, userFileSuffix: string, cfg: ConfigModel) {
   if (userFileSuffix === 'ADM') {
     cfg.errorService.resetAll();
 
@@ -103,6 +97,28 @@ export function importAtlasFile(selectedFile: File) {
 }
 
 /**
+ * The user has imported a file (mapping catalog, Java archive or source/target
+ * level specific instance or schema).
+ *
+ * @param selectedFile - File object representing the file the user selected.
+ * @param isSource - true if selected file is associated with the Source panel,
+ *                   false otherwise
+ */
+export function importAtlasFile(selectedFile: File, isSource: boolean) {
+  const cfg = ConfigModel.getConfig();
+  const userFileComps = selectedFile.name.split('.');
+  const userFileSuffix: string = userFileComps[
+    userFileComps.length - 1
+  ].toUpperCase();
+
+  if (userFileSuffix === 'ADM' || userFileSuffix === 'JAR') {
+    importAtlasGlobalFile(selectedFile, userFileSuffix, cfg);
+  } else {
+    importInstanceSchema(selectedFile, cfg, isSource);
+  }
+}
+
+/**
  * Remove all documents and imported JARs from the server.
  */
 export function resetAtlasmap() {
@@ -125,6 +141,4 @@ export function resetAtlasmap() {
         level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
     }
   });
-
 }
-

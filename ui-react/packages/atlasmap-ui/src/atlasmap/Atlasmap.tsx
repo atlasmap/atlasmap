@@ -37,7 +37,7 @@ export interface IAtlasmapProps {
   pending: boolean;
   error: boolean;
   onExportAtlasFile: (event: any) => void;
-  onImportAtlasFile: (selectedFile: File) => void;
+  onImportAtlasFile: (selectedFile: File, isSource: boolean) => void;
   onResetAtlasmap: () => void;
   onSourceSearch: (content: string) => void;
   onTargetSearch: (content: string) => void;
@@ -127,7 +127,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
                 <FieldsBoxHeader
                   title={'Source'}
                   onSearch={onSourceSearch}
-                  onImport={() => void(0)}
+                  onImportAtlasFile={onImportAtlasFile}
                   onJavaClasses={() => void(0)}
                 />
               }
@@ -176,7 +176,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
                 <FieldsBoxHeader
                   title={'Target'}
                   onSearch={onTargetSearch}
-                  onImport={() => void(0)}
+                  onImportAtlasFile={onImportAtlasFile}
                   onJavaClasses={() => void(0)}
                 />
               }

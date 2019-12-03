@@ -22,18 +22,19 @@ import {
   AddCircleOIcon,
 } from '@patternfly/react-icons';
 import React, { FunctionComponent, useCallback, useState } from 'react';
+import { FilePicker } from 'react-file-picker';
 
 export interface IFieldsBoxHeaderProps {
   title: string;
   onSearch: (content: string) => void;
-  onImport: () => void;
+  onImportAtlasFile: (selectedFile: File, isSource: boolean) => void;
   onJavaClasses: () => void;
 }
 
 export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
   title,
   onSearch,
-  onImport,
+  onImportAtlasFile,
   onJavaClasses,
 }) => {
   const [showActions, setShowActions] = useState(false);
@@ -69,7 +70,6 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
                 <DropdownItem
                   variant={'icon'}
                   key={'import'}
-                  onClick={onImport}
                 >
                   <DropdownItemIcon>
                     <ImportIcon />
@@ -79,7 +79,16 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
                     enableFlip={true}
                     content={<div>Import instance or schema file</div>}
                   >
-                    <div>Import</div>
+                    <FilePicker
+                      extensions={['json', 'xml', 'xsd']}
+                      onChange={(selectedFile: File) =>
+                        onImportAtlasFile(selectedFile, title === 'Source')}
+                      onError={(errMsg: any) => console.error(errMsg)}
+                    >
+                      <Button variant={'plain'} aria-label="Import mappings">
+                        <div>Import</div>
+                      </Button>
+                    </FilePicker>
                   </Tooltip>
                 </DropdownItem>,
                 <DropdownSeparator />,
