@@ -16,7 +16,7 @@ import {
   fromDocumentDefinitionToFieldGroup,
   fromMappingDefinitionToIMappings,
 } from './utils/to-ui-models-util';
-import { exportAtlasFile, importAtlasFile, resetAtlasmap } from './components/toolbar/MapperUtilsToolbar';
+import { exportAtlasFile, importAtlasFile, resetAtlasmap } from './components/toolbar/toolbar-util';
 
 const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
 
@@ -172,7 +172,7 @@ export function useAtlasmap({
   targets: IFieldsGroup[];
   mappings: IMappings[];
   exportAtlasFile: () => void;
-  importAtlasFile: (file: File) => void;
+  importAtlasFile: (file: File, isSource: boolean) => void;
   resetAtlasmap: () => void;
 } {
   const context = useContext(AtlasmapContext);
@@ -195,9 +195,9 @@ export function useAtlasmap({
   search(targetFilter, false);
 
   const handleImportAtlasFile = useCallback(
-    (file: File) => {
+    (file: File, isSource: boolean) => {
       dispatch({ type: 'loading' });
-      importAtlasFile(file);
+      importAtlasFile(file, isSource);
     },
     [dispatch]
   );
