@@ -18,7 +18,7 @@ import { FilePicker } from 'react-file-picker';
 
 export interface IAtlasmapContextToolbarProps {
   onExportAtlasFile: (event: any) => void;
-  onImportAtlasFile: (selectedFile: File, isSource: boolean) => void;
+  onImportAtlasFile: (selectedFile: File) => void;
   onResetAtlasmap: () => void;
 }
 
@@ -44,7 +44,7 @@ export const AtlasmapContextToolbar: FunctionComponent<
           >
             <FilePicker
               extensions={['adm', 'jar']}
-              onChange={(selectedFile: File) => onImportAtlasFile(selectedFile, false)}
+              onChange={onImportAtlasFile}
               onError={(errMsg: any) => console.error(errMsg)}
             >
               <Button variant={'plain'} aria-label="Import mappings">

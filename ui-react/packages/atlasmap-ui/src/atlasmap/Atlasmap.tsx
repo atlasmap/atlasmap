@@ -7,14 +7,13 @@ import React, {
   useState,
 } from 'react';
 import { Loading } from '../common';
-import { ElementId, ElementType, IFieldsGroup, IMappings } from '../models';
+import { ElementId, DocumentType, IFieldsGroup, IMappings } from '../models';
 import {
   CanvasView,
   CanvasViewControlBar,
   CanvasViewProvider,
   CanvasViewToolbar,
   Document,
-  FieldGroup,
   FieldsBoxHeader,
   Links,
   Mapping,
@@ -31,13 +30,15 @@ export interface IAtlasmapProps {
   mappings: IMappings[];
   addToMapping: (
     elementId: ElementId,
-    elementType: ElementType,
+    elementType: DocumentType,
     mappingId: string
   ) => void;
   pending: boolean;
   error: boolean;
   onExportAtlasFile: (event: any) => void;
-  onImportAtlasFile: (selectedFile: File, isSource: boolean) => void;
+  onImportAtlasFile: (selectedFile: File) => void;
+  onImportSourceDocument: (selectedFile: File) => void;
+  onImportTargetDocument: (selectedFile: File) => void;
   onResetAtlasmap: () => void;
   onSourceSearch: (content: string) => void;
   onTargetSearch: (content: string) => void;
@@ -52,6 +53,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   error,
   onExportAtlasFile,
   onImportAtlasFile,
+  onImportSourceDocument,
+  onImportTargetDocument,
   onResetAtlasmap,
   onSourceSearch,
   onTargetSearch,
@@ -106,7 +109,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         onResetAtlasmap={onResetAtlasmap}
       />
     ),
-    [onImportAtlasFile, onResetAtlasmap]
+    [onExportAtlasFile, onImportAtlasFile, onImportAtlasFile]
   );
 
   return (
@@ -127,26 +130,21 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
                 <FieldsBoxHeader
                   title={'Source'}
                   onSearch={onSourceSearch}
-                  onImportAtlasFile={onImportAtlasFile}
+                  onImport={onImportSourceDocument}
                   onJavaClasses={() => void(0)}
                 />
               }
             >
               {sources.map(s => {
                 return (
-                  <Document key={s.id} title={s.title} footer={'Source document'}>
-                    {({ getRef, isExpanded, expandFields }) => (
-                      <FieldGroup
-                        isVisible={true}
-                        group={s}
-                        getBoxRef={getRef}
-                        type={'source'}
-                        rightAlign={false}
-                        parentExpanded={isExpanded}
-                        initiallyExpanded={expandFields}
-                      />
-                    )}
-                  </Document>
+                  <Document
+                    key={s.id}
+                    title={s.title}
+                    footer={'Source document'}
+                    type={'source'}
+                    lineConnectionSide={'right'}
+                    fields={s}
+                  />
                 );
               })}
             </Source>
@@ -176,26 +174,21 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
                 <FieldsBoxHeader
                   title={'Target'}
                   onSearch={onTargetSearch}
-                  onImportAtlasFile={onImportAtlasFile}
+                  onImport={onImportTargetDocument}
                   onJavaClasses={() => void(0)}
                 />
               }
             >
               {targets.map(t => {
                 return (
-                  <Document key={t.id} title={t.title} rightAlign={true} footer={'Target document'}>
-                    {({ getRef, isExpanded, expandFields }) => (
-                      <FieldGroup
-                        isVisible={true}
-                        group={t}
-                        getBoxRef={getRef}
-                        type={'target'}
-                        rightAlign={true}
-                        parentExpanded={isExpanded}
-                        initiallyExpanded={expandFields}
-                      />
-                    )}
-                  </Document>
+                  <Document
+                    key={t.id}
+                    title={t.title}
+                    footer={'Target document'}
+                    type={'target'}
+                    lineConnectionSide={'left'}
+                    fields={t}
+                  />
                 );
               })}
             </Target>

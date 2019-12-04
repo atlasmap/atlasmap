@@ -4,7 +4,6 @@ import React from 'react';
 import {
   CanvasView,
   Document,
-  FieldGroup,
   FieldsBoxHeader,
   Links,
   Mapping,
@@ -32,26 +31,21 @@ export const sample = () => {
           <FieldsBoxHeader
             title={'Source'}
             onSearch={action('onSearch')}
-            onImport={action('onImport')}
+            onImport={action('onImportAtlasFile')}
             onJavaClasses={action('onJavaClasses')}
           />
         }
       >
         {sources.map(s => {
           return (
-            <Document key={s.id} title={s.title} footer={'Source document'}>
-              {({ getRef, isExpanded, expandFields }) => (
-                <FieldGroup
-                  isVisible={true}
-                  group={s}
-                  getBoxRef={getRef}
-                  type={'source'}
-                  rightAlign={false}
-                  parentExpanded={isExpanded}
-                  initiallyExpanded={expandFields}
-                />
-              )}
-            </Document>
+            <Document
+              key={s.id}
+              title={s.title}
+              footer={'Source document'}
+              type={'source'}
+              lineConnectionSide={'right'}
+              fields={s}
+            />
           );
         })}
       </Source>
@@ -81,26 +75,21 @@ export const sample = () => {
           <FieldsBoxHeader
             title={'Source'}
             onSearch={action('onSearch')}
-            onImport={action('onImport')}
+            onImport={action('onImportAtlasFile')}
             onJavaClasses={action('onJavaClasses')}
           />
         }
       >
         {targets.map(t => {
           return (
-            <Document key={t.id} title={t.title} rightAlign={true} footer={'Target document'}>
-              {({ getRef, isExpanded, expandFields }) => (
-                <FieldGroup
-                  isVisible={true}
-                  group={t}
-                  getBoxRef={getRef}
-                  type={'target'}
-                  rightAlign={true}
-                  parentExpanded={isExpanded}
-                  initiallyExpanded={expandFields}
-                />
-              )}
-            </Document>
+            <Document
+              key={t.id}
+              title={t.title}
+              footer={'Target document'}
+              type={'target'}
+              lineConnectionSide={'left'}
+              fields={t}
+            />
           );
         })}
       </Target>

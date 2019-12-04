@@ -3,7 +3,7 @@ import React, { FunctionComponent, useCallback, useEffect, useRef } from 'react'
 import { useDrag } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend'
 import { useBoundingCanvasRect, useMappingNode } from '../../../canvas';
-import { ElementId, ElementType, IFieldsNode } from '../../../models';
+import { ElementId, DocumentType, IFieldsNode } from '../../../models';
 
 const styles = StyleSheet.create({
   element: {
@@ -20,7 +20,8 @@ const styles = StyleSheet.create({
 
 export interface IFieldElementProps {
   node: IFieldsNode;
-  type: ElementType;
+  documentType: DocumentType;
+  lineConnectionSide: 'left' | 'right';
   getParentRef: () => HTMLElement | null;
   getBoxRef: () => HTMLElement | null;
   rightAlign?: boolean;
@@ -28,13 +29,14 @@ export interface IFieldElementProps {
 
 export interface IFieldElementDragSource {
   id: ElementId;
-  type: ElementType;
+  type: DocumentType;
   name: string;
 }
 
 export const FieldElement: FunctionComponent<IFieldElementProps> = ({
   node,
-  type,
+  documentType,
+  lineConnectionSide,
   getParentRef,
   getBoxRef,
   rightAlign = false,
@@ -52,7 +54,7 @@ export const FieldElement: FunctionComponent<IFieldElementProps> = ({
       let dimensions = getBoundingCanvasRect(ref.current);
       dimensions = dimensions.height > 0 ? dimensions : parentRect;
       return {
-        x: type === 'source' ? boxRect.right : boxRect.left,
+        x: lineConnectionSide === 'right' ? boxRect.right : boxRect.left,
         y: Math.min(
           Math.max(dimensions.top + dimensions.height / 2, boxRect.top),
           boxRect.height + boxRect.top
@@ -62,14 +64,14 @@ export const FieldElement: FunctionComponent<IFieldElementProps> = ({
     // if (node.id === 'io.paul.Bicycle-/serialId')
     // console.log(node.id, ref.current, parentRef, boxRef)
     return null;
-  }, [getBoundingCanvasRect, getBoxRef, getParentRef, type]);
+  }, [getBoundingCanvasRect, getBoxRef, getParentRef, documentType]);
 
   const [{ opacity }, dragRef, preview] = useDrag<
     IFieldElementDragSource,
     undefined,
     { opacity: number }
     >({
-    item: { id: node.id, type, name: node.name },
+    item: { id: node.id, type: documentType, name: node.name },
     collect: monitor => ({
       opacity: monitor.isDragging() ? 0.4 : 1,
     }),
