@@ -13,7 +13,7 @@ import React, {
   useState,
 } from 'react';
 import { useBoundingCanvasRect, useMappingNode } from '../../../canvas';
-import { ElementType, IFieldsGroup, IFieldsNode } from '../../../models';
+import { DocumentType, IFieldsGroup, IFieldsNode } from '../../../models';
 import { FieldElement } from './FieldElement';
 
 const styles = StyleSheet.create({
@@ -50,7 +50,8 @@ const styles = StyleSheet.create({
 export interface IFieldGroupProps {
   isVisible: boolean;
   group: IFieldsGroup;
-  type: ElementType;
+  lineConnectionSide: 'left' | 'right';
+  documentType: DocumentType;
   getParentRef?: () => HTMLElement | null;
   getBoxRef: () => HTMLElement | null;
   rightAlign?: boolean;
@@ -61,7 +62,8 @@ export interface IFieldGroupProps {
 export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
   isVisible,
   group,
-  type,
+  lineConnectionSide,
+  documentType,
   getParentRef,
   getBoxRef,
   rightAlign = false,
@@ -90,7 +92,7 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
       let dimensions = getBoundingCanvasRect(ref.current);
       let boxRect = getBoundingCanvasRect(boxRef);
       return {
-        x: type === 'source' ? boxRect.right : boxRect.left,
+        x: lineConnectionSide === 'right' ? boxRect.right : boxRect.left,
         y: Math.min(
           Math.max(dimensions.top + dimensions.height / 2, boxRect.top),
           boxRect.height + boxRect.top
@@ -98,7 +100,7 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
       };
     }
     return null;
-  }, [getBoxRef, getBoundingCanvasRect, type]);
+  }, [getBoxRef, getBoundingCanvasRect, lineConnectionSide]);
 
   const handleChildLines = useCallback(() => {
     if (!isExpanded) {
@@ -122,7 +124,8 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
     (f as IFieldsNode).name ? (
       <FieldElement
         key={f.id}
-        type={type}
+        documentType={documentType}
+        lineConnectionSide={lineConnectionSide}
         getParentRef={() =>
           isVisible && isExpanded
             ? ref.current
@@ -137,7 +140,8 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
     ) : (
       <FieldGroup
         isVisible={isVisible && isExpanded}
-        type={type}
+        lineConnectionSide={lineConnectionSide}
+        documentType={documentType}
         getParentRef={() => isVisible || !getParentRef ? ref.current : getParentRef()}
         group={f as IFieldsGroup}
         getBoxRef={getBoxRef}
@@ -148,7 +152,7 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
         initiallyExpanded={initiallyExpanded}
       />
     )
-  ), [getBoxRef, group.fields, isExpanded, isVisible, level, parentExpanded, getParentRef, rightAlign, type]);
+  ), [getBoxRef, group.fields, isExpanded, isVisible, level, parentExpanded, getParentRef, rightAlign, lineConnectionSide]);
 
 
   return level === 0 ? <div ref={ref}>{content}</div> : (

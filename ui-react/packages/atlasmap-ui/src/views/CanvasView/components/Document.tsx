@@ -27,6 +27,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { DocumentType, IFieldsGroup } from '../../../models';
+import { FieldGroup } from './FieldGroup';
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -77,19 +79,17 @@ const styles = StyleSheet.create({
 export interface IDocumentProps {
   title: ReactElement | string;
   footer: ReactElement | string;
-  children: (props: {
-    getRef: () => HTMLElement | null;
-    isExpanded: boolean;
-    expandFields: boolean | undefined,
-  }) => ReactElement;
-  rightAlign?: boolean;
+  fields: IFieldsGroup;
+  type: DocumentType;
+  lineConnectionSide: 'left' | 'right'
 }
 
 export const Document: FunctionComponent<IDocumentProps> = ({
   title,
   footer,
-  children,
-  rightAlign = false,
+  type,
+  lineConnectionSide,
+  fields
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const [isExpanded, setIsExpanded] = useState(true);
@@ -99,6 +99,8 @@ export const Document: FunctionComponent<IDocumentProps> = ({
   const [expandFields, setExpandField] = useState<boolean | undefined>(undefined);
   const handleCollapseField = () => setExpandField(false);
   const handleExpandField = () => setExpandField(true);
+
+  const rightAlign = lineConnectionSide === 'left';
 
   useEffect(() => {
     if (expandFields !== undefined) {
@@ -138,7 +140,7 @@ export const Document: FunctionComponent<IDocumentProps> = ({
                   </DropdownItemIcon>
                   Collapse all
                 </DropdownItem>,
-                <DropdownSeparator />,
+                <DropdownSeparator key={'sep-1'} />,
                 <DropdownItem variant={'icon'} key={'delete'}>
                   <DropdownItemIcon>
                     <TrashIcon />
@@ -162,7 +164,16 @@ export const Document: FunctionComponent<IDocumentProps> = ({
               asDefinitionList={false}
               className={css(styles.accordion)}
             >
-              {children({ getRef, isExpanded, expandFields })}
+              <FieldGroup
+                isVisible={true}
+                group={fields}
+                getBoxRef={getRef}
+                documentType={type}
+                lineConnectionSide={lineConnectionSide}
+                rightAlign={rightAlign}
+                parentExpanded={isExpanded}
+                initiallyExpanded={expandFields}
+              />
             </Accordion>
           </div>
         </CardBody>

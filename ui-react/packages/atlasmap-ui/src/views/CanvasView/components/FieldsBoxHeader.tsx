@@ -27,14 +27,14 @@ import { FilePicker } from 'react-file-picker';
 export interface IFieldsBoxHeaderProps {
   title: string;
   onSearch: (content: string) => void;
-  onImportAtlasFile: (selectedFile: File, isSource: boolean) => void;
+  onImport: (selectedFile: File) => void;
   onJavaClasses: () => void;
 }
 
 export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
   title,
   onSearch,
-  onImportAtlasFile,
+  onImport,
   onJavaClasses,
 }) => {
   const [showActions, setShowActions] = useState(false);
@@ -82,16 +82,14 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
                     <FilePicker
                       extensions={['json', 'xml', 'xsd']}
                       onChange={(selectedFile: File) =>
-                        onImportAtlasFile(selectedFile, title === 'Source')}
+                        onImport(selectedFile)}
                       onError={(errMsg: any) => console.error(errMsg)}
                     >
-                      <Button variant={'plain'} aria-label="Import mappings">
-                        <div>Import</div>
-                      </Button>
+                      <div>Import</div>
                     </FilePicker>
                   </Tooltip>
                 </DropdownItem>,
-                <DropdownSeparator />,
+                <DropdownSeparator key={'sep-1'} />,
                 <DropdownItem
                   variant={'icon'}
                   key={'java-classes'}

@@ -29,7 +29,7 @@ import {
   useBoundingCanvasRect,
   useMappingNode,
 } from '../../../canvas';
-import { ElementId, ElementType, IMappings } from '../../../models';
+import { ElementId, DocumentType, IMappings } from '../../../models';
 import { IFieldElementDragSource } from './FieldElement';
 
 const styles = StyleSheet.create({
@@ -67,7 +67,7 @@ export interface IMappingElementProps {
   editMapping: () => void;
   addToMapping: (
     elementId: ElementId,
-    elementType: ElementType,
+    elementType: DocumentType,
     mappingId: string
   ) => void;
   mappingType: string;

@@ -1,7 +1,7 @@
 import { action } from '@storybook/addon-actions';
 import React, { createElement, useState } from 'react';
 import { Atlasmap } from '../src/atlasmap';
-import { ElementId, ElementType, IMappings } from '../src/models';
+import { ElementId, DocumentType, IMappings } from '../src/models';
 import { mappings as sampleMappings, sources, targets } from './sampleData';
 
 export default {
@@ -10,7 +10,7 @@ export default {
 
 export const sample = () => createElement(() => {
   const [mappings, setMappings] = useState<IMappings[]>(sampleMappings);
-  const addToMapping = (elementId: ElementId, elementType: ElementType, mappingId: string) => {
+  const addToMapping = (elementId: ElementId, elementType: DocumentType, mappingId: string) => {
     const updatedMappings = mappings.map(m => {
       if (m.id === mappingId) {
         if (elementType === 'source') {
@@ -30,6 +30,8 @@ export const sample = () => createElement(() => {
       mappings={mappings}
       addToMapping={addToMapping}
       onImportAtlasFile={action('importAtlasFile')}
+      onImportSourceDocument={action('onImportSourceDocument')}
+      onImportTargetDocument={action('onImportTargetDocument')}
       onExportAtlasFile={action('exportAtlasFile')}
       onResetAtlasmap={action('resetAtlasmap')}
       onSourceSearch={action('onSourceSearch')}
