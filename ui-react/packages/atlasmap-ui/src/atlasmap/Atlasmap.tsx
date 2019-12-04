@@ -8,7 +8,7 @@ import React, {
   useState,
 } from 'react';
 import { Loading } from '../common';
-import { ElementId, DocumentType, IFieldsGroup, IMappings, IFieldsNode } from '../views/CanvasView';
+import { ElementId, DocumentType, IFieldsGroup, IMappings, IFieldsNode, GroupId } from '../views/CanvasView';
 import {
   CanvasView,
   CanvasViewControlBar,
@@ -56,6 +56,7 @@ export interface IAtlasmapProps {
   onResetAtlasmap: () => void;
   onSourceSearch: (content: string) => void;
   onTargetSearch: (content: string) => void;
+  onDeleteDocument: (id: GroupId) => void;
 }
 
 export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
@@ -72,6 +73,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   onResetAtlasmap,
   onSourceSearch,
   onTargetSearch,
+  onDeleteDocument
 }) => {
   const [selectedMapping, setSelectedMapping] = useState<string>();
   const [isEditingMapping, setisEditingMapping] = useState(false);
@@ -207,6 +209,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
                           showType={showTypes}
                         />
                     }
+                    onDelete={() => onDeleteDocument(s.id)}
                   />
                 );
               })}
@@ -265,6 +268,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
                           showType={showTypes}
                         />
                     }
+                    onDelete={() => onDeleteDocument(t.id)}
                   />
                 );
               })}

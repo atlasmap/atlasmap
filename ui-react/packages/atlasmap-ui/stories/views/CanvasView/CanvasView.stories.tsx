@@ -46,6 +46,7 @@ export const sample = () => {
               lineConnectionSide={'right'}
               fields={s}
               renderNode={_ => <>test</>}
+              onDelete={action('onDelete Source')}
             />
           );
         })}
@@ -91,6 +92,7 @@ export const sample = () => {
               lineConnectionSide={'left'}
               fields={t}
               renderNode={_ => <>test</>}
+              onDelete={action('onDelete Target')}
             />
           );
         })}

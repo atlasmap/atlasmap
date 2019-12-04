@@ -13,6 +13,6 @@
   "scripts": {
     "build": "lerna run --stream build",
     "watch": "lerna run --ignore @atlasmap/standalone --parallel --no-bail start -- --verbose",
-    "standalone": "lerna run --scope @atlasmap/standalone start"
+    "standalone": "lerna run --stream --scope @atlasmap/standalone start"
   }
 }
