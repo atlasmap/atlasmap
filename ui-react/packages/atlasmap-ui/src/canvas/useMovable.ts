@@ -2,7 +2,7 @@ import clamp from 'lodash.clamp'
 import { useEffect } from 'react';
 import { useDrag } from 'react-use-gesture';
 import { useCanvas } from './CanvasContext';
-import { Coords } from '../models';
+import { Coords } from '../views/CanvasView/models';
 
 export interface IUseMovableArgs {
   id: string;

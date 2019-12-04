@@ -40,11 +40,12 @@ export const sample = () => {
           return (
             <Document
               key={s.id}
-              title={s.title}
+              title={s.name}
               footer={'Source document'}
               type={'source'}
               lineConnectionSide={'right'}
               fields={s}
+              renderNode={_ => <>test</>}
             />
           );
         })}
@@ -84,11 +85,12 @@ export const sample = () => {
           return (
             <Document
               key={t.id}
-              title={t.title}
+              title={t.name}
               footer={'Target document'}
               type={'target'}
               lineConnectionSide={'left'}
               fields={t}
+              renderNode={_ => <>test</>}
             />
           );
         })}

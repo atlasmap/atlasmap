@@ -8,13 +8,13 @@ export type BrowserRect = ClientRect | DOMRect;
 export type ElementId = string;
 export type DocumentType = 'source' | 'target';
 export type GroupId = string;
+
 export interface IFieldsNode {
   id: ElementId;
   name: string;
 }
 export interface IFieldsGroup {
   id: GroupId;
-  title: string;
   fields: (IFieldsNode | IFieldsGroup)[];
 }
 export interface IMappingField {

@@ -1,32 +1,36 @@
 import { IFieldsGroup, IFieldsNode, IMappingField, IMappings } from '@atlasmap/ui';
+import { IDocument, IDocumentField } from '@atlasmap/ui/src';
 import { DocumentDefinition, Field, MappedField, MappingDefinition } from '..';
 
-function fromFieldToIFieldsGroup(field: Field): IFieldsGroup {
+function fromFieldToIFieldsGroup(field: Field): IDocumentField & IFieldsGroup {
   return {
     id: `${field.docDef.uri}:${field.docDef.isSource ? 'source' : 'target'}:${field.uuid}`,
-    title: field.name,
+    name: field.name,
+    type: field.type,
     fields: field.children.map(fromFieldToIFields)
   }
 }
 
-function fromFieldToIFieldsNode(field: Field): IFieldsNode {
+function fromFieldToIFieldsNode(field: Field): IDocumentField & IFieldsNode {
   return {
     id: `${field.docDef.uri}:${field.docDef.isSource ? 'source' : 'target'}:${field.uuid}`,
-    name: field.getFieldLabel(false, false)
+    name: field.getFieldLabel(false, false),
+    type: field.type
   }
 }
 
-function fromFieldToIFields(field: Field): IFieldsGroup | IFieldsNode {
+function fromFieldToIFields(field: Field) {
   return field.children.length > 0
     ? fromFieldToIFieldsGroup(field)
     : fromFieldToIFieldsNode(field);
 }
 
-export function fromDocumentDefinitionToFieldGroup(def: DocumentDefinition): IFieldsGroup | null {
+export function fromDocumentDefinitionToFieldGroup(def: DocumentDefinition): IDocument | null {
   return def.visibleInCurrentDocumentSearch ? {
     id: def.id,
     fields: def.fields.map(fromFieldToIFields),
-    title: def.name
+    name: def.name,
+    type: def.type
   } : null;
 }
 

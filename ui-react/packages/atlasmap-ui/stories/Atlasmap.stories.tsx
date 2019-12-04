@@ -1,7 +1,7 @@
 import { action } from '@storybook/addon-actions';
 import React, { createElement, useState } from 'react';
 import { Atlasmap } from '../src/atlasmap';
-import { ElementId, DocumentType, IMappings } from '../src/models';
+import { ElementId, DocumentType, IMappings } from '../src/views/CanvasView';
 import { mappings as sampleMappings, sources, targets } from './sampleData';
 
 export default {

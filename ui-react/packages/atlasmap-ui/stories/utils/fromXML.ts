@@ -1,4 +1,4 @@
-import { IFieldsGroup } from '../../src/models';
+import { IDocument } from '../../src/atlasmap';
 
 interface Restrictions {
   restriction: any[];
@@ -59,11 +59,13 @@ export interface XMLObject {
 export function xmlToFieldGroup(xml: XMLObject, idPrefix: string) {
   const fromElement = (jf: XmlField) => ({
     id: `${idPrefix}-${jf.path}`,
-    name: jf.name
+    name: jf.name,
+    type: jf.fieldType,
   });
 
-  const fromGroup = (f: Field): IFieldsGroup => ({
-    title: f.name,
+  const fromGroup = (f: Field): IDocument => ({
+    name: f.name,
+    type: f.fieldType,
     id: `${idPrefix}-${f.path}`,
     fields: f.xmlFields.xmlField.map(
       f => f.xmlFields ? fromGroup(f as Field) : fromElement(f)

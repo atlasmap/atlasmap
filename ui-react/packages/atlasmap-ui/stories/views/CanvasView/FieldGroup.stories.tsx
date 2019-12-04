@@ -1,5 +1,5 @@
 import React from 'react';
-import { boolean, text } from '@storybook/addon-knobs';
+import { boolean } from '@storybook/addon-knobs';
 import { FieldGroup } from '../../../src/views/CanvasView';
 
 export default {
@@ -14,10 +14,10 @@ export const interactiveExample = () => (
     lineConnectionSide={'right'}
     group={{
       fields: [],
-      id: 'text-id',
-      title: text('Group title', 'Sample title'),
+      id: 'text-id'
     }}
     getBoxRef={() => null}
     parentExpanded={boolean('Parent expanded', true)}
+    renderNode={_ => <>test</>}
   />
 );

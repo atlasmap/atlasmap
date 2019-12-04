@@ -1,5 +1,5 @@
 import React, { FunctionComponent, HTMLAttributes, useEffect, useState } from 'react';
-import { Coords } from '../models';
+import { Coords } from '../views/CanvasView/models';
 import { useMovable } from './useMovable';
 
 export interface ICanvasObjectProps extends HTMLAttributes<SVGForeignObjectElement> {
