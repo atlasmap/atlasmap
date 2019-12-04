@@ -22,12 +22,7 @@ import {
   FolderOpenIcon,
 } from '@patternfly/react-icons';
 import { css, StyleSheet } from '@patternfly/react-styles';
-import React, {
-  ReactElement,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import { DocumentType, IFieldsGroup, IFieldsNode } from '../models';
 import { FieldGroup } from './FieldGroup';
 
@@ -84,6 +79,7 @@ export interface IDocumentProps<NodeType> {
   type: DocumentType;
   lineConnectionSide: 'left' | 'right';
   renderNode: (node: NodeType & (IFieldsGroup | IFieldsNode)) => ReactElement;
+  onDelete: () => void;
 }
 
 export function Document<NodeType>({
@@ -93,6 +89,7 @@ export function Document<NodeType>({
   lineConnectionSide,
   fields,
   renderNode,
+  onDelete
 }: IDocumentProps<NodeType>) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [isExpanded, setIsExpanded] = useState(true);
@@ -153,7 +150,11 @@ export function Document<NodeType>({
                   Collapse all
                 </DropdownItem>,
                 <DropdownSeparator key={'sep-1'} />,
-                <DropdownItem variant={'icon'} key={'delete'}>
+                <DropdownItem
+                  variant={'icon'}
+                  key={'delete'}
+                  onClick={onDelete}
+                >
                   <DropdownItemIcon>
                     <TrashIcon />
                   </DropdownItemIcon>
@@ -201,4 +202,4 @@ export function Document<NodeType>({
       </Card>
     </div>
   );
-};
+}

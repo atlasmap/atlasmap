@@ -36,6 +36,7 @@ export const sample = () => createElement(() => {
       onResetAtlasmap={action('resetAtlasmap')}
       onSourceSearch={action('onSourceSearch')}
       onTargetSearch={action('onTargetSearch')}
+      onDeleteDocument={action('onDeleteDocument')}
       pending={false}
       error={false}
     />
