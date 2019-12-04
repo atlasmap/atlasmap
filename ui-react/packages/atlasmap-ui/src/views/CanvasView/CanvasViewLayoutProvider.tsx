@@ -1,6 +1,6 @@
 import React, { createContext, FunctionComponent, useContext } from 'react';
 import { useCanvas } from '../../canvas';
-import { Coords } from '../../models';
+import { Coords } from './models';
 
 interface ICanvasViewLayoutContext {
   boxHeight: number;

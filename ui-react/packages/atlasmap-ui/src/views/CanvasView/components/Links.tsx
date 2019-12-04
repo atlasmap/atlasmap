@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { CanvasLink } from '../../../canvas';
-import { IMappings } from '../../../models';
+import { IMappings } from '../models';
 import { useCanvasViewContext } from '../CanvasViewProvider';
 import { useMappingLinks } from './useMappingLinks';
 import { useSourceTargetLinks } from './useSourceTargetLinks';

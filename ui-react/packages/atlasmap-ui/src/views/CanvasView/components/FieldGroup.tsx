@@ -2,18 +2,21 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionToggle,
+  Split,
+  SplitItem,
 } from '@patternfly/react-core';
 import { FolderOpenIcon, FolderCloseIcon } from '@patternfly/react-icons';
 import { css, StyleSheet } from '@patternfly/react-styles';
 import React, {
-  FunctionComponent,
+  ReactElement,
   useCallback,
-  useEffect, useMemo,
+  useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
 import { useBoundingCanvasRect, useMappingNode } from '../../../canvas';
-import { DocumentType, IFieldsGroup, IFieldsNode } from '../../../models';
+import { DocumentType, IFieldsGroup, IFieldsNode } from '../models';
 import { FieldElement } from './FieldElement';
 
 const styles = StyleSheet.create({
@@ -27,7 +30,7 @@ const styles = StyleSheet.create({
       direction: 'ltr',
       flex: 1,
       order: 1,
-    }
+    },
   },
   buttonContentRightAligned: {
     transform: 'scaleX(-1)',
@@ -38,16 +41,16 @@ const styles = StyleSheet.create({
   content: {
     fontSize: 'inherit !important',
     '& > div': {
-      padding: 'var(--pf-c-accordion__expanded-content-body--PaddingTop) 0.5rem var(--pf-c-accordion__expanded-content-body--PaddingBottom) 0.5rem !important'
-    }
+      padding:
+        'var(--pf-c-accordion__expanded-content-body--PaddingTop) 0.5rem var(--pf-c-accordion__expanded-content-body--PaddingBottom) 0.5rem !important',
+    },
   },
-  contentRightAligned: {
-    '& > div': {
-    }
+  fieldsWrapper: {
+    direction: 'ltr'
   },
 });
 
-export interface IFieldGroupProps {
+export interface IFieldGroupProps<NodeType> {
   isVisible: boolean;
   group: IFieldsGroup;
   lineConnectionSide: 'left' | 'right';
@@ -58,8 +61,11 @@ export interface IFieldGroupProps {
   level?: number;
   parentExpanded: boolean;
   initiallyExpanded?: boolean;
+  renderNode: (
+    node: NodeType & IFieldsGroup | NodeType & IFieldsNode
+  ) => ReactElement;
 }
-export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
+export function FieldGroup<NodeType>({
   isVisible,
   group,
   lineConnectionSide,
@@ -69,8 +75,9 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
   rightAlign = false,
   level = 0,
   parentExpanded,
-  initiallyExpanded
-}) => {
+  initiallyExpanded,
+  renderNode,
+}: IFieldGroupProps<NodeType>) {
   const getBoundingCanvasRect = useBoundingCanvasRect();
   const { setLineNode } = useMappingNode();
   const ref = useRef<HTMLDivElement | null>(null);
@@ -82,7 +89,7 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
 
   useEffect(() => {
     if (initiallyExpanded !== undefined) {
-      setIsExpanded(initiallyExpanded)
+      setIsExpanded(initiallyExpanded);
     }
   }, [initiallyExpanded]);
 
@@ -105,10 +112,10 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
   const handleChildLines = useCallback(() => {
     if (!isExpanded) {
       const traverseChildren = (f: IFieldsGroup | IFieldsNode) => {
-        if ((f as IFieldsNode).name) {
-          setLineNode(f.id, getChildCoords);
-        } else {
+        if ((f as IFieldsGroup).fields) {
           (f as IFieldsGroup).fields.forEach(traverseChildren);
+        } else {
+          setLineNode(f.id, getChildCoords);
         }
       };
       group.fields.forEach(traverseChildren);
@@ -119,43 +126,69 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
     handleChildLines();
   }, [handleChildLines, parentExpanded]);
 
-  const content = useMemo(() =>
-    group.fields.map(f =>
-    (f as IFieldsNode).name ? (
-      <FieldElement
-        key={f.id}
-        documentType={documentType}
-        lineConnectionSide={lineConnectionSide}
-        getParentRef={() =>
-          isVisible && isExpanded
-            ? ref.current
-            : isVisible || !getParentRef
-            ? ref.current
-            : getParentRef()
-        }
-        getBoxRef={getBoxRef}
-        node={f as IFieldsNode}
-        rightAlign={rightAlign}
-      />
-    ) : (
-      <FieldGroup
-        isVisible={isVisible && isExpanded}
-        lineConnectionSide={lineConnectionSide}
-        documentType={documentType}
-        getParentRef={() => isVisible || !getParentRef ? ref.current : getParentRef()}
-        group={f as IFieldsGroup}
-        getBoxRef={getBoxRef}
-        rightAlign={rightAlign}
-        key={f.id}
-        level={level + 1}
-        parentExpanded={parentExpanded}
-        initiallyExpanded={initiallyExpanded}
-      />
-    )
-  ), [getBoxRef, group.fields, isExpanded, isVisible, level, parentExpanded, getParentRef, rightAlign, lineConnectionSide]);
+  const content = useMemo(
+    () =>
+      group.fields.map(f =>
+        !(f as IFieldsGroup).fields ? (
+          <FieldElement
+            key={f.id}
+            documentType={documentType}
+            lineConnectionSide={lineConnectionSide}
+            getParentRef={() =>
+              isVisible && isExpanded
+                ? ref.current
+                : isVisible || !getParentRef
+                ? ref.current
+                : getParentRef()
+            }
+            getBoxRef={getBoxRef}
+            node={f as IFieldsNode}
+            rightAlign={rightAlign}
+          >
+            {renderNode(f as NodeType & IFieldsNode)}
+          </FieldElement>
+        ) : (
+          <FieldGroup
+            isVisible={isVisible && isExpanded}
+            lineConnectionSide={lineConnectionSide}
+            documentType={documentType}
+            getParentRef={() =>
+              isVisible || !getParentRef ? ref.current : getParentRef()
+            }
+            group={f as IFieldsGroup}
+            getBoxRef={getBoxRef}
+            rightAlign={rightAlign}
+            key={f.id}
+            level={level + 1}
+            parentExpanded={parentExpanded}
+            initiallyExpanded={initiallyExpanded}
+            renderNode={renderNode}
+          />
+        )
+      ),
+    [
+      getBoxRef,
+      group.fields,
+      isExpanded,
+      isVisible,
+      level,
+      parentExpanded,
+      getParentRef,
+      rightAlign,
+      lineConnectionSide,
+    ]
+  );
 
-
-  return level === 0 ? <div ref={ref}>{content}</div> : (
+  return level === 0 ? (
+    <div
+      ref={ref}
+      className={css(
+        styles.fieldsWrapper
+      )}
+    >
+      {content}
+    </div>
+  ) : (
     <AccordionItem>
       <AccordionToggle
         onClick={toggleExpand}
@@ -167,16 +200,25 @@ export const FieldGroup: FunctionComponent<IFieldGroupProps> = ({
           ref={ref}
           className={css(rightAlign && styles.buttonContentRightAligned)}
         >
-          {isExpanded ? <FolderOpenIcon /> : <FolderCloseIcon />} {group.title}
+          <Split>
+            <SplitItem style={{ paddingRight: '0.5rem' }}>
+              {isExpanded ? <FolderOpenIcon /> : <FolderCloseIcon />}
+            </SplitItem>
+            <SplitItem isFilled={true}>
+              {renderNode(group as NodeType & IFieldsGroup)}
+            </SplitItem>
+          </Split>
         </span>
       </AccordionToggle>
       <AccordionContent
         id={`source-field-group-${group.id}-content`}
         isHidden={!isExpanded}
-        className={css(styles.content, rightAlign && styles.contentRightAligned)}
+        className={css(
+          styles.content
+        )}
       >
         {content}
       </AccordionContent>
     </AccordionItem>
   );
-};
+}

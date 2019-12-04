@@ -1,4 +1,4 @@
-import { IFieldsGroup, IMappings } from '@atlasmap/ui/src';
+import { IDocument, IFieldsGroup, IMappings } from '@atlasmap/ui';
 import ky from 'ky';
 import React, { createContext, FunctionComponent, useCallback, useContext, useEffect, useMemo, useReducer } from 'react';
 import { timer } from 'rxjs';
@@ -168,8 +168,8 @@ export function useAtlasmap({
 }: IUseAtlasmapArgs = {}): {
   pending: boolean;
   error: boolean;
-  sources: IFieldsGroup[];
-  targets: IFieldsGroup[];
+  sources: IDocument[];
+  targets: IDocument[];
   mappings: IMappings[];
   exportAtlasFile: () => void;
   importAtlasFile: (file: File, isSource: boolean) => void;
@@ -214,8 +214,8 @@ export function useAtlasmap({
     () => ({
       pending: pending,
       error: error,
-      sources: sourceDocs.map(fromDocumentDefinitionToFieldGroup).filter(d => d) as IFieldsGroup[],
-      targets: targetDocs.map(fromDocumentDefinitionToFieldGroup).filter(d => d) as IFieldsGroup[],
+      sources: sourceDocs.map(fromDocumentDefinitionToFieldGroup).filter(d => d) as IDocument[],
+      targets: targetDocs.map(fromDocumentDefinitionToFieldGroup).filter(d => d) as IDocument[],
       mappings: fromMappingDefinitionToIMappings(mappingDefinition),
       exportAtlasFile: exportAtlasFile,
       importAtlasFile: handleImportAtlasFile,

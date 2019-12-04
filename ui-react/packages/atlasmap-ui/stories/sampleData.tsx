@@ -902,12 +902,14 @@ const XMLInstanceSource: XMLObject = {
 export const sources = [
   {
     id: 'JSONInstanceSource',
-    title: 'JSONInstanceSource',
+    name: 'JSONInstanceSource',
+    type: 'JSON',
     fields: jsonToFieldGroup(mockJSONInstanceSource, 'JSONInstanceSource'),
   },
   {
     id: 'JSONSchemaSource',
-    title: 'JSONSchemaSource',
+    name: 'JSONSchemaSource',
+    type: 'JSON',
     fields: jsonToFieldGroup(mockJSONSchemaSource, 'JSONSchemaSource'),
   },
 ];
@@ -915,17 +917,20 @@ export const sources = [
 export const targets = [
   {
     id: 'XMLInstanceSource',
-    title: 'XMLInstanceSource',
+    name: 'XMLInstanceSource',
+    type: 'XML',
     fields: xmlToFieldGroup(XMLInstanceSource, 'XMLInstanceSource'),
   },
   {
     id: 'XMLSchemaSource',
-    title: 'XMLSchemaSource',
+    name: 'XMLSchemaSource',
+    type: 'XML',
     fields: xmlToFieldGroup(XMLSchemaSource, 'XMLSchemaSource'),
   },
   {
     id: 'io.paul.Bicycle',
-    title: 'io.paul.Bicycle',
+    name: 'io.paul.Bicycle',
+    type: 'JAVA',
     fields: javaToFieldGroup(ioPaulBicycle, 'io.paul.Bicycle'),
   },
 ];

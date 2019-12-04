@@ -5,7 +5,7 @@ import {
   useRef,
   MutableRefObject,
 } from 'react';
-import { BrowserRect } from '../models';
+import { BrowserRect } from '../views/CanvasView/models';
 
 export interface UseDimensionsArgs {
   liveMeasure?: boolean;

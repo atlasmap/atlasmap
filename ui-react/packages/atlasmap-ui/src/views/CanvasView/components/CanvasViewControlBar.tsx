@@ -1,6 +1,6 @@
 import {
   createTopologyControlButtons,
-  TopologyControlBar,
+  TopologyControlBar, TopologyControlButton,
 } from '@patternfly/react-topology';
 import React, { FunctionComponent, useCallback, useMemo } from 'react';
 import {
@@ -9,14 +9,15 @@ import {
   ExpandArrowsAltIcon,
   ExpandIcon,
   PficonDragdropIcon,
-  LinkIcon,
-  InfoIcon,
-  ConnectedIcon,
-  DisconnectedIcon, EyeIcon
+  LinkIcon
 } from '@patternfly/react-icons';
 import { useCanvasViewContext } from '../CanvasViewProvider';
 
-export const CanvasViewControlBar: FunctionComponent = () => {
+export interface ICanvasViewControlBarProps {
+  extraButtons?: TopologyControlButton[]
+}
+
+export const CanvasViewControlBar: FunctionComponent<ICanvasViewControlBarProps> = ({ extraButtons = [] }) => {
   const { updateZoom,
     resetZoom,
     resetPan,
@@ -94,33 +95,10 @@ export const CanvasViewControlBar: FunctionComponent = () => {
             ariaLabel: ' ',
             callback: toggleMaterializedMappings
           },
-          {
-            id: 'Show types',
-            icon: <InfoIcon />,
-            tooltip: 'Show types',
-            ariaLabel: ' ',
-          },
-          {
-            id: 'Show mapped fields',
-            icon: <ConnectedIcon />,
-            tooltip: 'Show mapped fields',
-            ariaLabel: ' ',
-          },
-          {
-            id: 'Show unmapped fields',
-            icon: <DisconnectedIcon />,
-            tooltip: 'Show unmapped fields',
-            ariaLabel: ' ',
-          },
-          {
-            id: 'Show mapping preview',
-            icon: <EyeIcon />,
-            tooltip: 'Show mapping preview',
-            ariaLabel: ' ',
-          },
+          ...extraButtons
         ],
       }),
-    [handleZoomIn, handleZoomOut, handleViewReset, toggleFreeView, toggleMaterializedMappings]
+    [freeView, handleZoomIn, handleZoomOut, handleViewReset, toggleFreeView, toggleMaterializedMappings, extraButtons]
   );
 
   return (

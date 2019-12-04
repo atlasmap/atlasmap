@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Coords } from '../models';
+import { Coords } from '../views/CanvasView/models';
 import { useCanvas } from './CanvasContext';
 
 export type SourceTargetNodes = {

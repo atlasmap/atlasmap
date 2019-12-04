@@ -1,7 +1,7 @@
 import React, { FunctionComponent, HTMLAttributes, ReactElement, useEffect } from 'react';
 import { CanvasObject, useCanvas } from '../../../canvas';
 import { useDimensions } from '../../../common';
-import { Coords } from '../../../models';
+import { Coords } from '../models';
 import { useCanvasViewContext } from '../CanvasViewProvider';
 import { Box } from './Box';
 

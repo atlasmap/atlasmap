@@ -8,7 +8,8 @@ import {
   CardHead,
   CardHeader,
   Dropdown,
-  DropdownItem, DropdownItemIcon,
+  DropdownItem,
+  DropdownItemIcon,
   DropdownSeparator,
   DropdownToggle,
   DropdownToggleAction,
@@ -22,12 +23,12 @@ import {
 } from '@patternfly/react-icons';
 import { css, StyleSheet } from '@patternfly/react-styles';
 import React, {
-  FunctionComponent,
-  ReactElement, useEffect,
+  ReactElement,
+  useEffect,
   useRef,
   useState,
 } from 'react';
-import { DocumentType, IFieldsGroup } from '../../../models';
+import { DocumentType, IFieldsGroup, IFieldsNode } from '../models';
 import { FieldGroup } from './FieldGroup';
 
 const styles = StyleSheet.create({
@@ -76,27 +77,31 @@ const styles = StyleSheet.create({
   },
 });
 
-export interface IDocumentProps {
+export interface IDocumentProps<NodeType> {
   title: ReactElement | string;
   footer: ReactElement | string;
   fields: IFieldsGroup;
   type: DocumentType;
-  lineConnectionSide: 'left' | 'right'
+  lineConnectionSide: 'left' | 'right';
+  renderNode: (node: NodeType & (IFieldsGroup | IFieldsNode)) => ReactElement;
 }
 
-export const Document: FunctionComponent<IDocumentProps> = ({
+export function Document<NodeType>({
   title,
   footer,
   type,
   lineConnectionSide,
-  fields
-}) => {
+  fields,
+  renderNode,
+}: IDocumentProps<NodeType>) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [isExpanded, setIsExpanded] = useState(true);
   const toggleIsExpanded = () => setIsExpanded(!isExpanded);
   const [showActions, setShowActions] = useState(false);
   const toggleActions = (open: boolean) => setShowActions(open);
-  const [expandFields, setExpandField] = useState<boolean | undefined>(undefined);
+  const [expandFields, setExpandField] = useState<boolean | undefined>(
+    undefined
+  );
   const handleCollapseField = () => setExpandField(false);
   const handleExpandField = () => setExpandField(true);
 
@@ -123,9 +128,12 @@ export const Document: FunctionComponent<IDocumentProps> = ({
               toggle={
                 <DropdownToggle
                   splitButtonItems={[
-                    <DropdownToggleAction key="action" onClick={handleExpandField}>
+                    <DropdownToggleAction
+                      key="action"
+                      onClick={handleExpandField}
+                    >
                       <FolderOpenIcon />
-                    </DropdownToggleAction>
+                    </DropdownToggleAction>,
                   ]}
                   splitButtonVariant="action"
                   onToggle={toggleActions}
@@ -134,7 +142,11 @@ export const Document: FunctionComponent<IDocumentProps> = ({
               isOpen={showActions}
               position={'right'}
               dropdownItems={[
-                <DropdownItem variant={'icon'} key={'collapse'} onClick={handleCollapseField}>
+                <DropdownItem
+                  variant={'icon'}
+                  key={'collapse'}
+                  onClick={handleCollapseField}
+                >
                   <DropdownItemIcon>
                     <FolderCloseIcon />
                   </DropdownItemIcon>
@@ -173,6 +185,7 @@ export const Document: FunctionComponent<IDocumentProps> = ({
                 rightAlign={rightAlign}
                 parentExpanded={isExpanded}
                 initiallyExpanded={expandFields}
+                renderNode={renderNode}
               />
             </Accordion>
           </div>

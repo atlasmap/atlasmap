@@ -1,4 +1,4 @@
-import { IFieldsGroup } from '../../src/models';
+import { IDocument } from '../../src/atlasmap';
 
 interface Modifiers {
   modifier: string[];
@@ -71,10 +71,12 @@ export interface JavaObject {
 export function javaToFieldGroup(java: JavaObject, idPrefix: string) {
   const fromElement = (jf: JavaField) => ({
     id: `${idPrefix}-${jf.path}`,
-    name: jf.name
+    name: jf.name,
+    type: jf.fieldType
   });
-  const fromGroup = (f: JavaField): IFieldsGroup => ({
-    title: f.name,
+  const fromGroup = (f: JavaField): IDocument => ({
+    name: f.name,
+    type: f.fieldType,
     id: `${idPrefix}-${f.path}`,
     fields: f.javaFields!.javaField.map(f => f.javaFields ? fromGroup(f as JavaField) : fromElement(f))
   });

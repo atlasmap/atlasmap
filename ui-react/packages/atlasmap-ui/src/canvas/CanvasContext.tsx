@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 import { createContext, FunctionComponent, useContext } from 'react';
 import { scaleLinear } from 'd3-scale';
-import { Rect, Rects } from '../models';
+import { Rect, Rects } from '../views/CanvasView/models';
 
 type RedrawCallback = () => unknown;
 type RedrawCallbacks = Array<RedrawCallback>;

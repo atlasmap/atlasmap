@@ -1,6 +1,6 @@
 import React, { createContext, FunctionComponent, useCallback, useContext, useState } from 'react';
 import { useGesture } from 'react-use-gesture';
-import { Coords } from '../../models';
+import { Coords } from './models';
 
 interface ICanvasViewContext {
   zoom: number;

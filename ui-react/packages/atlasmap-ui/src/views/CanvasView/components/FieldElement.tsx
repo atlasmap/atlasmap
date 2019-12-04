@@ -1,9 +1,14 @@
 import { css, StyleSheet } from '@patternfly/react-styles';
-import React, { FunctionComponent, useCallback, useEffect, useRef } from 'react';
+import React, {
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useRef,
+} from 'react';
 import { useDrag } from 'react-dnd';
-import { getEmptyImage } from 'react-dnd-html5-backend'
+import { getEmptyImage } from 'react-dnd-html5-backend';
 import { useBoundingCanvasRect, useMappingNode } from '../../../canvas';
-import { ElementId, DocumentType, IFieldsNode } from '../../../models';
+import { ElementId, DocumentType, IFieldsNode } from '../models';
 
 const styles = StyleSheet.create({
   element: {
@@ -40,6 +45,7 @@ export const FieldElement: FunctionComponent<IFieldElementProps> = ({
   getParentRef,
   getBoxRef,
   rightAlign = false,
+  children,
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -61,30 +67,30 @@ export const FieldElement: FunctionComponent<IFieldElementProps> = ({
         ),
       };
     }
-    // if (node.id === 'io.paul.Bicycle-/serialId')
-    // console.log(node.id, ref.current, parentRef, boxRef)
     return null;
-  }, [getBoundingCanvasRect, getBoxRef, getParentRef, documentType]);
+  }, [getParentRef, getBoxRef, getBoundingCanvasRect, lineConnectionSide]);
 
-  const [{ opacity }, dragRef, preview] = useDrag<
+  const [{ color }, dragRef, preview] = useDrag<
     IFieldElementDragSource,
     undefined,
-    { opacity: number }
-    >({
+    { color: string | undefined }
+  >({
     item: { id: node.id, type: documentType, name: node.name },
     collect: monitor => ({
-      opacity: monitor.isDragging() ? 0.4 : 1,
+      color: monitor.isDragging()
+        ? 'var(--pf-global--primary-color--100)'
+        : undefined,
     }),
     begin: () => {
       setLineNode('dragsource', getCoords);
-    }
+    },
   });
 
   useEffect(() => {
     setLineNode(node.id, getCoords);
     return () => {
       unsetLineNode(node.id);
-    }
+    };
   }, [node, setLineNode, unsetLineNode, getCoords]);
 
   const handleRef = (el: HTMLDivElement) => {
@@ -93,16 +99,16 @@ export const FieldElement: FunctionComponent<IFieldElementProps> = ({
   };
 
   useEffect(() => {
-    preview(getEmptyImage(), { captureDraggingState: true })
+    preview(getEmptyImage(), { captureDraggingState: true });
   }, [preview]);
 
   return (
     <div
       ref={handleRef}
       className={css(styles.element, rightAlign && styles.rightAlign)}
-      style={{ opacity }}
+      style={{ color }}
     >
-      {node.name}
+      {children}
     </div>
   );
 };

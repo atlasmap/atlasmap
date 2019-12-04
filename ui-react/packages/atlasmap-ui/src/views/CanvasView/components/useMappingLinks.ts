@@ -2,7 +2,7 @@ import { scaleSequential } from 'd3-scale';
 import { interpolateRainbow } from 'd3-scale-chromatic';
 import { useMemo } from 'react';
 import { SourceTargetNodes, useCanvasLinks } from '../../../canvas';
-import { IMappings } from '../../../models';
+import { IMappings } from '../models';
 
 export interface IUseMappingsLinksArgs {
   mappings: IMappings[];

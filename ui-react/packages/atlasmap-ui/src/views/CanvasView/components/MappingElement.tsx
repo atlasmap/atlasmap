@@ -29,7 +29,7 @@ import {
   useBoundingCanvasRect,
   useMappingNode,
 } from '../../../canvas';
-import { ElementId, DocumentType, IMappings } from '../../../models';
+import { ElementId, DocumentType, IMappings } from '../models';
 import { IFieldElementDragSource } from './FieldElement';
 
 const styles = StyleSheet.create({
