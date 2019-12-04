@@ -159,7 +159,7 @@ public class AtlasService {
                 atlasDir.mkdirs();
             }
 
-            resetMappings(0); // resets default mapping (id = 0)
+            resetMappingById(0); // resets default mapping (id = 0)
             Files.copy(admPath.toAbsolutePath(),
                 Paths.get(mappingFolderPath.toAbsolutePath().toString() + File.separator + generateMappingFileNameFromId(0, ADM)),
                 StandardCopyOption.REPLACE_EXISTING);
@@ -197,7 +197,7 @@ public class AtlasService {
     @GET
     @Path("/mappings/{mappingId}")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "List Mappings", notes = "Retrieves a list of mapping file name saved on the server")
+    @ApiOperation(value = "List Mappings", notes = "Retrieves a list of mapping file name saved with specified mappingId")
     @ApiResponses(@ApiResponse(code = 200, response = StringMap.class, message = "Return a list of a pair of mapping file name and content"))
     public Response listMappings(@Context UriInfo uriInfo, @QueryParam("filter") final String filter,
                                  @ApiParam("Mapping ID") @PathParam("mappingId") Integer mappingId) {
@@ -273,12 +273,12 @@ public class AtlasService {
     @DELETE
     @Path("/mapping/RESET/{mappingId}")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Remove All Mappings", notes = "Remove all mapping files saved on the server")
+    @ApiOperation(value = "Remove Mapping by ID", notes = "Remove mapping file and catalogs related to specified ID")
     @ApiResponses({
-        @ApiResponse(code = 200, message = "All mapping files were removed successfully"),
-        @ApiResponse(code = 204, message = "Unable to remove all mapping files")})
-    public Response resetMappings(@ApiParam("Mapping ID") @PathParam("mappingId") Integer mappingId) {
-        LOG.debug("resetMappings {} ", mappingId);
+        @ApiResponse(code = 200, message = "Mapping file and Catalogs were removed successfully"),
+        @ApiResponse(code = 204, message = "Unable to remove mapping file and Catalogs for the specified ID")})
+    public Response resetMappingById(@ApiParam("Mapping ID") @PathParam("mappingId") Integer mappingId) {
+        LOG.debug("resetMappingById {} ", mappingId);
 
         java.nio.file.Path mappingFolderPath = Paths.get(getMappingSubDirectory(mappingId));
         File[] mappings = mappingFolderPath.toFile().listFiles();
@@ -291,6 +291,35 @@ public class AtlasService {
         mappings = Arrays.stream(mappings)
             .filter(file -> filesToDelete.contains(file.getName()))
             .toArray(File[]::new);
+
+        try {
+
+            for (File mappingFile: mappings) {
+                AtlasUtil.deleteDirectory(mappingFile);
+            }
+
+        } catch (Exception e) {
+            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
+        }
+        return Response.ok().build();
+    }
+
+    @DELETE
+    @Path("/mapping/RESET/ALL")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Remove All Mappings", notes = "Remove all mapping files and catalogs saved on the server")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "All mapping files were removed successfully"),
+        @ApiResponse(code = 204, message = "Unable to remove all mapping files")})
+    public Response resetAllMappings() {
+        LOG.debug("resetAllMappings");
+
+        java.nio.file.Path mappingFolderPath = Paths.get(mappingFolder);
+        File[] mappings = mappingFolderPath.toFile().listFiles();
+
+        if (mappings == null) {
+            return Response.ok().build();
+        }
 
         try {
 
