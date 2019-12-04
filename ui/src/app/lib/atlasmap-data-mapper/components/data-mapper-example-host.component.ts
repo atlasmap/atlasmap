@@ -44,7 +44,7 @@ export class DataMapperAppExampleHostComponent implements OnInit {
     // initialize config information before initializing services
     const c: ConfigModel = this.initializationService.cfg;
     //
-    c.mappingId = this.mappingIdentifierService.getCurrentMappingId();
+    c.mappingDefinitionId = this.mappingIdentifierService.getCurrentMappingDefinitionId();
 
     // store references to our services in our config model
 

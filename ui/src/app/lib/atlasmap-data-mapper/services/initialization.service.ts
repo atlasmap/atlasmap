@@ -226,7 +226,7 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
         // If catalog is null then no compressed mappings catalog is available on the server.
         if (catalog === null) {
           if (this.cfg.mappings === null) {
-            this.cfg.mappings = new MappingDefinition(this.cfg.mappingId);
+            this.cfg.mappings = new MappingDefinition(this.cfg.mappingDefinitionId);
           }
 
           // load field actions - do this even with no documents so the default field actions are loaded.
@@ -253,14 +253,14 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
 
         // load mappings
         if (this.cfg.mappings == null) {
-          this.cfg.mappings = new MappingDefinition(this.cfg.mappingId);
+          this.cfg.mappings = new MappingDefinition(this.cfg.mappingDefinitionId);
           if (this.cfg.mappingFiles.length > 0) {
-            await this.fetchMappingById(this.cfg.mappingId);
+            await this.fetchMappingById(this.cfg.mappingDefinitionId);
           } else {
             this.cfg.fileService.findMappingFiles('UI').toPromise()
               .then( async(files: string[]) => {
                 // It's okay if no mapping files are found - resolve false so the caller will know.
-                if (!await this.fetchMappingById(this.cfg.mappingId)) {
+                if (!await this.fetchMappingById(this.cfg.mappingDefinitionId)) {
                   resolve(false);
                 }
               },
@@ -349,7 +349,7 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
       // Update .../target/mappings/adm-catalog-files.gz
       const fileContent: Blob = new Blob([compressedCatalog], {type: 'application/octet-stream'});
       this.cfg.fileService.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/'
-        + this.cfg.mappingId).toPromise()
+        + this.cfg.mappingDefinitionId).toPromise()
         .then(async(result: boolean) => {
         resolve(true);
       }).catch((error: any) => {
@@ -388,7 +388,7 @@ ${error.status} ${error.statusText}`,
         if (mInfo && mInfo.exportMappings) {
           const catalogMappingsName = MappingSerializer.deserializeAtlasMappingName(
             DocumentManagementService.getMappingsInfo(mInfo.exportMappings.value),
-            this.cfg.mappingId);
+            this.cfg.mappingDefinitionId);
 
             // UI file.
             this.cfg.fileService.findMappingFiles('UI').toPromise()
@@ -525,13 +525,13 @@ ${error.status} ${error.statusText}`,
     });
   }
 
-  async fetchMappingById(mappingId: any): Promise<boolean> {
+  async fetchMappingById(mappingDefinitionId: any): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      if (mappingId == null) {
+      if (mappingDefinitionId == null) {
         resolve(false);
       }
 
-      this.cfg.mappingService.fetchMappings([mappingId], this.cfg.mappings).toPromise()
+      this.cfg.mappingService.fetchMappings([mappingDefinitionId], this.cfg.mappings).toPromise()
         .then((result: boolean) => {
           this.cfg.initCfg.mappingInitialized = true;
           this.updateStatus();

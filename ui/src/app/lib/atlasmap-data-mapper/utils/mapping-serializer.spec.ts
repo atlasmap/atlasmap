@@ -35,7 +35,7 @@ describe('MappingSerializer', () => {
     cfg = ConfigModel.getConfig();
     cfg.clearDocs();
     cfg.mappings = new MappingDefinition(0);
-    cfg.mappingId = 0;
+    cfg.mappingDefinitionId = 0;
     cfg.errorService = TestBed.get(ErrorHandlerService);
     cfg.fieldActionService = TestBed.get(FieldActionService);
     cfg.fieldActionService.cfg = cfg;

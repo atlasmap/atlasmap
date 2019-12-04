@@ -53,7 +53,7 @@ export class FileManagementService {
 
   findMappingFiles(filter: string): Observable<string[]> {
     return new Observable<string[]>((observer: any) => {
-      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mappings/' + this.cfg.mappingId
+      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mappings/' + this.cfg.mappingDefinitionId
         + (filter == null ? '' : '?filter=' + filter);
       this.cfg.logger.trace('Mapping List Request');
       this.http.get(url, { headers: this.headers }).toPromise().then((body: any) => {
@@ -83,7 +83,7 @@ export class FileManagementService {
   getCurrentMappingCatalog(): Observable<Uint8Array> {
     return new Observable<Uint8Array>((observer: any) => {
       const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/';
-      const url: string = baseURL + this.getMappingId();
+      const url: string = baseURL + this.getMappingDefinitionId();
       this.cfg.logger.trace('Mapping Catalog Request');
       const catHeaders = new HttpHeaders(
         { 'Content-Type':  'application/octet-stream',
@@ -109,7 +109,7 @@ export class FileManagementService {
   getCurrentADMCatalog(): Observable<Uint8Array> {
     return new Observable<Uint8Array>((observer: any) => {
       const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/ZIP/';
-      const url: string = baseURL + this.getMappingId();
+      const url: string = baseURL + this.getMappingDefinitionId();
       this.cfg.logger.trace('Mapping Catalog Request');
       const catHeaders = new HttpHeaders(
         { 'Content-Type':  'application/octet-stream',
@@ -137,7 +137,7 @@ export class FileManagementService {
    */
   resetMappings(): Observable<boolean> {
     return new Observable<boolean>((observer: any) => {
-      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/RESET/' + this.cfg.mappingId;
+      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/RESET/' + this.cfg.mappingDefinitionId;
       this.cfg.logger.trace('Mapping Service Request - Reset');
       this.http.delete(url, { headers: this.headers }).toPromise().then((res: any) => {
           if (this.cfg.isTraceEnabled()) {
@@ -182,7 +182,7 @@ export class FileManagementService {
   */
   setMappingToService(jsonBuffer: string): Observable<boolean> {
     return new Observable<boolean>((observer: any) => {
-      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON/' + this.getMappingId();
+      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON/' + this.getMappingDefinitionId();
       this.cfg.logger.trace('Mapping Service Request');
       this.http.put(url, jsonBuffer, { headers: this.headers }).toPromise().then((res: any) => {
         if (this.cfg.isTraceEnabled()) {
@@ -281,7 +281,7 @@ export class FileManagementService {
 
           // Save the model mappings to the runtime.
           this.setBinaryFileToService(fileContent,
-            this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/' + this.getMappingId()).toPromise()
+            this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/' + this.getMappingDefinitionId()).toPromise()
             .then(async(result: boolean) => {
 
             // Fetch the full ADM catalog file from the runtime (ZIP) and export it to to the local
@@ -353,7 +353,7 @@ export class FileManagementService {
 
       // Push the binary stream to the runtime.
       this.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl +
-        'mapping/ZIP/' + this.getMappingId()).toPromise().then( async(result: boolean) => {
+        'mapping/ZIP/' + this.getMappingDefinitionId()).toPromise().then( async(result: boolean) => {
 
         try {
           this.cfg.mappings = null;
@@ -410,12 +410,12 @@ export class FileManagementService {
    * Retrieve the current user AtlasMap data mappings from the server as an JSON buffer.
    */
   private getCurrentMappingJson(): Observable<string> {
-    const mappingIds: number[] = [this.cfg.mappingId];
+    const mappingDefinitionIds: number[] = [this.cfg.mappingDefinitionId];
     return new Observable<string>((observer: any) => {
       const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON/';
       const operations: Observable<any>[] = [];
-      for (const mappingId of mappingIds) {
-        const url: string = baseURL + mappingId;
+      for (const mappingDefinitionId of mappingDefinitionIds) {
+        const url: string = baseURL + mappingDefinitionId;
         this.cfg.logger.trace('Mapping Service Request');
         const jsonHeaders = new HttpHeaders(
           { 'Content-Type':  'application/json',
@@ -444,8 +444,8 @@ export class FileManagementService {
     });
   }
 
-  private getMappingId(): number {
-    return this.cfg.mappingId;
+  private getMappingDefinitionId(): number {
+    return this.cfg.mappingDefinitionId;
   }
 
   private handleError(message: string, error: any): void {

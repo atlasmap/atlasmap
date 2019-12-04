@@ -604,7 +604,7 @@ export class MappingManagementService {
       }
       this.cfg.errorService.clearValidationErrors();
       const payload: any = MappingSerializer.serializeMappings(this.cfg);
-      const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/validate/' + this.cfg.mappingId;
+      const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/validate/' + this.cfg.mappingDefinitionId;
       if (this.cfg.isTraceEnabled()) {
         this.cfg.logger.trace(`Validation Service Request: ${JSON.stringify(payload)}\n`);
       }

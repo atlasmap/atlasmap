@@ -7,17 +7,17 @@ export class MappingIdentifierService {
   constructor(private route: ActivatedRoute) {
   }
 
-  getCurrentMappingId(): number {
+  getCurrentMappingDefinitionId(): number {
     const urlMappingId = this.route.snapshot.paramMap.get('id');
     if (urlMappingId == null) {
       return 0;
     }
 
-    const mappingId: number = +urlMappingId;
-    if (isNaN(mappingId) || mappingId == null) {
+    const mappingDefinitionId: number = +urlMappingId;
+    if (isNaN(mappingDefinitionId) || mappingDefinitionId == null) {
       // Default mapping id
       return 0;
     }
-    return mappingId;
+    return mappingDefinitionId;
   }
 }

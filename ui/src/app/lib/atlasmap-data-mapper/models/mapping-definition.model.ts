@@ -23,7 +23,6 @@ import { DataMapperUtil } from '../common/data-mapper-util';
 
 export class MappingDefinition {
   static MAPPING_NAME_PREFIX = 'UI.';
-  static MAPPING_NAME_SUFFIX = '.default';
 
   name: string = null;
   mappings: MappingModel[] = [];
@@ -35,8 +34,8 @@ export class MappingDefinition {
   private tablesBySourceTargetKey: { [key: string]: LookupTable; } = {};
   private tablesByName: { [key: string]: LookupTable; } = {};
 
-  constructor(mappingId: number) {
-    this.name = MappingDefinition.MAPPING_NAME_PREFIX + mappingId +  MappingDefinition.MAPPING_NAME_SUFFIX;
+  constructor(mappingDefinitionId: number) {
+    this.name = MappingDefinition.MAPPING_NAME_PREFIX + mappingDefinitionId;
   }
 
   templateExists(): boolean {

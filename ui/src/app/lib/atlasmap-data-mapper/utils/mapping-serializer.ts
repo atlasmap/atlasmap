@@ -113,9 +113,9 @@ export class MappingSerializer {
 
   static deserializeMappingServiceJSON(json: any, cfg: ConfigModel): void {
     if (!cfg.mappings) {
-      cfg.mappings = new MappingDefinition(cfg.mappingId);
+      cfg.mappings = new MappingDefinition(cfg.mappingDefinitionId);
     }
-    cfg.mappings.name = this.deserializeAtlasMappingName(json, cfg.mappingId);
+    cfg.mappings.name = this.deserializeAtlasMappingName(json, cfg.mappingDefinitionId);
     cfg.mappings.parsedDocs = cfg.mappings.parsedDocs.concat(MappingSerializer.deserializeDocs(json, cfg.mappings));
     cfg.mappings.mappings = cfg.mappings.mappings.concat(MappingSerializer.deserializeMappings(json, cfg));
     for (const lookupTable of MappingSerializer.deserializeLookupTables(json)) {
@@ -130,15 +130,15 @@ export class MappingSerializer {
   }
 
   /**
-   * Return the AtlasMap mappings file name from the specified JSON buffer or an generate it from mappingId.
+   * Return the AtlasMap mappings file name from the specified JSON buffer or an generate it from mappingDefinitionId.
    *
    * @param json
    */
-  static deserializeAtlasMappingName(json: any, mappingId: number): string {
+  static deserializeAtlasMappingName(json: any, mappingDefinitionId: number): string {
     if (json && json.AtlasMapping && json.AtlasMapping.name) {
       return json.AtlasMapping.name;
     } else {
-      return 'UI.' + mappingId + '.default';
+      return 'UI.' + mappingDefinitionId;
     }
   }
 
