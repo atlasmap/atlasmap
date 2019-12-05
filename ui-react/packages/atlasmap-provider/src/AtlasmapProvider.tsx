@@ -187,7 +187,7 @@ export function useAtlasmap({
   sources: IAtlasmapDocument[];
   targets: IAtlasmapDocument[];
   mappings: IMappings[];
-  deleteAtlasFile: (fileName: any, isSource: any) => void;
+  deleteAtlasFile: (fileName?: string, isSource?: boolean) => void;
   exportAtlasFile: () => void;
   importAtlasFile: (file: File, isSource: boolean) => void;
   resetAtlasmap: () => void;

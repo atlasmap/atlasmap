@@ -15,9 +15,19 @@ import { importInstanceSchema, getDocDef, removeDocumentRef } from '../../compon
  * @param fileName - document name to delete
  * @param isSource - source or target panel
  */
-export async function deleteAtlasFile(fileName: string, isSource: boolean) {
+export async function deleteAtlasFile(fileName?: string, isSource?: boolean) {
   const cfg = ConfigModel.getConfig();
-  const docDef = getDocDef(fileName, cfg, isSource);
+  if (!fileName || !isSource) {
+    new ErrorInfo({
+      message:
+        'Fatal internal error: Could not delete the specified file.',
+      level: ErrorLevel.ERROR,
+      scope: ErrorScope.APPLICATION,
+      type: ErrorType.INTERNAL,
+      object: null,
+  });
+}
+  const docDef = getDocDef(fileName!, cfg, isSource!);
   await removeDocumentRef(docDef, cfg);
   cfg.initializationService.updateInitComplete();
 }
