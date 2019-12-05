@@ -16,6 +16,8 @@ import { ErrorHandlerService } from '../../services/error-handler.service';
  * Import the specified user-defined document.
  *
  * @param selectedFile
+ * @param cfg
+ * @param isSource
  */
 async function importDoc(selectedFile: any, cfg: ConfigModel, isSource: boolean): Promise<boolean> {
   return new Promise<boolean>( async(resolve) => {
@@ -33,8 +35,9 @@ async function importDoc(selectedFile: any, cfg: ConfigModel, isSource: boolean)
  * Remove a document from the UI and backend service.
  *
  * @param docDef
+ * @param cfg
  */
-async function removeDocumentRef(docDef: DocumentDefinition, cfg: ConfigModel): Promise<boolean> {
+export async function removeDocumentRef(docDef: DocumentDefinition, cfg: ConfigModel): Promise<boolean> {
   return new Promise<boolean>( async(resolve) => {
     cfg.mappingService.removeDocumentReferenceFromAllMappings(docDef.id);
     if (docDef.isSource) {
@@ -52,8 +55,10 @@ async function removeDocumentRef(docDef: DocumentDefinition, cfg: ConfigModel): 
  * Return the document definition associated with the specified document name.
  *
  * @param docName
+ * @param cfg
+ * @param isSource
  */
-function getDocDef(docName: string, cfg: ConfigModel, isSource: boolean): DocumentDefinition {
+export function getDocDef(docName: string, cfg: ConfigModel, isSource: boolean): DocumentDefinition {
   for (const docDef of cfg.getDocs(isSource)) {
     const candidateDocName = docDef.getName(false) + '.' + docDef.type.toLowerCase();
     if (candidateDocName.match(docName)) {
