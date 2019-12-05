@@ -79,7 +79,7 @@ export interface IDocumentProps<NodeType> {
   type: DocumentType;
   lineConnectionSide: 'left' | 'right';
   renderNode: (node: NodeType & (IFieldsGroup | IFieldsNode)) => ReactElement;
-  onDelete: () => void;
+  onDelete: (id: any) => void;
 }
 
 export function Document<NodeType>({
@@ -101,7 +101,6 @@ export function Document<NodeType>({
   );
   const handleCollapseField = () => setExpandField(false);
   const handleExpandField = () => setExpandField(true);
-
   const rightAlign = lineConnectionSide === 'left';
 
   useEffect(() => {

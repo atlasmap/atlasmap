@@ -34,7 +34,7 @@ async function importDoc(selectedFile: any, cfg: ConfigModel, isSource: boolean)
  *
  * @param docDef
  */
-async function removeDocumentRef(docDef: DocumentDefinition, cfg: ConfigModel): Promise<boolean> {
+export async function removeDocumentRef(docDef: DocumentDefinition, cfg: ConfigModel): Promise<boolean> {
   return new Promise<boolean>( async(resolve) => {
     cfg.mappingService.removeDocumentReferenceFromAllMappings(docDef.id);
     if (docDef.isSource) {
@@ -53,7 +53,7 @@ async function removeDocumentRef(docDef: DocumentDefinition, cfg: ConfigModel): 
  *
  * @param docName
  */
-function getDocDef(docName: string, cfg: ConfigModel, isSource: boolean): DocumentDefinition {
+export function getDocDef(docName: string, cfg: ConfigModel, isSource: boolean): DocumentDefinition {
   for (const docDef of cfg.getDocs(isSource)) {
     const candidateDocName = docDef.getName(false) + '.' + docDef.type.toLowerCase();
     if (candidateDocName.match(docName)) {

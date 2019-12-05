@@ -16,7 +16,7 @@ import {
   fromDocumentDefinitionToFieldGroup,
   fromMappingDefinitionToIMappings,
 } from './utils/to-ui-models-util';
-import { exportAtlasFile, importAtlasFile, resetAtlasmap } from './components/toolbar/toolbar-util';
+import { deleteAtlasFile, exportAtlasFile, importAtlasFile, resetAtlasmap } from './components/toolbar/toolbar-util';
 
 const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
 
@@ -171,6 +171,7 @@ export function useAtlasmap({
   sources: IDocument[];
   targets: IDocument[];
   mappings: IMappings[];
+  deleteAtlasFile: (fileName: any, isSource: any) => void;
   exportAtlasFile: () => void;
   importAtlasFile: (file: File, isSource: boolean) => void;
   resetAtlasmap: () => void;
@@ -201,7 +202,13 @@ export function useAtlasmap({
     },
     [dispatch]
   );
-
+  const handleDeleteAtlasFile = useCallback(
+    (fileName: string, isSource: boolean) => {
+      dispatch({ type: 'reset' });
+      deleteAtlasFile(fileName, isSource);
+    },
+    [dispatch]
+  );
   const handleResetAtlasmap = useCallback(
     () => {
       dispatch({ type: 'reset' });
@@ -217,10 +224,12 @@ export function useAtlasmap({
       sources: sourceDocs.map(fromDocumentDefinitionToFieldGroup).filter(d => d) as IDocument[],
       targets: targetDocs.map(fromDocumentDefinitionToFieldGroup).filter(d => d) as IDocument[],
       mappings: fromMappingDefinitionToIMappings(mappingDefinition),
+      deleteAtlasFile: handleDeleteAtlasFile,
       exportAtlasFile: exportAtlasFile,
       importAtlasFile: handleImportAtlasFile,
       resetAtlasmap: handleResetAtlasmap,
     }),
-    [error, handleImportAtlasFile, handleResetAtlasmap, mappingDefinition, pending, sourceDocs, targetDocs, sourceFilter, targetFilter]
+    [error, handleImportAtlasFile, handleResetAtlasmap, handleDeleteAtlasFile, mappingDefinition,
+     pending, sourceDocs, targetDocs, sourceFilter, targetFilter]
   );
 }

@@ -15,7 +15,8 @@ const App: React.FC = () => {
     error,
     importAtlasFile,
     resetAtlasmap,
-    exportAtlasFile
+    exportAtlasFile,
+    deleteAtlasFile
   } = useAtlasmap({
     sourceFilter,
     targetFilter
@@ -30,7 +31,7 @@ const App: React.FC = () => {
     [importAtlasFile]
   );
   const handleImportTargetDocument = useCallback(
-    (selectedFile: File) => importAtlasFile(selectedFile, true),
+    (selectedFile: File) => importAtlasFile(selectedFile, false),
     [importAtlasFile]
   );
 
@@ -47,19 +48,30 @@ const App: React.FC = () => {
   });
 
   const documentToDelete = useRef<GroupId | undefined>();
+  let documentIsSource = useRef<boolean>();
+
   const [deleteDocumentDialog, openDeleteDocumentDialog] = useConfirmationDialog({
     title: 'Remove selected document?',
     content: 'Are you sure you want to remove the selected document and any associated mappings?',
     onConfirm: (closeDialog) => {
       closeDialog();
+      deleteAtlasFile(documentToDelete.current, documentIsSource.current);
       console.log(`TODO: delete document id ${documentToDelete.current}`);
     },
     onCancel: (closeDialog) => {
       closeDialog();
     }
   });
-  const handleDeleteDocumentDialog = useCallback((id: GroupId) => {
+
+  const handleDeleteSourceDocumentDialog = useCallback((id: GroupId) => {
     documentToDelete.current = id;
+    documentIsSource.current = true;
+    openDeleteDocumentDialog();
+  }, [openDeleteDocumentDialog]);
+
+  const handleDeleteTargetDocumentDialog = useCallback((id: GroupId) => {
+    documentToDelete.current = id;
+    documentIsSource.current = false;
     openDeleteDocumentDialog();
   }, [openDeleteDocumentDialog]);
 
@@ -75,11 +87,12 @@ const App: React.FC = () => {
         onImportAtlasFile={handleImportAtlasFile}
         onImportSourceDocument={handleImportSourceDocument}
         onImportTargetDocument={handleImportTargetDocument}
+        onDeleteSourceDocument={handleDeleteSourceDocumentDialog}
+        onDeleteTargetDocument={handleDeleteTargetDocumentDialog}
         onResetAtlasmap={openResetDialog}
         onSourceSearch={setSourceFilter}
         onTargetSearch={setTargetFilter}
         onExportAtlasFile={exportAtlasFile}
-        onDeleteDocument={handleDeleteDocumentDialog}
       />
       {resetDialog}
       {deleteDocumentDialog}
