@@ -54,8 +54,13 @@ const App: React.FC = () => {
     title: 'Remove selected document?',
     content: 'Are you sure you want to remove the selected document and any associated mappings?',
     onConfirm: (closeDialog) => {
+      if (documentToDelete.current === undefined || documentIsSource.current === undefined) {
+        throw new Error(
+          `Fatal internal error: Could not remove the specified file.`
+        );
+      }
       closeDialog();
-      deleteAtlasFile(documentToDelete.current, documentIsSource.current);
+      deleteAtlasFile(documentToDelete.current!, documentIsSource.current!);
     },
     onCancel: (closeDialog) => {
       closeDialog();
