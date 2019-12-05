@@ -1,6 +1,7 @@
 import { action } from '@storybook/addon-actions';
 import { text } from '@storybook/addon-knobs';
 import React from 'react';
+import { DropTarget } from '../../../src/atlasmap/components';
 import {
   CanvasView,
   Document,
@@ -42,7 +43,6 @@ export const sample = () => {
               key={s.id}
               title={s.name}
               footer={'Source document'}
-              type={'source'}
               lineConnectionSide={'right'}
               fields={s}
               renderNode={_ => <>test</>}
@@ -56,17 +56,26 @@ export const sample = () => {
           <>
             {mappings.map(m => {
               return (
-                <MappingElement
+                <DropTarget
                   key={m.id}
                   node={m}
                   boxRef={ref}
                   selectedMapping={selectedMapping}
-                  selectMapping={selectMapping}
-                  deselectMapping={deselectMapping}
-                  editMapping={editMapping}
                   addToMapping={addToMapping}
-                  mappingType={'Split'}
-                />
+                >
+                  {({canDrop, isOver}) =>
+                    <MappingElement
+                      node={m}
+                      selectedMapping={selectedMapping}
+                      selectMapping={selectMapping}
+                      deselectMapping={deselectMapping}
+                      editMapping={editMapping}
+                      mappingType={'Split'}
+                      canDrop={canDrop}
+                      isOver={isOver}
+                    />
+                  }
+                </DropTarget>
               );
             })}
           </>
@@ -88,7 +97,6 @@ export const sample = () => {
               key={t.id}
               title={t.name}
               footer={'Target document'}
-              type={'target'}
               lineConnectionSide={'left'}
               fields={t}
               renderNode={_ => <>test</>}

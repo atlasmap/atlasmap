@@ -15,7 +15,7 @@ const App: React.FC = () => {
     error,
     importAtlasFile,
     resetAtlasmap,
-    exportAtlasFile
+    exportAtlasFile,
   } = useAtlasmap({
     sourceFilter,
     targetFilter

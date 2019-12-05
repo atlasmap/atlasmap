@@ -1,14 +1,21 @@
-import { ConnectedIcon, DisconnectedIcon, EyeIcon, InfoIcon } from '@patternfly/react-icons';
+import {
+  ConnectedIcon,
+  DisconnectedIcon,
+  EyeIcon,
+  InfoIcon,
+} from '@patternfly/react-icons';
 import { TopologyView } from '@patternfly/react-topology';
-import React, {
-  FunctionComponent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Loading } from '../common';
-import { ElementId, DocumentType, IFieldsGroup, IMappings, IFieldsNode, GroupId } from '../views/CanvasView';
+import {
+  ElementId,
+  IFieldsGroup,
+  IMappings,
+  IFieldsNode,
+  GroupId,
+  Target,
+  Source,
+} from '../views/CanvasView';
 import {
   CanvasView,
   CanvasViewControlBar,
@@ -20,14 +27,16 @@ import {
   Mapping,
   MappingElement,
 } from '../views/CanvasView';
-import { Source } from '../views/CanvasView/components/Source';
-import { Target } from '../views/CanvasView/components/Target';
 import { AtlasmapContextToolbar } from './AtlasmapContextToolbar';
-import { DocumentFooter } from './components';
-import { DocumentField } from './components/DocumentField';
+import {
+  DocumentFooter,
+  DragLayer,
+  DropTarget,
+  DocumentField,
+} from './components';
 import { MappingDetails } from './MappingDetails';
 
-export interface IDocumentField {
+export interface IDocumentField extends Object {
   name: string;
   type: string;
 }
@@ -35,18 +44,14 @@ export interface IDocumentField {
 export interface IDocument extends IFieldsGroup {
   name: string;
   type: string;
-  fields: Array<IFieldsGroup & IDocumentField | IFieldsNode & IDocumentField>
+  fields: Array<IFieldsGroup & IDocumentField | IFieldsNode & IDocumentField>;
 }
 
 export interface IAtlasmapProps {
-  sources: IDocument[];
-  targets: IDocument[];
+  sources: Array<IDocument>;
+  targets: Array<IDocument>;
   mappings: IMappings[];
-  addToMapping: (
-    elementId: ElementId,
-    elementType: DocumentType,
-    mappingId: string
-  ) => void;
+  addToMapping: (elementId: ElementId, mappingId: string) => void;
   pending: boolean;
   error: boolean;
   onExportAtlasFile: (event: any) => void;
@@ -59,7 +64,7 @@ export interface IAtlasmapProps {
   onDeleteDocument: (id: GroupId) => void;
 }
 
-export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
+export function Atlasmap({
   sources,
   mappings,
   targets,
@@ -73,12 +78,14 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   onResetAtlasmap,
   onSourceSearch,
   onTargetSearch,
-  onDeleteDocument
-}) => {
+  onDeleteDocument,
+}: IAtlasmapProps) {
   const [selectedMapping, setSelectedMapping] = useState<string>();
   const [isEditingMapping, setisEditingMapping] = useState(false);
   const [showTypes, setShowTypes] = useState(false);
-  const toggleShowTypes = useCallback(() => setShowTypes(!showTypes), [showTypes]);
+  const toggleShowTypes = useCallback(() => setShowTypes(!showTypes), [
+    showTypes,
+  ]);
 
   const closeMappingDetails = useCallback(() => {
     setisEditingMapping(false);
@@ -90,7 +97,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         setSelectedMapping(mapping);
       }
     },
-    [setSelectedMapping, isEditingMapping]
+    [isEditingMapping]
   );
 
   const deselectMapping = useCallback(() => {
@@ -130,36 +137,38 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     [onExportAtlasFile, onImportAtlasFile, onResetAtlasmap]
   );
 
-  const controlBar = useMemo(() =>
-    <CanvasViewControlBar
-      extraButtons={[
-        {
-          id: 'Show types',
-          icon: <InfoIcon />,
-          tooltip: 'Show types',
-          ariaLabel: ' ',
-          callback: toggleShowTypes
-        },
-        {
-          id: 'Show mapped fields',
-          icon: <ConnectedIcon />,
-          tooltip: 'Show mapped fields',
-          ariaLabel: ' ',
-        },
-        {
-          id: 'Show unmapped fields',
-          icon: <DisconnectedIcon />,
-          tooltip: 'Show unmapped fields',
-          ariaLabel: ' ',
-        },
-        {
-          id: 'Show mapping preview',
-          icon: <EyeIcon />,
-          tooltip: 'Show mapping preview',
-          ariaLabel: ' ',
-        },
-      ]}
-    />,
+  const controlBar = useMemo(
+    () => (
+      <CanvasViewControlBar
+        extraButtons={[
+          {
+            id: 'Show types',
+            icon: <InfoIcon />,
+            tooltip: 'Show types',
+            ariaLabel: ' ',
+            callback: toggleShowTypes,
+          },
+          {
+            id: 'Show mapped fields',
+            icon: <ConnectedIcon />,
+            tooltip: 'Show mapped fields',
+            ariaLabel: ' ',
+          },
+          {
+            id: 'Show unmapped fields',
+            icon: <DisconnectedIcon />,
+            tooltip: 'Show unmapped fields',
+            ariaLabel: ' ',
+          },
+          {
+            id: 'Show mapping preview',
+            icon: <EyeIcon />,
+            tooltip: 'Show mapping preview',
+            ariaLabel: ' ',
+          },
+        ]}
+      />
+    ),
     [toggleShowTypes]
   );
 
@@ -182,13 +191,13 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
                   title={'Source'}
                   onSearch={onSourceSearch}
                   onImport={onImportSourceDocument}
-                  onJavaClasses={() => void(0)}
+                  onJavaClasses={() => void 0}
                 />
               }
             >
               {sources.map(s => {
                 return (
-                  <Document<IDocumentField>
+                  <Document
                     key={s.id}
                     title={s.name}
                     footer={
@@ -198,17 +207,22 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
                         showType={showTypes}
                       />
                     }
-                    type={'source'}
                     lineConnectionSide={'right'}
                     fields={s}
-                    renderNode={
-                      (node: IDocumentField) =>
+                    renderNode={(node, getCoords) => {
+                      const { id, name, type } = node as IDocumentField &
+                        (IFieldsNode | IFieldsGroup);
+                      return (
                         <DocumentField
-                          name={node.name}
-                          type={node.type}
+                          id={id}
+                          name={name}
+                          type={type}
+                          documentType={'source'}
                           showType={showTypes}
+                          getCoords={getCoords}
                         />
-                    }
+                      );
+                    }}
                     onDelete={() => onDeleteDocument(s.id)}
                   />
                 );
@@ -219,17 +233,26 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
                 <>
                   {mappings.map(m => {
                     return (
-                      <MappingElement
+                      <DropTarget
                         key={m.id}
                         node={m}
                         boxRef={ref}
                         selectedMapping={selectedMapping}
-                        selectMapping={selectMapping}
-                        deselectMapping={deselectMapping}
-                        editMapping={editMapping}
                         addToMapping={addToMapping}
-                        mappingType={'Split'}
-                      />
+                      >
+                        {({ canDrop, isOver }) => (
+                          <MappingElement
+                            node={m}
+                            selectedMapping={selectedMapping}
+                            selectMapping={selectMapping}
+                            deselectMapping={deselectMapping}
+                            editMapping={editMapping}
+                            mappingType={'Split'}
+                            canDrop={canDrop}
+                            isOver={isOver}
+                          />
+                        )}
+                      </DropTarget>
                     );
                   })}
                 </>
@@ -241,7 +264,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
                   title={'Target'}
                   onSearch={onTargetSearch}
                   onImport={onImportTargetDocument}
-                  onJavaClasses={() => void(0)}
+                  onJavaClasses={() => void 0}
                 />
               }
             >
@@ -252,22 +275,27 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
                     title={t.name}
                     footer={
                       <DocumentFooter
-                        title='Target document'
+                        title="Target document"
                         type={t.type}
                         showType={showTypes}
                       />
                     }
-                    type={'target'}
                     lineConnectionSide={'left'}
                     fields={t}
-                    renderNode={
-                      (node: IDocumentField) =>
+                    renderNode={(node, getCoords) => {
+                      const { id, name, type } = node as IDocumentField &
+                        (IFieldsNode | IFieldsGroup);
+                      return (
                         <DocumentField
-                          name={node.name}
-                          type={node.type}
+                          id={id}
+                          name={name}
+                          type={type}
+                          documentType={'target'}
                           showType={showTypes}
+                          getCoords={getCoords}
                         />
-                    }
+                      );
+                    }}
                     onDelete={() => onDeleteDocument(t.id)}
                   />
                 );
@@ -275,9 +303,11 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
             </Target>
 
             <Links mappings={mappings} selectedMapping={selectedMapping} />
+
+            <DragLayer />
           </CanvasView>
         )}
       </TopologyView>
     </CanvasViewProvider>
   );
-};
+}

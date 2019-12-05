@@ -1,9 +1,9 @@
 import { Label } from '@patternfly/react-core';
 import React, { FunctionComponent, useEffect } from 'react';
 import { useDragLayer } from 'react-dnd';
-import { CanvasObject, useCanvas } from '../../../canvas';
-import { useDimensions } from '../../../common';
-import { IFieldElementDragSource } from './FieldElement';
+import { IFieldElementDragSource } from './DocumentField';
+import { CanvasObject, useCanvas } from '../../canvas';
+import { useDimensions } from '../../common';
 
 export const DragLayer: FunctionComponent = () => {
   const [ref, dimensions, measure] = useDimensions();

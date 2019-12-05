@@ -1,6 +1,14 @@
-import { IDocument, IFieldsGroup, IMappings } from '@atlasmap/ui';
+import { IMappings } from '@atlasmap/ui';
 import ky from 'ky';
-import React, { createContext, FunctionComponent, useCallback, useContext, useEffect, useMemo, useReducer } from 'react';
+import React, {
+  createContext,
+  FunctionComponent,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+} from 'react';
 import { timer } from 'rxjs';
 import { debounce } from 'rxjs/operators';
 import { DocumentDefinition } from './models/document-definition.model';
@@ -15,8 +23,13 @@ import { search } from './utils/filter-fields';
 import {
   fromDocumentDefinitionToFieldGroup,
   fromMappingDefinitionToIMappings,
+  IAtlasmapDocument,
 } from './utils/to-ui-models-util';
-import { exportAtlasFile, importAtlasFile, resetAtlasmap } from './components/toolbar/toolbar-util';
+import {
+  exportAtlasFile,
+  importAtlasFile,
+  resetAtlasmap,
+} from './components/toolbar/toolbar-util';
 
 const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
 
@@ -93,7 +106,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   baseXMLInspectionServiceUrl,
   baseJSONInspectionServiceUrl,
   baseMappingServiceUrl,
-  children
+  children,
 }) => {
   const [state, dispatch] = useReducer(reducer, {}, init);
 
@@ -148,14 +161,16 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   }, [initializationService]);
 
   return (
-    <AtlasmapContext.Provider value={{
-      ...state,
-      dispatch
-    }}>
+    <AtlasmapContext.Provider
+      value={{
+        ...state,
+        dispatch,
+      }}
+    >
       {children}
     </AtlasmapContext.Provider>
-  )
-}
+  );
+};
 
 export interface IUseAtlasmapArgs {
   sourceFilter?: string;
@@ -164,12 +179,12 @@ export interface IUseAtlasmapArgs {
 
 export function useAtlasmap({
   sourceFilter,
-  targetFilter
+  targetFilter,
 }: IUseAtlasmapArgs = {}): {
   pending: boolean;
   error: boolean;
-  sources: IDocument[];
-  targets: IDocument[];
+  sources: IAtlasmapDocument[];
+  targets: IAtlasmapDocument[];
   mappings: IMappings[];
   exportAtlasFile: () => void;
   importAtlasFile: (file: File, isSource: boolean) => void;
@@ -178,8 +193,8 @@ export function useAtlasmap({
   const context = useContext(AtlasmapContext);
   if (!context) {
     throw new Error(
-      `useAtlasmap must be used inside an AtlasmapProvider component`,
-    )
+      `useAtlasmap must be used inside an AtlasmapProvider component`
+    );
   }
 
   const {
@@ -202,25 +217,48 @@ export function useAtlasmap({
     [dispatch]
   );
 
-  const handleResetAtlasmap = useCallback(
-    () => {
-      dispatch({ type: 'reset' });
-      resetAtlasmap();
-    },
-    [dispatch]
+  const handleResetAtlasmap = useCallback(() => {
+    dispatch({ type: 'reset' });
+    resetAtlasmap();
+  }, [dispatch]);
+
+  const sources = useMemo(
+    () =>
+      sourceDocs
+        .map(fromDocumentDefinitionToFieldGroup)
+        .filter(d => d) as IAtlasmapDocument[],
+    [sourceDocs]
   );
+
+  const targets = useMemo(
+    () =>
+      targetDocs
+        .map(fromDocumentDefinitionToFieldGroup)
+        .filter(d => d) as IAtlasmapDocument[],
+    [targetDocs]
+  );
+
+  const mappings = fromMappingDefinitionToIMappings(mappingDefinition);
 
   return useMemo(
     () => ({
-      pending: pending,
-      error: error,
-      sources: sourceDocs.map(fromDocumentDefinitionToFieldGroup).filter(d => d) as IDocument[],
-      targets: targetDocs.map(fromDocumentDefinitionToFieldGroup).filter(d => d) as IDocument[],
-      mappings: fromMappingDefinitionToIMappings(mappingDefinition),
-      exportAtlasFile: exportAtlasFile,
+      pending,
+      error,
+      sources,
+      targets,
+      mappings,
+      exportAtlasFile,
       importAtlasFile: handleImportAtlasFile,
       resetAtlasmap: handleResetAtlasmap,
     }),
-    [error, handleImportAtlasFile, handleResetAtlasmap, mappingDefinition, pending, sourceDocs, targetDocs, sourceFilter, targetFilter]
+    [
+      pending,
+      error,
+      sources,
+      targets,
+      mappings,
+      handleImportAtlasFile,
+      handleResetAtlasmap,
+    ]
   );
 }
