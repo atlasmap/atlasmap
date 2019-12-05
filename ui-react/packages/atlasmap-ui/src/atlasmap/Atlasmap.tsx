@@ -58,10 +58,11 @@ export interface IAtlasmapProps {
   onImportAtlasFile: (selectedFile: File) => void;
   onImportSourceDocument: (selectedFile: File) => void;
   onImportTargetDocument: (selectedFile: File) => void;
+  onDeleteSourceDocument: (id: GroupId) => void;
+  onDeleteTargetDocument: (id: GroupId) => void;
   onResetAtlasmap: () => void;
   onSourceSearch: (content: string) => void;
   onTargetSearch: (content: string) => void;
-  onDeleteDocument: (id: GroupId) => void;
 }
 
 export function Atlasmap({
@@ -75,10 +76,11 @@ export function Atlasmap({
   onImportAtlasFile,
   onImportSourceDocument,
   onImportTargetDocument,
+  onDeleteSourceDocument,
+  onDeleteTargetDocument,
   onResetAtlasmap,
   onSourceSearch,
   onTargetSearch,
-  onDeleteDocument,
 }: IAtlasmapProps) {
   const [selectedMapping, setSelectedMapping] = useState<string>();
   const [isEditingMapping, setisEditingMapping] = useState(false);
@@ -223,7 +225,7 @@ export function Atlasmap({
                         />
                       );
                     }}
-                    onDelete={() => onDeleteDocument(s.id)}
+                    onDelete={() => onDeleteSourceDocument(s.id)}
                   />
                 );
               })}
@@ -296,7 +298,7 @@ export function Atlasmap({
                         />
                       );
                     }}
-                    onDelete={() => onDeleteDocument(t.id)}
+                    onDelete={() => onDeleteTargetDocument(t.id)}
                   />
                 );
               })}

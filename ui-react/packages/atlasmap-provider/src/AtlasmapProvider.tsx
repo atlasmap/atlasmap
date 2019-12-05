@@ -26,6 +26,7 @@ import {
   IAtlasmapDocument,
 } from './utils/to-ui-models-util';
 import {
+  deleteAtlasFile,
   exportAtlasFile,
   importAtlasFile,
   resetAtlasmap,
@@ -186,6 +187,7 @@ export function useAtlasmap({
   sources: IAtlasmapDocument[];
   targets: IAtlasmapDocument[];
   mappings: IMappings[];
+  deleteAtlasFile: (fileName: string, isSource: boolean) => void;
   exportAtlasFile: () => void;
   importAtlasFile: (file: File, isSource: boolean) => void;
   resetAtlasmap: () => void;
@@ -247,6 +249,7 @@ export function useAtlasmap({
       sources,
       targets,
       mappings,
+      deleteAtlasFile,
       exportAtlasFile,
       importAtlasFile: handleImportAtlasFile,
       resetAtlasmap: handleResetAtlasmap,

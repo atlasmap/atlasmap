@@ -7,7 +7,20 @@ import {
   ErrorLevel,
 } from '../../models/error.model';
 import { ErrorHandlerService } from '../../services/error-handler.service';
-import { importInstanceSchema } from '../../components/document/document-util';
+import { importInstanceSchema, getDocDef, removeDocumentRef } from '../../components/document/document-util';
+
+/**
+ * Delete the specified source or target document.
+ *
+ * @param fileName - document name to delete
+ * @param isSource - source or target panel
+ */
+export async function deleteAtlasFile(fileName: string, isSource: boolean) {
+  const cfg = ConfigModel.getConfig();
+  const docDef = getDocDef(fileName, cfg, isSource);
+  await removeDocumentRef(docDef, cfg);
+  cfg.initializationService.updateInitComplete();
+}
 
  /**
   * The user has requested their current mappings be exported.  Use the mapping management

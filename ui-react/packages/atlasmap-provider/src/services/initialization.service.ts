@@ -543,9 +543,7 @@ ${error.status} ${error.statusText}`,
         }
         MappingUtil.removeStaleMappings(this.cfg);
       }
-      this.updateLoadingStatus('Initialization complete.');
-      this.cfg.initCfg.initialized = true;
-      this.systemInitializedSource.next();
+      this.updateInitComplete();
     }
   }
 
@@ -555,6 +553,12 @@ ${error.status} ${error.statusText}`,
       level: ErrorLevel.ERROR, type: ErrorType.INTERNAL, object: error}));
     this.updateLoadingStatus(message);
     this.cfg.initCfg.initializationErrorOccurred = true;
+    this.cfg.initCfg.initialized = true;
+    this.systemInitializedSource.next();
+  }
+
+  updateInitComplete(): void {
+    this.updateLoadingStatus('Initialization complete.');
     this.cfg.initCfg.initialized = true;
     this.systemInitializedSource.next();
   }
