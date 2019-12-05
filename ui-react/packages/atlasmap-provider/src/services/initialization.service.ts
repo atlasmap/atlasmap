@@ -543,9 +543,7 @@ ${error.status} ${error.statusText}`,
         }
         MappingUtil.removeStaleMappings(this.cfg);
       }
-      this.updateLoadingStatus('Initialization complete.');
-      this.cfg.initCfg.initialized = true;
-      this.systemInitializedSource.next();
+      this.updateInitComplete();
     }
   }
 
@@ -562,6 +560,12 @@ ${error.status} ${error.statusText}`,
   updateLoadingStatus(status: string): void {
     this.cfg.initCfg.loadingStatus = status;
     this.initializationStatusChangedSource.next();
+  }
+
+  updateInitComplete(): void {
+    this.updateLoadingStatus('Initialization complete.');
+    this.cfg.initCfg.initialized = true;
+    this.systemInitializedSource.next();
   }
 
 }

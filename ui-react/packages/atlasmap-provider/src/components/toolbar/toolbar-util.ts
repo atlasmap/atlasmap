@@ -13,6 +13,7 @@ export async function deleteAtlasFile(fileName: string, isSource: boolean) {
   const cfg = ConfigModel.getConfig();
   const docDef = getDocDef(fileName, cfg, isSource);
   await removeDocumentRef(docDef, cfg);
+  cfg.initializationService.updateInitComplete();
 }
 
  /**

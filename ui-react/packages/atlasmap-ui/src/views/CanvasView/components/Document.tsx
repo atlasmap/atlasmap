@@ -79,7 +79,7 @@ export interface IDocumentProps<NodeType> {
   type: DocumentType;
   lineConnectionSide: 'left' | 'right';
   renderNode: (node: NodeType & (IFieldsGroup | IFieldsNode)) => ReactElement;
-  onDelete: (id: any) => void;
+  onDelete: () => void;
 }
 
 export function Document<NodeType>({

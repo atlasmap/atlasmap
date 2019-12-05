@@ -202,6 +202,7 @@ export function useAtlasmap({
     },
     [dispatch]
   );
+  /*
   const handleDeleteAtlasFile = useCallback(
     (fileName: string, isSource: boolean) => {
       dispatch({ type: 'reset' });
@@ -209,6 +210,7 @@ export function useAtlasmap({
     },
     [dispatch]
   );
+  */
   const handleResetAtlasmap = useCallback(
     () => {
       dispatch({ type: 'reset' });
@@ -224,12 +226,12 @@ export function useAtlasmap({
       sources: sourceDocs.map(fromDocumentDefinitionToFieldGroup).filter(d => d) as IDocument[],
       targets: targetDocs.map(fromDocumentDefinitionToFieldGroup).filter(d => d) as IDocument[],
       mappings: fromMappingDefinitionToIMappings(mappingDefinition),
-      deleteAtlasFile: handleDeleteAtlasFile,
+      deleteAtlasFile: deleteAtlasFile,
       exportAtlasFile: exportAtlasFile,
       importAtlasFile: handleImportAtlasFile,
       resetAtlasmap: handleResetAtlasmap,
     }),
-    [error, handleImportAtlasFile, handleResetAtlasmap, handleDeleteAtlasFile, mappingDefinition,
+    [error, handleImportAtlasFile, handleResetAtlasmap, mappingDefinition,
      pending, sourceDocs, targetDocs, sourceFilter, targetFilter]
   );
 }
