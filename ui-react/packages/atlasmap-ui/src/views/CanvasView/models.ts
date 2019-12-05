@@ -6,7 +6,6 @@ export type Rect = { id: string, x: number, y: number, width: number, height: nu
 export type Rects = Array<Rect>;
 export type BrowserRect = ClientRect | DOMRect;
 export type ElementId = string;
-export type DocumentType = 'source' | 'target';
 export type GroupId = string;
 
 export interface IFieldsNode {

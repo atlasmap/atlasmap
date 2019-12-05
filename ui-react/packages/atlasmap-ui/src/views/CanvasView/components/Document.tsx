@@ -22,9 +22,9 @@ import {
   FolderOpenIcon,
 } from '@patternfly/react-icons';
 import { css, StyleSheet } from '@patternfly/react-styles';
-import React, { ReactElement, useEffect, useRef, useState } from 'react';
-import { DocumentType, IFieldsGroup, IFieldsNode } from '../models';
-import { FieldGroup } from './FieldGroup';
+import React, { ReactElement, useRef, useState } from 'react';
+import { IFieldsGroup } from '../models';
+import { FieldGroup, IFieldGroupProps } from './FieldGroup';
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -72,43 +72,29 @@ const styles = StyleSheet.create({
   },
 });
 
-export interface IDocumentProps<NodeType> {
+export interface IDocumentProps extends Pick<IFieldGroupProps, 'renderNode'> {
   title: ReactElement | string;
   footer: ReactElement | string;
   fields: IFieldsGroup;
-  type: DocumentType;
   lineConnectionSide: 'left' | 'right';
-  renderNode: (node: NodeType & (IFieldsGroup | IFieldsNode)) => ReactElement;
   onDelete: () => void;
 }
 
-export function Document<NodeType>({
+export function Document({
   title,
   footer,
-  type,
   lineConnectionSide,
   fields,
   renderNode,
-  onDelete
-}: IDocumentProps<NodeType>) {
+  onDelete,
+}: IDocumentProps) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [isExpanded, setIsExpanded] = useState(true);
   const toggleIsExpanded = () => setIsExpanded(!isExpanded);
   const [showActions, setShowActions] = useState(false);
   const toggleActions = (open: boolean) => setShowActions(open);
-  const [expandFields, setExpandField] = useState<boolean | undefined>(
-    undefined
-  );
-  const handleCollapseField = () => setExpandField(false);
-  const handleExpandField = () => setExpandField(true);
 
   const rightAlign = lineConnectionSide === 'left';
-
-  useEffect(() => {
-    if (expandFields !== undefined) {
-      setExpandField(undefined);
-    }
-  }, [expandFields]);
 
   const getRef = () => ref.current;
   return (
@@ -127,7 +113,7 @@ export function Document<NodeType>({
                   splitButtonItems={[
                     <DropdownToggleAction
                       key="action"
-                      onClick={handleExpandField}
+                      onClick={() => void(0)}
                     >
                       <FolderOpenIcon />
                     </DropdownToggleAction>,
@@ -142,7 +128,7 @@ export function Document<NodeType>({
                 <DropdownItem
                   variant={'icon'}
                   key={'collapse'}
-                  onClick={handleCollapseField}
+                  onClick={() => void(0)}
                 >
                   <DropdownItemIcon>
                     <FolderCloseIcon />
@@ -181,11 +167,9 @@ export function Document<NodeType>({
                 isVisible={true}
                 group={fields}
                 getBoxRef={getRef}
-                documentType={type}
                 lineConnectionSide={lineConnectionSide}
                 rightAlign={rightAlign}
                 parentExpanded={isExpanded}
-                initiallyExpanded={expandFields}
                 renderNode={renderNode}
               />
             </Accordion>

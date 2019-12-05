@@ -1,6 +1,6 @@
 import React, { FunctionComponent, ReactElement } from 'react';
 import { useCanvasViewLayoutContext } from '../CanvasViewLayoutProvider';
-import { FieldsBox } from './index';
+import { FieldsBox } from './FieldsBox';
 
 export interface ISourceProps {
   header: ReactElement | string;

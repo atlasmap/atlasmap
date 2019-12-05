@@ -10,7 +10,6 @@ export default {
 export const interactiveExample = () => (
   <FieldGroup
     isVisible={true}
-    documentType={'source'}
     lineConnectionSide={'right'}
     group={{
       fields: [],

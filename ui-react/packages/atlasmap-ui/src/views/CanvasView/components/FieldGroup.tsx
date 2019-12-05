@@ -8,7 +8,6 @@ import {
 import { FolderOpenIcon, FolderCloseIcon } from '@patternfly/react-icons';
 import { css, StyleSheet } from '@patternfly/react-styles';
 import React, {
-  ReactElement,
   useCallback,
   useEffect,
   useMemo,
@@ -16,8 +15,8 @@ import React, {
   useState,
 } from 'react';
 import { useBoundingCanvasRect, useMappingNode } from '../../../canvas';
-import { DocumentType, IFieldsGroup, IFieldsNode } from '../models';
-import { FieldElement } from './FieldElement';
+import { IFieldsGroup, IFieldsNode } from '../models';
+import { FieldElement, IFieldElementProps } from './FieldElement';
 
 const styles = StyleSheet.create({
   button: {
@@ -50,50 +49,37 @@ const styles = StyleSheet.create({
   },
 });
 
-export interface IFieldGroupProps<NodeType> {
+export interface IFieldGroupProps extends Pick<IFieldElementProps, 'renderNode'> {
   isVisible: boolean;
   group: IFieldsGroup;
   lineConnectionSide: 'left' | 'right';
-  documentType: DocumentType;
   getParentRef?: () => HTMLElement | null;
   getBoxRef: () => HTMLElement | null;
   rightAlign?: boolean;
   level?: number;
   parentExpanded: boolean;
-  initiallyExpanded?: boolean;
-  renderNode: (
-    node: NodeType & IFieldsGroup | NodeType & IFieldsNode
-  ) => ReactElement;
 }
-export function FieldGroup<NodeType>({
+export function FieldGroup({
   isVisible,
   group,
   lineConnectionSide,
-  documentType,
   getParentRef,
   getBoxRef,
   rightAlign = false,
   level = 0,
   parentExpanded,
-  initiallyExpanded,
   renderNode,
-}: IFieldGroupProps<NodeType>) {
+}: IFieldGroupProps) {
   const getBoundingCanvasRect = useBoundingCanvasRect();
   const { setLineNode } = useMappingNode();
   const ref = useRef<HTMLDivElement | null>(null);
-  const [isExpanded, setIsExpanded] = useState(level === 0);
-  const toggleExpand = useCallback(() => setIsExpanded(!isExpanded), [
-    isExpanded,
-    setIsExpanded,
+  const [isExpandedByUser, setIsExpandedByUser] = useState(level === 0);
+  const toggleExpand = useCallback(() => setIsExpandedByUser(!isExpandedByUser), [
+    isExpandedByUser,
+    setIsExpandedByUser,
   ]);
 
-  useEffect(() => {
-    if (initiallyExpanded !== undefined) {
-      setIsExpanded(initiallyExpanded);
-    }
-  }, [initiallyExpanded]);
-
-  const getChildCoords = useCallback(() => {
+  const getCoords = useCallback(() => {
     const boxRef = getBoxRef();
     if (ref.current && boxRef) {
       let dimensions = getBoundingCanvasRect(ref.current);
@@ -110,17 +96,17 @@ export function FieldGroup<NodeType>({
   }, [getBoxRef, getBoundingCanvasRect, lineConnectionSide]);
 
   const handleChildLines = useCallback(() => {
-    if (!isExpanded) {
+    if (!isExpandedByUser) {
       const traverseChildren = (f: IFieldsGroup | IFieldsNode) => {
         if ((f as IFieldsGroup).fields) {
           (f as IFieldsGroup).fields.forEach(traverseChildren);
         } else {
-          setLineNode(f.id, getChildCoords);
+          setLineNode(f.id, getCoords);
         }
       };
       group.fields.forEach(traverseChildren);
     }
-  }, [getChildCoords, group.fields, isExpanded, setLineNode]);
+  }, [getCoords, group.fields, isExpandedByUser, setLineNode]);
 
   useEffect(() => {
     handleChildLines();
@@ -132,10 +118,9 @@ export function FieldGroup<NodeType>({
         !(f as IFieldsGroup).fields ? (
           <FieldElement
             key={f.id}
-            documentType={documentType}
             lineConnectionSide={lineConnectionSide}
             getParentRef={() =>
-              isVisible && isExpanded
+              isVisible && isExpandedByUser
                 ? ref.current
                 : isVisible || !getParentRef
                 ? ref.current
@@ -144,14 +129,12 @@ export function FieldGroup<NodeType>({
             getBoxRef={getBoxRef}
             node={f as IFieldsNode}
             rightAlign={rightAlign}
-          >
-            {renderNode(f as NodeType & IFieldsNode)}
-          </FieldElement>
+            renderNode={renderNode}
+          />
         ) : (
           <FieldGroup
-            isVisible={isVisible && isExpanded}
+            isVisible={isVisible && isExpandedByUser}
             lineConnectionSide={lineConnectionSide}
-            documentType={documentType}
             getParentRef={() =>
               isVisible || !getParentRef ? ref.current : getParentRef()
             }
@@ -161,22 +144,11 @@ export function FieldGroup<NodeType>({
             key={f.id}
             level={level + 1}
             parentExpanded={parentExpanded}
-            initiallyExpanded={initiallyExpanded}
             renderNode={renderNode}
           />
         )
       ),
-    [
-      getBoxRef,
-      group.fields,
-      isExpanded,
-      isVisible,
-      level,
-      parentExpanded,
-      getParentRef,
-      rightAlign,
-      lineConnectionSide,
-    ]
+    [group.fields, lineConnectionSide, getBoxRef, rightAlign, renderNode, isVisible, isExpandedByUser, level, parentExpanded, getParentRef]
   );
 
   return level === 0 ? (
@@ -192,7 +164,7 @@ export function FieldGroup<NodeType>({
     <AccordionItem>
       <AccordionToggle
         onClick={toggleExpand}
-        isExpanded={isExpanded}
+        isExpanded={isExpandedByUser}
         id={`source-field-group-${group.id}-toggle`}
         className={css(styles.button, rightAlign && styles.buttonRightAlign)}
       >
@@ -202,17 +174,17 @@ export function FieldGroup<NodeType>({
         >
           <Split>
             <SplitItem style={{ paddingRight: '0.5rem' }}>
-              {isExpanded ? <FolderOpenIcon /> : <FolderCloseIcon />}
+              {isExpandedByUser ? <FolderOpenIcon /> : <FolderCloseIcon />}
             </SplitItem>
             <SplitItem isFilled={true}>
-              {renderNode(group as NodeType & IFieldsGroup)}
+              {renderNode(group as IFieldsGroup, getCoords)}
             </SplitItem>
           </Split>
         </span>
       </AccordionToggle>
       <AccordionContent
         id={`source-field-group-${group.id}-content`}
-        isHidden={!isExpanded}
+        isHidden={!isExpandedByUser}
         className={css(
           styles.content
         )}

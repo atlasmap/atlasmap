@@ -1,14 +1,12 @@
 import { css, StyleSheet } from '@patternfly/react-styles';
 import React, {
-  FunctionComponent,
+  ReactElement,
   useCallback,
   useEffect,
   useRef,
 } from 'react';
-import { useDrag } from 'react-dnd';
-import { getEmptyImage } from 'react-dnd-html5-backend';
 import { useBoundingCanvasRect, useMappingNode } from '../../../canvas';
-import { ElementId, DocumentType, IFieldsNode } from '../models';
+import { Coords, IFieldsGroup, IFieldsNode } from '../models';
 
 const styles = StyleSheet.create({
   element: {
@@ -25,28 +23,24 @@ const styles = StyleSheet.create({
 
 export interface IFieldElementProps {
   node: IFieldsNode;
-  documentType: DocumentType;
   lineConnectionSide: 'left' | 'right';
   getParentRef: () => HTMLElement | null;
   getBoxRef: () => HTMLElement | null;
   rightAlign?: boolean;
+  renderNode: (
+    node: IFieldsGroup | IFieldsNode,
+    getCoords: () => Coords | null,
+  ) => ReactElement;
 }
 
-export interface IFieldElementDragSource {
-  id: ElementId;
-  type: DocumentType;
-  name: string;
-}
-
-export const FieldElement: FunctionComponent<IFieldElementProps> = ({
+export function FieldElement ({
   node,
-  documentType,
   lineConnectionSide,
   getParentRef,
   getBoxRef,
   rightAlign = false,
-  children,
-}) => {
+  renderNode,
+}: IFieldElementProps) {
   const ref = useRef<HTMLDivElement | null>(null);
 
   const getBoundingCanvasRect = useBoundingCanvasRect();
@@ -70,21 +64,6 @@ export const FieldElement: FunctionComponent<IFieldElementProps> = ({
     return null;
   }, [getParentRef, getBoxRef, getBoundingCanvasRect, lineConnectionSide]);
 
-  const [{ color }, dragRef, preview] = useDrag<
-    IFieldElementDragSource,
-    undefined,
-    { color: string | undefined }
-  >({
-    item: { id: node.id, type: documentType, name: node.name },
-    collect: monitor => ({
-      color: monitor.isDragging()
-        ? 'var(--pf-global--primary-color--100)'
-        : undefined,
-    }),
-    begin: () => {
-      setLineNode('dragsource', getCoords);
-    },
-  });
 
   useEffect(() => {
     setLineNode(node.id, getCoords);
@@ -93,22 +72,12 @@ export const FieldElement: FunctionComponent<IFieldElementProps> = ({
     };
   }, [node, setLineNode, unsetLineNode, getCoords]);
 
-  const handleRef = (el: HTMLDivElement) => {
-    dragRef(el);
-    ref.current = el;
-  };
-
-  useEffect(() => {
-    preview(getEmptyImage(), { captureDraggingState: true });
-  }, [preview]);
-
   return (
     <div
-      ref={handleRef}
+      ref={ref}
       className={css(styles.element, rightAlign && styles.rightAlign)}
-      style={{ color }}
     >
-      {children}
+      {renderNode(node as IFieldsNode, getCoords)}
     </div>
   );
-};
+}
