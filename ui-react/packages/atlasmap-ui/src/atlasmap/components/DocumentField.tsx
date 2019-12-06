@@ -50,11 +50,11 @@ export const DocumentField: FunctionComponent<IDocumentFieldProps> = ({
   }, [preview]);
 
   return (
-    <div
+    <span
       ref={dragRef}
       style={{ color }}
     >
       {name} {showType && `(${type})`}
-    </div>
+    </span>
   );
 };

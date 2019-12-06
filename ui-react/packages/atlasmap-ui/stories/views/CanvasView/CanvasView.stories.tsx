@@ -59,12 +59,12 @@ export const sample = () => {
                 <DropTarget
                   key={m.id}
                   node={m}
-                  boxRef={ref}
-                  selectedMapping={selectedMapping}
                   addToMapping={addToMapping}
+                  boxRef={ref}
                 >
-                  {({canDrop, isOver}) =>
+                  {({canDrop, isOver }) =>
                     <MappingElement
+                      boxRef={ref}
                       node={m}
                       selectedMapping={selectedMapping}
                       selectMapping={selectMapping}

@@ -2,8 +2,6 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionToggle,
-  Split,
-  SplitItem,
 } from '@patternfly/react-core';
 import { FolderOpenIcon, FolderCloseIcon } from '@patternfly/react-icons';
 import { css, StyleSheet } from '@patternfly/react-styles';
@@ -11,12 +9,12 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
-import { useBoundingCanvasRect, useMappingNode } from '../../../canvas';
+import { useMappingNode } from '../../../canvas';
 import { IFieldsGroup, IFieldsNode } from '../models';
 import { FieldElement, IFieldElementProps } from './FieldElement';
+import { useLinkable } from './useLinkable';
 
 const styles = StyleSheet.create({
   button: {
@@ -31,11 +29,13 @@ const styles = StyleSheet.create({
       order: 1,
     },
   },
+  buttonContent: {
+    display: 'inline-block',
+    width: '100%',
+  },
   buttonContentRightAligned: {
     transform: 'scaleX(-1)',
-    display: 'inline-block',
     textAlign: 'left',
-    width: '100%',
   },
   content: {
     fontSize: 'inherit !important',
@@ -70,30 +70,15 @@ export function FieldGroup({
   parentExpanded,
   renderNode,
 }: IFieldGroupProps) {
-  const getBoundingCanvasRect = useBoundingCanvasRect();
   const { setLineNode } = useMappingNode();
-  const ref = useRef<HTMLDivElement | null>(null);
+  const { ref, getLeftSideCoords, getRightSideCoords } = useLinkable({ getBoxRef, getParentRef });
   const [isExpandedByUser, setIsExpandedByUser] = useState(level === 0);
   const toggleExpand = useCallback(() => setIsExpandedByUser(!isExpandedByUser), [
     isExpandedByUser,
     setIsExpandedByUser,
   ]);
 
-  const getCoords = useCallback(() => {
-    const boxRef = getBoxRef();
-    if (ref.current && boxRef) {
-      let dimensions = getBoundingCanvasRect(ref.current);
-      let boxRect = getBoundingCanvasRect(boxRef);
-      return {
-        x: lineConnectionSide === 'right' ? boxRect.right : boxRect.left,
-        y: Math.min(
-          Math.max(dimensions.top + dimensions.height / 2, boxRect.top),
-          boxRect.height + boxRect.top
-        ),
-      };
-    }
-    return null;
-  }, [getBoxRef, getBoundingCanvasRect, lineConnectionSide]);
+  const getCoords = lineConnectionSide === 'right' ? getRightSideCoords : getLeftSideCoords;
 
   const handleChildLines = useCallback(() => {
     if (!isExpandedByUser) {
@@ -161,36 +146,35 @@ export function FieldGroup({
       {content}
     </div>
   ) : (
-    <AccordionItem>
-      <AccordionToggle
-        onClick={toggleExpand}
-        isExpanded={isExpandedByUser}
-        id={`source-field-group-${group.id}-toggle`}
-        className={css(styles.button, rightAlign && styles.buttonRightAlign)}
-      >
-        <span
-          ref={ref}
-          className={css(rightAlign && styles.buttonContentRightAligned)}
+    <div ref={ref}>
+      <AccordionItem>
+        <AccordionToggle
+          onClick={toggleExpand}
+          isExpanded={isExpandedByUser}
+          id={`source-field-group-${group.id}-toggle`}
+          className={css(styles.button, rightAlign && styles.buttonRightAlign)}
         >
-          <Split>
-            <SplitItem style={{ paddingRight: '0.5rem' }}>
-              {isExpandedByUser ? <FolderOpenIcon /> : <FolderCloseIcon />}
-            </SplitItem>
-            <SplitItem isFilled={true}>
-              {renderNode(group as IFieldsGroup, getCoords)}
-            </SplitItem>
-          </Split>
-        </span>
-      </AccordionToggle>
-      <AccordionContent
-        id={`source-field-group-${group.id}-content`}
-        isHidden={!isExpandedByUser}
-        className={css(
-          styles.content
-        )}
-      >
-        {content}
-      </AccordionContent>
-    </AccordionItem>
+          <span
+            className={css(
+              styles.buttonContent,
+              rightAlign && styles.buttonContentRightAligned
+            )}
+          >
+            {isExpandedByUser ? <FolderOpenIcon /> : <FolderCloseIcon />}
+            {' '}
+            {renderNode(group as IFieldsGroup, getCoords)}
+          </span>
+        </AccordionToggle>
+        <AccordionContent
+          id={`source-field-group-${group.id}-content`}
+          isHidden={!isExpandedByUser}
+          className={css(
+            styles.content
+          )}
+        >
+          {content}
+        </AccordionContent>
+      </AccordionItem>
+    </div>
   );
 }
