@@ -3,6 +3,7 @@ import { Atlasmap, GroupId } from "@atlasmap/ui";
 import React, { useCallback, useRef, useState } from 'react';
 import "./App.css";
 import { useConfirmationDialog } from './useConfirmationDialog';
+import { useSingleInputDialog } from './useSingleInputDialog';
 
 const App: React.FC = () => {
   const [sourceFilter, setSourceFilter] = useState<string | undefined>();
@@ -34,6 +35,20 @@ const App: React.FC = () => {
     (selectedFile: File) => importAtlasFile(selectedFile, false),
     [importAtlasFile]
   );
+
+  const [exportDialog, openExportDialog] = useSingleInputDialog({
+    title: 'Export Mappings and Documents.',
+    content: 'Please enter a name for your exported catalog file',
+    placeholder: 'atlasmap-mapping.adm',
+    state: { inputValue: '' },
+    onConfirm: (closeDialog) => {
+      closeDialog();
+      exportAtlasFile();
+    },
+    onCancel: (closeDialog) => {
+      closeDialog();
+    },
+  });
 
   const [resetDialog, openResetDialog] = useConfirmationDialog({
     title: 'Reset All Mappings and Imports?',
@@ -93,13 +108,14 @@ const App: React.FC = () => {
         onImportTargetDocument={handleImportTargetDocument}
         onDeleteSourceDocument={handleDeleteSourceDocumentDialog}
         onDeleteTargetDocument={handleDeleteTargetDocumentDialog}
+        onExportAtlasFile={openExportDialog}
         onResetAtlasmap={openResetDialog}
         onSourceSearch={setSourceFilter}
         onTargetSearch={setTargetFilter}
-        onExportAtlasFile={exportAtlasFile}
       />
-      {resetDialog}
+      {exportDialog}
       {deleteDocumentDialog}
+      {resetDialog}
     </>
   );
 };
