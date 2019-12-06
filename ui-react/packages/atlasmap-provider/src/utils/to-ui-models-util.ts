@@ -1,12 +1,14 @@
 import { IFieldsGroup, IFieldsNode, IMappingField, IMappings, IDocument, IDocumentField } from '@atlasmap/ui';
 import { DocumentDefinition, Field, MappedField, MappingDefinition } from '..';
 
+export type AtlasmapFields = Array<IFieldsGroup & IAtlasmapField | IFieldsNode & IAtlasmapField>;
+
 export interface IAtlasmapField extends IDocumentField {
   amField: Field;
 }
 
 export interface IAtlasmapDocument extends IDocument {
-  fields: Array<IFieldsGroup & IAtlasmapField | IFieldsNode & IAtlasmapField>;
+  fields: AtlasmapFields;
 }
 
 function fromFieldToIFieldsGroup(field: Field): IAtlasmapField & IFieldsGroup {

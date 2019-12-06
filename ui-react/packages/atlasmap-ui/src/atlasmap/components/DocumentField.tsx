@@ -5,10 +5,10 @@ import { getEmptyImage } from 'react-dnd-html5-backend';
 import { useLinkNode } from '../../canvas';
 import { Coords, ElementId } from '../../views/CanvasView';
 
-
 const styles = StyleSheet.create({
   element: {
     display: 'flex',
+    flexFlow: 'column'
   },
   isSelected: {
     background: 'var(--pf-global--BackgroundColor--150)',
@@ -44,7 +44,8 @@ export const DocumentField: FunctionComponent<IDocumentFieldProps> = ({
   documentType,
   showType,
   getCoords,
-  isSelected
+  isSelected,
+  children
 }) => {
   const { setLineNode } = useLinkNode();
 
@@ -75,7 +76,8 @@ export const DocumentField: FunctionComponent<IDocumentFieldProps> = ({
         isDragging && styles.isDragging
       )}
     >
-      {name} {showType && `(${type})`}
+      <span>{name} {showType && `(${type})`}</span>
+      {children}
     </span>
   );
 };

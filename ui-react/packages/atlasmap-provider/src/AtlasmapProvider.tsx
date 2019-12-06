@@ -1,4 +1,4 @@
-import { IMappings } from '@atlasmap/ui';
+import { IFieldsGroup, IFieldsNode } from '@atlasmap/ui';
 import ky from 'ky';
 import React, {
   createContext,
@@ -11,6 +11,7 @@ import React, {
 } from 'react';
 import { timer } from 'rxjs';
 import { debounce } from 'rxjs/operators';
+import { ConfigModel } from './models/config.model';
 import { DocumentDefinition } from './models/document-definition.model';
 import { MappingDefinition } from './models/mapping-definition.model';
 import { DocumentManagementService } from './services/document-management.service';
@@ -21,12 +22,15 @@ import { InitializationService } from './services/initialization.service';
 import { MappingManagementService } from './services/mapping-management.service';
 import { search } from './utils/filter-fields';
 import {
+  AtlasmapFields,
   fromDocumentDefinitionToFieldGroup,
   fromMappingDefinitionToIMappings,
   IAtlasmapDocument,
+  IAtlasmapField,
 } from './utils/to-ui-models-util';
 import {
   deleteAtlasFile,
+  enableMappingPreview,
   exportAtlasFile,
   importAtlasFile,
   resetAtlasmap,
@@ -181,17 +185,7 @@ export interface IUseAtlasmapArgs {
 export function useAtlasmap({
   sourceFilter,
   targetFilter,
-}: IUseAtlasmapArgs = {}): {
-  pending: boolean;
-  error: boolean;
-  sources: IAtlasmapDocument[];
-  targets: IAtlasmapDocument[];
-  mappings: IMappings[];
-  deleteAtlasFile: (fileName: string, isSource: boolean) => void;
-  exportAtlasFile: () => void;
-  importAtlasFile: (file: File, isSource: boolean) => void;
-  resetAtlasmap: () => void;
-} {
+}: IUseAtlasmapArgs = {}) {
   const context = useContext(AtlasmapContext);
   if (!context) {
     throw new Error(
@@ -242,6 +236,39 @@ export function useAtlasmap({
 
   const mappings = fromMappingDefinitionToIMappings(mappingDefinition);
 
+  const onFieldPreviewChange = (id: string, value: string) => {
+    // ⚠️ dragons ahead! This needs heavy refactoring.
+    const findInFields = (
+      fields?: AtlasmapFields
+    ): IFieldsNode & IAtlasmapField | undefined => {
+      return fields && fields.reduce<IFieldsNode & IAtlasmapField | undefined>(
+        (found, field) => {
+          return found || (field as IFieldsGroup).fields
+            ? findInFields((field as IFieldsGroup).fields as AtlasmapFields)
+            : field.id === id
+            ? field
+            : undefined;
+        },
+        undefined
+      );
+    };
+    const field =
+      sources.reduce<IFieldsNode & IAtlasmapField | undefined>(
+        (found, s) => found || findInFields(s.fields as AtlasmapFields),
+        undefined
+      ) ||
+      targets.reduce<IFieldsNode & IAtlasmapField | undefined>(
+        (found, s) => found || findInFields(s.fields as AtlasmapFields),
+        undefined
+      );
+    if (field) {
+      (field as IAtlasmapField).amField.value = value;
+      const cfg = ConfigModel.getConfig();
+      // TODO: ⚠️ this doesn't work right now because we also need to set the activeMapping, which we don't do right now.
+      cfg.mappingService.notifyMappingUpdated();
+    }
+  };
+
   return useMemo(
     () => ({
       pending,
@@ -253,6 +280,8 @@ export function useAtlasmap({
       exportAtlasFile,
       importAtlasFile: handleImportAtlasFile,
       resetAtlasmap: handleResetAtlasmap,
+      enableMappingPreview,
+      onFieldPreviewChange,
     }),
     [
       pending,

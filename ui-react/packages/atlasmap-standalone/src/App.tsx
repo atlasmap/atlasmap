@@ -17,6 +17,8 @@ const App: React.FC = () => {
     resetAtlasmap,
     exportAtlasFile,
     deleteAtlasFile,
+    enableMappingPreview,
+    onFieldPreviewChange
   } = useAtlasmap({
     sourceFilter,
     targetFilter
@@ -72,7 +74,7 @@ const App: React.FC = () => {
     documentIsSource.current = true;
     openDeleteDocumentDialog();
   }, [openDeleteDocumentDialog]);
- 
+
   const handleDeleteTargetDocumentDialog = useCallback((id: GroupId) => {
     documentToDelete.current = id;
     documentIsSource.current = false;
@@ -97,6 +99,8 @@ const App: React.FC = () => {
         onSourceSearch={setSourceFilter}
         onTargetSearch={setTargetFilter}
         onExportAtlasFile={exportAtlasFile}
+        onShowMappingPreview={enableMappingPreview}
+        onFieldPreviewChange={onFieldPreviewChange}
       />
       {resetDialog}
       {deleteDocumentDialog}

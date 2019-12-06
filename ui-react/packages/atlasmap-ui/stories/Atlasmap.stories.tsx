@@ -39,6 +39,8 @@ export const sample = () => createElement(() => {
       onTargetSearch={action('onTargetSearch')}
       onDeleteSourceDocument={action('onDeleteSourceDocument')}
       onDeleteTargetDocument={action('onDeleteTargetDocument')}
+      onShowMappingPreview={action('onShowMappingPreview')}
+      onFieldPreviewChange={action('onFieldPreviewChange')}
       pending={false}
       error={false}
     />
