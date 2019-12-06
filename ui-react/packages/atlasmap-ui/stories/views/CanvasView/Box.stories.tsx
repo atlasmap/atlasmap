@@ -3,7 +3,7 @@ import { text } from '@storybook/addon-knobs';
 import { Box } from '../../../src/views/CanvasView';
 
 export default {
-  title: 'Views/Source Target Mapper/Components/Box',
+  title: 'CanvasView/Box',
   component: Box,
 };
 
