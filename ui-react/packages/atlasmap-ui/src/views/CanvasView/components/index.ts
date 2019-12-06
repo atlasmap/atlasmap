@@ -11,6 +11,7 @@ export * from './FieldsBoxHeader';
 export * from './Links';
 export * from './Mapping';
 export * from './MappingElement';
+export * from './useLinkable';
 export * from './useMappingLinks';
 export * from './useSourceTargetLinks';
 export * from './Source';

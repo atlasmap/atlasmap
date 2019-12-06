@@ -1,74 +1,39 @@
-import React, { FunctionComponent, ReactChild, useCallback, useEffect, useRef } from 'react';
+import React, { FunctionComponent, ReactChild, useEffect } from 'react';
 import { useDrop } from 'react-dnd';
-import { useBoundingCanvasRect, useMappingNode } from '../../canvas';
-import { ElementId, IMappings } from '../../views/CanvasView';
+import { useMappingNode } from '../../canvas';
+import { ElementId, IMappings, useLinkable } from '../../views/CanvasView';
 import { IFieldElementDragSource } from './DocumentField';
 
 export interface IDropTargetProps {
   node: IMappings;
-  boxRef: HTMLElement | null;
-  selectedMapping: string | undefined;
   addToMapping: (
     elementId: ElementId,
     mappingId: string
   ) => void;
+  boxRef: HTMLElement | null;
   children: (props: { isOver: boolean, canDrop: boolean }) => ReactChild;
 }
 
 export const DropTarget: FunctionComponent<IDropTargetProps> = ({
   node,
-  boxRef,
-  selectedMapping,
   addToMapping,
+  boxRef,
   children
 }) => {
-  const ref = useRef<HTMLDivElement | null>(null);
-
-  const getBoundingCanvasRect = useBoundingCanvasRect();
+  const { ref, getLeftSideCoords, getRightSideCoords } = useLinkable({ getBoxRef: () => boxRef });
   const { setLineNode, unsetLineNode } = useMappingNode();
 
-  const getCoords = useCallback(() => {
-    if (ref.current && boxRef) {
-      let boxRect = getBoundingCanvasRect(boxRef);
-      let dimensions = getBoundingCanvasRect(ref.current);
-      return {
-        left: dimensions.left,
-        right: dimensions.right,
-        y: Math.min(
-          Math.max(dimensions.top + dimensions.height / 2, boxRect.top),
-          boxRect.height + boxRect.top
-        ),
-      };
-    } else {
-      return { left: 0, right: 0, y: 0 };
-    }
-  }, [ref, boxRef, getBoundingCanvasRect]);
-
-  const getFromSourceCoords = () => {
-    const { left, y } = getCoords();
-    return {
-      x: left,
-      y,
-    };
-  };
-  const getToTargetCoords = () => {
-    const { right, y } = getCoords();
-    return {
-      x: right,
-      y,
-    };
-  };
-
-  const [{ isOver, canDrop }, dropRef] = useDrop<
+  const [{ isOver, canDrop, type }, dropRef] = useDrop<
     IFieldElementDragSource,
     void,
-    { isOver: boolean; canDrop: boolean }
+    { isOver: boolean; canDrop: boolean, type?: string }
     >({
     accept: ['source', 'target'],
     drop: item => addToMapping(item.id, node.id),
     collect: monitor => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),
+      type: monitor.getItemType() as string | undefined
     }),
     canDrop: (props, monitor) => {
       const type = monitor.getItemType();
@@ -95,33 +60,23 @@ export const DropTarget: FunctionComponent<IDropTargetProps> = ({
         return true;
       }
       return false;
-    },
-    hover: (_, monitor) => {
-      const type = monitor.getItemType();
-      const canDrop = monitor.canDrop();
-      if (canDrop) {
-        setLineNode(
-          'dragtarget',
-          type === 'source' ? getFromSourceCoords : getToTargetCoords
-        );
-      }
-    },
+    }
   });
 
-  setLineNode(`to-${node.id}`, getFromSourceCoords);
-  setLineNode(`from-${node.id}`, getToTargetCoords);
-
-  const isSelected = node.id === selectedMapping;
-
   useEffect(() => {
-    if (!isOver) {
+    if (isOver && type && canDrop) {
+      setLineNode(
+        'dragtarget',
+        type === 'source' ? getLeftSideCoords : getRightSideCoords
+      );
+    } else {
       unsetLineNode('dragtarget');
     }
-  }, [isOver, isSelected, unsetLineNode]);
+  }, [getLeftSideCoords, getRightSideCoords, type, isOver, setLineNode, unsetLineNode, canDrop]);
 
   const handleRef = (el: HTMLDivElement | null) => {
     ref.current = el;
-    dropRef(el);
+    dropRef(el)
   };
 
   return (

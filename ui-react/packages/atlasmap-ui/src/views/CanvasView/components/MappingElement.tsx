@@ -21,9 +21,12 @@ import React, {
   FunctionComponent,
   useCallback,
   MouseEvent,
+  useEffect,
 } from 'react';
+import { useMappingNode } from '../../../canvas';
 
 import { IMappings } from '../models';
+import { useLinkable } from './useLinkable';
 
 const styles = StyleSheet.create({
   element: {
@@ -60,6 +63,7 @@ export interface IMappingElementProps {
   mappingType: string;
   canDrop: boolean;
   isOver: boolean;
+  boxRef: HTMLElement | null;
 }
 
 export const MappingElement: FunctionComponent<IMappingElementProps> = ({
@@ -70,9 +74,14 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
   editMapping,
   mappingType,
   canDrop,
-  isOver
+  isOver,
+  boxRef
 }) => {
+  const { ref, getLeftSideCoords, getRightSideCoords } = useLinkable({ getBoxRef: () => boxRef });
+  const { setLineNode, unsetLineNode } = useMappingNode();
+
   const isSelected = node.id === selectedMapping;
+
   const handleSelect = useCallback(() => {
     if (isSelected) {
       deselectMapping();
@@ -92,56 +101,68 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
   const mappingTypeLeft = node.sourceFields.length <= 1 ? 'One' : 'Many';
   const mappingTypeRight = node.targetFields.length <= 1 ? 'One' : 'Many';
 
+
+  useEffect(() => {
+    setLineNode(`to-${node.id}`, getLeftSideCoords);
+    setLineNode(`from-${node.id}`, getRightSideCoords);
+    return () => {
+      unsetLineNode(`to-${node.id}`);
+      unsetLineNode(`from-${node.id}`);
+    };
+  }, [getLeftSideCoords, getRightSideCoords, node.id, setLineNode, unsetLineNode]);
+
   return (
-    <Card
-      className={css(
-        styles.element,
-        isSelected && styles.selected,
-        canDrop && styles.canDrop,
-        canDrop && isOver && styles.dropTarget
-      )}
-      onClick={handleSelect}
-      isCompact={true}
-    >
-      <CardHead className={css(styles.head)}>
-        <CardActions>
-          {isSelected && (
-            <Button variant={'plain'} onClick={handleEdit}>
-              <EditIcon />
+    <div ref={ref}>
+      <Card
+        className={css(
+          styles.element,
+          isSelected && styles.selected,
+          canDrop && styles.canDrop,
+          canDrop && isOver && styles.dropTarget
+        )}
+        onClick={handleSelect}
+        isCompact={true}
+      >
+        <CardHead className={css(styles.head)}>
+          <CardActions>
+            {isSelected && (
+              <Button variant={'plain'} onClick={handleEdit}>
+                <EditIcon />
+              </Button>
+            )}
+          </CardActions>
+          <CardHeader>
+            <Button variant={'link'}>
+              {isSelected ? <CaretDownIcon /> : <CaretRightIcon />}{' '}
+              {`${mappingTypeLeft} to ${mappingTypeRight}`}
             </Button>
-          )}
-        </CardActions>
-        <CardHeader>
-          <Button variant={'link'}>
-            {isSelected ? <CaretDownIcon /> : <CaretRightIcon />}{' '}
-            {`${mappingTypeLeft} to ${mappingTypeRight}`}
-          </Button>
-        </CardHeader>
-      </CardHead>
-      {isSelected && <CardBody>
-        <Title size={BaseSizes.md}>Sources</Title>
-        {node.sourceFields.map((s, idx) => (
-          <p key={idx}>
-            {s.name}{' '}
-            <Tooltip position={TooltipPosition.top} content={s.tip}>
-              <OutlinedQuestionCircleIcon />
-            </Tooltip>
-          </p>
-        ))}
-        <br />
-        <Title size={BaseSizes.md}>Targets</Title>
-        {node.targetFields.map((s, idx) => (
-          <p key={idx}>
-            {s.name}{' '}
-            <Tooltip position={TooltipPosition.top} content={s.tip}>
-              <OutlinedQuestionCircleIcon />
-            </Tooltip>
-          </p>
-        ))}
-      </CardBody>}
-      <CardFooter className={css(styles.footer)}>
-        Mapping type: {mappingType}
-      </CardFooter>
-    </Card>
+          </CardHeader>
+        </CardHead>
+        {isSelected && <CardBody>
+          <Title size={BaseSizes.md}>Sources</Title>
+          {node.sourceFields.map((s, idx) => (
+            <p key={idx}>
+              {s.name}{' '}
+              <Tooltip position={TooltipPosition.top} content={s.tip}>
+                <OutlinedQuestionCircleIcon />
+              </Tooltip>
+            </p>
+          ))}
+          <br />
+          <Title size={BaseSizes.md}>Targets</Title>
+          {node.targetFields.map((s, idx) => (
+            <p key={idx}>
+              {s.name}{' '}
+              <Tooltip position={TooltipPosition.top} content={s.tip}>
+                <OutlinedQuestionCircleIcon />
+              </Tooltip>
+            </p>
+          ))}
+        </CardBody>}
+        <CardFooter className={css(styles.footer)}>
+          Mapping type: {mappingType}
+        </CardFooter>
+      </Card>
+    </div>
   );
 };

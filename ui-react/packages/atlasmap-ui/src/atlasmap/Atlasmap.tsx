@@ -239,11 +239,11 @@ export function Atlasmap({
                         key={m.id}
                         node={m}
                         boxRef={ref}
-                        selectedMapping={selectedMapping}
                         addToMapping={addToMapping}
                       >
                         {({ canDrop, isOver }) => (
                           <MappingElement
+                            boxRef={ref}
                             node={m}
                             selectedMapping={selectedMapping}
                             selectMapping={selectMapping}

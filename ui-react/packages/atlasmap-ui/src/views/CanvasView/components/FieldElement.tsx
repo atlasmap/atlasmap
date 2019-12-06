@@ -1,12 +1,11 @@
 import { css, StyleSheet } from '@patternfly/react-styles';
 import React, {
   ReactElement,
-  useCallback,
   useEffect,
-  useRef,
 } from 'react';
-import { useBoundingCanvasRect, useMappingNode } from '../../../canvas';
+import { useMappingNode } from '../../../canvas';
 import { Coords, IFieldsGroup, IFieldsNode } from '../models';
+import { useLinkable } from './useLinkable';
 
 const styles = StyleSheet.create({
   element: {
@@ -36,34 +35,15 @@ export interface IFieldElementProps {
 export function FieldElement ({
   node,
   lineConnectionSide,
-  getParentRef,
   getBoxRef,
+  getParentRef,
   rightAlign = false,
   renderNode,
 }: IFieldElementProps) {
-  const ref = useRef<HTMLDivElement | null>(null);
-
-  const getBoundingCanvasRect = useBoundingCanvasRect();
   const { setLineNode, unsetLineNode } = useMappingNode();
-  const getCoords = useCallback(() => {
-    const parentRef = getParentRef();
-    const boxRef = getBoxRef();
-    if (ref.current && parentRef && boxRef) {
-      let parentRect = getBoundingCanvasRect(parentRef);
-      let boxRect = getBoundingCanvasRect(boxRef);
-      let dimensions = getBoundingCanvasRect(ref.current);
-      dimensions = dimensions.height > 0 ? dimensions : parentRect;
-      return {
-        x: lineConnectionSide === 'right' ? boxRect.right : boxRect.left,
-        y: Math.min(
-          Math.max(dimensions.top + dimensions.height / 2, boxRect.top),
-          boxRect.height + boxRect.top
-        ),
-      };
-    }
-    return null;
-  }, [getParentRef, getBoxRef, getBoundingCanvasRect, lineConnectionSide]);
+  const { ref, getLeftSideCoords, getRightSideCoords } = useLinkable({ getBoxRef, getParentRef });
 
+  const getCoords = lineConnectionSide === 'right' ? getRightSideCoords : getLeftSideCoords;
 
   useEffect(() => {
     setLineNode(node.id, getCoords);
