@@ -11,7 +11,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { useMappingNode } from '../../../canvas';
+import { useLinkNode } from '../../../canvas';
 import { IFieldsGroup, IFieldsNode } from '../models';
 import { FieldElement, IFieldElementProps } from './FieldElement';
 import { useLinkable } from './useLinkable';
@@ -58,6 +58,7 @@ export interface IFieldGroupProps extends Pick<IFieldElementProps, 'renderNode'>
   rightAlign?: boolean;
   level?: number;
   parentExpanded: boolean;
+  expandParent?: (expanded: boolean) => void;
 }
 export function FieldGroup({
   isVisible,
@@ -68,20 +69,29 @@ export function FieldGroup({
   rightAlign = false,
   level = 0,
   parentExpanded,
+  expandParent,
   renderNode,
 }: IFieldGroupProps) {
-  const { setLineNode } = useMappingNode();
+  const { setLineNode } = useLinkNode();
   const { ref, getLeftSideCoords, getRightSideCoords } = useLinkable({ getBoxRef, getParentRef });
   const [isExpandedByUser, setIsExpandedByUser] = useState(level === 0);
+  const [isExpandedByField, setIsExpandedByField] = useState(false);
   const toggleExpand = useCallback(() => setIsExpandedByUser(!isExpandedByUser), [
     isExpandedByUser,
     setIsExpandedByUser,
   ]);
 
+  const setExpanded = useCallback((expanded: boolean) => {
+    expandParent && expandParent(expanded);
+    setIsExpandedByField(expanded);
+  }, [expandParent]);
+
+  const isExpanded = isExpandedByField || isExpandedByUser;
+
   const getCoords = lineConnectionSide === 'right' ? getRightSideCoords : getLeftSideCoords;
 
   const handleChildLines = useCallback(() => {
-    if (!isExpandedByUser) {
+    if (!isExpanded) {
       const traverseChildren = (f: IFieldsGroup | IFieldsNode) => {
         if ((f as IFieldsGroup).fields) {
           (f as IFieldsGroup).fields.forEach(traverseChildren);
@@ -91,7 +101,7 @@ export function FieldGroup({
       };
       group.fields.forEach(traverseChildren);
     }
-  }, [getCoords, group.fields, isExpandedByUser, setLineNode]);
+  }, [getCoords, group.fields, isExpanded, setLineNode]);
 
   useEffect(() => {
     handleChildLines();
@@ -105,7 +115,7 @@ export function FieldGroup({
             key={f.id}
             lineConnectionSide={lineConnectionSide}
             getParentRef={() =>
-              isVisible && isExpandedByUser
+              isVisible && isExpanded
                 ? ref.current
                 : isVisible || !getParentRef
                 ? ref.current
@@ -115,10 +125,11 @@ export function FieldGroup({
             node={f as IFieldsNode}
             rightAlign={rightAlign}
             renderNode={renderNode}
+            expandParent={setExpanded}
           />
         ) : (
           <FieldGroup
-            isVisible={isVisible && isExpandedByUser}
+            isVisible={isVisible && isExpanded}
             lineConnectionSide={lineConnectionSide}
             getParentRef={() =>
               isVisible || !getParentRef ? ref.current : getParentRef()
@@ -130,10 +141,11 @@ export function FieldGroup({
             level={level + 1}
             parentExpanded={parentExpanded}
             renderNode={renderNode}
+            expandParent={setExpanded}
           />
         )
       ),
-    [group.fields, lineConnectionSide, getBoxRef, rightAlign, renderNode, isVisible, isExpandedByUser, level, parentExpanded, getParentRef]
+    [group.fields, lineConnectionSide, getBoxRef, rightAlign, renderNode, isVisible, isExpanded, level, parentExpanded, ref, getParentRef, setExpanded]
   );
 
   return level === 0 ? (
@@ -150,7 +162,7 @@ export function FieldGroup({
       <AccordionItem>
         <AccordionToggle
           onClick={toggleExpand}
-          isExpanded={isExpandedByUser}
+          isExpanded={isExpanded}
           id={`source-field-group-${group.id}-toggle`}
           className={css(styles.button, rightAlign && styles.buttonRightAlign)}
         >
@@ -160,14 +172,14 @@ export function FieldGroup({
               rightAlign && styles.buttonContentRightAligned
             )}
           >
-            {isExpandedByUser ? <FolderOpenIcon /> : <FolderCloseIcon />}
+            {isExpanded ? <FolderOpenIcon /> : <FolderCloseIcon />}
             {' '}
             {renderNode(group as IFieldsGroup, getCoords)}
           </span>
         </AccordionToggle>
         <AccordionContent
           id={`source-field-group-${group.id}-content`}
-          isHidden={!isExpandedByUser}
+          isHidden={!isExpanded}
           className={css(
             styles.content
           )}

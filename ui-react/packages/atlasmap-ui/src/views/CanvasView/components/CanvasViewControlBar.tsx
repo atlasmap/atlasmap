@@ -11,7 +11,8 @@ import {
   PficonDragdropIcon,
   LinkIcon
 } from '@patternfly/react-icons';
-import { useCanvasViewContext } from '../CanvasViewProvider';
+import { useCanvasViewOptionsContext } from '../CanvasViewOptionsProvider';
+import { useCanvasViewContext } from '../CanvasViewCanvasProvider';
 
 export interface ICanvasViewControlBarProps {
   extraButtons?: TopologyControlButton[]
@@ -21,10 +22,13 @@ export const CanvasViewControlBar: FunctionComponent<ICanvasViewControlBarProps>
   const { updateZoom,
     resetZoom,
     resetPan,
+  } = useCanvasViewContext();
+
+  const {
     freeView,
     toggleFreeView,
-    toggleMaterializedMappings,
-  } = useCanvasViewContext();
+    toggleMaterializedMappings
+  } = useCanvasViewOptionsContext();
 
   const handleZoomIn = useCallback(() => {
     updateZoom(0.2);

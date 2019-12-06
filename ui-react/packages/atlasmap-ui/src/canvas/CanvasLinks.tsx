@@ -102,7 +102,7 @@ export function useCanvasLinks(linkedNodes: SourceTargetNodes[]) {
   };
 }
 
-export function useMappingNode() {
+export function useLinkNode() {
   const context = useContext(LinksContext);
   if (!context) {
     throw new Error('A LinksProvider wrapper is required to use this hook.');

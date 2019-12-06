@@ -1,8 +1,8 @@
 import React, { FunctionComponent, HTMLAttributes, ReactElement, useEffect } from 'react';
 import { CanvasObject, useCanvas } from '../../../canvas';
 import { useDimensions } from '../../../common';
+import { useCanvasViewOptionsContext } from '../CanvasViewOptionsProvider';
 import { Coords } from '../models';
-import { useCanvasViewContext } from '../CanvasViewProvider';
 import { Box } from './Box';
 
 export interface IMappingsBoxProps extends HTMLAttributes<HTMLDivElement> {
@@ -25,7 +25,7 @@ export const FieldsBox: FunctionComponent<IMappingsBoxProps> = ({
   children,
   ...props
 }) => {
-  const { freeView } = useCanvasViewContext();
+  const { freeView } = useCanvasViewOptionsContext();
   const scrollable = !freeView;
 
   const [ref, dimensions, measure ] = useDimensions();

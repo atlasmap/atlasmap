@@ -1,12 +1,14 @@
 import React, { FunctionComponent } from 'react';
 import { Canvas } from '../../../canvas';
 import { useDimensions } from '../../../common';
-import { useCanvasViewContext } from '../CanvasViewProvider';
+import { useCanvasViewOptionsContext } from '../CanvasViewOptionsProvider';
+import { useCanvasViewContext } from '../CanvasViewCanvasProvider';
 
 export const CanvasViewCanvas: FunctionComponent = ({
   children
 }) => {
-  const { freeView, isPanning, pan, zoom, bindCanvas } = useCanvasViewContext();
+  const { isPanning, pan, zoom, bindCanvas } = useCanvasViewContext();
+  const { freeView } = useCanvasViewOptionsContext();
   const [dimensionsRef, { width, height, top, left }] = useDimensions();
   return (
     <div

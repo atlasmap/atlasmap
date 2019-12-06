@@ -1,7 +1,7 @@
 import { number } from '@storybook/addon-knobs';
 import React from 'react';
 import {
-  CanvasView, CanvasViewProvider,
+  CanvasView, CanvasViewCanvasProvider,
 } from '../../../src/views/CanvasView';
 
 export default {
@@ -9,7 +9,7 @@ export default {
 };
 
 export const interactive = () => (
-    <CanvasViewProvider>
+    <CanvasViewCanvasProvider>
       <CanvasView>
         <circle
           cx={number('cx', 50)}
@@ -17,5 +17,5 @@ export const interactive = () => (
           r={number('r', 20)}
         />
       </CanvasView>
-    </CanvasViewProvider>
+    </CanvasViewCanvasProvider>
 );

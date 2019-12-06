@@ -21,9 +21,10 @@ import React, {
   FunctionComponent,
   useCallback,
   MouseEvent,
-  useEffect,
+  useEffect, useRef,
 } from 'react';
-import { useMappingNode } from '../../../canvas';
+import { useLinkNode } from '../../../canvas';
+import { useCanvasViewFieldsContext } from '../CanvasViewFieldsProvider';
 
 import { IMappings } from '../models';
 import { useLinkable } from './useLinkable';
@@ -78,17 +79,22 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
   boxRef
 }) => {
   const { ref, getLeftSideCoords, getRightSideCoords } = useLinkable({ getBoxRef: () => boxRef });
-  const { setLineNode, unsetLineNode } = useMappingNode();
+  const { setLineNode, unsetLineNode } = useLinkNode();
+  const { requireVisible } = useCanvasViewFieldsContext();
+  const wasPreviouslySelected = useRef<boolean>(false);
 
   const isSelected = node.id === selectedMapping;
 
   const handleSelect = useCallback(() => {
+    wasPreviouslySelected.current = true;
     if (isSelected) {
       deselectMapping();
     } else {
       selectMapping(node.id);
+      node.sourceFields.forEach(f => requireVisible(f.id, true));
+      node.targetFields.forEach(f => requireVisible(f.id, true));
     }
-  }, [isSelected, node, deselectMapping, selectMapping]);
+  }, [isSelected, node, deselectMapping, selectMapping, requireVisible]);
 
   const handleEdit = useCallback(
     (e: MouseEvent) => {
@@ -101,6 +107,13 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
   const mappingTypeLeft = node.sourceFields.length <= 1 ? 'One' : 'Many';
   const mappingTypeRight = node.targetFields.length <= 1 ? 'One' : 'Many';
 
+  useEffect(() => {
+    if (wasPreviouslySelected.current && !isSelected) {
+      node.sourceFields.forEach(f => requireVisible(f.id, false));
+      node.targetFields.forEach(f => requireVisible(f.id, false));
+      wasPreviouslySelected.current = false;
+    }
+  }, [isSelected, node.sourceFields, node.targetFields]);
 
   useEffect(() => {
     setLineNode(`to-${node.id}`, getLeftSideCoords);

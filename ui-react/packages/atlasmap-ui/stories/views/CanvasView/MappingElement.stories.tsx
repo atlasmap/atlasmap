@@ -2,7 +2,7 @@ import { action } from '@storybook/addon-actions';
 import { boolean, text } from '@storybook/addon-knobs';
 import React, { createElement, FunctionComponent, useState } from 'react';
 import { CanvasProvider } from '../../../src/canvas';
-import { CanvasView, CanvasViewProvider, FieldsBox } from '../../../src/views/CanvasView';
+import { CanvasView, CanvasViewCanvasProvider, FieldsBox } from '../../../src/views/CanvasView';
 import { MappingElement } from '../../../src/views/CanvasView/components';
 import { mappings } from '../../sampleData';
 
@@ -20,7 +20,7 @@ const Wrapper: FunctionComponent = ({ children }) => (
     panX={0}
     panY={0}
   >
-    <CanvasViewProvider>
+    <CanvasViewCanvasProvider>
       <CanvasView>
         <FieldsBox
           id={'sample'}
@@ -33,7 +33,7 @@ const Wrapper: FunctionComponent = ({ children }) => (
           {children}
         </FieldsBox>
       </CanvasView>
-    </CanvasViewProvider>
+    </CanvasViewCanvasProvider>
   </CanvasProvider>
 );
 

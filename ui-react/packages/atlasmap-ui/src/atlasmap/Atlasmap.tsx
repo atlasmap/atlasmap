@@ -15,8 +15,6 @@ import {
   GroupId,
   Target,
   Source,
-} from '../views/CanvasView';
-import {
   CanvasView,
   CanvasViewControlBar,
   CanvasViewProvider,
