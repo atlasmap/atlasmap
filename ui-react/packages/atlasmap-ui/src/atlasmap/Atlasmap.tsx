@@ -137,6 +137,14 @@ export function Atlasmap({
     [onExportAtlasFile, onImportAtlasFile, onResetAtlasmap]
   );
 
+  const isFieldPartOfSelection = (id: string) => {
+    const mapped = mappings.find(m => m.id === selectedMapping);
+    if (mapped) {
+      return !!(mapped.sourceFields.find(f => f.id === id) || mapped.targetFields.find(f => f.id === id));
+    }
+    return false;
+  };
+
   const controlBar = useMemo(
     () => (
       <CanvasViewControlBar
@@ -220,6 +228,7 @@ export function Atlasmap({
                           documentType={'source'}
                           showType={showTypes}
                           getCoords={getCoords}
+                          isSelected={isFieldPartOfSelection(id)}
                         />
                       );
                     }}
@@ -293,6 +302,7 @@ export function Atlasmap({
                           documentType={'target'}
                           showType={showTypes}
                           getCoords={getCoords}
+                          isSelected={isFieldPartOfSelection(id)}
                         />
                       );
                     }}

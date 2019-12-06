@@ -30,8 +30,9 @@ const styles = StyleSheet.create({
     },
   },
   buttonContent: {
-    display: 'inline-block',
-    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+
   },
   buttonContentRightAligned: {
     transform: 'scaleX(-1)',
@@ -173,7 +174,7 @@ export function FieldGroup({
             )}
           >
             {isExpanded ? <FolderOpenIcon /> : <FolderCloseIcon />}
-            {' '}
+            <span>&nbsp;</span>
             {renderNode(group as IFieldsGroup, getCoords)}
           </span>
         </AccordionToggle>
