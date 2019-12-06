@@ -31,6 +31,7 @@ import {
   DragLayer,
   DropTarget,
   DocumentField,
+  DocumentFieldPreview, DocumentFieldPreviewResults,
 } from './components';
 import { MappingDetails } from './MappingDetails';
 
@@ -61,6 +62,8 @@ export interface IAtlasmapProps {
   onResetAtlasmap: () => void;
   onSourceSearch: (content: string) => void;
   onTargetSearch: (content: string) => void;
+  onShowMappingPreview: (enabled: boolean) => void;
+  onFieldPreviewChange: (id: string, value: string) => void;
 }
 
 export function Atlasmap({
@@ -79,6 +82,8 @@ export function Atlasmap({
   onResetAtlasmap,
   onSourceSearch,
   onTargetSearch,
+  onShowMappingPreview,
+  onFieldPreviewChange
 }: IAtlasmapProps) {
   const [selectedMapping, setSelectedMapping] = useState<string>();
   const [isEditingMapping, setisEditingMapping] = useState(false);
@@ -86,6 +91,12 @@ export function Atlasmap({
   const toggleShowTypes = useCallback(() => setShowTypes(!showTypes), [
     showTypes,
   ]);
+  const [showMappingPreview, setShowMappingPreview] = useState(false);
+  const toggleShowMappingPreview = useCallback(() => {
+    const newValue = !showMappingPreview;
+    setShowMappingPreview(newValue);
+    onShowMappingPreview(newValue);
+  }, [onShowMappingPreview, showMappingPreview]);
 
   const closeMappingDetails = useCallback(() => {
     setisEditingMapping(false);
@@ -173,11 +184,12 @@ export function Atlasmap({
             icon: <EyeIcon />,
             tooltip: 'Show mapping preview',
             ariaLabel: ' ',
+            callback: toggleShowMappingPreview
           },
         ]}
       />
     ),
-    [toggleShowTypes]
+    [toggleShowMappingPreview, toggleShowTypes]
   );
 
   return (
@@ -220,6 +232,7 @@ export function Atlasmap({
                     renderNode={(node, getCoords) => {
                       const { id, name, type } = node as IDocumentField &
                         (IFieldsNode | IFieldsGroup);
+                      const showPreview = isFieldPartOfSelection(id) && showMappingPreview;
                       return (
                         <DocumentField
                           id={id}
@@ -229,7 +242,13 @@ export function Atlasmap({
                           showType={showTypes}
                           getCoords={getCoords}
                           isSelected={isFieldPartOfSelection(id)}
-                        />
+                        >
+                          {showPreview &&
+                            <DocumentFieldPreview
+                              id={id}
+                              onChange={value => onFieldPreviewChange(id, value)}/>
+                          }
+                        </DocumentField>
                       );
                     }}
                     onDelete={() => onDeleteSourceDocument(s.id)}
@@ -284,7 +303,7 @@ export function Atlasmap({
                     title={t.name}
                     footer={
                       <DocumentFooter
-                        title="Target document"
+                        title='Target document'
                         type={t.type}
                         showType={showTypes}
                       />
@@ -294,6 +313,7 @@ export function Atlasmap({
                     renderNode={(node, getCoords) => {
                       const { id, name, type } = node as IDocumentField &
                         (IFieldsNode | IFieldsGroup);
+                      const showPreview = isFieldPartOfSelection(id) && showMappingPreview;
                       return (
                         <DocumentField
                           id={id}
@@ -303,7 +323,13 @@ export function Atlasmap({
                           showType={showTypes}
                           getCoords={getCoords}
                           isSelected={isFieldPartOfSelection(id)}
-                        />
+                        >
+                          {showPreview &&
+                            <DocumentFieldPreviewResults
+                              id={id}
+                              value={'TODO'}/>
+                          }
+                        </DocumentField>
                       );
                     }}
                     onDelete={() => onDeleteTargetDocument(t.id)}

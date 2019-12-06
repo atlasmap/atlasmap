@@ -55,9 +55,9 @@ async function processMappingsCatalog(selectedFile: any, cfg: ConfigModel) {
 /**
  * Import an ADM catalog file or a user JAR file.
  *
- * @param selectedFile 
- * @param userFileSuffix 
- * @param cfg 
+ * @param selectedFile
+ * @param userFileSuffix
+ * @param cfg
  */
 function importAtlasGlobalFile(selectedFile: File, userFileSuffix: string, cfg: ConfigModel) {
   if (userFileSuffix === 'ADM') {
@@ -154,4 +154,14 @@ export function resetAtlasmap() {
         level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
     }
   });
+}
+
+export function enableMappingPreview(enabled: boolean) {
+  const cfg = ConfigModel.getConfig();
+
+  if (enabled) {
+    cfg.mappingService.enableMappingPreview();
+  } else {
+    cfg.mappingService.disableMappingPreview();
+  }
 }
