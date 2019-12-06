@@ -3,7 +3,8 @@ import React, {
   ReactElement,
   useEffect,
 } from 'react';
-import { useMappingNode } from '../../../canvas';
+import { useLinkNode } from '../../../canvas';
+import { useCanvasViewFieldsContext } from '../CanvasViewFieldsProvider';
 import { Coords, IFieldsGroup, IFieldsNode } from '../models';
 import { useLinkable } from './useLinkable';
 
@@ -30,6 +31,7 @@ export interface IFieldElementProps {
     node: IFieldsGroup | IFieldsNode,
     getCoords: () => Coords | null,
   ) => ReactElement;
+  expandParent: (expanded: boolean) => void;
 }
 
 export function FieldElement ({
@@ -39,18 +41,24 @@ export function FieldElement ({
   getParentRef,
   rightAlign = false,
   renderNode,
+  expandParent
 }: IFieldElementProps) {
-  const { setLineNode, unsetLineNode } = useMappingNode();
+  const { addField, removeField } = useCanvasViewFieldsContext();
+  const { setLineNode, unsetLineNode } = useLinkNode();
   const { ref, getLeftSideCoords, getRightSideCoords } = useLinkable({ getBoxRef, getParentRef });
 
   const getCoords = lineConnectionSide === 'right' ? getRightSideCoords : getLeftSideCoords;
 
   useEffect(() => {
     setLineNode(node.id, getCoords);
+    addField(node.id, {
+      requireVisible: expandParent,
+    });
     return () => {
       unsetLineNode(node.id);
+      removeField(node.id)
     };
-  }, [node, setLineNode, unsetLineNode, getCoords]);
+  }, [node, setLineNode, unsetLineNode, getCoords, addField, removeField, expandParent]);
 
   return (
     <div

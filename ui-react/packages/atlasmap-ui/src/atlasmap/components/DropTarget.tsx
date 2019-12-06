@@ -1,6 +1,6 @@
 import React, { FunctionComponent, ReactChild, useEffect } from 'react';
 import { useDrop } from 'react-dnd';
-import { useMappingNode } from '../../canvas';
+import { useLinkNode } from '../../canvas';
 import { ElementId, IMappings, useLinkable } from '../../views/CanvasView';
 import { IFieldElementDragSource } from './DocumentField';
 
@@ -21,7 +21,7 @@ export const DropTarget: FunctionComponent<IDropTargetProps> = ({
   children
 }) => {
   const { ref, getLeftSideCoords, getRightSideCoords } = useLinkable({ getBoxRef: () => boxRef });
-  const { setLineNode, unsetLineNode } = useMappingNode();
+  const { setLineNode, unsetLineNode } = useLinkNode();
 
   const [{ isOver, canDrop, type }, dropRef] = useDrop<
     IFieldElementDragSource,

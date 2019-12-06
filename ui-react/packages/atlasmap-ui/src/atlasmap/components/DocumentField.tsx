@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useEffect } from 'react';
 import { useDrag } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import { useMappingNode } from '../../canvas';
+import { useLinkNode } from '../../canvas';
 import { Coords, ElementId } from '../../views/CanvasView';
 
 export interface IFieldElementDragSource {
@@ -27,7 +27,7 @@ export const DocumentField: FunctionComponent<IDocumentFieldProps> = ({
   showType,
   getCoords
 }) => {
-  const { setLineNode } = useMappingNode();
+  const { setLineNode } = useLinkNode();
 
   const [{ color }, dragRef, preview] = useDrag<
     IFieldElementDragSource,

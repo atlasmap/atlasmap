@@ -1,7 +1,7 @@
 import { css, StyleSheet } from '@patternfly/react-styles';
 import React, { FunctionComponent, ReactElement, useRef } from 'react';
 import { useCanvasViewLayoutContext } from '../CanvasViewLayoutProvider';
-import { useCanvasViewContext } from '../CanvasViewProvider';
+import { useCanvasViewOptionsContext } from '../CanvasViewOptionsProvider';
 import { FieldsBox } from './FieldsBox';
 
 const styles = StyleSheet.create({
@@ -18,7 +18,7 @@ export interface IMappingProps {
 }
 
 export const Mapping: FunctionComponent<IMappingProps> = ({ children }) => {
-  const { materializedMappings } = useCanvasViewContext();
+  const { materializedMappings } = useCanvasViewOptionsContext();
   const { mappingWidth, boxHeight, initialMappingCoords } = useCanvasViewLayoutContext();
   const ref = useRef<HTMLDivElement | null>(null);
   return (
