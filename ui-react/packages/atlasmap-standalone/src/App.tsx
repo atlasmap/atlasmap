@@ -44,12 +44,10 @@ const App: React.FC = () => {
     content: 'Please enter a name for your exported catalog file',
     placeholder: 'atlasmap-mapping.adm',
     onConfirm: (closeDialog, value) => {
-      closeDialog();
-      if (value === undefined) {
-        throw new Error(
-          `Error: Could not export the specified file.`
-        );
+      if (value!.length === 0) {
+        value = 'atlasmap-mapping.adm';
       }
+      closeDialog();
       exportAtlasFile(value!);
     },
     onCancel: (closeDialog) => {

@@ -23,37 +23,19 @@ export async function deleteAtlasFile(fileName: string, isSource: boolean) {
 }
 
 /**
- * Correct the AtlasMap mappings catalog file name by giving it the correct
- * suffix if needed.
+ * The user has requested their current mappings be exported.  Use the mapping management
+ * service to establish the file content and to push it down to the server.
  *
  * @param fileName - user-specified catalog file name
  */
- function handleMappingsInstanceName(fileName: string): string | undefined {
-
-  if (fileName !== null && fileName.length > 0) {
-
-    // Tack on a .adm suffix if one wasn't already specified.
-    if (fileName.split('.').pop() !== 'adm') {
-      fileName = fileName.concat('.adm');
-    }
-  }
-  return fileName;
-}
-
- /**
-  * The user has requested their current mappings be exported.  Use the mapping management
-  * service to establish the file content and to push it down to the server.
-  *
-  * @param fileName - user-specified catalog file name
-  */
 export function exportAtlasFile(fileName: string) {
   const cfg = ConfigModel.getConfig();
-  const defaultExportAtlasFileName = 'atlasmap-mapping.adm';
 
-  if (fileName.length === 0) {
-    fileName = defaultExportAtlasFileName;
+  // Tack on a .adm suffix if one wasn't already specified.
+  if (fileName.split('.').pop() !== 'adm') {
+    fileName = fileName.concat('.adm');
   }
-  cfg.fileService.exportMappingsCatalog(handleMappingsInstanceName(fileName)!);
+  cfg.fileService.exportMappingsCatalog(fileName);
 }
 
 /**
