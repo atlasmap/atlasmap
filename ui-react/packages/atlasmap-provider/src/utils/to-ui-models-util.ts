@@ -56,6 +56,7 @@ export function fromMappingDefinitionToIMappings(def: MappingDefinition): IMappi
   return def.mappings.map(m => {
     return {
       id: m.uuid,
+      name: m.transition.getPrettyName(),
       sourceFields: m.getUserMappedFields(true).map(fromMappedFieldToIMappingField.bind(null, true)),
       targetFields: m.getUserMappedFields(false).map(fromMappedFieldToIMappingField.bind(null, false)),
     }

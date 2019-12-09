@@ -286,7 +286,6 @@ export function Atlasmap({
                             selectMapping={selectMapping}
                             deselectMapping={deselectMapping}
                             editMapping={editMapping}
-                            mappingType={'Split'}
                             canDrop={canDrop}
                             isOver={isOver}
                           />

@@ -1,5 +1,5 @@
 import { action } from '@storybook/addon-actions';
-import { boolean, text } from '@storybook/addon-knobs';
+import { boolean } from '@storybook/addon-knobs';
 import React, { createElement, FunctionComponent, useState } from 'react';
 import { CanvasProvider } from '../../../src/canvas';
 import { CanvasView, CanvasViewCanvasProvider, FieldsBox } from '../../../src/views/CanvasView';
@@ -55,7 +55,6 @@ export const interactive = () => {
           selectMapping={handleSelectMapping}
           deselectMapping={handleDeselectMapping}
           editMapping={action('editMapping')}
-          mappingType={text('Mapping type', 'Split')}
           canDrop={boolean('Can drop', false)}
           isOver={boolean('Is over', false)}
         />
@@ -73,7 +72,6 @@ export const canDrop = () => (
       selectMapping={() => void(0)}
       deselectMapping={() => void(0)}
       editMapping={() => void(0)}
-      mappingType={'Split'}
       isOver={false}
       canDrop={true}
     />
@@ -89,7 +87,6 @@ export const isHoverCanDrop = () => (
       selectMapping={() => void(0)}
       deselectMapping={() => void(0)}
       editMapping={() => void(0)}
-      mappingType={'Split'}
       isOver={true}
       canDrop={true}
     />

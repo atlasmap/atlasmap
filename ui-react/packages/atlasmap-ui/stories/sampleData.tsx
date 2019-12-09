@@ -938,6 +938,7 @@ export const targets = [
 export const mappings = [
   {
     id: 'a',
+    name: 'Lorem',
     sourceFields: [
       {
         id: 'JSONInstanceSource-/order/address/city',
@@ -960,6 +961,7 @@ export const mappings = [
   },
   {
     id: 'b',
+    name: 'Lorem',
     sourceFields: [
       {
         id: 'JSONInstanceSource-/primitives/numberPrimitive',
@@ -987,6 +989,7 @@ export const mappings = [
   },
   {
     id: 'c',
+    name: 'Lorem',
     sourceFields: [
       {
         id: 'JSONInstanceSource-/primitives/stringPrimitive',
