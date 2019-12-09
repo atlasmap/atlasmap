@@ -10,11 +10,9 @@ export type GroupId = string;
 
 export interface IFieldsNode {
   id: ElementId;
-  name: string;
 }
 export interface IFieldsGroup {
   id: GroupId;
-  name: string;
   fields: (IFieldsNode | IFieldsGroup)[];
 }
 export interface IMappingField {
