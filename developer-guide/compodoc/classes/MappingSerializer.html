@@ -484,7 +484,7 @@
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>deserializeAtlasMappingName(json: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                    <code>deserializeAtlasMappingName(json: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, mappingDefinitionId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
                 </td>
             </tr>
 
@@ -499,7 +499,7 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-description"><p>Return the AtlasMap mappings file name from the specified JSON buffer or an empty string.</p>
+                    <div class="io-description"><p>Return the AtlasMap mappings file name from the specified JSON buffer or an generate it from mappingDefinitionId.</p>
 </div>
 
                     <div class="io-description">
@@ -517,6 +517,18 @@
                                     <td>json</td>
                                     <td>
                                                 <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>mappingDefinitionId</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
                                     </td>
 
                                     <td>
@@ -2672,9 +2684,9 @@ export class MappingSerializer {
 
   static deserializeMappingServiceJSON(json: any, cfg: ConfigModel): void {
     if (!cfg.mappings) {
-      cfg.mappings &#x3D; new MappingDefinition;
+      cfg.mappings &#x3D; new MappingDefinition(cfg.mappingDefinitionId);
     }
-    cfg.mappings.name &#x3D; this.deserializeAtlasMappingName(json);
+    cfg.mappings.name &#x3D; this.deserializeAtlasMappingName(json, cfg.mappingDefinitionId);
     cfg.mappings.parsedDocs &#x3D; cfg.mappings.parsedDocs.concat(MappingSerializer.deserializeDocs(json, cfg.mappings));
     cfg.mappings.mappings &#x3D; cfg.mappings.mappings.concat(MappingSerializer.deserializeMappings(json, cfg));
     for (const lookupTable of MappingSerializer.deserializeLookupTables(json)) {
@@ -2689,15 +2701,15 @@ export class MappingSerializer {
   }
 
   /**
-   * Return the AtlasMap mappings file name from the specified JSON buffer or an empty string.
+   * Return the AtlasMap mappings file name from the specified JSON buffer or an generate it from mappingDefinitionId.
    *
    * @param json
    */
-  static deserializeAtlasMappingName(json: any): string {
+  static deserializeAtlasMappingName(json: any, mappingDefinitionId: number): string {
     if (json &amp;&amp; json.AtlasMapping &amp;&amp; json.AtlasMapping.name) {
       return json.AtlasMapping.name;
     } else {
-      return &#x27;&#x27;;
+      return &#x27;UI.&#x27; + mappingDefinitionId;
     }
   }
 

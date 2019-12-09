@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>Paths</title>
+<title>Multiple Mapping Definitions Usage</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -437,280 +437,33 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body class="book toc2 toc-left">
+<body class="book">
 <div id="header">
-<div id="toc" class="toc2">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#_atlas-service-json-paths">Paths</a>
-<ul class="sectlevel2">
-<li><a href="#_atlas-service-json-inspectclass">Inspect JSON</a></li>
-<li><a href="#_atlas-service-json-getclass">Inspect JSON via URI</a></li>
-<li><a href="#_atlas-service-json-simplehelloworld">Simple</a></li>
-</ul>
-</li>
-</ul>
-</div>
+<h1>Multiple Mapping Definitions Usage</h1>
 </div>
 <div id="content">
-<div class="sect1">
-<h2 id="_atlas-service-json-paths">Paths</h2>
+<div id="preamble">
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_atlas-service-json-inspectclass">Inspect JSON</h3>
+<div class="paragraph">
+<p>To test/use this feature, please follow below steps:</p>
+</div>
 <div class="literalblock">
 <div class="content">
-<pre>POST /json/inspect</pre>
-</div>
-</div>
-<div class="sect3">
-<h4 id="description">Description</h4>
-<div class="paragraph">
-<p>Inspect a JSON schema or instance and return a Document object</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="responses">Responses</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 10%;">
-<col style="width: 70%;">
-<col style="width: 20%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-middle">HTTP Code</th>
-<th class="tableblock halign-left valign-middle">Description</th>
-<th class="tableblock halign-left valign-middle">Schema</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p><strong>200</strong></p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p>Return a Document object represented by JsonDocument</p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p><a href="#_atlas-service-json-jsoninspectionresponse">JsonInspectionResponse</a></p>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="consumes">Consumes</h4>
-<div class="ulist">
-<ul>
-<li>
-<p><code>application/json</code></p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="produces">Produces</h4>
-<div class="ulist">
-<ul>
-<li>
-<p><code>application/json</code></p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_atlas-service-json-getclass">Inspect JSON via URI</h3>
-<div class="literalblock">
-<div class="content">
-<pre>GET /json/inspect</pre>
-</div>
-</div>
-<div class="sect3">
-<h4 id="description-2">Description</h4>
-<div class="paragraph">
-<p><strong>NOT IMPLEMENTED</strong> Inspect a JSON schema or instance located at specified URI and return a Document object</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="parameters">Parameters</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 11.1111%;">
-<col style="width: 16.6666%;">
-<col style="width: 50%;">
-<col style="width: 22.2223%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-middle">Type</th>
-<th class="tableblock halign-left valign-middle">Name</th>
-<th class="tableblock halign-left valign-middle">Description</th>
-<th class="tableblock halign-left valign-middle">Schema</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p><strong>Query</strong></p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p><strong>type</strong><br>
-<em>optional</em></p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div class="content"></div></td>
-<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p>string</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p><strong>Query</strong></p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p><strong>uri</strong><br>
-<em>optional</em></p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p>URI for JSON schema or instance</p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p>string</p>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="responses-2">Responses</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 10%;">
-<col style="width: 70%;">
-<col style="width: 20%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-middle">HTTP Code</th>
-<th class="tableblock halign-left valign-middle">Description</th>
-<th class="tableblock halign-left valign-middle">Schema</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p><strong>200</strong></p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p>Return a Document object represented by JsonDocument</p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p><a href="#_atlas-service-json-jsondocument">JsonDocument</a></p>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="produces-2">Produces</h4>
-<div class="ulist">
-<ul>
-<li>
-<p><code>application/json</code></p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_atlas-service-json-simplehelloworld">Simple</h3>
-<div class="literalblock">
-<div class="content">
-<pre>GET /json/simple</pre>
-</div>
-</div>
-<div class="sect3">
-<h4 id="description-3">Description</h4>
-<div class="paragraph">
-<p>Simple hello service</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="parameters-2">Parameters</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 11.1111%;">
-<col style="width: 16.6666%;">
-<col style="width: 50%;">
-<col style="width: 22.2223%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-middle">Type</th>
-<th class="tableblock halign-left valign-middle">Name</th>
-<th class="tableblock halign-left valign-middle">Description</th>
-<th class="tableblock halign-left valign-middle">Schema</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p><strong>Query</strong></p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p><strong>from</strong><br>
-<em>optional</em></p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p>From</p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p>string</p>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="responses-3">Responses</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 10%;">
-<col style="width: 70%;">
-<col style="width: 20%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-middle">HTTP Code</th>
-<th class="tableblock halign-left valign-middle">Description</th>
-<th class="tableblock halign-left valign-middle">Schema</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p><strong>200</strong></p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p>Return a response</p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p>string</p>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="produces-3">Produces</h4>
-<div class="ulist">
-<ul>
-<li>
-<p><code>text/plain</code></p>
-</li>
-</ul>
-</div>
+<pre>1- Clone AtlasMap Project,
+2- Checkout branch issue#930-poc
+2- Build the project as mentioned in project page [Here]:https://github.com/atlasmap/atlasmap
+3- Run AtlasMap application as indicated in the previous link
+4- Go to url : http://localhost:8585
+5- Add source json document
+6- Add target json document
+7- Do some mappings
+8- Go to url: http://localhost:8585/mapping-id/1
+9- Repeat steps 5,6 and 7
+10- Go to url: http://localhost:8585/mapping-id/2
+11- Repeat steps 5,6 and 7
+12- Revisit the three urls previously stated, you should see the same documets with same mappings persisted accordingly.
+13- Go to ~project_directory/target
+14- You should find three sets of files for each mapping url you visited: adm, gz, and json</pre>
 </div>
 </div>
 </div>
@@ -718,7 +471,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-12-09 20:29:17 UTC
+Last updated 2019-12-09 20:28:55 UTC
 </div>
 </div>
 </body>

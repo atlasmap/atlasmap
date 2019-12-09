@@ -87,6 +87,7 @@
                                 <code><a href="../injectables/MappingManagementService.html" target="_self" >MappingManagementService</a></code>
                                 <code><a href="../injectables/ErrorHandlerService.html" target="_self" >ErrorHandlerService</a></code>
                                 <code><a href="../injectables/DocumentManagementService.html" target="_self" >DocumentManagementService</a></code>
+                                <code><a href="../injectables/MappingIdentifierService.html" target="_self" >MappingIdentifierService</a></code>
                 </td>
             </tr>
 
@@ -163,12 +164,12 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(initializationService: <a href="../injectables/InitializationService.html">InitializationService</a>)</code>
+<code>constructor(initializationService: <a href="../injectables/InitializationService.html">InitializationService</a>, mappingIdentifierService: <a href="../injectables/MappingIdentifierService.html">MappingIdentifierService</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-example-host.component.ts:38</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-example-host.component.ts:39</a></div>
                             </td>
                         </tr>
 
@@ -190,6 +191,18 @@
                                                   
                                                         <td>
                                                                         <code><a href="../injectables/InitializationService.html" target="_self" >InitializationService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>mappingIdentifierService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/MappingIdentifierService.html" target="_self" >MappingIdentifierService</a></code>
                                                         </td>
                                                   
                                                     <td>
@@ -237,8 +250,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="42"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-example-host.component.ts:42</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="43"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-example-host.component.ts:43</a></div>
                 </td>
             </tr>
 
@@ -289,7 +302,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-example-host.component.ts:38</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/data-mapper-example-host.component.ts:39</a></div>
                             </td>
                         </tr>
 
@@ -313,11 +326,12 @@ import { InitializationService } from &#x27;../services/initialization.service&#
 import { DataMapperAppComponent } from &#x27;./app/data-mapper-app.component&#x27;;
 import { environment } from &#x27;../../../../environments/environment&#x27;;
 import { Examples } from &#x27;../models/examples&#x27;;
+import {MappingIdentifierService} from &#x27;../services/mapping-identifier.service&#x27;;
 
 @Component({
   selector: &#x27;data-mapper-example-host&#x27;,
   template: &#x27;&lt;data-mapper #dataMapperComponent&gt;&lt;/data-mapper&gt;&#x27;,
-  providers: [MappingManagementService, ErrorHandlerService, DocumentManagementService],
+  providers: [MappingManagementService, ErrorHandlerService, DocumentManagementService, MappingIdentifierService],
 })
 
 export class DataMapperAppExampleHostComponent implements OnInit {
@@ -325,11 +339,13 @@ export class DataMapperAppExampleHostComponent implements OnInit {
   @ViewChild(&#x27;dataMapperComponent&#x27;)
   dataMapperComponent: DataMapperAppComponent;
 
-  constructor(private initializationService: InitializationService) { }
+  constructor(private initializationService: InitializationService, private mappingIdentifierService: MappingIdentifierService) { }
 
   ngOnInit() {
     // initialize config information before initializing services
     const c: ConfigModel &#x3D; this.initializationService.cfg;
+    //
+    c.mappingDefinitionId &#x3D; this.mappingIdentifierService.getCurrentMappingDefinitionId();
 
     // store references to our services in our config model
 
