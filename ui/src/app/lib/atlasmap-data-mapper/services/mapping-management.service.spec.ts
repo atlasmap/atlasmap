@@ -55,7 +55,7 @@ describe('MappingManagementService', () => {
       const mappingModel = new MappingModel();
       mappingModel.addField(target, true);
 
-      const mappingDefinition = new MappingDefinition();
+      const mappingDefinition = new MappingDefinition(0);
       mappingDefinition.mappings.push(mappingModel);
       mappingModel.cfg.mappings = mappingDefinition;
 
@@ -91,7 +91,7 @@ describe('MappingManagementService', () => {
       const mappingModel = new MappingModel();
       mappingModel.addField(target, true);
 
-      const mappingDefinition = new MappingDefinition();
+      const mappingDefinition = new MappingDefinition(0);
       mappingDefinition.mappings.push(mappingModel);
       mappingModel.cfg.mappings = mappingDefinition;
 
@@ -123,7 +123,7 @@ describe('MappingManagementService', () => {
       const mappingModel = new MappingModel();
       mappingModel.addField(target, true);
 
-      const mappingDefinition = new MappingDefinition();
+      const mappingDefinition = new MappingDefinition(0);
       mappingDefinition.mappings.push(mappingModel);
       mappingModel.cfg.mappings = mappingDefinition;
 
