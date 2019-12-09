@@ -22,6 +22,8 @@ import { DocumentDefinition } from '../models/document-definition.model';
 import { DataMapperUtil } from '../common/data-mapper-util';
 
 export class MappingDefinition {
+  static MAPPING_NAME_PREFIX = 'UI.';
+
   name: string = null;
   mappings: MappingModel[] = [];
   activeMapping: MappingModel = null;
@@ -32,8 +34,8 @@ export class MappingDefinition {
   private tablesBySourceTargetKey: { [key: string]: LookupTable; } = {};
   private tablesByName: { [key: string]: LookupTable; } = {};
 
-  constructor() {
-    this.name = 'UI.' + Math.floor((Math.random() * 1000000) + 1).toString();
+  constructor(mappingDefinitionId: number) {
+    this.name = MappingDefinition.MAPPING_NAME_PREFIX + mappingDefinitionId;
   }
 
   templateExists(): boolean {

@@ -52,15 +52,15 @@ Upload a Java library archive file
 * `application/octet-stream`
 
 
-[[_atlas-service-core-resetmappings]]
+[[_atlas-service-core-resetallmappings]]
 === Remove All Mappings
 ....
-DELETE /mapping/RESET
+DELETE /mapping/RESET/ALL
 ....
 
 
 ==== Description
-Remove all mapping files saved on the server
+Remove all mapping files and catalogs saved on the server
 
 
 ==== Responses
@@ -70,6 +70,42 @@ Remove all mapping files saved on the server
 |HTTP Code|Description|Schema
 |**200**|All mapping files were removed successfully|No Content
 |**204**|Unable to remove all mapping files|No Content
+|===
+
+
+==== Produces
+
+* `application/json`
+
+
+[[_atlas-service-core-resetmappingbyid]]
+=== Remove Mapping by ID
+....
+DELETE /mapping/RESET/{mappingDefinitionId}
+....
+
+
+==== Description
+Remove mapping file and catalogs related to specified ID
+
+
+==== Parameters
+
+[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+|===
+|Type|Name|Description|Schema
+|**Path**|**mappingDefinitionId** +
+__required__|Mapping ID|integer (int32)
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|Mapping file and Catalogs were removed successfully|No Content
+|**204**|Unable to remove mapping file and Catalogs for the specified ID|No Content
 |===
 
 
@@ -138,12 +174,22 @@ Remove all user-defined JAR files saved on the server
 [[_atlas-service-core-validatemappingrequest]]
 === Validate Mapping
 ....
-PUT /mapping/validate
+PUT /mapping/validate/{mappingDefinitionId}
 ....
 
 
 ==== Description
 Validate mapping file
+
+
+==== Parameters
+
+[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+|===
+|Type|Name|Description|Schema
+|**Path**|**mappingDefinitionId** +
+__required__|Mapping ID|integer (int32)
+|===
 
 
 ==== Responses
@@ -165,96 +211,10 @@ Validate mapping file
 * `application/json`
 
 
-[[_atlas-service-core-getmappingrequest]]
-=== Get Mapping
-....
-GET /mapping/{mappingFormat}/{mappingId}
-....
-
-
-==== Description
-Retrieve a mapping file saved on the server
-
-
-==== Parameters
-
-[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
-|===
-|Type|Name|Description|Schema
-|**Path**|**mappingFormat** +
-__required__|Mapping Format|string
-|**Path**|**mappingId** +
-__required__|Mapping ID|string
-|===
-
-
-==== Responses
-
-[options="header", cols=".^2a,.^14a,.^4a"]
-|===
-|HTTP Code|Description|Schema
-|**200**|Return a mapping file content|<<_atlas-service-core-atlasmapping,AtlasMapping>>
-|**204**|Mapping file was not found|No Content
-|**500**|Mapping file access error|No Content
-|===
-
-
-==== Produces
-
-* `application/json`
-* `application/xml`
-* `application/octet-stream`
-
-
-[[_atlas-service-core-createmappingrequest]]
-=== Create Mapping
-....
-PUT /mapping/{mappingFormat}/{mappingId}
-....
-
-
-==== Description
-Save a mapping file on the server
-
-
-==== Parameters
-
-[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
-|===
-|Type|Name|Description|Schema
-|**Path**|**mappingFormat** +
-__required__|Mapping Format|string
-|**Path**|**mappingId** +
-__required__|Mapping ID|string
-|===
-
-
-==== Responses
-
-[options="header", cols=".^2a,.^14a,.^4a"]
-|===
-|HTTP Code|Description|Schema
-|**200**|Succeeded|No Content
-|**500**|Mapping file save error|No Content
-|===
-
-
-==== Consumes
-
-* `application/json`
-* `application/xml`
-* `application/octet-stream`
-
-
-==== Produces
-
-* `application/json`
-
-
 [[_atlas-service-core-updatemappingrequest]]
 === Update Mapping
 ....
-POST /mapping/{mappingId}
+POST /mapping/{mappingDefinitionId}
 ....
 
 
@@ -267,8 +227,8 @@ Update existing mapping file on the server
 [options="header", cols=".^2a,.^3a,.^9a,.^4a"]
 |===
 |Type|Name|Description|Schema
-|**Path**|**mappingId** +
-__required__|Mapping ID|string
+|**Path**|**mappingDefinitionId** +
+__required__|Mapping Definition ID|integer (int32)
 |===
 
 
@@ -294,7 +254,7 @@ __required__|Mapping ID|string
 [[_atlas-service-core-removemappingrequest]]
 === Remove Mapping
 ....
-DELETE /mapping/{mappingId}
+DELETE /mapping/{mappingDefinitionId}
 ....
 
 
@@ -307,8 +267,8 @@ Remove a mapping file saved on the server
 [options="header", cols=".^2a,.^3a,.^9a,.^4a"]
 |===
 |Type|Name|Description|Schema
-|**Path**|**mappingId** +
-__required__|Mapping ID|string
+|**Path**|**mappingDefinitionId** +
+__required__|Mapping ID|integer (int32)
 |===
 
 
@@ -327,24 +287,112 @@ __required__|Mapping ID|string
 * `application/json`
 
 
-[[_atlas-service-core-listmappings]]
-=== List Mappings
+[[_atlas-service-core-getmappingrequest]]
+=== Get Mapping
 ....
-GET /mappings
+GET /mapping/{mappingFormat}/{mappingDefinitionId}
 ....
 
 
 ==== Description
-Retrieves a list of mapping file name saved on the server
+Retrieve a mapping file saved on the server
 
 
 ==== Parameters
 
-[options="header", cols=".^2a,.^3a,.^4a"]
+[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
 |===
-|Type|Name|Schema
+|Type|Name|Description|Schema
+|**Path**|**mappingDefinitionId** +
+__required__|Mapping ID|integer (int32)
+|**Path**|**mappingFormat** +
+__required__|Mapping Format|enum (ADM, GZ, ZIP, JSON, XML)
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|Return a mapping file content|<<_atlas-service-core-atlasmapping,AtlasMapping>>
+|**204**|Mapping file was not found|No Content
+|**500**|Mapping file access error|No Content
+|===
+
+
+==== Produces
+
+* `application/json`
+* `application/xml`
+* `application/octet-stream`
+
+
+[[_atlas-service-core-createmappingrequest]]
+=== Create Mapping
+....
+PUT /mapping/{mappingFormat}/{mappingDefinitionId}
+....
+
+
+==== Description
+Save a mapping file on the server
+
+
+==== Parameters
+
+[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+|===
+|Type|Name|Description|Schema
+|**Path**|**mappingDefinitionId** +
+__required__|Mapping ID|integer (int32)
+|**Path**|**mappingFormat** +
+__required__|Mapping Format|enum (ADM, GZ, ZIP, JSON, XML)
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|Succeeded|No Content
+|**500**|Mapping file save error|No Content
+|===
+
+
+==== Consumes
+
+* `application/json`
+* `application/xml`
+* `application/octet-stream`
+
+
+==== Produces
+
+* `application/json`
+
+
+[[_atlas-service-core-listmappings]]
+=== List Mappings
+....
+GET /mappings/{mappingDefinitionId}
+....
+
+
+==== Description
+Retrieves a list of mapping file name saved with specified mappingDefinitionId
+
+
+==== Parameters
+
+[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+|===
+|Type|Name|Description|Schema
+|**Path**|**mappingDefinitionId** +
+__required__|Mapping Definition ID|integer (int32)
 |**Query**|**filter** +
-__optional__|string
+__optional__||string
 |===
 
 

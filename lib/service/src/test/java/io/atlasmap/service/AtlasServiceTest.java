@@ -15,6 +15,7 @@
  */
 package io.atlasmap.service;
 
+import static io.atlasmap.v2.MappingFileType.JSON;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -73,7 +74,7 @@ public class AtlasServiceTest {
     @Test
     public void testListMappings() throws Exception {
         Response resp = service.listMappings(
-                generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/mappings"), null);
+                generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/mappings"), null, null);
         StringMap sMap = Json.mapper().readValue((byte[])resp.getEntity(), StringMap.class);
         LOG.info("Found " + sMap.getStringMapEntry().size() + " objects");
         for (StringMapEntry s : sMap.getStringMapEntry()) {
@@ -83,7 +84,7 @@ public class AtlasServiceTest {
 
     @Test
     public void testGetMapping() {
-        Response resp = service.getMappingRequest("JSON", "junit3");
+        Response resp = service.getMappingRequest(JSON, 3);
         assertEquals(byte[].class, resp.getEntity().getClass());
     }
 

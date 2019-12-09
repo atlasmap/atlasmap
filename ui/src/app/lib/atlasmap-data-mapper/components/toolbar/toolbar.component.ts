@@ -295,7 +295,7 @@ export class ToolbarComponent implements OnInit {
   handleExportMapping(event) {
     let fileName = this.mappingsFileName;
     if (this.mappingsFileName.length === 0) {
-        fileName = 'atlasmap-mapping.adm';
+        fileName = 'atlasmap-mapping-' + this.cfg.mappingDefinitionId + '.adm';
     }
     this.cfg.fileService.exportMappingsCatalog(fileName);
   }

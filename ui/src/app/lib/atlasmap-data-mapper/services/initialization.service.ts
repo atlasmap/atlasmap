@@ -226,7 +226,7 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
         // If catalog is null then no compressed mappings catalog is available on the server.
         if (catalog === null) {
           if (this.cfg.mappings === null) {
-            this.cfg.mappings = new MappingDefinition();
+            this.cfg.mappings = new MappingDefinition(this.cfg.mappingDefinitionId);
           }
 
           // load field actions - do this even with no documents so the default field actions are loaded.
@@ -253,14 +253,14 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
 
         // load mappings
         if (this.cfg.mappings == null) {
-          this.cfg.mappings = new MappingDefinition();
+          this.cfg.mappings = new MappingDefinition(this.cfg.mappingDefinitionId);
           if (this.cfg.mappingFiles.length > 0) {
-            await this.fetchMappings(this.cfg.mappingFiles);
+            await this.fetchMappingById(this.cfg.mappingDefinitionId);
           } else {
             this.cfg.fileService.findMappingFiles('UI').toPromise()
               .then( async(files: string[]) => {
                 // It's okay if no mapping files are found - resolve false so the caller will know.
-                if (!await this.fetchMappings(files)) {
+                if (!await this.fetchMappingById(this.cfg.mappingDefinitionId)) {
                   resolve(false);
                 }
               },
@@ -348,7 +348,8 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
     return new Promise<boolean>((resolve, reject) => {
       // Update .../target/mappings/adm-catalog-files.gz
       const fileContent: Blob = new Blob([compressedCatalog], {type: 'application/octet-stream'});
-      this.cfg.fileService.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/0').toPromise()
+      this.cfg.fileService.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/'
+        + this.cfg.mappingDefinitionId).toPromise()
         .then(async(result: boolean) => {
         resolve(true);
       }).catch((error: any) => {
@@ -386,10 +387,9 @@ ${error.status} ${error.statusText}`,
         // Reinitialize the model mappings.
         if (mInfo && mInfo.exportMappings) {
           const catalogMappingsName = MappingSerializer.deserializeAtlasMappingName(
-            DocumentManagementService.getMappingsInfo(mInfo.exportMappings.value));
+            DocumentManagementService.getMappingsInfo(mInfo.exportMappings.value),
+            this.cfg.mappingDefinitionId);
 
-            // If the live UI mappings name does not match the UI mappings name extracted from the
-            // catalog file then use the mappings from the catalog file.  Otherwise use the live
             // UI file.
             this.cfg.fileService.findMappingFiles('UI').toPromise()
               .then( async(files: string[]) => {
@@ -399,9 +399,12 @@ ${error.status} ${error.statusText}`,
               .catch((error: any) => {
                 this.handleError('Failure to load field actions.', error);
               });
-              if (catalogMappingsName !== files[0]) {
-                await this.updateMappings(mInfo);
-              }
+
+              // This is no longer valid since there will be only one mapping definition at the current route
+              // and it will cause a conflict in case of an imported ADM
+              // if (catalogMappingsName !== files[0]) {
+              //   await this.updateMappings(mInfo);
+              // }
               resolve(true);
             },
             (error: any) => {
@@ -512,6 +515,28 @@ ${error.status} ${error.statusText}`,
         this.updateStatus();
         this.cfg.mappingService.notifyMappingUpdated().then(() => resolve(true));
       }).catch((error: any) => {
+        if (error.status === 0) {
+          this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+        } else {
+          this.handleError('Could not load mapping definitions.', error);
+        }
+        reject(error);
+      });
+    });
+  }
+
+  async fetchMappingById(mappingDefinitionId: any): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      if (mappingDefinitionId == null) {
+        resolve(false);
+      }
+
+      this.cfg.mappingService.fetchMappings([mappingDefinitionId], this.cfg.mappings).toPromise()
+        .then((result: boolean) => {
+          this.cfg.initCfg.mappingInitialized = true;
+          this.updateStatus();
+          this.cfg.mappingService.notifyMappingUpdated().then(() => resolve(true));
+        }).catch((error: any) => {
         if (error.status === 0) {
           this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
         } else {

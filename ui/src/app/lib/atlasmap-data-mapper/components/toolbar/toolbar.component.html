@@ -27,7 +27,8 @@
         tooltip="Export the current mappings and support files into a catalog (.adm) file." placement="bottom"></i>
       <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
         <div>
-          <a href="#">
+          <!--<a href="#"> this was commented after introducing routes. -->
+          <a>
             <div class="exportMappings">Export mappings
               <input type="text" (change)="handleMappingsInstanceName($event)" placeholder="atlasmap-mapping.adm"
                 (click)="handleExportClick($event)" [(ngModel)]="mappingsFileName"/>

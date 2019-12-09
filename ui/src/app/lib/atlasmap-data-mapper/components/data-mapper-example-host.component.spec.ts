@@ -11,8 +11,15 @@ import { InitializationService } from '../services/initialization.service';
 import { MappingManagementService } from '../services/mapping-management.service';
 import { FieldActionService } from '../services/field-action.service';
 import { FileManagementService } from '../services/file-management.service';
+import {MappingIdentifierService} from '../services/mapping-identifier.service';
+import {ActivatedRoute} from '@angular/router';
 
 describe('DataMapperAppExampleHostComponent', () => {
+  const testActivatedRoute = ({
+    data: ({
+      id: 0
+    })
+  } as any) as ActivatedRoute;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -26,6 +33,8 @@ describe('DataMapperAppExampleHostComponent', () => {
         InitializationService,
         MappingManagementService,
         NGXLogger,
+        MappingIdentifierService,
+        {provide: ActivatedRoute, useValue: testActivatedRoute}
       ],
     });
   });
