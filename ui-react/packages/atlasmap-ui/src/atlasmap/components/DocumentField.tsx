@@ -1,5 +1,5 @@
 import { css, StyleSheet } from '@patternfly/react-styles';
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent, useEffect, useRef } from 'react';
 import { useDrag } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { useLinkNode } from '../../canvas';
@@ -49,6 +49,7 @@ export const DocumentField: FunctionComponent<IDocumentFieldProps> = ({
 }) => {
   const { setLineNode } = useLinkNode();
 
+  const ref = useRef<HTMLDivElement | null>();
   const [{ isDragging }, dragRef, preview] = useDrag<
     IFieldElementDragSource,
     undefined,
@@ -67,9 +68,20 @@ export const DocumentField: FunctionComponent<IDocumentFieldProps> = ({
     preview(getEmptyImage(), { captureDraggingState: true });
   }, [preview]);
 
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [isSelected]);
+
+  const handleRef= (el: HTMLDivElement | null) => {
+    dragRef(el);
+    ref.current = el;
+  };
+
   return (
     <span
-      ref={dragRef}
+      ref={handleRef}
       className={css(
         styles.element,
         isSelected && styles.isSelected,

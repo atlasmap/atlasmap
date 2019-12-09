@@ -22,6 +22,7 @@ export interface IMappingField {
 }
 export interface IMappings {
   id: string;
+  name: string;
   sourceFields: Array<IMappingField>;
   targetFields: Array<IMappingField>;
 }

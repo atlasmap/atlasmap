@@ -89,11 +89,13 @@ export function Document({
   onDelete,
 }: IDocumentProps) {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [isExpanded, setIsExpanded] = useState(true);
-  const toggleIsExpanded = () => setIsExpanded(!isExpanded);
+  const [isUserExpanded, setIsUserExpanded] = useState(false);
+  const [shouldBeExpanded, setShouldBeExpanded] = useState(false);
+  const toggleIsExpanded = () => setIsUserExpanded(!isUserExpanded);
   const [showActions, setShowActions] = useState(false);
   const toggleActions = (open: boolean) => setShowActions(open);
 
+  const isExpanded = shouldBeExpanded || isUserExpanded;
   const rightAlign = lineConnectionSide === 'left';
 
   const getRef = () => ref.current;
@@ -170,6 +172,7 @@ export function Document({
                 lineConnectionSide={lineConnectionSide}
                 rightAlign={rightAlign}
                 parentExpanded={isExpanded}
+                expandParent={setShouldBeExpanded}
                 renderNode={renderNode}
               />
             </Accordion>

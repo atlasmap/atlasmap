@@ -1,27 +1,24 @@
 import {
-  BaseSizes,
   Button,
   Card,
   CardActions,
-  CardBody, CardFooter,
+  CardFooter,
   CardHead,
   CardHeader,
-  Title,
-  Tooltip,
-  TooltipPosition,
+  Level,
+  LevelItem,
 } from '@patternfly/react-core';
 import { css, StyleSheet } from '@patternfly/react-styles';
 import {
+  ArrowRightIcon,
   EditIcon,
-  OutlinedQuestionCircleIcon,
-  CaretRightIcon,
-  CaretDownIcon,
 } from '@patternfly/react-icons';
 import React, {
   FunctionComponent,
   useCallback,
   MouseEvent,
-  useEffect, useRef,
+  useEffect,
+  useRef,
 } from 'react';
 import { useLinkNode } from '../../../canvas';
 import { useCanvasViewFieldsContext } from '../CanvasViewFieldsProvider';
@@ -46,6 +43,7 @@ const styles = StyleSheet.create({
   },
   head: {
     padding: '0.5rem !important',
+    height: '52px'
   },
   footer: {
     borderTop: '1px solid #eee',
@@ -61,7 +59,6 @@ export interface IMappingElementProps {
   selectMapping: (id: string) => void;
   deselectMapping: () => void;
   editMapping: () => void;
-  mappingType: string;
   canDrop: boolean;
   isOver: boolean;
   boxRef: HTMLElement | null;
@@ -73,12 +70,13 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
   selectMapping,
   deselectMapping,
   editMapping,
-  mappingType,
   canDrop,
   isOver,
-  boxRef
+  boxRef,
 }) => {
-  const { ref, getLeftSideCoords, getRightSideCoords } = useLinkable({ getBoxRef: () => boxRef });
+  const { ref, getLeftSideCoords, getRightSideCoords } = useLinkable({
+    getBoxRef: () => boxRef,
+  });
   const { setLineNode, unsetLineNode } = useLinkNode();
   const { requireVisible } = useCanvasViewFieldsContext();
   const wasPreviouslySelected = useRef<boolean>(false);
@@ -91,10 +89,8 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
       deselectMapping();
     } else {
       selectMapping(node.id);
-      node.sourceFields.forEach(f => requireVisible(f.id, true));
-      node.targetFields.forEach(f => requireVisible(f.id, true));
     }
-  }, [isSelected, node, deselectMapping, selectMapping, requireVisible]);
+  }, [isSelected, node, deselectMapping, selectMapping]);
 
   const handleEdit = useCallback(
     (e: MouseEvent) => {
@@ -104,16 +100,16 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
     [editMapping]
   );
 
-  const mappingTypeLeft = node.sourceFields.length <= 1 ? 'One' : 'Many';
-  const mappingTypeRight = node.targetFields.length <= 1 ? 'One' : 'Many';
-
   useEffect(() => {
     if (wasPreviouslySelected.current && !isSelected) {
       node.sourceFields.forEach(f => requireVisible(f.id, false));
       node.targetFields.forEach(f => requireVisible(f.id, false));
       wasPreviouslySelected.current = false;
+    } else if (isSelected) {
+      node.sourceFields.forEach(f => requireVisible(f.id, true));
+      node.targetFields.forEach(f => requireVisible(f.id, true));
     }
-  }, [isSelected, node.sourceFields, node.targetFields]);
+  }, [isSelected, node.sourceFields, node.targetFields, requireVisible]);
 
   useEffect(() => {
     setLineNode(`to-${node.id}`, getLeftSideCoords);
@@ -122,7 +118,13 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
       unsetLineNode(`to-${node.id}`);
       unsetLineNode(`from-${node.id}`);
     };
-  }, [getLeftSideCoords, getRightSideCoords, node.id, setLineNode, unsetLineNode]);
+  }, [
+    getLeftSideCoords,
+    getRightSideCoords,
+    node.id,
+    setLineNode,
+    unsetLineNode,
+  ]);
 
   return (
     <div ref={ref}>
@@ -139,41 +141,21 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
         <CardHead className={css(styles.head)}>
           <CardActions>
             {isSelected && (
-              <Button variant={'plain'} onClick={handleEdit}>
+              <Button variant={'control'} onClick={handleEdit}>
                 <EditIcon />
               </Button>
             )}
           </CardActions>
           <CardHeader>
-            <Button variant={'link'}>
-              {isSelected ? <CaretDownIcon /> : <CaretRightIcon />}{' '}
-              {`${mappingTypeLeft} to ${mappingTypeRight}`}
-            </Button>
+            {node.name}
           </CardHeader>
         </CardHead>
-        {isSelected && <CardBody>
-          <Title size={BaseSizes.md}>Sources</Title>
-          {node.sourceFields.map((s, idx) => (
-            <p key={idx}>
-              {s.name}{' '}
-              <Tooltip position={TooltipPosition.top} content={s.tip}>
-                <OutlinedQuestionCircleIcon />
-              </Tooltip>
-            </p>
-          ))}
-          <br />
-          <Title size={BaseSizes.md}>Targets</Title>
-          {node.targetFields.map((s, idx) => (
-            <p key={idx}>
-              {s.name}{' '}
-              <Tooltip position={TooltipPosition.top} content={s.tip}>
-                <OutlinedQuestionCircleIcon />
-              </Tooltip>
-            </p>
-          ))}
-        </CardBody>}
         <CardFooter className={css(styles.footer)}>
-          Mapping type: {mappingType}
+          <Level>
+            <LevelItem>{node.sourceFields.length}</LevelItem>
+            <LevelItem><ArrowRightIcon /></LevelItem>
+            <LevelItem>{node.targetFields.length}</LevelItem>
+          </Level>
         </CardFooter>
       </Card>
     </div>
