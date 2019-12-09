@@ -60,6 +60,7 @@
     <osgi.include.resource>{maven-resources}</osgi.include.resource>
     <resteasy.version>4.4.1.Final</resteasy.version>
     <resteasy-jaxrs.version>3.9.3.Final</resteasy-jaxrs.version>
+    <logback.version>1.2.3</logback.version>
     <maven-version>3.6.3</maven-version>
     <maven-bundle-plugin.version>4.2.1</maven-bundle-plugin.version>
     <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
@@ -126,6 +127,18 @@
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>${logback.version}</version>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-core</artifactId>
+        <version>${logback.version}</version>
+        <scope>runtime</scope>
+      </dependency>
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-annotations</artifactId>
