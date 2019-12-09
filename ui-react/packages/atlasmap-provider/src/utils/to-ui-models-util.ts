@@ -1,17 +1,15 @@
-import { IFieldsGroup, IFieldsNode, IMappingField, IMappings, IDocument, IDocumentField } from '@atlasmap/ui';
+import { IAtlasmapDocument, IAtlasmapGroup, IAtlasmapField, IMappingField, IMappings } from '@atlasmap/ui';
 import { DocumentDefinition, Field, MappedField, MappingDefinition } from '..';
 
-export type AtlasmapFields = Array<IFieldsGroup & IAtlasmapField | IFieldsNode & IAtlasmapField>;
-
-export interface IAtlasmapField extends IDocumentField {
+export interface IAtlasmapGroupWithField extends IAtlasmapGroup {
   amField: Field;
 }
 
-export interface IAtlasmapDocument extends IDocument {
-  fields: AtlasmapFields;
+export interface IAtlasmapFieldWithField extends IAtlasmapField {
+  amField: Field;
 }
 
-function fromFieldToIFieldsGroup(field: Field): IAtlasmapField & IFieldsGroup {
+function fromFieldToIFieldsGroup(field: Field): IAtlasmapGroupWithField {
   return {
     id: `${field.docDef.uri}:${field.docDef.isSource ? 'source' : 'target'}:${field.uuid}`,
     name: field.name,
@@ -21,12 +19,13 @@ function fromFieldToIFieldsGroup(field: Field): IAtlasmapField & IFieldsGroup {
   }
 }
 
-function fromFieldToIFieldsNode(field: Field): IAtlasmapField & IFieldsNode {
+function fromFieldToIFieldsNode(field: Field): IAtlasmapFieldWithField {
   return {
     id: `${field.docDef.uri}:${field.docDef.isSource ? 'source' : 'target'}:${field.uuid}`,
     name: field.getFieldLabel(false, false),
     type: field.type,
-    amField: field
+    amField: field,
+    previewValue: field.value
   }
 }
 

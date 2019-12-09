@@ -1,4 +1,4 @@
-import { IDocument } from '../../src/atlasmap';
+import { IAtlasmapDocument } from '../../src/atlasmap';
 
 interface Modifiers {
   modifier: string[];
@@ -72,9 +72,10 @@ export function javaToFieldGroup(java: JavaObject, idPrefix: string) {
   const fromElement = (jf: JavaField) => ({
     id: `${idPrefix}-${jf.path}`,
     name: jf.name,
-    type: jf.fieldType
+    type: jf.fieldType,
+    previewValue: ''
   });
-  const fromGroup = (f: JavaField): IDocument => ({
+  const fromGroup = (f: JavaField): IAtlasmapDocument => ({
     name: f.name,
     type: f.fieldType,
     id: `${idPrefix}-${f.path}`,

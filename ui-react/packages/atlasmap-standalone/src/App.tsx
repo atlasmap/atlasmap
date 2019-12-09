@@ -1,5 +1,5 @@
-import { useAtlasmap } from "@atlasmap/provider";
-import { Atlasmap, GroupId } from "@atlasmap/ui";
+import { useAtlasmap, IAtlasmapFieldWithField } from '@atlasmap/provider';
+import { Atlasmap, GroupId, IAtlasmapField } from "@atlasmap/ui";
 import React, { useCallback, useRef, useState } from 'react';
 import "./App.css";
 import { useConfirmationDialog } from './useConfirmationDialog';
@@ -17,6 +17,7 @@ const App: React.FC = () => {
     resetAtlasmap,
     exportAtlasFile,
     deleteAtlasFile,
+    changeActiveMapping,
     enableMappingPreview,
     onFieldPreviewChange
   } = useAtlasmap({
@@ -81,6 +82,10 @@ const App: React.FC = () => {
     openDeleteDocumentDialog();
   }, [openDeleteDocumentDialog]);
 
+  const handleFieldPreviewChange = useCallback((field: IAtlasmapField, value: string) => {
+    onFieldPreviewChange(field as IAtlasmapFieldWithField, value);
+  }, [onFieldPreviewChange]);
+
   return (
     <>
       <Atlasmap
@@ -99,8 +104,9 @@ const App: React.FC = () => {
         onSourceSearch={setSourceFilter}
         onTargetSearch={setTargetFilter}
         onExportAtlasFile={exportAtlasFile}
+        onActiveMappingChange={changeActiveMapping}
         onShowMappingPreview={enableMappingPreview}
-        onFieldPreviewChange={onFieldPreviewChange}
+        onFieldPreviewChange={handleFieldPreviewChange}
       />
       {resetDialog}
       {deleteDocumentDialog}

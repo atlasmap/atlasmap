@@ -24,16 +24,15 @@ export const interactiveExample = () => (
         lineConnectionSide={'right'}
         group={{
           fields: [
-            {id: 'f1', name: 'f1'},
-            {id: 'f2', name: 'f2'},
-            {id: 'f3', name: 'f3'},
+            {id: 'f1'},
+            {id: 'f2'},
+            {id: 'f3'},
           ],
           id: 'text-id',
-          name: 'Sample'
         }}
         getBoxRef={() => null}
         parentExpanded={boolean('Parent expanded', true)}
-        renderNode={node => <>{node.name}</>}
+        renderNode={node => <>{node.id}</>}
       />
     </CanvasLinksProvider>
   </CanvasProvider>

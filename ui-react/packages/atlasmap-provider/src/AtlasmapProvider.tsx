@@ -1,4 +1,5 @@
-import { IFieldsGroup, IFieldsNode } from '@atlasmap/ui';
+import { IAtlasmapDocument } from '@atlasmap/ui';
+import { IAtlasmapField } from '@atlasmap/ui/src';
 import ky from 'ky';
 import React, {
   createContext,
@@ -11,7 +12,6 @@ import React, {
 } from 'react';
 import { timer } from 'rxjs';
 import { debounce } from 'rxjs/operators';
-import { ConfigModel } from './models/config.model';
 import { DocumentDefinition } from './models/document-definition.model';
 import { MappingDefinition } from './models/mapping-definition.model';
 import { DocumentManagementService } from './services/document-management.service';
@@ -22,11 +22,8 @@ import { InitializationService } from './services/initialization.service';
 import { MappingManagementService } from './services/mapping-management.service';
 import { search } from './utils/filter-fields';
 import {
-  AtlasmapFields,
   fromDocumentDefinitionToFieldGroup,
-  fromMappingDefinitionToIMappings,
-  IAtlasmapDocument,
-  IAtlasmapField,
+  fromMappingDefinitionToIMappings, IAtlasmapFieldWithField,
 } from './utils/to-ui-models-util';
 import {
   deleteAtlasFile,
@@ -40,6 +37,7 @@ const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
 
 interface IAtlasmapContext extends State {
   dispatch: (value: Action) => void;
+  initializationService: InitializationService;
 }
 
 const AtlasmapContext = createContext<IAtlasmapContext | null>(null);
@@ -132,6 +130,24 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   initializationService.cfg.initCfg.baseJSONInspectionServiceUrl = baseJSONInspectionServiceUrl;
   initializationService.cfg.initCfg.baseMappingServiceUrl = baseMappingServiceUrl;
 
+  const onUpdates = () => {
+    if (initializationService.cfg.initCfg.initialized) {
+      if (!initializationService.cfg.initCfg.initializationErrorOccurred) {
+        dispatch({
+          type: 'loaded',
+          payload: {
+            sourceDocs: [...initializationService.cfg.sourceDocs],
+            targetDocs: [...initializationService.cfg.targetDocs],
+            mappingDefinition:
+              initializationService.cfg.mappings || new MappingDefinition(),
+          },
+        });
+      } else {
+        dispatch({ type: 'error' });
+      }
+    }
+  };
+
   useEffect(() => {
     initializationService.initialize();
 
@@ -139,29 +155,16 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
       debounce(() => timer(500))
     );
 
-    const subscription = initializationObservable.subscribe(() => {
-      if (initializationService.cfg.initCfg.initialized) {
-        if (!initializationService.cfg.initCfg.initializationErrorOccurred) {
-          dispatch({
-            type: 'loaded',
-            payload: {
-              sourceDocs: [...initializationService.cfg.sourceDocs],
-              targetDocs: [...initializationService.cfg.targetDocs],
-              mappingDefinition:
-                initializationService.cfg.mappings || new MappingDefinition(),
-            },
-          });
-        } else {
-          dispatch({ type: 'error' });
-        }
-      }
-    });
+    const subscriptions = [
+      initializationObservable.subscribe(onUpdates),
+      initializationService.cfg.mappingService.mappingPreviewOutput$.subscribe(onUpdates)
+    ];
 
     dispatch({ type: 'loading' });
 
     return () => {
       initializationService.resetConfig();
-      subscription.unsubscribe();
+      subscriptions.forEach(s => s.unsubscribe());
     };
   }, [initializationService]);
 
@@ -170,6 +173,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
       value={{
         ...state,
         dispatch,
+        initializationService,
       }}
     >
       {children}
@@ -200,6 +204,7 @@ export function useAtlasmap({
     sourceDocs,
     targetDocs,
     mappingDefinition,
+    initializationService
   } = context;
 
   search(sourceFilter, true);
@@ -236,36 +241,17 @@ export function useAtlasmap({
 
   const mappings = fromMappingDefinitionToIMappings(mappingDefinition);
 
-  const onFieldPreviewChange = (id: string, value: string) => {
-    // ⚠️ dragons ahead! This needs heavy refactoring.
-    const findInFields = (
-      fields?: AtlasmapFields
-    ): IFieldsNode & IAtlasmapField | undefined => {
-      return fields && fields.reduce<IFieldsNode & IAtlasmapField | undefined>(
-        (found, field) => {
-          return found || (field as IFieldsGroup).fields
-            ? findInFields((field as IFieldsGroup).fields as AtlasmapFields)
-            : field.id === id
-            ? field
-            : undefined;
-        },
-        undefined
-      );
-    };
-    const field =
-      sources.reduce<IFieldsNode & IAtlasmapField | undefined>(
-        (found, s) => found || findInFields(s.fields as AtlasmapFields),
-        undefined
-      ) ||
-      targets.reduce<IFieldsNode & IAtlasmapField | undefined>(
-        (found, s) => found || findInFields(s.fields as AtlasmapFields),
-        undefined
-      );
-    if (field) {
-      (field as IAtlasmapField).amField.value = value;
-      const cfg = ConfigModel.getConfig();
-      // TODO: ⚠️ this doesn't work right now because we also need to set the activeMapping, which we don't do right now.
-      cfg.mappingService.notifyMappingUpdated();
+  const onFieldPreviewChange = (field: IAtlasmapFieldWithField, value: string) => {
+    field.amField.value = value;
+    initializationService.cfg.mappingService.notifyMappingUpdated();
+  };
+
+  const changeActiveMapping = (mappingId: string) => {
+    const mapping = mappingDefinition.mappings.find(m => m.uuid === mappingId);
+    if (mapping) {
+      initializationService.cfg.mappingService.selectMapping(mapping);
+    } else {
+      initializationService.cfg.mappingService.deselectMapping();
     }
   };
 
@@ -280,6 +266,7 @@ export function useAtlasmap({
       exportAtlasFile,
       importAtlasFile: handleImportAtlasFile,
       resetAtlasmap: handleResetAtlasmap,
+      changeActiveMapping,
       enableMappingPreview,
       onFieldPreviewChange,
     }),

@@ -35,20 +35,29 @@ import {
 } from './components';
 import { MappingDetails } from './MappingDetails';
 
-export interface IDocumentField extends Object {
+export type AtlasmapFields = Array<IAtlasmapGroup | IAtlasmapField>;
+
+export interface IAtlasmapField extends IFieldsNode {
+  name: string;
+  type: string;
+  previewValue: string;
+}
+
+export interface IAtlasmapGroup extends IFieldsGroup {
   name: string;
   type: string;
 }
 
-export interface IDocument extends IFieldsGroup {
+export interface IAtlasmapDocument {
+  id: string;
   name: string;
   type: string;
-  fields: Array<IFieldsGroup & IDocumentField | IFieldsNode & IDocumentField>;
+  fields: AtlasmapFields;
 }
 
 export interface IAtlasmapProps {
-  sources: Array<IDocument>;
-  targets: Array<IDocument>;
+  sources: Array<IAtlasmapDocument>;
+  targets: Array<IAtlasmapDocument>;
   mappings: IMappings[];
   addToMapping: (elementId: ElementId, mappingId: string) => void;
   pending: boolean;
@@ -62,8 +71,9 @@ export interface IAtlasmapProps {
   onResetAtlasmap: () => void;
   onSourceSearch: (content: string) => void;
   onTargetSearch: (content: string) => void;
+  onActiveMappingChange: (id: string) => void;
   onShowMappingPreview: (enabled: boolean) => void;
-  onFieldPreviewChange: (id: string, value: string) => void;
+  onFieldPreviewChange: (field: IAtlasmapField, value: string) => void;
 }
 
 export function Atlasmap({
@@ -82,6 +92,7 @@ export function Atlasmap({
   onResetAtlasmap,
   onSourceSearch,
   onTargetSearch,
+  onActiveMappingChange,
   onShowMappingPreview,
   onFieldPreviewChange
 }: IAtlasmapProps) {
@@ -105,10 +116,11 @@ export function Atlasmap({
   const selectMapping = useCallback(
     (mapping: string) => {
       if (!isEditingMapping) {
+        onActiveMappingChange(mapping);
         setSelectedMapping(mapping);
       }
     },
-    [isEditingMapping]
+    [isEditingMapping, onActiveMappingChange]
   );
 
   const deselectMapping = useCallback(() => {
@@ -230,8 +242,7 @@ export function Atlasmap({
                     lineConnectionSide={'right'}
                     fields={s}
                     renderNode={(node, getCoords) => {
-                      const { id, name, type } = node as IDocumentField &
-                        (IFieldsNode | IFieldsGroup);
+                      const { id, name, type } = node as IAtlasmapField;
                       const showPreview = isFieldPartOfSelection(id) && showMappingPreview;
                       return (
                         <DocumentField
@@ -246,7 +257,7 @@ export function Atlasmap({
                           {showPreview &&
                             <DocumentFieldPreview
                               id={id}
-                              onChange={value => onFieldPreviewChange(id, value)}/>
+                              onChange={value => onFieldPreviewChange(node as IAtlasmapField, value)}/>
                           }
                         </DocumentField>
                       );
@@ -311,7 +322,7 @@ export function Atlasmap({
                     lineConnectionSide={'left'}
                     fields={t}
                     renderNode={(node, getCoords) => {
-                      const { id, name, type } = node as IDocumentField &
+                      const { id, name, type, previewValue } = node as IAtlasmapField &
                         (IFieldsNode | IFieldsGroup);
                       const showPreview = isFieldPartOfSelection(id) && showMappingPreview;
                       return (
@@ -327,7 +338,7 @@ export function Atlasmap({
                           {showPreview &&
                             <DocumentFieldPreviewResults
                               id={id}
-                              value={'TODO'}/>
+                              value={previewValue}/>
                           }
                         </DocumentField>
                       );

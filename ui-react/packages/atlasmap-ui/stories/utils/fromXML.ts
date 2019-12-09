@@ -1,4 +1,4 @@
-import { IDocument } from '../../src/atlasmap';
+import { IAtlasmapDocument } from '../../src/atlasmap';
 
 interface Restrictions {
   restriction: any[];
@@ -61,9 +61,10 @@ export function xmlToFieldGroup(xml: XMLObject, idPrefix: string) {
     id: `${idPrefix}-${jf.path}`,
     name: jf.name,
     type: jf.fieldType,
+    previewValue: ''
   });
 
-  const fromGroup = (f: Field): IDocument => ({
+  const fromGroup = (f: Field): IAtlasmapDocument => ({
     name: f.name,
     type: f.fieldType,
     id: `${idPrefix}-${f.path}`,
