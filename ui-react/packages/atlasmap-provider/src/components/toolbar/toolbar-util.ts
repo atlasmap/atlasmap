@@ -22,21 +22,18 @@ export async function deleteAtlasFile(fileName: string, isSource: boolean) {
   cfg.initializationService.updateInitComplete();
 }
 
- /**
-  * The user has requested their current mappings be exported.  Use the mapping management
-  * service to establish the file content and to push it down to the server.
-  *
-  * @param event
-  */
-export function exportAtlasFile() {
+/**
+ * The user has requested their current mappings be exported.  Use the mapping management
+ * service to establish the file content and to push it down to the server.
+ *
+ * @param fileName - user-specified catalog file name
+ */
+export function exportAtlasFile(fileName: string) {
   const cfg = ConfigModel.getConfig();
-  const defaultExportAtlasFileName = 'atlasmap-mapping.adm';
 
-  // Extract from event...
-  // let fileName = event.target...;
-  let fileName = '';
-  if (fileName.length === 0) {
-    fileName = defaultExportAtlasFileName;
+  // Tack on a .adm suffix if one wasn't already specified.
+  if (fileName.split('.').pop() !== 'adm') {
+    fileName = fileName.concat('.adm');
   }
   cfg.fileService.exportMappingsCatalog(fileName);
 }
@@ -44,7 +41,7 @@ export function exportAtlasFile() {
 /**
  * A user has selected a compressed mappings catalog file to be imported into the canvas.
  *
- * @param selectedFile
+ * @param selectedFile - user-specified ADM catalog file.
  * @param cfg
  */
 async function processMappingsCatalog(selectedFile: any, cfg: ConfigModel) {
