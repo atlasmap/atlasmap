@@ -6,6 +6,7 @@ import {
 import { FolderOpenIcon, FolderCloseIcon } from '@patternfly/react-icons';
 import { css, StyleSheet } from '@patternfly/react-styles';
 import React, {
+  ReactChild,
   useCallback,
   useEffect,
   useMemo,
@@ -60,6 +61,10 @@ export interface IFieldGroupProps extends Pick<IFieldElementProps, 'renderNode'>
   level?: number;
   parentExpanded: boolean;
   expandParent?: (expanded: boolean) => void;
+  renderGroup: (
+    node: IFieldsGroup
+  ) => ReactChild;
+
 }
 export function FieldGroup({
   isVisible,
@@ -72,6 +77,7 @@ export function FieldGroup({
   parentExpanded,
   expandParent,
   renderNode,
+  renderGroup,
 }: IFieldGroupProps) {
   const { setLineNode } = useLinkNode();
   const { ref, getLeftSideCoords, getRightSideCoords } = useLinkable({ getBoxRef, getParentRef });
@@ -141,12 +147,13 @@ export function FieldGroup({
             key={f.id}
             level={level + 1}
             parentExpanded={parentExpanded}
+            renderGroup={renderGroup}
             renderNode={renderNode}
             expandParent={setExpanded}
           />
         )
       ),
-    [group.fields, lineConnectionSide, getBoxRef, rightAlign, renderNode, isVisible, isExpanded, level, parentExpanded, ref, getParentRef, setExpanded]
+    [group.fields, lineConnectionSide, getBoxRef, rightAlign, renderNode, renderGroup, isVisible, isExpanded, level, parentExpanded, ref, getParentRef, setExpanded]
   );
 
   return level === 0 ? (
@@ -175,7 +182,7 @@ export function FieldGroup({
           >
             {isExpanded ? <FolderOpenIcon /> : <FolderCloseIcon />}
             <span>&nbsp;</span>
-            {renderNode(group as IFieldsGroup, getCoords)}
+            {renderGroup(group)}
           </span>
         </AccordionToggle>
         <AccordionContent

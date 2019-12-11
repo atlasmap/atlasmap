@@ -1,33 +1,44 @@
-import { Modal, Button, TextInput } from '@patternfly/react-core';
-import React, { ReactChild, ReactPortal, useCallback, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { string } from 'prop-types';
-
-export type Callback = ((closeDialog: () => void, value?: string) => void);
+import { Modal, Button, TextInput } from "@patternfly/react-core";
+import React, {
+  FormEvent,
+  ReactChild,
+  ReactPortal,
+  useCallback,
+  useState
+} from "react";
+import { createPortal } from "react-dom";
 
 export interface IUseSingleInputDialogArgs {
   title: string;
   content: ReactChild;
-  placeholder: string;
-  onConfirm: Callback
-  onCancel: Callback;
+  defaultValue: string;
+  onConfirm: (closeDialog: () => void, value: string) => void;
+  onCancel: (closeDialog: () => void) => void;
 }
 
 export function useSingleInputDialog({
   title,
   content,
-  placeholder,
+  defaultValue,
   onConfirm,
-  onCancel,
+  onCancel
 }: IUseSingleInputDialogArgs): [ReactPortal, () => void] {
   const [isOpen, setIsOpen] = useState(false);
-  const [value, setValue] = useState('');
+  const [isValid, setIsValid] = useState(true);
+  const [value, setValue] = useState(defaultValue);
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
-  const handleTextInputChange = (value: string) => {
+  const handleTextInputChange = (
+    value: string,
+    event: FormEvent<HTMLInputElement>
+  ) => {
     setValue(value);
+    console.log((event.target as HTMLInputElement).reportValidity());
+    setIsValid((event.target as HTMLInputElement).reportValidity());
   };
-  const handleConfirm = useCallback(() => onConfirm(closeModal, value), [onConfirm, value]);
+  const handleConfirm = useCallback(() => {
+    isValid && onConfirm(closeModal, value);
+  }, [onConfirm, value, isValid]);
   const handleCancel = useCallback(() => onCancel(closeModal), [onCancel]);
 
   const modal = createPortal(
@@ -37,12 +48,25 @@ export function useSingleInputDialog({
       isOpen={isOpen}
       onClose={closeModal}
       actions={[
-        <TextInput key={'text-input'} value={value} type="text"
-         onChange={handleTextInputChange} aria-label={title} placeholder={placeholder}/>,
-        <Button key={'confirm'} variant={'primary'} onClick={handleConfirm}>
+        <TextInput
+          key={"text-input"}
+          value={value}
+          type="text"
+          onChange={handleTextInputChange}
+          aria-label={title}
+          isRequired={true}
+          minLength={3}
+          isValid={isValid}
+        />,
+        <Button
+          key={"confirm"}
+          variant={"primary"}
+          onClick={handleConfirm}
+          isDisabled={!isValid}
+        >
           Confirm
         </Button>,
-        <Button key={'cancel'} variant={'link'} onClick={handleCancel}>
+        <Button key={"cancel"} variant={"link"} onClick={handleCancel}>
           Cancel
         </Button>
       ]}
@@ -50,9 +74,8 @@ export function useSingleInputDialog({
     >
       {content}
     </Modal>,
-    document.getElementById('modals')!
+    document.getElementById("modals")!
   );
 
   return [modal, openModal];
 }
-

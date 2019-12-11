@@ -8,8 +8,7 @@ import {
   SearchMinusIcon,
   ExpandArrowsAltIcon,
   ExpandIcon,
-  PficonDragdropIcon,
-  LinkIcon
+  PficonDragdropIcon
 } from '@patternfly/react-icons';
 import { useCanvasViewOptionsContext } from '../CanvasViewOptionsProvider';
 import { useCanvasViewContext } from '../CanvasViewCanvasProvider';
@@ -26,8 +25,7 @@ export const CanvasViewControlBar: FunctionComponent<ICanvasViewControlBarProps>
 
   const {
     freeView,
-    toggleFreeView,
-    toggleMaterializedMappings
+    toggleFreeView
   } = useCanvasViewOptionsContext();
 
   const handleZoomIn = useCallback(() => {
@@ -92,17 +90,10 @@ export const CanvasViewControlBar: FunctionComponent<ICanvasViewControlBarProps>
             ariaLabel: ' ',
             callback: toggleFreeView
           },
-          {
-            id: 'Toggle mappings column',
-            icon: <LinkIcon />,
-            tooltip: 'Toggle mappings column',
-            ariaLabel: ' ',
-            callback: toggleMaterializedMappings
-          },
           ...extraButtons
         ],
       }),
-    [freeView, handleZoomIn, handleZoomOut, handleViewReset, toggleFreeView, toggleMaterializedMappings, extraButtons]
+    [freeView, handleZoomIn, handleZoomOut, handleViewReset, toggleFreeView, extraButtons]
   );
 
   return (

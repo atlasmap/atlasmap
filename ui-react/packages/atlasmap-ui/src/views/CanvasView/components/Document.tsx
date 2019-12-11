@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export interface IDocumentProps extends Pick<IFieldGroupProps, 'renderNode'> {
+export interface IDocumentProps extends Pick<IFieldGroupProps, 'renderNode'>, Pick<IFieldGroupProps, 'renderGroup'> {
   title: ReactElement | string;
   footer: ReactElement | string;
   fields: IFieldsGroup;
@@ -86,10 +86,11 @@ export function Document({
   lineConnectionSide,
   fields,
   renderNode,
+  renderGroup,
   onDelete,
 }: IDocumentProps) {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [isUserExpanded, setIsUserExpanded] = useState(false);
+  const [isUserExpanded, setIsUserExpanded] = useState(true);
   const [shouldBeExpanded, setShouldBeExpanded] = useState(false);
   const toggleIsExpanded = () => setIsUserExpanded(!isUserExpanded);
   const [showActions, setShowActions] = useState(false);
@@ -174,6 +175,7 @@ export function Document({
                 parentExpanded={isExpanded}
                 expandParent={setShouldBeExpanded}
                 renderNode={renderNode}
+                renderGroup={renderGroup}
               />
             </Accordion>
           </div>

@@ -1,23 +1,22 @@
 import React, { FunctionComponent, ReactChild, useEffect } from 'react';
 import { useDrop } from 'react-dnd';
 import { useLinkNode } from '../../canvas';
-import { ElementId, IMappings, useLinkable } from '../../views/CanvasView';
+import { ElementId, useLinkable } from '../../views/CanvasView';
 import { IFieldElementDragSource } from './DocumentField';
 
 export interface IDropTargetProps {
-  node: IMappings;
-  addToMapping: (
+  onDrop: (
     elementId: ElementId,
-    mappingId: string
   ) => void;
   boxRef: HTMLElement | null;
+  isFieldDroppable: (documentType: string, fieldId: string) => boolean;
   children: (props: { isOver: boolean, canDrop: boolean }) => ReactChild;
 }
 
 export const DropTarget: FunctionComponent<IDropTargetProps> = ({
-  node,
-  addToMapping,
+  onDrop,
   boxRef,
+  isFieldDroppable,
   children
 }) => {
   const { ref, getLeftSideCoords, getRightSideCoords } = useLinkable({ getBoxRef: () => boxRef });
@@ -29,7 +28,7 @@ export const DropTarget: FunctionComponent<IDropTargetProps> = ({
     { isOver: boolean; canDrop: boolean, type?: string }
     >({
     accept: ['source', 'target'],
-    drop: item => addToMapping(item.id, node.id),
+    drop: item => onDrop(item.id),
     collect: monitor => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),
@@ -37,29 +36,7 @@ export const DropTarget: FunctionComponent<IDropTargetProps> = ({
     }),
     canDrop: (props, monitor) => {
       const type = monitor.getItemType();
-      if (node.sourceFields.length === 1 && node.targetFields.length === 1) {
-        if (
-          type === 'source' &&
-          !node.sourceFields.find(f => f.id === props.id)
-        ) {
-          return true;
-        } else if (!node.targetFields.find(f => f.id === props.id)) {
-          return true;
-        }
-      } else if (
-        type === 'source' &&
-        node.targetFields.length === 1 &&
-        !node.sourceFields.find(f => f.id === props.id)
-      ) {
-        return true;
-      } else if (
-        type === 'target' &&
-        node.sourceFields.length === 1 &&
-        !node.targetFields.find(f => f.id === props.id)
-      ) {
-        return true;
-      }
-      return false;
+      return isFieldDroppable(type as string, props.id);
     }
   });
 

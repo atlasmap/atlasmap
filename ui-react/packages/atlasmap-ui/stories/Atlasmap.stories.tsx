@@ -24,12 +24,23 @@ export const sample = () => createElement(() => {
     setMappings(updatedMappings)
   };
 
+  const createMapping = (sourceId: ElementId, targetId: ElementId) => {
+    setMappings([
+      ...mappings,
+      {
+        id: `${Date.now()}`,
+        name: 'One to One (mock)',
+        sourceFields: [{id: sourceId, name: sourceId, tip: sourceId}],
+        targetFields: [{id: targetId, name: targetId, tip: targetId}],
+      }
+    ])
+  };
+
   return (
     <Atlasmap
       sources={sources}
       targets={targets}
       mappings={mappings}
-      addToMapping={addToMapping}
       onImportAtlasFile={action('importAtlasFile')}
       onImportSourceDocument={action('onImportSourceDocument')}
       onImportTargetDocument={action('onImportTargetDocument')}
@@ -42,6 +53,8 @@ export const sample = () => createElement(() => {
       onActiveMappingChange={action('onActiveMappingChange')}
       onShowMappingPreview={action('onShowMappingPreview')}
       onFieldPreviewChange={action('onFieldPreviewChange')}
+      onAddToMapping={addToMapping}
+      onCreateMapping={createMapping}
       pending={false}
       error={false}
     />

@@ -33,10 +33,10 @@ const styles = StyleSheet.create({
     border: '2px solid transparent',
   },
   selected: {
-    borderColor: 'var(--pf-global--primary-color--100) !important',
+    borderColor: 'var(--pf-global--active-color--400) !important',
   },
   dropTarget: {
-    borderColor: 'var(--pf-global--primary-color--100) !important',
+    borderColor: 'var(--pf-global--active-color--400) !important',
   },
   canDrop: {
     borderColor: 'var(--pf-global--success-color--100) !important',

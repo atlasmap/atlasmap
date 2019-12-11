@@ -3,17 +3,21 @@ import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { CanvasLinksProvider } from '../../canvas';
 import { CanvasViewFieldsProvider } from './CanvasViewFieldsProvider';
-import { CanvasViewLayoutProvider } from './CanvasViewLayoutProvider';
+import { CanvasViewLayoutProvider, ICanvasViewLayoutProviderProps } from './CanvasViewLayoutProvider';
 import { CanvasViewCanvas } from './components';
 
-export const CanvasView: FunctionComponent = ({
+export interface ICanvasViewProps extends ICanvasViewLayoutProviderProps {
+}
+
+export const CanvasView: FunctionComponent<ICanvasViewProps> = ({
+  isMappingColumnVisible,
   children
 }) => {
   return (
     <DndProvider backend={HTML5Backend}>
       <CanvasLinksProvider>
         <CanvasViewCanvas>
-          <CanvasViewLayoutProvider>
+          <CanvasViewLayoutProvider isMappingColumnVisible={isMappingColumnVisible}>
             <CanvasViewFieldsProvider>
               {children}
             </CanvasViewFieldsProvider>

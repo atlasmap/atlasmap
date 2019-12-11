@@ -11,7 +11,7 @@ export interface IMappingsBoxProps extends HTMLAttributes<HTMLDivElement> {
   initialHeight: number;
   position: Coords;
   header: ReactElement | string;
-  hidden: boolean;
+  visible?: boolean;
   rightAlign?: boolean;
 }
 export const FieldsBox: FunctionComponent<IMappingsBoxProps> = ({
@@ -21,7 +21,7 @@ export const FieldsBox: FunctionComponent<IMappingsBoxProps> = ({
   position,
   header,
   rightAlign = false,
-  hidden,
+  visible = true,
   children,
   ...props
 }) => {
@@ -54,7 +54,7 @@ export const FieldsBox: FunctionComponent<IMappingsBoxProps> = ({
         ref={ref}
         style={{
           height: scrollable ? '100%' : undefined,
-          opacity: hidden ? 0 : 1,
+          opacity: visible ? 1 : 0,
         }}
         {...props}
       >

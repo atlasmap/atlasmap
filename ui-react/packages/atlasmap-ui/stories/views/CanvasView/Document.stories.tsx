@@ -28,7 +28,8 @@ export const interactive = () => (
         footer={text('footer', 'Source document')}
         lineConnectionSide={'right'}
         fields={s}
-        renderNode={node => <>{node.id}</>}
+        renderGroup={node => node.id}
+        renderNode={node => node.id}
         onDelete={action('onDelete Source')}
       />
     </CanvasLinksProvider>
