@@ -938,7 +938,7 @@ export const targets = [
 export const mappings = [
   {
     id: 'a',
-    name: 'Lorem',
+    name: 'Many To One(Concatenate)',
     sourceFields: [
       {
         id: 'JSONInstanceSource-/order/address/city',
@@ -961,7 +961,7 @@ export const mappings = [
   },
   {
     id: 'b',
-    name: 'Lorem',
+    name: 'One to Many (Split)',
     sourceFields: [
       {
         id: 'JSONInstanceSource-/primitives/numberPrimitive',
@@ -989,7 +989,7 @@ export const mappings = [
   },
   {
     id: 'c',
-    name: 'Lorem',
+    name: 'Many to One (Concatenate)',
     sourceFields: [
       {
         id: 'JSONInstanceSource-/primitives/stringPrimitive',

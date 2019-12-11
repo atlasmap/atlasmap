@@ -32,7 +32,8 @@ export const interactiveExample = () => (
         }}
         getBoxRef={() => null}
         parentExpanded={boolean('Parent expanded', true)}
-        renderNode={node => <>{node.id}</>}
+        renderGroup={node => node.id}
+        renderNode={node => node.id}
       />
     </CanvasLinksProvider>
   </CanvasProvider>

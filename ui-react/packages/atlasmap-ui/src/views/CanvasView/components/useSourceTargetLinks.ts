@@ -6,16 +6,20 @@ import { IMappings } from '../models';
 
 export interface IUseSourceTargetLinksArgs {
   mappings: IMappings[];
+  selectedMapping: string | undefined;
 }
-export function useSourceTargetLinks({ mappings }: IUseSourceTargetLinksArgs) {
+export function useSourceTargetLinks({ selectedMapping, mappings }: IUseSourceTargetLinksArgs) {
   const colors = useMemo(
     () => scaleSequential(interpolateRainbow).domain([0, mappings.length]),
     [mappings]
   );
 
   const linkedNodes = mappings.reduce<SourceTargetNodes[]>(
-    (lines, { sourceFields, targetFields }, idx) => {
-      const color = colors(idx);
+    (lines, { id, sourceFields, targetFields }, idx) => {
+      const isMappingSelected = id === selectedMapping;
+      const color = selectedMapping ? (
+        isMappingSelected ? 'var(--pf-global--active-color--400)' : '#ccc'
+      ) : colors(idx);
       const mappingLines = sourceFields.reduce<SourceTargetNodes[]>(
         (lines, start) => {
           const linesFromSource = targetFields.map(end => ({
@@ -27,7 +31,9 @@ export function useSourceTargetLinks({ mappings }: IUseSourceTargetLinksArgs) {
         },
         []
       );
-      return [...lines, ...mappingLines];
+      return isMappingSelected
+        ? [...lines, ...mappingLines]
+        : [...mappingLines, ...lines];
     },
     []
   );

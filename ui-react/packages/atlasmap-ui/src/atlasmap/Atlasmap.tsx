@@ -31,7 +31,8 @@ import {
   DragLayer,
   DropTarget,
   DocumentField,
-  DocumentFieldPreview, DocumentFieldPreviewResults,
+  DocumentFieldPreview,
+  DocumentFieldPreviewResults,
 } from './components';
 import { MappingDetails } from './MappingDetails';
 
@@ -59,7 +60,6 @@ export interface IAtlasmapProps {
   sources: Array<IAtlasmapDocument>;
   targets: Array<IAtlasmapDocument>;
   mappings: IMappings[];
-  addToMapping: (elementId: ElementId, mappingId: string) => void;
   pending: boolean;
   error: boolean;
   onExportAtlasFile: (event: any) => void;
@@ -74,13 +74,14 @@ export interface IAtlasmapProps {
   onActiveMappingChange: (id: string) => void;
   onShowMappingPreview: (enabled: boolean) => void;
   onFieldPreviewChange: (field: IAtlasmapField, value: string) => void;
+  onAddToMapping: (elementId: ElementId, mappingId: string) => void;
+  onCreateMapping: (sourceId: ElementId, targetId: ElementId) => void;
 }
 
 export function Atlasmap({
   sources,
   mappings,
   targets,
-  addToMapping,
   pending,
   error,
   onExportAtlasFile,
@@ -94,7 +95,9 @@ export function Atlasmap({
   onTargetSearch,
   onActiveMappingChange,
   onShowMappingPreview,
-  onFieldPreviewChange
+  onFieldPreviewChange,
+  onAddToMapping,
+  onCreateMapping,
 }: IAtlasmapProps) {
   const [selectedMapping, setSelectedMapping] = useState<string>();
   const [isEditingMapping, setisEditingMapping] = useState(false);
@@ -160,10 +163,15 @@ export function Atlasmap({
     [onExportAtlasFile, onImportAtlasFile, onResetAtlasmap]
   );
 
+  const currentMapping = mappings.find(m => m.id === selectedMapping);
+
   const isFieldPartOfSelection = (id: string) => {
-    const mapped = mappings.find(m => m.id === selectedMapping);
+    const mapped = currentMapping;
     if (mapped) {
-      return !!(mapped.sourceFields.find(f => f.id === id) || mapped.targetFields.find(f => f.id === id));
+      return !!(
+        mapped.sourceFields.find(f => f.id === id) ||
+        mapped.targetFields.find(f => f.id === id)
+      );
     }
     return false;
   };
@@ -196,13 +204,51 @@ export function Atlasmap({
             icon: <EyeIcon />,
             tooltip: 'Show mapping preview',
             ariaLabel: ' ',
-            callback: toggleShowMappingPreview
+            callback: toggleShowMappingPreview,
           },
         ]}
       />
     ),
     [toggleShowMappingPreview, toggleShowTypes]
   );
+
+  const isMappingColumnVisible = !isEditingMapping;
+
+  const isFieldAddableToSelection = (
+    mapping: IMappings | undefined,
+    documentType: string,
+    fieldId: ElementId
+  ) => {
+    if (!mapping) {
+      return false;
+    }
+    if (
+      mapping.sourceFields.length === 1 &&
+      mapping.targetFields.length === 1
+    ) {
+      if (
+        documentType === 'source' &&
+        !mapping.sourceFields.find(f => f.id === fieldId)
+      ) {
+        return true;
+      } else if (!mapping.targetFields.find(f => f.id === fieldId)) {
+        return true;
+      }
+    } else if (
+      documentType === 'source' &&
+      mapping.targetFields.length === 1 &&
+      !mapping.sourceFields.find(f => f.id === fieldId)
+    ) {
+      return true;
+    } else if (
+      documentType === 'target' &&
+      mapping.sourceFields.length === 1 &&
+      !mapping.targetFields.find(f => f.id === fieldId)
+    ) {
+      return true;
+    }
+    return false;
+  };
 
   return (
     <CanvasViewProvider>
@@ -216,7 +262,7 @@ export function Atlasmap({
         {pending && <Loading />}
         {error && <p>Error</p>}
         {!pending && !error && (
-          <CanvasView>
+          <CanvasView isMappingColumnVisible={isMappingColumnVisible}>
             <Source
               header={
                 <FieldsBoxHeader
@@ -241,9 +287,11 @@ export function Atlasmap({
                     }
                     lineConnectionSide={'right'}
                     fields={s}
+                    renderGroup={(node) => (node as IAtlasmapGroup).name}
                     renderNode={(node, getCoords) => {
                       const { id, name, type } = node as IAtlasmapField;
-                      const showPreview = isFieldPartOfSelection(id) && showMappingPreview;
+                      const showPreview =
+                        isFieldPartOfSelection(id) && showMappingPreview;
                       return (
                         <DocumentField
                           id={id}
@@ -253,12 +301,28 @@ export function Atlasmap({
                           showType={showTypes}
                           getCoords={getCoords}
                           isSelected={isFieldPartOfSelection(id)}
+                          showAddToMapping={
+                            isFieldAddableToSelection(
+                              currentMapping,
+                              'source',
+                              id
+                            )
+                          }
+                          onAddToMapping={() =>
+                            selectedMapping && onAddToMapping(id, selectedMapping)
+                          }
                         >
-                          {showPreview &&
+                          {showPreview && (
                             <DocumentFieldPreview
                               id={id}
-                              onChange={value => onFieldPreviewChange(node as IAtlasmapField, value)}/>
-                          }
+                              onChange={value =>
+                                onFieldPreviewChange(
+                                  node as IAtlasmapField,
+                                  value
+                                )
+                              }
+                            />
+                          )}
                         </DocumentField>
                       );
                     }}
@@ -274,9 +338,11 @@ export function Atlasmap({
                     return (
                       <DropTarget
                         key={m.id}
-                        node={m}
                         boxRef={ref}
-                        addToMapping={addToMapping}
+                        onDrop={itemId => onAddToMapping(itemId, m.id)}
+                        isFieldDroppable={(documentType, fieldId) =>
+                          isFieldAddableToSelection(m, documentType, fieldId)
+                        }
                       >
                         {({ canDrop, isOver }) => (
                           <MappingElement
@@ -313,33 +379,60 @@ export function Atlasmap({
                     title={t.name}
                     footer={
                       <DocumentFooter
-                        title='Target document'
+                        title="Target document"
                         type={t.type}
                         showType={showTypes}
                       />
                     }
                     lineConnectionSide={'left'}
                     fields={t}
-                    renderNode={(node, getCoords) => {
-                      const { id, name, type, previewValue } = node as IAtlasmapField &
-                        (IFieldsNode | IFieldsGroup);
-                      const showPreview = isFieldPartOfSelection(id) && showMappingPreview;
+                    renderGroup={(node) => (node as IAtlasmapGroup).name}
+                    renderNode={(node, getCoords, boxRef) => {
+                      const {
+                        id,
+                        name,
+                        type,
+                        previewValue,
+                      } = node as IAtlasmapField & (IFieldsNode | IFieldsGroup);
+                      const showPreview =
+                        isFieldPartOfSelection(id) && showMappingPreview;
                       return (
-                        <DocumentField
-                          id={id}
-                          name={name}
-                          type={type}
-                          documentType={'target'}
-                          showType={showTypes}
-                          getCoords={getCoords}
-                          isSelected={isFieldPartOfSelection(id)}
+                        <DropTarget
+                          key={id}
+                          boxRef={boxRef}
+                          onDrop={sourceId => onCreateMapping(sourceId, id)}
+                          isFieldDroppable={() => !isEditingMapping}
                         >
-                          {showPreview &&
-                            <DocumentFieldPreviewResults
+                          {({ isOver }) =>
+                            <DocumentField
                               id={id}
-                              value={previewValue}/>
+                              name={name}
+                              type={type}
+                              documentType={'target'}
+                              showType={showTypes}
+                              getCoords={getCoords}
+                              isSelected={isFieldPartOfSelection(id)}
+                              showAddToMapping={
+                                isFieldAddableToSelection(
+                                  currentMapping,
+                                  'target',
+                                  id
+                                )
+                              }
+                              onAddToMapping={() =>
+                                selectedMapping && onAddToMapping(id, selectedMapping)
+                              }
+                              isOver={isOver}
+                            >
+                              {showPreview && (
+                                <DocumentFieldPreviewResults
+                                  id={id}
+                                  value={previewValue}
+                                />
+                              )}
+                            </DocumentField>
                           }
-                        </DocumentField>
+                        </DropTarget>
                       );
                     }}
                     onDelete={() => onDeleteTargetDocument(t.id)}

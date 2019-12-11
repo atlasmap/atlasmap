@@ -15,10 +15,7 @@ interface ICanvasViewContext {
 }
 const CanvasViewContext = createContext<ICanvasViewContext | undefined>(undefined);
 
-export interface ICanvasViewProviderProps {
-
-}
-export const CanvasViewCanvasProvider: FunctionComponent<ICanvasViewProviderProps> = ({
+export const CanvasViewCanvasProvider: FunctionComponent = ({
   children
 }) => {
   const { freeView } = useCanvasViewOptionsContext();

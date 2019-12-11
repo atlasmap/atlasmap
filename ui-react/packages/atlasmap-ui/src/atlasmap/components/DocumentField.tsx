@@ -1,3 +1,5 @@
+import { AddCircleOIcon } from '@patternfly/react-icons';
+import { Button, Label } from '@patternfly/react-core';
 import { css, StyleSheet } from '@patternfly/react-styles';
 import React, { FunctionComponent, useEffect, useRef } from 'react';
 import { useDrag } from 'react-dnd';
@@ -8,18 +10,15 @@ import { Coords, ElementId } from '../../views/CanvasView';
 const styles = StyleSheet.create({
   element: {
     display: 'flex',
-    flexFlow: 'column'
-  },
-  isSelected: {
-    background: 'var(--pf-global--BackgroundColor--150)',
-    color: 'var(--pf-global--Color--100)',
-    padding: '0.5rem'
+    flexFlow: 'column',
   },
   isDragging: {
-    color: 'var(--pf-global--primary-color--100)',
+    color: 'var(--pf-global--active-color--400)',
+  },
+  isOver: {
+    color: 'var(--pf-global--active-color--400)',
   }
 });
-
 
 export interface IFieldElementDragSource {
   id: ElementId;
@@ -35,6 +34,9 @@ export interface IDocumentFieldProps {
   showType: boolean;
   getCoords: () => Coords | null;
   isSelected: boolean;
+  showAddToMapping: boolean;
+  isOver?: boolean;
+  onAddToMapping: () => void;
 }
 
 export const DocumentField: FunctionComponent<IDocumentFieldProps> = ({
@@ -45,7 +47,10 @@ export const DocumentField: FunctionComponent<IDocumentFieldProps> = ({
   showType,
   getCoords,
   isSelected,
-  children
+  showAddToMapping,
+  onAddToMapping,
+  isOver = false,
+  children,
 }) => {
   const { setLineNode } = useLinkNode();
 
@@ -54,7 +59,7 @@ export const DocumentField: FunctionComponent<IDocumentFieldProps> = ({
     IFieldElementDragSource,
     undefined,
     { isDragging: boolean }
-    >({
+  >({
     item: { id, type: documentType, name },
     collect: monitor => ({
       isDragging: monitor.isDragging(),
@@ -70,25 +75,36 @@ export const DocumentField: FunctionComponent<IDocumentFieldProps> = ({
 
   useEffect(() => {
     if (ref.current) {
-      ref.current.scrollIntoView({ behavior: 'smooth' })
+      ref.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [isSelected]);
 
-  const handleRef= (el: HTMLDivElement | null) => {
+  const handleRef = (el: HTMLDivElement | null) => {
     dragRef(el);
     ref.current = el;
   };
+
+  const content = isSelected ? <Label>{name}</Label> : name;
 
   return (
     <span
       ref={handleRef}
       className={css(
         styles.element,
-        isSelected && styles.isSelected,
+        isOver && styles.isOver,
         isDragging && styles.isDragging
       )}
     >
-      <span>{name} {showType && `(${type})`}</span>
+      <span>
+        {showAddToMapping ? (
+          <Button variant={'link'} onClick={onAddToMapping} isInline={true} icon={<AddCircleOIcon />}>
+            {content}
+          </Button>
+        ) : (
+          content
+        )}
+        {showType && ` (${type})`}
+      </span>
       {children}
     </span>
   );

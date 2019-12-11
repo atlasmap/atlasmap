@@ -19,7 +19,7 @@ export function useMappingLinks({ mappings, selectedMapping }: IUseMappingsLinks
     (lines, { id, sourceFields, targetFields }, idx) => {
       const isMappingSelected = id === selectedMapping;
       const color = selectedMapping ? (
-        isMappingSelected ? 'var(--pf-global--primary-color--100)' : '#ccc'
+        isMappingSelected ? 'var(--pf-global--active-color--400)' : '#ccc'
       ) : colors(idx);
       const sourcesToMappings = sourceFields.map(source => ({
         start: source.id,
@@ -46,7 +46,7 @@ export function useMappingLinks({ mappings, selectedMapping }: IUseMappingsLinks
       {
         start: 'dragsource',
         end: 'dragtarget',
-        color: 'var(--pf-global--primary-color--100)'
+        color: 'var(--pf-global--active-color--400)'
       }
     ]
   ),

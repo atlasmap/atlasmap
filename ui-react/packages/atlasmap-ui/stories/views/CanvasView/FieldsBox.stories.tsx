@@ -25,7 +25,7 @@ export const interactive = () => (
           initialHeight={number('Height', 300)}
           position={{ x: number('X', 10), y: number('Y', 10)}}
           header={text('Header', 'Sample header')}
-          hidden={boolean('Hidden', false)}
+          visible={boolean('Hidden', false)}
         >
           {text('Children', 'lorem dolor')}
         </FieldsBox>

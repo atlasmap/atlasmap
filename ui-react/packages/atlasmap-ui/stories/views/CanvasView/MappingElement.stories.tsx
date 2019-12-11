@@ -28,7 +28,7 @@ const Wrapper: FunctionComponent = ({ children }) => (
           initialHeight={400}
           position={{ x: 10, y: 10}}
           header={'Mappings'}
-          hidden={false}
+          visible={false}
         >
           {children}
         </FieldsBox>

@@ -1,23 +1,23 @@
 import { css, StyleSheet } from '@patternfly/react-styles';
 import React, {
-  ReactElement,
+  ReactChild,
   useEffect,
 } from 'react';
 import { useLinkNode } from '../../../canvas';
 import { useCanvasViewFieldsContext } from '../CanvasViewFieldsProvider';
-import { Coords, IFieldsGroup, IFieldsNode } from '../models';
+import { Coords, IFieldsNode } from '../models';
 import { useLinkable } from './useLinkable';
 
 const styles = StyleSheet.create({
   element: {
     padding:
-      'var(--pf-c-accordion__toggle--PaddingTop) var(--pf-c-accordion__toggle--PaddingRight) var(--pf-c-accordion__toggle--PaddingBottom) calc(var(--pf-c-accordion__toggle--PaddingLeft))',
+      '0.1rem var(--pf-c-accordion__toggle--PaddingRight) 0.1rem calc(var(--pf-c-accordion__toggle--PaddingLeft))',
     cursor: 'pointer',
   },
   rightAlign: {
     transform: 'scaleX(-1)',
     padding:
-      'var(--pf-c-accordion__toggle--PaddingTop) var(--pf-c-accordion__toggle--PaddingLeft) var(--pf-c-accordion__toggle--PaddingBottom) var(--pf-c-accordion__toggle--PaddingRight)',
+      '0.1rem var(--pf-c-accordion__toggle--PaddingLeft) 0.1rem var(--pf-c-accordion__toggle--PaddingRight)',
   },
 });
 
@@ -28,9 +28,10 @@ export interface IFieldElementProps {
   getBoxRef: () => HTMLElement | null;
   rightAlign?: boolean;
   renderNode: (
-    node: IFieldsGroup | IFieldsNode,
+    node: IFieldsNode,
     getCoords: () => Coords | null,
-  ) => ReactElement;
+    boxRef: HTMLElement | null
+  ) => ReactChild;
   expandParent: (expanded: boolean) => void;
 }
 
@@ -65,7 +66,7 @@ export function FieldElement ({
       ref={ref}
       className={css(styles.element, rightAlign && styles.rightAlign)}
     >
-      {renderNode(node as IFieldsNode, getCoords)}
+      {renderNode(node as IFieldsNode, getCoords, getBoxRef())}
     </div>
   );
 }

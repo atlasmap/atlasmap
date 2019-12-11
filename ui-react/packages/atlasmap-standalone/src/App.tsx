@@ -42,13 +42,10 @@ const App: React.FC = () => {
   const [exportDialog, openExportDialog] = useSingleInputDialog({
     title: 'Export Mappings and Documents.',
     content: 'Please enter a name for your exported catalog file',
-    placeholder: 'atlasmap-mapping.adm',
+    defaultValue: 'atlasmap-mapping.adm',
     onConfirm: (closeDialog, value) => {
-      if (value!.length === 0) {
-        value = 'atlasmap-mapping.adm';
-      }
       closeDialog();
-      exportAtlasFile(value!);
+      exportAtlasFile(value);
     },
     onCancel: (closeDialog) => {
       closeDialog();
@@ -109,7 +106,6 @@ const App: React.FC = () => {
         sources={sources}
         targets={targets}
         mappings={mappings}
-        addToMapping={() => void 0}
         pending={pending}
         error={error}
         onImportAtlasFile={handleImportAtlasFile}
@@ -124,6 +120,8 @@ const App: React.FC = () => {
         onActiveMappingChange={changeActiveMapping}
         onShowMappingPreview={enableMappingPreview}
         onFieldPreviewChange={handleFieldPreviewChange}
+        onAddToMapping={() => void 0}
+        onCreateMapping={() => void 0}
       />
       {exportDialog}
       {deleteDocumentDialog}
