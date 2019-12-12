@@ -23,6 +23,7 @@ import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.LookupEntry;
 import io.atlasmap.v2.LookupTable;
@@ -55,12 +56,12 @@ public abstract class BaseDefaultAtlasContextTest {
         session = (DefaultAtlasSession) context.createSession();
         if (reader == null) {
             reader = new MockFieldReader();
-            session.setFieldReader(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, reader);
         }
+        session.setFieldReader(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, reader);
         if (writer == null) {
             writer = new MockFieldWriter();
-            session.setFieldWriter(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID, writer);
         }
+        session.setFieldWriter(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID, writer);
     }
 
     private BaseAtlasModule mockAtlasModule() throws AtlasException {
@@ -123,7 +124,9 @@ public abstract class BaseDefaultAtlasContextTest {
         Field field = new SimpleField();
         field.setFieldType(type);
         field.setPath("/testPath" + value);
-        mapping.getInputField().add(field);
+        if (mapping != null) {
+            mapping.getInputField().add(field);
+        }
         reader.sources.put(field.getPath(), value);
         return field;
     }
@@ -141,6 +144,55 @@ public abstract class BaseDefaultAtlasContextTest {
                 return value;
             }
         }, index);
+    }
+
+    protected FieldGroup populateCollectionSourceField(Mapping mapping, String docId, String seed) {
+        String basePath = "/testPath" + seed;
+        FieldGroup fieldGroup = new FieldGroup();
+        fieldGroup.setFieldType(FieldType.STRING);
+        fieldGroup.setPath(basePath + "<>");
+        if (mapping != null) {
+            mapping.setInputFieldGroup(fieldGroup);
+        }
+        for (int i=0; i<10; i++) {
+            Field child = new SimpleField();
+            child.setFieldType(FieldType.STRING);
+            child.setPath(basePath + "<" + i + ">");
+            child.setValue(seed + i);
+            child.setIndex(i);
+            fieldGroup.getField().add(child);
+            reader.sources.put(child.getPath(), child.getValue());
+        }
+        reader.sources.put(fieldGroup.getPath(), fieldGroup);
+        return fieldGroup;
+    }
+
+    protected FieldGroup populateComplexCollectionSourceField(Mapping mapping, String docId, String seed) {
+        String basePath = "/testPath" + seed;
+        FieldGroup fieldGroup = new FieldGroup();
+        fieldGroup.setFieldType(FieldType.COMPLEX);
+        fieldGroup.setPath(basePath + "<>");
+        if (mapping != null) {
+            mapping.setInputFieldGroup(fieldGroup);
+        }
+        for (int i=0; i<10; i++) {
+            FieldGroup child = new FieldGroup();
+            child.setFieldType(FieldType.COMPLEX);
+            child.setPath(basePath + "<" + i + ">");
+            child.setIndex(i);
+            Field terminal = new SimpleField();
+            terminal.setFieldType(FieldType.STRING);
+            terminal.setPath(basePath + "<" + i + ">/value");
+            terminal.setValue(seed + i);
+            child.getField().add(terminal);
+            reader.sources.put(terminal.getPath(), terminal.getValue());
+            fieldGroup.getField().add(child);
+            reader.sources.put(child.getPath(), child);
+            reader.sources.put(terminal.getPath(), terminal);
+        }
+        reader.sources.put(fieldGroup.getPath(), fieldGroup);
+        reader.sources.put(fieldGroup.getPath() + "/value", fieldGroup);
+        return fieldGroup;
     }
 
     protected Field populateUnsupportedSourceField(Mapping mapping, String value, int index) {
@@ -173,7 +225,12 @@ public abstract class BaseDefaultAtlasContextTest {
         @Override
         public Field read(AtlasInternalSession session) throws AtlasException {
             Field field = session.head().getSourceField();
-            field.setValue(sources.get(field.getPath()));
+            Object value = sources.get(field.getPath());
+            if (value instanceof Field) {
+                session.head().setSourceField((Field)value);
+                return (Field)value;
+            }
+            field.setValue(value);
             return field;
         }
     }

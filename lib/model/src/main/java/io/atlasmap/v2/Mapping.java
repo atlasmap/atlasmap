@@ -25,7 +25,7 @@ public class Mapping extends BaseMapping implements Serializable {
 
     private final static long serialVersionUID = 1L;
 
-    protected FormulaExpression formulaExpression;
+    protected Expression expression;
 
     protected FieldGroup inputFieldGroup;
 
@@ -46,27 +46,27 @@ public class Mapping extends BaseMapping implements Serializable {
     protected String strategyClassName;
 
     /**
-     * Gets the value of the formulaExpression property.
+     * Gets the value of the expression property.
      *
      * @return
      *     possible object is
-     *     {@link FormulaExpression }
+     *     {@link Expression }
      *
      */
-    public FormulaExpression getFormulaExpression() {
-        return formulaExpression;
+    public Expression getExpression() {
+        return expression;
     }
 
     /**
-     * Sets the value of the formulaExpression property.
+     * Sets the value of the expression property.
      *
      * @param value
      *     allowed object is
-     *     {@link FormulaExpression }
+     *     {@link expression }
      *
      */
-    public void setFormulaExpression(FormulaExpression value) {
-        this.formulaExpression = value;
+    public void setExpression(Expression value) {
+        this.expression = value;
     }
 
     /**

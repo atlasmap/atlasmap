@@ -826,9 +826,9 @@ public abstract class BaseMarshallerTest {
 
     protected void addConditionalMapping(AtlasMapping model, String key) {
         Mapping mapping = new Mapping();
-        FormulaExpression fe = new FormulaExpression();
+        Expression fe = new Expression();
         fe.setExpression("=if(srcId:/path != \"\", srcId:/path, \":\")");
-        mapping.setFormulaExpression(fe);
+        mapping.setExpression(fe);
 
         MockField targetMockField = new MockField();
         targetMockField.setName(key + "-output");
@@ -846,8 +846,8 @@ public abstract class BaseMarshallerTest {
 
         validateMapping(mapping);
 
-        assertNotNull(mapping.getFormulaExpression());
-        FormulaExpression fe = mapping.getFormulaExpression();
+        assertNotNull(mapping.getExpression());
+        Expression fe = mapping.getExpression();
         assertEquals("=if(srcId:/path != \"\", srcId:/path, \":\")", fe.getExpression());
 
         assertNotNull(mapping.getOutputField());
