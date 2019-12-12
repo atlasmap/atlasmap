@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.json.core.JsonComplexTypeFactory;
@@ -75,9 +76,6 @@ public class JsonSchemaInspector implements JsonInspector {
 
     /**
      * Store the JsonNode rather than pre-built JsonComplexType as path needs to be filled by their own.
-     *
-     * TODO do we need to honor pointer reference vs. full URI? as long as the pointer is always from root document,
-     * the pointer works as a unique key, therefore not necessary to resolve to full URI.
      */
     private void populateDefinitions(JsonNode node, Map<String, JsonNode> definitionMap) {
         JsonNode definitions = node.get("definitions");
@@ -85,13 +83,14 @@ public class JsonSchemaInspector implements JsonInspector {
             return;
         }
 
-        definitions.forEach(entry -> {
-            JsonNode id = entry.get("$id");
-            if (id == null || id.asText().isEmpty()) {
-                LOG.warn("$id must be specified for the definition '{}', ignoring", entry);
-            } else {
-                definitionMap.put(id.asText(), entry);
+        definitions.fields().forEachRemaining((entry) -> {
+            String name = entry.getKey();
+            JsonNode def = entry.getValue();
+            JsonNode id = def.get("$id");
+            if (id != null && !id.asText().isEmpty()) {
+                definitionMap.put(id.asText(), def);
             }
+            definitionMap.put("#/definitions/" + name, def);
         });
     }
 

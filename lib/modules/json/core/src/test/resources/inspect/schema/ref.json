@@ -10,6 +10,9 @@
     },
     "ref-c": {
       "$ref": "urn:c"
+    },
+    "ref-d": {
+      "$ref": "#/definitions/def-d"
     }
   },
   "definitions": {
@@ -34,6 +37,14 @@
       "type": "object",
       "properties": {
         "str-c": {
+          "type": "string"
+        }
+      }
+    },
+    "def-d": {
+      "type": "object",
+      "properties": {
+        "str-d": {
           "type": "string"
         }
       }
