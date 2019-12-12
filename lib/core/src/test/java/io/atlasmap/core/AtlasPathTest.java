@@ -195,7 +195,7 @@ public class AtlasPathTest {
 
     @Test
     public void testIsAttributeSegment() {
-        assertFalse(new AtlasPath(null).getSegments(true).get(0).isAttribute());
+        assertFalse(new AtlasPath((String)null).getSegments(true).get(0).isAttribute());
         assertFalse(new AtlasPath("order").getSegments(false).get(0).isAttribute());
         assertTrue(new AtlasPath("@order").getSegments(false).get(0).isAttribute());
     }

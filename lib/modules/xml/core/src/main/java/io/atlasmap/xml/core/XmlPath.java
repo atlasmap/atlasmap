@@ -35,10 +35,6 @@ public class XmlPath extends AtlasPath {
         super(updatedPath(path, namespacesToReplace));
     }
 
-    protected XmlSegmentContext createSegmentContext(String expression) {
-        return new XmlSegmentContext(expression);
-    }
-
     public List<XmlSegmentContext> getXmlSegments(boolean includeRoot) {
         List<XmlSegmentContext> answer = new ArrayList<>();
         int start = includeRoot ? 0 : 1;
@@ -62,6 +58,10 @@ public class XmlPath extends AtlasPath {
             parentPath.appendField(this.segmentContexts.get(i).getExpression());
         }
         return parentPath;
+    }
+
+    protected XmlSegmentContext createSegmentContext(String expression) {
+        return new XmlSegmentContext(expression);
     }
 
     private static String updatedPath(String fieldPath, Map<String, String> namespacesToReplace) {

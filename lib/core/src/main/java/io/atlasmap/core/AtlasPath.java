@@ -19,7 +19,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.CollectionType;
+import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
 
 public class AtlasPath {
     public static final String PATH_SEPARATOR = "/";
@@ -34,36 +37,111 @@ public class AtlasPath {
     public static final String PATH_ATTRIBUTE_PREFIX = "@";
     public static final String PATH_NAMESPACE_SEPARATOR = ":";
 
-    protected List<SegmentContext> segmentContexts = new ArrayList<>();
+    protected List<SegmentContext> segmentContexts;
     private String originalPath = null;
+
+    /**
+     * Extract child fields by feeding relative path.
+     * 
+     * @param f Parent field to extract from
+     * @param path Relative path string
+     * @return extracted field(s)
+     */
+	public static Field extractChildren(Field f, String path) {
+        if (f == null || path == null || path.isEmpty()) {
+            return null;
+        }
+
+        if (path.equals(PATH_SEPARATOR)) {
+            return f;
+        }
+        if (!(f instanceof FieldGroup)) {
+            return null;
+        }
+
+        List<Field> extracted = new ArrayList<>();
+        FieldGroup entryField = (FieldGroup)f;
+        extracted.add(entryField);
+        List<SegmentContext> entrySegments = new AtlasPath(entryField.getPath()).getSegments(true);
+        SegmentContext entrySegment = entrySegments.get(entrySegments.size() - 1);
+        List<SegmentContext> extractedSegments = new ArrayList<>(entrySegments);
+        List<SegmentContext> relativeSegments = new AtlasPath(path).getSegments(true);
+        SegmentContext relativeRootSegment = relativeSegments.get(0);
+
+        List<Field> selected = new ArrayList<>();
+        if (relativeRootSegment.getCollectionType() == null || relativeRootSegment.getCollectionType() == CollectionType.NONE) {
+            if (entrySegment.getCollectionType() != null
+                && entrySegment.getCollectionType() != CollectionType.NONE
+                && entrySegment.getCollectionIndex() == null) {
+                selected.addAll(entryField.getField());
+            } else {
+                selected.add(entryField);
+            }
+        } else if (relativeRootSegment.getCollectionIndex() != null) {
+            if (entrySegment.getCollectionIndex() != null) {
+                if (entrySegment.getCollectionIndex() == relativeRootSegment.getCollectionIndex()) {
+                    selected.add(entryField);
+                }
+            } else {
+                selected.add(entryField.getField().get(relativeRootSegment.getCollectionIndex()));
+                entrySegment.collectionIndex = relativeRootSegment.getCollectionIndex();
+                extractedSegments.set(entrySegments.size() - 1, entrySegment.rebuild());
+            }
+        } else {
+            selected.addAll(entryField.getField());
+        }
+        extracted = selected;
+
+        for (int i=1; i<relativeSegments.size(); i++) {
+            SegmentContext segment = relativeSegments.get(i);
+            extractedSegments.add(segment);
+            selected = new ArrayList<>();
+
+            for (Field f1 : extracted) {
+                FieldGroup f1Group = (FieldGroup)f1;
+                for (Field f2 : f1Group.getField()) {
+                    AtlasPath f2Path = new AtlasPath(f2.getPath());
+                    if (!segment.getName().equals(f2Path.getLastSegment().getName())) {
+                        continue;
+                    }
+                    if (segment.getCollectionType() == CollectionType.NONE) {
+                        selected.add(f2);
+                    } else {
+                        FieldGroup f2Group = (FieldGroup)f2;
+                        if (segment.getCollectionIndex() != null) {
+                            selected.add((f2Group.getField().get(segment.getCollectionIndex())));
+                        } else {
+                            selected.addAll(f2Group.getField());
+                        }
+                    }
+                    break;
+                }
+            }
+            extracted = selected;
+        }
+
+        if (extracted.size() == 1) {
+            return extracted.get(0);
+        }
+        FieldGroup answer = AtlasModelFactory.createFieldGroupFrom(f);
+        answer.setPath(new AtlasPath(extractedSegments).toString());
+        answer.getField().addAll(extracted);
+        return answer;
+	}
 
     public AtlasPath(String p) {
         String path = p;
         this.originalPath = path;
-        if (path != null && !"".equals(path)) {
-            if (path.startsWith(PATH_SEPARATOR)) {
-                path = path.replaceFirst(PATH_SEPARATOR, "");
-            }
-            if (path.contains(PATH_SEPARATOR)) {
-                String[] parts = path.split(PATH_SEPARATOR_ESCAPED, 512);
-                for (String part : parts) {
-                    this.segmentContexts.add(createSegmentContext(part));
-                }
-            } else {
-                this.segmentContexts.add(createSegmentContext(path));
-            }
-        }
-        if (this.segmentContexts.isEmpty() || !this.segmentContexts.get(0).isRoot()) {
-            // add root segment if there's not
-            this.segmentContexts.add(0, createSegmentContext(""));
-        }
+        this.segmentContexts = parse(path);
     }
 
-    protected SegmentContext createSegmentContext(String expression) {
-        return new SegmentContext(expression);
+    protected AtlasPath(List<SegmentContext> segments) {
+        this.segmentContexts = segments;
+        this.originalPath = getSegmentPath(segments.get(segments.size() - 1));
     }
 
     private AtlasPath() {
+        this.segmentContexts = new ArrayList<>();
     }
 
     public AtlasPath appendField(String fieldExpression) {
@@ -238,6 +316,32 @@ public class AtlasPath {
             }
         }
         return answer;
+    }
+
+    protected List<SegmentContext> parse(String path) {
+        List<SegmentContext> segmentContexts = new ArrayList<>();
+        if (path != null && !"".equals(path)) {
+            if (path.startsWith(PATH_SEPARATOR)) {
+                path = path.replaceFirst(PATH_SEPARATOR, "");
+            }
+            if (path.contains(PATH_SEPARATOR)) {
+                String[] parts = path.split(PATH_SEPARATOR_ESCAPED, 512);
+                for (String part : parts) {
+                    segmentContexts.add(createSegmentContext(part));
+                }
+            } else {
+                segmentContexts.add(createSegmentContext(path));
+            }
+        }
+        if (segmentContexts.isEmpty() || !segmentContexts.get(0).isRoot()) {
+            // add root segment if there's not
+            segmentContexts.add(0, createSegmentContext(""));
+        }
+        return segmentContexts;
+    }
+
+    protected SegmentContext createSegmentContext(String expression) {
+        return new SegmentContext(expression);
     }
 
     public static class SegmentContext {

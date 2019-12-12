@@ -59,7 +59,7 @@ import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
-import io.atlasmap.v2.FormulaExpression;
+import io.atlasmap.v2.Expression;
 import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
@@ -469,29 +469,26 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                     continue;
                 }
 
-                if ((mapping.getInputField() == null || mapping.getInputField().isEmpty())
-                        && mapping.getInputFieldGroup() == null) {
-                    session.head().addAudit(AuditStatus.WARN, null, null, String.format(
-                            "Mapping does not contain at least one source field: alias=%s desc=%s",
+                try {
+                    if (mapping.getExpression() != null) {
+                        DefaultAtlasExpressionProcessor.processExpression(session, mapping.getExpression());
+                    } else if (mapping.getInputFieldGroup() != null) {
+                        processSourceFieldGroup(session, mapping.getInputFieldGroup());
+                    } else if (mapping.getInputField() != null && !mapping.getInputField().isEmpty()) {
+                        processSourceFieldMappings(session, mapping.getInputField());
+                    } else {
+                        session.head().addAudit(AuditStatus.WARN, null, null, String.format(
+                            "Mapping does not contain expression or at least one source field: alias=%s desc=%s",
                             mapping.getAlias(), mapping.getDescription()));
-                } else {
-                    try {
-                        if (mapping.getFormulaExpression() != null) {
-                            processExpression(session, mapping.getFormulaExpression());
-                        } else if (mapping.getInputFieldGroup() != null) {
-                            processSourceFieldGroup(session, mapping.getInputFieldGroup());
-                        } else {
-                            processSourceFieldMappings(session, mapping.getInputField());
-                        }
-                    }catch (Exception t) {
-                        Field sourceField = session.head().getSourceField();
-                        String docId = sourceField != null ? sourceField.getDocId() : null;
-                        String path =  sourceField != null ? sourceField.getPath() : null;
-                        session.head().addAudit(AuditStatus.ERROR, docId, path, String.format(
-                                "Unexpected exception is thrown while reading source field: %s", t.getMessage()));
-                        if (LOG.isDebugEnabled()) {
-                            LOG.error("", t);
-                        }
+                    }
+                } catch (Exception t) {
+                    Field sourceField = session.head().getSourceField();
+                    String docId = sourceField != null ? sourceField.getDocId() : null;
+                    String path =  sourceField != null ? sourceField.getPath() : null;
+                    session.head().addAudit(AuditStatus.ERROR, docId, path, String.format(
+                            "Unexpected exception is thrown while reading source field: %s", t.getMessage()));
+                    if (LOG.isDebugEnabled()) {
+                        LOG.error("", t);
                     }
                 }
 
@@ -563,10 +560,6 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                     : AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID;
         }
         return direction == FieldDirection.SOURCE ? sourceModules.get(docId) : targetModules.get(docId);
-    }
-
-    private void processExpression(DefaultAtlasSession session, FormulaExpression expression) throws AtlasException {
-        // TODO formulaExpressionParser.evaluate(session, expression.getExpression());
     }
 
     private void processSourceFieldGroup(DefaultAtlasSession session, FieldGroup sourceFieldGroup) throws AtlasException {
