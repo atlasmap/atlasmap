@@ -112,12 +112,13 @@ export class MappingManagementService {
       }
       const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON/';
       const operations: Observable<any>[] = [];
-      for (const mappingName of mappingFileNames) {
-        const url: string = baseURL + mappingName;
-        this.cfg.logger!.debug('Mapping Service Request');
+      // Ref https://github.com/atlasmap/atlasmap/issues/1577
+      // for (const mappingName of mappingFileNames) {
+        const url: string = baseURL;
+        this.cfg.logger!.debug('Mapping Service Request: ' + url);
         const operation = from(this.api.get(url).json());
         operations.push(operation);
-      }
+      // }
 
       forkJoin(operations).toPromise().then( async(data: any[]) => {
         if (!data) {

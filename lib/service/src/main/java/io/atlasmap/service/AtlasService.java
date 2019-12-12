@@ -17,6 +17,7 @@ package io.atlasmap.service;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -24,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -193,6 +195,17 @@ public class AtlasService {
         return Response.ok().entity(serialized).build();
     }
 
+    @Deprecated
+    @GET
+    @Path("/mappings")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "List Mappings", notes = "Retrieves a list of mapping file name saved with specified mappingDefinitionId")
+    @ApiResponses(@ApiResponse(code = 200, response = StringMap.class, message = "Return a list of a pair of mapping file name and content"))
+    public Response listMappingsOld(@Context UriInfo uriInfo, @QueryParam("filter") final String filter)
+    {
+        return listMappings(uriInfo, filter, 0);
+    }
+
     @GET
     @Path("/mappings/{mappingDefinitionId}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -243,6 +256,18 @@ public class AtlasService {
         return Response.ok().entity(serialized).build();
     }
 
+    @Deprecated
+    @DELETE
+    @Path("/mapping")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Remove Mapping", notes = "Remove a mapping file saved on the server")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "Specified mapping file was removed successfully"),
+        @ApiResponse(code = 204, message = "Mapping file was not found")})
+    public Response removeMappingRequestOld() {
+        return removeMappingRequest(0);
+    }
+
     @DELETE
     @Path("/mapping/{mappingDefinitionId}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -270,6 +295,19 @@ public class AtlasService {
         }
 
         return Response.ok().build();
+    }
+
+    @Deprecated
+    @DELETE
+    @Path("/mapping/RESET")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Remove Mapping by ID", notes = "Remove mapping file and catalogs related to specified ID")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "Mapping file and Catalogs were removed successfully"),
+        @ApiResponse(code = 204, message = "Unable to remove mapping file and Catalogs for the specified ID")})
+    public Response resetMappingByIdOld()
+    {
+        return resetMappingById(0);
     }
 
     @DELETE
@@ -362,6 +400,21 @@ public class AtlasService {
         return Response.ok().build();
     }
 
+    @Deprecated
+    @GET
+    @Path("/mapping/{mappingFormat}")
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_OCTET_STREAM})
+    @ApiOperation(value = "Get Mapping", notes = "Retrieve a mapping file saved on the server")
+    @ApiResponses({
+        @ApiResponse(code = 200, response = AtlasMapping.class, message = "Return a mapping file content"),
+        @ApiResponse(code = 204, message = "Mapping file was not found"),
+        @ApiResponse(code = 500, message = "Mapping file access error")})
+    public Response getMappingRequestOld(
+      @ApiParam("Mapping Format") @PathParam("mappingFormat") MappingFileType mappingFormat)
+    {
+        return getMappingRequest(mappingFormat, 0);
+    }
+
     @GET
     @Path("/mapping/{mappingFormat}/{mappingDefinitionId}")
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_OCTET_STREAM})
@@ -414,6 +467,23 @@ public class AtlasService {
         default:
             throw new WebApplicationException("Unrecognized mapping format: " + mappingFormat, Status.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Deprecated
+    @PUT
+    @Path("/mapping/{mappingFormat}")
+    @Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_OCTET_STREAM})
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Create Mapping", notes = "Save a mapping file on the server")
+    @ApiImplicitParams(@ApiImplicitParam(
+            name = "mapping", value = "Mapping file content", dataType = "io.atlasmap.v2.AtlasMapping"))
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "Succeeded"),
+        @ApiResponse(code = 500, message = "Mapping file save error")})
+    public Response createMappingRequestOld(InputStream mapping,
+    @ApiParam("Mapping Format") @PathParam("mappingFormat") MappingFileType mappingFormat,
+    @Context UriInfo uriInfo) {
+        return createMappingRequest(mapping, mappingFormat, 0, uriInfo);
     }
 
     @PUT
@@ -476,6 +546,22 @@ public class AtlasService {
         return this.mappingFolder + File.separator + mappingDefinitionId;
     }
 
+    @Deprecated
+    @POST
+    @Path("/mapping")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Update Mapping", notes = "Update existing mapping file on the server")
+    @ApiImplicitParams(@ApiImplicitParam(
+            name = "mapping", value = "Mapping file content", dataType = "io.atlasmap.v2.AtlasMapping"))
+    @ApiResponses(@ApiResponse(code = 200, message = "Succeeded"))
+    public Response updateMappingRequestOld(
+            InputStream mapping,
+            @Context UriInfo uriInfo)
+    {
+        return updateMappingRequest(mapping, 0, uriInfo);
+    }
+
     @POST
     @Path("/mapping/{mappingDefinitionId}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -489,6 +575,21 @@ public class AtlasService {
             @ApiParam("Mapping Definition ID") @PathParam("mappingDefinitionId") Integer mappingDefinitionId,
             @Context UriInfo uriInfo) {
         return saveMapping(mappingDefinitionId, fromJson(mapping, AtlasMapping.class), uriInfo);
+    }
+
+    @Deprecated
+    @PUT
+    @Path("/mapping/validate")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Validate Mapping", notes = "Validate mapping file")
+    @ApiImplicitParams(@ApiImplicitParam(
+            name = "mapping", value = "Mapping file content", dataType = "io.atlasmap.v2.AtlasMapping"))
+    @ApiResponses(@ApiResponse(code = 200, response = Validations.class, message = "Return a validation result"))
+    public Response validateMappingRequest(InputStream mapping,
+                                           @Context UriInfo uriInfo)
+    {
+        return validateMappingRequest(mapping, 0, uriInfo);
     }
 
     @PUT
@@ -904,6 +1005,16 @@ public class AtlasService {
 
     private <T> T fromJson(InputStream value, Class<T>clazz) {
         try {
+            if (LOG.isDebugEnabled()) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(value));
+                StringBuffer buf = new StringBuffer();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    buf.append(line);
+                }
+                LOG.debug(buf.toString());
+                return Json.mapper().readValue(buf.toString(), clazz);
+            }
             return Json.mapper().readValue(value, clazz);
         } catch (IOException e) {
             throw new WebApplicationException(e, Status.BAD_REQUEST);
