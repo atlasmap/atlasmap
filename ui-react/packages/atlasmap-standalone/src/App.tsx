@@ -38,13 +38,16 @@ const App: React.FC = () => {
     (selectedFile: File) => importAtlasFile(selectedFile, false),
     [importAtlasFile]
   );
-
+  const defaultCatalogName = 'atlasmap-mapping.adm';
   const [exportDialog, openExportDialog] = useSingleInputDialog({
     title: 'Export Mappings and Documents.',
     content: 'Please enter a name for your exported catalog file',
-    defaultValue: 'atlasmap-mapping.adm',
+    defaultValue: defaultCatalogName,
     onConfirm: (closeDialog, value) => {
       closeDialog();
+      if (value.length === 0) {
+        value = defaultCatalogName;
+      }
       exportAtlasFile(value);
     },
     onCancel: (closeDialog) => {

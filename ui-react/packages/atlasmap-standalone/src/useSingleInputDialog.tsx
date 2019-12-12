@@ -25,7 +25,7 @@ export function useSingleInputDialog({
 }: IUseSingleInputDialogArgs): [ReactPortal, () => void] {
   const [isOpen, setIsOpen] = useState(false);
   const [isValid, setIsValid] = useState(true);
-  const [value, setValue] = useState(defaultValue);
+  const [value, setValue] = useState('');
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
   const handleTextInputChange = (
@@ -33,7 +33,6 @@ export function useSingleInputDialog({
     event: FormEvent<HTMLInputElement>
   ) => {
     setValue(value);
-    console.log((event.target as HTMLInputElement).reportValidity());
     setIsValid((event.target as HTMLInputElement).reportValidity());
   };
   const handleConfirm = useCallback(() => {
@@ -51,11 +50,11 @@ export function useSingleInputDialog({
         <TextInput
           key={"text-input"}
           value={value}
+          placeholder={defaultValue}
           type="text"
           onChange={handleTextInputChange}
           aria-label={title}
           isRequired={true}
-          minLength={3}
           isValid={isValid}
         />,
         <Button
