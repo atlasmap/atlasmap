@@ -498,7 +498,7 @@ public class JsonSchemaInspectorTest {
                 .readAllBytes(Paths.get("src/test/resources/inspect/schema/ref.json")));
         JsonDocument document = inspectionService.inspectJsonSchema(schema);
         assertNotNull(document);
-        assertEquals(3, document.getFields().getField().size());
+        assertEquals(4, document.getFields().getField().size());
 
         JsonField refA = (JsonField) document.getFields().getField().get(0);
         assertNotNull(refA);
@@ -550,6 +550,20 @@ public class JsonSchemaInspectorTest {
         assertEquals("/ref-c/str-c", strC.getPath());
         assertEquals(FieldType.STRING, strC.getFieldType());
         assertEquals(FieldStatus.SUPPORTED, strC.getStatus());
+
+        JsonComplexType refD = (JsonComplexType) document.getFields().getField().get(3);
+        assertNotNull(refD);
+        assertEquals("ref-d", refD.getName());
+        assertEquals("/ref-d", refD.getPath());
+        assertEquals(FieldType.COMPLEX, refD.getFieldType());
+        assertEquals(FieldStatus.SUPPORTED, refD.getStatus());
+        assertEquals(1, refD.getJsonFields().getJsonField().size());
+        JsonField strD = refD.getJsonFields().getJsonField().get(0);
+        assertNotNull(strD);
+        assertEquals("str-d", strD.getName());
+        assertEquals("/ref-d/str-d", strD.getPath());
+        assertEquals(FieldType.STRING, strD.getFieldType());
+        assertEquals(FieldStatus.SUPPORTED, strD.getStatus());
     }
 
     // examples from json-schema.org
