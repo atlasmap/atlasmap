@@ -860,10 +860,8 @@ public class AtlasService {
      */
     private void extractCompressedCatalog(Integer mappingDefinitionId) throws IOException {
         byte[] buffer = new byte[2048];
-        String catalogName = getMappingSubDirectory(mappingDefinitionId) +
-            File.separator +
-            generateMappingFileNameFromId(mappingDefinitionId, ADM);
-
+        String mappingFileBasePath = getMappingSubDirectory(mappingDefinitionId);
+        String catalogName = mappingFileBasePath + File.separator + generateMappingFileNameFromId(mappingDefinitionId, ADM);
         String atlasmapCatalogFilesName = generateMappingFileNameFromId(mappingDefinitionId, GZ);
         String catEntryname;
         String jsonCatEntryName = null;
@@ -876,14 +874,14 @@ public class AtlasService {
             while ((catEntry = zipIn.getNextEntry()) != null) {
                 catEntryname = catEntry.getName();
                 if (catEntryname.contains("adm-catalog-files")) {
-                    out = new BufferedOutputStream(new FileOutputStream(getMappingSubDirectory(mappingDefinitionId) +
+                    out = new BufferedOutputStream(new FileOutputStream(mappingFileBasePath +
                         File.separator + atlasmapCatalogFilesName));
                 }
                 else if (catEntryname.contains(".jar")) {
                     out = new BufferedOutputStream(new FileOutputStream(baseFolder + File.separator + catEntryname));
                 }
                 else if (catEntryname.contains(atlasmapGenericMappingsName)) {
-                    out = new BufferedOutputStream(new FileOutputStream(getMappingSubDirectory(mappingDefinitionId) +
+                    out = new BufferedOutputStream(new FileOutputStream(mappingFileBasePath +
                         File.separator +
                         catEntryname));
                     jsonCatEntryName = catEntryname;
@@ -904,18 +902,22 @@ public class AtlasService {
             }
             zipIn.close();
 
-            // If ZIP contains Json file, rename AtlasMapping inside it to be consistent with mappingDefinitionId
+            // If ZIP contains Json file, rename AtlasMapping inside it, and mapping File itself
+            // to be consistent with current mappingDefinitionId
             if (jsonCatEntryName != null) {
-                String oldMappingFilePath = getMappingSubDirectory(mappingDefinitionId) + File.separator + jsonCatEntryName;
-                File oldMappingFile = new File(oldMappingFilePath);
+                String oldMappingFilePath = mappingFileBasePath + File.separator + jsonCatEntryName;
+                String mappingDefinitionName = "UI." + mappingDefinitionId;
+                String newMappingFilePath =  mappingFileBasePath + File.separator + generateMappingFileName(mappingDefinitionName);
                 // Rename AtlasMapping
-                String newMappingName = "UI." + mappingDefinitionId;
+                File oldMappingFile = new File(oldMappingFilePath);
+                File newMappingFile = new File(newMappingFilePath);
+
                 AtlasMapping oldAtlasMapping = Json.mapper().readValue(oldMappingFile, AtlasMapping.class);
-                oldAtlasMapping.setName(newMappingName);
-                // Write new mapping to new mapping file
-                Json.mapper().writeValue(createMappingFile(mappingDefinitionId, newMappingName), oldAtlasMapping);
-                // Delete old mapping json
-                oldMappingFile.delete();
+                oldAtlasMapping.setName(mappingDefinitionName);
+                // Update Mapping File
+                Json.mapper().writeValue(oldMappingFile, oldAtlasMapping);
+                // Rename Mapping File
+                oldMappingFile.renameTo(newMappingFile);
                 // Delete ADM file since its contents are no longer valid
                 File admFileToDelete = new File (catalogName);
                 admFileToDelete.delete();
