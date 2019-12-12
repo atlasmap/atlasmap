@@ -101,7 +101,7 @@ public class AtlasService {
 
     private String atlasmapCatalogName = "atlasmap-catalog.adm";
     private String atlasmapCatalogFilesName = "adm-catalog-files.gz";
-    private String atlasmapGenericMappingsName = "atlasmapping-UI";
+    private String mappingFileNamePrefix = "atlasmapping";
     private String baseFolder = "";
     private String mappingFolder = "";
     private String libFolder = "";
@@ -880,7 +880,7 @@ public class AtlasService {
                 else if (catEntryname.contains(".jar")) {
                     out = new BufferedOutputStream(new FileOutputStream(baseFolder + File.separator + catEntryname));
                 }
-                else if (catEntryname.contains(atlasmapGenericMappingsName)) {
+                else if (catEntryname.contains(mappingFileNamePrefix)) {
                     out = new BufferedOutputStream(new FileOutputStream(mappingFileBasePath +
                         File.separator +
                         catEntryname));
