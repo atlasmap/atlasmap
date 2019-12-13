@@ -11,7 +11,7 @@ import { createPortal } from "react-dom";
 export interface IUseSingleInputDialogArgs {
   title: string;
   content: ReactChild;
-  defaultValue: string;
+  placeholder: string;
   onConfirm: (closeDialog: () => void, value: string) => void;
   onCancel: (closeDialog: () => void) => void;
 }
@@ -19,7 +19,7 @@ export interface IUseSingleInputDialogArgs {
 export function useSingleInputDialog({
   title,
   content,
-  defaultValue,
+  placeholder,
   onConfirm,
   onCancel
 }: IUseSingleInputDialogArgs): [ReactPortal, () => void] {
@@ -50,7 +50,7 @@ export function useSingleInputDialog({
         <TextInput
           key={"text-input"}
           value={value}
-          placeholder={defaultValue}
+          placeholder={placeholder}
           type="text"
           onChange={handleTextInputChange}
           aria-label={title}

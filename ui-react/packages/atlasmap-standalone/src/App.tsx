@@ -42,7 +42,7 @@ const App: React.FC = () => {
   const [exportDialog, openExportDialog] = useSingleInputDialog({
     title: 'Export Mappings and Documents.',
     content: 'Please enter a name for your exported catalog file',
-    defaultValue: defaultCatalogName,
+    placeholder: defaultCatalogName,
     onConfirm: (closeDialog, value) => {
       closeDialog();
       if (value.length === 0) {
