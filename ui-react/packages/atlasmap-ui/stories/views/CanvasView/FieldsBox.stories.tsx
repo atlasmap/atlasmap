@@ -1,7 +1,11 @@
 import { boolean, number, text } from '@storybook/addon-knobs';
 import React from 'react';
-import { CanvasProvider } from '../../../src/canvas';
-import { CanvasView, CanvasViewCanvasProvider, FieldsBox } from '../../../src/views/CanvasView';
+import { CanvasProvider } from '../../../src/Canvas';
+import {
+  CanvasView,
+  CanvasViewCanvasProvider,
+  FieldsBox,
+} from '../../../src/CanvasView';
 
 export default {
   title: 'CanvasView/FieldsBox',
@@ -23,13 +27,13 @@ export const interactive = () => (
           id={'sources'}
           initialWidth={number('Width', 200)}
           initialHeight={number('Height', 300)}
-          position={{ x: number('X', 10), y: number('Y', 10)}}
+          position={{ x: number('X', 10), y: number('Y', 10) }}
           header={text('Header', 'Sample header')}
           visible={boolean('Hidden', false)}
         >
           {text('Children', 'lorem dolor')}
         </FieldsBox>
-        </CanvasView>
+      </CanvasView>
     </CanvasViewCanvasProvider>
   </CanvasProvider>
 );

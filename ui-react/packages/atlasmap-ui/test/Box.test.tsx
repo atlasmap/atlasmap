@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box } from '../src/views/CanvasView';
+import { Box } from '../src/CanvasView';
 import { render } from './setup';
 
 describe('Box tests', () => {

@@ -1,4 +1,9 @@
-import { EmptyState, EmptyStateIcon, EmptyStateVariant, Title } from '@patternfly/react-core';
+import {
+  EmptyState,
+  EmptyStateIcon,
+  EmptyStateVariant,
+  Title,
+} from '@patternfly/react-core';
 import { Spinner } from '@patternfly/react-core/dist/js/experimental';
 import React, { FunctionComponent } from 'react';
 

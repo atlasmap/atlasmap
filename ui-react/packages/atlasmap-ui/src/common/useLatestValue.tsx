@@ -1,6 +1,9 @@
 import { ReactNode, useCallback, useRef, useState } from 'react';
 
-export function useLatestValue(): [ReactNode | undefined, (el: ReactNode) => void] {
+export function useLatestValue(): [
+  ReactNode | undefined,
+  (el: ReactNode) => void
+] {
   const [element, setElement] = useState<ReactNode | undefined>();
   const previousElement = useRef<ReactNode | null>();
   const handleSetElement = useCallback(
