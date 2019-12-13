@@ -973,17 +973,17 @@ export const mappings = [
       {
         id: 'io.paul.Bicycle-/cadence',
         name: 'cadence',
-        tip: '/cadence'
+        tip: '/cadence',
       },
       {
         id: 'io.paul.Bicycle-/gear',
         name: 'gear',
-        tip: '/gear'
+        tip: '/gear',
       },
       {
         id: 'io.paul.Bicycle-/speed',
         name: 'speed',
-        tip: '/speed'
+        tip: '/speed',
       },
     ],
   },

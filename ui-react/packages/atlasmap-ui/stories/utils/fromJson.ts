@@ -1,4 +1,4 @@
-import { IAtlasmapDocument } from '../../src/atlasmap';
+import { IAtlasmapDocument } from '../../src/AtlasmapUI';
 
 interface JsonField {
   jsonType: string;
@@ -44,19 +44,24 @@ export interface JsonObject {
   JsonInspectionResponse: JsonInspectionResponse;
 }
 
-export function jsonToFieldGroup(json: JsonObject, idPrefix: string): IAtlasmapDocument[] {
+export function jsonToFieldGroup(
+  json: JsonObject,
+  idPrefix: string
+): IAtlasmapDocument[] {
   const fromElement = (jf: JsonField) => ({
     id: `${idPrefix}-${jf.path}`,
     name: jf.name,
     type: jf.fieldType,
-    previewValue: ''
+    previewValue: '',
   });
   const fromGroup = (f: Field): IAtlasmapDocument => ({
     name: f.name,
     type: f.fieldType,
     id: `${idPrefix}-${f.path}`,
-    fields: f.jsonFields.jsonField.map(f => f.jsonFields ? fromGroup(f as Field) : fromElement(f))
+    fields: f.jsonFields.jsonField.map(f =>
+      f.jsonFields ? fromGroup(f as Field) : fromElement(f)
+    ),
   });
 
-  return json.JsonInspectionResponse.jsonDocument.fields.field.map(fromGroup)
+  return json.JsonInspectionResponse.jsonDocument.fields.field.map(fromGroup);
 }

@@ -1,4 +1,4 @@
-import { IAtlasmapDocument } from '../../src/atlasmap';
+import { IAtlasmapDocument } from '../../src/AtlasmapUI';
 
 interface Restrictions {
   restriction: any[];
@@ -61,19 +61,19 @@ export function xmlToFieldGroup(xml: XMLObject, idPrefix: string) {
     id: `${idPrefix}-${jf.path}`,
     name: jf.name,
     type: jf.fieldType,
-    previewValue: ''
+    previewValue: '',
   });
 
   const fromGroup = (f: Field): IAtlasmapDocument => ({
     name: f.name,
     type: f.fieldType,
     id: `${idPrefix}-${f.path}`,
-    fields: f.xmlFields.xmlField.map(
-      f => f.xmlFields ? fromGroup(f as Field) : fromElement(f)
-    )
+    fields: f.xmlFields.xmlField.map(f =>
+      f.xmlFields ? fromGroup(f as Field) : fromElement(f)
+    ),
   });
 
-  return xml.XmlInspectionResponse.xmlDocument.fields.field.map(
-    f => f.xmlFields ? fromGroup(f as Field) : fromElement(f)
-  )
+  return xml.XmlInspectionResponse.xmlDocument.fields.field.map(f =>
+    f.xmlFields ? fromGroup(f as Field) : fromElement(f)
+  );
 }

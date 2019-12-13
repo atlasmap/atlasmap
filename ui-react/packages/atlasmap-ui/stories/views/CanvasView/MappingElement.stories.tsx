@@ -1,9 +1,13 @@
 import { action } from '@storybook/addon-actions';
 import { boolean } from '@storybook/addon-knobs';
 import React, { createElement, FunctionComponent, useState } from 'react';
-import { CanvasProvider } from '../../../src/canvas';
-import { CanvasView, CanvasViewCanvasProvider, FieldsBox } from '../../../src/views/CanvasView';
-import { MappingElement } from '../../../src/views/CanvasView/components';
+import { CanvasProvider } from '../../../src/Canvas';
+import {
+  CanvasView,
+  CanvasViewCanvasProvider,
+  FieldsBox,
+} from '../../../src/CanvasView';
+import { MappingElement } from '../../../src/CanvasView/components';
 import { mappings } from '../../sampleData';
 
 export default {
@@ -26,7 +30,7 @@ const Wrapper: FunctionComponent = ({ children }) => (
           id={'sample'}
           initialWidth={300}
           initialHeight={400}
-          position={{ x: 10, y: 10}}
+          position={{ x: 10, y: 10 }}
           header={'Mappings'}
           visible={false}
         >
@@ -39,7 +43,9 @@ const Wrapper: FunctionComponent = ({ children }) => (
 
 export const interactive = () => {
   return createElement(() => {
-    const [selectedMapping, setSelectedMapping] = useState<string | undefined>();
+    const [selectedMapping, setSelectedMapping] = useState<
+      string | undefined
+    >();
     const handleSelectMapping = (id: string) => {
       setSelectedMapping(id);
     };
@@ -59,7 +65,7 @@ export const interactive = () => {
           isOver={boolean('Is over', false)}
         />
       </Wrapper>
-    )
+    );
   });
 };
 
@@ -69,9 +75,9 @@ export const canDrop = () => (
       boxRef={null}
       node={mappings[0]}
       selectedMapping={undefined}
-      selectMapping={() => void(0)}
-      deselectMapping={() => void(0)}
-      editMapping={() => void(0)}
+      selectMapping={() => void 0}
+      deselectMapping={() => void 0}
+      editMapping={() => void 0}
       isOver={false}
       canDrop={true}
     />
@@ -84,9 +90,9 @@ export const isHoverCanDrop = () => (
       boxRef={null}
       node={mappings[0]}
       selectedMapping={undefined}
-      selectMapping={() => void(0)}
-      deselectMapping={() => void(0)}
-      editMapping={() => void(0)}
+      selectMapping={() => void 0}
+      deselectMapping={() => void 0}
+      editMapping={() => void 0}
       isOver={true}
       canDrop={true}
     />

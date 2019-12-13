@@ -1,8 +1,8 @@
 import { action } from '@storybook/addon-actions';
 import { text } from '@storybook/addon-knobs';
 import React from 'react';
-import { CanvasLinksProvider, CanvasProvider } from '../../../src/canvas';
-import { Document } from '../../../src/views/CanvasView/components';
+import { CanvasLinksProvider, CanvasProvider } from '../../../src/Canvas';
+import { Document } from '../../../src/CanvasView/components';
 import { sources } from '../../sampleData';
 
 const s = sources[0];

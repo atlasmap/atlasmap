@@ -1,5 +1,6 @@
 import { useAtlasmap, IAtlasmapFieldWithField } from '@atlasmap/provider';
-import { Atlasmap, GroupId, IAtlasmapField } from "@atlasmap/ui";
+import { AtlasmapUI, GroupId, IAtlasmapField } from "@atlasmap/ui";
+import { Page, PageHeader, PageSection } from "@patternfly/react-core";
 import React, { useCallback, useRef, useState } from 'react';
 import "./App.css";
 import { useConfirmationDialog } from './useConfirmationDialog';
@@ -104,32 +105,41 @@ const App: React.FC = () => {
   }, [onFieldPreviewChange]);
 
   return (
-    <>
-      <Atlasmap
-        sources={sources}
-        targets={targets}
-        mappings={mappings}
-        pending={pending}
-        error={error}
-        onImportAtlasFile={handleImportAtlasFile}
-        onImportSourceDocument={handleImportSourceDocument}
-        onImportTargetDocument={handleImportTargetDocument}
-        onDeleteSourceDocument={handleDeleteSourceDocumentDialog}
-        onDeleteTargetDocument={handleDeleteTargetDocumentDialog}
-        onResetAtlasmap={openResetDialog}
-        onSourceSearch={setSourceFilter}
-        onTargetSearch={setTargetFilter}
-        onExportAtlasFile={openExportDialog}
-        onActiveMappingChange={changeActiveMapping}
-        onShowMappingPreview={enableMappingPreview}
-        onFieldPreviewChange={handleFieldPreviewChange}
-        onAddToMapping={() => void 0}
-        onCreateMapping={() => void 0}
-      />
-      {exportDialog}
-      {deleteDocumentDialog}
-      {resetDialog}
-    </>
+    <Page
+      header={
+        <PageHeader
+          logo={<><strong>Atlasmap</strong>&nbsp;Data Mapper UI</>}
+          style={{ minHeight: 40 }}
+        />
+      }
+    >
+      <PageSection variant={'light'} noPadding={true}>
+        <AtlasmapUI
+          sources={sources}
+          targets={targets}
+          mappings={mappings}
+          pending={pending}
+          error={error}
+          onImportAtlasFile={handleImportAtlasFile}
+          onImportSourceDocument={handleImportSourceDocument}
+          onImportTargetDocument={handleImportTargetDocument}
+          onDeleteSourceDocument={handleDeleteSourceDocumentDialog}
+          onDeleteTargetDocument={handleDeleteTargetDocumentDialog}
+          onResetAtlasmap={openResetDialog}
+          onSourceSearch={setSourceFilter}
+          onTargetSearch={setTargetFilter}
+          onExportAtlasFile={openExportDialog}
+          onActiveMappingChange={changeActiveMapping}
+          onShowMappingPreview={enableMappingPreview}
+          onFieldPreviewChange={handleFieldPreviewChange}
+          onAddToMapping={() => void 0}
+          onCreateMapping={() => void 0}
+        />
+        {exportDialog}
+        {deleteDocumentDialog}
+        {resetDialog}
+      </PageSection>
+    </Page>
   );
 };
 

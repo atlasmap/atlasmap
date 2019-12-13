@@ -1,7 +1,7 @@
 import React from 'react';
 import { boolean } from '@storybook/addon-knobs';
-import { CanvasLinksProvider, CanvasProvider } from '../../../src/canvas';
-import { FieldGroup } from '../../../src/views/CanvasView';
+import { CanvasLinksProvider, CanvasProvider } from '../../../src/Canvas';
+import { FieldGroup } from '../../../src/CanvasView';
 
 export default {
   title: 'CanvasView/FieldGroup',
@@ -23,11 +23,7 @@ export const interactiveExample = () => (
         isVisible={true}
         lineConnectionSide={'right'}
         group={{
-          fields: [
-            {id: 'f1'},
-            {id: 'f2'},
-            {id: 'f3'},
-          ],
+          fields: [{ id: 'f1' }, { id: 'f2' }, { id: 'f3' }],
           id: 'text-id',
         }}
         getBoxRef={() => null}

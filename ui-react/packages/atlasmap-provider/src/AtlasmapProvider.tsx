@@ -23,7 +23,8 @@ import { MappingManagementService } from './services/mapping-management.service'
 import { search } from './utils/filter-fields';
 import {
   fromDocumentDefinitionToFieldGroup,
-  fromMappingDefinitionToIMappings, IAtlasmapFieldWithField,
+  fromMappingDefinitionToIMappings,
+  IAtlasmapFieldWithField,
 } from './utils/to-ui-models-util';
 import {
   deleteAtlasFile,
@@ -130,7 +131,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   initializationService.cfg.initCfg.baseJSONInspectionServiceUrl = baseJSONInspectionServiceUrl;
   initializationService.cfg.initCfg.baseMappingServiceUrl = baseMappingServiceUrl;
 
-  const onUpdates = () => {
+  const onUpdates = useCallback(() => {
     if (initializationService.cfg.initCfg.initialized) {
       if (!initializationService.cfg.initCfg.initializationErrorOccurred) {
         dispatch({
@@ -146,7 +147,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
         dispatch({ type: 'error' });
       }
     }
-  };
+  }, [initializationService]);
 
   useEffect(() => {
     initializationService.initialize();
@@ -157,7 +158,9 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
 
     const subscriptions = [
       initializationObservable.subscribe(onUpdates),
-      initializationService.cfg.mappingService.mappingPreviewOutput$.subscribe(onUpdates)
+      initializationService.cfg.mappingService.mappingPreviewOutput$.subscribe(
+        onUpdates
+      ),
     ];
 
     dispatch({ type: 'loading' });
@@ -166,7 +169,14 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
       initializationService.resetConfig();
       subscriptions.forEach(s => s.unsubscribe());
     };
-  }, [initializationService]);
+  }, [
+    initializationService,
+    onUpdates,
+    baseJavaInspectionServiceUrl,
+    baseXMLInspectionServiceUrl,
+    baseJSONInspectionServiceUrl,
+    baseMappingServiceUrl,
+  ]);
 
   return (
     <AtlasmapContext.Provider
@@ -204,7 +214,7 @@ export function useAtlasmap({
     sourceDocs,
     targetDocs,
     mappingDefinition,
-    initializationService
+    initializationService,
   } = context;
 
   search(sourceFilter, true);
@@ -241,19 +251,22 @@ export function useAtlasmap({
 
   const mappings = fromMappingDefinitionToIMappings(mappingDefinition);
 
-  const onFieldPreviewChange = (field: IAtlasmapFieldWithField, value: string) => {
+  const onFieldPreviewChange = useCallback((
+    field: IAtlasmapFieldWithField,
+    value: string
+  ) => {
     field.amField.value = value;
     initializationService.cfg.mappingService.notifyMappingUpdated();
-  };
+  }, [initializationService]);
 
-  const changeActiveMapping = (mappingId: string) => {
+  const changeActiveMapping = useCallback((mappingId: string) => {
     const mapping = mappingDefinition.mappings.find(m => m.uuid === mappingId);
     if (mapping) {
       initializationService.cfg.mappingService.selectMapping(mapping);
     } else {
       initializationService.cfg.mappingService.deselectMapping();
     }
-  };
+  }, [initializationService, mappingDefinition]);
 
   return useMemo(
     () => ({
@@ -278,6 +291,8 @@ export function useAtlasmap({
       mappings,
       handleImportAtlasFile,
       handleResetAtlasmap,
+      changeActiveMapping,
+      onFieldPreviewChange,
     ]
   );
 }

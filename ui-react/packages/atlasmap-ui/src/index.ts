@@ -1,4 +1,4 @@
-export * from './canvas';
+export * from './AtlasmapUI';
+export * from './Canvas';
+export * from './CanvasView';
 export * from './common';
-export * from './atlasmap';
-export * from './views';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { text } from '@storybook/addon-knobs';
-import { Box } from '../../../src/views/CanvasView';
+import { Box } from '../../../src/CanvasView';
 
 export default {
   title: 'CanvasView/Box',
