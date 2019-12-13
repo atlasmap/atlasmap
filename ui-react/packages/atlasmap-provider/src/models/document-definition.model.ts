@@ -42,8 +42,12 @@ export class NamespaceModel {
     if (this === NamespaceModel.getUnqualifiedNamespace()) {
       return this.alias;
     }
-    return (this.isTarget ? 'Target' : this.alias)
-      + ' [' + (this.uri == null ? 'NO URI' : this.uri) + ']';
+    return (
+      (this.isTarget ? 'Target' : this.alias) +
+      ' [' +
+      (this.uri == null ? 'NO URI' : this.uri) +
+      ']'
+    );
   }
 
   copy(): NamespaceModel {
@@ -70,7 +74,6 @@ export class PaddingField extends Field {
   isSource(): boolean {
     return this._isSource;
   }
-
 }
 
 export class DocumentDefinition {
@@ -99,9 +102,9 @@ export class DocumentDefinition {
   fields: Field[] = [];
   allFields: Field[] = [];
   terminalFields: Field[] = [];
-  complexFieldsByClassIdentifier: { [key: string]: Field; } = {};
-  enumFieldsByClassIdentifier: { [key: string]: Field; } = {};
-  fieldsByPath: { [key: string]: Field; } = {};
+  complexFieldsByClassIdentifier: { [key: string]: Field } = {};
+  enumFieldsByClassIdentifier: { [key: string]: Field } = {};
+  fieldsByPath: { [key: string]: Field } = {};
   fieldPaths: string[] = [];
   showFields = true;
   visibleInCurrentDocumentSearch = true;
@@ -111,7 +114,8 @@ export class DocumentDefinition {
 
   set type(type: DocumentType) {
     this._type = type;
-    this.isPropertyOrConstant = type === DocumentType.CONSTANT || type === DocumentType.PROPERTY;
+    this.isPropertyOrConstant =
+      type === DocumentType.CONSTANT || type === DocumentType.PROPERTY;
   }
 
   get type(): DocumentType {
@@ -137,11 +141,16 @@ export class DocumentDefinition {
    * @param targetField
    * @param targetFieldDocDefType
    */
-  fieldExists(targetField: Field, targetFieldDocDefType: DocumentType): boolean {
-
+  fieldExists(
+    targetField: Field,
+    targetFieldDocDefType: DocumentType
+  ): boolean {
     for (const field of this.getAllFields()) {
-      if (field.name === targetField.name && field.docDef.type === targetFieldDocDefType) {
-          return true;
+      if (
+        field.name === targetField.name &&
+        field.docDef.type === targetFieldDocDefType
+      ) {
+        return true;
       }
     }
     return false;
@@ -152,7 +161,7 @@ export class DocumentDefinition {
       return true;
     }
     const foundFields: Field[] = this.getFields(Field.getFieldPaths(fields));
-    return (foundFields != null) && (fields.length === foundFields.length);
+    return foundFields != null && fields.length === foundFields.length;
   }
 
   getFields(fieldPaths: string[]): Field[] {
@@ -194,15 +203,20 @@ export class DocumentDefinition {
     if (originalPath != null && originalPath.indexOf(pathSeparator) === 0) {
       originalPath = originalPath.substring(1);
     }
-    if (field == null && (originalPath.indexOf(pathSeparator) !== -1)) {
+    if (field == null && originalPath.indexOf(pathSeparator) !== -1) {
       let currentParentPath = '';
       while (originalPath.indexOf(pathSeparator) !== -1) {
-        const currentPathSection: string = originalPath.substr(0, originalPath.indexOf(pathSeparator));
+        const currentPathSection: string = originalPath.substr(
+          0,
+          originalPath.indexOf(pathSeparator)
+        );
         currentParentPath += pathSeparator + currentPathSection;
         const parentField: Field = this.fieldsByPath[currentParentPath];
         if (parentField == null) {
           if (originalPath.indexOf(pathSeparator) !== -1) {
-            originalPath = originalPath.substr(originalPath.indexOf(pathSeparator) + 1);
+            originalPath = originalPath.substr(
+              originalPath.indexOf(pathSeparator) + 1
+            );
             continue;
           } else {
             break;
@@ -213,7 +227,9 @@ export class DocumentDefinition {
         }
         this.populateChildren(parentField);
         if (originalPath.indexOf(pathSeparator) !== -1) {
-          originalPath = originalPath.substr(originalPath.indexOf(pathSeparator) + 1);
+          originalPath = originalPath.substr(
+            originalPath.indexOf(pathSeparator) + 1
+          );
         }
       }
       field = this.fieldsByPath[fieldPath];
@@ -247,11 +263,14 @@ export class DocumentDefinition {
       this.populateFieldParentPaths(field, null, 0);
     } else {
       const pathSeparator: string = this.pathSeparator;
-      this.populateFieldParentPaths(field, field.parentField.path + pathSeparator,
-        field.parentField.fieldDepth + 1);
+      this.populateFieldParentPaths(
+        field,
+        field.parentField.path + pathSeparator,
+        field.parentField.fieldDepth + 1
+      );
     }
     if (oldPath != null && this.fieldsByPath[oldPath] != null) {
-      delete (this.fieldsByPath[oldPath]);
+      delete this.fieldsByPath[oldPath];
     }
     DataMapperUtil.removeItemFromArray(field.path, this.fieldPaths);
     this.populateFieldData(field);
@@ -268,8 +287,11 @@ export class DocumentDefinition {
       field.parentField.children.push(field);
       Field.alphabetizeFields(field.parentField.children);
       const pathSeparator: string = this.pathSeparator;
-      this.populateFieldParentPaths(field, field.parentField.path + pathSeparator,
-        field.parentField.fieldDepth + 1);
+      this.populateFieldParentPaths(
+        field,
+        field.parentField.path + pathSeparator,
+        field.parentField.fieldDepth + 1
+      );
     }
     this.populateFieldData(field);
     this.fieldPaths.sort();
@@ -280,9 +302,8 @@ export class DocumentDefinition {
    * @param field - target field
    */
   populateChildren(field: Field): boolean {
-
     // populate complex fields
-    if (field.isTerminal() || (field.children.length > 0)) {
+    if (field.isTerminal() || field.children.length > 0) {
       return true;
     }
 
@@ -297,7 +318,11 @@ export class DocumentDefinition {
     for (let childField of cachedField.children) {
       childField = childField.copy();
       childField.parentField = field;
-      this.populateFieldParentPaths(childField, field.path + pathSeparator, field.fieldDepth + 1);
+      this.populateFieldParentPaths(
+        childField,
+        field.path + pathSeparator,
+        field.fieldDepth + 1
+      );
       this.populateFieldData(childField);
       field.children.push(childField);
     }
@@ -338,14 +363,13 @@ export class DocumentDefinition {
     DataMapperUtil.removeItemFromArray(field, this.allFields);
     DataMapperUtil.removeItemFromArray(field, this.terminalFields);
     DataMapperUtil.removeItemFromArray(field.path, this.fieldPaths);
-    delete (this.fieldsByPath[field.path]);
+    delete this.fieldsByPath[field.path];
     if (field.parentField != null) {
       DataMapperUtil.removeItemFromArray(field, field.parentField.children);
     }
   }
 
   updateFromMappings(mappingDefinition: MappingDefinition): void {
-
     if (mappingDefinition === null) {
       return;
     }
@@ -361,10 +385,12 @@ export class DocumentDefinition {
       for (const field of mapping.getAllFields()) {
         let parentField = field;
         // TODO: check this non null operator
-        const partOfTransformation = mapping.getMappedFieldForField(field)!.actions.length > 0;
+        const partOfTransformation =
+          mapping.getMappedFieldForField(field)!.actions.length > 0;
         while (parentField != null) {
           parentField.partOfMapping = true;
-          parentField.partOfTransformation = parentField.partOfTransformation || partOfTransformation;
+          parentField.partOfTransformation =
+            parentField.partOfTransformation || partOfTransformation;
           parentField = parentField.parentField;
         }
       }
@@ -374,13 +400,19 @@ export class DocumentDefinition {
     }
   }
 
-  private populateFieldParentPaths(field: Field, parentPath: string | null, depth: number): void {
+  private populateFieldParentPaths(
+    field: Field,
+    parentPath: string | null,
+    depth: number
+  ): void {
     if (parentPath == null) {
       parentPath = this.pathSeparator;
     }
     field.path = parentPath + field.getNameWithNamespace();
     if (field.isCollection) {
-      field.path += field.isArray ? (this.LEFT_BRACKET + this.RIGHT_BRACKET) : '<>';
+      field.path += field.isArray
+        ? this.LEFT_BRACKET + this.RIGHT_BRACKET
+        : '<>';
     }
     if (field.isAttribute) {
       field.path = parentPath += '@' + field.name;
@@ -392,7 +424,11 @@ export class DocumentDefinition {
     const pathSeparator: string = this.pathSeparator;
     for (const childField of field.children) {
       childField.parentField = field;
-      this.populateFieldParentPaths(childField, field.path + pathSeparator, depth + 1);
+      this.populateFieldParentPaths(
+        childField,
+        field.path + pathSeparator,
+        depth + 1
+      );
     }
   }
 
@@ -439,12 +475,13 @@ export class DocumentDefinition {
         continue;
       }
       if (field.serviceObject.status === 'SUPPORTED') {
-        this.complexFieldsByClassIdentifier[field.classIdentifier] = field.copy();
+        this.complexFieldsByClassIdentifier[
+          field.classIdentifier
+        ] = field.copy();
       }
       if (field.children) {
         this.discoverComplexFields(field.children);
       }
     }
   }
-
 }

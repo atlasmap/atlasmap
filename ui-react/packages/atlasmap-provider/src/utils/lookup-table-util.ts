@@ -24,12 +24,18 @@ import { MappingDefinition } from '../models/mapping-definition.model';
  * Static routines for handling LookupTable.
  */
 export class LookupTableUtil {
-
-  static populateMappingLookupTable(mappingDefinition: MappingDefinition, m: MappingModel): void {
-    if (!(m.transition.mode === TransitionMode.ENUM
-      && m.transition.lookupTableName == null
-      && m.getFields(true).length === 1
-      && m.getFields(false).length === 1)) {
+  static populateMappingLookupTable(
+    mappingDefinition: MappingDefinition,
+    m: MappingModel
+  ): void {
+    if (
+      !(
+        m.transition.mode === TransitionMode.ENUM &&
+        m.transition.lookupTableName == null &&
+        m.getFields(true).length === 1 &&
+        m.getFields(false).length === 1
+      )
+    ) {
       return;
     }
     let inputClassIdentifier: string | undefined;
@@ -44,7 +50,10 @@ export class LookupTableUtil {
       outputClassIdentifier = outputField.classIdentifier;
     }
     if (inputClassIdentifier && outputClassIdentifier) {
-      let table: LookupTable = mappingDefinition.getTableBySourceTarget(inputClassIdentifier, outputClassIdentifier);
+      let table: LookupTable = mappingDefinition.getTableBySourceTarget(
+        inputClassIdentifier,
+        outputClassIdentifier
+      );
       if (table == null) {
         table = new LookupTable();
         table.sourceIdentifier = inputClassIdentifier;
@@ -62,7 +71,10 @@ export class LookupTableUtil {
       if (t.sourceIdentifier && t.targetIdentifier) {
         continue;
       }
-      const m: MappingModel = LookupTableUtil.getFirstMappingForLookupTable(mappingDefinition, t.name);
+      const m: MappingModel = LookupTableUtil.getFirstMappingForLookupTable(
+        mappingDefinition,
+        t.name
+      );
       if (m != null && m.transition.lookupTableName != null) {
         if (!t.sourceIdentifier) {
           const inputField: Field = m.getFields(true)[0];
@@ -83,9 +95,13 @@ export class LookupTableUtil {
     }
   }
 
-  private static getFirstMappingForLookupTable(mappingDefinition: MappingDefinition, lookupTableName: string): MappingModel {
+  private static getFirstMappingForLookupTable(
+    mappingDefinition: MappingDefinition,
+    lookupTableName: string
+  ): MappingModel {
     // TODO: check this non null operator
-    return mappingDefinition.mappings.find(m => m.transition.lookupTableName === lookupTableName)!;
+    return mappingDefinition.mappings.find(
+      m => m.transition.lookupTableName === lookupTableName
+    )!;
   }
-
 }

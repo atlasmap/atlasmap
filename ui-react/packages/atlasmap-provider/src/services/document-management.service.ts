@@ -17,21 +17,33 @@
 import ky from 'ky';
 import { Observable } from 'rxjs';
 
-import { DocumentType, InspectionType, CollectionType } from '../common/config.types';
+import {
+  DocumentType,
+  InspectionType,
+  CollectionType,
+} from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
 import { Field, EnumValue } from '../models/field.model';
-import { DocumentDefinition, NamespaceModel } from '../models/document-definition.model';
+import {
+  DocumentDefinition,
+  NamespaceModel,
+} from '../models/document-definition.model';
 
 import { DataMapperUtil } from '../common/data-mapper-util';
 import { Subscription } from 'rxjs';
-import { ErrorScope, ErrorType, ErrorInfo, ErrorLevel } from '../models/error.model';
+import {
+  ErrorScope,
+  ErrorType,
+  ErrorInfo,
+  ErrorLevel,
+} from '../models/error.model';
 
 export class DocumentManagementService {
   cfg!: ConfigModel;
 
   private mappingUpdatedSubscription!: Subscription;
 
-  private headers = {'Content-Type': 'application/json'};
+  private headers = { 'Content-Type': 'application/json' };
 
   /**
    * Use the JSON utility to translate the specified buffer into a JSON buffer - then replace any
@@ -66,13 +78,15 @@ export class DocumentManagementService {
    * @param buffer
    */
   static generateExportMappings(buffer: string): string {
-
     if (buffer === null || buffer.length === 0) {
       return '';
     }
-    const metaStr = `   "exportMappings":
+    const metaStr =
+      `   "exportMappings":
     {
-       \"value\": ` + this.sanitizeJSON(buffer) + `
+       \"value\": ` +
+      this.sanitizeJSON(buffer) +
+      `
     },\n`;
 
     return metaStr;
@@ -84,13 +98,15 @@ export class DocumentManagementService {
    * @param buffer
    */
   static generateExportBlockData(buffer: string): string {
-
     if (buffer === null || buffer.length === 0) {
-        return '';
+      return '';
     }
-    const metaStr = `
+    const metaStr =
+      `
           {
-             \"value\": ` + this.sanitizeJSON(buffer) + `
+             \"value\": ` +
+      this.sanitizeJSON(buffer) +
+      `
           }`;
     return metaStr;
   }
@@ -100,12 +116,21 @@ export class DocumentManagementService {
    * @param docDef
    */
   static generateExportMetaStr(docDef: DocumentDefinition): string {
-    const metaStr = `
+    const metaStr =
+      `
        {
-          \"name\": \"` + docDef.name + `\",
-          \"documentType\": \"` + docDef.type + `\",
-          \"inspectionType\": \"` + docDef.inspectionType + `\",
-          \"isSource\": \"` + docDef.isSource + `\"
+          \"name\": \"` +
+      docDef.name +
+      `\",
+          \"documentType\": \"` +
+      docDef.type +
+      `\",
+          \"inspectionType\": \"` +
+      docDef.inspectionType +
+      `\",
+          \"isSource\": \"` +
+      docDef.isSource +
+      `\"
        }`;
     return metaStr;
   }
@@ -113,14 +138,15 @@ export class DocumentManagementService {
   constructor(private api: typeof ky) {}
 
   initialize(): void {
-    this.mappingUpdatedSubscription
-      = this.cfg.mappingService.mappingUpdated$.subscribe(() => {
-      for (const d of this.cfg.getAllDocs()) {
-        if (d.initialized) {
-          d.updateFromMappings(this.cfg.mappings!); // TODO: check this non null operator
+    this.mappingUpdatedSubscription = this.cfg.mappingService.mappingUpdated$.subscribe(
+      () => {
+        for (const d of this.cfg.getAllDocs()) {
+          if (d.initialized) {
+            d.updateFromMappings(this.cfg.mappings!); // TODO: check this non null operator
+          }
         }
       }
-    });
+    );
   }
 
   ngOnDestroy() {
@@ -130,17 +156,25 @@ export class DocumentManagementService {
   fetchClassPath(): Observable<string> {
     return new Observable<string>((observer: any) => {
       const requestBody = {
-        'MavenClasspathRequest': {
-          'jsonType': ConfigModel.javaServicesPackagePrefix + '.MavenClasspathRequest',
-          'pomXmlData': this.cfg.initCfg.pomPayload,
-          'executeTimeout': this.cfg.initCfg.classPathFetchTimeoutInMilliseconds,
+        MavenClasspathRequest: {
+          jsonType:
+            ConfigModel.javaServicesPackagePrefix + '.MavenClasspathRequest',
+          pomXmlData: this.cfg.initCfg.pomPayload,
+          executeTimeout: this.cfg.initCfg.classPathFetchTimeoutInMilliseconds,
         },
       };
-      const url: string = this.cfg.initCfg.baseJavaInspectionServiceUrl + 'mavenclasspath';
-      this.cfg.logger!.debug(`Classpath Service Request: ${JSON.stringify(requestBody)}`);
-      this.api.post(url, { json: requestBody, headers: this.headers }).json()
+      const url: string =
+        this.cfg.initCfg.baseJavaInspectionServiceUrl + 'mavenclasspath';
+      this.cfg.logger!.debug(
+        `Classpath Service Request: ${JSON.stringify(requestBody)}`
+      );
+      this.api
+        .post(url, { json: requestBody, headers: this.headers })
+        .json()
         .then((body: any) => {
-          this.cfg.logger!.debug(`Classpath Service Response: ${JSON.stringify(body)}`);
+          this.cfg.logger!.debug(
+            `Classpath Service Response: ${JSON.stringify(body)}`
+          );
           const classPath: string = body.MavenClasspathResponse.classpath;
           observer.next(classPath);
           observer.complete();
@@ -148,12 +182,14 @@ export class DocumentManagementService {
         .catch((error: any) => {
           observer.error(error);
           observer.complete();
-        },
-      );
+        });
     });
   }
 
-  fetchDocument(docDef: DocumentDefinition, classPath: string): Observable<DocumentDefinition> {
+  fetchDocument(
+    docDef: DocumentDefinition,
+    classPath: string
+  ): Observable<DocumentDefinition> {
     return new Observable<DocumentDefinition>((observer: any) => {
       if (docDef.inspectionResult) {
         const responseJson: any = JSON.parse(docDef.inspectionResult);
@@ -165,15 +201,24 @@ export class DocumentManagementService {
 
       const payload: any = this.createDocumentFetchRequest(docDef, classPath);
       let url: string = this.cfg.initCfg.baseJavaInspectionServiceUrl + 'class';
-      if ((docDef.type === DocumentType.XML) || (docDef.type === DocumentType.XSD)) {
+      if (
+        docDef.type === DocumentType.XML ||
+        docDef.type === DocumentType.XSD
+      ) {
         url = this.cfg.initCfg.baseXMLInspectionServiceUrl + 'inspect';
       } else if (docDef.type === DocumentType.JSON) {
         url = this.cfg.initCfg.baseJSONInspectionServiceUrl + 'inspect';
       }
-      this.cfg.logger!.debug(`Document Service Request: ${JSON.stringify(payload)}`);
-      this.api.post(url, { json: payload, headers: this.headers }).json()
+      this.cfg.logger!.debug(
+        `Document Service Request: ${JSON.stringify(payload)}`
+      );
+      this.api
+        .post(url, { json: payload, headers: this.headers })
+        .json()
         .then((responseJson: any) => {
-          this.cfg.logger!.debug(`Document Service Response: ${JSON.stringify(responseJson)}`);
+          this.cfg.logger!.debug(
+            `Document Service Response: ${JSON.stringify(responseJson)}`
+          );
           this.parseDocumentResponse(responseJson, docDef);
           observer.next(docDef);
           observer.complete();
@@ -183,8 +228,7 @@ export class DocumentManagementService {
           docDef.errorOccurred = true;
           observer.next(docDef);
           observer.complete();
-        },
-      );
+        });
     });
   }
 
@@ -193,18 +237,31 @@ export class DocumentManagementService {
    *
    * @param binaryBuffer
    */
-  setLibraryToService(binaryBuffer: any, callback: (success: boolean, res: any) => void): void {
+  setLibraryToService(
+    binaryBuffer: any,
+    callback: (success: boolean, res: any) => void
+  ): void {
     const url = this.cfg.initCfg.baseMappingServiceUrl + 'library';
     this.cfg.logger!.debug('Set Library Service Request');
-    const fileContent: Blob = new Blob([binaryBuffer], {type: 'application/octet-stream'});
-    this.api.put(url, { body: fileContent }).blob().then((res: any) => {
-      callback(true, res);
-      this.cfg.logger!.debug(`Set Library Service Response: ${JSON.stringify(res)}`);
-    })
-    .catch((error: any) => {
-      callback(false, error);
-      this.handleError('Error occurred while uploading a JAR file to the server.', error); },
-    );
+    const fileContent: Blob = new Blob([binaryBuffer], {
+      type: 'application/octet-stream',
+    });
+    this.api
+      .put(url, { body: fileContent })
+      .blob()
+      .then((res: any) => {
+        callback(true, res);
+        this.cfg.logger!.debug(
+          `Set Library Service Response: ${JSON.stringify(res)}`
+        );
+      })
+      .catch((error: any) => {
+        callback(false, error);
+        this.handleError(
+          'Error occurred while uploading a JAR file to the server.',
+          error
+        );
+      });
   }
 
   /**
@@ -216,8 +273,12 @@ export class DocumentManagementService {
    * @param inspectionType
    * @param isSource
    */
-  async processDocument(selectedFile: any, inspectionType: InspectionType, isSource: boolean): Promise<boolean> {
-    return new Promise<boolean>( async(resolve) => {
+  async processDocument(
+    selectedFile: any,
+    inspectionType: InspectionType,
+    isSource: boolean
+  ): Promise<boolean> {
+    return new Promise<boolean>(async resolve => {
       let fileBin = null;
       let fileText = '';
       const reader = new FileReader();
@@ -226,16 +287,24 @@ export class DocumentManagementService {
 
       const userFileComps = selectedFile.name.split('.');
       const userFile = userFileComps[0];
-      const userFileSuffix: string = userFileComps[userFileComps.length - 1].toUpperCase();
+      const userFileSuffix: string = userFileComps[
+        userFileComps.length - 1
+      ].toUpperCase();
 
       if (userFileSuffix === DocumentType.JAVA_ARCHIVE) {
-
         // Wait for the async read of the selected binary document to be completed.
         try {
           fileBin = await DataMapperUtil.readBinaryFile(selectedFile, reader);
         } catch (error) {
-          this.cfg.errorService.addError(new ErrorInfo({message: 'Unable to import the specified schema document.',
-            level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.USER, object: error}));
+          this.cfg.errorService.addError(
+            new ErrorInfo({
+              message: 'Unable to import the specified schema document.',
+              level: ErrorLevel.ERROR,
+              scope: ErrorScope.APPLICATION,
+              type: ErrorType.USER,
+              object: error,
+            })
+          );
           resolve(false);
           return;
         }
@@ -243,22 +312,30 @@ export class DocumentManagementService {
           inspectionType = InspectionType.JAVA_CLASS;
         }
       } else {
-
         // Wait for the async read of the selected ascii document to be completed.
         try {
           fileText = await DataMapperUtil.readFile(selectedFile, reader);
         } catch (error) {
-          this.cfg.errorService.addError(new ErrorInfo({message: 'Unable to import the specified schema document.',
-            level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.USER, object: error}));
+          this.cfg.errorService.addError(
+            new ErrorInfo({
+              message: 'Unable to import the specified schema document.',
+              level: ErrorLevel.ERROR,
+              scope: ErrorScope.APPLICATION,
+              type: ErrorType.USER,
+              object: error,
+            })
+          );
           resolve(false);
           return;
         }
 
         // Derive the format if not already defined.
         if (inspectionType === InspectionType.UNKNOWN) {
-          if ((userFileSuffix === DocumentType.XSD) ||
-              (fileText.search('SchemaSet') > -1) ||
-              (fileText.search('\\$schema') > -1)) {
+          if (
+            userFileSuffix === DocumentType.XSD ||
+            fileText.search('SchemaSet') > -1 ||
+            fileText.search('\\$schema') > -1
+          ) {
             inspectionType = InspectionType.SCHEMA;
           } else {
             inspectionType = InspectionType.INSTANCE;
@@ -267,83 +344,137 @@ export class DocumentManagementService {
       }
 
       switch (userFileSuffix) {
+        case DocumentType.JSON:
+          this.cfg.initializationService.initializeUserDoc(
+            fileText,
+            userFile,
+            DocumentType.JSON,
+            inspectionType,
+            isSource
+          );
+          break;
 
-      case DocumentType.JSON:
-        this.cfg.initializationService.initializeUserDoc(fileText, userFile, DocumentType.JSON,
-          inspectionType, isSource);
-        break;
+        case DocumentType.JAVA_ARCHIVE:
+          this.cfg.initializationService.initializeUserDoc(
+            fileBin,
+            userFile,
+            DocumentType.JAVA_ARCHIVE,
+            inspectionType,
+            isSource
+          );
+          this.cfg.errorService.addError(
+            new ErrorInfo({
+              message: `${selectedFile.name} import complete.  Select the plus icon on the Sources/Targets panel to enable specific classes.`,
+              level: ErrorLevel.INFO,
+              scope: ErrorScope.APPLICATION,
+              type: ErrorType.USER,
+            })
+          );
+          resolve(true);
+          return;
 
-      case DocumentType.JAVA_ARCHIVE:
-        this.cfg.initializationService.initializeUserDoc(fileBin, userFile, DocumentType.JAVA_ARCHIVE,
-          inspectionType, isSource);
-        this.cfg.errorService.addError(new ErrorInfo({
-          message: `${selectedFile.name} import complete.  Select the plus icon on the Sources/Targets panel to enable specific classes.`,
-          level: ErrorLevel.INFO, scope: ErrorScope.APPLICATION, type: ErrorType.USER}));
-        resolve(true);
-        return;
+        case 'java':
+          this.cfg.initializationService.initializeUserDoc(
+            fileText,
+            userFile,
+            DocumentType.JAVA,
+            inspectionType,
+            isSource
+          );
+          break;
 
-      case 'java':
-        this.cfg.initializationService.initializeUserDoc(fileText, userFile, DocumentType.JAVA,
-          inspectionType, isSource);
-        break;
+        case DocumentType.XML:
+        case DocumentType.XSD:
+          this.cfg.initializationService.initializeUserDoc(
+            fileText,
+            userFile,
+            userFileSuffix,
+            inspectionType,
+            isSource
+          );
+          break;
 
-      case DocumentType.XML:
-      case DocumentType.XSD:
-        this.cfg.initializationService.initializeUserDoc(fileText, userFile, userFileSuffix,
-          inspectionType, isSource);
-        break;
-
-      default:
-        this.handleError('Unrecognized document suffix (' + userFileSuffix + ')', null);
+        default:
+          this.handleError(
+            'Unrecognized document suffix (' + userFileSuffix + ')',
+            null
+          );
       }
-      this.cfg.errorService.addError(new ErrorInfo({message: `${selectedFile.name} ${userFileSuffix} import complete.`,
-        level: ErrorLevel.INFO, scope: ErrorScope.APPLICATION, type: ErrorType.USER}));
+      this.cfg.errorService.addError(
+        new ErrorInfo({
+          message: `${selectedFile.name} ${userFileSuffix} import complete.`,
+          level: ErrorLevel.INFO,
+          scope: ErrorScope.APPLICATION,
+          type: ErrorType.USER,
+        })
+      );
       resolve(true);
     });
   }
 
-  private createDocumentFetchRequest(docDef: DocumentDefinition, classPath: string): any {
-    if ((docDef.type === DocumentType.XML) || (docDef.type === DocumentType.XSD)) {
+  private createDocumentFetchRequest(
+    docDef: DocumentDefinition,
+    classPath: string
+  ): any {
+    if (docDef.type === DocumentType.XML || docDef.type === DocumentType.XSD) {
       return {
-        'XmlInspectionRequest': {
-          'jsonType': 'io.atlasmap.xml.v2.XmlInspectionRequest',
-          'type': docDef.inspectionType,
-          'xmlData': docDef.inspectionSource,
+        XmlInspectionRequest: {
+          jsonType: 'io.atlasmap.xml.v2.XmlInspectionRequest',
+          type: docDef.inspectionType,
+          xmlData: docDef.inspectionSource,
         },
       };
     }
     if (docDef.type === DocumentType.JSON) {
       return {
-        'JsonInspectionRequest': {
-          'jsonType': 'io.atlasmap.json.v2.JsonInspectionRequest',
-          'type': docDef.inspectionType,
-          'jsonData': docDef.inspectionSource,
+        JsonInspectionRequest: {
+          jsonType: 'io.atlasmap.json.v2.JsonInspectionRequest',
+          type: docDef.inspectionType,
+          jsonData: docDef.inspectionSource,
         },
       };
     }
     const className: string = docDef.inspectionSource;
     const payload: any = {
-      'ClassInspectionRequest': {
-        'jsonType': ConfigModel.javaServicesPackagePrefix + '.ClassInspectionRequest',
-        'classpath': classPath,
-        'className': className,
-        'disablePrivateOnlyFields': this.cfg.initCfg.disablePrivateOnlyFields,
-        'disableProtectedOnlyFields': this.cfg.initCfg.disableProtectedOnlyFields,
-        'disablePublicOnlyFields': this.cfg.initCfg.disablePublicOnlyFields,
-        'disablePublicGetterSetterFields': this.cfg.initCfg.disablePublicGetterSetterFields,
+      ClassInspectionRequest: {
+        jsonType:
+          ConfigModel.javaServicesPackagePrefix + '.ClassInspectionRequest',
+        classpath: classPath,
+        className: className,
+        disablePrivateOnlyFields: this.cfg.initCfg.disablePrivateOnlyFields,
+        disableProtectedOnlyFields: this.cfg.initCfg.disableProtectedOnlyFields,
+        disablePublicOnlyFields: this.cfg.initCfg.disablePublicOnlyFields,
+        disablePublicGetterSetterFields: this.cfg.initCfg
+          .disablePublicGetterSetterFields,
       },
     };
-    if (docDef.initModel.collectionType && docDef.initModel.collectionType as CollectionType !== CollectionType.NONE) {
-      payload['ClassInspectionRequest']['collectionType'] = docDef.initModel.collectionType;
+    if (
+      docDef.initModel.collectionType &&
+      (docDef.initModel.collectionType as CollectionType) !==
+        CollectionType.NONE
+    ) {
+      payload['ClassInspectionRequest']['collectionType'] =
+        docDef.initModel.collectionType;
       if (docDef.initModel.collectionClassName) {
-        payload['ClassInspectionRequest']['collectionClassName'] = docDef.initModel.collectionClassName;
+        payload['ClassInspectionRequest']['collectionClassName'] =
+          docDef.initModel.collectionClassName;
       }
     }
-    if (this.cfg.initCfg.fieldNameBlacklist && this.cfg.initCfg.fieldNameBlacklist.length) {
-      payload['ClassInspectionRequest']['fieldNameBlacklist'] = { 'string': this.cfg.initCfg.fieldNameBlacklist };
+    if (
+      this.cfg.initCfg.fieldNameBlacklist &&
+      this.cfg.initCfg.fieldNameBlacklist.length
+    ) {
+      payload['ClassInspectionRequest']['fieldNameBlacklist'] = {
+        string: this.cfg.initCfg.fieldNameBlacklist,
+      };
     }
-    if (this.cfg.initCfg.classNameBlacklist && this.cfg.initCfg.classNameBlacklist.length) {
-      payload['ClassInspectionRequest']['classNameBlacklist'] = { 'string': this.cfg.initCfg.classNameBlacklist };
+    if (
+      this.cfg.initCfg.classNameBlacklist &&
+      this.cfg.initCfg.classNameBlacklist.length
+    ) {
+      payload['ClassInspectionRequest']['classNameBlacklist'] = {
+        string: this.cfg.initCfg.classNameBlacklist,
+      };
     }
     return payload;
   }
@@ -351,27 +482,42 @@ export class DocumentManagementService {
   parseDocumentResponse(responseJson: any, docDef: DocumentDefinition): void {
     if (docDef.type === DocumentType.JAVA) {
       if (typeof responseJson.ClassInspectionResponse !== 'undefined') {
-        this.extractJavaDocumentDefinitionFromInspectionResponse(responseJson, docDef);
-      } else if ((typeof responseJson.javaClass !== 'undefined')
-        || (typeof responseJson.JavaClass !== 'undefined')) {
+        this.extractJavaDocumentDefinitionFromInspectionResponse(
+          responseJson,
+          docDef
+        );
+      } else if (
+        typeof responseJson.javaClass !== 'undefined' ||
+        typeof responseJson.JavaClass !== 'undefined'
+      ) {
         this.extractJavaDocumentDefinition(responseJson, docDef);
       } else {
         this.handleError('Unknown Java inspection result format', responseJson);
       }
     } else if (docDef.type === DocumentType.JSON) {
       if (typeof responseJson.JsonInspectionResponse !== 'undefined') {
-        this.extractJSONDocumentDefinitionFromInspectionResponse(responseJson, docDef);
-      } else if ((typeof responseJson.jsonDocument !== 'undefined')
-        || (typeof responseJson.JsonDocument !== 'undefined')) {
+        this.extractJSONDocumentDefinitionFromInspectionResponse(
+          responseJson,
+          docDef
+        );
+      } else if (
+        typeof responseJson.jsonDocument !== 'undefined' ||
+        typeof responseJson.JsonDocument !== 'undefined'
+      ) {
         this.extractJSONDocumentDefinition(responseJson, docDef);
       } else {
         this.handleError('Unknown JSON inspection result format', responseJson);
       }
     } else {
       if (typeof responseJson.XmlInspectionResponse !== 'undefined') {
-        this.extractXMLDocumentDefinitionFromInspectionResponse(responseJson, docDef);
-      } else if ((typeof responseJson.xmlDocument !== 'undefined')
-        || (typeof responseJson.XmlDocument !== 'undefined')) {
+        this.extractXMLDocumentDefinitionFromInspectionResponse(
+          responseJson,
+          docDef
+        );
+      } else if (
+        typeof responseJson.xmlDocument !== 'undefined' ||
+        typeof responseJson.XmlDocument !== 'undefined'
+      ) {
         this.extractXMLDocumentDefinition(responseJson, docDef);
       } else {
         this.handleError('Unknown XML inspection result format', responseJson);
@@ -380,10 +526,16 @@ export class DocumentManagementService {
     docDef.initializeFromFields();
   }
 
-  private extractJSONDocumentDefinitionFromInspectionResponse(responseJson: any, docDef: DocumentDefinition): void {
+  private extractJSONDocumentDefinitionFromInspectionResponse(
+    responseJson: any,
+    docDef: DocumentDefinition
+  ): void {
     const body: any = responseJson.JsonInspectionResponse;
     if (body.errorMessage) {
-      this.handleError('Could not load JSON document, error: ' + body.errorMessage, null);
+      this.handleError(
+        'Could not load JSON document, error: ' + body.errorMessage,
+        null
+      );
       docDef.errorOccurred = true;
       return;
     }
@@ -391,7 +543,10 @@ export class DocumentManagementService {
     this.extractJSONDocumentDefinition(body, docDef);
   }
 
-  private extractJSONDocumentDefinition(body: any, docDef: DocumentDefinition): void {
+  private extractJSONDocumentDefinition(
+    body: any,
+    docDef: DocumentDefinition
+  ): void {
     let jsonDocument: any;
     if (typeof body.jsonDocument !== 'undefined') {
       jsonDocument = body.jsonDocument;
@@ -414,10 +569,16 @@ export class DocumentManagementService {
     }
   }
 
-  private extractXMLDocumentDefinitionFromInspectionResponse(responseJson: any, docDef: DocumentDefinition): void {
+  private extractXMLDocumentDefinitionFromInspectionResponse(
+    responseJson: any,
+    docDef: DocumentDefinition
+  ): void {
     const body: any = responseJson.XmlInspectionResponse;
     if (body.errorMessage) {
-      this.handleError('Could not load XML document, error: ' + body.errorMessage, null);
+      this.handleError(
+        'Could not load XML document, error: ' + body.errorMessage,
+        null
+      );
       docDef.errorOccurred = true;
       return;
     }
@@ -443,8 +604,11 @@ export class DocumentManagementService {
     docDef.characterEncoding = xmlDocument.characterEncoding;
     docDef.locale = xmlDocument.locale;
 
-    if (xmlDocument.xmlNamespaces && xmlDocument.xmlNamespaces.xmlNamespace
-      && xmlDocument.xmlNamespaces.xmlNamespace.length) {
+    if (
+      xmlDocument.xmlNamespaces &&
+      xmlDocument.xmlNamespaces.xmlNamespace &&
+      xmlDocument.xmlNamespaces.xmlNamespace.length
+    ) {
       for (const serviceNS of xmlDocument.xmlNamespaces.xmlNamespace) {
         const ns: NamespaceModel = new NamespaceModel();
         ns.alias = serviceNS.alias;
@@ -463,27 +627,47 @@ export class DocumentManagementService {
     }
   }
 
-  private isSelectedRootElement(field: any, docDef: DocumentDefinition): boolean {
-    return docDef.selectedRoot && field && field.name
-      && docDef.selectedRoot === (field.name.indexOf(':') !== -1 ? field.name.split(':')[1] : field.name);
+  private isSelectedRootElement(
+    field: any,
+    docDef: DocumentDefinition
+  ): boolean {
+    return (
+      docDef.selectedRoot &&
+      field &&
+      field.name &&
+      docDef.selectedRoot ===
+        (field.name.indexOf(':') !== -1 ? field.name.split(':')[1] : field.name)
+    );
   }
 
-  private extractJavaDocumentDefinitionFromInspectionResponse(responseJson: any, docDef: DocumentDefinition): void {
+  private extractJavaDocumentDefinitionFromInspectionResponse(
+    responseJson: any,
+    docDef: DocumentDefinition
+  ): void {
     const body: any = responseJson.ClassInspectionResponse;
 
     if (body.errorMessage) {
-      this.handleError('Could not load Java document, error: ' + body.errorMessage, null);
+      this.handleError(
+        'Could not load Java document, error: ' + body.errorMessage,
+        null
+      );
       docDef.errorOccurred = true;
       return;
     }
     this.extractJavaDocumentDefinition(body, docDef);
   }
 
-  private extractJavaDocumentDefinition(body: any, docDef: DocumentDefinition): void {
+  private extractJavaDocumentDefinition(
+    body: any,
+    docDef: DocumentDefinition
+  ): void {
     const docIdentifier: string = docDef.id;
     const javaClass = body.JavaClass ? body.JavaClass : body.javaClass;
     if (!javaClass || javaClass.status === 'NOT_FOUND') {
-      this.handleError('Could not load JAVA document. Document is not found: ' + docIdentifier, null);
+      this.handleError(
+        'Could not load JAVA document. Document is not found: ' + docIdentifier,
+        null
+      );
       docDef.errorOccurred = true;
       return;
     }
@@ -506,7 +690,10 @@ export class DocumentManagementService {
     docDef.locale = javaClass.locale;
 
     let rootField = null;
-    if (javaClass.collectionType && javaClass.collectionType !== CollectionType.NONE.valueOf()) {
+    if (
+      javaClass.collectionType &&
+      javaClass.collectionType !== CollectionType.NONE.valueOf()
+    ) {
       this.parseJavaFieldFromDocument(javaClass, null, docDef);
       rootField = docDef.fields[0];
     }
@@ -515,24 +702,41 @@ export class DocumentManagementService {
     }
   }
 
-  private parseJSONFieldFromDocument(field: any, parentField: Field | null, docDef: DocumentDefinition): void {
+  private parseJSONFieldFromDocument(
+    field: any,
+    parentField: Field | null,
+    docDef: DocumentDefinition
+  ): void {
     const parsedField = this.parseFieldFromDocument(field, parentField, docDef);
     if (parsedField == null) {
       return;
     }
 
-    if (field.jsonFields && field.jsonFields.jsonField && field.jsonFields.jsonField.length) {
+    if (
+      field.jsonFields &&
+      field.jsonFields.jsonField &&
+      field.jsonFields.jsonField.length
+    ) {
       for (const childField of field.jsonFields.jsonField) {
         this.parseJSONFieldFromDocument(childField, parsedField, docDef);
       }
     }
   }
 
-  private parseFieldFromDocument(field: any, parentField: Field | null, docDef: DocumentDefinition): Field | null {
+  private parseFieldFromDocument(
+    field: any,
+    parentField: Field | null,
+    docDef: DocumentDefinition
+  ): Field | null {
     if (field != null && field.status === 'NOT_FOUND') {
-      this.cfg.errorService.addError(new ErrorInfo({
-        message: `Ignoring unknown field: ${field.name} (${field.className}), parent class: ${docDef.name}`,
-        level: ErrorLevel.WARN, scope: ErrorScope.APPLICATION, type: ErrorType.USER}));
+      this.cfg.errorService.addError(
+        new ErrorInfo({
+          message: `Ignoring unknown field: ${field.name} (${field.className}), parent class: ${docDef.name}`,
+          level: ErrorLevel.WARN,
+          scope: ErrorScope.APPLICATION,
+          type: ErrorType.USER,
+        })
+      );
       return null;
     } else if (field != null && field.status === 'BLACK_LIST') {
       return null;
@@ -561,7 +765,11 @@ export class DocumentManagementService {
     return parsedField;
   }
 
-  private parseXMLFieldFromDocument(field: any, parentField: Field | null, docDef: DocumentDefinition): void {
+  private parseXMLFieldFromDocument(
+    field: any,
+    parentField: Field | null,
+    docDef: DocumentDefinition
+  ): void {
     const parsedField = this.parseFieldFromDocument(field, parentField, docDef);
     if (parsedField == null) {
       return;
@@ -572,16 +780,24 @@ export class DocumentManagementService {
       parsedField.name = field.name.split(':')[1];
     }
 
-    parsedField.isAttribute = (parsedField.path.indexOf('@') !== -1);
+    parsedField.isAttribute = parsedField.path.indexOf('@') !== -1;
 
-    if (field.xmlFields && field.xmlFields.xmlField && field.xmlFields.xmlField.length) {
+    if (
+      field.xmlFields &&
+      field.xmlFields.xmlField &&
+      field.xmlFields.xmlField.length
+    ) {
       for (const childField of field.xmlFields.xmlField) {
         this.parseXMLFieldFromDocument(childField, parsedField, docDef);
       }
     }
   }
 
-  private parseJavaFieldFromDocument(field: any, parentField: Field | null, docDef: DocumentDefinition): void {
+  private parseJavaFieldFromDocument(
+    field: any,
+    parentField: Field | null,
+    docDef: DocumentDefinition
+  ): void {
     const parsedField = this.parseFieldFromDocument(field, parentField, docDef);
     if (parsedField == null) {
       return;
@@ -592,7 +808,11 @@ export class DocumentManagementService {
     parsedField.classIdentifier = field.className;
     parsedField.enumeration = field.enumeration;
 
-    if (parsedField.enumeration && field.javaEnumFields && field.javaEnumFields.javaEnumField) {
+    if (
+      parsedField.enumeration &&
+      field.javaEnumFields &&
+      field.javaEnumFields.javaEnumField
+    ) {
       for (const enumValue of field.javaEnumFields.javaEnumField) {
         const parsedEnumValue: EnumValue = new EnumValue();
         parsedEnumValue.name = enumValue.name;
@@ -601,7 +821,11 @@ export class DocumentManagementService {
       }
     }
 
-    if (field.javaFields && field.javaFields.javaField && field.javaFields.javaField.length) {
+    if (
+      field.javaFields &&
+      field.javaFields.javaField &&
+      field.javaFields.javaField.length
+    ) {
       for (const childField of field.javaFields.javaField) {
         this.parseJavaFieldFromDocument(childField, parsedField, docDef);
       }
@@ -609,7 +833,14 @@ export class DocumentManagementService {
   }
 
   private handleError(message: string, error: any): void {
-    this.cfg.errorService.addError(new ErrorInfo({message: message, level: ErrorLevel.ERROR,
-      scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
+    this.cfg.errorService.addError(
+      new ErrorInfo({
+        message: message,
+        level: ErrorLevel.ERROR,
+        scope: ErrorScope.APPLICATION,
+        type: ErrorType.INTERNAL,
+        object: error,
+      })
+    );
   }
 }

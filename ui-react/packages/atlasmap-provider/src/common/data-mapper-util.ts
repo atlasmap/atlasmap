@@ -16,7 +16,6 @@
 import { saveAs } from 'file-saver';
 
 export class DataMapperUtil {
-
   static HTTP_STATUS_OK = 200;
   static HTTP_STATUS_NO_CONTENT = 204;
 
@@ -50,7 +49,12 @@ export class DataMapperUtil {
     const splitMarkerLen = splitMarker.length;
     const result: string[] = [];
 
-    if (inStr === null || inStr.length === 0 || splitMarker === null || splitMarkerLen === 0) {
+    if (
+      inStr === null ||
+      inStr.length === 0 ||
+      splitMarker === null ||
+      splitMarkerLen === 0
+    ) {
       return [];
     }
     while (splitLoc !== -1) {
@@ -83,7 +87,7 @@ export class DataMapperUtil {
    * @param reader
    */
   static async readFile(fileName: any, reader: any): Promise<string> {
-    return new Promise<string>((resolve) => {
+    return new Promise<string>(resolve => {
       reader.onload = () => {
         const fileBody = reader.result;
         resolve(fileBody);
@@ -99,7 +103,7 @@ export class DataMapperUtil {
    * @param reader - reader object
    */
   static async readBinaryFile(fileName: any, reader: any): Promise<Int8Array> {
-    return new Promise<Int8Array>((resolve) => {
+    return new Promise<Int8Array>(resolve => {
       reader.onload = () => {
         const fileBody = new Int8Array(reader.result);
         resolve(fileBody);
@@ -116,7 +120,7 @@ export class DataMapperUtil {
    * @param fName
    */
   static async writeFile(fileContent: Blob, fName: any): Promise<boolean> {
-    return new Promise<boolean>((resolve) => {
+    return new Promise<boolean>(resolve => {
       saveAs(fileContent, fName);
       resolve(true);
     });
@@ -128,7 +132,11 @@ export class DataMapperUtil {
    * @param camelCaseString
    */
   static toDisplayable(camelCaseString: string): string {
-    if (typeof camelCaseString === 'undefined' || !camelCaseString || camelCaseString.indexOf(' ') >= 0) {
+    if (
+      typeof camelCaseString === 'undefined' ||
+      !camelCaseString ||
+      camelCaseString.indexOf(' ') >= 0
+    ) {
       return camelCaseString;
     }
     let displayableString: string = camelCaseString.charAt(0).toUpperCase();
@@ -150,7 +158,7 @@ export class DataMapperUtil {
    * @param fieldWidth
    */
   static extractDisplayPath(path: string, fieldWidth: number): string {
-    const MAX_PATH_WIDTH = fieldWidth - 4;  // account for length of ellipsis
+    const MAX_PATH_WIDTH = fieldWidth - 4; // account for length of ellipsis
 
     if (!path || MAX_PATH_WIDTH <= 0) {
       return '';
@@ -166,5 +174,4 @@ export class DataMapperUtil {
     const delta = MAX_PATH_WIDTH - leaf.length;
     return path.substr(0, delta) + '...' + leaf;
   }
-
 }

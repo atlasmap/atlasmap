@@ -1,7 +1,10 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async, inject } from '@angular/core/testing';
-import { LookupTableEntry, LookupTable } from '../src/models/lookup-table.model';
+import {
+  LookupTableEntry,
+  LookupTable,
+} from '../src/models/lookup-table.model';
 
 describe('LookupTable', () => {
   beforeEach(() => {
@@ -10,11 +13,11 @@ describe('LookupTable', () => {
     });
   });
 
-  it(
-    'should ...',
-    inject([LookupTableEntry, LookupTable], (entry: LookupTableEntry, table: LookupTable) => {
+  it('should ...', inject(
+    [LookupTableEntry, LookupTable],
+    (entry: LookupTableEntry, table: LookupTable) => {
       expect(entry).toBeTruthy();
       expect(table).toBeTruthy();
-    }),
-  );
+    }
+  ));
 });

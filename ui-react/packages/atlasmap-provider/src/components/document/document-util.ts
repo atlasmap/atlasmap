@@ -19,15 +19,22 @@ import { ErrorHandlerService } from '../../services/error-handler.service';
  * @param cfg
  * @param isSource
  */
-async function importDoc(selectedFile: any, cfg: ConfigModel, isSource: boolean): Promise<boolean> {
-  return new Promise<boolean>( async(resolve) => {
+async function importDoc(
+  selectedFile: any,
+  cfg: ConfigModel,
+  isSource: boolean
+): Promise<boolean> {
+  return new Promise<boolean>(async resolve => {
     cfg.initCfg.initialized = false;
-    cfg.initializationService.updateLoadingStatus('Importing Document ' + selectedFile.name);
-    cfg.documentService.processDocument(selectedFile, InspectionType.UNKNOWN, isSource)
-    .then(() => {
-      cfg.fileService.exportMappingsCatalog('');
-      resolve(true);
-    });
+    cfg.initializationService.updateLoadingStatus(
+      'Importing Document ' + selectedFile.name
+    );
+    cfg.documentService
+      .processDocument(selectedFile, InspectionType.UNKNOWN, isSource)
+      .then(() => {
+        cfg.fileService.exportMappingsCatalog('');
+        resolve(true);
+      });
   });
 }
 
@@ -37,8 +44,11 @@ async function importDoc(selectedFile: any, cfg: ConfigModel, isSource: boolean)
  * @param docDef
  * @param cfg
  */
-export async function removeDocumentRef(docDef: DocumentDefinition, cfg: ConfigModel): Promise<boolean> {
-  return new Promise<boolean>( async(resolve) => {
+export async function removeDocumentRef(
+  docDef: DocumentDefinition,
+  cfg: ConfigModel
+): Promise<boolean> {
+  return new Promise<boolean>(async resolve => {
     cfg.mappingService.removeDocumentReferenceFromAllMappings(docDef.id);
     if (docDef.isSource) {
       DataMapperUtil.removeItemFromArray(docDef, cfg.sourceDocs);
@@ -58,30 +68,37 @@ export async function removeDocumentRef(docDef: DocumentDefinition, cfg: ConfigM
  * @param cfg
  * @param isSource
  */
-export function getDocDef(docName: string, cfg: ConfigModel, isSource: boolean): DocumentDefinition {
+export function getDocDef(
+  docName: string,
+  cfg: ConfigModel,
+  isSource: boolean
+): DocumentDefinition {
   for (const docDef of cfg.getDocs(isSource)) {
-    const candidateDocName = docDef.getName(false) + '.' + docDef.type.toLowerCase();
+    const candidateDocName =
+      docDef.getName(false) + '.' + docDef.type.toLowerCase();
     if (candidateDocName.match(docName)) {
       return docDef;
     }
   }
-  return <DocumentDefinition><unknown>null;
+  return <DocumentDefinition>(<unknown>null);
 }
 
 /**
  * Import an instance or schema document into either the Source panel or Target
  * panel (JSON, XML, XSD).
  *
- * @param selectedFile 
- * @param cfg 
- * @param isSource 
+ * @param selectedFile
+ * @param cfg
+ * @param isSource
  */
-export async function importInstanceSchema(selectedFile: File, cfg: ConfigModel,
-  isSource: boolean) {
+export async function importInstanceSchema(
+  selectedFile: File,
+  cfg: ConfigModel,
+  isSource: boolean
+) {
   const docDef = getDocDef(selectedFile.name, cfg, isSource);
   if (docDef) {
     await removeDocumentRef(docDef, cfg);
   }
   await importDoc(selectedFile, cfg, isSource);
 }
-

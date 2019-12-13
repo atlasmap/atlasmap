@@ -1,7 +1,7 @@
 import { BaseSizes, Title, TitleLevel } from '@patternfly/react-core';
 import { FunctionComponent } from 'react';
 import React from 'react';
-import {IMappings} from "../CanvasView";
+import { IMappings } from '../CanvasView';
 
 export interface IMappingDetailsProps {
   mapping: IMappings;

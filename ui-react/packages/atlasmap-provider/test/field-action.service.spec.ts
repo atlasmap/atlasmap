@@ -1,13 +1,19 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async, inject } from '@angular/core/testing';
-import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
+import {
+  BrowserDynamicTestingModule,
+  platformBrowserDynamicTesting,
+} from '@angular/platform-browser-dynamic/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { LoggerModule, NGXLogger, NgxLoggerLevel } from 'ngx-logger';
 import { FieldActionService } from '../src/services/field-action.service';
 import { ErrorHandlerService } from '../src/services/error-handler.service';
-import { Multiplicity, FieldActionDefinition } from '../src/models/field-action.model';
+import {
+  Multiplicity,
+  FieldActionDefinition,
+} from '../src/models/field-action.model';
 import { MappingModel } from '../src/models/mapping.model';
 import { Field } from '../src/models/field.model';
 import { ConfigModel } from '../src/models/config.model';
@@ -15,58 +21,61 @@ import { ConfigModel } from '../src/models/config.model';
 describe('FieldActionService', () => {
   beforeEach(() => {
     TestBed.resetTestEnvironment();
-    TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
+    TestBed.initTestEnvironment(
+      BrowserDynamicTestingModule,
+      platformBrowserDynamicTesting()
+    );
     TestBed.configureTestingModule({
-      imports: [HttpClientModule, HttpClientTestingModule, LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG })],
-      providers: [
-        ErrorHandlerService,
-        FieldActionService,
-        NGXLogger,
+      imports: [
+        HttpClientModule,
+        HttpClientTestingModule,
+        LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
       ],
+      providers: [ErrorHandlerService, FieldActionService, NGXLogger],
     });
     jasmine.getFixtures().fixturesPath = 'base/test-resources/fieldActions';
     const service = TestBed.get(FieldActionService);
     ConfigModel.getConfig().logger = service.logger;
   });
 
-  it(
-    'should parse field action metadata', (done) => {
-      inject([FieldActionService], (service: FieldActionService) => {
-        service.cfg.preloadedFieldActionMetadata = JSON.parse(jasmine.getFixtures().read('atlasmap-field-action.json'));
-        service.fetchFieldActions().then(() => {
-          let concatenateFound = false;
-          let dummyFound = false;
-          for (const action of service.actions[Multiplicity.ONE_TO_ONE]) {
-            if (action.name === 'io.atlasmap.maven.test.DummyOneToOne') {
-              expect(action.isCustom).toBeTruthy();
-              dummyFound = true;
-            } else if (action.name === 'Concatenate') {
-              expect(action.isCustom).toBeFalsy();
-              action.arguments[0].name = 'delimiter';
-              concatenateFound = true;
-            }
+  it('should parse field action metadata', done => {
+    inject([FieldActionService], (service: FieldActionService) => {
+      service.cfg.preloadedFieldActionMetadata = JSON.parse(
+        jasmine.getFixtures().read('atlasmap-field-action.json')
+      );
+      service.fetchFieldActions().then(() => {
+        let concatenateFound = false;
+        let dummyFound = false;
+        for (const action of service.actions[Multiplicity.ONE_TO_ONE]) {
+          if (action.name === 'io.atlasmap.maven.test.DummyOneToOne') {
+            expect(action.isCustom).toBeTruthy();
+            dummyFound = true;
+          } else if (action.name === 'Concatenate') {
+            expect(action.isCustom).toBeFalsy();
+            action.arguments[0].name = 'delimiter';
+            concatenateFound = true;
           }
-          expect(dummyFound).toBeTruthy();
-          expect(concatenateFound).toBeFalsy();
-          dummyFound = false;
-          concatenateFound = false;
-          for (const action of service.actions[Multiplicity.MANY_TO_ONE]) {
-            if (action.name === 'io.atlasmap.maven.test.DummyOneToOne') {
-              expect(action.isCustom).toBeTruthy();
-              dummyFound = true;
-            } else if (action.name === 'Concatenate') {
-              expect(action.isCustom).toBeFalsy();
-              action.arguments[0].name = 'delimiter';
-              concatenateFound = true;
-            }
+        }
+        expect(dummyFound).toBeTruthy();
+        expect(concatenateFound).toBeFalsy();
+        dummyFound = false;
+        concatenateFound = false;
+        for (const action of service.actions[Multiplicity.MANY_TO_ONE]) {
+          if (action.name === 'io.atlasmap.maven.test.DummyOneToOne') {
+            expect(action.isCustom).toBeTruthy();
+            dummyFound = true;
+          } else if (action.name === 'Concatenate') {
+            expect(action.isCustom).toBeFalsy();
+            action.arguments[0].name = 'delimiter';
+            concatenateFound = true;
           }
-          expect(dummyFound).toBeFalsy();
-          expect(concatenateFound).toBeTruthy();
-          done();
-        });
-      })();
-    });
-
+        }
+        expect(dummyFound).toBeFalsy();
+        expect(concatenateFound).toBeTruthy();
+        done();
+      });
+    })();
+  });
 });
 
 describe('FieldActionService.appliesToField()', () => {
@@ -77,14 +86,17 @@ describe('FieldActionService.appliesToField()', () => {
 
   beforeEach(() => {
     TestBed.resetTestEnvironment();
-    TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
+    TestBed.initTestEnvironment(
+      BrowserDynamicTestingModule,
+      platformBrowserDynamicTesting()
+    );
     TestBed.configureTestingModule({
-      imports: [HttpClientModule, HttpClientTestingModule, LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG })],
-      providers: [
-        ErrorHandlerService,
-        FieldActionService,
-        NGXLogger,
+      imports: [
+        HttpClientModule,
+        HttpClientTestingModule,
+        LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
       ],
+      providers: [ErrorHandlerService, FieldActionService, NGXLogger],
     });
     jasmine.getFixtures().fixturesPath = 'base/test-resources/fieldActions';
     action = new FieldActionDefinition();
@@ -97,31 +109,40 @@ describe('FieldActionService.appliesToField()', () => {
     mapping.addField(target, false);
   });
 
-  it('should return false if FieldMappingPair is null',
-    inject([FieldActionService], (service: FieldActionService) => {
+  it('should return false if FieldMappingPair is null', inject(
+    [FieldActionService],
+    (service: FieldActionService) => {
       expect(service.appliesToField(action, null, false)).toBe(false);
-    }));
+    }
+  ));
 
-  it('should return false if source or target is null',
-    inject([FieldActionService], (service: FieldActionService) => {
+  it('should return false if source or target is null', inject(
+    [FieldActionService],
+    (service: FieldActionService) => {
       mapping.targetFields.splice(0);
       expect(service.appliesToField(action, mapping, false)).toBe(false);
-    }));
+    }
+  ));
 
-  it('should return false if action multiplicity is ONE_TO_MANY',
-    inject([FieldActionService], (service: FieldActionService) => {
+  it('should return false if action multiplicity is ONE_TO_MANY', inject(
+    [FieldActionService],
+    (service: FieldActionService) => {
       action.multiplicity = Multiplicity.ONE_TO_MANY;
       expect(service.appliesToField(action, mapping, false)).toBe(false);
-    }));
+    }
+  ));
 
-  it('should return false if action multiplicity is MANY_TO_ONE',
-    inject([FieldActionService], (service: FieldActionService) => {
+  it('should return false if action multiplicity is MANY_TO_ONE', inject(
+    [FieldActionService],
+    (service: FieldActionService) => {
       action.multiplicity = Multiplicity.MANY_TO_ONE;
       expect(service.appliesToField(action, mapping, false)).toBe(false);
-    }));
+    }
+  ));
 
-  it('should return if action target type is NUMBER and target field type is numeric',
-    inject([FieldActionService], (service: FieldActionService) => {
+  it('should return if action target type is NUMBER and target field type is numeric', inject(
+    [FieldActionService],
+    (service: FieldActionService) => {
       action.sourceType = 'NUMBER';
       action.targetType = 'NUMBER';
       target.type = 'SHORT';
@@ -130,10 +151,12 @@ describe('FieldActionService.appliesToField()', () => {
       expect(service.appliesToField(action, mapping, false)).toBe(true);
       target.type = 'STRING';
       expect(service.appliesToField(action, mapping, false)).toBe(false);
-    }));
+    }
+  ));
 
-  it('should return if action target type is ANY_DATE and target field type is a date/time',
-    inject([FieldActionService], (service: FieldActionService) => {
+  it('should return if action target type is ANY_DATE and target field type is a date/time', inject(
+    [FieldActionService],
+    (service: FieldActionService) => {
       action.sourceType = 'ANY_DATE';
       action.targetType = 'ANY_DATE';
       target.type = 'DATE';
@@ -142,31 +165,37 @@ describe('FieldActionService.appliesToField()', () => {
       expect(service.appliesToField(action, mapping, false)).toBe(true);
       target.type = 'STRING';
       expect(service.appliesToField(action, mapping, false)).toBe(false);
-    }));
+    }
+  ));
 
-  it('should return true if action source type STRING matches target field type STRING, and action target type matches target type',
-    inject([FieldActionService], (service: FieldActionService) => {
+  it('should return true if action source type STRING matches target field type STRING, and action target type matches target type', inject(
+    [FieldActionService],
+    (service: FieldActionService) => {
       source.type = 'STRING';
       target.type = 'STRING';
       action.targetType = 'STRING';
       action.sourceType = 'STRING';
       expect(service.appliesToField(action, mapping, false)).toBe(true);
-    }));
+    }
+  ));
 
-  it('should return false if action source type CHAR matches target field type STRING, and action target type matches target type',
-    inject([FieldActionService], (service: FieldActionService) => {
+  it('should return false if action source type CHAR matches target field type STRING, and action target type matches target type', inject(
+    [FieldActionService],
+    (service: FieldActionService) => {
       target.type = 'STRING';
       action.targetType = 'STRING';
       action.sourceType = 'CHAR';
       expect(service.appliesToField(action, mapping, false)).toBe(false);
-    }));
+    }
+  ));
 
-  it('should return false if action source type STRING matches target field type CHAR, and action target type does not match target type',
-    inject([FieldActionService], (service: FieldActionService) => {
+  it('should return false if action source type STRING matches target field type CHAR, and action target type does not match target type', inject(
+    [FieldActionService],
+    (service: FieldActionService) => {
       target.type = 'CHAR';
       action.targetType = 'STRING';
       action.sourceType = 'STRING';
       expect(service.appliesToField(action, mapping, false)).toBe(false);
-    }));
-
+    }
+  ));
 });

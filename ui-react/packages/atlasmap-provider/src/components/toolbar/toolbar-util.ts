@@ -7,7 +7,11 @@ import {
   ErrorLevel,
 } from '../../models/error.model';
 import { ErrorHandlerService } from '../../services/error-handler.service';
-import { importInstanceSchema, getDocDef, removeDocumentRef } from '../../components/document/document-util';
+import {
+  importInstanceSchema,
+  getDocDef,
+  removeDocumentRef,
+} from '../../components/document/document-util';
 
 /**
  * Delete the specified source or target document.
@@ -56,7 +60,11 @@ async function processMappingsCatalog(selectedFile: any, cfg: ConfigModel) {
  * @param userFileSuffix
  * @param cfg
  */
-function importAtlasGlobalFile(selectedFile: File, userFileSuffix: string, cfg: ConfigModel) {
+function importAtlasGlobalFile(
+  selectedFile: File,
+  userFileSuffix: string,
+  cfg: ConfigModel
+) {
   if (userFileSuffix === 'ADM') {
     cfg.errorService.resetAll();
 
@@ -134,23 +142,44 @@ export function importAtlasFile(selectedFile: File, isSource: boolean) {
 export function resetAtlasmap() {
   const cfg = ConfigModel.getConfig();
   cfg.errorService.resetAll();
-  return cfg.fileService.resetMappings().toPromise().then( async() => {
-    cfg.mappings = null;
-    cfg.fileService.resetLibs().toPromise().then( async() => {
-      await cfg.initializationService.initialize();
+  return cfg.fileService
+    .resetMappings()
+    .toPromise()
+    .then(async () => {
+      cfg.mappings = null;
+      cfg.fileService
+        .resetLibs()
+        .toPromise()
+        .then(async () => {
+          await cfg.initializationService.initialize();
+        });
+      cfg.clearDocs();
+      return cfg.initializationService.initialize();
+    })
+    .catch((error: any) => {
+      if (error.status === 0) {
+        cfg.errorService.addError(
+          new ErrorInfo({
+            message:
+              'Fatal network error: Could not connect to AtlasMap design runtime service.',
+            level: ErrorLevel.ERROR,
+            scope: ErrorScope.APPLICATION,
+            type: ErrorType.INTERNAL,
+            object: error,
+          })
+        );
+      } else {
+        cfg.errorService.addError(
+          new ErrorInfo({
+            message: 'Could not reset mapping definitions.',
+            level: ErrorLevel.ERROR,
+            scope: ErrorScope.APPLICATION,
+            type: ErrorType.INTERNAL,
+            object: error,
+          })
+        );
+      }
     });
-    cfg.clearDocs();
-    return cfg.initializationService.initialize();
-  }).catch((error: any) => {
-    if (error.status === 0) {
-      cfg.errorService.addError(new ErrorInfo({
-        message: 'Fatal network error: Could not connect to AtlasMap design runtime service.',
-        level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
-    } else {
-      cfg.errorService.addError(new ErrorInfo({message: 'Could not reset mapping definitions.',
-        level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
-    }
-  });
 }
 
 export function enableMappingPreview(enabled: boolean) {

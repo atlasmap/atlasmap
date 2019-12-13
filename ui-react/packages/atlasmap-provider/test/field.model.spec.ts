@@ -10,10 +10,7 @@ describe('Field', () => {
     });
   });
 
-  it(
-    'should ...',
-    inject([Field], (service: Field) => {
-      expect(service).toBeTruthy();
-    }),
-  );
+  it('should ...', inject([Field], (service: Field) => {
+    expect(service).toBeTruthy();
+  }));
 });

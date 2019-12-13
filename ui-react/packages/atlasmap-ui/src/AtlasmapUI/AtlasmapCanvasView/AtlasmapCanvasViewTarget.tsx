@@ -4,15 +4,16 @@ import {
   Document,
   IFieldsNode,
   IFieldsGroup,
-  Target, ElementId, GroupId,
+  Target,
+  ElementId,
+  GroupId,
 } from '../../CanvasView';
 import { DocumentField } from './DocumentField';
 import { DocumentFooter } from './DocumentFooter';
-import {IAtlasmapDocument, IAtlasmapField, IAtlasmapGroup} from '../models';
+import { IAtlasmapDocument, IAtlasmapField, IAtlasmapGroup } from '../models';
 import { useAtlasmapUI } from '../AtlasmapUIProvider';
 import { DropTarget } from './DropTarget';
 import { DocumentFieldPreviewResults } from './DocumentFieldPreviewResults';
-
 
 export interface IAtlasmapCanvasViewTargetProps {
   onAddToMapping: (elementId: ElementId, mappingId: string) => void;
@@ -25,7 +26,9 @@ export interface IAtlasmapCanvasViewTargetProps {
   targets: Array<IAtlasmapDocument>;
 }
 
-export const AtlasmapCanvasViewTarget: FunctionComponent<IAtlasmapCanvasViewTargetProps> = ({
+export const AtlasmapCanvasViewTarget: FunctionComponent<
+  IAtlasmapCanvasViewTargetProps
+> = ({
   onAddToMapping,
   onCreateMapping,
   onDeleteDocument,

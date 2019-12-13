@@ -1,9 +1,15 @@
 import React, { FunctionComponent } from 'react';
-import {FieldsBoxHeader, Source, Document, GroupId, ElementId} from '../../CanvasView';
+import {
+  FieldsBoxHeader,
+  Source,
+  Document,
+  GroupId,
+  ElementId,
+} from '../../CanvasView';
 import { DocumentField } from './DocumentField';
 import { DocumentFooter } from './DocumentFooter';
 import { DocumentFieldPreview } from './DocumentFieldPreview';
-import {IAtlasmapDocument, IAtlasmapField, IAtlasmapGroup} from '../models';
+import { IAtlasmapDocument, IAtlasmapField, IAtlasmapGroup } from '../models';
 import { useAtlasmapUI } from '../AtlasmapUIProvider';
 
 export interface IAtlasmapCanvasViewSourceProps {
@@ -17,7 +23,9 @@ export interface IAtlasmapCanvasViewSourceProps {
   showTypes: boolean;
 }
 
-export const AtlasmapCanvasViewSource: FunctionComponent<IAtlasmapCanvasViewSourceProps> = ({
+export const AtlasmapCanvasViewSource: FunctionComponent<
+  IAtlasmapCanvasViewSourceProps
+> = ({
   onAddToMapping,
   onDeleteDocument,
   onFieldPreviewChange,

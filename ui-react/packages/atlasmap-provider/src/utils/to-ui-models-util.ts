@@ -1,4 +1,10 @@
-import { IAtlasmapDocument, IAtlasmapGroup, IAtlasmapField, IMappingField, IMappings } from '@atlasmap/ui';
+import {
+  IAtlasmapDocument,
+  IAtlasmapGroup,
+  IAtlasmapField,
+  IMappingField,
+  IMappings,
+} from '@atlasmap/ui';
 import { DocumentDefinition, Field, MappedField, MappingDefinition } from '..';
 
 export interface IAtlasmapGroupWithField extends IAtlasmapGroup {
@@ -11,22 +17,26 @@ export interface IAtlasmapFieldWithField extends IAtlasmapField {
 
 function fromFieldToIFieldsGroup(field: Field): IAtlasmapGroupWithField {
   return {
-    id: `${field.docDef.uri}:${field.docDef.isSource ? 'source' : 'target'}:${field.uuid}`,
+    id: `${field.docDef.uri}:${field.docDef.isSource ? 'source' : 'target'}:${
+      field.uuid
+    }`,
     name: field.name,
     type: field.type,
     fields: field.children.map(fromFieldToIFields),
-    amField: field
-  }
+    amField: field,
+  };
 }
 
 function fromFieldToIFieldsNode(field: Field): IAtlasmapFieldWithField {
   return {
-    id: `${field.docDef.uri}:${field.docDef.isSource ? 'source' : 'target'}:${field.uuid}`,
+    id: `${field.docDef.uri}:${field.docDef.isSource ? 'source' : 'target'}:${
+      field.uuid
+    }`,
     name: field.getFieldLabel(false, false),
     type: field.type,
     amField: field,
-    previewValue: field.value
-  }
+    previewValue: field.value,
+  };
 }
 
 function fromFieldToIFields(field: Field) {
@@ -35,30 +45,45 @@ function fromFieldToIFields(field: Field) {
     : fromFieldToIFieldsNode(field);
 }
 
-export function fromDocumentDefinitionToFieldGroup(def: DocumentDefinition): IAtlasmapDocument | null {
-  return def.visibleInCurrentDocumentSearch ? {
-    id: def.id,
-    fields: def.fields.map(fromFieldToIFields),
-    name: def.name,
-    type: def.type,
-  } : null;
+export function fromDocumentDefinitionToFieldGroup(
+  def: DocumentDefinition
+): IAtlasmapDocument | null {
+  return def.visibleInCurrentDocumentSearch
+    ? {
+        id: def.id,
+        fields: def.fields.map(fromFieldToIFields),
+        name: def.name,
+        type: def.type,
+      }
+    : null;
 }
 
-function fromMappedFieldToIMappingField(isSource: boolean, field: MappedField): IMappingField {
+function fromMappedFieldToIMappingField(
+  isSource: boolean,
+  field: MappedField
+): IMappingField {
   return {
-    id: `${field.field!.docDef.uri}:${isSource ? 'source' : 'target'}:${field.field!.uuid}`,
+    id: `${field.field!.docDef.uri}:${isSource ? 'source' : 'target'}:${
+      field.field!.uuid
+    }`,
     name: field.field!.getFieldLabel(false, false),
-    tip: field.field!.path
-  }
+    tip: field.field!.path,
+  };
 }
 
-export function fromMappingDefinitionToIMappings(def: MappingDefinition): IMappings[] {
+export function fromMappingDefinitionToIMappings(
+  def: MappingDefinition
+): IMappings[] {
   return def.mappings.map(m => {
     return {
       id: m.uuid,
       name: m.transition.getPrettyName(),
-      sourceFields: m.getUserMappedFields(true).map(fromMappedFieldToIMappingField.bind(null, true)),
-      targetFields: m.getUserMappedFields(false).map(fromMappedFieldToIMappingField.bind(null, false)),
-    }
-  })
+      sourceFields: m
+        .getUserMappedFields(true)
+        .map(fromMappedFieldToIMappingField.bind(null, true)),
+      targetFields: m
+        .getUserMappedFields(false)
+        .map(fromMappedFieldToIMappingField.bind(null, false)),
+    };
+  });
 }

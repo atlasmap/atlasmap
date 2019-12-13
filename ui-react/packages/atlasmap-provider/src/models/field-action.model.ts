@@ -30,7 +30,7 @@ export enum Multiplicity {
   ONE_TO_ONE = 'ONE_TO_ONE',
   ONE_TO_MANY = 'ONE_TO_MANY',
   MANY_TO_ONE = 'MANY_TO_ONE',
-  ZERO_TO_ONE = 'ZERO_TO_ONE'
+  ZERO_TO_ONE = 'ZERO_TO_ONE',
 }
 
 export class FieldActionDefinition {
@@ -51,9 +51,19 @@ export class FieldActionDefinition {
     if (action.argumentValues == null || action.argumentValues.length === 0) {
       action.argumentValues = [];
       for (const arg of this.arguments) {
-
         // Default the input field to 0 for numerics
-        if (['LONG', 'INTEGER', 'FLOAT', 'DOUBLE', 'SHORT', 'BYTE', 'DECIMAL', 'NUMBER'].indexOf(arg.type) !== -1) {
+        if (
+          [
+            'LONG',
+            'INTEGER',
+            'FLOAT',
+            'DOUBLE',
+            'SHORT',
+            'BYTE',
+            'DECIMAL',
+            'NUMBER',
+          ].indexOf(arg.type) !== -1
+        ) {
           action.setArgumentValue(arg.name!, '0'); // TODO: check this non null operator
         } else {
           action.setArgumentValue(arg.name!, ''); // TODO: check this non null operator
@@ -66,7 +76,6 @@ export class FieldActionDefinition {
     // TODO: check this non null operator
     return this.arguments.find(argument => argument.name === name)!;
   }
-
 }
 
 export class FieldAction {
@@ -97,6 +106,4 @@ export class FieldAction {
   setArgumentValue(argumentName: string, value: string): void {
     this.getArgumentValue(argumentName).value = value;
   }
-
 }
-

@@ -1,4 +1,7 @@
-import { FieldActionDefinition, FieldAction } from '../src/models/field-action.model';
+import {
+  FieldActionDefinition,
+  FieldAction,
+} from '../src/models/field-action.model';
 
 describe('FieldAction.create()', () => {
   let actionDefinition: FieldActionDefinition;
@@ -13,5 +16,4 @@ describe('FieldAction.create()', () => {
     expect(action.name).toEqual(actionDefinition.name);
     expect(action.definition).toEqual(actionDefinition);
   });
-
 });

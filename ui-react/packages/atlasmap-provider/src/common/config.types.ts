@@ -23,24 +23,24 @@ export enum DocumentType {
   CORE = 'Core',
   CSV = 'CSV',
   CONSTANT = 'Constants',
-  PROPERTY = 'Property'
+  PROPERTY = 'Property',
 }
 
 export enum InspectionType {
   JAVA_CLASS = 'JAVA_CLASS',
   SCHEMA = 'SCHEMA',
   INSTANCE = 'INSTANCE',
-  UNKNOWN = 'UNKNOWN'
+  UNKNOWN = 'UNKNOWN',
 }
 
 export const enum FieldMode {
   CREATE,
-  EDIT
+  EDIT,
 }
 
 export enum CollectionType {
   ARRAY = 'ARRAY',
   LIST = 'LIST',
   MAP = 'MAP',
-  NONE = 'NONE'
+  NONE = 'NONE',
 }

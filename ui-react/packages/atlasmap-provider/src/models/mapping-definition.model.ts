@@ -28,15 +28,15 @@ export class MappingDefinition {
   templateText: string | null = null;
 
   private tables: LookupTable[] = [];
-  private tablesBySourceTargetKey: { [key: string]: LookupTable; } = {};
-  private tablesByName: { [key: string]: LookupTable; } = {};
+  private tablesBySourceTargetKey: { [key: string]: LookupTable } = {};
+  private tablesByName: { [key: string]: LookupTable } = {};
 
   constructor() {
-    this.name = 'UI.' + Math.floor((Math.random() * 1000000) + 1).toString();
+    this.name = 'UI.' + Math.floor(Math.random() * 1000000 + 1).toString();
   }
 
   templateExists(): boolean {
-    return ((this.templateText != null) && (this.templateText !== ''));
+    return this.templateText != null && this.templateText !== '';
   }
 
   addTable(table: LookupTable): void {
@@ -49,7 +49,10 @@ export class MappingDefinition {
     return this.tablesByName[name];
   }
 
-  getTableBySourceTarget(sourceIdentifier: string, targetIdentifier: string): LookupTable {
+  getTableBySourceTarget(
+    sourceIdentifier: string,
+    targetIdentifier: string
+  ): LookupTable {
     const key: string = sourceIdentifier + ':' + targetIdentifier;
     return this.tablesBySourceTargetKey[key];
   }
@@ -107,5 +110,4 @@ export class MappingDefinition {
   removeMapping(m: MappingModel): boolean {
     return DataMapperUtil.removeItemFromArray(m, this.mappings);
   }
-
 }

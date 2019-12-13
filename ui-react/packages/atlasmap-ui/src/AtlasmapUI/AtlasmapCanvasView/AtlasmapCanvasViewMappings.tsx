@@ -1,13 +1,15 @@
 import React, { FunctionComponent } from 'react';
 import { DropTarget } from './DropTarget';
-import {ElementId, Mapping, MappingElement} from '../../CanvasView';
+import { ElementId, Mapping, MappingElement } from '../../CanvasView';
 import { useAtlasmapUI } from '../AtlasmapUIProvider';
 
 export interface IAtlasmapCanvasViewMappingsProps {
   onAddToMapping: (elementId: ElementId, mappingId: string) => void;
 }
 
-export const AtlasmapCanvasViewMappings: FunctionComponent<IAtlasmapCanvasViewMappingsProps> = ({ onAddToMapping }) => {
+export const AtlasmapCanvasViewMappings: FunctionComponent<
+  IAtlasmapCanvasViewMappingsProps
+> = ({ onAddToMapping }) => {
   const {
     mappings,
     isFieldAddableToSelection,

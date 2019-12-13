@@ -10,10 +10,7 @@ describe('DataMapperUtil', () => {
     });
   });
 
-  it(
-    'should ...',
-    inject([DataMapperUtil], (service: DataMapperUtil) => {
-      expect(service).toBeTruthy();
-    }),
-  );
+  it('should ...', inject([DataMapperUtil], (service: DataMapperUtil) => {
+    expect(service).toBeTruthy();
+  }));
 });

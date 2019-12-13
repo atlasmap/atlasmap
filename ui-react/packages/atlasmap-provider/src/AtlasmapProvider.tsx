@@ -251,22 +251,27 @@ export function useAtlasmap({
 
   const mappings = fromMappingDefinitionToIMappings(mappingDefinition);
 
-  const onFieldPreviewChange = useCallback((
-    field: IAtlasmapFieldWithField,
-    value: string
-  ) => {
-    field.amField.value = value;
-    initializationService.cfg.mappingService.notifyMappingUpdated();
-  }, [initializationService]);
+  const onFieldPreviewChange = useCallback(
+    (field: IAtlasmapFieldWithField, value: string) => {
+      field.amField.value = value;
+      initializationService.cfg.mappingService.notifyMappingUpdated();
+    },
+    [initializationService]
+  );
 
-  const changeActiveMapping = useCallback((mappingId: string) => {
-    const mapping = mappingDefinition.mappings.find(m => m.uuid === mappingId);
-    if (mapping) {
-      initializationService.cfg.mappingService.selectMapping(mapping);
-    } else {
-      initializationService.cfg.mappingService.deselectMapping();
-    }
-  }, [initializationService, mappingDefinition]);
+  const changeActiveMapping = useCallback(
+    (mappingId: string) => {
+      const mapping = mappingDefinition.mappings.find(
+        m => m.uuid === mappingId
+      );
+      if (mapping) {
+        initializationService.cfg.mappingService.selectMapping(mapping);
+      } else {
+        initializationService.cfg.mappingService.deselectMapping();
+      }
+    },
+    [initializationService, mappingDefinition]
+  );
 
   return useMemo(
     () => ({

@@ -14,35 +14,61 @@
     limitations under the License.
 */
 
-import { PaddingField, DocumentDefinition } from '../models/document-definition.model';
+import {
+  PaddingField,
+  DocumentDefinition,
+} from '../models/document-definition.model';
 import { MappingModel, MappedField } from '../models/mapping.model';
 import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
 import { Multiplicity } from '../models/field-action.model';
-import { ErrorType, ErrorScope, ErrorInfo, ErrorLevel } from '../models/error.model';
+import {
+  ErrorType,
+  ErrorScope,
+  ErrorInfo,
+  ErrorLevel,
+} from '../models/error.model';
 
 /**
  * Static routines for handling mappings.
  */
 export class MappingUtil {
-
   static updateMappingsFromDocuments(cfg: ConfigModel): void {
     const sourceDocMap = cfg.getDocUriMap(cfg, true);
     const targetDocMap = cfg.getDocUriMap(cfg, false);
 
     // TODO: check this non null operator
     for (const mapping of cfg.mappings!.mappings) {
-      MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, sourceDocMap, true);
-      MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, targetDocMap, false);
+      MappingUtil.updateMappedFieldsFromDocuments(
+        mapping,
+        cfg,
+        sourceDocMap,
+        true
+      );
+      MappingUtil.updateMappedFieldsFromDocuments(
+        mapping,
+        cfg,
+        targetDocMap,
+        false
+      );
     }
     for (const doc of cfg.getAllDocs()) {
       if (doc.id == null) {
-        doc.id = 'DOC.' + doc.name + '.' + Math.floor((Math.random() * 1000000) + 1).toString();
+        doc.id =
+          'DOC.' +
+          doc.name +
+          '.' +
+          Math.floor(Math.random() * 1000000 + 1).toString();
       }
     }
   }
 
-  static updateMappedFieldsFromDocuments(mapping: MappingModel, cfg: ConfigModel, docMap: any, isSource: boolean): void {
+  static updateMappedFieldsFromDocuments(
+    mapping: MappingModel,
+    cfg: ConfigModel,
+    docMap: any,
+    isSource: boolean
+  ): void {
     let mappedFields: MappedField[] = mapping.getMappedFields(isSource);
     let mappedFieldIndex = -1;
 
@@ -59,20 +85,33 @@ export class MappingUtil {
           docMap = cfg.getDocUriMap(cfg, isSource);
         }
         // TODO: check this non null operator
-        doc = docMap[mappedField.parsedData.parsedDocURI!] as DocumentDefinition;
+        doc = docMap[
+          mappedField.parsedData.parsedDocURI!
+        ] as DocumentDefinition;
         if (doc == null) {
           if (mappedField.parsedData.parsedName != null) {
-            cfg.errorService.addError(new ErrorInfo({
-              message: `Could not find document for mapped field \'${mappedField.parsedData.parsedName}\' \
+            cfg.errorService.addError(
+              new ErrorInfo({
+                message: `Could not find document for mapped field \'${mappedField.parsedData.parsedName}\' \
 at URI ${mappedField.parsedData.parsedDocURI}`,
-              level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL}));
+                level: ErrorLevel.ERROR,
+                scope: ErrorScope.APPLICATION,
+                type: ErrorType.INTERNAL,
+              })
+            );
           }
           continue;
         }
 
         if (mappedField.parsedData.parsedDocID == null) {
-          cfg.errorService.addError(new ErrorInfo({message: `Could not find doc ID for mapped field ${mappedField.parsedData.parsedName}`,
-            level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL}));
+          cfg.errorService.addError(
+            new ErrorInfo({
+              message: `Could not find doc ID for mapped field ${mappedField.parsedData.parsedName}`,
+              level: ErrorLevel.ERROR,
+              scope: ErrorScope.APPLICATION,
+              type: ErrorType.INTERNAL,
+            })
+          );
           continue;
         }
         doc.id = mappedField.parsedData.parsedDocID;
@@ -83,7 +122,10 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
         mappedField.field = doc.getField(mappedField.parsedData.parsedPath!);
       }
       if (mappedField.field == null) {
-        if (mappedField.parsedData.fieldIsConstant || mappedField.parsedData.fieldIsProperty) {
+        if (
+          mappedField.parsedData.fieldIsConstant ||
+          mappedField.parsedData.fieldIsProperty
+        ) {
           const constantField: Field = new Field();
           constantField.value = mappedField.parsedData.parsedValue!; // TODO: check this non null operator
           constantField.type = mappedField.parsedData.parsedValueType!; // TODO: check this non null operator
@@ -93,19 +135,25 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
           constantField.userCreated = true;
           mappedField.field = constantField;
           doc.addField(constantField);
-        } else if (mappedField.parsedData.userCreated || mappedField.parsedData.parsedPath) {
+        } else if (
+          mappedField.parsedData.userCreated ||
+          mappedField.parsedData.parsedPath
+        ) {
           const path: string = mappedField.parsedData.parsedPath!; // TODO: check this non null operator
 
           mappedField.field = new Field();
-          mappedField.field.serviceObject.jsonType = 'io.atlasmap.xml.v2.XmlField';
+          mappedField.field.serviceObject.jsonType =
+            'io.atlasmap.xml.v2.XmlField';
           mappedField.field.path = path;
           mappedField.field.type = mappedField.parsedData.parsedValueType!; // TODO: check this non null operator
           mappedField.field.userCreated = true;
 
           const lastSeparator: number = path.lastIndexOf('/');
 
-          const parentPath = (lastSeparator > 0) ? path.substring(0, lastSeparator) : null;
-          let fieldName = (lastSeparator === -1) ? path : path.substring(lastSeparator + 1);
+          const parentPath =
+            lastSeparator > 0 ? path.substring(0, lastSeparator) : null;
+          let fieldName =
+            lastSeparator === -1 ? path : path.substring(lastSeparator + 1);
           let namespaceAlias: string | null = null;
           if (fieldName.indexOf(':') !== -1) {
             namespaceAlias = fieldName.split(':')[0];
@@ -114,7 +162,7 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
 
           mappedField.field.name = fieldName;
           mappedField.field.displayName = fieldName;
-          mappedField.field.isAttribute = (fieldName.indexOf('@') !== -1);
+          mappedField.field.isAttribute = fieldName.indexOf('@') !== -1;
           mappedField.field.namespaceAlias = namespaceAlias;
 
           if (parentPath != null) {
@@ -124,10 +172,15 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
 
           doc.addField(mappedField.field);
         } else {
-          cfg.errorService.addError(new ErrorInfo({
-            message: `Could not find field from document for mapped field \'${mappedField.parsedData.parsedName}\'`,
-            level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL,
-            object: { 'mappedField': mappedField, 'doc': doc }}));
+          cfg.errorService.addError(
+            new ErrorInfo({
+              message: `Could not find field from document for mapped field \'${mappedField.parsedData.parsedName}\'`,
+              level: ErrorLevel.ERROR,
+              scope: ErrorScope.APPLICATION,
+              type: ErrorType.INTERNAL,
+              object: { mappedField: mappedField, doc: doc },
+            })
+          );
           return;
         }
       }
@@ -135,17 +188,28 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
       // Process field actions.
       mappedField.actions = [];
       if (mappedField.parsedData.parsedActions.length > 0) {
-
         for (const action of mappedField.parsedData.parsedActions) {
           let actionDefinition = null;
           if (action.name === 'CustomAction') {
-            actionDefinition = cfg.fieldActionService.getActionDefinitionForName(action.argumentValues[0].value, Multiplicity.ONE_TO_ONE);
+            actionDefinition = cfg.fieldActionService.getActionDefinitionForName(
+              action.argumentValues[0].value,
+              Multiplicity.ONE_TO_ONE
+            );
           } else {
-            actionDefinition = cfg.fieldActionService.getActionDefinitionForName(action.name, Multiplicity.ONE_TO_ONE);
+            actionDefinition = cfg.fieldActionService.getActionDefinitionForName(
+              action.name,
+              Multiplicity.ONE_TO_ONE
+            );
           }
           if (actionDefinition == null) {
-            cfg.errorService.addError(new ErrorInfo({message: `Could not find field action definition for action \'${action.name}\'`,
-              level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL}));
+            cfg.errorService.addError(
+              new ErrorInfo({
+                message: `Could not find field action definition for action \'${action.name}\'`,
+                level: ErrorLevel.ERROR,
+                scope: ErrorScope.APPLICATION,
+                type: ErrorType.INTERNAL,
+              })
+            );
             continue;
           }
           actionDefinition.populateFieldAction(action);
@@ -158,7 +222,12 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
       if (zeroBasedIndex <= mappedFieldIndex) {
         mappedFields[zeroBasedIndex] = mappedField;
       } else {
-        cfg.mappingService.addPlaceholders(zeroBasedIndex - mappedFieldIndex, mapping, mappedFieldIndex, isSource);
+        cfg.mappingService.addPlaceholders(
+          zeroBasedIndex - mappedFieldIndex,
+          mapping,
+          mappedFieldIndex,
+          isSource
+        );
       }
     }
   }
@@ -172,16 +241,24 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
     let index = 0;
     let sourceFieldPaths: string[] = [];
     for (const doc of cfg.getDocs(true)) {
-      sourceFieldPaths = sourceFieldPaths.concat(Field.getFieldPaths(doc.getAllFields()));
+      sourceFieldPaths = sourceFieldPaths.concat(
+        Field.getFieldPaths(doc.getAllFields())
+      );
     }
     let targetSourcePaths: string[] = [];
     for (const doc of cfg.getDocs(false)) {
-      targetSourcePaths = targetSourcePaths.concat(Field.getFieldPaths(doc.getAllFields()));
+      targetSourcePaths = targetSourcePaths.concat(
+        Field.getFieldPaths(doc.getAllFields())
+      );
     }
     // TODO: check these non null operator
     while (index < cfg.mappings!.mappings.length) {
       const mapping: MappingModel = cfg.mappings!.mappings[index];
-      const mappingIsStale: boolean = this.isMappingStale(mapping, sourceFieldPaths, targetSourcePaths);
+      const mappingIsStale: boolean = this.isMappingStale(
+        mapping,
+        sourceFieldPaths,
+        targetSourcePaths
+      );
       if (mappingIsStale) {
         cfg.mappings!.mappings.splice(index, 1);
       } else {
@@ -190,15 +267,24 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
     }
   }
 
-  private static isMappingStale(mapping: MappingModel, sourceFieldPaths: string[], targetSourcePaths: string[]): boolean {
-
+  private static isMappingStale(
+    mapping: MappingModel,
+    sourceFieldPaths: string[],
+    targetSourcePaths: string[]
+  ): boolean {
     for (const field of mapping.getFields(true)) {
-      if (!(field instanceof PaddingField) && sourceFieldPaths.indexOf(field.path) === -1) {
+      if (
+        !(field instanceof PaddingField) &&
+        sourceFieldPaths.indexOf(field.path) === -1
+      ) {
         return true;
       }
     }
     for (const field of mapping.getFields(false)) {
-      if (!(field instanceof PaddingField) && targetSourcePaths.indexOf(field.path) === -1) {
+      if (
+        !(field instanceof PaddingField) &&
+        targetSourcePaths.indexOf(field.path) === -1
+      ) {
         return true;
       }
     }
@@ -223,10 +309,19 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
 
       const doc = this.getDocById(parsedDoc.id, docs);
       if (doc == null) {
-        cfg.errorService.addError(new ErrorInfo({
-          message: `Could not find document with identifier \'${parsedDoc.id}\' for namespace override.`,
-          level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL,
-          object: { 'identifier': parsedDoc.id, 'parsedDoc': parsedDoc, 'docs': docs }}));
+        cfg.errorService.addError(
+          new ErrorInfo({
+            message: `Could not find document with identifier \'${parsedDoc.id}\' for namespace override.`,
+            level: ErrorLevel.ERROR,
+            scope: ErrorScope.APPLICATION,
+            type: ErrorType.INTERNAL,
+            object: {
+              identifier: parsedDoc.id,
+              parsedDoc: parsedDoc,
+              docs: docs,
+            },
+          })
+        );
         continue;
       }
 
@@ -234,7 +329,10 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
     }
   }
 
-  private static getDocById(documentId: string, docs: DocumentDefinition[]): DocumentDefinition | null {
+  private static getDocById(
+    documentId: string,
+    docs: DocumentDefinition[]
+  ): DocumentDefinition | null {
     if (documentId == null || docs == null || !docs.length) {
       return null;
     }
@@ -244,7 +342,5 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
       }
     }
     return null;
-
   }
-
 }

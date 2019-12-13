@@ -1,4 +1,10 @@
-import React, {FunctionComponent, useCallback, useEffect, useMemo, useState} from 'react';
+import React, {
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {
   Links,
   CanvasView,
@@ -12,7 +18,7 @@ import { AtlasmapCanvasViewSource } from './AtlasmapCanvasViewSource';
 import { AtlasmapCanvasViewMappings } from './AtlasmapCanvasViewMappings';
 import { AtlasmapCanvasViewTarget } from './AtlasmapCanvasViewTarget';
 import { useAtlasmapUI } from '../AtlasmapUIProvider';
-import {AtlasmapLayout, IAtlasmapLayoutProps} from '../AtlasmapLayout';
+import { AtlasmapLayout, IAtlasmapLayoutProps } from '../AtlasmapLayout';
 import {
   ConnectedIcon,
   DisconnectedIcon,
@@ -138,9 +144,7 @@ export const AtlasmapCanvasView: FunctionComponent<
             sources={sources}
           />
 
-          <AtlasmapCanvasViewMappings
-            onAddToMapping={onAddToMapping}
-          />
+          <AtlasmapCanvasViewMappings onAddToMapping={onAddToMapping} />
 
           <AtlasmapCanvasViewTarget
             onAddToMapping={onAddToMapping}

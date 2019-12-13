@@ -10,10 +10,7 @@ describe('TransitionModel', () => {
     });
   });
 
-  it(
-    'should ...',
-    inject([TransitionModel], (service: TransitionModel) => {
-      expect(service).toBeTruthy();
-    }),
-  );
+  it('should ...', inject([TransitionModel], (service: TransitionModel) => {
+    expect(service).toBeTruthy();
+  }));
 });

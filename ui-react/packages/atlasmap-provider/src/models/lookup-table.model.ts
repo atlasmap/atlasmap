@@ -22,10 +22,10 @@ export class LookupTableEntry {
 
   toJSON(): any {
     return {
-      'sourceValue': this.sourceValue,
-      'sourceType': this.sourceType,
-      'targetValue': this.targetValue,
-      'targetType': this.targetType,
+      sourceValue: this.sourceValue,
+      sourceType: this.sourceType,
+      targetValue: this.targetValue,
+      targetType: this.targetType,
     };
   }
 
@@ -44,14 +44,20 @@ export class LookupTable {
   targetIdentifier: string;
 
   constructor() {
-    this.name = (new Date().getTime() + '-' + Math.floor(Math.random() * 1000000).toString());
+    this.name =
+      new Date().getTime() +
+      '-' +
+      Math.floor(Math.random() * 1000000).toString();
   }
 
   getInputOutputKey(): string {
     return this.sourceIdentifier + ':' + this.targetIdentifier;
   }
 
-  getEntryForSource(sourceValue: string, autocreate: boolean): LookupTableEntry | null {
+  getEntryForSource(
+    sourceValue: string,
+    autocreate: boolean
+  ): LookupTableEntry | null {
     for (const entry of this.entries) {
       if (entry.sourceValue === sourceValue) {
         return entry;
@@ -67,12 +73,19 @@ export class LookupTable {
   }
 
   toString() {
-    let result: string = 'Lookup Table, name: ' + this.name + ', entries: ' + this.entries.length;
-    result += '\n\sourceIdentifier: ' + this.sourceIdentifier;
+    let result: string =
+      'Lookup Table, name: ' + this.name + ', entries: ' + this.entries.length;
+    result += '\nsourceIdentifier: ' + this.sourceIdentifier;
     result += '\n\targetIdentifier: ' + this.targetIdentifier;
     let counter = 0;
     for (const entry of this.entries) {
-      result += '\n\tEntry #' + counter + ': ' + entry.sourceValue + ' => ' + entry.targetValue;
+      result +=
+        '\n\tEntry #' +
+        counter +
+        ': ' +
+        entry.sourceValue +
+        ' => ' +
+        entry.targetValue;
       counter += 1;
     }
     return result;

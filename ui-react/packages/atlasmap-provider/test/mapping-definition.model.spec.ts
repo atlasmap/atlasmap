@@ -10,10 +10,7 @@ describe('MappingDefinition', () => {
     });
   });
 
-  it(
-    'should ...',
-    inject([MappingDefinition], (service: MappingDefinition) => {
-      expect(service).toBeTruthy();
-    }),
-  );
+  it('should ...', inject([MappingDefinition], (service: MappingDefinition) => {
+    expect(service).toBeTruthy();
+  }));
 });

@@ -5,7 +5,11 @@ import { ErrorInfo, ErrorLevel } from '../src/models/error.model';
 
 describe('ErrorModel', () => {
   it('should ...', () => {
-    const ei: ErrorInfo = new ErrorInfo({message: 'test error message', level: ErrorLevel.ERROR, object: null});
+    const ei: ErrorInfo = new ErrorInfo({
+      message: 'test error message',
+      level: ErrorLevel.ERROR,
+      object: null,
+    });
     expect(ei.object).toBeNull();
     expect(ei.identifier).toBeGreaterThanOrEqual(0);
     expect(ei.level).toBe(ErrorLevel.ERROR);
