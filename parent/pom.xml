@@ -56,7 +56,7 @@
     <keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
     <license-maven-plugin.version>3.0</license-maven-plugin.version>
     <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
-    <log4j2.version>2.12.1</log4j2.version>
+    <log4j2.version>2.13.0</log4j2.version>
     <osgi.include.resource>{maven-resources}</osgi.include.resource>
     <resteasy.version>4.4.1.Final</resteasy.version>
     <resteasy-jaxrs.version>3.9.3.Final</resteasy-jaxrs.version>
