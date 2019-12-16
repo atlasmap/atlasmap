@@ -32,6 +32,7 @@ import {
   exportAtlasFile,
   importAtlasFile,
   resetAtlasmap,
+  documentExists,
 } from './components/toolbar/toolbar-util';
 
 const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
@@ -282,6 +283,7 @@ export function useAtlasmap({
       changeActiveMapping,
       enableMappingPreview,
       onFieldPreviewChange,
+      documentExists,
     }),
     [
       pending,

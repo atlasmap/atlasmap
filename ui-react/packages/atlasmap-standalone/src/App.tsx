@@ -20,6 +20,7 @@ const App: React.FC = () => {
     exportAtlasFile,
     deleteAtlasFile,
     changeActiveMapping,
+    documentExists,
     enableMappingPreview,
     onFieldPreviewChange
   } = useAtlasmap({
@@ -27,18 +28,53 @@ const App: React.FC = () => {
     targetFilter
   });
 
+  const documentToDelete = useRef<GroupId | undefined>();
+  let documentIsSource = useRef<boolean>();
+  let importDocument = useRef<File | undefined>();
+
+  const [importDialog, openImportDialog] = useConfirmationDialog({
+    title: 'Overwrite selected document?',
+    content: 'Are you sure you want to overwrite the selected document and remove any associated mappings?',
+    onConfirm: (closeDialog) => {
+      closeDialog();
+      importAtlasFile(importDocument.current!, documentIsSource.current!);
+    },
+    onCancel: (closeDialog) => {
+      closeDialog();
+    }
+  });
+
   const handleImportAtlasFile = useCallback(
     (selectedFile: File) => importAtlasFile(selectedFile, false),
     [importAtlasFile]
   );
+
   const handleImportSourceDocument = useCallback(
-    (selectedFile: File) => importAtlasFile(selectedFile, true),
-    [importAtlasFile]
+    (selectedFile: File) => {
+      importDocument.current = selectedFile;
+      documentIsSource.current = true;
+      if (documentExists(selectedFile, true)) {
+        openImportDialog();
+      } else {
+        importAtlasFile(importDocument.current!, documentIsSource.current!);
+      }
+    },
+    [openImportDialog, documentExists]
   );
+
   const handleImportTargetDocument = useCallback(
-    (selectedFile: File) => importAtlasFile(selectedFile, false),
-    [importAtlasFile]
+    (selectedFile: File) => {
+      importDocument.current = selectedFile;
+      documentIsSource.current = false;
+      if (documentExists(selectedFile, false)) {
+        openImportDialog();
+      } else {
+        importAtlasFile(importDocument.current!, documentIsSource.current!);
+      }
+    },
+    [openImportDialog, documentExists]
   );
+
   const defaultCatalogName = 'atlasmap-mapping.adm';
   const [exportDialog, openExportDialog] = useSingleInputDialog({
     title: 'Export Mappings and Documents.',
@@ -67,9 +103,6 @@ const App: React.FC = () => {
       closeDialog();
     }
   });
-
-  const documentToDelete = useRef<GroupId | undefined>();
-  let documentIsSource = useRef<boolean>();
 
   const [deleteDocumentDialog, openDeleteDocumentDialog] = useConfirmationDialog({
     title: 'Remove selected document?',
@@ -136,6 +169,7 @@ const App: React.FC = () => {
           onCreateMapping={() => void 0}
         />
         {exportDialog}
+        {importDialog}
         {deleteDocumentDialog}
         {resetDialog}
       </PageSection>
