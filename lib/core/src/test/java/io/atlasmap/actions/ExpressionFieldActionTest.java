@@ -16,10 +16,12 @@
 package io.atlasmap.actions;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.Test;
 
@@ -96,7 +98,6 @@ public class ExpressionFieldActionTest {
     /**
      * operators
      */
-
     @Test
     public void testAdd() throws Exception {
         Expression action = new Expression();
@@ -187,6 +188,33 @@ public class ExpressionFieldActionTest {
         BigDecimal bigDec = new BigDecimal("1");
         action.setExpression("IF(${0} == 1, 'bigdecimal 1', 'not bigdecimal 1')");
         assertEquals("bigdecimal 1", ExpressionFieldAction.process(action, Arrays.asList(bigDec)));
+    }
+
+    @Test
+    public void testConcatenateActionWithDelimiter() throws Exception {
+        Expression action = new Expression();
+        action.setExpression("CONCATENATE(${0}, ${1}, ${2}, ${3})");
+        assertEquals("a,b,c", ExpressionFieldAction.process(action, Arrays.asList(",", "a", "b", "c")));
+    }
+
+    @Test
+    public void testConcatenateActionWithMissingArguments() throws Exception {
+        Expression action = new Expression();
+        action.setExpression("CONCATENATE(${0})");
+        try {
+            ExpressionFieldAction.process(action, Arrays.asList(","));
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertEquals(IllegalArgumentException.class, e.getClass());
+            assertEquals("The transformation 'CONCATENATE' expects more arguments", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testAddNestedAction() throws Exception {
+        Expression action = new Expression();
+        action.setExpression("IF(ADD(${0}, ${1}, ${2}) == ${3}, 'pass', 'fail')");
+        assertEquals("pass", ExpressionFieldAction.process(action, Arrays.asList(1, 2, 3, 6)));
     }
 
 }

@@ -54,7 +54,8 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
             Arrays.asList("java.lang.Boolean", "java.lang.Byte", "java.lang.Character", "java.lang.Double",
                     "java.lang.Float", "java.lang.Integer", "java.lang.Long", "java.lang.Short", "java.lang.String")));
 
-    private static DefaultAtlasConversionService instance = null;
+    private static volatile DefaultAtlasConversionService instance = null;
+    private static final Object singletonLock = new Object();
 
     private Map<ConverterKey, ConverterMethodHolder> converterMethods = null;
     private Map<ConverterKey, ConverterMethodHolder> customConverterMethods = null;
@@ -108,15 +109,18 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
     }
 
     public static DefaultAtlasConversionService getInstance() {
-        if (instance == null) {
-            synchronized (DefaultAtlasConversionService.class) {
-                if (instance == null) {
-                    instance = new DefaultAtlasConversionService();
-                    instance.init();
+        DefaultAtlasConversionService result = instance;
+        if (result == null) {
+            synchronized (singletonLock) {
+                result = instance;
+                if (result == null) {
+                    result = new DefaultAtlasConversionService();
+                    result.init();
+                    instance = result;
                 }
             }
         }
-        return instance;
+        return result;
     }
 
     public static Set<String> listPrimitiveClassNames() {

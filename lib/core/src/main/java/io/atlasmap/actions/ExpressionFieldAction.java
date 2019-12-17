@@ -22,7 +22,6 @@ import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.ExpressionException;
 import io.atlasmap.spi.AtlasActionProcessor;
 import io.atlasmap.spi.AtlasFieldAction;
-import io.atlasmap.v2.Multiplicity;
 
 public class ExpressionFieldAction implements AtlasFieldAction {
 

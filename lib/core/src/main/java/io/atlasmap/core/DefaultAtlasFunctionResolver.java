@@ -15,20 +15,27 @@
  */
 package io.atlasmap.core;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ServiceLoader;
 
 import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.FunctionResolver;
 import io.atlasmap.expression.parser.ParseException;
+import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.FunctionFactory;
+import io.atlasmap.v2.Action;
+import io.atlasmap.v2.ActionParameter;
+import io.atlasmap.v2.ActionParameters;
 
 public class DefaultAtlasFunctionResolver implements FunctionResolver {
-    
+
     private static DefaultAtlasFunctionResolver instance;
 
     private HashMap<String, FunctionFactory> functions = new HashMap<>();
+    private DefaultAtlasFieldActionService fieldActionService;
 
     public static DefaultAtlasFunctionResolver getInstance() {
         if (instance == null) {
@@ -44,17 +51,57 @@ public class DefaultAtlasFunctionResolver implements FunctionResolver {
         for (FunctionFactory f : implementations) {
             functions.put(f.getName().toUpperCase(), f);
         }
+
+        fieldActionService = DefaultAtlasFieldActionService.getInstance();
+        fieldActionService.init();
     }
 
     @Override
-    public Expression resolve(String name, List<Expression> args) throws ParseException {
-        name = name.toUpperCase();
-        FunctionFactory f = functions.get(name);
+    public Expression resolve(final String name, List<Expression> args) throws ParseException {
+        String functionName = name.toUpperCase();
+        FunctionFactory f = functions.get(functionName);
         if (f != null) {
             return f.create(args);
+        } else {
+            //lookup action
+            return (ctx) -> {
+                List<Object> arguments = new ArrayList<>();
+                for (Expression arg: args) {
+                    arguments.add(arg.evaluate(ctx));
+                }
+
+                Object valueForTypeEvaluation = null;
+                if (arguments.isEmpty()) {
+                    return null;
+                } else {
+                    valueForTypeEvaluation = arguments.get(arguments.size() - 1);
+                }
+
+                DefaultAtlasFieldActionService.ActionProcessor actionProcessor = fieldActionService.findActionProcessor(name, valueForTypeEvaluation);
+                if (actionProcessor != null) {
+                    Map<String, Object> actionParameters = new HashMap<>();
+                    ActionParameters actionDetailParameters = actionProcessor.getActionDetail().getParameters();
+                    if (actionDetailParameters != null && actionDetailParameters.getParameter() != null) {
+                        for (ActionParameter parameter : actionDetailParameters.getParameter()) {
+                            if (!arguments.isEmpty()) {
+                                Object parameterValue = arguments.remove(0);
+                                actionParameters.put(parameter.getName(), parameterValue);
+                            } else {
+                                throw new IllegalArgumentException(String.format("The transformation '%s' expects more parameters. The parameter '%s' is missing", name, parameter.getName()));
+                            }
+                        }
+                    }
+                    if (arguments.isEmpty()) {
+                        throw new IllegalArgumentException(String.format("The transformation '%s' expects more arguments", name));
+                    }
+                    return fieldActionService.processAction(actionProcessor, actionParameters, arguments);
+                } else {
+                    throw new IllegalArgumentException(String.format("The expression function or transformation '%s' was not found", name));
+                }
+            };
         }
 
-        throw new IllegalArgumentException(String.format("The expression function '%s' was not found", name));
+
     }
 
 }

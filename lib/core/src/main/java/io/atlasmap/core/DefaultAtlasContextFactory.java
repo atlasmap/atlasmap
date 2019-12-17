@@ -95,7 +95,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         this.classLoader = new CompoundClassLoader();
         this.classLoader.add(AtlasMapping.class.getClassLoader());
         this.atlasConversionService = DefaultAtlasConversionService.getInstance();
-        this.atlasFieldActionService = new DefaultAtlasFieldActionService(this.atlasConversionService);
+        this.atlasFieldActionService = DefaultAtlasFieldActionService.getInstance();
         this.atlasFieldActionService.init(this.classLoader);
         registerFactoryJmx(this);
         this.moduleInfoRegistry = new DefaultAtlasModuleInfoRegistry(this);

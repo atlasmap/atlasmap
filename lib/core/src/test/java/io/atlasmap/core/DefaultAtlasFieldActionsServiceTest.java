@@ -39,7 +39,7 @@ public class DefaultAtlasFieldActionsServiceTest {
 
     @Before
     public void setUp() {
-        fieldActionsService = new DefaultAtlasFieldActionService(DefaultAtlasConversionService.getInstance());
+        fieldActionsService = DefaultAtlasFieldActionService.getInstance();
         fieldActionsService.init();
     }
 

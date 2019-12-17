@@ -69,7 +69,7 @@ public class JavaValidationServiceTest {
         mappingUtil = new AtlasMappingUtil();
         moduleDetail = JavaModule.class.getAnnotation(AtlasModuleDetail.class);
 
-        fieldActionService = new DefaultAtlasFieldActionService(DefaultAtlasConversionService.getInstance());
+        fieldActionService = DefaultAtlasFieldActionService.getInstance();
         fieldActionService.init();
         sourceValidationService = new JavaValidationService(DefaultAtlasConversionService.getInstance(), fieldActionService);
         sourceValidationService.setMode(AtlasModuleMode.SOURCE);

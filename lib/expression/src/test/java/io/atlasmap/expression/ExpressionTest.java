@@ -19,6 +19,7 @@ package io.atlasmap.expression;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.HashMap;
+import java.util.Map;
 
 import io.atlasmap.expression.internal.ComparisonExpression;
 import io.atlasmap.expression.parser.ParseException;
@@ -65,6 +66,20 @@ public class ExpressionTest extends TestCase {
                     return null;
                 }
                 return value.toString().toLowerCase();
+            };
+        } else if ("CONCATENATE".equals(name)) {
+            if (args.size() < 3) {
+                throw new ParseException("CONCATENATE expects at least 3 arguments.");
+            }
+
+            return (ctx) -> {
+                String value = "";
+                String delimiter = args.get(0).evaluate(ctx).toString();
+
+                for (int i = 1; i < args.size(); i++) {
+                    value += (i == 1 ? "" : delimiter) + args.get(i).evaluate(ctx);
+                }
+                return value;
             };
         }
 
@@ -386,6 +401,15 @@ public class ExpressionTest extends TestCase {
         assertSelector(message, "IF(ToLower(${name}) == 'James', 'good', 'bad')", "bad");
     }
 
+    public void testConcatenateAction() throws Exception {
+        MockMessage message = createMessage();
+        assertSelector(message, "concatenate('', ToLower(${name}), ${name})", "jamesJames");
+    }
+
+    public void testConcatenateWithDelimiterAction() throws Exception {
+        MockMessage message = createMessage();
+        assertSelector(message, "concatenate(',', ToLower(${name}), ${name})", "james,James");
+    }
 
     public void testInvalidSelector() throws Exception {
         MockMessage message = createMessage();
