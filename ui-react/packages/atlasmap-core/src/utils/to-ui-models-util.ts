@@ -1,5 +1,8 @@
-import { IAtlasmapDocument, IAtlasmapGroup, IAtlasmapField, IMappingField, IMappings } from '@atlasmap/ui';
-import { DocumentDefinition, Field, MappedField, MappingDefinition } from '..';
+import { IAtlasmapDocument, IAtlasmapGroup, IAtlasmapField, IMapping } from '@atlasmap/ui';
+import { MappedField, MappingModel } from "../models/mapping.model";
+import { Field } from "../models/field.model";
+import { MappingDefinition } from "../models/mapping-definition.model";
+import { DocumentDefinition } from "../models/document-definition.model";
 
 export interface IAtlasmapGroupWithField extends IAtlasmapGroup {
   amField: Field;
@@ -7,6 +10,14 @@ export interface IAtlasmapGroupWithField extends IAtlasmapGroup {
 
 export interface IAtlasmapFieldWithField extends IAtlasmapField {
   amField: Field;
+}
+
+export interface IAtlasmapMappedField extends IAtlasmapField {
+  mappedField: MappedField;
+}
+
+export interface IAtlasmapMapping extends IMapping {
+  mapping: MappingModel;
 }
 
 function fromFieldToIFieldsGroup(field: Field): IAtlasmapGroupWithField {
@@ -44,21 +55,24 @@ export function fromDocumentDefinitionToFieldGroup(def: DocumentDefinition): IAt
   } : null;
 }
 
-function fromMappedFieldToIMappingField(isSource: boolean, field: MappedField): IMappingField {
+function fromMappedFieldToIMappingField(field: MappedField): IAtlasmapMappedField {
   return {
-    id: `${field.field!.docDef.uri}:${isSource ? 'source' : 'target'}:${field.field!.uuid}`,
+    id: `${field.field!.docDef.uri}:${field.field!.docDef.isSource ? 'source' : 'target'}:${field.field!.uuid}`,
     name: field.field!.getFieldLabel(false, false),
-    tip: field.field!.path
-  }
+    type: field.field!.type,
+    previewValue: '',
+    mappedField: field
+  };
 }
 
-export function fromMappingDefinitionToIMappings(def: MappingDefinition): IMappings[] {
+export function fromMappingDefinitionToIMappings(def: MappingDefinition): IAtlasmapMapping[] {
   return def.mappings.map(m => {
     return {
       id: m.uuid,
       name: m.transition.getPrettyName(),
-      sourceFields: m.getUserMappedFields(true).map(fromMappedFieldToIMappingField.bind(null, true)),
-      targetFields: m.getUserMappedFields(false).map(fromMappedFieldToIMappingField.bind(null, false)),
+      sourceFields: m.getUserMappedFields(true).map(fromMappedFieldToIMappingField),
+      targetFields: m.getUserMappedFields(false).map(fromMappedFieldToIMappingField),
+      mapping: m
     }
   })
 }

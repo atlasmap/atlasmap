@@ -6,8 +6,13 @@ import React, {
   useContext,
   useState,
 } from 'react';
-import { ElementId, IMappings } from '../CanvasView';
+import { ElementId, IMapping } from '../CanvasView';
 import { IAtlasmapDocument } from './models';
+
+export interface IRenderMappingDetailsArgs {
+  mapping: IMapping;
+  closeDetails: () => void;
+}
 
 export interface IAtlasmapUIContext {
   selectedMapping: string | undefined;
@@ -17,18 +22,18 @@ export interface IAtlasmapUIContext {
   isEditingMapping: boolean;
   closeMappingDetails: () => void;
   isFieldAddableToSelection: (
-    mapping: IMappings | undefined,
+    mapping: IMapping | undefined,
     documentType: string,
     fieldId: ElementId
   ) => boolean;
-  currentMapping: IMappings | undefined;
+  currentMapping: IMapping | undefined;
   isFieldPartOfSelection: (id: string) => boolean;
   error: boolean;
   pending: boolean;
   sources: Array<IAtlasmapDocument>;
   targets: Array<IAtlasmapDocument>;
-  mappings: IMappings[];
-  renderMappingDetails: (mapping: IMappings) => ReactElement;
+  mappings: IMapping[];
+  renderMappingDetails: (props: IRenderMappingDetailsArgs) => ReactElement;
 }
 
 const AtlasmapUIContext = createContext<IAtlasmapUIContext | null>(null);
@@ -38,9 +43,9 @@ export interface IAtlasmapUIProviderProps {
   pending: boolean;
   sources: Array<IAtlasmapDocument>;
   targets: Array<IAtlasmapDocument>;
-  mappings: IMappings[];
+  mappings: IMapping[];
   onActiveMappingChange: (id: string) => void;
-  renderMappingDetails: (mapping: IMappings) => ReactElement;
+  renderMappingDetails: (props: IRenderMappingDetailsArgs) => ReactElement;
 }
 
 export const AtlasmapUIProvider: FunctionComponent<
@@ -75,7 +80,7 @@ export const AtlasmapUIProvider: FunctionComponent<
   }, [selectedMapping, setisEditingMapping]);
 
   const isFieldAddableToSelection = (
-    mapping: IMappings | undefined,
+    mapping: IMapping | undefined,
     documentType: string,
     fieldId: ElementId
   ) => {

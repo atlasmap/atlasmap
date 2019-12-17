@@ -70,7 +70,8 @@ export const FieldsBox: FunctionComponent<IMappingsBoxProps> = ({
             ref={ref}
             style={{
               height: scrollable ? '100%' : undefined,
-              overflow: scrollable ? 'auto' : undefined,
+              overflowY: scrollable ? 'auto' : undefined,
+              overflowX: 'hidden',
               display: 'flex',
               flexFlow: 'column',
               width: '100%',

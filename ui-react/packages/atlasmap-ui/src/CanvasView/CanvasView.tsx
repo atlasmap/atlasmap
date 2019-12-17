@@ -12,7 +12,7 @@ import { CanvasViewCanvas } from './components';
 export interface ICanvasViewProps extends ICanvasViewLayoutProviderProps {}
 
 export const CanvasView: FunctionComponent<ICanvasViewProps> = ({
-  isMappingColumnVisible,
+  showMappingColumn,
   children,
 }) => {
   return (
@@ -20,7 +20,7 @@ export const CanvasView: FunctionComponent<ICanvasViewProps> = ({
       <CanvasLinksProvider>
         <CanvasViewCanvas>
           <CanvasViewLayoutProvider
-            isMappingColumnVisible={isMappingColumnVisible}
+            showMappingColumn={showMappingColumn}
           >
             <CanvasViewFieldsProvider>{children}</CanvasViewFieldsProvider>
           </CanvasViewLayoutProvider>

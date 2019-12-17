@@ -2,7 +2,6 @@ export * from './AtlasmapCanvasView';
 export * from './AtlasmapCanvasViewMappings';
 export * from './AtlasmapCanvasViewSource';
 export * from './AtlasmapCanvasViewTarget';
-export * from '../AtlasmapLayout';
 export * from './DocumentField';
 export * from './DocumentFieldPreview';
 export * from './DocumentFieldPreviewResults';

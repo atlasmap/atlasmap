@@ -20,7 +20,7 @@ import React, {
 import { useLinkNode } from '../../Canvas';
 import { useCanvasViewFieldsContext } from '../CanvasViewFieldsProvider';
 
-import { IMappings } from '../models';
+import { IMapping } from '../models';
 import { useLinkable } from './useLinkable';
 
 const styles = StyleSheet.create({
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
 });
 
 export interface IMappingElementProps {
-  node: IMappings;
+  node: IMapping;
   selectedMapping: string | undefined;
   selectMapping: (id: string) => void;
   deselectMapping: () => void;

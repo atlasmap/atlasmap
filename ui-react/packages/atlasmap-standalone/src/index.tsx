@@ -1,8 +1,7 @@
-import { AtlasmapProvider } from '@atlasmap/provider';
+import './index.css';
+import { AtlasmapProvider } from '@atlasmap/core';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import '@patternfly/react-core/dist/styles/base.css';
-import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 

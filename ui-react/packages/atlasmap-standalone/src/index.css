@@ -1,3 +1,6 @@
+@import '~@patternfly/react-core/dist/styles/base.css';
+
 html, body, #root {
   height: 100%;
 }
+

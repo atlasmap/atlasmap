@@ -1,5 +1,4 @@
 import { IAtlasmapDocument } from '@atlasmap/ui';
-import { IAtlasmapField } from '@atlasmap/ui/src';
 import ky from 'ky';
 import React, {
   createContext,
@@ -26,9 +25,7 @@ import {
   fromMappingDefinitionToIMappings,
   IAtlasmapFieldWithField,
 } from './utils/to-ui-models-util';
-import {
-  addToMapping,
-} from './components/field/field-util';
+import { addToMapping } from './components/field/field-util';
 import {
   deleteAtlasFile,
   enableMappingPreview,
@@ -37,6 +34,12 @@ import {
   resetAtlasmap,
   documentExists,
 } from './components/toolbar/toolbar-util';
+import {
+  FieldAction,
+  FieldActionDefinition,
+  Multiplicity,
+} from './models/field-action.model';
+import { MappedField } from './models/mapping.model';
 
 const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
 
@@ -198,15 +201,49 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   );
 };
 
-export interface IUseAtlasmapArgs {
-  sourceFilter?: string;
-  targetFilter?: string;
+export function useAtlasmapSources(filter?: string) {
+  const context = useContext(AtlasmapContext);
+  if (!context) {
+    throw new Error(
+      `useAtlasmapSources must be used inside an AtlasmapProvider component`
+    );
+  }
+
+  const { sourceDocs } = context;
+
+  useEffect(() => search(filter, true), [filter]);
+
+  return useMemo(
+    () =>
+      sourceDocs
+        .map(fromDocumentDefinitionToFieldGroup)
+        .filter(d => d) as IAtlasmapDocument[],
+    [sourceDocs, filter]
+  );
 }
 
-export function useAtlasmap({
-  sourceFilter,
-  targetFilter,
-}: IUseAtlasmapArgs = {}) {
+export function useAtlasmapTargets(filter?: string) {
+  const context = useContext(AtlasmapContext);
+  if (!context) {
+    throw new Error(
+      `useAtlasmapTargets must be used inside an AtlasmapProvider component`
+    );
+  }
+
+  const { targetDocs } = context;
+
+  useEffect(() => search(filter, false), [filter]);
+
+  return useMemo(
+    () =>
+      targetDocs
+        .map(fromDocumentDefinitionToFieldGroup)
+        .filter(d => d) as IAtlasmapDocument[],
+    [targetDocs, filter]
+  );
+}
+
+export function useAtlasmap() {
   const context = useContext(AtlasmapContext);
   if (!context) {
     throw new Error(
@@ -218,14 +255,9 @@ export function useAtlasmap({
     dispatch,
     pending,
     error,
-    sourceDocs,
-    targetDocs,
     mappingDefinition,
     initializationService,
   } = context;
-
-  search(sourceFilter, true);
-  search(targetFilter, false);
 
   const handleImportAtlasFile = useCallback(
     (file: File, isSource: boolean) => {
@@ -240,47 +272,68 @@ export function useAtlasmap({
     resetAtlasmap();
   }, [dispatch]);
 
-  const sources = useMemo(
-    () =>
-      sourceDocs
-        .map(fromDocumentDefinitionToFieldGroup)
-        .filter(d => d) as IAtlasmapDocument[],
-    [sourceDocs]
-  );
-
-  const targets = useMemo(
-    () =>
-      targetDocs
-        .map(fromDocumentDefinitionToFieldGroup)
-        .filter(d => d) as IAtlasmapDocument[],
-    [targetDocs]
-  );
-
   const mappings = fromMappingDefinitionToIMappings(mappingDefinition);
 
-  const onFieldPreviewChange = useCallback((
-    field: IAtlasmapFieldWithField,
-    value: string
-  ) => {
-    field.amField.value = value;
-    initializationService.cfg.mappingService.notifyMappingUpdated();
-  }, [initializationService]);
+  const onFieldPreviewChange = useCallback(
+    (field: IAtlasmapFieldWithField, value: string) => {
+      field.amField.value = value;
+      initializationService.cfg.mappingService.notifyMappingUpdated();
+    },
+    [initializationService]
+  );
 
-  const changeActiveMapping = useCallback((mappingId: string) => {
-    const mapping = mappingDefinition.mappings.find(m => m.uuid === mappingId);
-    if (mapping) {
-      initializationService.cfg.mappingService.selectMapping(mapping);
-    } else {
-      initializationService.cfg.mappingService.deselectMapping();
-    }
-  }, [initializationService, mappingDefinition]);
+  const changeActiveMapping = useCallback(
+    (mappingId: string) => {
+      const mapping = mappingDefinition.mappings.find(
+        m => m.uuid === mappingId
+      );
+      if (mapping) {
+        initializationService.cfg.mappingService.selectMapping(mapping);
+      } else {
+        initializationService.cfg.mappingService.deselectMapping();
+      }
+    },
+    [initializationService, mappingDefinition]
+  );
+
+  const getMappingActions = useCallback(
+    (isSource: boolean) => {
+      return initializationService.cfg.fieldActionService.getActionsAppliesToField(
+        initializationService.cfg.mappings!.activeMapping!,
+        isSource,
+        Multiplicity.ONE_TO_ONE
+      );
+    },
+    [initializationService]
+  );
+
+  const handleActionChange = useCallback(
+    (action: FieldAction, definition: FieldActionDefinition) => {
+      action.argumentValues = []; // Invalidate the previously selected field action arguments.
+      definition.populateFieldAction(action);
+
+      // If the field action configuration predefines argument values then populate the fields with
+      // default values.  Needed to support pull-down menus in action argument definitions.
+      if (
+        action.argumentValues.values &&
+        action.argumentValues.length > 0 &&
+        definition.arguments[0] &&
+        definition.arguments[0].values &&
+        definition.arguments[0].values.length > 0
+      ) {
+        for (let i = 0; i < action.argumentValues.length; i++) {
+          action.argumentValues[i].value = definition.arguments[i].values![i];
+        }
+      }
+      initializationService.cfg.mappingService.notifyMappingUpdated();
+    },
+    [initializationService]
+  );
 
   return useMemo(
     () => ({
       pending,
       error,
-      sources,
-      targets,
       mappings,
       deleteAtlasFile,
       exportAtlasFile,
@@ -289,19 +342,21 @@ export function useAtlasmap({
       changeActiveMapping,
       enableMappingPreview,
       onFieldPreviewChange,
-      documentExists,
       addToMapping,
+      documentExists,
+      getMappingActions,
+      handleActionChange,
     }),
     [
       pending,
       error,
-      sources,
-      targets,
       mappings,
       handleImportAtlasFile,
       handleResetAtlasmap,
       changeActiveMapping,
       onFieldPreviewChange,
+      getMappingActions,
+      handleActionChange,
     ]
   );
 }

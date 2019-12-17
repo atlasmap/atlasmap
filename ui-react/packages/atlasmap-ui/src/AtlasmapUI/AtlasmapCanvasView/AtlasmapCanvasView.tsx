@@ -1,16 +1,10 @@
-import React, {FunctionComponent, useCallback, useEffect, useMemo, useState} from 'react';
+import React, { FunctionComponent, ReactChild, useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  Links,
   CanvasView,
   CanvasViewProvider,
-  CanvasViewControlBar,
-  GroupId,
-  ElementId,
+  CanvasViewControlBar, Links,
 } from '../../CanvasView';
 import { DragLayer } from './DragLayer';
-import { AtlasmapCanvasViewSource } from './AtlasmapCanvasViewSource';
-import { AtlasmapCanvasViewMappings } from './AtlasmapCanvasViewMappings';
-import { AtlasmapCanvasViewTarget } from './AtlasmapCanvasViewTarget';
 import { useAtlasmapUI } from '../AtlasmapUIProvider';
 import {AtlasmapLayout, IAtlasmapLayoutProps} from '../AtlasmapLayout';
 import {
@@ -19,19 +13,10 @@ import {
   EyeIcon,
   InfoIcon,
 } from '@patternfly/react-icons';
-import { IAtlasmapField } from '../models';
 
 export interface IAtlasmapCanvasViewProps extends IAtlasmapLayoutProps {
-  onImportSourceDocument: (selectedFile: File) => void;
-  onImportTargetDocument: (selectedFile: File) => void;
-  onDeleteSourceDocument: (id: GroupId) => void;
-  onDeleteTargetDocument: (id: GroupId) => void;
-  onSourceSearch: (content: string) => void;
   onShowMappingPreview: (enabled: boolean) => void;
-  onTargetSearch: (content: string) => void;
-  onFieldPreviewChange: (field: IAtlasmapField, value: string) => void;
-  onAddToMapping: (elementId: ElementId, mappingId: string) => void;
-  onCreateMapping: (sourceId: ElementId, targetId: ElementId) => void;
+  children: (props: { showTypes: boolean; showMappingPreview: boolean }) => ReactChild;
 }
 
 export const AtlasmapCanvasView: FunctionComponent<
@@ -39,24 +24,14 @@ export const AtlasmapCanvasView: FunctionComponent<
 > = ({
   onExportAtlasFile,
   onImportAtlasFile,
-  onImportSourceDocument,
-  onImportTargetDocument,
-  onDeleteSourceDocument,
-  onDeleteTargetDocument,
   onResetAtlasmap,
-  onSourceSearch,
   onShowMappingPreview,
-  onTargetSearch,
-  onFieldPreviewChange,
-  onAddToMapping,
-  onCreateMapping,
+  children
 }) => {
   const {
-    sources,
-    targets,
     mappings,
-    isEditingMapping,
     selectedMapping,
+    isEditingMapping,
   } = useAtlasmapUI();
 
   const isMappingColumnVisible = !isEditingMapping;
@@ -126,35 +101,9 @@ export const AtlasmapCanvasView: FunctionComponent<
         onImportAtlasFile={onImportAtlasFile}
         onResetAtlasmap={onResetAtlasmap}
       >
-        <CanvasView isMappingColumnVisible={isMappingColumnVisible}>
-          <AtlasmapCanvasViewSource
-            onAddToMapping={onAddToMapping}
-            onDeleteDocument={onDeleteSourceDocument}
-            onFieldPreviewChange={onFieldPreviewChange}
-            onImportDocument={onImportSourceDocument}
-            onSearch={onSourceSearch}
-            showMappingPreview={showMappingPreview}
-            showTypes={showTypes}
-            sources={sources}
-          />
-
-          <AtlasmapCanvasViewMappings
-            onAddToMapping={onAddToMapping}
-          />
-
-          <AtlasmapCanvasViewTarget
-            onAddToMapping={onAddToMapping}
-            onCreateMapping={onCreateMapping}
-            onDeleteDocument={onDeleteTargetDocument}
-            onImportDocument={onImportTargetDocument}
-            onSearch={onTargetSearch}
-            showMappingPreview={showMappingPreview}
-            showTypes={showTypes}
-            targets={targets}
-          />
-
+        <CanvasView showMappingColumn={isMappingColumnVisible}>
+          {children({ showMappingPreview, showTypes })}
           <Links mappings={mappings} selectedMapping={selectedMapping} />
-
           <DragLayer />
         </CanvasView>
       </AtlasmapLayout>

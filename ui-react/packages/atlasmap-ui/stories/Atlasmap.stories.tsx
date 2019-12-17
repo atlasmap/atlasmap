@@ -1,8 +1,15 @@
 import { action } from '@storybook/addon-actions';
 import React, { createElement, useState } from 'react';
-import { AtlasmapUI } from '../src/AtlasmapUI';
-import { ElementId, IMappings } from '../src/CanvasView';
+import { ElementId, IMapping } from '../src/CanvasView';
 import { mappings as sampleMappings, sources, targets } from './sampleData';
+import {Button} from "@patternfly/react-core";
+import {
+  AtlasmapCanvasView,
+  AtlasmapCanvasViewMappings,
+  AtlasmapCanvasViewSource, AtlasmapCanvasViewTarget,
+  AtlasmapUIProvider
+} from "../src/AtlasmapUI";
+import { boolean } from "@storybook/addon-knobs";
 
 export default {
   title: 'Mapper',
@@ -10,19 +17,19 @@ export default {
 
 export const sample = () =>
   createElement(() => {
-    const [mappings, setMappings] = useState<IMappings[]>(sampleMappings);
+    const [mappings, setMappings] = useState<IMapping[]>(sampleMappings);
     const addToMapping = (elementId: ElementId, mappingId: string) => {
       const updatedMappings = mappings.map(m => {
         if (m.id === mappingId) {
           if (/*elementType === */ 'source') {
             m.sourceFields = [
               ...m.sourceFields,
-              { id: elementId, name: elementId, tip: elementId },
+              { id: elementId },
             ];
           } else {
             m.targetFields = [
               ...m.targetFields,
-              { id: elementId, name: elementId, tip: elementId },
+              { id: elementId },
             ];
           }
         }
@@ -37,33 +44,61 @@ export const sample = () =>
         {
           id: `${Date.now()}`,
           name: 'One to One (mock)',
-          sourceFields: [{ id: sourceId, name: sourceId, tip: sourceId }],
-          targetFields: [{ id: targetId, name: targetId, tip: targetId }],
+          sourceFields: [{ id: sourceId }],
+          targetFields: [{ id: targetId }],
         },
       ]);
     };
 
     return (
-      <AtlasmapUI
+      <AtlasmapUIProvider
+        error={boolean('error', false)}
+        pending={boolean('pending', false)}
         sources={sources}
         targets={targets}
         mappings={mappings}
-        onImportAtlasFile={action('importAtlasFile')}
-        onImportSourceDocument={action('onImportSourceDocument')}
-        onImportTargetDocument={action('onImportTargetDocument')}
-        onExportAtlasFile={action('exportAtlasFile')}
-        onResetAtlasmap={action('resetAtlasmap')}
-        onSourceSearch={action('onSourceSearch')}
-        onTargetSearch={action('onTargetSearch')}
-        onDeleteSourceDocument={action('onDeleteSourceDocument')}
-        onDeleteTargetDocument={action('onDeleteTargetDocument')}
         onActiveMappingChange={action('onActiveMappingChange')}
-        onShowMappingPreview={action('onShowMappingPreview')}
-        onFieldPreviewChange={action('onFieldPreviewChange')}
-        onAddToMapping={addToMapping}
-        onCreateMapping={createMapping}
-        pending={false}
-        error={false}
-      />
+        renderMappingDetails={({ mapping, closeDetails }) => (
+          <>
+            {mapping.name}
+            <Button onClick={closeDetails}>Close</Button>
+          </>
+        )}
+      >
+        <AtlasmapCanvasView
+          onShowMappingPreview={action('AtlasmapCanvasView')}
+          onExportAtlasFile={action('onExportAtlasFile')}
+          onImportAtlasFile={action('onImportAtlasFile')}
+          onResetAtlasmap={action('onResetAtlasmap')}
+        >
+          {({ showTypes, showMappingPreview }) => (
+            <>
+              <AtlasmapCanvasViewSource
+                onAddToMapping={addToMapping}
+                onDeleteDocument={action('onDeleteDocument')}
+                onFieldPreviewChange={action('onFieldPreviewChange')}
+                onImportDocument={action('onImportDocument')}
+                onSearch={action('onSearch')}
+                showMappingPreview={showMappingPreview}
+                showTypes={showTypes}
+                sources={sources}
+              />
+
+              <AtlasmapCanvasViewMappings onAddToMapping={addToMapping} />
+
+              <AtlasmapCanvasViewTarget
+                onAddToMapping={addToMapping}
+                onCreateMapping={createMapping}
+                onDeleteDocument={action('onDeleteDocument')}
+                onImportDocument={action('onImportDocument')}
+                onSearch={action('onSearch')}
+                showMappingPreview={showMappingPreview}
+                showTypes={showTypes}
+                targets={targets}
+              />
+            </>
+          )}
+        </AtlasmapCanvasView>
+      </AtlasmapUIProvider>
     );
   });

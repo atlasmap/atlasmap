@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@atlasmap/provider": "*",
+    "@atlasmap/core": "*",
     "@atlasmap/ui": "*",
     "@patternfly/react-core": "^3.124.1",
     "@types/jest": "24.0.21",
