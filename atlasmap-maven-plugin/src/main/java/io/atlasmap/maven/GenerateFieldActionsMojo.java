@@ -144,7 +144,7 @@ public class GenerateFieldActionsMojo extends AbstractAtlasMapMojo {
     private void generateFieldAction(List<URL> urls)
             throws MojoFailureException, MojoExecutionException {
 
-        DefaultAtlasFieldActionService fieldActionService = new DefaultAtlasFieldActionService(DefaultAtlasConversionService.getInstance());
+        DefaultAtlasFieldActionService fieldActionService = DefaultAtlasFieldActionService.getInstance();
         ClassLoader origTccl = Thread.currentThread().getContextClassLoader();
         ActionDetails answer = new ActionDetails();
         try (URLClassLoader loader = new URLClassLoader(urls.toArray(new URL[urls.size()]), origTccl)) {

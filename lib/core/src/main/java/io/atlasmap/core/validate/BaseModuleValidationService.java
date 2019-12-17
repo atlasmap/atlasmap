@@ -56,7 +56,7 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
 
     public BaseModuleValidationService() {
         this.conversionService = DefaultAtlasConversionService.getInstance();
-        this.fieldActionService = new DefaultAtlasFieldActionService(this.conversionService);
+        this.fieldActionService = DefaultAtlasFieldActionService.getInstance();
         init();
     }
 

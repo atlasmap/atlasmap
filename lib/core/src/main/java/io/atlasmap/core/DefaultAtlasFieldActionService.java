@@ -1,6 +1,5 @@
 package io.atlasmap.core;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
@@ -9,7 +8,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -57,9 +55,22 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
     private ReadWriteLock actionProcessorsLock = new ReentrantReadWriteLock();
     private AtlasConversionService conversionService = null;
     private ActionResolver actionResolver = null;
+    private static DefaultAtlasFieldActionService instance;
 
-    public DefaultAtlasFieldActionService(AtlasConversionService conversionService) {
+    private DefaultAtlasFieldActionService(AtlasConversionService conversionService) {
         this.conversionService = conversionService;
+    }
+
+    public static DefaultAtlasFieldActionService getInstance() {
+        if (instance == null) {
+            synchronized (DefaultAtlasFieldActionService.class) {
+                if (instance == null) {
+                    instance = new DefaultAtlasFieldActionService(DefaultAtlasConversionService.getInstance());
+                    instance.init();
+                }
+            }
+        }
+        return instance;
     }
 
     public void init() {
@@ -357,7 +368,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                     Type itemType = method.getGenericParameterTypes()[1];
                     Class<?> itemClass = paramType.isArray() ? paramType.getComponentType()
                         : (Class<?>)((ParameterizedType) itemType).getActualTypeArguments()[0];
-                    
+
                     if (sourceCollectionType != CollectionType.NONE) {
                         if (sourceCollectionType == CollectionType.ARRAY) {
                             sourceList = Arrays.asList(sourceObject);
@@ -372,7 +383,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                         sourceList = Arrays.asList(sourceObject);
                     }
                     for (int i=0; i<sourceList.size(); i++) {
-                        
+
                         Object item = sourceList.get(i);
                         if (item != null) {
                             item = conversionService.convertType(item, null, itemClass, null);
@@ -532,8 +543,8 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         try {
             readLock.lock();
             for (ActionProcessor processor : actionProcessors) {
-                ActionDetail detail = processor.getActionDetail();
                 if (customAction != null) {
+                    ActionDetail detail = processor.getActionDetail();
                     if (customAction.getClassName().equals(detail.getClassName())
                         && customAction.getMethodName().equals(detail.getMethod())) {
                         matches.add(processor);
@@ -547,20 +558,55 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
             readLock.unlock();
         }
 
-        switch (matches.size()) {
-            case 0:
-                return null;
-            case 1:
-                return matches.get(0);
-            default:
-                if (sourceType != null && !Arrays.asList(FieldType.ANY, FieldType.NONE).contains(sourceType)) {
-                    for (ActionProcessor processor : matches) {
-                        if (sourceType.equals(processor.getActionDetail().getSourceType())) {
-                            return processor;
-                        }
-                    }
+        return findBestActionProcessor(matches, sourceType);
+    }
+
+    public ActionProcessor findActionProcessor(String name, Object value) {
+        FieldType valueType = (value != null ? getConversionService().fieldTypeFromClass(value.getClass()) : FieldType.NONE);
+        String uppercaseName = name.toUpperCase();
+
+        List<ActionProcessor> processors = new ArrayList<>();
+        Lock readLock = actionProcessorsLock.readLock();
+        try {
+            readLock.lock();
+            for (ActionProcessor processor : actionProcessors) {
+                if (processor.getActionDetail().getName().toUpperCase().equals(uppercaseName)) {
+                    processors.add(processor);
                 }
-                return matches.get(0);
+            }
+        } finally {
+            readLock.unlock();
+        }
+
+        return findBestActionProcessor(processors, valueType);
+    }
+
+    private ActionProcessor findBestActionProcessor(List<ActionProcessor> processors, FieldType valueType) {
+        if (processors.isEmpty()) {
+            return null;
+        } else if (processors.size() == 1) {
+            return processors.get(0);
+        } else if (valueType != null && !Arrays.asList(FieldType.ANY, FieldType.NONE).contains(valueType)) {
+            for (ActionProcessor processor: processors) {
+                if (valueType.equals(processor.getActionDetail().getSourceType())) {
+                    return processor;
+                }
+            }
+        }
+        return processors.get(0);
+    }
+
+    public Object processAction(ActionProcessor actionProcessor, Map<String, Object> actionParameters, Object value) {
+        FieldType valueType = (value != null ? getConversionService().fieldTypeFromClass(value.getClass()) : FieldType.NONE);
+        try {
+            Action action = actionProcessor.getActionClass().newInstance();
+            for (Map.Entry<String, Object> property: actionParameters.entrySet()) {
+                String setter = "set" + property.getKey().substring(0, 1).toUpperCase() + property.getKey().substring(1);
+                action.getClass().getMethod(setter, property.getValue().getClass()).invoke(action, property.getValue());
+            }
+            return processAction(action, actionProcessor, valueType, value);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(String.format("The action '%s' cannot be processed", actionProcessor.getActionDetail().getName()), e);
         }
     }
 
@@ -607,33 +653,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                 continue;
             }
 
-            Multiplicity multiplicity = detail.getMultiplicity()!= null ? detail.getMultiplicity() : Multiplicity.ONE_TO_ONE;
-            if (tmpSourceObject instanceof List) {
-                List<Object> tmpSourceList = (List<Object>) tmpSourceObject;
-                for (int i = 0; i < tmpSourceList.size(); i++) {
-                    Object subValue = tmpSourceList.get(i);
-                    FieldType subType = (subValue != null ? getConversionService().fieldTypeFromClass(subValue.getClass()) : FieldType.NONE);
-                    if (subValue != null && !isAssignableFieldType(detail.getSourceType(), subType)) {
-                        subValue = getConversionService().convertType(subValue, subType, detail.getSourceType());
-                        tmpSourceList.set(i, subValue);
-                    }
-                    if (multiplicity != Multiplicity.MANY_TO_ONE) {
-                        subValue = processor.process(action, subValue);
-                        tmpSourceList.set(i, subValue);
-                    }
-                }
-            } else if (!isAssignableFieldType(detail.getSourceType(), currentType)) {
-                tmpSourceObject = getConversionService().convertType(sourceObject, currentType, detail.getSourceType());
-            }
-            if (!(tmpSourceObject instanceof List) || multiplicity == Multiplicity.MANY_TO_ONE) {
-                tmpSourceObject = processor.process(action, tmpSourceObject);
-            }
-
-            if (tmpSourceObject != null && tmpSourceObject.getClass().isArray()) {
-                tmpSourceObject = Arrays.asList((Object[]) tmpSourceObject);
-            } else if ((tmpSourceObject instanceof java.util.Collection) && !(tmpSourceObject instanceof List)) {
-                tmpSourceObject = Arrays.asList(((java.util.Collection<?>) tmpSourceObject).toArray());
-            }
+            tmpSourceObject = processAction(action, processor, currentType, tmpSourceObject);
             currentType = null;
             if (tmpSourceObject instanceof List) {
                 for (Object item : ((List<?>) tmpSourceObject)) {
@@ -688,6 +708,38 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
             field.setFieldType(currentType);
         }
         return field;
+    }
+
+    private Object processAction(Action action, ActionProcessor processor, FieldType sourceType, Object sourceObject) throws AtlasException {
+        ActionDetail detail = processor.getActionDetail();
+        Multiplicity multiplicity = detail.getMultiplicity()!= null ? detail.getMultiplicity() : Multiplicity.ONE_TO_ONE;
+        if (sourceObject instanceof List) {
+            List<Object> tmpSourceList = (List<Object>) sourceObject;
+            for (int i = 0; i < tmpSourceList.size(); i++) {
+                Object subValue = tmpSourceList.get(i);
+                FieldType subType = (subValue != null ? getConversionService().fieldTypeFromClass(subValue.getClass()) : FieldType.NONE);
+                if (subValue != null && !isAssignableFieldType(detail.getSourceType(), subType)) {
+                    subValue = getConversionService().convertType(subValue, subType, detail.getSourceType());
+                    tmpSourceList.set(i, subValue);
+                }
+                if (multiplicity != Multiplicity.MANY_TO_ONE) {
+                    subValue = processor.process(action, subValue);
+                    tmpSourceList.set(i, subValue);
+                }
+            }
+        } else if (!isAssignableFieldType(detail.getSourceType(), sourceType)) {
+            sourceObject = getConversionService().convertType(sourceObject, sourceType, detail.getSourceType());
+        }
+        if (!(sourceObject instanceof List) || multiplicity == Multiplicity.MANY_TO_ONE) {
+            sourceObject = processor.process(action, sourceObject);
+        }
+
+        if (sourceObject != null && sourceObject.getClass().isArray()) {
+            sourceObject = Arrays.asList((Object[]) sourceObject);
+        } else if ((sourceObject instanceof Collection) && !(sourceObject instanceof List)) {
+            sourceObject = Arrays.asList(((Collection<?>) sourceObject).toArray());
+        }
+        return sourceObject;
     }
 
     private boolean isAssignableFieldType(FieldType expected, FieldType actual) {

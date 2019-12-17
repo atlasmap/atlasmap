@@ -68,7 +68,7 @@ public class XmlValidationServiceTest {
         mappingUtil = new AtlasMappingUtil();
         moduleDetail = XmlModule.class.getAnnotation(AtlasModuleDetail.class);
 
-        fieldActionService = new DefaultAtlasFieldActionService(DefaultAtlasConversionService.getInstance());
+        fieldActionService = DefaultAtlasFieldActionService.getInstance();
         fieldActionService.init();
         sourceValidationService = new XmlValidationService(DefaultAtlasConversionService.getInstance(), fieldActionService);
         sourceValidationService.setMode(AtlasModuleMode.SOURCE);

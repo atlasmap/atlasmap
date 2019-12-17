@@ -57,7 +57,7 @@ public abstract class BaseJsonValidationServiceTest {
         mappingUtil = new AtlasMappingUtil();
         moduleDetail = JsonModule.class.getAnnotation(AtlasModuleDetail.class);
 
-        fieldActionService = new DefaultAtlasFieldActionService(DefaultAtlasConversionService.getInstance());
+        fieldActionService = DefaultAtlasFieldActionService.getInstance();
         fieldActionService.init();
         sourceValidationService = new JsonValidationService(DefaultAtlasConversionService.getInstance(), fieldActionService);
         sourceValidationService.setMode(AtlasModuleMode.SOURCE);
