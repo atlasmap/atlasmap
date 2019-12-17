@@ -10,6 +10,17 @@ import { ErrorHandlerService } from '../../services/error-handler.service';
 import { importInstanceSchema, getDocDef, removeDocumentRef } from '../../components/document/document-util';
 
 /**
+ * Return true if the specified file object file name exists as a source or target document,
+ * false otherwise.
+ *
+ * @param file - file object
+ * @param isSource - source or target panel
+ */
+export function documentExists(file: File, isSource: boolean): boolean {
+  return (getDocDef(file.name, ConfigModel.getConfig(), isSource) !== null);
+}
+
+/**
  * Delete the specified source or target document.
  *
  * @param fileName - document name to delete
