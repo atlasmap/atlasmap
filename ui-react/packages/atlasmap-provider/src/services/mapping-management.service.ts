@@ -232,7 +232,10 @@ export class MappingManagementService {
     }
   }
 
-  fieldSelected(field: Field, compoundSelection: boolean, position?: string, offset?: number): void {
+  fieldSelected(field: Field, compoundSelection?: boolean, position?: string, offset?: number): void {
+
+    // Keep around for now
+    compoundSelection = true;
 
     if (!field.isTerminal()) {
       field.docDef.populateChildren(field);
