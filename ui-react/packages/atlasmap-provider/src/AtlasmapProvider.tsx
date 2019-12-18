@@ -27,6 +27,9 @@ import {
   IAtlasmapFieldWithField,
 } from './utils/to-ui-models-util';
 import {
+  addToMapping,
+} from './components/field/field-util';
+import {
   deleteAtlasFile,
   enableMappingPreview,
   exportAtlasFile,
@@ -159,6 +162,9 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
 
     const subscriptions = [
       initializationObservable.subscribe(onUpdates),
+      initializationService.cfg.mappingService.mappingUpdatedSource.subscribe(
+        onUpdates
+      ),
       initializationService.cfg.mappingService.mappingPreviewOutput$.subscribe(
         onUpdates
       ),
@@ -284,6 +290,7 @@ export function useAtlasmap({
       enableMappingPreview,
       onFieldPreviewChange,
       documentExists,
+      addToMapping,
     }),
     [
       pending,

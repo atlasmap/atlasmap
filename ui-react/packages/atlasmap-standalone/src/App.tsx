@@ -22,7 +22,8 @@ const App: React.FC = () => {
     changeActiveMapping,
     documentExists,
     enableMappingPreview,
-    onFieldPreviewChange
+    onFieldPreviewChange,
+    addToMapping
   } = useAtlasmap({
     sourceFilter,
     targetFilter
@@ -44,6 +45,13 @@ const App: React.FC = () => {
     }
   });
 
+  const handleAddToMapping = useCallback(
+    (fieldId: string, mappingId: string) => {
+      addToMapping(fieldId, mappingId);
+    },
+    [addToMapping]
+  );
+
   const handleImportAtlasFile = useCallback(
     (selectedFile: File) => importAtlasFile(selectedFile, false),
     [importAtlasFile]
@@ -59,7 +67,7 @@ const App: React.FC = () => {
         importAtlasFile(importDocument.current!, documentIsSource.current!);
       }
     },
-    [openImportDialog, documentExists]
+    [importAtlasFile, openImportDialog, documentExists]
   );
 
   const handleImportTargetDocument = useCallback(
@@ -72,7 +80,7 @@ const App: React.FC = () => {
         importAtlasFile(importDocument.current!, documentIsSource.current!);
       }
     },
-    [openImportDialog, documentExists]
+    [importAtlasFile, openImportDialog, documentExists]
   );
 
   const defaultCatalogName = 'atlasmap-mapping.adm';
@@ -165,7 +173,7 @@ const App: React.FC = () => {
           onActiveMappingChange={changeActiveMapping}
           onShowMappingPreview={enableMappingPreview}
           onFieldPreviewChange={handleFieldPreviewChange}
-          onAddToMapping={() => void 0}
+          onAddToMapping={handleAddToMapping}
           onCreateMapping={() => void 0}
         />
         {exportDialog}
