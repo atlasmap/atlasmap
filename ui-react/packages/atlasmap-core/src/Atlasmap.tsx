@@ -137,10 +137,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
               sources={sources}
             />
 
-            <AtlasmapCanvasViewMappings
-              onAddToMapping={addToMapping}
-              onCreateMapping={createMapping}
-            />
+            <AtlasmapCanvasViewMappings onAddToMapping={addToMapping}/>
 
             <AtlasmapCanvasViewTarget
               onAddToMapping={addToMapping}
