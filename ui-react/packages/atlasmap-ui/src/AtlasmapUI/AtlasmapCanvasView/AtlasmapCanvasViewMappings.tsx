@@ -5,6 +5,7 @@ import { useAtlasmapUI } from '../AtlasmapUIProvider';
 
 export interface IAtlasmapCanvasViewMappingsProps {
   onAddToMapping: (elementId: ElementId, mappingId: string) => void;
+  onCreateMapping: (sourceId: ElementId, targetId: ElementId) => void;
 }
 
 export const AtlasmapCanvasViewMappings: FunctionComponent<IAtlasmapCanvasViewMappingsProps> = ({ onAddToMapping }) => {

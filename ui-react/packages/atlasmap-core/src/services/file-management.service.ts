@@ -234,9 +234,11 @@ export class FileManagementService {
         }
 
         // Retrieve the JSON mappings buffer from the server.
-        const jsonBuffer = await this.getJsonBuf();
-        if (jsonBuffer) {
-          aggregateBuffer += DocumentManagementService.generateExportMappings(jsonBuffer);
+        if (this.cfg.mappings) {
+          const jsonBuffer = await this.getJsonBuf();
+          if (jsonBuffer) {
+            aggregateBuffer += DocumentManagementService.generateExportMappings(jsonBuffer);
+          }
         }
 
         let exportMeta = '   "exportMeta": [\n';

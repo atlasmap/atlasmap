@@ -25,7 +25,7 @@ import {
   fromMappingDefinitionToIMappings,
   IAtlasmapFieldWithField,
 } from './utils/to-ui-models-util';
-import { addToMapping } from './components/field/field-util';
+import { addToMapping, createMapping } from './components/field/field-util';
 import {
   deleteAtlasFile,
   enableMappingPreview,
@@ -343,6 +343,7 @@ export function useAtlasmap() {
       enableMappingPreview,
       onFieldPreviewChange,
       addToMapping,
+      createMapping,
       documentExists,
       getMappingActions,
       handleActionChange,
