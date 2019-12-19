@@ -32,7 +32,7 @@ export class MappingDefinition {
   private tablesByName: { [key: string]: LookupTable; } = {};
 
   constructor() {
-    // Mapping uuid must be 0 until https://github.com/atlasmap/atlasmap/issues/1577
+    // Mapping definition ID must be 0 until https://github.com/atlasmap/atlasmap/issues/1577
     // this.name = 'UI.' + Math.floor((Math.random() * 1000000) + 1).toString();
     this.name = 'UI.0';
   }
