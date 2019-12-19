@@ -4,29 +4,41 @@ import React, {
   ReactChild,
   ReactPortal,
   useCallback,
+  useRef,
   useState
 } from "react";
 import { createPortal } from "react-dom";
+
+export type ConfirmCallback = (value: string) => void;
+export type CancelCallback = () => void;
 
 export interface IUseSingleInputDialogArgs {
   title: string;
   content: ReactChild;
   placeholder: string;
-  onConfirm: (closeDialog: () => void, value: string) => void;
-  onCancel: (closeDialog: () => void) => void;
 }
 
 export function useSingleInputDialog({
   title,
   content,
-  placeholder,
-  onConfirm,
-  onCancel
-}: IUseSingleInputDialogArgs): [ReactPortal, () => void] {
+  placeholder
+}: IUseSingleInputDialogArgs): [
+  ReactPortal,
+  (onConfirm?: ConfirmCallback, onCancel?: CancelCallback) => void
+] {
+  const onConfirm = useRef<ConfirmCallback | undefined>();
+  const onCancel = useRef<CancelCallback | undefined>();
   const [isOpen, setIsOpen] = useState(false);
   const [isValid, setIsValid] = useState(true);
-  const [value, setValue] = useState('');
-  const openModal = () => setIsOpen(true);
+  const [value, setValue] = useState("");
+  const openModal = (
+    onConfirmCb?: ConfirmCallback,
+    onCancelCb?: CancelCallback
+  ) => {
+    onConfirm.current = onConfirmCb;
+    onCancel.current = onCancelCb;
+    setIsOpen(true);
+  };
   const closeModal = () => setIsOpen(false);
   const handleTextInputChange = (
     value: string,
@@ -36,9 +48,13 @@ export function useSingleInputDialog({
     setIsValid((event.target as HTMLInputElement).reportValidity());
   };
   const handleConfirm = useCallback(() => {
-    isValid && onConfirm(closeModal, value);
+    isValid && onConfirm.current && onConfirm.current(value);
+    closeModal();
   }, [onConfirm, value, isValid]);
-  const handleCancel = useCallback(() => onCancel(closeModal), [onCancel]);
+  const handleCancel = useCallback(() => {
+    onCancel.current && onCancel.current();
+    closeModal();
+  }, [onCancel]);
 
   const modal = createPortal(
     <Modal

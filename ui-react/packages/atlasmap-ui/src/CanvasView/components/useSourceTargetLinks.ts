@@ -2,10 +2,10 @@ import { scaleSequential } from 'd3-scale';
 import { interpolateRainbow } from 'd3-scale-chromatic';
 import { useMemo } from 'react';
 import { SourceTargetNodes, useCanvasLinks } from '../../Canvas';
-import { IMappings } from '../models';
+import { IMapping } from '../models';
 
 export interface IUseSourceTargetLinksArgs {
-  mappings: IMappings[];
+  mappings: IMapping[];
   selectedMapping: string | undefined;
 }
 export function useSourceTargetLinks({

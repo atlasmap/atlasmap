@@ -1,6 +1,6 @@
-import { Field } from '..';
 import { ConfigModel } from '../models/config.model';
 import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from '../models/error.model';
+import { Field } from "../models/field.model";
 
 const MAX_SEARCH_MATCH = 10000;
 

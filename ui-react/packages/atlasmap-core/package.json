@@ -1,10 +1,10 @@
 {
-  "name": "@atlasmap/provider",
+  "name": "@atlasmap/core",
   "description": "",
   "version": "0.1.0",
   "license": "MIT",
   "main": "dist/index.js",
-  "module": "dist/atlasmap-provider.esm.js",
+  "module": "dist/atlasmap-core.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"

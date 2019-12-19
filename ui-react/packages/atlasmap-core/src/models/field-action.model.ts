@@ -17,7 +17,7 @@
 export class FieldActionArgument {
   name: string;
   type = 'STRING';
-  values = null;
+  values: string[] | null = null;
   serviceObject: any = new Object();
 }
 

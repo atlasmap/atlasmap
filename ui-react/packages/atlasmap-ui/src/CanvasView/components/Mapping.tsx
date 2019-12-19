@@ -17,7 +17,7 @@ export interface IMappingProps {
 }
 
 export const Mapping: FunctionComponent<IMappingProps> = ({ children }) => {
-  const { isMappingColumnVisible } = useCanvasViewLayoutContext();
+  const { showMappingColumn } = useCanvasViewLayoutContext();
   const {
     mappingWidth,
     boxHeight,
@@ -31,7 +31,7 @@ export const Mapping: FunctionComponent<IMappingProps> = ({ children }) => {
       initialHeight={boxHeight}
       position={initialMappingCoords}
       header={'Mapping'}
-      visible={isMappingColumnVisible}
+      visible={showMappingColumn}
     >
       <div className={css(styles.content)} ref={ref}>
         {children({ ref: ref.current })}

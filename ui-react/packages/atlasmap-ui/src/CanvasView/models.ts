@@ -11,10 +11,8 @@ export interface IFieldsGroup {
 }
 export interface IMappingField {
   id: ElementId;
-  name: string;
-  tip: string;
 }
-export interface IMappings {
+export interface IMapping {
   id: string;
   name: string;
   sourceFields: Array<IMappingField>;
