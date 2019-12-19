@@ -43,6 +43,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     enableMappingPreview,
     onFieldPreviewChange,
     addToMapping,
+    createMapping,
   } = useAtlasmap();
   const sources = useAtlasmapSources(sourceFilter);
   const targets = useAtlasmapTargets(targetFilter);
@@ -136,11 +137,11 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
               sources={sources}
             />
 
-            <AtlasmapCanvasViewMappings onAddToMapping={addToMapping} />
+            <AtlasmapCanvasViewMappings onAddToMapping={addToMapping}/>
 
             <AtlasmapCanvasViewTarget
               onAddToMapping={addToMapping}
-              onCreateMapping={() => void 0}
+              onCreateMapping={createMapping}
               onDeleteDocument={handleDeleteTargetDocument}
               onImportDocument={handleImportTargetDocument}
               onSearch={setTargetFilter}
