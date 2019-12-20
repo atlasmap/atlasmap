@@ -5,7 +5,8 @@ import React, { FunctionComponent, useEffect, useRef } from 'react';
 import { useDrag } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { Coords, useLinkNode } from '../../Canvas';
-import { ElementId } from '../../CanvasView';
+import { ElementId, IMapping } from '../../CanvasView';
+import { IAtlasmapField } from '../models';
 
 const styles = StyleSheet.create({
   element: {
@@ -24,6 +25,8 @@ export interface IFieldElementDragSource {
   id: ElementId;
   type: string;
   name: string;
+  onCreateMapping: (target: IAtlasmapField) => void;
+  onAddToMapping: (mapping: IMapping) => void;
 }
 
 export interface IDocumentFieldProps {
@@ -36,7 +39,9 @@ export interface IDocumentFieldProps {
   isSelected: boolean;
   showAddToMapping: boolean;
   isOver?: boolean;
-  onAddToMapping: () => void;
+  onCreateMapping: (target: IAtlasmapField) => void;
+  onDropToMapping: (mapping: IMapping) => void;
+  onClickAddToMapping: () => void;
 }
 
 export const DocumentField: FunctionComponent<IDocumentFieldProps> = ({
@@ -48,7 +53,9 @@ export const DocumentField: FunctionComponent<IDocumentFieldProps> = ({
   getCoords,
   isSelected,
   showAddToMapping,
-  onAddToMapping,
+  onClickAddToMapping,
+  onDropToMapping,
+  onCreateMapping,
   isOver = false,
   children,
 }) => {
@@ -60,7 +67,13 @@ export const DocumentField: FunctionComponent<IDocumentFieldProps> = ({
     undefined,
     { isDragging: boolean }
   >({
-    item: { id, type: documentType, name },
+    item: {
+      id,
+      type: documentType,
+      name,
+      onAddToMapping: onDropToMapping,
+      onCreateMapping,
+    },
     collect: monitor => ({
       isDragging: monitor.isDragging(),
     }),
@@ -99,7 +112,7 @@ export const DocumentField: FunctionComponent<IDocumentFieldProps> = ({
         {showAddToMapping ? (
           <Button
             variant={'link'}
-            onClick={onAddToMapping}
+            onClick={onClickAddToMapping}
             isInline={true}
             icon={<AddCircleOIcon />}
           >

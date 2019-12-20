@@ -25,7 +25,10 @@ import {
   fromMappingDefinitionToIMappings,
   IAtlasmapFieldWithField,
 } from './utils/to-ui-models-util';
-import { addToMapping, createMapping } from './components/field/field-util';
+import {
+  addToCurrentMapping,
+  createMapping,
+} from './components/field/field-util';
 import {
   deleteAtlasFile,
   enableMappingPreview,
@@ -40,6 +43,7 @@ import {
   Multiplicity,
 } from './models/field-action.model';
 import { MappedField } from './models/mapping.model';
+import { Field } from './models/field.model';
 
 const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
 
@@ -342,7 +346,7 @@ export function useAtlasmap() {
       changeActiveMapping,
       enableMappingPreview,
       onFieldPreviewChange,
-      addToMapping,
+      addToCurrentMapping,
       createMapping,
       documentExists,
       getMappingActions,

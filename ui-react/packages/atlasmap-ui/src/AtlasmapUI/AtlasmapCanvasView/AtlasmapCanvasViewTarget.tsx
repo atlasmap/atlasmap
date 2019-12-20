@@ -4,19 +4,20 @@ import {
   Document,
   IFieldsNode,
   IFieldsGroup,
-  Target, ElementId, GroupId,
+  Target,
+  GroupId,
+  IMapping,
 } from '../../CanvasView';
 import { DocumentField } from './DocumentField';
 import { DocumentFooter } from './DocumentFooter';
-import {IAtlasmapDocument, IAtlasmapField, IAtlasmapGroup} from '../models';
+import { IAtlasmapDocument, IAtlasmapField, IAtlasmapGroup } from '../models';
 import { useAtlasmapUI } from '../AtlasmapUIProvider';
 import { DropTarget } from './DropTarget';
 import { DocumentFieldPreviewResults } from './DocumentFieldPreviewResults';
 
-
 export interface IAtlasmapCanvasViewTargetProps {
-  onAddToMapping: (elementId: ElementId, mappingId: string) => void;
-  onCreateMapping: (sourceId: ElementId, targetId: ElementId) => void;
+  onAddToMapping: (node: IAtlasmapField, mapping: IMapping) => void;
+  onCreateMapping: (source: IAtlasmapField, target: IAtlasmapField) => void;
   onDeleteDocument: (id: GroupId) => void;
   onImportDocument: (selectedFile: File) => void;
   onSearch: (content: string) => void;
@@ -25,7 +26,9 @@ export interface IAtlasmapCanvasViewTargetProps {
   targets: Array<IAtlasmapDocument>;
 }
 
-export const AtlasmapCanvasViewTarget: FunctionComponent<IAtlasmapCanvasViewTargetProps> = ({
+export const AtlasmapCanvasViewTarget: FunctionComponent<
+  IAtlasmapCanvasViewTargetProps
+> = ({
   onAddToMapping,
   onCreateMapping,
   onDeleteDocument,
@@ -37,10 +40,10 @@ export const AtlasmapCanvasViewTarget: FunctionComponent<IAtlasmapCanvasViewTarg
 }) => {
   const {
     currentMapping,
+    selectMapping,
     isEditingMapping,
     isFieldAddableToSelection,
     isFieldPartOfSelection,
-    selectedMapping,
   } = useAtlasmapUI();
   return (
     <Target
@@ -77,7 +80,7 @@ export const AtlasmapCanvasViewTarget: FunctionComponent<IAtlasmapCanvasViewTarg
                 <DropTarget
                   key={id}
                   boxRef={boxRef}
-                  onDrop={sourceId => onCreateMapping(sourceId, id)}
+                  onDrop={item => item.onCreateMapping(node as IAtlasmapField)}
                   isFieldDroppable={() => !isEditingMapping}
                 >
                   {({ isOver }) => (
@@ -94,9 +97,17 @@ export const AtlasmapCanvasViewTarget: FunctionComponent<IAtlasmapCanvasViewTarg
                         'target',
                         id
                       )}
-                      onAddToMapping={() =>
-                        selectedMapping && onAddToMapping(id, selectedMapping)
+                      onDropToMapping={mapping => {
+                        selectMapping(mapping.id);
+                        onAddToMapping(node as IAtlasmapField, mapping);
+                      }}
+                      onClickAddToMapping={() =>
+                        currentMapping &&
+                        onAddToMapping(node as IAtlasmapField, currentMapping)
                       }
+                      onCreateMapping={target => {
+                        onCreateMapping(node as IAtlasmapField, target);
+                      }}
                       isOver={isOver}
                     >
                       {showPreview && (

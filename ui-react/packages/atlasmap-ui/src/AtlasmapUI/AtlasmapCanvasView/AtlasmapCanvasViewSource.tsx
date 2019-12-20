@@ -1,13 +1,20 @@
 import React, { FunctionComponent } from 'react';
-import {FieldsBoxHeader, Source, Document, GroupId, ElementId} from '../../CanvasView';
+import {
+  FieldsBoxHeader,
+  Source,
+  Document,
+  GroupId,
+  IMapping,
+} from '../../CanvasView';
 import { DocumentField } from './DocumentField';
 import { DocumentFooter } from './DocumentFooter';
 import { DocumentFieldPreview } from './DocumentFieldPreview';
-import {IAtlasmapDocument, IAtlasmapField, IAtlasmapGroup} from '../models';
+import { IAtlasmapDocument, IAtlasmapField, IAtlasmapGroup } from '../models';
 import { useAtlasmapUI } from '../AtlasmapUIProvider';
 
 export interface IAtlasmapCanvasViewSourceProps {
-  onAddToMapping: (elementId: ElementId, mappingId: string) => void;
+  onAddToMapping: (field: IAtlasmapField, mapping: IMapping) => void;
+  onCreateMapping: (source: IAtlasmapField, target: IAtlasmapField) => void;
   onDeleteDocument: (id: GroupId) => void;
   onFieldPreviewChange: (field: IAtlasmapField, value: string) => void;
   onImportDocument: (selectedFile: File) => void;
@@ -17,8 +24,11 @@ export interface IAtlasmapCanvasViewSourceProps {
   showTypes: boolean;
 }
 
-export const AtlasmapCanvasViewSource: FunctionComponent<IAtlasmapCanvasViewSourceProps> = ({
+export const AtlasmapCanvasViewSource: FunctionComponent<
+  IAtlasmapCanvasViewSourceProps
+> = ({
   onAddToMapping,
+  onCreateMapping,
   onDeleteDocument,
   onFieldPreviewChange,
   onImportDocument,
@@ -31,7 +41,7 @@ export const AtlasmapCanvasViewSource: FunctionComponent<IAtlasmapCanvasViewSour
     currentMapping,
     isFieldAddableToSelection,
     isFieldPartOfSelection,
-    selectedMapping,
+    selectMapping
   } = useAtlasmapUI();
   return (
     <Source
@@ -77,8 +87,16 @@ export const AtlasmapCanvasViewSource: FunctionComponent<IAtlasmapCanvasViewSour
                     'source',
                     id
                   )}
-                  onAddToMapping={() =>
-                    selectedMapping && onAddToMapping(id, selectedMapping)
+                  onDropToMapping={mapping => {
+                    selectMapping(mapping.id);
+                    onAddToMapping(node as IAtlasmapField, mapping)
+                  }}
+                  onClickAddToMapping={() =>
+                    currentMapping &&
+                    onAddToMapping(node as IAtlasmapField, currentMapping)
+                  }
+                  onCreateMapping={target =>
+                    onCreateMapping(node as IAtlasmapField, target)
                   }
                 >
                   {showPreview && (

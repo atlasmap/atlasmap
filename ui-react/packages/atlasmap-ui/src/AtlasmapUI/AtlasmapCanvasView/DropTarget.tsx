@@ -1,11 +1,11 @@
 import React, { FunctionComponent, ReactChild, useEffect } from 'react';
 import { useDrop } from 'react-dnd';
 import { useLinkNode } from '../../Canvas';
-import { ElementId, useLinkable } from '../../CanvasView';
+import { useLinkable } from '../../CanvasView';
 import { IFieldElementDragSource } from './DocumentField';
 
 export interface IDropTargetProps {
-  onDrop: (elementId: ElementId) => void;
+  onDrop: (item: IFieldElementDragSource) => void;
   boxRef: HTMLElement | null;
   isFieldDroppable: (documentType: string, fieldId: string) => boolean;
   children: (props: { isOver: boolean; canDrop: boolean }) => ReactChild;
@@ -28,7 +28,7 @@ export const DropTarget: FunctionComponent<IDropTargetProps> = ({
     { isOver: boolean; canDrop: boolean; type?: string }
   >({
     accept: ['source', 'target'],
-    drop: item => onDrop(item.id),
+    drop: item => onDrop(item),
     collect: monitor => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),

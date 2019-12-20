@@ -7,13 +7,18 @@ import {
   AtlasmapUIProvider,
   GroupId,
   IAtlasmapField,
+  IMapping,
 } from '@atlasmap/ui';
 import { AtlasmapMappingDetails } from './AtlasmapMappingDetails';
 import {
   IAtlasmapFieldWithField,
   IAtlasmapMapping,
 } from './utils/to-ui-models-util';
-import { useAtlasmap, useAtlasmapSources, useAtlasmapTargets } from './AtlasmapProvider';
+import {
+  useAtlasmap,
+  useAtlasmapSources,
+  useAtlasmapTargets,
+} from './AtlasmapProvider';
 
 export interface IAtlasmapProps {
   onExportAtlasFile: (exportAtlasFile: (fileName: string) => void) => void;
@@ -42,7 +47,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     documentExists,
     enableMappingPreview,
     onFieldPreviewChange,
-    addToMapping,
+    addToCurrentMapping,
     createMapping,
   } = useAtlasmap();
   const sources = useAtlasmapSources(sourceFilter);
@@ -103,6 +108,23 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     [onFieldPreviewChange]
   );
 
+  const handleAddToMapping = useCallback(
+    (node: IAtlasmapField) => {
+      const field = (node as IAtlasmapFieldWithField).amField;
+      addToCurrentMapping(field);
+    },
+    [addToCurrentMapping]
+  );
+
+  const handleCreateMapping = useCallback(
+    (source: IAtlasmapField, target: IAtlasmapField) => {
+      const sourceField = (source as IAtlasmapFieldWithField).amField;
+      const targetField = (target as IAtlasmapFieldWithField).amField;
+      createMapping(sourceField, targetField);
+    },
+    [createMapping]
+  );
+
   return (
     <AtlasmapUIProvider
       error={error}
@@ -127,7 +149,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         {({ showTypes, showMappingPreview }) => (
           <>
             <AtlasmapCanvasViewSource
-              onAddToMapping={addToMapping}
+              onAddToMapping={handleAddToMapping}
+              onCreateMapping={handleCreateMapping}
               onDeleteDocument={handleDeleteSourceDocument}
               onFieldPreviewChange={handleFieldPreviewChange}
               onImportDocument={handleImportSourceDocument}
@@ -137,11 +160,11 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
               sources={sources}
             />
 
-            <AtlasmapCanvasViewMappings onAddToMapping={addToMapping}/>
+            <AtlasmapCanvasViewMappings />
 
             <AtlasmapCanvasViewTarget
-              onAddToMapping={addToMapping}
-              onCreateMapping={createMapping}
+              onAddToMapping={handleAddToMapping}
+              onCreateMapping={handleCreateMapping}
               onDeleteDocument={handleDeleteTargetDocument}
               onImportDocument={handleImportTargetDocument}
               onSearch={setTargetFilter}
