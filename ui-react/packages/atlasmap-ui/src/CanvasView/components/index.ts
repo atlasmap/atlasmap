@@ -4,6 +4,7 @@ export * from './CanvasViewCanvas';
 export * from './CanvasViewControlBar';
 export * from './CanvasViewToolbar';
 export * from './Document';
+export * from './DocumentProvider';
 export * from './FieldElement';
 export * from './FieldGroup';
 export * from './FieldsBox';

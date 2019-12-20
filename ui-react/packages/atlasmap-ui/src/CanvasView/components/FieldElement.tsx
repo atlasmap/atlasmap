@@ -5,7 +5,7 @@ import { useCanvasViewFieldsContext } from '../CanvasViewFieldsProvider';
 import { IFieldsNode } from '../models';
 import { useLinkable } from './useLinkable';
 import { Coords } from '../../Canvas/models';
-import { useBoxContext } from "./BoxProvider";
+import { useDocumentContext } from "./DocumentProvider";
 
 const styles = StyleSheet.create({
   element: {
@@ -43,7 +43,7 @@ export function FieldElement({
 }: IFieldElementProps) {
   const { addField, removeField } = useCanvasViewFieldsContext();
   const { setLineNode, unsetLineNode } = useLinkNode();
-  const { getScrollableAreaRef } = useBoxContext();
+  const { getScrollableAreaRef } = useDocumentContext();
   const { ref, getLeftSideCoords, getRightSideCoords } = useLinkable({
     getScrollableAreaRef,
     getParentRef,

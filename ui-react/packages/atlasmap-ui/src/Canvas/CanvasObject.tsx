@@ -10,7 +10,6 @@ import { css, StyleSheet } from '@patternfly/react-styles';
 
 const styles = StyleSheet.create({
   foreignObject: { overflow: 'visible' },
-  foreignObjectInner: { height: '100%' },
 });
 
 export interface ICanvasObjectProps
@@ -21,7 +20,9 @@ export interface ICanvasObjectProps
   x: number;
   y: number;
   movable?: boolean;
+  childrenProps?: HTMLAttributes<HTMLDivElement>;
 }
+
 export const CanvasObject: FunctionComponent<ICanvasObjectProps> = ({
   id,
   children,
@@ -30,6 +31,7 @@ export const CanvasObject: FunctionComponent<ICanvasObjectProps> = ({
   x,
   y,
   movable = true,
+  childrenProps = {},
   ...props
 }) => {
   const [coords, setCoords] = useState<Coords>({ x, y });
@@ -56,7 +58,7 @@ export const CanvasObject: FunctionComponent<ICanvasObjectProps> = ({
       className={css(styles.foreignObject)}
       {...props}
     >
-      <div {...bind()} className={css(styles.foreignObjectInner)}>
+      <div {...bind()} {...childrenProps}>
         {children}
       </div>
     </foreignObject>

@@ -16,7 +16,7 @@ import { useLinkNode } from '../../Canvas';
 import { IFieldsGroup, IFieldsNode } from '../models';
 import { FieldElement, IFieldElementProps } from './FieldElement';
 import { useLinkable } from './useLinkable';
-import { useBoxContext } from "./BoxProvider";
+import { useDocumentContext } from "./DocumentProvider";
 
 const styles = StyleSheet.create({
   button: {
@@ -76,7 +76,7 @@ export function FieldGroup({
   renderGroup,
 }: IFieldGroupProps) {
   const { setLineNode } = useLinkNode();
-  const { getScrollableAreaRef } = useBoxContext();
+  const { getScrollableAreaRef } = useDocumentContext();
   const { ref, getLeftSideCoords, getRightSideCoords } = useLinkable({
     getScrollableAreaRef,
     getParentRef,
