@@ -7,19 +7,25 @@ import {
   AtlasmapUIProvider,
   GroupId,
   IAtlasmapField,
+  IMapping,
 } from '@atlasmap/ui';
 import { AtlasmapMappingDetails } from './AtlasmapMappingDetails';
 import {
   IAtlasmapFieldWithField,
   IAtlasmapMapping,
 } from './utils/to-ui-models-util';
-import { useAtlasmap, useAtlasmapSources, useAtlasmapTargets } from './AtlasmapProvider';
+import {
+  useAtlasmap,
+  useAtlasmapSources,
+  useAtlasmapTargets,
+} from './AtlasmapProvider';
 
 export interface IAtlasmapProps {
   onExportAtlasFile: (exportAtlasFile: (fileName: string) => void) => void;
   onResetAtlasmap: (resetAtlasmap: () => void) => void;
   onImportDocument: (importDocument: () => void) => void;
   onDeleteDocument: (deleteDocument: () => void) => void;
+  onRemoveMappedField: (removeMappedfield: () => void) => void;
 }
 
 export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
@@ -27,6 +33,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   onResetAtlasmap,
   onImportDocument,
   onDeleteDocument,
+  onRemoveMappedField
 }) => {
   const [sourceFilter, setSourceFilter] = useState<string | undefined>();
   const [targetFilter, setTargetFilter] = useState<string | undefined>();
@@ -40,9 +47,11 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     deleteAtlasFile,
     changeActiveMapping,
     documentExists,
-    enableMappingPreview,
+    toggleMappingPreview,
+    toggleShowMappedFields,
+    toggleShowUnmappedFields,
     onFieldPreviewChange,
-    addToMapping,
+    addToCurrentMapping,
     createMapping,
   } = useAtlasmap();
   const sources = useAtlasmapSources(sourceFilter);
@@ -103,6 +112,23 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     [onFieldPreviewChange]
   );
 
+  const handleAddToMapping = useCallback(
+    (node: IAtlasmapField) => {
+      const field = (node as IAtlasmapFieldWithField).amField;
+      addToCurrentMapping(field);
+    },
+    [addToCurrentMapping]
+  );
+
+  const handleCreateMapping = useCallback(
+    (source: IAtlasmapField, target: IAtlasmapField) => {
+      const sourceField = (source as IAtlasmapFieldWithField).amField;
+      const targetField = (target as IAtlasmapFieldWithField).amField;
+      createMapping(sourceField, targetField);
+    },
+    [createMapping]
+  );
+
   return (
     <AtlasmapUIProvider
       error={error}
@@ -115,11 +141,14 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         <AtlasmapMappingDetails
           mapping={(mapping as IAtlasmapMapping).mapping}
           closeDetails={closeDetails}
+          onRemoveMappedField={onRemoveMappedField}
         />
       )}
     >
       <AtlasmapCanvasView
-        onShowMappingPreview={enableMappingPreview}
+        onShowMappingPreview={toggleMappingPreview}
+        onShowMappedFields={toggleShowMappedFields}
+        onShowUnmappedFields={toggleShowUnmappedFields}
         onExportAtlasFile={handleExportAtlasFile}
         onImportAtlasFile={file => handleImportAtlasFile(file)}
         onResetAtlasmap={handleResetAtlasmap}
@@ -127,7 +156,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         {({ showTypes, showMappingPreview }) => (
           <>
             <AtlasmapCanvasViewSource
-              onAddToMapping={addToMapping}
+              onAddToMapping={handleAddToMapping}
+              onCreateMapping={handleCreateMapping}
               onDeleteDocument={handleDeleteSourceDocument}
               onFieldPreviewChange={handleFieldPreviewChange}
               onImportDocument={handleImportSourceDocument}
@@ -137,11 +167,11 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
               sources={sources}
             />
 
-            <AtlasmapCanvasViewMappings onAddToMapping={addToMapping}/>
+            <AtlasmapCanvasViewMappings />
 
             <AtlasmapCanvasViewTarget
-              onAddToMapping={addToMapping}
-              onCreateMapping={createMapping}
+              onAddToMapping={handleAddToMapping}
+              onCreateMapping={handleCreateMapping}
               onDeleteDocument={handleDeleteTargetDocument}
               onImportDocument={handleImportTargetDocument}
               onSearch={setTargetFilter}

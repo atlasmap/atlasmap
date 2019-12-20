@@ -36,6 +36,7 @@ export const DragLayer: FunctionComponent = () => {
         style={{
           display: 'inline-block',
           margin: 'auto',
+          zIndex: 100
         }}
       >
         <Label>{item.name}</Label>

@@ -1,13 +1,13 @@
 import { action } from '@storybook/addon-actions';
 import React, { createElement, useState } from 'react';
-import { ElementId, IMapping } from '../src/CanvasView';
+import { IMapping } from '../src/CanvasView';
 import { mappings as sampleMappings, sources, targets } from './sampleData';
 import {Button} from "@patternfly/react-core";
 import {
   AtlasmapCanvasView,
   AtlasmapCanvasViewMappings,
   AtlasmapCanvasViewSource, AtlasmapCanvasViewTarget,
-  AtlasmapUIProvider
+  AtlasmapUIProvider, IAtlasmapField
 } from "../src/AtlasmapUI";
 import { boolean } from "@storybook/addon-knobs";
 
@@ -18,18 +18,18 @@ export default {
 export const sample = () =>
   createElement(() => {
     const [mappings, setMappings] = useState<IMapping[]>(sampleMappings);
-    const addToMapping = (elementId: ElementId, mappingId: string) => {
+    const addToMapping = (node: IAtlasmapField, mapping: IMapping) => {
       const updatedMappings = mappings.map(m => {
-        if (m.id === mappingId) {
-          if (/*elementType === */ 'source') {
+        if (m.id === mapping.id) {
+          if (node.id.includes('source')) {
             m.sourceFields = [
               ...m.sourceFields,
-              { id: elementId },
+              { id: node.id },
             ];
           } else {
             m.targetFields = [
               ...m.targetFields,
-              { id: elementId },
+              { id: node.id },
             ];
           }
         }
@@ -38,14 +38,14 @@ export const sample = () =>
       setMappings(updatedMappings);
     };
 
-    const createMapping = (sourceId: ElementId, targetId: ElementId) => {
+    const createMapping = (source: IAtlasmapField, target: IAtlasmapField) => {
       setMappings([
         ...mappings,
         {
           id: `${Date.now()}`,
           name: 'One to One (mock)',
-          sourceFields: [{ id: sourceId }],
-          targetFields: [{ id: targetId }],
+          sourceFields: [{ id: source.id }],
+          targetFields: [{ id: target.id }],
         },
       ]);
     };
@@ -67,6 +67,8 @@ export const sample = () =>
       >
         <AtlasmapCanvasView
           onShowMappingPreview={action('AtlasmapCanvasView')}
+          onShowMappedFields={action('onShowMappedFields')}
+          onShowUnmappedFields={action('onShowUnmappedFields')}
           onExportAtlasFile={action('onExportAtlasFile')}
           onImportAtlasFile={action('onImportAtlasFile')}
           onResetAtlasmap={action('onResetAtlasmap')}
@@ -75,6 +77,7 @@ export const sample = () =>
             <>
               <AtlasmapCanvasViewSource
                 onAddToMapping={addToMapping}
+                onCreateMapping={createMapping}
                 onDeleteDocument={action('onDeleteDocument')}
                 onFieldPreviewChange={action('onFieldPreviewChange')}
                 onImportDocument={action('onImportDocument')}
@@ -84,7 +87,7 @@ export const sample = () =>
                 sources={sources}
               />
 
-              <AtlasmapCanvasViewMappings onAddToMapping={addToMapping} />
+              <AtlasmapCanvasViewMappings />
 
               <AtlasmapCanvasViewTarget
                 onAddToMapping={addToMapping}

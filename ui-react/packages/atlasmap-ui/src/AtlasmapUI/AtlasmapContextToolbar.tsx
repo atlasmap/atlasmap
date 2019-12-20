@@ -1,6 +1,5 @@
 import {
   CodeIcon,
-  ExchangeAltIcon,
   ExportIcon,
   ImportIcon,
   TableIcon,
@@ -111,17 +110,6 @@ export const AtlasmapContextToolbar: FunctionComponent<
           >
             <Button variant={'plain'} aria-label="Show/hide namespace table">
               <CodeIcon />
-            </Button>
-          </Tooltip>
-        </ToolbarItem>
-        <ToolbarItem>
-          <Tooltip
-            position={'auto'}
-            enableFlip={true}
-            content={<div>Show/hide mapping details</div>}
-          >
-            <Button variant={'plain'} aria-label="Show/hide mapping details">
-              <ExchangeAltIcon />
             </Button>
           </Tooltip>
         </ToolbarItem>

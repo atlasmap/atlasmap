@@ -33,6 +33,15 @@ const App: React.FC = () => {
       "Are you sure you want to remove the selected document and any associated mappings?"
   });
 
+  const [
+    removeMappedFieldDialog,
+    openRemoveMappedFieldDialog
+  ] = useConfirmationDialog({
+    title: "Remove field?",
+    content:
+      "Are you sure you want to remove this field?"
+  });
+
   const handleExportAtlasFile = useCallback(
     (exportAtlasFile: (fileName: string) => void) => {
       openExportDialog(value => {
@@ -57,6 +66,10 @@ const App: React.FC = () => {
     (deleteDocument: () => void) => openDeleteDocumentDialog(deleteDocument),
     [openDeleteDocumentDialog]
   );
+  const handleRemoveMappedField = useCallback(
+    (removeMappedField: () => void) => openRemoveMappedFieldDialog(removeMappedField),
+    [openRemoveMappedFieldDialog]
+  );
 
   return (
     <>
@@ -78,6 +91,7 @@ const App: React.FC = () => {
             onResetAtlasmap={handleResetAtlasmap}
             onImportDocument={handleImportDocument}
             onDeleteDocument={handleDeleteDocument}
+            onRemoveMappedField={handleRemoveMappedField}
           />
         </PageSection>
       </Page>
@@ -85,6 +99,7 @@ const App: React.FC = () => {
       {importDialog}
       {deleteDocumentDialog}
       {resetDialog}
+      {removeMappedFieldDialog}
     </>
   );
 };

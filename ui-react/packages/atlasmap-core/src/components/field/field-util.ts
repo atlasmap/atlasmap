@@ -1,51 +1,35 @@
 import { ConfigModel } from '../../models/config.model';
-import { getDocDef } from '../document/document-util';
 import { Field } from '../../models/field.model';
 
 /**
  * Create a new mapping using the speciied source and target IDs.
  *
- * @param sourceId
- * @param targetId
+ * @param source
+ * @param target
  */
-export function createMapping(sourceId: string, targetId: string): void {
+export function createMapping(source: Field, target: Field): void {
   const cfg = ConfigModel.getConfig();
-  const [uri, docType, docName, panel, uuid] = sourceId.split(':');
-  const isSource = (panel === 'source');
-  const sourceField = getFieldByUUID(docName, cfg, isSource, uuid);
-
-  if (!sourceField) {
-    return;
-  }
-  cfg.mappingService.addNewMapping(sourceField, false);
-  addToMapping(targetId, '');
+  cfg.mappingService.addNewMapping(source, false);
+  addToCurrentMapping(target);
 }
 
 /**
  * Add the specified field to the current mapping.
  *
- * @param fieldId - field identifier
- * @param mappingId - needed for multiple mapping files
+ * @param field
  */
-export function addToMapping(fieldId: string, _mappingId: string): void {
+export function addToCurrentMapping(field: Field): void {
   const cfg = ConfigModel.getConfig();
-  const [uri, docType, docName, panel, uuid] = fieldId.split(':');
-  const isSource = (panel === 'source');
-  const field = getFieldByUUID(docName, cfg, isSource, uuid);
-
-  if (!field) {
-    return;
-  }
   cfg.mappingService.fieldSelected(field);
 }
 
 /**
  * Return the Field object associated with the specified UUID in the specified document.
  *
- * @param docName 
- * @param cfg 
- * @param isSource 
- * @param uuid 
+ * @param docName
+ * @param cfg
+ * @param isSource
+ * @param uuid
  */
 export function getFieldByUUID(docName: string, cfg: ConfigModel, isSource: boolean,
   uuid: string): Field | undefined

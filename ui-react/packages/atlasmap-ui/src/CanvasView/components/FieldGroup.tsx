@@ -16,6 +16,7 @@ import { useLinkNode } from '../../Canvas';
 import { IFieldsGroup, IFieldsNode } from '../models';
 import { FieldElement, IFieldElementProps } from './FieldElement';
 import { useLinkable } from './useLinkable';
+import { useBoxContext } from "./BoxProvider";
 
 const styles = StyleSheet.create({
   button: {
@@ -56,7 +57,6 @@ export interface IFieldGroupProps
   group: IFieldsGroup;
   lineConnectionSide: 'left' | 'right';
   getParentRef?: () => HTMLElement | null;
-  getBoxRef: () => HTMLElement | null;
   rightAlign?: boolean;
   level?: number;
   parentExpanded: boolean;
@@ -68,7 +68,6 @@ export function FieldGroup({
   group,
   lineConnectionSide,
   getParentRef,
-  getBoxRef,
   rightAlign = false,
   level = 0,
   parentExpanded,
@@ -77,8 +76,9 @@ export function FieldGroup({
   renderGroup,
 }: IFieldGroupProps) {
   const { setLineNode } = useLinkNode();
+  const { getScrollableAreaRef } = useBoxContext();
   const { ref, getLeftSideCoords, getRightSideCoords } = useLinkable({
-    getBoxRef,
+    getScrollableAreaRef,
     getParentRef,
   });
   const [isExpandedByUser, setIsExpandedByUser] = useState(level === 0);
@@ -132,7 +132,6 @@ export function FieldGroup({
                 ? ref.current
                 : getParentRef()
             }
-            getBoxRef={getBoxRef}
             node={f as IFieldsNode}
             rightAlign={rightAlign}
             renderNode={renderNode}
@@ -146,7 +145,6 @@ export function FieldGroup({
               isVisible || !getParentRef ? ref.current : getParentRef()
             }
             group={f as IFieldsGroup}
-            getBoxRef={getBoxRef}
             rightAlign={rightAlign}
             key={f.id}
             level={level + 1}
@@ -160,7 +158,6 @@ export function FieldGroup({
     [
       group.fields,
       lineConnectionSide,
-      getBoxRef,
       rightAlign,
       renderNode,
       renderGroup,

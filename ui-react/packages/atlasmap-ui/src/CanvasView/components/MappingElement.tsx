@@ -72,7 +72,7 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
   boxRef,
 }) => {
   const { ref, getLeftSideCoords, getRightSideCoords } = useLinkable({
-    getBoxRef: () => boxRef,
+    getScrollableAreaRef: () => boxRef,
   });
   const { setLineNode, unsetLineNode } = useLinkNode();
   const { requireVisible } = useCanvasViewFieldsContext();

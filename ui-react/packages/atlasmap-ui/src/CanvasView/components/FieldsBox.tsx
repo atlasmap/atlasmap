@@ -1,6 +1,5 @@
 import React, {
   FunctionComponent,
-  HTMLAttributes,
   ReactElement,
   useEffect,
 } from 'react';
@@ -9,7 +8,7 @@ import { useDimensions } from '../../common';
 import { useCanvasViewOptionsContext } from '../CanvasViewOptionsProvider';
 import { Box } from './Box';
 
-export interface IMappingsBoxProps extends HTMLAttributes<HTMLDivElement> {
+export interface IMappingsBoxProps {
   id: string;
   initialWidth: number;
   initialHeight: number;
@@ -27,7 +26,6 @@ export const FieldsBox: FunctionComponent<IMappingsBoxProps> = ({
   rightAlign = false,
   visible = true,
   children,
-  ...props
 }) => {
   const { freeView } = useCanvasViewOptionsContext();
   const scrollable = !freeView;
@@ -50,38 +48,15 @@ export const FieldsBox: FunctionComponent<IMappingsBoxProps> = ({
       movable={!scrollable}
       {...position}
     >
-      <div
+      <Box
+        header={header}
+        rightAlign={rightAlign}
+        scrollable={scrollable}
+        visible={visible}
         ref={ref}
-        style={{
-          height: scrollable ? '100%' : undefined,
-          opacity: visible ? 1 : 0,
-        }}
-        {...props}
       >
-        <Box
-          header={header}
-          rightAlign={rightAlign}
-          style={{
-            alignItems: 'center',
-            overflow: 'hidden',
-          }}
-        >
-          <div
-            ref={ref}
-            style={{
-              height: scrollable ? '100%' : undefined,
-              overflowY: scrollable ? 'auto' : undefined,
-              overflowX: 'hidden',
-              display: 'flex',
-              flexFlow: 'column',
-              width: '100%',
-            }}
-            {...props}
-          >
-            {children}
-          </div>
-        </Box>
-      </div>
+        {children}
+      </Box>
     </CanvasObject>
   );
 };

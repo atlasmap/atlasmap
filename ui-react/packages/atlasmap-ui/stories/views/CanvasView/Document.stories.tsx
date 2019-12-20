@@ -1,9 +1,12 @@
 import { action } from '@storybook/addon-actions';
 import { text } from '@storybook/addon-knobs';
 import React from 'react';
-import { CanvasLinksProvider, CanvasProvider } from '../../../src/Canvas';
-import { Document } from '../../../src/CanvasView/components';
+import {
+  CanvasObject,
+} from '../../../src/Canvas';
+import { BoxProvider, Document } from '../../../src/CanvasView/components';
 import { sources } from '../../sampleData';
+import { CanvasView, CanvasViewProvider } from '../../../src/CanvasView';
 
 const s = sources[0];
 
@@ -12,26 +15,22 @@ export default {
 };
 
 export const interactive = () => (
-  <CanvasProvider
-    width={200}
-    height={200}
-    zoom={1}
-    offsetTop={0}
-    offsetLeft={0}
-    panX={0}
-    panY={0}
-  >
-    <CanvasLinksProvider>
-      <Document
-        key={s.id}
-        title={s.name}
-        footer={text('footer', 'Source document')}
-        lineConnectionSide={'right'}
-        fields={s}
-        renderGroup={node => node.id}
-        renderNode={node => node.id}
-        onDelete={action('onDelete Source')}
-      />
-    </CanvasLinksProvider>
-  </CanvasProvider>
+  <CanvasViewProvider>
+    <CanvasView>
+      <BoxProvider getScrollableAreaRef={() => null}>
+        <CanvasObject height={300} width={200} id={'id'} x={10} y={10}>
+          <Document
+            key={s.id}
+            title={s.name}
+            footer={text('footer', 'Source document')}
+            lineConnectionSide={'right'}
+            fields={s}
+            renderGroup={node => node.id}
+            renderNode={node => node.id}
+            onDelete={action('onDelete Source')}
+          />
+        </CanvasObject>
+      </BoxProvider>
+    </CanvasView>
+  </CanvasViewProvider>
 );

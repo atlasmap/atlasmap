@@ -904,13 +904,13 @@ export const sources = [
     id: 'JSONInstanceSource',
     name: 'JSONInstanceSource',
     type: 'JSON',
-    fields: jsonToFieldGroup(mockJSONInstanceSource, 'JSONInstanceSource'),
+    fields: jsonToFieldGroup(mockJSONInstanceSource, 'JSONInstanceSource-source'),
   },
   {
     id: 'JSONSchemaSource',
     name: 'JSONSchemaSource',
     type: 'JSON',
-    fields: jsonToFieldGroup(mockJSONSchemaSource, 'JSONSchemaSource'),
+    fields: jsonToFieldGroup(mockJSONSchemaSource, 'JSONSchemaSource-source'),
   },
 ];
 
@@ -919,19 +919,19 @@ export const targets = [
     id: 'XMLInstanceSource',
     name: 'XMLInstanceSource',
     type: 'XML',
-    fields: xmlToFieldGroup(XMLInstanceSource, 'XMLInstanceSource'),
+    fields: xmlToFieldGroup(XMLInstanceSource, 'XMLInstanceSource-target'),
   },
   {
     id: 'XMLSchemaSource',
     name: 'XMLSchemaSource',
     type: 'XML',
-    fields: xmlToFieldGroup(XMLSchemaSource, 'XMLSchemaSource'),
+    fields: xmlToFieldGroup(XMLSchemaSource, 'XMLSchemaSource-target'),
   },
   {
     id: 'io.paul.Bicycle',
     name: 'io.paul.Bicycle',
     type: 'JAVA',
-    fields: javaToFieldGroup(ioPaulBicycle, 'io.paul.Bicycle'),
+    fields: javaToFieldGroup(ioPaulBicycle, 'io.paul.Bicycle-target'),
   },
 ];
 
@@ -941,19 +941,19 @@ export const mappings = [
     name: 'Many To One(Concatenate)',
     sourceFields: [
       {
-        id: 'JSONInstanceSource-/order/address/city',
+        id: 'JSONInstanceSource-source-/order/address/city',
         name: 'city',
         tip: '/order/address/city',
       },
       {
-        id: 'JSONInstanceSource-/order/address/state',
+        id: 'JSONInstanceSource-source-/order/address/state',
         name: 'state',
         tip: '/order/address/state',
       },
     ],
     targetFields: [
       {
-        id: 'XMLInstanceSource-/ns:XmlOE/ns:Address/ns:addressLine1',
+        id: 'XMLInstanceSource-target-/ns:XmlOE/ns:Address/ns:addressLine1',
         name: 'ns:addressLine1',
         tip: '/ns:XmlOE/ns:Address/ns:addressLine1',
       },
@@ -964,24 +964,24 @@ export const mappings = [
     name: 'One to Many (Split)',
     sourceFields: [
       {
-        id: 'JSONInstanceSource-/primitives/numberPrimitive',
+        id: 'JSONInstanceSource-source-/primitives/numberPrimitive',
         name: 'numberPrimitive',
         tip: '/primitives/numberPrimitive',
       },
     ],
     targetFields: [
       {
-        id: 'io.paul.Bicycle-/cadence',
+        id: 'io.paul.Bicycle-target-/cadence',
         name: 'cadence',
         tip: '/cadence',
       },
       {
-        id: 'io.paul.Bicycle-/gear',
+        id: 'io.paul.Bicycle-target-/gear',
         name: 'gear',
         tip: '/gear',
       },
       {
-        id: 'io.paul.Bicycle-/speed',
+        id: 'io.paul.Bicycle-target-/speed',
         name: 'speed',
         tip: '/speed',
       },
@@ -992,12 +992,12 @@ export const mappings = [
     name: 'Many to One (Concatenate)',
     sourceFields: [
       {
-        id: 'JSONInstanceSource-/primitives/stringPrimitive',
+        id: 'JSONInstanceSource-source-/primitives/stringPrimitive',
         name: 'stringPrimitive',
         tip: '/primitives/stringPrimitive',
       },
       {
-        id: 'JSONInstanceSource-/order/orderId',
+        id: 'JSONInstanceSource-source-/order/orderId',
         name: 'orderId',
         tip: '/order/orderId',
       },
@@ -1009,7 +1009,7 @@ export const mappings = [
     ],
     targetFields: [
       {
-        id: 'io.paul.Bicycle-/serialId',
+        id: 'io.paul.Bicycle-target-/serialId',
         name: 'serialId',
         tip: '/serialId',
       },

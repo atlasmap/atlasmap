@@ -164,7 +164,7 @@ export function resetAtlasmap() {
   });
 }
 
-export function enableMappingPreview(enabled: boolean) {
+export function toggleMappingPreview(enabled: boolean) {
   const cfg = ConfigModel.getConfig();
 
   if (enabled) {
@@ -172,4 +172,18 @@ export function enableMappingPreview(enabled: boolean) {
   } else {
     cfg.mappingService.disableMappingPreview();
   }
+}
+
+export function toggleShowMappedFields(enabled: boolean) {
+  const cfg = ConfigModel.getConfig();
+
+  cfg.showMappedFields = enabled;
+  cfg.initializationService.systemInitializedSource.next();
+}
+
+export function toggleShowUnmappedFields(enabled: boolean) {
+  const cfg = ConfigModel.getConfig();
+
+  cfg.showUnmappedFields = enabled;
+  cfg.initializationService.systemInitializedSource.next();
 }

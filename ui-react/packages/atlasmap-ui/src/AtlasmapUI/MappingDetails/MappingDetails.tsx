@@ -12,6 +12,7 @@ import {
 import { FunctionComponent } from 'react';
 import React from 'react';
 import { css, StyleSheet } from '@patternfly/react-styles';
+import { TrashIcon } from "@patternfly/react-icons";
 
 const styles = StyleSheet.create({
   content: {
@@ -52,7 +53,7 @@ export const MappingDetails: FunctionComponent<IMappingDetailsProps> = ({
       </StackItem>
       <StackItem>
         <PageSection>
-          <Button onClick={onClose} variant={'secondary'}>
+          <Button onClick={onClose} variant={'primary'}>
             Close
           </Button>{' '}
           <Tooltip
@@ -60,8 +61,9 @@ export const MappingDetails: FunctionComponent<IMappingDetailsProps> = ({
             enableFlip={true}
             content={<div>Remove the current mapping</div>}
           >
-            <Button variant={'danger'} onClick={onDelete}>
-              Remove
+            <Button variant={'link'} onClick={onDelete}>
+              <TrashIcon />{' '}
+              Remove mapping
             </Button>
           </Tooltip>
         </PageSection>

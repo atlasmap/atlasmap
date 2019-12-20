@@ -3,6 +3,7 @@ import { MappedField, MappingModel } from "../models/mapping.model";
 import { Field } from "../models/field.model";
 import { MappingDefinition } from "../models/mapping-definition.model";
 import { DocumentDefinition } from "../models/document-definition.model";
+import { ConfigModel } from "../models/config.model";
 
 export interface IAtlasmapGroupWithField extends IAtlasmapGroup {
   amField: Field;
@@ -20,24 +21,29 @@ export interface IAtlasmapMapping extends IMapping {
   mapping: MappingModel;
 }
 
-function fromFieldToIFieldsGroup(field: Field): IAtlasmapGroupWithField {
-  return {
+function fromFieldToIFieldsGroup(field: Field): IAtlasmapGroupWithField | null {
+  const fields = field.children.map(fromFieldToIFields).filter(f => f) as IAtlasmapFieldWithField[];
+  return fields.length > 0 ? {
     id: `${field.docDef.uri}:${field.docDef.isSource ? 'source' : 'target'}:${field.uuid}`,
     name: field.name,
     type: field.type,
-    fields: field.children.map(fromFieldToIFields),
+    fields: fields,
     amField: field
-  }
+  } : null;
 }
 
-function fromFieldToIFieldsNode(field: Field): IAtlasmapFieldWithField {
-  return {
+function fromFieldToIFieldsNode(field: Field): IAtlasmapFieldWithField | null {
+  const cfg = ConfigModel.getConfig();
+  const partOfMapping: boolean = field.partOfMapping;
+  const shouldBeVisible = partOfMapping ? cfg.showMappedFields : cfg.showUnmappedFields;
+
+  return shouldBeVisible ? {
     id: `${field.docDef.uri}:${field.docDef.isSource ? 'source' : 'target'}:${field.uuid}`,
     name: field.getFieldLabel(false, false),
     type: field.type,
     amField: field,
     previewValue: field.value
-  }
+  } : null;
 }
 
 function fromFieldToIFields(field: Field) {
@@ -47,9 +53,10 @@ function fromFieldToIFields(field: Field) {
 }
 
 export function fromDocumentDefinitionToFieldGroup(def: DocumentDefinition): IAtlasmapDocument | null {
-  return def.visibleInCurrentDocumentSearch ? {
+  const fields = def.fields.map(fromFieldToIFields).filter(f => f) as IAtlasmapFieldWithField[];
+  return def.visibleInCurrentDocumentSearch && fields.length > 0 ? {
     id: def.id,
-    fields: def.fields.map(fromFieldToIFields),
+    fields: fields,
     name: def.name,
     type: def.type,
   } : null;

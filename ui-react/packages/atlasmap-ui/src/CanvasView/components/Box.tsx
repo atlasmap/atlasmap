@@ -1,18 +1,18 @@
 import React, {
   forwardRef,
   PropsWithChildren,
-  ReactElement,
-  HTMLAttributes,
+  ReactElement, useRef,
 } from 'react';
 import { css, StyleSheet } from '@patternfly/react-styles';
+import { BoxProvider } from "./BoxProvider";
 
 const styles = StyleSheet.create({
   outer: {
     width: '100%',
     height: '100%',
-    display: 'flex',
     flexFlow: 'column',
     userSelect: 'none',
+    display: 'flex',
   },
   header: {
     flex: '0 1 0',
@@ -35,10 +35,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export interface IBoxProps extends HTMLAttributes<HTMLDivElement> {
+export interface IBoxProps {
+  scrollable?: boolean;
+  visible?: boolean;
   header?: ReactElement | string;
   footer?: ReactElement | string;
-  onLayout?: () => void;
   rightAlign?: boolean;
 }
 
@@ -47,21 +48,35 @@ export interface IBoxProps extends HTMLAttributes<HTMLDivElement> {
  */
 export const Box = forwardRef<HTMLDivElement, PropsWithChildren<IBoxProps>>(
   (
-    { header, footer, children, onLayout, rightAlign = false, ...props },
+    {
+      scrollable = false,
+      visible = true,
+      header,
+      footer,
+      children,
+      rightAlign = false,
+    },
     ref
   ) => {
+    const scrollableArea = useRef<HTMLDivElement | null>(null);
     return (
-      <div className={css(styles.outer)}>
-        {header && <div className={css(styles.header)}>{header}</div>}
-        <div
-          className={css(styles.body, rightAlign && styles.bodyRightAligned)}
-          ref={ref}
-          {...props}
-        >
-          {children}
+      <BoxProvider getScrollableAreaRef={() => scrollableArea.current}>
+        <div className={css(styles.outer)} ref={ref}>
+          {header && <div className={css(styles.header)}>{header}</div>}
+          <div
+            className={css(styles.body, rightAlign && styles.bodyRightAligned)}
+            ref={scrollableArea}
+            style={{
+              height: scrollable ? '100%' : undefined,
+              overflow: scrollable ? 'auto' : undefined,
+              opacity: visible ? 1 : 0,
+            }}
+          >
+            {children}
+          </div>
+          {footer && <div className={css(styles.footer)}>{footer}</div>}
         </div>
-        {footer && <div className={css(styles.footer)}>{footer}</div>}
-      </div>
+      </BoxProvider>
     );
   }
 );

@@ -25,14 +25,17 @@ import {
   fromMappingDefinitionToIMappings,
   IAtlasmapFieldWithField,
 } from './utils/to-ui-models-util';
-import { addToMapping, createMapping } from './components/field/field-util';
+import {
+  addToCurrentMapping,
+  createMapping,
+} from './components/field/field-util';
 import {
   deleteAtlasFile,
-  enableMappingPreview,
+  toggleMappingPreview,
   exportAtlasFile,
   importAtlasFile,
   resetAtlasmap,
-  documentExists,
+  documentExists, toggleShowUnmappedFields, toggleShowMappedFields,
 } from './components/toolbar/toolbar-util';
 import {
   FieldAction,
@@ -40,6 +43,7 @@ import {
   Multiplicity,
 } from './models/field-action.model';
 import { MappedField } from './models/mapping.model';
+import { Field } from './models/field.model';
 
 const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
 
@@ -165,6 +169,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
 
     const subscriptions = [
       initializationObservable.subscribe(onUpdates),
+      initializationService.systemInitializedSource.subscribe(onUpdates),
       initializationService.cfg.mappingService.mappingUpdatedSource.subscribe(
         onUpdates
       ),
@@ -340,9 +345,11 @@ export function useAtlasmap() {
       importAtlasFile: handleImportAtlasFile,
       resetAtlasmap: handleResetAtlasmap,
       changeActiveMapping,
-      enableMappingPreview,
+      toggleMappingPreview,
+      toggleShowMappedFields,
+      toggleShowUnmappedFields,
       onFieldPreviewChange,
-      addToMapping,
+      addToCurrentMapping,
       createMapping,
       documentExists,
       getMappingActions,

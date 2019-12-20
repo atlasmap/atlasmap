@@ -9,14 +9,15 @@ import {
 import { useAtlasmap } from './AtlasmapProvider';
 import { DataMapperUtil } from './common/data-mapper-util';
 
-export interface IAtlasmapMappingDetais {
+export interface IAtlasmapMappingDetaisProps {
   mapping: MappingModel;
   closeDetails: () => void;
+  onRemoveMappedField: (remove: () => void) => void;
 }
 
 export const AtlasmapMappingDetails: FunctionComponent<
-  IAtlasmapMappingDetais
-> = ({ mapping, closeDetails }) => {
+  IAtlasmapMappingDetaisProps
+> = ({ mapping, closeDetails, onRemoveMappedField }) => {
   const { getMappingActions, handleActionChange } = useAtlasmap();
 
   const sources = mapping.getMappedFields(true);
@@ -40,7 +41,9 @@ export const AtlasmapMappingDetails: FunctionComponent<
               name={s.field!.name}
               info={s.field!.getFieldLabel(true, true)}
               onAdd={() => void 0}
-              onDelete={() => void 0}
+              onDelete={() =>
+                onRemoveMappedField(() => mapping.removeMappedField(s))
+              }
               index={mapping.getIndexForMappedField(s)!}
               showIndex={showSourcesIndex}
               canEditIndex={!s.isPadField()}
@@ -81,7 +84,9 @@ export const AtlasmapMappingDetails: FunctionComponent<
               name={t.field!.name}
               info={t.field!.getFieldLabel(true, true)}
               onAdd={() => void 0}
-              onDelete={() => void 0}
+              onDelete={() =>
+                onRemoveMappedField(() => mapping.removeMappedField(t))
+              }
               index={mapping.getIndexForMappedField(t)!}
               showIndex={showTargetIndex}
               canEditIndex={!t.isPadField()}
