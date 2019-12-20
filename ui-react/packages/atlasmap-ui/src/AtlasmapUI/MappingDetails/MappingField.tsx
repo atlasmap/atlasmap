@@ -16,6 +16,17 @@ import {
 } from '@patternfly/react-core';
 import React, { FunctionComponent, useState, Children } from 'react';
 import { BoltIcon, InfoAltIcon, TrashIcon } from '@patternfly/react-icons';
+import { css, StyleSheet } from '@patternfly/react-styles';
+
+const styles = StyleSheet.create({
+  dataListContent: { boxShadow: 'none' },
+  indexInput: {
+    background: 'transparent',
+    color: 'inherit',
+    border: '0 none',
+    width: 40,
+  }
+});
 
 export interface IMappingFieldProps {
   name: string;
@@ -69,12 +80,7 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
                     value={index}
                     id={'index'}
                     disabled={!canEditIndex}
-                    style={{
-                      background: 'transparent',
-                      color: 'inherit',
-                      border: '0 none',
-                      width: 40,
-                    }}
+                    className={css(styles.indexInput)}
                   />
                 </Label>
               )}
@@ -120,7 +126,7 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
       {Children.count(children) > 0 && (
         <DataListContent
           aria-label={'Field transformations'}
-          style={{ boxShadow: 'none' }}
+          className={css(styles.dataListContent)}
         >
           <Title size={'xs'} headingLevel={'h4'}>Transformations</Title>
           {children}

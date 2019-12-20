@@ -6,6 +6,12 @@ import React, {
 } from 'react';
 import { useMovable } from './useMovable';
 import { Coords } from './models';
+import { css, StyleSheet } from '@patternfly/react-styles';
+
+const styles = StyleSheet.create({
+  foreignObject: { overflow: 'visible' },
+  foreignObjectInner: { height: '100%' },
+});
 
 export interface ICanvasObjectProps
   extends HTMLAttributes<SVGForeignObjectElement> {
@@ -47,10 +53,10 @@ export const CanvasObject: FunctionComponent<ICanvasObjectProps> = ({
       height={height}
       x={movable ? coords.x : x}
       y={movable ? coords.y : y}
-      style={{ overflow: 'visible' }}
+      className={css(styles.foreignObject)}
       {...props}
     >
-      <div {...bind()} style={{ height: '100%' }}>
+      <div {...bind()} className={css(styles.foreignObjectInner)}>
         {children}
       </div>
     </foreignObject>

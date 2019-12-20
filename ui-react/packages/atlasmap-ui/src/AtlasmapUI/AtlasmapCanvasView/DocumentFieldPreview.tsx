@@ -1,5 +1,10 @@
 import { Form, FormGroup, TextInput } from '@patternfly/react-core';
 import React, { FunctionComponent } from 'react';
+import { css, StyleSheet } from '@patternfly/react-styles';
+
+const styles = StyleSheet.create({
+  form: { marginTop: '0.5rem' },
+});
 
 export interface IDocumentFieldPreviewProps {
   id: string;
@@ -10,7 +15,7 @@ export const DocumentFieldPreview: FunctionComponent<
   IDocumentFieldPreviewProps
 > = ({ id, onChange }) => {
   return (
-    <Form style={{ marginTop: '0.5rem' }}>
+    <Form className={css(styles.form)}>
       <FormGroup
         label="Mapping preview"
         helperText="Type sample data here"

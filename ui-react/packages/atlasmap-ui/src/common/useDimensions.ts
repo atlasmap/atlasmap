@@ -7,6 +7,30 @@ import {
 } from 'react';
 import { BrowserRect } from '../CanvasView';
 
+const noSize = {
+  width: 0,
+  height: 0,
+  top: 0,
+  left: 0,
+  x: 0,
+  y: 0,
+  right: 0,
+  bottom: 0,
+};
+
+function areRectsDifferent(a: DOMRect, b: DOMRect) {
+  return (
+    a.width !== b.width ||
+    a.height !== b.height ||
+    a.top !== b.top ||
+    a.left !== b.left ||
+    a.x !== b.x ||
+    a.y !== b.y ||
+    a.right !== b.right ||
+    a.bottom !== b.bottom
+  );
+}
+
 export interface UseDimensionsArgs {
   liveMeasure?: boolean;
 }
@@ -18,30 +42,22 @@ export function useDimensions<T = HTMLDivElement>({
   BrowserRect,
   () => void
 ] {
-  const [dimensions, setDimensions] = useState<BrowserRect>({
-    width: 0,
-    height: 0,
-    top: 0,
-    left: 0,
-    x: 0,
-    y: 0,
-    right: 0,
-    bottom: 0,
-  });
+  const previousDimensions = useRef<BrowserRect>(noSize);
+  const [dimensions, setDimensions] = useState<BrowserRect>(noSize);
   const ref = useRef<T>(null);
 
   const measure = useCallback(() => {
     if (ref.current) {
-      setDimensions(
-        ((ref.current as unknown) as HTMLElement).getBoundingClientRect()
-      );
+      const d = ((ref.current as unknown) as HTMLElement).getBoundingClientRect();
+      if (areRectsDifferent(d as DOMRect, previousDimensions.current as DOMRect)) {
+        setDimensions(d);
+        previousDimensions.current = d;
+      }
     }
-  }, [ref, setDimensions]);
+  }, [setDimensions]);
 
   useLayoutEffect(() => {
-    const requestId = requestAnimationFrame(() => {
-      measure();
-    });
+    measure();
 
     if (liveMeasure) {
       window.addEventListener('resize', measure);
@@ -51,9 +67,6 @@ export function useDimensions<T = HTMLDivElement>({
       if (liveMeasure) {
         window.removeEventListener('resize', measure);
         window.removeEventListener('scroll', measure);
-      }
-      if (requestId) {
-        cancelAnimationFrame(requestId);
       }
     };
   }, [liveMeasure, measure]);

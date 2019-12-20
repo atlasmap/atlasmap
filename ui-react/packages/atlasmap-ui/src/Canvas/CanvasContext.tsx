@@ -42,27 +42,21 @@ export const CanvasProvider: FunctionComponent<ICanvasProviderProps> = ({
   panY,
 }) => {
   const rects = useRef<Rects>([]);
-  const addRect = (rect: Rect) => {
+  const addRect = useCallback((rect: Rect) => {
     removeRect(rect.id);
     rects.current = [...rects.current, rect];
-  };
-  const removeRect = (id: string) => {
+  }, []);
+  const removeRect = useCallback((id: string) => {
     rects.current = rects.current.filter(r => r.id !== id);
-  };
+  }, []);
 
   const redrawCallbacks = useRef<RedrawCallbacks>([]);
-  const addRedrawListener = useCallback(
-    (cb: RedrawCallback) => {
-      redrawCallbacks.current = [...redrawCallbacks.current, cb];
-    },
-    [redrawCallbacks]
-  );
-  const removeRedrawListener = useCallback(
-    (cb: RedrawCallback) => {
-      redrawCallbacks.current = redrawCallbacks.current.filter(c => c !== cb);
-    },
-    [redrawCallbacks]
-  );
+  const addRedrawListener = useCallback((cb: RedrawCallback) => {
+    redrawCallbacks.current = [...redrawCallbacks.current, cb];
+  }, []);
+  const removeRedrawListener = useCallback((cb: RedrawCallback) => {
+    redrawCallbacks.current = redrawCallbacks.current.filter(c => c !== cb);
+  }, []);
 
   useEffect(function effectLoop() {
     let frame = requestAnimationFrame(function loop() {
