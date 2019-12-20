@@ -1,12 +1,13 @@
-import React, {
-  FunctionComponent,
-  ReactElement,
-  useEffect,
-} from 'react';
+import React, { FunctionComponent, ReactElement, useEffect } from 'react';
 import { CanvasObject, useCanvas, Coords } from '../../Canvas';
 import { useDimensions } from '../../common';
 import { useCanvasViewOptionsContext } from '../CanvasViewOptionsProvider';
 import { Box } from './Box';
+import { css, StyleSheet } from '@patternfly/react-styles';
+
+const styles = StyleSheet.create({
+  boxWrapper: { height: '100%' },
+});
 
 export interface IMappingsBoxProps {
   id: string;
@@ -46,6 +47,9 @@ export const FieldsBox: FunctionComponent<IMappingsBoxProps> = ({
       width={initialWidth}
       height={scrollable ? initialHeight : yDomain(dimensions.height)}
       movable={!scrollable}
+      childrenProps={{
+        className: css(scrollable && styles.boxWrapper)
+      }}
       {...position}
     >
       <Box

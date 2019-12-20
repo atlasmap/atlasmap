@@ -6,8 +6,8 @@ import React, {
   useMemo,
   useRef,
 } from 'react';
-import { css, StyleSheet } from '@patternfly/react-styles';
 import { BoxProvider } from './BoxProvider';
+import { css, StyleSheet } from '@patternfly/react-styles';
 
 const styles = StyleSheet.create({
   outer: {
