@@ -1,10 +1,13 @@
 import React, {
+  CSSProperties,
   forwardRef,
   PropsWithChildren,
-  ReactElement, useRef,
+  ReactElement,
+  useMemo,
+  useRef,
 } from 'react';
 import { css, StyleSheet } from '@patternfly/react-styles';
-import { BoxProvider } from "./BoxProvider";
+import { BoxProvider } from './BoxProvider';
 
 const styles = StyleSheet.create({
   outer: {
@@ -59,18 +62,27 @@ export const Box = forwardRef<HTMLDivElement, PropsWithChildren<IBoxProps>>(
     ref
   ) => {
     const scrollableArea = useRef<HTMLDivElement | null>(null);
+    const getScrollableAreaRef = useMemo(
+      () => () => scrollableArea.current,
+      []
+    );
+    const style = useMemo(
+      () =>
+        ({
+          height: scrollable ? '100%' : undefined,
+          overflow: scrollable ? 'auto' : undefined,
+          opacity: visible ? 1 : 0,
+        } as CSSProperties),
+      [scrollable, visible]
+    );
     return (
-      <BoxProvider getScrollableAreaRef={() => scrollableArea.current}>
+      <BoxProvider getScrollableAreaRef={getScrollableAreaRef}>
         <div className={css(styles.outer)} ref={ref}>
           {header && <div className={css(styles.header)}>{header}</div>}
           <div
             className={css(styles.body, rightAlign && styles.bodyRightAligned)}
             ref={scrollableArea}
-            style={{
-              height: scrollable ? '100%' : undefined,
-              overflow: scrollable ? 'auto' : undefined,
-              opacity: visible ? 1 : 0,
-            }}
+            style={style}
           >
             {children}
           </div>

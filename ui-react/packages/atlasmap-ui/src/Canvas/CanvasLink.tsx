@@ -1,5 +1,5 @@
 import { linkHorizontal } from 'd3-shape';
-import React, { FunctionComponent, useMemo } from 'react';
+import React, { CSSProperties, FunctionComponent, useMemo } from 'react';
 import { Coords } from './models';
 
 export interface ICanvasLinkProps {
@@ -34,6 +34,16 @@ export const CanvasLink: FunctionComponent<ICanvasLinkProps> = ({
 
   const d = link({ start, end });
 
+  const style = useMemo(
+    () =>
+      ({
+        stroke: color,
+        strokeWidth: s,
+        fill: '#fff',
+      } as CSSProperties),
+    [color, s]
+  );
+
   return d ? (
     <g>
       <path d={d} stroke={color} strokeWidth={s} fill={'none'} />
@@ -43,11 +53,7 @@ export const CanvasLink: FunctionComponent<ICanvasLinkProps> = ({
         width={r}
         height={r}
         transform={`rotate(45 ${csx} ${start.y})`}
-        style={{
-          stroke: color,
-          strokeWidth: s,
-          fill: '#fff',
-        }}
+        style={style}
       />
       <rect
         x={cex - r / 2}
@@ -55,11 +61,7 @@ export const CanvasLink: FunctionComponent<ICanvasLinkProps> = ({
         width={r}
         height={r}
         transform={`rotate(45 ${cex} ${end.y})`}
-        style={{
-          stroke: color,
-          strokeWidth: s,
-          fill: '#fff',
-        }}
+        style={style}
       />
     </g>
   ) : null;

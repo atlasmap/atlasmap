@@ -1,5 +1,5 @@
 import { css, StyleSheet } from '@patternfly/react-styles';
-import React, { FunctionComponent, HTMLAttributes } from 'react';
+import React, { CSSProperties, FunctionComponent, HTMLAttributes, useMemo } from 'react';
 import { CanvasProvider } from './CanvasContext';
 import { CanvasTransforms } from './CanvasTransforms';
 
@@ -43,6 +43,16 @@ export const Canvas: FunctionComponent<ICanvasProps> = ({
   allowPanning,
   ...props
 }) => {
+  const style = useMemo(
+    () => {
+      return {
+        cursor: allowPanning ? (isPanning ? 'grabbing' : 'grab') : undefined,
+        userSelect: allowPanning && isPanning ? 'none' : 'auto',
+        backgroundSize: `${30 * zoom}px ${30 * zoom}px`,
+      } as CSSProperties;
+    },
+    [allowPanning, isPanning, zoom]
+  );
   return (
     <CanvasProvider
       width={width}
@@ -55,11 +65,7 @@ export const Canvas: FunctionComponent<ICanvasProps> = ({
     >
       <svg
         className={css(styles.svg, allowPanning && styles.panning)}
-        style={{
-          cursor: allowPanning ? (isPanning ? 'grabbing' : 'grab') : undefined,
-          userSelect: allowPanning && isPanning ? 'none' : 'auto',
-          backgroundSize: `${30 * zoom}px ${30 * zoom}px`,
-        }}
+        style={style}
         width={width}
         height={height}
         {...props}

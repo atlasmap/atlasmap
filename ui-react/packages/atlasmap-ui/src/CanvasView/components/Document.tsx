@@ -38,6 +38,12 @@ const styles = StyleSheet.create({
   card: {
     height: '100%',
   },
+  cardHeader: {
+    width: '70%',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
   title: {
     direction: 'ltr',
     padding: '0.5rem !important',
@@ -148,7 +154,10 @@ export function Document({
               ]}
             />
           </CardActions>
-          <CardHeader onClick={toggleIsExpanded} style={{ width: '70%' }}>
+          <CardHeader
+            onClick={toggleIsExpanded}
+            className={css(styles.cardHeader)}
+          >
             <Button variant={'link'}>
               {isExpanded ? <CaretDownIcon /> : <CaretRightIcon />} {title}
             </Button>

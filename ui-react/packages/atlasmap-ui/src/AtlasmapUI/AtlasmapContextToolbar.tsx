@@ -14,6 +14,11 @@ import {
 } from '@patternfly/react-core';
 
 import { FilePicker } from 'react-file-picker';
+import { css, StyleSheet } from '@patternfly/react-styles';
+
+const styles = StyleSheet.create({
+  toolbar: { borderBottom: '1px solid #ccc' },
+});
 
 export interface IAtlasmapContextToolbarProps {
   onExportAtlasFile: (event: any) => void;
@@ -26,8 +31,7 @@ export const AtlasmapContextToolbar: FunctionComponent<
 > = ({ onImportAtlasFile, onResetAtlasmap, onExportAtlasFile }) => {
   return (
     <Toolbar
-      className="view-toolbar pf-u-px-md pf-u-py-md"
-      style={{ borderBottom: '1px solid #ccc' }}
+      className={css('view-toolbar pf-u-px-md pf-u-py-md', styles.toolbar)}
     >
       <ToolbarGroup>
         <ToolbarItem>

@@ -37,8 +37,8 @@ function withoutMappingsSizes(
 
   const initialSourceCoords = { x: gutter, y: gutter };
   const initialMappingCoords = {
-    x: 0,
-    y: 0,
+    x: -9999,
+    y: -9999,
   };
   const initialTargetCoords = {
     x: Math.max(width - gutter - targetWidth, initialSourceCoords.x + sourceWidth + gutter),
