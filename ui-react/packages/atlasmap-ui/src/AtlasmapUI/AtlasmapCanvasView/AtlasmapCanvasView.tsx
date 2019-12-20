@@ -1,22 +1,36 @@
-import React, { FunctionComponent, ReactChild, useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  FunctionComponent,
+  ReactChild,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {
   CanvasView,
   CanvasViewProvider,
-  CanvasViewControlBar, Links,
+  CanvasViewControlBar,
+  Links,
+  getToolbarIconStyle,
 } from '../../CanvasView';
 import { DragLayer } from './DragLayer';
 import { useAtlasmapUI } from '../AtlasmapUIProvider';
-import {AtlasmapLayout, IAtlasmapLayoutProps} from '../AtlasmapLayout';
+import { AtlasmapLayout, IAtlasmapLayoutProps } from '../AtlasmapLayout';
 import {
-  ConnectedIcon,
-  DisconnectedIcon,
+  MapMarkedIcon,
   EyeIcon,
+  MapIcon,
   InfoIcon,
 } from '@patternfly/react-icons';
 
 export interface IAtlasmapCanvasViewProps extends IAtlasmapLayoutProps {
   onShowMappingPreview: (enabled: boolean) => void;
-  children: (props: { showTypes: boolean; showMappingPreview: boolean }) => ReactChild;
+  onShowMappedFields: (enabled: boolean) => void;
+  onShowUnmappedFields: (enabled: boolean) => void;
+  children: (props: {
+    showTypes: boolean;
+    showMappingPreview: boolean;
+  }) => ReactChild;
 }
 
 export const AtlasmapCanvasView: FunctionComponent<
@@ -26,13 +40,11 @@ export const AtlasmapCanvasView: FunctionComponent<
   onImportAtlasFile,
   onResetAtlasmap,
   onShowMappingPreview,
-  children
+  onShowMappedFields,
+  onShowUnmappedFields,
+  children,
 }) => {
-  const {
-    mappings,
-    selectedMapping,
-    isEditingMapping,
-  } = useAtlasmapUI();
+  const { mappings, selectedMapping, isEditingMapping } = useAtlasmapUI();
 
   const isMappingColumnVisible = !isEditingMapping;
 
@@ -47,32 +59,51 @@ export const AtlasmapCanvasView: FunctionComponent<
     onShowMappingPreview(newValue);
   }, [onShowMappingPreview, showMappingPreview]);
 
+  const [showMappedFields, setShowMappedFields] = useState(true);
+  const toggleShowMappedFields = useCallback(() => {
+    const newValue = !showMappedFields;
+    setShowMappedFields(newValue);
+    onShowMappedFields(newValue);
+  }, [showMappedFields, onShowMappedFields]);
+  const [showUnmappedFields, setShowUnmappedFields] = useState(true);
+  const toggleShowUnmappedFields = useCallback(() => {
+    const newValue = !showUnmappedFields;
+    setShowUnmappedFields(newValue);
+    onShowUnmappedFields(newValue);
+  }, [showUnmappedFields, onShowUnmappedFields]);
+
   const controlBar = useMemo(
     () => (
       <CanvasViewControlBar
         extraButtons={[
           {
             id: 'Show types',
-            icon: <InfoIcon />,
+            icon: <InfoIcon style={getToolbarIconStyle(showTypes)} />,
             tooltip: 'Show types',
             ariaLabel: ' ',
             callback: toggleShowTypes,
           },
           {
             id: 'Show mapped fields',
-            icon: <ConnectedIcon />,
+            icon: (
+              <MapMarkedIcon style={getToolbarIconStyle(showMappedFields)} />
+            ),
             tooltip: 'Show mapped fields',
             ariaLabel: ' ',
+            callback: toggleShowMappedFields,
           },
           {
             id: 'Show unmapped fields',
-            icon: <DisconnectedIcon />,
+            icon: (
+              <MapIcon style={getToolbarIconStyle(showUnmappedFields)} />
+            ),
             tooltip: 'Show unmapped fields',
             ariaLabel: ' ',
+            callback: toggleShowUnmappedFields,
           },
           {
             id: 'Show mapping preview',
-            icon: <EyeIcon />,
+            icon: <EyeIcon style={getToolbarIconStyle(showMappingPreview)} />,
             tooltip: 'Show mapping preview',
             ariaLabel: ' ',
             callback: toggleShowMappingPreview,
@@ -80,7 +111,16 @@ export const AtlasmapCanvasView: FunctionComponent<
         ]}
       />
     ),
-    [toggleShowMappingPreview, toggleShowTypes]
+    [
+      showTypes,
+      toggleShowTypes,
+      showMappedFields,
+      toggleShowMappedFields,
+      showUnmappedFields,
+      toggleShowUnmappedFields,
+      showMappingPreview,
+      toggleShowMappingPreview,
+    ]
   );
 
   useEffect(() => {

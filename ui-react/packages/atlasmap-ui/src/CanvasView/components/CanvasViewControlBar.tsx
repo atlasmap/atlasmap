@@ -14,6 +14,10 @@ import {
 import { useCanvasViewOptionsContext } from '../CanvasViewOptionsProvider';
 import { useCanvasViewContext } from '../CanvasViewCanvasProvider';
 
+export function getToolbarIconStyle(active: boolean) {
+  return { color: active ? 'var(--pf-global--primary-color--100)' : undefined };
+}
+
 export interface ICanvasViewControlBarProps {
   extraButtons?: TopologyControlButton[];
 }
@@ -82,7 +86,7 @@ export const CanvasViewControlBar: FunctionComponent<
         customButtons: [
           {
             id: 'Free view mode',
-            icon: <PficonDragdropIcon />,
+            icon: <PficonDragdropIcon  style={getToolbarIconStyle(freeView)} />,
             tooltip: 'Free view mode',
             ariaLabel: ' ',
             callback: toggleFreeView,

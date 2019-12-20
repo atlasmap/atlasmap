@@ -11,6 +11,7 @@ import { DocumentFooter } from './DocumentFooter';
 import { DocumentFieldPreview } from './DocumentFieldPreview';
 import { IAtlasmapDocument, IAtlasmapField, IAtlasmapGroup } from '../models';
 import { useAtlasmapUI } from '../AtlasmapUIProvider';
+import { DocumentGroup } from "./DocumentGroup";
 
 export interface IAtlasmapCanvasViewSourceProps {
   onAddToMapping: (field: IAtlasmapField, mapping: IMapping) => void;
@@ -68,7 +69,12 @@ export const AtlasmapCanvasViewSource: FunctionComponent<
             }
             lineConnectionSide={'right'}
             fields={s}
-            renderGroup={node => (node as IAtlasmapGroup).name}
+            renderGroup={node => {
+              const group = (node as IAtlasmapGroup);
+              return (
+                <DocumentGroup name={group.name} type={group.type} showType={showTypes} />
+              )
+            }}
             renderNode={(node, getCoords) => {
               const { id, name, type } = node as IAtlasmapField;
               const showPreview =

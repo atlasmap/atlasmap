@@ -1,4 +1,4 @@
-import React, { FunctionComponent, ReactChild, useEffect } from 'react';
+import React, { FunctionComponent, ReactChild, useEffect, useRef } from 'react';
 import { useDrop } from 'react-dnd';
 import { useLinkNode } from '../../Canvas';
 import { useLinkable } from '../../CanvasView';
@@ -18,7 +18,7 @@ export const DropTarget: FunctionComponent<IDropTargetProps> = ({
   children,
 }) => {
   const { ref, getLeftSideCoords, getRightSideCoords } = useLinkable({
-    getBoxRef: () => boxRef,
+    getScrollableAreaRef: () => boxRef,
   });
   const { setLineNode, unsetLineNode } = useLinkNode();
 
@@ -40,14 +40,19 @@ export const DropTarget: FunctionComponent<IDropTargetProps> = ({
     },
   });
 
+  const wasOver = useRef(false);
   useEffect(() => {
     if (isOver && type && canDrop) {
+      wasOver.current = true;
       setLineNode(
         'dragtarget',
         type === 'source' ? getLeftSideCoords : getRightSideCoords
       );
     } else {
-      unsetLineNode('dragtarget');
+      if (wasOver.current) {
+        unsetLineNode('dragtarget');
+        wasOver.current = false;
+      }
     }
   }, [
     getLeftSideCoords,

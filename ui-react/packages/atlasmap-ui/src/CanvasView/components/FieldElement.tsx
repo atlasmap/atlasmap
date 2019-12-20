@@ -5,6 +5,7 @@ import { useCanvasViewFieldsContext } from '../CanvasViewFieldsProvider';
 import { IFieldsNode } from '../models';
 import { useLinkable } from './useLinkable';
 import { Coords } from '../../Canvas/models';
+import { useBoxContext } from "./BoxProvider";
 
 const styles = StyleSheet.create({
   element: {
@@ -23,12 +24,11 @@ export interface IFieldElementProps {
   node: IFieldsNode;
   lineConnectionSide: 'left' | 'right';
   getParentRef: () => HTMLElement | null;
-  getBoxRef: () => HTMLElement | null;
   rightAlign?: boolean;
   renderNode: (
     node: IFieldsNode,
     getCoords: () => Coords | null,
-    boxRef: HTMLElement | null
+    scrollableAreaRef: HTMLElement | null
   ) => ReactChild;
   expandParent: (expanded: boolean) => void;
 }
@@ -36,7 +36,6 @@ export interface IFieldElementProps {
 export function FieldElement({
   node,
   lineConnectionSide,
-  getBoxRef,
   getParentRef,
   rightAlign = false,
   renderNode,
@@ -44,8 +43,9 @@ export function FieldElement({
 }: IFieldElementProps) {
   const { addField, removeField } = useCanvasViewFieldsContext();
   const { setLineNode, unsetLineNode } = useLinkNode();
+  const { getScrollableAreaRef } = useBoxContext();
   const { ref, getLeftSideCoords, getRightSideCoords } = useLinkable({
-    getBoxRef,
+    getScrollableAreaRef,
     getParentRef,
   });
 
@@ -76,7 +76,7 @@ export function FieldElement({
       ref={ref}
       className={css(styles.element, rightAlign && styles.rightAlign)}
     >
-      {renderNode(node as IFieldsNode, getCoords, getBoxRef())}
+      {renderNode(node as IFieldsNode, getCoords, getScrollableAreaRef())}
     </div>
   );
 }

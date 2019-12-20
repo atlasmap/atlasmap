@@ -31,11 +31,11 @@ import {
 } from './components/field/field-util';
 import {
   deleteAtlasFile,
-  enableMappingPreview,
+  toggleMappingPreview,
   exportAtlasFile,
   importAtlasFile,
   resetAtlasmap,
-  documentExists,
+  documentExists, toggleShowUnmappedFields, toggleShowMappedFields,
 } from './components/toolbar/toolbar-util';
 import {
   FieldAction,
@@ -169,6 +169,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
 
     const subscriptions = [
       initializationObservable.subscribe(onUpdates),
+      initializationService.systemInitializedSource.subscribe(onUpdates),
       initializationService.cfg.mappingService.mappingUpdatedSource.subscribe(
         onUpdates
       ),
@@ -344,7 +345,9 @@ export function useAtlasmap() {
       importAtlasFile: handleImportAtlasFile,
       resetAtlasmap: handleResetAtlasmap,
       changeActiveMapping,
-      enableMappingPreview,
+      toggleMappingPreview,
+      toggleShowMappedFields,
+      toggleShowUnmappedFields,
       onFieldPreviewChange,
       addToCurrentMapping,
       createMapping,

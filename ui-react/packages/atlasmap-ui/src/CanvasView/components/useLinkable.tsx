@@ -3,18 +3,18 @@ import { useBoundingCanvasRect } from '../../Canvas';
 
 export interface IUseLinkableArgs {
   getParentRef?: () => HTMLElement | null;
-  getBoxRef: () => HTMLElement | null;
+  getScrollableAreaRef: () => HTMLElement | null;
 }
 
-export function useLinkable({ getBoxRef, getParentRef }: IUseLinkableArgs) {
+export function useLinkable({ getScrollableAreaRef, getParentRef }: IUseLinkableArgs) {
   const ref = useRef<HTMLDivElement | null>(null);
   const getBoundingCanvasRect = useBoundingCanvasRect();
 
   const getCoords = useCallback(() => {
     const parentRef = getParentRef ? getParentRef() : null;
-    const boxRef = getBoxRef();
-    if (ref.current && boxRef) {
-      const boxRect = getBoundingCanvasRect(boxRef);
+    const scrollableAreaRef = getScrollableAreaRef();
+    if (ref.current && scrollableAreaRef) {
+      const boxRect = getBoundingCanvasRect(scrollableAreaRef);
       let dimensions = getBoundingCanvasRect(ref.current);
       if (parentRef) {
         const parentRect = getBoundingCanvasRect(parentRef);
@@ -30,7 +30,7 @@ export function useLinkable({ getBoxRef, getParentRef }: IUseLinkableArgs) {
       };
     }
     return null;
-  }, [getParentRef, getBoxRef, getBoundingCanvasRect]);
+  }, [getParentRef, getScrollableAreaRef, getBoundingCanvasRect]);
 
   const getLeftSideCoords = () => {
     const coords = getCoords();

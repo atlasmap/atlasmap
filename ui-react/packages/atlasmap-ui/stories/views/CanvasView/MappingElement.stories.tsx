@@ -1,10 +1,11 @@
 import { action } from '@storybook/addon-actions';
 import { boolean } from '@storybook/addon-knobs';
 import React, { createElement, FunctionComponent, useState } from 'react';
-import { CanvasProvider } from '../../../src/Canvas';
+import { CanvasObject } from '../../../src/Canvas';
 import {
+  BoxProvider,
   CanvasView,
-  CanvasViewCanvasProvider,
+  CanvasViewProvider,
   FieldsBox,
 } from '../../../src/CanvasView';
 import { MappingElement } from '../../../src/CanvasView/components';
@@ -15,30 +16,24 @@ export default {
 };
 
 const Wrapper: FunctionComponent = ({ children }) => (
-  <CanvasProvider
-    width={310}
-    height={410}
-    zoom={1}
-    offsetTop={0}
-    offsetLeft={0}
-    panX={0}
-    panY={0}
-  >
-    <CanvasViewCanvasProvider>
-      <CanvasView>
-        <FieldsBox
-          id={'sample'}
-          initialWidth={300}
-          initialHeight={400}
-          position={{ x: 10, y: 10 }}
-          header={'Mappings'}
-          visible={false}
-        >
-          {children}
-        </FieldsBox>
-      </CanvasView>
-    </CanvasViewCanvasProvider>
-  </CanvasProvider>
+  <CanvasViewProvider>
+    <CanvasView>
+      <BoxProvider getScrollableAreaRef={() => null}>
+        <CanvasObject height={300} width={200} id={'id'} x={10} y={10}>
+          <FieldsBox
+            id={'sample'}
+            initialWidth={300}
+            initialHeight={400}
+            position={{ x: 10, y: 10 }}
+            header={'Mappings'}
+            visible={false}
+          >
+            {children}
+          </FieldsBox>
+        </CanvasObject>
+      </BoxProvider>
+    </CanvasView>
+  </CanvasViewProvider>
 );
 
 export const interactive = () => {

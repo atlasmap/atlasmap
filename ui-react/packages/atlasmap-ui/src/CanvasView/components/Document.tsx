@@ -22,7 +22,7 @@ import {
   FolderOpenIcon,
 } from '@patternfly/react-icons';
 import { css, StyleSheet } from '@patternfly/react-styles';
-import React, { ReactElement, useRef, useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { IFieldsGroup } from '../models';
 import { FieldGroup, IFieldGroupProps } from './FieldGroup';
 
@@ -91,7 +91,6 @@ export function Document({
   renderGroup,
   onDelete,
 }: IDocumentProps) {
-  const ref = useRef<HTMLDivElement | null>(null);
   const [isUserExpanded, setIsUserExpanded] = useState(true);
   const [shouldBeExpanded, setShouldBeExpanded] = useState(false);
   const toggleIsExpanded = () => setIsUserExpanded(!isUserExpanded);
@@ -101,10 +100,8 @@ export function Document({
   const isExpanded = shouldBeExpanded || isUserExpanded;
   const rightAlign = lineConnectionSide === 'left';
 
-  const getRef = () => ref.current;
   return (
     <div
-      ref={ref}
       className={css(styles.wrapper, isExpanded && styles.wrapperIsExpanded)}
     >
       <Card isCompact={true} className={css(styles.card)}>
@@ -168,7 +165,6 @@ export function Document({
               <FieldGroup
                 isVisible={true}
                 group={fields}
-                getBoxRef={getRef}
                 lineConnectionSide={lineConnectionSide}
                 rightAlign={rightAlign}
                 parentExpanded={isExpanded}

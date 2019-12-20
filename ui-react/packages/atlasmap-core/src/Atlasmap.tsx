@@ -45,7 +45,9 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     deleteAtlasFile,
     changeActiveMapping,
     documentExists,
-    enableMappingPreview,
+    toggleMappingPreview,
+    toggleShowMappedFields,
+    toggleShowUnmappedFields,
     onFieldPreviewChange,
     addToCurrentMapping,
     createMapping,
@@ -141,7 +143,9 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       )}
     >
       <AtlasmapCanvasView
-        onShowMappingPreview={enableMappingPreview}
+        onShowMappingPreview={toggleMappingPreview}
+        onShowMappedFields={toggleShowMappedFields}
+        onShowUnmappedFields={toggleShowUnmappedFields}
         onExportAtlasFile={handleExportAtlasFile}
         onImportAtlasFile={file => handleImportAtlasFile(file)}
         onResetAtlasmap={handleResetAtlasmap}
