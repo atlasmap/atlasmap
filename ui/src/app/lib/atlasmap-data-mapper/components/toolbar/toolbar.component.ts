@@ -20,7 +20,6 @@ import { ConfigModel } from '../../models/config.model';
 import { ModalWindowComponent } from '../modal//modal-window.component';
 import { TemplateEditComponent } from '../app/template-edit.component';
 import { ExpressionComponent } from './expression.component';
-import { TransitionMode } from '../../models/transition.model';
 import { ErrorScope, ErrorType, ErrorInfo, ErrorLevel } from '../../models/error.model';
 
 @Component({
@@ -172,7 +171,18 @@ export class ToolbarComponent implements OnInit {
     } else if ('resetAll' === action) {
       this.resetAll();
     } else if ('enableExpression') {
-      this.cfg.mappingService.toggleExpressionMode();
+      if (this.cfg.mappingService.willClearOutSourceFieldsOnTogglingExpression()) {
+        this.modalWindow.reset();
+        this.modalWindow.confirmButtonText = 'Disable';
+        this.modalWindow.headerText = 'Disable Expression?';
+        this.modalWindow.message = 'If you disable expression, all source fields in this mapping will be cleared out, are you sure?';
+        this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
+          this.cfg.mappingService.toggleExpressionMode();
+        };
+        this.modalWindow.show();
+      } else {
+        this.cfg.mappingService.toggleExpressionMode();
+      }
     }
     // Use the initialization service to trigger the observable updateFromConfig method
     // in the parent data-mapper-app class.  This avoids materializing the lineMachine object
