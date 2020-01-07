@@ -672,9 +672,9 @@
   integrity sha512-W2bE8pGh9Tsg8mxh+B6BSH8lTG6ZV7K2ZMAlEwSTqKFU1wMI5HShyRKSp3DngnxCmDu35tW3RAC4mxBFYRsTuw==
 
 "@types/node@*", "@types/node@^12.11.1":
-  version "12.12.21"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.21.tgz#aa44a6363291c7037111c47e4661ad210aded23f"
-  integrity sha512-8sRGhbpU+ck1n0PGAUgVrWrWdjSW2aqNeyC15W88GRsMpSwzv6RJGlLhE7s2RhVSOdyDmxbqlWSeThq4/7xqlA==
+  version "12.12.24"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.24.tgz#d4606afd8cf6c609036b854360367d1b2c78931f"
+  integrity sha512-1Ciqv9pqwVtW6FsIUKSZNB82E5Cu1I2bBTj1xuIHXLe/1zYLl3956Nbhg2MzSYHVfl9/rmanjbQIb7LibfCnug==
 
 "@types/q@^0.0.32":
   version "0.0.32"
