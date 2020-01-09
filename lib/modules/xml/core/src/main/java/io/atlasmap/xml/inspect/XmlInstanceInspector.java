@@ -15,6 +15,9 @@
  */
 package io.atlasmap.xml.inspect;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.xml.XMLConstants;
 
 import org.w3c.dom.Attr;
@@ -57,6 +60,7 @@ public class XmlInstanceInspector {
             mapAttributes(rootNode, rootComplexType);
             if (rootNode.hasChildNodes()) {
                 mapChildNodes(rootNode.getChildNodes(), rootComplexType);
+                mapCollectionType(rootComplexType, (Element)rootNode);
             }
         }
     }
@@ -158,18 +162,29 @@ public class XmlInstanceInspector {
         parentComplexType.getXmlFields().getXmlField().add(xmlField);
     }
 
+    // FIXME this won't work if not every collection field has more than one,
+    // IOW it's a collection from schema POV, but not always have multiple occurence
     private void mapCollectionType(XmlComplexType childParent, Element e) {
-        if (e.hasChildNodes()) {
-            NodeList children = e.getChildNodes();
-            // immediate child element
-            for (int i = 0; i < children.getLength(); i++) {
-                Node child = children.item(i);
-                if (child.getNodeType() == Node.ELEMENT_NODE) {
-                    NodeList childElements = e.getElementsByTagName(child.getNodeName());
-                    if (childElements.getLength() > 1) {
-                        childParent.setCollectionType(CollectionType.LIST);
-                    }
-                    break;
+        if (!e.hasChildNodes()) {
+            return;
+        }
+
+        Set<String> checked = new HashSet<>();
+        NodeList children = e.getChildNodes();
+        // immediate child element
+        for (int i = 0; i < children.getLength(); i++) {
+            Node child = children.item(i);
+            if (child.getNodeType() != Node.ELEMENT_NODE || checked.contains(child.getNodeName())) {
+                continue;
+            }
+            checked.add(child.getNodeName());
+            NodeList childElements = e.getElementsByTagName(child.getNodeName());
+            if (childElements.getLength() <= 1) {
+                continue;
+            }
+            for (XmlField f : childParent.getXmlFields().getXmlField()) {
+                if (child.getNodeName().equals(f.getName())) {
+                    f.setCollectionType(CollectionType.LIST);
                 }
             }
         }
