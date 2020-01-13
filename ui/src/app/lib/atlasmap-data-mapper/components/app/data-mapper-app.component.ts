@@ -33,7 +33,7 @@ import { Subscription } from 'rxjs';
   moduleId: module.id,
   encapsulation: ViewEncapsulation.None,
   templateUrl: './data-mapper-app.component.html',
-  styleUrls: ['data-mapper-app.component.css'],
+  styleUrls: ['_data-mapper-app.component.css'],
 })
 
 export class DataMapperAppComponent implements OnInit, OnDestroy {

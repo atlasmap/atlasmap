@@ -1,0 +1,1106 @@
+/*
+    Copyright (C) 2019 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+/*
+    Copyright (C) 2019 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+/* general data-mapper-wide styles and variables */
+
+@-webkit-keyframes dm-fade-in { from {opacity:0} to {opacity:1} }
+@keyframes dm-fade-in { from {opacity:0} to {opacity:1} }
+
+@-webkit-keyframes dm-fade-out { from {opacity:1} to {opacity:0} }
+@keyframes dm-fade-out { from {opacity:1} to {opacity:0} }
+
+@-webkit-keyframes dm-swipe-right { from {margin-left:-100%;} to {margin-left:0%;} }
+@keyframes dm-swipe-right { from {margin-left:-100%;} to {margin-left:0%;} }
+
+@-webkit-keyframes dm-swipe-left { from {margin-left:0%;} to {margin-left:-100%;} }
+@keyframes dm-swipe-left { from {margin-left:0%;} to {margin-left:-100%;} }
+
+:root {
+  --current-active-color: green;
+  --disabled-element-color: rgb(175,175,175);
+  --dropdown-hover-color: rgb(54,54,54);
+  --field-label-color: #363636;
+  --item-color: #CAC9C9;
+  --selected-item-color: #5CBADF;
+  --selection-background-color: #F6F6F6;
+}
+
+.DataMapperUI { height:100%; width:100%; position:relative; }
+
+.DataMapperUI .alert { font-size:12px; border: 0px transparent;}
+.DataMapperUI .alert-info { color: var(--current-active-color); }
+.DataMapperUI .alert .close { font-size:18px; color:#888888; }
+.DataMapperUI .tooltip-inner { min-width: 160px; max-width:600px; color:white; text-align: center; }
+.DataMapperUI .clear { clear:both; height:0px; }
+.DataMapperUI .hidden { visibility:hidden; }
+.DataMapperUI I { display:inline-block; }
+.DataMapperUI I.link:hover, .DataMapperUI I.selected { color:var(--selected-item-color); cursor:pointer; }
+.DataMapperUI I.selectedIcon { color:var(--selected-item-color); }
+.DataMapperUI LABEL { font-weight:normal; }
+.DataMapperUI A:hover { color:#0088ce; cursor:pointer; text-decoration:none; }
+.DataMapperUI input[disabled] { color:var(--disabled-element-color); }
+.DataMapperUI .form-group { margin: 10px auto 10px auto; }
+.DataMapperUI .form-group LABEL { width:75px; }
+.DataMapperUI .form-group LABEL.disabled { color:var(--disabled-element-color); }
+.DataMapperUI .form-group SELECT { width:100px; }
+.DataMapperUI .card-pf { margin:0; padding-left:0; padding-right:0; height:100%;
+    -webkit-animation-name:dm-fade-in; -webkit-animation-duration:0.4s;
+    animation-name:dm-fade-in; animation-duration:0.4s; }
+.DataMapperUI .dm-swipe-left { -webkit-animation-name:dm-swipe-left; -webkit-animation-duration:0.4s;
+    animation-name:dm-swipe-left; animation-duration:0.4s; }
+.DataMapperUI .dm-swipe-right { -webkit-animation-name:dm-swipe-right; -webkit-animation-duration:0.4s;
+    animation-name:dm-swipe-right; animation-duration:0.4s; }
+.DataMapperUI .card-pf-title { font-size:20px; padding:0px 12px; }
+.DataMapperUI .card-pf-heading { margin:0; padding:0; }
+.DataMapperUI .card-pf-body { padding:0px; margin:0px; }
+
+/* search box */
+.DataMapperUI .searchBox { position:relative; }
+.DataMapperUI .searchBox INPUT { width:100%; border:1px solid #FBFBFB; border-bottom:1px solid var(--item-color); padding:5px 10px; float:left;}
+.DataMapperUI .searchBox INPUT:placeholder-shown { font-style:italic; }
+.DataMapperUI .searchBoxCloseIcon { position:absolute; right:10px; top:10px; }
+.DataMapperUI .noSearchResults { width:100%; padding:10px; text-align:center; }
+
+/*
+    Copyright (C) 2019 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+/*
+    Copyright (C) 2019 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+/* general data-mapper-wide styles and variables */
+
+@-webkit-keyframes dm-fade-in { from {opacity:0} to {opacity:1} }
+@keyframes dm-fade-in { from {opacity:0} to {opacity:1} }
+
+@-webkit-keyframes dm-fade-out { from {opacity:1} to {opacity:0} }
+@keyframes dm-fade-out { from {opacity:1} to {opacity:0} }
+
+@-webkit-keyframes dm-swipe-right { from {margin-left:-100%;} to {margin-left:0%;} }
+@keyframes dm-swipe-right { from {margin-left:-100%;} to {margin-left:0%;} }
+
+@-webkit-keyframes dm-swipe-left { from {margin-left:0%;} to {margin-left:-100%;} }
+@keyframes dm-swipe-left { from {margin-left:0%;} to {margin-left:-100%;} }
+
+:root {
+  --current-active-color: green;
+  --disabled-element-color: rgb(175,175,175);
+  --dropdown-hover-color: rgb(54,54,54);
+  --field-label-color: #363636;
+  --item-color: #CAC9C9;
+  --selected-item-color: #5CBADF;
+  --selection-background-color: #F6F6F6;
+}
+
+.DataMapperUI { height:100%; width:100%; position:relative; }
+
+.DataMapperUI .alert { font-size:12px; border: 0px transparent;}
+.DataMapperUI .alert-info { color: var(--current-active-color); }
+.DataMapperUI .alert .close { font-size:18px; color:#888888; }
+.DataMapperUI .tooltip-inner { min-width: 160px; max-width:600px; color:white; text-align: center; }
+.DataMapperUI .clear { clear:both; height:0px; }
+.DataMapperUI .hidden { visibility:hidden; }
+.DataMapperUI I { display:inline-block; }
+.DataMapperUI I.link:hover, .DataMapperUI I.selected { color:var(--selected-item-color); cursor:pointer; }
+.DataMapperUI I.selectedIcon { color:var(--selected-item-color); }
+.DataMapperUI LABEL { font-weight:normal; }
+.DataMapperUI A:hover { color:#0088ce; cursor:pointer; text-decoration:none; }
+.DataMapperUI input[disabled] { color:var(--disabled-element-color); }
+.DataMapperUI .form-group { margin: 10px auto 10px auto; }
+.DataMapperUI .form-group LABEL { width:75px; }
+.DataMapperUI .form-group LABEL.disabled { color:var(--disabled-element-color); }
+.DataMapperUI .form-group SELECT { width:100px; }
+.DataMapperUI .card-pf { margin:0; padding-left:0; padding-right:0; height:100%;
+    -webkit-animation-name:dm-fade-in; -webkit-animation-duration:0.4s;
+    animation-name:dm-fade-in; animation-duration:0.4s; }
+.DataMapperUI .dm-swipe-left { -webkit-animation-name:dm-swipe-left; -webkit-animation-duration:0.4s;
+    animation-name:dm-swipe-left; animation-duration:0.4s; }
+.DataMapperUI .dm-swipe-right { -webkit-animation-name:dm-swipe-right; -webkit-animation-duration:0.4s;
+    animation-name:dm-swipe-right; animation-duration:0.4s; }
+.DataMapperUI .card-pf-title { font-size:20px; padding:0px 12px; }
+.DataMapperUI .card-pf-heading { margin:0; padding:0; }
+.DataMapperUI .card-pf-body { padding:0px; margin:0px; }
+
+/* search box */
+.DataMapperUI .searchBox { position:relative; }
+.DataMapperUI .searchBox INPUT { width:100%; border:1px solid #FBFBFB; border-bottom:1px solid var(--item-color); padding:5px 10px; float:left;}
+.DataMapperUI .searchBox INPUT:placeholder-shown { font-style:italic; }
+.DataMapperUI .searchBoxCloseIcon { position:absolute; right:10px; top:10px; }
+.DataMapperUI .noSearchResults { width:100%; padding:10px; text-align:center; }
+
+
+/* class-name */
+.DataMapperUI .ClassNameComponent INPUT, DataMapperUI .ClassNameComponent .form-group SELECT { width:300px; }
+.DataMapperUI .ClassNameComponent .form-group LABEL { width:300px; }
+.DataMapperUI .ClassNameComponent .form-group TEXTAREA { margin:auto; }
+
+/* document-definition */
+.DataMapperUI I.docCollapseIcon { width:10px; margin-left:5px; }
+.DataMapperUI .docDef { position:relative; border:1px solid var(--item-color); height:100%; background-color:white; overflow:hidden; }
+.DataMapperUI .docDef #importInstanceSchema { float:right; margin-right:10px; margin-top:1px; }
+.DataMapperUI .docDef #importInstanceSchema INPUT { display:none }
+.DataMapperUI .docDef I.searchBoxIcon { float:right; }
+.DataMapperUI .docDef .fieldListSearchOpen { overflow:auto; }
+.DataMapperUI .docDef .card-pf-heading.fieldsCount.emptyFieldsCount { float:left; font-size:12px;font-style:italic; }
+.DataMapperUI .docDef .docName { overflow:hidden; display:inline-block; width:calc(100% - 25px); margin-left:3px; float:left; }
+.DataMapperUI .docDef .docName I { margin-right:5px; vertical-align:baseline; margin-bottom:4px; }
+.DataMapperUI .docDef .documentHeader { color:white; background-image:linear-gradient(to bottom, rgb(125,125,125), var(--dropdown-hover-color));
+    font-size:16px; padding-top:5px; margin:0px; overflow:hidden; }
+.DataMapperUI .docDef .documentHeader I.link:hover { color:var(--dropdown-hover-color); }
+.DataMapperUI .docDef .enableImportJavaClass { float:right; }
+.DataMapperUI .docDef .fieldList { overflow:auto; height:calc(100% - 90px); }
+.DataMapperUI .docDef .panel-group .panel-heading .panel-title .panelTitleHeader { float:left }
+.DataMapperUI .docDef .panel-group .panel-heading .panel-title .panelTitleHeader .nbsp { display:inline-block; width:5px }
+.DataMapperUI .docDef .panel-group .panel-heading .panel-title .panelTitleHeader .fa.fa-angle-down.docCollapseIcon { margin-right:4px; }
+.DataMapperUI .docDef .panel-group .panel-heading .panel-title .trashIcon { float:right; font-size:16px; }
+.DataMapperUI .docDef .panel-group .panel-heading .addFieldIcon { float:right; }
+.DataMapperUI .docDef .panel-group .panel-collapse.collapse.in .panel-body { width:100%; padding:5px 16px; margin:0; font-style:italic; }
+.DataMapperUI .docDef .fieldListSearchOpen { height:calc(100% - 122px); }
+.DataMapperUI .docDef .fieldsCount { padding:5px; font-size:10px; font-weight:bold;
+    text-align:right; margin:0; width:100%; border-top:1px solid var(--item-color); padding-right:12px;
+    border-bottom:0px solid black; }
+
+/* document-field-detail */
+.DataMapperUI .docDef .DocumentFieldDetailComponent I { text-shadow:0 1px 2px rgba(3, 3, 3, 0.24); margin-right:2px;
+    font-size:10px; }
+.DataMapperUI .DocumentFieldDetailComponent { width:100%; margin:0px; }
+.DataMapperUI .DocumentFieldDetailComponent .fieldDetail { padding:5px 5px; border-bottom:1px solid #d1d1d1; }
+.DataMapperUI .DocumentFieldDetailComponent LABEL { padding:0; margin:0; margin-bottom:1px; vertical-align:middle; }
+.DataMapperUI .DocumentFieldDetailComponent .selectedField { background-color:#02A2D8; color:white; }
+.DataMapperUI .DocumentFieldDetailComponent .selectedField I { color:white; }
+.DataMapperUI .DocumentFieldDetailComponent .dragHover { background-color:#02A2D8; color:white; }
+.DataMapperUI .DocumentFieldDetailComponent .dragHover I { color:white; }
+.DataMapperUI .DocumentFieldDetailComponent I.partOfMappingIcon { color:#0088ce; }
+.DataMapperUI .DocumentFieldDetailComponent I.arrow { text-shadow:none; width:8px; font-size:14px; margin-bottom:2px; margin-right:3px; }
+.DataMapperUI .DocumentFieldDetailComponent I.parentFolder { color:var(field-label-color); text-shadow:none; margin-right:2px; font-size:12px; }
+.DataMapperUI .DocumentFieldDetailComponent .selectedField I.partOfMappingIcon { color:white; }
+.DataMapperUI .DocumentFieldDetailComponent I.partOfMappingIconHidden { visibility:hidden; }
+.DataMapperUI .DocumentFieldDetailComponent .disableSelection LABEL { text-decoration:line-through; color: rgb(220,220,220); }
+.DataMapperUI .DocumentFieldDetailComponent .propertyFieldIcons { float:right; text-align:right; }
+.DataMapperUI .DocumentFieldDetailComponent .propertyFieldIcons I { font-size:12px; vertical-align:middle; text-shadow:none; }
+.DataMapperUI .DocumentFieldDetailComponent .panelField { float:left; display:inline-block; }
+.DataMapperUI .DocumentFieldDetailComponent .panelField .nonSource { display:inline-block; width:24px; }
+.DataMapperUI .DocumentFieldDetailComponent .panelField .inLineBlock { display:inline-block; }
+.DataMapperUI .DocumentFieldDetailComponent .nbsp { display:inline-block; width:5px; }
+.DataMapperUI .DocumentFieldDetailComponent .children { display:inline-block; color: gray; }
+.DataMapperUI .DocumentFieldDetailComponent .sourceField { float:right; width:24px; text-align:right; }
+
+.DataMapperUI .searchDisplayDocumentItem { font-size:14px; font-weight:bold; }
+
+
+/*
+    Copyright (C) 2019 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+/*
+    Copyright (C) 2019 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+/* general data-mapper-wide styles and variables */
+
+@-webkit-keyframes dm-fade-in { from {opacity:0} to {opacity:1} }
+@keyframes dm-fade-in { from {opacity:0} to {opacity:1} }
+
+@-webkit-keyframes dm-fade-out { from {opacity:1} to {opacity:0} }
+@keyframes dm-fade-out { from {opacity:1} to {opacity:0} }
+
+@-webkit-keyframes dm-swipe-right { from {margin-left:-100%;} to {margin-left:0%;} }
+@keyframes dm-swipe-right { from {margin-left:-100%;} to {margin-left:0%;} }
+
+@-webkit-keyframes dm-swipe-left { from {margin-left:0%;} to {margin-left:-100%;} }
+@keyframes dm-swipe-left { from {margin-left:0%;} to {margin-left:-100%;} }
+
+:root {
+  --current-active-color: green;
+  --disabled-element-color: rgb(175,175,175);
+  --dropdown-hover-color: rgb(54,54,54);
+  --field-label-color: #363636;
+  --item-color: #CAC9C9;
+  --selected-item-color: #5CBADF;
+  --selection-background-color: #F6F6F6;
+}
+
+.DataMapperUI { height:100%; width:100%; position:relative; }
+
+.DataMapperUI .alert { font-size:12px; border: 0px transparent;}
+.DataMapperUI .alert-info { color: var(--current-active-color); }
+.DataMapperUI .alert .close { font-size:18px; color:#888888; }
+.DataMapperUI .tooltip-inner { min-width: 160px; max-width:600px; color:white; text-align: center; }
+.DataMapperUI .clear { clear:both; height:0px; }
+.DataMapperUI .hidden { visibility:hidden; }
+.DataMapperUI I { display:inline-block; }
+.DataMapperUI I.link:hover, .DataMapperUI I.selected { color:var(--selected-item-color); cursor:pointer; }
+.DataMapperUI I.selectedIcon { color:var(--selected-item-color); }
+.DataMapperUI LABEL { font-weight:normal; }
+.DataMapperUI A:hover { color:#0088ce; cursor:pointer; text-decoration:none; }
+.DataMapperUI input[disabled] { color:var(--disabled-element-color); }
+.DataMapperUI .form-group { margin: 10px auto 10px auto; }
+.DataMapperUI .form-group LABEL { width:75px; }
+.DataMapperUI .form-group LABEL.disabled { color:var(--disabled-element-color); }
+.DataMapperUI .form-group SELECT { width:100px; }
+.DataMapperUI .card-pf { margin:0; padding-left:0; padding-right:0; height:100%;
+    -webkit-animation-name:dm-fade-in; -webkit-animation-duration:0.4s;
+    animation-name:dm-fade-in; animation-duration:0.4s; }
+.DataMapperUI .dm-swipe-left { -webkit-animation-name:dm-swipe-left; -webkit-animation-duration:0.4s;
+    animation-name:dm-swipe-left; animation-duration:0.4s; }
+.DataMapperUI .dm-swipe-right { -webkit-animation-name:dm-swipe-right; -webkit-animation-duration:0.4s;
+    animation-name:dm-swipe-right; animation-duration:0.4s; }
+.DataMapperUI .card-pf-title { font-size:20px; padding:0px 12px; }
+.DataMapperUI .card-pf-heading { margin:0; padding:0; }
+.DataMapperUI .card-pf-body { padding:0px; margin:0px; }
+
+/* search box */
+.DataMapperUI .searchBox { position:relative; }
+.DataMapperUI .searchBox INPUT { width:100%; border:1px solid #FBFBFB; border-bottom:1px solid var(--item-color); padding:5px 10px; float:left;}
+.DataMapperUI .searchBox INPUT:placeholder-shown { font-style:italic; }
+.DataMapperUI .searchBoxCloseIcon { position:absolute; right:10px; top:10px; }
+.DataMapperUI .noSearchResults { width:100%; padding:10px; text-align:center; }
+
+
+/* collapsable-header */
+.DataMapperUI .CollapsableCardHeader {  border-top:1px solid #d1d1d1; }
+.DataMapperUI .CollapsableCardHeader .card-pf-heading { border-bottom:0; padding-left:5px; }
+.DataMapperUI .sources .CollapsableCardHeader .card-pf-heading { border-top:0; }
+.DataMapperUI .CollapsableCardHeader .card-pf-title { font-size:16px; }
+.DataMapperUI .CollapsableCardHeader I { margin-right:0px; vertical-align:middle; width:24px; font-size:20px; }
+
+/* mapping-field-detail */
+.DataMapperUI .fieldDetail INPUT { padding:2px 2px; width:calc(100%);
+  color: #4d5258; box-shadow: inset 0 2px 2px 0 rgba(0, 0, 0, 0.08); border:solid 1px #bbbbbb; }
+.DataMapperUI .fieldDetail LABEL.parentObjectName { float: left; width: 100%; margin-bottom: 0px; }
+.DataMapperUI .fieldDetail .parentObjectName .pficon-info { margin-right:4px; }
+.DataMapperUI .fieldDetail LABEL { text-align: left; width: 70%; }
+.DataMapperUI .fieldDetail .addTransformation { width: 100%; }
+.DataMapperUI .fieldDetail .addTransformation .addTransformationIcon { float: left; padding-right: 5px; padding-top: 10px; }
+.DataMapperUI .fieldDetail .addTransformation LABEL { padding-left: 5px; padding-top: 0px; font-family: Helvetica; }
+.DataMapperUI .fieldDetail .index-container { float:right; }
+.DataMapperUI .fieldDetail .index-container LABEL { display: inline-block; text-align: right; margin-right: 10px;
+  font-style: italic; width: 30px; float: left; margin-bottom: 0px; }
+.DataMapperUI .fieldDetail .index-container .index-value { display: inline-block; text-align: right; font-size: 110%;
+  margin-right: 15px; font-weight: bold; font-style: normal; float: left; color:var(--current-active-color); width: 20px; }
+.DataMapperUI .fieldDetail .index-container .index-value INPUT { font-weight: bold; color:var(--current-active-color);
+  height: 20px; text-align: right; }
+.DataMapperUI .fieldDetail .index-container .index-value LABEL { margin-bottom: 0px; font-style: normal; margin-left: 8px}
+.DataMapperUI .fieldDetail .index-container .removeMappedelement { float: left; margin-right:0; }
+.DataMapperUI .fieldDetail .dropdown { width:calc(100% - 71px);}
+.DataMapperUI .fieldDetail .dropdown-menu { padding:0px; width:100%; }
+.DataMapperUI .fieldDetail .dropdown-menu LI A { margin:0px; }
+.DataMapperUI .fieldDetail .dropdown-menu button.dropdown-item { background-color:white;
+  display:block; border:0px solid black; width:100%; text-align:left; }
+.DataMapperUI .fieldDetail .dropdown-menu button.active { background-color:#F5F5F5; }
+.DataMapperUI .fieldDetail { white-space: nowrap; }
+.DataMapperUI .fieldDetail .parentObjectName { font-style:italic; }
+.DataMapperUI .fieldDetail .parentObjectName LABEL { width:calc(30%); display:inline; }
+.DataMapperUI .fieldDetail .parentObjectName I { font-size:12px; vertical-align:text-bottom; margin-right:2px; }
+.DataMapperUI .fieldDetail .fieldDocName { font-style: italic; }
+
+/* mapping-detail */
+.DataMapperUI .fieldMappingDetail { border-left:1px solid #d1d1d1; float:left; overflow:auto; height:100%; width: 100%;
+    background-color:#d1d1d1; border:1px solid var(--item-color); position:relative; }
+.DataMapperUI .fieldMappingDetail .fieldDetail { }
+.DataMapperUI .fieldDetailTooltip LABEL { color:white; float:left; clear:left; }
+.DataMapperUI .fieldDetailTooltip LABEL.parentObjectName { color:white; font-style:italic; }
+.DataMapperUI .fieldDetailTooltip LABEL.parentObjectName I { vertical-align:baseline; }
+.DataMapperUI .fieldMappingDetail .linkContainer { position: relative; width:100%; text-align:right; }
+.DataMapperUI .fieldMappingDetail I { vertical-align:middle; }
+.DataMapperUI .fieldMappingDetail A.button I { margin-right:5px; font-size:10px; }
+.DataMapperUI .fieldMappingDetail A.button { margin:10px; margin-left:0px; border:1px solid #02A2D7; padding:5px 10px; border-radius:5px; }
+.DataMapperUI .fieldMappingDetail A.button:hover { border:1px solid var(field-label-color); }
+.DataMapperUI .fieldMappingDetail HR { margin-top:2px; margin-bottom:2px; border-top:1px solid #d1d1d1; }
+.DataMapperUI .fieldMappingDetail .sectionHeader { font-weight:bold; }
+.DataMapperUI .fieldMappingDetail .fieldMappingDetail-body { height:calc(100% - 65px); overflow:auto; }
+.DataMapperUI .fieldMappingDetail A.small-primary { padding:5px 5px; border-radius:1px; border:solid 1px #00659c;
+    background-image:linear-gradient(to bottom, #39a5dc, #0088ce); box-shadow:0 2px 3px 0 rgba(3, 3, 3, 0.1);
+    text-align:center; color:#ffffff; }
+.DataMapperUI .fieldMappingDetail A.small-primary:active { background-image:linear-gradient(to bottom, #0088ce, #39a5dc); }
+.DataMapperUI .fieldMappingDetail .collectionSectionContainer { width:100%; overflow:hidden; overflow-y:auto; height:100%; }
+.DataMapperUI .fieldMappingDetail .collectionSection { width:200%; }
+.DataMapperUI .fieldMappingDetail .collectionSectionLeft { margin-left:-100%; }
+.DataMapperUI .fieldMappingDetail .alert>.pficon { top:8px; font-size:16px; left:8px; }
+.DataMapperUI .fieldMappingDetail .alert { margin:0; border-left-width:0px; border-right-width:0px; padding:5px; }
+.DataMapperUI .fieldMappingDetail .alert LABEL { width:calc(100% - 60px); margin-left:28px; margin-bottom:0; }
+.DataMapperUI .fieldMappingDetail .alert .close { margin-right:5px; }
+.DataMapperUI .fieldMappingDetail .mappingFieldAction .linkContainer { padding-right:6px; }
+
+/* mapping-field-action */
+.DataMapperUI .mappingFieldAction .form-group LABEL { float:left; clear:left; margin-right: 10px; width:20%;
+  text-align:right; }
+.DataMapperUI .mappingFieldAction .form-group SELECT { float: left; clear: left; width:calc(100% - 30px);
+  color:var(--current-active-color); font-weight: bold; }
+.DataMapperUI .mappingFieldAction .form-group INPUT { float: left; width: 50%; text-align: right; color:var(--current-active-color); }
+.DataMapperUI .mappingFieldAction .form-group .actionConfigOptions { color: black; }
+.DataMapperUI .mappingFieldAction .form-group .removeTransIcon { float:right; margin-right: 5px; font-size:14px; }
+.DataMapperUI .mappingFieldAction .check-icon-disabled { font-size:14px; color: lightgray }
+.DataMapperUI .mappingFieldAction .check-icon-enabled { font-size:14px; color: var(--current-active-color) }
+.DataMapperUI .mappingFieldAction .actionContainer .combobox-container {
+   display: block;
+   float: left;
+   margin-left: 20px;
+   margin-right: 0px;
+   width: calc(100% - 50px);
+   text-align: left;
+}
+
+/* mapping-field-action-argument */
+.DataMapperUI .mappingFieldActionArgument .actionConfigStyleOptions { color: black; }
+.DataMapperUI .mappingFieldActionArgument .actionDelimiter { font-weight:bold; color: var(--current-active-color); }
+.DataMapperUI .mappingFieldActionArgument .leftText { text-align:left; }
+.DataMapperUI .mappingFieldActionArgument .rightText { text-align:right; }
+
+/* mapping-field-container */
+.DataMapperUI .mappingFieldContainer { background-color:#d3d3d3; padding: 10px; width: 100%; }
+.DataMapperUI .mappingFieldContainer .MappingFieldSectionDisplay .searchBoxWrapper LABEL:hover { color:#ddd }
+.DataMapperUI .mappingFieldContainer .MappingFieldSectionDisplay .transitionSelectionDisplay { margin-top:10px; }
+.DataMapperUI .mappingFieldContainer .searchDisplayFieldItem { margin-left:5px; }
+.DataMapperUI .MappingFieldSection { background-color: white; padding: 6px 10px 6px 10px; margin: 5px; box-shadow: 1px 1px 2px 2px rgba(51, 51, 51, 0.25); }
+.DataMapperUI .MappingFieldSection LABEL { color: var(field-label-color); }
+.DataMapperUI .MappingFieldSection .fieldDetailTooltip LABEL { color: white; }
+.DataMapperUI .MappingFieldSection .searchBoxWrapper { overflow-x: visible; }
+.DataMapperUI .MappingFieldSection .searchBoxWrapper .searchBox { border-color: #4d5258; color: var(--current-active-color); z-index: 101; max-width: 400px; overflow-y: visible; }
+
+/* mapping-selection */
+.DataMapperUI .MappingSelectionComponent { margin-left:20px; margin-right:20px; width:500px; }
+.DataMapperUI .MappingSelectionComponent .MappingSelectionOptions { overflow:auto; }
+.DataMapperUI .MappingSelectionComponent .inputFields,
+.DataMapperUI .MappingSelectionComponent .outputFields { width:200px; padding:5px; padding-left:10px; vertical-align:top; }
+.DataMapperUI .MappingSelectionComponent .odd { background-color: var(--selection-background-color); }
+.DataMapperUI .MappingSelectionComponent .pathHeader .pathName, .MappingSelectionComponent .pathHeader,
+.DataMapperUI .MappingSelectionComponent .pathHeader .fieldName { display:inline; padding:0; margin:0; float:left; }
+.DataMapperUI .MappingSelectionComponent .pathHeader .pathName { word-break:break-word; }
+.DataMapperUI .MappingSelectionComponent .pathHeader { display:inline-block; width:100%; margin-top:2px; margin-bottom:20px; }
+.DataMapperUI .MappingSelectionComponent .sourceTargetHeader { font-size:16px; }
+.DataMapperUI .MappingSelectionComponent .fieldPair { margin-bottom:10px; border-left:1px solid rgb(54, 54, 54); padding-left:5px; margin-top:10px; }
+.DataMapperUI .MappingSelectionComponent BUTTON.addButton I { margin-right:5px; }
+.DataMapperUI .MappingSelectionComponent .header { margin-bottom:20px; }
+
+/* mapping-selection-section */
+.DataMapperUI .MappingSelectionSection { padding:0px 8px; border:1px solid var(--selection-background-color); }
+.DataMapperUI .MappingSelectionSection .pathName, .MappingSelectionSection .pathContainer,
+.DataMapperUI .MappingSelectionSection .fieldName, .MappingSelectionSection .numberWrapper { display:inline; padding:0; margin:0; float:left; }
+.DataMapperUI .MappingSelectionSection .numberWrapper { width:30px; height:30px; text-align:center; color:#fafafa; background-color:#0088ce;
+    border-radius:15px; font-size:16px; margin-right:10px; margin-left:5px; margin-top:15px; }
+.DataMapperUI .MappingSelectionSection .number { display:block; font-weight:bold; margin-top:2px; }
+.DataMapperUI .SelectedMappingSelectionSection .numberWrapper { background-color:white; color:#0088ce; }
+.DataMapperUI .MappingSelectionSection .pathName { word-break:break-word; }
+.DataMapperUI .MappingSelectionSection .pathContainer { display:inline-block; width:calc(100% - 45px); }
+.DataMapperUI .MappingSelectionSection .sourceTargetSection LABEL { display:none; }
+.DataMapperUI .MappingSelectionSection .sourceTargetSection I { font-size:16px; margin-right:5px; vertical-align:text-bottom; }
+.DataMapperUI .MappingSelectionSection .sourceTargetSection I:hover { color:inherit; }
+.DataMapperUI .SelectedMappingSelectionSection, .MappingSelectionComponent .SelectedMappingSelectionSection.odd { background-color:#0088ce; color:#fafafa; border-color:#0088ce; }
+.DataMapperUI .SelectedMappingSelectionSection .fieldPair { border-left-color:rgb(250,250,250); }
+
+.DataMapperUI .wizard-pf {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  top: 0px;
+  bottom: 0px;
+  margin: 0;
+  margin-left: 0;
+  position: relative;
+}
+
+.DataMapperUI .wizard-pf-body {
+  height: inherit;
+  max-height: inherit;
+  padding: 0;
+  margin: 0;
+}
+
+.DataMapperUI .wizard-pf-row {
+  height: auto;
+  min-height: 50%;
+  position: relative;
+  overflow: auto;
+  z-index: 99;
+}
+
+.DataMapperUI .wizard-pf-sidebar {
+  border: 0;
+  cursor: pointer;
+  display: flex;
+  flex: 1 1 inherit;
+  flex-direction: column;
+}
+
+.DataMapperUI .mapping-details-panel {
+  height: 100%;
+  width: calc(100% - 50px);
+  margin-right: 10px;
+  position: relative;
+}
+
+.DataMapperUI .mapping-detail-icon-container {
+  width: 50px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.DataMapperUI .mapping-detail-icon-container:before {
+  border-bottom: 0;
+  content: '';
+  position: absolute;
+  width: 3px;
+  background-color: #d4d4d4;
+  top: 44px;
+  bottom: 0;
+  overflow: none;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.DataMapperUI .mapping-detail-icon-container-bottom {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.DataMapperUI .mapping-detail-icon-container-bottom:before {
+  border-top: 0;
+  content: '';
+  position: absolute;
+  padding-top: 0px;
+  height: 16px;
+  width: 3px;
+  background-color: #d4d4d4;
+  top: 0px;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.DataMapperUI .mapping-detail-icon-container .fa-stack {
+  position: absolute;
+  top: 16px;
+  bottom: 0;
+  font-size: 16px;
+ }
+
+.DataMapperUI .mapping-sources .CollapsableCardHeader {
+  border-top: 0;
+}
+
+.DataMapperUI .fieldDetail .combobox-container {
+  display: block;
+  float: right;
+  min-width: calc(100% - 65px); 
+  width: calc(100% - 80px); 
+}
+
+/* transition-selection */
+.DataMapperUI .TransitionSelection LABEL { width:100%; }
+.DataMapperUI .TransitionSelection .combobox { color:var(--current-active-color); font-weight: bold; }
+.DataMapperUI .TransitionSelection .enumSection LABEL { width:calc(100% - 25px); margin-bottom:0; }
+.DataMapperUI .TransitionSelection SELECT { float: left; display: block; width: calc(100% - 30px); }
+.DataMapperUI .TransitionSelection .form-group .combobox .multiplicityOption { color: black; }
+.DataMapperUI .TransitionSelection .form-group INPUT { float: left; width: 50%; text-align: right;
+  color: var(--current-active-color); }
+.DataMapperUI .TransitionSelection .form-group {
+    position: relative;
+    display: block;
+}
+.DataMapperUI .TransitionSelection .form-group .select-separator-text {
+    display: block;
+    position: absolute;
+    margin-top: 2px;
+    background: #EEE;
+    width: calc(100% - 65px);
+}
+.DataMapperUI .TransitionSelection .form-group .form-control div {
+    cursor: pointer;
+    padding: 2px 5px;
+}
+.DataMapperUI .TransitionSelection .form-group input:focus + .form-control {
+    display: block;
+}
+
+/* lookup-table */
+.DataMapperUI .LookupTableComponent .lookupTableRow { margin:0px 10px 10px 5px; padding:5px 0px; }
+.DataMapperUI .LookupTableComponent LABEL { width:150px; margin-right:20px; overflow:hidden; vertical-align:bottom; }
+.DataMapperUI .LookupTableComponent SELECT { width:200px; vertical-align:super; }
+
+/*
+    Copyright (C) 2019 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+/*
+    Copyright (C) 2019 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+/* general data-mapper-wide styles and variables */
+
+@-webkit-keyframes dm-fade-in { from {opacity:0} to {opacity:1} }
+@keyframes dm-fade-in { from {opacity:0} to {opacity:1} }
+
+@-webkit-keyframes dm-fade-out { from {opacity:1} to {opacity:0} }
+@keyframes dm-fade-out { from {opacity:1} to {opacity:0} }
+
+@-webkit-keyframes dm-swipe-right { from {margin-left:-100%;} to {margin-left:0%;} }
+@keyframes dm-swipe-right { from {margin-left:-100%;} to {margin-left:0%;} }
+
+@-webkit-keyframes dm-swipe-left { from {margin-left:0%;} to {margin-left:-100%;} }
+@keyframes dm-swipe-left { from {margin-left:0%;} to {margin-left:-100%;} }
+
+:root {
+  --current-active-color: green;
+  --disabled-element-color: rgb(175,175,175);
+  --dropdown-hover-color: rgb(54,54,54);
+  --field-label-color: #363636;
+  --item-color: #CAC9C9;
+  --selected-item-color: #5CBADF;
+  --selection-background-color: #F6F6F6;
+}
+
+.DataMapperUI { height:100%; width:100%; position:relative; }
+
+.DataMapperUI .alert { font-size:12px; border: 0px transparent;}
+.DataMapperUI .alert-info { color: var(--current-active-color); }
+.DataMapperUI .alert .close { font-size:18px; color:#888888; }
+.DataMapperUI .tooltip-inner { min-width: 160px; max-width:600px; color:white; text-align: center; }
+.DataMapperUI .clear { clear:both; height:0px; }
+.DataMapperUI .hidden { visibility:hidden; }
+.DataMapperUI I { display:inline-block; }
+.DataMapperUI I.link:hover, .DataMapperUI I.selected { color:var(--selected-item-color); cursor:pointer; }
+.DataMapperUI I.selectedIcon { color:var(--selected-item-color); }
+.DataMapperUI LABEL { font-weight:normal; }
+.DataMapperUI A:hover { color:#0088ce; cursor:pointer; text-decoration:none; }
+.DataMapperUI input[disabled] { color:var(--disabled-element-color); }
+.DataMapperUI .form-group { margin: 10px auto 10px auto; }
+.DataMapperUI .form-group LABEL { width:75px; }
+.DataMapperUI .form-group LABEL.disabled { color:var(--disabled-element-color); }
+.DataMapperUI .form-group SELECT { width:100px; }
+.DataMapperUI .card-pf { margin:0; padding-left:0; padding-right:0; height:100%;
+    -webkit-animation-name:dm-fade-in; -webkit-animation-duration:0.4s;
+    animation-name:dm-fade-in; animation-duration:0.4s; }
+.DataMapperUI .dm-swipe-left { -webkit-animation-name:dm-swipe-left; -webkit-animation-duration:0.4s;
+    animation-name:dm-swipe-left; animation-duration:0.4s; }
+.DataMapperUI .dm-swipe-right { -webkit-animation-name:dm-swipe-right; -webkit-animation-duration:0.4s;
+    animation-name:dm-swipe-right; animation-duration:0.4s; }
+.DataMapperUI .card-pf-title { font-size:20px; padding:0px 12px; }
+.DataMapperUI .card-pf-heading { margin:0; padding:0; }
+.DataMapperUI .card-pf-body { padding:0px; margin:0px; }
+
+/* search box */
+.DataMapperUI .searchBox { position:relative; }
+.DataMapperUI .searchBox INPUT { width:100%; border:1px solid #FBFBFB; border-bottom:1px solid var(--item-color); padding:5px 10px; float:left;}
+.DataMapperUI .searchBox INPUT:placeholder-shown { font-style:italic; }
+.DataMapperUI .searchBoxCloseIcon { position:absolute; right:10px; top:10px; }
+.DataMapperUI .noSearchResults { width:100%; padding:10px; text-align:center; }
+
+
+/* mapping-list, namespace-list */
+.DataMapperUI .dataMapperItemList  { border:1px solid black; border:1px solid var(--item-color); margin-right:10px; height:100%; }
+.DataMapperUI .dataMapperItemList  LABEL { float:left; margin-bottom:0px; padding-left:5px; }
+.DataMapperUI .dataMapperItemList  .items { height:calc(100% - 125px); position:relative; overflow:scroll; overflow-x:hidden;
+    float:left; clear:left; width:100%; }
+.DataMapperUI .dataMapperItemList  .items.searchShown { height:calc(100% - 157px); }
+.DataMapperUI .dataMapperItemList .item { border-bottom:1px solid #d1d1d1; }
+.DataMapperUI .dataMapperItemList .item.even { background-color:rgba(201,201,201,0.10); }
+.DataMapperUI .dataMapperItemList .item.active { background-color:#39a5dc; color:white; }
+.DataMapperUI .dataMapperItemList .item.active .fieldPath I { color:white; text-shadow:0 1px 2px rgba(54,54,54,0.24); }
+.DataMapperUI .dataMapperItemList .searchBox {  }
+.DataMapperUI .dataMapperItemList .itemCount { padding:5px; font-size:10px; font-weight:bold;
+    text-align:right; margin:0; width:100%; border-top:1px solid var(--item-color); padding-right:12px;
+    border-bottom:0px solid black; }
+.DataMapperUI .dataMapperItemList .itemCount { float:left; clear:left; }
+.DataMapperUI .dataMapperItemList .card-pf-title .name { display:inline-block; width:calc(100% - 45px); margin-left:3px; float:left; }
+.DataMapperUI .dataMapperItemList .card-pf-title .name I { margin-right:5px; vertical-align:baseline; }
+.DataMapperUI .dataMapperItemList .card-pf-title .name LABEL { float:none; padding-left:0px; }
+.DataMapperUI .dataMapperItemList .card-pf-title { border-bottom:1px solid var(--item-color); margin:0; padding-top:20px; padding-bottom:20px; }
+.DataMapperUI .dataMapperItemList I.importExportIcon { float:right; }
+.DataMapperUI .dataMapperItemList I.searchBoxIcon { float:right; }
+.DataMapperUI .dataMapperItemList .rows { border-top:1px solid #d1d1d1; }
+.DataMapperUI .dataMapperItemList .rows.searchShown { }
+.DataMapperUI .dataMapperItemList .searchHeaderWrapper { width:100%; float:left; clear:left; position:relative; }
+.DataMapperUI .dataMapperItemList .rowTitles { background-color:white; width:calc(100% - 0px); overflow:scroll; overflow-x:hidden; padding: 2px 6px; }
+.DataMapperUI .dataMapperItemList .rowTitles.searchShown { }
+.DataMapperUI .dataMapperItemList .rowTitles LABEL { width:calc(40% - 20px); padding:5px 5px; float:left; margin-bottom:0px; }
+.DataMapperUI .dataMapperItemList .rowTitles LABEL I { margin-right:5px; vertical-align:baseline; text-shadow: 0 1px 2px rgba(3, 3, 3, 0.24); }
+.DataMapperUI .dataMapperItemList .itemRow { padding:5px 6px;}
+.DataMapperUI .dataMapperItemList .noSearchResults { font-weight:bolder; font-size:14px; text-align:center; padding:30px; }
+.DataMapperUI .dataMapperItemList .noSearchResults LABEL { float:none; }
+
+/* mapping-list */
+.DataMapperUI .mappingList .fieldNames { float:left; width:calc(40% - 20px);  }
+.DataMapperUI .mappingList .targetFieldNames { }
+.DataMapperUI .mappingList .fieldPath {  clear:left; }
+.DataMapperUI .mappingList .fieldPath I { margin-left:5px; font-size:12px; color:#0088ce; text-shadow: 0 1px 2px rgba(3, 3, 3, 0.24); }
+.DataMapperUI .mappingList .transition { float:left; width:calc(15% - 20px); }
+.DataMapperUI .mappingList .error { float:right; font-size:14px; }
+.DataMapperUI .mappingList .rowTitles LABEL.type { width:calc(15% - 20px); }
+
+/* namespace-list */
+.DataMapperUI .namespaceList LABEL.alias { width:calc(15% - 0px); }
+.DataMapperUI .namespaceList LABEL.uri { width:calc(30% - 0px); }
+.DataMapperUI .namespaceList LABEL.locationUri { width:calc(30% - 0px); }
+.DataMapperUI .namespaceList .actions { float:right; }
+.DataMapperUI .namespaceList .actions .fa { margin-left:2px; font-size:14px; }
+
+/* data preview */
+.DataMapperUI .previewSourceTextarea { width:100%; height:29px; }
+.DataMapperUI .previewResultContainer { position: relative; width: 100%; height: 29px; }
+.DataMapperUI .previewResultContainer:before {
+  box-sizing: border-box;
+  content: '';
+  top: 0;
+  left: 0;
+  position: absolute;
+  border-top: 14px solid transparent;
+  border-bottom: 14px solid transparent;
+  border-left: 14px solid #003b5d;
+}
+.DataMapperUI .previewResultContainer:after { box-sizing: border-box; }
+.DataMapperUI .previewResultContainer textarea {
+  min-height: 29px;
+  height: 100%;
+  width: 100%;
+  resize: none;
+  padding-top: 4px;
+  padding: 4px 4px 4px 22px;
+  line-height: 1.75;
+  border: none;
+  font-size: 12px;
+  color: black;
+}
+
+table.mappedFieldTable { width:100%; margin-top:3px; margin-bottom:3px; }
+table.mappedFieldTable .mappedFieldTablePreview { width:97%; }
+table.mappingTable { width:100%; margin-top:5px; }
+table.mappingTable tr { width:12px; }
+table.previewResults { width:100% }
+
+/*
+    Copyright (C) 2019 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+/*
+    Copyright (C) 2019 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+/* general data-mapper-wide styles and variables */
+
+@-webkit-keyframes dm-fade-in { from {opacity:0} to {opacity:1} }
+@keyframes dm-fade-in { from {opacity:0} to {opacity:1} }
+
+@-webkit-keyframes dm-fade-out { from {opacity:1} to {opacity:0} }
+@keyframes dm-fade-out { from {opacity:1} to {opacity:0} }
+
+@-webkit-keyframes dm-swipe-right { from {margin-left:-100%;} to {margin-left:0%;} }
+@keyframes dm-swipe-right { from {margin-left:-100%;} to {margin-left:0%;} }
+
+@-webkit-keyframes dm-swipe-left { from {margin-left:0%;} to {margin-left:-100%;} }
+@keyframes dm-swipe-left { from {margin-left:0%;} to {margin-left:-100%;} }
+
+:root {
+  --current-active-color: green;
+  --disabled-element-color: rgb(175,175,175);
+  --dropdown-hover-color: rgb(54,54,54);
+  --field-label-color: #363636;
+  --item-color: #CAC9C9;
+  --selected-item-color: #5CBADF;
+  --selection-background-color: #F6F6F6;
+}
+
+.DataMapperUI { height:100%; width:100%; position:relative; }
+
+.DataMapperUI .alert { font-size:12px; border: 0px transparent;}
+.DataMapperUI .alert-info { color: var(--current-active-color); }
+.DataMapperUI .alert .close { font-size:18px; color:#888888; }
+.DataMapperUI .tooltip-inner { min-width: 160px; max-width:600px; color:white; text-align: center; }
+.DataMapperUI .clear { clear:both; height:0px; }
+.DataMapperUI .hidden { visibility:hidden; }
+.DataMapperUI I { display:inline-block; }
+.DataMapperUI I.link:hover, .DataMapperUI I.selected { color:var(--selected-item-color); cursor:pointer; }
+.DataMapperUI I.selectedIcon { color:var(--selected-item-color); }
+.DataMapperUI LABEL { font-weight:normal; }
+.DataMapperUI A:hover { color:#0088ce; cursor:pointer; text-decoration:none; }
+.DataMapperUI input[disabled] { color:var(--disabled-element-color); }
+.DataMapperUI .form-group { margin: 10px auto 10px auto; }
+.DataMapperUI .form-group LABEL { width:75px; }
+.DataMapperUI .form-group LABEL.disabled { color:var(--disabled-element-color); }
+.DataMapperUI .form-group SELECT { width:100px; }
+.DataMapperUI .card-pf { margin:0; padding-left:0; padding-right:0; height:100%;
+    -webkit-animation-name:dm-fade-in; -webkit-animation-duration:0.4s;
+    animation-name:dm-fade-in; animation-duration:0.4s; }
+.DataMapperUI .dm-swipe-left { -webkit-animation-name:dm-swipe-left; -webkit-animation-duration:0.4s;
+    animation-name:dm-swipe-left; animation-duration:0.4s; }
+.DataMapperUI .dm-swipe-right { -webkit-animation-name:dm-swipe-right; -webkit-animation-duration:0.4s;
+    animation-name:dm-swipe-right; animation-duration:0.4s; }
+.DataMapperUI .card-pf-title { font-size:20px; padding:0px 12px; }
+.DataMapperUI .card-pf-heading { margin:0; padding:0; }
+.DataMapperUI .card-pf-body { padding:0px; margin:0px; }
+
+/* search box */
+.DataMapperUI .searchBox { position:relative; }
+.DataMapperUI .searchBox INPUT { width:100%; border:1px solid #FBFBFB; border-bottom:1px solid var(--item-color); padding:5px 10px; float:left;}
+.DataMapperUI .searchBox INPUT:placeholder-shown { font-style:italic; }
+.DataMapperUI .searchBoxCloseIcon { position:absolute; right:10px; top:10px; }
+.DataMapperUI .noSearchResults { width:100%; padding:10px; text-align:center; }
+
+
+.DataMapperUI .modal { width:100%; height:100%; overflow:auto; }
+.DataMapperUI .modal-body { overflow:auto; overflow-x:hidden; margin-bottom:5px; background-color: white }
+.DataMapperUI .modal-title { font-size:16px; }
+.DataMapperUI .modal-footer .btn { margin-left:10px; }
+.DataMapperUI .modal-footer { margin:0; }
+.DataMapperUI .modal-message { padding:10px 20px; }
+.DataMapperUI .modal-error-count { font-weight: bold; font-size:20px; }
+
+/*
+    Copyright (C) 2019 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+/*
+    Copyright (C) 2019 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+/* general data-mapper-wide styles and variables */
+
+@-webkit-keyframes dm-fade-in { from {opacity:0} to {opacity:1} }
+@keyframes dm-fade-in { from {opacity:0} to {opacity:1} }
+
+@-webkit-keyframes dm-fade-out { from {opacity:1} to {opacity:0} }
+@keyframes dm-fade-out { from {opacity:1} to {opacity:0} }
+
+@-webkit-keyframes dm-swipe-right { from {margin-left:-100%;} to {margin-left:0%;} }
+@keyframes dm-swipe-right { from {margin-left:-100%;} to {margin-left:0%;} }
+
+@-webkit-keyframes dm-swipe-left { from {margin-left:0%;} to {margin-left:-100%;} }
+@keyframes dm-swipe-left { from {margin-left:0%;} to {margin-left:-100%;} }
+
+:root {
+  --current-active-color: green;
+  --disabled-element-color: rgb(175,175,175);
+  --dropdown-hover-color: rgb(54,54,54);
+  --field-label-color: #363636;
+  --item-color: #CAC9C9;
+  --selected-item-color: #5CBADF;
+  --selection-background-color: #F6F6F6;
+}
+
+.DataMapperUI { height:100%; width:100%; position:relative; }
+
+.DataMapperUI .alert { font-size:12px; border: 0px transparent;}
+.DataMapperUI .alert-info { color: var(--current-active-color); }
+.DataMapperUI .alert .close { font-size:18px; color:#888888; }
+.DataMapperUI .tooltip-inner { min-width: 160px; max-width:600px; color:white; text-align: center; }
+.DataMapperUI .clear { clear:both; height:0px; }
+.DataMapperUI .hidden { visibility:hidden; }
+.DataMapperUI I { display:inline-block; }
+.DataMapperUI I.link:hover, .DataMapperUI I.selected { color:var(--selected-item-color); cursor:pointer; }
+.DataMapperUI I.selectedIcon { color:var(--selected-item-color); }
+.DataMapperUI LABEL { font-weight:normal; }
+.DataMapperUI A:hover { color:#0088ce; cursor:pointer; text-decoration:none; }
+.DataMapperUI input[disabled] { color:var(--disabled-element-color); }
+.DataMapperUI .form-group { margin: 10px auto 10px auto; }
+.DataMapperUI .form-group LABEL { width:75px; }
+.DataMapperUI .form-group LABEL.disabled { color:var(--disabled-element-color); }
+.DataMapperUI .form-group SELECT { width:100px; }
+.DataMapperUI .card-pf { margin:0; padding-left:0; padding-right:0; height:100%;
+    -webkit-animation-name:dm-fade-in; -webkit-animation-duration:0.4s;
+    animation-name:dm-fade-in; animation-duration:0.4s; }
+.DataMapperUI .dm-swipe-left { -webkit-animation-name:dm-swipe-left; -webkit-animation-duration:0.4s;
+    animation-name:dm-swipe-left; animation-duration:0.4s; }
+.DataMapperUI .dm-swipe-right { -webkit-animation-name:dm-swipe-right; -webkit-animation-duration:0.4s;
+    animation-name:dm-swipe-right; animation-duration:0.4s; }
+.DataMapperUI .card-pf-title { font-size:20px; padding:0px 12px; }
+.DataMapperUI .card-pf-heading { margin:0; padding:0; }
+.DataMapperUI .card-pf-body { padding:0px; margin:0px; }
+
+/* search box */
+.DataMapperUI .searchBox { position:relative; }
+.DataMapperUI .searchBox INPUT { width:100%; border:1px solid #FBFBFB; border-bottom:1px solid var(--item-color); padding:5px 10px; float:left;}
+.DataMapperUI .searchBox INPUT:placeholder-shown { font-style:italic; }
+.DataMapperUI .searchBoxCloseIcon { position:absolute; right:10px; top:10px; }
+.DataMapperUI .noSearchResults { width:100%; padding:10px; text-align:center; }
+
+
+.DataMapperUI .toolbar { margin:1px 0px; padding:10px; }
+.DataMapperUI .toolbar .toolbar-icons I { font-size:20px; margin-left:10px; vertical-align:middle; }
+.DataMapperUI .toolbar .toolbar-icons .fSubX { float:left; font-weight:bold; margin-top:-6px; margin-left:50px;}
+.DataMapperUI .toolbar .toolbar-icons .conditionalExprBlock { width:400px; margin-left:10px; }
+.DataMapperUI .toolbar .toolbar-icons .toolbarIconSeparator { font-size:24px; color:gray; margin-top:-2px; }
+.DataMapperUI .toolbar .toolbar-icons .exportADM { float:left;color: black; margin-top:2px }
+.DataMapperUI .toolbar .toolbar-icons .exportADM .dropdown-menu { font-size:14px; width:426px; }
+.DataMapperUI .toolbar .toolbar-icons .exportADM .exportMappings { margin-left:8px; margin-right:8px; }
+.DataMapperUI .toolbar .toolbar-icons .exportADM .exportMappings .exportOK { margin-left:7px; margin-right:4px; }
+.DataMapperUI .toolbar .toolbar-icons .importADM { font-size:20px; margin-top:-2px; }
+.DataMapperUI .toolbar .toolbar-icons .importADM INPUT { display:none; }
+.DataMapperUI .toolbar .toolbar-icons .pficon-restart { margin-left:22px; }
+.DataMapperUI .toolbar .dropdown-menu .dropdown-item { margin-top:5px; margin-left:7px; font-size:14px; }
+.DataMapperUI .toolbar .dropdown-menu LI { background-color:transparent; width:220px; }
+.DataMapperUI .toolbar .dropdown-menu LI A { color:var(--dropdown-hover-color); }
+.DataMapperUI .toolbar .dropdown-menu LI I { color:var(--dropdown-hover-color); font-size:14px; margin-right:10px;
+  vertical-align:baseline; }
+.DataMapperUI .toolbar .dropdown-menu LI I.fa-check { margin-top:3px; }
+.DataMapperUI .toolbar .dropdown-menu LI:hover { background-color:rgba(92, 186, 223, 0.75); }
+.DataMapperUI .toolbar .dropdown-menu LI:hover A { }
+.DataMapperUI .toolbar .dropdown-menu LI:hover I { }
+
+/* expression */
+.DataMapperUI .conditional-expr-picker { font-size: 12px; position: absolute; z-index: 100; overflow: auto;
+  text-shadow:0 1px 2px rgba(54,54,54,0.24); color: #4d5258; box-shadow: inset 0 2px 2px 0 rgba(0, 0, 0, 0.08);
+  border:solid 1px #bbbbbb; max-width: 620px; }
+.DataMapperUI .conditional-expr-picker .expressionSearchResult:hover {
+  background-color: lightblue;
+  outline: none; }
+
+.DataMapperUI .expressionMarkup {
+  min-width: 400px;
+  height:29px;
+  display: inline-block;
+  word-wrap: normal;
+  overflow-wrap: normal;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.DataMapperUI .expressionFieldLabel {
+  display: inline-block;
+}
+
+.DataMapperUI .expressionSearchResult {
+  cursor: pointer;
+}
+
+.DataMapperUI .expressionSearchResult:hover {
+  background-color: var(--selected-item-color);
+}
+
+
+/* loading screen styles */
+.dataMapperBodyHidden { visibility:hidden; position:relative; height:0px; }
+.dataMapperBody { visibility:visible; height:100%; width: 100%; position:relative; margin-left: 0px; }
+
+.DataMapperLoadingMessage { position:absolute; height:100%; top:0%; left:0%; padding-top:20%; width:100%; text-align:center; }
+.DataMapperLoadingMessage .error { color:crimson; }
+.DataMapperLoadingMessage .spinner { vertical-align:text-bottom; }
+.DataMapperLoadingMessage LABEL { vertical-align:text-top; margin-right:3px; }
+.DataMapperLoadingMessage IMG { height:12px; width:12px; vertical-align:middle; }
+
+.DataMapperUI .atlasmapNavbar { }
+.DataMapperUI .atlasmapNavbar .dropdown { position: relative; display: inline-block; }
+.DataMapperUI .atlasmapNavbar .dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.DataMapperUI .atlasmapNavbar .dropdown .dropdown-content a:hover { background-color: #ddd; }
+.DataMapperUI .atlasmapNavbar A:hover { color:#0088ce; cursor:pointer; text-decoration:none; background-color: #ddd;}
+.DataMapperUI .atlasmapNavbar I.link:hover { color:rgb(54,54,54); }
+.DataMapperUI .atlasmapNavbar .dropdown:hover .dropdown-content { display: block; }
+
+.DataMapperUI .row { margin:0px; }
+.DataMapperUI .row.modalWindow { min-height:0px; }
+.DataMapperUI .row.mainDisplay { height:calc(100% - 10px); position:relative; padding-top:10px; }
+.DataMapperUI .row.mainDisplay .col-md-3 { padding:0px; height:100%; width:30%; }
+.DataMapperUI .row.mainDisplay .col-md-9 { height:100%; padding:0; width: 70%; }
+.DataMapperUI .row.mainDisplay .col-md-9 .docDefIn { float:left; width:45%; height:100%; }
+.DataMapperUI .row.mainDisplay .col-md-9 .lineMachine { float:left; width:10%; height:100%; margin-left:-5px; margin-right:-5px; }
+.DataMapperUI .row.mainDisplay .col-md-9 .docDefOut { float:left; width:45%; height:100%; }
+
+/* constant-field-edit, field-edit, property-field-edit */
+.DataMapperUI .DataMapperEditComponent INPUT, .DataMapperEditComponent .form-group SELECT { width:300px; }
+.DataMapperUI .DataMapperEditComponent .form-group TEXTAREA { margin:auto; }
+.DataMapperUI .DataMapperEditComponent .fieldDocDefName { font-style:italic; }
+
+/* data-mapper-error */
+.DataMapperUI .DataMapperErrorComponent {
+  display: block;
+  box-sizing: border-box;
+  border: 1px;
+  margin-top: 8px;
+  height: 54px;
+  position: fixed;
+  margin-bottom: 8px;
+  overflow: hidden;
+  overflow-x: hidden;
+  width: 40%;
+}
+
+/* data-mapper-error */
+.DataMapperUI .DataMapperErrorComponent {
+  display: block;
+  box-sizing: border-box;
+  border: 1px;
+  margin-top: 8px;
+  height: 54px;
+  position: fixed;
+  margin-bottom: 8px;
+  overflow: hidden;
+  overflow-x: hidden;
+  width: 40%;
+}
+
+/* line-machine */
+.DataMapperUI .LineMachineComponent { height:100%; margin-top:6%; }
+.DataMapperUI .LineMachineComponent line:hover { cursor:pointer; }
+.DataMapperUI .LineMachineComponent svg { width:100%; height:100%; }
+
+/* namespace-edit */
+.DataMapperUI .PropertyEditFieldComponent LABEL { width:105px; }
+.DataMapperUI .PropertyEditFieldComponent INPUT {  width:300px; }
+.DataMapperUI .PropertyEditFieldComponent .targetType INPUT { width:20px; vertical-align:left; }
