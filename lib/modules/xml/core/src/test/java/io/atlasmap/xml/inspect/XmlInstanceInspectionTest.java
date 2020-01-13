@@ -315,21 +315,31 @@ public class XmlInstanceInspectionTest extends BaseXmlInspectionServiceTest {
         assertEquals("firstArray", firstArray.getName());
         assertEquals(CollectionType.LIST, firstArray.getCollectionType());
         assertEquals(3, firstArray.getXmlFields().getXmlField().size());
+        XmlField firstValue = (XmlField) firstArray.getXmlFields().getXmlField().get(0);
+        assertNotNull(firstValue);
+        assertEquals("value", firstValue.getName());
+        assertNull(firstValue.getCollectionType());
+        assertEquals(FieldType.STRING, firstValue.getFieldType());
         XmlComplexType secondArray = (XmlComplexType) firstArray.getXmlFields().getXmlField().get(1);
         assertNotNull(secondArray);
         assertEquals("secondArray", secondArray.getName());
         assertEquals(CollectionType.LIST, secondArray.getCollectionType());
         assertEquals(3, firstArray.getXmlFields().getXmlField().size());
+        XmlField secondValue = (XmlField) secondArray.getXmlFields().getXmlField().get(0);
+        assertNotNull(secondValue);
+        assertEquals("value", secondValue.getName());
+        assertNull(secondValue.getCollectionType());
+        assertEquals(FieldType.STRING, secondValue.getFieldType());
         XmlComplexType thirdArray = (XmlComplexType) secondArray.getXmlFields().getXmlField().get(1);
         assertNotNull(thirdArray);
         assertEquals("thirdArray", thirdArray.getName());
         assertEquals(CollectionType.LIST, thirdArray.getCollectionType());
         assertEquals(1, thirdArray.getXmlFields().getXmlField().size());
-        XmlField value = (XmlField) thirdArray.getXmlFields().getXmlField().get(0);
-        assertNotNull(value);
-        assertEquals("value", value.getName());
-        assertNull(value.getCollectionType());
-        assertEquals(FieldType.STRING, value.getFieldType());
+        XmlField thirdValue = (XmlField) thirdArray.getXmlFields().getXmlField().get(0);
+        assertNotNull(thirdValue);
+        assertEquals("value", thirdValue.getName());
+        assertNull(thirdValue.getCollectionType());
+        assertEquals(FieldType.STRING, thirdValue.getFieldType());
     }
 
 }

@@ -15,7 +15,9 @@
  */
 package io.atlasmap.xml.inspect;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.xml.XMLConstants;
@@ -178,14 +180,14 @@ public class XmlInstanceInspector {
                 continue;
             }
             checked.add(child.getNodeName());
-            NodeList childElements = e.getElementsByTagName(child.getNodeName());
-            if (childElements.getLength() <= 1) {
-                continue;
-            }
+            List<XmlField> detected = new ArrayList<>();
             for (XmlField f : childParent.getXmlFields().getXmlField()) {
                 if (child.getNodeName().equals(f.getName())) {
-                    f.setCollectionType(CollectionType.LIST);
+                    detected.add(f);
                 }
+            }
+            if (detected.size() > 1) {
+                detected.forEach(f -> f.setCollectionType(CollectionType.LIST));
             }
         }
     }
