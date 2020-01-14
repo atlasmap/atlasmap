@@ -379,8 +379,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="122"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/app/data-mapper-error.component.ts:122</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="128"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/app/data-mapper-error.component.ts:128</a></div>
                 </td>
             </tr>
 
@@ -421,8 +421,8 @@ available from the error modal window.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="130"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/app/data-mapper-error.component.ts:130</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="136"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/app/data-mapper-error.component.ts:136</a></div>
                 </td>
             </tr>
 
@@ -463,8 +463,8 @@ available from the error modal window.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="72"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/app/data-mapper-error.component.ts:72</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="76"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/app/data-mapper-error.component.ts:76</a></div>
                 </td>
             </tr>
 
@@ -502,8 +502,8 @@ available from the error modal window.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="68"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/app/data-mapper-error.component.ts:68</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="70"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/app/data-mapper-error.component.ts:70</a></div>
                 </td>
             </tr>
 
@@ -541,8 +541,8 @@ available from the error modal window.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="76"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/app/data-mapper-error.component.ts:76</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="82"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/app/data-mapper-error.component.ts:82</a></div>
                 </td>
             </tr>
 
@@ -611,8 +611,8 @@ available from the error modal window.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="87"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/app/data-mapper-error.component.ts:87</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="93"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/app/data-mapper-error.component.ts:93</a></div>
                 </td>
             </tr>
 
@@ -684,8 +684,8 @@ for a half-second then the active errors modal will show all of the errors/ warn
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="102"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/app/data-mapper-error.component.ts:102</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="108"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/app/data-mapper-error.component.ts:108</a></div>
                 </td>
             </tr>
 
@@ -836,8 +836,8 @@ for a half-second then the active errors modal will show all of the errors/ warn
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="112"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/app/data-mapper-error.component.ts:112</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="118"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/components/app/data-mapper-error.component.ts:118</a></div>
                 </td>
             </tr>
 
@@ -1100,15 +1100,21 @@ export class DataMapperErrorComponent implements OnInit, OnDestroy {
   }
 
   getErrors(): ErrorInfo[] {
-    return ErrorHandlerService.filterWith(this.errors, this.cfg.mappings.activeMapping, ErrorLevel.ERROR);
+    return ErrorHandlerService.filterWith(this.errors,
+      (this.cfg.mappings ? this.cfg.mappings.activeMapping : null),
+      ErrorLevel.ERROR);
   }
 
   getWarnings(): ErrorInfo[] {
-    return ErrorHandlerService.filterWith(this.errors, this.cfg.mappings.activeMapping, ErrorLevel.WARN);
+    return ErrorHandlerService.filterWith(this.errors,
+      (this.cfg.mappings ? this.cfg.mappings.activeMapping : null),
+      ErrorLevel.WARN);
   }
 
   getInfos(): ErrorInfo[] {
-    return ErrorHandlerService.filterWith(this.errors, this.cfg.mappings.activeMapping, ErrorLevel.INFO);
+    return ErrorHandlerService.filterWith(this.errors,
+      (this.cfg.mappings ? this.cfg.mappings.activeMapping : null),
+      ErrorLevel.INFO);
   }
 
   handleAlertClose(e: ErrorInfo): void {
