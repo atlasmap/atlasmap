@@ -570,28 +570,32 @@ export class MappingManagementService {
     }
   }
 
+  willClearOutSourceFieldsOnTogglingExpression() {
+    if (this.cfg.mappings!.activeMapping!.transition.enableExpression) {
+      return this.cfg.mappings!.activeMapping!.getFirstCollectionField(true) != null;
+    } else {
+      return false;
+    }
+  }
+
   toggleExpressionMode() {
     if (!this.cfg.mappings || !this.cfg.mappings.activeMapping || !this.cfg.mappings.activeMapping.transition) {
       this.cfg.errorService.addError(new ErrorInfo({
         message: 'Please select a mapping first.', level: ErrorLevel.INFO, scope: ErrorScope.MAPPING, type: ErrorType.USER}));
       return;
     }
-    if (this.cfg.mappings.activeMapping.getFirstCollectionField(false)) {
-      this.cfg.errorService.addError(new ErrorInfo({
-        message: `Cannot establish a conditional mapping expression when referencing a target collection field.`,
-        level: ErrorLevel.WARN, scope: ErrorScope.MAPPING, type: ErrorType.USER, mapping: this.cfg.mappings.activeMapping}));
-      return;
-    } else if (this.cfg.mappings.activeMapping.getFirstCollectionField(true)) {
-      this.cfg.errorService.addError(new ErrorInfo({
-        message: `Cannot establish a conditional mapping expression when referencing a source collection field.`,
-        level: ErrorLevel.WARN, scope: ErrorScope.MAPPING, type: ErrorType.USER, mapping: this.cfg.mappings.activeMapping}));
-      return;
-    } else if (this.cfg.mappings.activeMapping.transition.mode === TransitionMode.ONE_TO_MANY) {
+    if (this.cfg.mappings.activeMapping.transition.mode === TransitionMode.ONE_TO_MANY) {
       this.cfg.errorService.addError(new ErrorInfo({
         message: `Cannot establish a conditional mapping expression when multiple target fields are selected.
         Please select only one target field and try again.`,
         level: ErrorLevel.WARN, scope: ErrorScope.MAPPING, type: ErrorType.USER, mapping: this.cfg.mappings.activeMapping}));
       return;
+    }
+
+    if (this.willClearOutSourceFieldsOnTogglingExpression()) {
+      // Clear out source fields, if the mapping contains a source collection
+      const activeMapping = this.cfg.mappings.activeMapping;
+      activeMapping.sourceFields.splice(0, activeMapping.sourceFields.length);
     }
 
     this.cfg.mappings.activeMapping.transition.enableExpression
