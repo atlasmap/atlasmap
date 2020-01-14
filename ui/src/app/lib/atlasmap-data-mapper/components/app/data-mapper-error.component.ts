@@ -62,15 +62,21 @@ export class DataMapperErrorComponent implements OnInit, OnDestroy {
   }
 
   getErrors(): ErrorInfo[] {
-    return ErrorHandlerService.filterWith(this.errors, this.cfg.mappings.activeMapping, ErrorLevel.ERROR);
+    return ErrorHandlerService.filterWith(this.errors,
+      (this.cfg.mappings ? this.cfg.mappings.activeMapping : null),
+      ErrorLevel.ERROR);
   }
 
   getWarnings(): ErrorInfo[] {
-    return ErrorHandlerService.filterWith(this.errors, this.cfg.mappings.activeMapping, ErrorLevel.WARN);
+    return ErrorHandlerService.filterWith(this.errors,
+      (this.cfg.mappings ? this.cfg.mappings.activeMapping : null),
+      ErrorLevel.WARN);
   }
 
   getInfos(): ErrorInfo[] {
-    return ErrorHandlerService.filterWith(this.errors, this.cfg.mappings.activeMapping, ErrorLevel.INFO);
+    return ErrorHandlerService.filterWith(this.errors,
+      (this.cfg.mappings ? this.cfg.mappings.activeMapping : null),
+      ErrorLevel.INFO);
   }
 
   handleAlertClose(e: ErrorInfo): void {
