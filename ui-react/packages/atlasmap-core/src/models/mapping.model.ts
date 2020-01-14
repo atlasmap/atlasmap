@@ -168,8 +168,11 @@ export class MappingModel {
   }
 
   removeMappedField(mappedField: MappedField): void {
-    // TODO: check this non null operator
+    if (!mappedField || !mappedField.field) {
+      return;
+    }
     DataMapperUtil.removeItemFromArray(mappedField, this.getMappedFields(mappedField.field!.isSource()));
+    this.cfg.mappingService.notifyMappingUpdated();
   }
 
   getMappedFieldForField(field: Field): MappedField | null {

@@ -63,6 +63,9 @@ export function fromDocumentDefinitionToFieldGroup(def: DocumentDefinition): IAt
 }
 
 function fromMappedFieldToIMappingField(field: MappedField): IAtlasmapMappedField {
+  if (!field.field) {
+    return {id: '', name: '', type: '', previewValue: '', mappedField: field};
+  }
   return {
     id: `${field.field!.docDef.uri}:${field.field!.docDef.isSource ? 'source' : 'target'}:${field.field!.uuid}`,
     name: field.field!.getFieldLabel(false, false),
