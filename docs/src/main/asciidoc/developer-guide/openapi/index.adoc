@@ -1,6 +1,6 @@
 = AtlasMap Design Time Service API 
 atlasmap@googlegroups.com
-1.44.0-SNAPSHOT
+2.0.0-SNAPSHOT
 :toc: left
 :numbered:
 :toclevels: 3
@@ -3483,25 +3483,6 @@ endif::internal-generation[]
 |===
 
 
-[#FormulaExpression]
-=== _FormulaExpression_ 
-
-
-
-[.fields-FormulaExpression]
-[cols="2,1,2,4,1"]
-|===         
-| Field Name| Required| Type| Description| Format
-
-| expression 
-|  
-| String  
-| 
-|  
-
-|===
-
-
 [#JavaClass]
 === _JavaClass_ 
 
@@ -4322,9 +4303,9 @@ endif::internal-generation[]
 | 
 |  _Enum:_ ALL, COLLECTION, COMBINE, LOOKUP, MAP, SEPARATE, NONE, 
 
-| formulaExpression 
+| expression 
 |  
-| FormulaExpression  
+| String  
 | 
 |  
 
