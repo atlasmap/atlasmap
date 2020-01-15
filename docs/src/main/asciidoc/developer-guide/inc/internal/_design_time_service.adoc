@@ -5,25 +5,25 @@ Design Time Service is a set of REST API which provide background services to be
 
 === Core Service
 * Code Location: https://github.com/atlasmap/atlasmap/blob/master/lib/service
-* API Reference: <<inc/swagger/index#core,Core Service>>
+* API Reference: link:openapi/index.html[API]
 
 Core Service provides basic operations which is not specific to the individual data formats, Create/Get/Update/Remove mapping definition stored in Design Time Service local storage, validate mapping, retrieve metadata for available field actions and etc. 
 
 === Java Service
 * Code Location: https://github.com/atlasmap/atlasmap/blob/master/lib/modules/java/service
-* API Reference: <<inc/swagger/index#java,Java Service>>
+* API Reference: link:openapi/index.html[API]
 
 Java Service provides Java inspection service which generate an AtlasMap Document object from Java class name.
 
 === JSON Service
 * Code Location: https://github.com/atlasmap/atlasmap/blob/master/lib/modules/json/service
-* API Reference: <<inc/swagger/index#json,JSON Service>>
+* API Reference: link:openapi/index.html[API]
 
 JSON Service provides JSON inspection service which generate an AtlasMap Document object from JSON instance or JSON schema.
 
 === XML Service
 * Code Location: https://github.com/atlasmap/atlasmap/blob/master/lib/modules/xml/service
-* API Reference: <<inc/swagger/index#xml,XML Service>>
+* API Reference: link:openapi/index.html[API]
 
 XML Service provides XML inspection service which generate an AtlasMap Document object from XML instance or XML schema.
 
