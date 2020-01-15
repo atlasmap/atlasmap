@@ -20,6 +20,8 @@ import java.util.Collections;
 import java.util.List;
 
 import io.atlasmap.v2.AtlasModelFactory;
+import io.atlasmap.v2.Audit;
+import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
@@ -42,7 +44,7 @@ public class AtlasPath {
 
     /**
      * Extract child fields by feeding relative path.
-     * 
+     *
      * @param f Parent field to extract from
      * @param path Relative path string
      * @return extracted field(s)
@@ -244,17 +246,36 @@ public class AtlasPath {
         return this.segmentContexts.set(segmentIndex, sc.rebuild());
     }
 
-    public void copyCollectionIndexes(AtlasPath sourcePath) {
+    public List<Audit> copyCollectionIndexes(AtlasPath sourcePath) {
+        List<Audit> audits = new ArrayList<>();
         int targetCollectionCount = getCollectionSegmentCount();
         int sourceCollectionCount = sourcePath.getCollectionSegmentCount();
-        if (targetCollectionCount != sourceCollectionCount) {
-            throw new IllegalArgumentException(String.format("Source has %d collections, whereas target has %d" +
-                    " collections on the path. Target must have the same collection count as source or equal to 1.", sourceCollectionCount,
+        int targetIndex = 0;
+        List<SegmentContext> targetSegments = getSegments(true);
+
+        if (targetCollectionCount > sourceCollectionCount) {
+            Audit audit = new Audit();
+            audit.setStatus(AuditStatus.WARN);
+            audit.setMessage(String.format("Source has %d collections, whereas target has %d" +
+                    " collections on the path. The 0 index will be used for any parent collection, if target has collection count higher than source.", sourceCollectionCount,
                 targetCollectionCount));
+            audits.add(audit);
+
+            int collectionCount = 0;
+            //Put 0 index in excessive target collections, if targetCollectionCount > sourceCollectionCount
+            while (collectionCount < targetCollectionCount - sourceCollectionCount) {
+                SegmentContext targetSegment = targetSegments.get(targetIndex);
+                if (targetSegment.getCollectionType() != CollectionType.NONE) {
+                    setCollectionIndex(targetIndex, 0);
+                    collectionCount++;
+                }
+                targetIndex++;
+            }
+        } else if (targetCollectionCount < sourceCollectionCount && targetCollectionCount > 1) {
+            throw new IllegalArgumentException(String.format("Source has %d collections, whereas target has %d" +
+                " collections on the path. Target must have collection count 0 or 1, same as source or higher than source.", sourceCollectionCount, targetCollectionCount));
         }
 
-        List<SegmentContext> targetSegments = getSegments(true);
-        int targetIndex = 0;
         for (SegmentContext sourceSegment : sourcePath.getSegments(true)) {
             if (sourceSegment.getCollectionType() != CollectionType.NONE && sourceSegment.getCollectionIndex() != null) {
                 while (targetSegments.size() > targetIndex) {
@@ -269,6 +290,7 @@ public class AtlasPath {
                 }
             }
         }
+        return audits;
     }
 
     public SegmentContext setVacantCollectionIndex(Integer collectionIndex) {

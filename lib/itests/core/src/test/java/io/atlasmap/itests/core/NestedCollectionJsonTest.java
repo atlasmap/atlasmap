@@ -48,7 +48,6 @@ import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Mapping;
-import org.w3c.dom.Element;
 
 public class NestedCollectionJsonTest {
 
@@ -109,7 +108,7 @@ public class NestedCollectionJsonTest {
 
     @Test
     public void testSamePaths1stLevelCollection() throws Exception {
-        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("1-1"));
+        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("1-1"), true);
         String prettyPrinted = mapper.writeValueAsString(outputJson);
         ArrayNode firstArray = assert1stLevelCollection(outputJson, prettyPrinted);
         assertNull(prettyPrinted, firstArray.get(0).get("secondArray"));
@@ -118,7 +117,7 @@ public class NestedCollectionJsonTest {
 
     @Test
     public void testSamePaths1stAnd2ndLevelNestedCollection() throws Exception {
-        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("1-1", "2-2"));
+        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("1-1", "2-2"), true);
         String prettyPrinted = mapper.writeValueAsString(outputJson);
         assert1stLevelCollection(outputJson, prettyPrinted);
         assert2ndLevelNestedCollection(outputJson, prettyPrinted);
@@ -126,14 +125,14 @@ public class NestedCollectionJsonTest {
 
     @Test
     public void testSamePaths2ndLevelNestedCollection() throws Exception {
-        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("2-2"));
+        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("2-2"), true);
         String prettyPrinted = mapper.writeValueAsString(outputJson);
         assert2ndLevelNestedCollection(outputJson, prettyPrinted);
     }
 
     @Test
     public void testSamePaths1stAnd2ndAnd3rdLevelNestedCollection() throws Exception {
-        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("1-1", "2-2", "3-3"));
+        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("1-1", "2-2", "3-3"), true);
         String prettyPrinted = mapper.writeValueAsString(outputJson);
         assert1stLevelCollection(outputJson, prettyPrinted);
         assert2ndLevelNestedCollection(outputJson, prettyPrinted);
@@ -142,7 +141,7 @@ public class NestedCollectionJsonTest {
 
     @Test
     public void testSamePaths2ndAnd3rdLevelNestedCollection() throws Exception {
-        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("2-2", "3-3"));
+        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("2-2", "3-3"), true);
         String prettyPrinted = mapper.writeValueAsString(outputJson);
         assert2ndLevelNestedCollection(outputJson, prettyPrinted);
         assert3rdLevelNestedCollection(outputJson, prettyPrinted);
@@ -150,7 +149,7 @@ public class NestedCollectionJsonTest {
 
     @Test
     public void testSamePaths1stAnd3rdLevelNestedCollection() throws Exception {
-        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("1-1", "3-3"));
+        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("1-1", "3-3"), true);
         String prettyPrinted = mapper.writeValueAsString(outputJson);
         assert1stLevelCollection(outputJson, prettyPrinted);
         assert3rdLevelNestedCollection(outputJson, prettyPrinted);
@@ -158,21 +157,21 @@ public class NestedCollectionJsonTest {
 
     @Test
     public void testSamePaths3rdLevelNestedCollection() throws Exception {
-        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("3-3"));
+        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("3-3"), true);
         String prettyPrinted = mapper.writeValueAsString(outputJson);
         assert3rdLevelNestedCollection(outputJson, prettyPrinted);
     }
 
     @Test
     public void testRenamedPaths3rdLevelNestedCollection() throws Exception {
-        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("3-3renamed"));
+        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("3-3renamed"), true);
         String prettyPrinted = mapper.writeValueAsString(outputJson);
         assert3rdLevelNestedCollection(outputJson, prettyPrinted, "Renamed");
     }
 
     @Test
     public void testSamePaths1stAndRenamedPaths3rdLevelNestedCollection() throws Exception {
-        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("1-1", "3-3renamed"));
+        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("1-1", "3-3renamed"), true);
         String prettyPrinted = mapper.writeValueAsString(outputJson);
         assert1stLevelCollection(outputJson, prettyPrinted);
         assert3rdLevelNestedCollection(outputJson, prettyPrinted, "Renamed");
@@ -180,7 +179,7 @@ public class NestedCollectionJsonTest {
 
     @Test
     public void testSamePaths1stAnd2nAndRenamedPaths3rdLevelNestedCollection() throws Exception {
-        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("1-1", "2-2", "3-3renamed"));
+        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("1-1", "2-2", "3-3renamed"), true);
         String prettyPrinted = mapper.writeValueAsString(outputJson);
         assert1stLevelCollection(outputJson, prettyPrinted);
         assert2ndLevelNestedCollection(outputJson, prettyPrinted);
@@ -189,7 +188,7 @@ public class NestedCollectionJsonTest {
 
     @Test
     public void testSamePaths1stAnd2ndAnd3rdAndRenamedPaths3rdLevelNestedCollection() throws Exception {
-        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("1-1", "2-2", "3-3", "3-3renamed"));
+        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("1-1", "2-2", "3-3", "3-3renamed"), true);
         String prettyPrinted = mapper.writeValueAsString(outputJson);
         assert1stLevelCollection(outputJson, prettyPrinted);
         assert2ndLevelNestedCollection(outputJson, prettyPrinted);
@@ -197,8 +196,18 @@ public class NestedCollectionJsonTest {
         assert3rdLevelNestedCollection(outputJson, prettyPrinted, "Renamed");
     }
 
-    private JsonNode processJsonNestedCollection(List<String> mappingsToProcess) throws AtlasException, IOException, URISyntaxException {
-        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-nested-collection-symmetric.json");
+    @Test
+    public void testSamePaths1stAndPaths3rdLevelNestedCollection() throws Exception {
+        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("1-3"), false);
+        String prettyPrinted = mapper.writeValueAsString(outputJson);
+        ArrayNode thirdArray = (ArrayNode) outputJson.get("firstArray").get(0).get("secondArray").get(0).get("thirdArray");
+        assertEquals(prettyPrinted, 2, thirdArray.size());
+        assertEquals(prettyPrinted, "firstArrayValue0", thirdArray.get(0).get("value").asText());
+        assertEquals(prettyPrinted, "firstArrayValue1", thirdArray.get(1).get("value").asText());
+    }
+
+    private JsonNode processJsonNestedCollection(List<String> mappingsToProcess, boolean assertNoWarnings) throws AtlasException, IOException, URISyntaxException {
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-nested-collection-json.json");
         AtlasMapping mapping = mappingService.loadMapping(url);
         mapping.getMappings().getMapping().removeIf(m -> !mappingsToProcess.contains(((Mapping) m).getId()));
         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
@@ -208,7 +217,9 @@ public class NestedCollectionJsonTest {
         session.setSourceDocument("JSONInstanceNestedCollection", source);
         context.process(session);
         assertFalse(TestHelper.printAudit(session), session.hasErrors());
-        assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        if (assertNoWarnings) {
+            assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        }
         Object output = session.getTargetDocument("JSONInstanceNestedCollection");
         return mapper.readTree((String) output);
     }
@@ -277,10 +288,12 @@ public class NestedCollectionJsonTest {
         session.setSourceDocument("JSONInstanceNestedCollection", source);
         context.process(session);
         assertTrue(TestHelper.printAudit(session), session.hasErrors());
-        assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        assertTrue(TestHelper.printAudit(session), session.hasWarns());
         assertTrue(TestHelper.printAudit(session), session.getAudits().getAudit().get(0).getMessage().contains("/firstArray<>/secondArray<>/value"));
-        assertEquals(TestHelper.printAudit(session), AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
-        assertTrue(TestHelper.printAudit(session), session.getAudits().getAudit().get(1).getMessage().contains("/firstArray<>/secondArray<>/thirdArray<>/value"));
+        assertEquals(TestHelper.printAudit(session), AuditStatus.WARN, session.getAudits().getAudit().get(0).getStatus());
+        assertTrue(TestHelper.printAudit(session), session.getAudits().getAudit().get(1).getMessage().contains("/firstArray<>/secondArray<>/value"));
         assertEquals(TestHelper.printAudit(session), AuditStatus.ERROR, session.getAudits().getAudit().get(1).getStatus());
+        assertTrue(TestHelper.printAudit(session), session.getAudits().getAudit().get(2).getMessage().contains("/firstArray<>/secondArray<>/thirdArray<>/value"));
+        assertEquals(TestHelper.printAudit(session), AuditStatus.WARN, session.getAudits().getAudit().get(2).getStatus());
     }
 }

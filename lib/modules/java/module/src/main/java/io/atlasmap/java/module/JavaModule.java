@@ -18,6 +18,7 @@ package io.atlasmap.java.module;
 import java.lang.reflect.Array;
 import java.util.List;
 
+import io.atlasmap.v2.Audit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -227,7 +228,8 @@ public class JavaModule extends BaseAtlasModule {
                     subPath.setVacantCollectionIndex(i);
                 } else {
                     //handle symmetric case with matching collection counts
-                    subPath.copyCollectionIndexes(new AtlasPath(sourceSubField.getPath()));
+                    List<Audit> audits = subPath.copyCollectionIndexes(new AtlasPath(sourceSubField.getPath()));
+                    AtlasUtil.addAudits(session, getDocId(), audits);
                 }
                 targetSubField.setPath(subPath.toString());
                 targetFieldGroup.getField().add(targetSubField);

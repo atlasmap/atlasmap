@@ -19,6 +19,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.v2.Action;
+import io.atlasmap.v2.ActionDetail;
+import io.atlasmap.v2.Multiplicity;
+import io.atlasmap.v2.Split;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -213,20 +218,57 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         }
         if (direction == FieldDirection.TARGET) {
             AtlasPath sourcePath = null;
+            Integer sourceCollectionCount = null;
             if (sourceField != null) {
                 sourcePath = new AtlasPath(sourceField.getPath());
+                sourceCollectionCount = sourcePath.getCollectionSegmentCount();
+                List<Action> actions = sourceField.getActions();
+                if (actions != null) {
+                    for (Action action : actions) {
+                        ActionDetail actionDetail = null;
+                        try {
+                            actionDetail = fieldActionService.findActionDetail(action, sourceField.getFieldType());
+                        } catch (AtlasException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        if (actionDetail != null) {
+                            if (Multiplicity.ONE_TO_MANY.equals(actionDetail.getMultiplicity())) {
+                                sourceCollectionCount++;
+                            } else if (Multiplicity.MANY_TO_ONE.equals(actionDetail.getMultiplicity())) {
+                                sourceCollectionCount--;
+                            }
+                        }
+                    }
+                }
             }
             AtlasPath targetPath = new AtlasPath(targetField.getPath());
-            if (sourcePath == null || (targetPath.getCollectionSegmentCount() != 1 && targetPath.getCollectionSegmentCount() != sourcePath.getCollectionSegmentCount())) {
-                if (targetPath.getCollectionSegmentCount() > 1) {
+            Integer targetCollectionCount = targetPath.getCollectionSegmentCount();
+            if (sourceCollectionCount == null || targetCollectionCount < sourceCollectionCount) {
+                if (targetCollectionCount > 1) {
                     Validation validation = new Validation();
                     validation.setScope(ValidationScope.MAPPING);
                     validation.setId(mappingId);
-                    validation.setMessage(String.format("Target must have the same collection count on the path as source or equal to 1: [%s]",
-                        targetField.getPath()));
+                    String message = String.format(
+                        "The mapping is not supported since target [%s] has %s collections on the path, whereas it needs" +
+                            " to have none, one, same or more than source",
+                        targetField.getPath(), targetCollectionCount);
+                    if (sourceCollectionCount != null) {
+                        message += String.format(", which has %s collections.", sourceCollectionCount);
+                    }
+                    validation.setMessage(message);
                     validation.setStatus(ValidationStatus.ERROR);
                     validations.add(validation);
                 }
+            } else if (targetCollectionCount > sourceCollectionCount) {
+                Validation validation = new Validation();
+                validation.setScope(ValidationScope.MAPPING);
+                validation.setId(mappingId);
+                validation.setMessage(String.format("The 0 index will be used for any extra parent collections in target [%s]," +
+                        " since target has %s collections on the path, whereas source has %s.",
+                    targetField.getPath(), targetCollectionCount, sourceCollectionCount));
+                validation.setStatus(ValidationStatus.WARN);
+                validations.add(validation);
             }
         }
         if (getFieldType().isAssignableFrom(targetField.getClass()) && matchDocIdOrNull(targetField.getDocId())) {

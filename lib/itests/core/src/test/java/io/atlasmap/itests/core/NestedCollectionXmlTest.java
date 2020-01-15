@@ -55,7 +55,7 @@ public class NestedCollectionXmlTest {
 
     @Test
     public void testSamePaths1stLevelCollection() throws Exception {
-        String output = processXmlNestedCollection(Arrays.asList("1-1"));
+        String output = processXmlNestedCollection(Arrays.asList("1-1"), true);
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><root>" +
             "<firstArray><value>firstArrayValue0</value></firstArray>" +
             "<firstArray><value>firstArrayValue1</value></firstArray></root>", output);
@@ -63,7 +63,7 @@ public class NestedCollectionXmlTest {
 
     @Test
     public void testSamePaths1stAnd2ndLevelNestedCollection() throws Exception {
-        String output = processXmlNestedCollection(Arrays.asList("1-1", "2-2"));
+        String output = processXmlNestedCollection(Arrays.asList("1-1", "2-2"), true);
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><root>" +
             "<firstArray><value>firstArrayValue0</value><secondArray><value>secondArrayValue0-0</value></secondArray>" +
             "<secondArray><value>secondArrayValue0-1</value></secondArray></firstArray>" +
@@ -73,7 +73,7 @@ public class NestedCollectionXmlTest {
 
     @Test
     public void testSamePaths2ndLevelNestedCollection() throws Exception {
-        String output = processXmlNestedCollection(Arrays.asList("2-2"));
+        String output = processXmlNestedCollection(Arrays.asList("2-2"), true);
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><root><firstArray>" +
             "<secondArray><value>secondArrayValue0-0</value></secondArray>" +
             "<secondArray><value>secondArrayValue0-1</value></secondArray></firstArray>" +
@@ -83,7 +83,7 @@ public class NestedCollectionXmlTest {
 
     @Test
     public void testSamePaths1stAnd2ndAnd3rdLevelNestedCollection() throws Exception {
-        String output = processXmlNestedCollection(Arrays.asList("1-1", "2-2", "3-3"));
+        String output = processXmlNestedCollection(Arrays.asList("1-1", "2-2", "3-3"), true);
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><root>" +
             "<firstArray><value>firstArrayValue0</value><secondArray><value>secondArrayValue0-0</value>" +
             "<thirdArray><value>thirdArrayValue0-0-0</value></thirdArray>" +
@@ -101,7 +101,7 @@ public class NestedCollectionXmlTest {
 
     @Test
     public void testSamePaths2ndAnd3rdLevelNestedCollection() throws Exception {
-        String output = processXmlNestedCollection(Arrays.asList("2-2", "3-3"));
+        String output = processXmlNestedCollection(Arrays.asList("2-2", "3-3"), true);
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><root>" +
             "<firstArray><secondArray><value>secondArrayValue0-0</value>" +
             "<thirdArray><value>thirdArrayValue0-0-0</value></thirdArray>" +
@@ -119,7 +119,7 @@ public class NestedCollectionXmlTest {
 
     @Test
     public void testSamePaths1stAnd3rdLevelNestedCollection() throws Exception {
-        String output = processXmlNestedCollection(Arrays.asList("1-1", "3-3"));
+        String output = processXmlNestedCollection(Arrays.asList("1-1", "3-3"), true);
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><root>" +
             "<firstArray><value>firstArrayValue0</value><secondArray>" +
             "<thirdArray><value>thirdArrayValue0-0-0</value></thirdArray>" +
@@ -137,7 +137,7 @@ public class NestedCollectionXmlTest {
 
     @Test
     public void testSamePaths3rdLevelNestedCollection() throws Exception {
-        String output = processXmlNestedCollection(Arrays.asList("3-3"));
+        String output = processXmlNestedCollection(Arrays.asList("3-3"), true);
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><root>" +
             "<firstArray><secondArray><thirdArray><value>thirdArrayValue0-0-0</value></thirdArray>" +
             "<thirdArray><value>thirdArrayValue0-0-1</value></thirdArray></secondArray><secondArray>" +
@@ -153,7 +153,7 @@ public class NestedCollectionXmlTest {
 
     @Test
     public void testRenamedPaths3rdLevelNestedCollection() throws Exception {
-        String output = processXmlNestedCollection(Arrays.asList("3-3renamed"));
+        String output = processXmlNestedCollection(Arrays.asList("3-3renamed"), true);
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><root><firstArrayRenamed>" +
             "<secondArrayRenamed><thirdArrayRenamed><value>thirdArrayValue0-0-0</value></thirdArrayRenamed>" +
             "<thirdArrayRenamed><value>thirdArrayValue0-0-1</value></thirdArrayRenamed></secondArrayRenamed>" +
@@ -171,7 +171,7 @@ public class NestedCollectionXmlTest {
 
     @Test
     public void testSamePaths1stAndRenamedPaths3rdLevelNestedCollection() throws Exception {
-        String output = processXmlNestedCollection(Arrays.asList("1-1", "3-3renamed"));
+        String output = processXmlNestedCollection(Arrays.asList("1-1", "3-3renamed"), true);
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><root>" +
             "<firstArray><value>firstArrayValue0</value></firstArray>" +
             "<firstArray><value>firstArrayValue1</value></firstArray><firstArrayRenamed>" +
@@ -184,7 +184,7 @@ public class NestedCollectionXmlTest {
 
     @Test
     public void testSamePaths1stAnd2nAndRenamedPaths3rdLevelNestedCollection() throws Exception {
-        String output = processXmlNestedCollection(Arrays.asList("1-1", "2-2", "3-3renamed"));
+        String output = processXmlNestedCollection(Arrays.asList("1-1", "2-2", "3-3renamed"), true);
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><root>" +
             "<firstArray><value>firstArrayValue0</value><secondArray><value>secondArrayValue0-0</value></secondArray>" +
             "<secondArray><value>secondArrayValue0-1</value></secondArray></firstArray>" +
@@ -206,7 +206,7 @@ public class NestedCollectionXmlTest {
 
     @Test
     public void testSamePaths1stAnd2ndAnd3rdAndRenamedPaths3rdLevelNestedCollection() throws Exception {
-        String output = processXmlNestedCollection(Arrays.asList("1-1", "2-2", "3-3", "3-3renamed"));
+        String output = processXmlNestedCollection(Arrays.asList("1-1", "2-2", "3-3", "3-3renamed"), true);
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><root>" +
             "<firstArray><value>firstArrayValue0</value><secondArray><value>secondArrayValue0-0</value>" +
             "<thirdArray><value>thirdArrayValue0-0-0</value></thirdArray>" +
@@ -236,7 +236,7 @@ public class NestedCollectionXmlTest {
 
     @Test
     public void testAsymmetricPaths1stAnd2ndAnd3rdNestedCollectionToSingleCollection() throws Exception {
-        String output = processXmlNestedCollection(Arrays.asList("3-1"));
+        String output = processXmlNestedCollection(Arrays.asList("3-1"), true);
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><root>" +
             "<firstArray><value>thirdArrayValue0-0-0</value></firstArray>" +
             "<firstArray><value>thirdArrayValue0-0-1</value></firstArray>" +
@@ -251,7 +251,18 @@ public class NestedCollectionXmlTest {
             "</root>", output);
     }
 
-    private String processXmlNestedCollection(List<String> mappingsToProcess) throws AtlasException, IOException, URISyntaxException {
+    @Test
+    public void testAsymmetricPaths1stNestedCollectionTo3LevelsNestedCollection() throws Exception {
+        String output = processXmlNestedCollection(Arrays.asList("1-3"), false);
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><root>" +
+            "<firstArray><secondArray>" +
+            "<thirdArray><value>firstArrayValue0</value></thirdArray>" +
+            "<thirdArray><value>firstArrayValue1</value></thirdArray>" +
+            "</secondArray></firstArray>" +
+            "</root>", output);
+    }
+
+    private String processXmlNestedCollection(List<String> mappingsToProcess, boolean assertNoWarnings) throws AtlasException, IOException, URISyntaxException {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-nested-collection-xml.json");
         AtlasMapping mapping = mappingService.loadMapping(url);
         mapping.getMappings().getMapping().removeIf(m -> !mappingsToProcess.contains(((Mapping) m).getId()));
@@ -262,7 +273,9 @@ public class NestedCollectionXmlTest {
         session.setSourceDocument("XMLInstanceNestedCollection", source);
         context.process(session);
         assertFalse(TestHelper.printAudit(session), session.hasErrors());
-        assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        if (assertNoWarnings) {
+            assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        }
         Object output = session.getTargetDocument("XMLInstanceNestedCollection");
         return (String) output;
     }

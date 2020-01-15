@@ -37,6 +37,7 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import io.atlasmap.spi.AtlasInternalSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -289,6 +290,13 @@ public class AtlasUtil {
         audit.setMessage(validation.getMessage());
         audit.setStatus(AtlasUtil.toAuditStatus(validation.getStatus()));
         session.getAudits().getAudit().add(audit);
+    }
+
+    public static void addAudits(AtlasInternalSession session, String docId, List<Audit> audits) {
+        for (Audit audit: audits) {
+            audit.setDocId(docId);
+            session.getAudits().getAudit().add(audit);
+        }
     }
 
     public static AuditStatus toAuditStatus(ValidationStatus vstatus) {
