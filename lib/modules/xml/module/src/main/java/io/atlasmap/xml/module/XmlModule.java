@@ -24,6 +24,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import io.atlasmap.core.AtlasPath;
+import io.atlasmap.v2.Audit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -238,7 +239,8 @@ public class XmlModule extends BaseAtlasModule {
                     subPath.setVacantCollectionIndex(i);
                 } else {
                     //handle symmetric case with matching collection counts
-                    subPath.copyCollectionIndexes(new XmlPath(sourceSubField.getPath()));
+                    List<Audit> audits = subPath.copyCollectionIndexes(new XmlPath(sourceSubField.getPath()));
+                    AtlasUtil.addAudits(session, getDocId(), audits);
                 }
                 targetSubField.setPath(subPath.toString());
                 // Attempt to Auto-detect field type based on input value

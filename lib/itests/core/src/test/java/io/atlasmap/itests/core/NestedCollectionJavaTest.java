@@ -143,6 +143,18 @@ public class NestedCollectionJavaTest {
         assertNull(target.getSomeArray()[5].getSomeArray());
     }
 
+    @Test
+    public void testAsymmetricPaths2ndLevelNestedCollectionTo4LevelsNestedCollection() throws Exception {
+        TargetClass target = processNestedJavaCollection(Arrays.asList("2-4"));
+
+        assertEquals(1, target.getSomeArray().length);
+        assertEquals(1, target.getSomeArray()[0].getSomeArray().length);
+        BaseClass.SomeNestedClass[] nestedArray = target.getSomeArray()[0].getSomeArray()[0].getSomeArray();
+        TargetClass nestedTarget = new TargetClass();
+        nestedTarget.setSomeArray(nestedArray);
+        assert2ndLevelCollection(nestedTarget);
+    }
+
     private void assert1stLevelCollection(TargetClass target) {
         assertEquals(3, target.getSomeArray().length);
         assertEquals("array0", target.getSomeArray()[0].getSomeField());

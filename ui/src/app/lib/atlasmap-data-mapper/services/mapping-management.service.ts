@@ -377,20 +377,6 @@ export class MappingManagementService {
       return 'cannot add multiple target fields when conditional mapping is enabled.';
     }
 
-    // Check multiplicity restrictions
-    const otherSideMappedFields = mapping.getMappedFields(!field.isSource());
-
-    if (field.isInCollection()) {
-      if (otherSideMappedFields.length > 0) {
-        if (field.getCollectionCount() !== otherSideMappedFields[0].field.getCollectionCount()) {
-          const target = field.isSource() ? otherSideMappedFields[0].field : field;
-          if (target.getCollectionCount() !== 1) {
-            return `source and target must have the same nested collection count or target must have a single nested collection on the path.`;
-          }
-        }
-      }
-    }
-
     return null;
   }
 
