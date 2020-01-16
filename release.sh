@@ -122,6 +122,12 @@ pushd ui/dist/lib
 npm version ${RELEASE_VERSION}
 npm publish
 popd
+pushd ui-react/packages/atlasmap-core
+yarn publish --new-version ${RELEASE_VERSION} --access public
+popd
+pushd ui-react/packages/atlasmap-ui
+yarn publish --new-version ${RELEASE_VERSION} --access public
+popd
 
 # For some reason following no longer works... instead run manually ./node_modules/.bin/gren release --tags atlasmap-${RELEASE_VERSION}..${PREVIOUS_VERSION} --override 
 # echo "=========================================================="

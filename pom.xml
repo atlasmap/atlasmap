@@ -89,6 +89,8 @@
     <module>camel</module>
     <module>ui</module>
     <module>standalone</module>
+    <module>ui-react</module>
+    <module>standalone-reactui</module>
     <module>coverage-report</module>
     <module>examples</module>
     <module>docs</module>
