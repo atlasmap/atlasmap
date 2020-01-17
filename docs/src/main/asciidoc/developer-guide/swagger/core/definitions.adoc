@@ -29,7 +29,7 @@ __optional__|boolean
 |**method** +
 __optional__|string
 |**multiplicity** +
-__optional__|enum (ONE_TO_ONE, ONE_TO_MANY, MANY_TO_ONE, ZERO_TO_ONE)
+__optional__|enum (ONE_TO_ONE, ONE_TO_MANY, MANY_TO_ONE, ZERO_TO_ONE, MANY_TO_MANY)
 |**name** +
 __optional__|string
 |**parameters** +

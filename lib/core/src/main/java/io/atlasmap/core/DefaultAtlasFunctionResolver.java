@@ -24,9 +24,7 @@ import java.util.ServiceLoader;
 import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.FunctionResolver;
 import io.atlasmap.expression.parser.ParseException;
-import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.FunctionFactory;
-import io.atlasmap.v2.Action;
 import io.atlasmap.v2.ActionParameter;
 import io.atlasmap.v2.ActionParameters;
 
@@ -94,7 +92,8 @@ public class DefaultAtlasFunctionResolver implements FunctionResolver {
                     if (arguments.isEmpty()) {
                         throw new IllegalArgumentException(String.format("The transformation '%s' expects more arguments", name));
                     }
-                    return fieldActionService.processAction(actionProcessor, actionParameters, arguments);
+
+                    return fieldActionService.buildAndProcessAction(actionProcessor, actionParameters, arguments);
                 } else {
                     throw new IllegalArgumentException(String.format("The expression function or transformation '%s' was not found", name));
                 }
@@ -103,5 +102,4 @@ public class DefaultAtlasFunctionResolver implements FunctionResolver {
 
 
     }
-
 }

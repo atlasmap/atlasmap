@@ -77,6 +77,7 @@ public class JavaFieldReader implements AtlasFieldReader {
                 source = conversionService.copyPrimitive(source);
             }
             newField.setValue(source);
+            newField.setIndex(null); //reset index for subfields
             fields.add(newField);
         } else if (segments.size() > depth) {
             SegmentContext segmentContext = segments.get(depth);

@@ -19,6 +19,8 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
+import io.atlasmap.api.AtlasSession;
+import io.atlasmap.v2.Expression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -298,7 +300,11 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
             CollectionType sourceCollection = toFieldCollectionType(sourceClass);
             CollectionType targetCollection = toFieldCollectionType(targetClass);
             if (sourceCollection != CollectionType.NONE) {
-                det.setMultiplicity(Multiplicity.MANY_TO_ONE);
+                if (targetCollection != CollectionType.NONE) {
+                    det.setMultiplicity(Multiplicity.MANY_TO_MANY);
+                } else {
+                    det.setMultiplicity(Multiplicity.MANY_TO_ONE);
+                }
             } else if (targetCollection != CollectionType.NONE) {
                 det.setMultiplicity(Multiplicity.ONE_TO_MANY);
             } else {
@@ -329,6 +335,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         final Object object = o;
 
         Class<? extends Action> finalActionClazz = actionClazz;
+
         return new ActionProcessor() {
             @Override
             public ActionDetail getActionDetail() {
@@ -382,14 +389,9 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                     } else {
                         sourceList = Arrays.asList(sourceObject);
                     }
-                    for (int i=0; i<sourceList.size(); i++) {
 
-                        Object item = sourceList.get(i);
-                        if (item != null) {
-                            item = conversionService.convertType(item, null, itemClass, null);
-                        }
-                        sourceList.set(i, item);
-                    }
+                    convertItems(sourceList, itemClass);
+
                     if (paramType.isArray()) {
                         return sourceList.toArray();
                     } else {
@@ -401,6 +403,16 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                 return conversionService.convertType(sourceObject, null, paramType, null);
             }
         };
+    }
+
+    private void convertItems(List<Object> sourceList, Class<?> itemClass) throws AtlasConversionException {
+        for (int i=0; i<sourceList.size(); i++) {
+            Object item = sourceList.get(i);
+            if (item != null) {
+                item = conversionService.convertType(item, null, itemClass, null);
+            }
+            sourceList.set(i, item);
+        }
     }
 
     private static Set<String> listClasses = new HashSet<>(Arrays.asList("java.util.List", "java.util.ArrayList", "java.util.LinkedList", "java.util.Vector",
@@ -596,14 +608,35 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         return processors.get(0);
     }
 
-    public Object processAction(ActionProcessor actionProcessor, Map<String, Object> actionParameters, Object value) {
+    private Object flattenList(Object value) {
+        if (value instanceof Iterable) {
+            List<Object> extractedValues = new ArrayList<>();
+            for (Object argument : (Iterable) value) {
+                if (argument instanceof Iterable) {
+                    for (Object item : (Iterable) argument) {
+                        extractedValues.add(item);
+                    }
+                } else {
+                    extractedValues.add(argument);
+                }
+            }
+            return extractedValues;
+        } else {
+            return value;
+        }
+    }
+
+    public Object buildAndProcessAction(ActionProcessor actionProcessor, Map<String, Object> actionParameters, Object value) {
         FieldType valueType = (value != null ? getConversionService().fieldTypeFromClass(value.getClass()) : FieldType.NONE);
         try {
             Action action = actionProcessor.getActionClass().newInstance();
-            for (Map.Entry<String, Object> property: actionParameters.entrySet()) {
+            for (Map.Entry<String, Object> property : actionParameters.entrySet()) {
                 String setter = "set" + property.getKey().substring(0, 1).toUpperCase() + property.getKey().substring(1);
                 action.getClass().getMethod(setter, property.getValue().getClass()).invoke(action, property.getValue());
             }
+
+            value = flattenList(value);
+
             return processAction(action, actionProcessor, valueType, value);
         } catch (Exception e) {
             throw new IllegalArgumentException(String.format("The action '%s' cannot be processed", actionProcessor.getActionDetail().getName()), e);
@@ -625,23 +658,24 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
         Object sourceObject = field.getValue();
         FieldType sourceType = (sourceObject != null ? getConversionService().fieldTypeFromClass(sourceObject.getClass()) : FieldType.NONE);
+
         FieldGroup fieldGroup = null;
         if (field instanceof FieldGroup) {
             fieldGroup = (FieldGroup) field;
+
             List<Object> values = new ArrayList<>();
-            extractFromFieldGroup(fieldGroup, values);
-            sourceObject = values;
-            sourceType = FieldType.NONE;
-            if (values.size() > 0) {
-                Optional<Object> o = values.stream().filter(v -> v != null).findFirst();
-                if (o.isPresent()) {
-                    sourceType = getConversionService().fieldTypeFromClass(o.get().getClass());
-                }
+            if (hasExpressionAction(actions)) {
+                extractNestedListValuesFromFieldGroup(fieldGroup, values); //preserve top level list of parameters and arguments
+                field = findLastIndexField(fieldGroup); //arguments are last in the list
+            } else {
+                extractFlatListValuesFromFieldGroup(session, fieldGroup, values);
             }
+
+            sourceObject = values;
+            sourceType = determineFieldType(values);
         }
 
         Object tmpSourceObject = sourceObject;
-
         FieldType currentType = sourceType;
         for (Action action : actions) {
             ActionProcessor processor = findActionProcessor(action, currentType);
@@ -671,19 +705,21 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
             if (tmpSourceObject instanceof List) {
                 // n -> n - reuse passed-in FieldGroup
                 List<?> sourceList = (List<?>) tmpSourceObject;
+                Field lastSubField = null;
                 for (int i = 0; i < sourceList.size(); i++) {
                     if (fieldGroup.getField().size() > i) {
-                        Field subField = fieldGroup.getField().get(i);
-                        subField.setValue(sourceList.get(i));
-                        subField.setFieldType(currentType);
+                        lastSubField = fieldGroup.getField().get(i);
                     } else {
-                        AtlasUtil.addAudit(session, fieldGroup.getDocId(),
-                            "FieldAction created more values than expected, ignoring", fieldGroup.getPath(),
-                            AuditStatus.WARN, sourceList.get(i).toString());
+                        Field subField = new SimpleField();
+                        AtlasModelFactory.copyField(lastSubField, subField, true);
+                        fieldGroup.getField().add(subField);
+                        lastSubField = subField;
                     }
+                    lastSubField.setValue(sourceList.get(i));
+                    lastSubField.setFieldType(currentType);
                 }
                 field = fieldGroup;
-            } else {
+        } else {
                 // n -> 1 - create new Field
                 Field newField = new SimpleField();
                 AtlasModelFactory.copyField(field, newField, false);
@@ -710,9 +746,112 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         return field;
     }
 
+    private FieldType determineFieldType(List<Object> values) {
+        if (values.size() > 0) {
+            // Use last argument to determine type
+            Optional<Object> o = values.stream().filter(v -> v != null).reduce((a, b) -> b);
+            if (o.isPresent()) {
+                if (o.get() instanceof List) {
+                    // Check deeper level for expressions
+                    o = ((List) o.get()).stream().filter(v -> v != null).reduce((a, b) -> b);
+                }
+                if (o.isPresent()) {
+                    return getConversionService().fieldTypeFromClass(o.get().getClass());
+                }
+            }
+        }
+        return FieldType.NONE;
+    }
+
+    private void extractFlatListValuesFromFieldGroup(AtlasSession session, FieldGroup fieldGroup, List<Object> values) {
+        if (fieldGroup == null || fieldGroup.getField() == null || fieldGroup.getField().isEmpty()) {
+            return;
+        }
+        for (Field subField : fieldGroup.getField()) {
+            Integer index = subField.getIndex();
+            Object value = null;
+            if (subField instanceof FieldGroup) {
+                // Collection field
+                List<Field> fields = ((FieldGroup) subField).getField();
+                if (fields != null && !fields.isEmpty()) {
+                    if (fieldGroup.getField().size() == 1 && (index == 0 || index == null)) {
+                        //For backwards compatibility treat as a collection in a SimpleField
+                        for (Field field: fields) {
+                            values.add(field.getValue());
+                        }
+                        break;
+                    } else {
+                        AtlasUtil.addAudit(session, subField.getDocId(), "Using only the first element of " +
+                                "the collection since a single value is expected in a multi-field selection.",
+                            subField.getPath(), AuditStatus.WARN, null);
+                        value = fields.get(0).getValue(); //get only the first value
+                    }
+                }
+            } else {
+                value = subField.getValue();
+            }
+
+            if (index != null) {
+                while (index >= values.size()) {
+                    values.add(null);
+                }
+                values.set(index, value);
+            } else {
+                values.add(value);
+            }
+        }
+    }
+
+    private void extractNestedListValuesFromFieldGroup(FieldGroup fieldGroup, List<Object> values) {
+        if (fieldGroup == null || fieldGroup.getField() == null || fieldGroup.getField().isEmpty()) {
+            return;
+        }
+        for (Field subField : fieldGroup.getField()) {
+            Object subValue = null;
+            if (subField instanceof FieldGroup) {
+                List<Object> subValues = new ArrayList<>();
+                extractNestedListValuesFromFieldGroup((FieldGroup)subField, subValues);
+                subValue = subValues;
+            } else {
+                subValue = subField.getValue();
+            }
+            Integer index = subField.getIndex();
+            if (index != null) {
+                while (index >= values.size()) {
+                    values.add(null);
+                }
+                values.set(index, subValue);
+            } else {
+                values.add(subValue);
+            }
+        }
+    }
+
+    private boolean hasExpressionAction(List<Action> actions) {
+        for (Action action: actions) {
+            if (action instanceof Expression) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Field findLastIndexField(FieldGroup fieldGroup) {
+        Field lastSubField = fieldGroup.getField().get(0);
+        for (Field subField: fieldGroup.getField()) {
+            int subFieldIndex = (subField.getIndex() == null) ? Integer.MAX_VALUE : subField.getIndex();
+            int lastSubFieldIndex = (lastSubField.getIndex() == null) ? Integer.MAX_VALUE: lastSubField.getIndex();
+            if (lastSubFieldIndex <= subFieldIndex) {
+                lastSubField = subField;
+            }
+        }
+        return lastSubField;
+    }
+
     private Object processAction(Action action, ActionProcessor processor, FieldType sourceType, Object sourceObject) throws AtlasException {
         ActionDetail detail = processor.getActionDetail();
         Multiplicity multiplicity = detail.getMultiplicity()!= null ? detail.getMultiplicity() : Multiplicity.ONE_TO_ONE;
+
         if (sourceObject instanceof List) {
             List<Object> tmpSourceList = (List<Object>) sourceObject;
             for (int i = 0; i < tmpSourceList.size(); i++) {
@@ -765,28 +904,6 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         char c[] = parameter.toCharArray();
         c[0] = Character.toLowerCase(c[0]);
         return new String(c);
-    }
-
-    private void extractFromFieldGroup(FieldGroup fieldGroup, List<Object> values) {
-        if (fieldGroup == null || fieldGroup.getField() == null || fieldGroup.getField().isEmpty()) {
-            return;
-        }
-        for (Field subField : fieldGroup.getField()) {
-            if (subField instanceof FieldGroup) {
-                extractFromFieldGroup((FieldGroup)subField, values);
-                continue;
-            }
-            Integer index = subField.getIndex();
-            if (index != null) {
-                while (index >= values.size()) {
-                    values.add(null);
-                }
-                // TODO this might not work with nested collection
-                values.set(index, subField.getValue());
-            } else {
-                values.add(subField.getValue());
-            }
-        }
     }
 
 }

@@ -571,10 +571,6 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 
     private void processSourceFieldGroup(DefaultAtlasSession session, FieldGroup sourceFieldGroup) throws AtlasException {
         processSourceFieldMappings(session, sourceFieldGroup.getField());
-        if (session.head().getSourceField() instanceof FieldGroup) {
-            sourceFieldGroup.getField().clear();
-            sourceFieldGroup.getField().add(session.head().getSourceField());
-        }
         session.head().setSourceField(sourceFieldGroup);
         Field processed = applyFieldActions(session, session.head().getSourceField());
         session.head().setSourceField(processed);
@@ -582,7 +578,8 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 
     private void processSourceFieldMappings(DefaultAtlasSession session, List<Field> sourceFields)
             throws AtlasException {
-        for (Field sourceField : sourceFields) {
+        for (int i = 0; i < sourceFields.size(); i++) {
+            Field sourceField = sourceFields.get(i);
             session.head().setSourceField(sourceField);
             if (sourceField instanceof FieldGroup) {
                 processSourceFieldMappings(session, ((FieldGroup)sourceField).getField());
@@ -604,25 +601,10 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                 return;
             }
 
-            if (sourceField.getIndex() != null) {
-                AtlasPath path = new AtlasPath(sourceField.getPath());
-                if (path.hasCollection() && !path.isIndexedCollection()) {
-                    if (sourceField.getIndex() != 0) {
-                        AtlasUtil.addAudit(session, sourceField.getDocId(),
-                            String.format("Index on a field is not supported, if there is a collection without index on the path",
-                                sourceField.getPath()), sourceField.getPath(), AuditStatus.ERROR, null);
-                    } else {
-                        sourceField.setIndex(null);
-                        AtlasUtil.addAudit(session, sourceField.getDocId(),
-                            String.format("Setting index from 0 to null since there is a collection without index on the path",
-                                sourceField.getPath()), sourceField.getPath(), AuditStatus.WARN, null);
-                    }
-                }
-            }
-
             module.readSourceValue(session);
             Field processed = applyFieldActions(session, session.head().getSourceField());
             session.head().setSourceField(processed);
+            sourceFields.set(i, processed);
         }
     }
 

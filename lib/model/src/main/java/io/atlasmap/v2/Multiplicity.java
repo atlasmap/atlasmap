@@ -7,8 +7,10 @@ public enum Multiplicity {
     ONE_TO_MANY("OneToMany"),
 
     MANY_TO_ONE("ManyToOne"),
-    
-    ZERO_TO_ONE("ZeroToOne");
+
+    ZERO_TO_ONE("ZeroToOne"),
+
+    MANY_TO_MANY("ManyToMany");
 
     Multiplicity(String v) {
         value = v;

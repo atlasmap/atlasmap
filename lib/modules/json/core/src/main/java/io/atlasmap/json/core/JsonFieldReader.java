@@ -96,6 +96,7 @@ public class JsonFieldReader implements AtlasFieldReader {
             AtlasModelFactory.copyField(field, jsonField, true);
             Object value = handleValueNode(session, node, jsonField);
             jsonField.setValue(value);
+            jsonField.setIndex(null); //reset index for subfields
             fields.add(jsonField);
         } else if (segments.size() > depth) {
             SegmentContext segmentContext;
