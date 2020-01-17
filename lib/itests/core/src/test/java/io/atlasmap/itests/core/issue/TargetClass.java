@@ -26,6 +26,7 @@ public class TargetClass {
     private String targetFirstName;
     private String targetLastName;
     private String targetName;
+    private String targetFullName;
     private Integer targetStreetNumber;
     private String targetStreetName1;
     private String targetStreetName2;
@@ -82,6 +83,14 @@ public class TargetClass {
     public TargetClass setTargetName(String targetName) {
         this.targetName = targetName;
         return this;
+    }
+
+    public String getTargetFullName() {
+        return targetFullName;
+    }
+
+    public void setTargetFullName(String targetFullName) {
+        this.targetFullName = targetFullName;
     }
 
     public Integer getTargetStreetNumber() {

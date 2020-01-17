@@ -109,6 +109,7 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
             AtlasModelFactory.copyField(field, xmlField, false);
             XmlSegmentContext lastSegment = segments.get(depth - 1);
             copyValue(session, lastSegment, node, xmlField);
+            xmlField.setIndex(null); //reset index for subfields
             xmlFields.add(xmlField);
         } else if (segments.size() > depth) {
             XmlSegmentContext segment = segments.get(depth);
