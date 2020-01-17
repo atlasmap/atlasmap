@@ -73,17 +73,10 @@ public class JsonValidationServiceMultiplicityTest extends BaseJsonValidationSer
         }
         validations.addAll(sourceValidationService.validateMapping(mapping));
         validations.addAll(targetValidationService.validateMapping(mapping));
-        assertTrue(validationHelper.allValidationsToString(), validationHelper.hasErrors());
+        assertFalse(validationHelper.allValidationsToString(), validationHelper.hasErrors());
         assertFalse(validationHelper.allValidationsToString(), validationHelper.hasWarnings());
         assertFalse(validationHelper.allValidationsToString(), validationHelper.hasInfos());
-        assertEquals(1, validationHelper.getCount());
-        Validation validation = validations.get(0);
-        assertNotNull(validation);
-        assertEquals(ValidationScope.MAPPING, validation.getScope());
-        assertEquals("concatenate-from-field-group", validation.getId());
-        assertEquals("A Source field contained in a collection can not be selected with other Source field: ['/sourceStringList<>']",
-                validation.getMessage());
-        assertEquals(ValidationStatus.ERROR, validation.getStatus());
+        assertEquals(0, validationHelper.getCount());
     }
 
     @Test
@@ -102,17 +95,10 @@ public class JsonValidationServiceMultiplicityTest extends BaseJsonValidationSer
         }
         validations.addAll(sourceValidationService.validateMapping(mapping));
         validations.addAll(targetValidationService.validateMapping(mapping));
-        assertTrue(validationHelper.allValidationsToString(), validationHelper.hasErrors());
+        assertFalse(validationHelper.allValidationsToString(), validationHelper.hasErrors());
         assertFalse(validationHelper.allValidationsToString(), validationHelper.hasWarnings());
         assertFalse(validationHelper.allValidationsToString(), validationHelper.hasInfos());
-        assertEquals(1, validationHelper.getCount());
-        Validation validation = validations.get(0);
-        assertNotNull(validation);
-        assertEquals(ValidationScope.MAPPING, validation.getScope());
-        assertEquals("split-into-multiple-fields", validation.getId());
-        assertEquals("A Target field contained in a collection can not be selected with other Target field: ['/targetStringList<>']",
-                validation.getMessage());
-        assertEquals(ValidationStatus.ERROR, validation.getStatus());
+        assertEquals(0, validationHelper.getCount());
     }
 
 }

@@ -52,7 +52,6 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
     private AtlasModuleMode mode;
     private String docId;
     private MappingFieldPairValidator mappingFieldPairValidator;
-    private MultipleFieldSelectionValidator multipleFieldSelectionValidator;
 
     public BaseModuleValidationService() {
         this.conversionService = DefaultAtlasConversionService.getInstance();
@@ -68,7 +67,6 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
 
     private void init() {
         this.mappingFieldPairValidator = new MappingFieldPairValidator(this);
-        this.multipleFieldSelectionValidator = new MultipleFieldSelectionValidator(this);
     }
 
     public void setMode(AtlasModuleMode mode) {
@@ -151,19 +149,15 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         if (getMode() == AtlasModuleMode.SOURCE) {
             FieldGroup sourceFieldGroup = mapping.getInputFieldGroup();
             if (sourceFieldGroup != null) {
-                multipleFieldSelectionValidator.validate(validations, mappingId,
-                        FieldDirection.SOURCE, sourceFieldGroup.getField());
                 validateFieldGroup(mappingId, sourceFieldGroup, FieldDirection.SOURCE, validations);
             } else {
                 List<Field> sourceFields = mapping.getInputField();
-                multipleFieldSelectionValidator.validate(validations, mappingId, FieldDirection.SOURCE, sourceFields);
                 sourceFields.forEach(sourceField -> {
                     validateField(mappingId, null, sourceField, FieldDirection.SOURCE, validations);
                 });
             }
         } else if (getMode() == AtlasModuleMode.TARGET) {
             List<Field> targetFields = mapping.getOutputField();
-            multipleFieldSelectionValidator.validate(validations, mappingId, FieldDirection.TARGET, targetFields);
 
             int i  = 0;
             List<Field> sourceFields = mapping.getInputField();

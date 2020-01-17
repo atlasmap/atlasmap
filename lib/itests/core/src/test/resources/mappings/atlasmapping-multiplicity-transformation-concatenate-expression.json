@@ -1,0 +1,94 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "io.atlasmap.itests.core.issue.SourceClass",
+      "uri" : "atlas:java?className=io.atlasmap.itests.core.issue.SourceClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "io.atlasmap.itests.core.issue.TargetClass",
+      "uri" : "atlas:java?className=io.atlasmap.itests.core.issue.TargetClass",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ {
+            "Expression" : {
+              "expression" : "concatenate(${0}, capitalize(${1}))"
+            }
+          } ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "docId" : "io.atlasmap.itests.core.issue.SourceClass",
+            "index" : 0,
+            "path" : "/sourceString",
+            "fieldType" : "STRING",
+            "name" : "sourceString"
+            }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "docId" : "io.atlasmap.itests.core.issue.SourceClass",
+            "index" : 1,
+            "path" : "/sourceStringList<>",
+            "fieldType" : "STRING",
+            "name" : "sourceStringList"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.issue.TargetClass",
+          "path" : "/targetString",
+          "fieldType" : "STRING",
+          "name" : "targetString"
+        } ]
+      },
+      {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ {
+            "Expression" : {
+              "expression" : "concatenate(${0}, ${1}, ${2})"
+            }
+          } ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "docId" : "io.atlasmap.itests.core.issue.SourceClass",
+            "index" : 0,
+            "path" : "/sourceString",
+            "fieldType" : "STRING",
+            "name" : "sourceString"
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "docId" : "io.atlasmap.itests.core.issue.SourceClass",
+            "index" : 1,
+            "path" : "/sourceStringList<>",
+            "fieldType" : "STRING",
+            "name" : "sourceStringList"
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "docId" : "io.atlasmap.itests.core.issue.SourceClass",
+            "index" : 2,
+            "path" : "/sourceList<>/name",
+            "fieldType" : "STRING",
+            "name" : "sourceList"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.issue.TargetClass",
+          "path" : "/targetFirstName",
+          "fieldType" : "STRING",
+          "name" : "targetFirstName"
+        } ]
+      }]
+    },
+    "name" : "core.unit.test"
+  }
+}

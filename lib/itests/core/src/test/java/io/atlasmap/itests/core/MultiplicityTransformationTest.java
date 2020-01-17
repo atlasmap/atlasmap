@@ -15,8 +15,11 @@
  */
 package io.atlasmap.itests.core;
 
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.net.URL;
@@ -25,7 +28,9 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
+import io.atlasmap.itests.core.issue.Item;
 import io.atlasmap.v2.Audit;
+import org.hamcrest.FeatureMatcher;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -69,13 +74,25 @@ public class MultiplicityTransformationTest {
         context.process(session);
         assertFalse(TestHelper.printAudit(session), session.hasErrors());
         assertTrue("split(STRING) => INTEGER/DOUBLE mapping should get warnings", session.hasWarns());
-        assertEquals(8, session.getAudits().getAudit().stream().filter(a -> a.getStatus() == AuditStatus.WARN).count());
+        assertEquals(9, session.getAudits().getAudit().stream().filter(a -> a.getStatus() == AuditStatus.WARN).count());
         Object output = session.getTargetDocument("io.atlasmap.itests.core.issue.TargetClass");
         assertEquals(TargetClass.class, output.getClass());
         TargetClass target = TargetClass.class.cast(output);
         assertEquals("Manjiro", target.getTargetFirstName());
         assertEquals("Nakahama", target.getTargetLastName());
         assertEquals("Manjiro,Nakahama", target.getTargetName());
+
+        // Concatenate(',', Capitalize(SourceStringList<>), SourceName) -> targetFullName
+        assertEquals("One,Nakahama", target.getTargetFullName());
+        assertThat(session.getAudits().getAudit(), hasItem(new FeatureMatcher<Audit, String>(
+            is("Using only the first element of the collection since a single value is expected in " +
+                "a multi-field selection."), "message", "message") {
+            @Override
+            protected String featureValueOf(Audit actual) {
+                return actual.getMessage();
+            }
+        }));
+
         assertEquals("one,two,three", target.getTargetString());
         assertEquals(new Integer(314), target.getTargetStreetNumber());
         assertEquals("Littleton", target.getTargetStreetName1());
@@ -93,6 +110,7 @@ public class MultiplicityTransformationTest {
         assertEquals(new Integer(4000), intList.get(3));
         assertEquals(Double.valueOf(128.965), target.getTargetWeightDouble());
         assertEquals("kg", target.getTargetWeightUnit());
+
     }
 
     @Test
@@ -187,6 +205,63 @@ public class MultiplicityTransformationTest {
         assertEquals("false", target.getTargetFirstName());
     }
 
+    @Test
+    public void testCapitalizeExpressionWithCollection() throws Exception {
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-capitalize-expression.json");
+        AtlasMapping mapping = mappingService.loadMapping(url);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasSession session = context.createSession();
+        SourceClass source = new SourceClass()
+            .setSourceStringList(Arrays.asList("bob", "john", "andrea"));
+        session.setSourceDocument("io.atlasmap.itests.core.issue.SourceClass", source);
+        context.process(session);
+        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        Object output = session.getTargetDocument("io.atlasmap.itests.core.issue.TargetClass");
+        assertEquals(TargetClass.class, output.getClass());
+        TargetClass target = TargetClass.class.cast(output);
+        assertEquals(Arrays.asList("Bob", "John", "Andrea"), target.getTargetStringList());
+    }
+
+    @Test
+    public void testConcatenateExpressionWithCollection() throws Exception {
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-concatenate-expression.json");
+        AtlasMapping mapping = mappingService.loadMapping(url);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasSession session = context.createSession();
+        SourceClass source = new SourceClass()
+            .setSourceStringList(Arrays.asList("bob", "john", "andrea"));
+        source.setSourceString(",");
+        session.setSourceDocument("io.atlasmap.itests.core.issue.SourceClass", source);
+        context.process(session);
+        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        Object output = session.getTargetDocument("io.atlasmap.itests.core.issue.TargetClass");
+        assertEquals(TargetClass.class, output.getClass());
+        TargetClass target = TargetClass.class.cast(output);
+        assertEquals("Bob,John,Andrea", target.getTargetString());
+    }
+
+    @Test
+    public void testConcatenateExpressionWithTwoCollections() throws Exception {
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-concatenate-expression.json");
+        AtlasMapping mapping = mappingService.loadMapping(url);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasSession session = context.createSession();
+        SourceClass source = new SourceClass()
+            .setSourceStringList(Arrays.asList("bob", "john", "andrea"));
+        source.setSourceList(Arrays.asList(new Item("thomas", null), new Item("arnold", null)));
+        source.setSourceString(",");
+        session.setSourceDocument("io.atlasmap.itests.core.issue.SourceClass", source);
+        context.process(session);
+        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        Object output = session.getTargetDocument("io.atlasmap.itests.core.issue.TargetClass");
+        assertEquals(TargetClass.class, output.getClass());
+        TargetClass target = TargetClass.class.cast(output);
+        assertEquals("bob,john,andrea,thomas,arnold", target.getTargetFirstName());
+    }
+
 
     @Test
     public void testAdd() throws Exception {
@@ -206,11 +281,6 @@ public class MultiplicityTransformationTest {
         session.setSourceDocument("java-source", sourceJava);
         context.process(session);
         assertFalse(TestHelper.printAudit(session), session.hasErrors());
-        assertTrue(TestHelper.printAudit(session), session.hasWarns());
-        assertEquals(4, session.getAudits().getAudit().size());
-        for (Audit audit: session.getAudits().getAudit()) {
-            assertEquals("Setting index from 0 to null since there is a collection without index on the path", audit.getMessage());
-        }
         Object output = session.getTargetDocument("io.atlasmap.java.test.TargetFlatPrimitiveClass");
         assertEquals(TargetFlatPrimitiveClass.class, output.getClass());
         TargetFlatPrimitiveClass target = TargetFlatPrimitiveClass.class.cast(output);

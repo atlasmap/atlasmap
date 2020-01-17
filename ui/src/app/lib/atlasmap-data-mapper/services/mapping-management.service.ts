@@ -378,23 +378,7 @@ export class MappingManagementService {
     }
 
     // Check multiplicity restrictions
-    const mappedFields = mapping.getMappedFields(field.isSource());
     const otherSideMappedFields = mapping.getMappedFields(!field.isSource());
-    const direction = field.isSource() ? 'source' : 'target';
-    const otherDirection = !field.isSource() ? 'source' : 'target';
-    if (mappedFields.length > 0) {
-      if (field.isInCollection() || mappedFields[0].field.isInCollection()) {
-        return 'a collection field cannot be a part of compound selection.';
-      } else if (otherSideMappedFields.length > 1) {
-        return `multiple ${direction} fields cannot be added into this
-          mapping. Only one Source field or Target field could be made multiple.`;
-      }
-    } else {
-      if (otherSideMappedFields.length > 1 && field.isInCollection()) {
-        return `a collection field cannot be selected as a ${direction} field
-         when multiple ${otherDirection} fields are already selected.`;
-      }
-    }
 
     if (field.isInCollection()) {
       if (otherSideMappedFields.length > 0) {
