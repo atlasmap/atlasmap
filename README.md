@@ -56,7 +56,7 @@ AtlasMap Data Mapper UI is available at http://127.0.0.1:8585/ by default.
 
 ## Live update for UI development
 
-While standalone AtlasMap design time services are running by following above, you can also run an another AtlasMap Data Mapper UI instance at different port by `yarn start`. This enables live update for UI code so you can see the outcome of your UI code change without build&restart manually.
+While standalone AtlasMap design time services are running by following above steps, you can also run another AtlasMap Data Mapper UI instance at a different port by `yarn start`. This enables live updates to the UI code so you can see the outcome of your UI code change without building and restarting manually.
 
 1. [Install Yarn](https://yarnpkg.com/lang/en/docs/install/)
 
@@ -75,13 +75,41 @@ The **yarn start** command will attempt to automatically open your browser windo
 
 ## Run REACT version of the standalone AtlasMap UI
 
-1. Run AtlasMap standalone jar from springboot maven plugin, as described above
+1. Run the AtlasMap standalone jar from the springboot maven plugin, as described above:
 ```
 $ cd ${ATLASMAP}/standalone
 $ ../mvnw -Pitests spring-boot:run
 ```
 
-2. Run standalone UI from REACT folder
+2. In a separate terminal window, run the standalone UI from the REACT folder:
+```
+$ cd ${ATLASMAP}/ui-react
+$ yarn standalone
+```
+
+## Live update for REACT UI development
+
+You can also run the REACT UI with live updates by starting yarn in both the core and UI folders:
+
+1. As above, run the AtlasMap standalone jar from the springboot maven plugin:
+```
+$ cd ${ATLASMAP}/standalone
+$ ../mvnw -Pitests spring-boot:run
+```
+
+2. In a separate terminal window, run yarn start to make live updates to core:
+```
+$ cd ${ATLASMAP}/ui-react/packages/atlasmap-core
+$ yarn start
+```
+
+3. Again in a separate terminal window, run yarn start to make live updates to the REACT UI:
+```
+$ cd ${ATLASMAP}/ui-react/packages/atlasmap-ui
+$ yarn start
+```
+
+4. In a final separate terminal window, run the standalone UI from the REACT folder:
 ```
 $ cd ${ATLASMAP}/ui-react
 $ yarn standalone
