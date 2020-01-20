@@ -25,7 +25,7 @@ $ wget http://central.maven.org/maven2/io/atlasmap/atlasmap-standalone/${VERSION
 
 2. Run
 ```
-$ java -jar atlasmap-standalone-${VERSION}.jar 
+$ java -jar atlasmap-standalone-${VERSION}.jar
 ```
 
 Then AtlasMap Data Mapper UI is available at http://127.0.0.1:8585/ by default.
@@ -36,7 +36,7 @@ Then AtlasMap Data Mapper UI is available at http://127.0.0.1:8585/ by default.
 ```
 $ git clone https://github.com/atlasmap/atlasmap ${ATLASMAP}
 ```
- 
+
 2. Build
 ```
 $ cd ${ATLASMAP}
@@ -73,3 +73,16 @@ $ yarn start
 
 The **yarn start** command will attempt to automatically open your browser window, but if it doesn't, open it directly with this URL: <http://localhost:3000>.
 
+## Run REACT version of the standalone AtlasMap UI
+
+1. Run AtlasMap standalone jar from springboot maven plugin, as described above
+```
+$ cd ${ATLASMAP}/standalone
+$ ../mvnw -Pitests spring-boot:run
+```
+
+2. Run standalone UI from REACT folder
+```
+$ cd ${ATLASMAP}/ui-react
+$ yarn standalone
+```
