@@ -16,7 +16,6 @@ import {
   Tooltip,
 } from '@patternfly/react-core';
 import {
-  FilterIcon,
   SearchIcon,
   ImportIcon,
   AddCircleOIcon,
@@ -55,7 +54,7 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
                 <DropdownToggle
                   splitButtonItems={[
                     <DropdownToggleAction key="action" onClick={toggleSearch}>
-                      <FilterIcon />
+                      <SearchIcon />
                     </DropdownToggleAction>,
                   ]}
                   splitButtonVariant={'action'}
