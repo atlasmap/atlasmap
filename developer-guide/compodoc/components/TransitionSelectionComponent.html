@@ -856,25 +856,26 @@ getMappedValueCount(): number {
     &lt;i class&#x3D;&quot;fa fa-edit link&quot; (click)&#x3D;&quot;showLookupTable()&quot;&gt;&lt;/i&gt;
   &lt;/div&gt;
 
-  &lt;div class&#x3D;&quot;mappingFieldAction&quot;&gt;
+  &lt;div class&#x3D;&quot;mappingFieldAction&quot; *ngIf&#x3D;&quot;mapping.transition.isManyToOneMode() || mapping.transition.isOneToManyMode()&quot;&gt;
     &lt;div class&#x3D;&quot;actionContainer&quot;&gt;
-      &lt;div class&#x3D;&quot;form-group&quot; *ngIf&#x3D;&quot;mapping.transition.isManyToOneMode() || mapping.transition.isOneToManyMode()&quot;
-        tooltip&#x3D;&quot;Choose a multiplicity transformation&quot;&gt;
-        &lt;select (change)&#x3D;&quot;configSelectionChanged($event);&quot; [ngModel]&#x3D;&quot;action.name&quot;&gt;
+      &lt;div class&#x3D;&quot;form-group&quot; tooltip&#x3D;&quot;Choose a multiplicity transformation&quot;&gt;
+        &lt;div class&#x3D;&quot;clear&quot;&gt;&lt;/div&gt;
+        &lt;select class&#x3D;&quot;combobox&quot; (change)&#x3D;&quot;configSelectionChanged($event);&quot; [ngModel]&#x3D;&quot;action.name&quot;&gt;
           &lt;option class&#x3D;&quot;multiplicityOption&quot; *ngFor&#x3D;&quot;let actionConfig of getMultiplicityActionConfigs()&quot;
-            [attr.value]&#x3D;&quot;actionConfig.name&quot;&gt;{{ getLabel(actionConfig.name) }}
+            [attr.value]&#x3D;&quot;actionConfig.name&quot; [value]&#x3D;&quot;actionConfig.name&quot;&gt;{{ getLabel(actionConfig.name) }}
           &lt;/option&gt;
         &lt;/select&gt;
+        &lt;div class&#x3D;&quot;clear&quot;&gt;&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;form-group argument&quot; *ngFor&#x3D;&quot;let argConfig of action.definition.arguments; let argValIndex &#x3D; index&quot;&gt;
+        &lt;div *ngIf&#x3D;&quot;!isIndexArg(argConfig.name, argValIndex)&quot;&gt;
 
-        &lt;div class&#x3D;&quot;form-group argument&quot; *ngFor&#x3D;&quot;let argConfig of action.definition.arguments; let argValIndex &#x3D; index&quot;&gt;
-          &lt;div *ngIf&#x3D;&quot;!isIndexArg(argConfig.name, argValIndex)&quot;&gt;
+          &lt;mapping-field-action-argument [action]&#x3D;&quot;action&quot; [argConfig]&#x3D;&quot;argConfig&quot; [argValIndex]&#x3D;&quot;argValIndex&quot;
+            [cfg]&#x3D;&quot;cfg&quot;&gt;
+          &lt;/mapping-field-action-argument&gt;
 
-            &lt;mapping-field-action-argument [action]&#x3D;&quot;action&quot; [argConfig]&#x3D;&quot;argConfig&quot; [argValIndex]&#x3D;&quot;argValIndex&quot;
-              [cfg]&#x3D;&quot;cfg&quot;&gt;
-            &lt;/mapping-field-action-argument&gt;
-
-          &lt;/div&gt;
         &lt;/div&gt;
+      &lt;/div&gt;
         &lt;!--
       &lt;select class&#x3D;&quot;combobox&quot; name&#x3D;&quot;separator&quot; id&#x3D;&quot;separator&quot; [ngModel]&#x3D;&quot;mapping.transition.delimiter&quot;&gt;
         &lt;ng-container *ngFor&#x3D;&quot;let delimiter of delimiters&quot; id&#x3D;&quot;delimiter&quot;&gt;
@@ -885,7 +886,6 @@ getMappedValueCount(): number {
         &lt;/ng-container&gt;
       &lt;/select&gt;
 --&gt;
-      &lt;/div&gt;
     &lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>
@@ -917,7 +917,7 @@ getMappedValueCount(): number {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><div class="TransitionSelection" *ngIf="cfg.mappings.activeMapping">  <div *ngIf="modeIsEnum()" class="enumSection">    <label>{{ getMappedValueCount() }} values mapped</label>    <i class="fa fa-edit link" (click)="showLookupTable()"></i>  </div>  <div class="mappingFieldAction">    <div class="actionContainer">      <div class="form-group" *ngIf="mapping.transition.isManyToOneMode() || mapping.transition.isOneToManyMode()"        tooltip="Choose a multiplicity transformation">        <select (change)="configSelectionChanged($event);" [ngModel]="action.name">          <option class="multiplicityOption" *ngFor="let actionConfig of getMultiplicityActionConfigs()"            [attr.value]="actionConfig.name">{{ getLabel(actionConfig.name) }}          </option>        </select>        <div class="form-group argument" *ngFor="let argConfig of action.definition.arguments; let argValIndex = index">          <div *ngIf="!isIndexArg(argConfig.name, argValIndex)">            <mapping-field-action-argument [action]="action" [argConfig]="argConfig" [argValIndex]="argValIndex"              [cfg]="cfg">            </mapping-field-action-argument>          </div>        </div>        <!--      <select class="combobox" name="separator" id="separator" [ngModel]="mapping.transition.delimiter">        <ng-container *ngFor="let delimiter of delimiters" id="delimiter">          <option *ngIf="modeIsSupported(delimiter)" value="{{ delimiter.delimiter }}" s t y le ="color: black;">            <label *ngIf="isUserDelimiter(delimiter); else standardDelimiter">{{ mapping.transition.userDelimiter }}</label>            <ng-template #standardDelimiter>{{ delimiter.prettyName }}</ng-template>          </option>        </ng-container>      </select>-->      </div>    </div>  </div></div></div>'
+        var COMPONENT_TEMPLATE = '<div><div class="TransitionSelection" *ngIf="cfg.mappings.activeMapping">  <div *ngIf="modeIsEnum()" class="enumSection">    <label>{{ getMappedValueCount() }} values mapped</label>    <i class="fa fa-edit link" (click)="showLookupTable()"></i>  </div>  <div class="mappingFieldAction" *ngIf="mapping.transition.isManyToOneMode() || mapping.transition.isOneToManyMode()">    <div class="actionContainer">      <div class="form-group" tooltip="Choose a multiplicity transformation">        <div class="clear"></div>        <select class="combobox" (change)="configSelectionChanged($event);" [ngModel]="action.name">          <option class="multiplicityOption" *ngFor="let actionConfig of getMultiplicityActionConfigs()"            [attr.value]="actionConfig.name" [value]="actionConfig.name">{{ getLabel(actionConfig.name) }}          </option>        </select>        <div class="clear"></div>      </div>      <div class="form-group argument" *ngFor="let argConfig of action.definition.arguments; let argValIndex = index">        <div *ngIf="!isIndexArg(argConfig.name, argValIndex)">          <mapping-field-action-argument [action]="action" [argConfig]="argConfig" [argValIndex]="argValIndex"            [cfg]="cfg">          </mapping-field-action-argument>        </div>      </div>        <!--      <select class="combobox" name="separator" id="separator" [ngModel]="mapping.transition.delimiter">        <ng-container *ngFor="let delimiter of delimiters" id="delimiter">          <option *ngIf="modeIsSupported(delimiter)" value="{{ delimiter.delimiter }}" s t y le ="color: black;">            <label *ngIf="isUserDelimiter(delimiter); else standardDelimiter">{{ mapping.transition.userDelimiter }}</label>            <ng-template #standardDelimiter>{{ delimiter.prettyName }}</ng-template>          </option>        </ng-container>      </select>-->    </div>  </div></div></div>'
     var COMPONENTS = [{'name': 'AppComponent', 'selector': 'atlasmap-dev-root'},{'name': 'AtlasmapNavbarComponent', 'selector': 'atlasmap-navbar'},{'name': 'ClassNameComponent', 'selector': 'class-name'},{'name': 'CollapsableHeaderComponent', 'selector': 'collapsable-header'},{'name': 'ConstantFieldEditComponent', 'selector': 'constant-field-edit'},{'name': 'DataMapperAppComponent', 'selector': 'data-mapper'},{'name': 'DataMapperAppExampleHostComponent', 'selector': 'data-mapper-example-host'},{'name': 'DataMapperErrorComponent', 'selector': 'data-mapper-error'},{'name': 'DocumentDefinitionComponent', 'selector': 'document-definition'},{'name': 'DocumentFieldDetailComponent', 'selector': 'document-field-detail'},{'name': 'EmptyModalBodyComponent', 'selector': 'empty-modal-body'},{'name': 'ExpressionComponent', 'selector': 'expression'},{'name': 'FieldEditComponent', 'selector': 'field-edit'},{'name': 'LineMachineComponent', 'selector': 'line-machine'},{'name': 'LookupTableComponent', 'selector': 'lookup-table'},{'name': 'MappingDetailComponent', 'selector': 'mapping-detail'},{'name': 'MappingFieldActionArgumentComponent', 'selector': 'mapping-field-action-argument'},{'name': 'MappingFieldActionComponent', 'selector': 'mapping-field-action'},{'name': 'MappingFieldContainerComponent', 'selector': 'mapping-field-container'},{'name': 'MappingFieldDetailComponent', 'selector': 'mapping-field-detail'},{'name': 'MappingListComponent', 'selector': 'mapping-list'},{'name': 'MappingListFieldComponent', 'selector': 'mapping-list-field'},{'name': 'MappingSelectionComponent', 'selector': 'mapping-selection'},{'name': 'MappingSelectionSectionComponent', 'selector': 'mapping-selection-section'},{'name': 'ModalErrorDetailComponent', 'selector': 'modal-error-detail'},{'name': 'ModalErrorWindowComponent', 'selector': 'modal-error-window'},{'name': 'ModalWindowComponent', 'selector': 'modal-window'},{'name': 'NamespaceEditComponent', 'selector': 'namespace-edit'},{'name': 'NamespaceListComponent', 'selector': 'namespace-list'},{'name': 'PropertyFieldEditComponent', 'selector': 'property-field-edit'},{'name': 'TemplateEditComponent', 'selector': 'template-edit'},{'name': 'ToolbarComponent', 'selector': 'toolbar'},{'name': 'TransitionSelectionComponent', 'selector': 'transition-selection'}];
     var DIRECTIVES = [{'name': 'FocusDirective', 'selector': '[focus]'}];
     var ACTUAL_COMPONENT = {'name': 'TransitionSelectionComponent'};
