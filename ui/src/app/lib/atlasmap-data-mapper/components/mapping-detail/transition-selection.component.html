@@ -5,25 +5,26 @@
     <i class="fa fa-edit link" (click)="showLookupTable()"></i>
   </div>
 
-  <div class="mappingFieldAction">
+  <div class="mappingFieldAction" *ngIf="mapping.transition.isManyToOneMode() || mapping.transition.isOneToManyMode()">
     <div class="actionContainer">
-      <div class="form-group" *ngIf="mapping.transition.isManyToOneMode() || mapping.transition.isOneToManyMode()"
-        tooltip="Choose a multiplicity transformation">
-        <select (change)="configSelectionChanged($event);" [ngModel]="action.name">
+      <div class="form-group" tooltip="Choose a multiplicity transformation">
+        <div class="clear"></div>
+        <select class="combobox" (change)="configSelectionChanged($event);" [ngModel]="action.name">
           <option class="multiplicityOption" *ngFor="let actionConfig of getMultiplicityActionConfigs()"
-            [attr.value]="actionConfig.name">{{ getLabel(actionConfig.name) }}
+            [attr.value]="actionConfig.name" [value]="actionConfig.name">{{ getLabel(actionConfig.name) }}
           </option>
         </select>
+        <div class="clear"></div>
+      </div>
+      <div class="form-group argument" *ngFor="let argConfig of action.definition.arguments; let argValIndex = index">
+        <div *ngIf="!isIndexArg(argConfig.name, argValIndex)">
 
-        <div class="form-group argument" *ngFor="let argConfig of action.definition.arguments; let argValIndex = index">
-          <div *ngIf="!isIndexArg(argConfig.name, argValIndex)">
+          <mapping-field-action-argument [action]="action" [argConfig]="argConfig" [argValIndex]="argValIndex"
+            [cfg]="cfg">
+          </mapping-field-action-argument>
 
-            <mapping-field-action-argument [action]="action" [argConfig]="argConfig" [argValIndex]="argValIndex"
-              [cfg]="cfg">
-            </mapping-field-action-argument>
-
-          </div>
         </div>
+      </div>
         <!--
       <select class="combobox" name="separator" id="separator" [ngModel]="mapping.transition.delimiter">
         <ng-container *ngFor="let delimiter of delimiters" id="delimiter">
@@ -34,7 +35,6 @@
         </ng-container>
       </select>
 -->
-      </div>
     </div>
   </div>
 </div>
