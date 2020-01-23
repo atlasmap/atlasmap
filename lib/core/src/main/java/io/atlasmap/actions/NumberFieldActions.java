@@ -21,6 +21,9 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.atlasmap.spi.AtlasActionProcessor;
 import io.atlasmap.spi.AtlasFieldAction;
 import io.atlasmap.v2.AbsoluteValue;
@@ -38,13 +41,14 @@ import io.atlasmap.v2.Floor;
 import io.atlasmap.v2.MassUnitType;
 import io.atlasmap.v2.Maximum;
 import io.atlasmap.v2.Minimum;
-import io.atlasmap.v2.Multiplicity;
 import io.atlasmap.v2.Multiply;
 import io.atlasmap.v2.Round;
 import io.atlasmap.v2.Subtract;
 import io.atlasmap.v2.VolumeUnitType;
 
 public class NumberFieldActions implements AtlasFieldAction {
+    private static final Logger LOG = LoggerFactory.getLogger(NumberFieldActions.class);
+
     // 1D
     private static final double KILO_GRAMS_IN_A_POUND = 0.45359237;
     private static final double YARDS_IN_A_MILE = 1760.0;
@@ -61,8 +65,6 @@ public class NumberFieldActions implements AtlasFieldAction {
     private static final double LITERS_IN_A_CUBIC_METER = 1000.0;
     private static final double CUBIC_FEET_IN_A_CUBIC_METER = Math.pow(1.0 / METERS_IN_A_INCH / INCHES_IN_A_FOOT, 3.0);
     private static final double GALLONS_US_FLUID_IN_A_CUBIC_METER = 264.17205236;
-
-    private static final String COLLECTION_MUST_CONTAIN_NUMBERS_ERR_MSG = "The source collection/arry/map must only contain numbers";
 
     private static Map<MassUnitType, Map<MassUnitType, Double>> massConvertionTable;
     static {
@@ -206,7 +208,7 @@ public class NumberFieldActions implements AtlasFieldAction {
                     sum = sum.longValue() + ((Number) entry).longValue();
                 }
             } else {
-                throw new IllegalArgumentException(COLLECTION_MUST_CONTAIN_NUMBERS_ERR_MSG);
+                warnIgnoringValue("Add", entry);
             }
         }
 
@@ -313,7 +315,7 @@ public class NumberFieldActions implements AtlasFieldAction {
                     quotient = quotient.doubleValue() / ((Number) entry).doubleValue();
                 }
             } else {
-                throw new IllegalArgumentException(COLLECTION_MUST_CONTAIN_NUMBERS_ERR_MSG);
+                warnIgnoringValue("Divide", entry);
             }
         }
 
@@ -340,7 +342,7 @@ public class NumberFieldActions implements AtlasFieldAction {
                     max = (Number) entry;
                 }
             } else {
-                throw new IllegalArgumentException(COLLECTION_MUST_CONTAIN_NUMBERS_ERR_MSG);
+                warnIgnoringValue("Maximum", entry);
             }
         }
 
@@ -362,7 +364,7 @@ public class NumberFieldActions implements AtlasFieldAction {
                     min = (Number) entry;
                 }
             } else {
-                throw new IllegalArgumentException(COLLECTION_MUST_CONTAIN_NUMBERS_ERR_MSG);
+                warnIgnoringValue("Minimum", entry);
             }
         }
 
@@ -388,7 +390,7 @@ public class NumberFieldActions implements AtlasFieldAction {
                     product = product.longValue() * ((Number) entry).longValue();
                 }
             } else {
-                throw new IllegalArgumentException(COLLECTION_MUST_CONTAIN_NUMBERS_ERR_MSG);
+                warnIgnoringValue("Multiply", entry);
             }
         }
 
@@ -421,7 +423,7 @@ public class NumberFieldActions implements AtlasFieldAction {
                     difference = difference.longValue() - ((Number) entry).longValue();
                 }
             } else {
-                throw new IllegalArgumentException(COLLECTION_MUST_CONTAIN_NUMBERS_ERR_MSG);
+                warnIgnoringValue("Subtract", entry);
             }
         }
 
@@ -437,5 +439,14 @@ public class NumberFieldActions implements AtlasFieldAction {
 
     private static boolean requiresDoubleResult(Object object) {
         return object instanceof Double || object instanceof Float;
+    }
+
+    /**
+     * @TODO Add audit via @AtlasSession instead - https://github.com/atlasmap/atlasmap/issues/1269
+     * @param value value
+     */
+    private static void warnIgnoringValue(String action, Object value) {
+        LOG.warn("The source collection/arry/map must only contain numbers for '{}' transformation - ignoring '{}'",
+            action, value != null ? value : "null");
     }
 }
