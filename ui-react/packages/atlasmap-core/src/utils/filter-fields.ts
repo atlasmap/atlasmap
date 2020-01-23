@@ -44,7 +44,7 @@ export function search(searchFilter: string | undefined, isSource: boolean) {
           let parentField = field.parentField;
 
           // Direct lineage is then visible.
-          while (parentField != null) {
+          while (parentField != null && !parentField.visibleInCurrentDocumentSearch) {
             parentField.visibleInCurrentDocumentSearch = true;
             parentField.collapsed = false;
             parentField = parentField.parentField;

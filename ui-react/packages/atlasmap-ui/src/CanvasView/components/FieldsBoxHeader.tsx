@@ -6,10 +6,10 @@ import {
   DropdownItemIcon,
   DropdownSeparator,
   DropdownToggle,
-  DropdownToggleAction,
+  Flex,
+  FlexItem,
+  FlexModifiers,
   InputGroup,
-  Level,
-  LevelItem,
   Stack,
   StackItem,
   TextInput,
@@ -46,21 +46,38 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
   return (
     <Stack>
       <StackItem>
-        <Level>
-          <LevelItem>{title}</LevelItem>
-          <LevelItem>
-            <Dropdown
-              toggle={
-                <DropdownToggle
-                  splitButtonItems={[
-                    <DropdownToggleAction key="action" onClick={toggleSearch}>
-                      <SearchIcon />
-                    </DropdownToggleAction>,
-                  ]}
-                  splitButtonVariant={'action'}
-                  onToggle={toggleActions}
+        <Flex breakpointMods={[{modifier: FlexModifiers['space-items-none']}]}>
+          {showSearch ? (
+              <FlexItem>{title}</FlexItem>
+          ) : (
+            <FlexItem breakpointMods={[{modifier: FlexModifiers['flex-1']}]}>{title}</FlexItem>
+          )}
+          <FlexItem>
+            <Button
+              variant={ButtonVariant.control}
+              aria-label="Search button for search input"
+              onClick={toggleSearch}
+            >
+              <SearchIcon />
+            </Button>
+          </FlexItem>
+          {showSearch && (
+            <FlexItem breakpointMods={[{modifier: FlexModifiers['flex-1']}]}>
+              <InputGroup>
+                <TextInput
+                  name={'source-search'}
+                  id={'source-search'}
+                  type="search"
+                  aria-label="Search source fields"
+                  autoFocus={true}
+                  onChange={onSearch}
                 />
-              }
+              </InputGroup>
+            </FlexItem>
+          )}
+          <FlexItem breakpointMods={[{modifier: FlexModifiers['align-self-flex-end']}]}>
+            <Dropdown
+              toggle={<DropdownToggle onToggle={toggleActions} />}
               isOpen={showActions}
               position={'right'}
               dropdownItems={[
@@ -106,29 +123,9 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
                 </DropdownItem>,
               ]}
             />
-          </LevelItem>
-        </Level>
+          </FlexItem>
+        </Flex>
       </StackItem>
-      {showSearch && (
-        <StackItem>
-          <InputGroup>
-            <TextInput
-              name={'source-search'}
-              id={'source-search'}
-              type="search"
-              aria-label="Search source fields"
-              autoFocus={true}
-              onChange={onSearch}
-            />
-            <Button
-              variant={ButtonVariant.control}
-              aria-label="Search button for search input"
-            >
-              <SearchIcon />
-            </Button>
-          </InputGroup>
-        </StackItem>
-      )}
     </Stack>
   );
 };
