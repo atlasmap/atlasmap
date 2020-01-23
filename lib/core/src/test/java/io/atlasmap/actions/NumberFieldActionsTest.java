@@ -20,8 +20,6 @@ import static org.junit.Assert.assertNotNull;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -68,6 +66,7 @@ public class NumberFieldActionsTest {
         assertEquals(10.0, NumberFieldActions.add(new Add(), Arrays.asList(1.0, 2.0, 3.0, 4.0)));
         assertEquals(10L, NumberFieldActions.add(new Add(), Arrays.asList(1, 2, 3, 4)));
         assertEquals(0, NumberFieldActions.add(new Add(), null));
+        assertEquals(10L, NumberFieldActions.add(new Add(), Arrays.asList(null, 1, 2, 3, null, 4, null)));
     }
 
     @Test
@@ -265,6 +264,7 @@ public class NumberFieldActionsTest {
         assertEquals(2.0, NumberFieldActions.divide(new Divide(), Arrays.asList(4.0, 2.0)));
         assertEquals(2.0, NumberFieldActions.divide(new Divide(), Arrays.asList(4, 2)));
         assertEquals(0, NumberFieldActions.divide(new Divide(), null));
+        assertEquals(2.0, NumberFieldActions.divide(new Divide(), Arrays.asList(null, 4, null, 2, null)));
     }
 
     @Test
@@ -287,6 +287,7 @@ public class NumberFieldActionsTest {
         assertEquals(4, NumberFieldActions.maximum(new Maximum(), Arrays.asList(1, 2, 3, 4)));
         assertEquals(BigDecimal.valueOf(4), NumberFieldActions.maximum(new Maximum(), Arrays.asList((byte) 1, 2, 3.0, BigDecimal.valueOf(4))));
         assertEquals(0, NumberFieldActions.maximum(new Maximum(), null));
+        assertEquals(4, NumberFieldActions.maximum(new Maximum(), Arrays.asList(null, 1, 2, 3, null, 4, null)));
     }
 
     @Test
@@ -296,6 +297,7 @@ public class NumberFieldActionsTest {
         assertEquals(1, NumberFieldActions.minimum(new Minimum(), Arrays.asList(1, 2, 3, 4)));
         assertEquals((byte) 1, NumberFieldActions.minimum(new Minimum(), Arrays.asList((byte) 1, 2, 3.0, BigDecimal.valueOf(4))));
         assertEquals(0, NumberFieldActions.minimum(new Minimum(), null));
+        assertEquals(1, NumberFieldActions.minimum(new Minimum(), Arrays.asList(null, 1, 2, null, 3, 4, null)));
     }
 
     @Test
@@ -317,6 +319,7 @@ public class NumberFieldActionsTest {
         assertEquals(-8.0, NumberFieldActions.subtract(new Subtract(), Arrays.asList(1.0, 2.0, 3.0, 4.0)));
         assertEquals(-8L, NumberFieldActions.subtract(new Subtract(), Arrays.asList(1, 2, 3, 4)));
         assertEquals(0, NumberFieldActions.subtract(new Subtract(), null));
+        assertEquals(-8.0, NumberFieldActions.subtract(new Subtract(), Arrays.asList(null, 1.0, null, 2.0, 3.0, null, 4.0, null)));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -352,6 +355,7 @@ public class NumberFieldActionsTest {
         assertEquals(24.0, NumberFieldActions.multiply(new Multiply(), Arrays.asList(1.0f, 2.0f, 3.0f, 4.0f)));
         assertEquals(24L, NumberFieldActions.multiply(new Multiply(), Arrays.asList(1L, 2L, 3L, 4L)));
         assertEquals(24L, NumberFieldActions.multiply(new Multiply(), Arrays.asList(1, 2, 3, 4)));
+        assertEquals(24L, NumberFieldActions.multiply(new Multiply(), Arrays.asList(null, 1, 2, null, 3, 4, null)));
     }
 
 }
