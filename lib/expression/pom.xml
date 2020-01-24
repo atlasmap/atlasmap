@@ -22,13 +22,13 @@
   <parent>
     <groupId>io.atlasmap</groupId>
     <artifactId>atlasmap-lib</artifactId>
-    <version>1.43.3</version>
+    <version>1.43.x-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
 
   <groupId>io.atlasmap</groupId>
   <artifactId>atlas-expression</artifactId>
-  <version>1.43.3</version>
+  <version>1.43.x-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>Atlas :: Expression</name>
