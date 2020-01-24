@@ -52,7 +52,7 @@
     <jetty-maven-plugin.version>9.4.26.v20200117</jetty-maven-plugin.version>
     <jsonschema2pojo-maven-plugin.version>1.0.2</jsonschema2pojo-maven-plugin.version>
     <junit.version>4.13</junit.version>
-    <karaf.version>4.2.1</karaf.version>
+    <karaf.version>4.2.8</karaf.version>
     <keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
     <license-maven-plugin.version>3.0</license-maven-plugin.version>
     <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
