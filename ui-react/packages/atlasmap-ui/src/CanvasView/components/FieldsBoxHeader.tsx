@@ -10,6 +10,7 @@ import {
   FlexItem,
   FlexModifiers,
   InputGroup,
+  SplitItem,
   Stack,
   StackItem,
   TextInput,
@@ -82,22 +83,26 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
               position={'right'}
               dropdownItems={[
                 <DropdownItem variant={'icon'} key={'import'}>
-                  <DropdownItemIcon>
-                    <ImportIcon />
-                  </DropdownItemIcon>
-                  <Tooltip
-                    position={'auto'}
-                    enableFlip={true}
-                    content={<div>Import instance or schema file</div>}
-                  >
+                  <SplitItem isFilled>
                     <FilePicker
                       extensions={['json', 'xml', 'xsd']}
                       onChange={(selectedFile: File) => onImport(selectedFile)}
                       onError={(errMsg: any) => console.error(errMsg)}
                     >
-                      <div>Import</div>
+                      <Tooltip
+                        position={'auto'}
+                        enableFlip={true}
+                        content={<div>Import instance or schema file</div>}
+                      >
+                        <div>
+                          <DropdownItemIcon>
+                            <ImportIcon />
+                          </DropdownItemIcon>
+                          Import
+                        </div>
+                      </Tooltip>
                     </FilePicker>
-                  </Tooltip>
+                  </SplitItem>
                 </DropdownItem>,
                 <DropdownSeparator key={'sep-1'} />,
                 <DropdownItem
@@ -105,21 +110,25 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
                   key={'java-classes'}
                   onClick={onJavaClasses}
                 >
-                  <DropdownItemIcon>
-                    <AddCircleOIcon />
-                  </DropdownItemIcon>
-                  <Tooltip
-                    position={'auto'}
-                    enableFlip={true}
-                    content={
+                  <SplitItem isFilled>
+                    <Tooltip
+                      position={'auto'}
+                      enableFlip={true}
+                      content={
+                        <div>
+                          Enable specific Java classes from your previously
+                          imported Java archive.
+                        </div>
+                      }
+                    >
                       <div>
-                        Enable specific Java classes from your previously
-                        imported Java archive.
+                        <DropdownItemIcon>
+                          <AddCircleOIcon />
+                        </DropdownItemIcon>
+                        Enable Java classes
                       </div>
-                    }
-                  >
-                    <div>Enable Java classes</div>
-                  </Tooltip>
+                    </Tooltip>
+                  </SplitItem>
                 </DropdownItem>,
               ]}
             />
