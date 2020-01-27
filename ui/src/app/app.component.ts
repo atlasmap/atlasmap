@@ -18,7 +18,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'atlasmap-dev-root',
-  template: '<router-outlet></router-outlet>',
+  template: '<data-mapper-example-host></data-mapper-example-host>',  // Required for vscode
+  // template: '<router-outlet></router-outlet>',
 })
 
 export class AppComponent {}
