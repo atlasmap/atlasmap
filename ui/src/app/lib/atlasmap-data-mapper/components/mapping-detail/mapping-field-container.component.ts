@@ -51,7 +51,7 @@ export class MappingFieldContainerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.inputId = 'input-' + this.isSource ? 'source' : 'target';
+    this.inputId = 'input-' + (this.isSource ? 'source' : 'target');
   }
 
   itemIsDocument(model: any): boolean {
