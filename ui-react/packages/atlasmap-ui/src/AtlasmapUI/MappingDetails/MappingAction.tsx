@@ -29,14 +29,14 @@ export const MappingAction: FunctionComponent<IMappingActionProps> = ({
   args = [],
   onChange,
 }) => {
-  const id = 'field-action-${value}';
+  const id = `field-action-${value}`;
   return (
     <>
       <div className={css(styles.spaced)}>
         <InputGroup>
           <FormSelect value={value} id={id} onChange={onChange}>
             {actions.map((a, idx) => (
-              <FormSelectOption label={a.name} value={a.value} key={idx} />
+              <FormSelectOption label={a.name} value={a.value} key={idx}/>
             ))}
           </FormSelect>
           <Button variant={'control'}>
