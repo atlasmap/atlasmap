@@ -70,7 +70,10 @@ const App: React.FC = () => {
     (removeMappedField: () => void) => openRemoveMappedFieldDialog(removeMappedField),
     [openRemoveMappedFieldDialog]
   );
-
+  const handleNewTransformation = useCallback(
+    (() => void 0),
+    []
+  );
   return (
     <>
       <Page
@@ -92,6 +95,7 @@ const App: React.FC = () => {
             onImportDocument={handleImportDocument}
             onDeleteDocument={handleDeleteDocument}
             onRemoveMappedField={handleRemoveMappedField}
+            onNewTransformation={handleNewTransformation}
           />
         </PageSection>
       </Page>

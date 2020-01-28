@@ -25,7 +25,12 @@ const styles = StyleSheet.create({
     color: 'inherit',
     border: '0 none',
     width: 40,
-  }
+  },
+  bodyDropdown: {
+    background: '#d4d4d4',
+    border: '1px solid #eee',
+    zIndex: 1,
+  },
 });
 
 export interface IMappingFieldProps {
@@ -34,8 +39,8 @@ export interface IMappingFieldProps {
   index: number;
   showIndex: boolean;
   canEditIndex: boolean;
-  onAdd: () => void;
   onDelete: () => void;
+  onNewTransformation: () => void;
 }
 
 export const MappingField: FunctionComponent<IMappingFieldProps> = ({
@@ -44,8 +49,8 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
   index,
   showIndex,
   canEditIndex,
-  onAdd,
   onDelete,
+  onNewTransformation,
   children,
 }) => {
   const [showActions, setShowActions] = useState(false);
@@ -53,6 +58,7 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
 
   const id = `mapping-field-${name}`;
   const actionsId = `${id}-actions`;
+  const dropdownId = `${actionsId}-dropdown`;
   return (
     <DataListItem aria-labelledby={id}>
       <DataListItemRow>
@@ -95,8 +101,14 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
           <Dropdown
             toggle={
               <DropdownToggle
+                id={dropdownId}
+                data-testid="fieldDetailsSelect"
+
                 splitButtonItems={[
-                  <DropdownToggleAction key='action' onClick={onAdd}>
+                  <DropdownToggleAction
+                   key='action'
+                   onClick={onNewTransformation}
+                  >
                     <Tooltip
                       position={'auto'}
                       enableFlip={true}
@@ -113,7 +125,10 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
             isOpen={showActions}
             position={'right'}
             dropdownItems={[
-              <DropdownItem variant={'icon'} key={'delete'} onClick={onDelete}>
+              <DropdownItem variant={'icon'}
+                key={'delete'}
+                onClick={onDelete}
+                className={css(styles.bodyDropdown)}>
                 <DropdownItemIcon>
                   <TrashIcon />
                 </DropdownItemIcon>
@@ -123,6 +138,8 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
           />
         </DataListAction>
       </DataListItemRow>
+
+      // Show established field action transformations associated with this field.
       {Children.count(children) > 0 && (
         <DataListContent
           aria-label={'Field transformations'}
