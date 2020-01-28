@@ -459,9 +459,14 @@ export class MappingManagementService {
           'mapping': MappingSerializer.serializeFieldMapping(this.cfg, inputFieldMapping, 'preview', false)
         }
       };
-      const docRefs: any = {};
+      const sourceDocRefs: any = {};
+      const targetDocRefs: any = {};
       for (const docRef of this.cfg.getAllDocs()) {
-        docRefs[docRef.id] = docRef.uri;
+        if (docRef.isSource) {
+          sourceDocRefs[docRef.id] = docRef.uri;
+        } else {
+          targetDocRefs[docRef.id] = docRef.uri;
+        }
       }
 
       const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/process';
@@ -472,7 +477,8 @@ export class MappingManagementService {
         if (this.cfg.isTraceEnabled()) {
           this.cfg.logger.trace(`Process Mapping Preview  Response: ${JSON.stringify(body)}`);
         }
-        const answer = MappingSerializer.deserializeFieldMapping(body.ProcessMappingResponse.mapping, docRefs, this.cfg, false);
+        const answer = MappingSerializer.deserializeFieldMapping(
+          body.ProcessMappingResponse.mapping, sourceDocRefs, targetDocRefs, this.cfg, false);
         for (const toWrite of inputFieldMapping.targetFields) {
           for (const toRead of answer.targetFields) {
             if (toWrite.field.docDef.id === toRead.parsedData.parsedDocID
