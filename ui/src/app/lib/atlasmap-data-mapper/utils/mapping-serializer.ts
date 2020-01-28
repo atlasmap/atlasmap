@@ -143,7 +143,7 @@ export class MappingSerializer {
   }
 
   static deserializeFieldMapping(
-    mappingJson: any, docRefs: any, cfg: ConfigModel, ignoreValue: boolean = true): MappingModel {
+    mappingJson: any, sourceDocRefs: any, targetDocRefs: any, cfg: ConfigModel, ignoreValue: boolean = true): MappingModel {
     const mapping = new MappingModel();
     mapping.uuid = mappingJson.id;
     mapping.sourceFields = [];
@@ -152,7 +152,7 @@ export class MappingSerializer {
     const isLookupMapping = (mappingJson.mappingType === 'LOOKUP') || mappingJson.lookupTableName != null;
 
     if (mappingJson.mappingType && mappingJson.mappingType !== '') {
-      this.deserializeFieldMappingFromType(mapping, mappingJson, docRefs, cfg, ignoreValue);
+      this.deserializeFieldMappingFromType(mapping, mappingJson, sourceDocRefs, targetDocRefs, cfg, ignoreValue);
       return mapping;
     }
 
@@ -163,7 +163,7 @@ export class MappingSerializer {
       inputField = mappingJson.inputFieldGroup.field;
 
       for (const field of inputField) {
-        MappingSerializer.addFieldIfDoesntExist(mapping, field, true, docRefs, cfg, ignoreValue);
+        MappingSerializer.addFieldIfDoesntExist(mapping, field, true, sourceDocRefs, cfg, ignoreValue);
       }
       MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, null, true);
 
@@ -186,7 +186,7 @@ export class MappingSerializer {
       inputField = mappingJson.inputField;
 
       for (const field of inputField) {
-        MappingSerializer.addFieldIfDoesntExist(mapping, field, true, docRefs, cfg, ignoreValue);
+        MappingSerializer.addFieldIfDoesntExist(mapping, field, true, sourceDocRefs, cfg, ignoreValue);
       }
 
       if (cfg.mappings) {
@@ -195,7 +195,7 @@ export class MappingSerializer {
     }
 
     for (const field of mappingJson.outputField) {
-      MappingSerializer.addFieldIfDoesntExist(mapping, field, false, docRefs, cfg, ignoreValue);
+      MappingSerializer.addFieldIfDoesntExist(mapping, field, false, targetDocRefs, cfg, ignoreValue);
     }
     MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, null, false);
 
@@ -478,23 +478,28 @@ export class MappingSerializer {
 
   private static deserializeMappings(json: any, cfg: ConfigModel): MappingModel[] {
     const mappings: MappingModel[] = [];
-    const docRefs: any = {};
+    const sourceDocRefs: any = {};
+    const targetDocRefs: any = {};
 
     if (!json || !json.AtlasMapping) {
       return mappings;
     }
     for (const docRef of json.AtlasMapping.dataSource) {
-      docRefs[docRef.id] = docRef.uri;
+      if (docRef.dataSourceType === 'SOURCE') {
+        sourceDocRefs[docRef.id] = docRef.uri;
+      } else {
+        targetDocRefs[docRef.id] = docRef.uri;
+      }
     }
     for (const fieldMapping of json.AtlasMapping.mappings.mapping) {
       // for backward compatibility
       const isCollectionMapping = (fieldMapping.jsonType === ConfigModel.mappingServicesPackagePrefix + '.Collection');
       if (isCollectionMapping) {
         for (const innerFieldMapping of fieldMapping.mappings.mapping) {
-          mappings.push(MappingSerializer.deserializeFieldMapping(innerFieldMapping, docRefs, cfg));
+          mappings.push(MappingSerializer.deserializeFieldMapping(innerFieldMapping, sourceDocRefs, targetDocRefs, cfg));
         }
       } else {
-        mappings.push(MappingSerializer.deserializeFieldMapping(fieldMapping, docRefs, cfg));
+        mappings.push(MappingSerializer.deserializeFieldMapping(fieldMapping, sourceDocRefs, targetDocRefs, cfg));
       }
     }
     return mappings;
@@ -506,12 +511,13 @@ export class MappingSerializer {
    *
    * @param mapping
    * @param fieldMapping
-   * @param docRefs
+   * @param sourceDocRefs
+   * @param targetDocRefs
    * @param cfg
    * @param ignoreValue
    */
   private static deserializeFieldMappingFromType(mapping: MappingModel,
-          fieldMapping: any, docRefs: any, cfg: ConfigModel, ignoreValue: boolean): void {
+          fieldMapping: any, sourceDocRefs: any, targetDocRefs: any, cfg: ConfigModel, ignoreValue: boolean): void {
     if (fieldMapping.mappingType === 'SEPARATE') {
       mapping.transition.mode = TransitionMode.ONE_TO_MANY;
       mapping.transition.transitionFieldAction
@@ -530,10 +536,10 @@ export class MappingSerializer {
     }
 
     for (const field of fieldMapping.inputField) {
-       MappingSerializer.addFieldIfDoesntExist(mapping, field, true, docRefs, cfg, ignoreValue);
+       MappingSerializer.addFieldIfDoesntExist(mapping, field, true, sourceDocRefs, cfg, ignoreValue);
     }
     for (const field of fieldMapping.outputField) {
-       MappingSerializer.addFieldIfDoesntExist(mapping, field, false, docRefs, cfg, ignoreValue);
+       MappingSerializer.addFieldIfDoesntExist(mapping, field, false, targetDocRefs, cfg, ignoreValue);
     }
     MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, null, true);
   }
