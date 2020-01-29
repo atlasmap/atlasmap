@@ -10,13 +10,13 @@ import { useAtlasmap } from './AtlasmapProvider';
 import { DataMapperUtil } from './common/data-mapper-util';
 import { FieldAction } from './models/field-action.model';
 import { ConfigModel } from './models/config.model';
-import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from './models/error.model';
 
 export interface IAtlasmapMappingDetaisProps {
   mapping: MappingModel;
   closeDetails: () => void;
   onRemoveMappedField: (remove: () => void) => void;
   onNewTransformation: (newTransformation: () => void) => void;
+  onRemoveTransformation: (removeTransformation: () => void) => void;
 }
 
 export const AtlasmapMappingDetails: FunctionComponent<
@@ -36,12 +36,6 @@ export const AtlasmapMappingDetails: FunctionComponent<
       <MappingFields title={'Sources'}>
         {sources.map(s => {
           const actions = getMappingActions(true);
-          if (!actions) {
-            cfg.errorService.addError(new ErrorInfo({message:
-              'The selected field has no applicable transformation actions.',
-              level: ErrorLevel.INFO, scope: ErrorScope.MAPPING, type: ErrorType.USER}));
-            return;
-          }
           const actionsOptions = actions.map(a => ({
             name: DataMapperUtil.toDisplayable(a.name),
             value: a.name,
@@ -75,12 +69,17 @@ export const AtlasmapMappingDetails: FunctionComponent<
                       ...opts,
                       name: DataMapperUtil.toDisplayable(opts.name),
                     }))}
-                  onChange={name =>
+                  onChange={(name:string) =>
                     handleActionChange(
                       s.actions[idx],
                       actions.find(a => a.name === name)!
                     )
                   }
+                  onRemoveTransformation={() => {
+                    const action = s.actions.find(a => a.name === s.actions[idx].name)!;
+                    DataMapperUtil.removeItemFromArray(action!, s.actions);
+                    cfg.mappingService.notifyMappingUpdated();
+                  }}
                 />
               ))}
             </MappingField>
@@ -90,12 +89,6 @@ export const AtlasmapMappingDetails: FunctionComponent<
       <MappingFields title={'Targets'}>
         {targets.map(t => {
           const actions = getMappingActions(false);
-          if (!actions) {
-            cfg.errorService.addError(new ErrorInfo({message:
-              'The selected field has no applicable transformation actions.',
-              level: ErrorLevel.INFO, scope: ErrorScope.MAPPING, type: ErrorType.USER}));
-            return;
-          }
           const actionsOptions = actions.map(a => ({
             name: DataMapperUtil.toDisplayable(a.name),
             value: a.name,
@@ -130,12 +123,17 @@ export const AtlasmapMappingDetails: FunctionComponent<
                       ...opts,
                       name: DataMapperUtil.toDisplayable(opts.name),
                     }))}
-                  onChange={name =>
+                  onChange={(name:string) =>
                     handleActionChange(
                       t.actions[idx],
                       actions.find(a => a.name === name)!
                     )
                   }
+                  onRemoveTransformation={() => {
+                    const action = t.actions.find(a => a.name === t.actions[idx].name)!;
+                    DataMapperUtil.removeItemFromArray(action!, t.actions);
+                    cfg.mappingService.notifyMappingUpdated();
+                  }}
                 />
               ))}
             </MappingField>

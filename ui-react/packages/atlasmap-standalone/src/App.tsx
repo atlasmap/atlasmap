@@ -74,6 +74,10 @@ const App: React.FC = () => {
     (() => void 0),
     []
   );
+  const handleRemoveTransformation = useCallback(
+    (() => void 0),
+    []
+  );
   return (
     <>
       <Page
@@ -96,6 +100,7 @@ const App: React.FC = () => {
             onDeleteDocument={handleDeleteDocument}
             onRemoveMappedField={handleRemoveMappedField}
             onNewTransformation={handleNewTransformation}
+            onRemoveTransformation={handleRemoveTransformation}
           />
         </PageSection>
       </Page>

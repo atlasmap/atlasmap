@@ -27,6 +27,7 @@ export interface IAtlasmapProps {
   onDeleteDocument: (deleteDocument: () => void) => void;
   onRemoveMappedField: (removeMappedfield: () => void) => void;
   onNewTransformation: (newTransformation: () => void) => void;
+  onRemoveTransformation: (removeTransformation: () => void) => void;
 }
 
 export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
@@ -35,7 +36,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   onImportDocument,
   onDeleteDocument,
   onRemoveMappedField,
-  onNewTransformation
+  onNewTransformation,
+  onRemoveTransformation
 }) => {
   const [sourceFilter, setSourceFilter] = useState<string | undefined>();
   const [targetFilter, setTargetFilter] = useState<string | undefined>();
@@ -145,6 +147,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
           closeDetails={closeDetails}
           onRemoveMappedField={onRemoveMappedField}
           onNewTransformation={onNewTransformation}
+          onRemoveTransformation={onRemoveTransformation}
         />
       )}
     >

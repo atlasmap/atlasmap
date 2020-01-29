@@ -21,6 +21,7 @@ export interface IMappingActionProps {
   actions: { name: string; value: string }[];
   args?: { name: string; value: string }[];
   onChange: (value: string) => void;
+  onRemoveTransformation: () => void;
 }
 
 export const MappingAction: FunctionComponent<IMappingActionProps> = ({
@@ -28,6 +29,7 @@ export const MappingAction: FunctionComponent<IMappingActionProps> = ({
   actions,
   args = [],
   onChange,
+  onRemoveTransformation,
 }) => {
   const id = `field-action-${value}`;
   return (
@@ -39,7 +41,7 @@ export const MappingAction: FunctionComponent<IMappingActionProps> = ({
               <FormSelectOption label={a.name} value={a.value} key={idx}/>
             ))}
           </FormSelect>
-          <Button variant={'control'}>
+          <Button variant={'control'} onClick={onRemoveTransformation}>
             <CloseIcon />
           </Button>
         </InputGroup>
