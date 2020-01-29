@@ -103,16 +103,16 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
               <DropdownToggle
                 id={dropdownId}
                 data-testid="fieldDetailsSelect"
-
                 splitButtonItems={[
                   <DropdownToggleAction
+                   isDisabled={!canEditIndex}
                    key='action'
                    onClick={onNewTransformation}
                   >
                     <Tooltip
                       position={'auto'}
                       enableFlip={true}
-                      content={<div>Add transformation</div>}
+                      content={<div>Add a new field transformation</div>}
                     >
                       <BoltIcon />
                     </Tooltip>
