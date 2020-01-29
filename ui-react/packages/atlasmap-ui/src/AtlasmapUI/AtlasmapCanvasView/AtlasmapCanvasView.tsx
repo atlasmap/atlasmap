@@ -3,30 +3,24 @@ import React, {
   ReactChild,
   useCallback,
   useEffect,
-  useMemo,
   useState,
 } from 'react';
 import {
   CanvasView,
   CanvasViewProvider,
-  CanvasViewControlBar,
   Links,
-  getToolbarIconStyle,
 } from '../../CanvasView';
 import { DragLayer } from './DragLayer';
 import { useAtlasmapUI } from '../AtlasmapUIProvider';
-import { AtlasmapLayout, IAtlasmapLayoutProps } from '../AtlasmapLayout';
-import {
-  MapMarkedIcon,
-  EyeIcon,
-  MapIcon,
-  InfoIcon,
-} from '@patternfly/react-icons';
+import { AtlasmapLayout } from '../AtlasmapLayout';
 
-export interface IAtlasmapCanvasViewProps extends IAtlasmapLayoutProps {
+export interface IAtlasmapCanvasViewProps {
   onShowMappingPreview: (enabled: boolean) => void;
   onShowMappedFields: (enabled: boolean) => void;
   onShowUnmappedFields: (enabled: boolean) => void;
+  onExportAtlasFile: (event: any) => void;
+  onImportAtlasFile: (selectedFile: File) => void;
+  onResetAtlasmap: () => void;
   children: (props: {
     showTypes: boolean;
     showMappingPreview: boolean;
@@ -36,12 +30,12 @@ export interface IAtlasmapCanvasViewProps extends IAtlasmapLayoutProps {
 export const AtlasmapCanvasView: FunctionComponent<
   IAtlasmapCanvasViewProps
 > = ({
-  onExportAtlasFile,
-  onImportAtlasFile,
-  onResetAtlasmap,
   onShowMappingPreview,
   onShowMappedFields,
   onShowUnmappedFields,
+  onExportAtlasFile,
+  onImportAtlasFile,
+  onResetAtlasmap,
   children,
 }) => {
   const { mappings, selectedMapping, isEditingMapping } = useAtlasmapUI();
@@ -72,57 +66,6 @@ export const AtlasmapCanvasView: FunctionComponent<
     onShowUnmappedFields(newValue);
   }, [showUnmappedFields, onShowUnmappedFields]);
 
-  const controlBar = useMemo(
-    () => (
-      <CanvasViewControlBar
-        extraButtons={[
-          {
-            id: 'Show types',
-            icon: <InfoIcon style={getToolbarIconStyle(showTypes)} />,
-            tooltip: 'Show types',
-            ariaLabel: ' ',
-            callback: toggleShowTypes,
-          },
-          {
-            id: 'Show mapped fields',
-            icon: (
-              <MapMarkedIcon style={getToolbarIconStyle(showMappedFields)} />
-            ),
-            tooltip: 'Show mapped fields',
-            ariaLabel: ' ',
-            callback: toggleShowMappedFields,
-          },
-          {
-            id: 'Show unmapped fields',
-            icon: (
-              <MapIcon style={getToolbarIconStyle(showUnmappedFields)} />
-            ),
-            tooltip: 'Show unmapped fields',
-            ariaLabel: ' ',
-            callback: toggleShowUnmappedFields,
-          },
-          {
-            id: 'Show mapping preview',
-            icon: <EyeIcon style={getToolbarIconStyle(showMappingPreview)} />,
-            tooltip: 'Show mapping preview',
-            ariaLabel: ' ',
-            callback: toggleShowMappingPreview,
-          },
-        ]}
-      />
-    ),
-    [
-      showTypes,
-      toggleShowTypes,
-      showMappedFields,
-      toggleShowMappedFields,
-      showUnmappedFields,
-      toggleShowUnmappedFields,
-      showMappingPreview,
-      toggleShowMappingPreview,
-    ]
-  );
-
   useEffect(() => {
     const timeout = setTimeout(
       () => {
@@ -136,10 +79,13 @@ export const AtlasmapCanvasView: FunctionComponent<
   return (
     <CanvasViewProvider>
       <AtlasmapLayout
-        controlBar={controlBar}
         onExportAtlasFile={onExportAtlasFile}
         onImportAtlasFile={onImportAtlasFile}
         onResetAtlasmap={onResetAtlasmap}
+        onToggleShowTypes={toggleShowTypes}
+        onToggleShowMappingPreview={toggleShowMappingPreview}
+        onToggleShowMappedFields={toggleShowMappedFields}
+        onToggleShowUnmappedFields={toggleShowUnmappedFields}
       >
         <CanvasView showMappingColumn={isMappingColumnVisible}>
           {children({ showMappingPreview, showTypes })}
