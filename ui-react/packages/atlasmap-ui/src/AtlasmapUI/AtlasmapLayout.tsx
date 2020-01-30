@@ -1,10 +1,12 @@
-import React, { FunctionComponent, useMemo } from 'react';
+import React, { FunctionComponent, useCallback, useMemo } from 'react';
 import { TopologyView } from '@patternfly/react-topology';
 import { AtlasmapContextToolbar } from './AtlasmapContextToolbar';
 import { useAtlasmapUI } from './AtlasmapUIProvider';
 import { Loading } from '../common';
 import { AtlasmapSidebar } from './AtlasmapSidebar';
 import { CanvasViewToolbar } from '../CanvasView/components';
+import { useCanvasViewOptionsContext } from '../CanvasView/CanvasViewOptionsProvider';
+import { useCanvasViewContext } from '../CanvasView/CanvasViewCanvasProvider';
 
 export interface IAtlasmapLayoutProps {
   onExportAtlasFile: (event: any) => void;
@@ -28,6 +30,21 @@ export const AtlasmapLayout: FunctionComponent<IAtlasmapLayoutProps> = ({
 }) => {
   const { pending, isEditingMapping } = useAtlasmapUI();
 
+  const { updateZoom, resetZoom, resetPan } = useCanvasViewContext();
+
+  const { freeView, toggleFreeView } = useCanvasViewOptionsContext();
+
+  const handleZoomIn = useCallback(() => {
+    updateZoom(0.2);
+  }, [updateZoom]);
+  const handleZoomOut = useCallback(() => {
+    updateZoom(-0.2);
+  }, [updateZoom]);
+  const handleResetView = useCallback(() => {
+    resetZoom();
+    resetPan();
+  }, [resetZoom, resetPan]);
+
   const contextToolbar = useMemo(
     () => (
       <AtlasmapContextToolbar
@@ -38,6 +55,11 @@ export const AtlasmapLayout: FunctionComponent<IAtlasmapLayoutProps> = ({
         onToggleShowMappingPreview={onToggleShowMappingPreview}
         onToggleShowMappedFields={onToggleShowMappedFields}
         onToggleShowUnmappedFields={onToggleShowUnmappedFields}
+        onToggleShowFreeView={toggleFreeView}
+        onZoomIn={handleZoomIn}
+        onZoomOut={handleZoomOut}
+        onResetView={handleResetView}
+        showFreeView={freeView}
       />
     ),
     [onExportAtlasFile, onImportAtlasFile, onResetAtlasmap]
