@@ -84,15 +84,15 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
               dropdownItems={[
                 <DropdownItem variant={'icon'} key={'import'}>
                   <SplitItem isFilled>
-                    <FilePicker
-                      extensions={['json', 'xml', 'xsd']}
-                      onChange={(selectedFile: File) => onImport(selectedFile)}
-                      onError={(errMsg: any) => console.error(errMsg)}
-                    >
-                      <Tooltip
+                  <Tooltip
                         position={'auto'}
                         enableFlip={true}
                         content={<div>Import instance or schema file</div>}
+                      >
+                      <FilePicker
+                        extensions={['json', 'xml', 'xsd']}
+                        onChange={(selectedFile: File) => onImport(selectedFile)}
+                        onError={(errMsg: any) => console.error(errMsg)}
                       >
                         <div>
                           <DropdownItemIcon>
@@ -100,8 +100,8 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
                           </DropdownItemIcon>
                           Import
                         </div>
-                      </Tooltip>
-                    </FilePicker>
+                      </FilePicker>
+                    </Tooltip>
                   </SplitItem>
                 </DropdownItem>,
                 <DropdownSeparator key={'sep-1'} />,
