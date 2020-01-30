@@ -7,6 +7,10 @@ import {
   InfoIcon,
   MapMarkedIcon,
   MapIcon,
+  SearchPlusIcon,
+  PficonDragdropIcon,
+  SearchMinusIcon,
+  ExpandIcon,
 } from '@patternfly/react-icons';
 import React, { FunctionComponent } from 'react';
 import {
@@ -16,7 +20,7 @@ import {
 
 import { FilePicker } from 'react-file-picker';
 import { css, StyleSheet } from '@patternfly/react-styles';
-import { DataToolbarItem, DataToolbar, DataToolbarContent } from '@patternfly/react-core/dist/js/experimental';
+import { DataToolbarItem, DataToolbar, DataToolbarContent, DataToolbarGroup } from '@patternfly/react-core/dist/js/experimental';
 
 const styles = StyleSheet.create({
   toolbar: { borderBottom: '1px solid #ccc' },
@@ -30,6 +34,11 @@ export interface IAtlasmapContextToolbarProps {
   onToggleShowMappingPreview: (id: any) => void;
   onToggleShowMappedFields: (id: any) => void;
   onToggleShowUnmappedFields: (id: any) => void;
+  onToggleShowFreeView: (id: any) => void;
+  onZoomIn: (id: any) => void;
+  onZoomOut: (id: any) => void;
+  onResetView: (id: any) => void;
+  showFreeView: boolean;
 }
 
 export const AtlasmapContextToolbar: FunctionComponent<
@@ -41,7 +50,12 @@ export const AtlasmapContextToolbar: FunctionComponent<
       onToggleShowMappingPreview,
       onToggleShowTypes,
       onToggleShowMappedFields,
-      onToggleShowUnmappedFields
+      onToggleShowUnmappedFields,
+      onToggleShowFreeView,
+      onZoomIn,
+      onZoomOut,
+      onResetView,
+      showFreeView,
     }) => {
   return (
     <DataToolbar
@@ -119,7 +133,7 @@ export const AtlasmapContextToolbar: FunctionComponent<
             >
               <Button
                 variant={'plain'}
-                aria-label="Reset all"
+                aria-label="Show/hide mapping preview"
                 onClick={onToggleShowMappingPreview}
               >
                 <EyeIcon />
@@ -157,7 +171,7 @@ export const AtlasmapContextToolbar: FunctionComponent<
             >
               <Button
                 variant={'plain'}
-                aria-label="Reset all"
+                aria-label="Show/hide types"
                 onClick={onToggleShowTypes}
               >
                 <InfoIcon />
@@ -172,7 +186,7 @@ export const AtlasmapContextToolbar: FunctionComponent<
             >
               <Button
                 variant={'plain'}
-                aria-label="Reset all"
+                aria-label="Show/hide mapped fields"
                 onClick={onToggleShowMappedFields}
               >
                 <MapMarkedIcon />
@@ -187,13 +201,78 @@ export const AtlasmapContextToolbar: FunctionComponent<
             >
               <Button
                 variant={'plain'}
-                aria-label="Reset all"
+                aria-label="Show/hide unmapped fields"
                 onClick={onToggleShowUnmappedFields}
               >
                 <MapIcon />
               </Button>
             </Tooltip>
           </DataToolbarItem>
+          <DataToolbarItem variant='separator'></DataToolbarItem>
+          <DataToolbarItem>
+            <Tooltip
+              position={'auto'}
+              enableFlip={true}
+              content={<div>Show/hide free view</div>}
+            >
+              <Button
+                variant={'plain'}
+                aria-label="Show/hide free view"
+                onClick={onToggleShowFreeView}
+              >
+                <PficonDragdropIcon />
+              </Button>
+            </Tooltip>
+          </DataToolbarItem>
+          {showFreeView && (
+            <DataToolbarGroup>
+              <DataToolbarItem>
+                <Tooltip
+                  position={'auto'}
+                  enableFlip={true}
+                  content={<div>Zoom in</div>}
+                >
+                  <Button
+                    variant={'plain'}
+                    aria-label="Zoom in"
+                    onClick={onZoomIn}
+                  >
+                    <SearchPlusIcon />
+                  </Button>
+                </Tooltip>
+              </DataToolbarItem>
+              <DataToolbarItem>
+                <Tooltip
+                  position={'auto'}
+                  enableFlip={true}
+                  content={<div>Zoom out</div>}
+                >
+                  <Button
+                    variant={'plain'}
+                    aria-label="Zoom out"
+                    onClick={onZoomOut}
+                  >
+                    <SearchMinusIcon />
+                  </Button>
+                </Tooltip>
+              </DataToolbarItem>
+              <DataToolbarItem>
+                <Tooltip
+                  position={'auto'}
+                  enableFlip={true}
+                  content={<div>Reset view</div>}
+                >
+                  <Button
+                    variant={'plain'}
+                    aria-label="Reset view"
+                    onClick={onResetView}
+                  >
+                    <ExpandIcon />
+                  </Button>
+                </Tooltip>
+              </DataToolbarItem>
+            </DataToolbarGroup>
+          )}
         </React.Fragment>
       </DataToolbarContent>
     </DataToolbar>

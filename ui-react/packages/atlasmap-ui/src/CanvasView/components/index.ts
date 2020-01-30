@@ -1,7 +1,6 @@
 export * from './Box';
 export * from './BoxProvider';
 export * from './CanvasViewCanvas';
-export * from './CanvasViewControlBar';
 export * from './CanvasViewToolbar';
 export * from './Document';
 export * from './DocumentProvider';
