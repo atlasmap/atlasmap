@@ -16,13 +16,13 @@
 package io.atlasmap.xml.inspect;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import javax.xml.XMLConstants;
 
-import org.w3c.dom.Attr;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -34,6 +34,7 @@ import io.atlasmap.v2.FieldStatus;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Fields;
 import io.atlasmap.xml.core.XmlComplexTypeFactory;
+import io.atlasmap.xml.core.XmlPath;
 import io.atlasmap.xml.v2.AtlasXmlModelFactory;
 import io.atlasmap.xml.v2.XmlComplexType;
 import io.atlasmap.xml.v2.XmlDocument;
@@ -44,6 +45,7 @@ import io.atlasmap.xml.v2.XmlNamespaces;
 
 public class XmlInstanceInspector {
 
+    private static final Logger LOG = LoggerFactory.getLogger(XmlInstanceInspector.class);
     private XmlDocument xmlDocument = AtlasXmlModelFactory.createXmlDocument();
 
     public void inspect(Document document) {
@@ -56,32 +58,34 @@ public class XmlInstanceInspector {
     }
 
     private void parseDocument(Node rootNode) {
-        if (rootNode.getParentNode() != null && rootNode.getParentNode().getNodeType() == Node.DOCUMENT_NODE) {
-            XmlComplexType rootComplexType = getXmlComplexType(rootNode);
-            xmlDocument.getFields().getField().add(rootComplexType);
-            mapAttributes(rootNode, rootComplexType);
-            if (rootNode.hasChildNodes()) {
-                mapChildNodes(rootNode.getChildNodes(), rootComplexType);
-                mapCollectionType(rootComplexType, (Element)rootNode);
-            }
+        if (rootNode.getParentNode() == null || rootNode.getParentNode().getNodeType() != Node.DOCUMENT_NODE) {
+            return;
+        }
+
+        XmlComplexType rootComplexType = createXmlComplexType(rootNode, null);
+        xmlDocument.getFields().getField().add(rootComplexType);
+        mapAttributes(rootNode, rootComplexType);
+        if (rootNode.hasChildNodes()) {
+            mapChildNodes(rootNode.getChildNodes(), rootComplexType);
         }
     }
 
     private void mapChildNodes(NodeList nodes, XmlComplexType rootComplexType) {
         for (int i = 0; i < nodes.getLength(); i++) {
             Node childNode = nodes.item(i);
-            if (childNode.getNodeType() == Node.ELEMENT_NODE || childNode.getNodeType() == Node.ATTRIBUTE_NODE) {
-                if (childNode.hasAttributes()) {
-                    mapAttributes(childNode, rootComplexType);
-                }
-                if (((Element) childNode).getElementsByTagName("*").getLength() > 0) {
-                    mapParentNode(childNode, rootComplexType);
-                } else {
-                    mapNodeToXmlField(childNode, rootComplexType);
-                }
-                if (childNode.getNamespaceURI() != null) {
-                    mapNamespace(childNode);
-                }
+            if (!Arrays.asList(new Short[]{Node.ELEMENT_NODE, Node.ATTRIBUTE_NODE}).contains(childNode.getNodeType())) {
+                continue;
+            }
+            if (childNode.hasAttributes()) {
+                mapAttributes(childNode, rootComplexType);
+            }
+            if (((Element) childNode).getElementsByTagName("*").getLength() > 0) {
+                mapParentNode(childNode, rootComplexType);
+            } else {
+                mapNodeToXmlField(childNode, rootComplexType);
+            }
+            if (childNode.getNamespaceURI() != null) {
+                mapNamespace(childNode);
             }
         }
     }
@@ -100,152 +104,176 @@ public class XmlInstanceInspector {
     }
 
     private void mapParentNode(Node node, XmlComplexType parent) {
-        if (node.hasChildNodes()) {
-            NodeList childNodes = node.getChildNodes();
-            XmlComplexType childParent = getXmlComplexType(node);
-
-            StringBuffer stringBuffer = new StringBuffer();
-            getXmlPath(node, stringBuffer);
-
-            if (node.hasAttributes()) {
-                mapAttributes(node, childParent);
+        if (!node.hasChildNodes()) {
+            return;
+        }
+        NodeList childNodes = node.getChildNodes();
+        XmlComplexType childParent = null;
+        XmlField[] existing = parent.getXmlFields().getXmlField().stream().filter(f ->
+            f.getName().equals(node.getNodeName()) && f.getFieldType() == FieldType.COMPLEX).toArray(XmlField[]::new);
+        if (existing.length > 0) {
+            childParent = (XmlComplexType) existing[0];
+            if (existing.length > 1) {
+                LOG.warn("Ignoring duplicate complex field '{}'", childParent.getPath());
             }
-            for (int i = 0; i < childNodes.getLength(); i++) {
-                Node e = childNodes.item(i);
-                if (e.getNodeType() == Node.ELEMENT_NODE) {
-                    // do we have child elements?
-                    NodeList childElements = ((Element) e).getElementsByTagName("*");
-                    if (childElements.getLength() > 0) {
-                        mapParentNode(e, childParent);
-                    } else {
-                        mapNodeToXmlField(e, childParent);
-                        if (e.hasAttributes()) {
-                            mapAttributes(e, childParent);
-                        }
-                    }
+            updateCollectionType(node.getParentNode(), childParent);
+        } else {
+            childParent = createXmlComplexType(node, parent);
+            parent.getXmlFields().getXmlField().add(childParent);
+        }
+
+        if (node.hasAttributes()) {
+            mapAttributes(node, childParent);
+        }
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node e = childNodes.item(i);
+            if (e.getNodeType() != Node.ELEMENT_NODE) {
+                continue;
+            }
+            // do we have child elements?
+            NodeList childElements = ((Element) e).getElementsByTagName("*");
+            if (childElements.getLength() > 0) {
+                mapParentNode(e, childParent);
+            } else {
+                mapNodeToXmlField(e, childParent);
+                if (e.hasAttributes()) {
+                    mapAttributes(e, childParent);
                 }
             }
-            mapCollectionType(childParent, (Element) node);
-            parent.getXmlFields().getXmlField().add(childParent);
         }
     }
 
     private void mapAttributes(Node node, XmlComplexType xmlComplexType) {
         NamedNodeMap attrs = node.getAttributes();
-        if (attrs != null) {
-            for (int i = 0; i < attrs.getLength(); i++) {
-                Node attrNode = attrs.item(i);
-                // don't map default namespace attribute ...
-                if (attrNode.getNamespaceURI() != null
-                        && attrNode.getNamespaceURI().equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {
-                    continue;
-                } else if (attrNode.getNamespaceURI() != null
-                        && attrNode.getNamespaceURI().equals(XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI)) {
-                    mapNamespace(attrNode);
-                    xmlComplexType.setTypeName(attrNode.getTextContent());
-                    continue;
-                } else if (attrNode.getNamespaceURI() != null) {
-                    mapNamespace(attrNode);
-                }
-                mapNodeToXmlField(attrNode, xmlComplexType);
+        if (attrs == null) {
+            return;
+        }
+        for (int i = 0; i < attrs.getLength(); i++) {
+            Node attrNode = attrs.item(i);
+            // don't map default namespace attribute ...
+            if (attrNode.getNamespaceURI() != null
+                    && attrNode.getNamespaceURI().equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {
+                continue;
+            } else if (attrNode.getNamespaceURI() != null
+                    && attrNode.getNamespaceURI().equals(XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI)) {
+                mapNamespace(attrNode);
+                xmlComplexType.setTypeName(attrNode.getTextContent());
+                continue;
+            } else if (attrNode.getNamespaceURI() != null) {
+                mapNamespace(attrNode);
             }
+            mapNodeToXmlField(attrNode, xmlComplexType);
         }
     }
 
     private void mapNodeToXmlField(Node node, XmlComplexType parentComplexType) {
-        XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-        StringBuffer sb = new StringBuffer(1024);
-        getXmlPath(node, sb);
-        xmlField.setPath(sb.toString());
-        xmlField.setValue(node.getTextContent());
-        xmlField.setFieldType(FieldType.STRING);
-        xmlField.setName(node.getNodeName());
-        xmlField.setStatus(FieldStatus.SUPPORTED);
-        parentComplexType.getXmlFields().getXmlField().add(xmlField);
-    }
-
-    // FIXME this won't work if not every collection field has more than one,
-    // IOW it's a collection from schema POV, but not always have multiple occurence
-    private void mapCollectionType(XmlComplexType childParent, Element e) {
-        if (!e.hasChildNodes()) {
-            return;
-        }
-
-        Set<String> checked = new HashSet<>();
-        NodeList children = e.getChildNodes();
-        // immediate child element
-        for (int i = 0; i < children.getLength(); i++) {
-            Node child = children.item(i);
-            if (child.getNodeType() != Node.ELEMENT_NODE || checked.contains(child.getNodeName())) {
-                continue;
-            }
-            checked.add(child.getNodeName());
-            List<XmlField> detected = new ArrayList<>();
-            for (XmlField f : childParent.getXmlFields().getXmlField()) {
-                if (child.getNodeName().equals(f.getName())) {
-                    detected.add(f);
-                }
-            }
-            if (detected.size() > 1) {
-                detected.forEach(f -> f.setCollectionType(CollectionType.LIST));
-            }
-        }
-    }
-
-    private void getXmlPath(Node node, StringBuffer sb) {
-        int index;
-        if (node.getParentNode() != null && node.getParentNode().getNodeType() == Node.ELEMENT_NODE) {
-            getXmlPath(node.getParentNode(), sb);
-        }
+        XmlField xmlField = null;
         if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
-            Node owner = ((Attr) node).getOwnerElement();
-            if (owner.getParentNode() != null && owner.getParentNode().getNodeType() == Node.ELEMENT_NODE) {
-                getXmlPath(owner.getParentNode(), sb);
+            XmlField[] existing = parentComplexType.getXmlFields().getXmlField().stream().filter(f ->
+                f.getName().equals(node.getNodeName()) && f.isAttribute()).toArray(XmlField[]::new);
+            if (existing.length > 0) {
+                xmlField = existing[0];
+                if (existing.length > 1) {
+                    LOG.error("Ignoring duplicated attribute '{}'", xmlField.getPath());
+                }
             }
-            index = getNodeIndex(owner);
-            sb.append("/").append(owner.getNodeName());
-            if (index > 0) {
-                sb.append("[").append(index).append("]");
-            }
-            sb.append("/");
-            if (node.getPrefix() != null) {
-                sb.append(node.getPrefix()).append(":");
-            }
-            sb.append("@").append(node.getLocalName());
         } else {
-            index = getNodeIndex(node);
-            sb.append("/").append(node.getNodeName());
-            if (index > 0) {
-                sb.append("[").append(index).append("]");
-            }
-        }
-    }
-
-    private int getNodeIndex(Node node) {
-        if (node.getParentNode().getNodeType() == Node.ELEMENT_NODE) {
-            Element parent = (Element) node.getParentNode();
-            // find my index
-            NodeList siblings = parent.getElementsByTagName(node.getNodeName());
-            if (siblings != null) {
-                for (int i = 0; i < siblings.getLength(); i++) {
-                    Node nextSibling = siblings.item(i);
-                    if (nextSibling.isSameNode(node)) {
-                        return i;
-                    }
+            XmlField[] existing = parentComplexType.getXmlFields().getXmlField().stream().filter(f ->
+                f.getName().equals(node.getNodeName()) && !f.isAttribute()).toArray(XmlField[]::new);
+            if (existing.length > 0) {
+                xmlField = existing[0];
+                if (existing.length > 1) {
+                    LOG.warn("Ignoring duplicated element '{}'", xmlField.getPath());
                 }
             }
         }
-        return 0;
+        if (xmlField == null) {
+            xmlField = AtlasXmlModelFactory.createXmlField();
+            xmlField.setValue(node.getTextContent());
+            xmlField.setFieldType(FieldType.STRING);
+            xmlField.setName(node.getNodeName());
+            xmlField.setStatus(FieldStatus.SUPPORTED);
+            xmlField.setAttribute(node.getNodeType() == Node.ATTRIBUTE_NODE);
+            parentComplexType.getXmlFields().getXmlField().add(xmlField);
+            StringBuffer fieldPath = new StringBuffer();
+            if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
+                fieldPath.append(XmlPath.PATH_ATTRIBUTE_PREFIX);
+            }
+            fieldPath.append(node.getNodeName());
+            XmlPath path = new XmlPath(parentComplexType.getPath());
+            path.appendField(fieldPath.toString());
+            xmlField.setPath(path.toString());
+        }
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
+            updateCollectionType(node.getParentNode(), xmlField);
+        }
     }
 
-    private XmlComplexType getXmlComplexType(Node childNode) {
+    private XmlComplexType createXmlComplexType(Node childNode, XmlComplexType parentField) {
         XmlComplexType childComplexType = XmlComplexTypeFactory.createXmlComlexField();
         childComplexType.setXmlFields(new XmlFields());
         childComplexType.setName(childNode.getNodeName());
-        StringBuffer stringBuffer = new StringBuffer();
-        getXmlPath(childNode, stringBuffer);
-        childComplexType.setPath(stringBuffer.toString());
+        XmlPath path = null;
+        if (parentField == null) {
+            path = new XmlPath(XmlPath.PATH_SEPARATOR + childNode.getNodeName());
+        } else {
+            path = new XmlPath(parentField.getPath());
+            Element parentElement = (Element)childNode.getParentNode();
+            if (isCollection(parentElement, childNode.getNodeName())) {
+                childComplexType.setCollectionType(CollectionType.LIST);
+                path.appendField(childNode.getNodeName() + XmlPath.PATH_LIST_START + XmlPath.PATH_LIST_END);
+            } else {
+                childComplexType.setCollectionType(CollectionType.NONE);
+                path.appendField(childNode.getNodeName());
+            }
+        }
+        childComplexType.setPath(path.toString());
         return childComplexType;
+    }
+
+    private void updateCollectionType(Node parentNode, XmlField field) {
+        if (field.getCollectionType() == CollectionType.LIST
+            || parentNode.getNodeType() != Node.ELEMENT_NODE) {
+            return;
+        }
+
+        if (!isCollection((Element)parentNode, field.getName())) {
+            return;
+        }
+
+        field.setCollectionType(CollectionType.LIST);
+        field.setPath(field.getPath() + XmlPath.PATH_LIST_START + XmlPath.PATH_LIST_END);
+        // Propagate parent collection to descendants
+        if (field instanceof XmlComplexType) {
+            XmlComplexType complex = (XmlComplexType)field;
+            for (XmlField child : complex.getXmlFields().getXmlField()) {
+                updateFieldPathFromParent(child, complex);
+            }
+        }
+    }
+
+    private boolean isCollection(Element parent, String name) {
+        NodeList siblings = parent.getChildNodes();
+        List<Element> dups = new ArrayList<>();
+        for (int i=0; i<siblings.getLength(); i++) {
+            Node n = siblings.item(i);
+            if (n.getNodeType() == Node.ELEMENT_NODE && n.getNodeName().equals(name)) {
+                dups.add((Element)n);
+            }
+        }
+        return dups.size() > 1;
+    }
+
+    private void updateFieldPathFromParent(XmlField child, XmlComplexType parent) {
+        XmlPath oldPath = new XmlPath(child.getPath());
+        XmlPath newPath = new XmlPath(parent.getPath());
+        newPath.appendField(oldPath.getLastSegment().getExpression());
+        child.setPath(newPath.toString());
+        if (child instanceof XmlComplexType) {
+            for (XmlField grandChild : ((XmlComplexType)child).getXmlFields().getXmlField()) {
+                updateFieldPathFromParent(grandChild, (XmlComplexType)child);
+            }
+        }
     }
 
 }
