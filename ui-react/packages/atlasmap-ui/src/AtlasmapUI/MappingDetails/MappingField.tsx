@@ -1,21 +1,17 @@
 import {
-  DataListAction,
-  DataListCell,
   DataListContent,
   DataListItem,
-  DataListItemCells,
-  DataListItemRow,
-  Dropdown,
-  DropdownItem,
-  DropdownItemIcon,
-  DropdownToggle,
-  DropdownToggleAction,
   Label,
   Title,
   Tooltip,
+  Button,
+  Split,
+  SplitItem,
+  Stack,
+  StackItem,
 } from '@patternfly/react-core';
-import React, { FunctionComponent, useState, Children } from 'react';
-import { BoltIcon, InfoAltIcon, TrashIcon } from '@patternfly/react-icons';
+import React, { FunctionComponent, Children } from 'react';
+import { BoltIcon, InfoAltIcon } from '@patternfly/react-icons';
 import { css, StyleSheet } from '@patternfly/react-styles';
 
 const styles = StyleSheet.create({
@@ -26,10 +22,11 @@ const styles = StyleSheet.create({
     border: '0 none',
     width: 40,
   },
-  bodyDropdown: {
-    background: '#d4d4d4',
-    border: '1px solid #eee',
-    zIndex: 1,
+  remove: {
+    padding: 0,
+  },
+  bolt: {
+    padding: 5,
   },
 });
 
@@ -53,18 +50,14 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
   onNewTransformation,
   children,
 }) => {
-  const [showActions, setShowActions] = useState(false);
-  const toggleActions = (open: boolean) => setShowActions(open);
-
   const id = `mapping-field-${name}`;
-  const actionsId = `${id}-actions`;
-  const dropdownId = `${actionsId}-dropdown`;
   return (
     <DataListItem aria-labelledby={id}>
-      <DataListItemRow>
-        <DataListItemCells
-          dataListCells={[
-            <DataListCell key={id} isFilled={true}>
+      <Split>
+        <SplitItem isFilled>
+          <Stack>
+            <StackItem isFilled />
+            <StackItem>
               <Title size={'md'} headingLevel={'h3'} id={id}>
                 <Tooltip
                   position={'auto'}
@@ -76,68 +69,57 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
                   </span>
                 </Tooltip>
               </Title>
-            </DataListCell>,
-            <DataListCell key={'index'} isFilled={false}>
-              {showIndex && (
-                <Label>
-                  #{' '}
-                  <input
-                    type={'number'}
-                    value={index}
-                    id={'index'}
-                    disabled={!canEditIndex}
-                    className={css(styles.indexInput)}
-                  />
-                </Label>
-              )}
-            </DataListCell>,
-          ]}
-        />
-        <DataListAction
-          aria-labelledby={actionsId}
-          id={actionsId}
-          aria-label='Actions'
-        >
-          <Dropdown
-            toggle={
-              <DropdownToggle
-                id={dropdownId}
-                data-testid="fieldDetailsSelect"
-                splitButtonItems={[
-                  <DropdownToggleAction
-                   isDisabled={!canEditIndex}
-                   key='action'
-                   onClick={onNewTransformation}
-                  >
-                    <Tooltip
-                      position={'auto'}
-                      enableFlip={true}
-                      content={<div>Add a new field transformation</div>}
-                    >
-                      <BoltIcon />
-                    </Tooltip>
-                  </DropdownToggleAction>,
-                ]}
-                splitButtonVariant='action'
-                onToggle={toggleActions}
+            </StackItem>
+            <StackItem isFilled />
+          </Stack>
+        </SplitItem>
+        <SplitItem>
+          {showIndex && (
+            <Label>
+              #{' '}
+              <input
+                type={'number'}
+                value={index}
+                id={'index'}
+                disabled={!canEditIndex}
+                className={css(styles.indexInput)}
               />
-            }
-            isOpen={showActions}
-            position={'right'}
-            dropdownItems={[
-              <DropdownItem variant={'icon'}
-                key={'delete'}
+            </Label>
+          )}
+        </SplitItem>
+        <SplitItem>
+          <Tooltip
+            position={'auto'}
+            enableFlip={true}
+            content={<div>Add a new field transformation</div>}
+          >
+            <Button
+              isDisabled={!canEditIndex}
+              variant={'link'}
+              onClick={onNewTransformation}
+              className={css(styles.bolt)}
+            >
+              <BoltIcon />
+            </Button>
+          </Tooltip>
+        </SplitItem>
+        <SplitItem>
+          <Stack>
+            <StackItem isFilled />
+            <StackItem>
+              <Button
+                isDisabled={!canEditIndex}
+                variant={'link'}
                 onClick={onDelete}
-                className={css(styles.bodyDropdown)}>
-                <DropdownItemIcon>
-                  <TrashIcon />
-                </DropdownItemIcon>
-                Remove mapping element
-              </DropdownItem>,
-            ]}
-          />
-        </DataListAction>
-      </DataListItemRow>
+                className={css(styles.remove)}
+              >
+                Remove
+              </Button>
+            </StackItem>
+            <StackItem isFilled />
+        </Stack>
+        </SplitItem>
+      </Split>
 
       // Show established field action transformations associated with this field.
       {Children.count(children) > 0 && (
