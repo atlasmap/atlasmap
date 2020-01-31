@@ -8,6 +8,8 @@ import {
   Title,
   TitleLevel,
   Tooltip,
+  Level,
+  LevelItem,
 } from '@patternfly/react-core';
 import { FunctionComponent } from 'react';
 import React from 'react';
@@ -37,9 +39,24 @@ export const MappingDetails: FunctionComponent<IMappingDetailsProps> = ({
     <Stack>
       <StackItem>
         <PageSection>
-          <Title headingLevel={TitleLevel.h1} size={BaseSizes['2xl']}>
-            Mapping details
-          </Title>
+          <Level>
+            <LevelItem>
+              <Title headingLevel={TitleLevel.h1} size={BaseSizes['2xl']}>
+                Mapping details
+              </Title>
+            </LevelItem>
+            <LevelItem>
+              <Tooltip
+                position={'auto'}
+                enableFlip={true}
+                content={<div>Remove the current mapping</div>}
+              >
+                <Button variant={'link'} onClick={onDelete}>
+                  <TrashIcon />
+                </Button>
+              </Tooltip>
+            </LevelItem>
+          </Level>
         </PageSection>
       </StackItem>
       <StackItem isFilled={true} className={css(styles.content)}>
@@ -56,16 +73,6 @@ export const MappingDetails: FunctionComponent<IMappingDetailsProps> = ({
           <Button onClick={onClose} variant={'primary'}>
             Close
           </Button>{' '}
-          <Tooltip
-            position={'auto'}
-            enableFlip={true}
-            content={<div>Remove the current mapping</div>}
-          >
-            <Button variant={'link'} onClick={onDelete}>
-              <TrashIcon />{' '}
-              Remove mapping
-            </Button>
-          </Tooltip>
         </PageSection>
       </StackItem>
     </Stack>
