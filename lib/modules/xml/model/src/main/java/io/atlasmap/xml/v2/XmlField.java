@@ -24,6 +24,8 @@ public class XmlField extends Field implements Serializable {
 
     protected Boolean userCreated;
 
+    protected Boolean attribute;
+
     /**
      * Gets the value of the annotations property.
      * 
@@ -192,6 +194,30 @@ public class XmlField extends Field implements Serializable {
         this.userCreated = value;
     }
 
+    /**
+     * Gets the value of the attribute property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isAttribute() {
+        return attribute;
+    }
+
+    /**
+     * Sets the value of the attribute property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setAttribute(Boolean value) {
+        this.attribute = value;
+    }
+
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -336,6 +362,23 @@ public class XmlField extends Field implements Serializable {
                 }
             }
         }
+        {
+            Boolean leftAttribute = this.isAttribute();
+            Boolean rightAttribute = that.isAttribute();
+            if (this.attribute != null) {
+                if (that.attribute != null) {
+                    if (!leftAttribute.equals(rightAttribute)) {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            } else {
+                if (that.attribute != null) {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 
@@ -396,6 +439,13 @@ public class XmlField extends Field implements Serializable {
             theUserCreated = this.isUserCreated();
             if (this.userCreated!= null) {
                 currentHashCode += theUserCreated.hashCode();
+            }
+        }
+        {
+            currentHashCode = (currentHashCode* 31);
+            Boolean theAttribute = this.isAttribute();
+            if (this.attribute != null) {
+                currentHashCode += theAttribute.hashCode();
             }
         }
         return currentHashCode;
