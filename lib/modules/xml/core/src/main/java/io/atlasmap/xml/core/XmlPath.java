@@ -52,6 +52,18 @@ public class XmlPath extends AtlasPath {
         return (XmlSegmentContext) super.getLastSegment();
     }
 
+    public XmlPath getLastSegmentParentPath() {
+        if (this.segmentContexts.isEmpty() || this.segmentContexts.size() == 1) {
+            return null;
+        }
+
+        XmlPath parentPath = new XmlPath(null);
+        for (int i = 0; i < this.segmentContexts.size() - 1; i++) {
+            parentPath.appendField(this.segmentContexts.get(i).getExpression());
+        }
+        return parentPath;
+    }
+
     private static String updatedPath(String fieldPath, Map<String, String> namespacesToReplace) {
 
         boolean isStartedWtSlash = false;

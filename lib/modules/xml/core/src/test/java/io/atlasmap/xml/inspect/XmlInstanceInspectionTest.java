@@ -18,6 +18,7 @@ package io.atlasmap.xml.inspect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -197,20 +198,12 @@ public class XmlInstanceInspectionTest extends BaseXmlInspectionServiceTest {
         // children
         XmlComplexType childZero = (XmlComplexType) root.getXmlFields().getXmlField().get(0);
         assertNotNull(childZero);
-        assertEquals(3, childZero.getXmlFields().getXmlField().size());
+        assertEquals(1, childZero.getXmlFields().getXmlField().size());
         XmlField childZeroZero = childZero.getXmlFields().getXmlField().get(0);
         assertNotNull(childZeroZero);
         assertEquals("int", childZeroZero.getName());
         assertEquals("3200", childZeroZero.getValue());
-        assertEquals("/data/intFields/int", childZeroZero.getPath());
-
-        XmlField childZeroOne = childZero.getXmlFields().getXmlField().get(1);
-        assertNotNull(childZeroOne);
-        assertEquals("int", childZeroOne.getName());
-        assertEquals("2500", childZeroOne.getValue());
-        assertEquals("/data/intFields/int[1]", childZeroOne.getPath());
-
-        // debugFields(xmlDocument.getFields());
+        assertEquals("/data/intFields/int<>", childZeroZero.getPath());
     }
 
     @Test
@@ -302,7 +295,18 @@ public class XmlInstanceInspectionTest extends BaseXmlInspectionServiceTest {
         final String instance = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/inspect/nested-collection-instance.xml")));
         XmlInspectionService service = new XmlInspectionService();
-        XmlDocument xmlDocument = service.inspectXmlDocument(instance);
+        assertNestedCollection(service.inspectXmlDocument(instance));
+    }
+
+    @Test
+    public void testInspectXmlNestedCollection2() throws Exception {
+        final String instance = new String(
+                Files.readAllBytes(Paths.get("src/test/resources/inspect/nested-collection-2-instance.xml")));
+        XmlInspectionService service = new XmlInspectionService();
+        assertNestedCollection(service.inspectXmlDocument(instance));
+    }
+
+    private void assertNestedCollection(XmlDocument xmlDocument) throws Exception {
         assertNotNull(xmlDocument);
         assertNotNull(xmlDocument.getFields());
         assertEquals(1, xmlDocument.getFields().getField().size());
@@ -320,6 +324,12 @@ public class XmlInstanceInspectionTest extends BaseXmlInspectionServiceTest {
         assertEquals("value", firstValue.getName());
         assertNull(firstValue.getCollectionType());
         assertEquals(FieldType.STRING, firstValue.getFieldType());
+        XmlField firstArrayAttr = (XmlField) firstArray.getXmlFields().getXmlField().get(2);
+        assertNotNull(firstArrayAttr);
+        assertEquals("firstArrayAttr", firstArrayAttr.getName());
+        assertNull(firstArrayAttr.getCollectionType());
+        assertEquals(FieldType.STRING, firstArrayAttr.getFieldType());
+        assertTrue(firstArrayAttr.isAttribute());
         XmlComplexType secondArray = (XmlComplexType) firstArray.getXmlFields().getXmlField().get(1);
         assertNotNull(secondArray);
         assertEquals("secondArray", secondArray.getName());
@@ -330,16 +340,27 @@ public class XmlInstanceInspectionTest extends BaseXmlInspectionServiceTest {
         assertEquals("value", secondValue.getName());
         assertNull(secondValue.getCollectionType());
         assertEquals(FieldType.STRING, secondValue.getFieldType());
+        XmlField secondArrayAttr = (XmlField) secondArray.getXmlFields().getXmlField().get(2);
+        assertNotNull(secondArrayAttr);
+        assertEquals("secondArrayAttr", secondArrayAttr.getName());
+        assertNull(secondArrayAttr.getCollectionType());
+        assertEquals(FieldType.STRING, secondArrayAttr.getFieldType());
+        assertTrue(secondArrayAttr.isAttribute());
         XmlComplexType thirdArray = (XmlComplexType) secondArray.getXmlFields().getXmlField().get(1);
         assertNotNull(thirdArray);
         assertEquals("thirdArray", thirdArray.getName());
         assertEquals(CollectionType.LIST, thirdArray.getCollectionType());
-        assertEquals(1, thirdArray.getXmlFields().getXmlField().size());
+        assertEquals(2, thirdArray.getXmlFields().getXmlField().size());
         XmlField thirdValue = (XmlField) thirdArray.getXmlFields().getXmlField().get(0);
         assertNotNull(thirdValue);
         assertEquals("value", thirdValue.getName());
         assertNull(thirdValue.getCollectionType());
         assertEquals(FieldType.STRING, thirdValue.getFieldType());
+        XmlField thirdArrayAttr = (XmlField) thirdArray.getXmlFields().getXmlField().get(1);
+        assertNotNull(thirdArrayAttr);
+        assertEquals("thirdArrayAttr", thirdArrayAttr.getName());
+        assertNull(thirdArrayAttr.getCollectionType());
+        assertEquals(FieldType.STRING, thirdArrayAttr.getFieldType());
+        assertTrue(thirdArrayAttr.isAttribute());
     }
-
 }
