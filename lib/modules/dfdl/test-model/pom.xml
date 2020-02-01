@@ -22,7 +22,7 @@
   <parent>
     <groupId>io.atlasmap</groupId>
     <artifactId>atlas-dfdl-parent</artifactId>
-    <version>1.43.x-SNAPSHOT</version>
+    <version>1.43.4</version>
     <relativePath>..</relativePath>
   </parent>
 
