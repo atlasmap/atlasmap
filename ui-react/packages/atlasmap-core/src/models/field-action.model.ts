@@ -22,6 +22,7 @@ export class FieldActionArgument {
 }
 
 export class FieldActionArgumentValue {
+  label: string;
   name: string;
   value: string;
 }

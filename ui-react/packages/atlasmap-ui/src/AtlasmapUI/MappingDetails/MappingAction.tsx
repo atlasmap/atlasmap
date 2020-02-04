@@ -17,27 +17,29 @@ const styles = StyleSheet.create({
 });
 
 export interface IMappingActionProps {
-  value: string;
-  actions: { name: string; value: string }[];
-  args?: { name: string; value: string }[];
-  onChange: (value: string) => void;
+  associatedFieldActionName: string;
+  actionsOptions: { name: string; value: string }[];
+  args?: { label: string; name: string; value: string }[];
+  onArgValueChange: (val: string, event: any) => void;
+  onActionChange: (value: string) => void;
   onRemoveTransformation: () => void;
 }
 
 export const MappingAction: FunctionComponent<IMappingActionProps> = ({
-  value,
-  actions,
+  associatedFieldActionName,
+  actionsOptions,
   args = [],
-  onChange,
+  onArgValueChange,
+  onActionChange,
   onRemoveTransformation,
 }) => {
-  const id = `field-action-${value}`;
+  const id = `user-field-action-${associatedFieldActionName}`;
   return (
     <>
       <div className={css(styles.spaced)}>
         <InputGroup>
-          <FormSelect value={value} id={id} onChange={onChange}>
-            {actions.map((a, idx) => (
+          <FormSelect value={associatedFieldActionName} id={id} onChange={onActionChange}>
+            {actionsOptions.map((a, idx) => (
               <FormSelectOption label={a.name} value={a.value} key={idx}/>
             ))}
           </FormSelect>
@@ -49,8 +51,14 @@ export const MappingAction: FunctionComponent<IMappingActionProps> = ({
       {args.map((a, idx) => (
         <div className={css(styles.spaced)} key={idx}>
           <InputGroup>
-            <InputGroupText>{a.name}</InputGroupText>
-            <TextInput id={a.name} value={a.value} />
+            <InputGroupText>{a.label}</InputGroupText>
+            <TextInput
+              id={a.name}
+              type="text"
+              defaultValue={a.value}
+              name={a.name}
+              onChange={onArgValueChange}
+            />
           </InputGroup>
         </div>
       ))}
