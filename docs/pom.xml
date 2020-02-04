@@ -52,34 +52,23 @@
       <artifactId>atlas-xml-service</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.github.swagger2markup</groupId>
-      <artifactId>swagger2markup</artifactId>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-dfdl-service</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.jboss.resteasy</groupId>
-      <artifactId>resteasy-multipart-provider</artifactId>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-dfdl-model</artifactId>
     </dependency>
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
     <plugins>
-      <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>mkdir</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <tasks>
-                <mkdir dir="${project.build.directory}/classes" />
-              </tasks>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <artifactId>maven-install-plugin</artifactId>
         <configuration>
@@ -93,180 +82,52 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>com.github.kongchen</groupId>
-        <artifactId>swagger-maven-plugin</artifactId>
-        <configuration>
-          <encoding>UTF-8</encoding>
-        </configuration>
+        <artifactId>maven-resources-plugin</artifactId>
         <executions>
           <execution>
-            <id>api-swagger-core</id>
-            <phase>prepare-package</phase>
+            <id>default-cli</id>
+            <phase>generate-resources</phase>
             <goals>
-              <goal>generate</goal>
+              <goal>resources</goal>
             </goals>
-            <configuration>
-              <apiSources>
-                <apiSource>
-                  <attachSwaggerArtifact>true</attachSwaggerArtifact>
-                  <outputFormats>json</outputFormats>
-                  <swaggerDirectory>${project.build.directory}/swagger</swaggerDirectory>
-                  <swaggerFileName>swagger-core</swaggerFileName>
-                  <locations>
-                    <location>io.atlasmap.service.AtlasService</location>
-                  </locations>
-                  <info>
-                    <title>AtlasMap Design Time Service :: Core</title>
-                    <version>${project.version}</version>
-                  </info>
-                </apiSource>
-              </apiSources>
-            </configuration>
           </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>io.swagger.core.v3</groupId>
+        <artifactId>swagger-maven-plugin</artifactId>
+        <executions>
           <execution>
-            <id>api-swagger-java</id>
+            <id>default-cli</id>
             <phase>prepare-package</phase>
             <goals>
-              <goal>generate</goal>
+              <goal>resolve</goal>
             </goals>
             <configuration>
-              <apiSources>
-                <apiSource>
-                  <attachSwaggerArtifact>true</attachSwaggerArtifact>
-                  <outputFormats>json</outputFormats>
-                  <swaggerDirectory>${project.build.directory}/swagger</swaggerDirectory>
-                  <swaggerFileName>swagger-java</swaggerFileName>
-                  <locations>
-                    <location>io.atlasmap.java.service.JavaService</location>
-                  </locations>
-                  <info>
-                    <title>AtlasMap Design Time Service :: Java</title>
-                    <version>${project.version}</version>
-                  </info>
-                </apiSource>
-              </apiSources>
-            </configuration>
-          </execution>
-          <execution>
-            <id>api-swagger-json</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-            <configuration>
-              <apiSources>
-                <apiSource>
-                  <attachSwaggerArtifact>true</attachSwaggerArtifact>
-                  <outputFormats>json</outputFormats>
-                  <swaggerDirectory>${project.build.directory}/swagger</swaggerDirectory>
-                  <swaggerFileName>swagger-json</swaggerFileName>
-                  <locations>
-                    <location>io.atlasmap.json.service.JsonService</location>
-                  </locations>
-                  <info>
-                    <title>AtlasMap Design Time Service :: JSON</title>
-                    <version>${project.version}</version>
-                  </info>
-                </apiSource>
-              </apiSources>
-            </configuration>
-          </execution>
-          <execution>
-            <id>api-swagger-xml</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-            <configuration>
-              <apiSources>
-                <apiSource>
-                  <attachSwaggerArtifact>true</attachSwaggerArtifact>
-                  <outputFormats>json</outputFormats>
-                  <swaggerDirectory>${project.build.directory}/swagger</swaggerDirectory>
-                  <swaggerFileName>swagger-xml</swaggerFileName>
-                  <locations>
-                    <location>io.atlasmap.xml.service.XmlService</location>
-                  </locations>
-                  <info>
-                    <title>AtlasMap Design Time Service :: XML</title>
-                    <version>${project.version}</version>
-                  </info>
-                </apiSource>
-              </apiSources>
+              <outputFormat>JSON</outputFormat>
+              <prettyPrint>true</prettyPrint>
+              <outputPath>${project.build.directory}/generated-sources/openapi</outputPath>
+              <outputFileName>atlasmap-api</outputFileName>
+              <configurationFilePath>${project.build.outputDirectory}/openapi-configuration.yaml</configurationFilePath>
             </configuration>
           </execution>
         </executions>
       </plugin>
       <plugin>
-        <groupId>io.github.swagger2markup</groupId>
-        <artifactId>swagger2markup-maven-plugin</artifactId>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <version>4.2.2</version>
         <executions>
           <execution>
-            <id>api-asciidoc-core</id>
+            <id>default-cli</id>
             <phase>prepare-package</phase>
             <goals>
-              <goal>convertSwagger2markup</goal>
+              <goal>generate</goal>
             </goals>
             <configuration>
-              <swaggerInput>${project.build.directory}/swagger/swagger-core.json</swaggerInput>
-              <outputDir>${project.basedir}/src/main/asciidoc/developer-guide/swagger/core</outputDir>
-              <config>
-                <swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
-                <swagger2markup.swaggerMarkupLanguage>ASCIIDOC</swagger2markup.swaggerMarkupLanguage>
-                <swagger2markup.basePathPrefixEnabled>true</swagger2markup.basePathPrefixEnabled>
-                <swagger2markup.anchorPrefix>atlas-service-core-</swagger2markup.anchorPrefix>
-              </config>
-            </configuration>
-          </execution>
-          <execution>
-            <id>api-asciidoc-java</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>convertSwagger2markup</goal>
-            </goals>
-            <configuration>
-              <swaggerInput>${project.build.directory}/swagger/swagger-java.json</swaggerInput>
-              <outputDir>${project.basedir}/src/main/asciidoc/developer-guide/swagger/java</outputDir>
-              <config>
-                <swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
-                <swagger2markup.swaggerMarkupLanguage>ASCIIDOC</swagger2markup.swaggerMarkupLanguage>
-                <swagger2markup.basePathPrefixEnabled>true</swagger2markup.basePathPrefixEnabled>
-                <swagger2markup.anchorPrefix>atlas-service-java-</swagger2markup.anchorPrefix>
-              </config>
-            </configuration>
-          </execution>
-          <execution>
-            <id>api-asciidoc-json</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>convertSwagger2markup</goal>
-            </goals>
-            <configuration>
-              <swaggerInput>${project.build.directory}/swagger/swagger-json.json</swaggerInput>
-              <outputDir>${project.basedir}/src/main/asciidoc/developer-guide/swagger/json</outputDir>
-              <config>
-                <swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
-                <swagger2markup.swaggerMarkupLanguage>ASCIIDOC</swagger2markup.swaggerMarkupLanguage>
-                <swagger2markup.basePathPrefixEnabled>true</swagger2markup.basePathPrefixEnabled>
-                <swagger2markup.anchorPrefix>atlas-service-json-</swagger2markup.anchorPrefix>
-              </config>
-            </configuration>
-          </execution>
-          <execution>
-            <id>api-asciidoc-xml</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>convertSwagger2markup</goal>
-            </goals>
-            <configuration>
-              <swaggerInput>${project.build.directory}/swagger/swagger-xml.json</swaggerInput>
-              <outputDir>${project.basedir}/src/main/asciidoc/developer-guide/swagger/xml</outputDir>
-              <config>
-                <swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
-                <swagger2markup.swaggerMarkupLanguage>ASCIIDOC</swagger2markup.swaggerMarkupLanguage>
-                <swagger2markup.basePathPrefixEnabled>true</swagger2markup.basePathPrefixEnabled>
-                <swagger2markup.anchorPrefix>atlas-service-xml-</swagger2markup.anchorPrefix>
-              </config>
+              <generatorName>asciidoc</generatorName>
+              <inputSpec>${project.build.directory}/generated-sources/openapi/atlasmap-api.json</inputSpec>
+              <output>${project.basedir}/src/main/asciidoc/developer-guide/openapi/</output>
             </configuration>
           </execution>
         </executions>
