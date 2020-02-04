@@ -63,7 +63,7 @@
     "@angular/language-service": "7.2.16",
     "@angular/platform-browser": "7.2.16",
     "@angular/platform-browser-dynamic": "7.2.15",
-    "@angular/router": "7.2.15",
+    "@angular/router": "8.2.14",
     "@compodoc/compodoc": "^1.1.10",
     "@types/jasmine": "^3.4.4",
     "@types/jasmine-jquery": "^1.5.32",
