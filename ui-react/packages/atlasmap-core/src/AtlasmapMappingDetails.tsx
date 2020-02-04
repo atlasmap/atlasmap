@@ -35,8 +35,8 @@ export const AtlasmapMappingDetails: FunctionComponent<
     <MappingDetails onDelete={() => void 0} onClose={closeDetails}>
       <MappingFields title={'Sources'}>
         {sources.map(s => {
-          const actions = getMappingActions(true);
-          const actionsOptions = actions.map(a => ({
+          const availableActions = getMappingActions(true);
+          const actionsOptions = availableActions.map(a => ({
             name: DataMapperUtil.toDisplayable(a.name),
             value: a.name,
           }));
@@ -50,7 +50,7 @@ export const AtlasmapMappingDetails: FunctionComponent<
               }
               onNewTransformation={() => {
                 const action: FieldAction = new FieldAction();
-                actions[0].populateFieldAction(action);
+                availableActions[0].populateFieldAction(action);
                 s.actions.push(action);
                 cfg.mappingService.notifyMappingUpdated();
               }}
@@ -58,21 +58,28 @@ export const AtlasmapMappingDetails: FunctionComponent<
               showIndex={showSourcesIndex}
               canEditIndex={!s.isPadField()}
             >
-              {s.actions.map((a, idx) => (
+              {s.actions.map((associatedFieldAction, idx) => (
                 <MappingAction
                   key={idx}
-                  value={a.name}
-                  actions={actionsOptions}
-                  args={a.definition.arguments
-                    .map(arg => a.getArgumentValue(arg.name))
-                    .map(opts => ({
-                      ...opts,
-                      name: DataMapperUtil.toDisplayable(opts.name),
-                    }))}
-                  onChange={(name:string) =>
+                  associatedFieldActionName={associatedFieldAction.name}
+                  actionsOptions={actionsOptions}
+                  args={associatedFieldAction.definition.arguments
+                    .map(arg => associatedFieldAction.getArgumentValue(arg.name))
+                      .map(opts => ({
+                        ...opts,
+                        label: DataMapperUtil.toDisplayable(opts.name),
+                        name: opts.name,
+                      })
+                    )
+                  }
+                  onArgValueChange={(value: string, event: any) => {
+                    associatedFieldAction.setArgumentValue(event.target.name, value);
+                    cfg.mappingService.notifyMappingUpdated();
+                  }}
+                  onActionChange={(name:string) =>
                     handleActionChange(
                       s.actions[idx],
-                      actions.find(a => a.name === name)!
+                      availableActions.find(a => a.name === name)!
                     )
                   }
                   onRemoveTransformation={() => {
@@ -88,8 +95,8 @@ export const AtlasmapMappingDetails: FunctionComponent<
       </MappingFields>
       <MappingFields title={'Targets'}>
         {targets.map(t => {
-          const actions = getMappingActions(false);
-          const actionsOptions = actions.map(a => ({
+          const availableActions = getMappingActions(false);
+          const actionsOptions = availableActions.map(a => ({
             name: DataMapperUtil.toDisplayable(a.name),
             value: a.name,
           }));
@@ -103,7 +110,7 @@ export const AtlasmapMappingDetails: FunctionComponent<
               }
               onNewTransformation={() => {
                 const action: FieldAction = new FieldAction();
-                actions[0].populateFieldAction(action);
+                availableActions[0].populateFieldAction(action);
                 t.actions.push(action);
                 cfg.mappingService.notifyMappingUpdated();
               }}
@@ -112,21 +119,26 @@ export const AtlasmapMappingDetails: FunctionComponent<
               canEditIndex={!t.isPadField()}
             >
               {
-                t.actions.map((a, idx) => (
+                t.actions.map((associatedFieldAction, idx) => (
                 <MappingAction
                   key={idx}
-                  value={a.name}
-                  actions={actionsOptions}
-                  args={a.definition.arguments
-                    .map(arg => a.getArgumentValue(arg.name))
-                    .map(opts => ({
-                      ...opts,
-                      name: DataMapperUtil.toDisplayable(opts.name),
-                    }))}
-                  onChange={(name:string) =>
+                  associatedFieldActionName={associatedFieldAction.name}
+                  actionsOptions={actionsOptions}
+                  args={associatedFieldAction.definition.arguments
+                    .map(arg => associatedFieldAction.getArgumentValue(arg.name))
+                      .map(opts => ({
+                        ...opts,
+                        label: DataMapperUtil.toDisplayable(opts.name),
+                        name: opts.name,
+                  }))}
+                  onArgValueChange={(value: string, event: any) => {
+                    associatedFieldAction.setArgumentValue(event.target.name, value);
+                    cfg.mappingService.notifyMappingUpdated();
+                  }}
+                  onActionChange={(name:string) =>
                     handleActionChange(
                       t.actions[idx],
-                      actions.find(a => a.name === name)!
+                      availableActions.find(a => a.name === name)!
                     )
                   }
                   onRemoveTransformation={() => {
