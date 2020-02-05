@@ -35,7 +35,7 @@
 
     <asciidoctor-maven-plugin.version>2.0.0-RC.1</asciidoctor-maven-plugin.version>
     <asciidoctorj.version>2.2.0</asciidoctorj.version>
-    <asciidoctorj-pdf.version>1.5.0-rc.2</asciidoctorj-pdf.version>
+    <asciidoctorj-pdf.version>1.5.0-rc.3</asciidoctorj-pdf.version>
     <atlas.version.range>[1,3)</atlas.version.range>
     <bcel-bundle-version>5.2_4</bcel-bundle-version>
     <build-helper-maven-plugin.version>3.0.0</build-helper-maven-plugin.version>
