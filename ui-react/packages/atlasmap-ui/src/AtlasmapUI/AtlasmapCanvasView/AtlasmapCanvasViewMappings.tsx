@@ -10,6 +10,7 @@ export const AtlasmapCanvasViewMappings: FunctionComponent = () => {
     selectedMapping,
     selectMapping,
     deselectMapping,
+    closeMappingDetails,
     editMapping,
   } = useAtlasmapUI();
   return (
@@ -33,6 +34,7 @@ export const AtlasmapCanvasViewMappings: FunctionComponent = () => {
                     selectedMapping={selectedMapping}
                     selectMapping={selectMapping}
                     deselectMapping={deselectMapping}
+                    closeMappingDetails={closeMappingDetails}
                     editMapping={editMapping}
                     canDrop={canDrop}
                     isOver={isOver}

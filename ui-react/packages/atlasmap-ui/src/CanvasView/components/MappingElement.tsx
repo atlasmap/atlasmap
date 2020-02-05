@@ -55,6 +55,7 @@ export interface IMappingElementProps {
   selectedMapping: string | undefined;
   selectMapping: (id: string) => void;
   deselectMapping: () => void;
+  closeMappingDetails: () => void;
   editMapping: () => void;
   canDrop: boolean;
   isOver: boolean;
@@ -66,6 +67,7 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
   selectedMapping,
   selectMapping,
   deselectMapping,
+  closeMappingDetails,
   editMapping,
   canDrop,
   isOver,
@@ -83,11 +85,12 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
   const handleSelect = useCallback(() => {
     wasPreviouslySelected.current = true;
     if (isSelected) {
+      closeMappingDetails();
       deselectMapping();
     } else {
       selectMapping(node.id);
     }
-  }, [isSelected, node, deselectMapping, selectMapping]);
+  }, [closeMappingDetails, isSelected, node, deselectMapping, selectMapping]);
 
   const handleEdit = useCallback(
     (e: MouseEvent) => {

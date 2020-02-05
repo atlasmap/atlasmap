@@ -141,7 +141,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       targets={targets}
       mappings={mappings}
       onActiveMappingChange={changeActiveMapping}
-      renderMappingDetails={({ mapping, closeDetails }) => (
+      renderMappingDetails={({ mapping, closeDetails }) => (mapping) && (
         <AtlasmapMappingDetails
           mapping={(mapping as IAtlasmapMapping).mapping}
           closeDetails={closeDetails}
