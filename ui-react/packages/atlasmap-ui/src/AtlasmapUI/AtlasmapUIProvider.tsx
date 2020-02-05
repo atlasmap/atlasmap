@@ -61,10 +61,8 @@ export const AtlasmapUIProvider: FunctionComponent<
 
   const selectMapping = useCallback(
     (mapping: string) => {
-      if (!isEditingMapping) {
-        onActiveMappingChange(mapping);
-        setSelectedMapping(mapping);
-      }
+      onActiveMappingChange(mapping);
+      setSelectedMapping(mapping);
     },
     [isEditingMapping, onActiveMappingChange]
   );
