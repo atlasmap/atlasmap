@@ -21,6 +21,7 @@
   },
   "peerDependencies": {
     "file-saver": "2.0.2",
+    "ky": "^0.16.0",
     "pako": "^1.0.5",
     "react": ">=16",
     "rxjs": "^6.2.2"
@@ -62,9 +63,9 @@
     "ky": "^0.16.0",
     "loglevel": "^1.6.6",
     "pako": "^1.0.5",
-    "react": "^16.11.0",
+    "react": "^16.12.0",
     "react-docgen-typescript-loader": "^3.3.0",
-    "react-dom": "^16.10.2",
+    "react-dom": "^16.12.0",
     "rxjs": "^6.2.2",
     "ts-loader": "^6.2.0",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
@@ -111,6 +112,7 @@
     }
   },
   "dependencies": {
-    "@atlasmap/ui": "*"
+    "@atlasmap/ui": "*",
+    "loglevel": "^1.6.6"
   }
 }
