@@ -7,6 +7,7 @@ export interface IFieldsNode {
 }
 export interface IFieldsGroup {
   id: GroupId;
+  isCollection: boolean;
   fields: (IFieldsNode | IFieldsGroup)[];
 }
 export interface IMappingField {
