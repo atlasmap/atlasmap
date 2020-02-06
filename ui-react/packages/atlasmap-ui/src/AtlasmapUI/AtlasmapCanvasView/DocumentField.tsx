@@ -1,4 +1,4 @@
-import { AddCircleOIcon } from '@patternfly/react-icons';
+import { AddCircleOIcon, MinusCircleIcon } from '@patternfly/react-icons';
 import { Button, Label } from '@patternfly/react-core';
 import { css, StyleSheet } from '@patternfly/react-styles';
 import React, { FunctionComponent, useEffect, useRef } from 'react';
@@ -114,7 +114,7 @@ export const DocumentField: FunctionComponent<IDocumentFieldProps> = ({
             variant={'link'}
             onClick={onClickAddToMapping}
             isInline={true}
-            icon={<AddCircleOIcon />}
+            icon={isSelected ? <MinusCircleIcon /> : <AddCircleOIcon />}
           >
             {content}
           </Button>
