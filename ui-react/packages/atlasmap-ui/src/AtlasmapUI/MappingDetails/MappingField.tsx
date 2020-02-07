@@ -37,6 +37,7 @@ export interface IMappingFieldProps {
   showIndex: boolean;
   canEditIndex: boolean;
   onDelete: () => void;
+  onIndexChange: (event: any) => void;
   onNewTransformation: () => void;
 }
 
@@ -47,6 +48,7 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
   showIndex,
   canEditIndex,
   onDelete,
+  onIndexChange,
   onNewTransformation,
   children,
 }) => {
@@ -83,6 +85,7 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
                 id={'index'}
                 disabled={!canEditIndex}
                 className={css(styles.indexInput)}
+                onChange={onIndexChange}
               />
             </Label>
           )}
