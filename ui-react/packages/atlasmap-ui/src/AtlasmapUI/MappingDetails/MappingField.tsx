@@ -77,17 +77,24 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
         </SplitItem>
         <SplitItem>
           {showIndex && (
-            <Label>
-              #{' '}
-              <input
-                type={'number'}
-                value={index}
-                id={'index'}
-                disabled={!canEditIndex}
-                className={css(styles.indexInput)}
-                onChange={onIndexChange}
-              />
-            </Label>
+            <Tooltip
+              position={'auto'}
+              enableFlip={true}
+              content={<div>Edit the index for this element by selecting the arrows. 
+                Placeholders may be automatically inserted to account for any gaps in the indexing</div>}
+            >
+              <Label>
+                #{' '}
+                <input
+                  type={'number'}
+                  value={index}
+                  id={'index'}
+                  disabled={!canEditIndex}
+                  className={css(styles.indexInput)}
+                  onChange={onIndexChange}
+                />
+              </Label>
+            </Tooltip>
           )}
         </SplitItem>
         <SplitItem>
@@ -111,7 +118,6 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
             <StackItem isFilled />
             <StackItem>
               <Button
-                isDisabled={!canEditIndex}
                 variant={'link'}
                 onClick={onDelete}
                 className={css(styles.remove)}
