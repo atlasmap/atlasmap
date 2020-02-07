@@ -10,6 +10,7 @@ import { useAtlasmap } from './AtlasmapProvider';
 import { DataMapperUtil } from './common/data-mapper-util';
 import { FieldAction } from './models/field-action.model';
 import { ConfigModel } from './models/config.model';
+import { MappedField } from './models/mapping.model';
 
 export interface IAtlasmapMappingDetaisProps {
   mapping: MappingModel;
@@ -17,6 +18,25 @@ export interface IAtlasmapMappingDetaisProps {
   onRemoveMappedField: (remove: () => void) => void;
   onNewTransformation: (newTransformation: () => void) => void;
   onRemoveTransformation: (removeTransformation: () => void) => void;
+}
+
+export const handleIndexChange =
+  (mapping: MappingModel, mField: MappedField, event: any) => {
+  const cfg = ConfigModel.getConfig();
+  const insertionIndex = Number(event.target.value) || 0;
+  if (insertionIndex === 0) {
+    return;
+  }
+  const mappedFields = mapping.getMappedFields(mField.isSource());
+  const targetIndex = mappedFields.length;
+  if (insertionIndex > targetIndex) {
+
+    // Add place-holders for each index value between the previous max index
+    // and the insertion index.
+    cfg.mappingService.addPlaceholders(insertionIndex - mappedFields.length,
+      mapping, targetIndex, mField.field!.isSource());
+  }
+  cfg.mappingService.moveMappedFieldTo(mapping, mField, insertionIndex);
 }
 
 export const AtlasmapMappingDetails: FunctionComponent<
@@ -27,10 +47,12 @@ export const AtlasmapMappingDetails: FunctionComponent<
   const cfg = ConfigModel.getConfig();
   const sources = mapping.getMappedFields(true);
   const showSourcesIndex =
-    sources.length > 1 && !mapping.transition.enableExpression;
+    sources.length > 1 && !mapping.transition.enableExpression
+      && mapping.transition.isManyToOneMode();
   const targets = mapping.getMappedFields(false);
   const showTargetIndex =
-    sources.length > 1 && !mapping.transition.enableExpression;
+    targets.length > 1 && !mapping.transition.enableExpression
+      && mapping.transition.isOneToManyMode();
   return (
     <MappingDetails onDelete={() => void 0} onClose={closeDetails}>
       <MappingFields title={'Sources'}>
@@ -48,6 +70,7 @@ export const AtlasmapMappingDetails: FunctionComponent<
               onDelete={() =>
                 onRemoveMappedField(() => mapping.removeMappedField(s))
               }
+              onIndexChange={(event: any) => handleIndexChange(mapping, s, event)}
               onNewTransformation={() => {
                 const action: FieldAction = new FieldAction();
                 availableActions[0].populateFieldAction(action);
@@ -108,6 +131,7 @@ export const AtlasmapMappingDetails: FunctionComponent<
               onDelete={() =>
                 onRemoveMappedField(() => mapping.removeMappedField(t))
               }
+              onIndexChange={(event: any) => handleIndexChange(mapping, t, event)}
               onNewTransformation={() => {
                 const action: FieldAction = new FieldAction();
                 availableActions[0].populateFieldAction(action);
