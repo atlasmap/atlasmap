@@ -60,7 +60,7 @@
     "@angular/compiler-cli": "7.2.15",
     "@angular/core": "7.2.15",
     "@angular/forms": "7.2.15",
-    "@angular/language-service": "7.2.16",
+    "@angular/language-service": "9.0.0",
     "@angular/platform-browser": "7.2.16",
     "@angular/platform-browser-dynamic": "7.2.15",
     "@angular/router": "7.2.15",
