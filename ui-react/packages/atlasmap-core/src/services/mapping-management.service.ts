@@ -192,18 +192,19 @@ export class MappingManagementService {
   }
 
   /**
-   * Move existing MappedField in the mapping to specified index, involves field index updates.
+   * Move the specified mapped field in the specified mapping to the specified index.
+   *
    * @param mapping
    * @param insertedMappedField
    * @param targetIndex
    */
-  moveMappedFieldTo(mapping: MappingModel, insertedMappedField: MappedField, targetIndex: number): void {
-    if (mapping == null) {
+  moveMappedFieldTo(mapping: MappingModel, insertedMappedField: MappedField,
+    targetIndex: number): void {
+    if (!mapping || !insertedMappedField) {
       return;
     }
     insertedMappedField.parsedData.parsedIndex = targetIndex.toString();
     const mappedFields = mapping.getMappedFields(insertedMappedField.isSource());
-    // TODO: check this non null operator
     mappedFields.splice(mapping.getIndexForMappedField(insertedMappedField)! - 1, 1);
     mappedFields.splice(targetIndex - 1, 0, insertedMappedField);
     this.clearExtraPaddingFields(mappedFields, true);
