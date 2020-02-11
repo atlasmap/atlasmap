@@ -20,6 +20,7 @@ export interface IMappingActionProps {
   associatedFieldActionName: string;
   actionsOptions: { name: string; value: string }[];
   args?: { label: string; name: string; value: string }[];
+  isMultiplicityAction: boolean;
   onArgValueChange: (val: string, event: any) => void;
   onActionChange: (value: string) => void;
   onRemoveTransformation: () => void;
@@ -29,6 +30,7 @@ export const MappingAction: FunctionComponent<IMappingActionProps> = ({
   associatedFieldActionName,
   actionsOptions,
   args = [],
+  isMultiplicityAction,
   onArgValueChange,
   onActionChange,
   onRemoveTransformation,
@@ -43,9 +45,11 @@ export const MappingAction: FunctionComponent<IMappingActionProps> = ({
               <FormSelectOption label={a.name} value={a.value} key={idx}/>
             ))}
           </FormSelect>
-          <Button variant={'control'} onClick={onRemoveTransformation}>
-            <CloseIcon />
-          </Button>
+          {!isMultiplicityAction && (
+            <Button variant={'control'} onClick={onRemoveTransformation}>
+              <CloseIcon />
+            </Button>
+          )}
         </InputGroup>
       </div>
       {args.map((a, idx) => (
@@ -57,6 +61,7 @@ export const MappingAction: FunctionComponent<IMappingActionProps> = ({
               type="text"
               defaultValue={a.value}
               name={a.name}
+              value={a.value}
               onChange={onArgValueChange}
             />
           </InputGroup>
