@@ -44,6 +44,7 @@ import {
 } from './models/field-action.model';
 import { MappedField } from './models/mapping.model';
 import { Field } from './models/field.model';
+import { TransitionMode } from './models/transition.model';
 
 const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
 
@@ -312,6 +313,21 @@ export function useAtlasmap() {
     [initializationService]
   );
 
+  const getMultiplicityActions = useCallback(
+    (mapping: any) => {
+      if (mapping.transition.mode === TransitionMode.ONE_TO_MANY) {
+        return initializationService.cfg.fieldActionService.getActionsAppliesToField(
+          mapping, true, Multiplicity.ONE_TO_MANY);
+      } else if (mapping.transition.mode === TransitionMode.MANY_TO_ONE) {
+        return initializationService.cfg.fieldActionService.getActionsAppliesToField(
+          mapping, true, Multiplicity.MANY_TO_ONE);
+      } else {
+        return [];
+      }
+    },
+    [initializationService]
+  );
+
   const handleActionChange = useCallback(
     (action: FieldAction, definition: FieldActionDefinition) => {
       action.argumentValues = []; // Invalidate the previously selected field action arguments.
@@ -353,6 +369,7 @@ export function useAtlasmap() {
       createMapping,
       documentExists,
       getMappingActions,
+      getMultiplicityActions,
       handleActionChange,
     }),
     [
@@ -364,6 +381,7 @@ export function useAtlasmap() {
       changeActiveMapping,
       onFieldPreviewChange,
       getMappingActions,
+      getMultiplicityActions,
       handleActionChange,
     ]
   );

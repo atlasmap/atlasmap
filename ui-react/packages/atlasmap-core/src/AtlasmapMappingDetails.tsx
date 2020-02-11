@@ -1,6 +1,9 @@
 import { MappingModel } from './models/mapping.model';
 import React, { FunctionComponent } from 'react';
 import {
+  DataListItem,
+} from '@patternfly/react-core';
+import {
   MappingAction,
   MappingDetails,
   MappingField,
@@ -12,7 +15,7 @@ import { FieldAction } from './models/field-action.model';
 import { ConfigModel } from './models/config.model';
 import { MappedField } from './models/mapping.model';
 
-export interface IAtlasmapMappingDetaisProps {
+export interface IAtlasmapMappingDetailsProps {
   mapping: MappingModel;
   closeDetails: () => void;
   onRemoveMappedField: (remove: () => void) => void;
@@ -40,9 +43,9 @@ export const handleIndexChange =
 }
 
 export const AtlasmapMappingDetails: FunctionComponent<
-  IAtlasmapMappingDetaisProps
+  IAtlasmapMappingDetailsProps
 > = ({ mapping, closeDetails, onRemoveMappedField }) => {
-  const { getMappingActions, handleActionChange } = useAtlasmap();
+  const { getMappingActions, getMultiplicityActions, handleActionChange } = useAtlasmap();
 
   const cfg = ConfigModel.getConfig();
   const sources = mapping.getMappedFields(true);
@@ -53,9 +56,50 @@ export const AtlasmapMappingDetails: FunctionComponent<
   const showTargetIndex =
     targets.length > 1 && !mapping.transition.enableExpression
       && mapping.transition.isOneToManyMode();
+  const id = `mapping-field-${name}`;
+  const availableActions = getMultiplicityActions(mapping);
+  const actionsOptions = availableActions.map(a => ({
+    name: DataMapperUtil.toDisplayable(a.name),
+    value: a.name,
+  }));
+  const multiplicityFieldAction = mapping.transition.transitionFieldAction;
+  const multiplicityId = `multiplicity-${multiplicityFieldAction}`;
+
   return (
     <MappingDetails onDelete={() => void 0} onClose={closeDetails}>
+
       <MappingFields title={'Sources'}>
+        {multiplicityFieldAction && (
+          <MappingAction
+            key={multiplicityId}
+            associatedFieldActionName={multiplicityFieldAction.name}
+            actionsOptions={actionsOptions}
+            isMultiplicityAction={true}
+            args={multiplicityFieldAction.definition.arguments
+              .map(arg => multiplicityFieldAction.getArgumentValue(arg.name))
+                .map(opts => ({
+                  ...opts,
+                  label: DataMapperUtil.toDisplayable(opts.name),
+                  name: opts.name,
+                  value: opts.value,
+                })
+              )
+            }
+            onArgValueChange={(value: string, event: any) => {
+              multiplicityFieldAction.setArgumentValue(event.target.name, value);
+              cfg.mappingService.notifyMappingUpdated();
+            }}
+            onActionChange={(name:string) =>
+              handleActionChange(
+                mapping.transition.transitionFieldAction,
+                availableActions.find(a => a.name === name)!
+              )
+            }
+            onRemoveTransformation={
+              () => {void(0)}
+            }
+          />
+        )}
         {sources.map(s => {
           const availableActions = getMappingActions(true);
           const actionsOptions = availableActions.map(a => ({
@@ -86,6 +130,7 @@ export const AtlasmapMappingDetails: FunctionComponent<
                   key={idx}
                   associatedFieldActionName={associatedFieldAction.name}
                   actionsOptions={actionsOptions}
+                  isMultiplicityAction={false}
                   args={associatedFieldAction.definition.arguments
                     .map(arg => associatedFieldAction.getArgumentValue(arg.name))
                       .map(opts => ({
@@ -116,6 +161,7 @@ export const AtlasmapMappingDetails: FunctionComponent<
           );
         })}
       </MappingFields>
+
       <MappingFields title={'Targets'}>
         {targets.map(t => {
           const availableActions = getMappingActions(false);
@@ -148,6 +194,7 @@ export const AtlasmapMappingDetails: FunctionComponent<
                   key={idx}
                   associatedFieldActionName={associatedFieldAction.name}
                   actionsOptions={actionsOptions}
+                  isMultiplicityAction={false}
                   args={associatedFieldAction.definition.arguments
                     .map(arg => associatedFieldAction.getArgumentValue(arg.name))
                       .map(opts => ({

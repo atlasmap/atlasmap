@@ -42,7 +42,7 @@ export const MappingDetails: FunctionComponent<IMappingDetailsProps> = ({
           <Level>
             <LevelItem>
               <Title headingLevel={TitleLevel.h1} size={BaseSizes['2xl']}>
-                Mapping details
+                Mapping Details
               </Title>
             </LevelItem>
             <LevelItem>
@@ -62,7 +62,6 @@ export const MappingDetails: FunctionComponent<IMappingDetailsProps> = ({
       <StackItem isFilled={true} className={css(styles.content)}>
         <Accordion
           asDefinitionList={false}
-          noBoxShadow={true}
           className={css(styles.accordion)}
         >
           {children}
