@@ -459,9 +459,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_atlas-service-core-constant">Constant</a></li>
 <li><a href="#_atlas-service-core-constants">Constants</a></li>
 <li><a href="#_atlas-service-core-datasource">DataSource</a></li>
+<li><a href="#_atlas-service-core-expression">Expression</a></li>
 <li><a href="#_atlas-service-core-field">Field</a></li>
 <li><a href="#_atlas-service-core-fieldgroup">FieldGroup</a></li>
-<li><a href="#_atlas-service-core-formulaexpression">FormulaExpression</a></li>
 <li><a href="#_atlas-service-core-jsonschema">JsonSchema</a></li>
 <li><a href="#_atlas-service-core-lookupentry">LookupEntry</a></li>
 <li><a href="#_atlas-service-core-lookuptable">LookupTable</a></li>
@@ -1138,6 +1138,48 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </table>
 </div>
 <div class="sect2">
+<h3 id="_atlas-service-core-expression">Expression</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 61.1111%;">
+<col style="width: 22.2223%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-middle">Name</th>
+<th class="tableblock halign-left valign-middle">Description</th>
+<th class="tableblock halign-left valign-middle">Schema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
+<p><strong>@type</strong><br>
+<em>optional</em><br>
+<em>read-only</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div class="content"></div></td>
+<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
+<p>string</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
+<p><strong>expression</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
+<p>The expression string to evaluate</p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
+<p>string</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
 <h3 id="_atlas-service-core-field">Field</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1391,32 +1433,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
 <p>object</p>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_atlas-service-core-formulaexpression">FormulaExpression</h3>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 42.8571%;">
-<col style="width: 57.1429%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-middle">Name</th>
-<th class="tableblock halign-left valign-middle">Schema</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p><strong>expression</strong><br>
-<em>optional</em></p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p>string</p>
 </div></div></td>
 </tr>
 </tbody>
@@ -1686,11 +1702,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </tr>
 <tr>
 <td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p><strong>formulaExpression</strong><br>
+<p><strong>expression</strong><br>
 <em>optional</em></p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><div class="content"><div class="paragraph">
-<p><a href="#_atlas-service-core-formulaexpression">FormulaExpression</a></p>
+<p><a href="#_atlas-service-core-expression">Expression</a></p>
 </div></div></td>
 </tr>
 <tr>
@@ -2088,7 +2104,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-11 17:59:57 UTC
+Last updated 2020-02-11 21:58:09 UTC
 </div>
 </div>
 </body>
