@@ -63,7 +63,7 @@
     "react": "^16.12.0",
     "react-docgen-typescript-loader": "^3.6.0",
     "react-dom": "^16.12.0",
-    "rxjs": "^6.2.2",
+    "rxjs": "^6.5.4",
     "ts-loader": "^6.2.0",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
     "tsdx": "^0.12.3",
@@ -111,8 +111,8 @@
   "dependencies": {
     "@atlasmap/ui": "*",
     "file-saver": "2.0.2",
-    "loglevel": "^1.6.6",
-    "ky": "^0.16.0",
-    "pako": "^1.0.5"
+    "ky": "^0.17.0",
+    "loglevel": "^1.6.7",
+    "pako": "^1.0.11"
   }
 }
