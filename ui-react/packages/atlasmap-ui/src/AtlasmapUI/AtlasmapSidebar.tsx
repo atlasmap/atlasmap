@@ -5,6 +5,7 @@ import { css, StyleSheet } from '@patternfly/react-styles';
 
 const styles = StyleSheet.create({
   sidebar: {
+    fontSize: 'small',
     height: '100%',
     overflow: 'hidden',
     '& > .pf-topology-side-bar__body': {

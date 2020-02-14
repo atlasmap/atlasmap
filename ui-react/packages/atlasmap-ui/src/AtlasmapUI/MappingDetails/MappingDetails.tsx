@@ -19,7 +19,8 @@ import { TrashIcon } from "@patternfly/react-icons";
 const styles = StyleSheet.create({
   content: {
     height: '100%',
-    overflow: 'auto'
+    overflow: 'auto',
+    fontSize: 'small',
   },
   accordion: {
     padding: 0
