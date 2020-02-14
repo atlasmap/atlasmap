@@ -123,7 +123,7 @@ export class Field {
     let parent: Field = this;
     while (parent != null) {
       parent.collapsed = false;
-      if (parent.isPropertyOrConstant) {
+      if (parent.isPropertyOrConstant()) {
         if (parent.docDef) {
           parent.docDef.showFields = true;
         }
