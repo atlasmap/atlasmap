@@ -20,9 +20,6 @@
     "build-storybook": "build-storybook"
   },
   "peerDependencies": {
-    "file-saver": "2.0.2",
-    "ky": "^0.16.0",
-    "pako": "^1.0.5",
     "react": ">=16",
     "rxjs": "^6.2.2"
   },
@@ -38,7 +35,11 @@
     "trailingComma": "es5"
   },
   "devDependencies": {
-    "@babel/core": "^7.6.2",
+    "@babel/core": "^7.8.4",
+    "@patternfly/react-core": "^3.77.2",
+    "@patternfly/react-icons": "^3.10.15",
+    "@patternfly/react-styles": "^3.5.7",
+    "@patternfly/react-topology": "^2.8.65",
     "@storybook/addon-actions": "^5.3.13",
     "@storybook/addon-docs": "^5.3.13",
     "@storybook/addon-knobs": "^5.3.13",
@@ -47,21 +48,18 @@
     "@storybook/addons": "^5.3.13",
     "@storybook/preset-typescript": "^1.2.0",
     "@storybook/react": "^5.3.13",
-    "@testing-library/jest-dom": "^4.1.1",
-    "@testing-library/react": "^9.3.1",
+    "@testing-library/jest-dom": "^5.1.1",
+    "@testing-library/react": "^9.4.0",
     "@types/file-saver": "^2.0.1",
-    "@types/jest": "^24.0.21",
+    "@types/jest": "^25.1.2",
     "@types/pako": "^1.0.1",
     "@types/react": "^16.9.5",
     "@types/react-dom": "^16.9.1",
     "babel-loader": "^8.0.6",
-    "eslint-config-react-app": "5.0.2",
-    "eslint-plugin-react-hooks": "^2.1.2",
-    "file-saver": "2.0.2",
-    "husky": "^3.0.8",
-    "ky": "^0.16.0",
+    "eslint-config-react-app": "5.2.0",
+    "eslint-plugin-react-hooks": "^2.3.0",
+    "husky": "^4.2.3",
     "loglevel": "^1.6.6",
-    "pako": "^1.0.5",
     "react": "^16.12.0",
     "react-docgen-typescript-loader": "^3.6.0",
     "react-dom": "^16.12.0",
@@ -112,6 +110,9 @@
   },
   "dependencies": {
     "@atlasmap/ui": "*",
-    "loglevel": "^1.6.6"
+    "file-saver": "2.0.2",
+    "loglevel": "^1.6.6",
+    "ky": "^0.16.0",
+    "pako": "^1.0.5"
   }
 }

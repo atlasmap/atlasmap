@@ -8,7 +8,7 @@
     "packages/*"
   ],
   "devDependencies": {
-    "lerna": "^3.18.3"
+    "lerna": "^3.20.2"
   },
   "scripts": {
     "build": "lerna run --stream build",
