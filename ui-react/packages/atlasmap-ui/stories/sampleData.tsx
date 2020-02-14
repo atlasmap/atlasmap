@@ -905,12 +905,14 @@ export const sources = [
     name: 'JSONInstanceSource',
     type: 'JSON',
     fields: jsonToFieldGroup(mockJSONInstanceSource, 'JSONInstanceSource-source'),
+    isCollection: false,
   },
   {
     id: 'JSONSchemaSource',
     name: 'JSONSchemaSource',
     type: 'JSON',
     fields: jsonToFieldGroup(mockJSONSchemaSource, 'JSONSchemaSource-source'),
+    isCollection: false,
   },
 ];
 
@@ -920,18 +922,21 @@ export const targets = [
     name: 'XMLInstanceSource',
     type: 'XML',
     fields: xmlToFieldGroup(XMLInstanceSource, 'XMLInstanceSource-target'),
+    isCollection: false,
   },
   {
     id: 'XMLSchemaSource',
     name: 'XMLSchemaSource',
     type: 'XML',
     fields: xmlToFieldGroup(XMLSchemaSource, 'XMLSchemaSource-target'),
+    isCollection: false,
   },
   {
     id: 'io.paul.Bicycle',
     name: 'io.paul.Bicycle',
     type: 'JAVA',
     fields: javaToFieldGroup(ioPaulBicycle, 'io.paul.Bicycle-target'),
+    isCollection: false,
   },
 ];
 
