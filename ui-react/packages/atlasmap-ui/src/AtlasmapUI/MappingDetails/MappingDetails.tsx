@@ -14,7 +14,7 @@ import {
 import { FunctionComponent } from 'react';
 import React from 'react';
 import { css, StyleSheet } from '@patternfly/react-styles';
-import { TrashIcon } from "@patternfly/react-icons";
+import { TrashIcon } from '@patternfly/react-icons';
 
 const styles = StyleSheet.create({
   content: {
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     fontSize: 'small',
   },
   accordion: {
-    padding: 0
+    padding: 0,
   },
 });
 export interface IMappingDetailsProps {
@@ -61,10 +61,7 @@ export const MappingDetails: FunctionComponent<IMappingDetailsProps> = ({
         </PageSection>
       </StackItem>
       <StackItem isFilled={true} className={css(styles.content)}>
-        <Accordion
-          asDefinitionList={false}
-          className={css(styles.accordion)}
-        >
+        <Accordion asDefinitionList={false} className={css(styles.accordion)}>
           {children}
         </Accordion>
       </StackItem>

@@ -82,7 +82,7 @@ export function javaToFieldGroup(java: JavaObject, idPrefix: string) {
     fields: f.javaFields!.javaField.map(f =>
       f.javaFields ? fromGroup(f as JavaField) : fromElement(f)
     ),
-    isCollection: false
+    isCollection: false,
   });
 
   return java.ClassInspectionResponse.javaClass.javaFields!.javaField.map(f =>

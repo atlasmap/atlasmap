@@ -48,24 +48,23 @@ export const MappingAction: FunctionComponent<IMappingActionProps> = ({
   return (
     <>
       <div className={css(styles.spaced)}>
-        <InputGroup >
+        <InputGroup>
           <FormSelect
             className={css(styles.smallBold)}
             value={associatedFieldActionName}
             id={id}
-            onChange={onActionChange}>
+            onChange={onActionChange}
+          >
             {actionsOptions.map((a, idx) => (
-              <FormSelectOption
-                label={a.name}
-                value={a.value}
-                key={idx}/>
+              <FormSelectOption label={a.name} value={a.value} key={idx} />
             ))}
           </FormSelect>
           {!isMultiplicityAction && (
             <Button
               className={css(styles.smallBold)}
               variant={'control'}
-              onClick={onRemoveTransformation}>
+              onClick={onRemoveTransformation}
+            >
               <CloseIcon />
             </Button>
           )}
@@ -74,18 +73,22 @@ export const MappingAction: FunctionComponent<IMappingActionProps> = ({
       {args.map((a, idx) => (
         <div className={css(styles.spaced)} key={idx}>
           <InputGroup>
-            <InputGroupText className={css(styles.smallBold)}>{a.label}</InputGroupText>
-            {(isMultiplicityAction && a.label === 'Delimiter') && (
+            <InputGroupText className={css(styles.smallBold)}>
+              {a.label}
+            </InputGroupText>
+            {isMultiplicityAction && a.label === 'Delimiter' && (
               <FormSelect
                 className={css(styles.smallBold)}
                 value={a.value}
                 id={a.name}
-                onChange={onActionDelimiterChange}>
+                onChange={onActionDelimiterChange}
+              >
                 {actionDelimiters.map((delimiter, delimiterIdx) => (
                   <FormSelectOption
                     label={delimiter.displayName}
                     value={delimiter.delimiterValue}
-                    key={delimiterIdx}/>
+                    key={delimiterIdx}
+                  />
                 ))}
               </FormSelect>
             )}

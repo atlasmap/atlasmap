@@ -62,7 +62,20 @@ export const AtlasmapLayout: FunctionComponent<IAtlasmapLayoutProps> = ({
         showFreeView={freeView}
       />
     ),
-    [onExportAtlasFile, onImportAtlasFile, onResetAtlasmap]
+    [
+      freeView,
+      handleResetView,
+      handleZoomIn,
+      handleZoomOut,
+      onExportAtlasFile,
+      onImportAtlasFile,
+      onResetAtlasmap,
+      onToggleShowMappedFields,
+      onToggleShowMappingPreview,
+      onToggleShowTypes,
+      onToggleShowUnmappedFields,
+      toggleFreeView,
+    ]
   );
 
   return pending ? (

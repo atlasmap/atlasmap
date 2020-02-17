@@ -2,14 +2,16 @@ import { action } from '@storybook/addon-actions';
 import React, { createElement, useState } from 'react';
 import { IMapping } from '../src/CanvasView';
 import { mappings as sampleMappings, sources, targets } from './sampleData';
-import {Button} from "@patternfly/react-core";
+import { Button } from '@patternfly/react-core';
 import {
   AtlasmapCanvasView,
   AtlasmapCanvasViewMappings,
-  AtlasmapCanvasViewSource, AtlasmapCanvasViewTarget,
-  AtlasmapUIProvider, IAtlasmapField
-} from "../src/AtlasmapUI";
-import { boolean } from "@storybook/addon-knobs";
+  AtlasmapCanvasViewSource,
+  AtlasmapCanvasViewTarget,
+  AtlasmapUIProvider,
+  IAtlasmapField,
+} from '../src/AtlasmapUI';
+import { boolean } from '@storybook/addon-knobs';
 
 export default {
   title: 'Mapper',
@@ -22,15 +24,9 @@ export const sample = () =>
       const updatedMappings = mappings.map(m => {
         if (m.id === mapping.id) {
           if (node.id.includes('source')) {
-            m.sourceFields = [
-              ...m.sourceFields,
-              { id: node.id },
-            ];
+            m.sourceFields = [...m.sourceFields, { id: node.id }];
           } else {
-            m.targetFields = [
-              ...m.targetFields,
-              { id: node.id },
-            ];
+            m.targetFields = [...m.targetFields, { id: node.id }];
           }
         }
         return m;

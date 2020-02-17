@@ -1,3 +1,3 @@
-export * from './Atlasmap';
-export * from './AtlasmapMappingDetails';
-export * from './AtlasmapProvider';
+export * from './react/Atlasmap';
+export * from './react/AtlasmapMappingDetails';
+export * from './react/AtlasmapProvider';

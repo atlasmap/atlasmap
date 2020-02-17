@@ -48,7 +48,7 @@ export const FieldsBox: FunctionComponent<IMappingsBoxProps> = ({
       height={scrollable ? initialHeight : yDomain(dimensions.height)}
       movable={!scrollable}
       childrenProps={{
-        className: css(scrollable && styles.boxWrapper)
+        className: css(scrollable && styles.boxWrapper),
       }}
       {...position}
     >

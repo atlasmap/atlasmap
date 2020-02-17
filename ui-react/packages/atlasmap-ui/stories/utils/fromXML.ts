@@ -71,7 +71,7 @@ export function xmlToFieldGroup(xml: XMLObject, idPrefix: string) {
     fields: f.xmlFields.xmlField.map(f =>
       f.xmlFields ? fromGroup(f as Field) : fromElement(f)
     ),
-    isCollection: false
+    isCollection: false,
   });
 
   return xml.XmlInspectionResponse.xmlDocument.fields.field.map(f =>

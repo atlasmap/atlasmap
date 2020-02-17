@@ -10,7 +10,7 @@ import { css, StyleSheet } from '@patternfly/react-styles';
 
 const styles = StyleSheet.create({
   toolbar: { borderBottom: '1px solid #ccc' },
-  toolbarItem: { flex: 1}
+  toolbarItem: { flex: 1 },
 });
 
 export const CanvasViewToolbar: FunctionComponent = () => {

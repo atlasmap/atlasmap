@@ -7,13 +7,12 @@ import {
   AtlasmapUIProvider,
   GroupId,
   IAtlasmapField,
-  IMapping,
 } from '@atlasmap/ui';
 import { AtlasmapMappingDetails } from './AtlasmapMappingDetails';
 import {
   IAtlasmapFieldWithField,
   IAtlasmapMapping,
-} from './utils/to-ui-models-util';
+} from '../utils/to-ui-models-util';
 import {
   useAtlasmap,
   useAtlasmapSources,
@@ -37,7 +36,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   onDeleteDocument,
   onRemoveMappedField,
   onNewTransformation,
-  onRemoveTransformation
+  onRemoveTransformation,
 }) => {
   const [sourceFilter, setSourceFilter] = useState<string | undefined>();
   const [targetFilter, setTargetFilter] = useState<string | undefined>();
@@ -141,15 +140,17 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       targets={targets}
       mappings={mappings}
       onActiveMappingChange={changeActiveMapping}
-      renderMappingDetails={({ mapping, closeDetails }) => (mapping) && (
-        <AtlasmapMappingDetails
-          mapping={(mapping as IAtlasmapMapping).mapping}
-          closeDetails={closeDetails}
-          onRemoveMappedField={onRemoveMappedField}
-          onNewTransformation={onNewTransformation}
-          onRemoveTransformation={onRemoveTransformation}
-        />
-      )}
+      renderMappingDetails={({ mapping, closeDetails }) =>
+        mapping && (
+          <AtlasmapMappingDetails
+            mapping={(mapping as IAtlasmapMapping).mapping}
+            closeDetails={closeDetails}
+            onRemoveMappedField={onRemoveMappedField}
+            onNewTransformation={onNewTransformation}
+            onRemoveTransformation={onRemoveTransformation}
+          />
+        )
+      }
     >
       <AtlasmapCanvasView
         onShowMappingPreview={toggleMappingPreview}

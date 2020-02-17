@@ -14,7 +14,7 @@ import { IAtlasmapDocument, IAtlasmapField, IAtlasmapGroup } from '../models';
 import { useAtlasmapUI } from '../AtlasmapUIProvider';
 import { DropTarget } from './DropTarget';
 import { DocumentFieldPreviewResults } from './DocumentFieldPreviewResults';
-import { DocumentGroup } from "./DocumentGroup";
+import { DocumentGroup } from './DocumentGroup';
 
 export interface IAtlasmapCanvasViewTargetProps {
   onAddToMapping: (node: IAtlasmapField, mapping: IMapping) => void;
@@ -27,9 +27,7 @@ export interface IAtlasmapCanvasViewTargetProps {
   targets: Array<IAtlasmapDocument>;
 }
 
-export const AtlasmapCanvasViewTarget: FunctionComponent<
-  IAtlasmapCanvasViewTargetProps
-> = ({
+export const AtlasmapCanvasViewTarget: FunctionComponent<IAtlasmapCanvasViewTargetProps> = ({
   onAddToMapping,
   onCreateMapping,
   onDeleteDocument,
@@ -72,10 +70,14 @@ export const AtlasmapCanvasViewTarget: FunctionComponent<
             lineConnectionSide={'left'}
             fields={t}
             renderGroup={node => {
-              const group = (node as IAtlasmapGroup);
+              const group = node as IAtlasmapGroup;
               return (
-                <DocumentGroup name={group.name} type={group.type} showType={showTypes} />
-              )
+                <DocumentGroup
+                  name={group.name}
+                  type={group.type}
+                  showType={showTypes}
+                />
+              );
             }}
             renderNode={(node, getCoords, boxRef) => {
               const { id, name, type, previewValue } = node as IAtlasmapField &

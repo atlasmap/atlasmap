@@ -11,13 +11,14 @@
   ],
   "scripts": {
     "start": "tsdx watch",
-    "build": "tsdx build",
+    "build:module": "tsdx build",
+    "build:storybook": "build-storybook --quiet",
+    "build": "npm-run-all lint build:* ",
     "test": "tsdx test",
-    "test-with-coverage": "tsdx test --coverage --coverageReporters=text-lcov | coveralls",
-    "lint": "tsdx lint",
-    "format": "prettier --write 'src/**/*.{js,ts,tsx,json}' 'test/**/*.{js,ts,tsx,json}' 'stories/**/*.{js,ts,tsx,json}'",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "test:coverage": "tsdx test --coverage --coverageReporters=text-lcov | coveralls",
+    "lint": "tsdx lint src/react",
+    "format": "yarn lint --fix",
+    "storybook": "start-storybook -p 6006"
   },
   "peerDependencies": {
     "react": ">=16",
@@ -59,7 +60,6 @@
     "eslint-config-react-app": "5.2.0",
     "eslint-plugin-react-hooks": "^2.3.0",
     "husky": "^4.2.3",
-    "loglevel": "^1.6.6",
     "react": "^16.12.0",
     "react-docgen-typescript-loader": "^3.6.0",
     "react-dom": "^16.12.0",

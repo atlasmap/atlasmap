@@ -11,7 +11,7 @@ import { DocumentFooter } from './DocumentFooter';
 import { DocumentFieldPreview } from './DocumentFieldPreview';
 import { IAtlasmapDocument, IAtlasmapField, IAtlasmapGroup } from '../models';
 import { useAtlasmapUI } from '../AtlasmapUIProvider';
-import { DocumentGroup } from "./DocumentGroup";
+import { DocumentGroup } from './DocumentGroup';
 
 export interface IAtlasmapCanvasViewSourceProps {
   onAddToMapping: (field: IAtlasmapField, mapping: IMapping) => void;
@@ -25,9 +25,7 @@ export interface IAtlasmapCanvasViewSourceProps {
   showTypes: boolean;
 }
 
-export const AtlasmapCanvasViewSource: FunctionComponent<
-  IAtlasmapCanvasViewSourceProps
-> = ({
+export const AtlasmapCanvasViewSource: FunctionComponent<IAtlasmapCanvasViewSourceProps> = ({
   onAddToMapping,
   onCreateMapping,
   onDeleteDocument,
@@ -42,7 +40,7 @@ export const AtlasmapCanvasViewSource: FunctionComponent<
     currentMapping,
     isFieldAddableToSelection,
     isFieldPartOfSelection,
-    selectMapping
+    selectMapping,
   } = useAtlasmapUI();
   return (
     <Source
@@ -70,10 +68,14 @@ export const AtlasmapCanvasViewSource: FunctionComponent<
             lineConnectionSide={'right'}
             fields={s}
             renderGroup={node => {
-              const group = (node as IAtlasmapGroup);
+              const group = node as IAtlasmapGroup;
               return (
-                <DocumentGroup name={group.name} type={group.type} showType={showTypes} />
-              )
+                <DocumentGroup
+                  name={group.name}
+                  type={group.type}
+                  showType={showTypes}
+                />
+              );
             }}
             renderNode={(node, getCoords) => {
               const { id, name, type } = node as IAtlasmapField;
@@ -95,7 +97,7 @@ export const AtlasmapCanvasViewSource: FunctionComponent<
                   )}
                   onDropToMapping={mapping => {
                     selectMapping(mapping.id);
-                    onAddToMapping(node as IAtlasmapField, mapping)
+                    onAddToMapping(node as IAtlasmapField, mapping);
                   }}
                   onClickAddToMapping={() =>
                     currentMapping &&

@@ -904,7 +904,10 @@ export const sources = [
     id: 'JSONInstanceSource',
     name: 'JSONInstanceSource',
     type: 'JSON',
-    fields: jsonToFieldGroup(mockJSONInstanceSource, 'JSONInstanceSource-source'),
+    fields: jsonToFieldGroup(
+      mockJSONInstanceSource,
+      'JSONInstanceSource-source'
+    ),
     isCollection: false,
   },
   {

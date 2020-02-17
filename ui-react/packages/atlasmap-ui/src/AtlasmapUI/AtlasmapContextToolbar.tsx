@@ -13,14 +13,16 @@ import {
   ExpandIcon,
 } from '@patternfly/react-icons';
 import React, { FunctionComponent } from 'react';
-import {
-  Button,
-  Tooltip,
-} from '@patternfly/react-core';
+import { Button, Tooltip } from '@patternfly/react-core';
 
 import { FilePicker } from 'react-file-picker';
 import { css, StyleSheet } from '@patternfly/react-styles';
-import { DataToolbarItem, DataToolbar, DataToolbarContent, DataToolbarGroup } from '@patternfly/react-core/dist/js/experimental';
+import {
+  DataToolbarItem,
+  DataToolbar,
+  DataToolbarContent,
+  DataToolbarGroup,
+} from '@patternfly/react-core/dist/js/experimental';
 
 const styles = StyleSheet.create({
   toolbar: { borderBottom: '1px solid #ccc' },
@@ -41,25 +43,23 @@ export interface IAtlasmapContextToolbarProps {
   showFreeView: boolean;
 }
 
-export const AtlasmapContextToolbar: FunctionComponent<
-  IAtlasmapContextToolbarProps
-> = ({
-      onImportAtlasFile,
-      onResetAtlasmap,
-      onExportAtlasFile,
-      onToggleShowMappingPreview,
-      onToggleShowTypes,
-      onToggleShowMappedFields,
-      onToggleShowUnmappedFields,
-      onToggleShowFreeView,
-      onZoomIn,
-      onZoomOut,
-      onResetView,
-      showFreeView,
-    }) => {
+export const AtlasmapContextToolbar: FunctionComponent<IAtlasmapContextToolbarProps> = ({
+  onImportAtlasFile,
+  onResetAtlasmap,
+  onExportAtlasFile,
+  onToggleShowMappingPreview,
+  onToggleShowTypes,
+  onToggleShowMappedFields,
+  onToggleShowUnmappedFields,
+  onToggleShowFreeView,
+  onZoomIn,
+  onZoomOut,
+  onResetView,
+  showFreeView,
+}) => {
   return (
     <DataToolbar
-      id='data-toolbar'
+      id="data-toolbar"
       className={css('view-toolbar pf-u-px-md pf-u-py-md', styles.toolbar)}
     >
       <DataToolbarContent>
@@ -70,8 +70,8 @@ export const AtlasmapContextToolbar: FunctionComponent<
               enableFlip={true}
               content={
                 <div>
-                  Import an AtlasMap mappings catalog file (.adm) or Java archive
-                  (.jar).
+                  Import an AtlasMap mappings catalog file (.adm) or Java
+                  archive (.jar).
                 </div>
               }
             >
@@ -106,7 +106,7 @@ export const AtlasmapContextToolbar: FunctionComponent<
               </Button>
             </Tooltip>
           </DataToolbarItem>
-          <DataToolbarItem variant='separator'></DataToolbarItem>
+          <DataToolbarItem variant="separator"></DataToolbarItem>
           <DataToolbarItem>
             <Tooltip
               position={'auto'}
@@ -124,7 +124,7 @@ export const AtlasmapContextToolbar: FunctionComponent<
               </Button>
             </Tooltip>
           </DataToolbarItem>
-          <DataToolbarItem variant='separator'></DataToolbarItem>
+          <DataToolbarItem variant="separator"></DataToolbarItem>
           <DataToolbarItem>
             <Tooltip
               position={'auto'}
@@ -162,7 +162,7 @@ export const AtlasmapContextToolbar: FunctionComponent<
               </Button>
             </Tooltip>
           </DataToolbarItem>
-          <DataToolbarItem variant='separator'></DataToolbarItem>
+          <DataToolbarItem variant="separator"></DataToolbarItem>
           <DataToolbarItem>
             <Tooltip
               position={'auto'}
@@ -208,7 +208,7 @@ export const AtlasmapContextToolbar: FunctionComponent<
               </Button>
             </Tooltip>
           </DataToolbarItem>
-          <DataToolbarItem variant='separator'></DataToolbarItem>
+          <DataToolbarItem variant="separator"></DataToolbarItem>
           <DataToolbarItem>
             <Tooltip
               position={'auto'}

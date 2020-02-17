@@ -42,14 +42,16 @@ export const CanvasProvider: FunctionComponent<ICanvasProviderProps> = ({
   panY,
 }) => {
   const rects = useRef<Rects>([]);
-  const addRect = useCallback((rect: Rect) => {
-    removeRect(rect.id);
-    rects.current = [...rects.current, rect];
-  }, []);
   const removeRect = useCallback((id: string) => {
     rects.current = rects.current.filter(r => r.id !== id);
   }, []);
-
+  const addRect = useCallback(
+    (rect: Rect) => {
+      removeRect(rect.id);
+      rects.current = [...rects.current, rect];
+    },
+    [removeRect]
+  );
   const redrawCallbacks = useRef<RedrawCallbacks>([]);
   const addRedrawListener = useCallback((cb: RedrawCallback) => {
     redrawCallbacks.current = [...redrawCallbacks.current, cb];

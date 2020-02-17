@@ -1,4 +1,4 @@
-import React, { createContext, FunctionComponent, useContext } from "react";
+import React, { createContext, FunctionComponent, useContext } from 'react';
 
 interface IBoxContext {
   getScrollableAreaRef: () => HTMLDivElement | null;
@@ -6,13 +6,12 @@ interface IBoxContext {
 
 const BoxContext = createContext<IBoxContext | null>(null);
 
-export const BoxProvider: FunctionComponent<IBoxContext> = ({ children, ...props }) => {
-  return (
-    <BoxContext.Provider value={props}>
-      {children}
-    </BoxContext.Provider>
-  )
-} ;
+export const BoxProvider: FunctionComponent<IBoxContext> = ({
+  children,
+  ...props
+}) => {
+  return <BoxContext.Provider value={props}>{children}</BoxContext.Provider>;
+};
 
 export function useBoxContext() {
   const context = useContext(BoxContext);

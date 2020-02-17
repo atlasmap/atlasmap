@@ -13,8 +13,7 @@ const styles = StyleSheet.create({
   foreignObject: { overflow: 'visible' },
 });
 
-export interface ICanvasObjectProps
-  extends SVGProps<SVGForeignObjectElement> {
+export interface ICanvasObjectProps extends SVGProps<SVGForeignObjectElement> {
   id: string;
   width: number;
   height: number;

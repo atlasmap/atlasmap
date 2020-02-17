@@ -1,9 +1,7 @@
 import { action } from '@storybook/addon-actions';
 import { text } from '@storybook/addon-knobs';
 import React from 'react';
-import {
-  CanvasObject,
-} from '../../../src/Canvas';
+import { CanvasObject } from '../../../src/Canvas';
 import { BoxProvider, Document } from '../../../src/CanvasView/components';
 import { sources } from '../../sampleData';
 import { CanvasView, CanvasViewProvider } from '../../../src/CanvasView';

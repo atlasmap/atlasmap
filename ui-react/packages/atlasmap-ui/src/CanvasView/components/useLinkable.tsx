@@ -6,7 +6,10 @@ export interface IUseLinkableArgs {
   getScrollableAreaRef: () => HTMLElement | null;
 }
 
-export function useLinkable({ getScrollableAreaRef, getParentRef }: IUseLinkableArgs) {
+export function useLinkable({
+  getScrollableAreaRef,
+  getParentRef,
+}: IUseLinkableArgs) {
   const ref = useRef<HTMLDivElement | null>(null);
   const getBoundingCanvasRect = useBoundingCanvasRect();
 
