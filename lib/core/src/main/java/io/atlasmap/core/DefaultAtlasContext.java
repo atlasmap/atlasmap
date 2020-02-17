@@ -470,12 +470,22 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                 }
 
                 try {
-                    if (mapping.getExpression() != null) {
-                        DefaultAtlasExpressionProcessor.processExpression(session, mapping.getExpression());
-                    } else if (mapping.getInputFieldGroup() != null) {
-                        processSourceFieldGroup(session, mapping.getInputFieldGroup());
+                    if (mapping.getInputFieldGroup() != null) {
+                        if (mapping.getExpression() != null) {
+                            session.head().setSourceField(mapping.getInputFieldGroup());
+                            DefaultAtlasExpressionProcessor.processExpression(session, mapping.getExpression());
+                        } else {
+                            processSourceFieldGroup(session, mapping.getInputFieldGroup());
+                        }
                     } else if (mapping.getInputField() != null && !mapping.getInputField().isEmpty()) {
-                        processSourceFieldMappings(session, mapping.getInputField());
+                        if (mapping.getExpression() != null) {
+                            FieldGroup group = new FieldGroup();
+                            group.getField().addAll(mapping.getInputField());
+                            session.head().setSourceField(group);
+                            DefaultAtlasExpressionProcessor.processExpression(session, mapping.getExpression());
+                        } else {
+                            processSourceFieldMappings(session, mapping.getInputField());
+                        }
                     } else {
                         session.head().addAudit(AuditStatus.WARN, null, null, String.format(
                             "Mapping does not contain expression or at least one source field: alias=%s desc=%s",

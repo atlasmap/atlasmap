@@ -23,7 +23,6 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import io.atlasmap.core.AtlasPath;
 import io.atlasmap.v2.Audit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -196,7 +195,7 @@ public class XmlModule extends BaseAtlasModule {
         XmlPath path = new XmlPath(targetField.getPath());
         FieldGroup targetFieldGroup = null;
         if (path.hasCollection() && !path.isIndexedCollection()) {
-            targetFieldGroup = AtlasModelFactory.createFieldGroupFrom(targetField);
+            targetFieldGroup = AtlasModelFactory.createFieldGroupFrom(targetField, true);
             session.head().setTargetField(targetFieldGroup);
         }
 
@@ -337,7 +336,7 @@ public class XmlModule extends BaseAtlasModule {
 
     @Override
     public Field cloneField(Field field) throws AtlasException {
-        return AtlasXmlModelFactory.cloneField(field);
+        return AtlasXmlModelFactory.cloneField((XmlField)field, true);
     }
 
     protected XmlIOHelper getXmlIOHelper() {

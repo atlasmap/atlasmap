@@ -64,17 +64,21 @@ public abstract class BaseJavaFieldReaderTest {
     }
 
     protected Object read(String path, FieldType fieldType) throws AtlasException {
-        this.field = createField(path, null, fieldType);
+        this.field = createJavaField(path, null, fieldType);
         this.field = (JavaField) read(field);
         return field.getValue();
     }
 
     protected void readGroup(String path, FieldType fieldType) throws AtlasException {
-        this.field = createField(path, null, fieldType);
-        this.fieldGroup = (FieldGroup) read(field);
+        if (fieldType == FieldType.COMPLEX) {
+            this.fieldGroup = createFieldGroup(path, fieldType);
+        } else {
+            this.field = createJavaField(path, null, fieldType);
+        }
+        this.fieldGroup = (FieldGroup) read(this.fieldGroup != null ? this.fieldGroup : this.field);
     }
 
-    protected JavaField createField(String path, Object value, FieldType fieldType) {
+    protected JavaField createJavaField(String path, Object value, FieldType fieldType) {
         JavaField field = new JavaField();
         field.setFieldType(fieldType);
         field.setValue(value);
@@ -82,4 +86,10 @@ public abstract class BaseJavaFieldReaderTest {
         return field;
     }
 
+    protected FieldGroup createFieldGroup(String path, FieldType fieldType) {
+        FieldGroup group = new FieldGroup();
+        group.setFieldType(fieldType);
+        group.setPath(path);
+        return group;
+    }
 }

@@ -1,11 +1,7 @@
 package io.atlasmap.java.core;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +9,9 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.AtlasPath.SegmentContext;
 import io.atlasmap.core.AtlasUtil;
+import io.atlasmap.java.core.accessor.JavaChildAccessor;
+import io.atlasmap.java.core.accessor.RootAccessor;
+import io.atlasmap.java.v2.AtlasJavaModelFactory;
 import io.atlasmap.java.v2.JavaEnumField;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.spi.AtlasConversionService;
@@ -23,6 +22,7 @@ import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
+import io.atlasmap.v2.FieldType;
 
 public class JavaFieldReader implements AtlasFieldReader {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(JavaFieldReader.class);
@@ -50,7 +50,7 @@ public class JavaFieldReader implements AtlasFieldReader {
             }
 
             if (path.hasCollection() && !path.isIndexedCollection()) {
-                FieldGroup fieldGroup = AtlasModelFactory.createFieldGroupFrom(field);
+                FieldGroup fieldGroup = AtlasModelFactory.createFieldGroupFrom(field, true);
                 fieldGroup.getField().addAll(fields);
                 session.head().setSourceField(fieldGroup);
                 return fieldGroup;
@@ -69,159 +69,187 @@ public class JavaFieldReader implements AtlasFieldReader {
         List<Field> fields = new ArrayList<>();
         List<SegmentContext> segments = path.getSegments(true);
 
+        if (segments.size() < depth) {
+            throw new AtlasException(String.format("depth '%s' exceeds segment size '%s'", depth, segments.size()));
+        }
         if (segments.size() == depth) {
-            Field newField = field instanceof JavaEnumField ? new JavaEnumField() : new JavaField();
-            AtlasModelFactory.copyField(field, newField, false);
-            if (source != null && (conversionService.isPrimitive(source.getClass())
-                || conversionService.isBoxedPrimitive(source.getClass()))) {
-                source = conversionService.copyPrimitive(source);
-            }
-            newField.setValue(source);
-            newField.setIndex(null); //reset index for subfields
-            fields.add(newField);
-        } else if (segments.size() > depth) {
-            SegmentContext segmentContext = segments.get(depth);
-            Object child = source;
-            if (depth == 0 && segments.size() > 1 && segmentContext.getCollectionType() == CollectionType.NONE) {
-                depth++;
-                segmentContext = segments.get(depth);
-            }
-
-            if (depth > 0) {
-                child = getChildForSegment(session, source, field, path, segmentContext);
-
-                if (child == null) {
-                    if (path.getLastSegment() != segmentContext) {
-                        //add audit only if not the last segment on the path
-                        AtlasUtil.addAudit(session, field.getDocId(), String.format(
-                            "Assigning null value for path path=%s docId=%s due to null parent", field.getPath(), field.getDocId()),
-                            field.getPath(), AuditStatus.WARN, null);
-
-                        Field newField = field instanceof JavaEnumField ? new JavaEnumField() : new JavaField();
-                        AtlasModelFactory.copyField(field, newField, false);
-                        newField.setValue(null);
-                        fields.add(newField);
-                    }
-                    return fields;
-                }
-            }
-
-            if (segmentContext.getCollectionType() == CollectionType.NONE) {
-                List<Field> childFields = getFieldsForPath(session, child, field, path, depth + 1);
-                fields.addAll(childFields);
+            Field newField;
+            if (field instanceof FieldGroup && field.getFieldType() == FieldType.COMPLEX) {
+                FieldGroup group = (FieldGroup) field;
+                populateChildFields(source, group, path);
+                newField = group;
             } else {
-                if (segmentContext.getCollectionIndex() != null) {
-                    Object indexItem = extractFromCollection(session, child, segmentContext);
-                    List<Field> childFields = getFieldsForPath(session, indexItem, field, path, depth + 1);
-                    fields.addAll(childFields);
-                } else {
-                    Object array = null;
-                    if (child instanceof Collection) {
-                        array = ((Collection) child).toArray();
-                    } else if (child.getClass().isArray()) {
-                        array = child;
-                    }
-                    if (array != null) {
-                        for (int i = 0; i < Array.getLength(array); i++) {
-                            //include the array index within the path
-                            AtlasPath subPath = new AtlasPath(field.getPath());
-                            subPath.setCollectionIndex(depth, i);
-                            field.setPath(subPath.toString());
-
-                            List<Field> arrayFields = getFieldsForPath(session, Array.get(array, i), field, path, depth + 1);
-                            fields.addAll(arrayFields);
-                        }
-                    } else {
-                        List<Field> arrayFields = getFieldsForPath(session, child, field, path, depth + 1);
-                        fields.addAll(arrayFields);
-                    }
+                newField = AtlasJavaModelFactory.cloneJavaField(field, true);
+                if (source != null && (conversionService.isPrimitive(source.getClass())
+                    || conversionService.isBoxedPrimitive(source.getClass()))) {
+                    source = conversionService.copyPrimitive(source);
                 }
+                newField.setValue(source);
+                newField.setIndex(null); //reset index for subfields
             }
+            fields.add(newField);
+            return fields;
         }
 
+        // segments.size() > depth) {
+        SegmentContext segmentContext = segments.get(depth);
+        if (depth == 0 && segments.size() > 1 && segmentContext.getCollectionType() == CollectionType.NONE) {
+            depth++;
+            segmentContext = segments.get(depth);
+        }
+
+        JavaChildAccessor childAccessor = getAccessorForSegment(session, source, field, path, segmentContext);
+        if (childAccessor == null || childAccessor.getRawValue() == null) {
+            if (path.getLastSegment() != segmentContext) {
+                //add audit only if not the last segment on the path
+                AtlasUtil.addAudit(session, field.getDocId(), String.format(
+                    "Assigning null value for path path=%s docId=%s due to null parent", field.getPath(), field.getDocId()),
+                    field.getPath(), AuditStatus.WARN, null);
+                Field newField = AtlasJavaModelFactory.cloneJavaField(field, false);
+                fields.add(newField);
+            }
+            return fields;
+        }
+
+        if (segmentContext.getCollectionType() == CollectionType.NONE) {
+            List<Field> childFields = getFieldsForPath(session, childAccessor.getValue(), field, path, depth + 1);
+            fields.addAll(childFields);
+            return fields;
+        }
+
+        // collection
+        if (segmentContext.getCollectionIndex() != null) {
+            Object indexItem = childAccessor.getValueAt(segmentContext.getCollectionIndex());
+            List<Field> childFields = getFieldsForPath(session, indexItem, field, path, depth + 1);
+            fields.addAll(childFields);
+        } else {
+            List<?> items = childAccessor.getCollectionValues();
+            for (int i = 0; i < items.size(); i++) {
+                //include the array index within the path
+                Field itemField;
+                if (field instanceof FieldGroup) {
+                    itemField = AtlasJavaModelFactory.cloneFieldGroup((FieldGroup)field);
+                    AtlasPath.setCollectionIndexRecursively((FieldGroup)itemField, depth, i);
+                } else {
+                    itemField = AtlasJavaModelFactory.cloneJavaField(field, false);
+                    AtlasPath itemPath = new AtlasPath(field.getPath());
+                    itemPath.setCollectionIndex(depth, i);
+                    itemField.setPath(itemPath.toString());
+                }
+                List<Field> arrayFields = getFieldsForPath(
+                    session, items.get(i), itemField, new AtlasPath(itemField.getPath()), depth + 1);
+                fields.addAll(arrayFields);
+            }
+        }
         return fields;
     }
 
-    private Object getChildForSegment(AtlasInternalSession session, Object source, Field field, AtlasPath path, SegmentContext segmentContext) throws AtlasException {
-        Object child = null;
-        Method getterMethod = ClassHelper.lookupGetterMethod(source, segmentContext.getName());
-        java.lang.reflect.Field classField = null;
-
-        if (getterMethod != null) {
-            try {
-                child = getterMethod.invoke(source);
-            } catch (Exception e) {
-                throw new AtlasException(e);
-            }
+    private JavaChildAccessor getAccessorForSegment(AtlasInternalSession session, Object source, Field field, AtlasPath path, SegmentContext segmentContext) throws AtlasException {
+        JavaChildAccessor accessor = null;
+        if (segmentContext.isRoot()) {
+            accessor = new RootAccessor(source);
         } else {
-            classField = ClassHelper.lookupJavaField(source, segmentContext.getName());
-            if (classField != null) {
-                try {
-                    child = classField.get(source);
-                } catch (IllegalAccessException e) {
-                    throw new AtlasException(e);
-                }
-            } else {
-                AtlasUtil.addAudit(session, field.getDocId(), String.format(
-                    "Field '%s' not found on object '%s'", segmentContext.getName(), source),
-                    field.getPath(), AuditStatus.ERROR, null);
-            }
+            accessor = ClassHelper.lookupAccessor(source, segmentContext.getName());
         }
-
-        if (path.getLastSegment() == segmentContext) {
-            if (field.getFieldType() == null
-                && (field instanceof JavaField || field instanceof JavaEnumField)) {
-                Class<?> returnType = null;
-                if (getterMethod != null) {
-                    returnType = getterMethod.getReturnType();
-                } else if (classField != null) {
-                    returnType = classField.getType();
-                }
-
-                if (returnType != null) {
-                    field.setFieldType(conversionService.fieldTypeFromClass(returnType));
-                    if (LOG.isTraceEnabled()) {
-                        LOG.trace("Auto-detected sourceField type p=" + field.getPath() + " t="
-                            + field.getFieldType());
-                    }
-                } else {
-                    AtlasUtil.addAudit(session, field.getDocId(), String.format(
-                        "Unable to auto-detect sourceField type path=%s docId=%s",
-                        field.getPath(), field.getDocId()),
-                        field.getPath(), AuditStatus.WARN, null);
-                }
-            }
-        }
-        return child;
-    }
-
-
-
-    private Object extractFromCollection(AtlasInternalSession session, Object source, SegmentContext segmentContext) {
-        if (source == null) {
+        if (accessor == null) {
+            AtlasUtil.addAudit(session, field.getDocId(), String.format(
+                "Field '%s' not found on object '%s'", segmentContext.getName(), source),
+                field.getPath(), AuditStatus.ERROR, null);
             return null;
         }
-        CollectionType collectionType = segmentContext.getCollectionType();
-        Integer index = segmentContext.getCollectionIndex();
-        if (collectionType == CollectionType.NONE || index == null) {
-            return source;
+
+        try {
+            accessor.getValue();
+        } catch (Exception e) {
+            AtlasUtil.addAudit(session, field.getDocId(), String.format(
+                "Cannot access field '%s' on object '%s': %s", segmentContext.getName(), source, e.getMessage()),
+                field.getPath(), AuditStatus.ERROR, null);
+            if (LOG.isDebugEnabled()) {
+                LOG.error("", e);
+            }
+            return null;
         }
 
-        if (collectionType == CollectionType.ARRAY) {
-            return Array.get(source, index);
-        } else if (collectionType == CollectionType.LIST) {
-            return Collection.class.cast(source).toArray()[index];
-        } else if (collectionType == CollectionType.MAP) {
-            // TODO support map key
-            String key = index.toString();
-            return Map.class.cast(source).get(key);
-        } else {
-            Field sourceField = session.head().getSourceField();
-            AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(
-                    "Ignoring unknown collection type in path '%s'", sourceField.getPath()),
-                    sourceField.getPath(), AuditStatus.WARN, null);
-            return source;
+        if (path.getLastSegment() == segmentContext && field.getFieldType() == null
+            && (field instanceof JavaField || field instanceof JavaEnumField)) {
+            detectFieldType(session, accessor, field);
         }
+        return accessor;
+    }
+
+    private void detectFieldType(AtlasInternalSession session, JavaChildAccessor accessor, Field field) throws AtlasException {
+        Class<?> returnType = null;
+        try {
+            returnType = accessor.getRawClass();
+        } catch (Exception e) {
+            AtlasUtil.addAudit(session, field.getDocId(), String.format(
+                "Cannot access the type of field '%s' on object '%s': %s",
+                    accessor.getName(), accessor.getRawValue(), e.getMessage()),
+                field.getPath(), AuditStatus.ERROR, null);
+            if (LOG.isDebugEnabled()) {
+                LOG.error("", e);
+            }
+        }
+
+        if (returnType != null) {
+            field.setFieldType(conversionService.fieldTypeFromClass(returnType));
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Auto-detected sourceField type p=" + field.getPath() + " t="
+                    + field.getFieldType());
+            }
+        } else {
+            AtlasUtil.addAudit(session, field.getDocId(), String.format(
+                "Unable to auto-detect sourceField type path=%s docId=%s",
+                field.getPath(), field.getDocId()),
+                field.getPath(), AuditStatus.WARN, null);
+        }
+    }
+
+    private void populateChildFields(Object source, FieldGroup fieldGroup, AtlasPath path) throws AtlasException {
+        List<Field> newChildren = new ArrayList<>();
+        for (Field child : fieldGroup.getField()) {
+            AtlasPath childPath = new AtlasPath(child.getPath());
+            JavaChildAccessor accessor = ClassHelper.lookupAccessor(source, childPath.getLastSegment().getName());
+            if (childPath.getLastSegment().getCollectionType() != CollectionType.NONE) {
+                FieldGroup childGroup = populateCollectionItems(accessor, child);
+                newChildren.add(childGroup);
+            } else {
+                if (child instanceof FieldGroup) {
+                    populateChildFields(accessor.getValue(), (FieldGroup)child, childPath);
+                } else {
+                    child.setValue(accessor.getValue());
+                }
+                newChildren.add(child);
+            }
+        }
+        fieldGroup.getField().clear();
+        fieldGroup.getField().addAll(newChildren);
+    }
+
+    private FieldGroup populateCollectionItems(JavaChildAccessor accessor, Field field) throws AtlasException {
+        if (accessor == null || accessor.getCollectionType() == CollectionType.NONE) {
+            throw new AtlasException(String.format("Couldn't find a collection object for field %s:%s",
+                field.getDocId(), field.getPath()));
+        }
+        FieldGroup group = field instanceof FieldGroup ?
+         (FieldGroup)field : AtlasModelFactory.createFieldGroupFrom(field, true);
+        for (int i=0; i<accessor.getCollectionValues().size(); i++) {
+            AtlasPath itemPath = new AtlasPath(group.getPath());
+            List<SegmentContext> segments = itemPath.getSegments(true);
+            itemPath.setCollectionIndex(segments.size() - 1, i);
+            if (field instanceof FieldGroup) {
+                FieldGroup itemGroup = AtlasJavaModelFactory.cloneFieldGroup((FieldGroup)field);
+                AtlasPath.setCollectionIndexRecursively(itemGroup, segments.size(), i);
+                populateChildFields(accessor.getValueAt(i), itemGroup, itemPath);
+                group.getField().add(itemGroup);
+            } else {
+                Field itemField = AtlasJavaModelFactory.cloneJavaField(field, false);
+                itemField.setPath(itemPath.toString());
+                itemField.setValue(accessor.getValueAt(i));
+                group.getField().add(itemField);
+            }
+        }
+        return group;
     }
 
     public void setDocument(Object sourceDocument) {

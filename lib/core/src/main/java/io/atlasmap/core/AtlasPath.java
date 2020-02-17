@@ -125,11 +125,26 @@ public class AtlasPath {
         if (extracted.size() == 1) {
             return extracted.get(0);
         }
-        FieldGroup answer = AtlasModelFactory.createFieldGroupFrom(f);
+        FieldGroup answer = AtlasModelFactory.createFieldGroupFrom(f, true);
         answer.setPath(new AtlasPath(extractedSegments).toString());
         answer.getField().addAll(extracted);
         return answer;
 	}
+
+    public static void setCollectionIndexRecursively(FieldGroup group, int segmentIndex, int index) {
+        AtlasPath path = new AtlasPath(group.getPath());
+        path.setCollectionIndex(segmentIndex, index);
+        group.setPath(path.toString());
+        for (Field f : group.getField()) {
+            if (f instanceof FieldGroup) {
+                setCollectionIndexRecursively((FieldGroup)f, segmentIndex, index);
+            } else {
+                AtlasPath fpath = new AtlasPath(f.getPath());
+                fpath.setCollectionIndex(segmentIndex, index);
+                f.setPath(fpath.toString());
+            }
+        }
+    }
 
     public AtlasPath(String p) {
         String path = p;

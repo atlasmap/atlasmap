@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<orders>
+  <order>
+    <address>
+      <addressLine1>123 Main St (1)</addressLine1>
+      <addressLine2>Suite 42b (1)</addressLine2>
+      <city>Anytown (1)</city>
+      <state>NY (1)</state>
+      <zipCode>90210 (1)</zipCode>
+    </address>
+    <contact>
+      <firstName>Ozzie (1)</firstName>
+      <lastName>Smith (1)</lastName>
+      <phoneNumber>5551212 (1)</phoneNumber>
+      <zipCode>81111 (1)</zipCode>
+    </contact>
+    <orderId>9</orderId>
+  </order>
+  <order>
+    <address>
+      <addressLine1>123 Main St (2)</addressLine1>
+      <addressLine2>Suite 42b (2)</addressLine2>
+      <city>Anytown (2)</city>
+      <state>NY (2)</state>
+      <zipCode>90210 (2)</zipCode>
+    </address>
+    <contact>
+      <firstName>Ozzie (2)</firstName>
+      <lastName>Smith (2)</lastName>
+      <phoneNumber>5551212 (2)</phoneNumber>
+      <zipCode>81111 (2)</zipCode>
+    </contact>
+    <orderId>8</orderId>
+  </order>
+  <order>
+    <address>
+      <addressLine1>123 Main St (3)</addressLine1>
+      <addressLine2>Suite 42b (3)</addressLine2>
+      <city>Anytown (3)</city>
+      <state>NY (3)</state>
+      <zipCode>90210 (3)</zipCode>
+    </address>
+    <contact>
+      <firstName>Ozzie (3)</firstName>
+      <lastName>Smith (3)</lastName>
+      <phoneNumber>5551212 (3)</phoneNumber>
+      <zipCode>81111 (3)</zipCode>
+    </contact>
+    <orderId>7</orderId>
+  </order>
+  <order>
+    <address>
+      <addressLine1>123 Main St (4)</addressLine1>
+      <addressLine2>Suite 42b (4)</addressLine2>
+      <city>Anytown (4)</city>
+      <state>NY (4)</state>
+      <zipCode>90210 (4)</zipCode>
+    </address>
+    <contact>
+      <firstName>Ozzie (4)</firstName>
+      <lastName>Smith (4)</lastName>
+      <phoneNumber>5551212 (4)</phoneNumber>
+      <zipCode>81111 (4)</zipCode>
+    </contact>
+    <orderId>6</orderId>
+  </order>
+  <order>
+    <address>
+      <addressLine1>123 Main St (5)</addressLine1>
+      <addressLine2>Suite 42b (5)</addressLine2>
+      <city>Anytown (5)</city>
+      <state>NY (5)</state>
+      <zipCode>90210 (5)</zipCode>
+    </address>
+    <contact>
+      <firstName>Ozzie (5)</firstName>
+      <lastName>Smith (5)</lastName>
+      <phoneNumber>5551212 (5)</phoneNumber>
+      <zipCode>81111 (5)</zipCode>
+    </contact>
+    <orderId>5</orderId>
+  </order>
+  <orderBatchNumber>4123562</orderBatchNumber>
+  <numberOfOrders>5</numberOfOrders>
+</orders>

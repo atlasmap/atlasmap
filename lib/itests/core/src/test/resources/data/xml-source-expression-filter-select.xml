@@ -1,0 +1,22 @@
+<root>
+  <someArray>
+    <name>n0</name>
+    <value>v0</value>
+  </someArray>
+  <someArray>
+    <name>n1</name>
+    <value>v1</value>
+  </someArray>
+  <someArray>
+    <name>n2</name>
+    <value>v2</value>
+  </someArray>
+  <someArray>
+    <name>n3</name>
+    <value>v3</value>
+  </someArray>
+  <someArray>
+    <name>n4</name>
+    <value>v4</value>
+  </someArray>
+</root>

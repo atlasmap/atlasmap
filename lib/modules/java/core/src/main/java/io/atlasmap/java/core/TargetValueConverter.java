@@ -38,6 +38,14 @@ public class TargetValueConverter {
 
     public void populateTargetField(AtlasInternalSession session, LookupTable lookupTable, Field sourceField,
             Object parentObject, Field targetField) throws AtlasException {
+        if (sourceField == null) {
+            AtlasUtil.addAudit(session, null, "Source field cannot be null", null, AuditStatus.ERROR, null);
+            return;
+        }
+        if (targetField == null) {
+            AtlasUtil.addAudit(session, null, "Target field cannot be null",null, AuditStatus.ERROR, null);
+            return;
+        }
         Object sourceValue = sourceField.getValue();
 
         if (LOG.isDebugEnabled()) {

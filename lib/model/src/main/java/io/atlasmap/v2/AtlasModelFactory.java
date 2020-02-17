@@ -122,6 +122,21 @@ public class AtlasModelFactory {
         throw new IllegalArgumentException("Use module specific factories to clone fields");
     }
 
+    /**
+     * This is a shallow copy, it doesn't handle children.
+     * Each module should handle their own deep clone.
+     * @param fg {@code FieldGroup}
+     * @return copied FieldGroup
+     */
+    public static FieldGroup copyFieldGroup(FieldGroup fg) {
+        if (fg == null) {
+            return null;
+        }
+        FieldGroup newfg = new FieldGroup();
+        copyField(fg, newfg, true);
+        return newfg;
+    }
+
     public static SimpleField cloneFieldToSimpleField(Field field) {
         if (field == null) {
             return null;
@@ -166,9 +181,9 @@ public class AtlasModelFactory {
         // We can't clone so don't set value
     }
 
-    public static FieldGroup createFieldGroupFrom(Field field) {
+    public static FieldGroup createFieldGroupFrom(Field field, boolean withActions) {
         FieldGroup answer = new FieldGroup();
-        copyField(field, answer, true);
+        copyField(field, answer, withActions);
         return answer;
     }
 

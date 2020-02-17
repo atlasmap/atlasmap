@@ -40,7 +40,7 @@ public class SELECT extends BaseFunctionFactory {
             Field parent = (Field) parentExpression.evaluate(ctx);
             List<Field> collection = parent instanceof FieldGroup ? ((FieldGroup)parent).getField() : Arrays.asList(parent);
             List<Field> selected = new ArrayList<>();
-            final FieldGroup answer = AtlasModelFactory.createFieldGroupFrom(parent);
+            final FieldGroup answer = AtlasModelFactory.createFieldGroupFrom(parent, true);
             answer.setPath(FUNCTION_PATH);
             for (Field f : collection) {
                 Field fs = (Field) selectExpression.evaluate((subCtx) -> {

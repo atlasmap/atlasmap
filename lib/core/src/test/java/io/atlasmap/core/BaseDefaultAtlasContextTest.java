@@ -5,7 +5,9 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Before;
@@ -20,6 +22,7 @@ import io.atlasmap.spi.AtlasFieldWriter;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.Field;
@@ -150,6 +153,7 @@ public abstract class BaseDefaultAtlasContextTest {
         String basePath = "/testPath" + seed;
         FieldGroup fieldGroup = new FieldGroup();
         fieldGroup.setFieldType(FieldType.STRING);
+        fieldGroup.setDocId(docId);
         fieldGroup.setPath(basePath + "<>");
         if (mapping != null) {
             mapping.setInputFieldGroup(fieldGroup);
@@ -157,6 +161,7 @@ public abstract class BaseDefaultAtlasContextTest {
         for (int i=0; i<10; i++) {
             Field child = new SimpleField();
             child.setFieldType(FieldType.STRING);
+            child.setDocId(docId);
             child.setPath(basePath + "<" + i + ">");
             child.setValue(seed + i);
             child.setIndex(i);
@@ -171,17 +176,21 @@ public abstract class BaseDefaultAtlasContextTest {
         String basePath = "/testPath" + seed;
         FieldGroup fieldGroup = new FieldGroup();
         fieldGroup.setFieldType(FieldType.COMPLEX);
+        fieldGroup.setDocId(docId);
         fieldGroup.setPath(basePath + "<>");
         if (mapping != null) {
             mapping.setInputFieldGroup(fieldGroup);
         }
+        List<Field> terminals = new ArrayList<>();
         for (int i=0; i<10; i++) {
             FieldGroup child = new FieldGroup();
             child.setFieldType(FieldType.COMPLEX);
+            child.setDocId(docId);
             child.setPath(basePath + "<" + i + ">");
             child.setIndex(i);
             Field terminal = new SimpleField();
             terminal.setFieldType(FieldType.STRING);
+            terminal.setDocId(docId);
             terminal.setPath(basePath + "<" + i + ">/value");
             terminal.setValue(seed + i);
             child.getField().add(terminal);
@@ -189,9 +198,13 @@ public abstract class BaseDefaultAtlasContextTest {
             fieldGroup.getField().add(child);
             reader.sources.put(child.getPath(), child);
             reader.sources.put(terminal.getPath(), terminal);
+            terminals.add(terminal);
         }
         reader.sources.put(fieldGroup.getPath(), fieldGroup);
-        reader.sources.put(fieldGroup.getPath() + "/value", fieldGroup);
+        FieldGroup valueGroup = AtlasModelFactory.copyFieldGroup(fieldGroup);
+        valueGroup.getField().addAll(terminals);
+        valueGroup.setPath(fieldGroup.getPath() + "/value");
+        reader.sources.put(valueGroup.getPath(), valueGroup);
         return fieldGroup;
     }
 

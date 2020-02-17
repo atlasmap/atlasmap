@@ -729,7 +729,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
             }
         } else if (tmpSourceObject instanceof List) {
             // 1 -> n - create new FieldGroup
-            fieldGroup = AtlasModelFactory.createFieldGroupFrom(field);
+            fieldGroup = AtlasModelFactory.createFieldGroupFrom(field, true);
             for (Object subValue : (List<?>) tmpSourceObject) {
                 Field subField = new SimpleField();
                 AtlasModelFactory.copyField(field, subField, false);

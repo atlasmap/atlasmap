@@ -15,8 +15,12 @@
  */
 package io.atlasmap.java.v2;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
 
 public class AtlasJavaModelFactory {
 
@@ -35,9 +39,30 @@ public class AtlasJavaModelFactory {
         return javaField;
     }
 
-    public static Field cloneJavaField(Field field) {
+    public static FieldGroup cloneFieldGroup(FieldGroup group) {
+        FieldGroup clone = AtlasModelFactory.copyFieldGroup(group);
+        List<Field> newChildren = new ArrayList<>();
+        for (Field child : group.getField()) {
+            if (child instanceof FieldGroup) {
+                newChildren.add(cloneFieldGroup((FieldGroup)child));
+            } else {
+                newChildren.add(cloneJavaField(child, true));
+            }
+        }
+        clone.getField().addAll(newChildren);
+        return clone;
+    }
+
+    public static Field cloneJavaField(Field field, boolean withActions) {
+        if (field instanceof FieldGroup) {
+            FieldGroup clone = AtlasModelFactory.createFieldGroupFrom(field, withActions);
+            for (Field f : ((FieldGroup)field).getField()) {
+                clone.getField().add(cloneJavaField(f, withActions));
+            }
+            return clone;
+        }
         Field clone = field instanceof JavaEnumField ? new JavaEnumField() : new JavaField();
-        copyField(field, clone, true);
+        copyField(field, clone, withActions);
         return clone;
     }
 
@@ -76,4 +101,5 @@ public class AtlasJavaModelFactory {
         throw new RuntimeException(String.format(
                 "Unsupported field type to copy: from=%s, to=%s", from, to));
     }
+
 }

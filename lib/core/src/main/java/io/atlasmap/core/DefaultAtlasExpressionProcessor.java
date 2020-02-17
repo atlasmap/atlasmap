@@ -15,6 +15,9 @@
  */
 package io.atlasmap.core;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,29 +26,44 @@ import io.atlasmap.expression.ExpressionException;
 import io.atlasmap.spi.AtlasFieldReader;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Field;
-import io.atlasmap.v2.SimpleField;
+import io.atlasmap.v2.FieldGroup;
 
 public class DefaultAtlasExpressionProcessor {
     private static Logger LOG = LoggerFactory.getLogger(DefaultAtlasExpressionProcessor.class);
 
-    public static void processExpression(DefaultAtlasSession session, io.atlasmap.v2.Expression action) {
-        if (action.getExpression() == null || action.getExpression().trim().isEmpty()) {
+    public static void processExpression(DefaultAtlasSession session, String expression) {
+        if (expression == null || expression.trim().isEmpty()) {
             return;
         }
 
         try {
-            Expression parsedExpression = Expression.parse(action.getExpression(),
-                    DefaultAtlasFunctionResolver.getInstance());
+            Map<String, Field> sourceFieldMap = new HashMap<>();
+            Field parent = session.head().getSourceField();
+            if (parent != null && !AtlasUtil.isEmpty(parent.getDocId()) && !AtlasUtil.isEmpty(parent.getPath())) {
+                 sourceFieldMap.put(parent.getDocId() + ":" + parent.getPath(), parent);
+            }
+            // Anonymous FieldGroup is just a wrapping, peel it off
+            if (parent instanceof FieldGroup && AtlasUtil.isEmpty(parent.getPath())) {
+                FieldGroup parentGroup = FieldGroup.class.cast(parent);
+                for (Field child : parentGroup.getField()) {
+                    if (!(AtlasUtil.isEmpty(child.getDocId()) && AtlasUtil.isEmpty(child.getPath()))) {
+                         sourceFieldMap.put(child.getDocId() + ":" + child.getPath(), child);
+                    }
+                }
+            }
+
+            Expression parsedExpression = Expression.parse(expression, DefaultAtlasFunctionResolver.getInstance());
             Object answer = parsedExpression.evaluate((path) -> {
                 if (path == null || path.isEmpty()) {
                     return null;
                 }
                 try {
                     String[] splitted = path.split(":", 2);
-                    Field f = new SimpleField();
-                    f.setDocId(splitted[0]);
-                    f.setPath(splitted[1]);
                     AtlasFieldReader reader = session.getFieldReader(splitted[0]);
+                    Field f = sourceFieldMap.get(path);
+                    if (f == null) {
+                        return null;
+                    }
                     session.head().setSourceField(f);
                     return reader.read(session);
                 } catch (Exception e) {
@@ -56,7 +74,7 @@ public class DefaultAtlasExpressionProcessor {
         } catch (Exception e) {
             AtlasUtil.addAudit(session, null,
                     String.format("Expression processing error: %s", e.getMessage()),
-                    action.getExpression(), AuditStatus.ERROR, null);
+                    expression, AuditStatus.ERROR, null);
             if (LOG.isDebugEnabled()) {
                 LOG.debug("", e);
             }

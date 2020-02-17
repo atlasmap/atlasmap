@@ -22,7 +22,6 @@ import org.junit.Test;
 
 import io.atlasmap.api.AtlasConstants;
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.v2.Expression;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
@@ -31,10 +30,10 @@ public class DefaultAtlasExpressionProcessorTest extends BaseDefaultAtlasContext
 
     @Test
     public void testSingle() throws AtlasException {
-        populateSourceField(null, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, FieldType.STRING, "foo");
-        Expression expression = new Expression();
-        expression.setExpression(String.format("${%s:/testPathfoo}", AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID));
+        Field source = populateSourceField(null, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, FieldType.STRING, "foo");
+        String expression = String.format("${%s:/testPathfoo}", AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID);
         recreateSession();
+        session.head().setSourceField(source);
         DefaultAtlasExpressionProcessor.processExpression(session, expression);
         assertFalse(printAudit(session), session.hasErrors());
         assertEquals("foo", session.head().getSourceField().getValue());
@@ -42,12 +41,15 @@ public class DefaultAtlasExpressionProcessorTest extends BaseDefaultAtlasContext
 
     @Test
     public void testCollection() throws Exception {
-        populateCollectionSourceField(null, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, "foo");
-        Expression expression = new Expression();
-        expression.setExpression(String.format(
+        FieldGroup source = populateCollectionSourceField(null, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, "foo");
+        String expression = String.format(
             "IF(ISEMPTY(${%s:/testPathfoo<0>}), null, ${%s:/testPathfoo<>})",
-            AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID));
+            AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID);
         recreateSession();
+        FieldGroup wrapper = new FieldGroup();
+        wrapper.getField().add(source);
+        wrapper.getField().add(source.getField().get(0));
+        session.head().setSourceField(wrapper);
         DefaultAtlasExpressionProcessor.processExpression(session, expression);
         assertFalse(printAudit(session), session.hasErrors());
         assertEquals(FieldGroup.class, session.head().getSourceField().getClass());
@@ -60,35 +62,36 @@ public class DefaultAtlasExpressionProcessorTest extends BaseDefaultAtlasContext
     @Test
     public void testComplexCollection() throws Exception {
         populateComplexCollectionSourceField(null, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, "foo");
-        Expression expression = new Expression();
-        expression.setExpression(String.format(
+        String expression = String.format(
             "IF(ISEMPTY(${%s:/testPathfoo<0>/value}), null, ${%s:/testPathfoo<>/value})",
-            AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID));
+            AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID);
         recreateSession();
+        FieldGroup wrapper = new FieldGroup();
+        wrapper.getField().add((Field)reader.sources.get("/testPathfoo<0>/value"));
+        wrapper.getField().add((Field)reader.sources.get("/testPathfoo<>/value"));
+        session.head().setSourceField(wrapper);
         DefaultAtlasExpressionProcessor.processExpression(session, expression);
         assertFalse(printAudit(session), session.hasErrors());
         assertEquals(FieldGroup.class, session.head().getSourceField().getClass());
         FieldGroup fieldGroup = (FieldGroup) session.head().getSourceField();
-        assertEquals("/testPathfoo<>", fieldGroup.getPath());
+        assertEquals("/testPathfoo<>/value", fieldGroup.getPath());
         assertEquals(10, fieldGroup.getField().size());
-        FieldGroup childFieldGroup = (FieldGroup) fieldGroup.getField().get(0);
-        assertEquals("/testPathfoo<0>", childFieldGroup.getPath());
-        assertEquals(1, childFieldGroup.getField().size());
-        assertEquals("foo0", childFieldGroup.getField().get(0).getValue());
-        childFieldGroup = (FieldGroup) fieldGroup.getField().get(1);
-        assertEquals("/testPathfoo<1>", childFieldGroup.getPath());
-        assertEquals(1, childFieldGroup.getField().size());
-        assertEquals("foo1", childFieldGroup.getField().get(0).getValue());
+        Field childField = fieldGroup.getField().get(0);
+        assertEquals("/testPathfoo<0>/value", childField.getPath());
+        assertEquals("foo0", childField.getValue());
+        childField = fieldGroup.getField().get(1);
+        assertEquals("/testPathfoo<1>/value", childField.getPath());
+        assertEquals("foo1", childField.getValue());
     }
 
     @Test
     public void testFilter() throws Exception {
-        populateComplexCollectionSourceField(null, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, "foo");
-        Expression expression = new Expression();
-        expression.setExpression(String.format(
-            "FILTER(${%s:/testPathfoo<>}, ${/value} != 'foo1'))",
-            AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID));
+        FieldGroup source = populateComplexCollectionSourceField(null, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, "foo");
+        String expression = String.format(
+            "FILTER(${%s:/testPathfoo<>}, ${/value} != 'foo1')",
+            AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID);
         recreateSession();
+        session.head().setSourceField(source);
         DefaultAtlasExpressionProcessor.processExpression(session, expression);
         assertFalse(printAudit(session), session.hasErrors());
         assertEquals(FieldGroup.class, session.head().getSourceField().getClass());
@@ -107,12 +110,12 @@ public class DefaultAtlasExpressionProcessorTest extends BaseDefaultAtlasContext
 
     @Test
     public void testSelect() throws Exception {
-        populateComplexCollectionSourceField(null, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, "foo");
-        Expression expression = new Expression();
-        expression.setExpression(String.format(
+        FieldGroup source = populateComplexCollectionSourceField(null, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, "foo");
+        String expression = String.format(
             "SELECT(${%s:/testPathfoo<>}, ${/value})",
-            AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID));
+            AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID);
         recreateSession();
+        session.head().setSourceField(source);
         DefaultAtlasExpressionProcessor.processExpression(session, expression);
         assertFalse(printAudit(session), session.hasErrors());
         assertEquals(FieldGroup.class, session.head().getSourceField().getClass());
@@ -127,5 +130,26 @@ public class DefaultAtlasExpressionProcessorTest extends BaseDefaultAtlasContext
         assertEquals("foo1", child.getValue());
     }
 
+    @Test
+    public void testFilterSelect() throws Exception {
+        FieldGroup source = populateComplexCollectionSourceField(null, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, "foo");
+        String expression = String.format(
+            "SELECT(FILTER(${%s:/testPathfoo<>}, ${/value} != 'foo1'), ${/value})",
+            AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID);
+        recreateSession();
+        session.head().setSourceField(source);
+        DefaultAtlasExpressionProcessor.processExpression(session, expression);
+        assertFalse(printAudit(session), session.hasErrors());
+        assertEquals(FieldGroup.class, session.head().getSourceField().getClass());
+        FieldGroup fieldGroup = (FieldGroup) session.head().getSourceField();
+        assertEquals("/testPathfoo<>/value", fieldGroup.getPath());
+        assertEquals(9, fieldGroup.getField().size());
+        Field child = fieldGroup.getField().get(0);
+        assertEquals("/testPathfoo<0>/value", child.getPath());
+        assertEquals("foo0", child.getValue());
+        child = fieldGroup.getField().get(1);
+        assertEquals("/testPathfoo<2>/value", child.getPath());
+        assertEquals("foo2", child.getValue());
+    }
 }
 

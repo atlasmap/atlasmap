@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.AtlasUtil;
+import io.atlasmap.java.core.ClassHelper;
 import io.atlasmap.java.core.JdkPackages;
 import io.atlasmap.java.core.StringUtil;
 import io.atlasmap.java.v2.AtlasJavaModelFactory;
@@ -763,23 +764,11 @@ public class ClassInspectionService {
     }
 
     private Class<?> detectListClassFromMethodReturn(Method m) {
-        return detectClassFromTypeArgument(m.getGenericReturnType());
+        return ClassHelper.detectClassFromTypeArgument(m.getGenericReturnType());
     }
 
     private Class<?> detectListClassFromMethodParameter(Method m) {
-        return detectClassFromTypeArgument(m.getGenericParameterTypes()[0]);
-    }
-
-    private Class<?> detectClassFromTypeArgument(Type type) {
-        if (type == null || !(type instanceof ParameterizedType)) {
-            return Object.class;
-        }
-        ParameterizedType genericType = (ParameterizedType) type;
-        Type[] typeArgs = genericType.getActualTypeArguments();
-        if (typeArgs == null || typeArgs.length == 0) {
-            return Object.class;
-        }
-        return typeArgs[0] instanceof Class ? (Class<?>) typeArgs[0] : Object.class;
+        return ClassHelper.detectClassFromTypeArgument(m.getGenericParameterTypes()[0]);
     }
 
     private Class<?> detectArrayClass(Class<?> clazz) {
