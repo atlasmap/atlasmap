@@ -26,10 +26,11 @@ export const AtlasmapSidebar: FunctionComponent = () => {
 
   return (
     <TopologySideBar show={show} className={css(styles.sidebar)}>
-      {show && renderMappingDetails({
-        mapping: currentMapping!,
-        closeDetails: closeMappingDetails
-      })}
+      {show &&
+        renderMappingDetails({
+          mapping: currentMapping!,
+          closeDetails: closeMappingDetails,
+        })}
     </TopologySideBar>
   );
 };

@@ -5,7 +5,7 @@ import { useCanvasViewFieldsContext } from '../CanvasViewFieldsProvider';
 import { IFieldsNode } from '../models';
 import { useLinkable } from './useLinkable';
 import { Coords } from '../../Canvas/models';
-import { useDocumentContext } from "./DocumentProvider";
+import { useDocumentContext } from './DocumentProvider';
 
 const styles = StyleSheet.create({
   element: {

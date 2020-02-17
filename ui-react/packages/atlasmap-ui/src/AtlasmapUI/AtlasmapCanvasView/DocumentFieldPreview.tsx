@@ -11,9 +11,10 @@ export interface IDocumentFieldPreviewProps {
   onChange: (value: string) => void;
 }
 
-export const DocumentFieldPreview: FunctionComponent<
-  IDocumentFieldPreviewProps
-> = ({ id, onChange }) => {
+export const DocumentFieldPreview: FunctionComponent<IDocumentFieldPreviewProps> = ({
+  id,
+  onChange,
+}) => {
   return (
     <Form className={css(styles.form)}>
       <FormGroup

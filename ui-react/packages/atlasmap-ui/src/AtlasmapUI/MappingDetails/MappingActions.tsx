@@ -1,7 +1,5 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent } from 'react';
 
 export const MappingActions: FunctionComponent = ({ children }) => (
-  <div>
-    {children}
-  </div>
-)
+  <div>{children}</div>
+);

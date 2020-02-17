@@ -11,13 +11,14 @@
   ],
   "scripts": {
     "start": "tsdx watch",
-    "build": "tsdx build",
+    "build:module": "tsdx build",
+    "build:storybook": "build-storybook --quiet",
+    "build": "npm-run-all lint test build:* ",
     "test": "tsdx test",
-    "test-with-coverage": "tsdx test --coverage --coverageReporters=text-lcov | coveralls",
-    "lint": "tsdx lint",
-    "format": "prettier --write 'src/**/*.{js,ts,tsx,json}' 'test/**/*.{js,ts,tsx,json}' 'stories/**/*.{js,ts,tsx,json}'",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "test:coverage": "tsdx test --coverage --coverageReporters=text-lcov | coveralls",
+    "lint": "tsdx lint src test stories",
+    "format": "yarn lint --fix",
+    "storybook": "start-storybook -p 6006"
   },
   "peerDependencies": {
     "@patternfly/react-core": "^3.77.2",

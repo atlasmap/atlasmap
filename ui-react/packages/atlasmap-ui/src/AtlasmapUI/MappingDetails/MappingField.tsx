@@ -74,14 +74,19 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
           <Stack>
             <StackItem isFilled />
             <StackItem>
-              <Title className={css(styles.dataListContent)} size={'sm'} headingLevel={'h3'} id={id}>
+              <Title
+                className={css(styles.dataListContent)}
+                size={'sm'}
+                headingLevel={'h3'}
+                id={id}
+              >
                 <Tooltip
                   position={'auto'}
                   enableFlip={true}
                   content={<div>{info}</div>}
                 >
                   <span>
-                    <InfoAltIcon className={css(styles.icon)}/> {name}
+                    <InfoAltIcon className={css(styles.icon)} /> {name}
                   </span>
                 </Tooltip>
               </Title>
@@ -94,8 +99,13 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
             <Tooltip
               position={'auto'}
               enableFlip={true}
-              content={<div>Edit the index for this element by selecting the arrows. 
-                Placeholders may be automatically inserted to account for any gaps in the indexing</div>}
+              content={
+                <div>
+                  Edit the index for this element by selecting the arrows.
+                  Placeholders may be automatically inserted to account for any
+                  gaps in the indexing
+                </div>
+              }
             >
               <Label>
                 #{' '}
@@ -140,11 +150,11 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
               </Button>
             </StackItem>
             <StackItem isFilled />
-        </Stack>
+          </Stack>
         </SplitItem>
       </Split>
-
-      // Show established field action transformations associated with this field.
+      // Show established field action transformations associated with this
+      field.
       {Children.count(children) > 0 && (
         <DataListContent
           aria-label={'Field transformations'}
@@ -153,8 +163,9 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
           <Title
             className={css(styles.dataListContent)}
             size={'sm'}
-            headingLevel={'h4'}>
-              Transformations
+            headingLevel={'h4'}
+          >
+            Transformations
           </Title>
           {children}
         </DataListContent>

@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from 'react';
 
-
 export interface IDocumentGroupProps {
   name: string;
   type: string;

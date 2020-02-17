@@ -48,9 +48,10 @@ export interface IAtlasmapUIProviderProps {
   renderMappingDetails: (props: IRenderMappingDetailsArgs) => ReactElement;
 }
 
-export const AtlasmapUIProvider: FunctionComponent<
-  IAtlasmapUIProviderProps
-> = ({ children, ...props }) => {
+export const AtlasmapUIProvider: FunctionComponent<IAtlasmapUIProviderProps> = ({
+  children,
+  ...props
+}) => {
   const { mappings, onActiveMappingChange } = props;
   const [selectedMapping, setSelectedMapping] = useState<string>();
   const [isEditingMapping, setisEditingMapping] = useState(false);
@@ -64,7 +65,7 @@ export const AtlasmapUIProvider: FunctionComponent<
       onActiveMappingChange(mapping);
       setSelectedMapping(mapping);
     },
-    [isEditingMapping, onActiveMappingChange]
+    [onActiveMappingChange]
   );
 
   const deselectMapping = useCallback(() => {

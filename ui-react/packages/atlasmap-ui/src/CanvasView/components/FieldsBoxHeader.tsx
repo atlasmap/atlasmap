@@ -47,11 +47,15 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
   return (
     <Stack>
       <StackItem>
-        <Flex breakpointMods={[{modifier: FlexModifiers['space-items-none']}]}>
+        <Flex
+          breakpointMods={[{ modifier: FlexModifiers['space-items-none'] }]}
+        >
           {showSearch ? (
-              <FlexItem>{title}</FlexItem>
+            <FlexItem>{title}</FlexItem>
           ) : (
-            <FlexItem breakpointMods={[{modifier: FlexModifiers['flex-1']}]}>{title}</FlexItem>
+            <FlexItem breakpointMods={[{ modifier: FlexModifiers['flex-1'] }]}>
+              {title}
+            </FlexItem>
           )}
           <FlexItem>
             <Button
@@ -63,7 +67,7 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
             </Button>
           </FlexItem>
           {showSearch && (
-            <FlexItem breakpointMods={[{modifier: FlexModifiers['flex-1']}]}>
+            <FlexItem breakpointMods={[{ modifier: FlexModifiers['flex-1'] }]}>
               <InputGroup>
                 <TextInput
                   name={'source-search'}
@@ -76,7 +80,11 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
               </InputGroup>
             </FlexItem>
           )}
-          <FlexItem breakpointMods={[{modifier: FlexModifiers['align-self-flex-end']}]}>
+          <FlexItem
+            breakpointMods={[
+              { modifier: FlexModifiers['align-self-flex-end'] },
+            ]}
+          >
             <Dropdown
               toggle={<DropdownToggle onToggle={toggleActions} />}
               isOpen={showActions}
@@ -84,14 +92,16 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
               dropdownItems={[
                 <DropdownItem variant={'icon'} key={'import'}>
                   <SplitItem isFilled>
-                  <Tooltip
-                        position={'auto'}
-                        enableFlip={true}
-                        content={<div>Import instance or schema file</div>}
-                      >
+                    <Tooltip
+                      position={'auto'}
+                      enableFlip={true}
+                      content={<div>Import instance or schema file</div>}
+                    >
                       <FilePicker
                         extensions={['json', 'xml', 'xsd']}
-                        onChange={(selectedFile: File) => onImport(selectedFile)}
+                        onChange={(selectedFile: File) =>
+                          onImport(selectedFile)
+                        }
                         onError={(errMsg: any) => console.error(errMsg)}
                       >
                         <div>

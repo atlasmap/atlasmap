@@ -19,9 +19,7 @@ export const CanvasView: FunctionComponent<ICanvasViewProps> = ({
     <DndProvider backend={HTML5Backend}>
       <CanvasLinksProvider>
         <CanvasViewCanvas>
-          <CanvasViewLayoutProvider
-            showMappingColumn={showMappingColumn}
-          >
+          <CanvasViewLayoutProvider showMappingColumn={showMappingColumn}>
             <CanvasViewFieldsProvider>{children}</CanvasViewFieldsProvider>
           </CanvasViewLayoutProvider>
         </CanvasViewCanvas>

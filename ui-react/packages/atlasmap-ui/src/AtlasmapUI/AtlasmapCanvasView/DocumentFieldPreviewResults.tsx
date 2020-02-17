@@ -11,9 +11,10 @@ export interface IDocumentFieldPreviewResultsProps {
   value: string;
 }
 
-export const DocumentFieldPreviewResults: FunctionComponent<
-  IDocumentFieldPreviewResultsProps
-> = ({ id, value }) => {
+export const DocumentFieldPreviewResults: FunctionComponent<IDocumentFieldPreviewResultsProps> = ({
+  id,
+  value,
+}) => {
   return (
     <Form className={css(styles.form)}>
       <FormGroup

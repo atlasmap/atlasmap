@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   accTogText: {
     fontSize: 'medium',
     fontWeight: 'bold',
-  }
+  },
 });
 
 export const MappingFields: FunctionComponent<IMappingFieldsProps> = ({
@@ -39,9 +39,7 @@ export const MappingFields: FunctionComponent<IMappingFieldsProps> = ({
         {title}
       </AccordionToggle>
       <AccordionContent className={css(styles.accContent)} isHidden={!expanded}>
-        <DataList aria-label={'Mapping fields'}>
-          {children}
-        </DataList>
+        <DataList aria-label={'Mapping fields'}>{children}</DataList>
       </AccordionContent>
     </AccordionItem>
   );

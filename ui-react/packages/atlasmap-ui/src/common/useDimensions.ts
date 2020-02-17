@@ -49,7 +49,9 @@ export function useDimensions<T = HTMLDivElement>({
   const measure = useCallback(() => {
     if (ref.current) {
       const d = ((ref.current as unknown) as HTMLElement).getBoundingClientRect();
-      if (areRectsDifferent(d as DOMRect, previousDimensions.current as DOMRect)) {
+      if (
+        areRectsDifferent(d as DOMRect, previousDimensions.current as DOMRect)
+      ) {
         setDimensions(d);
         previousDimensions.current = d;
       }

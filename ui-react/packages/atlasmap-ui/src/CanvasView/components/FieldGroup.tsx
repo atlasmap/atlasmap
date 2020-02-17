@@ -3,7 +3,11 @@ import {
   AccordionItem,
   AccordionToggle,
 } from '@patternfly/react-core';
-import { FolderOpenIcon, FolderCloseIcon, ListUlIcon } from '@patternfly/react-icons';
+import {
+  FolderOpenIcon,
+  FolderCloseIcon,
+  ListUlIcon,
+} from '@patternfly/react-icons';
 import { css, StyleSheet } from '@patternfly/react-styles';
 import React, {
   ReactChild,
@@ -16,7 +20,7 @@ import { useLinkNode } from '../../Canvas';
 import { IFieldsGroup, IFieldsNode } from '../models';
 import { FieldElement, IFieldElementProps } from './FieldElement';
 import { useLinkable } from './useLinkable';
-import { useDocumentContext } from "./DocumentProvider";
+import { useDocumentContext } from './DocumentProvider';
 
 const styles = StyleSheet.create({
   button: {
@@ -190,7 +194,13 @@ export function FieldGroup({
               rightAlign && styles.buttonContentRightAligned
             )}
           >
-            {group.isCollection ? <ListUlIcon /> : (isExpanded ? <FolderOpenIcon /> : <FolderCloseIcon />)}
+            {group.isCollection ? (
+              <ListUlIcon />
+            ) : isExpanded ? (
+              <FolderOpenIcon />
+            ) : (
+              <FolderCloseIcon />
+            )}
             <span>&nbsp;</span>
             {renderGroup(group)}
           </span>

@@ -5,11 +5,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import {
-  CanvasView,
-  CanvasViewProvider,
-  Links,
-} from '../../CanvasView';
+import { CanvasView, CanvasViewProvider, Links } from '../../CanvasView';
 import { DragLayer } from './DragLayer';
 import { useAtlasmapUI } from '../AtlasmapUIProvider';
 import { AtlasmapLayout } from '../AtlasmapLayout';
@@ -27,9 +23,7 @@ export interface IAtlasmapCanvasViewProps {
   }) => ReactChild;
 }
 
-export const AtlasmapCanvasView: FunctionComponent<
-  IAtlasmapCanvasViewProps
-> = ({
+export const AtlasmapCanvasView: FunctionComponent<IAtlasmapCanvasViewProps> = ({
   onShowMappingPreview,
   onShowMappedFields,
   onShowUnmappedFields,
