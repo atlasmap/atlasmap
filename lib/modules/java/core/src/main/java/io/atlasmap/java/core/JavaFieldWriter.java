@@ -19,8 +19,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.rmi.CORBA.Util;
-
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasException;

@@ -21,6 +21,7 @@ public abstract class BaseClass {
         private String someField;
         private SomeNestedClass[] someArray;
         private SomeNestedClass[] someRenamedArray;
+        private SomeNestedClass[] yetAnotherArray;
 
         public String getSomeField() {
             return someField;
@@ -52,11 +53,20 @@ public abstract class BaseClass {
         public void setSomeRenamedArray(SomeNestedClass[] someRenamedArray) {
             this.someRenamedArray = someRenamedArray;
         }
+
+        public SomeNestedClass[] getYetAnotherArray() {
+            return yetAnotherArray;
+        }
+
+        public void setYetAnotherArray(SomeNestedClass[] yetAnotherArray) {
+            this.yetAnotherArray = yetAnotherArray;
+        }
     }
 
     private String someField;
     private SomeNestedClass[] someArray;
     private SomeNestedClass[] someRenamedArray;
+    private SomeNestedClass[] yetAnotherArray;
 
     public String getSomeField() {
         return someField;
@@ -80,5 +90,13 @@ public abstract class BaseClass {
 
     public void setSomeRenamedArray(SomeNestedClass[] someRenamedArray) {
         this.someRenamedArray = someRenamedArray;
+    }
+
+    public SomeNestedClass[] getYetAnotherArray() {
+        return yetAnotherArray;
+    }
+
+    public void setYetAnotherArray(SomeNestedClass[] yetAnotherArray) {
+        this.yetAnotherArray = yetAnotherArray;
     }
 }

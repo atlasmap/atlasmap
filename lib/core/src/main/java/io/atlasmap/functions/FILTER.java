@@ -41,7 +41,7 @@ public class FILTER extends BaseFunctionFactory {
         return (ctx) -> {
             Field parent = (Field) parentExpression.evaluate(ctx);
             List<Field> collection = parent instanceof FieldGroup ? ((FieldGroup)parent).getField() : Arrays.asList(parent);
-            FieldGroup filtered = AtlasModelFactory.createFieldGroupFrom(parent);
+            FieldGroup filtered = AtlasModelFactory.createFieldGroupFrom(parent, true);
             for (Field f : collection) {
                 if (
                     filterExpression.matches((subCtx) -> {
@@ -49,7 +49,7 @@ public class FILTER extends BaseFunctionFactory {
                         if (extracted instanceof FieldGroup) {
                             return extracted;
                         }
-                        return extracted.getValue();
+                        return extracted != null ? extracted.getValue() : null;
                     })
                 ) {
                     filtered.getField().add(f);

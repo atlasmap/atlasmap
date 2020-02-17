@@ -124,7 +124,7 @@ public class JsonModule extends BaseAtlasModule {
         AtlasPath path = new AtlasPath(targetField.getPath());
         FieldGroup targetFieldGroup = null;
         if (path.hasCollection() && !path.isIndexedCollection()) {
-            targetFieldGroup = AtlasModelFactory.createFieldGroupFrom(targetField);
+            targetFieldGroup = AtlasModelFactory.createFieldGroupFrom(targetField, true);
             session.head().setTargetField(targetFieldGroup);
         }
 
@@ -254,6 +254,6 @@ public class JsonModule extends BaseAtlasModule {
 
     @Override
     public Field cloneField(Field field) throws AtlasException {
-        return AtlasJsonModelFactory.cloneField(field);
+        return AtlasJsonModelFactory.cloneField((JsonField)field, true);
     }
 }

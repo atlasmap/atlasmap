@@ -1,0 +1,24 @@
+{
+  "someArray": [
+    {
+      "name": "n0",
+      "value": "v0"
+    },
+    {
+      "name": "n1",
+      "value": "v1"
+    },
+    {
+      "name": "n2",
+      "value": "v2"
+    },
+    {
+      "name": "n3",
+      "value": "v3"
+    },
+    {
+      "name": "n4",
+      "value": "v4"
+    }
+  ]
+}

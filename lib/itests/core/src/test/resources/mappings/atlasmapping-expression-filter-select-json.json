@@ -1,0 +1,52 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "json-source",
+      "uri" : "atlas:json:json-source",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "TargetClass",
+      "uri" : "atlas:java?className=io.atlasmap.itests.core.TargetClass",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "expression": "SELECT( FILTER( ${json-source:/someArray<>}, ${/name} != 'n1' ), ${/value} )",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "docId" : "json-source",
+          "path" : "/someArray<>",
+          "fieldType" : "COMPLEX",
+          "field": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "docId": "json-source",
+              "path": "/someArray<>/name",
+              "fieldType": "STRING",
+              "name": "name"
+            },
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "docId": "json-source",
+              "path": "/someArray<>/value",
+              "fieldType": "STRING",
+              "name": "value"
+            }
+          ]
+        },
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "TargetClass",
+          "path" : "/someArray[]/someField",
+          "fieldType" : "STRING",
+          "name" : "someField"
+        } ]
+      } ]
+    },
+    "name" : "core.unit.test"
+  }
+}

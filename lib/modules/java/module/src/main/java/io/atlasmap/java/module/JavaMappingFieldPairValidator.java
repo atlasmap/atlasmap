@@ -63,8 +63,14 @@ public class JavaMappingFieldPairValidator extends MappingFieldPairValidator {
 
     private void validateClassConversion(String mappingId, JavaField inputField, JavaField outField,
             List<Validation> validations) {
+        // skip converter check for COMPLEX source field (possible for conditional mapping)
+        if (inputField.getFieldType() == FieldType.COMPLEX) {
+            return;
+        }
+
         Optional<AtlasConverter<?>> atlasConverter = conversionService
                 .findMatchingConverter(inputField.getClassName(), outField.getClassName());
+
         if (!atlasConverter.isPresent()) {
             Validation validation = new Validation();
             validation.setScope(ValidationScope.MAPPING);

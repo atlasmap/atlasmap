@@ -15,8 +15,12 @@
  */
 package io.atlasmap.json.v2;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.Fields;
 
 public class AtlasJsonModelFactory {
@@ -43,9 +47,23 @@ public class AtlasJsonModelFactory {
                 + ", fieldType=" + f.getFieldType() + "]";
     }
 
-    public static JsonField cloneField(Field field) {
+    public static JsonField cloneField(JsonField field, boolean withActions) {
         JsonField clone = new JsonField();
-        copyField(field, clone, true);
+        copyField(field, clone, withActions);
+        return clone;
+    }
+
+    public static FieldGroup cloneFieldGroup(FieldGroup group) {
+        FieldGroup clone = AtlasModelFactory.copyFieldGroup(group);
+        List<Field> newChildren = new ArrayList<>();
+        for (Field child : group.getField()) {
+            if (child instanceof FieldGroup) {
+                newChildren.add(cloneFieldGroup((FieldGroup)child));
+            } else {
+                newChildren.add(cloneField((JsonField)child, true));
+            }
+        }
+        clone.getField().addAll(newChildren);
         return clone;
     }
 

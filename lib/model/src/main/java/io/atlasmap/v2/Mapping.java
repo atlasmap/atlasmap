@@ -25,7 +25,7 @@ public class Mapping extends BaseMapping implements Serializable {
 
     private final static long serialVersionUID = 1L;
 
-    protected Expression expression;
+    protected String expression;
 
     protected FieldGroup inputFieldGroup;
 
@@ -50,10 +50,10 @@ public class Mapping extends BaseMapping implements Serializable {
      *
      * @return
      *     possible object is
-     *     {@link Expression }
+     *     {@link String }
      *
      */
-    public Expression getExpression() {
+    public String getExpression() {
         return expression;
     }
 
@@ -62,10 +62,10 @@ public class Mapping extends BaseMapping implements Serializable {
      *
      * @param value
      *     allowed object is
-     *     {@link expression }
+     *     {@link String }
      *
      */
-    public void setExpression(Expression value) {
+    public void setExpression(String value) {
         this.expression = value;
     }
 

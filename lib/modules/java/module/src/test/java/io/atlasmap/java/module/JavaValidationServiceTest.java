@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -330,6 +331,7 @@ public class JavaValidationServiceTest {
         assertFalse(validationHelper.hasInfos());
     }
 
+    @Ignore("https://github.com/atlasmap/atlasmap/issues/1817 - COMPLEX source field is allowed for conditional mapping... validation have to look if it's conditional or not")
     @Test
     public void testValidateAtlasMappingFileConversionRequired() throws Exception {
         AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.json");

@@ -18,15 +18,24 @@ package io.atlasmap.java.core;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.AtlasPath.SegmentContext;
+import io.atlasmap.java.core.accessor.FieldAccessor;
+import io.atlasmap.java.core.accessor.GetterAccessor;
+import io.atlasmap.java.core.accessor.JavaChildAccessor;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.v2.AuditStatus;
@@ -61,6 +70,36 @@ public class ClassHelper {
 
         throw new NoSuchMethodException(
                 String.format("No matching getter method for class=%s method=%s", clazz.getName(), methodName));
+    }
+
+    public static Map<String, Method> detectAllGetterMethods(Class<?> clazz) throws Exception {
+        Map<String, Method> answer = new HashMap<>();
+        Method[] methods = clazz.getMethods();
+        for (Method method : methods) {
+            if (method.getName().startsWith("get") && method.getParameterTypes().length == 0
+             && method.getReturnType() != Void.class) {
+                 answer.put(StringUtil.getFieldNameFromGetter(method.getName()), method);
+            } else if (method.getName().startsWith("is") && method.getParameterTypes().length == 0
+             && (method.getReturnType() == boolean.class || method.getReturnType() == Boolean.class)) {
+                 answer.put(StringUtil.getFieldNameFromGetter(method.getName()), method);
+            }
+        }
+        return answer;
+    }
+
+    public static List<Field> detectAllJavaFields(Class<?> clazz) {
+        List<Field> answer = new ArrayList<>();
+        Class<?> targetClazz = clazz;
+        while (targetClazz != null && targetClazz != Object.class) {
+            try {
+                Field[] fields = targetClazz.getDeclaredFields();
+                answer.addAll(Arrays.asList(fields));
+            } catch (Exception e) {
+                e.getMessage(); // ignore
+                targetClazz = targetClazz.getSuperclass();
+            }
+        }
+        return answer;
     }
 
     public static Method detectSetterMethod(Class<?> clazz, String methodName, Class<?> paramType)
@@ -138,6 +177,22 @@ public class ClassHelper {
                 clazz.getName(), methodName, paramTypeClassName));
     }
 
+    public static Class<?> detectClassFromTypeArgument(Type type) {
+        return detectClassFromTypeArgumentAt(type, 0);
+    }
+
+    public static Class<?> detectClassFromTypeArgumentAt(Type type, int pos) {
+        if (type == null || !(type instanceof ParameterizedType)) {
+            return Object.class;
+        }
+        ParameterizedType genericType = (ParameterizedType) type;
+        Type[] typeArgs = genericType.getActualTypeArguments();
+        if (typeArgs == null || typeArgs.length <= pos) {
+            return Object.class;
+        }
+        return typeArgs[pos] instanceof Class ? (Class<?>) typeArgs[pos] : Object.class;
+    }
+
     public static Method lookupGetterMethod(Object object, String name) {
         List<String> getters = getterMethodNames(name);
         Method getterMethod = null;
@@ -172,5 +227,41 @@ public class ClassHelper {
         }
         return null;
     }
+
+    public static JavaChildAccessor lookupAccessor(Object source, String name) {
+        if (source == null || AtlasUtil.isEmpty(name)) {
+            return null;
+        }
+        Method m = lookupGetterMethod(source, name);
+        if (m != null) {
+            return new GetterAccessor(source, name, m);
+        }
+        Field f = lookupJavaField(source, name);
+        if (f != null) {
+            return new FieldAccessor(source, name, f);
+        }
+        return null;
+    }
+
+	public static List<JavaChildAccessor> lookupAllAccessors(Object source) throws Exception {
+        List<JavaChildAccessor> answer = new ArrayList<>();
+        if (source == null) {
+            return answer;
+        }
+        Set<String> names = new HashSet<>();
+        Map<String, Method> getters = detectAllGetterMethods(source.getClass());
+        getters.forEach((k, v) -> {
+            answer.add(new GetterAccessor(source, k, v));
+            names.add(k);
+
+        });
+        List<Field> fields = detectAllJavaFields(source.getClass());
+        fields.forEach(f -> {
+            if (!names.contains(f.getName())) {
+                answer.add(new FieldAccessor(source, f.getName(), f));
+            }
+        });
+        return answer;
+	}
 
 }

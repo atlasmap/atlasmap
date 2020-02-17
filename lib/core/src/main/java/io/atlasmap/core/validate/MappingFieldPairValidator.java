@@ -96,6 +96,10 @@ public class MappingFieldPairValidator {
         if (sourceFieldType == FieldType.ANY || targetFieldType == FieldType.ANY) {
             return;
         }
+        // skip converter check for COMPLEX source field (possible for conditional mapping)
+        if (sourceField.getFieldType() == FieldType.COMPLEX) {
+            return;
+        }
 
         Optional<AtlasConverter<?>> atlasConverter = service.getConversionService().findMatchingConverter(sourceFieldType, targetFieldType);
         if (!atlasConverter.isPresent()) {
