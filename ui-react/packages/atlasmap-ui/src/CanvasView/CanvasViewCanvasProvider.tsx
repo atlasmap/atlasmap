@@ -57,7 +57,11 @@ export const CanvasViewCanvasProvider: FunctionComponent = ({ children }) => {
         }
       },
     },
-    { dragDelay: true }
+    {
+      drag: {
+        delay: true
+      }
+    }
   );
 
   return (

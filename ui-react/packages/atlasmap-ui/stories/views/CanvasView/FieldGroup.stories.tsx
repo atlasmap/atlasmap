@@ -24,6 +24,7 @@ export const interactiveExample = () => (
             group={{
               fields: [{ id: 'f1' }, { id: 'f2' }, { id: 'f3' }],
               id: 'text-id',
+              isCollection: false
             }}
             parentExpanded={boolean('Parent expanded', true)}
             renderGroup={node => node.id}

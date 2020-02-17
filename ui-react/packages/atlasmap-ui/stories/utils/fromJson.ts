@@ -61,6 +61,7 @@ export function jsonToFieldGroup(
     fields: f.jsonFields.jsonField.map(f =>
       f.jsonFields ? fromGroup(f as Field) : fromElement(f)
     ),
+    isCollection: false
   });
 
   return json.JsonInspectionResponse.jsonDocument.fields.field.map(fromGroup);

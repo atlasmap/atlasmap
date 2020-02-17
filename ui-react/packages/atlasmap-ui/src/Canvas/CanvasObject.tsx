@@ -1,6 +1,7 @@
 import React, {
   FunctionComponent,
   HTMLAttributes,
+  SVGProps,
   useEffect,
   useState,
 } from 'react';
@@ -13,7 +14,7 @@ const styles = StyleSheet.create({
 });
 
 export interface ICanvasObjectProps
-  extends HTMLAttributes<SVGForeignObjectElement> {
+  extends SVGProps<SVGForeignObjectElement> {
   id: string;
   width: number;
   height: number;

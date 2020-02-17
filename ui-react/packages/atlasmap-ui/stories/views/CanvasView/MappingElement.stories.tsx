@@ -58,6 +58,7 @@ export const interactive = () => {
           editMapping={action('editMapping')}
           canDrop={boolean('Can drop', false)}
           isOver={boolean('Is over', false)}
+          closeMappingDetails={action('closeMappingDetails')}
         />
       </Wrapper>
     );
@@ -75,6 +76,7 @@ export const canDrop = () => (
       editMapping={() => void 0}
       isOver={false}
       canDrop={true}
+      closeMappingDetails={() => void 0}
     />
   </Wrapper>
 );
@@ -90,6 +92,7 @@ export const isHoverCanDrop = () => (
       editMapping={() => void 0}
       isOver={true}
       canDrop={true}
+      closeMappingDetails={() => void 0}
     />
   </Wrapper>
 );
