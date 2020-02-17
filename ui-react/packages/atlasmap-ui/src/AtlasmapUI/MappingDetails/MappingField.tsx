@@ -15,18 +15,32 @@ import { BoltIcon, InfoAltIcon } from '@patternfly/react-icons';
 import { css, StyleSheet } from '@patternfly/react-styles';
 
 const styles = StyleSheet.create({
-  dataListContent: { boxShadow: 'none' },
+  bolt: {
+    padding: 5,
+    fontSize: 'small',
+  },
+  dataListContent: {
+    boxShadow: 'none',
+    fontSize: 'small',
+    fontWeight: 'bold',
+  },
   indexInput: {
     background: 'transparent',
     color: 'inherit',
     border: '0 none',
-    width: 40,
+    width: 30,
+    fontSize: 'small',
+  },
+  icon: {
+    color: 'blue',
+    fontSize: 'small',
+    fontWeight: 'bold',
+    marginLeft: 5,
   },
   remove: {
     padding: 0,
-  },
-  bolt: {
-    padding: 5,
+    fontSize: 'small',
+    marginRight: 5,
   },
 });
 
@@ -54,20 +68,20 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
 }) => {
   const id = `mapping-field-${name}`;
   return (
-    <DataListItem aria-labelledby={id}>
+    <DataListItem className={css(styles.dataListContent)} aria-labelledby={id}>
       <Split>
         <SplitItem isFilled>
           <Stack>
             <StackItem isFilled />
             <StackItem>
-              <Title size={'md'} headingLevel={'h3'} id={id}>
+              <Title className={css(styles.dataListContent)} size={'sm'} headingLevel={'h3'} id={id}>
                 <Tooltip
                   position={'auto'}
                   enableFlip={true}
                   content={<div>{info}</div>}
                 >
                   <span>
-                    <InfoAltIcon /> {name}
+                    <InfoAltIcon className={css(styles.icon)}/> {name}
                   </span>
                 </Tooltip>
               </Title>
@@ -136,7 +150,12 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
           aria-label={'Field transformations'}
           className={css(styles.dataListContent)}
         >
-          <Title size={'xs'} headingLevel={'h4'}>Transformations</Title>
+          <Title
+            className={css(styles.dataListContent)}
+            size={'sm'}
+            headingLevel={'h4'}>
+              Transformations
+          </Title>
           {children}
         </DataListContent>
       )}

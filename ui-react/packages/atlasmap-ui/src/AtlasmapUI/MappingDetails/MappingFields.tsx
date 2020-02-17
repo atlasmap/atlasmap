@@ -5,10 +5,22 @@ import {
   AccordionToggle,
   DataList,
 } from '@patternfly/react-core';
+import { css, StyleSheet } from '@patternfly/react-styles';
 
 export interface IMappingFieldsProps {
   title: string;
 }
+
+const styles = StyleSheet.create({
+  accContent: {
+    fontSize: 'small',
+    fontWeight: 'bold',
+  },
+  accTogText: {
+    fontSize: 'medium',
+    fontWeight: 'bold',
+  }
+});
 
 export const MappingFields: FunctionComponent<IMappingFieldsProps> = ({
   title,
@@ -19,14 +31,17 @@ export const MappingFields: FunctionComponent<IMappingFieldsProps> = ({
   return (
     <AccordionItem>
       <AccordionToggle
+        className={css(styles.accTogText)}
         id={title}
         isExpanded={expanded}
         onClick={toggleExpanded}
       >
         {title}
       </AccordionToggle>
-      <AccordionContent isHidden={!expanded}>
-        <DataList aria-label={'Mapping fields'}>{children}</DataList>
+      <AccordionContent className={css(styles.accContent)} isHidden={!expanded}>
+        <DataList aria-label={'Mapping fields'}>
+          {children}
+        </DataList>
       </AccordionContent>
     </AccordionItem>
   );

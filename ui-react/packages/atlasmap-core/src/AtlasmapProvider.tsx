@@ -44,7 +44,10 @@ import {
 } from './models/field-action.model';
 import { MappedField } from './models/mapping.model';
 import { Field } from './models/field.model';
-import { TransitionMode } from './models/transition.model';
+import { TransitionMode,
+         TransitionModel,
+         TransitionDelimiter
+} from './models/transition.model';
 
 const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
 
@@ -328,6 +331,13 @@ export function useAtlasmap() {
     [initializationService]
   );
 
+  const getMultiplicityActionDelimiters = useCallback(
+    () => {
+      return TransitionModel.delimiterModels;
+    },
+    []
+  );
+
   const handleActionChange = useCallback(
     (action: FieldAction, definition: FieldActionDefinition) => {
       action.argumentValues = []; // Invalidate the previously selected field action arguments.
@@ -370,6 +380,7 @@ export function useAtlasmap() {
       documentExists,
       getMappingActions,
       getMultiplicityActions,
+      getMultiplicityActionDelimiters,
       handleActionChange,
     }),
     [
@@ -382,6 +393,7 @@ export function useAtlasmap() {
       onFieldPreviewChange,
       getMappingActions,
       getMultiplicityActions,
+      getMultiplicityActionDelimiters,
       handleActionChange,
     ]
   );

@@ -45,7 +45,12 @@ export const handleIndexChange =
 export const AtlasmapMappingDetails: FunctionComponent<
   IAtlasmapMappingDetailsProps
 > = ({ mapping, closeDetails, onRemoveMappedField }) => {
-  const { getMappingActions, getMultiplicityActions, handleActionChange } = useAtlasmap();
+  const {
+    getMappingActions,
+    getMultiplicityActions,
+    getMultiplicityActionDelimiters,
+    handleActionChange,
+  } = useAtlasmap();
 
   const cfg = ConfigModel.getConfig();
   const sources = mapping.getMappedFields(true);
@@ -62,6 +67,11 @@ export const AtlasmapMappingDetails: FunctionComponent<
     name: DataMapperUtil.toDisplayable(a.name),
     value: a.name,
   }));
+  const availableDelimiters = getMultiplicityActionDelimiters();
+  const actionDelimiters = availableDelimiters.map(a => ({
+    displayName: a.prettyName!,
+    delimiterValue: a.actualDelimiter,
+  }));
   const multiplicityFieldAction = mapping.transition.transitionFieldAction;
   const multiplicityId = `multiplicity-${multiplicityFieldAction}`;
 
@@ -74,6 +84,10 @@ export const AtlasmapMappingDetails: FunctionComponent<
             key={multiplicityId}
             associatedFieldActionName={multiplicityFieldAction.name}
             actionsOptions={actionsOptions}
+            actionDelimiters={actionDelimiters}
+            currentActionDelimiter={
+              actionDelimiters[mapping.transition.delimiter].delimiterValue
+            }
             isMultiplicityAction={true}
             args={multiplicityFieldAction.definition.arguments
               .map(arg => multiplicityFieldAction.getArgumentValue(arg.name))
@@ -95,6 +109,10 @@ export const AtlasmapMappingDetails: FunctionComponent<
                 availableActions.find(a => a.name === name)!
               )
             }
+            onActionDelimiterChange={(delimiterValue: string) => {
+              multiplicityFieldAction.setArgumentValue('delimiter', delimiterValue);
+              cfg.mappingService.notifyMappingUpdated();
+            }}
             onRemoveTransformation={
               () => {void(0)}
             }
@@ -130,6 +148,9 @@ export const AtlasmapMappingDetails: FunctionComponent<
                   key={idx}
                   associatedFieldActionName={associatedFieldAction.name}
                   actionsOptions={actionsOptions}
+                  onActionDelimiterChange={() => {void(0)}}
+                  actionDelimiters={actionDelimiters}
+                  currentActionDelimiter={''}
                   isMultiplicityAction={false}
                   args={associatedFieldAction.definition.arguments
                     .map(arg => associatedFieldAction.getArgumentValue(arg.name))
@@ -194,6 +215,9 @@ export const AtlasmapMappingDetails: FunctionComponent<
                   key={idx}
                   associatedFieldActionName={associatedFieldAction.name}
                   actionsOptions={actionsOptions}
+                  onActionDelimiterChange={() => {void(0)}}
+                  actionDelimiters={actionDelimiters}
+                  currentActionDelimiter={''}
                   isMultiplicityAction={false}
                   args={associatedFieldAction.definition.arguments
                     .map(arg => associatedFieldAction.getArgumentValue(arg.name))
