@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
     boxShadow: 'none',
     fontSize: 'small',
     fontWeight: 'bold',
-    background: 'lightgray',
   },
   indexInput: {
     background: 'transparent',
