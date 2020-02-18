@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 5,
   },
-  remove: {
+  link: {
     padding: 0,
     fontSize: 'small',
     marginRight: 5,
@@ -122,29 +122,13 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
           )}
         </SplitItem>
         <SplitItem>
-          <Tooltip
-            position={'auto'}
-            enableFlip={true}
-            content={<div>Add a new field transformation</div>}
-          >
-            <Button
-              isDisabled={!canEditIndex}
-              variant={'link'}
-              onClick={onNewTransformation}
-              className={css(styles.bolt)}
-            >
-              <BoltIcon />
-            </Button>
-          </Tooltip>
-        </SplitItem>
-        <SplitItem>
           <Stack>
             <StackItem isFilled />
             <StackItem>
               <Button
                 variant={'link'}
                 onClick={onDelete}
-                className={css(styles.remove)}
+                className={css(styles.link)}
               >
                 Remove
               </Button>
@@ -170,6 +154,24 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
           {children}
         </DataListContent>
       )}
+      <DataListItem
+        className={css(styles.dataListContent)}
+        aria-labelledby={id}
+      >
+        <Split>
+          <StackItem>
+            <Button
+              isDisabled={!canEditIndex}
+              variant={'link'}
+              onClick={onNewTransformation}
+              className={css(styles.link)}
+            >
+              <BoltIcon />
+              Add Transformation
+            </Button>
+          </StackItem>
+        </Split>
+      </DataListItem>
     </DataListItem>
   );
 };
