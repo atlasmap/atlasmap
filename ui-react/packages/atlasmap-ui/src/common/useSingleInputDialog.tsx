@@ -1,13 +1,13 @@
-import { Modal, Button, TextInput } from "@patternfly/react-core";
+import { Modal, Button, TextInput } from '@patternfly/react-core';
 import React, {
   FormEvent,
   ReactChild,
   ReactPortal,
   useCallback,
   useRef,
-  useState
-} from "react";
-import { createPortal } from "react-dom";
+  useState,
+} from 'react';
+import { createPortal } from 'react-dom';
 
 export type ConfirmCallback = (value: string) => void;
 export type CancelCallback = () => void;
@@ -16,12 +16,14 @@ export interface IUseSingleInputDialogArgs {
   title: string;
   content: ReactChild;
   placeholder: string;
+  modalContainer: HTMLElement;
 }
 
 export function useSingleInputDialog({
   title,
   content,
-  placeholder
+  placeholder,
+  modalContainer,
 }: IUseSingleInputDialogArgs): [
   ReactPortal,
   (onConfirm?: ConfirmCallback, onCancel?: CancelCallback) => void
@@ -30,7 +32,7 @@ export function useSingleInputDialog({
   const onCancel = useRef<CancelCallback | undefined>();
   const [isOpen, setIsOpen] = useState(false);
   const [isValid, setIsValid] = useState(true);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
   const openModal = (
     onConfirmCb?: ConfirmCallback,
     onCancelCb?: CancelCallback
@@ -64,7 +66,7 @@ export function useSingleInputDialog({
       onClose={closeModal}
       actions={[
         <TextInput
-          key={"text-input"}
+          key={'text-input'}
           value={value}
           placeholder={placeholder}
           type="text"
@@ -74,22 +76,22 @@ export function useSingleInputDialog({
           isValid={isValid}
         />,
         <Button
-          key={"confirm"}
-          variant={"primary"}
+          key={'confirm'}
+          variant={'primary'}
           onClick={handleConfirm}
           isDisabled={!isValid}
         >
           Confirm
         </Button>,
-        <Button key={"cancel"} variant={"link"} onClick={handleCancel}>
+        <Button key={'cancel'} variant={'link'} onClick={handleCancel}>
           Cancel
-        </Button>
+        </Button>,
       ]}
       isFooterLeftAligned={true}
     >
       {content}
     </Modal>,
-    document.getElementById("modals")!
+    modalContainer
   );
 
   return [modal, openModal];

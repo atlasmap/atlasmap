@@ -1,23 +1,25 @@
-import { Modal, Button } from "@patternfly/react-core";
+import { Modal, Button } from '@patternfly/react-core';
 import React, {
   ReactChild,
   ReactPortal,
   useCallback,
   useRef,
-  useState
-} from "react";
-import { createPortal } from "react-dom";
+  useState,
+} from 'react';
+import { createPortal } from 'react-dom';
 
 export type Callback = () => void;
 
 export interface IUseConfirmationDialogArgs {
   title: string;
   content: ReactChild;
+  modalContainer: HTMLElement;
 }
 
 export function useConfirmationDialog({
   title,
-  content
+  content,
+  modalContainer,
 }: IUseConfirmationDialogArgs): [
   ReactPortal,
   (onConfirm?: Callback, onCancel?: Callback) => void
@@ -47,18 +49,18 @@ export function useConfirmationDialog({
       isOpen={isOpen}
       onClose={closeModal}
       actions={[
-        <Button key={"confirm"} variant={"primary"} onClick={handleConfirm}>
+        <Button key={'confirm'} variant={'primary'} onClick={handleConfirm}>
           Confirm
         </Button>,
-        <Button key={"cancel"} variant={"link"} onClick={handleCancel}>
+        <Button key={'cancel'} variant={'link'} onClick={handleCancel}>
           Cancel
-        </Button>
+        </Button>,
       ]}
       isFooterLeftAligned={true}
     >
       {content}
     </Modal>,
-    document.getElementById("modals")!
+    modalContainer
   );
 
   return [modal, openModal];
