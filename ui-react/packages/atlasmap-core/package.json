@@ -18,7 +18,7 @@
     "test:coverage": "tsdx test --coverage --coverageReporters=text-lcov | coveralls",
     "lint": "tsdx lint src/react",
     "format": "yarn lint --fix",
-    "storybook": "start-storybook -p 6006"
+    "storybook": "start-storybook -p 6007"
   },
   "peerDependencies": {
     "react": ">=16",
