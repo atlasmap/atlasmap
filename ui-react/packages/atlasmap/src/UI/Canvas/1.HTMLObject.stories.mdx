@@ -1,0 +1,16 @@
+import { Meta, Props } from "@storybook/addon-docs/blocks";
+import LinkTo from "@storybook/addon-links/react";
+import { example } from "./HTMLObject.stories.tsx";
+import { HTMLObject } from ".";
+
+<Meta title="UI|Canvas/HTMLObject" component={HTMLObject} />
+
+# HTMLObject
+
+A component to embed any HTML element inside a <LinkTo kind='canvas/canvas' story='example'>Canvas</LinkTo> component.
+
+<div>{example()}</div>
+
+## HTMLObject Props
+
+<Props of={HTMLObject} />

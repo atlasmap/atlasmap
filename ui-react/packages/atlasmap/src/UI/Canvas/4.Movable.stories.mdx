@@ -1,0 +1,33 @@
+import { Meta, Story, Props } from "@storybook/addon-docs/blocks";
+import LinkTo from "@storybook/addon-links/react";
+import { Movable } from ".";
+import * as stories from "./Movable.stories.tsx";
+
+<Meta title="UI|Canvas/Movable" component={Movable} />
+
+# Movable
+
+Any component in a <LinkTo kind='canvas/canvas' story='example'>Canvas</LinkTo> can be made movable through drag&drop
+using the `Movable` renderprop component:
+
+<Story name="Example">{stories.example()}</Story>
+
+## Movable Props
+
+<Props of={Movable} />
+
+## Stories
+
+### Can be disabled
+
+<Story name="Disabled">{stories.disabled()}</Story>
+
+### `HTMLObject` components can be made movable
+
+<Story name="HTMLObject">{stories.htmlObject()}</Story>
+
+### Multiple movable elements don't overlap
+
+Note: this works only if all the elements in the canvas are `Movable`.
+
+<Story name="Multiple movable">{stories.multipleMovable()}</Story>

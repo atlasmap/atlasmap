@@ -1,0 +1,9 @@
+.sb-show-main, .sb-show-main > #root, .sb-show-main > #root {
+  height: 100%;
+  background-color: #fafafa;
+}
+
+.story-wrapper {
+  min-height: 300px;
+  height: 100%;
+}

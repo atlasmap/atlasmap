@@ -1,0 +1,26 @@
+import { Meta, Story, Props } from "@storybook/addon-docs/blocks";
+import LinkTo from "@storybook/addon-links/react";
+import * as stories from "./Arc.stories.tsx";
+import { Arc } from ".";
+
+<Meta title="UI|Canvas/Arc" component={Arc} />
+
+# Arc
+
+Elements rendered inside a <LinkTo kind='canvas/canvas' story='example'>Canvas</LinkTo> can be linked together using a
+`Arc`.
+
+A `Arc` is rendered as an arch between a start and and end point, specified as SVG coordinates. The width and the
+color of the arch can be customized.
+
+<Story name="Example">{stories.example()}</Story>
+
+## Arc Props
+
+<Props of={Arc} />
+
+## Stories
+
+### Multiple Arcs with custom width and color
+
+<Story name="Custom width and color">{stories.customWidthAndColor()}</Story>

@@ -1,0 +1,27 @@
+import { Meta, Story, Props } from "@storybook/addon-docs/blocks";
+import * as stories from "./Document.stories.tsx";
+import { Document } from "./Document";
+
+<Meta title="UI|Document" component={Document} />
+
+# Document
+
+<Story name="Example">{stories.document()}</Story>
+
+## Props
+
+<Props of={Document} />
+
+## Stories
+
+### States
+
+<Story name="States">{stories.states()}</Story>
+
+### No actions
+
+<Story name="No actions">{stories.noActions()}</Story>
+
+### Documents can be stacked
+
+<Story name="Stacked">{stories.stacked()}</Story>

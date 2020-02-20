@@ -247,4 +247,25 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
 
   }
 
+  static activeMapping(): boolean {
+    const cfg = ConfigModel.getConfig();
+    return !!(cfg?.mappings?.activeMapping);
+  }
+
+  static getMappingExpressionStr(mapping?: any): string {
+    const cfg = ConfigModel.getConfig();
+    if (!mapping && !this.activeMapping()) {
+      return '';
+    }
+    if (!mapping) {
+      mapping = cfg.mappings?.activeMapping;
+    }
+    if (!(mapping.transition.expression)) {
+      return '';
+    }
+    return ((mapping.transition.expression) && (mapping.transition.enableExpression))
+        ? mapping.transition.expression.toText(true)
+        : '';
+  }
+
 }

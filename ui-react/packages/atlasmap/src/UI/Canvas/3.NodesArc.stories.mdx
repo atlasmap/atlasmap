@@ -1,0 +1,52 @@
+import { Meta, Story, Props } from "@storybook/addon-docs/blocks";
+import LinkTo from "@storybook/addon-links/react";
+import * as stories from "./NodesArc.stories.tsx";
+import { NodeRef, NodesArc } from ".";
+
+<Meta title="UI|Canvas/NodesArc" component={NodesArc} />
+
+# NodesArc
+
+It's possible to create <LinkTo kind='canvas/arc' story='example'>Arc</LinkTo>s between elements without knowing the
+start and end coordinates beforehand using `NodesArc` and `NodeRef`.
+
+This enables the possibility to move elements inside a `Canvas` programmatically without having to deal with coordinates
+change. For example, nodes could be animated:
+
+<Story name="Example">{stories.example()}</Story>
+
+## NodesArc Props
+
+<Props of={NodesArc} />
+
+## NodeRef Props
+
+<Props of={NodeRef} />
+
+## Stories
+
+### Multiple links with custom width and color
+
+<Story name="Custom width and color">{stories.customWidthAndColor()}</Story>
+
+### SVG elements coordinates can be automatically detected
+
+<Story name="SVG element coordinates">{stories.svgElementCoordinates()}</Story>
+
+### HTML elements coordinates can be automatically detected
+
+<Story name="HTML element coordinates">
+  {stories.htmlElementCoordinates()}
+</Story>
+
+### Nested HTML elements coordinates can be automatically detected
+
+<Story name="Nested HTML element coordinates">
+  {stories.nestedHtmlElementCoordinates()}
+</Story>
+
+### HTML elements coordinates can be automatically detected
+
+<Story name="Links between different HTML elements">
+  {stories.linksBetweenDifferentHtmlElements()}
+</Story>

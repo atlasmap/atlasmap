@@ -1,0 +1,43 @@
+import { Meta, Story, Props } from "@storybook/addon-docs/blocks";
+import { Canvas, CanvasProvider } from ".";
+import * as stories from "./Canvas.stories.tsx";
+
+<Meta title="UI|Canvas/Canvas" component={Canvas} />
+
+# Canvas
+
+Renders a resizable SVG which allows panning and zooming the content. Try dragging around the example, or scrolling
+mouse wheel.
+
+<Story name="Example">{stories.example()}</Story>
+
+A `Canvas` component must be used inside a `CanvasProvider` component. If `width` or `height` are not provided to the
+`CanvasProvider`, they will be automatically determined.
+
+## CanvasProvider props
+
+<Props of={CanvasProvider} />
+
+## Canvas props
+
+Same as the `svg` component.
+
+## Stories
+
+### With pan/zoom disabled.
+
+<Story name="Pan/zoom disabled">{stories.panZoomDisabled()}</Story>
+
+### With pan/zoom enabled
+
+<Story name="Pan/zoom enabled">{stories.panZoomEnabled()}</Story>
+
+### With a custom initial zoom and pan
+
+<Story name="Initial zoom and pan">{stories.initialZoomAndPan()}</Story>
+
+### Automatically sized
+
+In this example, a white circle should be visible sitting on the bottom right corner of a red square.
+
+<Story name="Automatically sized">{stories.automaticallySized()}</Story>
