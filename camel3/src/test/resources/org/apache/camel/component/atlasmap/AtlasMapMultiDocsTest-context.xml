@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <camelContext xmlns="http://camel.apache.org/schema/spring">
+        <route>
+            <from uri="direct:start" />
+            <to uri="atlas:atlasmapping-multidocs.json?sourceMapName=CAPTURED_OUT_MESSAGES_MAP&amp;targetMapName=TARGET_MESSAGES_MAP" />
+            <to uri="mock:result" />
+        </route>
+        <route>
+            <from uri="direct:start-body" />
+            <to uri="atlas:atlasmapping-multidocs.json" />
+            <to uri="mock:result-body" />
+        </route>
+    </camelContext>
+
+</beans>
