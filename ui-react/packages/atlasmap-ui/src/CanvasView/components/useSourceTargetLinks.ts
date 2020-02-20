@@ -1,6 +1,4 @@
-import { scaleSequential } from 'd3-scale';
-import { interpolateRainbow } from 'd3-scale-chromatic';
-import { useMemo } from 'react';
+// import { scaleSequential } from 'd3-scale';
 import { SourceTargetNodes, useCanvasLinks } from '../../Canvas';
 import { IMapping } from '../models';
 
@@ -12,19 +10,14 @@ export function useSourceTargetLinks({
   selectedMapping,
   mappings,
 }: IUseSourceTargetLinksArgs) {
-  const colors = useMemo(
-    () => scaleSequential(interpolateRainbow).domain([0, mappings.length]),
-    [mappings]
-  );
-
   const linkedNodes = mappings.reduce<SourceTargetNodes[]>(
-    (lines, { id, sourceFields, targetFields }, idx) => {
+    (lines, { id, sourceFields, targetFields }) => {
       const isMappingSelected = id === selectedMapping;
       const color = selectedMapping
         ? isMappingSelected
           ? 'var(--pf-global--active-color--400)'
           : '#ccc'
-        : colors(idx);
+        : 'grey';
       const mappingLines = sourceFields.reduce<SourceTargetNodes[]>(
         (lines, start) => {
           const linesFromSource = targetFields.map(end => ({
