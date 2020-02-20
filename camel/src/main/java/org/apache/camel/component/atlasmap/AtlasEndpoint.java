@@ -36,9 +36,9 @@ import org.apache.camel.Message;
 import org.apache.camel.component.ResourceEndpoint;
 import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
+import org.apache.camel.support.ResourceHelper;
 import org.apache.camel.util.IOHelper;
 import org.apache.camel.util.ObjectHelper;
-import org.apache.camel.util.ResourceHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -395,9 +395,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
     }
 
     private void populateTargetDocuments(AtlasSession session, Exchange exchange) {
-        Message outMessage = exchange.getOut();
-        outMessage.setHeaders(exchange.getIn().getHeaders());
-        outMessage.setAttachments(exchange.getIn().getAttachments());
+        Message message = exchange.getMessage();
 
         if (session.getMapping().getDataSource() == null) {
             return;
@@ -405,19 +403,23 @@ public class AtlasEndpoint extends ResourceEndpoint {
         DataSource[] targetDataSources = session.getMapping().getDataSource().stream()
                 .filter(ds -> ds.getDataSourceType() == DataSourceType.TARGET)
                 .toArray(DataSource[]::new);
+
         if (targetDataSources.length == 0) {
-            outMessage.setBody(session.getDefaultTargetDocument());
+            Object newBody = session.getDefaultTargetDocument();
+            message.setBody(newBody);
             return;
         }
 
         if (targetDataSources.length == 1) {
             String docId = targetDataSources[0].getId();
             if (docId == null || docId.isEmpty()) {
-                outMessage.setBody(session.getDefaultTargetDocument());
+                Object newBody = session.getDefaultTargetDocument();
+                message.setBody(newBody);
             } else {
-                outMessage.setBody(session.getTargetDocument(docId));
+                Object newBody = session.getTargetDocument(docId);
+                message.setBody(newBody);
             }
-            setContentType(targetDataSources[0], outMessage);
+            setContentType(targetDataSources[0], message);
             return;
         }
 
@@ -428,8 +430,9 @@ public class AtlasEndpoint extends ResourceEndpoint {
             if (docId == null || docId.isEmpty()) {
                 targetDocuments.put(io.atlasmap.api.AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID,
                         session.getDefaultTargetDocument());
-                outMessage.setBody(session.getDefaultTargetDocument());
-                setContentType(ds, outMessage);
+                Object newBody = session.getDefaultTargetDocument();
+                message.setBody(newBody);
+                setContentType(ds, message);
             } else {
                 targetDocuments.put(docId, session.getTargetDocument(docId));
             }
@@ -437,7 +440,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
         if (targetMapName != null) {
             exchange.setProperty(targetMapName, targetDocuments);
         } else {
-            outMessage.setBody(targetDocuments);
+            message.setBody(targetDocuments);
         }
     }
 

@@ -150,7 +150,6 @@ public class AtlasEndpointTest {
             }
         }).when(outMessage).setBody(any());
         doNothing().when(outMessage).setHeaders(any());
-        doNothing().when(outMessage).setAttachments(any());
         if (targetDocId == null) {
             when(session.getDefaultTargetDocument()).thenAnswer(new Answer<Object>() {
                 @Override
@@ -169,7 +168,7 @@ public class AtlasEndpointTest {
                 }
             });
         }
-        when(exchange.getOut()).thenReturn(outMessage);
+        when(exchange.getMessage()).thenReturn(outMessage);
         endpoint.onExchange(exchange);
     }
 
