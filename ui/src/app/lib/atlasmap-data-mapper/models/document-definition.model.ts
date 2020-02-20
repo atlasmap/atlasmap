@@ -263,6 +263,20 @@ export class DocumentDefinition {
   }
 
   addField(field: Field): void {
+    if (!field.parentField && field.path) {
+      // add missing parents recursively
+      const lastSeparator: number = field.path.lastIndexOf('/');
+      const parentPath: string = (lastSeparator > 0) ? field.path.substring(0, lastSeparator) : null;
+      if (parentPath) {
+        const parent: Field = new Field();
+        parent.path = parentPath;
+        parent.isCollection = parentPath.endsWith('<>');
+        parent.isArray = parentPath.endsWith('[]');
+        field.parentField = parent;
+        field.parentField.fieldDepth = field.fieldDepth - 1;
+        this.addField(parent);
+      }
+    }
     if (!field.parentField || this.isPropertyOrConstant) {
       this.fields.push(field);
       Field.alphabetizeFields(this.fields);
