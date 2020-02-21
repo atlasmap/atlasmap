@@ -1289,8 +1289,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="320"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:320</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="334"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:334</a></div>
                 </td>
             </tr>
 
@@ -1332,8 +1332,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="441"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:441</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="455"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:455</a></div>
                 </td>
             </tr>
 
@@ -2094,8 +2094,8 @@ false otherwise.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="286"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:286</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="300"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:300</a></div>
                 </td>
             </tr>
 
@@ -2175,8 +2175,8 @@ false otherwise.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="404"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:404</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="418"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:418</a></div>
                 </td>
             </tr>
 
@@ -2247,8 +2247,8 @@ false otherwise.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="382"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:382</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="396"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:396</a></div>
                 </td>
             </tr>
 
@@ -2343,8 +2343,8 @@ false otherwise.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="421"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:421</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="435"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:435</a></div>
                 </td>
             </tr>
 
@@ -2382,8 +2382,8 @@ false otherwise.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="337"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:337</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="351"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:351</a></div>
                 </td>
             </tr>
 
@@ -2536,8 +2536,8 @@ false otherwise.</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="351"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:351</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="365"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/models/document-definition.model.ts:365</a></div>
                 </td>
             </tr>
 
@@ -2913,6 +2913,20 @@ export class DocumentDefinition {
   }
 
   addField(field: Field): void {
+    if (!field.parentField &amp;&amp; field.path) {
+      // add missing parents recursively
+      const lastSeparator: number &#x3D; field.path.lastIndexOf(&#x27;/&#x27;);
+      const parentPath: string &#x3D; (lastSeparator &gt; 0) ? field.path.substring(0, lastSeparator) : null;
+      if (parentPath) {
+        const parent: Field &#x3D; new Field();
+        parent.path &#x3D; parentPath;
+        parent.isCollection &#x3D; parentPath.endsWith(&#x27;&lt;&gt;&#x27;);
+        parent.isArray &#x3D; parentPath.endsWith(&#x27;[]&#x27;);
+        field.parentField &#x3D; parent;
+        field.parentField.fieldDepth &#x3D; field.fieldDepth - 1;
+        this.addField(parent);
+      }
+    }
     if (!field.parentField || this.isPropertyOrConstant) {
       this.fields.push(field);
       Field.alphabetizeFields(this.fields);
