@@ -4,8 +4,14 @@ import React, {
   useCallback,
   useEffect,
   useState,
+  useMemo,
 } from 'react';
-import { CanvasView, CanvasViewProvider, Links } from '../../CanvasView';
+import {
+  CanvasView,
+  CanvasViewProvider,
+  Links,
+  CanvasViewControlBar,
+} from '../../CanvasView';
 import { DragLayer } from './DragLayer';
 import { useAtlasmapUI } from '../AtlasmapUIProvider';
 import { AtlasmapLayout } from '../AtlasmapLayout';
@@ -60,6 +66,8 @@ export const AtlasmapCanvasView: FunctionComponent<IAtlasmapCanvasViewProps> = (
     onShowUnmappedFields(newValue);
   }, [showUnmappedFields, onShowUnmappedFields]);
 
+  const controlBar = useMemo(() => <CanvasViewControlBar />, []);
+
   useEffect(() => {
     const timeout = setTimeout(
       () => {
@@ -76,6 +84,7 @@ export const AtlasmapCanvasView: FunctionComponent<IAtlasmapCanvasViewProps> = (
         onExportAtlasFile={onExportAtlasFile}
         onImportAtlasFile={onImportAtlasFile}
         onResetAtlasmap={onResetAtlasmap}
+        controlBar={controlBar}
         onToggleShowTypes={toggleShowTypes}
         onToggleShowMappingPreview={toggleShowMappingPreview}
         onToggleShowMappedFields={toggleShowMappedFields}

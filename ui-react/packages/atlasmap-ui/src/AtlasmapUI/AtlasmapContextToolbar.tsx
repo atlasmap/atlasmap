@@ -7,19 +7,9 @@ import {
   InfoIcon,
   MapMarkedIcon,
   MapIcon,
-  SearchPlusIcon,
-  PficonDragdropIcon,
-  SearchMinusIcon,
-  ExpandIcon,
 } from '@patternfly/react-icons';
 import React, { FunctionComponent } from 'react';
-import {
-  Button,
-  Tooltip,
-  Toolbar,
-  ToolbarItem,
-  ToolbarGroup,
-} from '@patternfly/react-core';
+import { Button, Tooltip, Toolbar, ToolbarItem } from '@patternfly/react-core';
 
 import { FilePicker } from 'react-file-picker';
 import { css, StyleSheet } from '@patternfly/react-styles';
@@ -36,11 +26,6 @@ export interface IAtlasmapContextToolbarProps {
   onToggleShowMappingPreview: (id: any) => void;
   onToggleShowMappedFields: (id: any) => void;
   onToggleShowUnmappedFields: (id: any) => void;
-  onToggleShowFreeView: (id: any) => void;
-  onZoomIn: (id: any) => void;
-  onZoomOut: (id: any) => void;
-  onResetView: (id: any) => void;
-  showFreeView: boolean;
 }
 
 export const AtlasmapContextToolbar: FunctionComponent<IAtlasmapContextToolbarProps> = ({
@@ -51,11 +36,6 @@ export const AtlasmapContextToolbar: FunctionComponent<IAtlasmapContextToolbarPr
   onToggleShowTypes,
   onToggleShowMappedFields,
   onToggleShowUnmappedFields,
-  onToggleShowFreeView,
-  onZoomIn,
-  onZoomOut,
-  onResetView,
-  showFreeView,
 }) => {
   return (
     <Toolbar
@@ -203,66 +183,6 @@ export const AtlasmapContextToolbar: FunctionComponent<IAtlasmapContextToolbarPr
           </Button>
         </Tooltip>
       </ToolbarItem>
-      <ToolbarItem>
-        <Tooltip
-          position={'auto'}
-          enableFlip={true}
-          content={<div>Show/hide free view</div>}
-        >
-          <Button
-            variant={'plain'}
-            aria-label="Show/hide free view"
-            onClick={onToggleShowFreeView}
-          >
-            <PficonDragdropIcon />
-          </Button>
-        </Tooltip>
-      </ToolbarItem>
-      {showFreeView && (
-        <ToolbarGroup>
-          <ToolbarItem>
-            <Tooltip
-              position={'auto'}
-              enableFlip={true}
-              content={<div>Zoom in</div>}
-            >
-              <Button variant={'plain'} aria-label="Zoom in" onClick={onZoomIn}>
-                <SearchPlusIcon />
-              </Button>
-            </Tooltip>
-          </ToolbarItem>
-          <ToolbarItem>
-            <Tooltip
-              position={'auto'}
-              enableFlip={true}
-              content={<div>Zoom out</div>}
-            >
-              <Button
-                variant={'plain'}
-                aria-label="Zoom out"
-                onClick={onZoomOut}
-              >
-                <SearchMinusIcon />
-              </Button>
-            </Tooltip>
-          </ToolbarItem>
-          <ToolbarItem>
-            <Tooltip
-              position={'auto'}
-              enableFlip={true}
-              content={<div>Reset view</div>}
-            >
-              <Button
-                variant={'plain'}
-                aria-label="Reset view"
-                onClick={onResetView}
-              >
-                <ExpandIcon />
-              </Button>
-            </Tooltip>
-          </ToolbarItem>
-        </ToolbarGroup>
-      )}
     </Toolbar>
   );
 };
