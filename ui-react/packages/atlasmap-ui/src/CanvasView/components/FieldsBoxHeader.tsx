@@ -20,6 +20,7 @@ import {
   SearchIcon,
   ImportIcon,
   AddCircleOIcon,
+  PlusIcon,
 } from '@patternfly/react-icons';
 import React, { FunctionComponent, useCallback, useState } from 'react';
 import { FilePicker } from 'react-file-picker';
@@ -29,6 +30,8 @@ export interface IFieldsBoxHeaderProps {
   onSearch: (content: string) => void;
   onImport: (selectedFile: File) => void;
   onJavaClasses: () => void;
+  onCreateConstant: () => void;
+  onCreateProperty: () => void;
 }
 
 export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
@@ -36,6 +39,8 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
   onSearch,
   onImport,
   onJavaClasses,
+  onCreateConstant,
+  onCreateProperty,
 }) => {
   const [showActions, setShowActions] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
@@ -136,6 +141,46 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
                           <AddCircleOIcon />
                         </DropdownItemIcon>
                         Enable Java classes
+                      </div>
+                    </Tooltip>
+                  </SplitItem>
+                </DropdownItem>,
+                <DropdownItem
+                  variant={'icon'}
+                  key={'create-constant'}
+                  onClick={onCreateConstant}
+                >
+                  <SplitItem isFilled>
+                    <Tooltip
+                      position={'auto'}
+                      enableFlip={true}
+                      content={<div>Create a constant for use in mapping</div>}
+                    >
+                      <div>
+                        <DropdownItemIcon>
+                          <PlusIcon />
+                        </DropdownItemIcon>
+                        Create a constant
+                      </div>
+                    </Tooltip>
+                  </SplitItem>
+                </DropdownItem>,
+                <DropdownItem
+                  variant={'icon'}
+                  key={'create-property'}
+                  onClick={onCreateProperty}
+                >
+                  <SplitItem isFilled>
+                    <Tooltip
+                      position={'auto'}
+                      enableFlip={true}
+                      content={<div>Create a property for use in mapping</div>}
+                    >
+                      <div>
+                        <DropdownItemIcon>
+                          <PlusIcon />
+                        </DropdownItemIcon>
+                        Create a property
                       </div>
                     </Tooltip>
                   </SplitItem>

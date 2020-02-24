@@ -27,6 +27,16 @@ export interface IAtlasmapProps {
   onRemoveMappedField: (removeMappedfield: () => void) => void;
   onNewTransformation: (newTransformation: () => void) => void;
   onRemoveTransformation: (removeTransformation: () => void) => void;
+  onCreateConstant: (
+    createConstant: (constValue: string, constType: string) => void
+  ) => void;
+  onCreateProperty: (
+    createProperty: (
+      propName: string,
+      propValue: string,
+      propType: string
+    ) => void
+  ) => void;
 }
 
 export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
@@ -37,6 +47,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   onRemoveMappedField,
   onNewTransformation,
   onRemoveTransformation,
+  onCreateConstant,
+  onCreateProperty,
 }) => {
   const [sourceFilter, setSourceFilter] = useState<string | undefined>();
   const [targetFilter, setTargetFilter] = useState<string | undefined>();
@@ -56,6 +68,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     onFieldPreviewChange,
     addToCurrentMapping,
     createMapping,
+    createConstant,
+    createProperty,
   } = useAtlasmap();
   const sources = useAtlasmapSources(sourceFilter);
   const targets = useAtlasmapTargets(targetFilter);
@@ -63,6 +77,15 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   const handleExportAtlasFile = () => {
     onExportAtlasFile(exportAtlasFile);
   };
+
+  const handleCreateConstant = () => {
+    onCreateConstant(createConstant);
+  };
+
+  const handleCreateProperty = () => {
+    onCreateProperty(createProperty);
+  };
+
   const handleImportAtlasFile = (file: File) => {
     importAtlasFile(file, false);
   };
@@ -157,7 +180,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         onShowMappedFields={toggleShowMappedFields}
         onShowUnmappedFields={toggleShowUnmappedFields}
         onExportAtlasFile={handleExportAtlasFile}
-        onImportAtlasFile={file => handleImportAtlasFile(file)}
+        onImportAtlasFile={(file: File) => handleImportAtlasFile(file)}
         onResetAtlasmap={handleResetAtlasmap}
       >
         {({ showTypes, showMappingPreview }) => (
@@ -168,6 +191,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
               onDeleteDocument={handleDeleteSourceDocument}
               onFieldPreviewChange={handleFieldPreviewChange}
               onImportDocument={handleImportSourceDocument}
+              onCreateConstant={handleCreateConstant}
+              onCreateProperty={handleCreateProperty}
               onSearch={setSourceFilter}
               showMappingPreview={showMappingPreview}
               showTypes={showTypes}

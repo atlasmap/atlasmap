@@ -3,3 +3,4 @@ export * from './useConfirmationDialog';
 export * from './useDimensions';
 export * from './useLatestValue';
 export * from './useSingleInputDialog';
+export * from './useInputTextSelectDialog';

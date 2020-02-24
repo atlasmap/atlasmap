@@ -12,5 +12,7 @@ export const interactive = () => (
     onSearch={action('onSearch')}
     onImport={action('onImportAtlasFile')}
     onJavaClasses={action('onJavaClasses')}
+    onCreateConstant={action('onCreateConstant')}
+    onCreateProperty={action('onCreateProperty')}
   />
 );
