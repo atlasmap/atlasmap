@@ -62,7 +62,7 @@
     "@angular/forms": "7.2.15",
     "@angular/language-service": "7.2.16",
     "@angular/platform-browser": "7.2.16",
-    "@angular/platform-browser-dynamic": "7.2.15",
+    "@angular/platform-browser-dynamic": "9.0.2",
     "@angular/router": "7.2.15",
     "@compodoc/compodoc": "^1.1.10",
     "@types/jasmine": "^3.4.4",
