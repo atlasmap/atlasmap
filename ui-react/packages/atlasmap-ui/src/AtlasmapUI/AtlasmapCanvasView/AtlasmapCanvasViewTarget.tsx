@@ -52,6 +52,8 @@ export const AtlasmapCanvasViewTarget: FunctionComponent<IAtlasmapCanvasViewTarg
           onSearch={onSearch}
           onImport={onImportDocument}
           onJavaClasses={() => void 0}
+          onCreateConstant={() => void 0}
+          onCreateProperty={() => void 0}
         />
       }
     >

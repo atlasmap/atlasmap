@@ -1,5 +1,10 @@
 import { useCallback } from 'react';
-import { useConfirmationDialog, useSingleInputDialog } from '@atlasmap/ui';
+import {
+  useConfirmationDialog,
+  useSingleInputDialog,
+  useInputTextSelectDialog,
+} from '@atlasmap/ui';
+import { constantTypes, propertyTypes } from '../common/config.types';
 
 export interface IUseAtlasmapDialogsProps {
   modalContainer: HTMLElement;
@@ -20,6 +25,32 @@ export function useAtlasmapDialogs({
     title: 'Export Mappings and Documents.',
     content: 'Please enter a name for your exported catalog file',
     placeholder: defaultCatalogName,
+  });
+
+  const [
+    createConstantDialog,
+    openCreateConstantDialog,
+  ] = useInputTextSelectDialog({
+    modalContainer,
+    title: 'Create Constant',
+    textLabel1: 'Value',
+    textLabel2: '',
+    selectLabel: 'Value Type',
+    selectValues: constantTypes,
+    selectDefault: 12,
+  });
+
+  const [
+    createPropertyDialog,
+    openCreatePropertyDialog,
+  ] = useInputTextSelectDialog({
+    modalContainer,
+    title: 'Create Property',
+    textLabel1: 'Name',
+    textLabel2: 'Value',
+    selectLabel: 'Value Type',
+    selectValues: propertyTypes,
+    selectDefault: 13,
   });
 
   const [resetDialog, openResetDialog] = useConfirmationDialog({
@@ -50,7 +81,7 @@ export function useAtlasmapDialogs({
 
   const handleExportAtlasFile = useCallback(
     (exportAtlasFile: (fileName: string) => void) => {
-      openExportDialog(value => {
+      openExportDialog((value: string) => {
         if (value.length === 0) {
           value = defaultCatalogName;
         }
@@ -58,6 +89,34 @@ export function useAtlasmapDialogs({
       });
     },
     [openExportDialog]
+  );
+
+  const handleCreateConstant = useCallback(
+    (createConstant: (constValue: string, constType: string) => void) => {
+      openCreateConstantDialog(
+        (value: string, _value2: string, valueType: string) => {
+          createConstant(value, valueType);
+        }
+      );
+    },
+    [openCreateConstantDialog]
+  );
+
+  const handleCreateProperty = useCallback(
+    (
+      createProperty: (
+        propName: string,
+        propValue: string,
+        propType: string
+      ) => void
+    ) => {
+      openCreatePropertyDialog(
+        (name: string, value: string, valueType: string) => {
+          createProperty(name, value, valueType);
+        }
+      );
+    },
+    [openCreatePropertyDialog]
   );
 
   const handleResetAtlasmap = useCallback(
@@ -77,6 +136,7 @@ export function useAtlasmapDialogs({
       openRemoveMappedFieldDialog(removeMappedField),
     [openRemoveMappedFieldDialog]
   );
+
   const handleNewTransformation = useCallback(() => void 0, []);
   const handleRemoveTransformation = useCallback(() => void 0, []);
 
@@ -89,11 +149,15 @@ export function useAtlasmapDialogs({
       onRemoveMappedField: handleRemoveMappedField,
       onNewTransformation: handleNewTransformation,
       onRemoveTransformation: handleRemoveTransformation,
+      onCreateConstant: handleCreateConstant,
+      onCreateProperty: handleCreateProperty,
     },
     dialogs: [
       exportDialog,
       importDialog,
       deleteDocumentDialog,
+      createConstantDialog,
+      createPropertyDialog,
       resetDialog,
       removeMappedFieldDialog,
     ],

@@ -28,6 +28,8 @@ import {
 import {
   addToCurrentMapping,
   createMapping,
+  createConstant,
+  createProperty,
 } from '../components/field/field-util';
 import {
   deleteAtlasFile,
@@ -149,7 +151,11 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
         dispatch({
           type: 'loaded',
           payload: {
-            sourceDocs: [...initializationService.cfg.sourceDocs],
+            sourceDocs: [
+              ...initializationService.cfg.sourceDocs,
+              initializationService.cfg.constantDoc,
+              initializationService.cfg.propertyDoc,
+            ],
             targetDocs: [...initializationService.cfg.targetDocs],
             mappingDefinition:
               initializationService.cfg.mappings || new MappingDefinition(),
@@ -382,6 +388,8 @@ export function useAtlasmap() {
       getMultiplicityActions,
       getMultiplicityActionDelimiters,
       handleActionChange,
+      createConstant,
+      createProperty,
     }),
     [
       pending,

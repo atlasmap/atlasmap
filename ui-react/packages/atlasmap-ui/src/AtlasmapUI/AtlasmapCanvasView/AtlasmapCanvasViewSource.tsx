@@ -15,7 +15,9 @@ import { DocumentGroup } from './DocumentGroup';
 
 export interface IAtlasmapCanvasViewSourceProps {
   onAddToMapping: (field: IAtlasmapField, mapping: IMapping) => void;
+  onCreateConstant: () => void;
   onCreateMapping: (source: IAtlasmapField, target: IAtlasmapField) => void;
+  onCreateProperty: () => void;
   onDeleteDocument: (id: GroupId) => void;
   onFieldPreviewChange: (field: IAtlasmapField, value: string) => void;
   onImportDocument: (selectedFile: File) => void;
@@ -27,7 +29,9 @@ export interface IAtlasmapCanvasViewSourceProps {
 
 export const AtlasmapCanvasViewSource: FunctionComponent<IAtlasmapCanvasViewSourceProps> = ({
   onAddToMapping,
+  onCreateConstant,
   onCreateMapping,
+  onCreateProperty,
   onDeleteDocument,
   onFieldPreviewChange,
   onImportDocument,
@@ -49,6 +53,8 @@ export const AtlasmapCanvasViewSource: FunctionComponent<IAtlasmapCanvasViewSour
           title={'Source'}
           onSearch={onSearch}
           onImport={onImportDocument}
+          onCreateConstant={onCreateConstant}
+          onCreateProperty={onCreateProperty}
           onJavaClasses={() => void 0}
         />
       }

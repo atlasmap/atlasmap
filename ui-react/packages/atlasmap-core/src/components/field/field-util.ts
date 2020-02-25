@@ -1,8 +1,34 @@
 import { ConfigModel } from '../../models/config.model';
 import { Field } from '../../models/field.model';
 
+export function createConstant(constValue: string, constType: string): void {
+  const cfg = ConfigModel.getConfig();
+  let field = cfg.constantDoc.getField(constValue);
+  field = (!field) ? new Field() : field.copy();
+  field.name = constValue;
+  field.value = constValue;
+  field.type = constType;
+  field.docDef = cfg.constantDoc;
+  field.userCreated = true;
+  cfg.constantDoc.addField(field);
+  cfg.mappingService.notifyMappingUpdated();
+}
+
+export function createProperty(propName: string, propValue: string, propType: string): void {
+  const cfg = ConfigModel.getConfig();
+  let field = cfg.propertyDoc.getField(propName);
+  field = (!field) ? new Field() : field.copy();
+  field.name = propName;
+  field.value = propValue;
+  field.type = propType;
+  field.docDef = cfg.propertyDoc;
+  field.userCreated = true;
+  cfg.propertyDoc.addField(field);
+  cfg.mappingService.notifyMappingUpdated();
+}
+
 /**
- * Create a new mapping using the speciied source and target IDs.
+ * Create a new mapping using the specified source and target IDs.
  *
  * @param source
  * @param target

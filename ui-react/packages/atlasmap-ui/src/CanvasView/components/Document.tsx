@@ -110,6 +110,7 @@ export function Document({
 
   const scrollableArea = useRef<HTMLDivElement | null>(null);
   const getScrollableAreaRef = useMemo(() => () => scrollableArea.current, []);
+  const isConstantOrProperty = title === 'Constants' || title === 'Properties';
 
   return (
     <DocumentProvider getScrollableAreaRef={getScrollableAreaRef}>
@@ -124,44 +125,49 @@ export function Document({
             )}
           >
             <CardActions>
-              <Dropdown
-                toggle={
-                  <DropdownToggle
-                    splitButtonItems={[
-                      <DropdownToggleAction key="action" onClick={() => void 0}>
-                        <FolderOpenIcon />
-                      </DropdownToggleAction>,
-                    ]}
-                    splitButtonVariant="action"
-                    onToggle={toggleActions}
-                  />
-                }
-                isOpen={showActions}
-                position={'right'}
-                dropdownItems={[
-                  <DropdownItem
-                    variant={'icon'}
-                    key={'collapse'}
-                    onClick={() => void 0}
-                  >
-                    <DropdownItemIcon>
-                      <FolderCloseIcon />
-                    </DropdownItemIcon>
-                    Collapse all
-                  </DropdownItem>,
-                  <DropdownSeparator key={'sep-1'} />,
-                  <DropdownItem
-                    variant={'icon'}
-                    key={'delete'}
-                    onClick={onDelete}
-                  >
-                    <DropdownItemIcon>
-                      <TrashIcon />
-                    </DropdownItemIcon>
-                    Remove instance or schema file
-                  </DropdownItem>,
-                ]}
-              />
+              {!isConstantOrProperty && (
+                <Dropdown
+                  toggle={
+                    <DropdownToggle
+                      splitButtonItems={[
+                        <DropdownToggleAction
+                          key="action"
+                          onClick={() => void 0}
+                        >
+                          <FolderOpenIcon />
+                        </DropdownToggleAction>,
+                      ]}
+                      splitButtonVariant="action"
+                      onToggle={toggleActions}
+                    />
+                  }
+                  isOpen={showActions}
+                  position={'right'}
+                  dropdownItems={[
+                    <DropdownItem
+                      variant={'icon'}
+                      key={'collapse'}
+                      onClick={() => void 0}
+                    >
+                      <DropdownItemIcon>
+                        <FolderCloseIcon />
+                      </DropdownItemIcon>
+                      Collapse all
+                    </DropdownItem>,
+                    <DropdownSeparator key={'sep-1'} />,
+                    <DropdownItem
+                      variant={'icon'}
+                      key={'delete'}
+                      onClick={onDelete}
+                    >
+                      <DropdownItemIcon>
+                        <TrashIcon />
+                      </DropdownItemIcon>
+                      Remove instance or schema file
+                    </DropdownItem>,
+                  ]}
+                />
+              )}
             </CardActions>
             <CardHeader
               onClick={toggleIsExpanded}
