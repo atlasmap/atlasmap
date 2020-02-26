@@ -1,0 +1,5 @@
+image:https://maven-badges.herokuapp.com/maven-central/io.atlasmap/atlas-parent/badge.svg?style=flat-square[caption="Runtime @ Maven Central", link=https://maven-badges.herokuapp.com/maven-central/io.atlasmap/atlas-parent/]
+image:https://badge.fury.io/js/%40atlasmap%2Fatlasmap-data-mapper.svg[caption="UI @ NPM", link=https://badge.fury.io/js/%40atlasmap%2Fatlasmap-data-mapper]
+image:https://api.netlify.com/api/v1/badges/08a56260-a890-4ffb-9c6d-7b7be24f0cc7/deploy-status[caption="Netlify Status", link=https://app.netlify.com/sites/atlasmap/deploys]
+image:https://badges.gitter.im/atlasmap/community.png[caption="Gitter chat", link=https://gitter.im/atlasmap/community]
+link:https://groups.google.com/d/forum/atlasmap[Google Group]

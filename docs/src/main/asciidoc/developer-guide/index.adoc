@@ -13,6 +13,8 @@ ifndef::ebook-format[:leveloffset: 1]
 ifdef::basebackend-html[toc::[]]
 
 :numbered:
+include::inc/_badges.adoc[]
+
 
 include::inc/_introduction.adoc[]
 

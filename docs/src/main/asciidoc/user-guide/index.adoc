@@ -15,6 +15,8 @@ The AtlasMap Team
 ifdef::basebackend-html[toc::[]]
 
 :numbered:
+include::topics/_badges.adoc[]
+
 
 [[introduction]]
 
