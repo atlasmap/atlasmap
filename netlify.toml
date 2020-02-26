@@ -1,0 +1,4 @@
+[build]
+  base = "ui-react/"
+  command = "make netlify"
+  publish = "_netlify"

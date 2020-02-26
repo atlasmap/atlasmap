@@ -13,7 +13,7 @@
     "start": "tsdx watch",
     "build:module": "tsdx build",
     "build:storybook": "build-storybook --quiet",
-    "build": "npm-run-all lint build:* ",
+    "build": "npm-run-all lint build:module",
     "test": "tsdx test",
     "test:coverage": "tsdx test --coverage --coverageReporters=text-lcov | coveralls",
     "lint": "tsdx lint src/react",

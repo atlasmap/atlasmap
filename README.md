@@ -6,6 +6,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/4acba1646e0a4cbabac3a76ad5df4df7)](https://www.codacy.com/app/atlasmapio/atlasmap?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=atlasmap/atlasmap&amp;utm_campaign=Badge_Grade)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/4acba1646e0a4cbabac3a76ad5df4df7)](https://www.codacy.com/app/atlasmapio/atlasmap?utm_source=github.com&utm_medium=referral&utm_content=atlasmap/atlasmap&utm_campaign=Badge_Coverage)
 [![Gitter chat](https://badges.gitter.im/atlasmap/community.png)](https://gitter.im/atlasmap/community)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/08a56260-a890-4ffb-9c6d-7b7be24f0cc7/deploy-status)](https://app.netlify.com/sites/atlasmap/deploys)
 [Google Group](https://groups.google.com/d/forum/atlasmap)
 
 
