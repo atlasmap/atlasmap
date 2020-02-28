@@ -9,7 +9,6 @@ import {
   SearchMinusIcon,
   ExpandArrowsAltIcon,
   ExpandIcon,
-  PficonDragdropIcon,
 } from '@patternfly/react-icons';
 import { useCanvasViewOptionsContext } from '../CanvasViewOptionsProvider';
 import { useCanvasViewContext } from '../CanvasViewCanvasProvider';
@@ -27,7 +26,7 @@ export const CanvasViewControlBar: FunctionComponent<ICanvasViewControlBarProps>
 }) => {
   const { updateZoom, resetZoom, resetPan } = useCanvasViewContext();
 
-  const { freeView, toggleFreeView } = useCanvasViewOptionsContext();
+  const { freeView } = useCanvasViewOptionsContext();
 
   const handleZoomIn = useCallback(() => {
     updateZoom(0.2);
@@ -83,25 +82,9 @@ export const CanvasViewControlBar: FunctionComponent<ICanvasViewControlBarProps>
         legendDisabled: false,
         legendHidden: false,
 
-        customButtons: [
-          {
-            id: 'Free view mode',
-            icon: <PficonDragdropIcon style={getToolbarIconStyle(freeView)} />,
-            tooltip: 'Free view mode',
-            ariaLabel: ' ',
-            callback: toggleFreeView,
-          },
-          ...extraButtons,
-        ],
+        customButtons: [...extraButtons],
       }),
-    [
-      freeView,
-      handleZoomIn,
-      handleZoomOut,
-      handleViewReset,
-      toggleFreeView,
-      extraButtons,
-    ]
+    [freeView, handleZoomIn, handleZoomOut, handleViewReset, extraButtons]
   );
 
   return <TopologyControlBar controlButtons={controlButtons} />;

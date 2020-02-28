@@ -5,6 +5,7 @@ import { useAtlasmapUI } from './AtlasmapUIProvider';
 import { Loading } from '../common';
 import { AtlasmapSidebar } from './AtlasmapSidebar';
 import { CanvasViewToolbar } from '../CanvasView/components';
+import { useCanvasViewOptionsContext } from '../CanvasView/CanvasViewOptionsProvider';
 
 export interface IAtlasmapLayoutProps {
   onExportAtlasFile: (event: any) => void;
@@ -30,6 +31,8 @@ export const AtlasmapLayout: FunctionComponent<IAtlasmapLayoutProps> = ({
 }) => {
   const { pending, isEditingMapping } = useAtlasmapUI();
 
+  const { toggleFreeView } = useCanvasViewOptionsContext();
+
   const contextToolbar = useMemo(
     () => (
       <AtlasmapContextToolbar
@@ -40,6 +43,7 @@ export const AtlasmapLayout: FunctionComponent<IAtlasmapLayoutProps> = ({
         onToggleShowMappingPreview={onToggleShowMappingPreview}
         onToggleShowMappedFields={onToggleShowMappedFields}
         onToggleShowUnmappedFields={onToggleShowUnmappedFields}
+        onToggleShowFreeView={toggleFreeView}
       />
     ),
     [
@@ -50,6 +54,7 @@ export const AtlasmapLayout: FunctionComponent<IAtlasmapLayoutProps> = ({
       onToggleShowMappingPreview,
       onToggleShowTypes,
       onToggleShowUnmappedFields,
+      toggleFreeView,
     ]
   );
 
