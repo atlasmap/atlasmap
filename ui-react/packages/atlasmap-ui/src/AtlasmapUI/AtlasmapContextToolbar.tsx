@@ -7,6 +7,7 @@ import {
   InfoIcon,
   MapMarkedIcon,
   MapIcon,
+  PficonDragdropIcon,
 } from '@patternfly/react-icons';
 import React, { FunctionComponent } from 'react';
 import { Button, Tooltip, Toolbar, ToolbarItem } from '@patternfly/react-core';
@@ -26,6 +27,7 @@ export interface IAtlasmapContextToolbarProps {
   onToggleShowMappingPreview: (id: any) => void;
   onToggleShowMappedFields: (id: any) => void;
   onToggleShowUnmappedFields: (id: any) => void;
+  onToggleShowFreeView: (id: any) => void;
 }
 
 export const AtlasmapContextToolbar: FunctionComponent<IAtlasmapContextToolbarProps> = ({
@@ -36,6 +38,7 @@ export const AtlasmapContextToolbar: FunctionComponent<IAtlasmapContextToolbarPr
   onToggleShowTypes,
   onToggleShowMappedFields,
   onToggleShowUnmappedFields,
+  onToggleShowFreeView,
 }) => {
   return (
     <Toolbar
@@ -180,6 +183,21 @@ export const AtlasmapContextToolbar: FunctionComponent<IAtlasmapContextToolbarPr
             onClick={onToggleShowUnmappedFields}
           >
             <MapIcon />
+          </Button>
+        </Tooltip>
+      </ToolbarItem>
+      <ToolbarItem>
+        <Tooltip
+          position={'auto'}
+          enableFlip={true}
+          content={<div>Show/hide free view</div>}
+        >
+          <Button
+            variant={'plain'}
+            aria-label="Show/hide free view"
+            onClick={onToggleShowFreeView}
+          >
+            <PficonDragdropIcon />
           </Button>
         </Tooltip>
       </ToolbarItem>
