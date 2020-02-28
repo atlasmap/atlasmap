@@ -27,6 +27,7 @@ function fromFieldToIFieldsGroup(field: Field): IAtlasmapGroupWithField | null {
   const fields = field.children.map(fromFieldToIFields).filter(f => f) as IAtlasmapFieldWithField[];
   return fields.length > 0 ? {
     id: `${field.docDef.uri}:${field.docDef.isSource ? 'source' : 'target'}:${field.uuid}`,
+    isVisible: () => {field.visibleInCurrentDocumentSearch;},
     name: field.name,
     type: field.type,
     isCollection: field.isCollection,
@@ -42,6 +43,7 @@ function fromFieldToIFieldsNode(field: Field): IAtlasmapFieldWithField | null {
 
   return shouldBeVisible ? {
     id: `${field.docDef.uri}:${field.docDef.isSource ? 'source' : 'target'}:${field.uuid}`,
+    isVisible: () => field.visibleInCurrentDocumentSearch,
     name: field.getFieldLabel(false, false),
     type: field.type,
     isCollection: field.isCollection,
@@ -60,6 +62,7 @@ export function fromDocumentDefinitionToFieldGroup(def: DocumentDefinition): IAt
   const fields = def.fields.map(fromFieldToIFields).filter(f => f) as IAtlasmapFieldWithField[];
   return def.visibleInCurrentDocumentSearch && fields.length > 0 ? {
     id: def.id,
+    isVisible: () => def.visibleInCurrentDocumentSearch,
     isCollection: false,
     fields: fields,
     name: def.name,
@@ -73,6 +76,7 @@ function fromMappedFieldToIMappingField(field: MappedField): IAtlasmapMappedFiel
   }
   return {
     id: `${field.field!.docDef.uri}:${field.field!.docDef.isSource ? 'source' : 'target'}:${field.field!.uuid}`,
+    isVisible: () => field.field.visibleInCurrentDocumentSearch,
     name: field.field!.getFieldLabel(false, false),
     type: field.field!.type,
     previewValue: '',
