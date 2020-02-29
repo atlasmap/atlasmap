@@ -122,16 +122,6 @@ export function FieldGroup({
     handleChildLines();
   }, [handleChildLines, parentExpanded]);
 
-  const traverseChildren = (f: IFieldsGroup | IFieldsNode) => {
-    if ((f as IFieldsGroup).fields) {
-      console.log('group: ', f.id);
-      (f as IFieldsGroup).fields.forEach(traverseChildren);
-    } else {
-      console.log('field: ', f.id, 'isVisible: ', (f as IFieldsNode).isVisible?.());
-    }
-  };
-  group.fields.forEach(traverseChildren);
-
   const content = useMemo(
     () =>
       group.fields.map(f =>

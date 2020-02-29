@@ -62,6 +62,7 @@ export function xmlToFieldGroup(xml: XMLObject, idPrefix: string) {
     name: jf.name,
     type: jf.fieldType,
     previewValue: '',
+    isVisible: () => true,
   });
 
   const fromGroup = (f: Field): IAtlasmapDocument => ({
@@ -72,6 +73,7 @@ export function xmlToFieldGroup(xml: XMLObject, idPrefix: string) {
       f.xmlFields ? fromGroup(f as Field) : fromElement(f)
     ),
     isCollection: false,
+    isVisible: () => true,
   });
 
   return xml.XmlInspectionResponse.xmlDocument.fields.field.map(f =>

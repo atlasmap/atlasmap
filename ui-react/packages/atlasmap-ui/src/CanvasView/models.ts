@@ -4,11 +4,11 @@ export type GroupId = string;
 
 export interface IFieldsNode {
   id: ElementId;
-  isVisible?: () => boolean;
+  isVisible: () => boolean;
 }
 export interface IFieldsGroup {
   id: GroupId;
-  isVisible?: () => boolean;
+  isVisible: () => boolean;
   isCollection: boolean;
   fields: (IFieldsNode | IFieldsGroup)[];
 }

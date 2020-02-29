@@ -53,6 +53,7 @@ export function jsonToFieldGroup(
     name: jf.name,
     type: jf.fieldType,
     previewValue: '',
+    isVisible: () => true,
   });
   const fromGroup = (f: Field): IAtlasmapDocument => ({
     name: f.name,
@@ -62,6 +63,7 @@ export function jsonToFieldGroup(
       f.jsonFields ? fromGroup(f as Field) : fromElement(f)
     ),
     isCollection: false,
+    isVisible: () => true,
   });
 
   return json.JsonInspectionResponse.jsonDocument.fields.field.map(fromGroup);
