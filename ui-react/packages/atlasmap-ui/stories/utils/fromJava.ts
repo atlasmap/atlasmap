@@ -74,6 +74,7 @@ export function javaToFieldGroup(java: JavaObject, idPrefix: string) {
     name: jf.name,
     type: jf.fieldType,
     previewValue: '',
+    isVisible: () => true,
   });
   const fromGroup = (f: JavaField): IAtlasmapDocument => ({
     name: f.name,
@@ -83,6 +84,7 @@ export function javaToFieldGroup(java: JavaObject, idPrefix: string) {
       f.javaFields ? fromGroup(f as JavaField) : fromElement(f)
     ),
     isCollection: false,
+    isVisible: () => true,
   });
 
   return java.ClassInspectionResponse.javaClass.javaFields!.javaField.map(f =>

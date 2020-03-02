@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
 
 export interface IFieldGroupProps
   extends Pick<IFieldElementProps, 'renderNode'> {
-  isVisible: boolean;
+  isVisible: () => boolean;
   group: IFieldsGroup;
   lineConnectionSide: 'left' | 'right';
   getParentRef?: () => HTMLElement | null;
@@ -126,24 +126,26 @@ export function FieldGroup({
     () =>
       group.fields.map(f =>
         !(f as IFieldsGroup).fields ? (
-          <FieldElement
-            key={f.id}
-            lineConnectionSide={lineConnectionSide}
-            getParentRef={() =>
-              isVisible && isExpanded
-                ? ref.current
-                : isVisible || !getParentRef
-                ? ref.current
-                : getParentRef()
-            }
-            node={f as IFieldsNode}
-            rightAlign={rightAlign}
-            renderNode={renderNode}
-            expandParent={setExpanded}
-          />
+          (f as IFieldsNode).isVisible?.() ? (
+            <FieldElement
+              key={f.id}
+              lineConnectionSide={lineConnectionSide}
+              getParentRef={() =>
+                isVisible && isExpanded
+                  ? ref.current
+                  : isVisible || !getParentRef
+                  ? ref.current
+                  : getParentRef()
+              }
+              node={f as IFieldsNode}
+              rightAlign={rightAlign}
+              renderNode={renderNode}
+              expandParent={setExpanded}
+            />
+          ) : null
         ) : (
           <FieldGroup
-            isVisible={isVisible && isExpanded}
+            isVisible={f.isVisible}
             lineConnectionSide={lineConnectionSide}
             getParentRef={() =>
               isVisible || !getParentRef ? ref.current : getParentRef()

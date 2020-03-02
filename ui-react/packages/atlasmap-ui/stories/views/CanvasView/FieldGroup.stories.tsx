@@ -19,12 +19,26 @@ export const interactiveExample = () => (
       <BoxProvider getScrollableAreaRef={() => null}>
         <CanvasObject height={300} width={200} id={'id'} x={10} y={10}>
           <FieldGroup
-            isVisible={true}
+            isVisible={() => true}
             lineConnectionSide={'right'}
             group={{
-              fields: [{ id: 'f1' }, { id: 'f2' }, { id: 'f3' }],
+              fields: [
+                {
+                  id: 'f1',
+                  isVisible: () => true,
+                },
+                {
+                  id: 'f2',
+                  isVisible: () => true,
+                },
+                {
+                  id: 'f3',
+                  isVisible: () => true,
+                },
+              ],
               id: 'text-id',
               isCollection: false,
+              isVisible: () => true,
             }}
             parentExpanded={boolean('Parent expanded', true)}
             renderGroup={node => node.id}

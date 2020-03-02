@@ -190,7 +190,7 @@ export function Document({
                 className={css(styles.accordion)}
               >
                 <FieldGroup
-                  isVisible={true}
+                  isVisible={() => true}
                   group={fields}
                   lineConnectionSide={lineConnectionSide}
                   rightAlign={rightAlign}

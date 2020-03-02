@@ -15,6 +15,7 @@ export interface IAtlasmapGroup extends IFieldsGroup {
 
 export interface IAtlasmapDocument {
   id: string;
+  isVisible: () => boolean;
   name: string;
   type: string;
   isCollection: boolean;
