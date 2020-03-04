@@ -23,7 +23,6 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import io.atlasmap.v2.Audit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -228,20 +227,13 @@ public class XmlModule extends BaseAtlasModule {
             }
             super.populateTargetField(session);
         } else if (sourceField instanceof FieldGroup) {
+            Field previousTargetSubField = null;
             for (int i=0; i<((FieldGroup)sourceField).getField().size(); i++) {
                 Field sourceSubField = ((FieldGroup)sourceField).getField().get(i);
                 XmlField targetSubField = new XmlField();
                 AtlasXmlModelFactory.copyField(targetField, targetSubField, false);
-                XmlPath subPath = new XmlPath(targetField.getPath());
-                if (subPath.getCollectionSegmentCount() == 1) {
-                    //handle asymmetric case with single target
-                    subPath.setVacantCollectionIndex(i);
-                } else {
-                    //handle symmetric case with matching collection counts
-                    List<Audit> audits = subPath.copyCollectionIndexes(new XmlPath(sourceSubField.getPath()));
-                    AtlasUtil.addAudits(session, getDocId(), audits);
-                }
-                targetSubField.setPath(subPath.toString());
+                getCollectionHelper().copyCollectionIndexes(sourceField, sourceSubField, targetSubField, previousTargetSubField);
+                previousTargetSubField = targetSubField;
                 // Attempt to Auto-detect field type based on input value
                 if (targetSubField.getFieldType() == null && sourceSubField.getValue() != null) {
                     targetSubField.setFieldType(getConversionService().fieldTypeFromClass(sourceSubField.getValue().getClass()));

@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.atlasmap.spi.AtlasCollectionHelper;
 import org.junit.After;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -338,6 +339,11 @@ public class DefaultAtlasContextFactoryTest {
 
         @Override
         public AtlasFieldActionService getFieldActionService() {
+            return null;
+        }
+
+        @Override
+        public AtlasCollectionHelper getCollectionHelper() {
             return null;
         }
 

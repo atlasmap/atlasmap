@@ -84,6 +84,8 @@ public interface AtlasModule {
 
     void setFieldActionService(AtlasFieldActionService atlasFieldActionService);
 
+    AtlasCollectionHelper getCollectionHelper();
+
     List<AtlasModuleMode> listSupportedModes();
 
     String getDocId();

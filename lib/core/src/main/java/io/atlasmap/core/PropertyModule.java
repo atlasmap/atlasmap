@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import io.atlasmap.spi.AtlasCollectionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +39,7 @@ public class PropertyModule implements AtlasModule {
     private AtlasPropertyStrategy propertyStrategy;
     private AtlasConversionService conversionService;
     private AtlasFieldActionService fieldActionService;
+    private AtlasCollectionHelper collectionHelper;
     private ClassLoader classLoader;
 
     public PropertyModule(AtlasPropertyStrategy propertyStrategy) {
@@ -191,6 +193,12 @@ public class PropertyModule implements AtlasModule {
     @Override
     public void setFieldActionService(AtlasFieldActionService atlasFieldActionService) {
         this.fieldActionService = atlasFieldActionService;
+        this.collectionHelper = new DefaultAtlasCollectionHelper(atlasFieldActionService);
+    }
+
+    @Override
+    public AtlasCollectionHelper getCollectionHelper() {
+        return this.collectionHelper;
     }
 
     @Override

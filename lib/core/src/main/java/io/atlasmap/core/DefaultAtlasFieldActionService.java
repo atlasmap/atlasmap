@@ -706,20 +706,25 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                 // n -> n - reuse passed-in FieldGroup
                 List<?> sourceList = (List<?>) tmpSourceObject;
                 Field lastSubField = null;
+                FieldGroup existingFieldGroup = fieldGroup;
+                if (field instanceof FieldGroup) {
+                    existingFieldGroup = (FieldGroup) field;
+                }
+
                 for (int i = 0; i < sourceList.size(); i++) {
-                    if (fieldGroup.getField().size() > i) {
-                        lastSubField = fieldGroup.getField().get(i);
+                    if (existingFieldGroup.getField().size() > i) {
+                        lastSubField = existingFieldGroup.getField().get(i);
                     } else {
                         Field subField = new SimpleField();
                         AtlasModelFactory.copyField(lastSubField, subField, true);
-                        fieldGroup.getField().add(subField);
+                        existingFieldGroup.getField().add(subField);
                         lastSubField = subField;
                     }
                     lastSubField.setValue(sourceList.get(i));
                     lastSubField.setFieldType(currentType);
                 }
-                field = fieldGroup;
-        } else {
+                field = existingFieldGroup;
+            } else {
                 // n -> 1 - create new Field
                 Field newField = new SimpleField();
                 AtlasModelFactory.copyField(field, newField, false);

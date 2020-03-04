@@ -7,7 +7,15 @@
           "value": "secondArrayValue0-0",
           "thirdArray": [
             {
-              "value": "thirdArrayValue0-0-0"
+              "value": "thirdArrayValue0-0-0",
+              "fourthArray": [
+                {
+                  "value": "fourthArrayValue0-0-0-0"
+                },
+                {
+                  "value": "fourthArrayValue0-0-0-1"
+                }
+              ]
             },
             {
               "value": "thirdArrayValue0-0-1"
@@ -51,7 +59,15 @@
           "value": "secondArrayValue1-1",
           "thirdArray": [
             {
-              "value": "thirdArrayValue1-1-0"
+              "value": "thirdArrayValue1-1-0",
+              "fourthArray": [
+                {
+                  "value": "fourthArrayValue1-1-0-0"
+                },
+                {
+                  "value": "fourthArrayValue1-1-0-1"
+                }
+              ]
             },
             {
               "value": "thirdArrayValue1-1-1"

@@ -16,19 +16,13 @@
 package io.atlasmap.core.validate;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import io.atlasmap.api.AtlasException;
-import io.atlasmap.v2.Action;
-import io.atlasmap.v2.ActionDetail;
-import io.atlasmap.v2.Multiplicity;
-import io.atlasmap.v2.Split;
+import io.atlasmap.core.DefaultAtlasCollectionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasValidationService;
-import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.core.DefaultAtlasFieldActionService;
 import io.atlasmap.spi.AtlasConversionService;
@@ -54,6 +48,7 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
 
     private AtlasConversionService conversionService;
     private AtlasFieldActionService fieldActionService;
+    private DefaultAtlasCollectionHelper collectionHelper;
     private AtlasModuleMode mode;
     private String docId;
     private MappingFieldPairValidator mappingFieldPairValidator;
@@ -61,12 +56,14 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
     public BaseModuleValidationService() {
         this.conversionService = DefaultAtlasConversionService.getInstance();
         this.fieldActionService = DefaultAtlasFieldActionService.getInstance();
+        this.collectionHelper = new DefaultAtlasCollectionHelper(this.fieldActionService);
         init();
     }
 
     public BaseModuleValidationService(AtlasConversionService conversionService, AtlasFieldActionService fieldActionService) {
         this.conversionService = conversionService;
         this.fieldActionService = fieldActionService;
+        this.collectionHelper = new DefaultAtlasCollectionHelper(fieldActionService);
         init();
     }
 
@@ -164,6 +161,11 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         } else if (getMode() == AtlasModuleMode.TARGET) {
             List<Field> targetFields = mapping.getOutputField();
 
+            if (targetFields.size() == 1 && Integer.valueOf(0).equals(targetFields.get(0).getIndex())) {
+                //The index should not have been set as there's only one item
+                targetFields.get(0).setIndex(null);
+            }
+
             int i  = 0;
             List<Field> sourceFields = mapping.getInputField();
             for (Field targetField: targetFields) {
@@ -217,59 +219,39 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
             return;
         }
         if (direction == FieldDirection.TARGET) {
-            AtlasPath sourcePath = null;
             Integer sourceCollectionCount = null;
             if (sourceField != null) {
-                sourcePath = new AtlasPath(sourceField.getPath());
-                sourceCollectionCount = sourcePath.getCollectionSegmentCount();
-                List<Action> actions = sourceField.getActions();
-                if (actions != null) {
-                    for (Action action : actions) {
-                        ActionDetail actionDetail = null;
-                        try {
-                            actionDetail = fieldActionService.findActionDetail(action, sourceField.getFieldType());
-                        } catch (AtlasException e) {
-                            throw new RuntimeException(e);
-                        }
-
-                        if (actionDetail != null) {
-                            if (Multiplicity.ONE_TO_MANY.equals(actionDetail.getMultiplicity())) {
-                                sourceCollectionCount++;
-                            } else if (Multiplicity.MANY_TO_ONE.equals(actionDetail.getMultiplicity())) {
-                                sourceCollectionCount--;
-                            }
-                        }
-                    }
-                }
+                sourceCollectionCount = collectionHelper.determineSourceCollectionCount(null, sourceField);
             }
-            AtlasPath targetPath = new AtlasPath(targetField.getPath());
-            Integer targetCollectionCount = targetPath.getCollectionSegmentCount();
-            if (sourceCollectionCount == null || targetCollectionCount < sourceCollectionCount) {
-                if (targetCollectionCount > 1) {
+
+            Integer targetCollectionCount = collectionHelper.determineTargetCollectionCount(targetField);
+
+            if (sourceCollectionCount != null) {
+                if (sourceCollectionCount > targetCollectionCount) {
                     Validation validation = new Validation();
                     validation.setScope(ValidationScope.MAPPING);
                     validation.setId(mappingId);
                     String message = String.format(
-                        "The mapping is not supported since target [%s] has %s collections on the path, whereas it needs" +
-                            " to have none, one, same or more than source",
-                        targetField.getPath(), targetCollectionCount);
-                    if (sourceCollectionCount != null) {
-                        message += String.format(", which has %s collections.", sourceCollectionCount);
-                    }
+                        "Target [%s] has %s collection(s) on the path, whereas source has %s. Values from the %s rightmost " +
+                            "source collections on the path will be added in depth-first order to the rightmost target " +
+                            "collection(s) unless transformed explicitly.",
+                        targetField.getPath(), targetCollectionCount, sourceCollectionCount,
+                        sourceCollectionCount - targetCollectionCount + 1);
                     validation.setMessage(message);
-                    validation.setStatus(ValidationStatus.ERROR);
+                    validation.setStatus(ValidationStatus.WARN);
+                    validations.add(validation);
+                } else if (sourceCollectionCount < targetCollectionCount) {
+                    Validation validation = new Validation();
+                    validation.setScope(ValidationScope.MAPPING);
+                    validation.setId(mappingId);
+                    validation.setMessage(String.format("The 0 index will be used for any extra parent collections in " +
+                            "target [%s], since target has %s collections on the path, whereas source has %s.",
+                        targetField.getPath(), targetCollectionCount, sourceCollectionCount));
+                    validation.setStatus(ValidationStatus.WARN);
                     validations.add(validation);
                 }
-            } else if (targetCollectionCount > sourceCollectionCount) {
-                Validation validation = new Validation();
-                validation.setScope(ValidationScope.MAPPING);
-                validation.setId(mappingId);
-                validation.setMessage(String.format("The 0 index will be used for any extra parent collections in target [%s]," +
-                        " since target has %s collections on the path, whereas source has %s.",
-                    targetField.getPath(), targetCollectionCount, sourceCollectionCount));
-                validation.setStatus(ValidationStatus.WARN);
-                validations.add(validation);
             }
+
         }
         if (getFieldType().isAssignableFrom(targetField.getClass()) && matchDocIdOrNull(targetField.getDocId())) {
             validateModuleField(mappingId, (T)targetField, direction, validations);
