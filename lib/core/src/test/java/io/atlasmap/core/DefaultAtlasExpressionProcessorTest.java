@@ -103,7 +103,7 @@ public class DefaultAtlasExpressionProcessorTest extends BaseDefaultAtlasContext
         assertEquals(1, childFieldGroup.getField().size());
         assertEquals("foo0", childFieldGroup.getField().get(0).getValue());
         childFieldGroup = (FieldGroup) fieldGroup.getField().get(1);
-        assertEquals("/testPathfoo<2>", childFieldGroup.getPath());
+        assertEquals("/testPathfoo<1>", childFieldGroup.getPath());
         assertEquals(1, childFieldGroup.getField().size());
         assertEquals("foo2", childFieldGroup.getField().get(0).getValue());
     }
@@ -148,7 +148,7 @@ public class DefaultAtlasExpressionProcessorTest extends BaseDefaultAtlasContext
         assertEquals("/testPathfoo<0>/value", child.getPath());
         assertEquals("foo0", child.getValue());
         child = fieldGroup.getField().get(1);
-        assertEquals("/testPathfoo<2>/value", child.getPath());
+        assertEquals("/testPathfoo<1>/value", child.getPath());
         assertEquals("foo2", child.getValue());
     }
 }

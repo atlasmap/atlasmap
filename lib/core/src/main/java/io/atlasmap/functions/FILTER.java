@@ -15,14 +15,12 @@
  */
 package io.atlasmap.functions;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.BaseFunctionFactory;
 import io.atlasmap.expression.Expression;
-import io.atlasmap.expression.ExpressionContext;
 import io.atlasmap.expression.internal.BooleanExpression;
 import io.atlasmap.expression.parser.ParseException;
 import io.atlasmap.v2.AtlasModelFactory;
@@ -42,6 +40,7 @@ public class FILTER extends BaseFunctionFactory {
             Field parent = (Field) parentExpression.evaluate(ctx);
             List<Field> collection = parent instanceof FieldGroup ? ((FieldGroup)parent).getField() : Arrays.asList(parent);
             FieldGroup filtered = AtlasModelFactory.createFieldGroupFrom(parent, true);
+            int index = 0;
             for (Field f : collection) {
                 if (
                     filterExpression.matches((subCtx) -> {
@@ -52,11 +51,34 @@ public class FILTER extends BaseFunctionFactory {
                         return extracted != null ? extracted.getValue() : null;
                     })
                 ) {
+                    adjustRootCollectionIndex(f, index);
+                    index++;
                     filtered.getField().add(f);
                 }
             }
             return filtered;
         };
+    }
+
+    private void adjustRootCollectionIndex(Field f, int index) {
+        AtlasPath filteredPath = new AtlasPath(f.getPath());
+        Integer collectionSegmentIndex = null;
+        List<AtlasPath.SegmentContext> filteredSegments = filteredPath.getSegments(true);
+        if (filteredSegments.get(0).getCollectionIndex() != null) {
+            collectionSegmentIndex = 0;
+        } else if (filteredSegments.get(1).getCollectionIndex() != null) {
+            collectionSegmentIndex = 1;
+        }
+
+        if (collectionSegmentIndex != null) {
+            if (f instanceof FieldGroup) {
+                AtlasPath.setCollectionIndexRecursively((FieldGroup) f, collectionSegmentIndex, index);
+            } else {
+                filteredPath.setCollectionIndex(collectionSegmentIndex, index);
+                f.setPath(filteredPath.getOriginalPath());
+            }
+
+        }
     }
 
 }

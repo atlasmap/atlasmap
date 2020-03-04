@@ -15,9 +15,14 @@
  */
 package io.atlasmap.itests.core;
 
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -25,8 +30,12 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -36,6 +45,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import io.atlasmap.api.AtlasException;
+import org.hamcrest.FeatureMatcher;
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -77,7 +88,7 @@ public class NestedCollectionJsonTest {
         session.setSourceDocument("JSONInstanceNestedCollection", source);
         context.process(session);
         assertFalse(TestHelper.printAudit(session), session.hasErrors());
-        assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        assertTrue(TestHelper.printAudit(session), session.hasWarns());
         Object output = session.getTargetDocument("JSONInstanceNestedCollection");
         assertEquals(String.class, output.getClass());
         JsonNode outputJson = mapper.readTree((String)output);
@@ -206,6 +217,41 @@ public class NestedCollectionJsonTest {
         assertEquals(prettyPrinted, "firstArrayValue1", thirdArray.get(1).get("value").asText());
     }
 
+    @Test
+    public void test3To2LevelNestedCollection() throws Exception {
+        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("3-2"), false);
+        assertThat(outputJson.get("firstArray").size(), is(2));
+        ArrayNode secondArray0 = (ArrayNode) outputJson.get("firstArray").get(0).get("secondArray");
+        assertThat(secondArray0, hasValues("thirdArrayValue0-0-0", "thirdArrayValue0-0-1", "thirdArrayValue0-1-0",
+            "thirdArrayValue0-1-1", "thirdArrayValue0-1-2"));
+        ArrayNode secondArray1 = (ArrayNode) outputJson.get("firstArray").get(1).get("secondArray");
+        assertThat(secondArray1, hasValues("thirdArrayValue1-0-0", "thirdArrayValue1-0-1", "thirdArrayValue1-0-2",
+            "thirdArrayValue1-1-0", "thirdArrayValue1-1-1"));
+    }
+
+    @Test
+    public void test4To2LevelNestedCollection() throws Exception {
+        JsonNode outputJson = processJsonNestedCollection(Arrays.asList("4-2"), false);
+        assertThat(outputJson.get("firstArray").size(), is(2));
+        ArrayNode secondArray0 = (ArrayNode) outputJson.get("firstArray").get(0).get("secondArray");
+        assertThat(secondArray0, hasValues("fourthArrayValue0-0-0-0", "fourthArrayValue0-0-0-1"));
+        ArrayNode secondArray1 = (ArrayNode) outputJson.get("firstArray").get(1).get("secondArray");
+        assertThat(secondArray1, hasValues("fourthArrayValue1-1-0-0", "fourthArrayValue1-1-0-1"));
+    }
+
+    private FeatureMatcher<ArrayNode, List<String>> hasValues(String... values) {
+        return new FeatureMatcher<ArrayNode, List<String>>(hasItems(values), "value for", "value for") {
+            @Override
+            protected List<String> featureValueOf(ArrayNode actual) {
+                List<String> values = new ArrayList<>();
+                for (int i = 0; i < actual.size(); i++) {
+                    values.add(actual.get(i).get("value").asText());
+                }
+                return values;
+            }
+        };
+    }
+
     private JsonNode processJsonNestedCollection(List<String> mappingsToProcess, boolean assertNoWarnings) throws AtlasException, IOException, URISyntaxException {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-nested-collection-json.json");
         AtlasMapping mapping = mappingService.loadMapping(url);
@@ -287,13 +333,13 @@ public class NestedCollectionJsonTest {
             Thread.currentThread().getContextClassLoader().getResource("mappings/document-nested-collection.json").toURI())));
         session.setSourceDocument("JSONInstanceNestedCollection", source);
         context.process(session);
-        assertTrue(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(TestHelper.printAudit(session), session.hasErrors());
         assertTrue(TestHelper.printAudit(session), session.hasWarns());
         assertTrue(TestHelper.printAudit(session), session.getAudits().getAudit().get(0).getMessage().contains("/firstArray<>/secondArray<>/value"));
         assertEquals(TestHelper.printAudit(session), AuditStatus.WARN, session.getAudits().getAudit().get(0).getStatus());
         assertTrue(TestHelper.printAudit(session), session.getAudits().getAudit().get(1).getMessage().contains("/firstArray<>/secondArray<>/value"));
-        assertEquals(TestHelper.printAudit(session), AuditStatus.ERROR, session.getAudits().getAudit().get(1).getStatus());
-        assertTrue(TestHelper.printAudit(session), session.getAudits().getAudit().get(2).getMessage().contains("/firstArray<>/secondArray<>/thirdArray<>/value"));
+        assertEquals(TestHelper.printAudit(session), AuditStatus.WARN, session.getAudits().getAudit().get(1).getStatus());
+        assertTrue(TestHelper.printAudit(session), session.getAudits().getAudit().get(2).getMessage().contains("/firstArray<>/value"));
         assertEquals(TestHelper.printAudit(session), AuditStatus.WARN, session.getAudits().getAudit().get(2).getStatus());
     }
 }

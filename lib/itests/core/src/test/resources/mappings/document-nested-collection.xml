@@ -6,6 +6,12 @@
       <value>secondArrayValue0-0</value>
       <thirdArray>
         <value>thirdArrayValue0-0-0</value>
+        <fourthArray>
+          <value>0-0-0-0</value>
+        </fourthArray>
+        <fourthArray>
+          <value>0-0-0-1</value>
+        </fourthArray>
       </thirdArray>
       <thirdArray>
         <value>thirdArrayValue0-0-1</value>
@@ -42,6 +48,12 @@
       <value>secondArrayValue1-1</value>
       <thirdArray>
         <value>thirdArrayValue1-1-0</value>
+        <fourthArray>
+          <value>1-1-0-0</value>
+        </fourthArray>
+        <fourthArray>
+          <value>1-1-0-1</value>
+        </fourthArray>
       </thirdArray>
       <thirdArray>
         <value>thirdArrayValue1-1-1</value>

@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import io.atlasmap.spi.AtlasCollectionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +40,7 @@ public class ConstantModule implements AtlasModule {
 
     private AtlasConversionService conversionService;
     private AtlasFieldActionService fieldActionService;
+    private AtlasCollectionHelper collectionHelper;
     private ClassLoader classLoader;
 
     @Override
@@ -192,6 +194,11 @@ public class ConstantModule implements AtlasModule {
     @Override
     public void setFieldActionService(AtlasFieldActionService atlasFieldActionService) {
         this.fieldActionService = atlasFieldActionService;
+        this.collectionHelper = new DefaultAtlasCollectionHelper(atlasFieldActionService);
+    }
+
+    public AtlasCollectionHelper getCollectionHelper() {
+        return collectionHelper;
     }
 
     @Override

@@ -23,6 +23,7 @@ import java.util.Map;
 
 import javax.management.openmbean.TabularData;
 
+import io.atlasmap.spi.AtlasCollectionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +50,7 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
     private boolean automaticallyProcessOutputFieldActions = true;
     private AtlasConversionService atlasConversionService = null;
     private AtlasFieldActionService atlasFieldActionService = null;
+    private AtlasCollectionHelper collectionHelper = null;
     private AtlasModuleMode atlasModuleMode = AtlasModuleMode.UNSET;
     private String docId;
     private String uri;
@@ -184,6 +186,11 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
     }
 
     @Override
+    public AtlasCollectionHelper getCollectionHelper() {
+        return collectionHelper;
+    }
+
+    @Override
     public String getDocId() {
         return docId;
     }
@@ -228,6 +235,7 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
     @Override
     public void setFieldActionService(AtlasFieldActionService atlasFieldActionService) {
         this.atlasFieldActionService = atlasFieldActionService;
+        this.collectionHelper = new DefaultAtlasCollectionHelper(atlasFieldActionService);
     }
 
     public boolean isAutomaticallyProcessOutputFieldActions() {
