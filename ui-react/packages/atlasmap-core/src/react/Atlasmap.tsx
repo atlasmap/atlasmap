@@ -30,8 +30,26 @@ export interface IAtlasmapProps {
   onCreateConstant: (
     createConstant: (constValue: string, constType: string) => void
   ) => void;
+  onDeleteConstant: (deleteConstant: () => void) => void;
+  onEditConstant: (
+    constVal: string,
+    editConstant: (
+      origVal: string,
+      constValue: string,
+      constType: string
+    ) => void
+  ) => void;
   onCreateProperty: (
     createProperty: (
+      propName: string,
+      propValue: string,
+      propType: string
+    ) => void
+  ) => void;
+  onDeleteProperty: (deleteProperty: () => void) => void;
+  onEditProperty: (
+    selectedName: string,
+    editProperty: (
       propName: string,
       propValue: string,
       propType: string
@@ -48,7 +66,11 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   onNewTransformation,
   onRemoveTransformation,
   onCreateConstant,
+  onDeleteConstant,
+  onEditConstant,
   onCreateProperty,
+  onDeleteProperty,
+  onEditProperty,
 }) => {
   const [sourceFilter, setSourceFilter] = useState<string | undefined>();
   const [targetFilter, setTargetFilter] = useState<string | undefined>();
@@ -69,8 +91,13 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     addToCurrentMapping,
     createMapping,
     createConstant,
+    deleteConstant,
+    editConstant,
     createProperty,
+    deleteProperty,
+    editProperty,
   } = useAtlasmap();
+
   const sources = useAtlasmapSources(sourceFilter);
   const targets = useAtlasmapTargets(targetFilter);
 
@@ -89,6 +116,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   const handleImportAtlasFile = (file: File) => {
     importAtlasFile(file, false);
   };
+
   const handleResetAtlasmap = () => {
     onResetAtlasmap(resetAtlasmap);
   };
@@ -112,6 +140,34 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   const handleImportTargetDocument = useCallback(
     (selectedFile: File) => handleImportDocument(selectedFile, false),
     [handleImportDocument]
+  );
+
+  const handleDeleteConstant = useCallback(
+    (constValue: string) => {
+      onDeleteConstant(() => deleteConstant(constValue));
+    },
+    [onDeleteConstant, deleteConstant]
+  );
+
+  const handleEditConstant = useCallback(
+    (constVal: string) => {
+      onEditConstant(constVal, editConstant);
+    },
+    [onEditConstant, editConstant]
+  );
+
+  const handleDeleteProperty = useCallback(
+    (propName: string) => {
+      onDeleteProperty(() => deleteProperty(propName));
+    },
+    [onDeleteProperty, deleteProperty]
+  );
+
+  const handleEditProperty = useCallback(
+    (field: string) => {
+      onEditProperty(field, editProperty);
+    },
+    [onEditProperty, editProperty]
   );
 
   const handleDeleteDocument = useCallback(
@@ -192,7 +248,11 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
               onFieldPreviewChange={handleFieldPreviewChange}
               onImportDocument={handleImportSourceDocument}
               onCreateConstant={handleCreateConstant}
+              onDeleteConstant={handleDeleteConstant}
+              onEditConstant={handleEditConstant}
               onCreateProperty={handleCreateProperty}
+              onDeleteProperty={handleDeleteProperty}
+              onEditProperty={handleEditProperty}
               onSearch={setSourceFilter}
               showMappingPreview={showMappingPreview}
               showTypes={showTypes}

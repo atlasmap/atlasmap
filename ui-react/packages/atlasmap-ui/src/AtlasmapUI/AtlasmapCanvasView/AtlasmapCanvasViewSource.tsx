@@ -16,8 +16,12 @@ import { DocumentGroup } from './DocumentGroup';
 export interface IAtlasmapCanvasViewSourceProps {
   onAddToMapping: (field: IAtlasmapField, mapping: IMapping) => void;
   onCreateConstant: () => void;
+  onDeleteConstant: (value: string) => void;
+  onEditConstant: (value: string) => void;
   onCreateMapping: (source: IAtlasmapField, target: IAtlasmapField) => void;
   onCreateProperty: () => void;
+  onDeleteProperty: (field: string) => void;
+  onEditProperty: (field: string) => void;
   onDeleteDocument: (id: GroupId) => void;
   onFieldPreviewChange: (field: IAtlasmapField, value: string) => void;
   onImportDocument: (selectedFile: File) => void;
@@ -32,7 +36,11 @@ export const AtlasmapCanvasViewSource: FunctionComponent<IAtlasmapCanvasViewSour
   onCreateConstant,
   onCreateMapping,
   onCreateProperty,
+  onDeleteConstant,
   onDeleteDocument,
+  onDeleteProperty,
+  onEditConstant,
+  onEditProperty,
   onFieldPreviewChange,
   onImportDocument,
   onSearch,
@@ -96,6 +104,17 @@ export const AtlasmapCanvasViewSource: FunctionComponent<IAtlasmapCanvasViewSour
                   showType={showTypes}
                   getCoords={getCoords}
                   isSelected={isFieldPartOfSelection(id)}
+                  isConstantOrProperty={s.isConstantOrProperty}
+                  onDeleteConstProp={name => {
+                    s.type === 'Constants'
+                      ? onDeleteConstant(name)
+                      : onDeleteProperty(name);
+                  }}
+                  onEditConstProp={selectedName => {
+                    s.type === 'Constants'
+                      ? onEditConstant(selectedName)
+                      : onEditProperty(selectedName);
+                  }}
                   showAddToMapping={isFieldAddableToSelection(
                     currentMapping,
                     'source',

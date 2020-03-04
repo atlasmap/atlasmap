@@ -119,6 +119,13 @@ export const AtlasmapCanvasViewTarget: FunctionComponent<IAtlasmapCanvasViewTarg
                         onCreateMapping(node as IAtlasmapField, target);
                       }}
                       isOver={isOver}
+                      isConstantOrProperty={t.isConstantOrProperty}
+                      onDeleteConstProp={() => {
+                        void 0;
+                      }}
+                      onEditConstProp={() => {
+                        void 0;
+                      }}
                     >
                       {showPreview && (
                         <DocumentFieldPreviewResults

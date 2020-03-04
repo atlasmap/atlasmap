@@ -19,5 +19,6 @@ export interface IAtlasmapDocument {
   name: string;
   type: string;
   isCollection: boolean;
+  isConstantOrProperty: boolean;
   fields: AtlasmapFields;
 }

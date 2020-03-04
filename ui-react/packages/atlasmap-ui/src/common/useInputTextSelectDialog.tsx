@@ -27,17 +27,23 @@ export type ConfirmInputTextCallback = (
 export interface IUseInputTextSelectDialogArgs {
   title: string;
   textLabel1: string;
+  textValue1: React.MutableRefObject<string>;
+  text1ReadOnly: boolean;
   textLabel2: string;
+  textValue2: React.MutableRefObject<string>;
   selectLabel: string;
   selectValues: string[][];
-  selectDefault: number;
+  selectDefault: React.MutableRefObject<number>;
   modalContainer: HTMLElement;
 }
 
 export function useInputTextSelectDialog({
   title,
   textLabel1,
+  textValue1,
+  text1ReadOnly,
   textLabel2,
+  textValue2,
   selectLabel,
   selectValues,
   selectDefault,
@@ -50,10 +56,10 @@ export function useInputTextSelectDialog({
   const onCancel = useRef<CancelCallback | undefined>();
   const [isOpen, setIsOpen] = useState(false);
   const [isValid, setIsValid] = useState(true);
-  const [value, setValue] = useState('');
-  const [value2, setValue2] = useState('');
+  const [value1, setValue1] = useState(textValue1.current);
+  const [value2, setValue2] = useState(textValue2.current);
   const [selectValue, setSelectValue] = useState(
-    selectValues[selectDefault][0]
+    selectValues[selectDefault.current][0]
   );
   const openModal = (
     onConfirmCb?: ConfirmInputTextCallback,
@@ -62,6 +68,9 @@ export function useInputTextSelectDialog({
     onConfirm.current = onConfirmCb;
     onCancel.current = onCancelCb;
     setIsOpen(true);
+    setValue1(textValue1.current);
+    setValue2(textValue2.current);
+    setSelectValue(selectValues[selectDefault.current][0]);
   };
 
   const closeModal = () => setIsOpen(false);
@@ -70,7 +79,7 @@ export function useInputTextSelectDialog({
     value: string,
     event: FormEvent<HTMLInputElement>
   ) => {
-    setValue(value);
+    setValue1(value);
     setIsValid((event.target as HTMLInputElement).reportValidity());
   };
 
@@ -89,9 +98,9 @@ export function useInputTextSelectDialog({
   const handleConfirm = useCallback(() => {
     isValid &&
       onConfirm.current &&
-      onConfirm.current(value, value2, selectValue);
+      onConfirm.current(value1, value2, selectValue);
     closeModal();
-  }, [onConfirm, value, value2, selectValue, isValid]);
+  }, [onConfirm, value1, value2, selectValue, isValid]);
 
   const handleCancel = useCallback(() => {
     onCancel.current && onCancel.current();
@@ -136,12 +145,13 @@ export function useInputTextSelectDialog({
           </InputGroupText>
           <TextInput
             key={'text-input-value1'}
-            value={value}
+            value={value1}
             type="text"
             onChange={handleTextInputChange}
             aria-label={title}
             isRequired={true}
             isValid={isValid}
+            isDisabled={text1ReadOnly}
           />
         </InputGroup>
       )}

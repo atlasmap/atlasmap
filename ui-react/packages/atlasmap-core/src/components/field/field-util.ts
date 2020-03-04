@@ -1,5 +1,7 @@
 import { ConfigModel } from '../../models/config.model';
+import { DocumentDefinition } from '../../models/document-definition.model';
 import { Field } from '../../models/field.model';
+import { propertyTypes, constantTypes } from '../../common/config.types';
 
 export function createConstant(constValue: string, constType: string): void {
   const cfg = ConfigModel.getConfig();
@@ -14,6 +16,46 @@ export function createConstant(constValue: string, constType: string): void {
   cfg.mappingService.notifyMappingUpdated();
 }
 
+export function deleteConstant(constValue: string): void {
+  const cfg = ConfigModel.getConfig();
+  const field = cfg.constantDoc.getField(cfg.constantDoc.pathSeparator + constValue);
+  if (!field) {
+    return;
+  }
+  cfg.mappingService.removeFieldFromAllMappings(field);
+  cfg.constantDoc.removeField(field);
+  cfg.mappingService.notifyMappingUpdated();
+}
+
+export function editConstant(
+  origValue: string,
+  constValue: string,
+  constType: string
+  ): void
+{
+  const cfg = ConfigModel.getConfig();
+  let field = cfg.constantDoc.getField(cfg.constantDoc.pathSeparator + origValue);
+  if (!field) {
+    return;
+  }
+  deleteConstant(origValue);
+  createConstant(constValue, constType);
+}
+
+export function getConstantTypeIndex(constVal: string): number {
+  const cfg = ConfigModel.getConfig();
+  const field = cfg.constantDoc.getField(cfg.constantDoc.pathSeparator + constVal);
+  if (!field) {
+    return 0;
+  }
+  for (let i=0; i<constantTypes.length; i++) {
+    if (constantTypes[i].includes(field.type)) {
+      return i;
+    }
+  }
+  return 0;
+}
+
 export function createProperty(propName: string, propValue: string, propType: string): void {
   const cfg = ConfigModel.getConfig();
   let field = cfg.propertyDoc.getField(propName);
@@ -25,6 +67,52 @@ export function createProperty(propName: string, propValue: string, propType: st
   field.userCreated = true;
   cfg.propertyDoc.addField(field);
   cfg.mappingService.notifyMappingUpdated();
+}
+
+export function deleteProperty(propName: string): void {
+  const cfg = ConfigModel.getConfig();
+  const field = cfg.propertyDoc.getField(cfg.propertyDoc.pathSeparator + propName.split(' ')[0]);
+  if (!field) {
+    return;
+  }
+  cfg.mappingService.removeFieldFromAllMappings(field);
+  cfg.propertyDoc.removeField(field);
+  cfg.mappingService.notifyMappingUpdated();
+}
+
+export function editProperty(propName: string, propValue: string, propType: string): void {
+  const cfg = ConfigModel.getConfig();
+  const field = cfg.propertyDoc.getField(cfg.propertyDoc.pathSeparator + propName.split(' ')[0]);
+  if (!field) {
+    return;
+  }
+  field.value = propValue;
+  field.type = propType;
+  cfg.propertyDoc.updateField(field, '');
+  cfg.mappingService.notifyMappingUpdated();
+}
+
+export function getPropertyValue(propName: string): string {
+  const cfg = ConfigModel.getConfig();
+  const field = cfg.propertyDoc.getField(cfg.propertyDoc.pathSeparator + propName.split(' ')[0]);
+  if (!field) {
+    return '';
+  }
+  return field.value;
+}
+
+export function getPropertyTypeIndex(propName: string): number {
+  const cfg = ConfigModel.getConfig();
+  const field = cfg.propertyDoc.getField(cfg.propertyDoc.pathSeparator + propName);
+  if (!field) {
+    return 0;
+  }
+  for (let i=0; i<propertyTypes.length; i++) {
+    if (propertyTypes[i].includes(field.type)) {
+      return i;
+    }
+  }
+  return 0;
 }
 
 /**

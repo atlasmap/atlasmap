@@ -125,14 +125,7 @@ export class ConfigModel {
   logger?: Logger;
 
   constructor() {
-    this.propertyDoc.type = DocumentType.PROPERTY;
-    this.propertyDoc.name = 'Properties';
-    this.propertyDoc.isSource = true;
-    this.propertyDoc.showFields = false;
-    this.constantDoc.type = DocumentType.CONSTANT;
-    this.constantDoc.name = 'Constants';
-    this.constantDoc.isSource = true;
-    this.constantDoc.showFields = false;
+    this.setConstantPropertyDocs();
   }
 
   static getConfig(): ConfigModel {
@@ -141,6 +134,21 @@ export class ConfigModel {
 
   static setConfig(cfg: ConfigModel): void {
     ConfigModel.cfg = cfg;
+  }
+
+  setConstantPropertyDocs(): void {
+    this.propertyDoc.clearFields();
+    this.propertyDoc.type = DocumentType.PROPERTY;
+    this.propertyDoc.name = 'Properties';
+    this.propertyDoc.isSource = true;
+    this.propertyDoc.showFields = false;
+    this.propertyDoc.isPropertyOrConstant = true;
+    this.constantDoc.clearFields();
+    this.constantDoc.type = DocumentType.CONSTANT;
+    this.constantDoc.name = 'Constants';
+    this.constantDoc.isSource = true;
+    this.constantDoc.showFields = false;
+    this.constantDoc.isPropertyOrConstant = true;
   }
 
   set showMappingPreview(show: boolean) {
