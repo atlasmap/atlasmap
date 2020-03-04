@@ -63,6 +63,7 @@ export function jsonToFieldGroup(
       f.jsonFields ? fromGroup(f as Field) : fromElement(f)
     ),
     isCollection: false,
+    isConstantOrProperty: false,
     isVisible: () => true,
   });
 

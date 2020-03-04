@@ -162,6 +162,7 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
 
   async initialize(): Promise<boolean> {
     return new Promise<boolean>(async(resolve, reject) => {
+      this.cfg.setConstantPropertyDocs();
       this.cfg.errorService.resetAll();
       this.cfg.fieldActionService.isInitialized = false;
       this.cfg.initCfg.initialized = false;

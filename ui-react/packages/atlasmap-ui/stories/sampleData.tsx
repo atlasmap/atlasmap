@@ -909,6 +909,7 @@ export const sources = [
       'JSONInstanceSource-source'
     ),
     isCollection: false,
+    isConstantOrProperty: false,
     isVisible: () => true,
   },
   {
@@ -917,6 +918,7 @@ export const sources = [
     type: 'JSON',
     fields: jsonToFieldGroup(mockJSONSchemaSource, 'JSONSchemaSource-source'),
     isCollection: false,
+    isConstantOrProperty: false,
     isVisible: () => true,
   },
 ];
@@ -928,6 +930,7 @@ export const targets = [
     type: 'XML',
     fields: xmlToFieldGroup(XMLInstanceSource, 'XMLInstanceSource-target'),
     isCollection: false,
+    isConstantOrProperty: false,
     isVisible: () => true,
   },
   {
@@ -936,6 +939,7 @@ export const targets = [
     type: 'XML',
     fields: xmlToFieldGroup(XMLSchemaSource, 'XMLSchemaSource-target'),
     isCollection: false,
+    isConstantOrProperty: false,
     isVisible: () => true,
   },
   {
@@ -944,6 +948,7 @@ export const targets = [
     type: 'JAVA',
     fields: javaToFieldGroup(ioPaulBicycle, 'io.paul.Bicycle-target'),
     isCollection: false,
+    isConstantOrProperty: false,
     isVisible: () => true,
   },
 ];

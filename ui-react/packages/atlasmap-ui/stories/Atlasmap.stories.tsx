@@ -74,8 +74,12 @@ export const sample = () =>
               <AtlasmapCanvasViewSource
                 onAddToMapping={addToMapping}
                 onCreateConstant={action('onCreateConstant')}
+                onDeleteConstant={action('onDeleteConstant')}
+                onEditConstant={action('onEditConstant')}
                 onCreateProperty={action('onCreateProperty')}
                 onCreateMapping={createMapping}
+                onDeleteProperty={action('onDeleteProperty')}
+                onEditProperty={action('onEditProperty')}
                 onDeleteDocument={action('onDeleteDocument')}
                 onFieldPreviewChange={action('onFieldPreviewChange')}
                 onImportDocument={action('onImportDocument')}

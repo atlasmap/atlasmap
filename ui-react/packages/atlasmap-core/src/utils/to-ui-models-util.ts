@@ -6,13 +6,22 @@ import { DocumentDefinition } from "../models/document-definition.model";
 import { ConfigModel } from "../models/config.model";
 
 export interface IAtlasmapGroupWithField extends IAtlasmapGroup {
+  id: string;
+  name: string;
+  type: string;
   isCollection: boolean;
+  fields: IAtlasmapFieldWithField[];
   amField: Field;
 }
 
 export interface IAtlasmapFieldWithField extends IAtlasmapField {
+  id: string;
+  name: string;
+  type: string;
   isCollection: boolean;
+  isConstantOrProperty: boolean;
   amField: Field;
+  previewValue: string;
 }
 
 export interface IAtlasmapMappedField extends IAtlasmapField {
@@ -35,7 +44,7 @@ function fromFieldToIFieldsGroup(field: Field): IAtlasmapGroupWithField | null {
     type: field.type,
     isCollection: field.isCollection,
     fields: fields,
-    amField: field
+    amField: field,
   } : null;
 }
 
@@ -52,6 +61,7 @@ function fromFieldToIFieldsNode(field: Field): IAtlasmapFieldWithField | null {
     name: field.getFieldLabel(false, false),
     type: field.type,
     isCollection: field.isCollection,
+    isConstantOrProperty: field.docDef.isPropertyOrConstant,
     amField: field,
     previewValue: field.value
   } : null;
@@ -72,6 +82,7 @@ export function fromDocumentDefinitionToFieldGroup(def: DocumentDefinition): IAt
     id: def.id,
     isVisible: isGroupVisible,
     isCollection: false,
+    isConstantOrProperty: def.isPropertyOrConstant,
     fields: fields,
     name: def.name,
     type: def.type,

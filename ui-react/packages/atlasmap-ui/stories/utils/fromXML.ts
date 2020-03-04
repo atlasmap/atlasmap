@@ -73,6 +73,7 @@ export function xmlToFieldGroup(xml: XMLObject, idPrefix: string) {
       f.xmlFields ? fromGroup(f as Field) : fromElement(f)
     ),
     isCollection: false,
+    isConstantOrProperty: false,
     isVisible: () => true,
   });
 

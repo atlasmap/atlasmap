@@ -29,7 +29,11 @@ import {
   addToCurrentMapping,
   createMapping,
   createConstant,
+  deleteConstant,
+  editConstant,
   createProperty,
+  deleteProperty,
+  editProperty,
 } from '../components/field/field-util';
 import {
   deleteAtlasFile,
@@ -389,7 +393,11 @@ export function useAtlasmap() {
       getMultiplicityActionDelimiters,
       handleActionChange,
       createConstant,
+      deleteConstant,
+      editConstant,
       createProperty,
+      deleteProperty,
+      editProperty,
     }),
     [
       pending,

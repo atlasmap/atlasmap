@@ -1,10 +1,15 @@
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import {
   useConfirmationDialog,
   useSingleInputDialog,
   useInputTextSelectDialog,
 } from '@atlasmap/ui';
 import { constantTypes, propertyTypes } from '../common/config.types';
+import {
+  getPropertyValue,
+  getPropertyTypeIndex,
+  getConstantTypeIndex,
+} from '../components/field/field-util';
 
 export interface IUseAtlasmapDialogsProps {
   modalContainer: HTMLElement;
@@ -27,6 +32,10 @@ export function useAtlasmapDialogs({
     placeholder: defaultCatalogName,
   });
 
+  const textVal1 = useRef<string>('');
+  const textVal2 = useRef<string>('');
+  const selectIndex = useRef<number>(0);
+
   const [
     createConstantDialog,
     openCreateConstantDialog,
@@ -34,11 +43,39 @@ export function useAtlasmapDialogs({
     modalContainer,
     title: 'Create Constant',
     textLabel1: 'Value',
+    textValue1: textVal1,
+    text1ReadOnly: false,
     textLabel2: '',
+    textValue2: textVal2,
     selectLabel: 'Value Type',
     selectValues: constantTypes,
-    selectDefault: 12,
+    selectDefault: selectIndex,
   });
+
+  const [
+    deleteConstantDialog,
+    openDeleteConstantDialog,
+  ] = useConfirmationDialog({
+    modalContainer,
+    title: 'Delete constant?',
+    content:
+      'Are you sure you want to delete the selected constant and remove any associated mapping references?',
+  });
+
+  const [editConstantDialog, openEditConstantDialog] = useInputTextSelectDialog(
+    {
+      modalContainer,
+      title: 'Edit Constant',
+      textLabel1: 'Value',
+      textValue1: textVal1,
+      text1ReadOnly: false,
+      textLabel2: '',
+      textValue2: textVal2,
+      selectLabel: 'Value Type',
+      selectValues: constantTypes,
+      selectDefault: selectIndex,
+    }
+  );
 
   const [
     createPropertyDialog,
@@ -47,11 +84,39 @@ export function useAtlasmapDialogs({
     modalContainer,
     title: 'Create Property',
     textLabel1: 'Name',
+    textValue1: textVal1,
+    text1ReadOnly: false,
     textLabel2: 'Value',
+    textValue2: textVal2,
     selectLabel: 'Value Type',
     selectValues: propertyTypes,
-    selectDefault: 13,
+    selectDefault: selectIndex,
   });
+
+  const [
+    deletePropertyDialog,
+    openDeletePropertyDialog,
+  ] = useConfirmationDialog({
+    modalContainer,
+    title: 'Delete property?',
+    content:
+      'Are you sure you want to delete the selected property and remove any associated mapping references?',
+  });
+
+  const [editPropertyDialog, openEditPropertyDialog] = useInputTextSelectDialog(
+    {
+      modalContainer,
+      title: 'Edit Property',
+      textLabel1: 'Name',
+      textValue1: textVal1,
+      text1ReadOnly: true,
+      textLabel2: 'Value',
+      textValue2: textVal2,
+      selectLabel: 'Value Type',
+      selectValues: propertyTypes,
+      selectDefault: selectIndex,
+    }
+  );
 
   const [resetDialog, openResetDialog] = useConfirmationDialog({
     modalContainer,
@@ -93,6 +158,8 @@ export function useAtlasmapDialogs({
 
   const handleCreateConstant = useCallback(
     (createConstant: (constValue: string, constType: string) => void) => {
+      textVal1.current = '';
+      selectIndex.current = 12;
       openCreateConstantDialog(
         (value: string, _value2: string, valueType: string) => {
           createConstant(value, valueType);
@@ -100,6 +167,33 @@ export function useAtlasmapDialogs({
       );
     },
     [openCreateConstantDialog]
+  );
+
+  const handleDeleteConstant = useCallback(
+    (deleteConstant: () => void) => openDeleteConstantDialog(deleteConstant),
+    [openDeleteConstantDialog]
+  );
+
+  const handleEditConstant = useCallback(
+    (
+      selectedValue: string,
+      editConstant: (
+        origValue: string,
+        constValue: string,
+        constType: string
+      ) => void
+    ) => {
+      const originalValue = selectedValue.split(' ')[0];
+      textVal1.current = originalValue;
+      textVal2.current = '';
+      selectIndex.current = getConstantTypeIndex(originalValue);
+      openEditConstantDialog(
+        (value: string, _value2: string, valueType: string) => {
+          editConstant(originalValue, value, valueType);
+        }
+      );
+    },
+    [openEditConstantDialog]
   );
 
   const handleCreateProperty = useCallback(
@@ -110,6 +204,9 @@ export function useAtlasmapDialogs({
         propType: string
       ) => void
     ) => {
+      textVal1.current = '';
+      textVal2.current = '';
+      selectIndex.current = 13;
       openCreatePropertyDialog(
         (name: string, value: string, valueType: string) => {
           createProperty(name, value, valueType);
@@ -117,6 +214,33 @@ export function useAtlasmapDialogs({
       );
     },
     [openCreatePropertyDialog]
+  );
+
+  const handleDeleteProperty = useCallback(
+    (deleteProperty: () => void) => openDeletePropertyDialog(deleteProperty),
+    [openDeletePropertyDialog]
+  );
+
+  const handleEditProperty = useCallback(
+    (
+      selectedName: string,
+      editProperty: (
+        propName: string,
+        propValue: string,
+        propType: string
+      ) => void
+    ) => {
+      textVal1.current = selectedName.split(' ')[0];
+      textVal2.current = getPropertyValue(textVal1.current);
+      selectIndex.current = getPropertyTypeIndex(textVal1.current);
+
+      openEditPropertyDialog(
+        (name: string, value: string, valueType: string) => {
+          editProperty(name, value, valueType);
+        }
+      );
+    },
+    [openEditPropertyDialog]
   );
 
   const handleResetAtlasmap = useCallback(
@@ -150,14 +274,22 @@ export function useAtlasmapDialogs({
       onNewTransformation: handleNewTransformation,
       onRemoveTransformation: handleRemoveTransformation,
       onCreateConstant: handleCreateConstant,
+      onDeleteConstant: handleDeleteConstant,
+      onEditConstant: handleEditConstant,
       onCreateProperty: handleCreateProperty,
+      onDeleteProperty: handleDeleteProperty,
+      onEditProperty: handleEditProperty,
     },
     dialogs: [
       exportDialog,
       importDialog,
       deleteDocumentDialog,
       createConstantDialog,
+      deleteConstantDialog,
+      editConstantDialog,
       createPropertyDialog,
+      deletePropertyDialog,
+      editPropertyDialog,
       resetDialog,
       removeMappedFieldDialog,
     ],

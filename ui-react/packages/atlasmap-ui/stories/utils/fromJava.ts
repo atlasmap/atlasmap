@@ -84,6 +84,7 @@ export function javaToFieldGroup(java: JavaObject, idPrefix: string) {
       f.javaFields ? fromGroup(f as JavaField) : fromElement(f)
     ),
     isCollection: false,
+    isConstantOrProperty: false,
     isVisible: () => true,
   });
 

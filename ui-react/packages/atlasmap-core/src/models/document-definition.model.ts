@@ -111,7 +111,8 @@ export class DocumentDefinition {
 
   set type(type: DocumentType) {
     this._type = type;
-    this.isPropertyOrConstant = type === DocumentType.CONSTANT || type === DocumentType.PROPERTY;
+    this.isPropertyOrConstant =
+      type === DocumentType.CONSTANT || type === DocumentType.PROPERTY;
   }
 
   get type(): DocumentType {
@@ -241,7 +242,7 @@ export class DocumentDefinition {
     this.initialized = true;
   }
 
-  updateField(field: Field, oldPath: string): void {
+  updateField(field: Field, oldPath: string | null): void {
     Field.alphabetizeFields(this.fields);
     if (!field.parentField || this.isPropertyOrConstant) {
       this.populateFieldParentPaths(field, null, 0);
@@ -250,7 +251,7 @@ export class DocumentDefinition {
       this.populateFieldParentPaths(field, field.parentField.path + pathSeparator,
         field.parentField.fieldDepth + 1);
     }
-    if (oldPath != null && this.fieldsByPath[oldPath] != null) {
+    if (oldPath != null && oldPath.length > 0 && this.fieldsByPath[oldPath] != null) {
       delete (this.fieldsByPath[oldPath]);
     }
     DataMapperUtil.removeItemFromArray(field.path, this.fieldPaths);
@@ -325,6 +326,15 @@ export class DocumentDefinition {
     this.enumFieldsByClassIdentifier = {};
   }
 
+  getFieldIndex(field: Field, fields: Field[]) : number {
+    for (let i = 0; i < fields.length; i++) {
+      if (fields[i].name === field.name) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
   /**
    * Remove the specified field from this document definition.
    *
@@ -334,9 +344,18 @@ export class DocumentDefinition {
     if (field == null) {
       return;
     }
-    DataMapperUtil.removeItemFromArray(field, this.fields);
-    DataMapperUtil.removeItemFromArray(field, this.allFields);
-    DataMapperUtil.removeItemFromArray(field, this.terminalFields);
+    let targetIndex = this.getFieldIndex(field, this.fields);
+    if (targetIndex > -1) {
+      this.fields.splice(targetIndex, 1);
+    }
+    targetIndex = this.getFieldIndex(field, this.allFields);
+    if (targetIndex > -1) {
+      this.allFields.splice(targetIndex, 1);
+    }
+    targetIndex = this.getFieldIndex(field, this.terminalFields);
+    if (targetIndex > -1) {
+      this.terminalFields.splice(targetIndex, 1);
+    }
     DataMapperUtil.removeItemFromArray(field.path, this.fieldPaths);
     delete (this.fieldsByPath[field.path]);
     if (field.parentField != null) {
