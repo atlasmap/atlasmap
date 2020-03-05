@@ -454,7 +454,11 @@ public class AtlasUtil {
         File[] allContents = targetDir.listFiles();
         if (allContents != null) {
             for (File file : allContents) {
-                file.delete();
+                if (!file.isDirectory()) {
+                    file.delete();
+                } else {
+                    deleteDirectory(file);
+                }
             }
         }
         targetDir.delete();

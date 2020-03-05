@@ -46,6 +46,7 @@ import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
+import io.atlasmap.core.ADMArchiveHandler;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Audit;
@@ -180,48 +181,27 @@ public class AtlasEndpoint extends ResourceEndpoint {
     }
 
     /**
-     * Extract the AtlasMap mappings file (XML) from the specified catalog file stream (ADM/ZIP)
+     * Extract the AtlasMap mappings file (JSON) from the specified ADM archive
      * and return it as a String.
      *
-     * @param in - Live input stream to the ADM catalog file via the resource URI.
-     * @param admCatalogPath - used for diagnostics only
-     * @return the extracted mappings XML content
+     * @param in - Live input stream to the ADM archive file via the resource URI.
+     * @param admPath - used for diagnostics only
+     * @return the extracted mappings JSON content
      *
      * @throws Exception
      */
-    private String extractMappingsFromADM(InputStream in, String admCatalogPath) throws Exception {
-        byte[] buffer = new byte[2048];
-        StringBuilder extractedMappoings = new StringBuilder();
-        String catEntryname;
-        ZipInputStream zipIn = new ZipInputStream(in);
-
+    private String extractMappingsFromADM(InputStream in, String admPath) throws Exception {
         try {
-            ZipEntry catEntry;
-            while ((catEntry = zipIn.getNextEntry()) != null) {
-                catEntryname = catEntry.getName();
-                LOG.debug("Found entry: {}", catEntryname);
-                if (atlasmapMappingFileNamePattern.matcher(catEntryname).matches()) {
-                    break;
-                }
-                else {
-                    continue;
-                }
-            }
-            if (zipIn != null) {
-                int len = 0;
-                while ((len = zipIn.read(buffer)) > 0) {
-                    extractedMappoings.append(new String(buffer, 0, len));
-                }
-                zipIn.close();
-            }
+            ADMArchiveHandler handler = new ADMArchiveHandler(getCamelContext().getApplicationContextClassLoader());
+            handler.setIgnoreLibrary(true);
+            handler.load(in);
             if (log.isDebugEnabled()) {
-                log.debug("Atlas mapping content extracted from AtlasMap catalog: {}",
-                    new Object[] { admCatalogPath });
+                log.debug("Atlas mapping content extracted from ADM archive: {}", admPath);
             }
-        } catch (IOException e) {
-            throw new IOException("Error extracting mappings file from ADM catalog " + admCatalogPath, e);
+            return new String(handler.getMappingDefinitionBytes());
+        } catch (Exception e) {
+            throw new IOException("Error extracting mappings file from ADM archive " + admPath, e);
         }
-        return extractedMappoings.toString();
     }
 
     @Override
