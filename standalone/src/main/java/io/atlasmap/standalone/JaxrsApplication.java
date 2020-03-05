@@ -30,6 +30,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.dfdl.service.DfdlService;
 import io.atlasmap.java.service.JavaService;
 import io.atlasmap.java.v2.MavenClasspathResponse;
 import io.atlasmap.json.service.JsonService;
@@ -58,6 +59,11 @@ public class JaxrsApplication extends Application {
     }
 
     @Bean
+    public DfdlService dfdlService() {
+        return new DfdlService();
+    }
+
+    @Bean
     public AtlasService atlasService() throws AtlasException {
         return new AtlasService();
     }
@@ -83,6 +89,7 @@ public class JaxrsApplication extends Application {
             response.setClasspath("");
             return Response.ok().entity(toJson(response)).build();
         }
+
     }
 
 }

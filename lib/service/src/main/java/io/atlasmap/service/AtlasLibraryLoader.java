@@ -39,40 +39,22 @@ import io.atlasmap.api.AtlasException;
 public class AtlasLibraryLoader extends ClassLoader {
     private static final Logger LOG = LoggerFactory.getLogger(AtlasLibraryLoader.class);
 
-    private String saveDir;
+    private File saveDir;
     private URLClassLoader urlClassLoader;
     private Set<ClassLoader> alternativeLoaders = new HashSet<>();
     private Set<AtlasLibraryLoaderListener> listeners = new HashSet<>();
 
-    public AtlasLibraryLoader(String saveDir) throws AtlasException {
+    public AtlasLibraryLoader(String saveDirName) throws AtlasException {
         super(AtlasLibraryLoader.class.getClassLoader());
-        LOG.debug("Using {} as a lib directory", saveDir);
-        this.saveDir = saveDir;
-        File saveDirRef = new File(saveDir);
-        if (!new File(saveDir).exists()) {
-            saveDirRef.mkdirs();
+        LOG.debug("Using {} as a lib directory", saveDirName);
+        this.saveDir = new File(saveDirName);
+        if (!saveDir.exists()) {
+            saveDir.mkdirs();
         }
-        if (!saveDirRef.isDirectory()) {
-            throw new AtlasException(String.format("'%s' is not a directory", saveDirRef.getName()));
+        if (!saveDir.isDirectory()) {
+            throw new AtlasException(String.format("'%s' is not a directory", saveDir.getName()));
         }
-
-        List<URL> urls = new LinkedList<>();
-        File[] files = saveDirRef.listFiles();
-        for (File f : files) {
-            if (f.isFile() && f.getName().endsWith(".jar")) {
-                try {
-                    urls.add(f.toURI().toURL());
-                } catch (MalformedURLException e) {
-                    throw new AtlasException(e);
-                }
-            }
-        }
-
-        if (urls.size() > 0) {
-            // This won't work on hierarchical class loader like JavaEE or OSGi.
-            // We don't have any plan to get design time services working on those though.
-            this.urlClassLoader = new URLClassLoader(urls.toArray(new URL[0]), AtlasLibraryLoader.class.getClassLoader());
-        }
+        reload();
     }
 
     public void addJarFromStream(InputStream is) throws Exception {
@@ -94,9 +76,42 @@ public class AtlasLibraryLoader extends ClassLoader {
             URL[] origUrls = this.urlClassLoader.getURLs();
             urls.addAll(Arrays.asList(origUrls));
         }
+        reload();
+    }
+
+    public void clearLibaries() {
+        File[] files = saveDir.listFiles();
+        if (!saveDir.exists() || !saveDir.isDirectory() || files == null) {
+            return;
+        }
+        for (File f : saveDir.listFiles()) {
+            f.delete();
+        }
+        reload();
+    }
+
+    public void reload() {
+        List<URL> urls = new LinkedList<>();
+        File[] files = saveDir.listFiles();
+        if (!saveDir.exists() || !saveDir.isDirectory() || files == null) {
+            return;
+        }
+
+        for (File f : files) {
+            try {
+                if (!f.isFile()) {
+                    LOG.warn("Ignoring invalid file {}", f.getAbsolutePath());
+                    continue;
+                }
+                urls.add(f.toURI().toURL());
+            } catch (Exception e) {
+                LOG.warn("Ignoring invalid file", e);
+            }
+        }
         // This won't work on hierarchical class loader like JavaEE or OSGi.
         // We don't have any plan to get design time services working on those though.
-        this.urlClassLoader = new URLClassLoader(urls.toArray(new URL[0]), AtlasLibraryLoader.class.getClassLoader());
+        this.urlClassLoader = urls.size() == 0 ? null
+         : new URLClassLoader(urls.toArray(new URL[0]), AtlasLibraryLoader.class.getClassLoader());
         listeners.forEach(l -> l.onUpdate(this));
     }
 

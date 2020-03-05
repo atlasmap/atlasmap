@@ -41,7 +41,6 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.atlasmap.v2.Action;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.Field;
@@ -86,12 +85,6 @@ public class AtlasServiceTest {
     public void testGetMapping() {
         Response resp = service.getMappingRequest(JSON, 3);
         assertEquals(byte[].class, resp.getEntity().getClass());
-    }
-
-    @Test
-    public void testFilenameMatch() {
-        String fileName = "atlasmapping-foo.json";
-        assertTrue(fileName.matches("atlasmapping-[a-zA-Z0-9]+.json"));
     }
 
     @Test
