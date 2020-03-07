@@ -4,6 +4,7 @@ import React, {
   ReactElement,
   useCallback,
   useContext,
+  useRef,
   useState,
 } from 'react';
 import { ElementId, IMapping } from '../CanvasView';
@@ -34,6 +35,7 @@ export interface IAtlasmapUIContext {
   targets: Array<IAtlasmapDocument>;
   mappings: IMapping[];
   renderMappingDetails: (props: IRenderMappingDetailsArgs) => ReactElement;
+  deselectMappingOnWhitespaceClicked: () => void;
 }
 
 const AtlasmapUIContext = createContext<IAtlasmapUIContext | null>(null);
@@ -56,6 +58,8 @@ export const AtlasmapUIProvider: FunctionComponent<IAtlasmapUIProviderProps> = (
   const [selectedMapping, setSelectedMapping] = useState<string>();
   const [isEditingMapping, setisEditingMapping] = useState(false);
 
+  const mappingSelected = useRef<boolean>(false);
+
   const closeMappingDetails = useCallback(() => {
     setisEditingMapping(false);
   }, [setisEditingMapping]);
@@ -64,6 +68,7 @@ export const AtlasmapUIProvider: FunctionComponent<IAtlasmapUIProviderProps> = (
     (mapping: string) => {
       onActiveMappingChange(mapping);
       setSelectedMapping(mapping);
+      mappingSelected.current = true;
     },
     [onActiveMappingChange]
   );
@@ -77,6 +82,14 @@ export const AtlasmapUIProvider: FunctionComponent<IAtlasmapUIProviderProps> = (
       setisEditingMapping(true);
     }
   }, [selectedMapping, setisEditingMapping]);
+
+  const deselectMappingOnWhitespaceClicked = useCallback(() => {
+    if (!mappingSelected.current) {
+      closeMappingDetails();
+      deselectMapping();
+    }
+    mappingSelected.current = false;
+  }, [closeMappingDetails, deselectMapping]);
 
   const isFieldAddableToSelection = (
     mapping: IMapping | undefined,
@@ -140,6 +153,7 @@ export const AtlasmapUIProvider: FunctionComponent<IAtlasmapUIProviderProps> = (
         isFieldAddableToSelection,
         currentMapping,
         isFieldPartOfSelection,
+        deselectMappingOnWhitespaceClicked,
       }}
     >
       {children}
