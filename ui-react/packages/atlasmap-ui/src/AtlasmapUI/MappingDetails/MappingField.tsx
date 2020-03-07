@@ -1,4 +1,5 @@
 import {
+  DataList,
   DataListContent,
   DataListItem,
   Label,
@@ -68,92 +69,97 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
 }) => {
   const id = `mapping-field-${name}`;
   return (
-    <DataListItem className={css(styles.dataListContent)} aria-labelledby={id}>
-      <Split>
-        <SplitItem isFilled>
-          <Stack>
-            <StackItem isFilled />
-            <StackItem>
-              <Title
-                className={css(styles.dataListContent)}
-                size={'sm'}
-                headingLevel={'h3'}
-                id={id}
-              >
-                <Tooltip
-                  position={'auto'}
-                  enableFlip={true}
-                  content={<div>{info}</div>}
+    <DataList aria-label="dataList">
+      <DataListItem
+        className={css(styles.dataListContent)}
+        aria-labelledby={id}
+      >
+        <Split>
+          <SplitItem isFilled>
+            <Stack>
+              <StackItem isFilled />
+              <StackItem>
+                <Title
+                  className={css(styles.dataListContent)}
+                  size={'sm'}
+                  headingLevel={'h3'}
+                  id={id}
                 >
-                  <span>
-                    <InfoAltIcon className={css(styles.icon)} /> {name}
-                  </span>
-                </Tooltip>
-              </Title>
-            </StackItem>
-            <StackItem isFilled />
-          </Stack>
-        </SplitItem>
-        <SplitItem>
-          {showIndex && (
-            <Tooltip
-              position={'auto'}
-              enableFlip={true}
-              content={
-                <div>
-                  Edit the index for this element by selecting the arrows.
-                  Placeholders may be automatically inserted to account for any
-                  gaps in the indexing
-                </div>
-              }
-            >
-              <Label>
-                #{' '}
-                <input
-                  type={'number'}
-                  value={index}
-                  id={'index'}
-                  disabled={!canEditIndex}
-                  className={css(styles.indexInput)}
-                  onChange={onIndexChange}
-                />
-              </Label>
-            </Tooltip>
-          )}
-        </SplitItem>
-        <SplitItem>
-          <Stack>
-            <StackItem isFilled />
-            <StackItem>
-              <Button
-                variant={'link'}
-                onClick={onDelete}
-                className={css(styles.link)}
+                  <Tooltip
+                    position={'auto'}
+                    enableFlip={true}
+                    content={<div>{info}</div>}
+                  >
+                    <span>
+                      <InfoAltIcon className={css(styles.icon)} /> {name}
+                    </span>
+                  </Tooltip>
+                </Title>
+              </StackItem>
+              <StackItem isFilled />
+            </Stack>
+          </SplitItem>
+          <SplitItem>
+            {showIndex && (
+              <Tooltip
+                position={'auto'}
+                enableFlip={true}
+                content={
+                  <div>
+                    Edit the index for this element by selecting the arrows.
+                    Placeholders may be automatically inserted to account for
+                    any gaps in the indexing
+                  </div>
+                }
               >
-                Remove
-              </Button>
-            </StackItem>
-            <StackItem isFilled />
-          </Stack>
-        </SplitItem>
-      </Split>
-      // Show established field action transformations associated with this
-      field.
-      {Children.count(children) > 0 && (
-        <DataListContent
-          aria-label={'Field transformations'}
-          className={css(styles.dataListContent)}
-        >
-          <Title
+                <Label>
+                  #{' '}
+                  <input
+                    type={'number'}
+                    value={index}
+                    id={'index'}
+                    disabled={!canEditIndex}
+                    className={css(styles.indexInput)}
+                    onChange={onIndexChange}
+                  />
+                </Label>
+              </Tooltip>
+            )}
+          </SplitItem>
+          <SplitItem>
+            <Stack>
+              <StackItem isFilled />
+              <StackItem>
+                <Button
+                  variant={'link'}
+                  onClick={onDelete}
+                  className={css(styles.link)}
+                >
+                  Remove
+                </Button>
+              </StackItem>
+              <StackItem isFilled />
+            </Stack>
+          </SplitItem>
+        </Split>
+        // Show established field action transformations associated with this //
+        field.
+        {Children.count(children) > 0 && (
+          <DataListContent
+            aria-label={'Field transformations'}
             className={css(styles.dataListContent)}
-            size={'sm'}
-            headingLevel={'h4'}
           >
-            Transformations
-          </Title>
-          {children}
-        </DataListContent>
-      )}
+            <Title
+              className={css(styles.dataListContent)}
+              size={'sm'}
+              headingLevel={'h4'}
+            >
+              Transformations
+            </Title>
+            {children}
+          </DataListContent>
+        )}
+      </DataListItem>
       <DataListItem
         className={css(styles.dataListContent)}
         aria-labelledby={id}
@@ -172,6 +178,6 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
           </StackItem>
         </Split>
       </DataListItem>
-    </DataListItem>
+    </DataList>
   );
 };
