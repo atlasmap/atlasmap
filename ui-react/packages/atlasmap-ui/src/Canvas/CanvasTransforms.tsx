@@ -8,18 +8,12 @@ export const CanvasTransforms: FunctionComponent = ({ children }) => {
   // const originY = height / 2;
   // const x = xDomain(zoom * (panX + originX) - originX);
   // const y = yDomain(zoom * (panY + originY) - originY);
-  const {
-    deselectMapping,
-    closeMappingDetails,
-    selectedMapping,
-  } = useAtlasmapUI();
 
-  const handleSelect = useCallback(() => {
-    if (selectedMapping) {
-      closeMappingDetails();
-      deselectMapping();
-    }
-  }, [selectedMapping, closeMappingDetails, deselectMapping]);
+  const { deselectMappingOnWhitespaceClicked } = useAtlasmapUI();
+
+  const handleSelect = useCallback(() => deselectMappingOnWhitespaceClicked(), [
+    deselectMappingOnWhitespaceClicked,
+  ]);
 
   return (
     <g
