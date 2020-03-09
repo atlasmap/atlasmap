@@ -14,16 +14,16 @@ import {
 } from '@patternfly/react-icons';
 
 const styles = StyleSheet.create({
+  buttonCluster: {
+    justifyContent: 'flex-end',
+    width: '30%',
+  },
   buttonRightAlign: {
-    alignItems: 'right',
-    alignSelf: 'right',
-    paddingRight: '0.5rem !important',
-    direction: 'rtl',
     float: 'right',
   },
-  element: {
-    display: 'flex',
-    flexFlow: 'column',
+  elementBody: {
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
     width: '70%',
   },
   isDragging: {
@@ -118,32 +118,36 @@ export const DocumentField: FunctionComponent<IDocumentFieldProps> = ({
   const content = isSelected ? <Label>{name}</Label> : name;
 
   return (
-    <span
-      ref={handleRef}
-      className={css(
-        styles.element,
-        isOver && styles.isOver,
-        isDragging && styles.isDragging
-      )}
-    >
-      <span>
-        {showAddToMapping ? (
-          <Button
-            variant={'link'}
-            onClick={onClickAddToMapping}
-            isInline={true}
-            icon={isSelected ? <MinusCircleIcon /> : <AddCircleOIcon />}
-          >
-            {content}
-          </Button>
-        ) : (
-          content
+    <span>
+      <span
+        ref={handleRef}
+        className={css(
+          styles.elementBody,
+          isOver && styles.isOver,
+          isDragging && styles.isDragging
         )}
-        {showType && ` (${type})`}
-        {isConstantOrProperty && (
-          <span>
+      >
+        <span>
+          {showAddToMapping ? (
             <Button
-              className={css(styles.buttonRightAlign)}
+              variant={'link'}
+              onClick={onClickAddToMapping}
+              isInline={true}
+              icon={isSelected ? <MinusCircleIcon /> : <AddCircleOIcon />}
+            >
+              {content}
+            </Button>
+          ) : (
+            content
+          )}
+          {showType && ` (${type})`}
+        </span>
+        {children}
+      </span>
+      <span className={css(styles.buttonCluster)}>
+        {isConstantOrProperty && (
+          <span className={css(styles.buttonRightAlign)}>
+            <Button
               variant={ButtonVariant.plain}
               aria-label="Edit constant or property"
               key={'edit-element'}
@@ -152,7 +156,6 @@ export const DocumentField: FunctionComponent<IDocumentFieldProps> = ({
               <EditIcon size="sm" />
             </Button>
             <Button
-              className={css(styles.buttonRightAlign)}
               variant={ButtonVariant.plain}
               aria-label="Delete constant or property"
               key={'delete-element'}
@@ -163,7 +166,6 @@ export const DocumentField: FunctionComponent<IDocumentFieldProps> = ({
           </span>
         )}
       </span>
-      {children}
     </span>
   );
 };
