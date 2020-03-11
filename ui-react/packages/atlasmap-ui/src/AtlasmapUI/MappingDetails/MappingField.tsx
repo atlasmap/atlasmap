@@ -142,8 +142,10 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
             </Stack>
           </SplitItem>
         </Split>
-        // Show established field action transformations associated with this //
+        {/*
+        Show established field action transformations associated with this
         field.
+        */}
         {Children.count(children) > 0 && (
           <DataListContent
             aria-label={'Field transformations'}
