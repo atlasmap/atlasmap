@@ -459,10 +459,16 @@ export class ExpressionModel {
   }
 
   toText() {
+    if (this.textCache.length === 0) {
+      this.updateCache();
+    }
     return this.textCache;
   }
 
   toHTML() {
+    if (this.htmlCache.length === 0) {
+      this.updateCache();
+    }
     return this.htmlCache;
   }
 

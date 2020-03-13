@@ -579,6 +579,15 @@ export class MappingManagementService {
     }
   }
 
+  conditionalMappingExpressionEnabled(): boolean {
+    if (!this.cfg || !this.cfg.mappings || !this.cfg.mappings.activeMapping) {
+      return false;
+    };
+    return (this.cfg.mappings && this.cfg.mappings.activeMapping &&
+      this.cfg.mappings.activeMapping.transition &&
+      this.cfg.mappings.activeMapping.transition.enableExpression);
+  }
+
   toggleExpressionMode() {
     if (!this.cfg.mappings || !this.cfg.mappings.activeMapping || !this.cfg.mappings.activeMapping.transition) {
       this.cfg.errorService.addError(new ErrorInfo({

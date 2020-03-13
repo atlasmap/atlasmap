@@ -84,6 +84,9 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     deleteAtlasFile,
     changeActiveMapping,
     documentExists,
+    onToggleExpressionMode,
+    onConditionalMappingExpressionEnabled,
+    onGetMappingExpressionStr,
     toggleMappingPreview,
     toggleShowMappedFields,
     toggleShowUnmappedFields,
@@ -100,6 +103,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
 
   const sources = useAtlasmapSources(sourceFilter);
   const targets = useAtlasmapTargets(targetFilter);
+  let expressionTokens = [''];
 
   const handleExportAtlasFile = () => {
     onExportAtlasFile(exportAtlasFile);
@@ -235,9 +239,18 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         onShowMappingPreview={toggleMappingPreview}
         onShowMappedFields={toggleShowMappedFields}
         onShowUnmappedFields={toggleShowUnmappedFields}
+        onConditionalMappingExpressionEnabled={
+          onConditionalMappingExpressionEnabled
+        }
+        onGetMappingExpressionStr={onGetMappingExpressionStr}
+        onToggleExpressionMode={() => {
+          onToggleExpressionMode();
+          expressionTokens = [''];
+        }}
         onExportAtlasFile={handleExportAtlasFile}
         onImportAtlasFile={(file: File) => handleImportAtlasFile(file)}
         onResetAtlasmap={handleResetAtlasmap}
+        expressionTokens={expressionTokens}
       >
         {({ showTypes, showMappingPreview }) => (
           <>

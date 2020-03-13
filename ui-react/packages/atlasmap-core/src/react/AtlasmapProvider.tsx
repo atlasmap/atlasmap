@@ -35,6 +35,7 @@ import {
   deleteProperty,
   editProperty,
 } from '../components/field/field-util';
+import { getExpressionStr } from '../components/expression/expression-util';
 import {
   deleteAtlasFile,
   toggleMappingPreview,
@@ -298,6 +299,18 @@ export function useAtlasmap() {
     [initializationService]
   );
 
+  const onConditionalMappingExpressionEnabled = useCallback(() => {
+    return initializationService.cfg.mappingService.conditionalMappingExpressionEnabled();
+  }, [initializationService]);
+
+  const onGetMappingExpressionStr = useCallback(() => {
+    return getExpressionStr();
+  }, []);
+
+  const onToggleExpressionMode = useCallback(() => {
+    initializationService.cfg.mappingService.toggleExpressionMode();
+  }, [initializationService]);
+
   const changeActiveMapping = useCallback(
     (mappingId: string) => {
       const mapping = mappingDefinition.mappings.find(
@@ -381,6 +394,9 @@ export function useAtlasmap() {
       importAtlasFile: handleImportAtlasFile,
       resetAtlasmap: handleResetAtlasmap,
       changeActiveMapping,
+      onConditionalMappingExpressionEnabled,
+      onGetMappingExpressionStr,
+      onToggleExpressionMode,
       toggleMappingPreview,
       toggleShowMappedFields,
       toggleShowUnmappedFields,
@@ -407,6 +423,9 @@ export function useAtlasmap() {
       handleResetAtlasmap,
       changeActiveMapping,
       onFieldPreviewChange,
+      onConditionalMappingExpressionEnabled,
+      onGetMappingExpressionStr,
+      onToggleExpressionMode,
       getMappingActions,
       getMultiplicityActions,
       getMultiplicityActionDelimiters,
