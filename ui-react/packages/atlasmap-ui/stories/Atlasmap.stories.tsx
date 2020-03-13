@@ -46,6 +46,16 @@ export const sample = () =>
       ]);
     };
 
+    const conditionalMappingExpressionEnabled = () => {
+      return false;
+    };
+
+    const getMappingExpressionStr = () => {
+      return '';
+    };
+
+    const expressionTokens = [''];
+
     return (
       <AtlasmapUIProvider
         error={boolean('error', false)}
@@ -68,6 +78,12 @@ export const sample = () =>
           onExportAtlasFile={action('onExportAtlasFile')}
           onImportAtlasFile={action('onImportAtlasFile')}
           onResetAtlasmap={action('onResetAtlasmap')}
+          onConditionalMappingExpressionEnabled={
+            conditionalMappingExpressionEnabled
+          }
+          onGetMappingExpressionStr={getMappingExpressionStr}
+          onToggleExpressionMode={action('onToggleExpressionMode')}
+          expressionTokens={expressionTokens}
         >
           {({ showTypes, showMappingPreview }) => (
             <>
