@@ -20,9 +20,13 @@ export interface IAtlasmapCanvasViewProps {
   onShowMappingPreview: (enabled: boolean) => void;
   onShowMappedFields: (enabled: boolean) => void;
   onShowUnmappedFields: (enabled: boolean) => void;
+  onConditionalMappingExpressionEnabled: () => boolean;
+  onGetMappingExpressionStr: () => string;
+  onToggleExpressionMode: () => void;
   onExportAtlasFile: (event: any) => void;
   onImportAtlasFile: (selectedFile: File) => void;
   onResetAtlasmap: () => void;
+  expressionTokens: string[];
   children: (props: {
     showTypes: boolean;
     showMappingPreview: boolean;
@@ -33,9 +37,13 @@ export const AtlasmapCanvasView: FunctionComponent<IAtlasmapCanvasViewProps> = (
   onShowMappingPreview,
   onShowMappedFields,
   onShowUnmappedFields,
+  onConditionalMappingExpressionEnabled,
+  onGetMappingExpressionStr,
+  onToggleExpressionMode,
   onExportAtlasFile,
   onImportAtlasFile,
   onResetAtlasmap,
+  expressionTokens,
   children,
 }) => {
   const { mappings, selectedMapping, isEditingMapping } = useAtlasmapUI();
@@ -47,11 +55,24 @@ export const AtlasmapCanvasView: FunctionComponent<IAtlasmapCanvasViewProps> = (
     showTypes,
   ]);
   const [showMappingPreview, setShowMappingPreview] = useState(false);
+
   const toggleShowMappingPreview = useCallback(() => {
     const newValue = !showMappingPreview;
     setShowMappingPreview(newValue);
     onShowMappingPreview(newValue);
   }, [onShowMappingPreview, showMappingPreview]);
+
+  const conditionalMappingExpressionEnabled = useCallback(() => {
+    return onConditionalMappingExpressionEnabled();
+  }, [onConditionalMappingExpressionEnabled]);
+
+  const getMappingExpressionStr = useCallback(() => {
+    return onGetMappingExpressionStr();
+  }, [onGetMappingExpressionStr]);
+
+  const toggleExpressionMode = useCallback(() => {
+    onToggleExpressionMode();
+  }, [onToggleExpressionMode]);
 
   const [showMappedFields, setShowMappedFields] = useState(true);
   const toggleShowMappedFields = useCallback(() => {
@@ -85,10 +106,16 @@ export const AtlasmapCanvasView: FunctionComponent<IAtlasmapCanvasViewProps> = (
         onImportAtlasFile={onImportAtlasFile}
         onResetAtlasmap={onResetAtlasmap}
         controlBar={controlBar}
+        onConditionalMappingExpressionEnabled={
+          conditionalMappingExpressionEnabled
+        }
+        onGetMappingExpressionStr={getMappingExpressionStr}
+        onToggleExpressionMode={toggleExpressionMode}
         onToggleShowTypes={toggleShowTypes}
         onToggleShowMappingPreview={toggleShowMappingPreview}
         onToggleShowMappedFields={toggleShowMappedFields}
         onToggleShowUnmappedFields={toggleShowUnmappedFields}
+        expressionTokens={expressionTokens}
       >
         <CanvasView showMappingColumn={isMappingColumnVisible}>
           {children({ showMappingPreview, showTypes })}

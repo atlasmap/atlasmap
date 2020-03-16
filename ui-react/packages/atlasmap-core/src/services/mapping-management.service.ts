@@ -579,6 +579,10 @@ export class MappingManagementService {
     }
   }
 
+  conditionalMappingExpressionEnabled(): boolean {
+    return !!(this.cfg.mappings?.activeMapping?.transition?.enableExpression);
+  }
+
   toggleExpressionMode() {
     if (!this.cfg.mappings || !this.cfg.mappings.activeMapping || !this.cfg.mappings.activeMapping.transition) {
       this.cfg.errorService.addError(new ErrorInfo({

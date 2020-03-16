@@ -12,10 +12,14 @@ export interface IAtlasmapLayoutProps {
   onImportAtlasFile: (selectedFile: File) => void;
   onResetAtlasmap: () => void;
   controlBar?: ReactNode;
+  onConditionalMappingExpressionEnabled: () => boolean;
+  onGetMappingExpressionStr: () => string;
+  onToggleExpressionMode: () => void;
   onToggleShowTypes: (id: any) => void;
   onToggleShowMappingPreview: (id: any) => void;
   onToggleShowMappedFields: (id: any) => void;
   onToggleShowUnmappedFields: (id: any) => void;
+  expressionTokens: string[];
 }
 
 export const AtlasmapLayout: FunctionComponent<IAtlasmapLayoutProps> = ({
@@ -23,10 +27,14 @@ export const AtlasmapLayout: FunctionComponent<IAtlasmapLayoutProps> = ({
   onImportAtlasFile,
   onResetAtlasmap,
   controlBar,
+  onConditionalMappingExpressionEnabled,
+  onGetMappingExpressionStr,
+  onToggleExpressionMode,
   onToggleShowTypes,
   onToggleShowMappingPreview,
   onToggleShowMappedFields,
   onToggleShowUnmappedFields,
+  expressionTokens,
   children,
 }) => {
   const { pending, isEditingMapping } = useAtlasmapUI();
@@ -58,12 +66,31 @@ export const AtlasmapLayout: FunctionComponent<IAtlasmapLayoutProps> = ({
     ]
   );
 
+  const canvasViewToolbar = useMemo(
+    () => (
+      <CanvasViewToolbar
+        expressionTokens={expressionTokens}
+        onConditionalMappingExpressionEnabled={
+          onConditionalMappingExpressionEnabled
+        }
+        onGetMappingExpressionStr={onGetMappingExpressionStr}
+        onToggleExpressionMode={onToggleExpressionMode}
+      />
+    ),
+    [
+      expressionTokens,
+      onConditionalMappingExpressionEnabled,
+      onGetMappingExpressionStr,
+      onToggleExpressionMode,
+    ]
+  );
+
   return pending ? (
     <Loading />
   ) : (
     <TopologyView
       contextToolbar={contextToolbar}
-      viewToolbar={<CanvasViewToolbar />}
+      viewToolbar={canvasViewToolbar}
       controlBar={controlBar}
       sideBar={<AtlasmapSidebar />}
       sideBarOpen={isEditingMapping}
