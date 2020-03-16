@@ -245,7 +245,6 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         onGetMappingExpressionStr={onGetMappingExpressionStr}
         onToggleExpressionMode={() => {
           onToggleExpressionMode();
-          expressionTokens = [''];
         }}
         onExportAtlasFile={handleExportAtlasFile}
         onImportAtlasFile={(file: File) => handleImportAtlasFile(file)}

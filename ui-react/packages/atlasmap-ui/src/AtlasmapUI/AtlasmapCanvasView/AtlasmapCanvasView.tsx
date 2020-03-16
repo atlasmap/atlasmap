@@ -72,8 +72,7 @@ export const AtlasmapCanvasView: FunctionComponent<IAtlasmapCanvasViewProps> = (
 
   const toggleExpressionMode = useCallback(() => {
     onToggleExpressionMode();
-    expressionTokens[0] = 'ratsky';
-  }, [expressionTokens, onToggleExpressionMode]);
+  }, [onToggleExpressionMode]);
 
   const [showMappedFields, setShowMappedFields] = useState(true);
   const toggleShowMappedFields = useCallback(() => {

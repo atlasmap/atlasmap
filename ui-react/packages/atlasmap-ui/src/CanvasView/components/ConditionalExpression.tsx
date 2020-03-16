@@ -3,13 +3,15 @@ import { TextInput } from '@patternfly/react-core';
 
 export interface IConditionalExpressionProps {
   expressionTokens: string[];
+  condExprEnabled: boolean;
   onConditionalMappingExpressionEnabled: () => boolean;
   onGetMappingExpressionStr: () => string;
 }
 
 export const ConditionalExpression: FunctionComponent<IConditionalExpressionProps> = ({
   // expressionTokens,
-  onConditionalMappingExpressionEnabled,
+  condExprEnabled,
+  // onConditionalMappingExpressionEnabled,
   onGetMappingExpressionStr,
 }) => {
   return (
@@ -17,7 +19,7 @@ export const ConditionalExpression: FunctionComponent<IConditionalExpressionProp
       aria-label={'Conditional mapping expression'}
       // value={expressionTokens[0]}
       value={onGetMappingExpressionStr()}
-      isDisabled={!onConditionalMappingExpressionEnabled()}
+      isDisabled={!condExprEnabled}
       // onChange={onExpressionChange}
     />
   );

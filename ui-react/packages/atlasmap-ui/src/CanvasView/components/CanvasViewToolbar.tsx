@@ -26,6 +26,16 @@ export const CanvasViewToolbar: FunctionComponent<ICanvasViewToolbarProps> = ({
   onGetMappingExpressionStr,
   onToggleExpressionMode,
 }) => {
+  /*
+  const [condExprEnabled, setCondExprEnabled] = useState(
+    onConditionalMappingExpressionEnabled()
+  );
+
+  const condExprEnabledRef = useRef<boolean>(
+    onConditionalMappingExpressionEnabled()
+  );
+  */
+  let condExprEnabled = onConditionalMappingExpressionEnabled();
   return (
     <Toolbar
       className={css('view-toolbar pf-u-px-md pf-u-py-md', styles.toolbar)}
@@ -35,7 +45,11 @@ export const CanvasViewToolbar: FunctionComponent<ICanvasViewToolbarProps> = ({
           <Button
             variant={'plain'}
             aria-label="Enable/ Disable conditional mapping expression"
-            onClick={onToggleExpressionMode}
+            onClick={() => {
+              onToggleExpressionMode();
+              // setCondExprEnabled(onConditionalMappingExpressionEnabled());
+              condExprEnabled = onConditionalMappingExpressionEnabled();
+            }}
             disabled={!onConditionalMappingExpressionEnabled()}
           >
             <i>
@@ -43,10 +57,11 @@ export const CanvasViewToolbar: FunctionComponent<ICanvasViewToolbarProps> = ({
             </i>
           </Button>
         </ToolbarItem>
-        {onConditionalMappingExpressionEnabled() && (
+        {condExprEnabled && (
           <ToolbarItem className={css(styles.toolbarItem)}>
             <ConditionalExpression
               expressionTokens={expressionTokens}
+              condExprEnabled={condExprEnabled}
               onConditionalMappingExpressionEnabled={
                 onConditionalMappingExpressionEnabled
               }
