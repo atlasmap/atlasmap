@@ -70,7 +70,7 @@
     <maven-plugin-plugin.version>3.6.0</maven-plugin-plugin.version>
     <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
-    <mockito.version>3.3.1</mockito.version>
+    <mockito.version>3.3.3</mockito.version>
     <okhttp.version>4.2.2</okhttp.version>
     <osgi.symbolic.name>${project.artifactId}</osgi.symbolic.name>
     <osgi.import.pkg>*</osgi.import.pkg>
