@@ -6,7 +6,7 @@ const trailerId = 'expression-trailer';
 
 function activeMapping(): boolean {
   const cfg = ConfigModel.getConfig();
-  return !(!cfg || !cfg.mappings || !cfg.mappings.activeMapping);
+  return !!(cfg?.mappings?.activeMapping);
 }
 
 function updateExpressionMarkup() {
@@ -100,7 +100,7 @@ export class FieldNode extends ExpressionNode {
 
 export function getExpression(): ExpressionModel | null {
   const cfg = ConfigModel.getConfig();
-  if (!activeMapping()) {
+  if (!activeMapping() || !(cfg.mappings?.activeMapping)) {
     return null;
   }
   const mapping = cfg.mappings!.activeMapping;
@@ -121,9 +121,16 @@ export function getExpression(): ExpressionModel | null {
 
 export function getExpressionStr(): string {
   const cfg = ConfigModel.getConfig();
-  if (!activeMapping() || !cfg.mappings!.activeMapping!.transition || 
-    !cfg.mappings!.activeMapping!.transition.expression) {
-    getExpression();
+  if (!activeMapping()) {
+    return '';
   }
-  return cfg.mappings!.activeMapping!.transition.expression.toText();
+  if (!(cfg.mappings?.activeMapping?.transition?.expression)) {
+    if (!getExpression()) {
+      return '';
+    }
+  }
+  return ((cfg.mappings!.activeMapping!.transition.expression) &&
+    (cfg.mappings!.activeMapping!.transition.enableExpression))
+      ? cfg.mappings!.activeMapping!.transition.expression.toText()
+      : '';
 }
