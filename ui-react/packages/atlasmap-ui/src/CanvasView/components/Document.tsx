@@ -133,12 +133,14 @@ export function Document({
                         <DropdownToggleAction
                           key="action"
                           onClick={() => void 0}
+                          data-testid={`open-folder-${title}-action`}
                         >
                           <FolderOpenIcon />
                         </DropdownToggleAction>,
                       ]}
                       splitButtonVariant="action"
                       onToggle={toggleActions}
+                      data-testid={`mapping-${title}-dropdown`}
                     />
                   }
                   isOpen={showActions}
@@ -148,6 +150,7 @@ export function Document({
                       variant={'icon'}
                       key={'collapse'}
                       onClick={() => void 0}
+                      data-testid={'collapse-all-dropdown-item'}
                     >
                       <DropdownItemIcon>
                         <FolderCloseIcon />
@@ -159,6 +162,7 @@ export function Document({
                       variant={'icon'}
                       key={'delete'}
                       onClick={onDelete}
+                      data-testid={'remove-instance-or-schema-dropdown-item'}
                     >
                       <DropdownItemIcon>
                         <TrashIcon />
@@ -173,7 +177,10 @@ export function Document({
               onClick={toggleIsExpanded}
               className={css(styles.cardHeader)}
             >
-              <Button variant={'link'}>
+              <Button
+                variant={'link'}
+                data-testid={`wrap-unwrap-mapping-${title}-button`}
+              >
                 {isExpanded ? <CaretDownIcon /> : <CaretRightIcon />} {title}
               </Button>
             </CardHeader>

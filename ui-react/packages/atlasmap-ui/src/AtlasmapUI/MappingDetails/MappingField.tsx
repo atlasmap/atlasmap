@@ -121,6 +121,7 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
                     disabled={!canEditIndex}
                     className={css(styles.indexInput)}
                     onChange={onIndexChange}
+                    data-testid={`change-${name}-input-index`}
                   />
                 </Label>
               </Tooltip>
@@ -134,6 +135,7 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
                   variant={'link'}
                   onClick={onDelete}
                   className={css(styles.link)}
+                  data-testid={`remove-${name}-from-mapping-button`}
                 >
                   Remove
                 </Button>
@@ -173,6 +175,7 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
               variant={'link'}
               onClick={onNewTransformation}
               className={css(styles.link)}
+              data-testid={`add-transformation-to-${name}-field-button`}
             >
               <BoltIcon />
               Add Transformation

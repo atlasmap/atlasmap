@@ -49,10 +49,20 @@ export function useConfirmationDialog({
       isOpen={isOpen}
       onClose={closeModal}
       actions={[
-        <Button key={'confirm'} variant={'primary'} onClick={handleConfirm}>
+        <Button
+          key={'confirm'}
+          variant={'primary'}
+          onClick={handleConfirm}
+          data-testid={'confirmation-dialog-confirm-button'}
+        >
           Confirm
         </Button>,
-        <Button key={'cancel'} variant={'link'} onClick={handleCancel}>
+        <Button
+          key={'cancel'}
+          variant={'link'}
+          onClick={handleCancel}
+          data-testid={'confirmation-dialog-cancel-button'}
+        >
           Cancel
         </Button>,
       ]}

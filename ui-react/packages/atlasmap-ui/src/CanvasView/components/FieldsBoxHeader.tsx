@@ -67,6 +67,7 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
               variant={ButtonVariant.control}
               aria-label="Search button for search input"
               onClick={toggleSearch}
+              data-testid={`search-for-${title}-input-button`}
             >
               <SearchIcon />
             </Button>
@@ -79,6 +80,7 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
                   id={'source-search'}
                   type="search"
                   aria-label="Search source fields"
+                  data-testid={`search-for-${title}-input-field`}
                   autoFocus={true}
                   onChange={onSearch}
                 />
@@ -94,8 +96,13 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
               toggle={<DropdownToggle onToggle={toggleActions} />}
               isOpen={showActions}
               position={'right'}
+              data-testid={`dropdown-handle-${title}-button`}
               dropdownItems={[
-                <DropdownItem variant={'icon'} key={'import'}>
+                <DropdownItem
+                  variant={'icon'}
+                  key={'import'}
+                  data-testid={'import-instance-or-schema-file'}
+                >
                   <SplitItem isFilled>
                     <Tooltip
                       position={'auto'}
@@ -124,6 +131,7 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
                   variant={'icon'}
                   key={'java-classes'}
                   onClick={onJavaClasses}
+                  data-testid={'enable-java-classes'}
                 >
                   <SplitItem isFilled>
                     <Tooltip
@@ -149,6 +157,7 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
                   variant={'icon'}
                   key={'create-constant'}
                   onClick={onCreateConstant}
+                  data-testid={'create-constant'}
                 >
                   <SplitItem isFilled>
                     <Tooltip
@@ -169,6 +178,7 @@ export const FieldsBoxHeader: FunctionComponent<IFieldsBoxHeaderProps> = ({
                   variant={'icon'}
                   key={'create-property'}
                   onClick={onCreateProperty}
+                  data-testid={'create-property'}
                 >
                   <SplitItem isFilled>
                     <Tooltip

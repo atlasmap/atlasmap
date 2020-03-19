@@ -189,6 +189,7 @@ export function FieldGroup({
           isExpanded={isExpanded}
           id={`source-field-group-${group.id}-toggle`}
           className={css(styles.button, rightAlign && styles.buttonRightAlign)}
+          data-testid={`element-group-${renderGroup(group)}-toggle`}
         >
           <span
             className={css(

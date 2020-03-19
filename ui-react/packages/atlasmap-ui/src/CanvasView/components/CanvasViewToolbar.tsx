@@ -65,6 +65,7 @@ export const CanvasViewToolbar: FunctionComponent<ICanvasViewToolbarProps> = ({
               setCondExprEnabled(onConditionalMappingExpressionEnabled());
             }}
             disabled={false}
+            data-testid={'enable-disable-conditional-mapping-expression-button'}
           >
             <i>
               f<sub>(x)</sub>
