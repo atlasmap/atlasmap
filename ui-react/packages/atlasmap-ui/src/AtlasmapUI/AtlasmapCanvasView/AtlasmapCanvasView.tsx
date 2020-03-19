@@ -62,10 +62,6 @@ export const AtlasmapCanvasView: FunctionComponent<IAtlasmapCanvasViewProps> = (
     onShowMappingPreview(newValue);
   }, [onShowMappingPreview, showMappingPreview]);
 
-  const conditionalMappingExpressionEnabled = useCallback(() => {
-    return onConditionalMappingExpressionEnabled();
-  }, [onConditionalMappingExpressionEnabled]);
-
   const getMappingExpressionStr = useCallback(() => {
     return onGetMappingExpressionStr();
   }, [onGetMappingExpressionStr]);
@@ -107,7 +103,7 @@ export const AtlasmapCanvasView: FunctionComponent<IAtlasmapCanvasViewProps> = (
         onResetAtlasmap={onResetAtlasmap}
         controlBar={controlBar}
         onConditionalMappingExpressionEnabled={
-          conditionalMappingExpressionEnabled
+          onConditionalMappingExpressionEnabled
         }
         onGetMappingExpressionStr={getMappingExpressionStr}
         onToggleExpressionMode={toggleExpressionMode}
