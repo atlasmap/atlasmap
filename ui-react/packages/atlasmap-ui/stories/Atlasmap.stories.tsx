@@ -78,6 +78,7 @@ export const sample = () =>
           onExportAtlasFile={action('onExportAtlasFile')}
           onImportAtlasFile={action('onImportAtlasFile')}
           onResetAtlasmap={action('onResetAtlasmap')}
+          onAddMapping={action('onAddMapping')}
           onConditionalMappingExpressionEnabled={
             conditionalMappingExpressionEnabled
           }

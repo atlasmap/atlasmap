@@ -8,6 +8,7 @@ import {
   MapMarkedIcon,
   MapIcon,
   PficonDragdropIcon,
+  PlusIcon,
 } from '@patternfly/react-icons';
 import React, { FunctionComponent } from 'react';
 import { Button, Tooltip, Toolbar, ToolbarItem } from '@patternfly/react-core';
@@ -23,6 +24,7 @@ export interface IAtlasmapContextToolbarProps {
   onExportAtlasFile: (event: any) => void;
   onImportAtlasFile: (selectedFile: File) => void;
   onResetAtlasmap: () => void;
+  onAddMapping: () => void;
   onToggleShowTypes: (id: any) => void;
   onToggleShowMappingPreview: (id: any) => void;
   onToggleShowMappedFields: (id: any) => void;
@@ -34,6 +36,7 @@ export const AtlasmapContextToolbar: FunctionComponent<IAtlasmapContextToolbarPr
   onImportAtlasFile,
   onResetAtlasmap,
   onExportAtlasFile,
+  onAddMapping,
   onToggleShowMappingPreview,
   onToggleShowTypes,
   onToggleShowMappedFields,
@@ -101,6 +104,21 @@ export const AtlasmapContextToolbar: FunctionComponent<IAtlasmapContextToolbarPr
             onClick={onResetAtlasmap}
           >
             Reset all
+          </Button>
+        </Tooltip>
+      </ToolbarItem>
+      <ToolbarItem>
+        <Tooltip
+          position={'auto'}
+          enableFlip={true}
+          content={<div>Add new mapping</div>}
+        >
+          <Button
+            variant={'plain'}
+            aria-label="Add new mapping"
+            onClick={onAddMapping}
+          >
+            <PlusIcon />
           </Button>
         </Tooltip>
       </ToolbarItem>

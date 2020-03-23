@@ -430,6 +430,22 @@ export class MappingManagementService {
     this.selectMapping(mapping);
   }
 
+  /**
+   * Instantiate a new mapping model.
+   */
+  newMapping(): void {
+    this.deselectMapping();
+    const mapping: MappingModel = new MappingModel();
+    // Determine type of mapping (i.e., transition mode)
+    this.updateTransition(mapping);
+    // SelectMapping marks new mapping as active mapping, which is necessary so
+    // that it gets added to the existing mappings in notifyMappingUpdated().
+    // TODO: this seems very unintuitive, seems like some step to explicitly
+    // add the new mapping would make more sense
+    this.selectMapping(mapping);
+    this.notifyMappingUpdated();
+  }
+
   selectMapping(mappingModel: MappingModel) {
     if (mappingModel == null) {
       this.deselectMapping();
