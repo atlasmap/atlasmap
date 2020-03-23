@@ -93,6 +93,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     onFieldPreviewChange,
     addToCurrentMapping,
     createMapping,
+    newMapping,
     createConstant,
     deleteConstant,
     editConstant,
@@ -215,6 +216,11 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     [createMapping]
   );
 
+  const handleNewMapping = useCallback(() => {
+    console.log('handleNewMapping');
+    newMapping();
+  }, [newMapping]);
+
   return (
     <AtlasmapUIProvider
       error={error}
@@ -249,6 +255,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         onExportAtlasFile={handleExportAtlasFile}
         onImportAtlasFile={(file: File) => handleImportAtlasFile(file)}
         onResetAtlasmap={handleResetAtlasmap}
+        onAddMapping={handleNewMapping}
         expressionTokens={expressionTokens}
       >
         {({ showTypes, showMappingPreview }) => (

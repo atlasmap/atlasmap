@@ -430,6 +430,17 @@ export class MappingManagementService {
     this.selectMapping(mapping);
   }
 
+  /**
+   * Instantiate a new mapping model.
+   */
+  newMapping(): void {
+    this.deselectMapping();
+    const mapping: MappingModel = new MappingModel();
+    this.updateTransition(mapping);
+    this.notifyMappingUpdated();
+    this.selectMapping(mapping);
+  }
+
   selectMapping(mappingModel: MappingModel) {
     if (mappingModel == null) {
       this.deselectMapping();
