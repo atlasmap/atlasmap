@@ -26,6 +26,7 @@ export interface IAtlasmapCanvasViewProps {
   onExportAtlasFile: (event: any) => void;
   onImportAtlasFile: (selectedFile: File) => void;
   onResetAtlasmap: () => void;
+  onAddMapping: () => void;
   expressionTokens: string[];
   children: (props: {
     showTypes: boolean;
@@ -43,6 +44,7 @@ export const AtlasmapCanvasView: FunctionComponent<IAtlasmapCanvasViewProps> = (
   onExportAtlasFile,
   onImportAtlasFile,
   onResetAtlasmap,
+  onAddMapping,
   expressionTokens,
   children,
 }) => {
@@ -101,6 +103,7 @@ export const AtlasmapCanvasView: FunctionComponent<IAtlasmapCanvasViewProps> = (
         onExportAtlasFile={onExportAtlasFile}
         onImportAtlasFile={onImportAtlasFile}
         onResetAtlasmap={onResetAtlasmap}
+        onAddMapping={onAddMapping}
         controlBar={controlBar}
         onConditionalMappingExpressionEnabled={
           onConditionalMappingExpressionEnabled

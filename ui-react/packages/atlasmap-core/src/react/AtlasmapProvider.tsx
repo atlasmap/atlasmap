@@ -28,6 +28,7 @@ import {
 import {
   addToCurrentMapping,
   createMapping,
+  newMapping,
   createConstant,
   deleteConstant,
   editConstant,
@@ -403,6 +404,7 @@ export function useAtlasmap() {
       onFieldPreviewChange,
       addToCurrentMapping,
       createMapping,
+      newMapping,
       documentExists,
       getMappingActions,
       getMultiplicityActions,

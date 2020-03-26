@@ -11,6 +11,7 @@ export interface IAtlasmapLayoutProps {
   onExportAtlasFile: (event: any) => void;
   onImportAtlasFile: (selectedFile: File) => void;
   onResetAtlasmap: () => void;
+  onAddMapping: () => void;
   controlBar?: ReactNode;
   onConditionalMappingExpressionEnabled: () => boolean;
   onGetMappingExpressionStr: () => string;
@@ -26,6 +27,7 @@ export const AtlasmapLayout: FunctionComponent<IAtlasmapLayoutProps> = ({
   onExportAtlasFile,
   onImportAtlasFile,
   onResetAtlasmap,
+  onAddMapping,
   controlBar,
   onConditionalMappingExpressionEnabled,
   onGetMappingExpressionStr,
@@ -47,6 +49,7 @@ export const AtlasmapLayout: FunctionComponent<IAtlasmapLayoutProps> = ({
         onExportAtlasFile={onExportAtlasFile}
         onImportAtlasFile={onImportAtlasFile}
         onResetAtlasmap={onResetAtlasmap}
+        onAddMapping={onAddMapping}
         onToggleShowTypes={onToggleShowTypes}
         onToggleShowMappingPreview={onToggleShowMappingPreview}
         onToggleShowMappedFields={onToggleShowMappedFields}
@@ -58,6 +61,7 @@ export const AtlasmapLayout: FunctionComponent<IAtlasmapLayoutProps> = ({
       onExportAtlasFile,
       onImportAtlasFile,
       onResetAtlasmap,
+      onAddMapping,
       onToggleShowMappedFields,
       onToggleShowMappingPreview,
       onToggleShowTypes,

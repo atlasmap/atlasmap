@@ -128,6 +128,17 @@ export function createMapping(source: Field, target: Field): void {
 }
 
 /**
+ * Create a new mapping using the specified source and target IDs.
+ *
+ * @param source
+ * @param target
+ */
+export function newMapping(): void {
+  const cfg = ConfigModel.getConfig();
+  cfg.mappingService.newMapping();
+}
+
+/**
  * Add the specified field to the current mapping.
  *
  * @param field
