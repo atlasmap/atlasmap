@@ -94,6 +94,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     addToCurrentMapping,
     createMapping,
     newMapping,
+    removeMapping,
     createConstant,
     deleteConstant,
     editConstant,
