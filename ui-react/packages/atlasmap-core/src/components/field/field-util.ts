@@ -2,6 +2,7 @@ import { ConfigModel } from '../../models/config.model';
 import { DocumentDefinition } from '../../models/document-definition.model';
 import { Field } from '../../models/field.model';
 import { propertyTypes, constantTypes } from '../../common/config.types';
+import { MappingModel } from '../../models/mapping.model';
 
 export function createConstant(constValue: string, constType: string): void {
   const cfg = ConfigModel.getConfig();
@@ -128,14 +129,18 @@ export function createMapping(source: Field, target: Field): void {
 }
 
 /**
- * Create a new mapping using the specified source and target IDs.
- *
- * @param source
- * @param target
+ * Create a new mapping.
  */
 export function newMapping(): void {
   const cfg = ConfigModel.getConfig();
   cfg.mappingService.newMapping();
+}
+
+/**
+ * Removes a mapping.
+ */
+export function removeMapping(mappingModel: MappingModel): void {
+  ConfigModel.getConfig().mappingService.removeMapping(mappingModel);
 }
 
 /**

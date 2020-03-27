@@ -55,6 +55,7 @@ export const AtlasmapMappingDetails: FunctionComponent<IAtlasmapMappingDetailsPr
     getMultiplicityActions,
     getMultiplicityActionDelimiters,
     handleActionChange,
+    removeMapping,
   } = useAtlasmap();
 
   const cfg = ConfigModel.getConfig();
@@ -80,9 +81,13 @@ export const AtlasmapMappingDetails: FunctionComponent<IAtlasmapMappingDetailsPr
   }));
   const multiplicityFieldAction = mapping.transition.transitionFieldAction;
   const multiplicityId = `multiplicity-${multiplicityFieldAction}`;
+  const handleRemoveMapping = () => {
+    removeMapping(mapping);
+    closeDetails();
+  };
 
   return (
-    <MappingDetails onDelete={() => void 0} onClose={closeDetails}>
+    <MappingDetails onDelete={handleRemoveMapping} onClose={closeDetails}>
       <MappingFields title={'Sources'}>
         {multiplicityFieldAction && (
           <MappingAction
