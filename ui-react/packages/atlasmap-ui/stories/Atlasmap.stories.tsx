@@ -60,9 +60,8 @@ export const sample = () =>
     ) => {
       if (nodeId || startOffset || endOffset) {
         return 'startOffset';
-      }
-      else {
-        return ''
+      } else {
+        return '';
       }
     };
     const mappingExprEmpty = () => {
