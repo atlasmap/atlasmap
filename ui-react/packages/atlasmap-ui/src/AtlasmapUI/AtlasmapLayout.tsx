@@ -8,19 +8,36 @@ import { CanvasViewToolbar } from '../CanvasView/components';
 import { useCanvasViewOptionsContext } from '../CanvasView/CanvasViewOptionsProvider';
 
 export interface IAtlasmapLayoutProps {
+  mappingExpressionClearText: (
+    nodeId?: string,
+    startOffset?: number,
+    endOffset?: number
+  ) => any;
+  mappingExpressionEmpty: () => boolean;
+  mappingExpressionInit: () => void;
+  mappingExpressionInsertText: (
+    str: string,
+    nodeId?: string,
+    offset?: number
+  ) => void;
+  mappingExpressionObservable: () => any;
+  mappingExpressionRemoveField: (
+    tokenPosition?: string,
+    offset?: number
+  ) => void;
   onExportAtlasFile: (event: any) => void;
   onImportAtlasFile: (selectedFile: File) => void;
   onResetAtlasmap: () => void;
   onAddMapping: () => void;
   controlBar?: ReactNode;
   onConditionalMappingExpressionEnabled: () => boolean;
-  onGetMappingExpressionStr: () => string;
+  onGetMappingExpression: () => string;
   onToggleExpressionMode: () => void;
   onToggleShowTypes: (id: any) => void;
   onToggleShowMappingPreview: (id: any) => void;
   onToggleShowMappedFields: (id: any) => void;
   onToggleShowUnmappedFields: (id: any) => void;
-  expressionTokens: string[];
+  trailerId: string;
 }
 
 export const AtlasmapLayout: FunctionComponent<IAtlasmapLayoutProps> = ({
@@ -29,15 +46,21 @@ export const AtlasmapLayout: FunctionComponent<IAtlasmapLayoutProps> = ({
   onResetAtlasmap,
   onAddMapping,
   controlBar,
+  mappingExpressionClearText,
+  mappingExpressionEmpty,
+  mappingExpressionInit,
+  mappingExpressionInsertText,
+  mappingExpressionObservable,
+  mappingExpressionRemoveField,
   onConditionalMappingExpressionEnabled,
-  onGetMappingExpressionStr,
+  onGetMappingExpression,
   onToggleExpressionMode,
   onToggleShowTypes,
   onToggleShowMappingPreview,
   onToggleShowMappedFields,
   onToggleShowUnmappedFields,
-  expressionTokens,
   children,
+  trailerId,
 }) => {
   const { pending, isEditingMapping } = useAtlasmapUI();
 
@@ -73,19 +96,31 @@ export const AtlasmapLayout: FunctionComponent<IAtlasmapLayoutProps> = ({
   const canvasViewToolbar = useMemo(
     () => (
       <CanvasViewToolbar
-        expressionTokens={expressionTokens}
+        mappingExpressionClearText={mappingExpressionClearText}
+        mappingExpressionEmpty={mappingExpressionEmpty}
+        mappingExpressionInit={mappingExpressionInit}
+        mappingExpressionInsertText={mappingExpressionInsertText}
+        mappingExpressionObservable={mappingExpressionObservable}
+        mappingExpressionRemoveField={mappingExpressionRemoveField}
         onConditionalMappingExpressionEnabled={
           onConditionalMappingExpressionEnabled
         }
-        onGetMappingExpressionStr={onGetMappingExpressionStr}
+        onGetMappingExpression={onGetMappingExpression}
         onToggleExpressionMode={onToggleExpressionMode}
+        trailerId={trailerId}
       />
     ),
     [
-      expressionTokens,
+      mappingExpressionClearText,
+      mappingExpressionEmpty,
+      mappingExpressionInit,
+      mappingExpressionInsertText,
+      mappingExpressionObservable,
+      mappingExpressionRemoveField,
       onConditionalMappingExpressionEnabled,
-      onGetMappingExpressionStr,
+      onGetMappingExpression,
       onToggleExpressionMode,
+      trailerId,
     ]
   );
 

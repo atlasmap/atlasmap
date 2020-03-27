@@ -14,17 +14,40 @@ const styles = StyleSheet.create({
 });
 
 export interface ICanvasViewToolbarProps {
-  expressionTokens: string[];
+  mappingExpressionClearText: (
+    nodeId?: string,
+    startOffset?: number,
+    endOffset?: number
+  ) => any;
+  mappingExpressionEmpty: () => boolean;
+  mappingExpressionInit: () => void;
+  mappingExpressionInsertText: (
+    str: string,
+    nodeId?: string,
+    offset?: number
+  ) => void;
+  mappingExpressionObservable: () => any;
+  mappingExpressionRemoveField: (
+    tokenPosition?: string,
+    offset?: number
+  ) => void;
   onConditionalMappingExpressionEnabled: () => boolean;
-  onGetMappingExpressionStr: () => string;
+  onGetMappingExpression: () => string;
   onToggleExpressionMode: () => void;
+  trailerId: string;
 }
 
 export const CanvasViewToolbar: FunctionComponent<ICanvasViewToolbarProps> = ({
-  expressionTokens,
+  mappingExpressionClearText,
+  mappingExpressionEmpty,
+  mappingExpressionInit,
+  mappingExpressionInsertText,
+  mappingExpressionObservable,
+  mappingExpressionRemoveField,
   onConditionalMappingExpressionEnabled,
-  onGetMappingExpressionStr,
+  onGetMappingExpression,
   onToggleExpressionMode,
+  trailerId,
 }) => {
   const [, setCondExprEnabled] = useState<boolean>();
 
@@ -50,11 +73,14 @@ export const CanvasViewToolbar: FunctionComponent<ICanvasViewToolbarProps> = ({
         </ToolbarItem>
         <ToolbarItem className={css(styles.toolbarItem)}>
           <ConditionalExpression
-            expressionTokens={expressionTokens}
-            onConditionalMappingExpressionEnabled={
-              onConditionalMappingExpressionEnabled
-            }
-            onGetMappingExpressionStr={onGetMappingExpressionStr}
+            mappingExpressionClearText={mappingExpressionClearText}
+            mappingExpressionEmpty={mappingExpressionEmpty}
+            mappingExpressionInit={mappingExpressionInit}
+            mappingExpressionInsertText={mappingExpressionInsertText}
+            mappingExpressionObservable={mappingExpressionObservable}
+            mappingExpressionRemoveField={mappingExpressionRemoveField}
+            onGetMappingExpression={onGetMappingExpression}
+            trailerId={trailerId}
           />
         </ToolbarItem>
       </ToolbarGroup>

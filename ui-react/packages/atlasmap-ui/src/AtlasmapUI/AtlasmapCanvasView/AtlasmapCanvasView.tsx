@@ -17,36 +17,59 @@ import { useAtlasmapUI } from '../AtlasmapUIProvider';
 import { AtlasmapLayout } from '../AtlasmapLayout';
 
 export interface IAtlasmapCanvasViewProps {
+  mappingExpressionClearText: (
+    nodeId?: string,
+    startOffset?: number,
+    endOffset?: number
+  ) => any;
+  mappingExpressionEmpty: () => boolean;
+  mappingExpressionInit: () => void;
+  mappingExpressionInsertText: (
+    str: string,
+    nodeId?: string,
+    offset?: number
+  ) => void;
+  mappingExpressionObservable: () => any;
+  mappingExpressionRemoveField: (
+    tokenPosition?: string,
+    offset?: number
+  ) => void;
   onShowMappingPreview: (enabled: boolean) => void;
   onShowMappedFields: (enabled: boolean) => void;
   onShowUnmappedFields: (enabled: boolean) => void;
   onConditionalMappingExpressionEnabled: () => boolean;
-  onGetMappingExpressionStr: () => string;
+  onGetMappingExpression: () => string;
   onToggleExpressionMode: () => void;
   onExportAtlasFile: (event: any) => void;
   onImportAtlasFile: (selectedFile: File) => void;
   onResetAtlasmap: () => void;
   onAddMapping: () => void;
-  expressionTokens: string[];
   children: (props: {
     showTypes: boolean;
     showMappingPreview: boolean;
   }) => ReactChild;
+  trailerId: string;
 }
 
 export const AtlasmapCanvasView: FunctionComponent<IAtlasmapCanvasViewProps> = ({
+  mappingExpressionClearText,
+  mappingExpressionEmpty,
+  mappingExpressionInit,
+  mappingExpressionInsertText,
+  mappingExpressionObservable,
+  mappingExpressionRemoveField,
   onShowMappingPreview,
   onShowMappedFields,
   onShowUnmappedFields,
   onConditionalMappingExpressionEnabled,
-  onGetMappingExpressionStr,
+  onGetMappingExpression,
   onToggleExpressionMode,
   onExportAtlasFile,
   onImportAtlasFile,
   onResetAtlasmap,
   onAddMapping,
-  expressionTokens,
   children,
+  trailerId,
 }) => {
   const { mappings, selectedMapping, isEditingMapping } = useAtlasmapUI();
 
@@ -64,9 +87,21 @@ export const AtlasmapCanvasView: FunctionComponent<IAtlasmapCanvasViewProps> = (
     onShowMappingPreview(newValue);
   }, [onShowMappingPreview, showMappingPreview]);
 
-  const getMappingExpressionStr = useCallback(() => {
-    return onGetMappingExpressionStr();
-  }, [onGetMappingExpressionStr]);
+  const mappingExprEmpty = useCallback((): boolean => {
+    return mappingExpressionEmpty();
+  }, [mappingExpressionEmpty]);
+
+  const mappingExprInit = useCallback(() => {
+    return mappingExpressionInit();
+  }, [mappingExpressionInit]);
+
+  const mappingExprClearText = useCallback(() => {
+    return mappingExpressionClearText();
+  }, [mappingExpressionClearText]);
+
+  const getMappingExpression = useCallback(() => {
+    return onGetMappingExpression();
+  }, [onGetMappingExpression]);
 
   const toggleExpressionMode = useCallback(() => {
     onToggleExpressionMode();
@@ -100,6 +135,12 @@ export const AtlasmapCanvasView: FunctionComponent<IAtlasmapCanvasViewProps> = (
   return (
     <CanvasViewProvider>
       <AtlasmapLayout
+        mappingExpressionClearText={mappingExprClearText}
+        mappingExpressionEmpty={mappingExprEmpty}
+        mappingExpressionInit={mappingExprInit}
+        mappingExpressionInsertText={mappingExpressionInsertText}
+        mappingExpressionObservable={mappingExpressionObservable}
+        mappingExpressionRemoveField={mappingExpressionRemoveField}
         onExportAtlasFile={onExportAtlasFile}
         onImportAtlasFile={onImportAtlasFile}
         onResetAtlasmap={onResetAtlasmap}
@@ -108,13 +149,13 @@ export const AtlasmapCanvasView: FunctionComponent<IAtlasmapCanvasViewProps> = (
         onConditionalMappingExpressionEnabled={
           onConditionalMappingExpressionEnabled
         }
-        onGetMappingExpressionStr={getMappingExpressionStr}
+        onGetMappingExpression={getMappingExpression}
         onToggleExpressionMode={toggleExpressionMode}
         onToggleShowTypes={toggleShowTypes}
         onToggleShowMappingPreview={toggleShowMappingPreview}
         onToggleShowMappedFields={toggleShowMappedFields}
         onToggleShowUnmappedFields={toggleShowUnmappedFields}
-        expressionTokens={expressionTokens}
+        trailerId={trailerId}
       >
         <CanvasView showMappingColumn={isMappingColumnVisible}>
           {children({ showMappingPreview, showTypes })}

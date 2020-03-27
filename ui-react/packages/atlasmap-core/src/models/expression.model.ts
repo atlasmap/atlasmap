@@ -125,8 +125,8 @@ export class ExpressionModel {
   }
 
   /**
-   * Clear all text from the specified TextNode offset range or from the '@' to the end
-   * of the text node if no node ID is specified.
+   * Clear all text from the specified TextNode offset range or from the '@' to
+   * the end of the text node if no node ID is specified.
    *
    * Return the new UUID position indicator string or null.
    *
@@ -134,7 +134,7 @@ export class ExpressionModel {
    * @param startOffset
    * @param endOffset
    */
-  clearText(nodeId?: string, startOffset?: number, endOffset?: number): TextNode | null {
+  clearText(nodeId?: string, startOffset?: number, endOffset?: number): any | null {
     let targetNode: TextNode | null = null;
     if (!nodeId) {
       const lastNode = this.getLastNode();
@@ -307,7 +307,7 @@ export class ExpressionModel {
     this.expressionUpdatedSource.next(updatedEvent);
   }
 
-  removeToken(lastFieldRefRemoved: (removed: MappedField) => void, tokenPosition?: string, offset?: number) {
+  removeToken(tokenPosition?: string, offset?: number) {
 
     // No position was specified - append to the end
     if (!tokenPosition) {
@@ -319,7 +319,8 @@ export class ExpressionModel {
         const removed = this._nodes.pop() as FieldNode;
         if (!this._nodes.find(n => n instanceof FieldNode && n.field === removed.field)) {
           // TODO: check this non null operator
-          lastFieldRefRemoved(removed.field!);
+          this.mapping.removeMappedField(removed.field!);
+          this.cfg.mappingService.updateMappedField(this.mapping);
         }
       } else if (last instanceof TextNode) {
         if (last.str.length > 0) {
@@ -350,7 +351,8 @@ export class ExpressionModel {
       const targetFieldNode: FieldNode = removed[0] as FieldNode;
       if (!this._nodes.find(n => n instanceof FieldNode && n.field === targetFieldNode.field)) {
         // TODO: check this non null operator
-        lastFieldRefRemoved(targetFieldNode.field!);
+        this.mapping.removeMappedField(targetFieldNode.field!);
+        this.cfg.mappingService.updateMappedField(this.mapping);
       }
       if (this._nodes.length > targetNodeIndex) {
         if (this._nodes[targetNodeIndex - 1] instanceof TextNode

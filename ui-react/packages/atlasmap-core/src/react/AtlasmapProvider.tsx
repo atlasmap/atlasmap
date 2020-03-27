@@ -9,7 +9,7 @@ import React, {
   useMemo,
   useReducer,
 } from 'react';
-import { timer } from 'rxjs';
+import { timer, Observable } from 'rxjs';
 import { debounce } from 'rxjs/operators';
 import { DocumentDefinition } from '../models/document-definition.model';
 import { MappingDefinition } from '../models/mapping-definition.model';
@@ -37,7 +37,11 @@ import {
   deleteProperty,
   editProperty,
 } from '../components/field/field-util';
-import { getExpressionStr } from '../components/expression/expression-util';
+import {
+  getMappingExpression,
+  getMappingExpressionStr,
+  trailerId,
+} from '../components/expression/expression-util';
 import {
   deleteAtlasFile,
   toggleMappingPreview,
@@ -54,6 +58,7 @@ import {
   Multiplicity,
 } from '../models/field-action.model';
 import { TransitionMode, TransitionModel } from '../models/transition.model';
+import { ExpressionModel } from '../models/expression.model';
 
 const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
 
@@ -293,6 +298,89 @@ export function useAtlasmap() {
 
   const mappings = fromMappingDefinitionToIMappings(mappingDefinition);
 
+  const mappingExpressionEmpty = useCallback((): boolean => {
+    return (
+      initializationService.cfg.mappings!.activeMapping!.transition.expression
+        .nodes.length === 0
+    );
+  }, [initializationService]);
+
+  const mappingExpressionInit = useCallback(() => {
+    if (
+      !initializationService.cfg.mappings ||
+      !initializationService.cfg.mappings.activeMapping
+    ) {
+      return;
+    }
+    const mapping = initializationService.cfg.mappings!.activeMapping!;
+
+    // Filter out padding fields for expression mapping.
+    mapping
+      .getMappedFields(true)
+      .filter(mf => mf.isPadField())
+      .forEach(mf => mapping.removeMappedField(mf));
+
+    if (!mapping.transition.expression) {
+      mapping.transition.expression = new ExpressionModel(
+        mapping,
+        initializationService.cfg
+      );
+      mapping.transition.expression.generateInitialExpression();
+    } else {
+      mapping.transition.expression.setConfigModel(initializationService.cfg);
+    }
+    mapping.transition.expression.updateFieldReference(mapping);
+  }, [initializationService]);
+
+  const mappingExpressionClearText = useCallback(
+    (nodeId?: string, startOffset?: number, endOffset?: number) => {
+      const uuidNode = initializationService.cfg.mappings!.activeMapping!.transition.expression.clearText(
+        nodeId!,
+        startOffset,
+        endOffset
+      );
+      initializationService.cfg.mappingService.notifyMappingUpdated();
+      return uuidNode;
+    },
+    [initializationService]
+  );
+
+  const mappingExpressionInsertText = useCallback(
+    (str: string, nodeId?: string, offset?: number) => {
+      initializationService.cfg.mappings!.activeMapping!.transition.expression.insertText(
+        str,
+        nodeId,
+        offset
+      );
+      initializationService.cfg.mappingService.notifyMappingUpdated();
+    },
+    [initializationService]
+  );
+
+  const mappingExpressionObservable = useCallback((): Observable<
+    any
+  > | null => {
+    if (
+      !initializationService.cfg.mappings ||
+      !initializationService.cfg.mappings!.activeMapping
+    ) {
+      return null;
+    }
+    return initializationService.cfg.mappings!.activeMapping.transition
+      .expression.expressionUpdated$;
+  }, [initializationService]);
+
+  const mappingExpressionRemoveField = useCallback(
+    (tokenPosition?: string, offset?: number) => {
+      initializationService.cfg.mappings!.activeMapping!.transition.expression.removeToken(
+        tokenPosition,
+        offset
+      );
+      initializationService.cfg.mappingService.notifyMappingUpdated();
+    },
+    [initializationService]
+  );
+
   const onFieldPreviewChange = useCallback(
     (field: IAtlasmapFieldWithField, value: string) => {
       field.amField.value = value;
@@ -305,8 +393,12 @@ export function useAtlasmap() {
     return initializationService.cfg.mappingService.conditionalMappingExpressionEnabled();
   }, [initializationService]);
 
+  const onGetMappingExpression = useCallback(() => {
+    return getMappingExpression();
+  }, []);
+
   const onGetMappingExpressionStr = useCallback(() => {
-    return getExpressionStr();
+    return getMappingExpressionStr();
   }, []);
 
   const onToggleExpressionMode = useCallback(() => {
@@ -396,8 +488,15 @@ export function useAtlasmap() {
       importAtlasFile: handleImportAtlasFile,
       resetAtlasmap: handleResetAtlasmap,
       changeActiveMapping,
+      mappingExpressionClearText,
+      mappingExpressionEmpty,
+      mappingExpressionInit,
+      mappingExpressionInsertText,
+      mappingExpressionObservable,
+      mappingExpressionRemoveField,
       onConditionalMappingExpressionEnabled,
       onGetMappingExpressionStr,
+      onGetMappingExpression,
       onToggleExpressionMode,
       toggleMappingPreview,
       toggleShowMappedFields,
@@ -418,6 +517,7 @@ export function useAtlasmap() {
       createProperty,
       deleteProperty,
       editProperty,
+      trailerId,
     }),
     [
       pending,
@@ -426,9 +526,16 @@ export function useAtlasmap() {
       handleImportAtlasFile,
       handleResetAtlasmap,
       changeActiveMapping,
+      mappingExpressionClearText,
+      mappingExpressionEmpty,
+      mappingExpressionInit,
+      mappingExpressionInsertText,
+      mappingExpressionObservable,
+      mappingExpressionRemoveField,
       onFieldPreviewChange,
       onConditionalMappingExpressionEnabled,
       onGetMappingExpressionStr,
+      onGetMappingExpression,
       onToggleExpressionMode,
       getMappingActions,
       getMultiplicityActions,
