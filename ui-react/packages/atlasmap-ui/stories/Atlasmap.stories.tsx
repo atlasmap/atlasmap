@@ -58,7 +58,12 @@ export const sample = () =>
       startOffset?: number,
       endOffset?: number
     ) => {
-      return '';
+      if (nodeId || startOffset || endOffset) {
+        return 'startOffset';
+      }
+      else {
+        return ''
+      }
     };
     const mappingExprEmpty = () => {
       return false;
@@ -68,7 +73,11 @@ export const sample = () =>
       str: string,
       nodeId?: string,
       offset?: number
-    ) => {};
+    ) => {
+      if (nodeId || offset) {
+        console.log(str);
+      }
+    };
     const mappingExpressionObservable = () => {};
     const mappingExpressionRemoveField = () => {};
     const trailerID = '';
