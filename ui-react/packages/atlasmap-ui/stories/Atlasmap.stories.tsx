@@ -50,11 +50,36 @@ export const sample = () =>
       return false;
     };
 
-    const getMappingExpressionStr = () => {
+    const getMappingExpression = () => {
       return '';
     };
-
-    const expressionTokens = [''];
+    const mappingExprClearText = (
+      nodeId?: string,
+      startOffset?: number,
+      endOffset?: number
+    ) => {
+      if (nodeId || startOffset || endOffset) {
+        return 'startOffset';
+      } else {
+        return '';
+      }
+    };
+    const mappingExprEmpty = () => {
+      return false;
+    };
+    const mappingExprInit = () => {};
+    const mappingExpressionInsertText = (
+      str: string,
+      nodeId?: string,
+      offset?: number
+    ) => {
+      if (nodeId || offset) {
+        console.log(str);
+      }
+    };
+    const mappingExpressionObservable = () => {};
+    const mappingExpressionRemoveField = () => {};
+    const trailerID = '';
 
     return (
       <AtlasmapUIProvider
@@ -82,9 +107,15 @@ export const sample = () =>
           onConditionalMappingExpressionEnabled={
             conditionalMappingExpressionEnabled
           }
-          onGetMappingExpressionStr={getMappingExpressionStr}
+          onGetMappingExpression={getMappingExpression}
+          mappingExpressionClearText={mappingExprClearText}
+          mappingExpressionEmpty={mappingExprEmpty}
+          mappingExpressionInit={mappingExprInit}
+          mappingExpressionInsertText={mappingExpressionInsertText}
+          mappingExpressionObservable={mappingExpressionObservable}
+          mappingExpressionRemoveField={mappingExpressionRemoveField}
           onToggleExpressionMode={action('onToggleExpressionMode')}
-          expressionTokens={expressionTokens}
+          trailerId={trailerID}
         >
           {({ showTypes, showMappingPreview }) => (
             <>

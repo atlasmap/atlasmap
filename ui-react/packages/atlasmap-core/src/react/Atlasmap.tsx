@@ -84,9 +84,15 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     deleteAtlasFile,
     changeActiveMapping,
     documentExists,
+    mappingExpressionClearText,
+    mappingExpressionEmpty,
+    mappingExpressionInit,
+    mappingExpressionInsertText,
+    mappingExpressionObservable,
+    mappingExpressionRemoveField,
     onToggleExpressionMode,
     onConditionalMappingExpressionEnabled,
-    onGetMappingExpressionStr,
+    onGetMappingExpression,
     toggleMappingPreview,
     toggleShowMappedFields,
     toggleShowUnmappedFields,
@@ -101,11 +107,11 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     createProperty,
     deleteProperty,
     editProperty,
+    trailerId,
   } = useAtlasmap();
 
   const sources = useAtlasmapSources(sourceFilter);
   const targets = useAtlasmapTargets(targetFilter);
-  let expressionTokens = [''];
 
   const handleExportAtlasFile = () => {
     onExportAtlasFile(exportAtlasFile);
@@ -242,13 +248,19 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       }
     >
       <AtlasmapCanvasView
+        mappingExpressionClearText={mappingExpressionClearText}
+        mappingExpressionEmpty={mappingExpressionEmpty}
+        mappingExpressionInit={mappingExpressionInit}
+        mappingExpressionInsertText={mappingExpressionInsertText}
+        mappingExpressionObservable={mappingExpressionObservable}
+        mappingExpressionRemoveField={mappingExpressionRemoveField}
         onShowMappingPreview={toggleMappingPreview}
         onShowMappedFields={toggleShowMappedFields}
         onShowUnmappedFields={toggleShowUnmappedFields}
         onConditionalMappingExpressionEnabled={
           onConditionalMappingExpressionEnabled
         }
-        onGetMappingExpressionStr={onGetMappingExpressionStr}
+        onGetMappingExpression={onGetMappingExpression}
         onToggleExpressionMode={() => {
           onToggleExpressionMode();
         }}
@@ -256,7 +268,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         onImportAtlasFile={(file: File) => handleImportAtlasFile(file)}
         onResetAtlasmap={handleResetAtlasmap}
         onAddMapping={handleNewMapping}
-        expressionTokens={expressionTokens}
+        trailerId={trailerId}
       >
         {({ showTypes, showMappingPreview }) => (
           <>

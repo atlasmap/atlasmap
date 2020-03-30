@@ -1,23 +1,48 @@
 import React, { FunctionComponent } from 'react';
-import { TextInput } from '@patternfly/react-core';
+import { ExpressionContent } from './ExpressionContent';
 
 export interface IConditionalExpressionProps {
-  expressionTokens: string[];
-  onConditionalMappingExpressionEnabled: () => boolean;
-  onGetMappingExpressionStr: () => string;
+  mappingExpressionClearText: (
+    nodeId?: string,
+    startOffset?: number,
+    endOffset?: number
+  ) => any;
+  mappingExpressionEmpty: () => boolean;
+  mappingExpressionInit: () => void;
+  mappingExpressionInsertText: (
+    str: string,
+    nodeId?: string,
+    offset?: number
+  ) => void;
+  mappingExpressionObservable: () => any;
+  mappingExpressionRemoveField: (
+    tokenPosition?: string,
+    offset?: number
+  ) => void;
+  onGetMappingExpression: () => string;
+  trailerId: string;
 }
 
 export const ConditionalExpression: FunctionComponent<IConditionalExpressionProps> = ({
-  // expressionTokens,
-  onConditionalMappingExpressionEnabled,
-  onGetMappingExpressionStr,
+  mappingExpressionClearText,
+  mappingExpressionEmpty,
+  mappingExpressionInit,
+  mappingExpressionInsertText,
+  mappingExpressionObservable,
+  mappingExpressionRemoveField,
+  onGetMappingExpression,
+  trailerId,
 }) => {
   return (
-    <TextInput
-      aria-label={'Conditional mapping expression'}
-      isDisabled={!onConditionalMappingExpressionEnabled()}
-      value={onGetMappingExpressionStr()}
-      // onChange={onExpressionChange}
+    <ExpressionContent
+      mappingExpressionClearText={mappingExpressionClearText}
+      mappingExpressionEmpty={mappingExpressionEmpty}
+      mappingExpressionInit={mappingExpressionInit}
+      mappingExpressionInsertText={mappingExpressionInsertText}
+      mappingExpressionObservable={mappingExpressionObservable}
+      mappingExpressionRemoveField={mappingExpressionRemoveField}
+      onGetMappingExpression={onGetMappingExpression}
+      trailerId={trailerId}
     />
   );
 };

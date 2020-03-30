@@ -2,34 +2,11 @@ import { ConfigModel } from '../../models/config.model';
 import { ExpressionModel } from '../../models/expression.model';
 import { MappedField, MappingModel } from '../../models/mapping.model';
 
-const trailerId = 'expression-trailer';
+export const trailerId = 'expression-trailer';
 
 function activeMapping(): boolean {
   const cfg = ConfigModel.getConfig();
   return !!(cfg?.mappings?.activeMapping);
-}
-
-function updateExpressionMarkup() {
-  // this.markup.nativeElement.innerHTML = getExpression()!.toHTML()
-  //  + `<span id="${trailerId}">&nbsp;</span>`;
-}
-
-function moveCaretToEnd() {
-  /*
-  const trailerNode = this.markup.nativeElement.querySelector('#' +
-    trailerId);
-  this.markup.nativeElement.focus();
-  let range;
-  if (window.getSelection()!.rangeCount > 0) {
-    range = window.getSelection()!.getRangeAt(0);
-  } else {
-    range = document.createRange();
-    window.getSelection()!.addRange(range);
-  }
-  range.selectNode(trailerNode.childNodes[0]);
-  range.setStart(trailerNode.childNodes[0], 0);
-  range.collapse(true);
-  */
 }
 
 export abstract class ExpressionNode {
@@ -111,15 +88,29 @@ export function getExpression(): ExpressionModel | null {
     expression = mapping!.transition.expression;
     expression.generateInitialExpression();
     expression.updateFieldReference(mapping!);
-    updateExpressionMarkup();
-    moveCaretToEnd();
   } else {
     mapping!.transition.expression.setConfigModel(cfg);
   }
   return mapping!.transition.expression;
 }
 
-export function getExpressionStr(): string {
+export function getMappingExpression(): string {
+  const cfg = ConfigModel.getConfig();
+  if (!activeMapping()) {
+    return '';
+  }
+  if (!(cfg.mappings?.activeMapping?.transition?.expression)) {
+    if (!getExpression()) {
+      return '';
+    }
+  }
+  return ((cfg.mappings!.activeMapping!.transition.expression) &&
+    (cfg.mappings!.activeMapping!.transition.enableExpression))
+      ? cfg.mappings!.activeMapping!.transition.expression.toHTML()
+      : '';
+}
+
+export function getMappingExpressionStr(): string {
   const cfg = ConfigModel.getConfig();
   if (!activeMapping()) {
     return '';
