@@ -14,6 +14,7 @@
     limitations under the License.
 */
 import { ConfigModel } from './config.model';
+import { ExpressionModel } from './expression.model';
 import { Field } from './field.model';
 import { TransitionModel } from './transition.model';
 
@@ -82,6 +83,8 @@ export class MappingModel {
 
   sourceFields: MappedField[] = [];
   targetFields: MappedField[] = [];
+  expression: ExpressionModel;
+  enableExpression = false;
   transition: TransitionModel = new TransitionModel();
 
   constructor() {

@@ -13,7 +13,6 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { ExpressionModel } from './expression.model';
 import { FieldAction } from './field-action.model';
 
 export enum TransitionMode {
@@ -51,8 +50,6 @@ export class TransitionModel {
   delimiter: TransitionDelimiter = TransitionDelimiter.SPACE;
   userDelimiter = '';
   lookupTableName: string | null = null;
-  expression!: ExpressionModel;
-  enableExpression = false;
   transitionFieldAction!: FieldAction;
 
   constructor() {

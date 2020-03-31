@@ -300,8 +300,8 @@ export function useAtlasmap() {
 
   const mappingExpressionEmpty = useCallback((): boolean => {
     return (
-      initializationService.cfg.mappings!.activeMapping!.transition.expression
-        .nodes.length === 0
+      initializationService.cfg.mappings!.activeMapping!.expression.nodes
+        .length === 0
     );
   }, [initializationService]);
 
@@ -320,21 +320,21 @@ export function useAtlasmap() {
       .filter(mf => mf.isPadField())
       .forEach(mf => mapping.removeMappedField(mf));
 
-    if (!mapping.transition.expression) {
-      mapping.transition.expression = new ExpressionModel(
+    if (!mapping.expression) {
+      mapping.expression = new ExpressionModel(
         mapping,
         initializationService.cfg
       );
-      mapping.transition.expression.generateInitialExpression();
+      mapping.expression.generateInitialExpression();
     } else {
-      mapping.transition.expression.setConfigModel(initializationService.cfg);
+      mapping.expression.setConfigModel(initializationService.cfg);
     }
-    mapping.transition.expression.updateFieldReference(mapping);
+    mapping.expression.updateFieldReference(mapping);
   }, [initializationService]);
 
   const mappingExpressionClearText = useCallback(
     (nodeId?: string, startOffset?: number, endOffset?: number) => {
-      const uuidNode = initializationService.cfg.mappings!.activeMapping!.transition.expression.clearText(
+      const uuidNode = initializationService.cfg.mappings!.activeMapping!.expression.clearText(
         nodeId!,
         startOffset,
         endOffset
@@ -347,7 +347,7 @@ export function useAtlasmap() {
 
   const mappingExpressionInsertText = useCallback(
     (str: string, nodeId?: string, offset?: number) => {
-      initializationService.cfg.mappings!.activeMapping!.transition.expression.insertText(
+      initializationService.cfg.mappings!.activeMapping!.expression.insertText(
         str,
         nodeId,
         offset
@@ -366,13 +366,13 @@ export function useAtlasmap() {
     ) {
       return null;
     }
-    return initializationService.cfg.mappings!.activeMapping.transition
-      .expression.expressionUpdated$;
+    return initializationService.cfg.mappings!.activeMapping.expression
+      .expressionUpdated$;
   }, [initializationService]);
 
   const mappingExpressionRemoveField = useCallback(
     (tokenPosition?: string, offset?: number) => {
-      initializationService.cfg.mappings!.activeMapping!.transition.expression.removeToken(
+      initializationService.cfg.mappings!.activeMapping!.expression.removeToken(
         tokenPosition,
         offset
       );
@@ -397,8 +397,8 @@ export function useAtlasmap() {
     return getMappingExpression();
   }, []);
 
-  const onGetMappingExpressionStr = useCallback(() => {
-    return getMappingExpressionStr();
+  const onGetMappingExpressionStr = useCallback((mapping?: any) => {
+    return getMappingExpressionStr(mapping);
   }, []);
 
   const onToggleExpressionMode = useCallback(() => {

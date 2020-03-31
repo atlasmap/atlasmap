@@ -81,17 +81,17 @@ export function getExpression(): ExpressionModel | null {
     return null;
   }
   const mapping = cfg.mappings!.activeMapping;
-  let expression = mapping!.transition.expression;
+  let expression = mapping!.expression;
   if (!expression) {
-    mapping!.transition.expression = 
+    mapping!.expression =
       new ExpressionModel(mapping!, cfg);
-    expression = mapping!.transition.expression;
+    expression = mapping!.expression;
     expression.generateInitialExpression();
     expression.updateFieldReference(mapping!);
   } else {
-    mapping!.transition.expression.setConfigModel(cfg);
+    mapping!.expression.setConfigModel(cfg);
   }
-  return mapping!.transition.expression;
+  return mapping!.expression;
 }
 
 export function getMappingExpression(): string {
@@ -99,29 +99,29 @@ export function getMappingExpression(): string {
   if (!activeMapping()) {
     return '';
   }
-  if (!(cfg.mappings?.activeMapping?.transition?.expression)) {
+  if (!(cfg.mappings?.activeMapping?.expression)) {
     if (!getExpression()) {
       return '';
     }
   }
-  return ((cfg.mappings!.activeMapping!.transition.expression) &&
-    (cfg.mappings!.activeMapping!.transition.enableExpression))
-      ? cfg.mappings!.activeMapping!.transition.expression.toHTML()
+  return ((cfg.mappings!.activeMapping!.expression) &&
+    (cfg.mappings!.activeMapping!.enableExpression))
+      ? cfg.mappings!.activeMapping!.expression.toHTML()
       : '';
 }
 
-export function getMappingExpressionStr(): string {
+export function getMappingExpressionStr(mapping?: any): string {
   const cfg = ConfigModel.getConfig();
-  if (!activeMapping()) {
+  if (!mapping && !activeMapping()) {
     return '';
   }
-  if (!(cfg.mappings?.activeMapping?.transition?.expression)) {
-    if (!getExpression()) {
-      return '';
-    }
+  if (!mapping) {
+    mapping = cfg.mappings?.activeMapping;
   }
-  return ((cfg.mappings!.activeMapping!.transition.expression) &&
-    (cfg.mappings!.activeMapping!.transition.enableExpression))
-      ? cfg.mappings!.activeMapping!.transition.expression.toText()
+  if (!(mapping.expression)) {
+    return '';
+  }
+  return ((mapping.expression) && (mapping.enableExpression))
+      ? mapping.expression.toText()
       : '';
 }

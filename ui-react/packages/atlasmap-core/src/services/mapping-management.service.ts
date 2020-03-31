@@ -369,7 +369,7 @@ export class MappingManagementService {
       return 'Enumeration fields are not valid for this mapping';
     }
     // Expression mapping
-    if (mapping.transition.enableExpression && !field.isSource() && mapping.getMappedFields(false).length > 0) {
+    if (mapping.enableExpression && !field.isSource() && mapping.getMappedFields(false).length > 0) {
       return 'cannot add multiple target fields when conditional mapping is enabled.';
     }
 
@@ -588,7 +588,7 @@ export class MappingManagementService {
   }
 
   willClearOutSourceFieldsOnTogglingExpression() {
-    if (this.cfg.mappings!.activeMapping!.transition.enableExpression) {
+    if (this.cfg.mappings!.activeMapping!.enableExpression) {
       return this.cfg.mappings!.activeMapping!.getFirstCollectionField(true) != null;
     } else {
       return false;
@@ -596,11 +596,11 @@ export class MappingManagementService {
   }
 
   conditionalMappingExpressionEnabled(): boolean {
-    return !!(this.cfg.mappings?.activeMapping?.transition?.enableExpression);
+    return !!(this.cfg.mappings?.activeMapping?.enableExpression);
   }
 
   toggleExpressionMode() {
-    if (!this.cfg.mappings || !this.cfg.mappings.activeMapping || !this.cfg.mappings.activeMapping.transition) {
+    if (!this.cfg.mappings || !this.cfg.mappings.activeMapping) {
       this.cfg.errorService.addError(new ErrorInfo({
         message: 'Please select a mapping first.', level: ErrorLevel.INFO, scope: ErrorScope.MAPPING, type: ErrorType.USER}));
       return;
@@ -619,8 +619,8 @@ export class MappingManagementService {
       activeMapping.sourceFields.splice(0, activeMapping.sourceFields.length);
     }
 
-    this.cfg.mappings.activeMapping.transition.enableExpression
-      = !this.cfg.mappings.activeMapping.transition.enableExpression;
+    this.cfg.mappings.activeMapping.enableExpression
+      = !this.cfg.mappings.activeMapping.enableExpression;
     this.updateTransition(this.cfg.mappings.activeMapping);
   }
 
@@ -731,9 +731,9 @@ export class MappingManagementService {
 
     if (sourceMappedCollection && targetMappedCollection) {
       mapping.transition.mode = TransitionMode.FOR_EACH;
-    } else if (sourceMappedFields.length > 1 || sourceMappedCollection || mapping.transition.enableExpression) {
+    } else if (sourceMappedFields.length > 1 || sourceMappedCollection || mapping.enableExpression) {
       mapping.transition.mode = TransitionMode.MANY_TO_ONE;
-      if (!mapping.transition.enableExpression
+      if (!mapping.enableExpression
        && ( !mapping.transition.transitionFieldAction
          || mapping.transition.transitionFieldAction.definition.multiplicity !== Multiplicity.MANY_TO_ONE)) {
         mapping.transition.transitionFieldAction
@@ -753,8 +753,8 @@ export class MappingManagementService {
     }
 
     // Update conditional expression field references if enabled.
-    if (mapping.transition.enableExpression && mapping.transition.expression) {
-      mapping.transition.expression.updateFieldReference(mapping, position, offset);
+    if (mapping.enableExpression && mapping.expression) {
+      mapping.expression.updateFieldReference(mapping, position, offset);
     }
   }
 

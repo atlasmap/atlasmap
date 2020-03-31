@@ -305,7 +305,7 @@ function onDragEnd(_event: React.DragEvent<HTMLDivElement>): void {
       this.addConditionalExpressionNode(mappedField, null, 0);
     }
 
-  // Pulling an unmapped field into a transition expression evaluation implies a compound selection.
+  // Pulling an unmapped field into an expression evaluation implies a compound selection.
   } else {
 
     if (textNode) {

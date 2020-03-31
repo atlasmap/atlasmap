@@ -62,12 +62,12 @@ export const AtlasmapMappingDetails: FunctionComponent<IAtlasmapMappingDetailsPr
   const sources = mapping.getMappedFields(true);
   const showSourcesIndex =
     sources.length > 1 &&
-    !mapping.transition.enableExpression &&
+    !mapping.enableExpression &&
     mapping.transition.isManyToOneMode();
   const targets = mapping.getMappedFields(false);
   const showTargetIndex =
     targets.length > 1 &&
-    !mapping.transition.enableExpression &&
+    !mapping.enableExpression &&
     mapping.transition.isOneToManyMode();
   const availableActions = getMultiplicityActions(mapping);
   const actionsOptions = availableActions.map(a => ({
