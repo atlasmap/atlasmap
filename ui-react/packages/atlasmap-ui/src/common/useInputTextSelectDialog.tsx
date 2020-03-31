@@ -129,10 +129,16 @@ export function useInputTextSelectDialog({
           variant={'primary'}
           onClick={handleConfirm}
           isDisabled={!isValid}
+          data-testid={'text-select-dialog-confirm-button'}
         >
           Confirm
         </Button>,
-        <Button key={'cancel'} variant={'link'} onClick={handleCancel}>
+        <Button
+          key={'cancel'}
+          variant={'link'}
+          onClick={handleCancel}
+          data-testid={'text-select-dialog-cancel-button'}
+        >
           Cancel
         </Button>,
       ]}
@@ -152,6 +158,7 @@ export function useInputTextSelectDialog({
             isRequired={true}
             isValid={isValid}
             isDisabled={text1ReadOnly}
+            data-testid={'value1-text-input'}
           />
         </InputGroup>
       )}
@@ -168,6 +175,7 @@ export function useInputTextSelectDialog({
             aria-label={title}
             isRequired={true}
             isValid={isValid}
+            data-testid={'value2-text-input'}
           />
         </InputGroup>
       )}
@@ -179,6 +187,7 @@ export function useInputTextSelectDialog({
           value={selectValue}
           id={selectValue}
           onChange={handleSelect}
+          data-testid={'type-dropdown-form-select'}
         >
           {selectValues.map(
             (selectValue: string[], idx: number | undefined) => (

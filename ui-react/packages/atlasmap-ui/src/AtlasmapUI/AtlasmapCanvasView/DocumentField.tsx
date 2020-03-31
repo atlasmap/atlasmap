@@ -134,6 +134,7 @@ export const DocumentField: FunctionComponent<IDocumentFieldProps> = ({
               onClick={onClickAddToMapping}
               isInline={true}
               icon={isSelected ? <MinusCircleIcon /> : <AddCircleOIcon />}
+              data-testid={`add-to-selected-mapping-${name}-button`}
             >
               {content}
             </Button>
@@ -152,6 +153,7 @@ export const DocumentField: FunctionComponent<IDocumentFieldProps> = ({
               aria-label="Edit constant or property"
               key={'edit-element'}
               onClick={() => onEditConstProp(name)}
+              data-testid={`edit-${name}-constant-or-property-button`}
             >
               <EditIcon size="sm" />
             </Button>
@@ -160,6 +162,7 @@ export const DocumentField: FunctionComponent<IDocumentFieldProps> = ({
               aria-label="Delete constant or property"
               key={'delete-element'}
               onClick={() => onDeleteConstProp(name)}
+              data-testid={`delete-${name}-constant-or-property-button`}
             >
               <TrashIcon size="sm" />
             </Button>

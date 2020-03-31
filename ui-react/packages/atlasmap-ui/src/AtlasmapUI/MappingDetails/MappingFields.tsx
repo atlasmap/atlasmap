@@ -35,6 +35,7 @@ export const MappingFields: FunctionComponent<IMappingFieldsProps> = ({
         id={title}
         isExpanded={expanded}
         onClick={toggleExpanded}
+        data-testid={`mapping-fields-detail-${title}-toggle`}
       >
         {title}
       </AccordionToggle>

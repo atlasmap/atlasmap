@@ -137,11 +137,16 @@ export const MappingElement: FunctionComponent<IMappingElementProps> = ({
         )}
         onClick={handleSelect}
         isCompact={true}
+        data-testid={'mapping-card-view'}
       >
         <CardHead className={css(styles.head)}>
           <CardActions>
             {isSelected && (
-              <Button variant={'control'} onClick={handleEdit}>
+              <Button
+                variant={'control'}
+                onClick={handleEdit}
+                data-testid={'edit-selected-mapping-button'}
+              >
                 <EditIcon />
               </Button>
             )}

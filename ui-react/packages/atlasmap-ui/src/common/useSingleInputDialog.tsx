@@ -74,16 +74,23 @@ export function useSingleInputDialog({
           aria-label={title}
           isRequired={true}
           isValid={isValid}
+          data-testid={'input-text-field'}
         />,
         <Button
           key={'confirm'}
           variant={'primary'}
           onClick={handleConfirm}
           isDisabled={!isValid}
+          data-testid={'single-input-dialog-confirm-button'}
         >
           Confirm
         </Button>,
-        <Button key={'cancel'} variant={'link'} onClick={handleCancel}>
+        <Button
+          key={'cancel'}
+          variant={'link'}
+          onClick={handleCancel}
+          data-testid={'single-input-dialog-cancel-button'}
+        >
           Cancel
         </Button>,
       ]}

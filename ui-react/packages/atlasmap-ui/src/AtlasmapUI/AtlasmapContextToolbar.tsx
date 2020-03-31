@@ -64,7 +64,11 @@ export const AtlasmapContextToolbar: FunctionComponent<IAtlasmapContextToolbarPr
             onChange={onImportAtlasFile}
             onError={(errMsg: any) => console.error(errMsg)}
           >
-            <Button variant={'plain'} aria-label="Import mappings">
+            <Button
+              variant={'plain'}
+              aria-label="Import mappings"
+              data-testid="import-mappings-button"
+            >
               <ImportIcon />
             </Button>
           </FilePicker>
@@ -85,6 +89,7 @@ export const AtlasmapContextToolbar: FunctionComponent<IAtlasmapContextToolbarPr
             variant={'plain'}
             aria-label="Export mappings"
             onClick={(event: any) => onExportAtlasFile(event)}
+            data-testid="export-mappings-button"
           >
             <ExportIcon />
           </Button>
@@ -102,6 +107,7 @@ export const AtlasmapContextToolbar: FunctionComponent<IAtlasmapContextToolbarPr
             variant={'plain'}
             aria-label="Reset all"
             onClick={onResetAtlasmap}
+            data-testid="reset-all-button"
           >
             Reset all
           </Button>
@@ -132,6 +138,7 @@ export const AtlasmapContextToolbar: FunctionComponent<IAtlasmapContextToolbarPr
             variant={'plain'}
             aria-label="Show/hide mapping preview"
             onClick={onToggleShowMappingPreview}
+            data-testid="show-hide-mapping-preview-button"
           >
             <EyeIcon />
           </Button>
@@ -143,7 +150,11 @@ export const AtlasmapContextToolbar: FunctionComponent<IAtlasmapContextToolbarPr
           enableFlip={true}
           content={<div>Show/hide mapping table</div>}
         >
-          <Button variant={'plain'} aria-label="Show/hide mapping table">
+          <Button
+            variant={'plain'}
+            aria-label="Show/hide mapping table"
+            data-testid="show-hide-mapping-table-button"
+          >
             <TableIcon />
           </Button>
         </Tooltip>
@@ -154,7 +165,11 @@ export const AtlasmapContextToolbar: FunctionComponent<IAtlasmapContextToolbarPr
           enableFlip={true}
           content={<div>Show/hide namespace table</div>}
         >
-          <Button variant={'plain'} aria-label="Show/hide namespace table">
+          <Button
+            variant={'plain'}
+            aria-label="Show/hide namespace table"
+            data-testid="show-hide-namespace-table-button"
+          >
             <CodeIcon />
           </Button>
         </Tooltip>
@@ -169,6 +184,7 @@ export const AtlasmapContextToolbar: FunctionComponent<IAtlasmapContextToolbarPr
             variant={'plain'}
             aria-label="Show/hide types"
             onClick={onToggleShowTypes}
+            data-testid="show-hide-types-button"
           >
             <InfoIcon />
           </Button>
@@ -184,6 +200,7 @@ export const AtlasmapContextToolbar: FunctionComponent<IAtlasmapContextToolbarPr
             variant={'plain'}
             aria-label="Show/hide mapped fields"
             onClick={onToggleShowMappedFields}
+            data-testid="show-hide-mapped-fields-button"
           >
             <MapMarkedIcon />
           </Button>
@@ -199,6 +216,7 @@ export const AtlasmapContextToolbar: FunctionComponent<IAtlasmapContextToolbarPr
             variant={'plain'}
             aria-label="Show/hide unmapped fields"
             onClick={onToggleShowUnmappedFields}
+            data-testid="show-hide-unmapped-fields-button"
           >
             <MapIcon />
           </Button>
@@ -214,6 +232,7 @@ export const AtlasmapContextToolbar: FunctionComponent<IAtlasmapContextToolbarPr
             variant={'plain'}
             aria-label="Show/hide free view"
             onClick={onToggleShowFreeView}
+            data-testid="show-hide-free-view-button"
           >
             <PficonDragdropIcon />
           </Button>

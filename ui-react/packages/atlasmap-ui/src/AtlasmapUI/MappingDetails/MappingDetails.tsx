@@ -52,7 +52,11 @@ export const MappingDetails: FunctionComponent<IMappingDetailsProps> = ({
                 enableFlip={true}
                 content={<div>Remove the current mapping</div>}
               >
-                <Button variant={'link'} onClick={onDelete}>
+                <Button
+                  variant={'link'}
+                  onClick={onDelete}
+                  data-testid={'remove-current-mapping-button'}
+                >
                   <TrashIcon />
                 </Button>
               </Tooltip>
@@ -67,7 +71,11 @@ export const MappingDetails: FunctionComponent<IMappingDetailsProps> = ({
       </StackItem>
       <StackItem>
         <PageSection>
-          <Button onClick={onClose} variant={'primary'}>
+          <Button
+            onClick={onClose}
+            variant={'primary'}
+            data-testid={'close-mapping-detail-button'}
+          >
             Close
           </Button>{' '}
         </PageSection>

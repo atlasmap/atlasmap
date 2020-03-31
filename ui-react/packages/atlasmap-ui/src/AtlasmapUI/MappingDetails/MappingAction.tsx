@@ -54,6 +54,7 @@ export const MappingAction: FunctionComponent<IMappingActionProps> = ({
             value={associatedFieldActionName}
             id={id}
             onChange={onActionChange}
+            data-testid={id}
           >
             {actionsOptions.map((a, idx) => (
               <FormSelectOption label={a.name} value={a.value} key={idx} />
@@ -64,6 +65,7 @@ export const MappingAction: FunctionComponent<IMappingActionProps> = ({
               className={css(styles.smallBold)}
               variant={'control'}
               onClick={onRemoveTransformation}
+              data-testid={`close-transformation-${associatedFieldActionName}-button`}
             >
               <CloseIcon />
             </Button>
@@ -82,6 +84,7 @@ export const MappingAction: FunctionComponent<IMappingActionProps> = ({
                 value={a.value}
                 id={a.name}
                 onChange={onActionDelimiterChange}
+                data-testid={a.name}
               >
                 {actionDelimiters.map((delimiter, delimiterIdx) => (
                   <FormSelectOption
@@ -100,6 +103,7 @@ export const MappingAction: FunctionComponent<IMappingActionProps> = ({
                 name={a.name}
                 value={a.value}
                 onChange={onArgValueChange}
+                data-testid={`insert-transformation-parameter-${a.name}-input-field`}
               />
             )}
           </InputGroup>
