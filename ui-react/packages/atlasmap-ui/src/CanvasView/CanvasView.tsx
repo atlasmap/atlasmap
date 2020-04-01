@@ -9,16 +9,19 @@ import {
 } from './CanvasViewLayoutProvider';
 import { CanvasViewCanvas } from './components';
 
-export interface ICanvasViewProps extends ICanvasViewLayoutProviderProps {}
+export interface ICanvasViewProps extends ICanvasViewLayoutProviderProps {
+  onSelection: () => void;
+}
 
 export const CanvasView: FunctionComponent<ICanvasViewProps> = ({
+  onSelection,
   showMappingColumn,
   children,
 }) => {
   return (
     <DndProvider backend={HTML5Backend}>
       <CanvasLinksProvider>
-        <CanvasViewCanvas>
+        <CanvasViewCanvas onSelection={onSelection}>
           <CanvasViewLayoutProvider showMappingColumn={showMappingColumn}>
             <CanvasViewFieldsProvider>{children}</CanvasViewFieldsProvider>
           </CanvasViewLayoutProvider>

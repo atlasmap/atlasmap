@@ -71,7 +71,12 @@ export const AtlasmapCanvasView: FunctionComponent<IAtlasmapCanvasViewProps> = (
   children,
   trailerId,
 }) => {
-  const { mappings, selectedMapping, isEditingMapping } = useAtlasmapUI();
+  const {
+    mappings,
+    selectedMapping,
+    isEditingMapping,
+    deselectMappingOnWhitespaceClicked,
+  } = useAtlasmapUI();
 
   const isMappingColumnVisible = !isEditingMapping;
 
@@ -157,7 +162,10 @@ export const AtlasmapCanvasView: FunctionComponent<IAtlasmapCanvasViewProps> = (
         onToggleShowUnmappedFields={toggleShowUnmappedFields}
         trailerId={trailerId}
       >
-        <CanvasView showMappingColumn={isMappingColumnVisible}>
+        <CanvasView
+          showMappingColumn={isMappingColumnVisible}
+          onSelection={deselectMappingOnWhitespaceClicked}
+        >
           {children({ showMappingPreview, showTypes })}
           <Links mappings={mappings} selectedMapping={selectedMapping} />
           <DragLayer />

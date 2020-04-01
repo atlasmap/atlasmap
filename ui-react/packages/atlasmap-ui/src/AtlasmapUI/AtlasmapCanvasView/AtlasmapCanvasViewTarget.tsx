@@ -43,6 +43,7 @@ export const AtlasmapCanvasViewTarget: FunctionComponent<IAtlasmapCanvasViewTarg
     isEditingMapping,
     isFieldAddableToSelection,
     isFieldPartOfSelection,
+    onDocumentSelected,
   } = useAtlasmapUI();
   return (
     <Target
@@ -139,6 +140,7 @@ export const AtlasmapCanvasViewTarget: FunctionComponent<IAtlasmapCanvasViewTarg
               );
             }}
             onDelete={() => onDeleteDocument(t.id)}
+            onDocumentSelected={onDocumentSelected}
           />
         );
       })}

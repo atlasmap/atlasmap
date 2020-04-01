@@ -1,4 +1,5 @@
 import React from 'react';
+import { action } from '@storybook/addon-actions';
 import { boolean } from '@storybook/addon-knobs';
 import {
   BoxProvider,
@@ -15,7 +16,7 @@ export default {
 
 export const interactiveExample = () => (
   <CanvasViewProvider>
-    <CanvasView>
+    <CanvasView onSelection={action('onSelection')}>
       <BoxProvider getScrollableAreaRef={() => null}>
         <CanvasObject height={300} width={200} id={'id'} x={10} y={10}>
           <FieldGroup

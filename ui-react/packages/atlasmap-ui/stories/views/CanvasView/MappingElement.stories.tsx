@@ -17,7 +17,7 @@ export default {
 
 const Wrapper: FunctionComponent = ({ children }) => (
   <CanvasViewProvider>
-    <CanvasView>
+    <CanvasView onSelection={action('onSelection')}>
       <BoxProvider getScrollableAreaRef={() => null}>
         <CanvasObject height={300} width={200} id={'id'} x={10} y={10}>
           <FieldsBox

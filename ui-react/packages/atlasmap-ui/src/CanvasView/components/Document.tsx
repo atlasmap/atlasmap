@@ -88,6 +88,7 @@ export interface IDocumentProps
   fields: IFieldsGroup;
   lineConnectionSide: 'left' | 'right';
   onDelete: () => void;
+  onDocumentSelected: () => void;
 }
 
 export function Document({
@@ -98,6 +99,7 @@ export function Document({
   renderNode,
   renderGroup,
   onDelete,
+  onDocumentSelected,
 }: IDocumentProps) {
   const [isUserExpanded, setIsUserExpanded] = useState(true);
   const [shouldBeExpanded, setShouldBeExpanded] = useState(false);
@@ -116,6 +118,7 @@ export function Document({
     <DocumentProvider getScrollableAreaRef={getScrollableAreaRef}>
       <div
         className={css(styles.wrapper, isExpanded && styles.wrapperIsExpanded)}
+        onClick={onDocumentSelected}
       >
         <Card isCompact={true} className={css(styles.card)}>
           <CardHead
