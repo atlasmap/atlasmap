@@ -60,17 +60,33 @@ export class FieldNode extends ExpressionNode {
 
   static readonly PREFIX = 'expression-field-';
 
-  constructor(private mapping: MappingModel, public field?: MappedField, index: number = 0) {
+  constructor(
+    private mapping: MappingModel,
+    public field?: MappedField,
+    public metaStr?: string,
+    index: number = 0)
+  {
     super(FieldNode.PREFIX);
     if (!field) {
-      // TODO: check this non null operator
-      this.field = mapping.getMappedFieldForIndex((index + 1).toString(), true)!;
+      if (metaStr) {
+        const fieldParts = metaStr.split(':');
+        this.field = mapping.getMappedFieldByName(fieldParts[1], true)!;
+      } else {
+        // TODO: check this non null operator
+        this.field = mapping.getMappedFieldForIndex((index + 1).toString(), true)!;
+      }
     }
   }
 
   toText(): string {
-    // TODO: check this non null operator
-    return '${' + (this.mapping.getIndexForMappedField(this.field!)! - 1) + '}';
+    if (!this.field || !this.field.field) {
+      return '';
+    }
+    return '${' +
+      this.field.field.docDef.id +
+      ':' +
+      this.field.parsedData.parsedPath +
+      '}';
   }
 
   toHTML(): string {
@@ -488,14 +504,22 @@ export class ExpressionModel {
     let position = -1;
     let fn = null;
 
-    while ((position = text.search(/\$\{[0-9]+\}/)) !== -1 ) {
+    while ((text.search(/\$\{[a-zA-Z0-9\.:\/]+\}/)) !== -1 ) {
+      position = text.search(/\$/);
       if (position !== 0) {
         answer.push(new TextNode(text.substring(0, position)));
       }
-      const index = parseInt(text.substring(position + 2, text.indexOf('}')), 10);
-      fn = new FieldNode(this.mapping, undefined, index);
-      if (fn.field === null) {
-        this.cfg.errorService.addError(new ErrorInfo({message: `Unable to map expression index "${index}" to field node.`,
+      const nodeMetaVal = text.substring(position + 2, text.indexOf('}'));
+      let fn = null;
+      if (isNaN(Number(nodeMetaVal))) {
+        fn = new FieldNode(this.mapping, undefined, nodeMetaVal, undefined);
+      } else {
+        const index = parseInt(nodeMetaVal, 10);
+        fn = new FieldNode(this.mapping, undefined, undefined, index);
+      }
+
+      if (!fn || !fn.field) {
+        this.cfg.errorService.addError(new ErrorInfo({message: `Unable to map expression element to field node.`,
           level: ErrorLevel.ERROR, scope: ErrorScope.MAPPING, type: ErrorType.INTERNAL, mapping: this.mapping}));
       } else {
         answer.push(fn);

@@ -184,6 +184,19 @@ export class MappingModel {
     return null;
   }
 
+  getMappedFieldByName(fieldPath: string, isSource: boolean): MappedField | null {
+    if (!fieldPath) {
+      return null;
+    }
+    const mappedFields = this.getMappedFields(isSource);
+    for (let i=0; i<mappedFields.length; i++) {
+      if (mappedFields[i].parsedData.parsedPath === fieldPath) {
+        return mappedFields[i];
+      }
+    }
+    return null;
+  }
+
   getMappedFieldForIndex(index: string, isSource: boolean): MappedField | null {
     if (!index) {
       return null;
