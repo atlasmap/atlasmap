@@ -26,6 +26,7 @@ import { ConfigModel } from '../models/config.model';
 import { ErrorInfo, ErrorLevel, ErrorType, ErrorScope } from '../models/error.model';
 import { ExpressionModel } from '../models/expression.model';
 import { MappingUtil } from './mapping-util';
+import { getMappingExpressionStr } from '../components/expression/expression-util';
 
 export class MappingSerializer {
 
@@ -79,31 +80,27 @@ export class MappingSerializer {
       jsonMapping = {
        'jsonType': jsonMappingType,
        'id': id,
+       'expression' : getMappingExpressionStr(mapping),
        inputFieldGroup,
        'outputField': serializedOutputFields,
       };
     } else {
-      let mAction: any;
       if (mapping.transition.enableExpression) {
-        mAction = {
-          '@type': 'Expression',
-          'expression' : mapping.transition.expression.toText()
+        jsonMapping = {
+          'jsonType': jsonMappingType,
+          'id': id,
+          'expression' : getMappingExpressionStr(mapping),
+          'inputField' : serializedInputFields,
+          'outputField': serializedOutputFields,
         };
-      } else if (mapping.transition.isManyToOneMode() || mapping.transition.isOneToManyMode()) {
-        mAction = this.serializeAction(mapping.transition.transitionFieldAction, cfg);
+      } else {
+        jsonMapping = {
+          'jsonType': jsonMappingType,
+          'id': id,
+          'inputField' : serializedInputFields,
+          'outputField': serializedOutputFields,
+        };
       }
-      if (mAction) {
-        if (!serializedInputFields[0].actions) {
-          serializedInputFields[0].actions = [];
-        }
-        serializedInputFields[0].actions.unshift(mAction);
-      }
-      jsonMapping = {
-        'jsonType': jsonMappingType,
-        'id': id,
-        'inputField' : serializedInputFields,
-        'outputField': serializedOutputFields,
-      };
     }
 
     if (mapping.transition.isEnumerationMode()) {
@@ -159,8 +156,8 @@ export class MappingSerializer {
     }
 
     let inputField = [];
-
     if (mappingJson.inputFieldGroup) {
+
       mapping.transition.mode = TransitionMode.MANY_TO_ONE;
       inputField = mappingJson.inputFieldGroup.field;
 
@@ -172,6 +169,7 @@ export class MappingSerializer {
       // Check for an InputFieldGroup containing a many-to-one action
       const firstAction = mappingJson.inputFieldGroup.actions[0];
       if (firstAction) {
+        // @deprecated Support legacy ADM files that have transformation-action-based expressions.
         if (firstAction.Expression || firstAction['@type'] === 'Expression') {
           mapping.transition.enableExpression = true;
           mapping.transition.expression = new ExpressionModel(mapping, cfg);
@@ -195,6 +193,12 @@ export class MappingSerializer {
       if (cfg.mappings) {
         MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, null, true);
       }
+    }
+
+    if (mappingJson.expression && mappingJson.expression.length > 0) {
+      mapping.transition.enableExpression = true;
+      mapping.transition.expression = new ExpressionModel(mapping, cfg);
+      mapping.transition.expression.insertText(mappingJson.expression);
     }
 
     for (const field of mappingJson.outputField) {
@@ -226,15 +230,9 @@ export class MappingSerializer {
   private static createInputFieldGroup(mapping: MappingModel, field: any[], cfg: ConfigModel): any {
     const actions = [];
 
-    if (mapping.transition.isManyToOneMode()) {
-      if (mapping.transition.enableExpression) {
-        actions[0] = {
-          '@type': 'Expression',
-          'expression' : mapping.transition.expression.toText()
-        };
-      } else {
-        actions[0] = this.serializeAction(mapping.transition.transitionFieldAction, cfg);
-      }
+    if (mapping.transition.isManyToOneMode() &&
+      mapping.transition.transitionFieldAction) {
+      actions[0] = this.serializeAction(mapping.transition.transitionFieldAction, cfg);
     }
     const inputFieldGroup: any = {
         'jsonType': ConfigModel.mappingServicesPackagePrefix + '.FieldGroup',
@@ -610,10 +608,15 @@ export class MappingSerializer {
    */
   private static deserializeFieldActions( field: any, mappedField: MappedField, mapping: MappingModel,
                                           cfg: ConfigModel, isSource: boolean ): void {
+    if (field.Expression) {
+      const expr = field.Expression.expression;
+      mapping.transition.expression.insertText(expr);
+    }
     for ( const action of field.actions ) {
       const parsedAction = this.parseAction( action );
       parsedAction.definition = cfg.fieldActionService.getActionDefinitionForName( parsedAction.name)!; // TODO: check this non null operator
 
+      // @deprecated Support old-style transformation-action-based expressions.
       if ( isSource && ( action.Expression || action['@type'] === 'Expression' ) ) {
         mapping.transition.enableExpression = true;
         mapping.transition.expression = new ExpressionModel( mapping, cfg );

@@ -397,8 +397,8 @@ export function useAtlasmap() {
     return getMappingExpression();
   }, []);
 
-  const onGetMappingExpressionStr = useCallback(() => {
-    return getMappingExpressionStr();
+  const onGetMappingExpressionStr = useCallback((mapping?: any) => {
+    return getMappingExpressionStr(mapping);
   }, []);
 
   const onToggleExpressionMode = useCallback(() => {

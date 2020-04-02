@@ -110,18 +110,18 @@ export function getMappingExpression(): string {
       : '';
 }
 
-export function getMappingExpressionStr(): string {
+export function getMappingExpressionStr(mapping?: any): string {
   const cfg = ConfigModel.getConfig();
-  if (!activeMapping()) {
+  if (!mapping && !activeMapping()) {
     return '';
   }
-  if (!(cfg.mappings?.activeMapping?.transition?.expression)) {
-    if (!getExpression()) {
-      return '';
-    }
+  if (!mapping) {
+    mapping = cfg.mappings?.activeMapping;
   }
-  return ((cfg.mappings!.activeMapping!.transition.expression) &&
-    (cfg.mappings!.activeMapping!.transition.enableExpression))
-      ? cfg.mappings!.activeMapping!.transition.expression.toText()
+  if (!(mapping.transition.expression)) {
+    return '';
+  }
+  return ((mapping.transition.expression) && (mapping.transition.enableExpression))
+      ? mapping.transition.expression.toText(true)
       : '';
 }
