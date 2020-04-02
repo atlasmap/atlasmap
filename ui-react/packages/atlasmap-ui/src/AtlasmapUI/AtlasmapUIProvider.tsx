@@ -36,6 +36,7 @@ export interface IAtlasmapUIContext {
   mappings: IMapping[];
   renderMappingDetails: (props: IRenderMappingDetailsArgs) => ReactElement;
   deselectMappingOnWhitespaceClicked: () => void;
+  onDocumentSelected: () => void;
 }
 
 const AtlasmapUIContext = createContext<IAtlasmapUIContext | null>(null);
@@ -59,6 +60,8 @@ export const AtlasmapUIProvider: FunctionComponent<IAtlasmapUIProviderProps> = (
   const [isEditingMapping, setisEditingMapping] = useState(false);
 
   const mappingSelected = useRef<boolean>(false);
+  const mappingDeselected = useRef<boolean>(false);
+  const documentSelected = useRef<boolean>(false);
 
   const closeMappingDetails = useCallback(() => {
     setisEditingMapping(false);
@@ -70,11 +73,12 @@ export const AtlasmapUIProvider: FunctionComponent<IAtlasmapUIProviderProps> = (
       setSelectedMapping(mapping);
       mappingSelected.current = true;
     },
-    [onActiveMappingChange]
+    [onActiveMappingChange, setSelectedMapping]
   );
 
   const deselectMapping = useCallback(() => {
     setSelectedMapping(undefined);
+    mappingDeselected.current = true;
   }, [setSelectedMapping]);
 
   const editMapping = useCallback(() => {
@@ -83,12 +87,22 @@ export const AtlasmapUIProvider: FunctionComponent<IAtlasmapUIProviderProps> = (
     }
   }, [selectedMapping, setisEditingMapping]);
 
+  const onDocumentSelected = () => {
+    documentSelected.current = true;
+  };
+
   const deselectMappingOnWhitespaceClicked = useCallback(() => {
-    if (!mappingSelected.current) {
+    if (
+      !mappingSelected.current &&
+      !mappingDeselected.current &&
+      !documentSelected.current
+    ) {
       closeMappingDetails();
       deselectMapping();
     }
     mappingSelected.current = false;
+    mappingDeselected.current = false;
+    documentSelected.current = false;
   }, [closeMappingDetails, deselectMapping]);
 
   const isFieldAddableToSelection = (
@@ -154,6 +168,7 @@ export const AtlasmapUIProvider: FunctionComponent<IAtlasmapUIProviderProps> = (
         currentMapping,
         isFieldPartOfSelection,
         deselectMappingOnWhitespaceClicked,
+        onDocumentSelected,
       }}
     >
       {children}

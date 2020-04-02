@@ -13,12 +13,24 @@ const styles = StyleSheet.create({
   },
 });
 
-export const CanvasViewCanvas: FunctionComponent = ({ children }) => {
+export interface ICanvasViewCanvasProps {
+  onSelection: () => void;
+}
+
+export const CanvasViewCanvas: FunctionComponent<ICanvasViewCanvasProps> = ({
+  onSelection,
+  children,
+}) => {
   const { isPanning, pan, zoom, bindCanvas } = useCanvasViewContext();
   const { freeView } = useCanvasViewOptionsContext();
   const [dimensionsRef, { width, height, top, left }] = useDimensions();
+
   return (
-    <div ref={dimensionsRef} className={css(styles.canvasWrapper)}>
+    <div
+      ref={dimensionsRef}
+      className={css(styles.canvasWrapper)}
+      onClick={onSelection}
+    >
       <Canvas
         width={width}
         height={height}

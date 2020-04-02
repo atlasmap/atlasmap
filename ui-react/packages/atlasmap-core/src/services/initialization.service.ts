@@ -14,7 +14,7 @@
     limitations under the License.
 */
 import log from 'loglevel';
-log.setDefaultLevel(log.levels.TRACE);
+log.setDefaultLevel(log.levels.WARN);
 import { inflate } from 'pako';
 import { Subject, Observable } from 'rxjs';
 
