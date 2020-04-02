@@ -648,9 +648,6 @@ export class MappingSerializer {
       mappedField.parsedData.parsedPath = field.name;
       mappedField.parsedData.parsedValue = field.value;
       mappedField.parsedData.fieldIsProperty = true;
-      if ( field.actions ) {
-        this.deserializeFieldActions( field, mappedField, mapping, cfg, isSource );
-      }
     } else if (field.jsonType === (ConfigModel.mappingServicesPackagePrefix + '.ConstantField')) {
       mappedField.parsedData.fieldIsConstant = true;
       mappedField.parsedData.parsedValue = field.value;
@@ -679,11 +676,11 @@ export class MappingSerializer {
           object: { 'fieldJSON': field, 'knownDocs': docRefs }}));
         return null;
       }
-      if (field.actions) {
-        this.deserializeFieldActions( field, mappedField, mapping, cfg, isSource );
-      }
     }
     mapping.addMappedField(mappedField, isSource);
+    if (field.actions) {
+      this.deserializeFieldActions( field, mappedField, mapping, cfg, isSource );
+    }
     return mappedField;
   }
 

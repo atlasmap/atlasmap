@@ -73,7 +73,7 @@ export class FieldNode extends ExpressionNode {
         this.field = mapping.getMappedFieldByName(fieldParts[1], true)!;
       } else {
         // TODO: check this non null operator
-        this.field = mapping.getMappedFieldForIndex((index + 1).toString(), true)!;
+        this.field = mapping.getMappedFieldForIndex((index).toString(), true)!;
       }
     }
   }
@@ -504,7 +504,7 @@ export class ExpressionModel {
     let position = -1;
     let fn = null;
 
-    while ((text.search(/\$\{[a-zA-Z0-9\.:\/]+\}/)) !== -1 ) {
+    while ((text.search(/\$\{[a-zA-Z0-9\.:\/\<\>\_]+\}/)) !== -1 ) {
       position = text.search(/\$/);
       if (position !== 0) {
         answer.push(new TextNode(text.substring(0, position)));
