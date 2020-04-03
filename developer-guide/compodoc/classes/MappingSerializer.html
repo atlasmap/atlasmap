@@ -1523,8 +1523,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="690"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/utils/mapping-serializer.ts:690</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="687"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/utils/mapping-serializer.ts:687</a></div>
                 </td>
             </tr>
 
@@ -1596,8 +1596,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="726"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/utils/mapping-serializer.ts:726</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="723"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/utils/mapping-serializer.ts:723</a></div>
                 </td>
             </tr>
 
@@ -1669,8 +1669,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="701"
-                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/utils/mapping-serializer.ts:701</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="698"
+                            class="link-to-prism">src/app/lib/atlasmap-data-mapper/utils/mapping-serializer.ts:698</a></div>
                 </td>
             </tr>
 
@@ -3245,9 +3245,6 @@ export class MappingSerializer {
       mappedField.parsedData.parsedPath &#x3D; field.name;
       mappedField.parsedData.parsedValue &#x3D; field.value;
       mappedField.parsedData.fieldIsProperty &#x3D; true;
-      if ( field.actions ) {
-        this.deserializeFieldActions( field, mappedField, mapping, cfg, isSource );
-      }
     } else if (field.jsonType &#x3D;&#x3D;&#x3D; (ConfigModel.mappingServicesPackagePrefix + &#x27;.ConstantField&#x27;)) {
       mappedField.parsedData.fieldIsConstant &#x3D; true;
       mappedField.parsedData.parsedValue &#x3D; field.value;
@@ -3276,11 +3273,11 @@ export class MappingSerializer {
           object: { &#x27;fieldJSON&#x27;: field, &#x27;knownDocs&#x27;: docRefs }}));
         return null;
       }
-      if (field.actions) {
-        this.deserializeFieldActions( field, mappedField, mapping, cfg, isSource );
-      }
     }
     mapping.addMappedField(mappedField, isSource);
+    if (field.actions) {
+      this.deserializeFieldActions( field, mappedField, mapping, cfg, isSource );
+    }
     return mappedField;
   }
 
