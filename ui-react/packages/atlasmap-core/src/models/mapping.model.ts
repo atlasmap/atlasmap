@@ -198,7 +198,7 @@ export class MappingModel {
   }
 
   getMappedFieldForIndex(index: string, isSource: boolean): MappedField | null {
-    if (!index) {
+    if (!index || index.length === 0) {
       return null;
     }
     const mappedFields = this.getMappedFields(isSource);
