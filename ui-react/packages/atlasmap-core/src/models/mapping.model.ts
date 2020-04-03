@@ -202,10 +202,10 @@ export class MappingModel {
       return null;
     }
     const mappedFields = this.getMappedFields(isSource);
-    if (+index >= mappedFields.length) {
+    if (+index - 1 > mappedFields.length - 1) {
       return null;
     }
-    return mappedFields[+index];
+    return mappedFields[+index - 1];
   }
 
   getIndexForMappedField(mappedField: MappedField): number | null {

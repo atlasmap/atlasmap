@@ -73,7 +73,7 @@ export class FieldNode extends ExpressionNode {
         this.field = mapping.getMappedFieldByName(fieldParts[1], true)!;
       } else {
         // TODO: check this non null operator
-        this.field = mapping.getMappedFieldForIndex((index).toString(), true)!;
+        this.field = mapping.getMappedFieldForIndex((index+1).toString(), true)!;
       }
     }
   }
