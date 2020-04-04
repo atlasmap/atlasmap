@@ -113,10 +113,7 @@ export const AtlasmapUIProvider: FunctionComponent<IAtlasmapUIProviderProps> = (
     if (!mapping) {
       return false;
     }
-    if (
-      mapping.sourceFields.length === 1 &&
-      mapping.targetFields.length === 1
-    ) {
+    if (mapping.sourceFields.length <= 1 && mapping.targetFields.length <= 1) {
       if (
         documentType === 'source' &&
         !mapping.sourceFields.find(f => f.id === fieldId)
@@ -127,13 +124,13 @@ export const AtlasmapUIProvider: FunctionComponent<IAtlasmapUIProviderProps> = (
       }
     } else if (
       documentType === 'source' &&
-      mapping.targetFields.length === 1 &&
+      mapping.targetFields.length <= 1 &&
       !mapping.sourceFields.find(f => f.id === fieldId)
     ) {
       return true;
     } else if (
       documentType === 'target' &&
-      mapping.sourceFields.length === 1 &&
+      mapping.sourceFields.length <= 1 &&
       !mapping.targetFields.find(f => f.id === fieldId)
     ) {
       return true;

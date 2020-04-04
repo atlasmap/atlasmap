@@ -114,12 +114,20 @@ export class MappingModel {
    * @param first - if true add the field to the beginning of the array, last otherwise.
    */
   addField(field: Field, first: boolean): MappedField {
+    const mappedFields = this.getMappedFields(field.isSource());
+    if (mappedFields.length == 1) {
+      const mappedField: MappedField = mappedFields[0];
+      if (!mappedField.field) {
+        mappedField.field = field;
+        return mappedField;
+      }
+    }
     const mappedField: MappedField = new MappedField();
     mappedField.field = field;
     if (first) {
-      this.getMappedFields(field.isSource()).unshift(mappedField);
+      mappedFields.unshift(mappedField);
     } else {
-      this.getMappedFields(field.isSource()).push(mappedField);
+      mappedFields.push(mappedField);
     }
     return mappedField;
   }
@@ -327,7 +335,7 @@ export class MappingModel {
 
       for (const mappedOutputField of m.targetFields) {
         // TODO: check this non null operator
-        if (mappedOutputField.field!.docDef === field.docDef
+        if (mappedOutputField.field?.docDef === field.docDef
           && mappedOutputField.field!.path === field.path) {
           if (m.isFieldMapped(field)) {
             return m.sourceFields[0].field!.name;

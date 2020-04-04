@@ -86,6 +86,8 @@ export const AtlasmapMappingDetails: FunctionComponent<IAtlasmapMappingDetailsPr
     closeDetails();
   };
 
+  let nextEmptyKey = 0;
+
   return (
     <MappingDetails onDelete={handleRemoveMapping} onClose={closeDetails}>
       <MappingFields title={'Sources'}>
@@ -140,9 +142,9 @@ export const AtlasmapMappingDetails: FunctionComponent<IAtlasmapMappingDetailsPr
           }));
           return (
             <MappingField
-              key={s.field!.uuid}
-              name={s.field!.name}
-              info={s.field!.getFieldLabel(true, true)}
+              key={s.field?.uuid ?? ++nextEmptyKey}
+              name={s.field?.name ?? ''}
+              info={s.field?.getFieldLabel(true, true) ?? ''}
               onDelete={() =>
                 onRemoveMappedField(() => mapping.removeMappedField(s))
               }
@@ -215,9 +217,9 @@ export const AtlasmapMappingDetails: FunctionComponent<IAtlasmapMappingDetailsPr
           }));
           return (
             <MappingField
-              key={t.field!.uuid}
-              name={t.field!.name}
-              info={t.field!.getFieldLabel(true, true)}
+              key={t.field?.uuid ?? ++nextEmptyKey}
+              name={t.field?.name ?? ''}
+              info={t.field?.getFieldLabel(true, true) ?? ''}
               onDelete={() =>
                 onRemoveMappedField(() => mapping.removeMappedField(t))
               }

@@ -380,7 +380,7 @@ export class MappingManagementService {
     const otherDirection = !field.isSource() ? 'source' : 'target';
     if (mappedFields.length > 0) {
       // TODO: check this non null operator
-      if (field.isInCollection() || mappedFields[0].field!.isInCollection()) {
+      if (field.isInCollection() || mappedFields[0]?.field?.isInCollection()) {
         return 'a collection field cannot be a part of compound selection.';
       } else if (otherSideMappedFields.length > 1) {
         return `multiple ${direction} fields cannot be added into this
