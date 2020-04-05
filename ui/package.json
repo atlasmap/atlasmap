@@ -94,7 +94,7 @@
     "lodash": "^4.16.4",
     "ng-packagr": "^4.4.0",
     "ngx-bootstrap": "^5.2.0",
-    "ngx-logger": "3.3.13",
+    "ngx-logger": "3.4.6",
     "pako": "^1.0.5",
     "patternfly": "3.59.4",
     "patternfly-bootstrap-combobox": "^1.1.6",
