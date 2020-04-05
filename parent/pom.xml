@@ -60,7 +60,7 @@
     <log4j2.version>2.13.1</log4j2.version>
     <osgi.include.resource>{maven-resources}</osgi.include.resource>
     <resteasy.version>4.5.3.Final</resteasy.version>
-    <resteasy-jaxrs.version>3.11.1.Final</resteasy-jaxrs.version>
+    <resteasy-jaxrs.version>3.11.2.Final</resteasy-jaxrs.version>
     <logback.version>1.2.3</logback.version>
     <maven-version>3.6.3</maven-version>
     <maven-bundle-plugin.version>4.2.1</maven-bundle-plugin.version>
