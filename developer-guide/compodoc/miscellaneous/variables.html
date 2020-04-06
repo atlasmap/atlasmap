@@ -64,7 +64,7 @@
                             <a href="#bsDropdownModuleForRoot" title="src/app/lib/atlasmap-data-mapper/data-mapper.module.ts"><b>bsDropdownModuleForRoot</b>&nbsp;&nbsp;&nbsp;(src/.../data-mapper.module.ts)</a>
                         </li>
                         <li>
-                            <a href="#environment" title="src/environments/environment.prod.ts"><b>environment</b>&nbsp;&nbsp;&nbsp;(src/.../environment.prod.ts)</a>
+                            <a href="#environment" title="src/environments/environment.dev.ts"><b>environment</b>&nbsp;&nbsp;&nbsp;(src/.../environment.dev.ts)</a>
                         </li>
                         <li>
                             <a href="#environment" title="src/environments/environment.trace.ts"><b>environment</b>&nbsp;&nbsp;&nbsp;(src/.../environment.trace.ts)</a>
@@ -73,7 +73,7 @@
                             <a href="#environment" title="src/environments/environment.ts"><b>environment</b>&nbsp;&nbsp;&nbsp;(src/.../environment.ts)</a>
                         </li>
                         <li>
-                            <a href="#environment" title="src/environments/environment.dev.ts"><b>environment</b>&nbsp;&nbsp;&nbsp;(src/.../environment.dev.ts)</a>
+                            <a href="#environment" title="src/environments/environment.prod.ts"><b>environment</b>&nbsp;&nbsp;&nbsp;(src/.../environment.prod.ts)</a>
                         </li>
                         <li>
                             <a href="#httpClientXsrfModuleForRoot" title="src/app/lib/atlasmap-data-mapper/data-mapper.module.ts"><b>httpClientXsrfModuleForRoot</b>&nbsp;&nbsp;&nbsp;(src/.../data-mapper.module.ts)</a>
@@ -262,7 +262,7 @@
             </tbody>
         </table>
 </section>
-    <h3>src/environments/environment.prod.ts</h3>
+    <h3>src/environments/environment.dev.ts</h3>
     <section>
     <h3></h3>        <table class="table table-sm table-bordered">
             <tbody>
@@ -285,10 +285,10 @@
                     <tr>
                         <td class="col-md-4">
                             <i>Default value : </i><code>{
-  production: true,
+  production: false,
   ngxLoggerConfig: {
-    level: NgxLoggerLevel.OFF,
-    disableConsoleLogging: true
+    level: NgxLoggerLevel.DEBUG,
+    disableConsoleLogging: false
   },
   xsrf: {
     headerName: &#x27;ATLASMAP-XSRF-TOKEN&#x27;,
@@ -403,7 +403,7 @@
             </tbody>
         </table>
 </section>
-    <h3>src/environments/environment.dev.ts</h3>
+    <h3>src/environments/environment.prod.ts</h3>
     <section>
     <h3></h3>        <table class="table table-sm table-bordered">
             <tbody>
@@ -426,10 +426,10 @@
                     <tr>
                         <td class="col-md-4">
                             <i>Default value : </i><code>{
-  production: false,
+  production: true,
   ngxLoggerConfig: {
-    level: NgxLoggerLevel.DEBUG,
-    disableConsoleLogging: false
+    level: NgxLoggerLevel.OFF,
+    disableConsoleLogging: true
   },
   xsrf: {
     headerName: &#x27;ATLASMAP-XSRF-TOKEN&#x27;,
