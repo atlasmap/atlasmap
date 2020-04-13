@@ -425,9 +425,11 @@ export class MappingManagementService {
     if (selectedField != null) {
       mapping.addField(selectedField, false);
       this.updateTransition(mapping);
+      this.selectMapping(mapping);
       this.notifyMappingUpdated();
+    } else {
+      this.selectMapping(mapping);
     }
-    this.selectMapping(mapping);
   }
 
   /**

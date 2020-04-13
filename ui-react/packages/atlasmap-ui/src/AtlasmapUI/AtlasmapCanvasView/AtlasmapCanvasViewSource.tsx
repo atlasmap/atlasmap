@@ -18,7 +18,7 @@ export interface IAtlasmapCanvasViewSourceProps {
   onCreateConstant: () => void;
   onDeleteConstant: (value: string) => void;
   onEditConstant: (value: string) => void;
-  onCreateMapping: (source: IAtlasmapField, target: IAtlasmapField) => void;
+  onCreateMapping: (source: IAtlasmapField, target?: IAtlasmapField) => void;
   onCreateProperty: () => void;
   onDeleteProperty: (field: string) => void;
   onEditProperty: (field: string) => void;
@@ -125,10 +125,13 @@ export const AtlasmapCanvasViewSource: FunctionComponent<IAtlasmapCanvasViewSour
                     selectMapping(mapping.id);
                     onAddToMapping(node as IAtlasmapField, mapping);
                   }}
-                  onClickAddToMapping={() =>
-                    currentMapping &&
-                    onAddToMapping(node as IAtlasmapField, currentMapping)
-                  }
+                  onClickAddToMapping={() => {
+                    if (currentMapping) {
+                      onAddToMapping(node as IAtlasmapField, currentMapping);
+                    } else {
+                      onCreateMapping(node as IAtlasmapField);
+                    }
+                  }}
                   onCreateMapping={target =>
                     onCreateMapping(node as IAtlasmapField, target)
                   }

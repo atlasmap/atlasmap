@@ -128,19 +128,23 @@ export const DocumentField: FunctionComponent<IDocumentFieldProps> = ({
         )}
       >
         <span>
-          {showAddToMapping ? (
-            <Button
-              variant={'link'}
-              onClick={onClickAddToMapping}
-              isInline={true}
-              icon={isSelected ? <MinusCircleIcon /> : <AddCircleOIcon />}
-              data-testid={`add-to-selected-mapping-${name}-button`}
-            >
-              {content}
-            </Button>
-          ) : (
-            content
-          )}
+          <Button
+            variant={'link'}
+            onClick={onClickAddToMapping}
+            isInline={true}
+            icon={
+              showAddToMapping ? (
+                isSelected ? (
+                  <MinusCircleIcon />
+                ) : (
+                  <AddCircleOIcon />
+                )
+              ) : null
+            }
+            data-testid={`add-to-selected-mapping-${name}-button`}
+          >
+            {content}
+          </Button>
           {showType && ` (${type})`}
         </span>
         {children}
