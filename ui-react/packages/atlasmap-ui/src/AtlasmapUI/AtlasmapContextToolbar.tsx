@@ -123,6 +123,7 @@ export const AtlasmapContextToolbar: FunctionComponent<IAtlasmapContextToolbarPr
             variant={'plain'}
             aria-label="Add new mapping"
             onClick={onAddMapping}
+            data-testid="add-new-mapping-button"
           >
             <PlusIcon />
           </Button>
