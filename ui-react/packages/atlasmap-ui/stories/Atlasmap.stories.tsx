@@ -34,14 +34,17 @@ export const sample = () =>
       setMappings(updatedMappings);
     };
 
-    const createMapping = (source: IAtlasmapField, target: IAtlasmapField) => {
+    const createMapping = (
+      source: IAtlasmapField | undefined,
+      target?: IAtlasmapField
+    ) => {
       setMappings([
         ...mappings,
         {
           id: `${Date.now()}`,
           name: 'One to One (mock)',
-          sourceFields: [{ id: source.id }],
-          targetFields: [{ id: target.id }],
+          sourceFields: source ? [{ id: source.id }] : [],
+          targetFields: target ? [{ id: target.id }] : [],
         },
       ]);
     };

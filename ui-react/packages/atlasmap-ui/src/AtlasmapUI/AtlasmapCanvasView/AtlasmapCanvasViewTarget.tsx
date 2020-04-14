@@ -18,7 +18,10 @@ import { DocumentGroup } from './DocumentGroup';
 
 export interface IAtlasmapCanvasViewTargetProps {
   onAddToMapping: (node: IAtlasmapField, mapping: IMapping) => void;
-  onCreateMapping: (source: IAtlasmapField, target: IAtlasmapField) => void;
+  onCreateMapping: (
+    source: IAtlasmapField | undefined,
+    target?: IAtlasmapField
+  ) => void;
   onDeleteDocument: (id: GroupId) => void;
   onImportDocument: (selectedFile: File) => void;
   onSearch: (content: string) => void;
@@ -112,10 +115,16 @@ export const AtlasmapCanvasViewTarget: FunctionComponent<IAtlasmapCanvasViewTarg
                         selectMapping(mapping.id);
                         onAddToMapping(node as IAtlasmapField, mapping);
                       }}
-                      onClickAddToMapping={() =>
-                        currentMapping &&
-                        onAddToMapping(node as IAtlasmapField, currentMapping)
-                      }
+                      onClickAddToMapping={() => {
+                        if (currentMapping) {
+                          onAddToMapping(
+                            node as IAtlasmapField,
+                            currentMapping
+                          );
+                        } else {
+                          onCreateMapping(undefined, node as IAtlasmapField);
+                        }
+                      }}
                       onCreateMapping={target => {
                         onCreateMapping(node as IAtlasmapField, target);
                       }}

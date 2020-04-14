@@ -100,7 +100,6 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     addToCurrentMapping,
     createMapping,
     newMapping,
-    removeMapping,
     createConstant,
     deleteConstant,
     editConstant,
@@ -215,9 +214,13 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   );
 
   const handleCreateMapping = useCallback(
-    (source: IAtlasmapField, target: IAtlasmapField) => {
-      const sourceField = (source as IAtlasmapFieldWithField).amField;
-      const targetField = (target as IAtlasmapFieldWithField).amField;
+    (source: IAtlasmapField | undefined, target?: IAtlasmapField) => {
+      const sourceField = source
+        ? (source as IAtlasmapFieldWithField).amField
+        : undefined;
+      const targetField = target
+        ? (target as IAtlasmapFieldWithField).amField
+        : undefined;
       createMapping(sourceField, targetField);
     },
     [createMapping]

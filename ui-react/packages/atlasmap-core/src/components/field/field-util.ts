@@ -122,10 +122,12 @@ export function getPropertyTypeIndex(propName: string): number {
  * @param source
  * @param target
  */
-export function createMapping(source: Field, target: Field): void {
+export function createMapping(source: Field | undefined, target?: Field): void {
   const cfg = ConfigModel.getConfig();
-  cfg.mappingService.addNewMapping(source, false);
-  addToCurrentMapping(target);
+  source
+    ? cfg.mappingService.addNewMapping(source, false)
+    : cfg.mappingService.newMapping();
+  target && addToCurrentMapping(target);
 }
 
 /**
