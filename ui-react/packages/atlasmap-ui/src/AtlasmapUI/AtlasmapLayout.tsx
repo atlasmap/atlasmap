@@ -6,6 +6,7 @@ import { Loading } from '../common';
 import { AtlasmapSidebar } from './AtlasmapSidebar';
 import { CanvasViewToolbar } from '../CanvasView/components';
 import { useCanvasViewOptionsContext } from '../CanvasView/CanvasViewOptionsProvider';
+import { MappingTable } from '.';
 
 export interface IAtlasmapLayoutProps {
   mappingExpressionClearText: (
@@ -35,6 +36,8 @@ export interface IAtlasmapLayoutProps {
   onToggleExpressionMode: () => void;
   onToggleShowTypes: (id: any) => void;
   onToggleShowMappingPreview: (id: any) => void;
+  showMappingTable: boolean;
+  onToggleShowMappingTable: (id: any) => void;
   onToggleShowMappedFields: (id: any) => void;
   onToggleShowUnmappedFields: (id: any) => void;
   trailerId: string;
@@ -57,6 +60,8 @@ export const AtlasmapLayout: FunctionComponent<IAtlasmapLayoutProps> = ({
   onToggleExpressionMode,
   onToggleShowTypes,
   onToggleShowMappingPreview,
+  showMappingTable,
+  onToggleShowMappingTable,
   onToggleShowMappedFields,
   onToggleShowUnmappedFields,
   children,
@@ -75,6 +80,7 @@ export const AtlasmapLayout: FunctionComponent<IAtlasmapLayoutProps> = ({
         onAddMapping={onAddMapping}
         onToggleShowTypes={onToggleShowTypes}
         onToggleShowMappingPreview={onToggleShowMappingPreview}
+        onToggleShowMappingTable={onToggleShowMappingTable}
         onToggleShowMappedFields={onToggleShowMappedFields}
         onToggleShowUnmappedFields={onToggleShowUnmappedFields}
         onToggleShowFreeView={toggleFreeView}
@@ -87,6 +93,7 @@ export const AtlasmapLayout: FunctionComponent<IAtlasmapLayoutProps> = ({
       onAddMapping,
       onToggleShowMappedFields,
       onToggleShowMappingPreview,
+      onToggleShowMappingTable,
       onToggleShowTypes,
       onToggleShowUnmappedFields,
       toggleFreeView,
@@ -126,7 +133,7 @@ export const AtlasmapLayout: FunctionComponent<IAtlasmapLayoutProps> = ({
 
   return pending ? (
     <Loading />
-  ) : (
+  ) : !showMappingTable ? (
     <TopologyView
       contextToolbar={contextToolbar}
       viewToolbar={canvasViewToolbar}
@@ -136,5 +143,10 @@ export const AtlasmapLayout: FunctionComponent<IAtlasmapLayoutProps> = ({
     >
       {children}
     </TopologyView>
+  ) : (
+    <MappingTable
+      contextToolbar={contextToolbar}
+      viewToolbar={canvasViewToolbar}
+    />
   );
 };

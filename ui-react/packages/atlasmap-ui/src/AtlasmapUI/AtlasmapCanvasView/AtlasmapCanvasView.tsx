@@ -85,12 +85,18 @@ export const AtlasmapCanvasView: FunctionComponent<IAtlasmapCanvasViewProps> = (
     showTypes,
   ]);
   const [showMappingPreview, setShowMappingPreview] = useState(false);
+  const [showMappingTable, setShowMappingTable] = useState(false);
 
   const toggleShowMappingPreview = useCallback(() => {
     const newValue = !showMappingPreview;
     setShowMappingPreview(newValue);
     onShowMappingPreview(newValue);
   }, [onShowMappingPreview, showMappingPreview]);
+
+  const toggleShowMappingTable = useCallback(() => {
+    const newValue = !showMappingTable;
+    setShowMappingTable(newValue);
+  }, [showMappingTable]);
 
   const mappingExprEmpty = useCallback((): boolean => {
     return mappingExpressionEmpty();
@@ -158,6 +164,8 @@ export const AtlasmapCanvasView: FunctionComponent<IAtlasmapCanvasViewProps> = (
         onToggleExpressionMode={toggleExpressionMode}
         onToggleShowTypes={toggleShowTypes}
         onToggleShowMappingPreview={toggleShowMappingPreview}
+        showMappingTable={showMappingTable}
+        onToggleShowMappingTable={toggleShowMappingTable}
         onToggleShowMappedFields={toggleShowMappedFields}
         onToggleShowUnmappedFields={toggleShowUnmappedFields}
         trailerId={trailerId}
