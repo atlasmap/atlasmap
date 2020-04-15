@@ -27,6 +27,7 @@ export interface IAtlasmapContextToolbarProps {
   onAddMapping: () => void;
   onToggleShowTypes: (id: any) => void;
   onToggleShowMappingPreview: (id: any) => void;
+  onToggleShowMappingTable: (id: any) => void;
   onToggleShowMappedFields: (id: any) => void;
   onToggleShowUnmappedFields: (id: any) => void;
   onToggleShowFreeView: (id: any) => void;
@@ -38,6 +39,7 @@ export const AtlasmapContextToolbar: FunctionComponent<IAtlasmapContextToolbarPr
   onExportAtlasFile,
   onAddMapping,
   onToggleShowMappingPreview,
+  onToggleShowMappingTable,
   onToggleShowTypes,
   onToggleShowMappedFields,
   onToggleShowUnmappedFields,
@@ -155,6 +157,7 @@ export const AtlasmapContextToolbar: FunctionComponent<IAtlasmapContextToolbarPr
             variant={'plain'}
             aria-label="Show/hide mapping table"
             data-testid="show-hide-mapping-table-button"
+            onClick={onToggleShowMappingTable}
           >
             <TableIcon />
           </Button>
