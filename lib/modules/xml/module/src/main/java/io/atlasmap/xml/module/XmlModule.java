@@ -20,12 +20,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamWriter;
+import javax.xml.transform.dom.DOMResult;
+import com.sun.xml.xsom.XSSchemaSet;
+import com.sun.xml.xsom.XSElementDecl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasValidationException;
@@ -39,11 +46,14 @@ import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
+import io.atlasmap.v2.InspectionType;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.xml.core.XmlFieldReader;
 import io.atlasmap.xml.core.XmlFieldWriter;
 import io.atlasmap.xml.core.XmlIOHelper;
 import io.atlasmap.xml.core.XmlPath;
+import io.atlasmap.xml.core.schema.AtlasRewritingXSVisitor;
+import io.atlasmap.xml.core.schema.AtlasXmlSchemaSetParser;
 import io.atlasmap.xml.v2.AtlasXmlModelFactory;
 import io.atlasmap.xml.v2.XmlDataSource;
 import io.atlasmap.xml.v2.XmlField;
@@ -294,7 +304,8 @@ public class XmlModule extends BaseAtlasModule {
     public void processPostTargetExecution(AtlasInternalSession session) throws AtlasException {
         XmlFieldWriter writer = session.getFieldWriter(getDocId(), XmlFieldWriter.class);
         if (writer != null && writer.getDocument() != null) {
-            String targetDocumentString = convertFromXmlDocument(writer.getDocument());
+            Document doc = enforceSchema(writer.getDocument());
+            String targetDocumentString = convertFromXmlDocument(doc);
             session.setTargetDocument(getDocId(), targetDocumentString);
         } else {
             AtlasUtil.addAudit(session, getDocId(), String
@@ -333,6 +344,35 @@ public class XmlModule extends BaseAtlasModule {
 
     protected XmlIOHelper getXmlIOHelper() {
         return this.ioHelper;
+    }
+
+    private Document enforceSchema(Document doc) {
+        if (getDataSourceMetadata() == null || getDataSourceMetadata().getInspectionType() != InspectionType.SCHEMA
+            || getDataSourceMetadata().getSpecification() == null || getDataSourceMetadata().getSpecification().length == 0) {
+            return doc;
+        }
+        try {
+            byte[] bytes = getDataSourceMetadata().getSpecification();
+            AtlasXmlSchemaSetParser schemaParser = new AtlasXmlSchemaSetParser(getClassLoader());
+            XSSchemaSet schemaSet = schemaParser.parse(new ByteArrayInputStream(bytes));
+            Element sourceRoot = doc.getDocumentElement();
+            String namespaceUri = sourceRoot.getNamespaceURI();
+            if (namespaceUri == null) {
+                namespaceUri = XMLConstants.NULL_NS_URI;
+            }
+            XSElementDecl rootDecl = schemaSet.getElementDecl(namespaceUri, sourceRoot.getLocalName());
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            dbf.setNamespaceAware(true);
+            Document targetDoc = dbf.newDocumentBuilder().newDocument();
+            rootDecl.visit(new AtlasRewritingXSVisitor(doc, targetDoc));
+            return targetDoc;
+        } catch (Exception e) {
+            LOG.warn("Failed to load XML schema for the document '{}': {} - ignoring", getDocId(), e.getMessage());
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("", e);
+            }
+            return doc;
+        }
     }
 
 }

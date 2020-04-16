@@ -44,6 +44,7 @@ import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.DataSourceMetadata;
 import io.atlasmap.v2.Field;
 
 public class DefaultAtlasContextFactoryTest {
@@ -167,7 +168,9 @@ public class DefaultAtlasContextFactoryTest {
 
     @Test
     public void testCreateContextWithFile() throws AtlasException {
-        File file = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.json").toFile();
+        File file = Paths.get(
+                "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.json")
+                .toFile();
         factory = DefaultAtlasContextFactory.getInstance();
         factory.init();
         assertNotNull(factory.createContext(file));
@@ -191,7 +194,9 @@ public class DefaultAtlasContextFactoryTest {
 
     @Test
     public void testCreateContextWithURI() throws AtlasException {
-        File file = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.json").toFile();
+        File file = Paths.get(
+                "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.json")
+                .toFile();
         factory = DefaultAtlasContextFactory.getInstance();
         factory.init();
         assertNotNull(factory.createContext(file.toURI()));
@@ -247,7 +252,8 @@ public class DefaultAtlasContextFactoryTest {
         assertNotNull(factory.getSupportedDataFormats(MockModule.class));
     }
 
-    @AtlasModuleDetail(name = "ConstantModule", uri = "", modes = { "SOURCE" }, dataFormats = { "xml", "json" }, configPackages = { "io.atlasmap.core" })
+    @AtlasModuleDetail(name = "ConstantModule", uri = "", modes = { "SOURCE" }, dataFormats = { "xml",
+            "json" }, configPackages = { "io.atlasmap.core" })
     private class MockModule implements AtlasModule {
 
         private ClassLoader classLoader;
@@ -404,6 +410,15 @@ public class DefaultAtlasContextFactoryTest {
 
         @Override
         public Map<String, String> getUriParameters() {
+            return null;
+        }
+
+        @Override
+        public void setDataSourceMetadata(DataSourceMetadata meta) {
+        }
+
+        @Override
+        public DataSourceMetadata getDataSourceMetadata() {
             return null;
         }
 

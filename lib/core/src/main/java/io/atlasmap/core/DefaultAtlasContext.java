@@ -55,11 +55,12 @@ import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.Collection;
 import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.DataSource;
+import io.atlasmap.v2.DataSourceKey;
+import io.atlasmap.v2.DataSourceMetadata;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
-import io.atlasmap.v2.Expression;
 import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
@@ -82,6 +83,8 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     private Map<String, AtlasModule> sourceModules = new HashMap<>();
     private Map<String, AtlasModule> targetModules = new HashMap<>();
     private Map<String, LookupTable> lookupTables = new HashMap<>();
+    private Map<DataSourceKey, DataSourceMetadata> dataSourceMetadataMap;
+    private boolean initialized;
 
     public DefaultAtlasContext(URI atlasMappingUri) {
         this(DefaultAtlasContextFactory.getInstance(), atlasMappingUri);
@@ -104,7 +107,11 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
      *
      * @throws AtlasException failed to initialize
      */
-    protected void init() throws AtlasException {
+    protected synchronized void init() throws AtlasException {
+
+        if (this.initialized) {
+            return;
+        }
 
         registerJmx(this);
 
@@ -173,6 +180,13 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                     getTargetModules().put(docId, module);
                 }
                 module.setDocId(docId);
+                if (this.dataSourceMetadataMap != null) {
+                    DataSourceKey dskey = new DataSourceKey(ds.getDataSourceType() == DataSourceType.SOURCE, docId);
+                    DataSourceMetadata meta = this.dataSourceMetadataMap.get(dskey);
+                    if (meta != null) {
+                        module.setDataSourceMetadata(meta);
+                    }
+                }
                 module.init();
             } catch (Exception t) {
                 LOG.error("Unable to initialize {} module: {}", ds.getDataSourceType(), moduleInfo);
@@ -181,6 +195,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                         moduleInfo.toString()), t);
             }
         }
+        initialized = true;
     }
 
     protected void registerJmx(DefaultAtlasContext context) {
@@ -887,15 +902,14 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 
     @Override
     public AtlasSession createSession() throws AtlasException {
-        if (mappingDefinition == null && atlasMappingUri != null) {
-            init();
-        }
+        init();
         return doCreateSession();
     }
 
     public AtlasSession createSession(AtlasMapping mappingDefinition) throws AtlasException {
         this.atlasMappingUri = null;
         this.mappingDefinition = mappingDefinition;
+        this.initialized = false;
         init();
         return doCreateSession();
     }
@@ -915,6 +929,11 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         df.setTimeZone(TimeZone.getDefault());
         session.getProperties().put("Atlas.CreatedDateTimeTZ", df.format(date));
     }
+
+	public void setDataSourceMetadata(Map<DataSourceKey, DataSourceMetadata> dataSourceMetadataMap) throws AtlasException {
+        this.dataSourceMetadataMap = dataSourceMetadataMap;
+        init();
+	}
 
     public Map<String, AtlasModule> getSourceModules() {
         return sourceModules;
@@ -988,4 +1007,5 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                 + ", mappingName=" + getMappingName() + ", mappingUri=" + getMappingUri() + ", sourceModules="
                 + sourceModules + ", targetModules=" + targetModules + "]";
     }
+
 }

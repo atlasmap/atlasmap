@@ -30,6 +30,7 @@ import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.validation.Schema;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -67,6 +68,10 @@ public class XmlFieldWriterTest {
     }
 
     public void createWriter() throws Exception {
+        createWriter(null);
+    }
+
+    public void createWriter(Schema schema) throws Exception {
         writer = new XmlFieldWriter(XmlFieldWriter.class.getClassLoader(), namespaces, seedDocument);
         this.document = writer.getDocument();
         assertNotNull(document);
@@ -174,33 +179,6 @@ public class XmlFieldWriterTest {
         writeValue("/orders/order/id[1]", "4423423");
 
         checkResultFromFile("simple_example.xml");
-    }
-
-    public void checkResultFromFile(String expectedFilename) throws Exception {
-        String filename = "src/test/resources/" + expectedFilename;
-        String expected = new String(Files.readAllBytes(Paths.get(filename)));
-        checkResult(expected);
-    }
-
-    public void checkResult(String s) throws Exception {
-        String expected = header + s;
-        if (document == null) {
-            throw new Exception("document is not initialized.");
-        }
-        /*
-         * Diff diff =
-         * DiffBuilder.compare(Input.fromString(expected)).withTest(Input.fromDocument(
-         * document)).ignoreWhitespace().build(); assertFalse(diff.toString(),
-         * diff.hasDifferences());
-         */
-        String actual = xmlHelper.writeDocumentToString(true, writer.getDocument());
-        expected = expected.replaceAll("\n|\r", "");
-        expected = expected.replaceAll("> *?<", "><");
-        expected = expected.replace("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>", "");
-
-        System.out.println("Expected: " + expected);
-        System.out.println("Actual:   " + actual);
-        assertEquals(expected, actual);
     }
 
     @Test
@@ -612,6 +590,33 @@ public class XmlFieldWriterTest {
 
         assertEquals(expectedValue, session.head().getSourceField().getValue());
         assertEquals(0, session.getAudits().getAudit().size());
+    }
+
+    private void checkResultFromFile(String expectedFilename) throws Exception {
+        String filename = "src/test/resources/" + expectedFilename;
+        String expected = new String(Files.readAllBytes(Paths.get(filename)));
+        checkResult(expected);
+    }
+
+    private void checkResult(String s) throws Exception {
+        String expected = header + s;
+        if (document == null) {
+            throw new Exception("document is not initialized.");
+        }
+        /*
+         * Diff diff =
+         * DiffBuilder.compare(Input.fromString(expected)).withTest(Input.fromDocument(
+         * document)).ignoreWhitespace().build(); assertFalse(diff.toString(),
+         * diff.hasDifferences());
+         */
+        String actual = xmlHelper.writeDocumentToString(true, writer.getDocument());
+        expected = expected.replaceAll("\n|\r", "");
+        expected = expected.replaceAll("> *?<", "><");
+        expected = expected.replace("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>", "");
+
+        System.out.println("Expected: " + expected);
+        System.out.println("Actual:   " + actual);
+        assertEquals(expected, actual);
     }
 
 }

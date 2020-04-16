@@ -53,6 +53,11 @@
       <artifactId>atlas-xml-core</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.atlasmap.com.sun.xsom</groupId>
+      <artifactId>xsom</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>

@@ -37,6 +37,7 @@ import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.DataSourceMetadata;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
@@ -57,6 +58,7 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
     private String uriDataType;
     private Map<String,String> uriParameters = new HashMap<>();
     private ClassLoader classLoader;
+    private DataSourceMetadata dataSourceMetadata;
 
     @Override
     public void init() throws AtlasException {
@@ -368,6 +370,16 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
     @Override
     public Boolean isSupportedField(Field field) {
         return field instanceof SimpleField || field instanceof FieldGroup;
+    }
+
+    @Override
+    public void setDataSourceMetadata(DataSourceMetadata meta) {
+        this.dataSourceMetadata = meta;
+    }
+
+    @Override
+    public DataSourceMetadata getDataSourceMetadata() {
+        return this.dataSourceMetadata;
     }
 
 }

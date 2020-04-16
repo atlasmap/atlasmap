@@ -45,7 +45,11 @@ public abstract class BaseDefaultAtlasContextTest {
     @Before
     public void init() throws AtlasException {
         mapping = AtlasTestData.generateAtlasMapping();
-        context = new DefaultAtlasContext(DefaultAtlasContextFactory.getInstance(), mapping);
+        context = new DefaultAtlasContext(DefaultAtlasContextFactory.getInstance(), mapping) {
+            protected void init() {
+                // hijack initialization
+            }
+        };
         sourceModule = mockAtlasModule();
         sourceModule.setMode(AtlasModuleMode.SOURCE);
         targetModule = mockAtlasModule();

@@ -15,6 +15,7 @@
  */
 package io.atlasmap.core;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,18 +23,25 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.slf4j.LoggerFactory;
 
 import org.slf4j.Logger;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.v2.ADMDigest;
 import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.DataSourceKey;
 import io.atlasmap.v2.DataSourceMetadata;
 import io.atlasmap.v2.Json;
 
@@ -72,11 +80,12 @@ public class ADMArchiveHandler {
     private byte[] buffer = new byte[2048];
     private byte[] gzippedAdmDigestBytes = null;
     private byte[] mappingDefinitionBytes = null;
-    private ClassLoader classLoader = null;
+    private ObjectMapper jsonMapper;
+    private ObjectMapper jsonMapperForDigest;
 
     private AtlasMapping mappingDefinition = null;
     private String mappingDefinitionId = "0";
-    private Map<String, DataSourceMetadata> dataSourceMetadata = new HashMap<>();
+    private Map<DataSourceKey, DataSourceMetadata> dataSourceMetadata;
     private boolean ignoreLibrary = false;
     private Path persistDirectory;
     private Path libraryDirectory;
@@ -86,7 +95,9 @@ public class ADMArchiveHandler {
     }
 
     public ADMArchiveHandler(ClassLoader loader) {
-        this.classLoader = loader;
+        this.jsonMapper = Json.withClassLoader(loader);
+        this.jsonMapperForDigest = this.jsonMapper.copy();
+        this.jsonMapperForDigest.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, false);
     }
 
     /**
@@ -97,7 +108,8 @@ public class ADMArchiveHandler {
         clear();
         File file = path.toFile();
         if (!file.exists() || (!file.isFile() && !file.isDirectory())) {
-            throw new AtlasException(String.format("'%s' doesn't exist or is not a regular file/directory", path.toString()));
+            throw new AtlasException(
+                    String.format("'%s' doesn't exist or is not a regular file/directory", path.toString()));
         }
 
         if (file.isDirectory()) {
@@ -153,9 +165,9 @@ public class ADMArchiveHandler {
                     zipOut.closeEntry();
                 }
             }
-       } catch (Exception e) {
-           throw new AtlasException("Error exporting ADM archive file", e);
-       }
+        } catch (Exception e) {
+            throw new AtlasException("Error exporting ADM archive file", e);
+        }
     }
 
     /**
@@ -188,8 +200,8 @@ public class ADMArchiveHandler {
     public AtlasMapping getMappingDefinition() throws AtlasException {
         try {
             if (this.mappingDefinition == null && this.mappingDefinitionBytes != null) {
-                this.mappingDefinition = Json.withClassLoader(classLoader)
-                    .readValue(this.mappingDefinitionBytes, AtlasMapping.class);
+                this.mappingDefinition = jsonMapper.readValue(this.mappingDefinitionBytes,
+                        AtlasMapping.class);
             }
             return this.mappingDefinition;
         } catch (Exception e) {
@@ -207,8 +219,7 @@ public class ADMArchiveHandler {
             this.mappingDefinition = null;
             this.mappingDefinitionBytes = readIntoByteArray(is);
             if (LOG.isDebugEnabled()) {
-                LOG.debug(Json.withClassLoader(classLoader)
-                              .writeValueAsString(getMappingDefinition()));
+                LOG.debug(this.jsonMapper.writeValueAsString(getMappingDefinition()));
             }
         } catch (Exception e) {
             throw new AtlasException(e);
@@ -218,8 +229,7 @@ public class ADMArchiveHandler {
     public byte[] getMappingDefinitionBytes() throws AtlasException {
         try {
             if (this.mappingDefinitionBytes == null && this.mappingDefinition != null) {
-                this.mappingDefinitionBytes = Json.withClassLoader(classLoader)
-                    .writeValueAsBytes(this.mappingDefinition);
+                this.mappingDefinitionBytes = jsonMapper.writeValueAsBytes(this.mappingDefinition);
             }
             return this.mappingDefinitionBytes;
         } catch (Exception e) {
@@ -239,14 +249,46 @@ public class ADMArchiveHandler {
         return this.gzippedAdmDigestBytes;
     }
 
+    public DataSourceMetadata getDataSourceMetadata(boolean isSource, String documentId) throws AtlasException {
+        return getDataSourceMetadata(new DataSourceKey(isSource, documentId));
+    }
+
+    public DataSourceMetadata getDataSourceMetadata(DataSourceKey key) throws AtlasException {
+        if (getDataSourceMetadataMap() == null) {
+            return null;
+        }
+        return getDataSourceMetadataMap().get(key);
+    }
+
+    public Map<DataSourceKey, DataSourceMetadata> getDataSourceMetadataMap() throws AtlasException {
+        if (this.dataSourceMetadata == null) {
+            if (this.gzippedAdmDigestBytes == null) {
+                return null;
+            }
+            try (GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(this.gzippedAdmDigestBytes))) {
+                ADMDigest digest = jsonMapperForDigest.readValue(in, ADMDigest.class);
+                this.dataSourceMetadata = new HashMap<>();
+                for (int i=0; i<digest.getExportMeta().length; i++) {
+                    DataSourceMetadata meta = digest.getExportMeta()[i];
+                    String spec = digest.getExportBlockData()[i].getValue();
+                    if (meta.getDocumentId() == null) {
+                        meta.setDocumentId(meta.getName());
+                    }
+                    meta.setSpecification(spec != null ? spec.getBytes() : null);
+                    this.dataSourceMetadata.put(new DataSourceKey(meta.isSource(), meta.getDocumentId()), meta);
+                }
+            } catch (Exception e) {
+                throw new AtlasException(e);
+            }
+        }
+        return Collections.unmodifiableMap(this.dataSourceMetadata);
+    }
+
     public void clear() {
         this.mappingDefinitionBytes = null;
         this.mappingDefinition = null;
-        this.dataSourceMetadata = new HashMap<>();
-    }
-
-    public DataSourceMetadata getDataSourceMetadata(String documentId) {
-        return this.dataSourceMetadata.get(documentId);
+        this.gzippedAdmDigestBytes = null;
+        this.dataSourceMetadata = null;
     }
 
     public void setIgnoreLibrary(boolean ignoreLib) {

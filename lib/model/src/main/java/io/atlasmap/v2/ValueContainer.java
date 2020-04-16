@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2017 Red Hat, Inc.
+ * Copyright (C) 2020 Red Hat, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.atlasmap.xml.core;
+package io.atlasmap.v2;
 
-public final class AtlasXmlConstants {
+public class ValueContainer {
 
-    public static final String ATLAS_XML_SCHEMASET_NAMESPACE = "http://atlasmap.io/xml/schemaset/v2";
-    public static final String NS_PREFIX_XMLSCHEMA = "xs";
-    public static final String NS_PREFIX_SCHEMASET = "ss";
+    private String value;
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
 
 }

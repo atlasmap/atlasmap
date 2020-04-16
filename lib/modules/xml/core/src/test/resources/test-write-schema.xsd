@@ -1,0 +1,11 @@
+<xs:schema targetNamespace="http://atlasmap.io/xml/example" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="data">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element type="xs:string" name="firstName" />
+        <xs:element type="xs:string" name="lastName" />
+        <xs:element type="xs:string" name="email" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

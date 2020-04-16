@@ -43,7 +43,11 @@ public class DefaultAtlasContextCollectionExpansionTest {
     public void shouldNotExponentialyGrowExpandedCollectionMappings() throws Exception {
         final AtlasMapping mapping = new AtlasMapping();
 
-        final DefaultAtlasContext context = new DefaultAtlasContext(DefaultAtlasContextFactory.getInstance(), mapping);
+        final DefaultAtlasContext context = new DefaultAtlasContext(DefaultAtlasContextFactory.getInstance(), mapping) {
+            protected void init() {
+                // hijack initialization
+            }
+        };
         context.setSourceModules(Collections.singletonMap("source", new JsonModule()));
 
         final DefaultAtlasSession session = (DefaultAtlasSession)context.createSession();
@@ -62,7 +66,7 @@ public class DefaultAtlasContextCollectionExpansionTest {
         mappings.getMapping().add(singleMapping);
         baseMapping.setMappings(mappings);
 
-        Method m = context.getClass().getDeclaredMethod("unwrapCollectionMappings", new Class[] {DefaultAtlasSession.class, BaseMapping.class});
+        Method m = DefaultAtlasContext.class.getDeclaredMethod("unwrapCollectionMappings", new Class[] {DefaultAtlasSession.class, BaseMapping.class});
         m.setAccessible(true);
         assertEquals(1, List.class.cast(m.invoke(context, new Object[] {session, baseMapping})).size());
         assertEquals(1, List.class.cast(m.invoke(context, new Object[] {session, baseMapping})).size());

@@ -171,13 +171,11 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
             throw new AtlasException("AtlasMappingService is not set");
         }
         DefaultAtlasContext context = new DefaultAtlasContext(this, atlasMappingUri);
-        context.init();
         return context;
     }
 
     public AtlasContext createContext(AtlasMapping mapping) throws AtlasException {
         DefaultAtlasContext context = new DefaultAtlasContext(this, mapping);
-        context.init();
         return context;
     }
 
