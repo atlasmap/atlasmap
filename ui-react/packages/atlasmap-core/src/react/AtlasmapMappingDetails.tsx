@@ -16,6 +16,7 @@ export interface IAtlasmapMappingDetailsProps {
   mapping: MappingModel;
   closeDetails: () => void;
   onRemoveMappedField: (remove: () => void) => void;
+  onDeleteMapping: (remove: () => void) => void;
   onNewTransformation: (newTransformation: () => void) => void;
   onRemoveTransformation: (removeTransformation: () => void) => void;
 }
@@ -49,6 +50,7 @@ export const AtlasmapMappingDetails: FunctionComponent<IAtlasmapMappingDetailsPr
   mapping,
   closeDetails,
   onRemoveMappedField,
+  onDeleteMapping,
 }) => {
   const {
     getMappingActions,
@@ -89,7 +91,10 @@ export const AtlasmapMappingDetails: FunctionComponent<IAtlasmapMappingDetailsPr
   let nextEmptyKey = 0;
 
   return (
-    <MappingDetails onDelete={handleRemoveMapping} onClose={closeDetails}>
+    <MappingDetails
+      onDelete={() => onDeleteMapping(() => handleRemoveMapping())}
+      onClose={closeDetails}
+    >
       <MappingFields title={'Sources'}>
         {multiplicityFieldAction && (
           <MappingAction

@@ -27,6 +27,7 @@ export interface IAtlasmapProps {
   onRemoveMappedField: (removeMappedfield: () => void) => void;
   onNewTransformation: (newTransformation: () => void) => void;
   onRemoveTransformation: (removeTransformation: () => void) => void;
+  onDeleteMapping: (deleteMapping: () => void) => void;
   onCreateConstant: (
     createConstant: (constValue: string, constType: string) => void
   ) => void;
@@ -65,6 +66,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   onRemoveMappedField,
   onNewTransformation,
   onRemoveTransformation,
+  onDeleteMapping,
   onCreateConstant,
   onDeleteConstant,
   onEditConstant,
@@ -244,6 +246,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
             mapping={(mapping as IAtlasmapMapping).mapping}
             closeDetails={closeDetails}
             onRemoveMappedField={onRemoveMappedField}
+            onDeleteMapping={onDeleteMapping}
             onNewTransformation={onNewTransformation}
             onRemoveTransformation={onRemoveTransformation}
           />
