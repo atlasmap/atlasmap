@@ -46,15 +46,14 @@ import io.atlasmap.java.v2.MavenClasspathResponse;
 import io.atlasmap.service.AtlasService;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Json;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
-@Api
 @Path("/java/")
 public class JavaService {
 
@@ -82,18 +81,18 @@ public class JavaService {
     @GET
     @Path("/simple")
     @Produces(MediaType.TEXT_PLAIN)
-    @ApiOperation(value = "Simple", notes = "Simple hello service")
-    @ApiResponses(@ApiResponse(code = 200, response = String.class, message = "Return a response"))
-    public String simpleHelloWorld(@ApiParam("From") @QueryParam("from") String from) {
+    @Operation(summary = "Simple", description ="Simple hello service")
+    @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = String.class)), description = "Return a response"))
+    public String simpleHelloWorld(@Parameter(description = "From") @QueryParam("from") String from) {
         return "Got it! " + from;
     }
 
     @GET
     @Path("/class")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Inspect Class", notes = "Inspect a Java Class with specified fully qualified class name and return a Document object")
-    @ApiResponses(@ApiResponse(code = 200, response = JavaClass.class, message = "Return a Document object represented by JavaClass"))
-    public Response getClass(@ApiParam("The fully qualified class name to inspect") @QueryParam("className") String className) {
+    @Operation(summary = "Inspect Class", description ="Inspect a Java Class with specified fully qualified class name and return a Document object")
+    @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = JavaClass.class)), description = "Return a Document object represented by JavaClass"))
+    public Response getClass(@Parameter(description = "The fully qualified class name to inspect") @QueryParam("className") String className) {
         ClassInspectionService classInspectionService = new ClassInspectionService();
         classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
         JavaClass c = classInspectionService.inspectClass(className, CollectionType.NONE, null);
@@ -105,12 +104,11 @@ public class JavaService {
     @Path("/mavenclasspath")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Generate Maven Classpath", notes = "Retrieve a maven classpath string")
-    @ApiImplicitParams(@ApiImplicitParam(
-            name = "requestIn", value = "MavenClasspathRequest object", dataType = "io.atlasmap.java.v2.MavenClasspathRequest"))
+    @Operation(summary = "Generate Maven Classpath", description ="Retrieve a maven classpath string")
+    @RequestBody(description = "MavenClasspathRequest object",  content = @Content(schema = @Schema(implementation = MavenClasspathRequest.class)))
     @ApiResponses(@ApiResponse(
-            code = 200, response = MavenClasspathResponse.class,
-            message = "Return a MavenClasspathResponse object which contains classpath string"))
+            responseCode = "200", content = @Content(schema = @Schema(implementation = MavenClasspathResponse.class)),
+            description = "Return a MavenClasspathResponse object which contains classpath string"))
     public Response generateClasspath(InputStream requestIn) {
         MavenClasspathRequest request = fromJson(requestIn, MavenClasspathRequest.class);
         MavenClasspathResponse response = new MavenClasspathResponse();
@@ -138,11 +136,10 @@ public class JavaService {
     @Path("/class")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Inspect Class", notes = "Inspect a Java Class with specified fully qualified class name and return a Document object")
-    @ApiImplicitParams(@ApiImplicitParam(
-            name = "requestIn", value = "MavenClasspathRequest object", dataType = "io.atlasmap.java.v2.MavenClasspathRequest"))
+    @Operation(summary = "Inspect Class", description ="Inspect a Java Class with specified fully qualified class name and return a Document object")
+    @RequestBody(description = "MavenClasspathRequest object", content = @Content(schema = @Schema(implementation = MavenClasspathRequest.class)))
     @ApiResponses(@ApiResponse(
-            code = 200, response = JavaClass.class, message = "Return a Document object represented by JavaClass"))
+            responseCode = "200", content = @Content(schema = @Schema(implementation = JavaClass.class)), description = "Return a Document object represented by JavaClass"))
     public Response inspectClass(InputStream requestIn) {
         ClassInspectionRequest request = fromJson(requestIn, ClassInspectionRequest.class);
         ClassInspectionResponse response = new ClassInspectionResponse();
