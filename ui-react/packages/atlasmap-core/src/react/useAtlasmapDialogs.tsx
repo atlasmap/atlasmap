@@ -144,6 +144,12 @@ export function useAtlasmapDialogs({
     content: 'Are you sure you want to remove this field?',
   });
 
+  const [deleteMappingDialog, openDeleteMappingDialog] = useConfirmationDialog({
+    modalContainer,
+    title: 'Remove Mapping?',
+    content: 'Are you sure you want to remove the current mapping?',
+  });
+
   const handleExportAtlasFile = useCallback(
     (exportAtlasFile: (fileName: string) => void) => {
       openExportDialog((value: string) => {
@@ -261,6 +267,11 @@ export function useAtlasmapDialogs({
     [openRemoveMappedFieldDialog]
   );
 
+  const handleDeleteMapping = useCallback(
+    (removeMapping: () => void) => openDeleteMappingDialog(removeMapping),
+    [openDeleteMappingDialog]
+  );
+
   const handleNewTransformation = useCallback(() => void 0, []);
   const handleRemoveTransformation = useCallback(() => void 0, []);
 
@@ -273,6 +284,7 @@ export function useAtlasmapDialogs({
       onRemoveMappedField: handleRemoveMappedField,
       onNewTransformation: handleNewTransformation,
       onRemoveTransformation: handleRemoveTransformation,
+      onDeleteMapping: handleDeleteMapping,
       onCreateConstant: handleCreateConstant,
       onDeleteConstant: handleDeleteConstant,
       onEditConstant: handleEditConstant,
@@ -292,6 +304,7 @@ export function useAtlasmapDialogs({
       editPropertyDialog,
       resetDialog,
       removeMappedFieldDialog,
+      deleteMappingDialog,
     ],
   };
 }
