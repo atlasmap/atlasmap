@@ -65,10 +65,10 @@ export const sample = () =>
     };
 
     const mappingExprAddField = (
-      selectedField: any,
-      newTextNode: any,
-      atIndex: number,
-      isTrailer: boolean
+      _selectedField: any,
+      _newTextNode: any,
+      _atIndex: number,
+      _isTrailer: boolean
     ) => {};
 
     const mappingExprClearText = (
