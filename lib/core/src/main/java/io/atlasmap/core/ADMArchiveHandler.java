@@ -133,11 +133,11 @@ public class ADMArchiveHandler {
                 zipOut.closeEntry();
             }
 
-            if (getGzippedADMDigetBytes() != null) {
+            if (getGzippedADMDigestBytes() != null) {
                 LOG.debug("  Creating gzipped ADM digest file '{}'", getGzippedADMDigestFileName());
                 catEntry = new ZipEntry(getGzippedADMDigestFileName());
                 zipOut.putNextEntry(catEntry);
-                zipOut.write(getGzippedADMDigetBytes(), 0, getGzippedADMDigetBytes().length);
+                zipOut.write(getGzippedADMDigestBytes(), 0, getGzippedADMDigestBytes().length);
                 zipOut.closeEntry();
 
                 zipOut.putNextEntry(new ZipEntry("lib/"));
@@ -166,26 +166,19 @@ public class ADMArchiveHandler {
             throw new AtlasException("Persist Directory must be set");
         }
 
-        if (this.mappingDefinition != null) {
-            try {
-                this.mappingDefinitionBytes = Json.mapper().writeValueAsBytes(this.mappingDefinition);
-            } catch (Exception e) {
-                LOG.warn("Failed to serialize MappingDefinition object", e);
-            }
-        }
         Path mdPath = this.persistDirectory.resolve(getMappingDefinitionFileName());
-        if (this.mappingDefinitionBytes != null) {
+        if (getMappingDefinitionBytes() != null) {
             try (FileOutputStream out = new FileOutputStream(mdPath.toFile())) {
-                out.write(this.mappingDefinitionBytes);
+                out.write(getMappingDefinitionBytes());
             } catch (Exception e) {
                 LOG.warn("Failed to persist mapping definition", e);
             }
         }
 
-        if (this.gzippedAdmDigestBytes != null) {
+        if (getGzippedADMDigestBytes() != null) {
             Path digestPath = this.persistDirectory.resolve(getGzippedADMDigestFileName());
             try (FileOutputStream out = new FileOutputStream(digestPath.toFile())) {
-                out.write(this.gzippedAdmDigestBytes);
+                out.write(getGzippedADMDigestBytes());
             } catch (Exception e) {
                 LOG.warn("Failed to persist gzipped ADM digest file");
             }
@@ -204,12 +197,18 @@ public class ADMArchiveHandler {
         }
     }
 
-    public void setMappingDefinition(InputStream is) throws AtlasException {
+    public void setMappingDefinition(AtlasMapping mapping) {
+        this.mappingDefinitionBytes = null;
+        this.mappingDefinition = mapping;
+    }
+
+    public void setMappingDefinitionBytes(InputStream is) throws AtlasException {
         try {
             this.mappingDefinition = null;
             this.mappingDefinitionBytes = readIntoByteArray(is);
             if (LOG.isDebugEnabled()) {
-                LOG.debug(new String(this.mappingDefinitionBytes));
+                LOG.debug(Json.withClassLoader(classLoader)
+                              .writeValueAsString(getMappingDefinition()));
             }
         } catch (Exception e) {
             throw new AtlasException(e);
@@ -236,7 +235,7 @@ public class ADMArchiveHandler {
         }
     }
 
-    public byte[] getGzippedADMDigetBytes() {
+    public byte[] getGzippedADMDigestBytes() {
         return this.gzippedAdmDigestBytes;
     }
 
