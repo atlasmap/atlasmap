@@ -36,9 +36,7 @@ import io.atlasmap.java.v2.MavenClasspathResponse;
 import io.atlasmap.json.service.JsonService;
 import io.atlasmap.service.AtlasService;
 import io.atlasmap.xml.service.XmlService;
-import io.swagger.annotations.Api;
 
-@Api
 @Component
 @ApplicationPath("/v2/atlas/")
 public class JaxrsApplication extends Application {

@@ -39,15 +39,14 @@ import io.atlasmap.json.v2.JsonDocument;
 import io.atlasmap.json.v2.JsonInspectionRequest;
 import io.atlasmap.json.v2.JsonInspectionResponse;
 import io.atlasmap.v2.Json;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
-@Api
 @Path("/json/")
 public class JsonService {
 
@@ -72,21 +71,20 @@ public class JsonService {
     @GET
     @Path("/simple")
     @Produces(MediaType.TEXT_PLAIN)
-    @ApiOperation(value = "Simple", notes = "Simple hello service")
-    @ApiResponses(@ApiResponse(code = 200, response = String.class, message = "Return a response"))
-    public String simpleHelloWorld(@ApiParam("From") @QueryParam("from") String from) {
+    @Operation(summary ="Simple", description = "Simple hello service")
+    @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = String.class)), description = "Return a response"))
+    public String simpleHelloWorld(@Parameter(description = "From") @QueryParam("from") String from) {
         return "Got it! " + from;
     }
 
     @GET
     @Path("/inspect")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Inspect JSON via URI", notes = "*NOT IMPLEMENTED* Inspect a JSON schema or instance located at specified URI and return a Document object")
-    @ApiImplicitParams(@ApiImplicitParam(
-            name = "type", value = "Inspection type, one of `instance` or `Schema`", dataType = "io.atlasmap.json.v2.InspectionType"))
-    @ApiResponses(@ApiResponse(code = 200, response = JsonDocument.class, message = "Return a Document object represented by JsonDocument"))
+    @Operation(summary ="Inspect JSON via URI", description = "*NOT IMPLEMENTED* Inspect a JSON schema or instance located at specified URI and return a Document object")
+    @RequestBody(description = "Inspection type, one of `instance` or `Schema`", content = @Content(schema = @Schema(implementation = InspectionType.class)))
+    @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = JsonDocument.class)), description = "Return a Document object represented by JsonDocument"))
     public Response getClass(
-            @ApiParam("URI for JSON schema or instance") @QueryParam("uri") String uri,
+            @Parameter(description ="URI for JSON schema or instance") @QueryParam("uri") String uri,
             @QueryParam("type") String type) {
         JsonDocument d = null;
 
@@ -116,10 +114,9 @@ public class JsonService {
     @Path("/inspect")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @ApiOperation(value = "Inspect JSON", notes = "Inspect a JSON schema or instance and return a Document object")
-    @ApiImplicitParams(@ApiImplicitParam(
-            name = "requestIn", value = "JsonInspectionRequest object", dataType = "io.atlasmap.json.v2.JsonInspectionRequest"))
-    @ApiResponses(@ApiResponse(code = 200, response = JsonInspectionResponse.class, message = "Return a Document object represented by JsonDocument"))
+    @Operation(summary ="Inspect JSON", description = "Inspect a JSON schema or instance and return a Document object")
+    @RequestBody(description = "JsonInspectionRequest object",  content = @Content(schema = @Schema(implementation = JsonInspectionRequest.class)))
+    @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = JsonInspectionResponse.class)), description = "Return a Document object represented by JsonDocument"))
     public Response inspectClass(InputStream requestIn) {
         JsonInspectionRequest request = fromJson(requestIn, JsonInspectionRequest.class);
         long startTime = System.currentTimeMillis();

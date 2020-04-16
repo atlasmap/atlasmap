@@ -41,14 +41,13 @@ import io.atlasmap.dfdl.v2.DfdlInspectionRequest;
 import io.atlasmap.dfdl.v2.DfdlInspectionResponse;
 import io.atlasmap.service.AtlasService;
 import io.atlasmap.xml.v2.XmlDocument;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
-@Api
 @Path("/dfdl/")
 public class DfdlService {
 
@@ -76,8 +75,8 @@ public class DfdlService {
     @GET
     @Path("/simple")
     @Produces(MediaType.TEXT_PLAIN)
-    @ApiOperation(value = "Simple", notes = "Simple hello service")
-    @ApiResponses(@ApiResponse(code = 200, response = String.class, message = "Return a response"))
+    @Operation(summary = "Simple", description = "Simple hello service")
+    @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = String.class)), description = "Return a response"))
     public String simpleHelloWorld(@QueryParam("from") String from) {
         return "Got it! " + from;
     }
@@ -86,10 +85,9 @@ public class DfdlService {
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     @Path("/inspect")
-    @ApiOperation(value = "Inspect DFDL", notes = "Inspect a DFDL schema or instance and return a Document object")
-    @ApiImplicitParams(@ApiImplicitParam(
-            name = "request", value = "DfdlInspectionRequest object", dataType = "io.atlasmap.dfdl.v2.DfdlInspectionRequest"))
-    @ApiResponses(@ApiResponse(code = 200, response = DfdlInspectionResponse.class, message = "Return a Document object represented by XmlDocument"))
+    @Operation(summary = "Inspect DFDL", description = "Inspect a DFDL schema or instance and return a Document object")
+    @RequestBody(description = "DfdlInspectionRequest object", content = @Content(schema = @Schema(implementation = DfdlInspectionRequest.class)))
+    @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = DfdlInspectionResponse.class)), description = "Return a Document object represented by XmlDocument"))
     public Response inspect(InputStream request) {
         return inspect(fromJson(request, DfdlInspectionRequest.class));
     }
