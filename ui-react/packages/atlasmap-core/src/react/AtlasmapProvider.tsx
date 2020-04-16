@@ -298,10 +298,23 @@ export function useAtlasmap() {
 
   const mappings = fromMappingDefinitionToIMappings(mappingDefinition);
 
+  const executeFieldSearch = useCallback(
+    (searchFilter: string, isSource: boolean): any => {
+      return initializationService.cfg.mappingService.executeFieldSearch(
+        initializationService.cfg,
+        searchFilter,
+        isSource
+      );
+    },
+    [initializationService]
+  );
+
   const mappingExpressionEmpty = useCallback((): boolean => {
-    return (
-      initializationService.cfg.mappings!.activeMapping!.transition.expression
-        .nodes.length === 0
+    return !(
+      initializationService.cfg.mappings !== null &&
+      initializationService.cfg.mappings.activeMapping !== null &&
+      initializationService.cfg.mappings.activeMapping.transition.expression
+        .nodes.length > 0
     );
   }, [initializationService]);
 
@@ -331,6 +344,40 @@ export function useAtlasmap() {
     }
     mapping.transition.expression.updateFieldReference(mapping);
   }, [initializationService]);
+
+  const mappingExpressionAddField = useCallback(
+    (
+      selectedField: any,
+      newTextNode: any,
+      atIndex: number,
+      isTrailer: boolean
+    ) => {
+      const mapping = initializationService.cfg.mappings!.activeMapping;
+      if (!mapping || !selectedField) {
+        return;
+      }
+      const mappedField = mapping.getMappedFieldForField(selectedField);
+
+      // If the selected field was not part of the original mapping then add
+      // it to the active mapping.
+      if (mappedField === null) {
+        initializationService.cfg.mappingService.fieldSelected(
+          selectedField,
+          true,
+          newTextNode.getUuid(),
+          isTrailer ? newTextNode.toText().length : atIndex
+        );
+      } else {
+        mapping.transition!.expression!.addConditionalExpressionNode(
+          mappedField,
+          newTextNode.getUuid(),
+          isTrailer ? newTextNode.str.length : atIndex
+        );
+      }
+      initializationService.cfg.mappingService.notifyMappingUpdated();
+    },
+    [initializationService]
+  );
 
   const mappingExpressionClearText = useCallback(
     (nodeId?: string, startOffset?: number, endOffset?: number) => {
@@ -371,12 +418,12 @@ export function useAtlasmap() {
   }, [initializationService]);
 
   const mappingExpressionRemoveField = useCallback(
-    (tokenPosition?: string, offset?: number) => {
+    (tokenPosition?: string, offset?: number, removeField?: boolean) => {
       initializationService.cfg.mappings!.activeMapping!.transition.expression.removeToken(
         tokenPosition,
-        offset
+        offset,
+        removeField
       );
-      initializationService.cfg.mappingService.notifyMappingUpdated();
     },
     [initializationService]
   );
@@ -488,6 +535,8 @@ export function useAtlasmap() {
       importAtlasFile: handleImportAtlasFile,
       resetAtlasmap: handleResetAtlasmap,
       changeActiveMapping,
+      executeFieldSearch,
+      mappingExpressionAddField,
       mappingExpressionClearText,
       mappingExpressionEmpty,
       mappingExpressionInit,
@@ -526,6 +575,8 @@ export function useAtlasmap() {
       handleImportAtlasFile,
       handleResetAtlasmap,
       changeActiveMapping,
+      executeFieldSearch,
+      mappingExpressionAddField,
       mappingExpressionClearText,
       mappingExpressionEmpty,
       mappingExpressionInit,

@@ -86,6 +86,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     deleteAtlasFile,
     changeActiveMapping,
     documentExists,
+    executeFieldSearch,
+    mappingExpressionAddField,
     mappingExpressionClearText,
     mappingExpressionEmpty,
     mappingExpressionInit,
@@ -254,6 +256,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       }
     >
       <AtlasmapCanvasView
+        executeFieldSearch={executeFieldSearch}
+        mappingExpressionAddField={mappingExpressionAddField}
         mappingExpressionClearText={mappingExpressionClearText}
         mappingExpressionEmpty={mappingExpressionEmpty}
         mappingExpressionInit={mappingExpressionInit}

@@ -2,24 +2,30 @@ import { FunctionComponent } from 'react';
 import React from 'react';
 import { Tooltip, Form, FormGroup } from '@patternfly/react-core';
 import { Observable } from 'rxjs';
+import { ExpressionFieldSearch } from './ExpressionFieldSearch';
 
 let atIndex = -1;
 let atContainer: Node | undefined;
-let candidateIndex = 0;
-let candidateSrcElement: any;
 let expressionUpdatedSubscription: Observable<any> | null;
 let lastUpdatedEvent: any = null;
+let mappedFieldCandidates: any[] = [];
 let markup: any;
 let searchFilter = '';
 let searchMode = false;
-// let mappedFieldCandidates: any[] = [];
-
 let trailerID = '';
+
+let addFieldToExpression: (
+  mappedField: any,
+  newTextNode: any,
+  atIndex: number,
+  isTrailer: boolean
+) => void;
 let clearText: (
   nodeId?: string,
   startOffset?: number,
   endOffset?: number
 ) => any;
+let fieldSearch: (searchFilter: string, isSource: boolean) => any[];
 let getMappingExpression: () => string;
 let mappingExprEmpty: () => boolean;
 let mappingExprInit: () => void;
@@ -29,9 +35,21 @@ let mappingExprInsertText: (
   offset?: number | undefined
 ) => void;
 let mappingExprObservable: () => any;
-let mappingExprRemoveField: (tokenPosition?: string, offset?: number) => void;
+let mappingExprRemoveField: (
+  tokenPosition?: string,
+  offset?: number,
+  removeNext?: boolean
+) => void;
+let selectedField: any;
 
 export interface IExpressionContentProps {
+  executeFieldSearch: (searchFilter: string, isSource: boolean) => any;
+  mappingExpressionAddField: (
+    selectedField: any,
+    newTextNode: any,
+    atIndex: number,
+    isTrailer: boolean
+  ) => void;
   mappingExpressionClearText: (
     nodeId?: string,
     startOffset?: number,
@@ -104,6 +122,7 @@ function insertTextAtCaretPosition(key: string) {
 
 function removeTokenAtCaretPosition(before: boolean) {
   const selection = window.getSelection();
+  let removeNext: boolean = false;
   if (!selection || !markup) {
     return;
   }
@@ -111,13 +130,24 @@ function removeTokenAtCaretPosition(before: boolean) {
     if (getCaretPositionNodeId() === trailerID) {
       if (before) {
         mappingExprRemoveField();
+        moveCaretToEnd();
       }
     }
     return;
   }
+  // The window selection node will be the text node if the cursor lies
+  // at the boundary between the text node and a field node.  In that
+  // case remove the next node.
+  removeNext =
+    selection.focusNode &&
+    selection.focusNode.nodeType === selection.focusNode.TEXT_NODE &&
+    selection.focusOffset === selection.focusNode.textContent!.length
+      ? true
+      : false;
   const range = selection.getRangeAt(0);
   const startContainer = range.startContainer;
   const startOffset = range.startOffset;
+
   if (startContainer === markup) {
     if (startOffset === 0) {
       // head of expression
@@ -137,12 +167,17 @@ function removeTokenAtCaretPosition(before: boolean) {
     if (before) {
       mappingExprRemoveField();
     }
+    moveCaretToEnd();
     return;
   }
   mappingExprRemoveField(
     getCaretPositionNodeId(),
-    before ? startOffset - 1 : startOffset
+    before ? startOffset - 1 : startOffset,
+    removeNext
   );
+  if (getCaretPositionNodeId() === trailerID) {
+    moveCaretToEnd();
+  }
 }
 
 function restoreCaretPosition(event: any) {
@@ -170,18 +205,13 @@ function restoreCaretPosition(event: any) {
   moveCaretToEnd();
 }
 
-/**
- * Update the candidate source element and reset the focus.
- *
- * @param sibling
- */
-function updateCandidate(sibling: any): void {
-  if (candidateSrcElement && sibling) {
-    candidateSrcElement.style.backgroundColor = 'white';
-    sibling.focus();
-    candidateSrcElement = sibling;
-    candidateSrcElement.style.backgroundColor = 'lightblue';
+function fieldCandidateIndex(fieldStr: string): number {
+  for (let i = 0; i < mappedFieldCandidates.length; i++) {
+    if (mappedFieldCandidates[i].displayName === fieldStr) {
+      return i;
+    }
   }
+  return -1;
 }
 
 /**
@@ -190,12 +220,7 @@ function updateCandidate(sibling: any): void {
  * @param event - expression keyboard event
  */
 function onKeyDown(event: any): void {
-  if ('Enter' === event.key) {
-    event.preventDefault();
-    if (candidateSrcElement) {
-      selectionChanged(event, candidateIndex);
-    }
-  } else if ('Backspace' === event.key) {
+  if ('Backspace' === event.key) {
     // TODO handle cursor position
     event.preventDefault();
     removeTokenAtCaretPosition(true);
@@ -208,22 +233,6 @@ function onKeyDown(event: any): void {
     if (searchMode) {
       updateSearchMode();
     }
-  } else if ('ArrowDown' === event.key) {
-    event.preventDefault();
-    updateCandidate(candidateSrcElement.nextElementSibling);
-  } else if ('ArrowUp' === event.key) {
-    event.preventDefault();
-    updateCandidate(candidateSrcElement.previousElementSibling);
-  } else if ('Tab' === event.key) {
-    if (!candidateSrcElement && event.srcElement) {
-      candidateSrcElement =
-        event.srcElement.nextElementSibling.firstElementChild;
-      candidateIndex = 0;
-      candidateSrcElement.style.backgroundColor = 'lightblue';
-    } else if (candidateSrcElement && candidateSrcElement.nextElementSibling) {
-      event.preventDefault();
-      updateCandidate(candidateSrcElement!.nextElementSibling);
-    }
   }
 }
 
@@ -234,13 +243,12 @@ function onKeyPress(event: any) {
   if (event.key.length > 1) {
     return;
   }
-
   event.preventDefault();
 
   if (searchMode) {
     if (event.key.match(/[a-z0-9]/i)) {
       searchFilter += event.key;
-      // this.mappedFieldCandidates = this.configModel.mappingService.executeFieldSearch(this.configModel, this.searchFilter, true);
+      mappedFieldCandidates = fieldSearch(searchFilter, true);
     }
   } else {
     searchMode = event.key === '@' ? true : false;
@@ -248,7 +256,7 @@ function onKeyPress(event: any) {
       atContainer = window.getSelection()!.getRangeAt(0).startContainer;
       atIndex = window.getSelection()!.getRangeAt(0).startOffset;
       searchFilter = '';
-      // mappedFieldCandidates = this.configModel.mappingService.executeFieldSearch(this.configModel, this.searchFilter, true);
+      mappedFieldCandidates = fieldSearch(searchFilter, true);
     }
   }
   insertTextAtCaretPosition(event.key);
@@ -321,35 +329,26 @@ function onDragEnd(_event: React.DragEvent<HTMLDivElement>): void {
 }
 
 /**
- * The user has selected a field from the type-ahead pull-down.
+ * The user has selected a field from the search select menu.
  *
- * @param event
+ * @param value
  */
-function selectionChanged(_event: any, _index: number): void {
+function insertSelectedField(index: number): void {
+  if (index >= mappedFieldCandidates.length) {
+    return;
+  }
+  selectedField = mappedFieldCandidates[index].field;
+  if (!selectedField) {
+    return;
+  }
   const newTextNode = clearAtText(getCaretPositionNodeId(atContainer));
   if (newTextNode === null) {
     return;
   }
-  // If the selected field was not part of the original mapping then add
-  // it to the active mapping.
-  /*
   const isTrailer = getCaretPositionNodeId(atContainer) === trailerID;
-  const selectedField = mappedFieldCandidates[index].field;
-  const activeMapping = this.configModel.mappings.activeMapping;
-  const mappedField = activeMapping.getMappedFieldForField(selectedField);
-
-  if (mappedField === null) {
-    this.configModel.mappingService.fieldSelected(selectedField, true, newTextNode.getUuid(),
-      isTrailer ? newTextNode.toText().length : atIndex);
-  } else {
-    this.addConditionalExpressionNode(mappedField, newTextNode.getUuid(),
-      isTrailer ? newTextNode.str.length : atIndex);
-  }
-  */
-  clearSearchMode();
+  addFieldToExpression(selectedField, newTextNode, atIndex, isTrailer);
+  clearSearchMode(false);
   markup.focus();
-  candidateSrcElement = null;
-  candidateIndex = 0;
 }
 
 /**
@@ -394,21 +393,24 @@ function getCaretPositionNodeId(startContainer?: Node): string {
 /**
  * Clear elements associated with mapped-field searching.
  */
-function clearSearchMode(): void {
+function clearSearchMode(clearAtSign: boolean): void {
+  if (clearAtSign) {
+    clearAtText(getCaretPositionNodeId(atContainer));
+  }
   atIndex = -1;
   atContainer = undefined;
   searchMode = false;
   searchFilter = '';
-  // mappedFieldCandidates = [];
+  mappedFieldCandidates = [];
 }
 
 function updateSearchMode(): void {
   if (searchFilter.length === 0) {
-    // mappedFieldCandidates = [];
+    mappedFieldCandidates = [];
     searchMode = false;
   } else {
     searchFilter = searchFilter.substr(0, searchFilter.length - 1);
-    // mappedFieldCandidates = this.configModel.mappingService.executeFieldSearch(this.configModel, this.searchFilter, true);
+    mappedFieldCandidates = fieldSearch(searchFilter, true);
   }
 }
 
@@ -429,9 +431,14 @@ function initializeMappingExpression() {
     );
   }
   updateExpressionMarkup();
+  if (!mappingExprEmpty()) {
+    moveCaretToEnd();
+  }
 }
 
 export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
+  executeFieldSearch,
+  mappingExpressionAddField,
   mappingExpressionClearText,
   mappingExpressionEmpty,
   mappingExpressionInit,
@@ -441,7 +448,9 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   onGetMappingExpression,
   trailerId,
 }) => {
+  addFieldToExpression = mappingExpressionAddField;
   clearText = mappingExpressionClearText;
+  fieldSearch = executeFieldSearch;
   getMappingExpression = onGetMappingExpression;
   mappingExprEmpty = mappingExpressionEmpty;
   mappingExprInit = mappingExpressionInit;
@@ -450,28 +459,45 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   mappingExprRemoveField = mappingExpressionRemoveField;
   trailerID = trailerId;
   initializeMappingExpression();
+
   return (
-    <Form>
-      <FormGroup fieldId="expressionContent">
-        <Tooltip
-          content={"Enter text or '@' for source fields dropdown."}
-          enableFlip={true}
-          entryDelay={2000}
-          position={'left'}
-        >
-          <div
-            aria-label="Expression Content"
-            contentEditable
-            onChange={onChange}
-            onCut={onCut}
-            onDragEnd={onDragEnd}
-            onKeyDown={onKeyDown}
-            onKeyPress={onKeyPress}
-            onPaste={onPaste}
-            ref={el => (markup = el)}
-          />
-        </Tooltip>
-      </FormGroup>
-    </Form>
+    <span>
+      <Form>
+        <FormGroup fieldId="expressionContent">
+          <Tooltip
+            content={"Enter text or '@' for source fields menu."}
+            enableFlip={true}
+            entryDelay={2000}
+            position={'left'}
+          >
+            <div
+              aria-label="Expression Content"
+              contentEditable
+              className="ExpressionFieldSearch"
+              suppressContentEditableWarning={true}
+              onChange={onChange}
+              onCut={onCut}
+              onDragEnd={onDragEnd}
+              onKeyDown={onKeyDown}
+              onKeyPress={onKeyPress}
+              onPaste={onPaste}
+              ref={el => (markup = el)}
+            />
+          </Tooltip>
+        </FormGroup>
+      </Form>
+      <div>
+        {mappedFieldCandidates.length > 0 && (
+          <span>
+            <ExpressionFieldSearch
+              clearSearchMode={clearSearchMode}
+              fieldCandidateIndex={fieldCandidateIndex}
+              insertSelectedField={insertSelectedField}
+              mappedFieldCandidates={mappedFieldCandidates}
+            />
+          </span>
+        )}
+      </div>
+    </span>
   );
 };

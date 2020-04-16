@@ -76,6 +76,9 @@ export class FieldNode extends ExpressionNode {
         this.field = mapping.getMappedFieldForIndex((index+1).toString(), true)!;
       }
     }
+    if (field && !field.parsedData.parsedPath && field.field) {
+      field.parsedData.parsedPath = field.field.path;
+    }
   }
 
   toText(): string {
@@ -323,9 +326,9 @@ export class ExpressionModel {
     this.expressionUpdatedSource.next(updatedEvent);
   }
 
-  removeToken(tokenPosition?: string, offset?: number) {
+  removeToken(tokenPosition?: string, offset?: number, removeNext?: boolean) {
 
-    // No position was specified - append to the end
+    // No position was specified - remove from the end
     if (!tokenPosition) {
       const last = this.getLastNode();
       if (!last) {
@@ -341,7 +344,8 @@ export class ExpressionModel {
       } else if (last instanceof TextNode) {
         if (last.str.length > 0) {
           last.str = last.str.substring(0, last.str.length - 1);
-        } else {
+        }
+        if (last.str.length === 0) {
           this._nodes.pop();
         }
       }
@@ -355,6 +359,10 @@ export class ExpressionModel {
     let targetNode = this._nodes.find(n => n.getUuid() === tokenPosition);
     // TODO: check this non null operator
     let targetNodeIndex = this._nodes.indexOf(targetNode!);
+    if (removeNext) {
+      targetNodeIndex++;
+      targetNode = this._nodes[targetNodeIndex];
+    }
     if (!targetNode || offset === -1) {
       if (targetNodeIndex < 1) {
         return;
@@ -488,6 +496,10 @@ export class ExpressionModel {
       this.updateCache();
     }
     return this.htmlCache;
+  }
+
+  addConditionalExpressionNode(mappedField: MappedField, nodeId: string, offset: number): void {
+    this.insertNodes([new FieldNode(this.mapping, mappedField)], nodeId, offset);
   }
 
   private updateCache() {
