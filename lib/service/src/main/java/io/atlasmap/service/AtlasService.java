@@ -18,7 +18,6 @@ package io.atlasmap.service;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -172,16 +171,13 @@ public class AtlasService {
                                  @ApiParam("Mapping Definition ID") @PathParam("mappingDefinitionId") Integer mappingDefinitionId) {
         StringMap sMap = new StringMap();
         LOG.debug("listMappings with filter '{}'", filter);
-        java.nio.file.Path mappingFolderPath = Paths.get(getMappingSubDirectory(mappingDefinitionId));
-        if (!mappingFolderPath.toFile().exists() || !mappingFolderPath.toFile().isDirectory()) {
-            return Response.ok().entity(toJson(sMap)).build();
-        }
 
-        ADMArchiveHandler handler = new ADMArchiveHandler(this.libraryLoader);
-        handler.setIgnoreLibrary(true);
         try {
-            handler.load(mappingFolderPath);
+            ADMArchiveHandler handler = loadExplodedMappingDirectory(mappingDefinitionId);
             AtlasMapping map = handler.getMappingDefinition();
+            if (map == null) {
+                return Response.ok().entity(toJson(sMap)).build();
+            }
             StringMapEntry mapEntry = new StringMapEntry();
             mapEntry.setName(map.getName());
             UriBuilder builder = uriInfo.getBaseUriBuilder().path("v2").path("atlas").path("mapping")
@@ -195,7 +191,7 @@ public class AtlasService {
             }
             return Response.ok().entity(serialized).build();
         } catch (AtlasException e) {
-            LOG.error("Error processing the AtlasMap catalog file " + mappingFolderPath + "\n" +
+            LOG.error("Error retrieving mapping definition file for ID:" + mappingDefinitionId + "\n" +
                 e.getMessage(), e);
             throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
         }
@@ -336,43 +332,38 @@ public class AtlasService {
       @ApiParam("Mapping Format") @PathParam("mappingFormat") MappingFileType mappingFormat,
       @ApiParam("Mapping ID") @PathParam("mappingDefinitionId") Integer mappingDefinitionId) {
         LOG.debug("getMappingRequest: {} '{}'", mappingFormat, mappingDefinitionId);
-        java.nio.file.Path mappingDirPath = Paths.get(getMappingSubDirectory(mappingDefinitionId));
-        File mappingDirFile = mappingDirPath.toFile();
-
-        if (mappingDirFile == null || !mappingDirFile.exists()) {
-            LOG.debug("getMappingRequest: {} '{}' not found", mappingFormat, mappingDefinitionId);
-            return Response.noContent().build();
-        }
-
-        LOG.debug("getMappingRequest: {} '{}'", mappingFormat, mappingDirPath);
-        ADMArchiveHandler admHandler = new ADMArchiveHandler(this.libraryLoader);
-        admHandler.setIgnoreLibrary(true);
+        ADMArchiveHandler admHandler = loadExplodedMappingDirectory(mappingDefinitionId);
 
         switch (mappingFormat) {
         case JSON:
             byte[] serialized = null;
             try {
-                admHandler.load(mappingDirPath);
                 serialized = admHandler.getMappingDefinitionBytes();
             } catch (Exception e) {
-                LOG.error("Error retrieving mapping definition file in " + mappingDirPath, e);
+                LOG.error("Error retrieving mapping definition file for ID:" + mappingDefinitionId, e);
                 throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
             }
             if (LOG.isDebugEnabled()) {
                 LOG.debug(new String(serialized));
             }
+            if (serialized == null) {
+                LOG.debug("Mapping definition not found for ID:{}", mappingDefinitionId);
+                return Response.noContent().build();
+            }
             return Response.ok().entity(serialized).build();
         case GZ:
             try {
-                admHandler.load(mappingDirPath);
-                return Response.ok().entity(admHandler.getGzippedADMDigetBytes()).build();
+                if (admHandler.getGzippedADMDigestBytes() == null) {
+                    LOG.debug("ADM Digest file not found for ID:{}", mappingDefinitionId);
+                    return Response.noContent().build();
+                }
+                return Response.ok().entity(admHandler.getGzippedADMDigestBytes()).build();
             } catch (Exception e) {
                 LOG.error("Error getting compressed ADM digest file.\n" + e.getMessage(), e);
                 throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
             }
         case ZIP:
             try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-                admHandler.load(mappingDirPath);
                 admHandler.setIgnoreLibrary(false);
                 admHandler.setLibraryDirectory(Paths.get(this.libFolder));
                 admHandler.export(out);
@@ -419,25 +410,12 @@ public class AtlasService {
       @Context UriInfo uriInfo) {
         LOG.debug("createMappingRequest (save) with format '{}'", mappingFormat);
         UriBuilder builder = uriInfo.getAbsolutePathBuilder();
-        java.nio.file.Path mappingDirPath = Paths.get(getMappingSubDirectory(mappingDefinitionId));
-        File mappingDirFile = mappingDirPath.toFile();
-        if (!mappingDirFile.exists()) {
-            mappingDirFile.mkdirs();
-        }
-
-        ADMArchiveHandler admHandler = new ADMArchiveHandler(this.libraryLoader);
-        admHandler.setIgnoreLibrary(true);
-        try {
-            admHandler.load(mappingDirPath);
-        } catch (Exception e) {
-            LOG.error("Unexpected error while loading mapping directory.\n" + e.getMessage(), e);
-            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
-        }
+        ADMArchiveHandler admHandler = loadExplodedMappingDirectory(mappingDefinitionId);
 
         switch (mappingFormat) {
         case JSON:
             try {
-                admHandler.setMappingDefinition(mapping);
+                admHandler.setMappingDefinitionBytes(mapping);
                 admHandler.persist();
                 builder.path(admHandler.getMappingDefinition().getName());
             } catch (AtlasException e) {
@@ -504,11 +482,10 @@ public class AtlasService {
             InputStream mapping,
             @ApiParam("Mapping Definition ID") @PathParam("mappingDefinitionId") Integer mappingDefinitionId,
             @Context UriInfo uriInfo) {
-        ADMArchiveHandler handler = new ADMArchiveHandler(this.libraryLoader);
-        handler.setIgnoreLibrary(true);
+        ADMArchiveHandler handler = loadExplodedMappingDirectory(mappingDefinitionId);
         UriBuilder builder = uriInfo.getAbsolutePathBuilder();
         try {
-            handler.setMappingDefinition(mapping);
+            handler.setMappingDefinitionBytes(mapping);
             handler.persist();
             builder.path(handler.getMappingDefinition().getName());
         } catch (AtlasException e) {
@@ -630,6 +607,11 @@ public class AtlasService {
     }
 
     protected Response validateMapping(Integer mappingDefinitionId, AtlasMapping mapping, UriInfo uriInfo) throws IOException, AtlasException {
+        // TODO Separate save mapping from validation - https://github.com/atlasmap/atlasmap/issues/1946
+        ADMArchiveHandler handler = loadExplodedMappingDirectory(mappingDefinitionId);
+        handler.setMappingDefinition(mapping);
+        handler.persist();
+
         AtlasContext context = atlasContextFactory.createContext(mapping);
         AtlasSession session = context.createSession();
         context.processValidation(session);
@@ -670,6 +652,24 @@ public class AtlasService {
 
     private String getMappingSubDirectory(Integer mappingDefinitionId) {
         return this.mappingFolder + File.separator + mappingDefinitionId;
+    }
+
+    private ADMArchiveHandler loadExplodedMappingDirectory(Integer mappingDefinitionId) {
+        java.nio.file.Path mappingDirPath = Paths.get(getMappingSubDirectory(mappingDefinitionId));
+        File mappingDirFile = mappingDirPath.toFile();
+        if (!mappingDirFile.exists()) {
+            mappingDirFile.mkdirs();
+        }
+
+        ADMArchiveHandler admHandler = new ADMArchiveHandler(this.libraryLoader);
+        admHandler.setIgnoreLibrary(true);
+        try {
+            admHandler.load(mappingDirPath);
+        } catch (Exception e) {
+            LOG.error("Unexpected error while loading mapping directory.\n" + e.getMessage(), e);
+            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
+        }
+        return admHandler;
     }
 
 }
