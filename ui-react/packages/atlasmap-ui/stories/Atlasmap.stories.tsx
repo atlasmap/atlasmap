@@ -53,9 +53,24 @@ export const sample = () =>
       return false;
     };
 
+    const execFieldSearch = (searchFilter: string, isSource: boolean) => {
+      if (searchFilter && isSource) {
+        return searchFilter;
+      }
+      return '';
+    };
+
     const getMappingExpression = () => {
       return '';
     };
+
+    const mappingExprAddField = (
+      selectedField: any,
+      newTextNode: any,
+      atIndex: number,
+      isTrailer: boolean
+    ) => {};
+
     const mappingExprClearText = (
       nodeId?: string,
       startOffset?: number,
@@ -100,6 +115,7 @@ export const sample = () =>
         )}
       >
         <AtlasmapCanvasView
+          executeFieldSearch={execFieldSearch}
           onShowMappingPreview={action('AtlasmapCanvasView')}
           onShowMappedFields={action('onShowMappedFields')}
           onShowUnmappedFields={action('onShowUnmappedFields')}
@@ -111,6 +127,7 @@ export const sample = () =>
             conditionalMappingExpressionEnabled
           }
           onGetMappingExpression={getMappingExpression}
+          mappingExpressionAddField={mappingExprAddField}
           mappingExpressionClearText={mappingExprClearText}
           mappingExpressionEmpty={mappingExprEmpty}
           mappingExpressionInit={mappingExprInit}

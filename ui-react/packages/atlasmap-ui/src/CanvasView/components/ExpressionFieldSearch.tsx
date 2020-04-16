@@ -113,11 +113,11 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
   }
 
   function onMouseLeave(_event: any): void {
-    mouseOverTimeOut = setTimeout(() => {
-      clearSearchMode(true);
-      candidateSrcElement = null;
-      candidateIndex = 0;
-    }, 750);
+    // mouseOverTimeOut = setTimeout(() => {
+    clearSearchMode(true);
+    candidateSrcElement = null;
+    candidateIndex = 0;
+    // }, 750);
   }
 
   function selectionChanged(
