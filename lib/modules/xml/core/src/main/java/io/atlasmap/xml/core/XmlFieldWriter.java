@@ -378,4 +378,5 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
     public void setIgnoreMissingNamespaces(boolean ignoreMissingNamespaces) {
         this.ignoreMissingNamespaces = ignoreMissingNamespaces;
     }
+
 }

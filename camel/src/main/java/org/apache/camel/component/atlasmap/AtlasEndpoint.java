@@ -47,6 +47,7 @@ import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.ADMArchiveHandler;
+import io.atlasmap.core.DefaultAtlasContext;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Audit;
@@ -65,7 +66,6 @@ public class AtlasEndpoint extends ResourceEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(AtlasEndpoint.class);
     private AtlasContextFactory atlasContextFactory;
     private AtlasContext atlasContext;
-    private Pattern atlasmapMappingFileNamePattern = Pattern.compile("atlasmapping(-UI\\.[0-9]+)?\\.json");
 
     @UriParam(defaultValue = "true")
     private boolean loaderCache = true;
@@ -275,16 +275,22 @@ public class AtlasEndpoint extends ResourceEndpoint {
                     new Object[] { path, getEndpointUri() });
         }
         if (path.toLowerCase().endsWith("adm")) {
-            reader = new StringReader(extractMappingsFromADM(getResourceAsInputStream(), path));
-        }
-        else {
+            ADMArchiveHandler handler = new ADMArchiveHandler(getCamelContext().getApplicationContextClassLoader());
+            handler.setIgnoreLibrary(true);
+            handler.load(getResourceAsInputStream());
+            if (log.isDebugEnabled()) {
+                log.debug("AtlasMap mapping definition and data sources extracted from ADM archive: {}", path);
+            }
+            atlasContext = ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory()).createContext(handler.getMappingDefinition());
+            ((DefaultAtlasContext)atlasContext).setDataSourceMetadata(handler.getDataSourceMetadataMap());
+        } else {
             reader = getEncoding() != null ? new InputStreamReader(getResourceAsInputStream(), getEncoding())
                 : new InputStreamReader(getResourceAsInputStream());
+            AtlasMapping mapping = ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory())
+                    .getMappingService()
+                    .loadMapping(reader);
+            atlasContext = ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory()).createContext(mapping);
         }
-        AtlasMapping mapping = ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory())
-                .getMappingService()
-                .loadMapping(reader);
-        atlasContext = ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory()).createContext(mapping);
         return atlasContext;
     }
 

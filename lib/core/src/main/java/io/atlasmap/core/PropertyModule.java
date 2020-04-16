@@ -30,6 +30,7 @@ import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.spi.AtlasPropertyStrategy;
+import io.atlasmap.v2.DataSourceMetadata;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.PropertyField;
 
@@ -208,6 +209,15 @@ public class PropertyModule implements AtlasModule {
 
     @Override
     public Map<String, String> getUriParameters() {
+        return null;
+    }
+
+    @Override
+    public void setDataSourceMetadata(DataSourceMetadata meta) {
+    }
+
+    @Override
+    public DataSourceMetadata getDataSourceMetadata() {
         return null;
     }
 

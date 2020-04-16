@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.v2.DataSourceMetadata;
 import io.atlasmap.v2.Field;
 
 /**
@@ -107,5 +108,9 @@ public interface AtlasModule {
     Boolean isSupportedField(Field field);
 
     Field cloneField(Field field) throws AtlasException;
+
+	void setDataSourceMetadata(DataSourceMetadata meta);
+
+    DataSourceMetadata getDataSourceMetadata();
 
 }
