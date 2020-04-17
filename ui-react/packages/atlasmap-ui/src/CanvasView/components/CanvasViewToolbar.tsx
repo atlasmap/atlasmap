@@ -14,6 +14,13 @@ const styles = StyleSheet.create({
 });
 
 export interface ICanvasViewToolbarProps {
+  executeFieldSearch: (searchFilter: string, isSource: boolean) => any;
+  mappingExpressionAddField: (
+    selectedField: any,
+    newTextNode: any,
+    atIndex: number,
+    isTrailer: boolean
+  ) => void;
   mappingExpressionClearText: (
     nodeId?: string,
     startOffset?: number,
@@ -29,7 +36,8 @@ export interface ICanvasViewToolbarProps {
   mappingExpressionObservable: () => any;
   mappingExpressionRemoveField: (
     tokenPosition?: string,
-    offset?: number
+    offset?: number,
+    removeNext?: boolean
   ) => void;
   onConditionalMappingExpressionEnabled: () => boolean;
   onGetMappingExpression: () => string;
@@ -38,6 +46,8 @@ export interface ICanvasViewToolbarProps {
 }
 
 export const CanvasViewToolbar: FunctionComponent<ICanvasViewToolbarProps> = ({
+  executeFieldSearch,
+  mappingExpressionAddField,
   mappingExpressionClearText,
   mappingExpressionEmpty,
   mappingExpressionInit,
@@ -62,6 +72,7 @@ export const CanvasViewToolbar: FunctionComponent<ICanvasViewToolbarProps> = ({
             aria-label="Enable/ Disable conditional mapping expression"
             onClick={() => {
               onToggleExpressionMode();
+              // TODO - factor expression enabled
               setCondExprEnabled(onConditionalMappingExpressionEnabled());
             }}
             disabled={false}
@@ -74,6 +85,8 @@ export const CanvasViewToolbar: FunctionComponent<ICanvasViewToolbarProps> = ({
         </ToolbarItem>
         <ToolbarItem className={css(styles.toolbarItem)}>
           <ConditionalExpression
+            executeFieldSearch={executeFieldSearch}
+            mappingExpressionAddField={mappingExpressionAddField}
             mappingExpressionClearText={mappingExpressionClearText}
             mappingExpressionEmpty={mappingExpressionEmpty}
             mappingExpressionInit={mappingExpressionInit}

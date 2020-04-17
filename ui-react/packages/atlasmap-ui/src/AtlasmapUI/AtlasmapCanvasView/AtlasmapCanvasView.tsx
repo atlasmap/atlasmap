@@ -17,6 +17,13 @@ import { useAtlasmapUI } from '../AtlasmapUIProvider';
 import { AtlasmapLayout } from '../AtlasmapLayout';
 
 export interface IAtlasmapCanvasViewProps {
+  executeFieldSearch: (searchFilter: string, isSource: boolean) => any;
+  mappingExpressionAddField: (
+    selectedField: any,
+    newTextNode: any,
+    atIndex: number,
+    isTrailer: boolean
+  ) => void;
   mappingExpressionClearText: (
     nodeId?: string,
     startOffset?: number,
@@ -32,7 +39,8 @@ export interface IAtlasmapCanvasViewProps {
   mappingExpressionObservable: () => any;
   mappingExpressionRemoveField: (
     tokenPosition?: string,
-    offset?: number
+    offset?: number,
+    removeNext?: boolean
   ) => void;
   onShowMappingPreview: (enabled: boolean) => void;
   onShowMappedFields: (enabled: boolean) => void;
@@ -52,6 +60,8 @@ export interface IAtlasmapCanvasViewProps {
 }
 
 export const AtlasmapCanvasView: FunctionComponent<IAtlasmapCanvasViewProps> = ({
+  executeFieldSearch,
+  mappingExpressionAddField,
   mappingExpressionClearText,
   mappingExpressionEmpty,
   mappingExpressionInit,
@@ -106,9 +116,29 @@ export const AtlasmapCanvasView: FunctionComponent<IAtlasmapCanvasViewProps> = (
     return mappingExpressionInit();
   }, [mappingExpressionInit]);
 
-  const mappingExprClearText = useCallback(() => {
-    return mappingExpressionClearText();
-  }, [mappingExpressionClearText]);
+  const mappingExprAddField = useCallback(
+    (
+      selectedField: any,
+      newTextNode: any,
+      atIndex: number,
+      isTrailer: boolean
+    ) => {
+      return mappingExpressionAddField(
+        selectedField,
+        newTextNode,
+        atIndex,
+        isTrailer
+      );
+    },
+    [mappingExpressionAddField]
+  );
+
+  const mappingExprClearText = useCallback(
+    (nodeId?: string, startOffset?: number, endOffset?: number) => {
+      return mappingExpressionClearText(nodeId, startOffset, endOffset);
+    },
+    [mappingExpressionClearText]
+  );
 
   const getMappingExpression = useCallback(() => {
     return onGetMappingExpression();
@@ -146,6 +176,8 @@ export const AtlasmapCanvasView: FunctionComponent<IAtlasmapCanvasViewProps> = (
   return (
     <CanvasViewProvider>
       <AtlasmapLayout
+        executeFieldSearch={executeFieldSearch}
+        mappingExpressionAddField={mappingExprAddField}
         mappingExpressionClearText={mappingExprClearText}
         mappingExpressionEmpty={mappingExprEmpty}
         mappingExpressionInit={mappingExprInit}

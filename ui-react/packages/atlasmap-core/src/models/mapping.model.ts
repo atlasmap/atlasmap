@@ -184,6 +184,10 @@ export class MappingModel {
   }
 
   getMappedFieldForField(field: Field): MappedField | null {
+    if (!field) {
+      return null;
+    }
+
     for (const mappedField of this.getMappedFields(field.isSource())) {
       if (mappedField.field === field) {
         return mappedField;

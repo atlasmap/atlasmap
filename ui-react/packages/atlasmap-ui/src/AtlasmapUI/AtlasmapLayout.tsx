@@ -9,6 +9,13 @@ import { useCanvasViewOptionsContext } from '../CanvasView/CanvasViewOptionsProv
 import { MappingTable } from '.';
 
 export interface IAtlasmapLayoutProps {
+  executeFieldSearch: (searchFilter: string, isSource: boolean) => any;
+  mappingExpressionAddField: (
+    selectedField: any,
+    newTextNode: any,
+    atIndex: number,
+    isTrailer: boolean
+  ) => void;
   mappingExpressionClearText: (
     nodeId?: string,
     startOffset?: number,
@@ -24,7 +31,8 @@ export interface IAtlasmapLayoutProps {
   mappingExpressionObservable: () => any;
   mappingExpressionRemoveField: (
     tokenPosition?: string,
-    offset?: number
+    offset?: number,
+    removeNext?: boolean
   ) => void;
   onExportAtlasFile: (event: any) => void;
   onImportAtlasFile: (selectedFile: File) => void;
@@ -49,6 +57,8 @@ export const AtlasmapLayout: FunctionComponent<IAtlasmapLayoutProps> = ({
   onResetAtlasmap,
   onAddMapping,
   controlBar,
+  executeFieldSearch,
+  mappingExpressionAddField,
   mappingExpressionClearText,
   mappingExpressionEmpty,
   mappingExpressionInit,
@@ -103,6 +113,8 @@ export const AtlasmapLayout: FunctionComponent<IAtlasmapLayoutProps> = ({
   const canvasViewToolbar = useMemo(
     () => (
       <CanvasViewToolbar
+        executeFieldSearch={executeFieldSearch}
+        mappingExpressionAddField={mappingExpressionAddField}
         mappingExpressionClearText={mappingExpressionClearText}
         mappingExpressionEmpty={mappingExpressionEmpty}
         mappingExpressionInit={mappingExpressionInit}
@@ -118,6 +130,8 @@ export const AtlasmapLayout: FunctionComponent<IAtlasmapLayoutProps> = ({
       />
     ),
     [
+      executeFieldSearch,
+      mappingExpressionAddField,
       mappingExpressionClearText,
       mappingExpressionEmpty,
       mappingExpressionInit,

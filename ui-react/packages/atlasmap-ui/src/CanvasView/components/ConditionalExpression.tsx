@@ -2,6 +2,13 @@ import React, { FunctionComponent } from 'react';
 import { ExpressionContent } from './ExpressionContent';
 
 export interface IConditionalExpressionProps {
+  executeFieldSearch: (searchFilter: string, isSource: boolean) => any;
+  mappingExpressionAddField: (
+    selectedField: any,
+    newTextNode: any,
+    atIndex: number,
+    isTrailer: boolean
+  ) => void;
   mappingExpressionClearText: (
     nodeId?: string,
     startOffset?: number,
@@ -17,13 +24,16 @@ export interface IConditionalExpressionProps {
   mappingExpressionObservable: () => any;
   mappingExpressionRemoveField: (
     tokenPosition?: string,
-    offset?: number
+    offset?: number,
+    removeNext?: boolean
   ) => void;
   onGetMappingExpression: () => string;
   trailerId: string;
 }
 
 export const ConditionalExpression: FunctionComponent<IConditionalExpressionProps> = ({
+  executeFieldSearch,
+  mappingExpressionAddField,
   mappingExpressionClearText,
   mappingExpressionEmpty,
   mappingExpressionInit,
@@ -35,6 +45,8 @@ export const ConditionalExpression: FunctionComponent<IConditionalExpressionProp
 }) => {
   return (
     <ExpressionContent
+      executeFieldSearch={executeFieldSearch}
+      mappingExpressionAddField={mappingExpressionAddField}
       mappingExpressionClearText={mappingExpressionClearText}
       mappingExpressionEmpty={mappingExpressionEmpty}
       mappingExpressionInit={mappingExpressionInit}
