@@ -80,7 +80,7 @@ function updateExpressionMarkup() {
 }
 
 function moveCaretToEnd() {
-  if (!markup) {
+  if (!markup || trailerID.length === 0) {
     return;
   }
   const trailerNode = markup.querySelector('#' + trailerID);
