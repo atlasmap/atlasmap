@@ -444,7 +444,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">The AtlasMap Team</span><br>
 <span id="revnumber">version 2.0.0-SNAPSHOT,</span>
-<span id="revdate">2020-04-20</span>
+<span id="revdate">2020-04-21</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">AtlasMap Developer Guide</div>
@@ -480,6 +480,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#java-service">3.2.2. Java Service</a></li>
 <li><a href="#json-service">3.2.3. JSON Service</a></li>
 <li><a href="#xml-service">3.2.4. XML Service</a></li>
+<li><a href="#dfdl-service">3.2.5. DFDL Service</a></li>
 </ul>
 </li>
 <li><a href="#internal-runtime-engine">3.3. Runtime Engine</a>
@@ -498,7 +499,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#camel-atlasmap">4. camel-atlasmap component</a></li>
 <li><a href="#Reference">5. Reference</a>
 <ul class="sectlevel2">
-<li><a href="#design-time-service-api">5.1. Design Time Service API</a></li>
+<li><a href="#design-time-service-api">5.1. Design Time Service API</a>
+<ul class="sectlevel3">
+<li><a href="#core">5.1.1. Core</a></li>
+<li><a href="#java">5.1.2. Java</a></li>
+<li><a href="#json">5.1.3. JSON</a></li>
+<li><a href="#xml">5.1.4. XML</a></li>
+<li><a href="#dfdl">5.1.5. DFDL</a></li>
+</ul>
+</li>
 <li><a href="#fieldAction">5.2. Transformation (FieldAction)</a></li>
 <li><a href="#java-api-reference-javadoc">5.3. Java API Reference (Javadoc)</a></li>
 <li><a href="#angular-compodoc">5.4. Angular Compodoc</a></li>
@@ -952,7 +961,7 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 <p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/lib/service</a></p>
 </li>
 <li>
-<p>API Reference: <a href="inc/swagger/index.html#core">Core Service</a></p>
+<p>API Reference: <a href="openapi/core/index.html">API</a></p>
 </li>
 </ul>
 </div>
@@ -968,7 +977,7 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 <p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/modules/java/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/lib/modules/java/service</a></p>
 </li>
 <li>
-<p>API Reference: <a href="inc/swagger/index.html#java">Java Service</a></p>
+<p>API Reference: <a href="openapi/java/index.html">API</a></p>
 </li>
 </ul>
 </div>
@@ -984,7 +993,7 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 <p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/modules/json/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/lib/modules/json/service</a></p>
 </li>
 <li>
-<p>API Reference: <a href="inc/swagger/index.html#json">JSON Service</a></p>
+<p>API Reference: <a href="openapi/json/index.html">API</a></p>
 </li>
 </ul>
 </div>
@@ -1000,7 +1009,23 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 <p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/modules/xml/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/lib/modules/xml/service</a></p>
 </li>
 <li>
-<p>API Reference: <a href="inc/swagger/index.html#xml">XML Service</a></p>
+<p>API Reference: <a href="openapi/xml/index.html">API</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>XML Service provides XML inspection service which generate an AtlasMap Document object from XML instance or XML schema.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="dfdl-service">3.2.5. DFDL Service</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/modules/dfdl/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/lib/modules/dfdl/service</a></p>
+</li>
+<li>
+<p>API Reference: <a href="openapi/dfdl/index.html">API</a></p>
 </li>
 </ul>
 </div>
@@ -1218,8 +1243,27 @@ Also There is a <a href="#fieldAction">Reference</a> for all available FieldActi
 <h2 id="Reference">5. Reference</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="design-time-service-api">5.1. <a href="swagger/index.html">Design Time Service API</a></h3>
+<h3 id="design-time-service-api">5.1. <a href="openapi/index.html">Design Time Service API</a></h3>
+<div class="sect3">
+<h4 id="core">5.1.1. <a href="openapi/core/index.html">Core</a></h4>
 
+</div>
+<div class="sect3">
+<h4 id="java">5.1.2. <a href="openapi/java/index.html">Java</a></h4>
+
+</div>
+<div class="sect3">
+<h4 id="json">5.1.3. <a href="openapi/json/index.html">JSON</a></h4>
+
+</div>
+<div class="sect3">
+<h4 id="xml">5.1.4. <a href="openapi/xml/index.html">XML</a></h4>
+
+</div>
+<div class="sect3">
+<h4 id="dfdl">5.1.5. <a href="openapi/dfdl/index.html">DFDL</a></h4>
+
+</div>
 </div>
 <div class="sect2">
 <h3 id="fieldAction">5.2. Transformation (FieldAction)</h3>
@@ -1838,7 +1882,7 @@ string.</p></td>
 <div id="footer">
 <div id="footer-text">
 Version 2.0.0-SNAPSHOT<br>
-Last updated 2020-04-20 14:07:42 UTC
+Last updated 2020-04-21 21:38:52 UTC
 </div>
 </div>
 <style>
