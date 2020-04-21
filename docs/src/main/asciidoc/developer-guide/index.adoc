@@ -36,6 +36,11 @@ include::inc/_camel.adoc[]
 = Reference
 
 == <<openapi/index#, Design Time Service API>>
+=== <<openapi/core/index#, Core>>
+=== <<openapi/java/index#, Java>>
+=== <<openapi/json/index#, JSON>>
+=== <<openapi/xml/index#, XML>>
+=== <<openapi/dfdl/index#, DFDL>>
 
 include::inc/_fieldAction.adoc[]
 

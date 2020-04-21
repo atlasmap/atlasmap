@@ -1,0 +1,2818 @@
+= AtlasMap Design Time Service API :: Core 
+atlasmap@googlegroups.com
+2.0.0-SNAPSHOT
+:toc: left
+:numbered:
+:toclevels: 3
+:source-highlighter: highlightjs
+:keywords: openapi, rest, AtlasMap Design Time Service API :: Core 
+:specDir: 
+:snippetDir: 
+:generator-template: v1 2019-11-19
+:info-url: https://www.atlasmap.io/
+:app-name: AtlasMap Design Time Service API :: Core
+
+[abstract]
+.Abstract
+Core Service provides basic operations which is not specific to the individual data formats, Create/Get/Update/Remove mapping definition stored in Design Time Service local storage, validate mapping, retrieve metadata for available field actions and etc. 
+
+
+// markup not found, no include ::intro.adoc[opts=optional]
+
+
+
+== Endpoints
+
+
+[.Default]
+=== Default
+
+
+[.createMappingRequest]
+==== createMappingRequest
+    
+`PUT /mapping/{mappingFormat}/{mappingDefinitionId}`
+
+Create Mapping
+
+===== Description 
+
+Save a mapping file on the server
+
+
+// markup not found, no include ::mapping/{mappingFormat}/{mappingDefinitionId}/PUT/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+====== Path Parameters
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| mappingFormat 
+| Mapping Format  
+| X 
+| null 
+|  
+
+| mappingDefinitionId 
+| Mapping ID  
+| X 
+| null 
+|  
+
+|===         
+
+===== Body Parameter
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| AtlasMapping 
+| Mapping file content <<AtlasMapping>> 
+| - 
+|  
+|  
+
+|===         
+
+
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Succeeded
+|  <<>>
+
+
+| 500
+| Mapping file save error
+|  <<>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::mapping/{mappingFormat}/{mappingDefinitionId}/PUT/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::mapping/{mappingFormat}/{mappingDefinitionId}/PUT/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :mapping/{mappingFormat}/{mappingDefinitionId}/PUT/PUT.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::mapping/{mappingFormat}/{mappingDefinitionId}/PUT/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.createMappingRequestOld]
+==== createMappingRequestOld
+    
+`PUT /mapping/{mappingFormat}`
+
+Create Mapping
+
+===== Description 
+
+Save a mapping file on the server
+
+
+// markup not found, no include ::mapping/{mappingFormat}/PUT/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+====== Path Parameters
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| mappingFormat 
+| Mapping Format  
+| X 
+| null 
+|  
+
+|===         
+
+===== Body Parameter
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| AtlasMapping 
+| Mapping file content <<AtlasMapping>> 
+| - 
+|  
+|  
+
+|===         
+
+
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Succeeded
+|  <<>>
+
+
+| 500
+| Mapping file save error
+|  <<>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::mapping/{mappingFormat}/PUT/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::mapping/{mappingFormat}/PUT/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :mapping/{mappingFormat}/PUT/PUT.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::mapping/{mappingFormat}/PUT/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.getMappingRequest]
+==== getMappingRequest
+    
+`GET /mapping/{mappingFormat}/{mappingDefinitionId}`
+
+Get Mapping
+
+===== Description 
+
+Retrieve a mapping file saved on the server
+
+
+// markup not found, no include ::mapping/{mappingFormat}/{mappingDefinitionId}/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+====== Path Parameters
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| mappingFormat 
+| Mapping Format  
+| X 
+| null 
+|  
+
+| mappingDefinitionId 
+| Mapping ID  
+| X 
+| null 
+|  
+
+|===         
+
+
+
+
+
+
+===== Return Type
+
+<<AtlasMapping>>
+
+
+===== Content Type
+
+* application/json
+* application/xml
+* application/octet-stream
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return a mapping file content
+|  <<AtlasMapping>>
+
+
+| 204
+| Mapping file was not found
+|  <<>>
+
+
+| 500
+| Mapping file access error
+|  <<>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::mapping/{mappingFormat}/{mappingDefinitionId}/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::mapping/{mappingFormat}/{mappingDefinitionId}/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :mapping/{mappingFormat}/{mappingDefinitionId}/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::mapping/{mappingFormat}/{mappingDefinitionId}/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.getMappingRequestOld]
+==== getMappingRequestOld
+    
+`GET /mapping/{mappingFormat}`
+
+Get Mapping
+
+===== Description 
+
+Retrieve a mapping file saved on the server
+
+
+// markup not found, no include ::mapping/{mappingFormat}/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+====== Path Parameters
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| mappingFormat 
+| Mapping Format  
+| X 
+| null 
+|  
+
+|===         
+
+
+
+
+
+
+===== Return Type
+
+<<AtlasMapping>>
+
+
+===== Content Type
+
+* application/json
+* application/xml
+* application/octet-stream
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return a mapping file content
+|  <<AtlasMapping>>
+
+
+| 204
+| Mapping file was not found
+|  <<>>
+
+
+| 500
+| Mapping file access error
+|  <<>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::mapping/{mappingFormat}/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::mapping/{mappingFormat}/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :mapping/{mappingFormat}/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::mapping/{mappingFormat}/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.listFieldActions]
+==== listFieldActions
+    
+`GET /fieldActions`
+
+List FieldActions
+
+===== Description 
+
+Retrieves a list of available field action
+
+
+// markup not found, no include ::fieldActions/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+
+
+
+
+
+===== Return Type
+
+<<ActionDetails>>
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return a list of field action detail
+|  <<ActionDetails>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::fieldActions/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::fieldActions/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :fieldActions/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::fieldActions/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.listMappings]
+==== listMappings
+    
+`GET /mappings/{mappingDefinitionId}`
+
+List Mappings
+
+===== Description 
+
+Retrieves a list of mapping file name saved with specified mappingDefinitionId
+
+
+// markup not found, no include ::mappings/{mappingDefinitionId}/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+====== Path Parameters
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| mappingDefinitionId 
+| Mapping Definition ID  
+| X 
+| null 
+|  
+
+|===         
+
+
+
+
+====== Query Parameters
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| filter 
+|   
+| - 
+| null 
+|  
+
+|===         
+
+
+===== Return Type
+
+<<StringMap>>
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return a list of a pair of mapping file name and content
+|  <<StringMap>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::mappings/{mappingDefinitionId}/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::mappings/{mappingDefinitionId}/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :mappings/{mappingDefinitionId}/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::mappings/{mappingDefinitionId}/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.listMappingsOld]
+==== listMappingsOld
+    
+`GET /mappings`
+
+List Mappings
+
+===== Description 
+
+Retrieves a list of mapping file name saved with specified mappingDefinitionId
+
+
+// markup not found, no include ::mappings/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+
+
+
+====== Query Parameters
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| filter 
+|   
+| - 
+| null 
+|  
+
+|===         
+
+
+===== Return Type
+
+<<StringMap>>
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return a list of a pair of mapping file name and content
+|  <<StringMap>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::mappings/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::mappings/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :mappings/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::mappings/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.ping]
+==== ping
+    
+`GET /ping`
+
+Ping
+
+===== Description 
+
+Simple liveness check method used in liveness checks. Must not be protected via authetication.
+
+
+// markup not found, no include ::ping/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+
+
+
+
+
+===== Return Type
+
+
+<<String>>
+
+
+===== Content Type
+
+* */*
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return &#39;pong&#39;
+|  <<String>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::ping/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::ping/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :ping/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::ping/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.processMappingRequest]
+==== processMappingRequest
+    
+`PUT /mapping/process`
+
+Process Mapping
+
+===== Description 
+
+Process Mapping by feeding input data
+
+
+// markup not found, no include ::mapping/process/PUT/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+===== Body Parameter
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| AtlasMapping 
+| Mapping file content <<AtlasMapping>> 
+| - 
+|  
+|  
+
+|===         
+
+
+
+
+
+===== Return Type
+
+<<ProcessMappingResponse>>
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return a mapping result
+|  <<ProcessMappingResponse>>
+
+
+| 204
+| Skipped empty mapping execution
+|  <<>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::mapping/process/PUT/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::mapping/process/PUT/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :mapping/process/PUT/PUT.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::mapping/process/PUT/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.removeMappingRequest]
+==== removeMappingRequest
+    
+`DELETE /mapping/{mappingDefinitionId}`
+
+Remove Mapping
+
+===== Description 
+
+Remove a mapping file saved on the server
+
+
+// markup not found, no include ::mapping/{mappingDefinitionId}/DELETE/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+====== Path Parameters
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| mappingDefinitionId 
+| Mapping ID  
+| X 
+| null 
+|  
+
+|===         
+
+
+
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Specified mapping file was removed successfully
+|  <<>>
+
+
+| 204
+| Mapping file was not found
+|  <<>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::mapping/{mappingDefinitionId}/DELETE/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::mapping/{mappingDefinitionId}/DELETE/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :mapping/{mappingDefinitionId}/DELETE/DELETE.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::mapping/{mappingDefinitionId}/DELETE/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.removeMappingRequestOld]
+==== removeMappingRequestOld
+    
+`DELETE /mapping`
+
+Remove Mapping
+
+===== Description 
+
+Remove a mapping file saved on the server
+
+
+// markup not found, no include ::mapping/DELETE/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+
+
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Specified mapping file was removed successfully
+|  <<>>
+
+
+| 204
+| Mapping file was not found
+|  <<>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::mapping/DELETE/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::mapping/DELETE/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :mapping/DELETE/DELETE.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::mapping/DELETE/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.resetAllMappings]
+==== resetAllMappings
+    
+`DELETE /mapping/RESET/ALL`
+
+Remove All Mappings
+
+===== Description 
+
+Remove all mapping files and catalogs saved on the server
+
+
+// markup not found, no include ::mapping/RESET/ALL/DELETE/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+
+
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| All mapping files were removed successfully
+|  <<>>
+
+
+| 204
+| Unable to remove all mapping files
+|  <<>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::mapping/RESET/ALL/DELETE/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::mapping/RESET/ALL/DELETE/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :mapping/RESET/ALL/DELETE/DELETE.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::mapping/RESET/ALL/DELETE/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.resetMappingById]
+==== resetMappingById
+    
+`DELETE /mapping/RESET/{mappingDefinitionId}`
+
+Remove Mapping by ID
+
+===== Description 
+
+Remove mapping file and catalogs related to specified ID
+
+
+// markup not found, no include ::mapping/RESET/{mappingDefinitionId}/DELETE/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+====== Path Parameters
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| mappingDefinitionId 
+| Mapping ID  
+| X 
+| null 
+|  
+
+|===         
+
+
+
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Mapping file and Catalogs were removed successfully
+|  <<>>
+
+
+| 204
+| Unable to remove mapping file and Catalogs for the specified ID
+|  <<>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::mapping/RESET/{mappingDefinitionId}/DELETE/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::mapping/RESET/{mappingDefinitionId}/DELETE/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :mapping/RESET/{mappingDefinitionId}/DELETE/DELETE.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::mapping/RESET/{mappingDefinitionId}/DELETE/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.resetMappingByIdOld]
+==== resetMappingByIdOld
+    
+`DELETE /mapping/RESET`
+
+Remove Mapping by ID
+
+===== Description 
+
+Remove mapping file and catalogs related to specified ID
+
+
+// markup not found, no include ::mapping/RESET/DELETE/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+
+
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Mapping file and Catalogs were removed successfully
+|  <<>>
+
+
+| 204
+| Unable to remove mapping file and Catalogs for the specified ID
+|  <<>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::mapping/RESET/DELETE/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::mapping/RESET/DELETE/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :mapping/RESET/DELETE/DELETE.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::mapping/RESET/DELETE/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.resetUserLibs]
+==== resetUserLibs
+    
+`DELETE /mapping/resetLibs`
+
+Remove All User-Defined JAR libraries
+
+===== Description 
+
+Remove all user-defined JAR files saved on the server
+
+
+// markup not found, no include ::mapping/resetLibs/DELETE/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+
+
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| All user-defined JAR files were removed successfully
+|  <<>>
+
+
+| 204
+| Unable to remove all user-defined JAR files
+|  <<>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::mapping/resetLibs/DELETE/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::mapping/resetLibs/DELETE/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :mapping/resetLibs/DELETE/DELETE.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::mapping/resetLibs/DELETE/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.updateMappingRequest]
+==== updateMappingRequest
+    
+`POST /mapping/{mappingDefinitionId}`
+
+Update Mapping
+
+===== Description 
+
+Update existing mapping file on the server
+
+
+// markup not found, no include ::mapping/{mappingDefinitionId}/POST/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+====== Path Parameters
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| mappingDefinitionId 
+| Mapping Definition ID  
+| X 
+| null 
+|  
+
+|===         
+
+===== Body Parameter
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| AtlasMapping 
+| Mapping file content <<AtlasMapping>> 
+| - 
+|  
+|  
+
+|===         
+
+
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Succeeded
+|  <<>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::mapping/{mappingDefinitionId}/POST/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::mapping/{mappingDefinitionId}/POST/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :mapping/{mappingDefinitionId}/POST/POST.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::mapping/{mappingDefinitionId}/POST/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.updateMappingRequestOld]
+==== updateMappingRequestOld
+    
+`POST /mapping`
+
+Update Mapping
+
+===== Description 
+
+Update existing mapping file on the server
+
+
+// markup not found, no include ::mapping/POST/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+===== Body Parameter
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| AtlasMapping 
+| Mapping file content <<AtlasMapping>> 
+| - 
+|  
+|  
+
+|===         
+
+
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Succeeded
+|  <<>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::mapping/POST/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::mapping/POST/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :mapping/POST/POST.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::mapping/POST/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.uploadLibrary]
+==== uploadLibrary
+    
+`PUT /library`
+
+Upload Library
+
+===== Description 
+
+Upload a Java library archive file
+
+
+// markup not found, no include ::library/PUT/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+===== Body Parameter
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| body 
+|  <<object>> 
+| - 
+|  
+|  
+
+|===         
+
+
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Library upload successful.
+|  <<>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::library/PUT/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::library/PUT/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :library/PUT/PUT.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::library/PUT/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.validateMappingRequest]
+==== validateMappingRequest
+    
+`PUT /mapping/validate/{mappingDefinitionId}`
+
+Validate Mapping
+
+===== Description 
+
+Validate mapping file
+
+
+// markup not found, no include ::mapping/validate/{mappingDefinitionId}/PUT/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+====== Path Parameters
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| mappingDefinitionId 
+| Mapping ID  
+| X 
+| null 
+|  
+
+|===         
+
+===== Body Parameter
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| AtlasMapping 
+| Mapping file content <<AtlasMapping>> 
+| - 
+|  
+|  
+
+|===         
+
+
+
+
+
+===== Return Type
+
+<<Validations>>
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return a validation result
+|  <<Validations>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::mapping/validate/{mappingDefinitionId}/PUT/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::mapping/validate/{mappingDefinitionId}/PUT/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :mapping/validate/{mappingDefinitionId}/PUT/PUT.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::mapping/validate/{mappingDefinitionId}/PUT/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.validateMappingRequest1]
+==== validateMappingRequest1
+    
+`PUT /mapping/validate`
+
+Validate Mapping
+
+===== Description 
+
+Validate mapping file
+
+
+// markup not found, no include ::mapping/validate/PUT/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+===== Body Parameter
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| AtlasMapping 
+| Mapping file content <<AtlasMapping>> 
+| - 
+|  
+|  
+
+|===         
+
+
+
+
+
+===== Return Type
+
+<<Validations>>
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return a validation result
+|  <<Validations>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::mapping/validate/PUT/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::mapping/validate/PUT/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :mapping/validate/PUT/PUT.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::mapping/validate/PUT/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[#models]
+== Models
+
+
+[#Action]
+=== _Action_ 
+
+
+
+[.fields-Action]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| @type 
+|  
+| String  
+| 
+|  
+
+|===
+
+
+[#ActionDetail]
+=== _ActionDetail_ 
+
+
+
+[.fields-ActionDetail]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| parameters 
+|  
+| ActionParameters  
+| 
+|  
+
+| name 
+|  
+| String  
+| 
+|  
+
+| custom 
+|  
+| Boolean  
+| 
+|  
+
+| className 
+|  
+| String  
+| 
+|  
+
+| method 
+|  
+| String  
+| 
+|  
+
+| sourceType 
+|  
+| String  
+| 
+|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
+
+| targetType 
+|  
+| String  
+| 
+|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
+
+| multiplicity 
+|  
+| String  
+| 
+|  _Enum:_ ONE_TO_ONE, ONE_TO_MANY, MANY_TO_ONE, ZERO_TO_ONE, MANY_TO_MANY, 
+
+| actionSchema 
+|  
+| JsonSchema  
+| 
+|  
+
+|===
+
+
+[#ActionDetails]
+=== _ActionDetails_ 
+
+
+
+[.fields-ActionDetails]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| actionDetail 
+|  
+| List  of <<ActionDetail>> 
+| 
+|  
+
+|===
+
+
+[#ActionParameter]
+=== _ActionParameter_ 
+
+
+
+[.fields-ActionParameter]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| values 
+|  
+| List  of <<string>> 
+| 
+|  
+
+| name 
+|  
+| String  
+| 
+|  
+
+| displayName 
+|  
+| String  
+| 
+|  
+
+| description 
+|  
+| String  
+| 
+|  
+
+| fieldType 
+|  
+| String  
+| 
+|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
+
+|===
+
+
+[#ActionParameters]
+=== _ActionParameters_ 
+
+
+
+[.fields-ActionParameters]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| parameter 
+|  
+| List  of <<ActionParameter>> 
+| 
+|  
+
+|===
+
+
+[#AtlasMapping]
+=== _AtlasMapping_ 
+
+
+
+[.fields-AtlasMapping]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| dataSource 
+|  
+| List  of <<DataSource>> 
+| 
+|  
+
+| mappings 
+|  
+| Mappings  
+| 
+|  
+
+| lookupTables 
+|  
+| LookupTables  
+| 
+|  
+
+| constants 
+|  
+| Constants  
+| 
+|  
+
+| properties 
+|  
+| Properties  
+| 
+|  
+
+| name 
+|  
+| String  
+| 
+|  
+
+| jsonType 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#AtlasMappingResult]
+=== _AtlasMappingResult_ 
+
+
+
+[.fields-AtlasMappingResult]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| targetDocuments 
+|  
+| List  of <<TargetDocument>> 
+| 
+|  
+
+| audits 
+|  
+| Audits  
+| 
+|  
+
+|===
+
+
+[#Audit]
+=== _Audit_ 
+
+
+
+[.fields-Audit]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| message 
+|  
+| String  
+| 
+|  
+
+| docId 
+|  
+| String  
+| 
+|  
+
+| path 
+|  
+| String  
+| 
+|  
+
+| value 
+|  
+| String  
+| 
+|  
+
+| status 
+|  
+| String  
+| 
+|  _Enum:_ ALL, INFO, WARN, ERROR, NONE, 
+
+|===
+
+
+[#Audits]
+=== _Audits_ 
+
+
+
+[.fields-Audits]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| audit 
+|  
+| List  of <<Audit>> 
+| 
+|  
+
+|===
+
+
+[#BaseMapping]
+=== _BaseMapping_ 
+
+
+
+[.fields-BaseMapping]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| alias 
+|  
+| String  
+| 
+|  
+
+| description 
+|  
+| String  
+| 
+|  
+
+| mappingType 
+|  
+| String  
+| 
+|  _Enum:_ ALL, COLLECTION, COMBINE, LOOKUP, MAP, SEPARATE, NONE, 
+
+| jsonType 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#Constant]
+=== _Constant_ 
+
+
+
+[.fields-Constant]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| name 
+|  
+| String  
+| 
+|  
+
+| value 
+|  
+| String  
+| 
+|  
+
+| fieldType 
+|  
+| String  
+| 
+|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
+
+|===
+
+
+[#Constants]
+=== _Constants_ 
+
+
+
+[.fields-Constants]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| constant 
+|  
+| List  of <<Constant>> 
+| 
+|  
+
+|===
+
+
+[#DataSource]
+=== _DataSource_ 
+
+
+
+[.fields-DataSource]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| id 
+|  
+| String  
+| 
+|  
+
+| uri 
+|  
+| String  
+| 
+|  
+
+| dataSourceType 
+|  
+| String  
+| 
+|  _Enum:_ SOURCE, TARGET, 
+
+| jsonType 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#Field]
+=== _Field_ 
+
+
+
+[.fields-Field]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| actions 
+|  
+| List  of <<Action>> 
+| 
+|  
+
+| value 
+|  
+| Object  
+| 
+|  
+
+| arrayDimensions 
+|  
+| Integer  
+| 
+| int32 
+
+| arraySize 
+|  
+| Integer  
+| 
+| int32 
+
+| collectionType 
+|  
+| String  
+| 
+|  _Enum:_ ALL, ARRAY, LIST, MAP, NONE, 
+
+| docId 
+|  
+| String  
+| 
+|  
+
+| index 
+|  
+| Integer  
+| 
+| int32 
+
+| path 
+|  
+| String  
+| 
+|  
+
+| required 
+|  
+| Boolean  
+| 
+|  
+
+| status 
+|  
+| String  
+| 
+|  _Enum:_ SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, BLACK_LIST, 
+
+| fieldType 
+|  
+| String  
+| 
+|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
+
+| format 
+|  
+| String  
+| 
+|  
+
+| jsonType 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#FieldGroup]
+=== _FieldGroup_ 
+
+
+
+[.fields-FieldGroup]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| actions 
+|  
+| List  of <<Action>> 
+| 
+|  
+
+| value 
+|  
+| Object  
+| 
+|  
+
+| arrayDimensions 
+|  
+| Integer  
+| 
+| int32 
+
+| arraySize 
+|  
+| Integer  
+| 
+| int32 
+
+| collectionType 
+|  
+| String  
+| 
+|  _Enum:_ ALL, ARRAY, LIST, MAP, NONE, 
+
+| docId 
+|  
+| String  
+| 
+|  
+
+| index 
+|  
+| Integer  
+| 
+| int32 
+
+| path 
+|  
+| String  
+| 
+|  
+
+| required 
+|  
+| Boolean  
+| 
+|  
+
+| status 
+|  
+| String  
+| 
+|  _Enum:_ SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, BLACK_LIST, 
+
+| fieldType 
+|  
+| String  
+| 
+|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
+
+| format 
+|  
+| String  
+| 
+|  
+
+| field 
+|  
+| List  of <<Field>> 
+| 
+|  
+
+|===
+
+
+[#JsonSchema]
+=== _JsonSchema_ 
+
+
+
+[.fields-JsonSchema]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| id 
+|  
+| String  
+| 
+|  
+
+| get$ref 
+|  
+| String  
+| 
+|  
+
+| get$schema 
+|  
+| String  
+| 
+|  
+
+| disallow 
+|  
+| List  of <<JsonSchema>> 
+| 
+|  
+
+| required 
+|  
+| Boolean  
+| 
+|  
+
+| readonly 
+|  
+| Boolean  
+| 
+|  
+
+| description 
+|  
+| String  
+| 
+|  
+
+| extends 
+|  
+| List  of <<JsonSchema>> 
+| 
+|  
+
+| type 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#LookupEntry]
+=== _LookupEntry_ 
+
+
+
+[.fields-LookupEntry]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| sourceValue 
+|  
+| String  
+| 
+|  
+
+| sourceType 
+|  
+| String  
+| 
+|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
+
+| targetValue 
+|  
+| String  
+| 
+|  
+
+| targetType 
+|  
+| String  
+| 
+|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
+
+|===
+
+
+[#LookupTable]
+=== _LookupTable_ 
+
+
+
+[.fields-LookupTable]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| lookupEntry 
+|  
+| List  of <<LookupEntry>> 
+| 
+|  
+
+| name 
+|  
+| String  
+| 
+|  
+
+| description 
+|  
+| String  
+| 
+|  
+
+|===
+
+
+[#LookupTables]
+=== _LookupTables_ 
+
+
+
+[.fields-LookupTables]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| lookupTable 
+|  
+| List  of <<LookupTable>> 
+| 
+|  
+
+|===
+
+
+[#Mapping]
+=== _Mapping_ 
+
+
+
+[.fields-Mapping]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| alias 
+|  
+| String  
+| 
+|  
+
+| description 
+|  
+| String  
+| 
+|  
+
+| mappingType 
+|  
+| String  
+| 
+|  _Enum:_ ALL, COLLECTION, COMBINE, LOOKUP, MAP, SEPARATE, NONE, 
+
+| expression 
+|  
+| String  
+| 
+|  
+
+| inputFieldGroup 
+|  
+| FieldGroup  
+| 
+|  
+
+| inputField 
+|  
+| List  of <<Field>> 
+| 
+|  
+
+| outputField 
+|  
+| List  of <<Field>> 
+| 
+|  
+
+| id 
+|  
+| String  
+| 
+|  
+
+| delimiter 
+|  
+| String  
+| 
+|  
+
+| delimiterString 
+|  
+| String  
+| 
+|  
+
+| lookupTableName 
+|  
+| String  
+| 
+|  
+
+| strategy 
+|  
+| String  
+| 
+|  
+
+| strategyClassName 
+|  
+| String  
+| 
+|  
+
+| jsonType 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#Mappings]
+=== _Mappings_ 
+
+
+
+[.fields-Mappings]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| mapping 
+|  
+| List  of <<BaseMapping>> 
+| 
+|  
+
+|===
+
+
+[#ProcessMappingResponse]
+=== _ProcessMappingResponse_ 
+
+
+
+[.fields-ProcessMappingResponse]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| mapping 
+|  
+| Mapping  
+| 
+|  
+
+| audits 
+|  
+| Audits  
+| 
+|  
+
+| atlasMappingResult 
+|  
+| AtlasMappingResult  
+| 
+|  
+
+| jsonType 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#Properties]
+=== _Properties_ 
+
+
+
+[.fields-Properties]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| property 
+|  
+| List  of <<Property>> 
+| 
+|  
+
+|===
+
+
+[#Property]
+=== _Property_ 
+
+
+
+[.fields-Property]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| name 
+|  
+| String  
+| 
+|  
+
+| value 
+|  
+| String  
+| 
+|  
+
+| fieldType 
+|  
+| String  
+| 
+|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
+
+|===
+
+
+[#StringMap]
+=== _StringMap_ 
+
+
+
+[.fields-StringMap]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| stringMapEntry 
+|  
+| List  of <<StringMapEntry>> 
+| 
+|  
+
+|===
+
+
+[#StringMapEntry]
+=== _StringMapEntry_ 
+
+
+
+[.fields-StringMapEntry]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| name 
+|  
+| String  
+| 
+|  
+
+| value 
+|  
+| String  
+| 
+|  
+
+|===
+
+
+[#TargetDocument]
+=== _TargetDocument_ 
+
+
+
+[.fields-TargetDocument]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| body 
+|  
+| String  
+| 
+|  
+
+| docId 
+|  
+| String  
+| 
+|  
+
+|===
+
+
+[#Validation]
+=== _Validation_ 
+
+
+
+[.fields-Validation]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| message 
+|  
+| String  
+| 
+|  
+
+| id 
+|  
+| String  
+| 
+|  
+
+| scope 
+|  
+| String  
+| 
+|  _Enum:_ ALL, DATA_SOURCE, MAPPING, LOOKUP_TABLE, CONSTANT, PROPERTY, 
+
+| status 
+|  
+| String  
+| 
+|  _Enum:_ ALL, INFO, WARN, ERROR, NONE, 
+
+|===
+
+
+[#Validations]
+=== _Validations_ 
+
+
+
+[.fields-Validations]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| validation 
+|  
+| List  of <<Validation>> 
+| 
+|  
+
+|===
+
+

@@ -1,0 +1,627 @@
+= AtlasMap Design Time Service API :: XML 
+atlasmap@googlegroups.com
+2.0.0-SNAPSHOT
+:toc: left
+:numbered:
+:toclevels: 3
+:source-highlighter: highlightjs
+:keywords: openapi, rest, AtlasMap Design Time Service API :: XML 
+:specDir: 
+:snippetDir: 
+:generator-template: v1 2019-11-19
+:info-url: https://www.atlasmap.io/
+:app-name: AtlasMap Design Time Service API :: XML
+
+[abstract]
+.Abstract
+XML Service provides XML inspection service which generate an AtlasMap Document object from XML instance or XML schema. 
+
+
+// markup not found, no include ::intro.adoc[opts=optional]
+
+
+
+== Endpoints
+
+
+[.Default]
+=== Default
+
+
+[.getClass]
+==== getClass
+    
+`GET /xml/inspect`
+
+Inspect XML via URI
+
+===== Description 
+
+Inspect a XML schema or instance located at specified URI and return a Document object
+
+
+// markup not found, no include ::xml/inspect/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+===== Body Parameter
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| body 
+| Inspection type, one of &#x60;instance&#x60; or &#x60;Schema&#x60; <<string>> 
+| - 
+|  
+|  
+
+|===         
+
+
+
+====== Query Parameters
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| uri 
+|   
+| - 
+| null 
+|  
+
+| type 
+|   
+| - 
+| null 
+|  
+
+|===         
+
+
+===== Return Type
+
+<<XmlDocument>>
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return a Document object represented by XmlDocument
+|  <<XmlDocument>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::xml/inspect/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::xml/inspect/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :xml/inspect/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::xml/inspect/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.inspectClass]
+==== inspectClass
+    
+`POST /xml/inspect`
+
+Inspect XML
+
+===== Description 
+
+Inspect a XML schema or instance and return a Document object
+
+
+// markup not found, no include ::xml/inspect/POST/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+===== Body Parameter
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| XmlInspectionRequest 
+| XmlInspectionRequest object <<XmlInspectionRequest>> 
+| - 
+|  
+|  
+
+|===         
+
+
+
+
+
+===== Return Type
+
+<<XmlInspectionResponse>>
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return a Document object represented by XmlDocument
+|  <<XmlInspectionResponse>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::xml/inspect/POST/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::xml/inspect/POST/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :xml/inspect/POST/POST.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::xml/inspect/POST/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.simpleHelloWorld]
+==== simpleHelloWorld
+    
+`GET /xml/simple`
+
+Simple
+
+===== Description 
+
+Simple hello service
+
+
+// markup not found, no include ::xml/simple/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+
+
+
+====== Query Parameters
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| from 
+|   
+| - 
+| null 
+|  
+
+|===         
+
+
+===== Return Type
+
+
+<<String>>
+
+
+===== Content Type
+
+* text/plain
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return a response
+|  <<String>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::xml/simple/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::xml/simple/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :xml/simple/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::xml/simple/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[#models]
+== Models
+
+
+[#Action]
+=== _Action_ 
+
+
+
+[.fields-Action]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| @type 
+|  
+| String  
+| 
+|  
+
+|===
+
+
+[#Field]
+=== _Field_ 
+
+
+
+[.fields-Field]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| actions 
+|  
+| List  of <<Action>> 
+| 
+|  
+
+| value 
+|  
+| Object  
+| 
+|  
+
+| arrayDimensions 
+|  
+| Integer  
+| 
+| int32 
+
+| arraySize 
+|  
+| Integer  
+| 
+| int32 
+
+| collectionType 
+|  
+| String  
+| 
+|  _Enum:_ ALL, ARRAY, LIST, MAP, NONE, 
+
+| docId 
+|  
+| String  
+| 
+|  
+
+| index 
+|  
+| Integer  
+| 
+| int32 
+
+| path 
+|  
+| String  
+| 
+|  
+
+| required 
+|  
+| Boolean  
+| 
+|  
+
+| status 
+|  
+| String  
+| 
+|  _Enum:_ SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, BLACK_LIST, 
+
+| fieldType 
+|  
+| String  
+| 
+|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
+
+| format 
+|  
+| String  
+| 
+|  
+
+| jsonType 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#Fields]
+=== _Fields_ 
+
+
+
+[.fields-Fields]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| field 
+|  
+| List  of <<Field>> 
+| 
+|  
+
+|===
+
+
+[#StringList]
+=== _StringList_ 
+
+
+
+[.fields-StringList]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| string 
+|  
+| List  of <<string>> 
+| 
+|  
+
+|===
+
+
+[#XmlDocument]
+=== _XmlDocument_ 
+
+
+
+[.fields-XmlDocument]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| fields 
+|  
+| Fields  
+| 
+|  
+
+| xmlNamespaces 
+|  
+| XmlNamespaces  
+| 
+|  
+
+| jsonType 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#XmlInspectionRequest]
+=== _XmlInspectionRequest_ 
+
+
+
+[.fields-XmlInspectionRequest]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| fieldNameBlacklist 
+|  
+| StringList  
+| 
+|  
+
+| typeNameBlacklist 
+|  
+| StringList  
+| 
+|  
+
+| namespaceBlacklist 
+|  
+| StringList  
+| 
+|  
+
+| xmlData 
+|  
+| String  
+| 
+|  
+
+| uri 
+|  
+| String  
+| 
+|  
+
+| type 
+|  
+| String  
+| 
+|  _Enum:_ ALL, INSTANCE, SCHEMA, NONE, 
+
+| jsonType 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#XmlInspectionResponse]
+=== _XmlInspectionResponse_ 
+
+
+
+[.fields-XmlInspectionResponse]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| xmlDocument 
+|  
+| XmlDocument  
+| 
+|  
+
+| errorMessage 
+|  
+| String  
+| 
+|  
+
+| executionTime 
+|  
+| Long  
+| 
+| int64 
+
+| jsonType 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#XmlNamespace]
+=== _XmlNamespace_ 
+
+
+
+[.fields-XmlNamespace]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| alias 
+|  
+| String  
+| 
+|  
+
+| uri 
+|  
+| String  
+| 
+|  
+
+| locationUri 
+|  
+| String  
+| 
+|  
+
+| targetNamespace 
+|  
+| Boolean  
+| 
+|  
+
+|===
+
+
+[#XmlNamespaces]
+=== _XmlNamespaces_ 
+
+
+
+[.fields-XmlNamespaces]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| xmlNamespace 
+|  
+| List  of <<XmlNamespace>> 
+| 
+|  
+
+|===
+
+

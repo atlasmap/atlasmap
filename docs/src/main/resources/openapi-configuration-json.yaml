@@ -14,20 +14,12 @@
 # limitations under the License.
 #
 resourceClasses:
-- io.atlasmap.service.AtlasService
-- io.atlasmap.java.service.JavaService
 - io.atlasmap.json.service.JsonService
-- io.atlasmap.xml.service.XmlService
-- io.atlasmap.dfdl.service.DfdlService
 openAPI:
    info:
-      title: AtlasMap Design Time Service API
+      title: "AtlasMap Design Time Service API :: JSON"
       description: |
-         AtlasMap is a data mapping solution with interactive web based user interface, that simplifies configuring
-         integrations between Java, XML, and JSON data sources. You can design your data mapping with AtlasMap Data Mapper
-         UI canvas, and then run that data mapping via runtime engine.
-
-         This is the definition of the API used at runtime while designing a mapping.
+         JSON Service provides JSON inspection service which generate an AtlasMap Document object from JSON instance or JSON schema.
       version: ${project.version}
       contact:
          url: https://www.atlasmap.io/

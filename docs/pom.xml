@@ -98,17 +98,78 @@
         <artifactId>swagger-maven-plugin</artifactId>
         <executions>
           <execution>
-            <id>default-cli</id>
+            <id>openapi-core</id>
             <phase>prepare-package</phase>
             <goals>
               <goal>resolve</goal>
             </goals>
             <configuration>
+              <contextId>openapi-core</contextId>
               <outputFormat>JSON</outputFormat>
               <prettyPrint>true</prettyPrint>
               <outputPath>${project.build.directory}/generated-sources/openapi</outputPath>
-              <outputFileName>atlasmap-api</outputFileName>
-              <configurationFilePath>${project.build.outputDirectory}/openapi-configuration.yaml</configurationFilePath>
+              <outputFileName>atlasmap-api-core</outputFileName>
+              <configurationFilePath>${project.build.outputDirectory}/openapi-configuration-core.yaml</configurationFilePath>
+            </configuration>
+          </execution>
+          <execution>
+            <id>openapi-java</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>resolve</goal>
+            </goals>
+            <configuration>
+              <contextId>openapi-java</contextId>
+              <outputFormat>JSON</outputFormat>
+              <prettyPrint>true</prettyPrint>
+              <outputPath>${project.build.directory}/generated-sources/openapi</outputPath>
+              <outputFileName>atlasmap-api-java</outputFileName>
+              <configurationFilePath>${project.build.outputDirectory}/openapi-configuration-java.yaml</configurationFilePath>
+            </configuration>
+          </execution>
+          <execution>
+            <id>openapi-json</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>resolve</goal>
+            </goals>
+            <configuration>
+              <contextId>openapi-json</contextId>
+              <outputFormat>JSON</outputFormat>
+              <prettyPrint>true</prettyPrint>
+              <outputPath>${project.build.directory}/generated-sources/openapi</outputPath>
+              <outputFileName>atlasmap-api-json</outputFileName>
+              <configurationFilePath>${project.build.outputDirectory}/openapi-configuration-json.yaml</configurationFilePath>
+            </configuration>
+          </execution>
+          <execution>
+            <id>openapi-xml</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>resolve</goal>
+            </goals>
+            <configuration>
+              <contextId>openapi-xml</contextId>
+              <outputFormat>JSON</outputFormat>
+              <prettyPrint>true</prettyPrint>
+              <outputPath>${project.build.directory}/generated-sources/openapi</outputPath>
+              <outputFileName>atlasmap-api-xml</outputFileName>
+              <configurationFilePath>${project.build.outputDirectory}/openapi-configuration-xml.yaml</configurationFilePath>
+            </configuration>
+          </execution>
+          <execution>
+            <id>openapi-dfdl</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>resolve</goal>
+            </goals>
+            <configuration>
+              <contextId>openapi-dfdl</contextId>
+              <outputFormat>JSON</outputFormat>
+              <prettyPrint>true</prettyPrint>
+              <outputPath>${project.build.directory}/generated-sources/openapi</outputPath>
+              <outputFileName>atlasmap-api-dfdl</outputFileName>
+              <configurationFilePath>${project.build.outputDirectory}/openapi-configuration-dfdl.yaml</configurationFilePath>
             </configuration>
           </execution>
         </executions>
@@ -119,15 +180,63 @@
         <version>4.2.2</version>
         <executions>
           <execution>
-            <id>default-cli</id>
+            <id>openapi-asciidoc-core</id>
             <phase>prepare-package</phase>
             <goals>
               <goal>generate</goal>
             </goals>
             <configuration>
               <generatorName>asciidoc</generatorName>
-              <inputSpec>${project.build.directory}/generated-sources/openapi/atlasmap-api.json</inputSpec>
-              <output>${project.basedir}/src/main/asciidoc/developer-guide/openapi/</output>
+              <inputSpec>${project.build.directory}/generated-sources/openapi/atlasmap-api-core.json</inputSpec>
+              <output>${project.basedir}/src/main/asciidoc/developer-guide/openapi/core</output>
+            </configuration>
+          </execution>
+          <execution>
+            <id>openapi-asciidoc-java</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <generatorName>asciidoc</generatorName>
+              <inputSpec>${project.build.directory}/generated-sources/openapi/atlasmap-api-java.json</inputSpec>
+              <output>${project.basedir}/src/main/asciidoc/developer-guide/openapi/java</output>
+            </configuration>
+          </execution>
+          <execution>
+            <id>openapi-asciidoc-json</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <generatorName>asciidoc</generatorName>
+              <inputSpec>${project.build.directory}/generated-sources/openapi/atlasmap-api-json.json</inputSpec>
+              <output>${project.basedir}/src/main/asciidoc/developer-guide/openapi/json</output>
+            </configuration>
+          </execution>
+          <execution>
+            <id>openapi-asciidoc-xml</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <generatorName>asciidoc</generatorName>
+              <inputSpec>${project.build.directory}/generated-sources/openapi/atlasmap-api-xml.json</inputSpec>
+              <output>${project.basedir}/src/main/asciidoc/developer-guide/openapi/xml</output>
+            </configuration>
+          </execution>
+          <execution>
+            <id>openapi-asciidoc-dfdl</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <generatorName>asciidoc</generatorName>
+              <inputSpec>${project.build.directory}/generated-sources/openapi/atlasmap-api-dfdl.json</inputSpec>
+              <output>${project.basedir}/src/main/asciidoc/developer-guide/openapi/dfdl</output>
             </configuration>
           </execution>
         </executions>
@@ -144,7 +253,7 @@
           <plugin>
             <groupId>org.asciidoctor</groupId>
             <artifactId>asciidoctor-maven-plugin</artifactId>
-            <executions>
+            <executions>  
               <execution>
                 <id>output-html-user-guide</id>
                 <phase>package</phase>

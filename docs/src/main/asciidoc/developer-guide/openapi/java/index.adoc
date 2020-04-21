@@ -1,0 +1,1015 @@
+= AtlasMap Design Time Service API :: Java 
+atlasmap@googlegroups.com
+2.0.0-SNAPSHOT
+:toc: left
+:numbered:
+:toclevels: 3
+:source-highlighter: highlightjs
+:keywords: openapi, rest, AtlasMap Design Time Service API :: Java 
+:specDir: 
+:snippetDir: 
+:generator-template: v1 2019-11-19
+:info-url: https://www.atlasmap.io/
+:app-name: AtlasMap Design Time Service API :: Java
+
+[abstract]
+.Abstract
+Java Service provides Java inspection service which generate an AtlasMap Document object from Java class name. 
+
+
+// markup not found, no include ::intro.adoc[opts=optional]
+
+
+
+== Endpoints
+
+
+[.Default]
+=== Default
+
+
+[.generateClasspath]
+==== generateClasspath
+    
+`POST /java/mavenclasspath`
+
+Generate Maven Classpath
+
+===== Description 
+
+Retrieve a maven classpath string
+
+
+// markup not found, no include ::java/mavenclasspath/POST/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+===== Body Parameter
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| MavenClasspathRequest 
+| MavenClasspathRequest object <<MavenClasspathRequest>> 
+| - 
+|  
+|  
+
+|===         
+
+
+
+
+
+===== Return Type
+
+<<MavenClasspathResponse>>
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return a MavenClasspathResponse object which contains classpath string
+|  <<MavenClasspathResponse>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::java/mavenclasspath/POST/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::java/mavenclasspath/POST/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :java/mavenclasspath/POST/POST.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::java/mavenclasspath/POST/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.getClass]
+==== getClass
+    
+`GET /java/class`
+
+Inspect Class
+
+===== Description 
+
+Inspect a Java Class with specified fully qualified class name and return a Document object
+
+
+// markup not found, no include ::java/class/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+
+
+
+====== Query Parameters
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| className 
+| The fully qualified class name to inspect  
+| - 
+| null 
+|  
+
+|===         
+
+
+===== Return Type
+
+<<JavaClass>>
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return a Document object represented by JavaClass
+|  <<JavaClass>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::java/class/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::java/class/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :java/class/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::java/class/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.inspectClass]
+==== inspectClass
+    
+`POST /java/class`
+
+Inspect Class
+
+===== Description 
+
+Inspect a Java Class with specified fully qualified class name and return a Document object
+
+
+// markup not found, no include ::java/class/POST/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+===== Body Parameter
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| MavenClasspathRequest 
+| MavenClasspathRequest object <<MavenClasspathRequest>> 
+| - 
+|  
+|  
+
+|===         
+
+
+
+
+
+===== Return Type
+
+<<JavaClass>>
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return a Document object represented by JavaClass
+|  <<JavaClass>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::java/class/POST/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::java/class/POST/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :java/class/POST/POST.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::java/class/POST/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.simpleHelloWorld]
+==== simpleHelloWorld
+    
+`GET /java/simple`
+
+Simple
+
+===== Description 
+
+Simple hello service
+
+
+// markup not found, no include ::java/simple/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+
+
+
+====== Query Parameters
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| from 
+| From  
+| - 
+| null 
+|  
+
+|===         
+
+
+===== Return Type
+
+
+<<String>>
+
+
+===== Content Type
+
+* text/plain
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return a response
+|  <<String>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::java/simple/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::java/simple/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :java/simple/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::java/simple/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[#models]
+== Models
+
+
+[#Action]
+=== _Action_ 
+
+
+
+[.fields-Action]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| @type 
+|  
+| String  
+| 
+|  
+
+|===
+
+
+[#JavaClass]
+=== _JavaClass_ 
+
+
+
+[.fields-JavaClass]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| actions 
+|  
+| List  of <<Action>> 
+| 
+|  
+
+| value 
+|  
+| Object  
+| 
+|  
+
+| arrayDimensions 
+|  
+| Integer  
+| 
+| int32 
+
+| arraySize 
+|  
+| Integer  
+| 
+| int32 
+
+| collectionType 
+|  
+| String  
+| 
+|  _Enum:_ ALL, ARRAY, LIST, MAP, NONE, 
+
+| docId 
+|  
+| String  
+| 
+|  
+
+| index 
+|  
+| Integer  
+| 
+| int32 
+
+| path 
+|  
+| String  
+| 
+|  
+
+| required 
+|  
+| Boolean  
+| 
+|  
+
+| status 
+|  
+| String  
+| 
+|  _Enum:_ SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, BLACK_LIST, 
+
+| fieldType 
+|  
+| String  
+| 
+|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
+
+| format 
+|  
+| String  
+| 
+|  
+
+| annotations 
+|  
+| StringList  
+| 
+|  
+
+| modifiers 
+|  
+| ModifierList  
+| 
+|  
+
+| parameterizedTypes 
+|  
+| StringList  
+| 
+|  
+
+| name 
+|  
+| String  
+| 
+|  
+
+| className 
+|  
+| String  
+| 
+|  
+
+| canonicalClassName 
+|  
+| String  
+| 
+|  
+
+| collectionClassName 
+|  
+| String  
+| 
+|  
+
+| getMethod 
+|  
+| String  
+| 
+|  
+
+| setMethod 
+|  
+| String  
+| 
+|  
+
+| primitive 
+|  
+| Boolean  
+| 
+|  
+
+| synthetic 
+|  
+| Boolean  
+| 
+|  
+
+| javaEnumFields 
+|  
+| JavaEnumFields  
+| 
+|  
+
+| javaFields 
+|  
+| JavaFields  
+| 
+|  
+
+| packageName 
+|  
+| String  
+| 
+|  
+
+| annotation 
+|  
+| Boolean  
+| 
+|  
+
+| annonymous 
+|  
+| Boolean  
+| 
+|  
+
+| enumeration 
+|  
+| Boolean  
+| 
+|  
+
+| localClass 
+|  
+| Boolean  
+| 
+|  
+
+| memberClass 
+|  
+| Boolean  
+| 
+|  
+
+| uri 
+|  
+| String  
+| 
+|  
+
+| interface 
+|  
+| Boolean  
+| 
+|  
+
+| jsonType 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#JavaEnumField]
+=== _JavaEnumField_ 
+
+
+
+[.fields-JavaEnumField]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| actions 
+|  
+| List  of <<Action>> 
+| 
+|  
+
+| value 
+|  
+| Object  
+| 
+|  
+
+| arrayDimensions 
+|  
+| Integer  
+| 
+| int32 
+
+| arraySize 
+|  
+| Integer  
+| 
+| int32 
+
+| collectionType 
+|  
+| String  
+| 
+|  _Enum:_ ALL, ARRAY, LIST, MAP, NONE, 
+
+| docId 
+|  
+| String  
+| 
+|  
+
+| index 
+|  
+| Integer  
+| 
+| int32 
+
+| path 
+|  
+| String  
+| 
+|  
+
+| required 
+|  
+| Boolean  
+| 
+|  
+
+| status 
+|  
+| String  
+| 
+|  _Enum:_ SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, BLACK_LIST, 
+
+| fieldType 
+|  
+| String  
+| 
+|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
+
+| format 
+|  
+| String  
+| 
+|  
+
+| name 
+|  
+| String  
+| 
+|  
+
+| ordinal 
+|  
+| Integer  
+| 
+| int32 
+
+| className 
+|  
+| String  
+| 
+|  
+
+| jsonType 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#JavaEnumFields]
+=== _JavaEnumFields_ 
+
+
+
+[.fields-JavaEnumFields]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| javaEnumField 
+|  
+| List  of <<JavaEnumField>> 
+| 
+|  
+
+|===
+
+
+[#JavaField]
+=== _JavaField_ 
+
+
+
+[.fields-JavaField]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| actions 
+|  
+| List  of <<Action>> 
+| 
+|  
+
+| value 
+|  
+| Object  
+| 
+|  
+
+| arrayDimensions 
+|  
+| Integer  
+| 
+| int32 
+
+| arraySize 
+|  
+| Integer  
+| 
+| int32 
+
+| collectionType 
+|  
+| String  
+| 
+|  _Enum:_ ALL, ARRAY, LIST, MAP, NONE, 
+
+| docId 
+|  
+| String  
+| 
+|  
+
+| index 
+|  
+| Integer  
+| 
+| int32 
+
+| path 
+|  
+| String  
+| 
+|  
+
+| required 
+|  
+| Boolean  
+| 
+|  
+
+| status 
+|  
+| String  
+| 
+|  _Enum:_ SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, BLACK_LIST, 
+
+| fieldType 
+|  
+| String  
+| 
+|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
+
+| format 
+|  
+| String  
+| 
+|  
+
+| annotations 
+|  
+| StringList  
+| 
+|  
+
+| modifiers 
+|  
+| ModifierList  
+| 
+|  
+
+| parameterizedTypes 
+|  
+| StringList  
+| 
+|  
+
+| name 
+|  
+| String  
+| 
+|  
+
+| className 
+|  
+| String  
+| 
+|  
+
+| canonicalClassName 
+|  
+| String  
+| 
+|  
+
+| collectionClassName 
+|  
+| String  
+| 
+|  
+
+| getMethod 
+|  
+| String  
+| 
+|  
+
+| setMethod 
+|  
+| String  
+| 
+|  
+
+| primitive 
+|  
+| Boolean  
+| 
+|  
+
+| synthetic 
+|  
+| Boolean  
+| 
+|  
+
+| jsonType 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#JavaFields]
+=== _JavaFields_ 
+
+
+
+[.fields-JavaFields]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| javaField 
+|  
+| List  of <<JavaField>> 
+| 
+|  
+
+|===
+
+
+[#MavenClasspathRequest]
+=== _MavenClasspathRequest_ 
+
+
+
+[.fields-MavenClasspathRequest]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| pomXmlData 
+|  
+| String  
+| 
+|  
+
+| executeTimeout 
+|  
+| Long  
+| 
+| int64 
+
+| workingDirectory 
+|  
+| String  
+| 
+|  
+
+| jsonType 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#MavenClasspathResponse]
+=== _MavenClasspathResponse_ 
+
+
+
+[.fields-MavenClasspathResponse]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| classpath 
+|  
+| String  
+| 
+|  
+
+| errorMessage 
+|  
+| String  
+| 
+|  
+
+| executionTime 
+|  
+| Long  
+| 
+| int64 
+
+| jsonType 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#ModifierList]
+=== _ModifierList_ 
+
+
+
+[.fields-ModifierList]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| modifier 
+|  
+| List  of <<string>> 
+| 
+|  _Enum:_ 
+
+|===
+
+
+[#StringList]
+=== _StringList_ 
+
+
+
+[.fields-StringList]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| string 
+|  
+| List  of <<string>> 
+| 
+|  
+
+|===
+
+

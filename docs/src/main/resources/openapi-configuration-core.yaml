@@ -1,0 +1,31 @@
+#
+# Copyright (C) 2017 Red Hat, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+resourceClasses:
+- io.atlasmap.service.AtlasService
+openAPI:
+   info:
+      title: "AtlasMap Design Time Service API :: Core"
+      description: |
+         Core Service provides basic operations which is not specific to the individual data formats,
+         Create/Get/Update/Remove mapping definition stored in Design Time Service local storage,
+         validate mapping, retrieve metadata for available field actions and etc.
+      version: ${project.version}
+      contact:
+         url: https://www.atlasmap.io/
+         email: atlasmap@googlegroups.com
+      license:
+         name: Apache 2.0
+         url: https://www.apache.org/licenses/LICENSE-2.0.html

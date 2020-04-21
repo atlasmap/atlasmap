@@ -1,0 +1,565 @@
+= AtlasMap Design Time Service API :: JSON 
+atlasmap@googlegroups.com
+2.0.0-SNAPSHOT
+:toc: left
+:numbered:
+:toclevels: 3
+:source-highlighter: highlightjs
+:keywords: openapi, rest, AtlasMap Design Time Service API :: JSON 
+:specDir: 
+:snippetDir: 
+:generator-template: v1 2019-11-19
+:info-url: https://www.atlasmap.io/
+:app-name: AtlasMap Design Time Service API :: JSON
+
+[abstract]
+.Abstract
+JSON Service provides JSON inspection service which generate an AtlasMap Document object from JSON instance or JSON schema. 
+
+
+// markup not found, no include ::intro.adoc[opts=optional]
+
+
+
+== Endpoints
+
+
+[.Default]
+=== Default
+
+
+[.getClass]
+==== getClass
+    
+`GET /json/inspect`
+
+Inspect JSON via URI
+
+===== Description 
+
+*NOT IMPLEMENTED* Inspect a JSON schema or instance located at specified URI and return a Document object
+
+
+// markup not found, no include ::json/inspect/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+===== Body Parameter
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| body 
+| Inspection type, one of &#x60;instance&#x60; or &#x60;Schema&#x60; <<string>> 
+| - 
+|  
+|  
+
+|===         
+
+
+
+====== Query Parameters
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| uri 
+| URI for JSON schema or instance  
+| - 
+| null 
+|  
+
+| type 
+|   
+| - 
+| null 
+|  
+
+|===         
+
+
+===== Return Type
+
+<<JsonDocument>>
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return a Document object represented by JsonDocument
+|  <<JsonDocument>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::json/inspect/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::json/inspect/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :json/inspect/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::json/inspect/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.inspectClass]
+==== inspectClass
+    
+`POST /json/inspect`
+
+Inspect JSON
+
+===== Description 
+
+Inspect a JSON schema or instance and return a Document object
+
+
+// markup not found, no include ::json/inspect/POST/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+===== Body Parameter
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| JsonInspectionRequest 
+| JsonInspectionRequest object <<JsonInspectionRequest>> 
+| - 
+|  
+|  
+
+|===         
+
+
+
+
+
+===== Return Type
+
+<<JsonInspectionResponse>>
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return a Document object represented by JsonDocument
+|  <<JsonInspectionResponse>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::json/inspect/POST/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::json/inspect/POST/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :json/inspect/POST/POST.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::json/inspect/POST/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.simpleHelloWorld]
+==== simpleHelloWorld
+    
+`GET /json/simple`
+
+Simple
+
+===== Description 
+
+Simple hello service
+
+
+// markup not found, no include ::json/simple/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+
+
+
+====== Query Parameters
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| from 
+| From  
+| - 
+| null 
+|  
+
+|===         
+
+
+===== Return Type
+
+
+<<String>>
+
+
+===== Content Type
+
+* text/plain
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return a response
+|  <<String>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include ::json/simple/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include ::json/simple/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :json/simple/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include ::json/simple/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[#models]
+== Models
+
+
+[#Action]
+=== _Action_ 
+
+
+
+[.fields-Action]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| @type 
+|  
+| String  
+| 
+|  
+
+|===
+
+
+[#Field]
+=== _Field_ 
+
+
+
+[.fields-Field]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| actions 
+|  
+| List  of <<Action>> 
+| 
+|  
+
+| value 
+|  
+| Object  
+| 
+|  
+
+| arrayDimensions 
+|  
+| Integer  
+| 
+| int32 
+
+| arraySize 
+|  
+| Integer  
+| 
+| int32 
+
+| collectionType 
+|  
+| String  
+| 
+|  _Enum:_ ALL, ARRAY, LIST, MAP, NONE, 
+
+| docId 
+|  
+| String  
+| 
+|  
+
+| index 
+|  
+| Integer  
+| 
+| int32 
+
+| path 
+|  
+| String  
+| 
+|  
+
+| required 
+|  
+| Boolean  
+| 
+|  
+
+| status 
+|  
+| String  
+| 
+|  _Enum:_ SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, BLACK_LIST, 
+
+| fieldType 
+|  
+| String  
+| 
+|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
+
+| format 
+|  
+| String  
+| 
+|  
+
+| jsonType 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#Fields]
+=== _Fields_ 
+
+
+
+[.fields-Fields]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| field 
+|  
+| List  of <<Field>> 
+| 
+|  
+
+|===
+
+
+[#JsonDocument]
+=== _JsonDocument_ 
+
+
+
+[.fields-JsonDocument]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| fields 
+|  
+| Fields  
+| 
+|  
+
+| jsonType 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#JsonInspectionRequest]
+=== _JsonInspectionRequest_ 
+
+
+
+[.fields-JsonInspectionRequest]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| fieldNameBlacklist 
+|  
+| StringList  
+| 
+|  
+
+| typeNameBlacklist 
+|  
+| StringList  
+| 
+|  
+
+| namespaceBlacklist 
+|  
+| StringList  
+| 
+|  
+
+| jsonData 
+|  
+| String  
+| 
+|  
+
+| uri 
+|  
+| String  
+| 
+|  
+
+| type 
+|  
+| String  
+| 
+|  _Enum:_ ALL, INSTANCE, SCHEMA, NONE, 
+
+| jsonType 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#JsonInspectionResponse]
+=== _JsonInspectionResponse_ 
+
+
+
+[.fields-JsonInspectionResponse]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| jsonDocument 
+|  
+| JsonDocument  
+| 
+|  
+
+| errorMessage 
+|  
+| String  
+| 
+|  
+
+| executionTime 
+|  
+| Long  
+| 
+| int64 
+
+| jsonType 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#StringList]
+=== _StringList_ 
+
+
+
+[.fields-StringList]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| string 
+|  
+| List  of <<string>> 
+| 
+|  
+
+|===
+
+
