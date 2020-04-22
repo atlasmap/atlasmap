@@ -1,4 +1,4 @@
-= AtlasMap Design Time Service API :: Core 
+= AtlasMap Design Time Service API :: Core
 atlasmap@googlegroups.com
 2.0.0-SNAPSHOT
 :toc: left
@@ -8,7 +8,7 @@ atlasmap@googlegroups.com
 :keywords: openapi, rest, AtlasMap Design Time Service API :: Core 
 :specDir: 
 :snippetDir: 
-:generator-template: v1 2019-11-19
+:generator-template: v1 2019-12-20
 :info-url: https://www.atlasmap.io/
 :app-name: AtlasMap Design Time Service API :: Core
 
@@ -17,7 +17,7 @@ atlasmap@googlegroups.com
 Core Service provides basic operations which is not specific to the individual data formats, Create/Get/Update/Remove mapping definition stored in Design Time Service local storage, validate mapping, retrieve metadata for available field actions and etc. 
 
 
-// markup not found, no include ::intro.adoc[opts=optional]
+// markup not found, no include::{specDir}intro.adoc[opts=optional]
 
 
 
@@ -40,7 +40,7 @@ Create Mapping
 Save a mapping file on the server
 
 
-// markup not found, no include ::mapping/{mappingFormat}/{mappingDefinitionId}/PUT/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/\{mappingFormat\}/\{mappingDefinitionId\}/PUT/spec.adoc[opts=optional]
 
 
 
@@ -113,10 +113,10 @@ Save a mapping file on the server
 ===== Samples
 
 
-// markup not found, no include ::mapping/{mappingFormat}/{mappingDefinitionId}/PUT/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/\{mappingFormat\}/\{mappingDefinitionId\}/PUT/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::mapping/{mappingFormat}/{mappingDefinitionId}/PUT/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/\{mappingFormat\}/\{mappingDefinitionId\}/PUT/http-response.adoc[opts=optional]
 
 
 
@@ -126,7 +126,7 @@ Save a mapping file on the server
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::mapping/{mappingFormat}/{mappingDefinitionId}/PUT/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/\{mappingFormat\}/\{mappingDefinitionId\}/PUT/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -144,7 +144,7 @@ Create Mapping
 Save a mapping file on the server
 
 
-// markup not found, no include ::mapping/{mappingFormat}/PUT/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/\{mappingFormat\}/PUT/spec.adoc[opts=optional]
 
 
 
@@ -211,10 +211,10 @@ Save a mapping file on the server
 ===== Samples
 
 
-// markup not found, no include ::mapping/{mappingFormat}/PUT/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/\{mappingFormat\}/PUT/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::mapping/{mappingFormat}/PUT/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/\{mappingFormat\}/PUT/http-response.adoc[opts=optional]
 
 
 
@@ -224,7 +224,7 @@ Save a mapping file on the server
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::mapping/{mappingFormat}/PUT/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/\{mappingFormat\}/PUT/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -242,7 +242,7 @@ Get Mapping
 Retrieve a mapping file saved on the server
 
 
-// markup not found, no include ::mapping/{mappingFormat}/{mappingDefinitionId}/GET/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/\{mappingFormat\}/\{mappingDefinitionId\}/GET/spec.adoc[opts=optional]
 
 
 
@@ -311,10 +311,10 @@ Retrieve a mapping file saved on the server
 ===== Samples
 
 
-// markup not found, no include ::mapping/{mappingFormat}/{mappingDefinitionId}/GET/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/\{mappingFormat\}/\{mappingDefinitionId\}/GET/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::mapping/{mappingFormat}/{mappingDefinitionId}/GET/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/\{mappingFormat\}/\{mappingDefinitionId\}/GET/http-response.adoc[opts=optional]
 
 
 
@@ -324,7 +324,7 @@ Retrieve a mapping file saved on the server
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::mapping/{mappingFormat}/{mappingDefinitionId}/GET/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/\{mappingFormat\}/\{mappingDefinitionId\}/GET/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -342,7 +342,7 @@ Get Mapping
 Retrieve a mapping file saved on the server
 
 
-// markup not found, no include ::mapping/{mappingFormat}/GET/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/\{mappingFormat\}/GET/spec.adoc[opts=optional]
 
 
 
@@ -405,10 +405,10 @@ Retrieve a mapping file saved on the server
 ===== Samples
 
 
-// markup not found, no include ::mapping/{mappingFormat}/GET/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/\{mappingFormat\}/GET/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::mapping/{mappingFormat}/GET/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/\{mappingFormat\}/GET/http-response.adoc[opts=optional]
 
 
 
@@ -418,7 +418,7 @@ Retrieve a mapping file saved on the server
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::mapping/{mappingFormat}/GET/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/\{mappingFormat\}/GET/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -436,7 +436,7 @@ List FieldActions
 Retrieves a list of available field action
 
 
-// markup not found, no include ::fieldActions/GET/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}fieldActions/GET/spec.adoc[opts=optional]
 
 
 
@@ -474,10 +474,10 @@ Retrieves a list of available field action
 ===== Samples
 
 
-// markup not found, no include ::fieldActions/GET/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}fieldActions/GET/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::fieldActions/GET/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}fieldActions/GET/http-response.adoc[opts=optional]
 
 
 
@@ -487,7 +487,7 @@ Retrieves a list of available field action
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::fieldActions/GET/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}fieldActions/GET/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -505,7 +505,7 @@ List Mappings
 Retrieves a list of mapping file name saved with specified mappingDefinitionId
 
 
-// markup not found, no include ::mappings/{mappingDefinitionId}/GET/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}mappings/\{mappingDefinitionId\}/GET/spec.adoc[opts=optional]
 
 
 
@@ -569,10 +569,10 @@ Retrieves a list of mapping file name saved with specified mappingDefinitionId
 ===== Samples
 
 
-// markup not found, no include ::mappings/{mappingDefinitionId}/GET/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mappings/\{mappingDefinitionId\}/GET/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::mappings/{mappingDefinitionId}/GET/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mappings/\{mappingDefinitionId\}/GET/http-response.adoc[opts=optional]
 
 
 
@@ -582,7 +582,7 @@ Retrieves a list of mapping file name saved with specified mappingDefinitionId
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::mappings/{mappingDefinitionId}/GET/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}mappings/\{mappingDefinitionId\}/GET/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -600,7 +600,7 @@ List Mappings
 Retrieves a list of mapping file name saved with specified mappingDefinitionId
 
 
-// markup not found, no include ::mappings/GET/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}mappings/GET/spec.adoc[opts=optional]
 
 
 
@@ -651,10 +651,10 @@ Retrieves a list of mapping file name saved with specified mappingDefinitionId
 ===== Samples
 
 
-// markup not found, no include ::mappings/GET/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mappings/GET/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::mappings/GET/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mappings/GET/http-response.adoc[opts=optional]
 
 
 
@@ -664,7 +664,7 @@ Retrieves a list of mapping file name saved with specified mappingDefinitionId
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::mappings/GET/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}mappings/GET/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -682,7 +682,7 @@ Ping
 Simple liveness check method used in liveness checks. Must not be protected via authetication.
 
 
-// markup not found, no include ::ping/GET/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}ping/GET/spec.adoc[opts=optional]
 
 
 
@@ -721,10 +721,10 @@ Simple liveness check method used in liveness checks. Must not be protected via 
 ===== Samples
 
 
-// markup not found, no include ::ping/GET/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}ping/GET/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::ping/GET/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}ping/GET/http-response.adoc[opts=optional]
 
 
 
@@ -734,7 +734,7 @@ Simple liveness check method used in liveness checks. Must not be protected via 
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::ping/GET/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}ping/GET/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -752,7 +752,7 @@ Process Mapping
 Process Mapping by feeding input data
 
 
-// markup not found, no include ::mapping/process/PUT/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/process/PUT/spec.adoc[opts=optional]
 
 
 
@@ -808,10 +808,10 @@ Process Mapping by feeding input data
 ===== Samples
 
 
-// markup not found, no include ::mapping/process/PUT/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/process/PUT/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::mapping/process/PUT/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/process/PUT/http-response.adoc[opts=optional]
 
 
 
@@ -821,7 +821,7 @@ Process Mapping by feeding input data
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::mapping/process/PUT/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/process/PUT/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -839,7 +839,7 @@ Remove Mapping
 Remove a mapping file saved on the server
 
 
-// markup not found, no include ::mapping/{mappingDefinitionId}/DELETE/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/\{mappingDefinitionId\}/DELETE/spec.adoc[opts=optional]
 
 
 
@@ -893,10 +893,10 @@ Remove a mapping file saved on the server
 ===== Samples
 
 
-// markup not found, no include ::mapping/{mappingDefinitionId}/DELETE/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/\{mappingDefinitionId\}/DELETE/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::mapping/{mappingDefinitionId}/DELETE/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/\{mappingDefinitionId\}/DELETE/http-response.adoc[opts=optional]
 
 
 
@@ -906,7 +906,7 @@ Remove a mapping file saved on the server
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::mapping/{mappingDefinitionId}/DELETE/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/\{mappingDefinitionId\}/DELETE/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -924,7 +924,7 @@ Remove Mapping
 Remove a mapping file saved on the server
 
 
-// markup not found, no include ::mapping/DELETE/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/DELETE/spec.adoc[opts=optional]
 
 
 
@@ -965,10 +965,10 @@ Remove a mapping file saved on the server
 ===== Samples
 
 
-// markup not found, no include ::mapping/DELETE/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/DELETE/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::mapping/DELETE/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/DELETE/http-response.adoc[opts=optional]
 
 
 
@@ -978,7 +978,7 @@ Remove a mapping file saved on the server
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::mapping/DELETE/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/DELETE/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -996,7 +996,7 @@ Remove All Mappings
 Remove all mapping files and catalogs saved on the server
 
 
-// markup not found, no include ::mapping/RESET/ALL/DELETE/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/RESET/ALL/DELETE/spec.adoc[opts=optional]
 
 
 
@@ -1037,10 +1037,10 @@ Remove all mapping files and catalogs saved on the server
 ===== Samples
 
 
-// markup not found, no include ::mapping/RESET/ALL/DELETE/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/RESET/ALL/DELETE/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::mapping/RESET/ALL/DELETE/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/RESET/ALL/DELETE/http-response.adoc[opts=optional]
 
 
 
@@ -1050,7 +1050,7 @@ Remove all mapping files and catalogs saved on the server
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::mapping/RESET/ALL/DELETE/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/RESET/ALL/DELETE/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -1068,7 +1068,7 @@ Remove Mapping by ID
 Remove mapping file and catalogs related to specified ID
 
 
-// markup not found, no include ::mapping/RESET/{mappingDefinitionId}/DELETE/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/RESET/\{mappingDefinitionId\}/DELETE/spec.adoc[opts=optional]
 
 
 
@@ -1122,10 +1122,10 @@ Remove mapping file and catalogs related to specified ID
 ===== Samples
 
 
-// markup not found, no include ::mapping/RESET/{mappingDefinitionId}/DELETE/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/RESET/\{mappingDefinitionId\}/DELETE/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::mapping/RESET/{mappingDefinitionId}/DELETE/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/RESET/\{mappingDefinitionId\}/DELETE/http-response.adoc[opts=optional]
 
 
 
@@ -1135,7 +1135,7 @@ Remove mapping file and catalogs related to specified ID
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::mapping/RESET/{mappingDefinitionId}/DELETE/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/RESET/\{mappingDefinitionId\}/DELETE/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -1153,7 +1153,7 @@ Remove Mapping by ID
 Remove mapping file and catalogs related to specified ID
 
 
-// markup not found, no include ::mapping/RESET/DELETE/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/RESET/DELETE/spec.adoc[opts=optional]
 
 
 
@@ -1194,10 +1194,10 @@ Remove mapping file and catalogs related to specified ID
 ===== Samples
 
 
-// markup not found, no include ::mapping/RESET/DELETE/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/RESET/DELETE/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::mapping/RESET/DELETE/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/RESET/DELETE/http-response.adoc[opts=optional]
 
 
 
@@ -1207,7 +1207,7 @@ Remove mapping file and catalogs related to specified ID
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::mapping/RESET/DELETE/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/RESET/DELETE/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -1225,7 +1225,7 @@ Remove All User-Defined JAR libraries
 Remove all user-defined JAR files saved on the server
 
 
-// markup not found, no include ::mapping/resetLibs/DELETE/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/resetLibs/DELETE/spec.adoc[opts=optional]
 
 
 
@@ -1266,10 +1266,10 @@ Remove all user-defined JAR files saved on the server
 ===== Samples
 
 
-// markup not found, no include ::mapping/resetLibs/DELETE/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/resetLibs/DELETE/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::mapping/resetLibs/DELETE/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/resetLibs/DELETE/http-response.adoc[opts=optional]
 
 
 
@@ -1279,7 +1279,7 @@ Remove all user-defined JAR files saved on the server
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::mapping/resetLibs/DELETE/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/resetLibs/DELETE/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -1297,7 +1297,7 @@ Update Mapping
 Update existing mapping file on the server
 
 
-// markup not found, no include ::mapping/{mappingDefinitionId}/POST/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/\{mappingDefinitionId\}/POST/spec.adoc[opts=optional]
 
 
 
@@ -1359,10 +1359,10 @@ Update existing mapping file on the server
 ===== Samples
 
 
-// markup not found, no include ::mapping/{mappingDefinitionId}/POST/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/\{mappingDefinitionId\}/POST/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::mapping/{mappingDefinitionId}/POST/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/\{mappingDefinitionId\}/POST/http-response.adoc[opts=optional]
 
 
 
@@ -1372,7 +1372,7 @@ Update existing mapping file on the server
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::mapping/{mappingDefinitionId}/POST/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/\{mappingDefinitionId\}/POST/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -1390,7 +1390,7 @@ Update Mapping
 Update existing mapping file on the server
 
 
-// markup not found, no include ::mapping/POST/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/POST/spec.adoc[opts=optional]
 
 
 
@@ -1439,10 +1439,10 @@ Update existing mapping file on the server
 ===== Samples
 
 
-// markup not found, no include ::mapping/POST/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/POST/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::mapping/POST/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/POST/http-response.adoc[opts=optional]
 
 
 
@@ -1452,7 +1452,7 @@ Update existing mapping file on the server
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::mapping/POST/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/POST/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -1470,7 +1470,7 @@ Upload Library
 Upload a Java library archive file
 
 
-// markup not found, no include ::library/PUT/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}library/PUT/spec.adoc[opts=optional]
 
 
 
@@ -1519,10 +1519,10 @@ Upload a Java library archive file
 ===== Samples
 
 
-// markup not found, no include ::library/PUT/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}library/PUT/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::library/PUT/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}library/PUT/http-response.adoc[opts=optional]
 
 
 
@@ -1532,7 +1532,7 @@ Upload a Java library archive file
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::library/PUT/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}library/PUT/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -1550,7 +1550,7 @@ Validate Mapping
 Validate mapping file
 
 
-// markup not found, no include ::mapping/validate/{mappingDefinitionId}/PUT/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/validate/\{mappingDefinitionId\}/PUT/spec.adoc[opts=optional]
 
 
 
@@ -1614,10 +1614,10 @@ Validate mapping file
 ===== Samples
 
 
-// markup not found, no include ::mapping/validate/{mappingDefinitionId}/PUT/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/validate/\{mappingDefinitionId\}/PUT/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::mapping/validate/{mappingDefinitionId}/PUT/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/validate/\{mappingDefinitionId\}/PUT/http-response.adoc[opts=optional]
 
 
 
@@ -1627,7 +1627,7 @@ Validate mapping file
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::mapping/validate/{mappingDefinitionId}/PUT/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/validate/\{mappingDefinitionId\}/PUT/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -1645,7 +1645,7 @@ Validate Mapping
 Validate mapping file
 
 
-// markup not found, no include ::mapping/validate/PUT/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/validate/PUT/spec.adoc[opts=optional]
 
 
 
@@ -1696,10 +1696,10 @@ Validate mapping file
 ===== Samples
 
 
-// markup not found, no include ::mapping/validate/PUT/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/validate/PUT/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::mapping/validate/PUT/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}mapping/validate/PUT/http-response.adoc[opts=optional]
 
 
 
@@ -1709,7 +1709,7 @@ Validate mapping file
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::mapping/validate/PUT/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}mapping/validate/PUT/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]

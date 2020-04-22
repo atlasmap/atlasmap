@@ -177,7 +177,6 @@
       <plugin>
         <groupId>org.openapitools</groupId>
         <artifactId>openapi-generator-maven-plugin</artifactId>
-        <version>4.2.2</version>
         <executions>
           <execution>
             <id>openapi-asciidoc-core</id>

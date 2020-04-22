@@ -1,4 +1,4 @@
-= AtlasMap Design Time Service API :: Java 
+= AtlasMap Design Time Service API :: Java
 atlasmap@googlegroups.com
 2.0.0-SNAPSHOT
 :toc: left
@@ -8,7 +8,7 @@ atlasmap@googlegroups.com
 :keywords: openapi, rest, AtlasMap Design Time Service API :: Java 
 :specDir: 
 :snippetDir: 
-:generator-template: v1 2019-11-19
+:generator-template: v1 2019-12-20
 :info-url: https://www.atlasmap.io/
 :app-name: AtlasMap Design Time Service API :: Java
 
@@ -17,7 +17,7 @@ atlasmap@googlegroups.com
 Java Service provides Java inspection service which generate an AtlasMap Document object from Java class name. 
 
 
-// markup not found, no include ::intro.adoc[opts=optional]
+// markup not found, no include::{specDir}intro.adoc[opts=optional]
 
 
 
@@ -40,7 +40,7 @@ Generate Maven Classpath
 Retrieve a maven classpath string
 
 
-// markup not found, no include ::java/mavenclasspath/POST/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}java/mavenclasspath/POST/spec.adoc[opts=optional]
 
 
 
@@ -91,10 +91,10 @@ Retrieve a maven classpath string
 ===== Samples
 
 
-// markup not found, no include ::java/mavenclasspath/POST/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}java/mavenclasspath/POST/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::java/mavenclasspath/POST/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}java/mavenclasspath/POST/http-response.adoc[opts=optional]
 
 
 
@@ -104,7 +104,7 @@ Retrieve a maven classpath string
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::java/mavenclasspath/POST/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}java/mavenclasspath/POST/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -122,7 +122,7 @@ Inspect Class
 Inspect a Java Class with specified fully qualified class name and return a Document object
 
 
-// markup not found, no include ::java/class/GET/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}java/class/GET/spec.adoc[opts=optional]
 
 
 
@@ -173,10 +173,10 @@ Inspect a Java Class with specified fully qualified class name and return a Docu
 ===== Samples
 
 
-// markup not found, no include ::java/class/GET/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}java/class/GET/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::java/class/GET/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}java/class/GET/http-response.adoc[opts=optional]
 
 
 
@@ -186,7 +186,7 @@ Inspect a Java Class with specified fully qualified class name and return a Docu
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::java/class/GET/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}java/class/GET/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -204,7 +204,7 @@ Inspect Class
 Inspect a Java Class with specified fully qualified class name and return a Document object
 
 
-// markup not found, no include ::java/class/POST/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}java/class/POST/spec.adoc[opts=optional]
 
 
 
@@ -255,10 +255,10 @@ Inspect a Java Class with specified fully qualified class name and return a Docu
 ===== Samples
 
 
-// markup not found, no include ::java/class/POST/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}java/class/POST/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::java/class/POST/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}java/class/POST/http-response.adoc[opts=optional]
 
 
 
@@ -268,7 +268,7 @@ Inspect a Java Class with specified fully qualified class name and return a Docu
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::java/class/POST/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}java/class/POST/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -286,7 +286,7 @@ Simple
 Simple hello service
 
 
-// markup not found, no include ::java/simple/GET/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}java/simple/GET/spec.adoc[opts=optional]
 
 
 
@@ -338,10 +338,10 @@ Simple hello service
 ===== Samples
 
 
-// markup not found, no include ::java/simple/GET/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}java/simple/GET/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::java/simple/GET/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}java/simple/GET/http-response.adoc[opts=optional]
 
 
 
@@ -351,7 +351,7 @@ Simple hello service
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::java/simple/GET/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}java/simple/GET/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]

@@ -72,6 +72,7 @@
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <mockito.version>3.3.3</mockito.version>
     <okhttp.version>4.2.2</okhttp.version>
+    <openapi-generator-maven-plugin.version>4.3.0</openapi-generator-maven-plugin.version>
     <osgi.symbolic.name>${project.artifactId}</osgi.symbolic.name>
     <osgi.import.pkg>*</osgi.import.pkg>
     <resteasy-spring-boot-starter.version>4.5.1.Final</resteasy-spring-boot-starter.version>
@@ -692,6 +693,11 @@
           <groupId>org.jsonschema2pojo</groupId>
           <artifactId>jsonschema2pojo-maven-plugin</artifactId>
           <version>${jsonschema2pojo-maven-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.openapitools</groupId>
+          <artifactId>openapi-generator-maven-plugin</artifactId>
+          <version>${openapi-generator-maven-plugin.version}</version>
         </plugin>
         <plugin>
           <groupId>org.springframework.boot</groupId>
