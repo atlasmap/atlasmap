@@ -26,7 +26,6 @@ import { ConfigModel } from '../models/config.model';
 import { ErrorInfo, ErrorLevel, ErrorType, ErrorScope } from '../models/error.model';
 import { ExpressionModel } from '../models/expression.model';
 import { MappingUtil } from './mapping-util';
-import { getMappingExpressionStr } from '../components/expression/expression-util';
 
 export class MappingSerializer {
 
@@ -80,7 +79,7 @@ export class MappingSerializer {
       jsonMapping = {
        'jsonType': jsonMappingType,
        'id': id,
-       'expression' : getMappingExpressionStr(mapping),
+       'expression' : MappingUtil.getMappingExpressionStr(mapping),
        inputFieldGroup,
        'outputField': serializedOutputFields,
       };
@@ -89,7 +88,7 @@ export class MappingSerializer {
         jsonMapping = {
           'jsonType': jsonMappingType,
           'id': id,
-          'expression' : getMappingExpressionStr(mapping),
+          'expression' : MappingUtil.getMappingExpressionStr(mapping),
           'inputField' : serializedInputFields,
           'outputField': serializedOutputFields,
         };

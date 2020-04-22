@@ -1,0 +1,26 @@
+import { Meta, Story, Props } from "@storybook/addon-docs/blocks";
+import * as stories from "./Drag-and-drop.stories.tsx";
+import { DraggableField, FieldDropTarget } from ".";
+import decorators from "../../stories/decorators";
+
+<Meta title="UI|Drag & Drop" decorators={decorators} />
+
+# Drag & drop
+
+<Story name="Example">{stories.example()}</Story>
+
+## DraggableField Props
+
+<Props of={DraggableField} />
+
+## FieldDropTarget Props
+
+<Props of={FieldDropTarget} />
+
+## Stories
+
+### Can be used with NodesArc
+
+<Story name="Can be used with NodesArc">
+  {stories.canBeUsedWithNodesArc()}
+</Story>

@@ -1,5 +1,5 @@
 import './index.css';
-import { AtlasmapProvider } from '@atlasmap/core';
+import { AtlasmapProvider } from '@atlasmap/atlasmap';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';

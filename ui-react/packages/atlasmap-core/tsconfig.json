@@ -1,13 +1,12 @@
 {
   "include": ["src", "types"],
   "compilerOptions": {
-    "target": "es5",
     "module": "esnext",
     "lib": ["dom", "esnext"],
     "importHelpers": true,
     "declaration": true,
     "sourceMap": true,
-    "rootDir": "./",
+    "rootDir": "./src",
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -20,9 +19,12 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
-    "baseUrl": ".",
+    "baseUrl": "./",
+    "paths": {
+      "@": ["./"],
+      "*": ["src/*", "node_modules/*"]
+    },
     "jsx": "react",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "esModuleInterop": true
   }
 }
