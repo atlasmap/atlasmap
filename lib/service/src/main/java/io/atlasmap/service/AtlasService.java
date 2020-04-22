@@ -499,7 +499,7 @@ public class AtlasService {
     @Operation(summary = "Validate Mapping", description = "Validate mapping file")
     @RequestBody(description = "Mapping file content", content = @Content(schema = @Schema(implementation = AtlasMapping.class)))
     @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Validations.class)), description = "Return a validation result"))
-    public Response validateMappingRequest(InputStream mapping,
+    public Response validateMappingRequestOld(InputStream mapping,
                                            @Context UriInfo uriInfo)
     {
         return validateMappingRequest(mapping, 0, uriInfo);

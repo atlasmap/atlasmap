@@ -1633,8 +1633,8 @@ ifdef::internal-generation[]
 endif::internal-generation[]
 
 
-[.validateMappingRequest1]
-==== validateMappingRequest1
+[.validateMappingRequestOld]
+==== validateMappingRequestOld
     
 `PUT /mapping/validate`
 
