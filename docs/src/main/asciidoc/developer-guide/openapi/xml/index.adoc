@@ -1,4 +1,4 @@
-= AtlasMap Design Time Service API :: XML 
+= AtlasMap Design Time Service API :: XML
 atlasmap@googlegroups.com
 2.0.0-SNAPSHOT
 :toc: left
@@ -8,7 +8,7 @@ atlasmap@googlegroups.com
 :keywords: openapi, rest, AtlasMap Design Time Service API :: XML 
 :specDir: 
 :snippetDir: 
-:generator-template: v1 2019-11-19
+:generator-template: v1 2019-12-20
 :info-url: https://www.atlasmap.io/
 :app-name: AtlasMap Design Time Service API :: XML
 
@@ -17,7 +17,7 @@ atlasmap@googlegroups.com
 XML Service provides XML inspection service which generate an AtlasMap Document object from XML instance or XML schema. 
 
 
-// markup not found, no include ::intro.adoc[opts=optional]
+// markup not found, no include::{specDir}intro.adoc[opts=optional]
 
 
 
@@ -40,7 +40,7 @@ Inspect XML via URI
 Inspect a XML schema or instance located at specified URI and return a Document object
 
 
-// markup not found, no include ::xml/inspect/GET/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}xml/inspect/GET/spec.adoc[opts=optional]
 
 
 
@@ -110,10 +110,10 @@ Inspect a XML schema or instance located at specified URI and return a Document 
 ===== Samples
 
 
-// markup not found, no include ::xml/inspect/GET/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}xml/inspect/GET/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::xml/inspect/GET/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}xml/inspect/GET/http-response.adoc[opts=optional]
 
 
 
@@ -123,7 +123,7 @@ Inspect a XML schema or instance located at specified URI and return a Document 
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::xml/inspect/GET/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}xml/inspect/GET/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -141,7 +141,7 @@ Inspect XML
 Inspect a XML schema or instance and return a Document object
 
 
-// markup not found, no include ::xml/inspect/POST/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}xml/inspect/POST/spec.adoc[opts=optional]
 
 
 
@@ -192,10 +192,10 @@ Inspect a XML schema or instance and return a Document object
 ===== Samples
 
 
-// markup not found, no include ::xml/inspect/POST/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}xml/inspect/POST/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::xml/inspect/POST/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}xml/inspect/POST/http-response.adoc[opts=optional]
 
 
 
@@ -205,7 +205,7 @@ Inspect a XML schema or instance and return a Document object
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::xml/inspect/POST/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}xml/inspect/POST/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -223,7 +223,7 @@ Simple
 Simple hello service
 
 
-// markup not found, no include ::xml/simple/GET/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}xml/simple/GET/spec.adoc[opts=optional]
 
 
 
@@ -275,10 +275,10 @@ Simple hello service
 ===== Samples
 
 
-// markup not found, no include ::xml/simple/GET/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}xml/simple/GET/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::xml/simple/GET/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}xml/simple/GET/http-response.adoc[opts=optional]
 
 
 
@@ -288,7 +288,7 @@ Simple hello service
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::xml/simple/GET/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}xml/simple/GET/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]

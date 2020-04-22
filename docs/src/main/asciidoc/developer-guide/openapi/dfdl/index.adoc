@@ -1,4 +1,4 @@
-= AtlasMap Design Time Service API :: DFDL 
+= AtlasMap Design Time Service API :: DFDL
 atlasmap@googlegroups.com
 2.0.0-SNAPSHOT
 :toc: left
@@ -8,7 +8,7 @@ atlasmap@googlegroups.com
 :keywords: openapi, rest, AtlasMap Design Time Service API :: DFDL 
 :specDir: 
 :snippetDir: 
-:generator-template: v1 2019-11-19
+:generator-template: v1 2019-12-20
 :info-url: https://www.atlasmap.io/
 :app-name: AtlasMap Design Time Service API :: DFDL
 
@@ -17,7 +17,7 @@ atlasmap@googlegroups.com
 DFDL Service provides DFDL inspection service which generate an AtlasMap Document object from instance document or DFDL schema. 
 
 
-// markup not found, no include ::intro.adoc[opts=optional]
+// markup not found, no include::{specDir}intro.adoc[opts=optional]
 
 
 
@@ -40,7 +40,7 @@ Inspect DFDL
 Inspect a DFDL schema or instance and return a Document object
 
 
-// markup not found, no include ::dfdl/inspect/POST/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}dfdl/inspect/POST/spec.adoc[opts=optional]
 
 
 
@@ -91,10 +91,10 @@ Inspect a DFDL schema or instance and return a Document object
 ===== Samples
 
 
-// markup not found, no include ::dfdl/inspect/POST/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}dfdl/inspect/POST/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::dfdl/inspect/POST/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}dfdl/inspect/POST/http-response.adoc[opts=optional]
 
 
 
@@ -104,7 +104,7 @@ Inspect a DFDL schema or instance and return a Document object
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::dfdl/inspect/POST/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}dfdl/inspect/POST/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -122,7 +122,7 @@ Simple
 Simple hello service
 
 
-// markup not found, no include ::dfdl/simple/GET/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}dfdl/simple/GET/spec.adoc[opts=optional]
 
 
 
@@ -174,10 +174,10 @@ Simple hello service
 ===== Samples
 
 
-// markup not found, no include ::dfdl/simple/GET/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}dfdl/simple/GET/http-request.adoc[opts=optional]
 
 
-// markup not found, no include ::dfdl/simple/GET/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}dfdl/simple/GET/http-response.adoc[opts=optional]
 
 
 
@@ -187,7 +187,7 @@ Simple hello service
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include ::dfdl/simple/GET/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}dfdl/simple/GET/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
