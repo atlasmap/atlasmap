@@ -9,7 +9,14 @@ import React, {
 import { interval } from "rxjs";
 import { debounce } from "rxjs/operators";
 
-import { MappingUtil, search } from "@atlasmap/core";
+import {
+  MappingUtil,
+  search,
+  MappingSerializer,
+  InspectionType,
+  DocumentType,
+  DocumentInitializationModel,
+} from "@atlasmap/core";
 
 import { IAtlasmapDocument, IAtlasmapMapping } from "../Views";
 import {
@@ -54,6 +61,18 @@ import {
   toggleShowUnmappedFields,
   trailerId,
 } from "./utils";
+
+// the document payload with get from Syndesis
+export interface IExternalDocumentProps {
+  id: string;
+  name: string;
+  description: string;
+  documentType: DocumentType;
+  inspectionType: InspectionType;
+  inspectionSource: string;
+  inspectionResult: string;
+  showFields: boolean;
+}
 
 interface IAtlasmapContext extends State {
   selectMapping: typeof selectMapping;
@@ -103,6 +122,14 @@ export interface IAtlasmapProviderProps {
   baseXMLInspectionServiceUrl: string;
   baseJSONInspectionServiceUrl: string;
   baseMappingServiceUrl: string;
+
+  externalDocument?: {
+    documentId: string;
+    inputDocuments: IExternalDocumentProps[];
+    outputDocument: IExternalDocumentProps;
+    initialMappings?: string;
+  };
+  onMappingChange?: (serializedMappings: string) => void;
 }
 
 interface State {
@@ -174,22 +201,65 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   baseXMLInspectionServiceUrl,
   baseJSONInspectionServiceUrl,
   baseMappingServiceUrl,
+  externalDocument,
+  onMappingChange,
   children,
 }) => {
   const [state, dispatch] = useReducer(reducer, {}, init);
 
   useEffect(() => {
-    initializationService.cfg.initCfg.baseJavaInspectionServiceUrl = baseJavaInspectionServiceUrl;
-    initializationService.cfg.initCfg.baseXMLInspectionServiceUrl = baseXMLInspectionServiceUrl;
-    initializationService.cfg.initCfg.baseJSONInspectionServiceUrl = baseJSONInspectionServiceUrl;
-    initializationService.cfg.initCfg.baseMappingServiceUrl = baseMappingServiceUrl;
+    dispatch({ type: "reset" });
+    initializationService.resetConfig();
+
+    const c = initializationService.cfg;
+    c.initCfg.baseMappingServiceUrl = baseMappingServiceUrl;
+    c.initCfg.baseJavaInspectionServiceUrl = baseJavaInspectionServiceUrl;
+    c.initCfg.baseXMLInspectionServiceUrl = baseXMLInspectionServiceUrl;
+    c.initCfg.baseJSONInspectionServiceUrl = baseJSONInspectionServiceUrl;
+
+    if (externalDocument) {
+      externalDocument.inputDocuments.forEach((d) => {
+        const inputDoc: DocumentInitializationModel = new DocumentInitializationModel();
+        inputDoc.type = d.documentType;
+        inputDoc.inspectionType = d.inspectionType;
+        inputDoc.inspectionSource = d.inspectionSource;
+        inputDoc.inspectionResult = d.inspectionResult;
+        inputDoc.id = d.id;
+        inputDoc.name = d.name;
+        inputDoc.description = d.description;
+        inputDoc.isSource = true;
+        inputDoc.showFields = d.showFields;
+        c.addDocument(inputDoc);
+      });
+
+      const outputDoc: DocumentInitializationModel = new DocumentInitializationModel();
+      outputDoc.type = externalDocument.outputDocument.documentType;
+      outputDoc.inspectionType = externalDocument.outputDocument.inspectionType;
+      outputDoc.inspectionSource =
+        externalDocument.outputDocument.inspectionSource;
+      outputDoc.inspectionResult =
+        externalDocument.outputDocument.inspectionResult;
+      outputDoc.id = externalDocument.outputDocument.id;
+      outputDoc.name = externalDocument.outputDocument.name;
+      outputDoc.description = externalDocument.outputDocument.description;
+      outputDoc.isSource = false;
+      outputDoc.showFields = externalDocument.outputDocument.showFields;
+      c.addDocument(outputDoc);
+
+      if (externalDocument.initialMappings) {
+        c.preloadedMappingJson = externalDocument.initialMappings;
+      }
+    }
+
     initializationService.initialize();
+
     dispatch({ type: "loading" });
   }, [
     baseJSONInspectionServiceUrl,
     baseJavaInspectionServiceUrl,
     baseMappingServiceUrl,
     baseXMLInspectionServiceUrl,
+    externalDocument,
   ]);
 
   useEffect(() => {
@@ -250,7 +320,6 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
     ];
 
     return () => {
-      initializationService.resetConfig();
       subscriptions.forEach((s) => s.unsubscribe());
     };
   }, [
@@ -259,6 +328,22 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
     baseJSONInspectionServiceUrl,
     baseMappingServiceUrl,
   ]);
+
+  useEffect(() => {
+    if (onMappingChange) {
+      initializationService.cfg.mappingService.mappingUpdatedSource.subscribe(
+        () => {
+          if (initializationService.cfg.initCfg.initialized) {
+            onMappingChange(
+              JSON.stringify(
+                MappingSerializer.serializeMappings(initializationService.cfg),
+              ),
+            );
+          }
+        },
+      );
+    }
+  }, [onMappingChange]);
 
   const handleImportAtlasFile = useCallback((file: File, isSource: boolean) => {
     dispatch({ type: "loading" });

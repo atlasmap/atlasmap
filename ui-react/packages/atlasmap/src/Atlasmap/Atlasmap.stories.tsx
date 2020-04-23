@@ -1,7 +1,58 @@
 import { text, boolean } from "@storybook/addon-knobs";
 import React from "react";
 import { Atlasmap } from "./Atlasmap";
-import { AtlasmapProvider } from "./AtlasmapProvider";
+import { AtlasmapProvider, IAtlasmapProviderProps } from "./AtlasmapProvider";
+import { action } from "@storybook/addon-actions";
+import { html } from "../stories/htmlKnob";
+
+const sampleExternalDocument = JSON.stringify(
+  {
+    documentId: "i-M5XxdCeWJ837juDzeM3z",
+    initialMappings:
+      '{"AtlasMapping":{"jsonType":"io.atlasmap.v2.AtlasMapping","dataSource":[{"jsonType":"io.atlasmap.json.v2.JsonDataSource","id":"i-M5XxQUHWJ837juDzeLrz","uri":"atlas:json:i-M5XxQUHWJ837juDzeLrz","dataSourceType":"SOURCE"},{"jsonType":"io.atlasmap.v2.DataSource","id":"-M5XxkSP4RiiMiYC85vx","uri":"atlas:java?className=io.syndesis.connector.slack.SlackPlainMessage","dataSourceType":"TARGET"}],"mappings":{"mapping":[{"jsonType":"io.atlasmap.v2.Mapping","id":"mapping.900920","inputField":[{"jsonType":"io.atlasmap.json.v2.JsonField","name":"name","path":"/body/name","fieldType":"STRING","docId":"i-M5XxQUHWJ837juDzeLrz","userCreated":false}],"outputField":[{"jsonType":"io.atlasmap.java.v2.JavaField","name":"message","path":"/message","fieldType":"STRING","docId":"-M5XxkSP4RiiMiYC85vx"}]}]},"name":"UI.0","lookupTables":{"lookupTable":[]},"constants":{"constant":[]},"properties":{"property":[]}}}',
+    inputDocuments: [
+      {
+        dataShape: {
+          name: "Request",
+          description: "API request payload",
+          kind: "json-schema",
+          specification:
+            '{"$schema":"http://json-schema.org/schema#","type":"object","$id":"io:syndesis:wrapped","properties":{"body":{"type":"object","description":"","properties":{"name":{"type":"string"}},"example":{"name":"gary"}}}}',
+          metadata: { unified: "true" },
+        },
+        description: "API request payload",
+        id: "i-M5XxQUHWJ837juDzeLrz",
+        inspectionResult: "",
+        inspectionSource:
+          '{"$schema":"http://json-schema.org/schema#","type":"object","$id":"io:syndesis:wrapped","properties":{"body":{"type":"object","description":"","properties":{"name":{"type":"string"}},"example":{"name":"gary"}}}}',
+        name: "1 - Request",
+        showFields: true,
+        documentType: "JSON",
+        inspectionType: "SCHEMA",
+      },
+    ],
+    outputDocument: {
+      dataShape: {
+        name: "Message",
+        kind: "java",
+        type: "io.syndesis.connector.slack.SlackPlainMessage",
+        specification:
+          '{"JavaClass":{"jsonType":"io.atlasmap.java.v2.JavaClass","collectionType":"NONE","path":"/","fieldType":"COMPLEX","modifiers":{"modifier":["PUBLIC"]},"className":"io.syndesis.connector.slack.SlackPlainMessage","canonicalClassName":"io.syndesis.connector.slack.SlackPlainMessage","primitive":false,"synthetic":false,"javaEnumFields":{"javaEnumField":[]},"javaFields":{"javaField":[{"jsonType":"io.atlasmap.java.v2.JavaField","path":"/message","status":"SUPPORTED","fieldType":"STRING","modifiers":{"modifier":["PRIVATE"]},"name":"message","className":"java.lang.String","canonicalClassName":"java.lang.String","getMethod":"getMessage","setMethod":"setMessage","primitive":true,"synthetic":false}]},"packageName":"io.syndesis.connector.slack","annotation":false,"annonymous":false,"enumeration":false,"localClass":false,"memberClass":false,"uri":"atlas:java?className=io.syndesis.connector.slack.SlackPlainMessage","interface":false}}',
+      },
+      description: "",
+      id: "-M5XxkSP4RiiMiYC85vx",
+      inspectionResult:
+        '{"JavaClass":{"jsonType":"io.atlasmap.java.v2.JavaClass","collectionType":"NONE","path":"/","fieldType":"COMPLEX","modifiers":{"modifier":["PUBLIC"]},"className":"io.syndesis.connector.slack.SlackPlainMessage","canonicalClassName":"io.syndesis.connector.slack.SlackPlainMessage","primitive":false,"synthetic":false,"javaEnumFields":{"javaEnumField":[]},"javaFields":{"javaField":[{"jsonType":"io.atlasmap.java.v2.JavaField","path":"/message","status":"SUPPORTED","fieldType":"STRING","modifiers":{"modifier":["PRIVATE"]},"name":"message","className":"java.lang.String","canonicalClassName":"java.lang.String","getMethod":"getMessage","setMethod":"setMessage","primitive":true,"synthetic":false}]},"packageName":"io.syndesis.connector.slack","annotation":false,"annonymous":false,"enumeration":false,"localClass":false,"memberClass":false,"uri":"atlas:java?className=io.syndesis.connector.slack.SlackPlainMessage","interface":false}}',
+      inspectionSource: "io.syndesis.connector.slack.SlackPlainMessage",
+      name: "2 - Message",
+      showFields: true,
+      documentType: "JAVA",
+      inspectionType: "JAVA_CLASS",
+    },
+  },
+  null,
+  2,
+);
 
 export default {
   title: "Atlasmap|Demo",
@@ -25,6 +76,7 @@ export const wiredToTheBackend = () => (
       "baseMappingServiceUrl",
       "http://localhost:8585/v2/atlas/",
     )}
+    onMappingChange={action("onMappingChange")}
   >
     <Atlasmap
       showImportAtlasFileToolbarItem={boolean(
@@ -66,160 +118,69 @@ export const wiredToTheBackend = () => (
   </AtlasmapProvider>
 );
 
-// import { action } from "@storybook/addon-actions";
-// import { boolean } from "@storybook/addon-knobs";
-// import React, { createElement, useState } from "react";
-// import { mappings as sampleMappings, sources, targets } from "stories/sampleData";
-// import { Button } from "@patternfly/react-core";
-// import {
-//   AtlasmapCanvasView,
-//   AtlasmapCanvasViewMappings,
-//   AtlasmapCanvasViewSource,
-//   AtlasmapCanvasViewTarget,
-//   AtlasmapUIProvider,
-//   IAtlasmapField,
-//   IMapping,
-// } from "UI";
-
-// export default {
-//   title: "Atlasmap|Mapper",
-// };
-
-// export const sample = () =>
-//   createElement(() => {
-//     const [mappings, setMappings] = useState<IMapping[]>(sampleMappings);
-//     const addToMapping = (node: IAtlasmapField, mapping: IMapping) => {
-//       const updatedMappings = mappings.map((m) => {
-//         if (m.id === mapping.id) {
-//           if (node.id.includes("source")) {
-//             m.sourceFields = [...m.sourceFields, { id: node.id }];
-//           } else {
-//             m.targetFields = [...m.targetFields, { id: node.id }];
-//           }
-//         }
-//         return m;
-//       });
-//       setMappings(updatedMappings);
-//     };
-
-//     const createMapping = (source: IAtlasmapField, target: IAtlasmapField) => {
-//       setMappings([
-//         ...mappings,
-//         {
-//           id: `${Date.now()}`,
-//           name: "One to One (mock)",
-//           sourceFields: [{ id: source.id }],
-//           targetFields: [{ id: target.id }],
-//         },
-//       ]);
-//     };
-
-//     const conditionalMappingExpressionEnabled = () => {
-//       return false;
-//     };
-
-//     const getMappingExpression = () => {
-//       return "";
-//     };
-//     const mappingExprClearText = (
-//       nodeId?: string,
-//       startOffset?: number,
-//       endOffset?: number,
-//     ) => {
-//       if (nodeId || startOffset || endOffset) {
-//         return "startOffset";
-//       } else {
-//         return "";
-//       }
-//     };
-//     const mappingExprEmpty = () => {
-//       return false;
-//     };
-//     const mappingExprInit = () => {};
-//     const mappingExpressionInsertText = (
-//       str: string,
-//       nodeId?: string,
-//       offset?: number,
-//     ) => {
-//       if (nodeId || offset) {
-//         console.log(str);
-//       }
-//     };
-//     const mappingExpressionObservable = () => {};
-//     const mappingExpressionRemoveField = () => {};
-//     const trailerID = "";
-
-//     return (
-//       <AtlasmapUIProvider
-//         error={boolean("error", false)}
-//         pending={boolean("pending", false)}
-//         sources={sources}
-//         targets={targets}
-//         mappings={mappings}
-//         onActiveMappingChange={action("onActiveMappingChange")}
-//         renderMappingDetails={({ mapping, closeDetails }) => (
-//           <>
-//             {mapping.name}
-//             <Button onSelect={closeDetails}>Close</Button>
-//           </>
-//         )}
-//       >
-//         <AtlasmapCanvasView
-//           onShowMappingPreview={action("AtlasmapCanvasView")}
-//           onShowMappedFields={action("onShowMappedFields")}
-//           onShowUnmappedFields={action("onShowUnmappedFields")}
-//           onExportAtlasFile={action("onExportAtlasFile")}
-//           onImportAtlasFile={action("onImportAtlasFile")}
-//           onResetAtlasmap={action("onResetAtlasmap")}
-//           onAddMapping={action("onAddMapping")}
-//           onConditionalMappingExpressionEnabled={
-//             conditionalMappingExpressionEnabled
-//           }
-//           onGetMappingExpression={getMappingExpression}
-//           mappingExpressionClearText={mappingExprClearText}
-//           mappingExpressionEmpty={mappingExprEmpty}
-//           mappingExpressionInit={mappingExprInit}
-//           mappingExpressionInsertText={mappingExpressionInsertText}
-//           mappingExpressionObservable={mappingExpressionObservable}
-//           mappingExpressionRemoveField={mappingExpressionRemoveField}
-//           onToggleExpressionMode={action("onToggleExpressionMode")}
-//           trailerId={trailerID}
-//         >
-//           {({ showTypes, showMappingPreview }) => (
-//             <>
-//               <AtlasmapCanvasViewSource
-//                 onAddToMapping={addToMapping}
-//                 onCreateConstant={action("onCreateConstant")}
-//                 onDeleteConstant={action("onDeleteConstant")}
-//                 onEditConstant={action("onEditConstant")}
-//                 onCreateProperty={action("onCreateProperty")}
-//                 onCreateMapping={createMapping}
-//                 onDeleteProperty={action("onDeleteProperty")}
-//                 onEditProperty={action("onEditProperty")}
-//                 onDeleteDocument={action("onDeleteDocument")}
-//                 onFieldPreviewChange={action("onFieldPreviewChange")}
-//                 onImportDocument={action("onImportDocument")}
-//                 onSearch={action("onSearch")}
-//                 showMappingPreview={showMappingPreview}
-//                 showTypes={showTypes}
-//                 sources={sources}
-//               />
-
-//               <AtlasmapCanvasViewMappings />
-
-//               <AtlasmapCanvasViewTarget
-//                 onAddToMapping={addToMapping}
-//                 onCreateMapping={createMapping}
-//                 onDeleteDocument={action("onDeleteDocument")}
-//                 onImportDocument={action("onImportDocument")}
-//                 onSearch={action("onSearch")}
-//                 showMappingPreview={showMappingPreview}
-//                 showTypes={showTypes}
-//                 targets={targets}
-//               />
-//             </>
-//           )}
-//         </AtlasmapCanvasView>
-//       </AtlasmapUIProvider>
-//     );
-//   });
+export const embeddedInSyndesis = () => {
+  const externalDocumentFromKnob = html(
+    "External document",
+    sampleExternalDocument,
+  );
+  let externalDocument: IAtlasmapProviderProps["externalDocument"];
+  try {
+    externalDocument = JSON.parse(externalDocumentFromKnob);
+  } catch (e) {
+    // do nothing
+  }
+  return (
+    <AtlasmapProvider
+      baseJavaInspectionServiceUrl={text(
+        "baseJavaInspectionServiceUrl",
+        "http://localhost:8585/v2/atlas/java/",
+      )}
+      baseXMLInspectionServiceUrl={text(
+        "baseXMLInspectionServiceUrl",
+        "http://localhost:8585/v2/atlas/xml/",
+      )}
+      baseJSONInspectionServiceUrl={text(
+        "baseJSONInspectionServiceUrl",
+        "http://localhost:8585/v2/atlas/json/",
+      )}
+      baseMappingServiceUrl={text(
+        "baseMappingServiceUrl",
+        "http://localhost:8585/v2/atlas/",
+      )}
+      externalDocument={externalDocument}
+      onMappingChange={action("onMappingChange")}
+    >
+      <Atlasmap
+        showImportAtlasFileToolbarItem={false}
+        showExportAtlasFileToolbarItem={false}
+        showResetToolbarItem={false}
+        showToggleMappingPreviewToolbarItem={boolean(
+          "showToggleMappingPreviewToolbarItem",
+          true,
+        )}
+        showToggleMappingColumnToolbarItem={boolean(
+          "showToggleMappingColumnToolbarItem",
+          true,
+        )}
+        showMappingTableViewToolbarItem={boolean(
+          "showToggleMappingTableToolbarItem",
+          true,
+        )}
+        showNamespaceTableViewToolbarItem={boolean(
+          "showToggleNamespaceTableToolbarItem",
+          true,
+        )}
+        showToggleTypesToolbarItem={boolean("showToggleTypesToolbarItem", true)}
+        showToggleMappedFieldsToolbarItem={boolean(
+          "showToggleMappedFieldsToolbarItem",
+          true,
+        )}
+        showToggleUnmappedFieldsToolbarItem={boolean(
+          "showToggleUnmappedFieldsToolbarItem",
+          true,
+        )}
+        showFreeViewToolbarItem={boolean("showToggleFreeViewToolbarItem", true)}
+      />
+    </AtlasmapProvider>
+  );
+};
