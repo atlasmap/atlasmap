@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonRootName("Document")
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
-public abstract class Document
+public class Document
     implements Serializable
 {
 
@@ -16,11 +16,11 @@ public abstract class Document
 
     /**
      * Gets the value of the fields property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Fields }
-     *     
+     *
      */
     public Fields getFields() {
         return fields;
@@ -28,11 +28,11 @@ public abstract class Document
 
     /**
      * Sets the value of the fields property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Fields }
-     *     
+     *
      */
     public void setFields(Fields value) {
         this.fields = value;

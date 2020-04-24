@@ -37,6 +37,8 @@ public abstract class Field
 
     protected String format;
 
+    protected String name;
+
     /**
      * Gets the value of the actions property.
      *
@@ -125,11 +127,11 @@ public abstract class Field
 
     /**
      * Sets the value of the actions property.
-     * 
+     *
      * @param actions
      *     allowed object is
      *     {@link List<Action> }
-     *     
+     *
      */
     @JsonDeserialize(using = ActionListUpgradeDeserializer.class)
     public void setActions(ArrayList<Action> actions) {
@@ -138,11 +140,11 @@ public abstract class Field
 
     /**
      * Gets the value of the value property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Object }
-     *     
+     *
      */
     public Object getValue() {
         return value;
@@ -150,11 +152,11 @@ public abstract class Field
 
     /**
      * Sets the value of the value property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Object }
-     *     
+     *
      */
     public void setValue(Object value) {
         this.value = value;
@@ -162,11 +164,11 @@ public abstract class Field
 
     /**
      * Gets the value of the arrayDimensions property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Integer }
-     *     
+     *
      */
     public Integer getArrayDimensions() {
         return arrayDimensions;
@@ -174,11 +176,11 @@ public abstract class Field
 
     /**
      * Sets the value of the arrayDimensions property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Integer }
-     *     
+     *
      */
     public void setArrayDimensions(Integer value) {
         this.arrayDimensions = value;
@@ -186,11 +188,11 @@ public abstract class Field
 
     /**
      * Gets the value of the arraySize property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Integer }
-     *     
+     *
      */
     public Integer getArraySize() {
         return arraySize;
@@ -198,11 +200,11 @@ public abstract class Field
 
     /**
      * Sets the value of the arraySize property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Integer }
-     *     
+     *
      */
     public void setArraySize(Integer value) {
         this.arraySize = value;
@@ -210,11 +212,11 @@ public abstract class Field
 
     /**
      * Gets the value of the collectionType property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link CollectionType }
-     *     
+     *
      */
     public CollectionType getCollectionType() {
         return collectionType;
@@ -222,11 +224,11 @@ public abstract class Field
 
     /**
      * Sets the value of the collectionType property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link CollectionType }
-     *     
+     *
      */
     public void setCollectionType(CollectionType value) {
         this.collectionType = value;
@@ -234,11 +236,11 @@ public abstract class Field
 
     /**
      * Gets the value of the docId property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getDocId() {
         return docId;
@@ -246,11 +248,11 @@ public abstract class Field
 
     /**
      * Sets the value of the docId property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setDocId(String value) {
         this.docId = value;
@@ -258,11 +260,11 @@ public abstract class Field
 
     /**
      * Gets the value of the index property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Integer }
-     *     
+     *
      */
     public Integer getIndex() {
         return index;
@@ -270,11 +272,11 @@ public abstract class Field
 
     /**
      * Sets the value of the index property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Integer }
-     *     
+     *
      */
     public void setIndex(Integer value) {
         this.index = value;
@@ -282,11 +284,11 @@ public abstract class Field
 
     /**
      * Gets the value of the path property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getPath() {
         return path;
@@ -294,11 +296,11 @@ public abstract class Field
 
     /**
      * Sets the value of the path property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setPath(String value) {
         this.path = value;
@@ -306,11 +308,11 @@ public abstract class Field
 
     /**
      * Gets the value of the required property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Boolean }
-     *     
+     *
      */
     public Boolean isRequired() {
         return required;
@@ -318,11 +320,11 @@ public abstract class Field
 
     /**
      * Sets the value of the required property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Boolean }
-     *     
+     *
      */
     public void setRequired(Boolean value) {
         this.required = value;
@@ -330,11 +332,11 @@ public abstract class Field
 
     /**
      * Gets the value of the status property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link FieldStatus }
-     *     
+     *
      */
     public FieldStatus getStatus() {
         return status;
@@ -342,11 +344,11 @@ public abstract class Field
 
     /**
      * Sets the value of the status property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link FieldStatus }
-     *     
+     *
      */
     public void setStatus(FieldStatus value) {
         this.status = value;
@@ -354,11 +356,11 @@ public abstract class Field
 
     /**
      * Gets the value of the fieldType property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link FieldType }
-     *     
+     *
      */
     public FieldType getFieldType() {
         return fieldType;
@@ -366,11 +368,11 @@ public abstract class Field
 
     /**
      * Sets the value of the fieldType property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link FieldType }
-     *     
+     *
      */
     public void setFieldType(FieldType value) {
         this.fieldType = value;
@@ -378,11 +380,11 @@ public abstract class Field
 
     /**
      * Gets the value of the format property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getFormat() {
         return format;
@@ -390,14 +392,37 @@ public abstract class Field
 
     /**
      * Sets the value of the format property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setFormat(String value) {
         this.format = value;
     }
 
+    /**
+     * Gets the value of the name property.
+     *
+     * @return
+     *     possible object is
+     *     {@link String }
+     *
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets the value of the name property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *
+     */
+    public void setName(String value) {
+        this.name = value;
+    }
 }

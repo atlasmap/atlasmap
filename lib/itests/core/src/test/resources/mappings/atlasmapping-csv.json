@@ -1,0 +1,141 @@
+{
+  "AtlasMapping": {
+    "jsonType": "io.atlasmap.v2.AtlasMapping",
+    "dataSource": [
+      {
+        "jsonType": "io.atlasmap.csv.v2.CsvDataSource",
+        "id": "source",
+        "uri": "atlas:csv:source?firstRecordAsHeader=true",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType": "io.atlasmap.csv.v2.CsvDataSource",
+        "id": "target-csv",
+        "uri": "atlas:csv:target-csv?firstRecordAsHeader=true",
+        "dataSourceType": "TARGET"
+      }
+    ],
+    "mappings": {
+      "mapping": [
+        {
+          "jsonType": "io.atlasmap.v2.Collection",
+          "mappingType": "COLLECTION",
+          "collectionType": null,
+          "mappings": {
+            "mapping": [
+              {
+                "jsonType": "io.atlasmap.v2.Mapping",
+                "mappingType": "MAP",
+                "id": "1",
+                "inputField": [
+                  {
+                    "jsonType": "io.atlasmap.csv.v2.CsvField",
+                    "name": "first_name",
+                    "path": "/<>/first_name",
+                    "fieldType": "STRING",
+                    "docId": "source"
+                  }
+                ],
+                "outputField": [
+                  {
+                    "jsonType": "io.atlasmap.csv.v2.CsvField",
+                    "name": "first",
+                    "path": "/<>/first",
+                    "fieldType": "STRING",
+                    "docId": "target-csv"
+                  }
+                ]
+              },
+              {
+                "jsonType": "io.atlasmap.v2.Mapping",
+                "mappingType": "MAP",
+                "id": "2",
+                "inputField": [
+                  {
+                    "jsonType": "io.atlasmap.csv.v2.CsvField",
+                    "name": "last_name",
+                    "path": "/<>/last_name",
+                    "fieldType": "STRING",
+                    "docId": "source"
+                  }
+                ],
+                "outputField": [
+                  {
+                    "jsonType": "io.atlasmap.csv.v2.CsvField",
+                    "name": "last",
+                    "path": "/<>/last",
+                    "fieldType": "STRING",
+                    "docId": "target-csv"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "mappingType": "MAP",
+          "id": "3",
+          "inputField": [
+            {
+              "jsonType": "io.atlasmap.csv.v2.CsvField",
+              "name": "last_name",
+              "path": "/<>/last_name",
+              "fieldType": "STRING",
+              "docId": "source"
+            }
+          ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.csv.v2.CsvField",
+              "name": "last",
+              "path": "/<>/last",
+              "fieldType": "STRING",
+              "docId": "target-csv"
+            }
+          ]
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "mappingType": "MAP",
+          "id": "4",
+          "inputFieldGroup": {
+            "jsonType": "io.atlasmap.v2.FieldGroup",
+            "actions" : [ {
+              "Expression" : {
+                "expression" : "capitalize(${0})"
+              }
+            } ],
+          "field": [
+            {
+              "jsonType": "io.atlasmap.csv.v2.CsvField",
+              "name": "first_name",
+              "path": "/<>/first_name",
+              "fieldType": "STRING",
+              "docId": "source"
+            }]
+          },
+          "outputField": [
+              {
+                "jsonType": "io.atlasmap.csv.v2.CsvField",
+                "name": "first",
+                "path": "/<>/first",
+                "fieldType": "STRING",
+                "docId": "target-csv"
+              }
+            ]
+        }
+      ]
+    },
+    "name": "UI.659774",
+    "lookupTables": {
+      "lookupTable": []
+    },
+    "constants": {
+      "constant": []
+    },
+    "properties": {
+      "property": []
+    }
+  }
+}

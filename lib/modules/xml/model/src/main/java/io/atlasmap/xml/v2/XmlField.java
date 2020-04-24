@@ -14,8 +14,6 @@ public class XmlField extends Field implements Serializable {
 
     protected Restrictions restrictions;
 
-    protected String name;
-
     protected NodeType nodeType;
 
     protected Boolean primitive;
@@ -28,11 +26,11 @@ public class XmlField extends Field implements Serializable {
 
     /**
      * Gets the value of the annotations property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link StringList }
-     *     
+     *
      */
     public StringList getAnnotations() {
         return annotations;
@@ -40,11 +38,11 @@ public class XmlField extends Field implements Serializable {
 
     /**
      * Sets the value of the annotations property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link StringList }
-     *     
+     *
      */
     public void setAnnotations(StringList value) {
         this.annotations = value;
@@ -52,11 +50,11 @@ public class XmlField extends Field implements Serializable {
 
     /**
      * Gets the value of the restrictions property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Restrictions }
-     *     
+     *
      */
     public Restrictions getRestrictions() {
         return restrictions;
@@ -64,47 +62,23 @@ public class XmlField extends Field implements Serializable {
 
     /**
      * Sets the value of the restrictions property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Restrictions }
-     *     
+     *
      */
     public void setRestrictions(Restrictions value) {
         this.restrictions = value;
     }
 
     /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    /**
      * Gets the value of the nodeType property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link NodeType }
-     *     
+     *
      */
     public NodeType getNodeType() {
         return nodeType;
@@ -112,11 +86,11 @@ public class XmlField extends Field implements Serializable {
 
     /**
      * Sets the value of the nodeType property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link NodeType }
-     *     
+     *
      */
     public void setNodeType(NodeType value) {
         this.nodeType = value;
@@ -124,11 +98,11 @@ public class XmlField extends Field implements Serializable {
 
     /**
      * Gets the value of the primitive property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Boolean }
-     *     
+     *
      */
     public Boolean isPrimitive() {
         return primitive;
@@ -136,11 +110,11 @@ public class XmlField extends Field implements Serializable {
 
     /**
      * Sets the value of the primitive property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Boolean }
-     *     
+     *
      */
     public void setPrimitive(Boolean value) {
         this.primitive = value;
@@ -148,11 +122,11 @@ public class XmlField extends Field implements Serializable {
 
     /**
      * Gets the value of the typeName property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getTypeName() {
         return typeName;
@@ -160,11 +134,11 @@ public class XmlField extends Field implements Serializable {
 
     /**
      * Sets the value of the typeName property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setTypeName(String value) {
         this.typeName = value;
@@ -172,11 +146,11 @@ public class XmlField extends Field implements Serializable {
 
     /**
      * Gets the value of the userCreated property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Boolean }
-     *     
+     *
      */
     public Boolean isUserCreated() {
         return userCreated;
@@ -184,11 +158,11 @@ public class XmlField extends Field implements Serializable {
 
     /**
      * Sets the value of the userCreated property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Boolean }
-     *     
+     *
      */
     public void setUserCreated(Boolean value) {
         this.userCreated = value;
@@ -196,11 +170,11 @@ public class XmlField extends Field implements Serializable {
 
     /**
      * Gets the value of the attribute property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Boolean }
-     *     
+     *
      */
     public Boolean isAttribute() {
         return attribute;
@@ -208,11 +182,11 @@ public class XmlField extends Field implements Serializable {
 
     /**
      * Sets the value of the attribute property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Boolean }
-     *     
+     *
      */
     public void setAttribute(Boolean value) {
         this.attribute = value;
@@ -272,8 +246,8 @@ public class XmlField extends Field implements Serializable {
             leftName = this.getName();
             String rightName;
             rightName = that.getName();
-            if (this.name!= null) {
-                if (that.name!= null) {
+            if (this.getName() != null) {
+                if (that.getName() != null) {
                     if (!leftName.equals(rightName)) {
                         return false;
                     }
@@ -281,7 +255,7 @@ public class XmlField extends Field implements Serializable {
                     return false;
                 }
             } else {
-                if (that.name!= null) {
+                if (that.getName() != null) {
                     return false;
                 }
             }
