@@ -24,6 +24,9 @@
         <include>io.atlasmap:atlas-xml-core</include>
         <include>io.atlasmap:atlas-xml-model</include>
         <include>io.atlasmap:atlas-xml-module</include>
+        <include>io.atlasmap:atlas-csv-core</include>
+        <include>io.atlasmap:atlas-csv-model</include>
+        <include>io.atlasmap:atlas-csv-module</include>
       </includes>
       <binaries>
         <outputDirectory>.</outputDirectory>

@@ -2234,6 +2234,12 @@ endif::internal-generation[]
 | 
 |  
 
+| name 
+|  
+| String  
+| 
+|  
+
 | jsonType 
 | X 
 | String  
@@ -2320,6 +2326,12 @@ endif::internal-generation[]
 |  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
 
 | format 
+|  
+| String  
+| 
+|  
+
+| name 
 |  
 | String  
 | 

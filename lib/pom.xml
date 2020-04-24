@@ -40,6 +40,7 @@
     <module>modules/json</module>
     <module>modules/xml</module>
     <module>modules/dfdl</module>
+    <module>modules/csv</module>
     <module>itests</module>
     <module>dist</module>
   </modules>

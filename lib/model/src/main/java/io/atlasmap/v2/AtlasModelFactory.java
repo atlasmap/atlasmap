@@ -178,6 +178,9 @@ public class AtlasModelFactory {
         if (from.getStatus() != null) {
             to.setStatus(FieldStatus.fromValue(from.getStatus().value()));
         }
+        if (from.getName() != null) {
+            to.setName(from.getName());
+        }
         // We can't clone so don't set value
     }
 

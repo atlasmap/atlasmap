@@ -462,6 +462,12 @@ endif::internal-generation[]
 | 
 |  
 
+| name 
+|  
+| String  
+| 
+|  
+
 | annotations 
 |  
 | StringList  
@@ -477,12 +483,6 @@ endif::internal-generation[]
 | parameterizedTypes 
 |  
 | StringList  
-| 
-|  
-
-| name 
-|  
-| String  
 | 
 |  
 
@@ -807,6 +807,12 @@ endif::internal-generation[]
 | 
 |  
 
+| name 
+|  
+| String  
+| 
+|  
+
 | annotations 
 |  
 | StringList  
@@ -822,12 +828,6 @@ endif::internal-generation[]
 | parameterizedTypes 
 |  
 | StringList  
-| 
-|  
-
-| name 
-|  
-| String  
 | 
 |  
 

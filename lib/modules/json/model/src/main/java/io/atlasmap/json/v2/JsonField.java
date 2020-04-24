@@ -9,8 +9,6 @@ public class JsonField extends Field implements Serializable {
 
     private final static long serialVersionUID = 1L;
 
-    protected String name;
-
     protected Boolean primitive;
 
     protected String typeName;
@@ -18,36 +16,12 @@ public class JsonField extends Field implements Serializable {
     protected Boolean userCreated;
 
     /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    /**
      * Gets the value of the primitive property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Boolean }
-     *     
+     *
      */
     public Boolean isPrimitive() {
         return primitive;
@@ -55,11 +29,11 @@ public class JsonField extends Field implements Serializable {
 
     /**
      * Sets the value of the primitive property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Boolean }
-     *     
+     *
      */
     public void setPrimitive(Boolean value) {
         this.primitive = value;
@@ -67,11 +41,11 @@ public class JsonField extends Field implements Serializable {
 
     /**
      * Gets the value of the typeName property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getTypeName() {
         return typeName;
@@ -79,11 +53,11 @@ public class JsonField extends Field implements Serializable {
 
     /**
      * Sets the value of the typeName property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setTypeName(String value) {
         this.typeName = value;
@@ -91,11 +65,11 @@ public class JsonField extends Field implements Serializable {
 
     /**
      * Gets the value of the userCreated property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Boolean }
-     *     
+     *
      */
     public Boolean isUserCreated() {
         return userCreated;
@@ -103,11 +77,11 @@ public class JsonField extends Field implements Serializable {
 
     /**
      * Sets the value of the userCreated property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Boolean }
-     *     
+     *
      */
     public void setUserCreated(Boolean value) {
         this.userCreated = value;
@@ -129,8 +103,8 @@ public class JsonField extends Field implements Serializable {
             leftName = this.getName();
             String rightName;
             rightName = that.getName();
-            if (this.name!= null) {
-                if (that.name!= null) {
+            if (this.getName() != null) {
+                if (that.getName() != null) {
                     if (!leftName.equals(rightName)) {
                         return false;
                     }
@@ -138,7 +112,7 @@ public class JsonField extends Field implements Serializable {
                     return false;
                 }
             } else {
-                if (that.name!= null) {
+                if (that.getName() != null) {
                     return false;
                 }
             }
@@ -210,7 +184,7 @@ public class JsonField extends Field implements Serializable {
             currentHashCode = (currentHashCode* 31);
             String theName;
             theName = this.getName();
-            if (this.name!= null) {
+            if (this.getName() != null) {
                 currentHashCode += theName.hashCode();
             }
         }
