@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 
 import { Tooltip, Button } from "@patternfly/react-core";
-import { PencilAltIcon } from "@patternfly/react-icons";
+import { ExchangeAltIcon } from "@patternfly/react-icons";
 
 export interface IEditMappingActionProps {
   onClick: () => void;
@@ -15,7 +15,7 @@ export const EditMappingAction: FunctionComponent<IEditMappingActionProps> = ({
     content={<div>Modify the mapping</div>}
   >
     <Button variant="plain" onClick={onClick} aria-label="Modify the mapping">
-      <PencilAltIcon />
+      <ExchangeAltIcon />
     </Button>
   </Tooltip>
 );
