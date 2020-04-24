@@ -1,12 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 
-import {
-  Column,
-  ColumnMapper,
-  Columns,
-  IMapping,
-  NodeRefProvider,
-} from "../UI";
+import { Column, ColumnMapper, Columns, NodeRefProvider } from "../UI";
 import {
   ISourcesColumnData,
   ITargetsColumnData,
@@ -18,6 +12,7 @@ import {
   ISourceColumnEvents,
   ITargetsColumnEvents,
 } from "./ColumnMapperView";
+import { IAtlasmapMapping } from "./models";
 
 export interface ISourceTargetViewProps
   extends ISourcesColumnData,
@@ -46,7 +41,8 @@ export const SourceTargetView: FunctionComponent<ISourceTargetViewProps> = ({
   const [highlightedMappingId, setHighlightedMappingId] = useState<
     string | undefined
   >();
-  const handleMouseOver = (m: IMapping) => setHighlightedMappingId(m.id);
+  const handleMouseOver = (m: IAtlasmapMapping) =>
+    setHighlightedMappingId(m.id);
   const handleMouseOut = () => setHighlightedMappingId(undefined);
 
   return (

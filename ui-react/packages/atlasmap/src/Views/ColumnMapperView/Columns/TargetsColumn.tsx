@@ -4,15 +4,16 @@ import {
   ColumnBody,
   Document,
   DocumentFooter,
-  GroupId,
   IDragAndDropField,
   NodeRef,
   SearchableColumnHeader,
+  Tree,
 } from "../../../UI";
 import {
   IAtlasmapDocument,
   IAtlasmapField,
   IAtlasmapMapping,
+  GroupId,
 } from "../../models";
 import {
   DeleteDocumentAction,
@@ -104,35 +105,37 @@ export const TargetsColumn: FunctionComponent<
                         />,
                       ]}
                     >
-                      <TraverseFields
-                        fields={t.fields}
-                        showTypes={showTypes}
-                        boundaryId={TARGETS_HEIGHT_BOUNDARY_ID}
-                        overrideWidth={TARGETS_WIDTH_BOUNDARY_ID}
-                        parentId={documentId}
-                        idPrefix={TARGETS_FIELD_ID_PREFIX}
-                        acceptDropType={SOURCES_DRAGGABLE_TYPE}
-                        draggableType={TARGETS_DRAGGABLE_TYPE}
-                        onDrop={onDrop}
-                        canDrop={canDrop}
-                        renderActions={(field) =>
-                          commonActions({
-                            connectedMappings: field.mappings,
-                            onShowMappingDetails,
-                            canAddToSelectedMapping: canAddToSelectedMapping(
-                              field,
-                            ),
-                            onAddToSelectedMapping: () =>
-                              onAddToSelectedMapping(field),
-                            canRemoveFromSelectedMapping: canRemoveFromSelectedMapping(
-                              field,
-                            ),
-                            onRemoveFromSelectedMapping: () =>
-                              onRemoveFromSelectedMapping(field),
-                            onStartMapping: () => void 0,
-                          })
-                        }
-                      />
+                      <Tree>
+                        <TraverseFields
+                          fields={t.fields}
+                          showTypes={showTypes}
+                          boundaryId={TARGETS_HEIGHT_BOUNDARY_ID}
+                          overrideWidth={TARGETS_WIDTH_BOUNDARY_ID}
+                          parentId={documentId}
+                          idPrefix={TARGETS_FIELD_ID_PREFIX}
+                          acceptDropType={SOURCES_DRAGGABLE_TYPE}
+                          draggableType={TARGETS_DRAGGABLE_TYPE}
+                          onDrop={onDrop}
+                          canDrop={canDrop}
+                          renderActions={(field) =>
+                            commonActions({
+                              connectedMappings: field.mappings,
+                              onShowMappingDetails,
+                              canAddToSelectedMapping: canAddToSelectedMapping(
+                                field,
+                              ),
+                              onAddToSelectedMapping: () =>
+                                onAddToSelectedMapping(field),
+                              canRemoveFromSelectedMapping: canRemoveFromSelectedMapping(
+                                field,
+                              ),
+                              onRemoveFromSelectedMapping: () =>
+                                onRemoveFromSelectedMapping(field),
+                              onStartMapping: () => void 0,
+                            })
+                          }
+                        />
+                      </Tree>
                     </Document>
                   </NodeRef>
                 );

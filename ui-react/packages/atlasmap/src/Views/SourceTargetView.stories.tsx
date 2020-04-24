@@ -11,8 +11,8 @@ import {
   sources,
   targets,
 } from "../stories/sampleData";
-import { CanvasProvider, IMapping } from "../UI";
-import { SourceTargetView } from "../Views";
+import { CanvasProvider } from "../UI";
+import { SourceTargetView, IAtlasmapMapping } from "../Views";
 
 export default {
   title: "Atlasmap|Views",
@@ -24,7 +24,7 @@ export const sourceTargetView = () =>
     const [selectedMappingId, setSelectedMappingId] = useState<
       string | undefined
     >(undefined);
-    const onSelectMapping = (m: IMapping) => setSelectedMappingId(m.id);
+    const onSelectMapping = (m: IAtlasmapMapping) => setSelectedMappingId(m.id);
     const onDeselectMapping = () => setSelectedMappingId(undefined);
     return (
       <CanvasProvider>

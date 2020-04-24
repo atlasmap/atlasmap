@@ -9,23 +9,23 @@ import React, {
   useState,
 } from "react";
 
-interface IDocumentFocusContext {
+interface ITreeFocusContext {
   focusedItem: HTMLElement | null;
   setFocusedItem: (item: HTMLElement | null) => void;
 }
 
-const DocumentFocusContext = createContext<IDocumentFocusContext | null>(null);
+const TreeFocusContext = createContext<ITreeFocusContext | null>(null);
 
-export const DocumentFocusProvider: FunctionComponent = ({ children }) => {
+export const TreeFocusProvider: FunctionComponent = ({ children }) => {
   const [focusedItem, setFocusedItem] = useState<HTMLElement | null>(null);
   return (
-    <DocumentFocusContext.Provider value={{ focusedItem, setFocusedItem }}>
+    <TreeFocusContext.Provider value={{ focusedItem, setFocusedItem }}>
       {children}
-    </DocumentFocusContext.Provider>
+    </TreeFocusContext.Provider>
   );
 };
 
-export interface IUseDocumentFocusProps {
+export interface IUseTreeFocusProps {
   ref: RefObject<HTMLDivElement | null>;
   isExpandable?: boolean;
   isExpanded?: boolean;
@@ -33,18 +33,16 @@ export interface IUseDocumentFocusProps {
   expandTreeitem?: () => void;
 }
 
-export const useDocumentFocus = ({
+export const useTreeFocus = ({
   ref,
   isExpandable = false,
   isExpanded = false,
   collapseTreeitem,
   expandTreeitem,
-}: IUseDocumentFocusProps) => {
-  const context = useContext(DocumentFocusContext);
+}: IUseTreeFocusProps) => {
+  const context = useContext(TreeFocusContext);
   if (!context) {
-    throw new Error(
-      `useDocumentFocus can be used only inside a Document component`,
-    );
+    throw new Error(`useTreeFocus can be used only inside a Tree component`);
   }
   const { focusedItem, setFocusedItem } = context;
   const getFocusableItems = (el: HTMLElement) => {

@@ -1,19 +1,4 @@
-import React, {
-  forwardRef,
-  HTMLAttributes,
-  MouseEvent,
-  KeyboardEvent,
-  PropsWithChildren,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useRef,
-  ReactElement,
-  useLayoutEffect,
-} from "react";
-
 import {
-  Accordion,
   Card,
   CardActions,
   CardBody,
@@ -22,7 +7,16 @@ import {
   Title,
 } from "@patternfly/react-core";
 import { css, StyleSheet } from "@patternfly/react-styles";
-import { DocumentFocusProvider } from "./DocumentFocusProvider";
+import React, {
+  forwardRef,
+  HTMLAttributes,
+  KeyboardEvent,
+  MouseEvent,
+  PropsWithChildren,
+  ReactElement,
+  ReactNode,
+  useCallback,
+} from "react";
 
 const styles = StyleSheet.create({
   card: {},
@@ -47,9 +41,6 @@ const styles = StyleSheet.create({
     "&:before": {
       background: "var(--pf-global--success-color--100) !important",
     },
-  },
-  accordion: {
-    padding: "0 !important",
   },
 });
 
@@ -91,7 +82,6 @@ export const Document = forwardRef<
     },
     ref,
   ) => {
-    const documentRef = useRef<HTMLDivElement | null>(null);
     const handleClick = useCallback(
       (event: MouseEvent) => {
         event.stopPropagation();
@@ -123,88 +113,41 @@ export const Document = forwardRef<
     );
     const makeCardSelected = selected || dropTarget || dropAccepted;
 
-    const handleRef = (el: HTMLDivElement | null) => {
-      if (ref) {
-        if (typeof ref === "function") {
-          ref(el);
-        } else {
-          // @ts-ignore
-          // by default forwardedRef.current is readonly. Let's ignore it
-          ref.current = el;
-        }
-      }
-      documentRef.current = el;
-    };
-
-    useEffect(() => {
-      if (scrollIntoView && documentRef.current) {
-        documentRef.current.scrollIntoView();
-      }
-    }, [scrollIntoView]);
-
-    useLayoutEffect(() => {
-      if (documentRef.current) {
-        const itemInTabSequence = documentRef.current.querySelector(
-          `[role=treeitem][tabindex="0"]`,
-        );
-        if (!itemInTabSequence) {
-          const firstTreeItem = documentRef.current.querySelector(
-            "[role=treeitem]",
-          );
-          if (firstTreeItem) {
-            firstTreeItem.setAttribute("tabindex", "0");
-          }
-        }
-      }
-    });
-
     return (
-      <DocumentFocusProvider>
-        <div
-          className={css(stacked && styles.stacked)}
-          ref={handleRef}
-          onClick={handleClick}
-          onKeyDown={handleKey}
-          {...props}
+      <div
+        className={css(stacked && styles.stacked)}
+        onClick={handleClick}
+        onKeyDown={handleKey}
+        ref={ref}
+        {...props}
+      >
+        <Card
+          isCompact={true}
+          className={css(
+            styles.card,
+            dropAccepted && !dropTarget && styles.dropAccepted,
+            dropTarget && styles.dropTarget,
+          )}
+          isSelected={makeCardSelected}
+          isSelectable={makeCardSelected || selectable}
+          aria-label={title}
         >
-          <Card
-            isCompact={true}
-            className={css(
-              styles.card,
-              dropAccepted && !dropTarget && styles.dropAccepted,
-              dropTarget && styles.dropTarget,
-            )}
-            isSelected={makeCardSelected}
-            isSelectable={makeCardSelected || selectable}
-            aria-label={title}
-          >
-            {(title || actions) && (
-              <CardHead className={css(styles.head)}>
-                <CardActions>{actions?.filter((a) => a)}</CardActions>
-                {title && (
-                  <CardHeader>
-                    <Title size={"lg"} headingLevel={"h2"} aria-label={title}>
-                      {title}
-                    </Title>
-                  </CardHeader>
-                )}
-              </CardHead>
-            )}
-            <CardBody className={css(styles.body)}>
-              <Accordion
-                asDefinitionList={false}
-                className={css(styles.accordion)}
-                noBoxShadow={true}
-                role={"tree"}
-                aria-labelledby={id}
-              >
-                {children}
-              </Accordion>
-            </CardBody>
-            {footer}
-          </Card>
-        </div>
-      </DocumentFocusProvider>
+          {(title || actions) && (
+            <CardHead className={css(styles.head)}>
+              <CardActions>{actions?.filter((a) => a)}</CardActions>
+              {title && (
+                <CardHeader>
+                  <Title size={"lg"} headingLevel={"h2"} aria-label={title}>
+                    {title}
+                  </Title>
+                </CardHeader>
+              )}
+            </CardHead>
+          )}
+          <CardBody className={css(styles.body)}>{children}</CardBody>
+          {footer}
+        </Card>
+      </div>
     );
   },
 );

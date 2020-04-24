@@ -13,7 +13,6 @@ import {
   ConditionalExpressionInput,
   FieldDragLayer,
   FieldsDndProvider,
-  GroupId,
 } from "../UI";
 import {
   IAtlasmapField,
@@ -25,6 +24,7 @@ import {
   MappingTableView,
   SourceMappingTargetView,
   SourceTargetView,
+  GroupId,
 } from "../Views";
 import { useAtlasmap } from "./AtlasmapProvider";
 import { useAtlasmapDialogs } from "./useAtlasmapDialogs";
