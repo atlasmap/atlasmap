@@ -1,7 +1,7 @@
 {
   "name": "@atlasmap/atlasmap",
   "description": "",
-  "version": "2.0.0-SNAPSHOT",
+  "version": "1.44.0-M5",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -29,7 +29,7 @@
     }
   },
   "dependencies": {
-    "@atlasmap/core": "^2.0.0-SNAPSHOT"
+    "@atlasmap/core": "^1.44.0-M5"
   },
   "peerDependencies": {
     "@patternfly/react-core": "^3.77.2",
