@@ -21,7 +21,7 @@ import { useTreeFocus } from "./TreeFocusProvider";
 
 const styles = StyleSheet.create({
   button: {
-    paddingRight: "var(--pf-global--spacer--md) !important",
+    padding: "0 !important",
   },
   content: {
     fontSize: "inherit !important",

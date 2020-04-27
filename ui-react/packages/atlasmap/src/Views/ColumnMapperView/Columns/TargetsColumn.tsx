@@ -107,6 +107,7 @@ export const TargetsColumn: FunctionComponent<
                           key={"delete-documents"}
                         />,
                       ]}
+                      noPadding={true}
                     >
                       <Tree>
                         <TraverseFields

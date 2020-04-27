@@ -12,20 +12,10 @@ const styles = StyleSheet.create({
   buttonContent: {
     display: "flex",
     alignItems: "center",
+    padding: "0.5rem 1rem",
   },
   buttonIcon: {
     marginRight: "1rem",
-  },
-  content: {
-    fontSize: "inherit !important",
-    "& > div": {
-      boxSizing: "border-box",
-      padding:
-        "var(--pf-c-accordion__expanded-content-body--PaddingTop) 0 var(--pf-c-accordion__expanded-content-body--PaddingBottom) 1.2rem !important",
-    },
-  },
-  hiddenContent: {
-    display: "none",
   },
 });
 

@@ -1,23 +1,23 @@
 import React, { FunctionComponent } from "react";
 
 import { Button, Tooltip } from "@patternfly/react-core";
-import { EditIcon, PlusIcon, TrashIcon } from "@patternfly/react-icons";
+import { PlusIcon } from "@patternfly/react-icons";
 
 import {
   ColumnBody,
   Document,
   DocumentFooter,
-  IDragAndDropField,
   NodeRef,
   SearchableColumnHeader,
   Tree,
   DocumentFieldPreview,
+  IDragAndDropField,
 } from "../../../UI";
 import {
+  GroupId,
   IAtlasmapDocument,
   IAtlasmapField,
   IAtlasmapMapping,
-  GroupId,
 } from "../../models";
 import {
   DeleteDocumentAction,
@@ -35,17 +35,17 @@ import {
   SOURCES_WIDTH_BOUNDARY_ID,
   TARGETS_DRAGGABLE_TYPE,
 } from "./constants";
+import { ConstantsTree, IConstantsTreeCallbacks } from "./ConstantsTree";
+import { IPropertiesTreeCallbacks, PropertiesTree } from "./PropertiesTree";
 import { TraverseFields } from "./TraverseFields";
 
-export interface ISourceColumnCallbacks {
+export interface ISourceColumnCallbacks
+  extends IConstantsTreeCallbacks,
+    IPropertiesTreeCallbacks {
   onCreateConstant: () => void;
-  onEditConstant: (value: string) => void;
-  onDeleteConstant: (value: string) => void;
   onCreateProperty: () => void;
-  onEditProperty: (name: string) => void;
-  onDeleteProperty: (name: string) => void;
-  onDeleteDocument: (id: GroupId) => void;
   onImportDocument: (selectedFile: File) => void;
+  onDeleteDocument: (id: GroupId) => void;
   onEnableJavaClasses: () => void;
   onSearch: (content: string) => void;
   canDrop: (source: IAtlasmapField, target: IDragAndDropField) => boolean;
@@ -107,188 +107,97 @@ export const SourcesColumn: FunctionComponent<
         <ColumnBody>
           <NodeRef id={SOURCES_WIDTH_BOUNDARY_ID}>
             <div>
-              {properties && (
-                <NodeRef
-                  id={SOURCES_PROPERTIES_ID}
-                  boundaryId={SOURCES_HEIGHT_BOUNDARY_ID}
-                  overrideWidth={SOURCES_WIDTH_BOUNDARY_ID}
-                >
-                  <Document
-                    title={"Properties"}
-                    actions={[
-                      <Tooltip
-                        position={"top"}
-                        enableFlip={true}
-                        content={
-                          <div>Create a constant for use in mapping</div>
-                        }
-                        key={"create-constant"}
+              <NodeRef
+                id={SOURCES_PROPERTIES_ID}
+                boundaryId={SOURCES_HEIGHT_BOUNDARY_ID}
+                overrideWidth={SOURCES_WIDTH_BOUNDARY_ID}
+              >
+                <Document
+                  title={"Properties"}
+                  actions={[
+                    <Tooltip
+                      position={"top"}
+                      enableFlip={true}
+                      content={<div>Create a constant for use in mapping</div>}
+                      key={"create-constant"}
+                    >
+                      <Button
+                        onClick={onCreateConstant}
+                        variant={"plain"}
+                        aria-label="Create a constant for use in mapping"
                       >
-                        <Button
-                          onClick={onCreateConstant}
-                          variant={"plain"}
-                          aria-label="Create a constant for use in mapping"
-                        >
-                          <PlusIcon />
-                        </Button>
-                      </Tooltip>,
-                    ]}
-                  >
-                    <Tree>
-                      <TraverseFields
-                        fields={properties.fields}
-                        showTypes={showTypes}
-                        parentId={SOURCES_PROPERTIES_ID}
-                        boundaryId={SOURCES_HEIGHT_BOUNDARY_ID}
-                        overrideWidth={SOURCES_WIDTH_BOUNDARY_ID}
-                        idPrefix={SOURCES_FIELD_ID_PREFIX}
-                        acceptDropType={TARGETS_DRAGGABLE_TYPE}
-                        draggableType={SOURCES_DRAGGABLE_TYPE}
-                        onDrop={onDrop}
-                        canDrop={canDrop}
-                        renderActions={(field) => [
-                          ...commonActions({
-                            connectedMappings: field.mappings,
-                            onShowMappingDetails,
-                            canAddToSelectedMapping: canAddToSelectedMapping(
-                              field,
-                            ),
-                            onAddToSelectedMapping: () =>
-                              onAddToSelectedMapping(field),
-                            canRemoveFromSelectedMapping: canRemoveFromSelectedMapping(
-                              field,
-                            ),
-                            onRemoveFromSelectedMapping: () =>
-                              onRemoveFromSelectedMapping(field),
-                            onStartMapping: () => void 0,
-                          }),
-                          <Tooltip
-                            key={"edit"}
-                            position={"top"}
-                            enableFlip={true}
-                            content={<div>Edit property</div>}
-                          >
-                            <Button
-                              variant="plain"
-                              onClick={() => onEditProperty(field.name)}
-                              aria-label={"Edit property"}
-                              tabIndex={0}
-                            >
-                              <EditIcon />
-                            </Button>
-                          </Tooltip>,
-                          <Tooltip
-                            key={"delete"}
-                            position={"top"}
-                            enableFlip={true}
-                            content={<div>Remove property</div>}
-                          >
-                            <Button
-                              variant="plain"
-                              onClick={() => onDeleteProperty(field.name)}
-                              aria-label={"Remove property"}
-                              tabIndex={0}
-                            >
-                              <TrashIcon />
-                            </Button>
-                          </Tooltip>,
-                        ]}
-                      />
-                    </Tree>
-                  </Document>
-                </NodeRef>
-              )}
-              {constants && (
-                <NodeRef
-                  id={SOURCES_CONSTANTS_ID}
-                  boundaryId={SOURCES_HEIGHT_BOUNDARY_ID}
-                  overrideWidth={SOURCES_WIDTH_BOUNDARY_ID}
+                        <PlusIcon />
+                      </Button>
+                    </Tooltip>,
+                  ]}
+                  noPadding={!!properties}
                 >
-                  <Document
-                    title={"Constants"}
-                    actions={[
-                      <Tooltip
-                        position={"top"}
-                        enableFlip={true}
-                        content={
-                          <div>Create a constant for use in mapping</div>
-                        }
-                        key={"create-constant"}
+                  {properties ? (
+                    <PropertiesTree
+                      onEditProperty={onEditProperty}
+                      onDeleteProperty={onDeleteProperty}
+                      canDrop={canDrop}
+                      onDrop={onDrop}
+                      onShowMappingDetails={onShowMappingDetails}
+                      canAddToSelectedMapping={canAddToSelectedMapping}
+                      onAddToSelectedMapping={onAddToSelectedMapping}
+                      canRemoveFromSelectedMapping={
+                        canRemoveFromSelectedMapping
+                      }
+                      onRemoveFromSelectedMapping={onRemoveFromSelectedMapping}
+                      fields={properties.fields}
+                      showTypes={showTypes}
+                    />
+                  ) : (
+                    "No properties"
+                  )}
+                </Document>
+              </NodeRef>
+              <NodeRef
+                id={SOURCES_CONSTANTS_ID}
+                boundaryId={SOURCES_HEIGHT_BOUNDARY_ID}
+                overrideWidth={SOURCES_WIDTH_BOUNDARY_ID}
+              >
+                <Document
+                  title={"Constants"}
+                  actions={[
+                    <Tooltip
+                      position={"top"}
+                      enableFlip={true}
+                      content={<div>Create a constant for use in mapping</div>}
+                      key={"create-constant"}
+                    >
+                      <Button
+                        onClick={onCreateProperty}
+                        variant={"plain"}
+                        aria-label="Create a constant for use in mapping"
                       >
-                        <Button
-                          onClick={onCreateProperty}
-                          variant={"plain"}
-                          aria-label="Create a constant for use in mapping"
-                        >
-                          <PlusIcon />
-                        </Button>
-                      </Tooltip>,
-                    ]}
-                  >
-                    <Tree>
-                      <TraverseFields
-                        fields={constants.fields}
-                        showTypes={false}
-                        parentId={SOURCES_CONSTANTS_ID}
-                        boundaryId={SOURCES_HEIGHT_BOUNDARY_ID}
-                        overrideWidth={SOURCES_WIDTH_BOUNDARY_ID}
-                        idPrefix={SOURCES_FIELD_ID_PREFIX}
-                        acceptDropType={TARGETS_DRAGGABLE_TYPE}
-                        draggableType={SOURCES_DRAGGABLE_TYPE}
-                        onDrop={onDrop}
-                        canDrop={canDrop}
-                        renderActions={(field) => [
-                          ...commonActions({
-                            connectedMappings: field.mappings,
-                            onShowMappingDetails,
-                            canAddToSelectedMapping: canAddToSelectedMapping(
-                              field,
-                            ),
-                            onAddToSelectedMapping: () =>
-                              onAddToSelectedMapping(field),
-                            canRemoveFromSelectedMapping: canRemoveFromSelectedMapping(
-                              field,
-                            ),
-                            onRemoveFromSelectedMapping: () =>
-                              onRemoveFromSelectedMapping(field),
-                            onStartMapping: () => void 0,
-                          }),
-                          <Tooltip
-                            key={"edit"}
-                            position={"top"}
-                            enableFlip={true}
-                            content={<div>Edit constant</div>}
-                          >
-                            <Button
-                              variant="plain"
-                              onClick={() => onEditConstant(field.name)}
-                              aria-label={"Edit constant"}
-                              tabIndex={0}
-                            >
-                              <EditIcon />
-                            </Button>
-                          </Tooltip>,
-                          <Tooltip
-                            key={"delete"}
-                            position={"top"}
-                            enableFlip={true}
-                            content={<div>Remove constant</div>}
-                          >
-                            <Button
-                              variant="plain"
-                              onClick={() => onDeleteConstant(field.name)}
-                              aria-label={"Remove constant"}
-                              tabIndex={0}
-                            >
-                              <TrashIcon />
-                            </Button>
-                          </Tooltip>,
-                        ]}
-                      />
-                    </Tree>
-                  </Document>
-                </NodeRef>
-              )}
+                        <PlusIcon />
+                      </Button>
+                    </Tooltip>,
+                  ]}
+                  noPadding={!!constants}
+                >
+                  {constants ? (
+                    <ConstantsTree
+                      onEditConstant={onEditConstant}
+                      onDeleteConstant={onDeleteConstant}
+                      canDrop={canDrop}
+                      onDrop={onDrop}
+                      onShowMappingDetails={onShowMappingDetails}
+                      canAddToSelectedMapping={canAddToSelectedMapping}
+                      onAddToSelectedMapping={onAddToSelectedMapping}
+                      canRemoveFromSelectedMapping={
+                        canRemoveFromSelectedMapping
+                      }
+                      onRemoveFromSelectedMapping={onRemoveFromSelectedMapping}
+                      fields={constants.fields}
+                    />
+                  ) : (
+                    <p>No constants</p>
+                  )}
+                </Document>
+              </NodeRef>
               {sources.map((s) => {
                 const documentId = `${SOURCES_DOCUMENT_ID_PREFIX}${s.id}`;
                 return (
@@ -311,6 +220,7 @@ export const SourcesColumn: FunctionComponent<
                           key={"delete-document"}
                         />,
                       ]}
+                      noPadding={true}
                     >
                       <Tree>
                         <TraverseFields

@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     height: "36px",
+    paddingLeft: "1rem",
   },
   searchRow: {
     margin: "1rem calc(2rem + 10px) 0 2rem",
