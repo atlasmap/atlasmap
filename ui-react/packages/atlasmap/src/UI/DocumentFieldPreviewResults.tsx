@@ -3,7 +3,10 @@ import React, { FunctionComponent } from "react";
 import { css, StyleSheet } from "@patternfly/react-styles";
 
 const styles = StyleSheet.create({
-  form: { marginTop: "0.5rem" },
+  form: {
+    padding: "1rem",
+    marginTop: "0.5rem",
+  },
 });
 
 export interface IDocumentFieldPreviewResultsProps {

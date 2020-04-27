@@ -11,6 +11,7 @@ import {
   NodeRef,
   SearchableColumnHeader,
   Tree,
+  DocumentFieldPreview,
 } from "../../../UI";
 import {
   IAtlasmapDocument,
@@ -36,7 +37,7 @@ import {
 } from "./constants";
 import { TraverseFields } from "./TraverseFields";
 
-export interface ISourceColumnEvents {
+export interface ISourceColumnCallbacks {
   onCreateConstant: () => void;
   onEditConstant: (value: string) => void;
   onDeleteConstant: (value: string) => void;
@@ -54,6 +55,8 @@ export interface ISourceColumnEvents {
   onAddToSelectedMapping: (source: IAtlasmapField) => void;
   canRemoveFromSelectedMapping: (source: IAtlasmapField) => boolean;
   onRemoveFromSelectedMapping: (source: IAtlasmapField) => void;
+  shouldShowMappingPreviewForField: (field: IAtlasmapField) => boolean;
+  onFieldPreviewChange: (field: IAtlasmapField, value: string) => void;
 }
 
 export interface ISourcesColumnData {
@@ -64,7 +67,7 @@ export interface ISourcesColumnData {
 }
 
 export const SourcesColumn: FunctionComponent<
-  ISourcesColumnData & ISourceColumnEvents
+  ISourcesColumnData & ISourceColumnCallbacks
 > = ({
   onCreateConstant,
   onEditConstant,
@@ -83,6 +86,8 @@ export const SourcesColumn: FunctionComponent<
   onAddToSelectedMapping,
   canRemoveFromSelectedMapping,
   onRemoveFromSelectedMapping,
+  shouldShowMappingPreviewForField,
+  onFieldPreviewChange,
   properties,
   constants,
   sources,
@@ -335,6 +340,17 @@ export const SourcesColumn: FunctionComponent<
                                 onRemoveFromSelectedMapping(field),
                               onStartMapping: () => void 0,
                             })
+                          }
+                          renderPreview={(field) =>
+                            shouldShowMappingPreviewForField(field) && (
+                              <DocumentFieldPreview
+                                id={field.id}
+                                value={field.previewValue}
+                                onChange={(value) =>
+                                  onFieldPreviewChange(field, value)
+                                }
+                              />
+                            )
                           }
                         />
                       </Tree>

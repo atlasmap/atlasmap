@@ -37,6 +37,8 @@ export const sourcesColumn = () => (
         onAddToSelectedMapping={action("onAddToSelectedMapping")}
         canRemoveFromSelectedMapping={() => true}
         onRemoveFromSelectedMapping={action("onRemoveFromSelectedMapping")}
+        shouldShowMappingPreviewForField={() => true}
+        onFieldPreviewChange={action("onFieldPreviewChange")}
         canDrop={() => true}
         onDrop={action("onDrop")}
         onSearch={action("onSearch")}
@@ -64,6 +66,7 @@ export const targetsColumn = () => (
         onAddToSelectedMapping={action("onAddToSelectedMapping")}
         canRemoveFromSelectedMapping={() => true}
         onRemoveFromSelectedMapping={action("onRemoveFromSelectedMapping")}
+        shouldShowMappingPreviewForField={() => true}
         showMappingPreview={boolean("Show mapping preview", false)}
         showTypes={boolean("Show types", true)}
         targets={targets}

@@ -16,6 +16,9 @@ export interface IAtlasmapField {
   hasTransformations: boolean;
   isCollection: boolean;
   isConnected: boolean;
+
+  // TODO: find a way to remove this maybe?
+  amField: Field;
 }
 
 export interface IAtlasmapGroup {
@@ -24,6 +27,9 @@ export interface IAtlasmapGroup {
   name: string;
   type: string;
   isCollection: boolean;
+
+  // TODO: find a way to remove this maybe?
+  amField: Field;
 }
 
 export interface IAtlasmapDocument {
@@ -31,24 +37,6 @@ export interface IAtlasmapDocument {
   name: string;
   type: string;
   fields: AtlasmapFields;
-}
-
-export interface IAtlasmapGroupWithField extends IAtlasmapGroup {
-  id: string;
-  name: string;
-  type: string;
-  isCollection: boolean;
-  fields: IAtlasmapFieldWithField[];
-  amField: Field;
-}
-
-export interface IAtlasmapFieldWithField extends IAtlasmapField {
-  id: string;
-  name: string;
-  type: string;
-  isCollection: boolean;
-  amField: Field;
-  previewValue: string;
 }
 
 export interface IAtlasmapMappedField extends IAtlasmapField {

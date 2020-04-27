@@ -4,12 +4,12 @@ import { Column, ColumnMapper, Columns, NodeRefProvider } from "../UI";
 import {
   IMappingDocumentEvents,
   IMappingsColumnData,
-  ISourceColumnEvents,
+  ISourceColumnCallbacks,
   ISourceMappingTargetLinksData,
   ISourceMappingTargetLinksEvents,
   ISourcesColumnData,
   ITargetsColumnData,
-  ITargetsColumnEvents,
+  ITargetsColumnCallbacks,
   MappingsColumn,
   SourceMappingTargetLinks,
   SourcesColumn,
@@ -24,9 +24,9 @@ export interface ISourceMappingTargetViewProps
     ISourceMappingTargetLinksData {
   onSelectMapping: ISourceMappingTargetLinksEvents["onSelectMapping"];
   onDeselectMapping: () => void;
-  sourceEvents: ISourceColumnEvents;
+  sourceEvents: ISourceColumnCallbacks;
   mappingEvents: IMappingDocumentEvents;
-  targetEvents: ITargetsColumnEvents;
+  targetEvents: ITargetsColumnCallbacks;
 }
 
 export const SourceMappingTargetView: FunctionComponent<ISourceMappingTargetViewProps> = ({

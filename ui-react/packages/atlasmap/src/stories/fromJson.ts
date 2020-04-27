@@ -69,6 +69,7 @@ export function jsonToFieldGroup(
           jf.name.startsWith("c")),
       isCollection: jf.collectionType === "LIST",
       isConnected: false,
+      amField: {} as IAtlasmapField["amField"],
     };
   };
   const fromGroup = (f: Field): IAtlasmapGroup => ({
@@ -79,6 +80,7 @@ export function jsonToFieldGroup(
       f.jsonFields ? fromGroup(f as Field) : fromElement(f),
     ),
     isCollection: false,
+    amField: {} as IAtlasmapField["amField"],
   });
 
   return json.JsonInspectionResponse.jsonDocument.fields.field.map(fromGroup);

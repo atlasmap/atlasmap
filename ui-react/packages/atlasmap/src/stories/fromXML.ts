@@ -83,6 +83,7 @@ export function xmlToFieldGroup(
           jf.name.startsWith("c")),
       isCollection: jf.collectionType === "LIST",
       isConnected: false,
+      amField: {} as IAtlasmapField["amField"],
     };
   };
   const fromGroup = (f: Field): IAtlasmapGroup => ({
@@ -93,6 +94,7 @@ export function xmlToFieldGroup(
       f.xmlFields ? fromGroup(f as Field) : fromElement(f),
     ),
     isCollection: false,
+    amField: {} as IAtlasmapField["amField"],
   });
 
   return xml.XmlInspectionResponse.xmlDocument.fields.field.map((f) =>
