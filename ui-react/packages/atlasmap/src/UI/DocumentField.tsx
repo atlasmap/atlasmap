@@ -1,17 +1,14 @@
 import React, {
   forwardRef,
   PropsWithChildren,
-  ReactElement,
-  useEffect,
-  useRef,
   ReactChild,
+  ReactElement,
 } from "react";
 
 import { css, StyleSheet } from "@patternfly/react-styles";
 
-import { useDocumentFocus } from "./DocumentFocusProvider";
-import { useToggle } from "./useToggle";
 import { FieldName } from "./FieldName";
+import { useToggle } from "./useToggle";
 
 const styles = StyleSheet.create({
   element: {
@@ -65,9 +62,7 @@ export interface IDocumentFieldProps {
   actions?: (ReactElement | null)[];
   showType?: boolean;
   isDragging?: boolean;
-  level: number;
-  setSize: number;
-  position: number;
+  isFocused?: boolean;
 }
 
 export const DocumentField = forwardRef<
@@ -83,9 +78,7 @@ export const DocumentField = forwardRef<
       actions,
       showType = false,
       isDragging = false,
-      level,
-      setSize,
-      position,
+      isFocused = false,
       children,
     },
     ref,
@@ -95,59 +88,27 @@ export const DocumentField = forwardRef<
       toggleOff: hideActions,
       toggleOn: showActions,
     } = useToggle(false);
-    const divRef = useRef<HTMLDivElement | null>(null);
-    const { focused, handlers: focusHandlers } = useDocumentFocus({
-      ref: divRef,
-    });
-    const nameRef = useRef<HTMLDivElement | null>(null);
-    useEffect(() => {
-      if (isDragging && nameRef.current) {
-        nameRef.current.focus();
-      }
-    }, [isDragging, nameRef]);
-    const handleRef = (el: HTMLDivElement | null) => {
-      divRef.current = el;
-      if (ref) {
-        if (typeof ref === "function") {
-          ref(el);
-        } else {
-          // @ts-ignore
-          ref.current = el;
-        }
-      }
-    };
     return (
       <div
-        ref={handleRef}
-        role={"treeitem"}
-        aria-level={level}
-        aria-setsize={setSize}
-        aria-posinset={position}
-        {...focusHandlers}
+        ref={ref}
+        className={css(styles.element, isDragging && styles.isDragging)}
         onMouseEnter={showActions}
         onMouseLeave={hideActions}
       >
-        <div
-          ref={nameRef}
-          className={css(styles.element, isDragging && styles.isDragging)}
-        >
-          <div className={css(styles.row)}>
-            {icon && <div className={css(styles.nameIcon)}>{icon}</div>}
-            <div className={css(styles.nameWrapper)}>
-              <FieldName>{name}</FieldName>
-              <span>{showType && ` (${type})`}</span>
-              <span className={styles.statusIcons}>
-                {statusIcons && statusIcons?.filter((a) => a)}
-              </span>
-            </div>
+        <div className={css(styles.row)}>
+          {icon && <div className={css(styles.nameIcon)}>{icon}</div>}
+          <div className={css(styles.nameWrapper)}>
+            <FieldName>{name}</FieldName>
+            <span>{showType && ` (${type})`}</span>
+            <span className={styles.statusIcons}>
+              {statusIcons && statusIcons?.filter((a) => a)}
+            </span>
           </div>
-          {(isHovering || focused) && actions && (
-            <div className={css(styles.actions)}>
-              {actions?.filter((a) => a)}
-            </div>
-          )}
-          {children}
         </div>
+        {(isHovering || isFocused) && actions && (
+          <div className={css(styles.actions)}>{actions?.filter((a) => a)}</div>
+        )}
+        {children}
       </div>
     );
   },

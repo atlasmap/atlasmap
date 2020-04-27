@@ -18,6 +18,8 @@ import {
   IDocumentFieldProps,
   IDragAndDropField,
   NodeRef,
+  TreeGroup,
+  TreeItem,
 } from "../../../UI";
 import {
   AtlasmapDocumentType,
@@ -53,8 +55,8 @@ export const TraverseFields: FunctionComponent<ITraverseFields> = ({
 };
 
 export interface IFieldOrGroupProps
-  extends Omit<Omit<IFieldProps, "field">, "fieldId">,
-    Omit<Omit<IGroupProps, "group">, "fieldId"> {
+  extends Omit<Omit<ITreeItemFieldAndNodeRefsAndDnDProps, "field">, "fieldId">,
+    Omit<Omit<ITreeGroupAndNodeRefsAndDnDProps, "group">, "fieldId"> {
   idPrefix: string;
   field: IAtlasmapGroup | IAtlasmapField;
 }
@@ -70,7 +72,12 @@ const FieldOrGroup: FunctionComponent<IFieldOrGroupProps> = ({
   const maybeField = field as IAtlasmapField;
   if (maybeGroup.fields) {
     return (
-      <Group fieldId={fieldId} group={maybeGroup} level={level} {...props}>
+      <TreeGroupAndNodeRefsAndDnD
+        fieldId={fieldId}
+        group={maybeGroup}
+        level={level}
+        {...props}
+      >
         <TraverseFields
           {
             ...props /* spreading the props must be done before everything else so to override the values fed to the Group */
@@ -80,15 +87,20 @@ const FieldOrGroup: FunctionComponent<IFieldOrGroupProps> = ({
           level={level + 1}
           idPrefix={idPrefix}
         />
-      </Group>
+      </TreeGroupAndNodeRefsAndDnD>
     );
   }
   return (
-    <Field fieldId={fieldId} field={maybeField} level={level} {...props} />
+    <TreeItemWithFieldAndNodeRefsAndDnD
+      fieldId={fieldId}
+      field={maybeField}
+      level={level}
+      {...props}
+    />
   );
 };
 
-interface IGroupProps {
+interface ITreeGroupAndNodeRefsAndDnDProps {
   fieldId: string;
   group: IAtlasmapGroup;
   showTypes: boolean;
@@ -102,7 +114,7 @@ interface IGroupProps {
   setSize?: number;
 }
 
-const Group: FunctionComponent<IGroupProps> = ({
+const TreeGroupAndNodeRefsAndDnD: FunctionComponent<ITreeGroupAndNodeRefsAndDnDProps> = ({
   fieldId,
   group,
   showTypes,
@@ -135,19 +147,23 @@ const Group: FunctionComponent<IGroupProps> = ({
             boundaryId={boundaryId}
             overrideWidth={overrideWidth}
           >
-            <DocumentGroup
+            <TreeGroup
               id={fieldId}
-              name={group.name}
-              type={group.type}
-              showType={showTypes}
-              icon={group.isCollection ? <LayerGroupIcon /> : undefined}
-              expanded={isOver ? true : undefined}
               level={level}
               position={position}
               setSize={setSize}
+              renderLabel={({ expanded }) => (
+                <DocumentGroup
+                  name={group.name}
+                  type={group.type}
+                  showType={showTypes}
+                  icon={group.isCollection ? <LayerGroupIcon /> : undefined}
+                  expanded={isOver || expanded}
+                />
+              )}
             >
-              {children}
-            </DocumentGroup>
+              {() => children}
+            </TreeGroup>
           </NodeRef>
         )}
       </DelayedBoolean>
@@ -155,7 +171,7 @@ const Group: FunctionComponent<IGroupProps> = ({
   </FieldDropTarget>
 );
 
-interface IFieldProps {
+interface ITreeItemFieldAndNodeRefsAndDnDProps {
   fieldId: string;
   field: IAtlasmapField;
   showTypes: boolean;
@@ -172,7 +188,7 @@ interface IFieldProps {
   onDrop: (source: IAtlasmapField, target: IDragAndDropField) => void;
 }
 
-const Field: FunctionComponent<IFieldProps> = ({
+const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent<ITreeItemFieldAndNodeRefsAndDnDProps> = ({
   fieldId,
   field,
   showTypes,
@@ -220,76 +236,82 @@ const Field: FunctionComponent<IFieldProps> = ({
             boundaryId={boundaryId}
             overrideWidth={overrideWidth}
           >
-            <DocumentField
-              name={field.name}
-              icon={
-                isDroppable || isTarget ? (
-                  <Button
-                    variant={isTarget ? "link" : "plain"}
-                    tabIndex={-1}
-                    aria-label={"Drop target"}
-                    isDisabled={!isDroppable}
-                  >
-                    <BullseyeIcon size="sm" />
-                  </Button>
-                ) : (
-                  <Button variant={"plain"} tabIndex={-1} aria-hidden={true}>
-                    <GripVerticalIcon />
-                  </Button>
-                )
-              }
-              type={field.type}
-              showType={showTypes}
-              isDragging={isDragging}
-              level={level}
-              position={position}
-              setSize={setSize}
-              statusIcons={[
-                field.isConnected ? (
-                  <Tooltip
-                    key="connected"
-                    position={"auto"}
-                    enableFlip={true}
-                    content={<div>This field is connected</div>}
-                  >
-                    <CircleIcon
-                      label={"This field is connected"}
-                      size="sm"
-                      tabIndex={-1}
-                    />
-                  </Tooltip>
-                ) : null,
-                field.isCollection ? (
-                  <Tooltip
-                    key={"collection"}
-                    position={"auto"}
-                    enableFlip={true}
-                    content={<div>This field is a collection</div>}
-                  >
-                    <LayerGroupIcon
-                      label={"This field is a collection"}
-                      size="sm"
-                      tabIndex={-1}
-                    />
-                  </Tooltip>
-                ) : null,
-                field.hasTransformations ? (
-                  <Tooltip
-                    key={"transformations"}
-                    position={"auto"}
-                    enableFlip={true}
-                    content={<div>This field has transformations</div>}
-                  >
-                    <BoltIcon
-                      label={"This field has transformations"}
-                      size="sm"
-                      tabIndex={-1}
-                    />
-                  </Tooltip>
-                ) : null,
-              ]}
-              actions={renderActions(field)}
-            />
+            <TreeItem level={level} position={position} setSize={setSize}>
+              {({ focused }) => (
+                <DocumentField
+                  name={field.name}
+                  icon={
+                    isDroppable || isTarget ? (
+                      <Button
+                        variant={isTarget ? "link" : "plain"}
+                        tabIndex={-1}
+                        aria-label={"Drop target"}
+                        isDisabled={!isDroppable}
+                      >
+                        <BullseyeIcon size="sm" />
+                      </Button>
+                    ) : (
+                      <Button
+                        variant={"plain"}
+                        tabIndex={-1}
+                        aria-hidden={true}
+                      >
+                        <GripVerticalIcon />
+                      </Button>
+                    )
+                  }
+                  type={field.type}
+                  showType={showTypes}
+                  isDragging={isDragging}
+                  isFocused={focused}
+                  statusIcons={[
+                    field.isConnected ? (
+                      <Tooltip
+                        key="connected"
+                        position={"auto"}
+                        enableFlip={true}
+                        content={<div>This field is connected</div>}
+                      >
+                        <CircleIcon
+                          label={"This field is connected"}
+                          size="sm"
+                          tabIndex={-1}
+                        />
+                      </Tooltip>
+                    ) : null,
+                    field.isCollection ? (
+                      <Tooltip
+                        key={"collection"}
+                        position={"auto"}
+                        enableFlip={true}
+                        content={<div>This field is a collection</div>}
+                      >
+                        <LayerGroupIcon
+                          label={"This field is a collection"}
+                          size="sm"
+                          tabIndex={-1}
+                        />
+                      </Tooltip>
+                    ) : null,
+                    field.hasTransformations ? (
+                      <Tooltip
+                        key={"transformations"}
+                        position={"auto"}
+                        enableFlip={true}
+                        content={<div>This field has transformations</div>}
+                      >
+                        <BoltIcon
+                          label={"This field has transformations"}
+                          size="sm"
+                          tabIndex={-1}
+                        />
+                      </Tooltip>
+                    ) : null,
+                  ]}
+                  actions={renderActions(field)}
+                />
+              )}
+            </TreeItem>
           </NodeRef>
         )}
       </DraggableField>

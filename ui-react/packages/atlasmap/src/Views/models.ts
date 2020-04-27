@@ -1,12 +1,14 @@
 import { Field, MappedField, MappingModel } from "@atlasmap/core";
 
-import { IFieldsGroup, IFieldsNode, IMapping } from "../UI";
+export type ElementId = string;
+export type GroupId = string;
 
 export type AtlasmapDocumentType = "source" | "target";
 
 export type AtlasmapFields = Array<IAtlasmapGroup | IAtlasmapField>;
 
-export interface IAtlasmapField extends IFieldsNode {
+export interface IAtlasmapField {
+  id: ElementId;
   name: string;
   type: string;
   previewValue: string;
@@ -16,7 +18,9 @@ export interface IAtlasmapField extends IFieldsNode {
   isConnected: boolean;
 }
 
-export interface IAtlasmapGroup extends IFieldsGroup {
+export interface IAtlasmapGroup {
+  id: GroupId;
+  fields: (IAtlasmapField | IAtlasmapGroup)[];
   name: string;
   type: string;
   isCollection: boolean;
@@ -51,7 +55,9 @@ export interface IAtlasmapMappedField extends IAtlasmapField {
   mappedField: MappedField;
 }
 
-export interface IAtlasmapMapping extends IMapping {
+export interface IAtlasmapMapping {
+  id: string;
+  name: string;
   sourceFields: Array<IAtlasmapField>;
   targetFields: Array<IAtlasmapField>;
   mapping: MappingModel;

@@ -12,8 +12,7 @@ import { css, StyleSheet } from "@patternfly/react-styles";
 import { Table, TableBody, TableHeader } from "@patternfly/react-table";
 
 import { MainContent } from "../Layout";
-import { IMapping } from "../UI";
-import { IAtlasmapField } from "../Views";
+import { IAtlasmapField, IAtlasmapMapping } from "../Views";
 
 const emptyContent = [
   {
@@ -41,7 +40,7 @@ const styles = StyleSheet.create({
 });
 
 export interface IMappingTableProps {
-  mappings: IMapping[];
+  mappings: IAtlasmapMapping[];
 }
 
 export const MappingTableView: FunctionComponent<IMappingTableProps> = ({

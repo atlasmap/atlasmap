@@ -1,0 +1,60 @@
+import { Meta, Story, Props } from "@storybook/addon-docs/blocks";
+import { example as treeExample } from "./Tree.stories.tsx";
+import { Tree, TreeGroup, TreeItem } from ".";
+
+<Meta title="UI|Tree" component={Tree} />
+
+# Tree
+
+<Story name="Tree">{treeExample()}</Story>
+
+## Keyboard Support
+
+### Enter or Space
+
+Performs the default action (e.g. onclick event) for the focused node.
+In this example, the default action is to update the File or Folder Selected textbox.
+
+### Down arrow
+
+Moves focus to the next node that is focusable without opening or closing a node.
+If focus is on the last node, does nothing.
+
+### Up arrow
+
+Moves focus to the previous node that is focusable without opening or closing a node.
+If focus is on the first node, does nothing.
+
+### Right Arrow
+
+When focus is on a closed node, opens the node; focus does not move.
+When focus is on a open node, moves focus to the first child node.
+When focus is on an end node, does nothing.
+
+### Left Arrow
+
+When focus is on an open node, closes the node.
+When focus is on a child node that is also either an end node or a closed node, moves focus to its parent node.
+When focus is on a root node that is also either an end node or a closed node, does nothing.
+
+### Home
+
+Moves focus to first node without opening or closing a node.
+
+### End
+
+Moves focus to the last node that can be focused without expanding any nodes that are closed.
+
+## Props
+
+### Tree
+
+<Props of={Tree} />
+
+### TreeGroup
+
+<Props of={TreeGroup} />
+
+### TreeItem
+
+<Props of={TreeItem} />
