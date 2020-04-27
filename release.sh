@@ -95,10 +95,6 @@ echo "=========================================================="
                -DdevelopmentVersion=${DEVELOPMENT_VERSION} \
                release:perform
 
-# Push the branch release changes and the tag.
-git push origin HEAD
-git push origin atlasmap-${RELEASE_VERSION}
-
 # tag the major/minor version and docker push it
 echo "=========================================================="
 echo "Pushing docker images to Docker Hub...."
@@ -122,12 +118,19 @@ pushd ui/dist/lib
 npm version ${RELEASE_VERSION}
 npm publish
 popd
-pushd ui-react/packages/atlasmap-core
-yarn publish --new-version ${RELEASE_VERSION} --access public
+
+pushd ui-react
+CURRENT_BRANCH=$(git branch --show-current)
+git checkout tags/atlasmap-${RELEASE_VERSION}
+./node_modules/.bin/lerna version --no-push --amend -y ${RELEASE_VERSION}
+./node_modules/.bin/lerna publish from-package -y
+git tag -f atlasmap-${RELEASE_VERSION}
+git push origin atlasmap-${RELEASE_VERSION}
+git checkout ${CURRENT_BRANCH}
+./node_modules/.bin/lerna version --no-push --amend -y ${DEVELOPMENT_VERSION}
+git push origin ${CURRENT_BRANCH}
 popd
-pushd ui-react/packages/atlasmap-ui
-yarn publish --new-version ${RELEASE_VERSION} --access public
-popd
+
 
 # For some reason following no longer works... instead run manually ./node_modules/.bin/gren release --tags atlasmap-${RELEASE_VERSION}..${PREVIOUS_VERSION} --override 
 # echo "=========================================================="
