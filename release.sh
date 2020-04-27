@@ -124,13 +124,13 @@ git checkout .
 pushd ui-react
 CURRENT_BRANCH=$(git branch --show-current)
 git checkout tags/atlasmap-${RELEASE_VERSION} -b temp-${RELEASE_VERSION}
-./node_modules/.bin/lerna version -m "chore: Set NPM package version to ${RELEASE_VERSION}" --no-push --force-publish --amend -y ${RELEASE_VERSION}
+./node_modules/.bin/lerna version --no-push --force-publish --amend -y ${RELEASE_VERSION}
 ./node_modules/.bin/lerna publish from-package -y
 git tag -f atlasmap-${RELEASE_VERSION}
 git push origin atlasmap-${RELEASE_VERSION}
 git checkout ${CURRENT_BRANCH}
 git branch -D temp-${RELEASE_VERSION}
-./node_modules/.bin/lerna version -m "chore: Set NPM package version to ${DEVELOPMENT_VERSION}" --no-push --force-publish --amend -y ${DEVELOPMENT_VERSION}
+./node_modules/.bin/lerna version --no-push --force-publish --amend -y ${DEVELOPMENT_VERSION}
 git push origin ${CURRENT_BRANCH}
 popd
 
