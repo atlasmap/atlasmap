@@ -1,8 +1,11 @@
 {
   "name": "@atlasmap/core",
   "description": "",
-  "version": "2.0.0",
+  "version": "2.0.0-SNAPSHOT",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/index.js",
   "module": "dist/atlasmap-core.esm.js",
   "typings": "dist/index.d.ts",

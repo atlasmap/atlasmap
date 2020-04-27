@@ -1,8 +1,11 @@
 {
   "name": "@atlasmap/atlasmap",
   "description": "",
-  "version": "2.0.0",
+  "version": "2.0.0-SNAPSHOT",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/index.js",
   "module": "dist/atlasmap.esm.js",
   "typings": "dist/index.d.ts",
@@ -26,7 +29,7 @@
     }
   },
   "dependencies": {
-    "@atlasmap/core": ">=2"
+    "@atlasmap/core": "^2.0.0-SNAPSHOT"
   },
   "peerDependencies": {
     "@patternfly/react-core": "^3.77.2",
