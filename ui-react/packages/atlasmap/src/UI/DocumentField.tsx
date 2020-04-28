@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     "--bg-color-fade": "rgba(255, 255, 255, 0.5))",
   },
   row: {
-    padding: "0 1rem",
+    // padding: "0 1rem",
     display: "flex",
     position: "relative",
   },

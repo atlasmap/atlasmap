@@ -10,12 +10,12 @@ import {
   TreeGroupAndNodeRefsAndDnD,
 } from "./TreeGroupAndNodeRefsAndDnD";
 
-export interface ITraverseFields
+export interface ITraverseFieldsProps
   extends Omit<Omit<IFieldOrGroupProps, "field">, "fieldId"> {
   fields: AtlasmapFields;
 }
 
-export const TraverseFields: FunctionComponent<ITraverseFields> = ({
+export const TraverseFields: FunctionComponent<ITraverseFieldsProps> = ({
   fields,
   idPrefix,
   ...props

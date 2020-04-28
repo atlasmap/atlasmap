@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   head: {
     paddingRight: "0 !important",
   },
-  body: {
+  noPadding: {
     padding: "0 !important",
   },
   hidden: {
@@ -55,6 +55,7 @@ export interface IDocumentProps
   dropAccepted?: boolean;
   stacked?: boolean;
   scrollIntoView?: boolean;
+  noPadding?: boolean;
   onSelect?: () => void;
   onDeselect?: () => void;
 }
@@ -75,6 +76,7 @@ export const Document = forwardRef<
       stacked = true,
       selectable = false,
       scrollIntoView = false,
+      noPadding = false,
       onSelect,
       onDeselect,
       children,
@@ -144,7 +146,9 @@ export const Document = forwardRef<
               )}
             </CardHead>
           )}
-          <CardBody className={css(styles.body)}>{children}</CardBody>
+          <CardBody className={css(noPadding && styles.noPadding)}>
+            {children}
+          </CardBody>
           {footer}
         </Card>
       </div>
