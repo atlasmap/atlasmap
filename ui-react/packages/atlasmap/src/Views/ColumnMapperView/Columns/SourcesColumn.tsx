@@ -118,13 +118,13 @@ export const SourcesColumn: FunctionComponent<
                     <Tooltip
                       position={"top"}
                       enableFlip={true}
-                      content={<div>Create a constant for use in mapping</div>}
-                      key={"create-constant"}
+                      content={<div>Create a property for use in mapping</div>}
+                      key={"create-property"}
                     >
                       <Button
-                        onClick={onCreateConstant}
+                        onClick={onCreateProperty}
                         variant={"plain"}
-                        aria-label="Create a constant for use in mapping"
+                        aria-label="Create a property for use in mapping"
                       >
                         <PlusIcon />
                       </Button>
@@ -168,7 +168,7 @@ export const SourcesColumn: FunctionComponent<
                       key={"create-constant"}
                     >
                       <Button
-                        onClick={onCreateProperty}
+                        onClick={onCreateConstant}
                         variant={"plain"}
                         aria-label="Create a constant for use in mapping"
                       >
