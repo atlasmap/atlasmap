@@ -30,6 +30,8 @@ export interface IPropertiesTreeCallbacks {
   onRemoveFromSelectedMapping: (source: IAtlasmapField) => void;
   onEditProperty: (name: string) => void;
   onDeleteProperty: (name: string) => void;
+  canStartMapping: (field: IAtlasmapField) => boolean;
+  onStartMapping: (field: IAtlasmapField) => void;
 }
 
 export interface IPropertiesTreeProps extends IPropertiesTreeCallbacks {
@@ -49,6 +51,8 @@ export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
   onRemoveFromSelectedMapping,
   onEditProperty,
   onDeleteProperty,
+  canStartMapping,
+  onStartMapping,
 }) => (
   <Tree>
     <TraverseFields
@@ -70,7 +74,8 @@ export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
           onAddToSelectedMapping: () => onAddToSelectedMapping(field),
           canRemoveFromSelectedMapping: canRemoveFromSelectedMapping(field),
           onRemoveFromSelectedMapping: () => onRemoveFromSelectedMapping(field),
-          onStartMapping: () => void 0,
+          canStartMapping: canStartMapping(field),
+          onStartMapping: () => onStartMapping(field),
         }),
         <Tooltip
           key={"edit"}

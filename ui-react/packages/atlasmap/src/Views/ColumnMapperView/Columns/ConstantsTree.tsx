@@ -30,6 +30,8 @@ export interface IConstantsTreeCallbacks {
   onRemoveFromSelectedMapping: (source: IAtlasmapField) => void;
   onEditConstant: (value: string) => void;
   onDeleteConstant: (value: string) => void;
+  canStartMapping: (field: IAtlasmapField) => boolean;
+  onStartMapping: (field: IAtlasmapField) => void;
 }
 
 export interface IConstantsTreeProps extends IConstantsTreeCallbacks {
@@ -47,6 +49,8 @@ export const ConstantsTree: FunctionComponent<IConstantsTreeProps> = ({
   onRemoveFromSelectedMapping,
   onEditConstant,
   onDeleteConstant,
+  canStartMapping,
+  onStartMapping,
 }) => (
   <Tree>
     <TraverseFields
@@ -68,7 +72,8 @@ export const ConstantsTree: FunctionComponent<IConstantsTreeProps> = ({
           onAddToSelectedMapping: () => onAddToSelectedMapping(field),
           canRemoveFromSelectedMapping: canRemoveFromSelectedMapping(field),
           onRemoveFromSelectedMapping: () => onRemoveFromSelectedMapping(field),
-          onStartMapping: () => void 0,
+          canStartMapping: canStartMapping(field),
+          onStartMapping: () => onStartMapping(field),
         }),
         <Tooltip
           key={"edit"}

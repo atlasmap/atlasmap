@@ -194,13 +194,6 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     [handleDeleteDocument],
   );
 
-  // const handleFieldPreviewChange = useCallback(
-  //   (field: IAtlasmapField, value: string) => {
-  //     onFieldPreviewChange(field as IAtlasmapField, value);
-  //   },
-  //   [onFieldPreviewChange],
-  // );
-
   const handleAddToMapping = useCallback((node: IAtlasmapField) => {
     const field = (node as IAtlasmapField).amField;
     addToCurrentMapping(field);
@@ -212,9 +205,12 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   }, []);
 
   const handleCreateMapping = useCallback(
-    (source: IAtlasmapField, target: IAtlasmapField) => {
-      const sourceField = (source as IAtlasmapField).amField;
-      const targetField = (target as IAtlasmapField).amField;
+    (
+      source: IAtlasmapField | undefined,
+      target: IAtlasmapField | undefined,
+    ) => {
+      const sourceField = (source as IAtlasmapField | undefined)?.amField;
+      const targetField = (target as IAtlasmapField | undefined)?.amField;
       createMapping(sourceField, targetField);
     },
     [createMapping],
@@ -313,6 +309,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onSearch: setSourceFilter,
       shouldShowMappingPreviewForField,
       onFieldPreviewChange,
+      canStartMapping: () => true, // TODO: check that there is at least one target field unmapped and compatible
+      onStartMapping: (field) => handleCreateMapping(field, undefined),
     }),
     [
       selectMapping,
@@ -350,6 +348,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onSearch: setTargetFilter,
       shouldShowMappingPreviewForField,
       onFieldPreviewChange,
+      canStartMapping: (field) => !field.isConnected,
+      onStartMapping: (field) => handleCreateMapping(undefined, field),
     }),
     [
       selectMapping,

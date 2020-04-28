@@ -51,6 +51,8 @@ export const sourceMappingTargetView = () =>
             canRemoveFromSelectedMapping: (item) =>
               !!selectedMappingId &&
               !!item.mappings.find((m) => m.id === selectedMappingId),
+            canStartMapping: () => true,
+            onStartMapping: action("onStartMapping"),
             shouldShowMappingPreviewForField: () => true,
             onFieldPreviewChange: action("onFieldPreviewChange"),
           }}
@@ -70,6 +72,8 @@ export const sourceMappingTargetView = () =>
             canRemoveFromSelectedMapping: (item) =>
               !!selectedMappingId &&
               !!item.mappings.find((m) => m.id === selectedMappingId),
+            canStartMapping: () => true,
+            onStartMapping: action("onStartMapping"),
             shouldShowMappingPreviewForField: () => true,
           }}
           mappingEvents={{

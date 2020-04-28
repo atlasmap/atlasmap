@@ -54,6 +54,8 @@ export interface ISourceColumnCallbacks
   canAddToSelectedMapping: (source: IAtlasmapField) => boolean;
   onAddToSelectedMapping: (source: IAtlasmapField) => void;
   canRemoveFromSelectedMapping: (source: IAtlasmapField) => boolean;
+  canStartMapping: (field: IAtlasmapField) => boolean;
+  onStartMapping: (field: IAtlasmapField) => void;
   onRemoveFromSelectedMapping: (source: IAtlasmapField) => void;
   shouldShowMappingPreviewForField: (field: IAtlasmapField) => boolean;
   onFieldPreviewChange: (field: IAtlasmapField, value: string) => void;
@@ -86,6 +88,8 @@ export const SourcesColumn: FunctionComponent<
   onAddToSelectedMapping,
   canRemoveFromSelectedMapping,
   onRemoveFromSelectedMapping,
+  canStartMapping,
+  onStartMapping,
   shouldShowMappingPreviewForField,
   onFieldPreviewChange,
   properties,
@@ -145,6 +149,8 @@ export const SourcesColumn: FunctionComponent<
                         canRemoveFromSelectedMapping
                       }
                       onRemoveFromSelectedMapping={onRemoveFromSelectedMapping}
+                      canStartMapping={canStartMapping}
+                      onStartMapping={onStartMapping}
                       fields={properties.fields}
                       showTypes={showTypes}
                     />
@@ -191,6 +197,8 @@ export const SourcesColumn: FunctionComponent<
                         canRemoveFromSelectedMapping
                       }
                       onRemoveFromSelectedMapping={onRemoveFromSelectedMapping}
+                      canStartMapping={canStartMapping}
+                      onStartMapping={onStartMapping}
                       fields={constants.fields}
                     />
                   ) : (
@@ -248,7 +256,8 @@ export const SourcesColumn: FunctionComponent<
                               ),
                               onRemoveFromSelectedMapping: () =>
                                 onRemoveFromSelectedMapping(field),
-                              onStartMapping: () => void 0,
+                              canStartMapping: canStartMapping(field),
+                              onStartMapping: () => onStartMapping(field),
                             })
                           }
                           renderPreview={(field) =>
