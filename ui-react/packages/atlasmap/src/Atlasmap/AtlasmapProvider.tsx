@@ -356,7 +356,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   }, []);
 
   const isMappingExpressionEmpty =
-    initializationService.cfg.mappings?.activeMapping?.transition.expression
+    initializationService.cfg.mappings?.activeMapping?.transition?.expression
       ?.nodes.length === 0;
 
   return (
@@ -380,6 +380,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
         onConditionalMappingExpressionEnabled,
 
         currentMappingExpression: MappingUtil.getMappingExpressionStr(
+          true,
           initializationService.cfg.mappings?.activeMapping,
         ),
         getMappingExpression,

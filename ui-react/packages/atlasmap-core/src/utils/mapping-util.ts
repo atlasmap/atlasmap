@@ -252,7 +252,15 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
     return !!(cfg?.mappings?.activeMapping);
   }
 
-  static getMappingExpressionStr(mapping?: any): string {
+  /**
+   * Return a string, in either text or HTML form, representing the
+   * expression mapping of either the optionally specified mapping or
+   * the active mapping if it exists, empty string otherwise.
+   *
+   * @param asHTML
+   * @param mapping
+   */
+  static getMappingExpressionStr(asHTML: boolean, mapping?: any): string {
     const cfg = ConfigModel.getConfig();
     if (!mapping && !this.activeMapping()) {
       return '';
@@ -263,9 +271,13 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
     if (!(mapping.transition.expression)) {
       return '';
     }
-    return ((mapping.transition.expression) && (mapping.transition.enableExpression))
-        ? mapping.transition.expression.toText(true)
-        : '';
+
+    if ((mapping.transition.expression) && (mapping.transition.enableExpression)) {
+      return (asHTML)
+        ? mapping.transition.expression.toHTML()
+        : mapping.transition.expression.toText(true);
+    }
+    return '';
   }
 
 }

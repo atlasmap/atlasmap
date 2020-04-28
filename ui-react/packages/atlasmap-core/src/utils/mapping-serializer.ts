@@ -79,7 +79,7 @@ export class MappingSerializer {
       jsonMapping = {
        'jsonType': jsonMappingType,
        'id': id,
-       'expression' : MappingUtil.getMappingExpressionStr(mapping),
+       'expression' : MappingUtil.getMappingExpressionStr(false, mapping),
        inputFieldGroup,
        'outputField': serializedOutputFields,
       };
@@ -88,7 +88,7 @@ export class MappingSerializer {
         jsonMapping = {
           'jsonType': jsonMappingType,
           'id': id,
-          'expression' : MappingUtil.getMappingExpressionStr(mapping),
+          'expression' : MappingUtil.getMappingExpressionStr(false, mapping),
           'inputField' : serializedInputFields,
           'outputField': serializedOutputFields,
         };

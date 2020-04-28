@@ -31,6 +31,7 @@ import { MappingSerializer } from '../utils/mapping-serializer';
 import { DataMapperUtil } from '../common/data-mapper-util';
 import { PaddingField } from '../models/document-definition.model';
 import { LookupTableUtil } from '../utils/lookup-table-util';
+import { MappingUtil } from 'utils';
 
 /**
  * Handles mapping updates. It restores mapping status from backend and reflect in UI,
@@ -592,6 +593,9 @@ export class MappingManagementService {
     this.cfg.mappings.activeMapping.transition.enableExpression
       = !this.cfg.mappings.activeMapping.transition.enableExpression;
     this.updateTransition(this.cfg.mappings.activeMapping);
+    if (this.cfg.mappings.activeMapping.transition.expression) {
+      this.cfg.mappings.activeMapping.transition.expression.expressionUpdatedSource.next();
+    }
   }
 
   /**

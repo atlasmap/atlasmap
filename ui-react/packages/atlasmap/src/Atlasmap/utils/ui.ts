@@ -160,8 +160,8 @@ export function fromMappingDefinitionToIMappings(
 export function executeFieldSearch(
   searchFilter: string,
   isSource: boolean,
-): void {
-  initializationService.cfg.mappingService.executeFieldSearch(
+): any[] {
+  return initializationService.cfg.mappingService.executeFieldSearch(
     initializationService.cfg,
     searchFilter,
     isSource,
@@ -224,6 +224,7 @@ export function mappingExpressionInit() {
     mapping.transition.expression.setConfigModel(initializationService.cfg);
   }
   mapping.transition.expression.updateFieldReference(mapping);
+  initializationService.cfg.mappingService.mappingUpdatedSource.next();
 }
 export function mappingExpressionClearText(
   nodeId?: string,
@@ -252,13 +253,12 @@ export function mappingExpressionInsertText(
 }
 export function mappingExpressionObservable(): Observable<any> | null {
   if (
-    !initializationService.cfg.mappings ||
-    !initializationService.cfg.mappings!.activeMapping
+    !initializationService.cfg.mappings?.activeMapping?.transition?.expression
   ) {
     return null;
   }
-  return initializationService.cfg.mappings!.activeMapping.transition
-    .expression!.expressionUpdated$;
+  return initializationService.cfg.mappings.activeMapping.transition.expression
+    .expressionUpdated$;
 }
 export function mappingExpressionRemoveField(
   tokenPosition?: string,
