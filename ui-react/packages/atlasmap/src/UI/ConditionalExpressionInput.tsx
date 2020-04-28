@@ -6,16 +6,44 @@ import {
   Tooltip,
 } from "@patternfly/react-core";
 import { css, StyleSheet } from "@patternfly/react-styles";
-import {
-  ExpressionContent,
-  IExpressionContentProps,
-} from "./ExpressionContent";
+import { ExpressionContent } from "./ExpressionContent";
 
 const styles = StyleSheet.create({
   toolbarItem: { flex: 1 },
 });
+export interface IConditionalExpressionInputProps {
+  executeFieldSearch: (searchFilter: string, isSource: boolean) => string[][];
+  mappingExpressionAddField: (
+    selectedField: string,
+    newTextNode: any,
+    atIndex: number,
+    isTrailer: boolean,
+  ) => void;
+  mappingExpressionClearText: (
+    nodeId?: string,
+    startOffset?: number,
+    endOffset?: number,
+  ) => any;
+  isMappingExpressionEmpty: boolean;
+  mappingExpressionInit: () => void;
+  mappingExpressionInsertText: (
+    str: string,
+    nodeId?: string | undefined,
+    offset?: number | undefined,
+  ) => void;
+  mappingExpressionObservable: () => any;
+  mappingExpressionRemoveField: (
+    tokenPosition?: string,
+    offset?: number,
+    removeNext?: boolean,
+  ) => void;
+  onConditionalMappingExpressionEnabled: () => boolean;
+  onToggleExpressionMode: () => void;
+  mappingExpression?: string;
+  trailerId: string;
+}
 
-export const ConditionalExpressionInput: FunctionComponent<IExpressionContentProps> = ({
+export const ConditionalExpressionInput: FunctionComponent<IConditionalExpressionInputProps> = ({
   executeFieldSearch,
   mappingExpressionAddField,
   mappingExpressionClearText,
@@ -29,11 +57,15 @@ export const ConditionalExpressionInput: FunctionComponent<IExpressionContentPro
   onToggleExpressionMode,
   trailerId,
 }) => {
-  const [, setCondExprEnabled] = useState<boolean>();
+  const [conditionExpressionEnabled, setCondExprEnabled] = useState<boolean>(
+    onConditionalMappingExpressionEnabled(),
+  );
+
   function onToggle() {
     onToggleExpressionMode();
     setCondExprEnabled(onConditionalMappingExpressionEnabled());
   }
+
   return (
     <ToolbarGroup className={css(styles.toolbarItem)} role={"form"}>
       <ToolbarItem>
@@ -48,7 +80,7 @@ export const ConditionalExpressionInput: FunctionComponent<IExpressionContentPro
             aria-label="Enable/ Disable conditional mapping expression"
             tabIndex={-1}
             onClick={onToggle}
-            disabled={!onConditionalMappingExpressionEnabled()}
+            disabled={!conditionExpressionEnabled}
             data-testid={"enable-disable-conditional-mapping-expression-button"}
           >
             <i>
@@ -58,8 +90,9 @@ export const ConditionalExpressionInput: FunctionComponent<IExpressionContentPro
         </Tooltip>
       </ToolbarItem>
       <ToolbarItem className={css(styles.toolbarItem)}>
-        {onConditionalMappingExpressionEnabled() && (
+        {conditionExpressionEnabled && (
           <ExpressionContent
+            conditionExpressionEnabled={conditionExpressionEnabled}
             executeFieldSearch={executeFieldSearch}
             mappingExpressionAddField={mappingExpressionAddField}
             mappingExpressionClearText={mappingExpressionClearText}
@@ -69,9 +102,6 @@ export const ConditionalExpressionInput: FunctionComponent<IExpressionContentPro
             mappingExpressionObservable={mappingExpressionObservable}
             mappingExpressionRemoveField={mappingExpressionRemoveField}
             mappingExpression={mappingExpression}
-            onConditionalMappingExpressionEnabled={
-              onConditionalMappingExpressionEnabled
-            }
             onToggleExpressionMode={onToggleExpressionMode}
             trailerId={trailerId}
           />

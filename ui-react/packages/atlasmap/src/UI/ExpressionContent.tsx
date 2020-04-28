@@ -7,7 +7,7 @@ import { ExpressionFieldSearch } from "./ExpressionFieldSearch";
 let atIndex = -1;
 let atContainer: Node | undefined;
 let expressionUpdatedSubscription: Subscription | null;
-let mappedFieldCandidates: any[] = [];
+let mappedFieldCandidates: string[][] = [];
 let markup: HTMLDivElement | null = null;
 let searchFilter = "";
 let searchMode = false;
@@ -18,9 +18,10 @@ let mappingExprInit: () => void;
 let mappingExprObservable: () => any;
 
 export interface IExpressionContentProps {
-  executeFieldSearch: (searchFilter: string, isSource: boolean) => any[];
+  conditionExpressionEnabled: boolean;
+  executeFieldSearch: (searchFilter: string, isSource: boolean) => string[][];
   mappingExpressionAddField: (
-    selectedField: any,
+    selectedField: string,
     newTextNode: any,
     atIndex: number,
     isTrailer: boolean,
@@ -43,7 +44,6 @@ export interface IExpressionContentProps {
     offset?: number,
     removeNext?: boolean,
   ) => void;
-  onConditionalMappingExpressionEnabled: () => boolean;
   onToggleExpressionMode: () => void;
   mappingExpression?: string;
   trailerId: string;
@@ -124,6 +124,7 @@ export function initializeMappingExpression() {
 }
 
 export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
+  conditionExpressionEnabled,
   executeFieldSearch,
   mappingExpressionAddField,
   mappingExpressionClearText,
@@ -133,13 +134,12 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   mappingExpressionObservable,
   mappingExpressionRemoveField,
   mappingExpression,
-  onConditionalMappingExpressionEnabled,
   trailerId,
 }) => {
-  let selectedField: any;
+  let selectedField: string;
 
   let addFieldToExpression: (
-    mappedField: any,
+    selectedField: string,
     newTextNode: any,
     atIndex: number,
     isTrailer: boolean,
@@ -149,7 +149,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     startOffset?: number,
     endOffset?: number,
   ) => any;
-  let fieldSearch: (searchFilter: string, isSource: boolean) => any[];
+  let fieldSearch: (searchFilter: string, isSource: boolean) => string[][];
 
   function insertTextAtCaretPosition(key: string) {
     const range = window.getSelection()!.getRangeAt(0);
@@ -236,7 +236,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
 
   function fieldCandidateIndex(fieldStr: string): number {
     for (let i = 0; i < mappedFieldCandidates.length; i++) {
-      if (mappedFieldCandidates[i].displayName === fieldStr) {
+      if (mappedFieldCandidates[i][0] === fieldStr) {
         return i;
       }
     }
@@ -329,7 +329,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     if (index >= mappedFieldCandidates.length) {
       return;
     }
-    selectedField = mappedFieldCandidates[index].field;
+    selectedField = mappedFieldCandidates[index][1];
     if (!selectedField) {
       return;
     }
@@ -428,11 +428,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   useEffect(() => {
     initMappingExpression();
     return () => uninitializeMappingExpression();
-  }, [
-    onConditionalMappingExpressionEnabled,
-    initMappingExpression,
-    mappingExpression,
-  ]);
+  }, [conditionExpressionEnabled, initMappingExpression, mappingExpression]);
 
   return (
     <>

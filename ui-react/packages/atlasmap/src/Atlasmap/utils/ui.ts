@@ -160,7 +160,7 @@ export function fromMappingDefinitionToIMappings(
 export function executeFieldSearch(
   searchFilter: string,
   isSource: boolean,
-): any[] {
+): string[][] {
   return initializationService.cfg.mappingService.executeFieldSearch(
     initializationService.cfg,
     searchFilter,
@@ -169,7 +169,7 @@ export function executeFieldSearch(
 }
 
 export function mappingExpressionAddField(
-  selectedField: any,
+  selectedField: string,
   newTextNode: any,
   atIndex: number,
   isTrailer: boolean,
@@ -178,17 +178,26 @@ export function mappingExpressionAddField(
   if (!mapping || !selectedField) {
     return;
   }
-  const mappedField = mapping.getMappedFieldForField(selectedField);
+  const mappedField = mapping.getMappedFieldByName(selectedField, true);
 
   // If the selected field was not part of the original mapping then add
   // it to the active mapping.
   if (mappedField === null) {
-    initializationService.cfg.mappingService.fieldSelected(
-      selectedField,
-      true,
-      newTextNode.getUuid(),
-      isTrailer ? newTextNode.toText().length : atIndex,
-    );
+    let field: Field | null = null;
+    for (const doc of initializationService.cfg.getDocs(true)) {
+      field = Field.getField(selectedField, doc.getAllFields());
+      if (field) {
+        break;
+      }
+    }
+    if (field) {
+      initializationService.cfg.mappingService.fieldSelected(
+        field,
+        true,
+        newTextNode.getUuid(),
+        isTrailer ? newTextNode.toText().length : atIndex,
+      );
+    }
   } else {
     mapping.transition!.expression!.addConditionalExpressionNode(
       mappedField,
