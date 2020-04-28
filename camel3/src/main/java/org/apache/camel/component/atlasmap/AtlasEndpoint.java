@@ -33,6 +33,7 @@ import java.util.zip.ZipInputStream;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Message;
+import org.apache.camel.StreamCache;
 import org.apache.camel.component.ResourceEndpoint;
 import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
@@ -366,12 +367,29 @@ public class AtlasEndpoint extends ResourceEndpoint {
         if (dataSource == null || message == null) {
             return null;
         }
+        Object body = null;
+
         if (dataSource != null && dataSource.getUri() != null
                 && !(dataSource.getUri().startsWith("atlas:core")
                         || dataSource.getUri().startsWith("atlas:java"))) {
-            return message.getBody(String.class);
+            body =  message.getBody(String.class);
+        } else {
+            body = message.getBody();
         }
-        return message.getBody();
+
+        //Just in case, prepare for future calls
+        try {
+            if (message.getBody() instanceof StreamCache) {
+                ((StreamCache) message.getBody()).reset();
+            }
+        } catch (Exception e) {
+            if(log.isDebugEnabled()) {
+                log.debug("Couldn't reset the body stream of message with ID '"
+                              + message.getMessageId() + "'.", e);
+            }
+        }
+
+        return body;
     }
 
     private void populateTargetDocuments(AtlasSession session, Exchange exchange) {
