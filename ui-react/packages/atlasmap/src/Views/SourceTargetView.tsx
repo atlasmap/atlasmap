@@ -9,8 +9,8 @@ import {
   TargetsColumn,
   ISourceMappingTargetLinksData,
   ISourceMappingTargetLinksEvents,
-  ISourceColumnEvents,
-  ITargetsColumnEvents,
+  ISourceColumnCallbacks,
+  ITargetsColumnCallbacks,
 } from "./ColumnMapperView";
 import { IAtlasmapMapping } from "./models";
 
@@ -20,8 +20,8 @@ export interface ISourceTargetViewProps
     ISourceMappingTargetLinksData {
   onSelectMapping: ISourceMappingTargetLinksEvents["onSelectMapping"];
   onDeselectMapping: () => void;
-  sourceEvents: ISourceColumnEvents;
-  targetEvents: ITargetsColumnEvents;
+  sourceEvents: ISourceColumnCallbacks;
+  targetEvents: ITargetsColumnCallbacks;
 }
 
 export const SourceTargetView: FunctionComponent<ISourceTargetViewProps> = ({

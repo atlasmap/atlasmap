@@ -16,10 +16,9 @@ import {
 } from "../UI";
 import {
   IAtlasmapField,
-  IAtlasmapFieldWithField,
   IMappingDocumentEvents,
-  ISourceColumnEvents,
-  ITargetsColumnEvents,
+  ISourceColumnCallbacks,
+  ITargetsColumnCallbacks,
   MappingDetailsView,
   MappingTableView,
   SourceMappingTargetView,
@@ -66,6 +65,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     deleteProperty,
     editProperty,
     documentExists,
+    onFieldPreviewChange,
 
     // expression
     currentMappingExpression,
@@ -196,25 +196,25 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
 
   // const handleFieldPreviewChange = useCallback(
   //   (field: IAtlasmapField, value: string) => {
-  //     onFieldPreviewChange(field as IAtlasmapFieldWithField, value);
+  //     onFieldPreviewChange(field as IAtlasmapField, value);
   //   },
   //   [onFieldPreviewChange],
   // );
 
   const handleAddToMapping = useCallback((node: IAtlasmapField) => {
-    const field = (node as IAtlasmapFieldWithField).amField;
+    const field = (node as IAtlasmapField).amField;
     addToCurrentMapping(field);
   }, []);
 
   const handleRemoveFromMapping = useCallback((node: IAtlasmapField) => {
-    const field = (node as IAtlasmapFieldWithField).amField;
+    const field = (node as IAtlasmapField).amField;
     removeFromCurrentMapping(field);
   }, []);
 
   const handleCreateMapping = useCallback(
     (source: IAtlasmapField, target: IAtlasmapField) => {
-      const sourceField = (source as IAtlasmapFieldWithField).amField;
-      const targetField = (target as IAtlasmapFieldWithField).amField;
+      const sourceField = (source as IAtlasmapField).amField;
+      const targetField = (target as IAtlasmapField).amField;
       createMapping(sourceField, targetField);
     },
     [createMapping],
@@ -280,7 +280,18 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     [isFieldAddableToSelection, selectedMapping],
   );
 
-  const sourceEvents = useMemo<ISourceColumnEvents>(
+  const shouldShowMappingPreviewForField = useCallback(
+    (field: IAtlasmapField) =>
+      showMappingPreview &&
+      !!selectedMapping &&
+      !!(
+        selectedMapping.sourceFields.find((s) => s.id === field.id) ||
+        selectedMapping.targetFields.find((t) => t.id === field.id)
+      ),
+    [selectedMapping, showMappingPreview],
+  );
+
+  const sourceEvents = useMemo<ISourceColumnCallbacks>(
     () => ({
       canDrop: () => true,
       onDrop: (s, t) => handleCreateMapping(s, t.payload as IAtlasmapField),
@@ -300,26 +311,30 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onEnableJavaClasses: () => void 0,
       onImportDocument: handleImportSourceDocument,
       onSearch: setSourceFilter,
+      shouldShowMappingPreviewForField,
+      onFieldPreviewChange,
     }),
     [
+      selectMapping,
       handleAddToMapping,
+      handleRemoveFromMapping,
       handleCreateConstant,
-      handleCreateMapping,
-      handleCreateProperty,
+      handleEditConstant,
       handleDeleteConstant,
+      handleCreateProperty,
+      handleEditProperty,
       handleDeleteProperty,
       handleDeleteSourceDocument,
-      handleEditConstant,
-      handleEditProperty,
       handleImportSourceDocument,
-      handleRemoveFromMapping,
+      shouldShowMappingPreviewForField,
+      onFieldPreviewChange,
+      handleCreateMapping,
       isFieldAddableToSelection,
       isFieldRemovableFromSelection,
-      selectMapping,
     ],
   );
 
-  const targetEvents = useMemo<ITargetsColumnEvents>(
+  const targetEvents = useMemo<ITargetsColumnCallbacks>(
     () => ({
       canDrop: (f) => !f.isConnected,
       onDrop: (s, t) => handleCreateMapping(t.payload as IAtlasmapField, s),
@@ -333,16 +348,20 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onEnableJavaClasses: () => void 0,
       onImportDocument: handleImportTargetDocument,
       onSearch: setTargetFilter,
+      shouldShowMappingPreviewForField,
+      onFieldPreviewChange,
     }),
     [
+      selectMapping,
       handleAddToMapping,
-      handleCreateMapping,
+      handleRemoveFromMapping,
       handleDeleteTargetDocument,
       handleImportTargetDocument,
-      handleRemoveFromMapping,
+      shouldShowMappingPreviewForField,
+      onFieldPreviewChange,
+      handleCreateMapping,
       isFieldAddableToSelection,
       isFieldRemovableFromSelection,
-      selectMapping,
     ],
   );
 

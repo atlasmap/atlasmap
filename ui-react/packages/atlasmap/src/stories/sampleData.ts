@@ -991,6 +991,7 @@ export const properties: IAtlasmapDocument = {
       hasTransformations: false,
       isCollection: false,
       isConnected: false,
+      amField: {} as IAtlasmapField["amField"],
     },
     {
       id: "prop-city",
@@ -1001,6 +1002,7 @@ export const properties: IAtlasmapDocument = {
       hasTransformations: false,
       isCollection: false,
       isConnected: false,
+      amField: {} as IAtlasmapField["amField"],
     },
   ],
 };
@@ -1019,6 +1021,7 @@ export const constants: IAtlasmapDocument = {
       hasTransformations: false,
       isCollection: false,
       isConnected: false,
+      amField: {} as IAtlasmapField["amField"],
     },
   ],
 };

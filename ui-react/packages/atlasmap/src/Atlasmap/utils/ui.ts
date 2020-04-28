@@ -24,10 +24,10 @@ import {
 
 import {
   IAtlasmapDocument,
-  IAtlasmapFieldWithField,
-  IAtlasmapGroupWithField,
   IAtlasmapMappedField,
   IAtlasmapMapping,
+  IAtlasmapGroup,
+  IAtlasmapField,
 } from "../../Views";
 
 const api = ky.create({ headers: { "ATLASMAP-XSRF-TOKEN": "awesome" } });
@@ -40,10 +40,10 @@ export const initializationService = new InitializationService(
   new FileManagementService(api),
 );
 
-function fromFieldToIFieldsGroup(field: Field): IAtlasmapGroupWithField | null {
+function fromFieldToIFieldsGroup(field: Field): IAtlasmapGroup | null {
   const fields = field.children
     .map(fromFieldToIFields)
-    .filter((f) => f) as IAtlasmapFieldWithField[];
+    .filter((f) => f) as IAtlasmapField[];
   return fields.length > 0 && field.visibleInCurrentDocumentSearch
     ? {
         id: `${field.docDef.uri || field.docDef.type}:${
@@ -58,7 +58,7 @@ function fromFieldToIFieldsGroup(field: Field): IAtlasmapGroupWithField | null {
     : null;
 }
 
-function fromFieldToIFieldsNode(field: Field): IAtlasmapFieldWithField | null {
+function fromFieldToIFieldsNode(field: Field): IAtlasmapField | null {
   const cfg = ConfigModel.getConfig();
   const partOfMapping: boolean = field.partOfMapping;
   const shouldBeVisible = partOfMapping
@@ -96,7 +96,7 @@ export function fromDocumentDefinitionToFieldGroup(
 ): IAtlasmapDocument | null {
   const fields = def.fields
     .map(fromFieldToIFields)
-    .filter((f) => f) as IAtlasmapFieldWithField[];
+    .filter((f) => f) as IAtlasmapField[];
   return def.visibleInCurrentDocumentSearch && fields.length > 0
     ? {
         id: def.id,
@@ -109,19 +109,9 @@ export function fromDocumentDefinitionToFieldGroup(
 
 function fromMappedFieldToIMappingField(
   field: MappedField,
-): IAtlasmapMappedField {
+): IAtlasmapMappedField | null {
   if (!field.field) {
-    return {
-      id: "",
-      name: "",
-      type: "",
-      previewValue: "",
-      mappedField: field,
-      mappings: [],
-      hasTransformations: false,
-      isCollection: false,
-      isConnected: false,
-    };
+    return null;
   }
   return {
     id: `${field.field!.docDef.uri || field.field!.docDef.type}:${
@@ -135,6 +125,7 @@ function fromMappedFieldToIMappingField(
     mappings: [],
     isCollection: false,
     isConnected: false,
+    amField: field.field,
   };
 }
 
@@ -145,10 +136,12 @@ export function fromMappingModelToImapping(m: MappingModel | null | undefined) {
         name: m.transition.getPrettyName(),
         sourceFields: m
           .getUserMappedFields(true)
-          .map(fromMappedFieldToIMappingField),
+          .map(fromMappedFieldToIMappingField)
+          .filter((f) => f) as IAtlasmapMappedField[],
         targetFields: m
           .getUserMappedFields(false)
-          .map(fromMappedFieldToIMappingField),
+          .map(fromMappedFieldToIMappingField)
+          .filter((f) => f) as IAtlasmapMappedField[],
         mapping: m,
       }
     : null;
@@ -277,10 +270,7 @@ export function mappingExpressionRemoveField(
   );
   initializationService.cfg.mappingService.notifyMappingUpdated();
 }
-export function onFieldPreviewChange(
-  field: IAtlasmapFieldWithField,
-  value: string,
-) {
+export function onFieldPreviewChange(field: IAtlasmapField, value: string) {
   field.amField.value = value;
   initializationService.cfg.mappingService.notifyMappingUpdated();
 }

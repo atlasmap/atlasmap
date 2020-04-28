@@ -8,6 +8,7 @@ import {
   NodeRef,
   SearchableColumnHeader,
   Tree,
+  DocumentFieldPreviewResults,
 } from "../../../UI";
 import {
   IAtlasmapDocument,
@@ -31,7 +32,7 @@ import {
 } from "./constants";
 import { TraverseFields } from "./TraverseFields";
 
-export interface ITargetsColumnEvents {
+export interface ITargetsColumnCallbacks {
   onDeleteDocument: (id: GroupId) => void;
   onImportDocument: (selectedFile: File) => void;
   onEnableJavaClasses: () => void;
@@ -43,6 +44,7 @@ export interface ITargetsColumnEvents {
   onAddToSelectedMapping: (field: IAtlasmapField) => void;
   canRemoveFromSelectedMapping: (field: IAtlasmapField) => boolean;
   onRemoveFromSelectedMapping: (field: IAtlasmapField) => void;
+  shouldShowMappingPreviewForField: (field: IAtlasmapField) => boolean;
 }
 
 export interface ITargetsColumnData {
@@ -52,7 +54,7 @@ export interface ITargetsColumnData {
 }
 
 export const TargetsColumn: FunctionComponent<
-  ITargetsColumnData & ITargetsColumnEvents
+  ITargetsColumnData & ITargetsColumnCallbacks
 > = ({
   onSearch,
   onImportDocument,
@@ -65,6 +67,7 @@ export const TargetsColumn: FunctionComponent<
   onAddToSelectedMapping,
   canRemoveFromSelectedMapping,
   onRemoveFromSelectedMapping,
+  shouldShowMappingPreviewForField,
   targets,
   showTypes,
 }) => {
@@ -133,6 +136,14 @@ export const TargetsColumn: FunctionComponent<
                                 onRemoveFromSelectedMapping(field),
                               onStartMapping: () => void 0,
                             })
+                          }
+                          renderPreview={(field) =>
+                            shouldShowMappingPreviewForField(field) && (
+                              <DocumentFieldPreviewResults
+                                id={field.id}
+                                value={field.previewValue}
+                              />
+                            )
                           }
                         />
                       </Tree>

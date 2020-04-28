@@ -51,6 +51,8 @@ export const sourceTargetView = () =>
             canRemoveFromSelectedMapping: (item) =>
               !!selectedMappingId &&
               !!item.mappings.find((m) => m.id === selectedMappingId),
+            shouldShowMappingPreviewForField: () => true,
+            onFieldPreviewChange: action("onFieldPreviewChange"),
           }}
           targetEvents={{
             onDeleteDocument: action("onDeleteDocument"),
@@ -68,6 +70,7 @@ export const sourceTargetView = () =>
             canRemoveFromSelectedMapping: (item) =>
               !!selectedMappingId &&
               !!item.mappings.find((m) => m.id === selectedMappingId),
+            shouldShowMappingPreviewForField: () => true,
           }}
           showTypes={boolean("Show types", false)}
           showMappingPreview={boolean("Show mapping preview", false)}

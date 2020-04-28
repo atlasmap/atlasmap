@@ -14,11 +14,14 @@ const styles = StyleSheet.create({
   element: {
     color: "var(--pf-global--Color--100)",
     border: "3px solid transparent",
-    position: "relative",
+    background: "var(--bg-color)",
+    "--bg-color": "var(--pf-global--BackgroundColor--100)",
+    "--bg-color-fade": "rgba(255, 255, 255, 0.5))",
   },
   row: {
     padding: "0 1rem",
     display: "flex",
+    position: "relative",
   },
   nameWrapper: {
     display: "flex !important",
@@ -39,7 +42,8 @@ const styles = StyleSheet.create({
     color: "var(--pf-global--active-color--400)",
   },
   isSelected: {
-    borderColor: "var(--pf-global--primary-color--100)",
+    "--bg-color": "var(--pf-global--BackgroundColor--150)",
+    "--bg-color-fade": "rgba(245, 245, 245, 0.5))",
   },
   actions: {
     position: "absolute",
@@ -49,7 +53,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
     transition: "all 0.2s",
     background:
-      "linear-gradient(to left, var(--pf-global--BackgroundColor--100) calc(100% - 2rem), rgba(255, 255, 255, 0.5))",
+      "linear-gradient(to left, var(--bg-color) calc(100% - 2rem), var(--bg-color-fade))",
     paddingLeft: "2rem",
   },
 });
@@ -63,6 +67,7 @@ export interface IDocumentFieldProps {
   showType?: boolean;
   isDragging?: boolean;
   isFocused?: boolean;
+  isSelected?: boolean;
 }
 
 export const DocumentField = forwardRef<
@@ -79,6 +84,7 @@ export const DocumentField = forwardRef<
       showType = false,
       isDragging = false,
       isFocused = false,
+      isSelected = false,
       children,
     },
     ref,
@@ -91,7 +97,11 @@ export const DocumentField = forwardRef<
     return (
       <div
         ref={ref}
-        className={css(styles.element, isDragging && styles.isDragging)}
+        className={css(
+          styles.element,
+          isDragging && styles.isDragging,
+          isSelected && styles.isSelected,
+        )}
         onMouseEnter={showActions}
         onMouseLeave={hideActions}
       >
@@ -104,10 +114,12 @@ export const DocumentField = forwardRef<
               {statusIcons && statusIcons?.filter((a) => a)}
             </span>
           </div>
+          {(isHovering || isFocused) && actions && (
+            <div className={css(styles.actions)}>
+              {actions?.filter((a) => a)}
+            </div>
+          )}
         </div>
-        {(isHovering || isFocused) && actions && (
-          <div className={css(styles.actions)}>{actions?.filter((a) => a)}</div>
-        )}
         {children}
       </div>
     );

@@ -170,6 +170,7 @@ export const MappingDocument: FunctionComponent<
                         {isSelected && showMappingPreview && (
                           <DocumentFieldPreview
                             id={mf.id}
+                            value={mf.previewValue}
                             onChange={(value) =>
                               onFieldPreviewChange(mf, value)
                             }
