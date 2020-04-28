@@ -33,10 +33,10 @@ import java.util.zip.ZipInputStream;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Message;
-import org.apache.camel.StreamCache;
 import org.apache.camel.component.ResourceEndpoint;
 import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
+import org.apache.camel.support.MessageHelper;
 import org.apache.camel.support.ResourceHelper;
 import org.apache.camel.util.IOHelper;
 import org.apache.camel.util.ObjectHelper;
@@ -378,16 +378,8 @@ public class AtlasEndpoint extends ResourceEndpoint {
         }
 
         //Just in case, prepare for future calls
-        try {
-            if (message.getBody() instanceof StreamCache) {
-                ((StreamCache) message.getBody()).reset();
-            }
-        } catch (Exception e) {
-            if(log.isDebugEnabled()) {
-                log.debug("Couldn't reset the body stream of message with ID '"
-                              + message.getMessageId() + "'.", e);
-            }
-        }
+        MessageHelper.resetStreamCache(message);
+
 
         return body;
     }
