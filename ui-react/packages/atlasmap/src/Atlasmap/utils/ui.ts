@@ -160,8 +160,8 @@ export function fromMappingDefinitionToIMappings(
 export function executeFieldSearch(
   searchFilter: string,
   isSource: boolean,
-): void {
-  initializationService.cfg.mappingService.executeFieldSearch(
+): string[][] {
+  return initializationService.cfg.mappingService.executeFieldSearch(
     initializationService.cfg,
     searchFilter,
     isSource,
@@ -169,7 +169,7 @@ export function executeFieldSearch(
 }
 
 export function mappingExpressionAddField(
-  selectedField: any,
+  selectedField: string,
   newTextNode: any,
   atIndex: number,
   isTrailer: boolean,
@@ -178,17 +178,26 @@ export function mappingExpressionAddField(
   if (!mapping || !selectedField) {
     return;
   }
-  const mappedField = mapping.getMappedFieldForField(selectedField);
+  const mappedField = mapping.getMappedFieldByName(selectedField, true);
 
   // If the selected field was not part of the original mapping then add
   // it to the active mapping.
   if (mappedField === null) {
-    initializationService.cfg.mappingService.fieldSelected(
-      selectedField,
-      true,
-      newTextNode.getUuid(),
-      isTrailer ? newTextNode.toText().length : atIndex,
-    );
+    let field: Field | null = null;
+    for (const doc of initializationService.cfg.getDocs(true)) {
+      field = Field.getField(selectedField, doc.getAllFields());
+      if (field) {
+        break;
+      }
+    }
+    if (field) {
+      initializationService.cfg.mappingService.fieldSelected(
+        field,
+        true,
+        newTextNode.getUuid(),
+        isTrailer ? newTextNode.toText().length : atIndex,
+      );
+    }
   } else {
     mapping.transition!.expression!.addConditionalExpressionNode(
       mappedField,
@@ -224,6 +233,7 @@ export function mappingExpressionInit() {
     mapping.transition.expression.setConfigModel(initializationService.cfg);
   }
   mapping.transition.expression.updateFieldReference(mapping);
+  initializationService.cfg.mappingService.mappingUpdatedSource.next();
 }
 export function mappingExpressionClearText(
   nodeId?: string,
@@ -252,13 +262,12 @@ export function mappingExpressionInsertText(
 }
 export function mappingExpressionObservable(): Observable<any> | null {
   if (
-    !initializationService.cfg.mappings ||
-    !initializationService.cfg.mappings!.activeMapping
+    !initializationService.cfg.mappings?.activeMapping?.transition?.expression
   ) {
     return null;
   }
-  return initializationService.cfg.mappings!.activeMapping.transition
-    .expression!.expressionUpdated$;
+  return initializationService.cfg.mappings.activeMapping.transition.expression
+    .expressionUpdated$;
 }
 export function mappingExpressionRemoveField(
   tokenPosition?: string,
@@ -280,6 +289,7 @@ export function onConditionalMappingExpressionEnabled() {
 
 export function onToggleExpressionMode() {
   initializationService.cfg.mappingService.toggleExpressionMode();
+  initializationService.cfg.mappingService.notifyMappingUpdated();
 }
 export function getMappingActions(isSource: boolean) {
   return initializationService.cfg.fieldActionService.getActionsAppliesToField(

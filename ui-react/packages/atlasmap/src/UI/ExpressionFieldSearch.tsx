@@ -25,7 +25,7 @@ export interface IExpressionFieldSearchProps {
   clearSearchMode: (clearAtSign: boolean) => void;
   fieldCandidateIndex: (fieldStr: string) => number;
   insertSelectedField: (index: number) => void;
-  mappedFieldCandidates: any[];
+  mappedFieldCandidates: string[][];
 }
 let mouseOverTimeOut: NodeJS.Timeout | null = null;
 let selectValue = "";
@@ -132,13 +132,13 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
     }
   }
 
-  function createSelectOption(selectField: any, idx: number): any {
-    if (!selectField.field) {
+  function createSelectOption(selectField: string[], idx: number): any {
+    if (selectField[1].length === 0) {
       return (
         <SelectOption
           isDisabled={true}
-          label={selectField.displayName}
-          value={selectField.displayName}
+          label={selectField[0]}
+          value={selectField[0]}
           key={idx}
           className={css(styles.document)}
         />
@@ -146,8 +146,8 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
     } else {
       return (
         <SelectOption
-          label={selectField.displayName}
-          value={selectField.displayName}
+          label={selectField[0]}
+          value={selectField[0]}
           key={idx}
           keyHandler={onKeyHandler}
           className={css(styles.field)}
@@ -172,8 +172,8 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
         onMouseLeave={onMouseLeave}
         data-testid={id}
       >
-        {mappedFieldCandidates.map((selectField: any, idx: number) =>
-          createSelectOption(selectField, idx),
+        {mappedFieldCandidates.map((s, idx: number) =>
+          createSelectOption(s, idx),
         )}
       </Select>
     </div>

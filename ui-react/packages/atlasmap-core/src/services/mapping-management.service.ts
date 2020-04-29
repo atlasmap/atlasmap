@@ -592,6 +592,9 @@ export class MappingManagementService {
     this.cfg.mappings.activeMapping.transition.enableExpression
       = !this.cfg.mappings.activeMapping.transition.enableExpression;
     this.updateTransition(this.cfg.mappings.activeMapping);
+    if (this.cfg.mappings.activeMapping.transition.expression) {
+      this.cfg.mappings.activeMapping.transition.expression.expressionUpdatedSource.next();
+    }
   }
 
   /**
@@ -757,18 +760,18 @@ export class MappingManagementService {
    *
    * @param filter
    */
-  executeFieldSearch(configModel: ConfigModel, filter: string, isSource: boolean): any[] {
+  executeFieldSearch(configModel: ConfigModel, filter: string, isSource: boolean): string[][] {
     const activeMapping = configModel.mappings!.activeMapping!; // TODO: check this non null operator
-    const formattedFields: any[] = [];
+    const formattedFields: string[][] = [];
     let fields: Field[] = [];
     for (const docDef of configModel.getDocs(isSource)) {
       fields = fields.concat(docDef.getTerminalFields());
     }
     let documentName = '';
     let fieldCount = -1;
-    let formattedField = null;
 
     for (const field of fields) {
+      const formattedField: string[] = [""];
       let displayName = (field == null) ? '' : field.getFieldLabel(configModel.showTypes, true);
 
       if (filter == null || filter === '' || displayName.toLowerCase().indexOf(filter.toLowerCase()) !== -1) {
@@ -780,14 +783,17 @@ export class MappingManagementService {
             formattedFields.pop();
             continue;
           } else {
+            const documentField = [""];
             documentName = field.docDef.name;
-            formattedField = { 'field': null, 'displayName': documentName };
+            documentField[0] = documentName;
+            documentField[1] = "";
             fieldCount = 0;
-            formattedFields.push(formattedField);
+            formattedFields.push(documentField);
           }
         }
         displayName = DataMapperUtil.extractDisplayPath(field.path, 100);
-        formattedField = { 'field': field, 'displayName': displayName };
+        formattedField[0] = displayName;
+        formattedField[1] = field.path;
         fieldCount++;
         formattedFields.push(formattedField);
       }
