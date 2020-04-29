@@ -15,7 +15,7 @@ import {
   NodeRef,
 } from "../../../UI";
 import { IAtlasmapField, IAtlasmapMapping } from "../../models";
-import { EditMappingAction } from "../Actions";
+import { EditMappingAction, DeleteMappingAction } from "../Actions";
 import {
   MAPPINGS_DOCUMENT_ID_PREFIX,
   MAPPINGS_DROP_TYPE,
@@ -81,6 +81,7 @@ export interface IMappingDocumentEvents {
   onSelectMapping: (mapping: IAtlasmapMapping) => void;
   onDeselectMapping: (mapping: IAtlasmapMapping) => void;
   onEditMapping: (mapping: IAtlasmapMapping) => void;
+  onDeleteMapping: (mapping: IAtlasmapMapping) => void;
   onFieldPreviewChange: (field: IAtlasmapField, value: string) => void;
   onMouseOver: (mapping: IAtlasmapMapping) => void;
   onMouseOut: () => void;
@@ -102,6 +103,7 @@ export const MappingDocument: FunctionComponent<
   onSelectMapping,
   onDeselectMapping,
   onEditMapping,
+  onDeleteMapping,
   onFieldPreviewChange,
   onMouseOver,
   onMouseOut,
@@ -144,6 +146,10 @@ export const MappingDocument: FunctionComponent<
               <EditMappingAction
                 onClick={() => onEditMapping(mapping)}
                 key="edit"
+              />,
+              <DeleteMappingAction
+                onClick={() => onDeleteMapping(mapping)}
+                key="delete"
               />,
             ]}
             selected={isSelected}

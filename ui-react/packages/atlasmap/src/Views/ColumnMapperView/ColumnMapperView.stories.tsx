@@ -84,6 +84,7 @@ export const mappingsColumn = () => (
         onSelectMapping={action("onSelectMapping")}
         onDeselectMapping={action("onDeselectMapping")}
         onEditMapping={action("onEditMapping")}
+        onDeleteMapping={action("onDeleteMapping")}
         onMouseOver={action("onMouseOver")}
         onMouseOut={action("onMouseOut")}
         canDrop={() => true}

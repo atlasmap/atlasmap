@@ -75,6 +75,7 @@ export const sourceMappingTargetView = () =>
           mappingEvents={{
             canDrop: () => true,
             onEditMapping: action("onEditMapping"),
+            onDeleteMapping: action("onDeleteMapping"),
             onFieldPreviewChange: action("onFieldPreviewChange"),
             onMouseOut: action("onMouseOut"),
             onMouseOver: action("onMouseOver"),

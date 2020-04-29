@@ -365,11 +365,21 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     ],
   );
 
+  const handleRemoveMapping = useCallback(
+    () =>
+      handlers.onDeleteMapping(() => {
+        removeMapping(selectedMapping!.mapping);
+        deselectMapping();
+      }),
+    [handlers, deselectMapping, removeMapping, selectedMapping],
+  );
+
   const mappingEvents: IMappingDocumentEvents = useMemo(
     () => ({
       onSelectMapping: selectMapping,
       onDeselectMapping: deselectMapping,
       onEditMapping: () => void 0,
+      onDeleteMapping: handleRemoveMapping,
       onFieldPreviewChange: () => void 0,
       onMouseOver: () => void 0,
       onMouseOut: () => void 0,
@@ -377,7 +387,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         !m.sourceFields.find((s) => s.id === f.id) &&
         !m.targetFields.find((t) => t.id === f.id),
     }),
-    [deselectMapping, selectMapping],
+    [deselectMapping, selectMapping, handleRemoveMapping],
   );
 
   const currentView = useMemo(() => {
@@ -462,12 +472,6 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         delimiterValue: a.actualDelimiter,
       }));
       const multiplicityFieldAction = m.transition.transitionFieldAction;
-      const handleRemoveMapping = () => {
-        handlers.onDeleteMapping(() => {
-          removeMapping(m);
-          deselectMapping();
-        });
-      };
       return (
         <MappingDetailsView
           mapping={selectedMapping}
@@ -495,8 +499,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     getMultiplicityActions,
     handleActionChange,
     handleRemoveFromMapping,
-    handlers,
-    removeMapping,
+    handleRemoveMapping,
     selectedMapping,
   ]);
 
