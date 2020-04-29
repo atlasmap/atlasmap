@@ -44,6 +44,8 @@ export interface ITargetsColumnCallbacks {
   onAddToSelectedMapping: (field: IAtlasmapField) => void;
   canRemoveFromSelectedMapping: (field: IAtlasmapField) => boolean;
   onRemoveFromSelectedMapping: (field: IAtlasmapField) => void;
+  canStartMapping: (field: IAtlasmapField) => boolean;
+  onStartMapping: (field: IAtlasmapField) => void;
   shouldShowMappingPreviewForField: (field: IAtlasmapField) => boolean;
 }
 
@@ -67,6 +69,8 @@ export const TargetsColumn: FunctionComponent<
   onAddToSelectedMapping,
   canRemoveFromSelectedMapping,
   onRemoveFromSelectedMapping,
+  canStartMapping,
+  onStartMapping,
   shouldShowMappingPreviewForField,
   targets,
   showTypes,
@@ -135,7 +139,8 @@ export const TargetsColumn: FunctionComponent<
                               ),
                               onRemoveFromSelectedMapping: () =>
                                 onRemoveFromSelectedMapping(field),
-                              onStartMapping: () => void 0,
+                              canStartMapping: canStartMapping(field),
+                              onStartMapping: () => onStartMapping(field),
                             })
                           }
                           renderPreview={(field) =>

@@ -26,6 +26,7 @@ export interface ICommonActionsProps {
   onAddToSelectedMapping: () => void;
   canRemoveFromSelectedMapping: boolean;
   onRemoveFromSelectedMapping: () => void;
+  canStartMapping: boolean;
   onStartMapping: () => void;
 }
 
@@ -36,6 +37,7 @@ export function commonActions({
   onAddToSelectedMapping,
   canRemoveFromSelectedMapping,
   onRemoveFromSelectedMapping,
+  canStartMapping,
   onStartMapping,
 }: ICommonActionsProps) {
   return [
@@ -136,6 +138,7 @@ export function commonActions({
         onClick={onStartMapping}
         aria-label={"Create new mapping"}
         tabIndex={0}
+        isDisabled={!canStartMapping}
       >
         <ProjectDiagramIcon />
       </Button>
