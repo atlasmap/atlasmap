@@ -289,6 +289,7 @@ export function onConditionalMappingExpressionEnabled() {
 
 export function onToggleExpressionMode() {
   initializationService.cfg.mappingService.toggleExpressionMode();
+  initializationService.cfg.mappingService.notifyMappingUpdated();
 }
 export function getMappingActions(isSource: boolean) {
   return initializationService.cfg.fieldActionService.getActionsAppliesToField(

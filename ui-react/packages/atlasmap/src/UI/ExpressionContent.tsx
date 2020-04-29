@@ -18,7 +18,6 @@ let mappingExprInit: () => void;
 let mappingExprObservable: () => any;
 
 export interface IExpressionContentProps {
-  conditionExpressionEnabled: boolean;
   executeFieldSearch: (searchFilter: string, isSource: boolean) => string[][];
   mappingExpressionAddField: (
     selectedField: string,
@@ -124,7 +123,6 @@ export function initializeMappingExpression() {
 }
 
 export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
-  conditionExpressionEnabled,
   executeFieldSearch,
   mappingExpressionAddField,
   mappingExpressionClearText,
@@ -428,7 +426,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   useEffect(() => {
     initMappingExpression();
     return () => uninitializeMappingExpression();
-  }, [conditionExpressionEnabled, initMappingExpression, mappingExpression]);
+  }, [initMappingExpression, mappingExpression]);
 
   return (
     <>

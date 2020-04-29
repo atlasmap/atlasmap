@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent } from "react";
 import {
   ToolbarGroup,
   ToolbarItem,
@@ -57,13 +57,8 @@ export const ConditionalExpressionInput: FunctionComponent<IConditionalExpressio
   onToggleExpressionMode,
   trailerId,
 }) => {
-  const [conditionExpressionEnabled, setCondExprEnabled] = useState<boolean>(
-    onConditionalMappingExpressionEnabled(),
-  );
-
   function onToggle() {
     onToggleExpressionMode();
-    setCondExprEnabled(onConditionalMappingExpressionEnabled());
   }
 
   return (
@@ -80,7 +75,7 @@ export const ConditionalExpressionInput: FunctionComponent<IConditionalExpressio
             aria-label="Enable/ Disable conditional mapping expression"
             tabIndex={-1}
             onClick={onToggle}
-            disabled={!conditionExpressionEnabled}
+            disabled={!onConditionalMappingExpressionEnabled()}
             data-testid={"enable-disable-conditional-mapping-expression-button"}
           >
             <i>
@@ -90,9 +85,8 @@ export const ConditionalExpressionInput: FunctionComponent<IConditionalExpressio
         </Tooltip>
       </ToolbarItem>
       <ToolbarItem className={css(styles.toolbarItem)}>
-        {conditionExpressionEnabled && (
+        {onConditionalMappingExpressionEnabled() && (
           <ExpressionContent
-            conditionExpressionEnabled={conditionExpressionEnabled}
             executeFieldSearch={executeFieldSearch}
             mappingExpressionAddField={mappingExpressionAddField}
             mappingExpressionClearText={mappingExpressionClearText}
