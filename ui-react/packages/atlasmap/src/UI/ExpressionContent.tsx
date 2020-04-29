@@ -43,7 +43,6 @@ export interface IExpressionContentProps {
     offset?: number,
     removeNext?: boolean,
   ) => void;
-  onToggleExpressionMode: () => void;
   mappingExpression?: string;
   trailerId: string;
 }

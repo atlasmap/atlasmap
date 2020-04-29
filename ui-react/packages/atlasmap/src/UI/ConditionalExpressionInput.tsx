@@ -6,41 +6,19 @@ import {
   Tooltip,
 } from "@patternfly/react-core";
 import { css, StyleSheet } from "@patternfly/react-styles";
-import { ExpressionContent } from "./ExpressionContent";
+import {
+  ExpressionContent,
+  IExpressionContentProps,
+} from "./ExpressionContent";
 
 const styles = StyleSheet.create({
   toolbarItem: { flex: 1 },
 });
-export interface IConditionalExpressionInputProps {
-  executeFieldSearch: (searchFilter: string, isSource: boolean) => string[][];
-  mappingExpressionAddField: (
-    selectedField: string,
-    newTextNode: any,
-    atIndex: number,
-    isTrailer: boolean,
-  ) => void;
-  mappingExpressionClearText: (
-    nodeId?: string,
-    startOffset?: number,
-    endOffset?: number,
-  ) => any;
-  isMappingExpressionEmpty: boolean;
-  mappingExpressionInit: () => void;
-  mappingExpressionInsertText: (
-    str: string,
-    nodeId?: string | undefined,
-    offset?: number | undefined,
-  ) => void;
-  mappingExpressionObservable: () => any;
-  mappingExpressionRemoveField: (
-    tokenPosition?: string,
-    offset?: number,
-    removeNext?: boolean,
-  ) => void;
+
+export interface IConditionalExpressionInputProps
+  extends IExpressionContentProps {
   onConditionalMappingExpressionEnabled: () => boolean;
   onToggleExpressionMode: () => void;
-  mappingExpression?: string;
-  trailerId: string;
 }
 
 export const ConditionalExpressionInput: FunctionComponent<IConditionalExpressionInputProps> = ({
@@ -96,7 +74,6 @@ export const ConditionalExpressionInput: FunctionComponent<IConditionalExpressio
             mappingExpressionObservable={mappingExpressionObservable}
             mappingExpressionRemoveField={mappingExpressionRemoveField}
             mappingExpression={mappingExpression}
-            onToggleExpressionMode={onToggleExpressionMode}
             trailerId={trailerId}
           />
         )}
