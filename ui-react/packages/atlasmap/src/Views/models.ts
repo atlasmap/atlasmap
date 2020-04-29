@@ -1,4 +1,5 @@
-import { Field, MappedField, MappingModel } from "@atlasmap/core";
+import { Field, MappingModel } from "@atlasmap/core";
+import { ITransformationArgument } from "../UI";
 
 export type ElementId = string;
 export type GroupId = string;
@@ -11,6 +12,7 @@ export interface IAtlasmapField {
   id: ElementId;
   name: string;
   type: string;
+  path: string;
   previewValue: string;
   mappings: IAtlasmapMapping[];
   hasTransformations: boolean;
@@ -40,13 +42,16 @@ export interface IAtlasmapDocument {
 }
 
 export interface IAtlasmapMappedField extends IAtlasmapField {
-  mappedField: MappedField;
+  transformations: Array<{
+    name: string;
+    arguments: Array<ITransformationArgument>;
+  }>;
 }
 
 export interface IAtlasmapMapping {
   id: string;
   name: string;
-  sourceFields: Array<IAtlasmapField>;
-  targetFields: Array<IAtlasmapField>;
+  sourceFields: Array<IAtlasmapMappedField>;
+  targetFields: Array<IAtlasmapMappedField>;
   mapping: MappingModel;
 }

@@ -1,6 +1,11 @@
 import { MappingModel } from "@atlasmap/core";
 
-import { IAtlasmapMapping, IAtlasmapDocument, IAtlasmapField } from "../Views";
+import {
+  IAtlasmapMapping,
+  IAtlasmapDocument,
+  IAtlasmapField,
+  IAtlasmapMappedField,
+} from "../Views";
 
 import { javaToFieldGroup } from "./fromJava";
 import { jsonToFieldGroup } from "./fromJson";
@@ -911,17 +916,17 @@ export const mappings: IAtlasmapMapping[] = [
       {
         id: "JSONInstanceSource-source-/order/address/city",
         name: "JSONInstanceSource-source-/order/address/city",
-      } as IAtlasmapField,
+      } as IAtlasmapMappedField,
       {
         id: "JSONInstanceSource-source-/order/address/state",
         name: "JSONInstanceSource-source-/order/address/state",
-      } as IAtlasmapField,
+      } as IAtlasmapMappedField,
     ],
     targetFields: [
       {
         id: "XMLInstanceSource-target-/ns:XmlOE/ns:Address/ns:addressLine1",
         name: "XMLInstanceSource-target-/ns:XmlOE/ns:Address/ns:addressLine1",
-      } as IAtlasmapField,
+      } as IAtlasmapMappedField,
     ],
     mapping: {} as MappingModel,
   },
@@ -932,21 +937,21 @@ export const mappings: IAtlasmapMapping[] = [
       {
         id: "JSONInstanceSource-source-/primitives/numberPrimitive",
         name: "JSONInstanceSource-source-/primitives/numberPrimitive",
-      } as IAtlasmapField,
+      } as IAtlasmapMappedField,
     ],
     targetFields: [
       {
         id: "io.paul.Bicycle-target-/cadence",
         name: "io.paul.Bicycle-target-/cadence",
-      } as IAtlasmapField,
+      } as IAtlasmapMappedField,
       {
         id: "io.paul.Bicycle-target-/gear",
         name: "io.paul.Bicycle-target-/gear",
-      } as IAtlasmapField,
+      } as IAtlasmapMappedField,
       {
         id: "io.paul.Bicycle-target-/speed",
         name: "io.paul.Bicycle-target-/speed",
-      } as IAtlasmapField,
+      } as IAtlasmapMappedField,
     ],
     mapping: {} as MappingModel,
   },
@@ -957,21 +962,21 @@ export const mappings: IAtlasmapMapping[] = [
       {
         id: "JSONInstanceSource-source-/primitives/stringPrimitive",
         name: "JSONInstanceSource-source-/primitives/stringPrimitive",
-      } as IAtlasmapField,
+      } as IAtlasmapMappedField,
       {
         id: "JSONInstanceSource-source-/order/orderId",
         name: "JSONInstanceSource-source-/order/orderId",
-      } as IAtlasmapField,
+      } as IAtlasmapMappedField,
       {
         id: "JSONSchemaSource-/primitives/stringPrimitive",
         name: "JSONSchemaSource-/primitives/stringPrimitive",
-      } as IAtlasmapField,
+      } as IAtlasmapMappedField,
     ],
     targetFields: [
       {
         id: "io.paul.Bicycle-target-/serialId",
         name: "io.paul.Bicycle-target-/serialId",
-      } as IAtlasmapField,
+      } as IAtlasmapMappedField,
     ],
     mapping: {} as MappingModel,
   },
@@ -986,6 +991,7 @@ export const properties: IAtlasmapDocument = {
       id: "boston",
       name: "boston = boston",
       type: "STRING",
+      path: "/boston",
       previewValue: "",
       mappings: [],
       hasTransformations: false,
@@ -997,6 +1003,7 @@ export const properties: IAtlasmapDocument = {
       id: "prop-city",
       name: "prop-city = boston",
       type: "STRING",
+      path: "/prop-city",
       previewValue: "",
       mappings: [],
       hasTransformations: false,
@@ -1016,6 +1023,7 @@ export const constants: IAtlasmapDocument = {
       id: "Boston",
       name: "Boston",
       type: "",
+      path: "/Boston",
       previewValue: "",
       mappings: [],
       hasTransformations: false,

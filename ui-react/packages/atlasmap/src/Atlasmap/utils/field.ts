@@ -4,6 +4,7 @@ import {
   constantTypes,
   propertyTypes,
   MappingModel,
+  MappedField,
 } from "@atlasmap/core";
 
 export function createConstant(constValue: string, constType: string): void {
@@ -196,6 +197,20 @@ export function removeFromCurrentMapping(field: Field): void {
       mapping.removeMappedField(mappedField);
       cfg.mappingService.updateMappedField(mapping);
     }
+  }
+}
+
+/**
+ * Add the specified field to the current mapping.
+ *
+ * @param field
+ */
+export function removeMappedFieldFromCurrentMapping(field: MappedField): void {
+  const cfg = ConfigModel.getConfig();
+  const mapping = cfg.mappings?.activeMapping;
+  if (mapping && field) {
+    mapping.removeMappedField(field);
+    cfg.mappingService.updateMappedField(mapping);
   }
 }
 

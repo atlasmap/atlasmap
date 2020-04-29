@@ -10,7 +10,7 @@ import {
   Title,
   Tooltip,
 } from "@patternfly/react-core";
-import { BoltIcon, TrashIcon } from "@patternfly/react-icons";
+import { BoltIcon, TrashIcon, InfoAltIcon } from "@patternfly/react-icons";
 import { css, StyleSheet } from "@patternfly/react-styles";
 
 const styles = StyleSheet.create({
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     marginRight: "1rem",
   },
   fieldName: {
-    flex: "2 0 calc(100% - 5.5rem)",
+    flex: "2 0 calc(100% - 6rem)",
   },
   link: {
     padding: 0,
@@ -53,10 +53,9 @@ export interface IMappingFieldProps {
   info: string;
   index: number;
   canShowIndex: boolean;
-  canEditIndex: boolean;
   onDelete: () => void;
-  onIndexChange: (event: any) => void;
-  onNewTransformation: () => void;
+  onIndexChange?: (value: string) => void;
+  onNewTransformation?: () => void;
 }
 
 export const MappingField: FunctionComponent<IMappingFieldProps> = ({
@@ -64,7 +63,6 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
   info,
   index,
   canShowIndex,
-  canEditIndex,
   onDelete,
   onIndexChange,
   onNewTransformation,
@@ -96,6 +94,7 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
                     id={"index"}
                     onChange={onIndexChange}
                     data-testid={`change-${name}-input-index`}
+                    isDisabled={!onIndexChange}
                   />
                 </InputGroup>
               </Tooltip>
@@ -105,20 +104,23 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
               enableFlip={true}
               content={<div>{info}</div>}
             >
-              <div className={css(styles.fieldName)}>{name}</div>
+              <div className={css(styles.fieldName)}>
+                {name} <InfoAltIcon />
+              </div>
             </Tooltip>
           </Title>
         </SplitItem>
         <SplitItem>
-          <Button
-            isDisabled={!canEditIndex}
-            variant={"plain"}
-            onClick={onNewTransformation}
-            className={css(styles.link)}
-            data-testid={`add-transformation-to-${name}-field-button`}
-          >
-            <BoltIcon />
-          </Button>
+          {onNewTransformation && (
+            <Button
+              variant={"plain"}
+              onClick={onNewTransformation}
+              className={css(styles.link)}
+              data-testid={`add-transformation-to-${name}-field-button`}
+            >
+              <BoltIcon />
+            </Button>
+          )}
           <Button
             variant={"plain"}
             onClick={onDelete}

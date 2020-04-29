@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, {
   FunctionComponent,
   useCallback,
@@ -24,11 +25,11 @@ import {
   SourceMappingTargetView,
   SourceTargetView,
   GroupId,
+  IMappingDetailsViewProps,
 } from "../Views";
 import { useAtlasmap } from "./AtlasmapProvider";
 import { useAtlasmapDialogs } from "./useAtlasmapDialogs";
 import { IUseContextToolbarData, useContextToolbar } from "./useContextToolbar";
-import { addToCurrentMapping, removeFromCurrentMapping } from "./utils";
 
 export interface IAtlasmapProps extends IUseContextToolbarData {
   modalsContainerId?: string;
@@ -66,6 +67,10 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     editProperty,
     documentExists,
     onFieldPreviewChange,
+    addToCurrentMapping,
+    removeFromCurrentMapping,
+    removeMappedFieldFromCurrentMapping,
+    fromMappedFieldToIMappingField,
 
     // expression
     currentMappingExpression,
@@ -85,7 +90,13 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     getMappingActions,
     getMultiplicityActions,
     getMultiplicityActionDelimiters,
-    handleActionChange,
+    handleIndexChange,
+    handleNewTransformation,
+    handleRemoveTransformation,
+    handleTransformationChange,
+    handleTransformationArgumentChange,
+    handleMultiplicityChange,
+    handleMultiplicityArgumentChange,
   } = useAtlasmap({
     sourcesSearchString: sourceFilter,
     targetsSearchString: targetFilter,
@@ -196,15 +207,21 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     [handleDeleteDocument],
   );
 
-  const handleAddToMapping = useCallback((node: IAtlasmapField) => {
-    const field = (node as IAtlasmapField).amField;
-    addToCurrentMapping(field);
-  }, []);
+  const handleAddToMapping = useCallback(
+    (node: IAtlasmapField) => {
+      const field = (node as IAtlasmapField).amField;
+      addToCurrentMapping(field);
+    },
+    [addToCurrentMapping],
+  );
 
-  const handleRemoveFromMapping = useCallback((node: IAtlasmapField) => {
-    const field = (node as IAtlasmapField).amField;
-    removeFromCurrentMapping(field);
-  }, []);
+  const handleRemoveFromMapping = useCallback(
+    (node: IAtlasmapField) => {
+      const field = (node as IAtlasmapField).amField;
+      removeFromCurrentMapping(field);
+    },
+    [removeFromCurrentMapping],
+  );
 
   const handleCreateMapping = useCallback(
     (
@@ -447,63 +464,124 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   const renderSidebar = useCallback(() => {
     if (selectedMapping) {
       const m = selectedMapping.mapping;
-      const sources = m.getMappedFields(true);
+      const sources = m
+        .getMappedFields(true)
+        .map(fromMappedFieldToIMappingField);
+      const targets = m
+        .getMappedFields(false)
+        .map(fromMappedFieldToIMappingField);
       const showSourcesIndex =
         sources.length > 1 &&
-        !m.transition.enableExpression &&
-        m.transition.isManyToOneMode();
-      const targets = m.getMappedFields(false);
+        m.transition.isManyToOneMode() &&
+        !m.transition.enableExpression;
       const showTargetsIndex =
         targets.length > 1 &&
-        !m.transition.enableExpression &&
-        m.transition.isOneToManyMode();
-      const availableActions = getMultiplicityActions(m);
-      const actionsOptions = availableActions.map((a) => ({
+        m.transition.isOneToManyMode() &&
+        !m.transition.enableExpression;
+
+      const multiplicityFieldAction = m.transition.transitionFieldAction;
+
+      let multiplicity: IMappingDetailsViewProps["multiplicity"] = undefined;
+      if (multiplicityFieldAction) {
+        const transformations = getMultiplicityActions(m);
+        const transformationsOptions = transformations.map((a) => ({
+          label: DataMapperUtil.toDisplayable(a.name),
+          name: a.name,
+          value: a.name,
+        }));
+        const delimiters = getMultiplicityActionDelimiters();
+        const delimitersOptions = delimiters.map((a) => ({
+          name: a.prettyName!,
+          value: a.actualDelimiter,
+        }));
+
+        multiplicity = {
+          name: multiplicityFieldAction.name,
+          transformationsOptions,
+          transformationsArguments: multiplicityFieldAction.argumentValues.map(
+            (a) => ({
+              label: DataMapperUtil.toDisplayable(a.name),
+              name: a.name,
+              value: a.value,
+              options: a.name === "delimiter" ? delimitersOptions : undefined,
+            }),
+          ),
+          onChange: (name) =>
+            handleMultiplicityChange(multiplicityFieldAction, name),
+          onArgumentChange: (argumentName, arguemntValue) =>
+            handleMultiplicityArgumentChange(
+              multiplicityFieldAction,
+              argumentName,
+              arguemntValue,
+            ),
+        };
+      }
+      const sourceTransformations = getMappingActions(true);
+      const sourceTransformationsOptions = sourceTransformations.map((a) => ({
         name: DataMapperUtil.toDisplayable(a.name),
         value: a.name,
       }));
-      const availableDelimiters = getMultiplicityActionDelimiters();
-      const actionDelimiters = availableDelimiters.map((a) => ({
-        displayName: a.prettyName!,
-        delimiterValue: a.actualDelimiter,
+      const targetTransformations = getMappingActions(false);
+      const targetTransformationsOptions = targetTransformations.map((a) => ({
+        name: DataMapperUtil.toDisplayable(a.name),
+        value: a.name,
       }));
-      const multiplicityFieldAction = m.transition.transitionFieldAction;
       const handleRemoveMapping = () => {
         handlers.onDeleteMapping(() => {
           removeMapping(m);
           deselectMapping();
         });
       };
+
+      const handleRemoveMappedField = (isSource: boolean, index: number) => {
+        const amField = selectedMapping.mapping.getMappedFieldForIndex(
+          "" + (index + 1),
+          isSource,
+        );
+        console.log(amField);
+        if (amField) {
+          removeMappedFieldFromCurrentMapping(amField);
+        }
+      };
+
       return (
         <MappingDetailsView
-          mapping={selectedMapping}
+          sources={sources}
+          targets={targets}
           onClose={deselectMapping}
           onRemoveMapping={handleRemoveMapping}
-          onRemoveMappedField={handleRemoveFromMapping}
-          sources={sources}
+          onRemoveMappedField={handleRemoveMappedField}
           showSourcesIndex={showSourcesIndex}
-          targets={targets}
           showTargetsIndex={showTargetsIndex}
-          availableActions={availableActions}
-          actionsOptions={actionsOptions}
-          actionDelimiters={actionDelimiters}
-          multiplicityFieldAction={multiplicityFieldAction}
-          onActionChange={handleActionChange}
-          getMappingActions={getMappingActions}
+          multiplicity={multiplicity}
+          sourceTransformationsOptions={sourceTransformationsOptions}
+          targetTransformationsOptions={targetTransformationsOptions}
+          onIndexChange={handleIndexChange}
+          onNewTransformation={handleNewTransformation}
+          onRemoveTransformation={handleRemoveTransformation}
+          onTransformationChange={handleTransformationChange}
+          onTransformationArgumentChange={handleTransformationArgumentChange}
         />
       );
     }
     return <>TODO: error</>;
   }, [
-    deselectMapping,
+    selectedMapping,
     getMappingActions,
-    getMultiplicityActionDelimiters,
+    fromMappedFieldToIMappingField,
+    deselectMapping,
+    handleIndexChange,
+    handleNewTransformation,
+    handleRemoveTransformation,
+    handleTransformationChange,
+    handleTransformationArgumentChange,
     getMultiplicityActions,
-    handleActionChange,
-    handleRemoveFromMapping,
+    getMultiplicityActionDelimiters,
+    handleMultiplicityChange,
+    handleMultiplicityArgumentChange,
     handlers,
     removeMapping,
-    selectedMapping,
+    removeMappedFieldFromCurrentMapping,
   ]);
 
   return (
