@@ -5,6 +5,7 @@ import {
   CardHead,
   CardHeader,
   Title,
+  Button,
 } from "@patternfly/react-core";
 import { css, StyleSheet } from "@patternfly/react-styles";
 import React, {
@@ -17,6 +18,8 @@ import React, {
   ReactNode,
   useCallback,
 } from "react";
+import { useToggle } from "./useToggle";
+import { AngleDownIcon, AngleRightIcon } from "@patternfly/react-icons";
 
 const styles = StyleSheet.create({
   card: {},
@@ -24,7 +27,8 @@ const styles = StyleSheet.create({
     margin: "1rem 0",
   },
   head: {
-    paddingRight: "0 !important",
+    paddingLeft: "0.5rem !important",
+    paddingRight: "0.5rem !important",
   },
   noPadding: {
     padding: "0 !important",
@@ -56,6 +60,7 @@ export interface IDocumentProps
   stacked?: boolean;
   scrollIntoView?: boolean;
   noPadding?: boolean;
+  startExpanded?: boolean;
   onSelect?: () => void;
   onDeselect?: () => void;
 }
@@ -77,6 +82,7 @@ export const Document = forwardRef<
       selectable = false,
       scrollIntoView = false,
       noPadding = false,
+      startExpanded = true,
       onSelect,
       onDeselect,
       children,
@@ -84,6 +90,9 @@ export const Document = forwardRef<
     },
     ref,
   ) => {
+    const { state: isExpanded, toggle: toggleExpanded } = useToggle(
+      startExpanded,
+    );
     const handleClick = useCallback(
       (event: MouseEvent) => {
         event.stopPropagation();
@@ -139,14 +148,26 @@ export const Document = forwardRef<
               <CardActions>{actions?.filter((a) => a)}</CardActions>
               {title && (
                 <CardHeader>
-                  <Title size={"lg"} headingLevel={"h2"} aria-label={title}>
-                    {title}
-                  </Title>
+                  <Button
+                    variant={"plain"}
+                    onClick={toggleExpanded}
+                    aria-label={"Expand/collapse this card"}
+                  >
+                    <Title size={"lg"} headingLevel={"h2"} aria-label={title}>
+                      {isExpanded ? <AngleDownIcon /> : <AngleRightIcon />}{" "}
+                      {title}
+                    </Title>
+                  </Button>
                 </CardHeader>
               )}
             </CardHead>
           )}
-          <CardBody className={css(noPadding && styles.noPadding)}>
+          <CardBody
+            className={css(
+              noPadding && styles.noPadding,
+              !isExpanded && styles.hidden,
+            )}
+          >
             {children}
           </CardBody>
           {footer}
