@@ -74,16 +74,6 @@ export interface IExternalDocumentProps {
   showFields: boolean;
 }
 
-export interface ITextNode {
-  uuid: string;
-  str: string;
-}
-
-export interface IExpressionUpdatedEvent {
-  node: ITextNode;
-  offset: number;
-}
-
 interface IAtlasmapContext extends State {
   selectMapping: typeof selectMapping;
   deselectMapping: typeof deselectMapping;

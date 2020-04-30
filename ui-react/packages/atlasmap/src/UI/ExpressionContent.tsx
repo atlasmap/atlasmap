@@ -1,9 +1,8 @@
 import { FunctionComponent, useEffect, useCallback } from "react";
-import React from "react";
+import React, { KeyboardEvent } from "react";
 import { Tooltip, Form, FormGroup } from "@patternfly/react-core";
 import { Subscription, Observable } from "rxjs";
 import { ExpressionFieldSearch } from "./ExpressionFieldSearch";
-import { ITextNode, IExpressionUpdatedEvent } from "../../src/Atlasmap";
 
 let atIndex = -1;
 let atContainer: Node | undefined;
@@ -17,6 +16,16 @@ let trailerID = "";
 let getMappingExpression: () => string;
 let mappingExprInit: () => void;
 let mappingExprObservable: () => Observable<IExpressionUpdatedEvent> | null;
+
+interface ITextNode {
+  uuid: string;
+  str: string;
+}
+
+interface IExpressionUpdatedEvent {
+  node: ITextNode;
+  offset: number;
+}
 
 export interface IExpressionContentProps {
   executeFieldSearch: (searchFilter: string, isSource: boolean) => string[][];
@@ -246,7 +255,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
    *
    * @param event - expression keyboard event
    */
-  function onKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
+  function onKeyDown(event: KeyboardEvent<HTMLDivElement>): void {
     if ("Backspace" === event.key) {
       // TODO handle cursor position
       event.preventDefault();
@@ -263,7 +272,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     }
   }
 
-  function onKeyPress(event: React.KeyboardEvent<HTMLDivElement>) {
+  function onKeyPress(event: KeyboardEvent<HTMLDivElement>) {
     if (event.ctrlKey || event.metaKey || event.altKey) {
       return;
     }
