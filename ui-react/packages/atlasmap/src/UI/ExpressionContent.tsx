@@ -1,8 +1,9 @@
 import { FunctionComponent, useEffect, useCallback } from "react";
 import React from "react";
 import { Tooltip, Form, FormGroup } from "@patternfly/react-core";
-import { Subscription } from "rxjs";
+import { Subscription, Observable } from "rxjs";
 import { ExpressionFieldSearch } from "./ExpressionFieldSearch";
+import { ITextNode, IExpressionUpdatedEvent } from "../../src/Atlasmap";
 
 let atIndex = -1;
 let atContainer: Node | undefined;
@@ -15,13 +16,13 @@ let trailerHTML = "";
 let trailerID = "";
 let getMappingExpression: () => string;
 let mappingExprInit: () => void;
-let mappingExprObservable: () => any;
+let mappingExprObservable: () => Observable<IExpressionUpdatedEvent> | null;
 
 export interface IExpressionContentProps {
   executeFieldSearch: (searchFilter: string, isSource: boolean) => string[][];
   mappingExpressionAddField: (
     selectedField: string,
-    newTextNode: any,
+    newTextNode: ITextNode,
     atIndex: number,
     isTrailer: boolean,
   ) => void;
@@ -29,7 +30,7 @@ export interface IExpressionContentProps {
     nodeId?: string,
     startOffset?: number,
     endOffset?: number,
-  ) => any;
+  ) => ITextNode;
   isMappingExpressionEmpty: boolean;
   mappingExpressionInit: () => void;
   mappingExpressionInsertText: (
@@ -37,7 +38,7 @@ export interface IExpressionContentProps {
     nodeId?: string | undefined,
     offset?: number | undefined,
   ) => void;
-  mappingExpressionObservable: () => any;
+  mappingExpressionObservable: () => Observable<IExpressionUpdatedEvent> | null;
   mappingExpressionRemoveField: (
     tokenPosition?: string,
     offset?: number,
@@ -79,14 +80,14 @@ function moveCaretToEnd() {
   range.collapse(true);
 }
 
-function restoreCaretPosition(event: any) {
+function restoreCaretPosition(event: IExpressionUpdatedEvent) {
   if (!markup || !event || !event.node) {
     return;
   }
 
   for (let i = 0; i < markup.childNodes.length; i++) {
     const target: any = markup.childNodes[i];
-    if (target.id === event.node.getUuid()) {
+    if (target.id === event.node.uuid) {
       const selection = window.getSelection();
       if (selection && selection.rangeCount) {
         const range = selection.getRangeAt(0);
@@ -111,7 +112,7 @@ export function initializeMappingExpression() {
       expressionUpdatedSubscription.unsubscribe();
     }
     expressionUpdatedSubscription = mappingExprObs.subscribe(
-      (updatedEvent: any) => {
+      (updatedEvent: IExpressionUpdatedEvent) => {
         updateExpressionMarkup();
         restoreCaretPosition(updatedEvent);
       },
@@ -137,7 +138,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
 
   let addFieldToExpression: (
     selectedField: string,
-    newTextNode: any,
+    newTextNode: ITextNode,
     atIndex: number,
     isTrailer: boolean,
   ) => void;
@@ -145,7 +146,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     nodeId?: string,
     startOffset?: number,
     endOffset?: number,
-  ) => any;
+  ) => ITextNode;
   let fieldSearch: (searchFilter: string, isSource: boolean) => string[][];
 
   function insertTextAtCaretPosition(key: string) {
@@ -245,7 +246,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
    *
    * @param event - expression keyboard event
    */
-  function onKeyDown(event: any): void {
+  function onKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
     if ("Backspace" === event.key) {
       // TODO handle cursor position
       event.preventDefault();
@@ -262,7 +263,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     }
   }
 
-  function onKeyPress(event: any) {
+  function onKeyPress(event: React.KeyboardEvent<HTMLDivElement>) {
     if (event.ctrlKey || event.metaKey || event.altKey) {
       return;
     }
@@ -298,8 +299,8 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     if (expressionUpdatedSubscription) {
       expressionUpdatedSubscription.unsubscribe();
     }
-    expressionUpdatedSubscription = mappingExprObservable().subscribe(
-      (updatedEvent: any) => {
+    expressionUpdatedSubscription = mappingExprObservable()!.subscribe(
+      (updatedEvent: IExpressionUpdatedEvent) => {
         updateExpressionMarkup();
         restoreCaretPosition(updatedEvent);
       },
@@ -345,9 +346,9 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
    * the specified node ID.  The input will become a FieldNode so we don't
    * need the text.  Return the new UUID position indicator.
    */
-  function clearAtText(nodeId: string): any {
+  function clearAtText(nodeId: string): ITextNode | null {
     if (atIndex === -1) {
-      return;
+      return null;
     }
     const startOffset = atIndex;
     const endOffset = startOffset + searchFilter.length + 1;
