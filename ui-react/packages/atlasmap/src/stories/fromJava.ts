@@ -85,6 +85,7 @@ export function javaToFieldGroup(
       id: `${idPrefix}-${jf.path}`,
       name: jf.name,
       type: jf.fieldType,
+      path: jf.path,
       previewValue: "",
       mappings,
       hasTransformations:

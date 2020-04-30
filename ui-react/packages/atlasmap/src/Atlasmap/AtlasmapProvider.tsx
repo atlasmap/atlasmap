@@ -5,6 +5,7 @@ import React, {
   useContext,
   useEffect,
   useReducer,
+  Dispatch,
 } from "react";
 import { interval } from "rxjs";
 import { debounce } from "rxjs/operators";
@@ -41,6 +42,13 @@ import {
   getMultiplicityActionDelimiters,
   getMultiplicityActions,
   handleActionChange,
+  handleIndexChange,
+  handleNewTransformation,
+  handleTransformationChange,
+  handleTransformationArgumentChange,
+  handleRemoveTransformation,
+  handleMultiplicityChange,
+  handleMultiplicityArgumentChange,
   importAtlasFile,
   initializationService,
   mappingExpressionAddField,
@@ -60,6 +68,9 @@ import {
   toggleShowMappedFields,
   toggleShowUnmappedFields,
   trailerId,
+  removeFromCurrentMapping,
+  removeMappedFieldFromCurrentMapping,
+  fromMappedFieldToIMappingField,
 } from "./utils";
 
 // the document payload with get from Syndesis
@@ -73,48 +84,9 @@ export interface IExternalDocumentProps {
   inspectionResult: string;
   showFields: boolean;
 }
-
 interface IAtlasmapContext extends State {
-  selectMapping: typeof selectMapping;
-  deselectMapping: typeof deselectMapping;
-  deleteAtlasFile: typeof deleteAtlasFile;
-  exportAtlasFile: typeof exportAtlasFile;
-  importAtlasFile: typeof importAtlasFile;
-  resetAtlasmap: typeof resetAtlasmap;
-  mappingExpressionClearText: typeof mappingExpressionClearText;
-  isMappingExpressionEmpty: boolean;
-  executeFieldSearch: typeof executeFieldSearch;
-  mappingExpressionAddField: typeof mappingExpressionAddField;
-  mappingExpressionInit: typeof mappingExpressionInit;
-  mappingExpressionInsertText: typeof mappingExpressionInsertText;
-  mappingExpressionObservable: typeof mappingExpressionObservable;
-  mappingExpressionRemoveField: typeof mappingExpressionRemoveField;
-  onConditionalMappingExpressionEnabled: typeof onConditionalMappingExpressionEnabled;
-  currentMappingExpression: string | undefined;
-  getMappingExpression: typeof getMappingExpression;
-  onToggleExpressionMode: typeof onToggleExpressionMode;
-  toggleMappingPreview: typeof toggleMappingPreview;
-  toggleShowMappedFields: typeof toggleShowMappedFields;
-  toggleShowUnmappedFields: typeof toggleShowUnmappedFields;
-  onFieldPreviewChange: typeof onFieldPreviewChange;
-  addToCurrentMapping: typeof addToCurrentMapping;
-  createMapping: typeof createMapping;
-  newMapping: typeof newMapping;
-  removeMapping: typeof removeMapping;
-  documentExists: typeof documentExists;
-  getMappingActions: typeof getMappingActions;
-  getMultiplicityActions: typeof getMultiplicityActions;
-  getMultiplicityActionDelimiters: typeof getMultiplicityActionDelimiters;
-  handleActionChange: typeof handleActionChange;
-  createConstant: typeof createConstant;
-  deleteConstant: typeof deleteConstant;
-  editConstant: typeof editConstant;
-  createProperty: typeof createProperty;
-  deleteProperty: typeof deleteProperty;
-  editProperty: typeof editProperty;
-  trailerId: typeof trailerId;
+  dispatch: Dispatch<Action>;
 }
-
 const AtlasmapContext = createContext<IAtlasmapContext | null>(null);
 
 export interface IAtlasmapProviderProps {
@@ -347,68 +319,8 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
     }
   }, [onMappingChange]);
 
-  const handleImportAtlasFile = useCallback((file: File, isSource: boolean) => {
-    dispatch({ type: "loading" });
-    importAtlasFile(file, isSource);
-  }, []);
-
-  const handleResetAtlasmap = useCallback(() => {
-    dispatch({ type: "reset" });
-    resetAtlasmap();
-  }, []);
-
-  const isMappingExpressionEmpty =
-    initializationService.cfg.mappings?.activeMapping?.transition?.expression
-      ?.nodes.length === 0;
-
   return (
-    <AtlasmapContext.Provider
-      value={{
-        ...state,
-        selectMapping,
-        deselectMapping,
-        deleteAtlasFile,
-        exportAtlasFile,
-        importAtlasFile: handleImportAtlasFile,
-        resetAtlasmap: handleResetAtlasmap,
-        mappingExpressionClearText,
-        isMappingExpressionEmpty,
-        executeFieldSearch,
-        mappingExpressionAddField,
-        mappingExpressionInit,
-        mappingExpressionInsertText,
-        mappingExpressionObservable,
-        mappingExpressionRemoveField,
-        onConditionalMappingExpressionEnabled,
-
-        currentMappingExpression: MappingUtil.getMappingExpressionStr(
-          true,
-          initializationService.cfg.mappings?.activeMapping,
-        ),
-        getMappingExpression,
-        onToggleExpressionMode,
-        toggleMappingPreview,
-        toggleShowMappedFields,
-        toggleShowUnmappedFields,
-        onFieldPreviewChange,
-        addToCurrentMapping,
-        createMapping,
-        newMapping,
-        removeMapping,
-        documentExists,
-        getMappingActions,
-        getMultiplicityActions,
-        getMultiplicityActionDelimiters,
-        handleActionChange,
-        createConstant,
-        deleteConstant,
-        editConstant,
-        createProperty,
-        deleteProperty,
-        editProperty,
-        trailerId,
-      }}
-    >
+    <AtlasmapContext.Provider value={{ ...state, dispatch }}>
       {children}
     </AtlasmapContext.Provider>
   );
@@ -434,5 +346,77 @@ export function useAtlasmap({
     );
   }
 
-  return context;
+  const { dispatch, ...state } = context;
+
+  const handleImportAtlasFile = useCallback(
+    (file: File, isSource: boolean) => {
+      dispatch({ type: "loading" });
+      importAtlasFile(file, isSource);
+    },
+    [dispatch],
+  );
+
+  const handleResetAtlasmap = useCallback(() => {
+    dispatch({ type: "reset" });
+    resetAtlasmap();
+  }, [dispatch]);
+
+  const isMappingExpressionEmpty =
+    initializationService.cfg.mappings?.activeMapping?.transition?.expression
+      ?.nodes.length === 0;
+
+  return {
+    ...state,
+    selectMapping,
+    deselectMapping,
+    deleteAtlasFile,
+    exportAtlasFile,
+    importAtlasFile: handleImportAtlasFile,
+    resetAtlasmap: handleResetAtlasmap,
+    mappingExpressionClearText,
+    isMappingExpressionEmpty,
+    executeFieldSearch,
+    mappingExpressionAddField,
+    mappingExpressionInit,
+    mappingExpressionInsertText,
+    mappingExpressionObservable,
+    mappingExpressionRemoveField,
+    onConditionalMappingExpressionEnabled,
+    currentMappingExpression: MappingUtil.getMappingExpressionStr(
+      true,
+      initializationService.cfg.mappings?.activeMapping,
+    ),
+    getMappingExpression,
+    onToggleExpressionMode,
+    toggleMappingPreview,
+    toggleShowMappedFields,
+    toggleShowUnmappedFields,
+    onFieldPreviewChange,
+    addToCurrentMapping,
+    removeFromCurrentMapping,
+    removeMappedFieldFromCurrentMapping,
+    fromMappedFieldToIMappingField,
+    createMapping,
+    newMapping,
+    removeMapping,
+    documentExists,
+    getMappingActions,
+    getMultiplicityActions,
+    getMultiplicityActionDelimiters,
+    handleActionChange,
+    handleIndexChange,
+    handleNewTransformation,
+    handleRemoveTransformation,
+    handleTransformationChange,
+    handleTransformationArgumentChange,
+    handleMultiplicityChange,
+    handleMultiplicityArgumentChange,
+    createConstant,
+    deleteConstant,
+    editConstant,
+    createProperty,
+    deleteProperty,
+    editProperty,
+    trailerId,
+  };
 }

@@ -6,9 +6,22 @@ import {
   FormSelectOption,
   InputGroup,
   TextInput,
+  InputGroupText,
 } from "@patternfly/react-core";
 import { TrashIcon } from "@patternfly/react-icons";
 import { css, StyleSheet } from "@patternfly/react-styles";
+
+export interface ITransformationSelectOption {
+  name: string;
+  value: string;
+}
+
+export interface ITransformationArgument {
+  label: string;
+  name: string;
+  value: string;
+  options?: ITransformationSelectOption[];
+}
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -30,51 +43,44 @@ const styles = StyleSheet.create({
 });
 
 export interface IMappingTransformationProps {
-  associatedFieldActionName: string;
-  actionsOptions: { name: string; value: string }[];
-  actionDelimiters: { displayName: string; delimiterValue: string }[];
-  currentActionDelimiter: string;
-  args?: { label: string; name: string; value: string }[];
-  isMultiplicityAction: boolean;
-  onArgValueChange: (val: string, event: any) => void;
-  onActionChange: (value: string) => void;
-  onActionDelimiterChange: (value: string) => void;
-  onRemoveTransformation: () => void;
+  name: string;
+  transformationsOptions: ITransformationSelectOption[];
+  transformationsArguments?: ITransformationArgument[];
+  onTransformationArgumentChange: (name: string, value: string) => void;
+  onTransformationChange: (value: string) => void;
+  onRemoveTransformation?: () => void;
   noPaddings?: boolean;
 }
 
 export const MappingTransformation: FunctionComponent<IMappingTransformationProps> = ({
-  associatedFieldActionName,
-  actionsOptions,
-  actionDelimiters,
-  args = [],
-  isMultiplicityAction,
-  onArgValueChange,
-  onActionChange,
-  onActionDelimiterChange,
+  name,
+  transformationsOptions,
+  transformationsArguments = [],
+  onTransformationArgumentChange,
+  onTransformationChange,
   onRemoveTransformation,
   noPaddings = false,
 }) => {
-  const id = `user-field-action-${associatedFieldActionName}`;
+  const id = `user-field-action-${name}`;
   return (
     <div className={css(styles.wrapper, !noPaddings && styles.wrapperPadded)}>
       <div className={css(styles.spaced)}>
         <InputGroup style={{ background: "transparent" }}>
           <FormSelect
-            value={associatedFieldActionName}
+            value={name}
             id={id}
-            onChange={onActionChange}
+            onChange={onTransformationChange}
             data-testid={id}
           >
-            {actionsOptions.map((a, idx) => (
+            {transformationsOptions.map((a, idx) => (
               <FormSelectOption label={a.name} value={a.value} key={idx} />
             ))}
           </FormSelect>
-          {!isMultiplicityAction && (
+          {onRemoveTransformation && (
             <Button
               variant={"plain"}
               onClick={onRemoveTransformation}
-              data-testid={`close-transformation-${associatedFieldActionName}-button`}
+              data-testid={`close-transformation-${name}-button`}
               aria-label="Remove the transformation"
             >
               <TrashIcon />
@@ -82,33 +88,38 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
           )}
         </InputGroup>
       </div>
-      {args.map((a, idx) => (
+      {transformationsArguments.map((a, idx) => (
         <div className={css(styles.spaced)} key={idx}>
           <InputGroup>
-            {isMultiplicityAction && a.label === "Delimiter" && (
+            <InputGroupText>{a.label}</InputGroupText>
+            {a.options ? (
               <FormSelect
                 value={a.value}
                 id={a.name}
-                onChange={onActionDelimiterChange}
+                onChange={(value) =>
+                  onTransformationArgumentChange(a.name, value)
+                }
                 data-testid={a.name}
               >
-                {actionDelimiters.map((delimiter, delimiterIdx) => (
+                {a.options.map((option, optIndx) => (
                   <FormSelectOption
-                    label={delimiter.displayName}
-                    value={delimiter.delimiterValue}
-                    key={delimiterIdx}
+                    label={option.name}
+                    value={option.value}
+                    key={optIndx}
                   />
                 ))}
               </FormSelect>
-            )}
-            {!(isMultiplicityAction && a.label === "Delimiter") && (
+            ) : (
               <TextInput
                 id={a.name}
                 type="text"
                 name={a.name}
-                value={a.value}
-                onChange={onArgValueChange}
-                placeholder={`(${a.label})`}
+                defaultValue={
+                  a.value
+                } /* uncontrolled component because the state will be updated slowly after some API call */
+                onChange={(value) =>
+                  onTransformationArgumentChange(a.name, value)
+                }
                 data-testid={`insert-transformation-parameter-${a.name}-input-field`}
               />
             )}

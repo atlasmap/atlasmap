@@ -60,6 +60,7 @@ export function jsonToFieldGroup(
       id,
       name: jf.name,
       type: jf.fieldType,
+      path: jf.path,
       previewValue: "",
       mappings,
       hasTransformations:
