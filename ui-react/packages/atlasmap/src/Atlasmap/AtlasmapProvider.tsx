@@ -298,14 +298,15 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
         },
       });
     };
+    const debounceInterval = state.pending ? 1000 : 50;
     const initializationObservable = initializationService.systemInitializedSource.pipe(
-      debounce(() => interval(500)),
+      debounce(() => interval(debounceInterval)),
     );
     const lineRefreshObservable = initializationService.cfg.mappingService.lineRefreshSource.pipe(
-      debounce(() => interval(500)),
+      debounce(() => interval(debounceInterval)),
     );
     const mappingUpdatedSource = initializationService.cfg.mappingService.mappingUpdatedSource.pipe(
-      debounce(() => interval(500)),
+      debounce(() => interval(debounceInterval)),
     );
 
     const subscriptions = [
@@ -327,6 +328,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
     baseXMLInspectionServiceUrl,
     baseJSONInspectionServiceUrl,
     baseMappingServiceUrl,
+    state.pending,
   ]);
 
   useEffect(() => {
