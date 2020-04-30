@@ -1,15 +1,10 @@
-import React, {
-  FormEvent,
-  FunctionComponent,
-  useRef,
-  useState,
-  useCallback,
-} from "react";
+import React, { FormEvent, FunctionComponent, useRef } from "react";
 
 import { Button, InputGroup, TextInput } from "@patternfly/react-core";
 import { SearchIcon } from "@patternfly/react-icons";
 
 import { ColumnHeader, IColumnHeaderProps } from "./ColumnHeader";
+import { useToggle } from "../useToggle";
 
 export interface ISearchableColumnHeaderProps extends IColumnHeaderProps {
   onSearch: (content: string) => void;
@@ -22,10 +17,16 @@ export const SearchableColumnHeader: FunctionComponent<ISearchableColumnHeaderPr
   onSearch,
   autoFocus = true,
 }) => {
-  const [showSearch, setShowSearch] = useState(false);
-  const toggleSearch = useCallback(() => setShowSearch(!showSearch), [
-    showSearch,
-  ]);
+  const cleanSearchOnTogglingSearchOff = (toggled: boolean) => {
+    if (!toggled) {
+      onSearch("");
+    }
+    return toggled;
+  };
+  const { state: showSearch, toggle: toggleSearch } = useToggle(
+    false,
+    cleanSearchOnTogglingSearchOff,
+  );
   const searchRef = useRef<HTMLInputElement | null>(null);
   const onSearchSubmit = (event: FormEvent<HTMLFormElement>) => {
     if (searchRef.current) {
@@ -33,12 +34,6 @@ export const SearchableColumnHeader: FunctionComponent<ISearchableColumnHeaderPr
     }
     event.preventDefault();
     return false;
-  };
-  const searchIfEmpty = (value: string) => {
-    console.log("onSearch", value);
-    if (value === "") {
-      onSearch("");
-    }
   };
   return (
     <ColumnHeader
@@ -66,7 +61,7 @@ export const SearchableColumnHeader: FunctionComponent<ISearchableColumnHeaderPr
               placeholder="Search fields..."
               aria-label="Search fields"
               autoFocus={autoFocus}
-              onChange={searchIfEmpty}
+              onChange={onSearch}
               ref={searchRef}
             />
             <Button type={"submit"} aria-label="Search">
