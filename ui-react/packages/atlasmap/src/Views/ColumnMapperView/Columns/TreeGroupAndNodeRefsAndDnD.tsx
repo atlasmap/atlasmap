@@ -63,6 +63,7 @@ export const TreeGroupAndNodeRefsAndDnD: FunctionComponent<ITreeGroupAndNodeRefs
               level={level}
               position={position}
               setSize={setSize}
+              expanded={isOver === true}
               renderLabel={({ expanded }) => (
                 <DocumentGroup
                   name={group.name}
