@@ -1,4 +1,4 @@
-import React, { FunctionComponent, ReactElement, ReactNode } from "react";
+import React, { FunctionComponent, ReactElement, ReactNode, memo } from "react";
 
 import { css, StyleSheet } from "@patternfly/react-styles";
 import { TopologyView } from "@patternfly/react-topology";
@@ -26,27 +26,29 @@ export interface IMainLayoutProps {
   renderSidebar: () => ReactElement;
 }
 
-export const MainLayout: FunctionComponent<IMainLayoutProps> = ({
-  loading,
-  showSidebar,
-  renderSidebar,
-  contextToolbar,
-  viewToolbar,
-  controlBar,
-  children,
-}) => {
-  return loading ? (
-    <Loading />
-  ) : (
-    <TopologyView
-      contextToolbar={contextToolbar}
-      viewToolbar={viewToolbar}
-      controlBar={controlBar}
-      sideBarOpen={showSidebar}
-      sideBar={<Sidebar show={showSidebar} children={renderSidebar} />}
-      className={css(styles.view)}
-    >
-      {children}
-    </TopologyView>
-  );
-};
+export const MainLayout: FunctionComponent<IMainLayoutProps> = memo(
+  ({
+    loading,
+    showSidebar,
+    renderSidebar,
+    contextToolbar,
+    viewToolbar,
+    controlBar,
+    children,
+  }) => {
+    return loading ? (
+      <Loading />
+    ) : (
+      <TopologyView
+        contextToolbar={contextToolbar}
+        viewToolbar={viewToolbar}
+        controlBar={controlBar}
+        sideBarOpen={showSidebar}
+        sideBar={<Sidebar show={showSidebar} children={renderSidebar} />}
+        className={css(styles.view)}
+      >
+        {children}
+      </TopologyView>
+    );
+  },
+);

@@ -4,6 +4,7 @@ import React, { FunctionComponent, SVGAttributes, useMemo } from "react";
 import { css, StyleSheet } from "@patternfly/react-styles";
 
 import { Coords } from "./models";
+import { useToggle } from "../useToggle";
 
 const styles = StyleSheet.create({
   clickable: {
@@ -44,6 +45,7 @@ export interface IArcProps extends Omit<SVGAttributes<SVGPathElement>, "end"> {
   type?: "horizontal" | "vertical";
   strokeWidth?: number;
   color?: string;
+  hoveredColor?: string;
   sideStrokeWidth?: number;
 }
 
@@ -52,6 +54,7 @@ export const Arc: FunctionComponent<IArcProps> = ({
   end,
   type = "horizontal",
   color = "grey",
+  hoveredColor = color,
   strokeWidth = 2,
   startSideSize = strokeWidth,
   endSideSize = strokeWidth,
@@ -59,7 +62,13 @@ export const Arc: FunctionComponent<IArcProps> = ({
   className,
   ...props
 }) => {
+  const {
+    state: hovered,
+    toggleOn: toggleHoverOn,
+    toggleOff: toggleHoverOff,
+  } = useToggle(false);
   const s = strokeWidth;
+  const appliedColor = hovered ? hoveredColor : color;
 
   const link = useMemo(
     () =>
@@ -81,8 +90,8 @@ export const Arc: FunctionComponent<IArcProps> = ({
   startSideSize = startSideSize / 2;
   endSideSize = endSideSize / 2;
   return d ? (
-    <g>
-      <path d={d} stroke={color} strokeWidth={s} fill={"none"} />
+    <g onMouseEnter={toggleHoverOn} onMouseLeave={toggleHoverOff}>
+      <path d={d} stroke={appliedColor} strokeWidth={s} fill={"none"} />
       <path
         d={d}
         stroke={"transparent"}
@@ -114,7 +123,7 @@ export const Arc: FunctionComponent<IArcProps> = ({
                 y: start.y - sideStrokeWidth / 2,
               }
         }
-        color={color}
+        color={appliedColor}
         strokeWidth={sideStrokeWidth}
       />
       <ArcEdge
@@ -128,7 +137,7 @@ export const Arc: FunctionComponent<IArcProps> = ({
             ? { x: end.x + sideStrokeWidth / 2, y: end.y + endSideSize - 1 }
             : { x: end.x + endSideSize - 1, y: end.y + sideStrokeWidth / 2 }
         }
-        color={color}
+        color={appliedColor}
         strokeWidth={sideStrokeWidth}
       />
     </g>

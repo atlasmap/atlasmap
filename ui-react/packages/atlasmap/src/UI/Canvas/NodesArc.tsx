@@ -65,61 +65,67 @@ export const NodesArc: FunctionComponent<INodesArcProps> = ({
     "horizontal",
   );
 
-  const calculateCoords = useCallback(() => {
-    const startRect = getRect(startId);
-    const endRect = getRect(endId);
-    if (startRect && endRect) {
-      const [smallRect, bigRect] =
-        startRect.width < endRect.width
-          ? [startRect, endRect]
-          : [endRect, startRect];
-      const sameVerticalSpace =
-        (smallRect.left > bigRect.left && smallRect.left < bigRect.right) ||
-        (smallRect.right < bigRect.right && smallRect.right > bigRect.left);
-      if (sameVerticalSpace) {
-        const [aboveId, bottomId] =
-          startRect.top > endRect.top ? [startId, endId] : [endId, startId];
-        const start = getRect(aboveId);
-        const end = getRect(bottomId);
-        if (start && end) {
-          setCoords({
-            start: topCoords(start, start.clipped),
-            end: bottomCoords(end, end.clipped),
-            startSideSize: start.clipped ? 0 : start.width,
-            endSideSize: end.clipped ? 0 : end.width,
-          });
-          setLinkType("vertical");
+  const calculateCoords = useCallback(
+    function calculateCoordsCb() {
+      const startRect = getRect(startId);
+      const endRect = getRect(endId);
+      if (startRect && endRect) {
+        const [smallRect, bigRect] =
+          startRect.width < endRect.width
+            ? [startRect, endRect]
+            : [endRect, startRect];
+        const sameVerticalSpace =
+          (smallRect.left > bigRect.left && smallRect.left < bigRect.right) ||
+          (smallRect.right < bigRect.right && smallRect.right > bigRect.left);
+        if (sameVerticalSpace) {
+          const [aboveId, bottomId] =
+            startRect.top > endRect.top ? [startId, endId] : [endId, startId];
+          const start = getRect(aboveId);
+          const end = getRect(bottomId);
+          if (start && end) {
+            setCoords({
+              start: topCoords(start, start.clipped),
+              end: bottomCoords(end, end.clipped),
+              startSideSize: start.clipped ? 0 : start.width,
+              endSideSize: end.clipped ? 0 : end.width,
+            });
+            setLinkType("vertical");
+          } else {
+            setCoords(null);
+          }
         } else {
-          setCoords(null);
+          const [leftId, rightId] =
+            startRect.left > endRect.left ? [startId, endId] : [endId, startId];
+          const start = getRect(leftId);
+          const end = getRect(rightId);
+          if (start && end) {
+            setCoords({
+              start: leftCoords(start, start.clipped),
+              end: rightCoords(end, end.clipped),
+              startSideSize: start.clipped ? 0 : start.height,
+              endSideSize: end.clipped ? 0 : end.height,
+            });
+            setLinkType("horizontal");
+          } else {
+            setCoords(null);
+          }
         }
       } else {
-        const [leftId, rightId] =
-          startRect.left > endRect.left ? [startId, endId] : [endId, startId];
-        const start = getRect(leftId);
-        const end = getRect(rightId);
-        if (start && end) {
-          setCoords({
-            start: leftCoords(start, start.clipped),
-            end: rightCoords(end, end.clipped),
-            startSideSize: start.clipped ? 0 : start.height,
-            endSideSize: end.clipped ? 0 : end.height,
-          });
-          setLinkType("horizontal");
-        } else {
-          setCoords(null);
-        }
+        setCoords(null);
       }
-    } else {
-      setCoords(null);
-    }
-  }, [endId, startId, getRect]);
+    },
+    [endId, startId, getRect],
+  );
 
-  useEffect(() => {
-    addRedrawListener(calculateCoords);
-    return () => {
-      removeRedrawListener(calculateCoords);
-    };
-  }, [addRedrawListener, removeRedrawListener, calculateCoords]);
+  useEffect(
+    function onNodeArcRedrawCb() {
+      addRedrawListener(calculateCoords);
+      return () => {
+        removeRedrawListener(calculateCoords);
+      };
+    },
+    [addRedrawListener, removeRedrawListener, calculateCoords],
+  );
 
   return coords ? (
     <Arc

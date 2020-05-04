@@ -7,8 +7,7 @@ import React, {
   useReducer,
   Dispatch,
 } from "react";
-import { interval } from "rxjs";
-import { debounce } from "rxjs/operators";
+import { debounceTime } from "rxjs/operators";
 
 import {
   MappingUtil,
@@ -179,63 +178,104 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
 }) => {
   const [state, dispatch] = useReducer(reducer, {}, init);
 
-  useEffect(() => {
-    dispatch({ type: "reset" });
-    initializationService.resetConfig();
+  useEffect(
+    function onInitializationCb() {
+      dispatch({ type: "reset" });
+      initializationService.resetConfig();
 
-    const c = initializationService.cfg;
-    c.initCfg.baseMappingServiceUrl = baseMappingServiceUrl;
-    c.initCfg.baseJavaInspectionServiceUrl = baseJavaInspectionServiceUrl;
-    c.initCfg.baseXMLInspectionServiceUrl = baseXMLInspectionServiceUrl;
-    c.initCfg.baseJSONInspectionServiceUrl = baseJSONInspectionServiceUrl;
+      const c = initializationService.cfg;
+      c.initCfg.baseMappingServiceUrl = baseMappingServiceUrl;
+      c.initCfg.baseJavaInspectionServiceUrl = baseJavaInspectionServiceUrl;
+      c.initCfg.baseXMLInspectionServiceUrl = baseXMLInspectionServiceUrl;
+      c.initCfg.baseJSONInspectionServiceUrl = baseJSONInspectionServiceUrl;
 
-    if (externalDocument) {
-      externalDocument.inputDocuments.forEach((d) => {
-        const inputDoc: DocumentInitializationModel = new DocumentInitializationModel();
-        inputDoc.type = d.documentType;
-        inputDoc.inspectionType = d.inspectionType;
-        inputDoc.inspectionSource = d.inspectionSource;
-        inputDoc.inspectionResult = d.inspectionResult;
-        inputDoc.id = d.id;
-        inputDoc.name = d.name;
-        inputDoc.description = d.description;
-        inputDoc.isSource = true;
-        inputDoc.showFields = d.showFields;
-        c.addDocument(inputDoc);
-      });
+      if (externalDocument) {
+        externalDocument.inputDocuments.forEach((d) => {
+          const inputDoc: DocumentInitializationModel = new DocumentInitializationModel();
+          inputDoc.type = d.documentType;
+          inputDoc.inspectionType = d.inspectionType;
+          inputDoc.inspectionSource = d.inspectionSource;
+          inputDoc.inspectionResult = d.inspectionResult;
+          inputDoc.id = d.id;
+          inputDoc.name = d.name;
+          inputDoc.description = d.description;
+          inputDoc.isSource = true;
+          inputDoc.showFields = d.showFields;
+          c.addDocument(inputDoc);
+        });
 
-      const outputDoc: DocumentInitializationModel = new DocumentInitializationModel();
-      outputDoc.type = externalDocument.outputDocument.documentType;
-      outputDoc.inspectionType = externalDocument.outputDocument.inspectionType;
-      outputDoc.inspectionSource =
-        externalDocument.outputDocument.inspectionSource;
-      outputDoc.inspectionResult =
-        externalDocument.outputDocument.inspectionResult;
-      outputDoc.id = externalDocument.outputDocument.id;
-      outputDoc.name = externalDocument.outputDocument.name;
-      outputDoc.description = externalDocument.outputDocument.description;
-      outputDoc.isSource = false;
-      outputDoc.showFields = externalDocument.outputDocument.showFields;
-      c.addDocument(outputDoc);
+        const outputDoc: DocumentInitializationModel = new DocumentInitializationModel();
+        outputDoc.type = externalDocument.outputDocument.documentType;
+        outputDoc.inspectionType =
+          externalDocument.outputDocument.inspectionType;
+        outputDoc.inspectionSource =
+          externalDocument.outputDocument.inspectionSource;
+        outputDoc.inspectionResult =
+          externalDocument.outputDocument.inspectionResult;
+        outputDoc.id = externalDocument.outputDocument.id;
+        outputDoc.name = externalDocument.outputDocument.name;
+        outputDoc.description = externalDocument.outputDocument.description;
+        outputDoc.isSource = false;
+        outputDoc.showFields = externalDocument.outputDocument.showFields;
+        c.addDocument(outputDoc);
 
-      if (externalDocument.initialMappings) {
-        c.preloadedMappingJson = externalDocument.initialMappings;
+        if (externalDocument.initialMappings) {
+          c.preloadedMappingJson = externalDocument.initialMappings;
+        }
       }
-    }
 
-    initializationService.initialize();
+      initializationService.initialize();
 
-    dispatch({ type: "loading" });
-  }, [
-    baseJSONInspectionServiceUrl,
-    baseJavaInspectionServiceUrl,
-    baseMappingServiceUrl,
-    baseXMLInspectionServiceUrl,
-    externalDocument,
-  ]);
+      dispatch({ type: "loading" });
+    },
+    [
+      baseJSONInspectionServiceUrl,
+      baseJavaInspectionServiceUrl,
+      baseMappingServiceUrl,
+      baseXMLInspectionServiceUrl,
+      externalDocument,
+    ],
+  );
 
-  useEffect(() => {
-    const onUpdates = (caller: string) => {
+  const convertSources = useCallback(function convertSourcesCb() {
+    return initializationService.cfg.sourceDocs
+      .map(fromDocumentDefinitionToFieldGroup)
+      .filter((d) => d) as IAtlasmapDocument[];
+  }, []);
+
+  const convertConstants = useCallback(function convertConstantsCb() {
+    return fromDocumentDefinitionToFieldGroup(
+      initializationService.cfg.constantDoc,
+    );
+  }, []);
+
+  const convertProperties = useCallback(function convertPropertiesCb() {
+    return fromDocumentDefinitionToFieldGroup(
+      initializationService.cfg.propertyDoc,
+    );
+  }, []);
+
+  const convertTargets = useCallback(function convertTargetsCb() {
+    return initializationService.cfg.targetDocs
+      .map(fromDocumentDefinitionToFieldGroup)
+      .filter((d) => d) as IAtlasmapDocument[];
+  }, []);
+
+  const convertMappings = useCallback(function convertMappingsCb() {
+    return fromMappingDefinitionToIMappings(initializationService.cfg.mappings);
+  }, []);
+
+  const convertSelectedMapping = useCallback(
+    function convertSelectedMappingCb() {
+      return fromMappingModelToImapping(
+        initializationService.cfg.mappings?.activeMapping,
+      );
+    },
+    [],
+  );
+
+  const onUpdates = useCallback(
+    function onUpdatesCb(caller: string) {
       console.log(
         "onUpdates",
         caller,
@@ -249,75 +289,85 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
         payload: {
           pending: !initializationService.cfg.initCfg.initialized,
           error: initializationService.cfg.initCfg.initializationErrorOccurred,
-          sources: initializationService.cfg.sourceDocs
-            .map(fromDocumentDefinitionToFieldGroup)
-            .filter((d) => d) as IAtlasmapDocument[],
-          constants: fromDocumentDefinitionToFieldGroup(
-            initializationService.cfg.constantDoc,
-          ),
-          properties: fromDocumentDefinitionToFieldGroup(
-            initializationService.cfg.propertyDoc,
-          ),
-          targets: initializationService.cfg.targetDocs
-            .map(fromDocumentDefinitionToFieldGroup)
-            .filter((d) => d) as IAtlasmapDocument[],
-          mappings: fromMappingDefinitionToIMappings(
-            initializationService.cfg.mappings,
-          ),
-          selectedMapping: fromMappingModelToImapping(
-            initializationService.cfg.mappings?.activeMapping,
-          ),
+          sources: convertSources(),
+          constants: convertConstants(),
+          properties: convertProperties(),
+          targets: convertTargets(),
+          mappings: convertMappings(),
+          selectedMapping: convertSelectedMapping(),
         },
       });
-    };
-    const debounceInterval = state.pending ? 1000 : 50;
-    const initializationObservable = initializationService.systemInitializedSource.pipe(
-      debounce(() => interval(debounceInterval)),
-    );
-    const lineRefreshObservable = initializationService.cfg.mappingService.lineRefreshSource.pipe(
-      debounce(() => interval(debounceInterval)),
-    );
-    const mappingUpdatedSource = initializationService.cfg.mappingService.mappingUpdatedSource.pipe(
-      debounce(() => interval(debounceInterval)),
-    );
+    },
+    [
+      convertConstants,
+      convertMappings,
+      convertProperties,
+      convertSelectedMapping,
+      convertSources,
+      convertTargets,
+    ],
+  );
 
-    const subscriptions = [
-      initializationObservable.subscribe(() =>
-        onUpdates("initializationObservable"),
-      ),
-      mappingUpdatedSource.subscribe(() => onUpdates("mappingUpdatedSource")),
-      initializationService.cfg.mappingService.mappingPreviewOutput$.subscribe(
-        () => onUpdates("mappingPreviewOutput$"),
-      ),
-      lineRefreshObservable.subscribe(() => onUpdates("lineRefreshObservable")),
-    ];
-
-    return () => {
-      subscriptions.forEach((s) => s.unsubscribe());
-    };
-  }, [
-    baseJavaInspectionServiceUrl,
-    baseXMLInspectionServiceUrl,
-    baseJSONInspectionServiceUrl,
-    baseMappingServiceUrl,
-    state.pending,
-  ]);
-
-  useEffect(() => {
-    if (onMappingChange) {
-      initializationService.cfg.mappingService.mappingUpdatedSource.subscribe(
-        () => {
-          if (initializationService.cfg.initCfg.initialized) {
-            onMappingChange(
-              JSON.stringify(
-                MappingSerializer.serializeMappings(initializationService.cfg),
-              ),
-            );
-          }
-        },
+  useEffect(
+    function subscriptionListener() {
+      const debounceTimeWindow = state.pending ? 1000 : 50;
+      const initializationObservable = initializationService.systemInitializedSource.pipe(
+        debounceTime(debounceTimeWindow),
       );
-    }
-  }, [onMappingChange]);
+      const lineRefreshObservable = initializationService.cfg.mappingService.lineRefreshSource.pipe(
+        debounceTime(debounceTimeWindow),
+      );
+      const mappingUpdatedSource = initializationService.cfg.mappingService.mappingUpdatedSource.pipe(
+        debounceTime(debounceTimeWindow),
+      );
+
+      const subscriptions = [
+        initializationObservable.subscribe(() =>
+          onUpdates("initializationObservable"),
+        ),
+        mappingUpdatedSource.subscribe(() => onUpdates("mappingUpdatedSource")),
+        initializationService.cfg.mappingService.mappingPreviewOutput$.subscribe(
+          () => onUpdates("mappingPreviewOutput$"),
+        ),
+        lineRefreshObservable.subscribe(() =>
+          onUpdates("lineRefreshObservable"),
+        ),
+      ];
+
+      return () => {
+        subscriptions.forEach((s) => s.unsubscribe());
+      };
+    },
+    [
+      baseJavaInspectionServiceUrl,
+      baseXMLInspectionServiceUrl,
+      baseJSONInspectionServiceUrl,
+      baseMappingServiceUrl,
+      state.pending,
+      onUpdates,
+    ],
+  );
+
+  useEffect(
+    function onMappingChangeListenerCb() {
+      if (onMappingChange) {
+        initializationService.cfg.mappingService.mappingUpdatedSource.subscribe(
+          function onMappingChangeListenerSubCb() {
+            if (initializationService.cfg.initCfg.initialized) {
+              onMappingChange(
+                JSON.stringify(
+                  MappingSerializer.serializeMappings(
+                    initializationService.cfg,
+                  ),
+                ),
+              );
+            }
+          },
+        );
+      }
+    },
+    [onMappingChange],
+  );
 
   return (
     <AtlasmapContext.Provider value={{ ...state, dispatch }}>
@@ -337,8 +387,18 @@ export function useAtlasmap({
 }: IUseAtlasmapProps = {}) {
   const context = useContext(AtlasmapContext);
 
-  useEffect(() => search(sourcesSearchString, true), [sourcesSearchString]);
-  useEffect(() => search(targetsSearchString, false), [targetsSearchString]);
+  useEffect(
+    function onSourceSearchCb() {
+      search(sourcesSearchString, true);
+    },
+    [sourcesSearchString],
+  );
+  useEffect(
+    function onTargetSearchCb() {
+      search(targetsSearchString, false);
+    },
+    [targetsSearchString],
+  );
 
   if (!context) {
     throw new Error(
