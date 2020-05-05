@@ -86,6 +86,7 @@ export const ConstantsTree: FunctionComponent<IConstantsTreeProps> = ({
             onClick={() => onEditConstant(field.name)}
             aria-label={"Edit constant"}
             tabIndex={0}
+            data-testid={`edit-constant-${field.name}-button`}
           >
             <EditIcon />
           </Button>
@@ -101,6 +102,7 @@ export const ConstantsTree: FunctionComponent<IConstantsTreeProps> = ({
             onClick={() => onDeleteConstant(field.name)}
             aria-label={"Remove constant"}
             tabIndex={0}
+            data-testid={`remove-constant-${field.name}-button`}
           >
             <TrashIcon />
           </Button>

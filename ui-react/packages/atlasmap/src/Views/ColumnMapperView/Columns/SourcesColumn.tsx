@@ -103,8 +103,16 @@ export const SourcesColumn: FunctionComponent<
         title={"Source"}
         onSearch={onSearch}
         actions={[
-          <ImportAction onImport={onImportDocument} key={"import"} />,
-          <EnableJavaClassAction onClick={onEnableJavaClasses} key={"java"} />,
+          <ImportAction
+            id="Source"
+            onImport={onImportDocument}
+            key={"import"}
+          />,
+          <EnableJavaClassAction
+            id="Source"
+            onClick={onEnableJavaClasses}
+            key={"java"}
+          />,
         ]}
       />
       <NodeRef id={SOURCES_HEIGHT_BOUNDARY_ID}>
@@ -129,6 +137,7 @@ export const SourcesColumn: FunctionComponent<
                         onClick={onCreateProperty}
                         variant={"plain"}
                         aria-label="Create a property for use in mapping"
+                        data-testid="create-property-button"
                       >
                         <PlusIcon />
                       </Button>
@@ -177,6 +186,7 @@ export const SourcesColumn: FunctionComponent<
                         onClick={onCreateConstant}
                         variant={"plain"}
                         aria-label="Create a constant for use in mapping"
+                        data-testid="create-constant-button"
                       >
                         <PlusIcon />
                       </Button>
@@ -224,6 +234,7 @@ export const SourcesColumn: FunctionComponent<
                       }
                       actions={[
                         <DeleteDocumentAction
+                          id={documentId}
                           onClick={() => onDeleteDocument(s.id)}
                           key={"delete-document"}
                         />,

@@ -45,6 +45,7 @@ export const SearchableColumnHeader: FunctionComponent<ISearchableColumnHeaderPr
           aria-label="Search button for search input"
           key={"search"}
           onClick={toggleSearch}
+          data-testid={`search-${title}-button`}
         >
           <SearchIcon />
         </Button>,
@@ -63,8 +64,13 @@ export const SearchableColumnHeader: FunctionComponent<ISearchableColumnHeaderPr
               autoFocus={autoFocus}
               onChange={onSearch}
               ref={searchRef}
+              data-testid={`search-${title}-fields-input-field`}
             />
-            <Button type={"submit"} aria-label="Search">
+            <Button
+              type={"submit"}
+              aria-label="Search"
+              data-testid={`run-search-${title}-button`}
+            >
               Search
             </Button>
           </InputGroup>

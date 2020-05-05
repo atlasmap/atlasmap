@@ -101,6 +101,7 @@ export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent<ITreeItemFiel
                             tabIndex={-1}
                             aria-label={"Drop target"}
                             isDisabled={!isDroppable}
+                            data-testid={`is-droppable-${field.name}-button`}
                           >
                             <BullseyeIcon size="sm" />
                           </Button>
@@ -109,6 +110,7 @@ export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent<ITreeItemFiel
                             variant={"plain"}
                             tabIndex={-1}
                             aria-hidden={true}
+                            data-testid={`grip-${field.name}-button`}
                           >
                             <GripVerticalIcon />
                           </Button>
