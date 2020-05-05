@@ -5,7 +5,6 @@ import React, {
   useContext,
   useEffect,
   useReducer,
-  Dispatch,
 } from "react";
 import { debounceTime } from "rxjs/operators";
 
@@ -18,7 +17,7 @@ import {
   DocumentInitializationModel,
 } from "@atlasmap/core";
 
-import { IAtlasmapDocument, IAtlasmapMapping, IAtlasmapField } from "../Views";
+import { IAtlasmapDocument, IAtlasmapField } from "../Views";
 import {
   addToCurrentMapping,
   createConstant,
@@ -70,7 +69,17 @@ import {
   removeFromCurrentMapping,
   removeMappedFieldFromCurrentMapping,
   fromMappedFieldToIMappingField,
+  errorLevelToVariant,
 } from "./utils";
+import {
+  INotificationsState,
+  IDataState,
+  initDataState,
+  initNotificationsState,
+  dataReducer,
+  notificationsReducer,
+  DataActionPayload,
+} from "./reducers";
 
 // the document payload with get from Syndesis
 export interface IExternalDocumentProps {
@@ -83,8 +92,10 @@ export interface IExternalDocumentProps {
   inspectionResult: string;
   showFields: boolean;
 }
-interface IAtlasmapContext extends State {
-  dispatch: Dispatch<Action>;
+interface IAtlasmapContext extends IDataState, INotificationsState {
+  onLoading: () => void;
+  onReset: () => void;
+  markNotificationRead: (id: string) => void;
 }
 const AtlasmapContext = createContext<IAtlasmapContext | null>(null);
 
@@ -102,73 +113,6 @@ export interface IAtlasmapProviderProps {
   };
   onMappingChange?: (serializedMappings: string) => void;
 }
-
-interface State {
-  pending: boolean;
-  error: boolean;
-  sources: IAtlasmapDocument[];
-  targets: IAtlasmapDocument[];
-  properties: IAtlasmapDocument | null;
-  constants: IAtlasmapDocument | null;
-  mappings: IAtlasmapMapping[];
-  selectedMapping: IAtlasmapMapping | null;
-}
-
-interface Action {
-  type: "reset" | "loading" | "update" | "error";
-  payload?: ActionPayload;
-}
-
-interface ActionPayload {
-  pending?: boolean;
-  error?: boolean;
-  sources?: IAtlasmapDocument[];
-  targets?: IAtlasmapDocument[];
-  properties?: IAtlasmapDocument | null;
-  constants?: IAtlasmapDocument | null;
-  mappings?: IAtlasmapMapping[];
-  selectedMapping?: IAtlasmapMapping | null;
-  sourcesFilter?: string;
-  targetsFilter?: string;
-}
-
-const init = (): State => ({
-  pending: false,
-  error: false,
-  properties: null,
-  constants: null,
-  sources: [],
-  targets: [],
-  mappings: [],
-  selectedMapping: null,
-});
-
-function reducer(state: State, action: Action): State {
-  switch (action.type) {
-    case "reset":
-      return {
-        ...state,
-        pending: false,
-        error: false,
-      };
-    case "loading":
-      return {
-        ...state,
-        pending: true,
-        error: false,
-      };
-    case "update":
-      return {
-        ...state,
-        ...action.payload,
-      };
-    case "error":
-      return init();
-    default:
-      throw new Error();
-  }
-}
-
 export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   baseJavaInspectionServiceUrl,
   baseXMLInspectionServiceUrl,
@@ -178,11 +122,37 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   onMappingChange,
   children,
 }) => {
-  const [state, dispatch] = useReducer(reducer, {}, init);
+  const [data, dispatchData] = useReducer(dataReducer, {}, initDataState);
+  const [notifications, dispatchNotifications] = useReducer(
+    notificationsReducer,
+    {},
+    initNotificationsState,
+  );
+
+  const onReset = () => {
+    dispatchData({ type: "reset" });
+    dispatchNotifications({
+      type: "reset",
+    });
+  };
+
+  const onLoading = () => {
+    dispatchData({ type: "loading" });
+  };
+
+  const onUpdates = (payload: DataActionPayload) => {
+    dispatchData({
+      type: "update",
+      payload,
+    });
+  };
+
+  const markNotificationRead = (id: string) =>
+    dispatchNotifications({ type: "dismiss", payload: { id } });
 
   useEffect(
     function onInitializationCb() {
-      dispatch({ type: "reset" });
+      onReset();
       initializationService.resetConfig();
 
       const c = initializationService.cfg;
@@ -228,7 +198,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
 
       initializationService.initialize();
 
-      dispatch({ type: "loading" });
+      onLoading();
     },
     [
       baseJSONInspectionServiceUrl,
@@ -276,8 +246,8 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
     [],
   );
 
-  const onUpdates = useCallback(
-    function onUpdatesCb(caller: string) {
+  const onSubUpdate = useCallback(
+    function onSubUpdateCb(caller: string) {
       console.log(
         "onUpdates",
         caller,
@@ -286,18 +256,15 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
         "errors",
         initializationService.cfg.initCfg.initializationErrorOccurred,
       );
-      dispatch({
-        type: "update",
-        payload: {
-          pending: !initializationService.cfg.initCfg.initialized,
-          error: initializationService.cfg.initCfg.initializationErrorOccurred,
-          sources: convertSources(),
-          constants: convertConstants(),
-          properties: convertProperties(),
-          targets: convertTargets(),
-          mappings: convertMappings(),
-          selectedMapping: convertSelectedMapping(),
-        },
+      onUpdates({
+        pending: !initializationService.cfg.initCfg.initialized,
+        error: initializationService.cfg.initCfg.initializationErrorOccurred,
+        sources: convertSources(),
+        constants: convertConstants(),
+        properties: convertProperties(),
+        targets: convertTargets(),
+        mappings: convertMappings(),
+        selectedMapping: convertSelectedMapping(),
       });
     },
     [
@@ -312,7 +279,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
 
   useEffect(
     function subscriptionListener() {
-      const debounceTimeWindow = state.pending ? 1000 : 50;
+      const debounceTimeWindow = data.pending ? 1000 : 50;
       const initializationObservable = initializationService.systemInitializedSource.pipe(
         debounceTime(debounceTimeWindow),
       );
@@ -325,15 +292,32 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
 
       const subscriptions = [
         initializationObservable.subscribe(() =>
-          onUpdates("initializationObservable"),
+          onSubUpdate("initializationObservable"),
         ),
-        mappingUpdatedSource.subscribe(() => onUpdates("mappingUpdatedSource")),
+        mappingUpdatedSource.subscribe(() =>
+          onSubUpdate("mappingUpdatedSource"),
+        ),
         initializationService.cfg.mappingService.mappingPreviewOutput$.subscribe(
-          () => onUpdates("mappingPreviewOutput$"),
+          () => onSubUpdate("mappingPreviewOutput$"),
         ),
         lineRefreshObservable.subscribe(() =>
-          onUpdates("lineRefreshObservable"),
+          onSubUpdate("lineRefreshObservable"),
         ),
+        initializationService.cfg.errorService.subscribe(() => {
+          dispatchNotifications({
+            type: "update",
+            payload: {
+              notifications: initializationService.cfg.errorService
+                .getErrors()
+                .filter((e) => !e.mapping && e.level !== "DEBUG")
+                .map((e) => ({
+                  variant: errorLevelToVariant(e.level),
+                  message: e.message,
+                  id: e.identifier,
+                })),
+            },
+          });
+        }),
       ];
 
       return () => {
@@ -345,8 +329,8 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
       baseXMLInspectionServiceUrl,
       baseJSONInspectionServiceUrl,
       baseMappingServiceUrl,
-      state.pending,
-      onUpdates,
+      data.pending,
+      onSubUpdate,
     ],
   );
 
@@ -372,7 +356,15 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   );
 
   return (
-    <AtlasmapContext.Provider value={{ ...state, dispatch }}>
+    <AtlasmapContext.Provider
+      value={{
+        ...data,
+        ...notifications,
+        onLoading,
+        onReset,
+        markNotificationRead,
+      }}
+    >
       {children}
     </AtlasmapContext.Provider>
   );
@@ -387,23 +379,25 @@ export function useAtlasmap() {
     );
   }
 
-  const { dispatch, ...state } = context;
+  const { onLoading, onReset, ...state } = context;
 
   const searchSources = useCallback((term: string) => search(term, true), []);
   const searchTargets = useCallback((term: string) => search(term, false), []);
 
   const handleImportAtlasFile = useCallback(
     (file: File, isSource: boolean) => {
-      dispatch({ type: "loading" });
+      if (!isSource) {
+        onLoading();
+      }
       importAtlasFile(file, isSource);
     },
-    [dispatch],
+    [onLoading],
   );
 
   const handleResetAtlasmap = useCallback(() => {
-    dispatch({ type: "reset" });
+    onReset();
     resetAtlasmap();
-  }, [dispatch]);
+  }, [onReset]);
 
   const isMappingExpressionEmpty =
     initializationService.cfg.mappings?.activeMapping?.transition?.expression

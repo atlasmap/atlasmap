@@ -1,3 +1,4 @@
+import { initializationService } from "./ui";
 import {
   ConfigModel,
   Field,
@@ -5,6 +6,10 @@ import {
   propertyTypes,
   MappingModel,
   MappedField,
+  ErrorInfo,
+  ErrorLevel,
+  ErrorScope,
+  ErrorType,
 } from "@atlasmap/core";
 
 export function createConstant(constValue: string, constType: string): void {
@@ -148,13 +153,30 @@ export function getPropertyTypeIndex(propName: string): number {
  */
 export function createMapping(source: Field | undefined, target?: Field): void {
   const cfg = ConfigModel.getConfig();
+  const ms = initializationService.cfg.mappingService;
   if (source) {
     cfg.mappingService.addNewMapping(source, false);
   } else {
     cfg.mappingService.newMapping();
   }
   if (target) {
-    addToCurrentMapping(target);
+    const exclusionReason = ms.getFieldSelectionExclusionReason(
+      cfg.mappings?.activeMapping!,
+      target,
+    );
+    if (exclusionReason !== null) {
+      cfg.errorService.addError(
+        new ErrorInfo({
+          message: `The field '${target.name}' cannot be selected, ${exclusionReason}.`,
+          level: ErrorLevel.ERROR,
+          mapping: cfg.mappings?.activeMapping!,
+          scope: ErrorScope.MAPPING,
+          type: ErrorType.USER,
+        }),
+      );
+    } else {
+      addToCurrentMapping(target);
+    }
   }
 }
 

@@ -1,5 +1,6 @@
 import { Field, MappingModel } from "@atlasmap/core";
 import { ITransformationArgument } from "../UI";
+import { AlertProps } from "@patternfly/react-core";
 
 export type ElementId = string;
 export type GroupId = string;
@@ -54,4 +55,12 @@ export interface IAtlasmapMapping {
   sourceFields: Array<IAtlasmapMappedField>;
   targetFields: Array<IAtlasmapMappedField>;
   mapping: MappingModel;
+  notifications: INotification[];
+}
+
+export interface INotification {
+  id: string;
+  variant: AlertProps["variant"];
+  message: string;
+  isRead?: boolean;
 }

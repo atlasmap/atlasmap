@@ -18,7 +18,6 @@ export interface ISourceTargetViewProps
     ITargetsColumnData,
     ISourceMappingTargetLinksData {
   onSelectMapping: ISourceMappingTargetLinksEvents["onSelectMapping"];
-  onDeselectMapping: () => void;
   sourceEvents: ISourceColumnCallbacks;
   targetEvents: ITargetsColumnCallbacks;
 }
@@ -33,12 +32,11 @@ export const SourceTargetView: FunctionComponent<ISourceTargetViewProps> = ({
   showTypes,
   selectedMappingId,
   onSelectMapping,
-  onDeselectMapping,
   sourceEvents,
   targetEvents,
 }) => {
   return (
-    <ColumnMapper onClick={onDeselectMapping} role={"main"}>
+    <ColumnMapper role={"main"}>
       <NodeRefProvider>
         <Columns>
           <Column totalColumns={2}>

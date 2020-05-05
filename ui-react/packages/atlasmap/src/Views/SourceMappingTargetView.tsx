@@ -23,7 +23,6 @@ export interface ISourceMappingTargetViewProps
     ITargetsColumnData,
     ISourceMappingTargetLinksData {
   onSelectMapping: ISourceMappingTargetLinksEvents["onSelectMapping"];
-  onDeselectMapping: () => void;
   sourceEvents: ISourceColumnCallbacks;
   mappingEvents: IMappingDocumentEvents;
   targetEvents: ITargetsColumnCallbacks;
@@ -39,7 +38,6 @@ export const SourceMappingTargetView: FunctionComponent<ISourceMappingTargetView
   showTypes,
   selectedMappingId,
   onSelectMapping,
-  onDeselectMapping,
   sourceEvents,
   mappingEvents,
   targetEvents,
@@ -52,7 +50,7 @@ export const SourceMappingTargetView: FunctionComponent<ISourceMappingTargetView
   const handleMouseOut = () => setHighlightedMappingId(undefined);
 
   return (
-    <ColumnMapper onClick={onDeselectMapping} role={"main"}>
+    <ColumnMapper role={"main"}>
       <NodeRefProvider>
         <Columns>
           <Column totalColumns={3}>
