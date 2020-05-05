@@ -7,11 +7,13 @@ import {
   useInputTextSelectDialog,
   useSingleInputDialog,
 } from "../UI";
+import { GroupId, IAtlasmapMapping, IAtlasmapField } from "../Views";
 import {
   getConstantTypeIndex,
   getPropertyTypeIndex,
   getPropertyValue,
 } from "./utils";
+import { useAtlasmap } from "./AtlasmapProvider";
 
 export interface IUseAtlasmapDialogsProps {
   modalContainer: HTMLElement;
@@ -19,6 +21,26 @@ export interface IUseAtlasmapDialogsProps {
 export function useAtlasmapDialogs({
   modalContainer,
 }: IUseAtlasmapDialogsProps) {
+  const {
+    selectedMapping,
+    deselectMapping,
+    removeMapping,
+    deleteAtlasFile,
+    exportAtlasFile,
+    importAtlasFile,
+    resetAtlasmap,
+    createConstant,
+    deleteConstant,
+    editConstant,
+    createProperty,
+    deleteProperty,
+    editProperty,
+    documentExists,
+    addToCurrentMapping,
+    createMapping,
+    removeFromCurrentMapping,
+  } = useAtlasmap();
+
   const [importDialog, openImportDialog] = useConfirmationDialog({
     modalContainer,
     title: "Overwrite selected document?",
@@ -127,10 +149,7 @@ export function useAtlasmapDialogs({
       "Are you sure you want to reset all mappings and clear all imported documents?",
   });
 
-  const [
-    deleteDocumentDialog,
-    openDeleteDocumentDialog,
-  ] = useConfirmationDialog({
+  const [deleteDocumentDialog] = useConfirmationDialog({
     modalContainer,
     title: "Remove selected document?",
     content:
@@ -152,45 +171,33 @@ export function useAtlasmapDialogs({
     content: "Are you sure you want to remove the current mapping?",
   });
 
-  const handleExportAtlasFile = useCallback(
-    (exportAtlasFile: (fileName: string) => void) => {
-      openExportDialog((value: string) => {
-        if (value.length === 0) {
-          value = defaultCatalogName;
-        }
-        exportAtlasFile(value);
-      });
-    },
-    [openExportDialog],
+  const onExportAtlasFile = useCallback(() => {
+    openExportDialog((value: string) => {
+      if (value.length === 0) {
+        value = defaultCatalogName;
+      }
+      exportAtlasFile(value);
+    });
+  }, [exportAtlasFile, openExportDialog]);
+
+  const onCreateConstant = useCallback(() => {
+    textVal1.current = "";
+    selectIndex.current = 12;
+    openCreateConstantDialog(
+      (value: string, _value2: string, valueType: string) => {
+        createConstant(value, valueType);
+      },
+    );
+  }, [createConstant, openCreateConstantDialog]);
+
+  const onDeleteConstant = useCallback(
+    (constValue: string) =>
+      openDeleteConstantDialog(() => deleteConstant(constValue)),
+    [deleteConstant, openDeleteConstantDialog],
   );
 
-  const handleCreateConstant = useCallback(
-    (createConstant: (constValue: string, constType: string) => void) => {
-      textVal1.current = "";
-      selectIndex.current = 12;
-      openCreateConstantDialog(
-        (value: string, _value2: string, valueType: string) => {
-          createConstant(value, valueType);
-        },
-      );
-    },
-    [openCreateConstantDialog],
-  );
-
-  const handleDeleteConstant = useCallback(
-    (deleteConstant: () => void) => openDeleteConstantDialog(deleteConstant),
-    [openDeleteConstantDialog],
-  );
-
-  const handleEditConstant = useCallback(
-    (
-      selectedValue: string,
-      editConstant: (
-        origValue: string,
-        constValue: string,
-        constType: string,
-      ) => void,
-    ) => {
+  const onEditConstant = useCallback(
+    (selectedValue: string) => {
       const originalValue = selectedValue.split(" ")[0];
       textVal1.current = originalValue;
       textVal2.current = "";
@@ -201,43 +208,28 @@ export function useAtlasmapDialogs({
         },
       );
     },
-    [openEditConstantDialog],
+    [editConstant, openEditConstantDialog],
   );
 
-  const handleCreateProperty = useCallback(
-    (
-      createProperty: (
-        propName: string,
-        propValue: string,
-        propType: string,
-      ) => void,
-    ) => {
-      textVal1.current = "";
-      textVal2.current = "";
-      selectIndex.current = 13;
-      openCreatePropertyDialog(
-        (name: string, value: string, valueType: string) => {
-          createProperty(name, value, valueType);
-        },
-      );
-    },
-    [openCreatePropertyDialog],
+  const onCreateProperty = useCallback(() => {
+    textVal1.current = "";
+    textVal2.current = "";
+    selectIndex.current = 13;
+    openCreatePropertyDialog(
+      (name: string, value: string, valueType: string) => {
+        createProperty(name, value, valueType);
+      },
+    );
+  }, [createProperty, openCreatePropertyDialog]);
+
+  const onDeleteProperty = useCallback(
+    (propName: string) =>
+      openDeletePropertyDialog(() => deleteProperty(propName)),
+    [deleteProperty, openDeletePropertyDialog],
   );
 
-  const handleDeleteProperty = useCallback(
-    (deleteProperty: () => void) => openDeletePropertyDialog(deleteProperty),
-    [openDeletePropertyDialog],
-  );
-
-  const handleEditProperty = useCallback(
-    (
-      selectedName: string,
-      editProperty: (
-        propName: string,
-        propValue: string,
-        propType: string,
-      ) => void,
-    ) => {
+  const onEditProperty = useCallback(
+    (selectedName: string) => {
       textVal1.current = selectedName.split(" ")[0];
       textVal2.current = getPropertyValue(textVal1.current);
       selectIndex.current = getPropertyTypeIndex(textVal1.current);
@@ -248,51 +240,100 @@ export function useAtlasmapDialogs({
         },
       );
     },
-    [openEditPropertyDialog],
+    [editProperty, openEditPropertyDialog],
   );
 
-  const handleResetAtlasmap = useCallback(
-    (resetAtlasmap: () => void) => openResetDialog(resetAtlasmap),
-    [openResetDialog],
+  const onResetAtlasmap = useCallback(() => openResetDialog(resetAtlasmap), [
+    openResetDialog,
+    resetAtlasmap,
+  ]);
+  const onImportDocument = useCallback(
+    (selectedFile: File, isSource: boolean) => {
+      if (documentExists(selectedFile, isSource)) {
+        openImportDialog(() => importAtlasFile(selectedFile, isSource));
+      } else {
+        importAtlasFile(selectedFile, isSource);
+      }
+    },
+    [documentExists, importAtlasFile, openImportDialog],
   );
-  const handleImportDocument = useCallback(
-    (importDocument: () => void) => openImportDialog(importDocument),
-    [openImportDialog],
+  const onDeleteDocument = useCallback(
+    (id: GroupId, isSource: boolean) => deleteAtlasFile(id, isSource),
+    [deleteAtlasFile],
   );
-  const handleDeleteDocument = useCallback(
-    (deleteDocument: () => void) => openDeleteDocumentDialog(deleteDocument),
-    [openDeleteDocumentDialog],
-  );
-  const handleRemoveMappedField = useCallback(
+  const onRemoveMappedField = useCallback(
     (removeMappedField: () => void) =>
       openRemoveMappedFieldDialog(removeMappedField),
     [openRemoveMappedFieldDialog],
   );
 
-  const handleDeleteMapping = useCallback(
-    (removeMapping: () => void) => openDeleteMappingDialog(removeMapping),
-    [openDeleteMappingDialog],
+  const onNewTransformation = useCallback(() => void 0, []);
+  const onRemoveTransformation = useCallback(() => void 0, []);
+
+  const onDeleteMapping = useCallback(
+    (mapping: IAtlasmapMapping) => {
+      openDeleteMappingDialog(() => {
+        removeMapping(mapping.mapping);
+        deselectMapping();
+      });
+    },
+    [deselectMapping, openDeleteMappingDialog, removeMapping],
   );
 
-  const handleNewTransformation = useCallback(() => void 0, []);
-  const handleRemoveTransformation = useCallback(() => void 0, []);
+  const onDeleteSelectedMapping = useCallback(() => {
+    if (selectedMapping) {
+      onDeleteMapping(selectedMapping);
+    }
+  }, [onDeleteMapping, selectedMapping]);
+
+  const onAddToMapping = useCallback(
+    (node: IAtlasmapField) => {
+      const field = (node as IAtlasmapField).amField;
+      addToCurrentMapping(field);
+    },
+    [addToCurrentMapping],
+  );
+
+  const onRemoveFromMapping = useCallback(
+    (node: IAtlasmapField) => {
+      const field = (node as IAtlasmapField).amField;
+      removeFromCurrentMapping(field);
+    },
+    [removeFromCurrentMapping],
+  );
+
+  const onCreateMapping = useCallback(
+    (
+      source: IAtlasmapField | undefined,
+      target: IAtlasmapField | undefined,
+    ) => {
+      const sourceField = (source as IAtlasmapField | undefined)?.amField;
+      const targetField = (target as IAtlasmapField | undefined)?.amField;
+      createMapping(sourceField, targetField);
+    },
+    [createMapping],
+  );
 
   return {
     handlers: {
-      onExportAtlasFile: handleExportAtlasFile,
-      onResetAtlasmap: handleResetAtlasmap,
-      onImportDocument: handleImportDocument,
-      onDeleteDocument: handleDeleteDocument,
-      onRemoveMappedField: handleRemoveMappedField,
-      onNewTransformation: handleNewTransformation,
-      onRemoveTransformation: handleRemoveTransformation,
-      onDeleteMapping: handleDeleteMapping,
-      onCreateConstant: handleCreateConstant,
-      onDeleteConstant: handleDeleteConstant,
-      onEditConstant: handleEditConstant,
-      onCreateProperty: handleCreateProperty,
-      onDeleteProperty: handleDeleteProperty,
-      onEditProperty: handleEditProperty,
+      onExportAtlasFile,
+      onCreateConstant,
+      onDeleteConstant,
+      onEditConstant,
+      onCreateProperty,
+      onDeleteProperty,
+      onEditProperty,
+      onResetAtlasmap,
+      onImportDocument,
+      onDeleteDocument,
+      onRemoveMappedField,
+      onNewTransformation,
+      onRemoveTransformation,
+      onDeleteMapping,
+      onDeleteSelectedMapping,
+      onAddToMapping,
+      onRemoveFromMapping,
+      onCreateMapping,
     },
     dialogs: [
       exportDialog,

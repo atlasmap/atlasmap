@@ -18,7 +18,7 @@ import {
   DocumentInitializationModel,
 } from "@atlasmap/core";
 
-import { IAtlasmapDocument, IAtlasmapMapping } from "../Views";
+import { IAtlasmapDocument, IAtlasmapMapping, IAtlasmapField } from "../Views";
 import {
   addToCurrentMapping,
   createConstant,
@@ -128,6 +128,8 @@ interface ActionPayload {
   constants?: IAtlasmapDocument | null;
   mappings?: IAtlasmapMapping[];
   selectedMapping?: IAtlasmapMapping | null;
+  sourcesFilter?: string;
+  targetsFilter?: string;
 }
 
 const init = (): State => ({
@@ -376,29 +378,8 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   );
 };
 
-export interface IUseAtlasmapProps {
-  sourcesSearchString?: string;
-  targetsSearchString?: string;
-}
-
-export function useAtlasmap({
-  sourcesSearchString,
-  targetsSearchString,
-}: IUseAtlasmapProps = {}) {
+export function useAtlasmap() {
   const context = useContext(AtlasmapContext);
-
-  useEffect(
-    function onSourceSearchCb() {
-      search(sourcesSearchString, true);
-    },
-    [sourcesSearchString],
-  );
-  useEffect(
-    function onTargetSearchCb() {
-      search(targetsSearchString, false);
-    },
-    [targetsSearchString],
-  );
 
   if (!context) {
     throw new Error(
@@ -407,6 +388,9 @@ export function useAtlasmap({
   }
 
   const { dispatch, ...state } = context;
+
+  const searchSources = useCallback((term: string) => search(term, true), []);
+  const searchTargets = useCallback((term: string) => search(term, false), []);
 
   const handleImportAtlasFile = useCallback(
     (file: File, isSource: boolean) => {
@@ -424,6 +408,51 @@ export function useAtlasmap({
   const isMappingExpressionEmpty =
     initializationService.cfg.mappings?.activeMapping?.transition?.expression
       ?.nodes.length === 0;
+
+  const isFieldAddableToSelection = useCallback(
+    (documentType: "source" | "target", field: IAtlasmapField) => {
+      const { selectedMapping } = context;
+      if (!selectedMapping) {
+        return false;
+      }
+      if (
+        selectedMapping.sourceFields.length <= 1 &&
+        selectedMapping.targetFields.length <= 1
+      ) {
+        if (
+          documentType === "source" &&
+          !selectedMapping.sourceFields.find((f) => f.id === field.id)
+        ) {
+          return true;
+        } else if (
+          !selectedMapping.targetFields.find((f) => f.id === field.id)
+        ) {
+          return true;
+        }
+      } else if (
+        documentType === "source" &&
+        selectedMapping.targetFields.length <= 1 &&
+        !selectedMapping.sourceFields.find((f) => f.id === field.id)
+      ) {
+        return true;
+      } else if (
+        documentType === "target" &&
+        selectedMapping.sourceFields.length <= 1 &&
+        !selectedMapping.targetFields.find((f) => f.id === field.id)
+      ) {
+        return true;
+      }
+      return false;
+    },
+    [context],
+  );
+
+  const isFieldRemovableFromSelection = useCallback(
+    (documentType: "source" | "target", field: IAtlasmapField) =>
+      !!context.selectedMapping &&
+      !isFieldAddableToSelection(documentType, field),
+    [context.selectedMapping, isFieldAddableToSelection],
+  );
 
   return {
     ...state,
@@ -478,5 +507,9 @@ export function useAtlasmap({
     deleteProperty,
     editProperty,
     trailerId,
+    isFieldAddableToSelection,
+    isFieldRemovableFromSelection,
+    searchSources,
+    searchTargets,
   };
 }
