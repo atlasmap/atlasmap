@@ -7,9 +7,11 @@ import {
   MappingTransformation,
   ITransformationArgument,
 } from "../UI";
-import { IAtlasmapMappedField } from "./models";
+import { IAtlasmapMappedField, INotification } from "./models";
+import { Alert } from "@patternfly/react-core";
 
 export interface IMappingDetailsViewProps {
+  notifications: INotification[];
   sources: Array<IAtlasmapMappedField | null>;
   targets: Array<IAtlasmapMappedField | null>;
   showSourcesIndex: boolean;
@@ -53,6 +55,7 @@ export interface IMappingDetailsViewProps {
 }
 
 export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = ({
+  notifications,
   sources,
   targets,
   showSourcesIndex,
@@ -145,6 +148,14 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
 
   return (
     <MappingDetailsSidebar onDelete={onRemoveMapping} onClose={onClose}>
+      {notifications.map((n, idx) => (
+        <Alert
+          key={idx}
+          variant={n.variant}
+          title={n.message}
+          isInline={true}
+        />
+      ))}
       {mappingAction}
       <MappingFields title={"Sources"}>
         {sources.map(renderSourceMappingField)}

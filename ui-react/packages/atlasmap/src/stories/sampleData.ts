@@ -929,6 +929,9 @@ export const mappings: IAtlasmapMapping[] = [
       } as IAtlasmapMappedField,
     ],
     mapping: {} as MappingModel,
+    notifications: [
+      { variant: "warning", message: "sample message", id: "abc" },
+    ],
   },
   {
     id: "b",
@@ -954,6 +957,9 @@ export const mappings: IAtlasmapMapping[] = [
       } as IAtlasmapMappedField,
     ],
     mapping: {} as MappingModel,
+    notifications: [
+      { variant: "warning", message: "sample message", id: "abc" },
+    ],
   },
   {
     id: "c",
@@ -979,6 +985,9 @@ export const mappings: IAtlasmapMapping[] = [
       } as IAtlasmapMappedField,
     ],
     mapping: {} as MappingModel,
+    notifications: [
+      { variant: "warning", message: "sample message", id: "abc" },
+    ],
   },
 ];
 

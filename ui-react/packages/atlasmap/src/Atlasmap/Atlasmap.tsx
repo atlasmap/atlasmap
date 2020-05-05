@@ -21,6 +21,11 @@ import { useAtlasmap } from "./AtlasmapProvider";
 import { useAtlasmapDialogs } from "./useAtlasmapDialogs";
 import { IUseContextToolbarData, useContextToolbar } from "./useContextToolbar";
 import { useSidebar } from "./useSidebar";
+import {
+  AlertGroup,
+  Alert,
+  AlertActionCloseButton,
+} from "@patternfly/react-core";
 
 export interface IAtlasmapProps extends IUseContextToolbarData {
   modalsContainerId?: string;
@@ -33,6 +38,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   const {
     pending,
     // error,
+    notifications,
+    markNotificationRead,
     properties,
     constants,
     sources,
@@ -205,7 +212,6 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
             targets={targets}
             selectedMappingId={selectedMapping?.id}
             onSelectMapping={selectMapping}
-            onDeselectMapping={deselectMapping}
             showMappingPreview={showMappingPreview}
             showTypes={showTypes}
             sourceEvents={sourceEvents}
@@ -221,7 +227,6 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
             targets={targets}
             selectedMappingId={selectedMapping?.id}
             onSelectMapping={selectMapping}
-            onDeselectMapping={deselectMapping}
             showMappingPreview={showMappingPreview}
             showTypes={showTypes}
             sourceEvents={sourceEvents}
@@ -236,7 +241,6 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   }, [
     activeView,
     constants,
-    deselectMapping,
     mappingEvents,
     mappings,
     properties,
@@ -269,6 +273,25 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
           {currentView}
         </MainLayout>
         <FieldDragLayer />
+        <AlertGroup isToast>
+          {notifications
+            .filter((n) => !n.isRead)
+            .map(({ id, variant, message }) => (
+              <Alert
+                isLiveRegion
+                variant={variant}
+                title={message}
+                key={id}
+                action={
+                  <AlertActionCloseButton
+                    title={message}
+                    variantLabel={`${variant} alert`}
+                    onClose={() => markNotificationRead(id)}
+                  />
+                }
+              />
+            ))}
+        </AlertGroup>
         {dialogs}
       </CanvasProvider>
     </FieldsDndProvider>

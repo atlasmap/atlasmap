@@ -18,11 +18,7 @@ import {
   ToggleTypesToolbarItem,
   ToggleUnmappedFieldsToolbarItem,
 } from "./toolbarItems";
-import {
-  toggleMappingPreview as amToggleMappingPreview,
-  toggleShowMappedFields as amToggleShowMappedFields,
-  toggleShowUnmappedFields as amToggleShowUnmappedFields,
-} from "./utils";
+import { useAtlasmap } from "./AtlasmapProvider";
 
 export type Views =
   | "ColumnMapper"
@@ -73,6 +69,12 @@ export function useContextToolbar({
   onExportAtlasFile,
   onResetAtlasmap,
 }: IUseContextToolbarData & IUseContextToolbarHandlers) {
+  const {
+    toggleMappingPreview: amToggleMappingPreview,
+    toggleShowMappedFields: amToggleShowMappedFields,
+    toggleShowUnmappedFields: amToggleShowUnmappedFields,
+  } = useAtlasmap();
+
   const [activeView, setActiveView] = useState<Views>("ColumnMapper");
   const {
     state: showMappingColumn,
@@ -91,6 +93,7 @@ export function useContextToolbar({
     state: showUnmappedFields,
     toggle: toggleShowUnmappedFields,
   } = useToggle(true, amToggleShowUnmappedFields);
+
   const contextToolbar = useMemo(
     () => (
       <ContextToolbar>

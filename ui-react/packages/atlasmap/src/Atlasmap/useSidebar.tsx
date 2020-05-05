@@ -98,7 +98,6 @@ export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
           "" + (index + 1),
           isSource,
         );
-        console.log(amField);
         if (amField) {
           removeMappedFieldFromCurrentMapping(amField);
         }
@@ -106,6 +105,7 @@ export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
 
       return (
         <MappingDetailsView
+          notifications={selectedMapping.notifications}
           sources={sources}
           targets={targets}
           onClose={deselectMapping}

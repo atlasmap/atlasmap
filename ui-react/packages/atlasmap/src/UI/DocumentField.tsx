@@ -12,11 +12,11 @@ import { useToggle } from "./useToggle";
 
 const styles = StyleSheet.create({
   element: {
+    "--bg-color": "var(--pf-global--BackgroundColor--100)",
+    "--bg-color-fade": "rgba(255, 255, 255, 0.5)",
     color: "var(--pf-global--Color--100)",
     border: "3px solid transparent",
     background: "var(--bg-color)",
-    "--bg-color": "var(--pf-global--BackgroundColor--100)",
-    "--bg-color-fade": "rgba(255, 255, 255, 0.5))",
   },
   row: {
     // padding: "0 1rem",
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   },
   isSelected: {
     "--bg-color": "var(--pf-global--BackgroundColor--150)",
-    "--bg-color-fade": "rgba(245, 245, 245, 0.5))",
+    "--bg-color-fade": "rgba(245, 245, 245, 0.5)",
   },
   actions: {
     position: "absolute",

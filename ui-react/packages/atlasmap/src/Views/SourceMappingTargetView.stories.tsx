@@ -25,7 +25,6 @@ export const sourceMappingTargetView = () =>
       string | undefined
     >(undefined);
     const onSelectMapping = (m: IAtlasmapMapping) => setSelectedMappingId(m.id);
-    const onDeselectMapping = () => setSelectedMappingId(undefined);
     return (
       <CanvasProvider>
         <SourceMappingTargetView
@@ -94,7 +93,6 @@ export const sourceMappingTargetView = () =>
           targets={targets}
           selectedMappingId={selectedMappingId}
           onSelectMapping={onSelectMapping}
-          onDeselectMapping={onDeselectMapping}
         />
       </CanvasProvider>
     );

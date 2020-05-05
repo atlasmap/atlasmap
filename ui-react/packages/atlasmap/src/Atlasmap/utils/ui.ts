@@ -1,5 +1,7 @@
+import { ErrorLevel } from "@atlasmap/core";
 import ky from "ky";
 import { Observable } from "rxjs";
+import { INotification } from "../../Views/models";
 
 import {
   ConfigModel,
@@ -139,7 +141,24 @@ export function fromMappedFieldToIMappingField(
   };
 }
 
-export function fromMappingModelToImapping(m: MappingModel | null | undefined) {
+export function errorLevelToVariant(
+  level: ErrorLevel,
+): INotification["variant"] {
+  switch (level) {
+    case ErrorLevel.INFO:
+      return "info";
+    case ErrorLevel.WARN:
+      return "warning";
+    case ErrorLevel.ERROR:
+      return "danger";
+    default:
+      return "default";
+  }
+}
+
+export function fromMappingModelToImapping(
+  m: MappingModel | null | undefined,
+): IAtlasmapMapping | null {
   return m
     ? {
         id: m.uuid,
@@ -153,6 +172,14 @@ export function fromMappingModelToImapping(m: MappingModel | null | undefined) {
           .map(fromMappedFieldToIMappingField)
           .filter((f) => f) as IAtlasmapMappedField[],
         mapping: m,
+        notifications: initializationService.cfg.errorService
+          .getErrors()
+          .filter((e) => e.mapping?.uuid === m.uuid && e.level !== "DEBUG")
+          .map((e) => ({
+            variant: errorLevelToVariant(e.level),
+            message: e.message,
+            id: e.identifier,
+          })),
       }
     : null;
 }
