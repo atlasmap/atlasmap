@@ -69,7 +69,7 @@ import {
   removeFromCurrentMapping,
   removeMappedFieldFromCurrentMapping,
   fromMappedFieldToIMappingField,
-  errorLevelToVariant,
+  errorInfoToNotification,
 } from "./utils";
 import {
   INotificationsState,
@@ -222,6 +222,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   }, []);
 
   const convertProperties = useCallback(function convertPropertiesCb() {
+    console.log(initializationService.cfg.propertyDoc);
     return fromDocumentDefinitionToFieldGroup(
       initializationService.cfg.propertyDoc,
     );
@@ -289,6 +290,9 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
       const mappingUpdatedSource = initializationService.cfg.mappingService.mappingUpdatedSource.pipe(
         debounceTime(debounceTimeWindow),
       );
+      const mappingPreview = initializationService.cfg.mappingService.mappingPreviewOutput$.pipe(
+        debounceTime(debounceTimeWindow),
+      );
 
       const subscriptions = [
         initializationObservable.subscribe(() =>
@@ -297,9 +301,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
         mappingUpdatedSource.subscribe(() =>
           onSubUpdate("mappingUpdatedSource"),
         ),
-        initializationService.cfg.mappingService.mappingPreviewOutput$.subscribe(
-          () => onSubUpdate("mappingPreviewOutput$"),
-        ),
+        mappingPreview.subscribe(() => onSubUpdate("mappingPreviewOutput$")),
         lineRefreshObservable.subscribe(() =>
           onSubUpdate("lineRefreshObservable"),
         ),
@@ -309,12 +311,12 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
             payload: {
               notifications: initializationService.cfg.errorService
                 .getErrors()
-                .filter((e) => !e.mapping && e.level !== "DEBUG")
-                .map((e) => ({
-                  variant: errorLevelToVariant(e.level),
-                  message: e.message,
-                  id: e.identifier,
-                })),
+                .filter((e) =>
+                  e.level !== "DEBUG" && data.selectedMapping
+                    ? !e.mapping
+                    : true,
+                )
+                .map(errorInfoToNotification),
             },
           });
         }),
@@ -330,6 +332,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
       baseJSONInspectionServiceUrl,
       baseMappingServiceUrl,
       data.pending,
+      data.selectedMapping,
       onSubUpdate,
     ],
   );

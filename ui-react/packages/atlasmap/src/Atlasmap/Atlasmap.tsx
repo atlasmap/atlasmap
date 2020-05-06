@@ -89,10 +89,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     (field: IAtlasmapField) =>
       showMappingPreview &&
       !!selectedMapping &&
-      !!(
-        selectedMapping.sourceFields.find((s) => s.id === field.id) ||
-        selectedMapping.targetFields.find((t) => t.id === field.id)
-      ),
+      field.isConnected &&
+      !!field.mappings.find((m) => m.id === selectedMapping.id),
     [selectedMapping, showMappingPreview],
   );
 
@@ -276,20 +274,23 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         <AlertGroup isToast>
           {notifications
             .filter((n) => !n.isRead)
-            .map(({ id, variant, message }) => (
+            .slice(0, 3)
+            .map(({ id, variant, title, description }) => (
               <Alert
                 isLiveRegion
                 variant={variant}
-                title={message}
+                title={title}
                 key={id}
                 action={
                   <AlertActionCloseButton
-                    title={message}
+                    title={title}
                     variantLabel={`${variant} alert`}
                     onClose={() => markNotificationRead(id)}
                   />
                 }
-              />
+              >
+                {description}
+              </Alert>
             ))}
         </AlertGroup>
         {dialogs}

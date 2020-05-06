@@ -215,13 +215,13 @@ export class MappingSerializer {
 
   static deserializeAudits(audits: any, errorType: ErrorType): ErrorInfo[] {
     const errors: ErrorInfo[] = [];
-    if (!audits) {
+    if (!audits && !audits.audit) {
       return errors;
     }
     for (const audit of audits.audit) {
       const msg = audit.status + '[' + audit.path + ']: ' + audit.message;
       errors.push(new ErrorInfo({message: msg, level: audit.status, scope: ErrorScope.MAPPING,
-        type: errorType, object: audit.audit.value}));
+        type: errorType, object: audit.audit?.value}));
     }
     return errors;
   }

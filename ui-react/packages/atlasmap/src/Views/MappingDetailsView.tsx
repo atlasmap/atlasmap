@@ -149,12 +149,9 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
   return (
     <MappingDetailsSidebar onDelete={onRemoveMapping} onClose={onClose}>
       {notifications.map((n, idx) => (
-        <Alert
-          key={idx}
-          variant={n.variant}
-          title={n.message}
-          isInline={true}
-        />
+        <Alert key={idx} variant={n.variant} title={n.title} isInline={true}>
+          {n.description}
+        </Alert>
       ))}
       {mappingAction}
       <MappingFields title={"Sources"}>

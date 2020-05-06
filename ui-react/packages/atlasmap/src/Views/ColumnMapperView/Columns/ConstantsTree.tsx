@@ -18,7 +18,7 @@ import {
   SOURCES_WIDTH_BOUNDARY_ID,
   TARGETS_DRAGGABLE_TYPE,
 } from "./constants";
-import { TraverseFields } from "./TraverseFields";
+import { TraverseFields, ITraverseFieldsProps } from "./TraverseFields";
 
 export interface IConstantsTreeCallbacks {
   onDrop: (source: IAtlasmapField, target: IDragAndDropField) => void;
@@ -36,6 +36,7 @@ export interface IConstantsTreeCallbacks {
 
 export interface IConstantsTreeProps extends IConstantsTreeCallbacks {
   fields: IAtlasmapDocument["fields"];
+  renderPreview: ITraverseFieldsProps["renderPreview"];
 }
 
 export const ConstantsTree: FunctionComponent<IConstantsTreeProps> = ({
@@ -51,6 +52,7 @@ export const ConstantsTree: FunctionComponent<IConstantsTreeProps> = ({
   onDeleteConstant,
   canStartMapping,
   onStartMapping,
+  renderPreview,
 }) => (
   <Tree>
     <TraverseFields
@@ -108,6 +110,7 @@ export const ConstantsTree: FunctionComponent<IConstantsTreeProps> = ({
           </Button>
         </Tooltip>,
       ]}
+      renderPreview={renderPreview}
     />
   </Tree>
 );

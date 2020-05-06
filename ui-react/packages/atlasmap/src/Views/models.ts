@@ -61,6 +61,7 @@ export interface IAtlasmapMapping {
 export interface INotification {
   id: string;
   variant: AlertProps["variant"];
-  message: string;
+  title: string;
+  description: string;
   isRead?: boolean;
 }
