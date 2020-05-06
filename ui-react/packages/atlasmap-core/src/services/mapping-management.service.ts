@@ -317,7 +317,7 @@ export class MappingManagementService {
       mapping.addField(field, false);
 
       this.updateTransition(mapping, position, offset);
-      if (mapping.sourceFields.length > 0 && mapping.targetFields.length > 0) {
+      if (mapping.sourceFields.length > 0 || mapping.targetFields.length > 0) {
         this.notifyMappingUpdated();
       }
       return;

@@ -222,7 +222,6 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   }, []);
 
   const convertProperties = useCallback(function convertPropertiesCb() {
-    console.log(initializationService.cfg.propertyDoc);
     return fromDocumentDefinitionToFieldGroup(
       initializationService.cfg.propertyDoc,
     );
@@ -428,13 +427,16 @@ export function useAtlasmap() {
         }
       } else if (
         documentType === "source" &&
-        selectedMapping.targetFields.length <= 1 &&
+        (selectedMapping.targetFields.length <= 1 ||
+          selectedMapping.sourceFields.length === 0) &&
         !selectedMapping.sourceFields.find((f) => f.id === field.id)
       ) {
         return true;
       } else if (
         documentType === "target" &&
-        selectedMapping.sourceFields.length <= 1 &&
+        !field.isConnected &&
+        (selectedMapping.sourceFields.length <= 1 ||
+          selectedMapping.targetFields.length === 0) &&
         !selectedMapping.targetFields.find((f) => f.id === field.id)
       ) {
         return true;
@@ -445,10 +447,12 @@ export function useAtlasmap() {
   );
 
   const isFieldRemovableFromSelection = useCallback(
-    (documentType: "source" | "target", field: IAtlasmapField) =>
+    (documentType: "source" | "target", field: IAtlasmapField): boolean =>
       !!context.selectedMapping &&
-      !isFieldAddableToSelection(documentType, field),
-    [context.selectedMapping, isFieldAddableToSelection],
+      !!context.selectedMapping[
+        documentType === "source" ? "sourceFields" : "targetFields"
+      ].find((f) => f.id === field.id),
+    [context.selectedMapping],
   );
 
   return {
