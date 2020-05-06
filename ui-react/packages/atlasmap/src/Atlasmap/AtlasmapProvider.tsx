@@ -30,6 +30,7 @@ import {
   documentExists,
   editConstant,
   editProperty,
+  enableCustomClass,
   executeFieldSearch,
   exportAtlasFile,
   fromDocumentDefinitionToFieldGroup,
@@ -512,5 +513,6 @@ export function useAtlasmap() {
     isFieldRemovableFromSelection,
     searchSources,
     searchTargets,
+    enableCustomClass,
   };
 }

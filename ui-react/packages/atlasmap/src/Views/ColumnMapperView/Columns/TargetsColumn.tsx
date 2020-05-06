@@ -35,7 +35,7 @@ import { TraverseFields } from "./TraverseFields";
 export interface ITargetsColumnCallbacks {
   onDeleteDocument: (id: GroupId) => void;
   onImportDocument: (selectedFile: File) => void;
-  onEnableJavaClasses: () => void;
+  onCustomClassSearch: (isSource: boolean) => void;
   onSearch: (content: string) => void;
   onDrop: (source: IAtlasmapField, target: IDragAndDropField) => void;
   canDrop: (source: IAtlasmapField, target: IDragAndDropField) => boolean;
@@ -61,7 +61,7 @@ export const TargetsColumn: FunctionComponent<
   onSearch,
   onImportDocument,
   onDeleteDocument,
-  onEnableJavaClasses,
+  onCustomClassSearch,
   onDrop,
   canDrop,
   onShowMappingDetails,
@@ -87,8 +87,8 @@ export const TargetsColumn: FunctionComponent<
             key={"import"}
           />,
           <EnableJavaClassAction
-            id="Target"
-            onClick={onEnableJavaClasses}
+            isSource={false}
+            onCustomClassSearch={onCustomClassSearch}
             key={"java"}
           />,
         ]}

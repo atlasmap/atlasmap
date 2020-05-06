@@ -133,7 +133,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onEditProperty: handlers.onEditProperty,
       onDeleteProperty: handlers.onDeleteProperty,
       onDeleteDocument: (id) => handlers.onDeleteDocument(id, true),
-      onEnableJavaClasses: () => void 0,
+      onCustomClassSearch: (isSource: boolean) =>
+        handlers.onEnableCustomClass(isSource),
       onImportDocument: (id) => handlers.onImportDocument(id, true),
       onSearch: searchSources,
       shouldShowMappingPreviewForField,
@@ -164,7 +165,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         isFieldRemovableFromSelection("target", f),
       onRemoveFromSelectedMapping: handlers.onRemoveFromMapping,
       onDeleteDocument: (id) => handlers.onDeleteDocument(id, false),
-      onEnableJavaClasses: () => void 0,
+      onCustomClassSearch: (isSource: boolean) =>
+        handlers.onEnableCustomClass(isSource),
       onImportDocument: (id) => handlers.onImportDocument(id, false),
       onSearch: searchTargets,
       shouldShowMappingPreviewForField,

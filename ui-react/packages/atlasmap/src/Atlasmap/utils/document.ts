@@ -3,7 +3,12 @@ import {
   ConfigModel,
   DocumentDefinition,
   DataMapperUtil,
+  ErrorInfo,
+  ErrorScope,
+  ErrorType,
+  ErrorLevel,
 } from "@atlasmap/core";
+import { ClassNameComponent } from "./custom-classname";
 
 /**
  * Import the specified user-defined document.
@@ -94,4 +99,156 @@ export async function importInstanceSchema(
     await removeDocumentRef(docDef, cfg);
   }
   await importDoc(selectedFile, cfg, isSource);
+}
+
+/**
+ * Enable the specified class package name and collection type in the
+ * targetted panel for use in field mapping or custom transformations.
+ * The user must have previously imported a JAR file containing the class.
+ * The user-defined class will establish either an instance of mappable
+ * fields or custom transformation methods.
+ *
+ * @param selectedClass
+ * @param selectedCollection
+ * @param isSource
+ */
+export function enableCustomClass(
+  selectedClass: string,
+  selectedCollection: string,
+  isSource: boolean,
+): void {
+  const cfg = ConfigModel.getConfig();
+  const classNameComponent = new ClassNameComponent(
+    selectedClass,
+    selectedCollection,
+    isSource,
+  );
+  const docdef = cfg.initializationService.addJavaDocument(
+    classNameComponent.userClassName,
+    isSource,
+    classNameComponent.userCollectionType,
+    classNameComponent.userCollectionClassName,
+  );
+  docdef.name = classNameComponent.userClassName;
+  docdef.isSource = isSource;
+  docdef.updateFromMappings(cfg.mappings!);
+
+  cfg.documentService
+    .fetchClassPath()
+    .toPromise()
+    .then((classPath: string) => {
+      cfg.initCfg.classPath = classPath;
+      cfg.documentService
+        .fetchDocument(docdef, cfg.initCfg.classPath)
+        .toPromise()
+        .then(async (doc: DocumentDefinition) => {
+          // No fields indicate the user is attempting to enable a custom
+          // field action class.  Remove the document from the panel since
+          // it has no fields.
+          if (doc.fields.length === 0) {
+            // Make any custom field actions active.
+            await cfg.fieldActionService
+              .fetchFieldActions()
+              .catch((error: any) => {
+                cfg.errorService.addError(
+                  new ErrorInfo({
+                    message: error,
+                    level: ErrorLevel.ERROR,
+                    scope: ErrorScope.APPLICATION,
+                    type: ErrorType.INTERNAL,
+                  }),
+                );
+              });
+
+            if (doc.isSource) {
+              DataMapperUtil.removeItemFromArray(doc, cfg.sourceDocs);
+            } else {
+              DataMapperUtil.removeItemFromArray(doc, cfg.targetDocs);
+            }
+          }
+          await cfg.mappingService.notifyMappingUpdated();
+          await cfg.fileService.exportMappingsCatalog("");
+        })
+        .catch((error: any) => {
+          if (error.status === 0) {
+            cfg.errorService.addError(
+              new ErrorInfo({
+                message: `Unable to fetch the Java class document '${docdef.name}' from the runtime service.`,
+                level: ErrorLevel.ERROR,
+                scope: ErrorScope.APPLICATION,
+                type: ErrorType.INTERNAL,
+                object: error,
+              }),
+            );
+          } else {
+            cfg.errorService.addError(
+              new ErrorInfo({
+                message: `Could not load the Java class document '${docdef.id}'`,
+                level: ErrorLevel.ERROR,
+                scope: ErrorScope.APPLICATION,
+                type: ErrorType.INTERNAL,
+                object: error,
+              }),
+            );
+          }
+        });
+    })
+    .catch((error: any) => {
+      if (error.status === 0) {
+        cfg.errorService.addError(
+          new ErrorInfo({
+            message:
+              "Fatal network error: Could not connect to AtlasMap design runtime service.",
+            level: ErrorLevel.ERROR,
+            scope: ErrorScope.APPLICATION,
+            type: ErrorType.INTERNAL,
+            object: error,
+          }),
+        );
+      } else {
+        cfg.errorService.addError(
+          new ErrorInfo({
+            message: "Could not load the Java class path.",
+            level: ErrorLevel.ERROR,
+            scope: ErrorScope.APPLICATION,
+            type: ErrorType.INTERNAL,
+            object: error,
+          }),
+        );
+      }
+    });
+}
+
+interface ISelectValues1 {
+  isSelectable: boolean;
+  value: string;
+}
+
+/**
+ * Return an array of custom class package names and JAR file names.
+ *
+ * TODO
+ * Need to disassemble the jar file as a binary in the backend server.
+ * There may be JDK internal tool to assist.  Basically the class
+ * hierarchy is completely decoupled from physical jar.
+ */
+export function getCustomClassCandidates(): ISelectValues1[] {
+  return [
+    {
+      isSelectable: false,
+      value: "somefile1",
+    } as ISelectValues1,
+    {
+      isSelectable: true,
+      value: "io.paul.Bicycle",
+    } as ISelectValues1,
+    {
+      isSelectable: false,
+      value: "somefile2",
+    } as ISelectValues1,
+    {
+      isSelectable: true,
+      value: "io.paul.GeoLocation",
+    } as ISelectValues1,
+  ];
 }

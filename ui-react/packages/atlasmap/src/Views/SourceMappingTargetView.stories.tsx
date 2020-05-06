@@ -37,7 +37,7 @@ export const sourceMappingTargetView = () =>
             onDeleteProperty: action("onDeleteProperty"),
             onDeleteDocument: action("onDeleteDocument"),
             onImportDocument: action("onImportDocument"),
-            onEnableJavaClasses: action("onEnableJavaClasses"),
+            onCustomClassSearch: action("onCustomClassSearch"),
             onSearch: action("onSearch"),
             onDrop: action("onDrop"),
             canDrop: () => true,
@@ -58,7 +58,7 @@ export const sourceMappingTargetView = () =>
           targetEvents={{
             onDeleteDocument: action("onDeleteDocument"),
             onImportDocument: action("onImportDocument"),
-            onEnableJavaClasses: action("onEnableJavaClasses"),
+            onCustomClassSearch: action("onCustomClassSearch"),
             onSearch: action("onSearch"),
             onDrop: action("onDrop"),
             canDrop: () => true,

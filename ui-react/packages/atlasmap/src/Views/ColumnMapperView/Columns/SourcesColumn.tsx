@@ -44,9 +44,9 @@ export interface ISourceColumnCallbacks
     IPropertiesTreeCallbacks {
   onCreateConstant: () => void;
   onCreateProperty: () => void;
+  onCustomClassSearch: (isSource: boolean) => void;
   onImportDocument: (selectedFile: File) => void;
   onDeleteDocument: (id: GroupId) => void;
-  onEnableJavaClasses: () => void;
   onSearch: (content: string) => void;
   canDrop: (source: IAtlasmapField, target: IDragAndDropField) => boolean;
   onDrop: (source: IAtlasmapField, target: IDragAndDropField) => void;
@@ -75,11 +75,11 @@ export const SourcesColumn: FunctionComponent<
   onEditConstant,
   onDeleteConstant,
   onCreateProperty,
+  onCustomClassSearch,
   onEditProperty,
   onDeleteProperty,
   onImportDocument,
   onDeleteDocument,
-  onEnableJavaClasses,
   onSearch,
   canDrop,
   onDrop,
@@ -121,8 +121,8 @@ export const SourcesColumn: FunctionComponent<
             key={"import"}
           />,
           <EnableJavaClassAction
-            id="Source"
-            onClick={onEnableJavaClasses}
+            isSource={true}
+            onCustomClassSearch={onCustomClassSearch}
             key={"java"}
           />,
         ]}

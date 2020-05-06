@@ -1,6 +1,6 @@
 import { useCallback, useRef } from "react";
 
-import { constantTypes, propertyTypes } from "@atlasmap/core";
+import { collectionTypes, constantTypes, propertyTypes } from "@atlasmap/core";
 
 import {
   useConfirmationDialog,
@@ -12,6 +12,7 @@ import {
   getConstantTypeIndex,
   getPropertyTypeIndex,
   getPropertyValue,
+  enableCustomClass,
 } from "./utils";
 import { useAtlasmap } from "./AtlasmapProvider";
 
@@ -171,6 +172,22 @@ export function useAtlasmapDialogs({
     content: "Are you sure you want to remove the current mapping?",
   });
 
+  const [
+    createEnableCustomClassDialog,
+    openCreateEnableCustomClassDialog,
+  ] = useInputTextSelectDialog({
+    modalContainer,
+    title: "Enable Custom Class",
+    textLabel1: "Custom Class Package Name",
+    textValue1: textVal1,
+    text1ReadOnly: false,
+    textLabel2: "",
+    textValue2: textVal2,
+    selectLabel: "Collection Type",
+    selectValues: collectionTypes,
+    selectDefault: selectIndex,
+  });
+
   const onExportAtlasFile = useCallback(() => {
     openExportDialog((value: string) => {
       if (value.length === 0) {
@@ -241,6 +258,30 @@ export function useAtlasmapDialogs({
       );
     },
     [editProperty, openEditPropertyDialog],
+  );
+
+  const getCustomClass = useCallback(
+    (
+      getCustomClassSelections: (
+        selectClass: string,
+        selectCollection: string,
+      ) => void,
+    ) => {
+      textVal1.current = "";
+      textVal2.current = "";
+      selectIndex.current = 3;
+      openCreateEnableCustomClassDialog(getCustomClassSelections);
+    },
+    [openCreateEnableCustomClassDialog],
+  );
+
+  const onEnableCustomClass = useCallback(
+    (isSource: boolean): void => {
+      getCustomClass((selectedClass: string, selectedCollection: string) =>
+        enableCustomClass(selectedClass, selectedCollection, isSource),
+      );
+    },
+    [getCustomClass],
   );
 
   const onResetAtlasmap = useCallback(() => openResetDialog(resetAtlasmap), [
@@ -334,6 +375,7 @@ export function useAtlasmapDialogs({
       onAddToMapping,
       onRemoveFromMapping,
       onCreateMapping,
+      onEnableCustomClass,
     },
     dialogs: [
       exportDialog,
@@ -348,6 +390,7 @@ export function useAtlasmapDialogs({
       resetDialog,
       removeMappedFieldDialog,
       deleteMappingDialog,
+      createEnableCustomClassDialog,
     ],
   };
 }
