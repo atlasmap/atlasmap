@@ -152,6 +152,7 @@ export const Document = forwardRef<
                     variant={"plain"}
                     onClick={toggleExpanded}
                     aria-label={"Expand/collapse this card"}
+                    data-testid={`expand-collapse-${title}-button`}
                   >
                     <Title size={"lg"} headingLevel={"h2"} aria-label={title}>
                       {isExpanded ? <AngleDownIcon /> : <AngleRightIcon />}{" "}

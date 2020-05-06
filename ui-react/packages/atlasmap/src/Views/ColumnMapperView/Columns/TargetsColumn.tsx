@@ -81,8 +81,16 @@ export const TargetsColumn: FunctionComponent<
         title={"Target"}
         onSearch={onSearch}
         actions={[
-          <ImportAction onImport={onImportDocument} key={"import"} />,
-          <EnableJavaClassAction onClick={onEnableJavaClasses} key={"java"} />,
+          <ImportAction
+            id="Target"
+            onImport={onImportDocument}
+            key={"import"}
+          />,
+          <EnableJavaClassAction
+            id="Target"
+            onClick={onEnableJavaClasses}
+            key={"java"}
+          />,
         ]}
       />
       <NodeRef id={TARGETS_HEIGHT_BOUNDARY_ID}>
@@ -107,6 +115,7 @@ export const TargetsColumn: FunctionComponent<
                       }
                       actions={[
                         <DeleteDocumentAction
+                          id={documentId}
                           onClick={() => onDeleteDocument(t.id)}
                           key={"delete-documents"}
                         />,

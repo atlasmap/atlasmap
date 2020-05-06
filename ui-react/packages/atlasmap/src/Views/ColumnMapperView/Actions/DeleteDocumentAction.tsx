@@ -4,9 +4,11 @@ import { Tooltip, Button } from "@patternfly/react-core";
 import { TrashIcon } from "@patternfly/react-icons";
 
 export interface IDeleteDocumentActionProps {
+  id: string;
   onClick: () => void;
 }
 export const DeleteDocumentAction: FunctionComponent<IDeleteDocumentActionProps> = ({
+  id,
   onClick,
 }) => (
   <Tooltip
@@ -18,6 +20,7 @@ export const DeleteDocumentAction: FunctionComponent<IDeleteDocumentActionProps>
       variant="plain"
       onClick={onClick}
       aria-label="Remove instance or schema file"
+      data-testid={`remove-${id}-instance-or-schema-file-button`}
     >
       <TrashIcon />
     </Button>

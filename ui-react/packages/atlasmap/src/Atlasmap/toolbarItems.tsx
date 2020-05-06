@@ -42,6 +42,7 @@ export const ImportAtlasFileToolbarItem: FunctionComponent<{
           variant={"plain"}
           aria-label="Import mappings"
           isDisabled={disabled}
+          data-testid="import-mappings-button"
         >
           <ImportIcon />
         </Button>
@@ -70,6 +71,7 @@ export const ExportAtlasFileToolbarItem: FunctionComponent<{
         aria-label="Export mappings"
         onClick={onClick}
         isDisabled={disabled}
+        data-testid="export-mappings-button"
       >
         <ExportIcon />
       </Button>
@@ -92,6 +94,7 @@ export const ResetToolbarItem: FunctionComponent<{
         aria-label="Reset all"
         onClick={onClick}
         isDisabled={disabled}
+        data-testid="reset-all-button"
       >
         <TrashIcon />
       </Button>
@@ -116,6 +119,7 @@ export const ToggleMappingColumnToolbarItem: FunctionComponent<{
         onClick={onClick}
         isDisabled={disabled}
         className={css(toggled && styles.toggled)}
+        data-testid="show-hide-mapping-column-button"
       >
         <BezierCurveIcon />
       </Button>
@@ -140,6 +144,7 @@ export const ToggleColumnMapperViewToolbarItem: FunctionComponent<{
         onClick={onClick}
         isDisabled={disabled}
         className={css(toggled && styles.toggled)}
+        data-testid="show-column-mapper-button"
       >
         <ColumnsIcon />
       </Button>
@@ -164,6 +169,7 @@ export const ToggleMappingTableViewToolbarItem: FunctionComponent<{
         onClick={onClick}
         isDisabled={disabled}
         className={css(toggled && styles.toggled)}
+        data-testid="show-hide-mapping-table-button"
       >
         <TableIcon />
       </Button>
@@ -188,6 +194,7 @@ export const ToggleNamespaceTableViewToolbarItem: FunctionComponent<{
         onClick={onClick}
         isDisabled={disabled}
         className={css(toggled && styles.toggled)}
+        data-testid="show-hide-namespace-table-button"
       >
         <CodeIcon />
       </Button>
@@ -212,6 +219,7 @@ export const ToggleFreeViewToolbarItem: FunctionComponent<{
         onClick={onClick}
         isDisabled={disabled}
         className={css(toggled && styles.toggled)}
+        data-testid="show-hide-free-view-button"
       >
         <PficonDragdropIcon />
       </Button>
@@ -236,6 +244,7 @@ export const ToggleMappingPreviewToolbarItem: FunctionComponent<{
         onClick={onClick}
         isDisabled={disabled}
         className={css(toggled && styles.toggled)}
+        data-testid="show-hide-mapping-preview-button"
       >
         <EyeIcon />
       </Button>
@@ -260,6 +269,7 @@ export const ToggleTypesToolbarItem: FunctionComponent<{
         onClick={onClick}
         isDisabled={disabled}
         className={css(toggled && styles.toggled)}
+        data-testid="show-hide-types-button"
       >
         <InfoIcon />
       </Button>
@@ -284,6 +294,7 @@ export const ToggleMappedFieldsToolbarItem: FunctionComponent<{
         onClick={onClick}
         isDisabled={disabled}
         className={css(toggled && styles.toggled)}
+        data-testid="show-hide-mapped-fields-button"
       >
         <MapMarkedIcon />
       </Button>
@@ -308,6 +319,7 @@ export const ToggleUnmappedFieldsToolbarItem: FunctionComponent<{
         onClick={onClick}
         isDisabled={disabled}
         className={css(toggled && styles.toggled)}
+        data-testid="show-hide-unmapped-fields-button"
       >
         <MapIcon />
       </Button>

@@ -142,6 +142,7 @@ export const MappingDocument: FunctionComponent<
             dropTarget={isTarget}
             actions={[
               <EditMappingAction
+                id={mapping.id}
                 onClick={() => onEditMapping(mapping)}
                 key="edit"
               />,

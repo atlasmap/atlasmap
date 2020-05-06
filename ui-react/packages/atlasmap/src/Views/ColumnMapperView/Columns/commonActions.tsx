@@ -88,6 +88,7 @@ export function commonActions({
           aria-label="Show mapping details"
           tabIndex={0}
           isDisabled={connectedMappings.length === 0}
+          data-testid={"show-mapping-details-button"}
         >
           <ExchangeAltIcon />
         </Button>
@@ -104,6 +105,7 @@ export function commonActions({
           variant="plain"
           onClick={onRemoveFromSelectedMapping}
           aria-label={"Disconnect from the selected mapping"}
+          data-testid={"disconnect-from-the-selected-mapping-button"}
           tabIndex={0}
         >
           <UnlinkIcon />
@@ -122,6 +124,7 @@ export function commonActions({
           aria-label={"Connect to the selected mapping"}
           tabIndex={0}
           isDisabled={!canAddToSelectedMapping}
+          data-testid={"connect-to-the-selected-mapping-button"}
         >
           <LinkIcon />
         </Button>
@@ -139,6 +142,7 @@ export function commonActions({
         aria-label={"Create new mapping"}
         tabIndex={0}
         isDisabled={!canStartMapping}
+        data-testid={"create-new-mapping-button"}
       >
         <ProjectDiagramIcon />
       </Button>

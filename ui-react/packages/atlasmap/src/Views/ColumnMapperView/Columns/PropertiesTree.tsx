@@ -88,6 +88,7 @@ export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
             onClick={() => onEditProperty(field.name)}
             aria-label={"Edit property"}
             tabIndex={0}
+            data-testid={`edit-property-${field.name}-button`}
           >
             <EditIcon />
           </Button>
@@ -103,6 +104,7 @@ export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
             onClick={() => onDeleteProperty(field.name)}
             aria-label={"Remove property"}
             tabIndex={0}
+            data-testid={`remove-property-${field.name}-button`}
           >
             <TrashIcon />
           </Button>

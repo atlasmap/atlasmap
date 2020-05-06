@@ -5,9 +5,11 @@ import { Tooltip, Button } from "@patternfly/react-core";
 import { ImportIcon } from "@patternfly/react-icons";
 
 export interface IImportActionProps {
+  id: string;
   onImport: (selectedFile: File) => void;
 }
 export const ImportAction: FunctionComponent<IImportActionProps> = ({
+  id,
   onImport,
 }) => (
   <Tooltip
@@ -20,7 +22,11 @@ export const ImportAction: FunctionComponent<IImportActionProps> = ({
       onChange={(selectedFile: File) => onImport(selectedFile)}
       onError={(errMsg: any) => console.error(errMsg)}
     >
-      <Button variant="plain" aria-label="Import instance or schema file">
+      <Button
+        variant="plain"
+        aria-label="Import instance or schema file"
+        data-testid={`import-instance-or-schema-file-${id}-button`}
+      >
         <ImportIcon />
       </Button>
     </FilePicker>
