@@ -181,6 +181,7 @@ export const MappingDocument: FunctionComponent<
                   );
                 })}
               </SplitItem>
+              <SplitItem isFilled />
               <SplitItem
                 style={{
                   maxWidth: "50%",
