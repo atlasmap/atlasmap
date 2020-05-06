@@ -930,7 +930,12 @@ export const mappings: IAtlasmapMapping[] = [
     ],
     mapping: {} as MappingModel,
     notifications: [
-      { variant: "warning", message: "sample message", id: "abc" },
+      {
+        variant: "warning",
+        title: "sample title",
+        description: "sample message",
+        id: "abc",
+      },
     ],
   },
   {
@@ -958,7 +963,12 @@ export const mappings: IAtlasmapMapping[] = [
     ],
     mapping: {} as MappingModel,
     notifications: [
-      { variant: "warning", message: "sample message", id: "abc" },
+      {
+        variant: "warning",
+        title: "sample title",
+        description: "sample message",
+        id: "abc",
+      },
     ],
   },
   {
@@ -986,7 +996,12 @@ export const mappings: IAtlasmapMapping[] = [
     ],
     mapping: {} as MappingModel,
     notifications: [
-      { variant: "warning", message: "sample message", id: "abc" },
+      {
+        variant: "warning",
+        title: "sample title",
+        description: "sample message",
+        id: "abc",
+      },
     ],
   },
 ];

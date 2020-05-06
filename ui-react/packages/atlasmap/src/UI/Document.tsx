@@ -20,6 +20,7 @@ import React, {
 } from "react";
 import { useToggle } from "./useToggle";
 import { AngleDownIcon, AngleRightIcon } from "@patternfly/react-icons";
+import { TruncatedString } from "./TruncatedString";
 
 const styles = StyleSheet.create({
   card: {},
@@ -29,6 +30,13 @@ const styles = StyleSheet.create({
   head: {
     paddingLeft: "0.5rem !important",
     paddingRight: "0.5rem !important",
+  },
+  header: {
+    width: "100%",
+    overflow: "hidden",
+  },
+  headerButton: {
+    maxWidth: "100%",
   },
   noPadding: {
     padding: "0 !important",
@@ -147,16 +155,19 @@ export const Document = forwardRef<
             <CardHead className={css(styles.head)}>
               <CardActions>{actions?.filter((a) => a)}</CardActions>
               {title && (
-                <CardHeader>
+                <CardHeader className={css(styles.header)}>
                   <Button
                     variant={"plain"}
                     onClick={toggleExpanded}
                     aria-label={"Expand/collapse this card"}
                     data-testid={`expand-collapse-${title}-button`}
+                    className={css(styles.headerButton)}
                   >
                     <Title size={"lg"} headingLevel={"h2"} aria-label={title}>
-                      {isExpanded ? <AngleDownIcon /> : <AngleRightIcon />}{" "}
-                      {title}
+                      <TruncatedString title={title}>
+                        {isExpanded ? <AngleDownIcon /> : <AngleRightIcon />}{" "}
+                        {title}
+                      </TruncatedString>
                     </Title>
                   </Button>
                 </CardHeader>

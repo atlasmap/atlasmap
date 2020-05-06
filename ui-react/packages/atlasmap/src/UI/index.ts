@@ -13,7 +13,7 @@ export * from "./DocumentFieldPreviewResults";
 export * from "./DocumentFooter";
 export * from "./DocumentGroup";
 export * from "./ExpressionContent";
-export * from "./FieldName";
+export * from "./TruncatedString";
 export * from "./Loading";
 export * from "./MappingTransformation";
 export * from "./MappingField";

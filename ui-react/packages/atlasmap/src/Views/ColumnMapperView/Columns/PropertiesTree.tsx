@@ -18,7 +18,7 @@ import {
   SOURCES_WIDTH_BOUNDARY_ID,
   TARGETS_DRAGGABLE_TYPE,
 } from "./constants";
-import { TraverseFields } from "./TraverseFields";
+import { TraverseFields, ITraverseFieldsProps } from "./TraverseFields";
 
 export interface IPropertiesTreeCallbacks {
   onDrop: (source: IAtlasmapField, target: IDragAndDropField) => void;
@@ -37,6 +37,7 @@ export interface IPropertiesTreeCallbacks {
 export interface IPropertiesTreeProps extends IPropertiesTreeCallbacks {
   fields: IAtlasmapDocument["fields"];
   showTypes: boolean;
+  renderPreview: ITraverseFieldsProps["renderPreview"];
 }
 
 export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
@@ -53,6 +54,7 @@ export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
   onDeleteProperty,
   canStartMapping,
   onStartMapping,
+  renderPreview,
 }) => (
   <Tree>
     <TraverseFields
@@ -110,6 +112,7 @@ export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
           </Button>
         </Tooltip>,
       ]}
+      renderPreview={renderPreview}
     />
   </Tree>
 );

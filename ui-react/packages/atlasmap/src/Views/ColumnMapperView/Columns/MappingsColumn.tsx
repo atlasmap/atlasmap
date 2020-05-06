@@ -10,7 +10,7 @@ import {
   DocumentFieldPreviewResults,
   DraggedField,
   FieldDropTarget,
-  FieldName,
+  TruncatedString,
   IDragAndDropField,
   NodeRef,
 } from "../../../UI";
@@ -167,7 +167,7 @@ export const MappingDocument: FunctionComponent<
                       overrideWidth={MAPPINGS_WIDTH_BOUNDARY_ID}
                     >
                       <div>
-                        <FieldName>{mf.name}</FieldName>
+                        <TruncatedString>{mf.name}</TruncatedString>
                         {isSelected && showMappingPreview && (
                           <DocumentFieldPreview
                             id={mf.id}
@@ -201,7 +201,7 @@ export const MappingDocument: FunctionComponent<
                       overrideWidth={MAPPINGS_WIDTH_BOUNDARY_ID}
                     >
                       <div>
-                        <FieldName>{mf.name}</FieldName>
+                        <TruncatedString>{mf.name}</TruncatedString>
                         {isSelected && showMappingPreview && (
                           <DocumentFieldPreviewResults
                             id={mf.id}

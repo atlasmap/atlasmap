@@ -1,5 +1,7 @@
-import { Form, FormGroup, TextInput } from "@patternfly/react-core";
 import React, { FunctionComponent } from "react";
+import { useDebouncedCallback } from "use-debounce";
+
+import { Form, FormGroup, TextInput } from "@patternfly/react-core";
 import { css, StyleSheet } from "@patternfly/react-styles";
 
 const styles = StyleSheet.create({
@@ -20,6 +22,7 @@ export const DocumentFieldPreview: FunctionComponent<IDocumentFieldPreviewProps>
   value,
   onChange,
 }) => {
+  const [debouncedOnChange] = useDebouncedCallback(onChange, 200);
   return (
     <Form
       className={css(styles.form)}
@@ -29,8 +32,8 @@ export const DocumentFieldPreview: FunctionComponent<IDocumentFieldPreviewProps>
         <TextInput
           id={id}
           type="text"
-          onChange={onChange}
-          value={value}
+          onChange={debouncedOnChange}
+          defaultValue={value || ""}
           aria-label="Type sample data here"
           placeholder="Type sample data here"
         />

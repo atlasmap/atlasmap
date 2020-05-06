@@ -11,11 +11,18 @@ const styles = StyleSheet.create({
   },
 });
 
-export const FieldName: FunctionComponent = ({ children }) => (
-  <div
+export interface ITruncatedStringProps {
+  title?: string;
+}
+
+export const TruncatedString: FunctionComponent<ITruncatedStringProps> = ({
+  title,
+  children,
+}) => (
+  <span
     className={css(styles.fieldName)}
-    title={typeof children === "string" ? children : undefined}
+    title={title || (typeof children === "string" ? children : undefined)}
   >
     {children}
-  </div>
+  </span>
 );

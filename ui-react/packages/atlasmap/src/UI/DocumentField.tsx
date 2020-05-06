@@ -7,7 +7,7 @@ import React, {
 
 import { css, StyleSheet } from "@patternfly/react-styles";
 
-import { FieldName } from "./FieldName";
+import { TruncatedString } from "./TruncatedString";
 import { useToggle } from "./useToggle";
 
 const styles = StyleSheet.create({
@@ -108,7 +108,7 @@ export const DocumentField = forwardRef<
         <div className={css(styles.row)}>
           {icon && <div className={css(styles.nameIcon)}>{icon}</div>}
           <div className={css(styles.nameWrapper)}>
-            <FieldName>{name}</FieldName>
+            <TruncatedString>{name}</TruncatedString>
             <span>{showType && ` (${type})`}</span>
             <span className={styles.statusIcons}>
               {statusIcons && statusIcons?.filter((a) => a)}

@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useCallback } from "react";
 
 import { Button, Tooltip } from "@patternfly/react-core";
 import { PlusIcon } from "@patternfly/react-icons";
@@ -97,6 +97,18 @@ export const SourcesColumn: FunctionComponent<
   sources,
   showTypes,
 }) => {
+  const renderPreview = useCallback(
+    (field: IAtlasmapField) =>
+      shouldShowMappingPreviewForField(field) && (
+        <DocumentFieldPreview
+          id={field.id}
+          value={field.previewValue}
+          onChange={(value) => onFieldPreviewChange(field, value)}
+        />
+      ),
+    [onFieldPreviewChange, shouldShowMappingPreviewForField],
+  );
+
   return (
     <>
       <SearchableColumnHeader
@@ -162,6 +174,7 @@ export const SourcesColumn: FunctionComponent<
                       onStartMapping={onStartMapping}
                       fields={properties.fields}
                       showTypes={showTypes}
+                      renderPreview={renderPreview}
                     />
                   ) : (
                     "No properties"
@@ -210,6 +223,7 @@ export const SourcesColumn: FunctionComponent<
                       canStartMapping={canStartMapping}
                       onStartMapping={onStartMapping}
                       fields={constants.fields}
+                      renderPreview={renderPreview}
                     />
                   ) : (
                     <p>No constants</p>
@@ -271,17 +285,7 @@ export const SourcesColumn: FunctionComponent<
                               onStartMapping: () => onStartMapping(field),
                             })
                           }
-                          renderPreview={(field) =>
-                            shouldShowMappingPreviewForField(field) && (
-                              <DocumentFieldPreview
-                                id={field.id}
-                                value={field.previewValue}
-                                onChange={(value) =>
-                                  onFieldPreviewChange(field, value)
-                                }
-                              />
-                            )
-                          }
+                          renderPreview={renderPreview}
                         />
                       </Tree>
                     </Document>

@@ -1,4 +1,4 @@
-import { ErrorLevel } from "@atlasmap/core";
+import { ErrorLevel, ErrorInfo, ErrorType } from "@atlasmap/core";
 import ky from "ky";
 import { Observable } from "rxjs";
 import { INotification } from "../../Views/models";
@@ -156,6 +156,42 @@ export function errorLevelToVariant(
   }
 }
 
+export function errorMessageToString(message: any): string {
+  switch (typeof message) {
+    case "string":
+      return message;
+    default:
+      return message?.message || JSON.stringify(message);
+  }
+}
+
+export function errorTypeToString(type: ErrorType): string {
+  switch (type) {
+    case ErrorType.INTERNAL:
+      return "Internal";
+    case ErrorType.USER:
+      return "User";
+    case ErrorType.VALIDATION:
+      return "Validation";
+    case ErrorType.PREVIEW:
+      return "Preview";
+    case ErrorType.FORM:
+      return "Form";
+  }
+}
+
+export function errorInfoToNotification(e: ErrorInfo): INotification {
+  return {
+    variant: errorLevelToVariant(e.level),
+    title:
+      e.mapping && e.type !== ErrorType.PREVIEW
+        ? `Invalid mapping "${e.mapping.transition.getPrettyName()}"`
+        : errorTypeToString(e.type),
+    description: errorMessageToString(e.message),
+    id: e.identifier,
+  };
+}
+
 export function fromMappingModelToImapping(
   m: MappingModel | null | undefined,
 ): IAtlasmapMapping | null {
@@ -174,12 +210,13 @@ export function fromMappingModelToImapping(
         mapping: m,
         notifications: initializationService.cfg.errorService
           .getErrors()
-          .filter((e) => e.mapping?.uuid === m.uuid && e.level !== "DEBUG")
-          .map((e) => ({
-            variant: errorLevelToVariant(e.level),
-            message: e.message,
-            id: e.identifier,
-          })),
+          .filter(
+            (e) =>
+              e.mapping?.uuid === m.uuid &&
+              e.level !== "DEBUG" &&
+              e.type !== "PREVIEW",
+          )
+          .map(errorInfoToNotification),
       }
     : null;
 }
