@@ -160,7 +160,6 @@ export function useInputTextSelectDialog({
         <>
           <TextInput
             className={css(styles.iGroupTextLabel)}
-            key={"itsd-text-input-value1"}
             value={value1}
             type="text"
             onChange={handleTextInputChange}
@@ -177,7 +176,6 @@ export function useInputTextSelectDialog({
         <>
           <TextInput
             className={css(styles.iGroupTextLabel)}
-            key={"itsd-text-input-value2"}
             value={value2}
             type="text"
             onChange={handleTextInputChange2}

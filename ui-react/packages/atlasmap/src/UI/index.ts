@@ -21,7 +21,6 @@ export * from "./MappingFields";
 export * from "./Tree";
 export * from "./useConfirmationDialog";
 export * from "./useDimensions";
-export * from "./useDoubleSelectDialog";
 export * from "./useInputTextSelectDialog";
 export * from "./useLatestValue";
 export * from "./useSingleInputDialog";

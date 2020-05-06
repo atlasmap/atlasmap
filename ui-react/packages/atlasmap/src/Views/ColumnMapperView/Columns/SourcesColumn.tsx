@@ -121,8 +121,7 @@ export const SourcesColumn: FunctionComponent<
             key={"import"}
           />,
           <EnableJavaClassAction
-            isSource={true}
-            onCustomClassSearch={onCustomClassSearch}
+            onCustomClassSearch={() => onCustomClassSearch(true)}
             key={"java"}
           />,
         ]}

@@ -218,37 +218,3 @@ export function enableCustomClass(
       }
     });
 }
-
-interface ISelectValues1 {
-  isSelectable: boolean;
-  value: string;
-}
-
-/**
- * Return an array of custom class package names and JAR file names.
- *
- * TODO
- * Need to disassemble the jar file as a binary in the backend server.
- * There may be JDK internal tool to assist.  Basically the class
- * hierarchy is completely decoupled from physical jar.
- */
-export function getCustomClassCandidates(): ISelectValues1[] {
-  return [
-    {
-      isSelectable: false,
-      value: "somefile1",
-    } as ISelectValues1,
-    {
-      isSelectable: true,
-      value: "io.paul.Bicycle",
-    } as ISelectValues1,
-    {
-      isSelectable: false,
-      value: "somefile2",
-    } as ISelectValues1,
-    {
-      isSelectable: true,
-      value: "io.paul.GeoLocation",
-    } as ISelectValues1,
-  ];
-}

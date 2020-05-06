@@ -3,16 +3,14 @@ import { Button, Tooltip } from "@patternfly/react-core";
 import { AddCircleOIcon } from "@patternfly/react-icons";
 
 export interface IEnableJavaClassActionProps {
-  isSource: boolean;
-  onCustomClassSearch: (isSource: boolean) => void;
+  onCustomClassSearch: () => void;
 }
 
 export const EnableJavaClassAction: FunctionComponent<IEnableJavaClassActionProps> = ({
-  isSource,
   onCustomClassSearch,
 }) => {
   function onEnableClassSearch(): void {
-    onCustomClassSearch(isSource);
+    onCustomClassSearch();
   }
 
   return (
