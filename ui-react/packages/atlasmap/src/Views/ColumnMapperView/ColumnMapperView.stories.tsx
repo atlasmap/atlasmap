@@ -31,7 +31,7 @@ export const sourcesColumn = () => (
         onDeleteProperty={action("onDeleteProperty")}
         onDeleteDocument={action("onDeleteDocument")}
         onImportDocument={action("onImportDocument")}
-        onEnableJavaClasses={action("onEnableJavaClasses")}
+        onCustomClassSearch={action("onCustomClassSearch")}
         onShowMappingDetails={action("onShowMappingDetails")}
         canAddToSelectedMapping={() => true}
         onAddToSelectedMapping={action("onAddToSelectedMapping")}
@@ -60,7 +60,7 @@ export const targetsColumn = () => (
         onDeleteDocument={action("onDeleteDocument")}
         onImportDocument={action("onImportDocument")}
         onSearch={action("onSearch")}
-        onEnableJavaClasses={action("onEnableJavaClasses")}
+        onCustomClassSearch={action("onCustomClassSearch")}
         onDrop={action("onDrop")}
         canDrop={() => true}
         onShowMappingDetails={action("onShowMappingDetails")}

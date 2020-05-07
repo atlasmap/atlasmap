@@ -45,6 +45,13 @@ export enum CollectionType {
   NONE = 'NONE'
 }
 
+export const collectionTypes = [
+  [CollectionType[CollectionType.ARRAY], 'Array'],
+  [CollectionType[CollectionType.LIST], 'List'],
+  [CollectionType[CollectionType.MAP], 'Map'],
+  [CollectionType[CollectionType.NONE], 'None'],
+]
+
 export const constantTypes = [
   ['BOOLEAN', 'Boolean'],
   ['BIG_INTEGER', 'Big Integer'],

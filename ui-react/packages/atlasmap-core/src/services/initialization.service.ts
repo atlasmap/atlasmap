@@ -125,6 +125,7 @@ export class InitializationService {
               });
             }
           });
+          this.updateStatus();
         } else {
           log.debug(`Fetching user document: name=${docdef.name}, id=${docdef.id},\
 isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionType}`);

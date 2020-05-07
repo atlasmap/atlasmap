@@ -4,8 +4,7 @@ import {
   TextInput,
   FormSelect,
   FormSelectOption,
-  InputGroup,
-  InputGroupText,
+  Label,
 } from "@patternfly/react-core";
 import React, {
   FormEvent,
@@ -58,9 +57,7 @@ export function useInputTextSelectDialog({
   const [isValid, setIsValid] = useState(true);
   const [value1, setValue1] = useState(textValue1.current);
   const [value2, setValue2] = useState(textValue2.current);
-  const [selectValue, setSelectValue] = useState(
-    selectValues[selectDefault.current][0],
-  );
+  const [selectValue, setSelectValue] = useState("");
   const openModal = (
     onConfirmCb?: ConfirmInputTextCallback,
     onCancelCb?: CancelCallback,
@@ -114,8 +111,19 @@ export function useInputTextSelectDialog({
       marginBottom: "1.0rem",
       marginLeft: "0.5rem",
     },
+    iSelectBody: {
+      width: 200,
+      marginLeft: "0.5rem",
+    },
+    iSelectLabel: {
+      marginTop: "1.5rem",
+      marginLeft: "0.5rem",
+      width: 150,
+      marginRight: "250",
+    },
     iGroupTextLabel: {
-      width: 125,
+      marginTop: "1.0rem",
+      width: 425,
     },
   });
 
@@ -149,12 +157,9 @@ export function useInputTextSelectDialog({
       isFooterLeftAligned={false}
     >
       {textLabel1 && (
-        <InputGroup className={css(styles.iGroup)}>
-          <InputGroupText className={css(styles.iGroupTextLabel)}>
-            {textLabel1}
-          </InputGroupText>
+        <>
           <TextInput
-            key={"text-input-value1"}
+            className={css(styles.iGroupTextLabel)}
             value={value1}
             type="text"
             onChange={handleTextInputChange}
@@ -162,48 +167,48 @@ export function useInputTextSelectDialog({
             isRequired={true}
             isValid={isValid}
             isDisabled={text1ReadOnly}
-            data-testid={"value1-text-input"}
+            placeholder={textLabel1}
+            data-testid={"itsd-value1-text-input"}
           />
-        </InputGroup>
+        </>
       )}
       {textLabel2.length > 0 && (
-        <InputGroup className={css(styles.iGroup)}>
-          <InputGroupText className={css(styles.iGroupTextLabel)}>
-            {textLabel2}
-          </InputGroupText>
+        <>
           <TextInput
-            key={"text-input-value2"}
+            className={css(styles.iGroupTextLabel)}
             value={value2}
             type="text"
             onChange={handleTextInputChange2}
             aria-label={title}
             isRequired={true}
             isValid={isValid}
-            data-testid={"value2-text-input"}
+            placeholder={textLabel2}
+            data-testid={"itsd-value2-text-input"}
           />
-        </InputGroup>
+        </>
       )}
-      <InputGroup className={css(styles.iGroup)}>
-        <InputGroupText className={css(styles.iGroupTextLabel)}>
-          {selectLabel}
-        </InputGroupText>
-        <FormSelect
-          value={selectValue}
-          id={selectValue}
-          onChange={handleSelect}
-          data-testid={"type-dropdown-form-select"}
-        >
-          {selectValues.map(
-            (selectValue: string[], idx: number | undefined) => (
-              <FormSelectOption
-                label={selectValue[1]}
-                value={selectValue[0]}
-                key={idx}
-              />
-            ),
-          )}
-        </FormSelect>
-      </InputGroup>
+      {selectLabel && (
+        <>
+          <Label className={css(styles.iSelectLabel)}>{selectLabel}</Label>
+          <FormSelect
+            className={css(styles.iSelectBody)}
+            value={selectValue}
+            id={selectValue}
+            onChange={handleSelect}
+            data-testid={"itsd-form-select"}
+          >
+            {selectValues.map(
+              (selectValue: string[], idx: number | undefined) => (
+                <FormSelectOption
+                  label={selectValue[1]}
+                  value={selectValue[0]}
+                  key={idx}
+                />
+              ),
+            )}
+          </FormSelect>
+        </>
+      )}
     </Modal>,
     modalContainer,
   );
