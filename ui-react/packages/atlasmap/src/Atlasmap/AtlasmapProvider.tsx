@@ -311,6 +311,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
             payload: {
               notifications: initializationService.cfg.errorService
                 .getErrors()
+                .reverse()
                 .filter((e) =>
                   e.level !== "DEBUG" && data.selectedMapping
                     ? !e.mapping

@@ -7,6 +7,7 @@ import {
   ConditionalExpressionInput,
   FieldDragLayer,
   FieldsDndProvider,
+  TimedToast,
 } from "../UI";
 import {
   IAtlasmapField,
@@ -21,11 +22,7 @@ import { useAtlasmap } from "./AtlasmapProvider";
 import { useAtlasmapDialogs } from "./useAtlasmapDialogs";
 import { IUseContextToolbarData, useContextToolbar } from "./useContextToolbar";
 import { useSidebar } from "./useSidebar";
-import {
-  AlertGroup,
-  Alert,
-  AlertActionCloseButton,
-} from "@patternfly/react-core";
+import { AlertGroup } from "@patternfly/react-core";
 
 export interface IAtlasmapProps extends IUseContextToolbarData {
   modalsContainerId?: string;
@@ -276,23 +273,17 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         <AlertGroup isToast>
           {notifications
             .filter((n) => !n.isRead)
-            .slice(0, 3)
+            .slice(0, 5)
             .map(({ id, variant, title, description }) => (
-              <Alert
-                isLiveRegion
+              <TimedToast
                 variant={variant}
                 title={title}
                 key={id}
-                action={
-                  <AlertActionCloseButton
-                    title={title}
-                    variantLabel={`${variant} alert`}
-                    onClose={() => markNotificationRead(id)}
-                  />
-                }
+                onClose={() => markNotificationRead(id)}
+                onTimeout={() => markNotificationRead(id)}
               >
                 {description}
-              </Alert>
+              </TimedToast>
             ))}
         </AlertGroup>
         {dialogs}
