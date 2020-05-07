@@ -7,7 +7,7 @@ import { TreeFocusProvider } from "./TreeFocusProvider";
 
 const styles = StyleSheet.create({
   accordion: {
-    padding: "0 !important",
+    padding: "0 1.3rem 0 0.5rem !important",
   },
 });
 

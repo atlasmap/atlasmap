@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   buttonContent: {
     display: "flex",
     alignItems: "center",
-    padding: "0.5rem 1rem",
+    padding: "0.5rem 1rem 0.5rem 1.2rem",
   },
   buttonIcon: {
     marginRight: "1rem",
