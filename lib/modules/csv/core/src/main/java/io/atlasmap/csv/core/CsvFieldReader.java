@@ -18,18 +18,23 @@ package io.atlasmap.csv.core;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.AtlasUtil;
+import io.atlasmap.csv.v2.CsvComplexType;
 import io.atlasmap.csv.v2.CsvField;
+import io.atlasmap.csv.v2.CsvFields;
 import io.atlasmap.spi.AtlasFieldReader;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Document;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
+import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Fields;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import sun.misc.IOUtils;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -55,8 +60,9 @@ public class CsvFieldReader implements AtlasFieldReader {
     public void setDocument(InputStream inputStream) {
         if (inputStream != null && !inputStream.markSupported()) {
             this.document = new BufferedInputStream(inputStream);
+        } else {
+            this.document = inputStream;
         }
-        this.document = inputStream;
     }
 
     @Override
@@ -122,7 +128,12 @@ public class CsvFieldReader implements AtlasFieldReader {
                 for (CSVRecord record: parser) {
                     if (i == fieldIndex) {
                         CsvField newField = CsvField.cloneOf(csvField);
-                        String value = record.get(csvField.getColumn());
+                        String value;
+                        if (csvField.getColumn() != null) {
+                            value = record.get(csvField.getColumn());
+                        } else {
+                            value = record.get(csvField.getName());
+                        }
                         newField.setValue(value);
                         fields.add(newField);
                         break;
@@ -182,7 +193,7 @@ public class CsvFieldReader implements AtlasFieldReader {
             throw new AtlasException(e);
         }
 
-        List<Field> fields = new ArrayList<>();
+        List<CsvField> fields = new ArrayList<>();
 
         if (csvConfig.isFirstRecordAsHeader()) {
             int i = 0;
@@ -191,6 +202,7 @@ public class CsvFieldReader implements AtlasFieldReader {
                 field.setColumn(i);
                 field.setName(headerName);
                 field.setPath("/<>/" + headerName);
+                field.setFieldType(FieldType.STRING);
                 fields.add(field);
                 i++;
             }
@@ -201,6 +213,7 @@ public class CsvFieldReader implements AtlasFieldReader {
                 field.setColumn(i);
                 field.setName(String.valueOf(i));
                 field.setPath("/<>/" + field.getName());
+                field.setFieldType(FieldType.STRING);
                 fields.add(field);
             }
         }
@@ -211,8 +224,18 @@ public class CsvFieldReader implements AtlasFieldReader {
             throw new AtlasException(e);
         }
 
+        CsvFields csvFields = new CsvFields();
+        csvFields.getCsvField().addAll(fields);
+
+        CsvComplexType csvComplexType = new CsvComplexType();
+        csvComplexType.setFieldType(FieldType.COMPLEX);
+        csvComplexType.setCollectionType(CollectionType.LIST);
+        csvComplexType.setPath("/<>");
+        csvComplexType.setName("");
+        csvComplexType.setCsvFields(csvFields);
+
         Fields documentFields = new Fields();
-        documentFields.getField().addAll(fields);
+        documentFields.getField().add(csvComplexType);
 
         Document document = new Document();
         document.setFields(documentFields);

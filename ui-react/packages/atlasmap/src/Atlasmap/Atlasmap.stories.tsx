@@ -72,6 +72,10 @@ export const wiredToTheBackend = () => (
       "baseJSONInspectionServiceUrl",
       "http://localhost:8585/v2/atlas/json/",
     )}
+    baseCSVInspectionServiceUrl={text(
+      "baseCSVInspectionServiceUrl",
+      "http://localhost:8585/v2/atlas/csv/",
+    )}
     baseMappingServiceUrl={text(
       "baseMappingServiceUrl",
       "http://localhost:8585/v2/atlas/",
@@ -142,6 +146,10 @@ export const embeddedInSyndesis = () => {
       baseJSONInspectionServiceUrl={text(
         "baseJSONInspectionServiceUrl",
         "http://localhost:8585/v2/atlas/json/",
+      )}
+      baseCSVInspectionServiceUrl={text(
+        "baseCSVInspectionServiceUrl",
+        "http://localhost:8585/v2/atlas/csv/",
       )}
       baseMappingServiceUrl={text(
         "baseMappingServiceUrl",

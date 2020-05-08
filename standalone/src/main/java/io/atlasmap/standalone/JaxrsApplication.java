@@ -26,6 +26,7 @@ import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import io.atlasmap.csv.service.CsvService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -60,6 +61,9 @@ public class JaxrsApplication extends Application {
     public DfdlService dfdlService() {
         return new DfdlService();
     }
+
+    @Bean
+    public CsvService csvService() { return new CsvService(); }
 
     @Bean
     public AtlasService atlasService() throws AtlasException {

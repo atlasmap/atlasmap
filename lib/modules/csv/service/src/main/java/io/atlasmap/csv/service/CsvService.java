@@ -121,8 +121,9 @@ public class CsvService {
 
             CsvFieldReader csvFieldReader = new CsvFieldReader(csvConfig);
             csvFieldReader.setDocument(request);
+
             Document document = csvFieldReader.readSchema();
-            response.setDocument(document);
+            response.setCsvDocument(document);
             request.close();
         } catch (Exception e) {
             LOG.error("Error inspecting CSV: " + e.getMessage(), e);

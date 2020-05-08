@@ -413,6 +413,9 @@ export class MappingSerializer {
         // TODO: check this non null operator
         serializedField['index'] = mapping.getIndexForMappedField(mappedField)! - 1;
       }
+      if (field.docDef.type === DocumentType.CSV) {
+        serializedField['column'] = field.column;
+      }
 
       this.serializeActions( cfg, mappedField, serializedField );
       fieldsJson.push(serializedField);
