@@ -114,14 +114,10 @@ docker tag "${ATLASMAP_IMAGE}:${RELEASE_VERSION}" "${ATLASMAP_IMAGE}:${MAJOR_MIN
 echo "=========================================================="
 echo "Publishing NPM package of AtlasMap UI...."
 echo "=========================================================="
-pushd ui/dist/lib
-npm version ${RELEASE_VERSION}
-npm publish
-popd
 
 git reset
 git checkout .
-pushd ui-react
+pushd ui
 CURRENT_BRANCH=$(git branch --show-current)
 git checkout tags/atlasmap-${RELEASE_VERSION} -b temp-${RELEASE_VERSION}
 ./node_modules/.bin/lerna version --no-push --force-publish --amend -y ${RELEASE_VERSION}

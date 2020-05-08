@@ -77,7 +77,7 @@ public class CsvService {
     @Produces({ MediaType.APPLICATION_JSON })
     @Path("/inspect")
     @Operation(summary = "Inspect CSV", description = "Inspect a CSV instance and return a Document object")
-    @RequestBody(description = "Csv", content = @Content(mediaType = "text/csv"))
+    @RequestBody(description = "Csv", content = @Content(mediaType = "text/csv", schema = @Schema(implementation = String.class)))
     @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = CsvInspectionResponse.class)),
         description = "Return a Document object"))
     public Response inspect(InputStream request, @QueryParam("format") String format, @QueryParam("delimiter") String delimiter,

@@ -15,7 +15,8 @@
  */
 package io.atlasmap.standalone;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -59,7 +60,7 @@ public class RestTest {
             .header("ATLASMAP-XSRF-TOKEN", "awesome")
             .build();
         try (Response response = CLIENT.newCall(request).execute()) {
-            assertThat(response.isSuccessful()).isTrue();
+            assertTrue(response.isSuccessful());
             System.out.println(response.body().string());
         }
     }
@@ -72,7 +73,7 @@ public class RestTest {
             .post(RequestBody.create(resource("atlasmap-json-inspection.json"), APPLICATION_JSON))
             .build();
         try (Response response = CLIENT.newCall(request).execute()) {
-            assertThat(response.isSuccessful()).isTrue();
+            assertTrue(response.isSuccessful());
             System.out.println(response.body().string());
         }
 
@@ -85,7 +86,7 @@ public class RestTest {
                 .post(RequestBody.create(resource("atlasmap-json-inspection.json"), APPLICATION_JSON))
                 .build();
         try (Response response = CLIENT.newCall(request).execute()) {
-            assertThat(response.isSuccessful()).isFalse();
+            assertFalse(response.isSuccessful());
             System.out.println(response.body().string());
         }
     }

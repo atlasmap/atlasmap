@@ -14,9 +14,9 @@
   <description>AtlasMap Data Mapper UI to design data mapping on an interactive web user interface</description>
   <url>https://www.atlasmap.io/</url>
   <scm>
-    <connection>scm:git:https://github.com/atlasmap/atlasmap-ui.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com:atlasmap/atlasmap-ui.git</developerConnection>
-    <url>http://github.com/atlasmap/atlasmap-ui</url>
+    <connection>scm:git:https://github.com/atlasmap/atlasmap.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com:atlasmap/atlasmap.git</developerConnection>
+    <url>http://github.com/atlasmap/atlasmap</url>
     <tag>HEAD</tag>
   </scm>
   <organization>
@@ -25,7 +25,7 @@
   </organization>
   <issueManagement>
     <system>github</system>
-    <url>https://github.com/atlasmap/atlasmap-ui/issues</url>
+    <url>https://github.com/atlasmap/atlasmap/issues</url>
   </issueManagement>
   <developers>
     <developer>
@@ -92,124 +92,16 @@
               </configuration>
             </execution>
             <execution>
-              <id>yarn prebuild:css</id>
+              <id>yarn build</id>
               <phase>compile</phase>
               <goals>
                 <goal>yarn</goal>
               </goals>
               <configuration>
-                <arguments>prebuild:css</arguments>
-              </configuration>
-            </execution>
-            <execution>
-              <id>yarn build lib</id>
-              <phase>compile</phase>
-              <goals>
-                <goal>yarn</goal>
-              </goals>
-              <configuration>
-                <arguments>build:lib</arguments>
-              </configuration>
-            </execution>
-            <execution>
-              <id>yarn build app</id>
-              <phase>compile</phase>
-              <goals>
-                <goal>yarn</goal>
-              </goals>
-              <configuration>
-                <arguments>build:app</arguments>
-              </configuration>
-            </execution>
-            <execution>
-              <id>yarn lint</id>
-              <phase>test</phase>
-              <goals>
-                <goal>yarn</goal>
-              </goals>
-              <configuration>
-                <arguments>lint</arguments>
-              </configuration>
-            </execution>
-            <execution>
-              <id>yarn test</id>
-              <phase>test</phase>
-              <goals>
-                <goal>yarn</goal>
-              </goals>
-              <configuration>
-                <arguments>test</arguments>
+                <arguments>build</arguments>
               </configuration>
             </execution>
           </executions>
-      </plugin>
-      <plugin>
-        <groupId>io.atlasmap</groupId>
-        <artifactId>atlasmap-maven-plugin</artifactId>
-        <version>${project.version}</version>
-        <executions>
-          <execution>
-            <id>generate-inspections</id>
-            <phase>test-compile</phase>
-            <goals>
-              <goal>generate-inspections</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>generate-field-actions</id>
-            <phase>test-compile</phase>
-            <goals>
-              <goal>generate-field-actions</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <outputDir>${project.basedir}/test-resources/inspected</outputDir>
-          <fieldActionOutputDir>${project.basedir}/test-resources/fieldActions</fieldActionOutputDir>
-          <inspections>
-            <inspection>
-              <artifacts>
-                <artifact>org.apache.camel:camel-twitter:2.20.1</artifact>
-              </artifacts>
-              <className>twitter4j.Status</className>
-            </inspection>
-            <inspection>
-                <fileName>${project.basedir}/test-resources/json/schema</fileName>
-                <inspectionType>SCHEMA</inspectionType>
-            </inspection>
-            <inspection>
-                <fileName>${project.basedir}/test-resources/json/instance</fileName>
-                <inspectionType>INSTANCE</inspectionType>
-            </inspection>
-            <inspection>
-                <fileName>${project.basedir}/test-resources/xml/schema</fileName>
-                <inspectionType>SCHEMA</inspectionType>
-            </inspection>
-            <inspection>
-                <fileName>${project.basedir}/test-resources/xml/instance</fileName>
-                <inspectionType>INSTANCE</inspectionType>
-            </inspection>
-          </inspections>
-          <fieldActions>
-            <fieldAction>
-              <artifacts>
-                <artifact>io.atlasmap:atlasmap-maven-plugin:jar:tests:${project.version}</artifact>
-              </artifacts>
-            </fieldAction>
-          </fieldActions>
-        </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-twitter</artifactId>
-            <version>2.23.4</version>
-          </dependency>
-          <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>javax.ws.rs-api</artifactId>
-            <version>2.1.1</version>
-          </dependency>
-        </dependencies>
       </plugin>
     </plugins>
   </build>
@@ -236,109 +128,14 @@
             <artifactId>frontend-maven-plugin</artifactId>
             <executions>
               <execution>
-                <id>yarn build app</id>
+                <id>yarn build</id>
                 <phase>compile</phase>
                 <goals>
                   <goal>yarn</goal>
                 </goals>
                 <configuration>
-                  <arguments>build:app</arguments>
+                  <arguments>build</arguments>
                 </configuration>
-              </execution>
-              <execution>
-                <id>yarn build lib</id>
-                <phase>compile</phase>
-                <goals>
-                  <goal>yarn</goal>
-                </goals>
-                <configuration>
-                  <arguments>build:lib</arguments>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>coverage</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>com.github.eirslett</groupId>
-            <artifactId>frontend-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>yarn test</id>
-                <phase>test</phase>
-                <goals>
-                  <goal>yarn</goal>
-                </goals>
-                <configuration>
-                  <arguments>test:coverage</arguments>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>compodoc</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>com.github.eirslett</groupId>
-            <artifactId>frontend-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>yarn compodoc</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>yarn</goal>
-                </goals>
-                <configuration>
-                  <arguments>compodoc</arguments>
-                </configuration>
-              </execution>
-              <execution>
-                <id>yarn build app</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>yarn build lib</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>yarn lint</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>yarn test</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>io.atlasmap</groupId>
-            <artifactId>atlasmap-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>generate-inspections</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>generate-field-actions</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>make-assembly</id>
-                <phase>none</phase>
               </execution>
             </executions>
           </plugin>

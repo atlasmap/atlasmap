@@ -150,6 +150,24 @@
           <artifactId>atlas-csv-service</artifactId>
         </dependency>
 
+        <!-- AtlasMap DFDL -->
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlas-dfdl-core</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlas-dfdl-model</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlas-dfdl-module</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlas-dfdl-service</artifactId>
+        </dependency>
+
         <!-- Others -->
         <dependency>
           <groupId>io.atlasmap</groupId>
@@ -162,6 +180,10 @@
         <dependency>
           <groupId>io.atlasmap</groupId>
           <artifactId>camel-atlasmap</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>camel3-atlasmap</artifactId>
         </dependency>
         <dependency>
           <groupId>io.atlasmap</groupId>
