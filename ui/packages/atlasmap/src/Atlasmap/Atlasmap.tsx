@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { AlertGroup } from "@patternfly/react-core";
 import React, { FunctionComponent, useCallback, useMemo } from "react";
-
 import { CanvasControlBar, MainLayout, ViewToolbar } from "../Layout";
 import {
   CanvasProvider,
@@ -15,6 +15,7 @@ import {
   ISourceColumnCallbacks,
   ITargetsColumnCallbacks,
   MappingTableView,
+  NamespaceTableView,
   SourceMappingTargetView,
   SourceTargetView,
 } from "../Views";
@@ -22,7 +23,6 @@ import { useAtlasmap } from "./AtlasmapProvider";
 import { useAtlasmapDialogs } from "./useAtlasmapDialogs";
 import { IUseContextToolbarData, useContextToolbar } from "./useContextToolbar";
 import { useSidebar } from "./useSidebar";
-import { AlertGroup } from "@patternfly/react-core";
 
 export interface IAtlasmapProps {
   allowImport?: boolean;
@@ -262,12 +262,22 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         );
       case "MappingTable":
         return <MappingTableView mappings={mappings} />;
+      case "NamespaceTable":
+        return (
+          <NamespaceTableView
+            sources={sources}
+            onCreateNamespace={handlers.onCreateNamespace}
+            onEditNamespace={handlers.onEditNamespace}
+            onDeleteNamespace={handlers.deleteNamespace}
+          />
+        );
       default:
         return <>TODO</>;
     }
   }, [
     activeView,
     constants,
+    handlers,
     mappingEvents,
     mappings,
     properties,

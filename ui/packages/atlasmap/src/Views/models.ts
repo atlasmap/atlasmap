@@ -36,11 +36,21 @@ export interface IAtlasmapGroup {
   amField: Field;
 }
 
+export interface IAtlasmapNamespace {
+  alias: string;
+  uri: string;
+  locationUri: string;
+  isTarget: boolean;
+}
+
+export type AtlasmapNamespaces = Array<IAtlasmapNamespace>;
+
 export interface IAtlasmapDocument {
   id: string;
   name: string;
   type: string;
   fields: AtlasmapFields;
+  namespaces?: AtlasmapNamespaces;
 }
 
 export interface IAtlasmapMappedField extends IAtlasmapField {
