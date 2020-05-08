@@ -18,7 +18,7 @@ export const ImportAction: FunctionComponent<IImportActionProps> = ({
     content={<div>Import instance or schema file</div>}
   >
     <FilePicker
-      extensions={["json", "xml", "xsd"]}
+      extensions={["json", "xml", "xsd", "csv"]}
       onChange={(selectedFile: File) => onImport(selectedFile)}
       onError={(errMsg: any) => console.error(errMsg)}
     >

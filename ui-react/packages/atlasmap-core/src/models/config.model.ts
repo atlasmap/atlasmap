@@ -37,6 +37,7 @@ export class DataMapperInitializationModel {
   baseJavaInspectionServiceUrl?: string;
   baseXMLInspectionServiceUrl?: string;
   baseJSONInspectionServiceUrl?: string;
+  baseCSVInspectionServiceUrl?: string;
   baseMappingServiceUrl?: string;
 
   xsrfHeaderName?: string;

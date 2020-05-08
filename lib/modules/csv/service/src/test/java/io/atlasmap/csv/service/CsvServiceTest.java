@@ -15,6 +15,8 @@
  */
 package io.atlasmap.csv.service;
 
+import io.atlasmap.csv.v2.CsvComplexType;
+import io.atlasmap.csv.v2.CsvField;
 import io.atlasmap.csv.v2.CsvInspectionResponse;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.Json;
@@ -61,7 +63,8 @@ public class CsvServiceTest {
         Object entity = res.getEntity();
         assertEquals(byte[].class, entity.getClass());
         CsvInspectionResponse csvInspectionResponse = Json.mapper().readValue((byte[])entity, CsvInspectionResponse.class);
-        List<Field> fields = csvInspectionResponse.getDocument().getFields().getField();
+        CsvComplexType complexType = (CsvComplexType) csvInspectionResponse.getCsvDocument().getFields().getField().get(0);
+        List<CsvField> fields = complexType.getCsvFields().getCsvField();
         assertThat(fields.get(0).getName(), is("header1"));
         assertThat(fields.get(1).getName(), is("header2"));
         assertThat(fields.get(2).getName(), is("header3"));

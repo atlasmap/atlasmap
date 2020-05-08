@@ -15,16 +15,15 @@
 */
 
 import ky from 'ky';
-import { Observable } from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 
-import { DocumentType, InspectionType, CollectionType } from '../common/config.types';
-import { ConfigModel } from '../models/config.model';
-import { Field, EnumValue } from '../models/field.model';
-import { DocumentDefinition, NamespaceModel } from '../models/document-definition.model';
+import {CollectionType, DocumentType, InspectionType} from '../common/config.types';
+import {ConfigModel} from '../models/config.model';
+import {EnumValue, Field} from '../models/field.model';
+import {DocumentDefinition, NamespaceModel} from '../models/document-definition.model';
 
-import { DataMapperUtil } from '../common/data-mapper-util';
-import { Subscription } from 'rxjs';
-import { ErrorScope, ErrorType, ErrorInfo, ErrorLevel } from '../models/error.model';
+import {DataMapperUtil} from '../common/data-mapper-util';
+import {ErrorInfo, ErrorLevel, ErrorScope, ErrorType} from '../models/error.model';
 
 export class DocumentManagementService {
   cfg!: ConfigModel;
@@ -164,14 +163,19 @@ export class DocumentManagementService {
       }
 
       const payload: any = this.createDocumentFetchRequest(docDef, classPath);
+      let options: any = {json: payload, headers: this.headers};
       let url: string = this.cfg.initCfg.baseJavaInspectionServiceUrl + 'class';
       if ((docDef.type === DocumentType.XML) || (docDef.type === DocumentType.XSD)) {
         url = this.cfg.initCfg.baseXMLInspectionServiceUrl + 'inspect';
       } else if (docDef.type === DocumentType.JSON) {
         url = this.cfg.initCfg.baseJSONInspectionServiceUrl + 'inspect';
+      } else if (docDef.type === DocumentType.CSV) {
+        url = this.cfg.initCfg.baseCSVInspectionServiceUrl + 'inspect';
+        options = {body: payload, headers: this.headers, searchParams: {firstRecordAsHeader: true}};
       }
+
       this.cfg.logger!.debug(`Document Service Request: ${JSON.stringify(payload)}`);
-      this.api.post(url, { json: payload, headers: this.headers }).json()
+      this.api.post(url, options).json()
         .then((responseJson: any) => {
           this.cfg.logger!.debug(`Document Service Response: ${JSON.stringify(responseJson)}`);
           this.parseDocumentResponse(responseJson, docDef);
@@ -243,7 +247,6 @@ export class DocumentManagementService {
           inspectionType = InspectionType.JAVA_CLASS;
         }
       } else {
-
         // Wait for the async read of the selected ascii document to be completed.
         try {
           fileText = await DataMapperUtil.readFile(selectedFile, reader);
@@ -287,6 +290,11 @@ export class DocumentManagementService {
           inspectionType, isSource);
         break;
 
+      case DocumentType.CSV:
+        this.cfg.initializationService.initializeUserDoc(fileText, userFile, DocumentType.CSV,
+            inspectionType, isSource);
+        break;
+
       case DocumentType.XML:
       case DocumentType.XSD:
         await this.cfg.initializationService.initializeUserDoc(fileText, userFile, userFileSuffix,
@@ -321,6 +329,9 @@ export class DocumentManagementService {
           'jsonData': docDef.inspectionSource,
         },
       };
+    }
+    if (docDef.type === DocumentType.CSV) {
+      return docDef.inspectionSource;
     }
     const className: string = docDef.inspectionSource;
     const payload: any = {
@@ -368,6 +379,15 @@ export class DocumentManagementService {
       } else {
         this.handleError('Unknown JSON inspection result format', responseJson);
       }
+    } else if (docDef.type === DocumentType.CSV) {
+      if (typeof responseJson.CsvInspectionResponse !== 'undefined') {
+        this.extractCSVDocumentDefinitionFromInspectionResponse(responseJson, docDef);
+      } else if ((typeof responseJson.csvDocument !== 'undefined')
+          || (typeof responseJson.csvDocument !== 'undefined')) {
+        this.extractCSVDocumentDefinition(responseJson, docDef);
+      } else {
+        this.handleError('Unknown CSV inspection result format', responseJson);
+      }
     } else {
       if (typeof responseJson.XmlInspectionResponse !== 'undefined') {
         this.extractXMLDocumentDefinitionFromInspectionResponse(responseJson, docDef);
@@ -379,6 +399,40 @@ export class DocumentManagementService {
       }
     }
     docDef.initializeFromFields();
+  }
+
+  private extractCSVDocumentDefinitionFromInspectionResponse(responseJson: any, docDef: DocumentDefinition): void {
+    const body: any = responseJson.CsvInspectionResponse;
+    if (body.errorMessage) {
+      this.handleError('Could not load JSON document, error: ' + body.errorMessage, null);
+      docDef.errorOccurred = true;
+      return;
+    }
+
+    this.extractCSVDocumentDefinition(body, docDef);
+  }
+
+  private extractCSVDocumentDefinition(body: any, docDef: DocumentDefinition): void {
+    let csvDocument: any;
+    if (typeof body.csvDocument !== 'undefined') {
+      csvDocument = body.csvDocument;
+    } else {
+      csvDocument = body.CsvDocument;
+    }
+
+    if (!docDef.description) {
+      docDef.description = docDef.id;
+    }
+    if (!docDef.name) {
+      docDef.name = docDef.description;
+    }
+
+    docDef.characterEncoding = csvDocument.characterEncoding;
+    docDef.locale = csvDocument.locale;
+
+    for (const field of csvDocument.fields.field) {
+      this.parseCSVFieldFromDocument(field, null, docDef);
+    }
   }
 
   private extractJSONDocumentDefinitionFromInspectionResponse(responseJson: any, docDef: DocumentDefinition): void {
@@ -516,6 +570,19 @@ export class DocumentManagementService {
     }
   }
 
+  private parseCSVFieldFromDocument(field: any, parentField: Field | null, docDef: DocumentDefinition): void {
+    const parsedField = this.parseFieldFromDocument(field, parentField, docDef);
+    if (parsedField == null) {
+      return;
+    }
+
+    if (field.csvFields && field.csvFields.csvField && field.csvFields.csvField.length) {
+      for (const childField of field.csvFields.csvField) {
+        this.parseCSVFieldFromDocument(childField, parsedField, docDef);
+      }
+    }
+  }
+
   private parseJSONFieldFromDocument(field: any, parentField: Field | null, docDef: DocumentDefinition): void {
     const parsedField = this.parseFieldFromDocument(field, parentField, docDef);
     if (parsedField == null) {
@@ -545,6 +612,7 @@ export class DocumentManagementService {
     parsedField.path = field.path;
     parsedField.isPrimitive = field.fieldType !== 'COMPLEX';
     parsedField.serviceObject = field;
+    parsedField.column = field.column;
 
     if ('LIST' === field.collectionType || 'ARRAY' === field.collectionType) {
       parsedField.isCollection = true;

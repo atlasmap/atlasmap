@@ -31,6 +31,7 @@ export class Field {
   path: string;
   type: string;
   value: string;
+  column: number;
   serviceObject: any = new Object();
   parentField: Field;
   partOfMapping = false;

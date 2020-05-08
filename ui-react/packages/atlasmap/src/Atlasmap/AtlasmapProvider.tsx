@@ -104,6 +104,7 @@ export interface IAtlasmapProviderProps {
   baseJavaInspectionServiceUrl: string;
   baseXMLInspectionServiceUrl: string;
   baseJSONInspectionServiceUrl: string;
+  baseCSVInspectionServiceUrl: string;
   baseMappingServiceUrl: string;
 
   externalDocument?: {
@@ -118,6 +119,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   baseJavaInspectionServiceUrl,
   baseXMLInspectionServiceUrl,
   baseJSONInspectionServiceUrl,
+  baseCSVInspectionServiceUrl,
   baseMappingServiceUrl,
   externalDocument,
   onMappingChange,
@@ -161,6 +163,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
       c.initCfg.baseJavaInspectionServiceUrl = baseJavaInspectionServiceUrl;
       c.initCfg.baseXMLInspectionServiceUrl = baseXMLInspectionServiceUrl;
       c.initCfg.baseJSONInspectionServiceUrl = baseJSONInspectionServiceUrl;
+      c.initCfg.baseCSVInspectionServiceUrl = baseCSVInspectionServiceUrl;
 
       if (externalDocument) {
         externalDocument.inputDocuments.forEach((d) => {
@@ -202,6 +205,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
       onLoading();
     },
     [
+      baseCSVInspectionServiceUrl,
       baseJSONInspectionServiceUrl,
       baseJavaInspectionServiceUrl,
       baseMappingServiceUrl,
@@ -331,6 +335,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
       baseJavaInspectionServiceUrl,
       baseXMLInspectionServiceUrl,
       baseJSONInspectionServiceUrl,
+      baseCSVInspectionServiceUrl,
       baseMappingServiceUrl,
       data.pending,
       data.selectedMapping,

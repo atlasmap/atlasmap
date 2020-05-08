@@ -477,6 +477,13 @@ ${error.status} ${error.statusText}`,
         docDef.initialized = true;
         this.updateStatus();
         continue;
+      } else if (docDef.type === DocumentType.CSV && this.cfg.initCfg.baseCSVInspectionServiceUrl == null) {
+        this.cfg.errorService.addError(new ErrorInfo({
+          message: `CSV inspection service is not configured. Document will not be loaded: ${docName}`,
+          level: ErrorLevel.WARN, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: docDef}));
+        docDef.initialized = true;
+        this.updateStatus();
+        continue;
       }
 
       // TODO: check this non null operator

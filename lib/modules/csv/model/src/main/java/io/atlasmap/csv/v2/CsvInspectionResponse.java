@@ -27,12 +27,12 @@ public class CsvInspectionResponse implements Serializable {
 
     private final static long serialVersionUID = 1L;
 
-    private Document document;
+    private Document csvDocument;
     private String errorMessage;
     private long executionTime;
 
-    public Document getDocument() {
-        return document;
+    public Document getCsvDocument() {
+        return csvDocument;
     }
 
     public String getErrorMessage() {
@@ -43,8 +43,8 @@ public class CsvInspectionResponse implements Serializable {
         return executionTime;
     }
 
-    public void setDocument(Document document) {
-        this.document = document;
+    public void setCsvDocument(Document csvDocument) {
+        this.csvDocument = csvDocument;
     }
 
     public void setErrorMessage(String message) {

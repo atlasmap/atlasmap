@@ -10,6 +10,7 @@ ReactDOM.render(
     baseJavaInspectionServiceUrl={'/v2/atlas/java/'}
     baseXMLInspectionServiceUrl={'/v2/atlas/xml/'}
     baseJSONInspectionServiceUrl={'/v2/atlas/json/'}
+    baseCSVInspectionServiceUrl={'/v2/atlas/csv/'}
     baseMappingServiceUrl={'/v2/atlas/'}
   >
     <App />
