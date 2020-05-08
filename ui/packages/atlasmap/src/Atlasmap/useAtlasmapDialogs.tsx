@@ -6,6 +6,7 @@ import {
   useConfirmationDialog,
   useInputTextSelectDialog,
   useSingleInputDialog,
+  useNamespaceDialog,
 } from "../UI";
 import { GroupId, IAtlasmapMapping, IAtlasmapField } from "../Views";
 import {
@@ -40,6 +41,9 @@ export function useAtlasmapDialogs({
     addToCurrentMapping,
     createMapping,
     removeFromCurrentMapping,
+    createNamespace,
+    editNamespace,
+    deleteNamespace,
   } = useAtlasmap();
 
   const [importDialog, openImportDialog] = useConfirmationDialog({
@@ -57,9 +61,32 @@ export function useAtlasmapDialogs({
     placeholder: defaultCatalogName,
   });
 
+  const title = useRef<string>("");
   const textVal1 = useRef<string>("");
   const textVal2 = useRef<string>("");
+  const textVal3 = useRef<string>("");
+  const booleanVal = useRef<boolean>(false);
   const selectIndex = useRef<number>(0);
+
+  const [createNamespaceDialog, openCreateNamespaceDialog] = useNamespaceDialog(
+    {
+      docName: title.current,
+      initAlias: textVal1,
+      initUri: textVal2,
+      initLocationUri: textVal3,
+      initIsTarget: booleanVal,
+      modalContainer,
+    },
+  );
+
+  const [editNamespaceDialog, openEditNamespaceDialog] = useNamespaceDialog({
+    docName: title.current,
+    initAlias: textVal1,
+    initUri: textVal2,
+    initLocationUri: textVal3,
+    initIsTarget: booleanVal,
+    modalContainer,
+  });
 
   const [
     createConstantDialog,
@@ -196,6 +223,50 @@ export function useAtlasmapDialogs({
       exportAtlasFile(value);
     });
   }, [exportAtlasFile, openExportDialog]);
+
+  const onCreateNamespace = (docName: string) => {
+    title.current = docName;
+    textVal1.current = "";
+    textVal2.current = "";
+    textVal3.current = "";
+    booleanVal.current = false;
+    openCreateNamespaceDialog(
+      (
+        docName: string,
+        alias: string,
+        uri: string,
+        locationUri: string,
+        isTarget: boolean,
+      ) => {
+        createNamespace(docName, alias, uri, locationUri, isTarget);
+      },
+    );
+  };
+
+  const onEditNamespace = (
+    docName: string,
+    alias: string,
+    uri: string,
+    locationUri: string,
+    isTarget: boolean,
+  ) => {
+    title.current = docName;
+    textVal1.current = alias;
+    textVal2.current = uri;
+    textVal3.current = locationUri;
+    booleanVal.current = isTarget;
+    openEditNamespaceDialog(
+      (
+        docName: string,
+        alias: string,
+        uri: string,
+        locationUri: string,
+        isTarget: boolean,
+      ) => {
+        editNamespace(docName, alias, uri, locationUri, isTarget);
+      },
+    );
+  };
 
   const onCreateConstant = useCallback(() => {
     textVal1.current = "";
@@ -376,6 +447,9 @@ export function useAtlasmapDialogs({
       onRemoveFromMapping,
       onCreateMapping,
       onEnableCustomClass,
+      onCreateNamespace,
+      onEditNamespace,
+      deleteNamespace,
     },
     dialogs: [
       exportDialog,
@@ -391,6 +465,8 @@ export function useAtlasmapDialogs({
       removeMappedFieldDialog,
       deleteMappingDialog,
       createEnableCustomClassDialog,
+      createNamespaceDialog,
+      editNamespaceDialog,
     ],
   };
 }

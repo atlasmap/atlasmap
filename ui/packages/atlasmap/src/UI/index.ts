@@ -24,5 +24,6 @@ export * from "./useConfirmationDialog";
 export * from "./useDimensions";
 export * from "./useInputTextSelectDialog";
 export * from "./useLatestValue";
+export * from "./useNamespaceDialog";
 export * from "./useSingleInputDialog";
 export * from "./useToggle";

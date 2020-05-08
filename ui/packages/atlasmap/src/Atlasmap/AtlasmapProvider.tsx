@@ -71,6 +71,9 @@ import {
   removeMappedFieldFromCurrentMapping,
   fromMappedFieldToIMappingField,
   errorInfoToNotification,
+  createNamespace,
+  editNamespace,
+  deleteNamespace,
 } from "./utils";
 import {
   INotificationsState,
@@ -520,5 +523,8 @@ export function useAtlasmap() {
     searchSources,
     searchTargets,
     enableCustomClass,
+    createNamespace,
+    editNamespace,
+    deleteNamespace,
   };
 }

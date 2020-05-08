@@ -7,8 +7,66 @@ import {
   ErrorScope,
   ErrorType,
   ErrorLevel,
+  NamespaceModel,
 } from "@atlasmap/core";
 import { ClassNameComponent } from "./custom-classname";
+
+/**
+ * Create a new namespace for the supplied XML document.
+ *
+ * @param docName
+ * @param alias
+ * @param uri
+ * @param locationUri
+ */
+export function createNamespace(
+  docName: string,
+  alias: string,
+  uri: string,
+  locationUri: string,
+  isTarget: boolean,
+) {
+  const cfg = ConfigModel.getConfig();
+  const docDef = getDocDef(docName, cfg, true);
+  const namespace: NamespaceModel = {
+    alias: alias,
+    uri: uri,
+    locationUri: locationUri,
+    createdByUser: true,
+    isTarget: isTarget,
+    getPrettyLabel: () => alias + " [" + uri + "]",
+    copy: () => Object.assign({}, namespace),
+    copyFrom: (n: NamespaceModel) => Object.assign(namespace, n),
+  };
+  docDef.namespaces.push(namespace);
+  cfg.mappingService.notifyMappingUpdated();
+}
+
+export function editNamespace(
+  docName: string,
+  alias: string,
+  uri: string,
+  locationUri: string,
+  isTarget: boolean,
+) {
+  const cfg = ConfigModel.getConfig();
+  const docDef = getDocDef(docName, cfg, true);
+  const namespace = docDef.getNamespaceForAlias(alias);
+  namespace.alias = alias;
+  namespace.uri = uri;
+  namespace.locationUri = locationUri;
+  namespace.isTarget = isTarget;
+  cfg.mappingService.notifyMappingUpdated();
+}
+
+export function deleteNamespace(docName: string, alias: string) {
+  const cfg = ConfigModel.getConfig();
+  const docDef = getDocDef(docName, cfg, true);
+  docDef.namespaces = docDef.namespaces.filter(
+    (namespace) => namespace.alias !== alias,
+  );
+  cfg.mappingService.notifyMappingUpdated();
+}
 
 /**
  * Import the specified user-defined document.
