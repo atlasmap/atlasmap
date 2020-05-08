@@ -72,23 +72,32 @@ export class MappingSerializer {
     const serializedInputFields: any[] = MappingSerializer.serializeFields(mapping, true, cfg, ignoreValue);
     const serializedOutputFields: any[] = MappingSerializer.serializeFields(mapping, false, cfg, ignoreValue);
     let jsonMapping: {[key: string]: any} = {};
+    const mappingExpression = MappingUtil.getMappingExpressionStr(false, mapping);
 
     if (mapping.transition.isManyToOneMode()) {
       inputFieldGroup = MappingSerializer.createInputFieldGroup(mapping, serializedInputFields, cfg);
-
-      jsonMapping = {
-       'jsonType': jsonMappingType,
-       'id': id,
-       'expression' : MappingUtil.getMappingExpressionStr(false, mapping),
-       inputFieldGroup,
-       'outputField': serializedOutputFields,
-      };
-    } else {
-      if (mapping.transition.enableExpression) {
+      if (mappingExpression.length > 0) {
+        jsonMapping = {
+         'jsonType': jsonMappingType,
+         'id': id,
+         'expression' : mappingExpression,
+         inputFieldGroup,
+         'outputField': serializedOutputFields,
+        };
+      } else {
         jsonMapping = {
           'jsonType': jsonMappingType,
           'id': id,
-          'expression' : MappingUtil.getMappingExpressionStr(false, mapping),
+          inputFieldGroup,
+          'outputField': serializedOutputFields,
+        };
+      }
+    } else {
+      if (mappingExpression.length > 0) {
+        jsonMapping = {
+          'jsonType': jsonMappingType,
+          'id': id,
+          'expression' : mappingExpression,
           'inputField' : serializedInputFields,
           'outputField': serializedOutputFields,
         };
