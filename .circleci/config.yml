@@ -150,7 +150,7 @@ jobs:
               java -cp ./.circleci/codacy-coverage-reporter-4.0.3-assembly.jar com.codacy.CodacyCoverageReporter report -l Java -r /workspace/coverage/jacoco.xml
             fi
             mkdir /workspace/coverage/ui
-            cp -a ui/coverage/* /workspace/coverage/ui/
+            cp -a ui/coverage/* /workspace/coverage/ui/ 2>/dev/null || :
       - store_artifacts:
           path: /workspace/coverage
       - <<: *save_checkstyle

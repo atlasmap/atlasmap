@@ -1,0 +1,481 @@
+= AtlasMap Design Time Service API :: CSV
+atlasmap@googlegroups.com
+2.0.0-SNAPSHOT
+:toc: left
+:numbered:
+:toclevels: 3
+:source-highlighter: highlightjs
+:keywords: openapi, rest, AtlasMap Design Time Service API :: CSV 
+:specDir: 
+:snippetDir: 
+:generator-template: v1 2019-12-20
+:info-url: https://www.atlasmap.io/
+:app-name: AtlasMap Design Time Service API :: CSV
+
+[abstract]
+.Abstract
+CSV Service provides CSV inspection service which generate an AtlasMap Document object from instance document. 
+
+
+// markup not found, no include::{specDir}intro.adoc[opts=optional]
+
+
+
+== Endpoints
+
+
+[.Default]
+=== Default
+
+
+[.inspect]
+==== inspect
+    
+`POST /csv/inspect`
+
+Inspect CSV
+
+===== Description 
+
+Inspect a CSV instance and return a Document object
+
+
+// markup not found, no include::{specDir}csv/inspect/POST/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+===== Body Parameter
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| body 
+| Csv <<string>> 
+| - 
+|  
+|  
+
+|===         
+
+
+
+====== Query Parameters
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| format 
+|   
+| - 
+| null 
+|  
+
+| delimiter 
+|   
+| - 
+| null 
+|  
+
+| firstRecordAsHeader 
+|   
+| - 
+| null 
+|  
+
+| headers 
+|   
+| - 
+| null 
+|  
+
+| commentMarker 
+|   
+| - 
+| null 
+|  
+
+| escape 
+|   
+| - 
+| null 
+|  
+
+| ignoreEmptyLines 
+|   
+| - 
+| null 
+|  
+
+| ignoreHeaderCase 
+|   
+| - 
+| null 
+|  
+
+| ignoreSurroundingSpaces 
+|   
+| - 
+| null 
+|  
+
+| nullString 
+|   
+| - 
+| null 
+|  
+
+| quote 
+|   
+| - 
+| null 
+|  
+
+| allowDuplicateHeaderNames 
+|   
+| - 
+| null 
+|  
+
+| allowMissingColumnNames 
+|   
+| - 
+| null 
+|  
+
+|===         
+
+
+===== Return Type
+
+<<CsvInspectionResponse>>
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return a Document object
+|  <<CsvInspectionResponse>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}csv/inspect/POST/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}csv/inspect/POST/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :csv/inspect/POST/POST.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}csv/inspect/POST/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.simpleHelloWorld]
+==== simpleHelloWorld
+    
+`GET /csv/simple`
+
+Simple
+
+===== Description 
+
+Simple hello service
+
+
+// markup not found, no include::{specDir}csv/simple/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+
+
+
+====== Query Parameters
+
+[cols="2,3,1,1,1"]
+|===         
+|Name| Description| Required| Default| Pattern
+
+| from 
+|   
+| - 
+| null 
+|  
+
+|===         
+
+
+===== Return Type
+
+
+<<String>>
+
+
+===== Content Type
+
+* text/plain
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return a response
+|  <<String>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}csv/simple/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}csv/simple/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :csv/simple/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}csv/simple/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[#models]
+== Models
+
+
+[#Action]
+=== _Action_ 
+
+
+
+[.fields-Action]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| @type 
+|  
+| String  
+| 
+|  
+
+|===
+
+
+[#CsvInspectionResponse]
+=== _CsvInspectionResponse_ 
+
+
+
+[.fields-CsvInspectionResponse]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| csvDocument 
+|  
+| Document  
+| 
+|  
+
+| errorMessage 
+|  
+| String  
+| 
+|  
+
+| executionTime 
+|  
+| Long  
+| 
+| int64 
+
+| jsonType 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#Document]
+=== _Document_ 
+
+
+
+[.fields-Document]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| fields 
+|  
+| Fields  
+| 
+|  
+
+| jsonType 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#Field]
+=== _Field_ 
+
+
+
+[.fields-Field]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| actions 
+|  
+| List  of <<Action>> 
+| 
+|  
+
+| value 
+|  
+| Object  
+| 
+|  
+
+| arrayDimensions 
+|  
+| Integer  
+| 
+| int32 
+
+| arraySize 
+|  
+| Integer  
+| 
+| int32 
+
+| collectionType 
+|  
+| String  
+| 
+|  _Enum:_ ALL, ARRAY, LIST, MAP, NONE, 
+
+| docId 
+|  
+| String  
+| 
+|  
+
+| index 
+|  
+| Integer  
+| 
+| int32 
+
+| path 
+|  
+| String  
+| 
+|  
+
+| required 
+|  
+| Boolean  
+| 
+|  
+
+| status 
+|  
+| String  
+| 
+|  _Enum:_ SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, BLACK_LIST, 
+
+| fieldType 
+|  
+| String  
+| 
+|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
+
+| format 
+|  
+| String  
+| 
+|  
+
+| name 
+|  
+| String  
+| 
+|  
+
+| jsonType 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#Fields]
+=== _Fields_ 
+
+
+
+[.fields-Fields]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| field 
+|  
+| List  of <<Field>> 
+| 
+|  
+
+|===
+
+

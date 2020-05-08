@@ -47,50 +47,21 @@ or you can skip tests to get the build little bit faster
 ```
 $ ./mvnw clean install -DskipTests
 ```
-3. Run AtlasMap standalone jar from springboot maven plugin
+3. Run the AtlasMap standalone jar from the springboot maven plugin, as described above:
 ```
 $ cd ${ATLASMAP}/standalone
 $ ../mvnw -Pitests spring-boot:run
 ```
 
-AtlasMap Data Mapper UI is available at http://127.0.0.1:8585/ by default.
-
-## Live update for UI development
-
-While standalone AtlasMap design time services are running by following above steps, you can also run another AtlasMap Data Mapper UI instance at a different port by `yarn start`. This enables live updates to the UI code so you can see the outcome of your UI code change without building and restarting manually.
-
-1. [Install Yarn](https://yarnpkg.com/lang/en/docs/install/)
-
-2. Install Data Mapper UI's dependencies
+4. In a separate terminal window, run the standalone UI:
 ```
 $ cd ${ATLASMAP}/ui
-$ yarn install
-```
-
-6. Start Data Mapper UI
-```
-$ yarn start
-```
-
-The **yarn start** command will attempt to automatically open your browser window, but if it doesn't, open it directly with this URL: <http://localhost:3000>.
-
-## Run REACT version of the standalone AtlasMap UI
-
-1. Run the AtlasMap standalone jar from the springboot maven plugin, as described above:
-```
-$ cd ${ATLASMAP}/standalone
-$ ../mvnw -Pitests spring-boot:run
-```
-
-2. In a separate terminal window, run the standalone UI from the REACT folder:
-```
-$ cd ${ATLASMAP}/ui-react
 $ yarn standalone
 ```
 
-## Live update for REACT UI development
+## Live update for UI development
 
-You can also run the REACT UI with live updates by starting yarn in both the core and UI folders:
+You can also run the AtlasMap Data Mapper UI with live updates by starting yarn in both the core and UI folders:
 
 1. As above, run the AtlasMap standalone jar from the springboot maven plugin:
 ```
@@ -100,18 +71,18 @@ $ ../mvnw -Pitests spring-boot:run
 
 2. In a separate terminal window, run yarn start to make live updates to core:
 ```
-$ cd ${ATLASMAP}/ui-react/packages/atlasmap-core
+$ cd ${ATLASMAP}/ui/packages/atlasmap-core
 $ yarn start
 ```
 
 3. Again in a separate terminal window, run yarn start to make live updates to the REACT UI:
 ```
-$ cd ${ATLASMAP}/ui-react/packages/atlasmap-ui
+$ cd ${ATLASMAP}/ui/packages/atlasmap-ui
 $ yarn start
 ```
 
 4. In a final separate terminal window, run the standalone UI from the REACT folder:
 ```
-$ cd ${ATLASMAP}/ui-react
+$ cd ${ATLASMAP}/ui
 $ yarn standalone
 ```

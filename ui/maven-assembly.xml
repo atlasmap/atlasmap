@@ -8,7 +8,7 @@
   <includeBaseDirectory>false</includeBaseDirectory>
   <fileSets>
     <fileSet>
-      <directory>dist/app</directory>
+      <directory>packages/atlasmap-standalone/build</directory>
       <outputDirectory/>
     </fileSet>
   </fileSets>

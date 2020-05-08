@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASM</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <style>
+    .container {
+      width: 200px;
+      height: 200px;
+      margin: 16px auto;
+      perspective: 100000px;
+      transform: scale3d(0.5, 0.5, 0.5);
+    }
+
+    #asm-logo-3d {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transform: translateZ(-100px) rotateX(-35.264deg) rotateY(-45deg);
+      transform-style: preserve-3d;
+    }
+
+    #asm-logo-3d div {
+      display: block;
+      position: absolute;
+      transform-origin: 0 0;
+      transform-style: preserve-3d;
+    }
+
+    .a-front {
+      transform: translate3d(0, 0, 0);
+    }
+    .a-middle {
+      transform: translate3d(0, 0, -80px);
+    }
+    .a-back {
+      transform: translate3d(0, 0, -160px);
+    }
+
+    .a-block1.front {
+      width: 160px;
+      height: 40px;
+      transform: translate3d(0, 0, 100px);
+    }
+    .a-block1.left {
+      width: 40px;
+      height: 40px;
+      transform: translate3d(0, 0, 60px) rotateY(-90deg);
+    }
+    .a-block1.top {
+      width: 200px;
+      height: 40px;
+      transform: translate3d(0, 0, 60px) rotateX(90deg);
+    }
+    .a-block1.bottom {
+      width: 160px;
+      height: 40px;
+      transform: translate3d(0, 40px, 100px) rotateX(-90deg);
+    }
+    .a-block1.back {
+      width: 160px;
+      height: 40px;
+      transform: translate3d(0, 40px, 60px) rotateX(180deg);
+    }
+    .a-block2.front {
+      width: 40px;
+      height: 200px;
+      transform: translate3d(160px, 0, 100px);
+    }
+    .a-block2.left {
+      width: 40px;
+      height: 120px;
+      transform: translate3d(160px, 40px, 60px) rotateY(-90deg);      
+    }
+    .a-block2.right {
+      width: 40px;
+      height: 200px;
+      transform: translate3d(200px, 0, 100px) rotateY(90deg);
+    }
+    .a-block2.back {
+      width: 40px;
+      height: 200px;
+      transform: translate3d(160px, 200px, 60px) rotateX(180deg);
+    }
+    .a-block3.front {
+      width: 160px;
+      height: 40px;
+      transform: translate3d(0, 160px, 100px);
+    }
+    .a-block3.top {
+      width: 120px;
+      height: 40px;
+      transform: translate3d(40px, 160px, 60px) rotateX(90deg);
+    }
+    .a-block3.bottom {
+      width: 200px;
+      height: 40px;
+      transform: translate3d(0, 200px, 100px) rotateX(-90deg);
+    }
+    .a-block3.back {
+      width: 160px;
+      height: 40px;
+      transform: translate3d(0, 200px, 60px) rotateX(180deg);
+    }
+    .a-block4.front {
+      width: 40px;
+      height: 40px;
+      transform: translate3d(0, 120px, 100px);
+    }
+    .a-block4.left {
+      width: 40px;
+      height: 120px;
+      transform: translate3d(0, 80px, 60px) rotateY(-90deg);
+    }
+    .a-block4.right {
+      width: 40px;
+      height: 40px;
+      transform: translate3d(40px, 120px, 100px) rotateY(90deg);
+    }
+    .a-block4.back {
+      width: 40px;
+      height: 40px;
+      transform: translate3d(0, 160px, 60px) rotateX(180deg);
+    }
+    .a-block5.front {
+      width: 160px;
+      height: 40px;
+      transform: translate3d(0, 80px, 100px);
+    }
+    .a-block5.top {
+      width: 160px;
+      height: 40px;
+      transform: translate3d(0, 80px, 60px) rotateX(90deg);
+    }
+    .a-block5.bottom {
+      width: 120px;
+      height: 40px;
+      transform: translate3d(40px, 120px, 100px) rotateX(-90deg);
+    }
+    .a-block5.back {
+      width: 160px;
+      height: 40px;
+      transform: translate3d(0, 120px, 60px) rotateX(180deg);
+    }
+
+    .m-block1, .s-block1 {
+      width: 40px;
+      height: 40px;
+    }
+    .m-block1.left {
+      transform: translate3d(160px, 0, 20px) rotateY(-90deg);
+    }
+    .m-block1.top {
+      transform: translate3d(160px, 0, 20px) rotateX(90deg);
+    }
+    .m-block1.right {
+      transform: translate3d(200px, 0, 60px) rotateY(90deg);
+    }
+    .m-block1.bottom {
+      transform: translate3d(160px, 40px, 60px) rotateX(-90deg);
+    }
+    .s-block1.left {
+      transform: translate3d(0, 0, -60px) rotateY(-90deg);
+    }
+    .s-block1.top {
+      transform: translate3d(0, 0, -60px) rotateX(90deg);
+    }
+    .s-block1.right {
+      transform: translate3d(40px, 0, -20px) rotateY(90deg);
+    }
+    .s-block1.bottom {
+      transform: translate3d(0, 40px, -20px) rotateX(-90deg);
+    }
+
+    .front.out {
+      background: rgb(0, 139, 224);
+    }
+    .left.out {
+      background: rgb(0, 119, 192);
+    }
+    .top.out {
+      background: rgb(0, 158, 255);
+    }
+    .right.out {
+      background: rgb(0, 119, 192);
+    }
+    .bottom.out {
+      background: rgb(0, 87, 140);
+    }
+    .back.out {
+      background: rgb(0, 87, 140);
+    }
+
+    .front.in {
+      background: rgb(224, 84, 0);
+    }
+    .left.in {
+      background: rgb(192, 72, 0);
+    }
+    .top.in {
+      background: rgb(255, 96, 0);
+    }
+    .right.in {
+      background: rgb(192, 72, 0);
+    }
+    .bottom.in {
+      background: rgb(175, 66, 0);
+    }
+    .back.in {
+      background: rgb(192, 72, 0);
+    }
+
+    @keyframes show-letters {      
+      0%    {transform: translateZ(-100px) rotateX(-35.26deg) rotateY(-45deg);}
+      16.6% {transform: translateZ(-100px);}
+      21.6% {transform: translateZ(-100px);}
+      33.3% {transform: translateZ(-100px) rotateX(-35.26deg) rotateY(-45deg);}
+      50%   {transform: translateZ(-100px) rotateX(-90deg);}
+      55%   {transform: translateZ(-100px) rotateX(-90deg);}
+      66.6% {transform: translateZ(-100px) rotateX(-35.26deg) rotateY(-45deg);}
+      83.3% {transform: translateZ(-100px) rotateY(-90deg);}
+      88.3% {transform: translateZ(-100px) rotateY(-90deg);}
+      100%  {transform: translateZ(-100px) rotateX(-35.26deg) rotateY(-45deg);}
+    }
+
+    #asm-logo-3d:hover {
+      animation-name: show-letters;
+      animation-duration: 4s;
+    }
+  </style>
+</head>
+<body>
+  <input id="nav-trigger" type="checkbox" hidden>
+<div class="header">
+  <label for="nav-trigger" class="nav-trigger">
+    <img src="burger-icon.svg" class="burger-icon">
+  </label>
+  <a href="index.html">
+    <img src="asm-logo.svg" class="asm-icon">
+  </a>
+  <span class="asm-title">ASM</span>
+  <a href="https://gitlab.ow2.org/asm/asm">
+    <img src="gitlab-logo.svg" class="gitlab-icon">
+  </a>
+</div>
+<label for="nav-trigger" class="nav-overlay"></label>
+<nav>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li>
+      <a href="documentation.html">Documentation</a>
+      <ul>
+        <li><a href="asm4-guide.pdf">User guide</a></li>
+        <li><a href="javadoc/overview-summary.html">Javadoc</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="developer-guide.html">Developer guide</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="about.html">About</a>
+      <ul>
+        <li><a href="license.html">License</a></li>
+        <li><a href="publications.html">Publications</a></li>
+        <li><a href="versions.html">Versions</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+  <div class="page-content">
+    <div class="container">
+      <div id="asm-logo-3d">
+        <div class="a-front">
+          <div class="a-block1 front out"></div>
+          <div class="a-block1 left out"></div>
+          <div class="a-block1 top out"></div>
+          <div class="a-block1 bottom in"></div>
+          <div class="a-block1 back in"></div>
+          <div class="a-block2 front out"></div>
+          <div class="a-block2 left in"></div>
+          <div class="a-block2 right out"></div>
+          <div class="a-block2 back in"></div>
+          <div class="a-block3 front out"></div>
+          <div class="a-block3 top in"></div>
+          <div class="a-block3 bottom out"></div>
+          <div class="a-block3 back in"></div>
+          <div class="a-block4 front out"></div>
+          <div class="a-block4 left out"></div>
+          <div class="a-block4 right in"></div>
+          <div class="a-block4 back in"></div>
+          <div class="a-block5 front out"></div>
+          <div class="a-block5 top in"></div>
+          <div class="a-block5 bottom in"></div>
+          <div class="a-block5 back in"></div>
+        </div>
+        <div class="m-block1 left in"></div>
+        <div class="m-block1 top out"></div>
+        <div class="m-block1 right out"></div>
+        <div class="m-block1 bottom in"></div>
+        <div class="a-middle">
+          <div class="a-block1 front in"></div>
+          <div class="a-block1 left out"></div>
+          <div class="a-block1 top out"></div>
+          <div class="a-block1 bottom out"></div>
+          <div class="a-block1 back in"></div>
+          <div class="a-block2 front in"></div>
+          <div class="a-block2 left in"></div>
+          <div class="a-block2 right out"></div>
+          <div class="a-block2 back in"></div>
+          <div class="a-block3 front in"></div>
+          <div class="a-block3 top in"></div>
+          <div class="a-block3 bottom out"></div>
+          <div class="a-block3 back in"></div>
+          <div class="a-block4 front in"></div>
+          <div class="a-block4 left out"></div>
+          <div class="a-block4 right in"></div>
+          <div class="a-block4 back in"></div>
+          <div class="a-block5 front in"></div>
+          <div class="a-block5 top in"></div>
+          <div class="a-block5 bottom in"></div>
+          <div class="a-block5 back in"></div>
+        </div>
+        <div class="s-block1 left out"></div>
+        <div class="s-block1 top out"></div>
+        <div class="s-block1 right in"></div>
+        <div class="s-block1 bottom in"></div>
+        <div class="a-back">
+          <div class="a-block1 front in"></div>
+          <div class="a-block1 left out"></div>
+          <div class="a-block1 top out"></div>
+          <div class="a-block1 bottom in"></div>
+          <div class="a-block1 back out"></div>
+          <div class="a-block2 front in"></div>
+          <div class="a-block2 left in"></div>
+          <div class="a-block2 right out"></div>
+          <div class="a-block2 back out"></div>
+          <div class="a-block3 front in"></div>
+          <div class="a-block3 top in"></div>
+          <div class="a-block3 bottom out"></div>
+          <div class="a-block3 back out"></div>
+          <div class="a-block4 front in"></div>
+          <div class="a-block4 left out"></div>
+          <div class="a-block4 right in"></div>
+          <div class="a-block4 back out"></div>
+          <div class="a-block5 front in"></div>
+          <div class="a-block5 top in"></div>
+          <div class="a-block5 bottom in"></div>
+          <div class="a-block5 back out"></div>
+        </div>
+      </div>
+    </div>
+    <p><b>ASM</b> is an all purpose Java bytecode manipulation and analysis
+    framework. It can be used to modify existing classes or to dynamically
+    generate classes, directly in binary form. ASM provides some common
+    bytecode transformations and analysis algorithms from which custom complex
+    transformations and code analysis tools can be built. ASM offers similar
+    functionality as other Java bytecode frameworks, but is focused on
+    performance. Because it was designed and implemented to be as small and as
+    fast as possible, it is well suited for use in dynamic systems (but can of
+    course be used in a static way too, e.g. in compilers).</p>
+    <p>ASM is used in many projects, including:</p>
+    <ul>
+      <li>the <a href="http://openjdk.java.net/"><b>OpenJDK</b></a>, to
+      generate the <a href=
+      "http://hg.openjdk.java.net/jdk8/jdk8/jdk/file/687fd7c7986d/src/share/classes/java/lang/invoke/InnerClassLambdaMetafactory.java">
+        lambda call sites</a>, and also in the <a href=
+        "https://en.wikipedia.org/wiki/Nashorn_(JavaScript_engine)">Nashorn</a>
+        <a href=
+        "http://hg.openjdk.java.net/jdk8/jdk8/nashorn/file/096dc407d310/src/jdk/nashorn/internal/codegen/ClassEmitter.java">
+        compiler</a>,
+      </li>
+      <li>the <a href="http://www.groovy-lang.org/"><b>Groovy</b></a>
+        <a href="https://github.com/apache/groovy/blob/GROOVY_2_4_15/src/main/org/codehaus/groovy/classgen/AsmClassGenerator.java">
+        compiler</a> and the <a href=
+        "https://kotlinlang.org/"><b>Kotlin</b></a> <a href=
+        "https://github.com/JetBrains/kotlin/blob/v1.2.30/compiler/backend/src/org/jetbrains/kotlin/codegen/ClassBuilder.java">
+        compiler</a>,
+      </li>
+      <li>
+        <a href="http://cobertura.github.io/cobertura/"><b>Cobertura</b></a>
+        and <a href="http://www.eclemma.org/jacoco/"><b>Jacoco</b></a>, to
+        <a href=
+        "https://github.com/cobertura/cobertura/blob/v1_9_4/src/net/sourceforge/cobertura/instrument/ClassInstrumenter.java">
+        instrument</a> <a href=
+        "https://github.com/jacoco/jacoco/blob/v0.8.1/org.jacoco.core/src/org/jacoco/core/instr/Instrumenter.java">
+        classes</a> in order to measure code coverage,
+      </li>
+      <li>
+        <a href="https://github.com/cglib/cglib"><b>CGLIB</b></a>, to
+        dynamically generate <a href=
+        "https://github.com/cglib/cglib/blob/RELEASE_3_2_6/cglib/src/main/java/net/sf/cglib/core/ClassEmitter.java">
+        proxy</a> classes (which are used in other projects such as <a href=
+        "http://site.mockito.org/"><b>Mockito</b></a> and <a href=
+        "http://easymock.org/"><b>EasyMock</b></a>),
+      </li>
+      <li>
+        <a href="https://gradle.org/"><b>Gradle</b></a>, to <a href=
+        "https://github.com/gradle/gradle/blob/v4.6.0/subprojects/core/src/main/java/org/gradle/api/internal/AsmBackedClassGenerator.java">
+        generate</a> some classes at runtime.
+      </li>
+    </ul>
+    <h2>Download</h2>
+    <p>ASM can be downloaded from the <a href="https://repository.ow2.org/">OW2
+    Maven repository</a> (which provides <a href=
+    "https://repository.ow2.org/nexus/content/repositories/releases/org/ow2/asm/">
+    releases</a> and <a href=
+    "https://repository.ow2.org/nexus/content/repositories/snapshots/org/ow2/asm/">
+    snapshots</a>), or from the <a href=
+    "http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.ow2.asm%22%20AND%20a%3A%22asm%22">
+    Maven Central</a> repository (releases only). The source code is hosted on
+    <a href="https://gitlab.ow2.org/asm/asm">Gitlab</a>.</p>
+    <h2>Recent news</h2>
+    <p>26 March 2018: release of ASM 6.1.1</p>
+  </div>
+</body>
+</html>

@@ -59,6 +59,14 @@
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-dfdl-model</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-csv-service</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-csv-model</artifactId>
+    </dependency>
   </dependencies>
 
   <build>
@@ -172,6 +180,21 @@
               <configurationFilePath>${project.build.outputDirectory}/openapi-configuration-dfdl.yaml</configurationFilePath>
             </configuration>
           </execution>
+          <execution>
+            <id>openapi-csv</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>resolve</goal>
+            </goals>
+            <configuration>
+              <contextId>openapi-csv</contextId>
+              <outputFormat>JSON</outputFormat>
+              <prettyPrint>true</prettyPrint>
+              <outputPath>${project.build.directory}/generated-sources/openapi</outputPath>
+              <outputFileName>atlasmap-api-csv</outputFileName>
+              <configurationFilePath>${project.build.outputDirectory}/openapi-configuration-csv.yaml</configurationFilePath>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
@@ -236,6 +259,18 @@
               <generatorName>asciidoc</generatorName>
               <inputSpec>${project.build.directory}/generated-sources/openapi/atlasmap-api-dfdl.json</inputSpec>
               <output>${project.basedir}/src/main/asciidoc/developer-guide/openapi/dfdl</output>
+            </configuration>
+          </execution>
+          <execution>
+            <id>openapi-asciidoc-csv</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <generatorName>asciidoc</generatorName>
+              <inputSpec>${project.build.directory}/generated-sources/openapi/atlasmap-api-csv.json</inputSpec>
+              <output>${project.basedir}/src/main/asciidoc/developer-guide/openapi/csv</output>
             </configuration>
           </execution>
         </executions>
