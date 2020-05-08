@@ -269,12 +269,12 @@ export class DocumentManagementService {
       switch (userFileSuffix) {
 
       case DocumentType.JSON:
-        this.cfg.initializationService.initializeUserDoc(fileText, userFile, DocumentType.JSON,
+        await this.cfg.initializationService.initializeUserDoc(fileText, userFile, DocumentType.JSON,
           inspectionType, isSource);
         break;
 
       case DocumentType.JAVA_ARCHIVE:
-        this.cfg.initializationService.initializeUserDoc(fileBin, userFile, DocumentType.JAVA_ARCHIVE,
+        await this.cfg.initializationService.initializeUserDoc(fileBin, userFile, DocumentType.JAVA_ARCHIVE,
           inspectionType, isSource);
         this.cfg.errorService.addError(new ErrorInfo({
           message: `${selectedFile.name} import complete.  Select the plus icon on the Sources/Targets panel to enable specific classes.`,
@@ -283,19 +283,20 @@ export class DocumentManagementService {
         return;
 
       case 'java':
-        this.cfg.initializationService.initializeUserDoc(fileText, userFile, DocumentType.JAVA,
+        await this.cfg.initializationService.initializeUserDoc(fileText, userFile, DocumentType.JAVA,
           inspectionType, isSource);
         break;
 
       case DocumentType.XML:
       case DocumentType.XSD:
-        this.cfg.initializationService.initializeUserDoc(fileText, userFile, userFileSuffix,
+        await this.cfg.initializationService.initializeUserDoc(fileText, userFile, userFileSuffix,
           inspectionType, isSource);
         break;
 
       default:
         this.handleError('Unrecognized document suffix (' + userFileSuffix + ')', null);
       }
+
       this.cfg.errorService.addError(new ErrorInfo({message: `${selectedFile.name} ${userFileSuffix} import complete.`,
         level: ErrorLevel.INFO, scope: ErrorScope.APPLICATION, type: ErrorType.USER}));
       resolve(true);

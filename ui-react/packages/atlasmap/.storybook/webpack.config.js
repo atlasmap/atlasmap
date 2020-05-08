@@ -27,6 +27,12 @@ module.exports = ({ config }) => {
 
   // HACK: Ensure we only bundle one instance of React
   config.resolve.alias.react = require.resolve('react')
+
+  config.module.rules.push({
+    test: /\.js$/,
+    use: ["source-map-loader"],
+    enforce: "pre"
+  })
   
 
   return config
