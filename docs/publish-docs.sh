@@ -16,7 +16,6 @@ cp -rv target/generated-docs/html/user-guide/* gh-pages/ && \
 cp -v target/generated-docs/pdf/user-guide/index.pdf gh-pages/user-guide.pdf && \
 mkdir -p gh-pages/developer-guide
 cp -rv target/generated-docs/html/developer-guide/* gh-pages/developer-guide/ && \
-cp -rv ../ui/dist/compodoc gh-pages/developer-guide/ && \
 cp -v target/generated-docs/pdf/developer-guide/index.pdf gh-pages/developer-guide.pdf && \
 cd gh-pages && \
 git add --ignore-errors * && \
