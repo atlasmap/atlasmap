@@ -14556,9 +14556,9 @@ react-transition-group@^4.3.0:
     prop-types "^15.6.2"
 
 react-use-gesture@^7.0.4:
-  version "7.0.12"
-  resolved "https://registry.yarnpkg.com/react-use-gesture/-/react-use-gesture-7.0.12.tgz#cf051b20a496011950ea144ebabcfbf9af2433f3"
-  integrity sha512-mkxaOA0gh10qy9Ha9ZpfhhPGBNJnlOG740oq0ukll0dE2NrBGR6ebzVrotJ4U5pAzjRKyTrpnzb7sdhm2PGdIg==
+  version "7.0.15"
+  resolved "https://registry.yarnpkg.com/react-use-gesture/-/react-use-gesture-7.0.15.tgz#93c651e916a31cfb12d079e7fa1543d5b0511e07"
+  integrity sha512-vHQkaa7oUbSDTAcFk9huQXa7E8KPrZH91erPuOMoqZT513qvtbb/SzTQ33lHc71/kOoJkMbzOkc4uoA4sT7Ogg==
 
 react@>=16, react@^16.13.1, react@^16.8.3:
   version "16.13.1"
