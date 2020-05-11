@@ -1,9 +1,18 @@
 <div class="mappingFieldActionArgument">
-  <div *ngIf="argConfig.name == 'delimiter'; then dropdownDelimiter; else regular"></div>
+    <div *ngIf="argConfig.name == 'delimiter'; then dropdownDelimiter; else dropdownFieldPathTemplate"></div>
 
-  <ng-template #regular>
-    <ng-container *ngIf="argConfig.values != null && argConfig.values.length > 0; then dropdown; else textInput"></ng-container> 
-  </ng-template>
+    <ng-template #dropdownFieldPathTemplate>
+        <ng-container *ngIf="argConfig.name == 'fieldPath'; then dropdownFieldPath; else fieldPathCount"></ng-container>
+    </ng-template>
+
+    <ng-template #regular>
+        <ng-container *ngIf="argConfig.values != null && argConfig.values.length > 0 && argConfig.name != 'fieldPathCount'; then dropdown; else textInput"></ng-container>
+    </ng-template>
+
+    <!-- To hide fieldPathCount-->
+    <ng-template #fieldPathCount>
+        <ng-container *ngIf="argConfig.name != 'fieldPathCount'; then regular"></ng-container>
+    </ng-template>
   <ng-template #dropdown>
     <label>{{ getLabel(argConfig.name) }}</label>
     <select (change)="actionConfigParamSelectionChanged($event)" [ngModel]="getActionConfigParamVDefault(argConfig, actionIndex, argValIndex)">
@@ -23,6 +32,16 @@
     </select>
   </ng-template>
 
+    <ng-template #dropdownFieldPath>
+        <label>{{ getLabel(argConfig.name) }}</label>
+        <select class="actionDelimiter" name="fieldPaths" id="fieldPaths" [(ngModel)]="action.getArgumentValue(argConfig.name).value">
+    <ng-container *ngFor="let fieldPath of cfg.mappings.activeMapping.sourceFields[0].field.docDef.fieldPaths" id="fieldPath">
+      <option class="actionConfigStyleOptions" *ngIf="modeIsSupported(fieldPath)" [value]="fieldPath">
+        {{ fieldPath }}
+      </option>
+    </ng-container>
+  </select>
+    </ng-template>
   <ng-template #textInput>
     <label>{{ getLabel(argConfig.name) }}: </label>
     <div *ngIf="argConfig.type == 'string'; else rightAlign">

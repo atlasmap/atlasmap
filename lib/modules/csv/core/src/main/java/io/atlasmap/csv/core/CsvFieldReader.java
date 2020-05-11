@@ -65,7 +65,27 @@ public class CsvFieldReader implements AtlasFieldReader {
         }
     }
 
-    @Override
+	@Override
+	public Field readField(AtlasInternalSession session, String fieldPath) throws AtlasException {
+		Field field = new CsvField();
+		field.setPath(fieldPath);
+
+ 		if (document == null) {
+            AtlasUtil.addAudit(session, field.getDocId(),
+                String.format("Cannot read field '%s' of document '%s', document is null",
+                    field.getPath(), field.getDocId()),
+                field.getPath(), AuditStatus.ERROR, null);
+            return field;
+        }
+		
+		if (!(field instanceof CsvField) && !(field instanceof FieldGroup)) {
+			throw new AtlasException(String.format("Unsupported field type '%s'", field.getClass()));
+		}
+		Field readField = readFields((CsvField) field);
+		return readField;
+	}
+
+	@Override
     public Field read(AtlasInternalSession session) throws AtlasException {
         Field field = session.head().getSourceField();
 
