@@ -291,7 +291,7 @@ export class DocumentManagementService {
         break;
 
       case DocumentType.CSV:
-        this.cfg.initializationService.initializeUserDoc(fileText, userFile, DocumentType.CSV,
+        await this.cfg.initializationService.initializeUserDoc(fileText, userFile, DocumentType.CSV,
             inspectionType, isSource);
         break;
 
