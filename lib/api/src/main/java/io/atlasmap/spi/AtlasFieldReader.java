@@ -22,4 +22,5 @@ public interface AtlasFieldReader {
 
     Field read(AtlasInternalSession session) throws AtlasException;
 
+	Field readField(AtlasInternalSession session, String fieldPath) throws AtlasException;
 }

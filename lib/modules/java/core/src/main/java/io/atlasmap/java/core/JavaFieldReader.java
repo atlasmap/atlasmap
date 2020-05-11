@@ -29,7 +29,44 @@ public class JavaFieldReader implements AtlasFieldReader {
 
     private AtlasConversionService conversionService;
     private Object sourceDocument;
+    
+    @Override
+    public Field readField(AtlasInternalSession session, String fieldPath) throws AtlasException {
+    	 try {
+             Field field = new JavaField();
+             field.setPath(fieldPath);
+             
+             if (sourceDocument == null) {
+                 AtlasUtil.addAudit(session, field.getDocId(), String.format(
+                     "Unable to read sourceField (path=%s),  document (docId=%s) is null",
+                     field.getPath(), field.getDocId()),
+                     field.getPath(), AuditStatus.ERROR, null);
+             }
 
+             AtlasPath path = new AtlasPath(field.getPath());
+
+             List<Field> fields = getFieldsForPath(session, sourceDocument, field, path, 0);
+             if (LOG.isDebugEnabled()) {
+                 LOG.debug("Processed input field sPath=" + field.getPath() + " sV=" + field.getValue()
+                     + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
+             }
+
+             if (path.hasCollection() && !path.isIndexedCollection()) {
+                 FieldGroup fieldGroup = AtlasModelFactory.createFieldGroupFrom(field, true);
+                 fieldGroup.getField().addAll(fields);
+                 session.head().setSourceField(fieldGroup);
+                 return fieldGroup;
+             } else if (fields.size() == 1) {
+                 field.setValue(fields.get(0).getValue());
+                 return field;
+             } else {
+                 return field;
+             }
+         } catch (Exception e) {
+             throw new AtlasException(e);
+         }
+   }
+    
     @Override
     public Field read(AtlasInternalSession session) throws AtlasException {
         try {
