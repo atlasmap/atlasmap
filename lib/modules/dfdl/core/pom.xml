@@ -13,7 +13,7 @@
   <name>Atlas :: DFDL Core</name>
 
   <properties>
-    <osgi.export.pkg>io.atlasmap.xml.core,io.atlasmap.dfdl.inspect</osgi.export.pkg>
+    <osgi.export.pkg>io.atlasmap.dfdl.core,io.atlasmap.dfdl.inspect</osgi.export.pkg>
   </properties>
 
   <dependencies>
