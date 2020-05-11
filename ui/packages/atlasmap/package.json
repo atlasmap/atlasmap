@@ -1,7 +1,7 @@
 {
   "name": "@atlasmap/atlasmap",
   "description": "",
-  "version": "2.1.0-SNAPSHOT",
+  "version": "2.0.1",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -29,7 +29,7 @@
     }
   },
   "dependencies": {
-    "@atlasmap/core": "^2.1.0-SNAPSHOT",
+    "@atlasmap/core": "^2.0.1",
     "use-debounce": "^3.4.2"
   },
   "peerDependencies": {
