@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
 
 export interface IColumnHeaderProps {
   title: string;
-  actions?: (ReactElement | null)[];
+  actions?: (ReactElement | null | undefined)[];
 }
 
 export const ColumnHeader: FunctionComponent<IColumnHeaderProps> = ({

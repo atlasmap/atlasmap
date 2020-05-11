@@ -57,9 +57,9 @@ export function useContextToolbar({
   showColumnMapperViewToolbarItem = true,
   showMappingTableViewToolbarItem = true,
   showNamespaceTableViewToolbarItem = true,
-  showFreeViewToolbarItem = true,
+  showFreeViewToolbarItem = false,
 
-  showToggleMappingColumnToolbarItem = true,
+  showToggleMappingColumnToolbarItem = false,
   showToggleMappingPreviewToolbarItem = true,
   showToggleTypesToolbarItem = true,
   showToggleMappedFieldsToolbarItem = true,

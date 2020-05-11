@@ -24,13 +24,24 @@ import { IUseContextToolbarData, useContextToolbar } from "./useContextToolbar";
 import { useSidebar } from "./useSidebar";
 import { AlertGroup } from "@patternfly/react-core";
 
-export interface IAtlasmapProps extends IUseContextToolbarData {
+export interface IAtlasmapProps {
+  allowImport?: boolean;
+  allowExport?: boolean;
+  allowReset?: boolean;
+  allowDelete?: boolean;
+  allowCustomJavaClasses?: boolean;
   modalsContainerId?: string;
+  toolbarOptions?: IUseContextToolbarData;
 }
 
 export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
+  allowImport = true,
+  allowExport = true,
+  allowReset = true,
+  allowDelete = true,
+  allowCustomJavaClasses = true,
   modalsContainerId = "modals",
-  ...props
+  toolbarOptions,
 }) => {
   const {
     pending,
@@ -76,7 +87,10 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     showTypes,
     contextToolbar,
   } = useContextToolbar({
-    ...props,
+    showImportAtlasFileToolbarItem: allowImport,
+    showExportAtlasFileToolbarItem: allowExport,
+    showResetToolbarItem: allowReset,
+    ...toolbarOptions,
     onImportAtlasFile: (file) => handlers.onImportDocument(file, false),
     onExportAtlasFile: handlers.onExportAtlasFile,
     onResetAtlasmap: handlers.onResetAtlasmap,
@@ -129,10 +143,15 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onCreateProperty: handlers.onCreateProperty,
       onEditProperty: handlers.onEditProperty,
       onDeleteProperty: handlers.onDeleteProperty,
-      onDeleteDocument: (id) => handlers.onDeleteDocument(id, true),
-      onCustomClassSearch: (isSource: boolean) =>
-        handlers.onEnableCustomClass(isSource),
-      onImportDocument: (id) => handlers.onImportDocument(id, true),
+      onDeleteDocument: allowDelete
+        ? (id) => handlers.onDeleteDocument(id, true)
+        : undefined,
+      onCustomClassSearch: allowCustomJavaClasses
+        ? (isSource: boolean) => handlers.onEnableCustomClass(isSource)
+        : undefined,
+      onImportDocument: allowImport
+        ? (id) => handlers.onImportDocument(id, true)
+        : undefined,
       onSearch: searchSources,
       shouldShowMappingPreviewForField,
       onFieldPreviewChange,
@@ -142,6 +161,9 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     [
       selectMapping,
       handlers,
+      allowDelete,
+      allowCustomJavaClasses,
+      allowImport,
       searchSources,
       shouldShowMappingPreviewForField,
       onFieldPreviewChange,
@@ -161,10 +183,15 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       canRemoveFromSelectedMapping: (f) =>
         isFieldRemovableFromSelection("target", f),
       onRemoveFromSelectedMapping: handlers.onRemoveFromMapping,
-      onDeleteDocument: (id) => handlers.onDeleteDocument(id, false),
-      onCustomClassSearch: (isSource: boolean) =>
-        handlers.onEnableCustomClass(isSource),
-      onImportDocument: (id) => handlers.onImportDocument(id, false),
+      onDeleteDocument: allowDelete
+        ? (id) => handlers.onDeleteDocument(id, false)
+        : undefined,
+      onCustomClassSearch: allowCustomJavaClasses
+        ? (isSource: boolean) => handlers.onEnableCustomClass(isSource)
+        : undefined,
+      onImportDocument: allowImport
+        ? (id) => handlers.onImportDocument(id, false)
+        : undefined,
       onSearch: searchTargets,
       shouldShowMappingPreviewForField,
       onFieldPreviewChange,
@@ -174,6 +201,9 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     [
       selectMapping,
       handlers,
+      allowDelete,
+      allowCustomJavaClasses,
+      allowImport,
       searchTargets,
       shouldShowMappingPreviewForField,
       onFieldPreviewChange,

@@ -83,41 +83,39 @@ export const wiredToTheBackend = () => (
     onMappingChange={action("onMappingChange")}
   >
     <Atlasmap
-      showImportAtlasFileToolbarItem={boolean(
-        "showImportAtlasFileToolbarItem",
-        true,
-      )}
-      showExportAtlasFileToolbarItem={boolean(
-        "showExportAtlasFileToolbarItem",
-        true,
-      )}
-      showResetToolbarItem={boolean("showResetToolbarItem", true)}
-      showToggleMappingPreviewToolbarItem={boolean(
-        "showToggleMappingPreviewToolbarItem",
-        true,
-      )}
-      showToggleMappingColumnToolbarItem={boolean(
-        "showToggleMappingColumnToolbarItem",
-        true,
-      )}
-      showMappingTableViewToolbarItem={boolean(
-        "showToggleMappingTableToolbarItem",
-        true,
-      )}
-      showNamespaceTableViewToolbarItem={boolean(
-        "showToggleNamespaceTableToolbarItem",
-        true,
-      )}
-      showToggleTypesToolbarItem={boolean("showToggleTypesToolbarItem", true)}
-      showToggleMappedFieldsToolbarItem={boolean(
-        "showToggleMappedFieldsToolbarItem",
-        true,
-      )}
-      showToggleUnmappedFieldsToolbarItem={boolean(
-        "showToggleUnmappedFieldsToolbarItem",
-        true,
-      )}
-      showFreeViewToolbarItem={boolean("showToggleFreeViewToolbarItem", true)}
+      allowImport={boolean("allow Import", true)}
+      allowExport={boolean("allow Export", true)}
+      allowReset={boolean("allow Reset", true)}
+      allowDelete={boolean("allow Delete", true)}
+      allowCustomJavaClasses={boolean("allow Custom Java Classes", true)}
+      toolbarOptions={{
+        showToggleMappingPreviewToolbarItem: boolean(
+          "showToggleMappingPreviewToolbarItem",
+          true,
+        ),
+        showToggleMappingColumnToolbarItem: boolean(
+          "showToggleMappingColumnToolbarItem",
+          true,
+        ),
+        showMappingTableViewToolbarItem: boolean(
+          "showToggleMappingTableToolbarItem",
+          true,
+        ),
+        showNamespaceTableViewToolbarItem: boolean(
+          "showToggleNamespaceTableToolbarItem",
+          true,
+        ),
+        showToggleTypesToolbarItem: boolean("showToggleTypesToolbarItem", true),
+        showToggleMappedFieldsToolbarItem: boolean(
+          "showToggleMappedFieldsToolbarItem",
+          true,
+        ),
+        showToggleUnmappedFieldsToolbarItem: boolean(
+          "showToggleUnmappedFieldsToolbarItem",
+          true,
+        ),
+        showFreeViewToolbarItem: boolean("showToggleFreeViewToolbarItem", true),
+      }}
     />
   </AtlasmapProvider>
 );
@@ -159,35 +157,11 @@ export const embeddedInSyndesis = () => {
       onMappingChange={action("onMappingChange")}
     >
       <Atlasmap
-        showImportAtlasFileToolbarItem={false}
-        showExportAtlasFileToolbarItem={false}
-        showResetToolbarItem={false}
-        showToggleMappingPreviewToolbarItem={boolean(
-          "showToggleMappingPreviewToolbarItem",
-          true,
-        )}
-        showToggleMappingColumnToolbarItem={boolean(
-          "showToggleMappingColumnToolbarItem",
-          true,
-        )}
-        showMappingTableViewToolbarItem={boolean(
-          "showToggleMappingTableToolbarItem",
-          true,
-        )}
-        showNamespaceTableViewToolbarItem={boolean(
-          "showToggleNamespaceTableToolbarItem",
-          true,
-        )}
-        showToggleTypesToolbarItem={boolean("showToggleTypesToolbarItem", true)}
-        showToggleMappedFieldsToolbarItem={boolean(
-          "showToggleMappedFieldsToolbarItem",
-          true,
-        )}
-        showToggleUnmappedFieldsToolbarItem={boolean(
-          "showToggleUnmappedFieldsToolbarItem",
-          true,
-        )}
-        showFreeViewToolbarItem={boolean("showToggleFreeViewToolbarItem", true)}
+        allowImport={false}
+        allowExport={false}
+        allowReset={false}
+        allowDelete={false}
+        allowCustomJavaClasses={false}
       />
     </AtlasmapProvider>
   );
