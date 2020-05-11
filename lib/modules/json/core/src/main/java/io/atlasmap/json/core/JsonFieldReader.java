@@ -58,6 +58,38 @@ public class JsonFieldReader implements AtlasFieldReader {
     public JsonFieldReader(AtlasConversionService conversionService) {
         this.conversionService = conversionService;
     }
+    
+
+    @Override
+    public Field readField(AtlasInternalSession session, String fieldPath) throws AtlasException {
+    	
+    	 Field field = new JsonField();
+    	 field.setPath(fieldPath);
+    	 
+         if (rootNode == null) {
+        	 AtlasUtil.addAudit(session, field.getDocId(),
+                     String.format("Cannot read a field '%s' of JSON document '%s', document is null",
+                         field.getPath(), field.getDocId()),
+                     field.getPath(), AuditStatus.ERROR, null);
+                 return field;
+         }
+         
+         AtlasPath path = new AtlasPath(field.getPath());
+
+         List<Field> fields = getJsonFieldsForPath(session, rootNode, field, path, 0);
+         if (path.hasCollection() && !path.isIndexedCollection()) {
+             FieldGroup fieldGroup = AtlasModelFactory.createFieldGroupFrom(field, true);
+             fieldGroup.getField().addAll(fields);
+             session.head().setSourceField(fieldGroup);
+             return fieldGroup;
+         } else if (fields.size() == 1) {
+             field.setValue(fields.get(0).getValue());
+             return field;
+         } else {
+             return field;
+         }
+    }
+    
 
     @Override
     public Field read(AtlasInternalSession session) throws AtlasException {

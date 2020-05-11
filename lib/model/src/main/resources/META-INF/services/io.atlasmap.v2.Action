@@ -60,3 +60,4 @@ io.atlasmap.v2.TrimLeft
 io.atlasmap.v2.TrimRight
 io.atlasmap.v2.Uppercase
 io.atlasmap.v2.UppercaseChar
+io.atlasmap.v2.RepeatForFieldPathCount

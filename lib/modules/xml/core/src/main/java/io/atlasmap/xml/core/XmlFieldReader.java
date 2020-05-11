@@ -65,6 +65,44 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
         super(cl, namespaces);
         this.conversionService = conversionService;
     }
+    
+    @Override
+    public Field readField(AtlasInternalSession session, String fieldPath) throws AtlasException {
+    	Field field = new XmlField();
+    	field.setPath(fieldPath);
+    	 
+    	 if (document == null) {
+             AtlasUtil.addAudit(session, field.getDocId(),
+                     String.format("Cannot read field '%s' of document '%s', document is null",
+                             field.getPath(), field.getDocId()),
+                     field.getPath(), AuditStatus.ERROR, null);
+             return field;
+         }
+        
+         if (!(field instanceof XmlField) && !(field instanceof FieldGroup)) {
+             throw new AtlasException(String.format("Unsupported field type '%s'", field.getClass()));
+         }
+         seedDocumentNamespaces(document);
+
+         if (LOG.isDebugEnabled()) {
+             LOG.debug("Reading source value for field: " + field.getPath());
+         }
+         Optional<XmlNamespaces> xmlNamespaces = getSourceNamespaces(session, field);
+         XmlPath path = new XmlPath(field.getPath());
+         List<Field> fields = getFieldsForPath(session, xmlNamespaces, document.getDocumentElement(), field, path, 0);
+
+         if (path.hasCollection() && !path.isIndexedCollection()) {
+             FieldGroup fieldGroup = AtlasModelFactory.createFieldGroupFrom(field, true);
+             fieldGroup.getField().addAll(fields);
+             session.head().setSourceField(fieldGroup);
+             return fieldGroup;
+         } else if (fields.size() == 1) {
+             field.setValue(fields.get(0).getValue());
+             return field;
+         } else {
+             return field;
+         }
+    }
 
     public Field read(AtlasInternalSession session) throws AtlasException {
         Field field = session.head().getSourceField();

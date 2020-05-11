@@ -250,6 +250,11 @@ public abstract class BaseDefaultAtlasContextTest {
             field.setValue(value);
             return field;
         }
+		@Override
+		public Field readField(AtlasInternalSession session, String fieldPath) throws AtlasException {
+			// TODO Auto-generated method stub
+			return null;
+		}
     }
 
     protected class MockFieldWriter implements AtlasFieldWriter {
