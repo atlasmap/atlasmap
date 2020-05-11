@@ -627,18 +627,23 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
     }
 
     public Object buildAndProcessAction(ActionProcessor actionProcessor, Map<String, Object> actionParameters, List<Field> fields) {
-        List<Object> flattenedValue = new ArrayList<>();
+        List<Object> flattenedValues = new ArrayList<>();
         for (Field item : fields) {
             if (item instanceof FieldGroup) {
                 FieldGroup fieldGroup = (FieldGroup)item;
                 List<Object> values = new ArrayList<>();
                 extractNestedListValuesFromFieldGroup(fieldGroup, values); //preserve top level list of parameters and arguments
-                flattenedValue.addAll(values);
+                flattenedValues.addAll(values);
             } else {
-                flattenedValue.add((item).getValue());
+                flattenedValues.add(item.getValue());
             }
         }
-        FieldType valueType = determineFieldType(flattenedValue);
+        Object sourceObject = flattenedValues;
+        if (flattenedValues.size() == 1) {
+            sourceObject = flattenedValues.get(0); //it is a single value so do not pass it as a collection
+        }
+
+        FieldType valueType = determineFieldType(flattenedValues);
         try {
             Action action = actionProcessor.getActionClass().newInstance();
             for (Map.Entry<String, Object> property : actionParameters.entrySet()) {
@@ -646,7 +651,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                 action.getClass().getMethod(setter, property.getValue().getClass()).invoke(action, property.getValue());
             }
 
-            return processAction(action, actionProcessor, valueType, flattenedValue);
+            return processAction(action, actionProcessor, valueType, sourceObject);
         } catch (Exception e) {
             throw new IllegalArgumentException(String.format("The action '%s' cannot be processed", actionProcessor.getActionDetail().getName()), e);
         }
@@ -710,48 +715,33 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
             }
         }
 
-        if (fieldGroup != null) {
-            if (tmpSourceObject instanceof List) {
-                // n -> n - reuse passed-in FieldGroup
-                List<?> sourceList = (List<?>) tmpSourceObject;
-                Field lastSubField = null;
-                FieldGroup existingFieldGroup = fieldGroup;
-                if (field instanceof FieldGroup) {
-                    existingFieldGroup = (FieldGroup) field;
-                }
+        if (tmpSourceObject instanceof List) {
+            // n -> n and 1 -> n - create new FieldGroup
+            fieldGroup = AtlasModelFactory.createFieldGroupFrom(field, false);
 
-                for (int i = 0; i < sourceList.size(); i++) {
-                    if (existingFieldGroup.getField().size() > i) {
-                        lastSubField = existingFieldGroup.getField().get(i);
-                    } else {
-                        Field subField = new SimpleField();
-                        AtlasModelFactory.copyField(lastSubField, subField, true);
-                        existingFieldGroup.getField().add(subField);
-                        lastSubField = subField;
-                    }
-                    lastSubField.setValue(sourceList.get(i));
-                    lastSubField.setFieldType(currentType);
-                }
-                field = existingFieldGroup;
-            } else {
-                // n -> 1 - create new Field
-                Field newField = new SimpleField();
-                AtlasModelFactory.copyField(field, newField, false);
-                newField.setValue(tmpSourceObject);
-                newField.setFieldType(currentType);
-                field = newField;
+            // Make sure fieldGroup is of a collection type
+            if (fieldGroup.getCollectionType() == null || CollectionType.NONE.equals(fieldGroup.getCollectionType())) {
+                fieldGroup.setCollectionType(CollectionType.ARRAY);
+                fieldGroup.setPath(fieldGroup.getPath() + "[]");
             }
-        } else if (tmpSourceObject instanceof List) {
-            // 1 -> n - create new FieldGroup
-            fieldGroup = AtlasModelFactory.createFieldGroupFrom(field, true);
+
             for (Object subValue : (List<?>) tmpSourceObject) {
                 Field subField = new SimpleField();
-                AtlasModelFactory.copyField(field, subField, false);
+                AtlasModelFactory.copyField(fieldGroup, subField, false);
+                subField.setIndex(null);
                 subField.setValue(subValue);
                 subField.setFieldType(currentType);
+                subField.setCollectionType(CollectionType.NONE);
                 fieldGroup.getField().add(subField);
             }
             field = fieldGroup;
+        } else if (fieldGroup != null) {
+            // n -> 1 - create new Field
+            Field newField = new SimpleField();
+            AtlasModelFactory.copyField(field, newField, false);
+            newField.setValue(tmpSourceObject);
+            newField.setFieldType(currentType);
+            field = newField;
         } else {
             // 1 -> 1 = reuse passed-in Field
             field.setValue(tmpSourceObject);

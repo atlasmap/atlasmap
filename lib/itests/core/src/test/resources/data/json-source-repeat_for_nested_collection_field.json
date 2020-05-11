@@ -1,0 +1,18 @@
+{
+  "simpleField": "simpleFieldValue",
+  "rootArray": [
+    {
+      "nestedArray": [
+        {
+          "arrayField": "dt1"
+        },
+        {
+          "arrayField": "dt2"
+        },
+        {
+          "arrayField": "dt2"
+        }
+      ]
+    }
+  ]
+}

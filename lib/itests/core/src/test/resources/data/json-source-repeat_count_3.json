@@ -1,0 +1,14 @@
+{
+  "simpleField": "simpleFieldValue",
+  "rootArray":[
+  {
+    "arrayField": ""
+  },
+  {
+    "arrayField": ""
+  },
+  {
+    "arrayField": ""
+  }
+]
+}

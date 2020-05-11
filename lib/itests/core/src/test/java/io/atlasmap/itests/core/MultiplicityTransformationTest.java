@@ -301,4 +301,68 @@ public class MultiplicityTransformationTest {
         assertEquals(2+4+6+8, target.getIntField());
     }
 
+    @Test
+    public void testActionRepeat_1() throws Exception {
+    	 URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-action_repeat.json");
+         AtlasMapping mapping = mappingService.loadMapping(url);
+         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+         AtlasSession session = context.createSession();
+         String sourceJson = new String(Files.readAllBytes(Paths.get(
+             Thread.currentThread().getContextClassLoader().getResource("data/json-source-repeat.json").toURI())));
+         session.setSourceDocument("json-source-repeat", sourceJson);
+
+         context.process(session);
+         assertFalse(TestHelper.printAudit(session), session.hasErrors());
+         Object output = session.getTargetDocument("json-target");
+         assertEquals("[{\"targetField\":\"simpleFieldValue\"}]", output);
+    }
+
+    @Test
+    public void testActionRepeatCount3() throws Exception {
+    	 URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-action_repeat.json");
+         AtlasMapping mapping = mappingService.loadMapping(url);
+         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+         AtlasSession session = context.createSession();
+         String sourceJson = new String(Files.readAllBytes(Paths.get(
+             Thread.currentThread().getContextClassLoader().getResource("data/json-source-repeat_count_3.json").toURI())));
+         session.setSourceDocument("json-source-repeat", sourceJson);
+
+         context.process(session);
+         assertFalse(TestHelper.printAudit(session), session.hasErrors());
+         Object output = session.getTargetDocument("json-target");
+         assertEquals("[{\"targetField\":\"simpleFieldValue\"},{\"targetField\":\"simpleFieldValue\"},{\"targetField\":\"simpleFieldValue\"}]", output);
+    }
+
+    @Test
+    public void testActionRepeatForNoSourceField() throws Exception {
+    	 URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-action_repeat.json");
+         AtlasMapping mapping = mappingService.loadMapping(url);
+         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+         AtlasSession session = context.createSession();
+         String sourceJson = new String(Files.readAllBytes(Paths.get(
+             Thread.currentThread().getContextClassLoader().getResource("data/json-source-repeat_no_field.json").toURI())));
+         session.setSourceDocument("json-source-repeat", sourceJson);
+
+         context.process(session);
+         assertFalse(TestHelper.printAudit(session), session.hasErrors());
+         Object output = session.getTargetDocument("json-target");
+         assertEquals("[]", output);
+    }
+
+    @Test
+    public void testActionRepeatForNestedCollectionField() throws Exception {
+    	 URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-action_repeat_nested_collection.json");
+         AtlasMapping mapping = mappingService.loadMapping(url);
+         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+         AtlasSession session = context.createSession();
+         String sourceJson = new String(Files.readAllBytes(Paths.get(
+             Thread.currentThread().getContextClassLoader().getResource("data/json-source-repeat_for_nested_collection_field.json").toURI())));
+         session.setSourceDocument("json-source-repeat", sourceJson);
+
+         context.process(session);
+         assertFalse(TestHelper.printAudit(session), session.hasErrors());
+         Object output = session.getTargetDocument("json-target");
+         assertEquals("[{\"targetField\":\"simpleFieldValue\"},{\"targetField\":\"simpleFieldValue\"},{\"targetField\":\"simpleFieldValue\"}]", output);
+    }
+
 }
