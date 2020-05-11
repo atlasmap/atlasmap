@@ -119,6 +119,15 @@ export class MappingSerializer {
   }
 
   static deserializeMappingServiceJSON(json: any, cfg: ConfigModel): void {
+
+    // Process constants and properties before mappings.
+    for (const field of MappingSerializer.deserializeConstants(json)) {
+      cfg.constantDoc.addField(field);
+    }
+    for (const field of MappingSerializer.deserializeProperties(json)) {
+      cfg.propertyDoc.addField(field);
+    }
+
     if (!cfg.mappings) {
       cfg.mappings = new MappingDefinition;
     }
@@ -127,12 +136,6 @@ export class MappingSerializer {
     cfg.mappings.mappings = cfg.mappings.mappings.concat(MappingSerializer.deserializeMappings(json, cfg));
     for (const lookupTable of MappingSerializer.deserializeLookupTables(json)) {
       cfg.mappings.addTable(lookupTable);
-    }
-    for (const field of MappingSerializer.deserializeConstants(json)) {
-      cfg.constantDoc.addField(field);
-    }
-    for (const field of MappingSerializer.deserializeProperties(json)) {
-      cfg.propertyDoc.addField(field);
     }
   }
 

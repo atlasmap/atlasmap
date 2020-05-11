@@ -15,7 +15,9 @@ import {
 export function createConstant(constValue: string, constType: string): void {
   const cfg = ConfigModel.getConfig();
   let field = cfg.constantDoc.getField(constValue);
-  field = !field ? new Field() : field.copy();
+  if (!field) {
+    field = new Field();
+  }
   field.name = constValue;
   field.value = constValue;
   field.type = constType;
@@ -77,7 +79,9 @@ export function createProperty(
 ): void {
   const cfg = ConfigModel.getConfig();
   let field = cfg.propertyDoc.getField(propName);
-  field = !field ? new Field() : field.copy();
+  if (!field) {
+    field = new Field();
+  }
   field.name = propName;
   field.value = propValue;
   field.type = propType;
@@ -107,7 +111,7 @@ export function editProperty(
 ): void {
   const cfg = ConfigModel.getConfig();
   const field = cfg.propertyDoc.getField(
-    cfg.propertyDoc.pathSeparator + propName.split(" ")[0],
+    cfg.propertyDoc.pathSeparator + propName,
   );
   if (!field) {
     return;

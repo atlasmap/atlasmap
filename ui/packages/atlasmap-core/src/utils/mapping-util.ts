@@ -83,16 +83,45 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
         mappedField.field = doc.getField(mappedField.parsedData.parsedPath!);
       }
       if (mappedField.field == null) {
-        if (mappedField.parsedData.fieldIsConstant || mappedField.parsedData.fieldIsProperty) {
-          const constantField: Field = new Field();
-          constantField.value = mappedField.parsedData.parsedValue!; // TODO: check this non null operator
-          constantField.type = mappedField.parsedData.parsedValueType!; // TODO: check this non null operator
+        if (mappedField.parsedData.fieldIsConstant &&
+          mappedField.parsedData.parsedValue &&
+          mappedField.parsedData.parsedValueType) {
+          let constantField =
+            cfg.constantDoc.getField(mappedField.parsedData.parsedValue);
+          if (!constantField) {
+            constantField = new Field();
+          }
+          constantField.value = mappedField.parsedData.parsedValue;
+          constantField.type = mappedField.parsedData.parsedValueType;
           constantField.displayName = constantField.value;
           constantField.name = constantField.value;
           constantField.path = constantField.value;
           constantField.userCreated = true;
           mappedField.field = constantField;
           doc.addField(constantField);
+        } else if (mappedField.parsedData.fieldIsProperty &&
+          mappedField.parsedData.parsedValue &&
+          mappedField.parsedData.parsedValueType &&
+          mappedField.parsedData.parsedName &&
+          mappedField.parsedData.parsedPath) {
+          let propertyField =
+            cfg.propertyDoc.getField(mappedField.parsedData.parsedName);
+          if (!propertyField) {
+            propertyField = new Field();
+          }
+          const lastSeparator: number =
+            mappedField.parsedData.parsedName.lastIndexOf('/');
+          let fieldName = (lastSeparator === -1)
+            ? mappedField.parsedData.parsedName
+            : mappedField.parsedData.parsedName.substring(lastSeparator + 1);
+          propertyField.value = mappedField.parsedData.parsedValue;
+          propertyField.type = mappedField.parsedData.parsedValueType;
+          propertyField.displayName = fieldName;
+          propertyField.name = fieldName;
+          propertyField.path = mappedField.parsedData.parsedPath;
+          propertyField.userCreated = true;
+          mappedField.field = propertyField;
+          doc.addField(propertyField);
         } else if (mappedField.parsedData.userCreated || mappedField.parsedData.parsedPath) {
           const path: string = mappedField.parsedData.parsedPath!; // TODO: check this non null operator
 
