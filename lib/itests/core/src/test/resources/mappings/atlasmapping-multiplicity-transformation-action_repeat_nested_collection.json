@@ -1,0 +1,70 @@
+{
+  "AtlasMapping": {
+    "jsonType": "io.atlasmap.v2.AtlasMapping",
+    "dataSource": [
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "json-source-repeat",
+        "uri": "atlas:json:json-source-repeat",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "json-target",
+        "uri": "atlas:json:json-target",
+        "dataSourceType": "TARGET"
+      }
+    ],
+    "mappings": {
+      "mapping": [
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "expression": "REPEAT(count(${json-source-repeat:/rootArray<>/nestedArray<>/arrayField}), ${json-source-repeat:/simpleField})",
+          "inputFieldGroup": {
+            "jsonType": "io.atlasmap.v2.FieldGroup",
+            "field": [
+              {
+                "jsonType": "io.atlasmap.json.v2.JsonField",
+                "docId": "json-source-repeat",
+                "index": 0,
+                "path": "/simpleField",
+                "fieldType": "STRING",
+                "name": "simpleField"
+              },
+              {
+                "jsonType": "io.atlasmap.json.v2.JsonField",
+                "docId": "json-source-repeat",
+                "index": 1,
+                "path": "/rootArray<>/nestedArray<>/arrayField",
+                "fieldType": "STRING",
+                "name": "DT"
+              }
+            ]
+          },
+          "inputField" : [ ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "docId": "json-target",
+              "index": 0,
+              "path": "/[]/targetField",
+              "fieldType": "STRING",
+              "name": "targetField"
+            }
+          ],
+          "id": "mapping.88333"
+        }
+      ]
+    },
+    "lookupTables": {
+      "lookupTable": []
+    },
+    "constants": {
+      "constant": []
+    },
+    "properties": {
+      "property": []
+    },
+    "name": "UI.158101"
+  }
+}

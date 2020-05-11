@@ -33,6 +33,7 @@ import io.atlasmap.v2.LastIndexOf;
 import io.atlasmap.v2.PadStringLeft;
 import io.atlasmap.v2.PadStringRight;
 import io.atlasmap.v2.Prepend;
+import io.atlasmap.v2.Repeat;
 import io.atlasmap.v2.ReplaceAll;
 import io.atlasmap.v2.ReplaceFirst;
 import io.atlasmap.v2.Split;
@@ -80,7 +81,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
             if (entry != null) {
                 builder.append(entry);
             }
-            isFirst =false;
+            isFirst = false;
         }
 
         return builder.toString();
@@ -202,6 +203,26 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         }
 
         return input == null ? null : input.toString().split(split.getDelimiter());
+    }
+
+    @AtlasActionProcessor(sourceType = FieldType.ANY)
+    public static String[] repeat(Repeat repeat, String input) {
+
+        if (repeat == null) {
+            throw new IllegalArgumentException("repeat is not defined");
+        }
+
+        String[] returnObj = null;
+
+        // Repeat the value based on count
+        int count = repeat.getCount();
+
+        returnObj = new String[count];
+        for (int i = 0; i < count; i++) {
+            returnObj[i] = input;
+        }
+
+        return returnObj;
     }
 
     @AtlasActionProcessor
