@@ -70,6 +70,7 @@ export function jsonToFieldGroup(
           jf.name.startsWith("c")),
       isCollection: jf.collectionType === "LIST",
       isConnected: false,
+      isDisabled: jf.collectionType === "COMPLEX",
       amField: {} as IAtlasmapField["amField"],
     };
   };
