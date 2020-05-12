@@ -303,7 +303,7 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
 
     if ((mapping.transition.expression) && (mapping.transition.enableExpression)) {
       return (asHTML)
-        ? mapping.transition.expression.toHTML()
+        ? mapping.transition.expression.expressionHTML
         : mapping.transition.expression.toText(true);
     }
     return '';

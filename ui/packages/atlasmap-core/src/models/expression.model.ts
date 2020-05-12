@@ -107,12 +107,12 @@ export class FieldNode extends ExpressionNode {
 }
 
 export class ExpressionModel {
+  expressionHTML = '';
   expressionUpdatedSource = new Subject<ExpressionUpdatedEvent>();
   expressionUpdated$ = this.expressionUpdatedSource.asObservable();
 
   private _nodes: ExpressionNode[] = [];
   private textCache = '';
-  private htmlCache = '';
 
   constructor(private mapping: MappingModel, private cfg: ConfigModel) {}
 
@@ -492,10 +492,10 @@ export class ExpressionModel {
   }
 
   toHTML() {
-    if (this.htmlCache.length === 0) {
+    if (this.expressionHTML.length === 0) {
       this.updateCache();
     }
-    return this.htmlCache;
+    return this.expressionHTML;
   }
 
   addConditionalExpressionNode(mappedField: MappedField, nodeId: string, offset: number): void {
@@ -508,7 +508,7 @@ export class ExpressionModel {
     this.textCache = answer;
     answer = '';
     this._nodes.forEach(node => answer += node.toHTML());
-    this.htmlCache = answer;
+    this.expressionHTML = answer;  // trigger expr box render
   }
 
   private createNodesFromText(text: string): ExpressionNode[] {
