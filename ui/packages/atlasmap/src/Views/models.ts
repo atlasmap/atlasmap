@@ -19,6 +19,7 @@ export interface IAtlasmapField {
   hasTransformations: boolean;
   isCollection: boolean;
   isConnected: boolean;
+  isDisabled: boolean;
 
   // TODO: find a way to remove this maybe?
   amField: Field;

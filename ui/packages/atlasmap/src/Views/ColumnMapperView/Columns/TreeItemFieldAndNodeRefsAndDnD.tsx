@@ -121,6 +121,7 @@ export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent<ITreeItemFiel
                       isDragging={isDragging}
                       isFocused={focused}
                       isSelected={!!preview}
+                      isDisabled={field.isDisabled}
                       statusIcons={[
                         field.isConnected ? (
                           <Tooltip

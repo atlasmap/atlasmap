@@ -45,6 +45,10 @@ const styles = StyleSheet.create({
     "--bg-color": "var(--pf-global--BackgroundColor--150)",
     "--bg-color-fade": "rgba(245, 245, 245, 0.5)",
   },
+  isDisabled: {
+    pointerEvents: "none",
+    color: "var(--pf-global--disabled-color--200)",
+  },
   actions: {
     position: "absolute",
     top: 0,
@@ -68,6 +72,7 @@ export interface IDocumentFieldProps {
   isDragging?: boolean;
   isFocused?: boolean;
   isSelected?: boolean;
+  isDisabled?: boolean;
 }
 
 export const DocumentField = forwardRef<
@@ -85,6 +90,7 @@ export const DocumentField = forwardRef<
       isDragging = false,
       isFocused = false,
       isSelected = false,
+      isDisabled = false,
       children,
     },
     ref,
@@ -101,9 +107,10 @@ export const DocumentField = forwardRef<
           styles.element,
           isDragging && styles.isDragging,
           isSelected && styles.isSelected,
+          isDisabled && styles.isDisabled,
         )}
-        onMouseEnter={showActions}
-        onMouseLeave={hideActions}
+        onMouseEnter={!isDisabled ? showActions : undefined}
+        onMouseLeave={!isDisabled ? hideActions : undefined}
       >
         <div className={css(styles.row)}>
           {icon && <div className={css(styles.nameIcon)}>{icon}</div>}
@@ -114,7 +121,7 @@ export const DocumentField = forwardRef<
               {statusIcons && statusIcons?.filter((a) => a)}
             </span>
           </div>
-          {(isHovering || isFocused) && actions && (
+          {(isHovering || isFocused) && actions && !isDisabled && (
             <div className={css(styles.actions)}>
               {actions?.filter((a) => a)}
             </div>

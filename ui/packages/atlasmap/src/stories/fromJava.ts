@@ -95,6 +95,7 @@ export function javaToFieldGroup(
           jf.name.startsWith("c")),
       isCollection: jf.collectionType === "LIST",
       isConnected: false,
+      isDisabled: jf.collectionType === "COMPLEX",
       amField: {} as IAtlasmapField["amField"],
     };
   };
