@@ -342,7 +342,7 @@ public class AtlasService {
                 LOG.error("Error retrieving mapping definition file for ID:" + mappingDefinitionId, e);
                 throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
             }
-            if (LOG.isDebugEnabled()) {
+            if (LOG.isDebugEnabled() && serialized != null) {
                 LOG.debug(new String(serialized));
             }
             if (serialized == null) {
