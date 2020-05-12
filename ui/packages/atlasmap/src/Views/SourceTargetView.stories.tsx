@@ -15,7 +15,7 @@ import { CanvasProvider } from "../UI";
 import { SourceTargetView, IAtlasmapMapping } from "../Views";
 
 export default {
-  title: "Atlasmap|Views",
+  title: "AtlasMap|Views",
   decorators,
 };
 

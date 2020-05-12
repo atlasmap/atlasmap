@@ -15,7 +15,7 @@ import { CanvasProvider, Column } from "../../UI";
 import { MappingsColumn, SourcesColumn, TargetsColumn } from "../../Views";
 
 export default {
-  title: "Atlasmap|Views/ColumnMapperView",
+  title: "AtlasMap|Views/ColumnMapperView",
   decorators,
 };
 

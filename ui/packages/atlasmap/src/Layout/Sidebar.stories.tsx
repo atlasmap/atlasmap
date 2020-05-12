@@ -4,7 +4,7 @@ import { boolean } from "@storybook/addon-knobs";
 import { Sidebar } from "./Sidebar";
 
 export default {
-  title: "Atlasmap|Layout/Sidebar",
+  title: "AtlasMap|Layout/Sidebar",
 };
 
 export const example = () => (

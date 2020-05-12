@@ -4,7 +4,7 @@ import { mappings } from "../stories/sampleData";
 import { MappingTableView } from "../Views";
 
 export default {
-  title: "Atlasmap|Views",
+  title: "AtlasMap|Views",
   decorators,
 };
 

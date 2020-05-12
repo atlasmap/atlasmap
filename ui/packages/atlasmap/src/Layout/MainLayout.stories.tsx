@@ -3,7 +3,7 @@ import React from "react";
 import { MainLayout } from "./MainLayout";
 
 export default {
-  title: "Atlasmap|Layout/MainLayout",
+  title: "AtlasMap|Layout/MainLayout",
 };
 
 export const example = () => (

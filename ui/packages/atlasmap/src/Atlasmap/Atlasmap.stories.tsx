@@ -55,7 +55,7 @@ const sampleExternalDocument = JSON.stringify(
 );
 
 export default {
-  title: "Atlasmap|Demo",
+  title: "AtlasMap|Demo",
 };
 
 export const wiredToTheBackend = () => (

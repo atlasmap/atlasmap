@@ -3,7 +3,7 @@ import { MainContent } from "./MainContent";
 import { TextContent } from "@patternfly/react-core";
 
 export default {
-  title: "Atlasmap|Layout/MainContent",
+  title: "AtlasMap|Layout/MainContent",
 };
 
 export const example = () => (
