@@ -29,7 +29,7 @@ export interface IFieldDropTargetProps
 
 export const FieldDropTarget = forwardRef<HTMLElement, IFieldDropTargetProps>(
   ({ accept, target, canDrop, as: As = "div", children, ...props }, ref) => {
-    const { setHoveredTarget, hoveredTarget } = useFieldsDnd();
+    const { setHoveredTarget } = useFieldsDnd();
     const [{ isOver, isDroppable, isTarget, field }, dropRef] = useDrop<
       IDragAndDropField,
       IDragAndDropField,
@@ -67,7 +67,7 @@ export const FieldDropTarget = forwardRef<HTMLElement, IFieldDropTargetProps>(
         wasOver.current = isOver;
         wasTarget.current = isTarget;
       }
-    }, [hoveredTarget, isOver, isTarget, setHoveredTarget, target]);
+    }, [isOver, isTarget, setHoveredTarget, target]);
 
     return (
       <As ref={handleRef} {...props}>

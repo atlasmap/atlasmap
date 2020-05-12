@@ -8,7 +8,7 @@ export interface IIDraggedFieldChildrenProps {
   isDragging: boolean;
   currentOffset: XYCoord | null;
   draggedField: IDragAndDropField | null;
-  hoveredTarget: IDragAndDropField | null;
+  getHoveredTarget: () => IDragAndDropField | null;
 }
 
 export interface IDraggedFieldProps {
@@ -18,14 +18,19 @@ export interface IDraggedFieldProps {
 export const DraggedField: FunctionComponent<IDraggedFieldProps> = ({
   children,
 }) => {
-  const { hoveredTarget } = useFieldsDnd();
+  const { getHoveredTarget } = useFieldsDnd();
   const { isDragging, draggedField, currentOffset } = useDragLayer<
-    Omit<IIDraggedFieldChildrenProps, "hoveredTarget">
+    Omit<IIDraggedFieldChildrenProps, "getHoveredTarget">
   >((monitor) => ({
     draggedField: monitor.getItem(),
     currentOffset: monitor.getClientOffset(),
     isDragging: monitor.isDragging(),
   }));
 
-  return children({ isDragging, currentOffset, draggedField, hoveredTarget });
+  return children({
+    isDragging,
+    currentOffset,
+    draggedField,
+    getHoveredTarget,
+  });
 };
