@@ -33,9 +33,9 @@ import {
 import { TraverseFields } from "./TraverseFields";
 
 export interface ITargetsColumnCallbacks {
-  onDeleteDocument: (id: GroupId) => void;
-  onImportDocument: (selectedFile: File) => void;
-  onCustomClassSearch: (isSource: boolean) => void;
+  onDeleteDocument?: (id: GroupId) => void;
+  onImportDocument?: (selectedFile: File) => void;
+  onCustomClassSearch?: (isSource: boolean) => void;
   onSearch: (content: string) => void;
   onDrop: (source: IAtlasmapField, target: IDragAndDropField) => void;
   canDrop: (source: IAtlasmapField, target: IDragAndDropField) => boolean;
@@ -81,15 +81,19 @@ export const TargetsColumn: FunctionComponent<
         title={"Target"}
         onSearch={onSearch}
         actions={[
-          <ImportAction
-            id="Target"
-            onImport={onImportDocument}
-            key={"import"}
-          />,
-          <EnableJavaClassAction
-            onCustomClassSearch={() => onCustomClassSearch(false)}
-            key={"java"}
-          />,
+          onImportDocument && (
+            <ImportAction
+              id="Target"
+              onImport={onImportDocument}
+              key={"import"}
+            />
+          ),
+          onCustomClassSearch && (
+            <EnableJavaClassAction
+              onCustomClassSearch={() => onCustomClassSearch(false)}
+              key={"java"}
+            />
+          ),
         ]}
       />
       <NodeRef id={TARGETS_HEIGHT_BOUNDARY_ID}>
@@ -113,11 +117,13 @@ export const TargetsColumn: FunctionComponent<
                         ) : undefined
                       }
                       actions={[
-                        <DeleteDocumentAction
-                          id={documentId}
-                          onClick={() => onDeleteDocument(t.id)}
-                          key={"delete-documents"}
-                        />,
+                        onDeleteDocument && (
+                          <DeleteDocumentAction
+                            id={documentId}
+                            onClick={() => onDeleteDocument(t.id)}
+                            key={"delete-documents"}
+                          />
+                        ),
                       ]}
                       noPadding={true}
                     >

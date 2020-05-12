@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
 export interface IDocumentProps
   extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
   title?: string;
-  actions?: (ReactElement | null)[];
+  actions?: (ReactElement | null | undefined)[];
   footer?: ReactNode;
   selected?: boolean;
   selectable?: boolean;
