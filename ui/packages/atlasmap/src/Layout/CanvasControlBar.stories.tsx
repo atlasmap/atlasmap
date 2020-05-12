@@ -8,7 +8,7 @@ import { Canvas, CanvasProvider } from "../UI";
 import { CanvasControlBar } from "./CanvasControlBar";
 
 export default {
-  title: "Atlasmap|Layout/CanvasControlBar",
+  title: "AtlasMap|Layout/CanvasControlBar",
 };
 
 export const example = () => {

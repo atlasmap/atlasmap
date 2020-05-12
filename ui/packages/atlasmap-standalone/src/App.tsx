@@ -9,7 +9,7 @@ const App: React.FC = () => {
         <PageHeader
           logo={
             <>
-              <strong>Atlasmap</strong>&nbsp;Data Mapper UI
+              <strong>AtlasMap</strong>&nbsp;Data Mapper UI
             </>
           }
           style={{ minHeight: 40 }}

@@ -5,7 +5,7 @@ import { action } from "@storybook/addon-actions";
 import { MappingDetailsSidebar } from "./MappingDetailsSidebar";
 
 export default {
-  title: "Atlasmap|Layout/MappingDetailsSidebar",
+  title: "AtlasMap|Layout/MappingDetailsSidebar",
 };
 
 export const example = () => (
