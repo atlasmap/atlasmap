@@ -53,10 +53,8 @@ export const MappingsColumn: FunctionComponent<
             </div>
           </NodeRef>
           <DraggedField>
-            {({ draggedField, hoveredTarget }) =>
-              draggedField &&
-              hoveredTarget &&
-              hoveredTarget.type !== "mapping" ? (
+            {({ draggedField, getHoveredTarget }) =>
+              draggedField && getHoveredTarget()?.type !== "mapping" ? (
                 <NodeRef
                   id={["dnd-new-mapping"]}
                   boundaryId={MAPPINGS_HEIGHT_BOUNDARY_ID}
