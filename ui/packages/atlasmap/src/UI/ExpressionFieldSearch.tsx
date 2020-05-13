@@ -72,7 +72,7 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
     // TODO
   }
 
-  function onKeyDown(event: any): void {
+  function onKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
     if ("Enter" === event.key) {
       event.preventDefault();
       if (candidateSrcElement) {
@@ -90,34 +90,21 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
       if (candidateSrcElement) {
         updateCandidate(candidateSrcElement.previousElementSibling);
       }
-    } else if ("Tab" === event.key) {
-      if (!candidateSrcElement && event.srcElement) {
-        candidateSrcElement =
-          event.srcElement.nextElementSibling.firstElementChild;
-        candidateIndex = 0;
-        candidateSrcElement.style.backgroundColor = "lightblue";
-      } else if (
-        candidateSrcElement &&
-        candidateSrcElement.nextElementSibling
-      ) {
-        event.preventDefault();
-        updateCandidate(candidateSrcElement!.nextElementSibling);
-      }
     }
   }
 
-  function onMouseEnter(_event: any): void {
+  function onMouseEnter(_event: React.MouseEvent<HTMLDivElement>): void {
     if (mouseOverTimeOut) {
       clearTimeout(mouseOverTimeOut);
     }
   }
 
-  function onMouseLeave(_event: any): void {
-    // mouseOverTimeOut = setTimeout(() => {
-    clearSearchMode(true);
-    candidateSrcElement = null;
-    candidateIndex = 0;
-    // }, 750);
+  function onMouseLeave(_event: React.MouseEvent<HTMLDivElement>): void {
+    mouseOverTimeOut = setTimeout(() => {
+      clearSearchMode(true);
+      candidateSrcElement = null;
+      candidateIndex = 0;
+    }, 750);
   }
 
   function selectionChanged(

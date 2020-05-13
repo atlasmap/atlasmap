@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useCallback } from "react";
+import { FunctionComponent, useEffect, useCallback, useState } from "react";
 import React, { KeyboardEvent } from "react";
 import { Tooltip, Form, FormGroup } from "@patternfly/react-core";
 import { Subscription, Observable } from "rxjs";
@@ -17,6 +17,7 @@ let trailerID = "";
 let getMappingExpression: () => string;
 let mappingExprInit: () => void;
 let mappingExprObservable: () => Observable<IExpressionUpdatedEvent> | null;
+let tooltipTimeOut: NodeJS.Timeout | null = null;
 
 interface ITextNode {
   uuid: string;
@@ -145,6 +146,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   mappingExpression,
   trailerId,
 }) => {
+  const [tooltipVisible, setTooltipVisible] = useState(false);
   let selectedField: string;
 
   let addFieldToExpression: (
@@ -415,6 +417,23 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     }
   }
 
+  function onMouseEnter(_event: React.MouseEvent<HTMLDivElement>): void {
+    setTooltipVisible(true);
+    tooltipTimeOut = setTimeout(() => {
+      setTooltipVisible(false);
+    }, 5000);
+  }
+
+  function onMouseLeave(_event: React.MouseEvent<HTMLDivElement>): void {
+    if (tooltipVisible) {
+      setTooltipVisible(false);
+    }
+    if (tooltipTimeOut) {
+      clearTimeout(tooltipTimeOut);
+      tooltipTimeOut = null;
+    }
+  }
+
   const initMappingExpression = useCallback(() => {
     initializeMappingExpression();
   }, []);
@@ -447,7 +466,9 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
             content={"Enter text or '@' for source fields menu."}
             enableFlip={true}
             entryDelay={2000}
+            isVisible={tooltipVisible}
             position={"left"}
+            trigger={"manual"}
           >
             <div
               id="expressionMarkup"
@@ -459,6 +480,8 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
               onChange={onChange}
               onKeyDown={onKeyDown}
               onKeyPress={onKeyPress}
+              onMouseEnter={onMouseEnter}
+              onMouseLeave={onMouseLeave}
               onPaste={onPaste}
               ref={(el) => (markup = el)}
               tabIndex={-1}
