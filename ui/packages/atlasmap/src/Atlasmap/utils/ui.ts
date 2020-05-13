@@ -309,7 +309,6 @@ export function mappingExpressionInit() {
     mapping.transition.expression.setConfigModel(initializationService.cfg);
   }
   mapping.transition.expression.updateFieldReference(mapping);
-  initializationService.cfg.mappingService.mappingUpdatedSource.next();
 }
 export function mappingExpressionClearText(
   nodeId?: string,

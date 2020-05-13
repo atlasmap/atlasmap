@@ -7,6 +7,7 @@ import { ExpressionFieldSearch } from "./ExpressionFieldSearch";
 let atIndex = -1;
 let atContainer: Node | undefined;
 let expressionUpdatedSubscription: Subscription | null;
+let lastUpdatedEvent: IExpressionUpdatedEvent | null = null;
 let mappedFieldCandidates: string[][] = [];
 let markup: HTMLDivElement | null = null;
 let searchFilter = "";
@@ -117,18 +118,19 @@ export function initializeMappingExpression() {
   mappingExprInit();
   const mappingExprObs = mappingExprObservable();
   if (mappingExprObs) {
-    if (expressionUpdatedSubscription) {
-      expressionUpdatedSubscription.unsubscribe();
-    }
     expressionUpdatedSubscription = mappingExprObs.subscribe(
       (updatedEvent: IExpressionUpdatedEvent) => {
-        updateExpressionMarkup();
-        restoreCaretPosition(updatedEvent);
+        lastUpdatedEvent = updatedEvent;
       },
     );
   }
   updateExpressionMarkup();
-  moveCaretToEnd();
+  if (!lastUpdatedEvent) {
+    moveCaretToEnd();
+  } else {
+    restoreCaretPosition(lastUpdatedEvent);
+    lastUpdatedEvent = null;
+  }
 }
 
 export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
