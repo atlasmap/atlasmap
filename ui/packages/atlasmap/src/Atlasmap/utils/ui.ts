@@ -1,7 +1,7 @@
 import { ErrorLevel, ErrorInfo, ErrorType } from "@atlasmap/core";
 import ky from "ky";
 import { Observable } from "rxjs";
-import { INotification } from "../../Views/models";
+import { INotification, IAtlasmapNamespace } from "../../Views/models";
 
 import {
   ConfigModel,
@@ -20,6 +20,7 @@ import {
   MappingManagementService,
   MappingModel,
   Multiplicity,
+  NamespaceModel,
   TransitionMode,
   TransitionModel,
   DataMapperUtil,
@@ -96,18 +97,31 @@ export function fromFieldToIFields(field: Field) {
     : fromFieldToIFieldsNode(field);
 }
 
+export function fromNamespaceModelToINamespace(namespace: NamespaceModel) {
+  return {
+    alias: namespace.alias,
+    uri: namespace.uri,
+    locationUri: namespace.locationUri,
+    isTarget: namespace.isTarget,
+  };
+}
+
 export function fromDocumentDefinitionToFieldGroup(
   def: DocumentDefinition,
 ): IAtlasmapDocument | null {
   const fields = def.fields
     .map(fromFieldToIFields)
     .filter((f) => f) as IAtlasmapField[];
+  const namespaces = def.namespaces
+    .map(fromNamespaceModelToINamespace)
+    .filter((n) => n) as IAtlasmapNamespace[];
   return def.visibleInCurrentDocumentSearch && fields.length > 0
     ? {
         id: def.id,
-        fields: fields,
+        fields,
         name: def.name,
         type: def.type,
+        namespaces,
       }
     : null;
 }
