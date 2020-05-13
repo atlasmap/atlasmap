@@ -8,6 +8,7 @@ import {
   FieldDropTarget,
   NodeRef,
   TreeGroup,
+  ITreeGroupProps,
 } from "../../../UI";
 import { AtlasmapDocumentType, IAtlasmapGroup } from "../../../Views";
 
@@ -23,6 +24,7 @@ export interface ITreeGroupAndNodeRefsAndDnDProps {
   level?: number;
   position?: number;
   setSize?: number;
+  children: ITreeGroupProps["children"];
 }
 
 export const TreeGroupAndNodeRefsAndDnD: FunctionComponent<ITreeGroupAndNodeRefsAndDnDProps> = ({
@@ -63,7 +65,7 @@ export const TreeGroupAndNodeRefsAndDnD: FunctionComponent<ITreeGroupAndNodeRefs
               level={level}
               position={position}
               setSize={setSize}
-              expanded={isOver === true}
+              expanded={isOver === true ? true : undefined}
               renderLabel={({ expanded }) => (
                 <DocumentGroup
                   name={group.name}
@@ -74,7 +76,7 @@ export const TreeGroupAndNodeRefsAndDnD: FunctionComponent<ITreeGroupAndNodeRefs
                 />
               )}
             >
-              {() => children}
+              {children}
             </TreeGroup>
           </NodeRef>
         )}
