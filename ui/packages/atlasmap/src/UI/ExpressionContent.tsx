@@ -421,6 +421,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     setTooltipVisible(true);
     tooltipTimeOut = setTimeout(() => {
       setTooltipVisible(false);
+      tooltipTimeOut = null;
     }, 5000);
   }
 
@@ -451,9 +452,14 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     if (expressionUpdatedSubscription) {
       expressionUpdatedSubscription.unsubscribe();
     }
+    if (tooltipTimeOut) {
+      clearTimeout(tooltipTimeOut);
+      tooltipTimeOut = null;
+    }
   };
 
   useEffect(() => {
+    tooltipTimeOut = null;
     initMappingExpression();
     return () => uninitializeMappingExpression();
   }, [initMappingExpression, mappingExpression]);
