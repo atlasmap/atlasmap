@@ -175,7 +175,7 @@ export class ErrorHandlerService {
    * @param value - A form field to validate
    * @param fieldDescription - used in error diagnostic
    */
-  isRequiredFieldValid(value: string, fieldDescription: string): boolean {
+  isRequiredFieldValid(value: string | null, fieldDescription: string): boolean {
     if (value == null || '' === value) {
       const errorMessage: string = fieldDescription + ' is required.';
       this.addError(new ErrorInfo({message: errorMessage, level: ErrorLevel.ERROR, scope: ErrorScope.FORM}));

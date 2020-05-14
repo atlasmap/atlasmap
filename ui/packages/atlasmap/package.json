@@ -117,6 +117,9 @@
     "testEnvironment": "jest-environment-jsdom-sixteen",
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"
-    }
+    },
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/(?!(ky)/)"
+    ]
   }
 }

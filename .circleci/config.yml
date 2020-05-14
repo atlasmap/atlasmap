@@ -16,7 +16,7 @@
 version: 2
 
 common_env: &common_env
-  MAVEN_OPTS: -Xmx1024m
+  MAVEN_OPTS: -Xmx512m
   DOCKER_VERSION: 17.12.1-ce
 
 job_default: &job_defaults
