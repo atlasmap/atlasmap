@@ -201,10 +201,13 @@ export function errorInfoToNotification(e: ErrorInfo): INotification {
     variant: errorLevelToVariant(e.level),
     title:
       e.mapping && e.type !== ErrorType.PREVIEW
-        ? `Invalid mapping "${e.mapping.transition.getPrettyName()}"`
+        ? `${errorTypeToString(
+            e.type,
+          )}: "${e.mapping.transition.getPrettyName()}"`
         : errorTypeToString(e.type),
     description: errorMessageToString(e.message),
     id: e.identifier,
+    mappingId: e.mapping?.uuid,
   };
 }
 
@@ -224,15 +227,6 @@ export function fromMappingModelToImapping(
           .map(fromMappedFieldToIMappingField)
           .filter((f) => f) as IAtlasmapMappedField[],
         mapping: m,
-        notifications: initializationService.cfg.errorService
-          .getErrors()
-          .filter(
-            (e) =>
-              e.mapping?.uuid === m.uuid &&
-              e.level !== "DEBUG" &&
-              e.type !== "PREVIEW",
-          )
-          .map(errorInfoToNotification),
       }
     : null;
 }

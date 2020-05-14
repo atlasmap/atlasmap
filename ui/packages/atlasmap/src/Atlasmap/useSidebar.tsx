@@ -1,6 +1,10 @@
 import { useAtlasmap } from "./AtlasmapProvider";
 import React, { useCallback } from "react";
-import { IMappingDetailsViewProps, MappingDetailsView } from "../Views";
+import {
+  IMappingDetailsViewProps,
+  MappingDetailsView,
+  IAtlasmapField,
+} from "../Views";
 import { DataMapperUtil } from "@atlasmap/core";
 
 export interface IUseSidebarProps {
@@ -13,6 +17,14 @@ export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
     deselectMapping,
     removeMappedFieldFromCurrentMapping,
     fromMappedFieldToIMappingField,
+    flatSources,
+    flatTargets,
+    constants,
+    properties,
+    isFieldAddableToSelection,
+    addToCurrentMapping,
+    notifications,
+    markNotificationRead,
 
     //mapping details
     getMappingActions,
@@ -103,11 +115,26 @@ export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
         }
       };
 
+      const addableSources = [
+        constants?.fields,
+        properties?.fields,
+        flatSources,
+      ]
+        .flatMap((fields) => (fields ? (fields as IAtlasmapField[]) : []))
+        .filter((f) => isFieldAddableToSelection("source", f));
+      const addableTargets = flatTargets.filter((f) =>
+        isFieldAddableToSelection("target", f),
+      );
+
       return (
         <MappingDetailsView
-          notifications={selectedMapping.notifications}
+          notifications={notifications.filter(
+            (n) => n.mappingId === selectedMapping.id && !n.isRead,
+          )}
           sources={sources}
           targets={targets}
+          addableSources={addableSources}
+          addableTargets={addableTargets}
           onClose={deselectMapping}
           onRemoveMapping={onRemoveMapping}
           onRemoveMappedField={handleRemoveMappedField}
@@ -121,6 +148,8 @@ export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
           onRemoveTransformation={handleRemoveTransformation}
           onTransformationChange={handleTransformationChange}
           onTransformationArgumentChange={handleTransformationArgumentChange}
+          onAddFieldToMapping={(_isSource, f) => addToCurrentMapping(f.amField)}
+          onNotificationRead={markNotificationRead}
         />
       );
     }
@@ -129,6 +158,11 @@ export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
     selectedMapping,
     fromMappedFieldToIMappingField,
     getMappingActions,
+    constants,
+    properties,
+    flatSources,
+    flatTargets,
+    notifications,
     deselectMapping,
     onRemoveMapping,
     handleIndexChange,
@@ -136,10 +170,13 @@ export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
     handleRemoveTransformation,
     handleTransformationChange,
     handleTransformationArgumentChange,
+    markNotificationRead,
     getMultiplicityActions,
     getMultiplicityActionDelimiters,
     handleMultiplicityChange,
     handleMultiplicityArgumentChange,
     removeMappedFieldFromCurrentMapping,
+    isFieldAddableToSelection,
+    addToCurrentMapping,
   ]);
 }

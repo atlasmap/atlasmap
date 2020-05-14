@@ -1,19 +1,23 @@
 import React, { FunctionComponent } from "react";
 
+import { Alert, AlertActionCloseButton } from "@patternfly/react-core";
+
 import { MappingDetailsSidebar } from "../Layout";
 import {
+  AddFieldTypeahead,
+  ITransformationArgument,
   MappingField,
   MappingFields,
   MappingTransformation,
-  ITransformationArgument,
 } from "../UI";
-import { IAtlasmapMappedField, INotification } from "./models";
-import { Alert } from "@patternfly/react-core";
+import { IAtlasmapField, IAtlasmapMappedField, INotification } from "./models";
 
 export interface IMappingDetailsViewProps {
   notifications: INotification[];
   sources: Array<IAtlasmapMappedField | null>;
   targets: Array<IAtlasmapMappedField | null>;
+  addableSources: IAtlasmapField[];
+  addableTargets: IAtlasmapField[];
   showSourcesIndex: boolean;
   showTargetsIndex: boolean;
   multiplicity?: {
@@ -52,12 +56,16 @@ export interface IMappingDetailsViewProps {
     index: number,
     currentTransformationName: string,
   ) => void;
+  onAddFieldToMapping: (isSource: boolean, field: IAtlasmapField) => void;
+  onNotificationRead: (id: string) => void;
 }
 
 export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = ({
   notifications,
   sources,
   targets,
+  addableSources,
+  addableTargets,
   showSourcesIndex,
   showTargetsIndex,
   sourceTransformationsOptions,
@@ -69,6 +77,8 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
   onTransformationChange,
   onTransformationArgumentChange,
   onRemoveTransformation,
+  onAddFieldToMapping,
+  onNotificationRead,
   multiplicity,
 }) => {
   const mappingAction = multiplicity && (
@@ -149,16 +159,51 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
   return (
     <MappingDetailsSidebar onDelete={onRemoveMapping} onClose={onClose}>
       {notifications.map((n, idx) => (
-        <Alert key={idx} variant={n.variant} title={n.title} isInline={true}>
-          {n.description}
-        </Alert>
+        <Alert
+          key={idx}
+          variant={n.variant}
+          title={n.description}
+          isInline={true}
+          action={
+            <AlertActionCloseButton
+              title={n.title}
+              variantLabel={`${n.variant} alert`}
+              onClose={() => onNotificationRead(n.id)}
+              data-testid={`dismiss-mapping-notification-${n.id}`}
+            />
+          }
+        />
       ))}
       {mappingAction}
       <MappingFields title={"Sources"}>
         {sources.map(renderSourceMappingField)}
+        {addableSources.length > 0 && (
+          <AddFieldTypeahead
+            ariaLabelTypeAhead={"Select source to add to the mapping"}
+            placeholderText={"Select source to add to the mapping"}
+            fields={addableSources.map((s) => ({
+              label: s.path,
+              group: s.amField.docDef.name,
+              onAdd: () => onAddFieldToMapping(true, s),
+            }))}
+            data-testid={"add-source-to-mapping"}
+          />
+        )}
       </MappingFields>
       <MappingFields title={"Targets"}>
         {targets.map(renderTargetMappingField)}
+        {addableTargets.length > 0 && (
+          <AddFieldTypeahead
+            ariaLabelTypeAhead={"Select target to add to the mapping"}
+            placeholderText={"Select target to add to the mapping"}
+            fields={addableTargets.map((s) => ({
+              label: s.path,
+              group: s.amField.docDef.name,
+              onAdd: () => onAddFieldToMapping(false, s),
+            }))}
+            data-testid={"add-target-to-mapping"}
+          />
+        )}
       </MappingFields>
     </MappingDetailsSidebar>
   );
