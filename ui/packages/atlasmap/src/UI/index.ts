@@ -2,6 +2,7 @@ export * from "./Canvas";
 export * from "./ColumnMapper";
 export * from "./dnd";
 export * from "./Actions";
+export * from "./AddFieldTypeahead";
 export * from "./AutoDropdown";
 export * from "./ConditionalExpressionInput";
 export * from "./DelayedBoolean";

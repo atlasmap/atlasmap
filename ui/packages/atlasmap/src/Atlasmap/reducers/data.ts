@@ -1,3 +1,4 @@
+import { IAtlasmapField } from "./../../Views/models";
 import { IAtlasmapDocument, IAtlasmapMapping } from "../../Views";
 
 export interface DataAction {
@@ -16,6 +17,8 @@ export interface DataActionPayload {
   selectedMapping?: IAtlasmapMapping | null;
   sourcesFilter?: string;
   targetsFilter?: string;
+  flatSources?: IAtlasmapField[];
+  flatTargets?: IAtlasmapField[];
 }
 
 export interface IDataState {
@@ -27,6 +30,8 @@ export interface IDataState {
   constants: IAtlasmapDocument | null;
   mappings: IAtlasmapMapping[];
   selectedMapping: IAtlasmapMapping | null;
+  flatSources: IAtlasmapField[];
+  flatTargets: IAtlasmapField[];
 }
 
 export function initDataState(): IDataState {
@@ -39,6 +44,8 @@ export function initDataState(): IDataState {
     targets: [],
     mappings: [],
     selectedMapping: null,
+    flatSources: [],
+    flatTargets: [],
   };
 }
 

@@ -74,6 +74,7 @@ import {
   createNamespace,
   editNamespace,
   deleteNamespace,
+  fromFieldToIFieldsNode,
 } from "./utils";
 import {
   INotificationsState,
@@ -254,6 +255,29 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
     [],
   );
 
+  const convertSourcesToFlatArray = useCallback(
+    function convertSourcesToFlatArrayCb(): IAtlasmapField[] {
+      return initializationService.cfg.sourceDocs.flatMap((s) =>
+        s.getAllFields().flatMap((f) => {
+          const af = fromFieldToIFieldsNode(f);
+          return af ? [af] : [];
+        }),
+      );
+    },
+    [],
+  );
+  const convertTargetsToFlatArray = useCallback(
+    function convertTargetsToFlatArrayCb() {
+      return initializationService.cfg.targetDocs.flatMap((t) =>
+        t.getAllFields().flatMap((f) => {
+          const af = fromFieldToIFieldsNode(f);
+          return af ? [af] : [];
+        }),
+      );
+    },
+    [],
+  );
+
   const onSubUpdate = useCallback(
     function onSubUpdateCb(caller: string) {
       console.log(
@@ -273,6 +297,18 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
         targets: convertTargets(),
         mappings: convertMappings(),
         selectedMapping: convertSelectedMapping(),
+        flatSources: convertSourcesToFlatArray(),
+        flatTargets: convertTargetsToFlatArray(),
+      });
+      dispatchNotifications({
+        type: "update",
+        payload: {
+          notifications: initializationService.cfg.errorService
+            .getErrors()
+            .reverse()
+            .filter((e) => e.level !== "DEBUG")
+            .map(errorInfoToNotification),
+        },
       });
     },
     [
@@ -281,7 +317,9 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
       convertProperties,
       convertSelectedMapping,
       convertSources,
+      convertSourcesToFlatArray,
       convertTargets,
+      convertTargetsToFlatArray,
     ],
   );
 
@@ -312,22 +350,9 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
         lineRefreshObservable.subscribe(() =>
           onSubUpdate("lineRefreshObservable"),
         ),
-        initializationService.cfg.errorService.subscribe(() => {
-          dispatchNotifications({
-            type: "update",
-            payload: {
-              notifications: initializationService.cfg.errorService
-                .getErrors()
-                .reverse()
-                .filter((e) =>
-                  e.level !== "DEBUG" && data.selectedMapping
-                    ? !e.mapping
-                    : true,
-                )
-                .map(errorInfoToNotification),
-            },
-          });
-        }),
+        initializationService.cfg.errorService.subscribe(() =>
+          onSubUpdate("errorService"),
+        ),
       ];
 
       return () => {
@@ -418,7 +443,7 @@ export function useAtlasmap() {
   const isFieldAddableToSelection = useCallback(
     (documentType: "source" | "target", field: IAtlasmapField) => {
       const { selectedMapping } = context;
-      if (!selectedMapping) {
+      if (!selectedMapping || !field.amField.isTerminal()) {
         return false;
       }
       if (
@@ -431,6 +456,7 @@ export function useAtlasmap() {
         ) {
           return true;
         } else if (
+          !field.isConnected &&
           !selectedMapping.targetFields.find((f) => f.id === field.id)
         ) {
           return true;

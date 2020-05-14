@@ -66,7 +66,6 @@ export interface IAtlasmapMapping {
   sourceFields: Array<IAtlasmapMappedField>;
   targetFields: Array<IAtlasmapMappedField>;
   mapping: MappingModel;
-  notifications: INotification[];
 }
 
 export interface INotification {
@@ -75,4 +74,5 @@ export interface INotification {
   title: string;
   description: string;
   isRead?: boolean;
+  mappingId?: string;
 }

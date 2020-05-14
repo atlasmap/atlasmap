@@ -312,7 +312,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         <FieldDragLayer />
         <AlertGroup isToast>
           {notifications
-            .filter((n) => !n.isRead)
+            .filter((n) => !n.isRead && !n.mappingId)
             .slice(0, 5)
             .map(({ id, variant, title, description }) => (
               <TimedToast
