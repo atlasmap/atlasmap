@@ -44,6 +44,7 @@ export function useAtlasmapDialogs({
     createNamespace,
     editNamespace,
     deleteNamespace,
+    toggleExpressionMode,
   } = useAtlasmap();
 
   const [importDialog, openImportDialog] = useConfirmationDialog({
@@ -175,6 +176,16 @@ export function useAtlasmapDialogs({
     title: "Reset All Mappings and Imports?",
     content:
       "Are you sure you want to reset all mappings and clear all imported documents?",
+  });
+
+  const [
+    toggleExpressionModeDialog,
+    openToggleExpressionModeDialog,
+  ] = useConfirmationDialog({
+    modalContainer,
+    title: "Disable Expression?",
+    content:
+      "If you disable an expression with a source collection, all source fields will be removed from the mapping.  Proceed with expression disable?",
   });
 
   const [deleteDocumentDialog] = useConfirmationDialog({
@@ -357,10 +368,22 @@ export function useAtlasmapDialogs({
     [getCustomClass],
   );
 
+  const onToggleExpressionMode = useCallback(
+    (mappingHasSourceCollection: boolean): void => {
+      if (mappingHasSourceCollection) {
+        openToggleExpressionModeDialog(toggleExpressionMode);
+      } else {
+        toggleExpressionMode();
+      }
+    },
+    [openToggleExpressionModeDialog, toggleExpressionMode],
+  );
+
   const onResetAtlasmap = useCallback(() => openResetDialog(resetAtlasmap), [
     openResetDialog,
     resetAtlasmap,
   ]);
+
   const onImportDocument = useCallback(
     (selectedFile: File, isSource: boolean) => {
       if (documentExists(selectedFile, isSource)) {
@@ -452,6 +475,7 @@ export function useAtlasmapDialogs({
       onCreateNamespace,
       onEditNamespace,
       deleteNamespace,
+      onToggleExpressionMode,
     },
     dialogs: [
       exportDialog,
@@ -469,6 +493,7 @@ export function useAtlasmapDialogs({
       createEnableCustomClassDialog,
       createNamespaceDialog,
       editNamespaceDialog,
+      toggleExpressionModeDialog,
     ],
   };
 }

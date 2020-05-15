@@ -68,8 +68,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     mappingExpressionInsertText,
     mappingExpressionObservable,
     mappingExpressionRemoveField,
+    mappingHasSourceCollection,
     onConditionalMappingExpressionEnabled,
-    onToggleExpressionMode,
     isMappingExpressionEmpty,
     trailerId,
     isFieldAddableToSelection,
@@ -120,7 +120,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         onConditionalMappingExpressionEnabled={
           onConditionalMappingExpressionEnabled
         }
-        onToggleExpressionMode={onToggleExpressionMode}
+        onMappingHasSourceCollection={mappingHasSourceCollection}
+        onToggleExpressionMode={handlers.onToggleExpressionMode}
         trailerId={trailerId}
       />
     </ViewToolbar>

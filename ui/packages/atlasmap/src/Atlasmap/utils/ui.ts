@@ -252,6 +252,10 @@ export function executeFieldSearch(
   );
 }
 
+export function mappingHasSourceCollection(): boolean {
+  return initializationService.cfg.mappingService.willClearOutSourceFieldsOnTogglingExpression();
+}
+
 export function mappingExpressionAddField(
   selectedField: string,
   newTextNode: any,
@@ -370,10 +374,11 @@ export function onConditionalMappingExpressionEnabled() {
   return initializationService.cfg.mappingService.conditionalMappingExpressionEnabled();
 }
 
-export function onToggleExpressionMode() {
+export function toggleExpressionMode() {
   initializationService.cfg.mappingService.toggleExpressionMode();
   initializationService.cfg.mappingService.notifyMappingUpdated();
 }
+
 export function getMappingActions(isSource: boolean) {
   return initializationService.cfg.fieldActionService.getActionsAppliesToField(
     initializationService.cfg.mappings!.activeMapping!,
