@@ -252,10 +252,6 @@ export function executeFieldSearch(
   );
 }
 
-export function mappingHasSourceCollection(): boolean {
-  return initializationService.cfg.mappingService.willClearOutSourceFieldsOnTogglingExpression();
-}
-
 export function mappingExpressionAddField(
   selectedField: string,
   newTextNode: any,

@@ -45,6 +45,7 @@ export function useAtlasmapDialogs({
     editNamespace,
     deleteNamespace,
     toggleExpressionMode,
+    mappingHasSourceCollection,
   } = useAtlasmap();
 
   const [importDialog, openImportDialog] = useConfirmationDialog({
@@ -368,16 +369,17 @@ export function useAtlasmapDialogs({
     [getCustomClass],
   );
 
-  const onToggleExpressionMode = useCallback(
-    (mappingHasSourceCollection: boolean): void => {
-      if (mappingHasSourceCollection) {
-        openToggleExpressionModeDialog(toggleExpressionMode);
-      } else {
-        toggleExpressionMode();
-      }
-    },
-    [openToggleExpressionModeDialog, toggleExpressionMode],
-  );
+  const onToggleExpressionMode = useCallback((): void => {
+    if (mappingHasSourceCollection()) {
+      openToggleExpressionModeDialog(toggleExpressionMode);
+    } else {
+      toggleExpressionMode();
+    }
+  }, [
+    mappingHasSourceCollection,
+    openToggleExpressionModeDialog,
+    toggleExpressionMode,
+  ]);
 
   const onResetAtlasmap = useCallback(() => openResetDialog(resetAtlasmap), [
     openResetDialog,

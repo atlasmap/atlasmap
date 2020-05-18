@@ -18,8 +18,7 @@ const styles = StyleSheet.create({
 export interface IConditionalExpressionInputProps
   extends IExpressionContentProps {
   onConditionalMappingExpressionEnabled: () => boolean;
-  onMappingHasSourceCollection: () => boolean;
-  onToggleExpressionMode: (mappingHasSourceCollection: boolean) => void;
+  onToggleExpressionMode: () => void;
 }
 
 export const ConditionalExpressionInput: FunctionComponent<IConditionalExpressionInputProps> = ({
@@ -33,12 +32,11 @@ export const ConditionalExpressionInput: FunctionComponent<IConditionalExpressio
   mappingExpressionRemoveField,
   mappingExpression,
   onConditionalMappingExpressionEnabled,
-  onMappingHasSourceCollection,
   onToggleExpressionMode,
   trailerId,
 }) => {
   function onToggle() {
-    onToggleExpressionMode(onMappingHasSourceCollection());
+    onToggleExpressionMode();
   }
 
   return (

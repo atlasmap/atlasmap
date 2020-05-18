@@ -56,7 +56,6 @@ import {
   mappingExpressionInsertText,
   mappingExpressionObservable,
   mappingExpressionRemoveField,
-  mappingHasSourceCollection,
   newMapping,
   onConditionalMappingExpressionEnabled,
   onFieldPreviewChange,
@@ -440,6 +439,10 @@ export function useAtlasmap() {
   const isMappingExpressionEmpty =
     initializationService.cfg.mappings?.activeMapping?.transition?.expression
       ?.nodes.length === 0;
+
+  const mappingHasSourceCollection = useCallback(() => {
+    return initializationService.cfg.mappingService.willClearOutSourceFieldsOnTogglingExpression();
+  }, []);
 
   const isFieldAddableToSelection = useCallback(
     (documentType: "source" | "target", field: IAtlasmapField) => {
