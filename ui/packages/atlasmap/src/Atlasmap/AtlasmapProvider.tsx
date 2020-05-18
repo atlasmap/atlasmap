@@ -59,7 +59,7 @@ import {
   newMapping,
   onConditionalMappingExpressionEnabled,
   onFieldPreviewChange,
-  onToggleExpressionMode,
+  toggleExpressionMode,
   removeMapping,
   resetAtlasmap,
   selectMapping,
@@ -440,6 +440,10 @@ export function useAtlasmap() {
     initializationService.cfg.mappings?.activeMapping?.transition?.expression
       ?.nodes.length === 0;
 
+  const mappingHasSourceCollection = useCallback(() => {
+    return initializationService.cfg.mappingService.willClearOutSourceFieldsOnTogglingExpression();
+  }, []);
+
   const isFieldAddableToSelection = useCallback(
     (documentType: "source" | "target", field: IAtlasmapField) => {
       const { selectedMapping } = context;
@@ -507,13 +511,14 @@ export function useAtlasmap() {
     mappingExpressionInsertText,
     mappingExpressionObservable,
     mappingExpressionRemoveField,
+    mappingHasSourceCollection,
     onConditionalMappingExpressionEnabled,
     currentMappingExpression: MappingUtil.getMappingExpressionStr(
       true,
       initializationService.cfg.mappings?.activeMapping,
     ),
     getMappingExpression,
-    onToggleExpressionMode,
+    toggleExpressionMode,
     toggleMappingPreview,
     toggleShowMappedFields,
     toggleShowUnmappedFields,

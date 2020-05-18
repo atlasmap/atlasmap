@@ -370,10 +370,11 @@ export function onConditionalMappingExpressionEnabled() {
   return initializationService.cfg.mappingService.conditionalMappingExpressionEnabled();
 }
 
-export function onToggleExpressionMode() {
+export function toggleExpressionMode() {
   initializationService.cfg.mappingService.toggleExpressionMode();
   initializationService.cfg.mappingService.notifyMappingUpdated();
 }
+
 export function getMappingActions(isSource: boolean) {
   return initializationService.cfg.fieldActionService.getActionsAppliesToField(
     initializationService.cfg.mappings!.activeMapping!,
