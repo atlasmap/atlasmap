@@ -169,6 +169,7 @@ export function useInputTextSelectDialog({
             isDisabled={text1ReadOnly}
             placeholder={textLabel1}
             data-testid={"itsd-value1-text-input"}
+            autoFocus
           />
         </>
       )}
