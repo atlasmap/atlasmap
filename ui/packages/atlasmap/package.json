@@ -65,12 +65,13 @@
     "@storybook/addons": "^5.3.18",
     "@storybook/preset-typescript": "^3.0.0",
     "@storybook/react": "^5.3.18",
-    "@testing-library/jest-dom": "^5.1.1",
-    "@testing-library/react": "^9.4.0",
+    "@testing-library/jest-dom": "^5.7.0",
+    "@testing-library/react": "^10.0.4",
+    "@testing-library/user-event": "^10.3.1",
     "@types/d3-scale": "2.1.1",
     "@types/d3-shape": "1.3.2",
     "@types/he": "^1.1.1",
-    "@types/jest": "25.1.2",
+    "@types/jest": "25.2.3",
     "@types/lodash.clamp": "^4.0.6",
     "@types/react": "16.9.34",
     "@types/react-dom": "16.9.6",
@@ -85,6 +86,7 @@
     "fork-ts-checker-webpack-plugin": "^4.1.3",
     "he": "^1.2.0",
     "husky": "^4.2.3",
+    "jest-environment-jsdom-sixteen": "^1.0.3",
     "ky": "^0.17.0",
     "lodash.clamp": "^4.0.3",
     "react": ">=16",
@@ -104,12 +106,15 @@
     "typescript": "~3.8.3"
   },
   "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/setup.ts"
+    ],
     "moduleNameMapper": {
       "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js",
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/__mocks__/fileMock.js",
       "ky": "ky/umd"
     },
-    "testEnvironment": "jsdom",
+    "testEnvironment": "jest-environment-jsdom-sixteen",
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"
     }

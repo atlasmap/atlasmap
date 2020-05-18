@@ -42,7 +42,7 @@ export const SearchableColumnHeader: FunctionComponent<ISearchableColumnHeaderPr
         <Button
           variant={"plain"}
           isInline={true}
-          aria-label="Search button for search input"
+          aria-label="Toggle search input"
           key={"search"}
           onClick={toggleSearch}
           data-testid={`search-${title}-button`}

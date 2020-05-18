@@ -299,10 +299,26 @@ export const example = () => (
             </NodeRef>
           </Column>
         </Columns>
-        <NodesArc start={"Fiz"} end={"Mapping 1"} />
-        <NodesArc start={"Mapping 1"} end={"Foo"} />
-        <NodesArc start={"Foo bar"} end={"Mapping 2"} />
-        <NodesArc start={"Mapping 2"} end={"Baz"} />
+        <NodesArc
+          start={"Fiz"}
+          end={"Mapping 1"}
+          data-testid={"Fiz:Mapping 1"}
+        />
+        <NodesArc
+          start={"Mapping 1"}
+          end={"Foo"}
+          data-testid={"Mapping 1:Foo"}
+        />
+        <NodesArc
+          start={"Foo bar"}
+          end={"Mapping 2"}
+          data-testid={"Foo bar:Mapping 2"}
+        />
+        <NodesArc
+          start={"Mapping 2"}
+          end={"Baz"}
+          data-testid={"Mapping 2:Baz"}
+        />
       </NodeRefProvider>
     </ColumnMapper>
   </CanvasProvider>
