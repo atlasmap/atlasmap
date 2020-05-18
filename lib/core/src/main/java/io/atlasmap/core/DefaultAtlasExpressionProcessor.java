@@ -24,9 +24,11 @@ import org.slf4j.LoggerFactory;
 import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.ExpressionException;
 import io.atlasmap.spi.AtlasFieldReader;
+import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
+import io.atlasmap.v2.SimpleField;
 
 public class DefaultAtlasExpressionProcessor {
     private static Logger LOG = LoggerFactory.getLogger(DefaultAtlasExpressionProcessor.class);
@@ -70,7 +72,15 @@ public class DefaultAtlasExpressionProcessor {
                     throw new ExpressionException(e);
                 }
             });
-            session.head().setSourceField((Field)answer);
+            if (answer instanceof Field) {
+                session.head().setSourceField((Field)answer);
+            } else {
+                Field from = session.head().getSourceField();
+                SimpleField to = new SimpleField();
+                AtlasModelFactory.copyField(from, to, false);
+                to.setValue(answer);
+                session.head().setSourceField(to);
+            }
         } catch (Exception e) {
             AtlasUtil.addAudit(session, null,
                     String.format("Expression processing error: %s", e.getMessage()),

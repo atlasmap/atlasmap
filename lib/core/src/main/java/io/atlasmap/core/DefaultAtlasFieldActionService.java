@@ -626,8 +626,26 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         }
     }
 
-    public Object buildAndProcessAction(ActionProcessor actionProcessor, Map<String, Object> actionParameters, Object value) {
-        FieldType valueType = (value != null ? getConversionService().fieldTypeFromClass(value.getClass()) : FieldType.NONE);
+    public Object buildAndProcessAction(ActionProcessor actionProcessor, Map<String, Object> actionParameters, List<Object> valueOrField) {
+        List<Object> flattenedValue = new ArrayList<>();
+        for (Object item : valueOrField) {
+            if (item instanceof FieldGroup) {
+                FieldGroup fieldGroup = (FieldGroup)item;
+                List<Object> values = new ArrayList<>();
+                extractNestedListValuesFromFieldGroup(fieldGroup, values); //preserve top level list of parameters and arguments
+                flattenedValue.addAll(values);
+            } else if (item instanceof Field) {
+                flattenedValue.add(((Field)item).getValue());
+            } else {
+                Object o = flattenList(item);
+                if (o instanceof Collection) {
+                    flattenedValue.addAll((Collection<?>)o);
+                } else {
+                    flattenedValue.add(item);
+                }
+            }
+        }
+        FieldType valueType = determineFieldType(flattenedValue);
         try {
             Action action = actionProcessor.getActionClass().newInstance();
             for (Map.Entry<String, Object> property : actionParameters.entrySet()) {
@@ -635,9 +653,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                 action.getClass().getMethod(setter, property.getValue().getClass()).invoke(action, property.getValue());
             }
 
-            value = flattenList(value);
-
-            return processAction(action, actionProcessor, valueType, value);
+            return processAction(action, actionProcessor, valueType, flattenedValue);
         } catch (Exception e) {
             throw new IllegalArgumentException(String.format("The action '%s' cannot be processed", actionProcessor.getActionDetail().getName()), e);
         }

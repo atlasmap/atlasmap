@@ -1,0 +1,53 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "SourceClass",
+      "uri" : "atlas:java?className=io.atlasmap.itests.core.SourceClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "TargetClass",
+      "uri" : "atlas:java?className=io.atlasmap.itests.core.TargetClass",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "expression" : "Average(${SourceClass:/someIntArray[]})",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "docId" : "SourceClass",
+            "index" : 0,
+            "path" : "/someIntArray[]",
+            "fieldType" : "INTEGER",
+            "name" : "someIntArray"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "TargetClass",
+          "path" : "/someDouble",
+          "fieldType" : "DOUBLE",
+          "name" : "someDouble"
+        } ],
+        "id" : "mapping.930637"
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "constants" : {
+      "constant" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "UI.0"
+  }
+}
