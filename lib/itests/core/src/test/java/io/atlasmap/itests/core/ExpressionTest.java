@@ -33,6 +33,7 @@ import io.atlasmap.core.AtlasMappingService;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.itests.core.BaseClass.SomeNestedClass;
 import io.atlasmap.v2.AtlasMapping;
+import junit.framework.Assert;
 
 public class ExpressionTest {
 
@@ -112,4 +113,21 @@ public class ExpressionTest {
         assertEquals("v2", array[1].getSomeField());
     }
 
+    @Test
+    public void testAverage() throws Exception {
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-expression2-average.json");
+        AtlasMapping mapping = mappingService.loadMapping(url);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasSession session = context.createSession();
+        SourceClass source = new SourceClass();
+        source.setSomeIntArray(new int[]{1, 2, 3, 4, 5});
+        session.setSourceDocument("SourceClass", source);
+
+        context.process(session);
+        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        Object output = session.getTargetDocument("TargetClass");
+        assertEquals(TargetClass.class, output.getClass());
+        TargetClass target = TargetClass.class.cast(output);
+        assertEquals((double)3.0, target.getSomeDouble(), 0.01);
+    }
 }

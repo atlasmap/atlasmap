@@ -22,6 +22,10 @@ public abstract class BaseClass {
         private SomeNestedClass[] someArray;
         private SomeNestedClass[] someRenamedArray;
         private SomeNestedClass[] yetAnotherArray;
+        private int someInt = 0;
+        private int[] someIntArray;
+        private double someDouble = 0.0;
+        private double[] someDoubleArray;
 
         public String getSomeField() {
             return someField;
@@ -61,12 +65,48 @@ public abstract class BaseClass {
         public void setYetAnotherArray(SomeNestedClass[] yetAnotherArray) {
             this.yetAnotherArray = yetAnotherArray;
         }
+
+        public int getSomeInt() {
+            return someInt;
+        }
+
+        public void setSomeInt(int someInt) {
+            this.someInt = someInt;
+        }
+
+        public int[] getSomeIntArray() {
+            return someIntArray;
+        }
+
+        public void setSomeIntArray(int[] someIntArray) {
+            this.someIntArray = someIntArray;
+        }
+
+        public double getSomeDouble() {
+            return someDouble;
+        }
+
+        public void setSomeDouble(double someDouble) {
+            this.someDouble = someDouble;
+        }
+
+        public double[] getSomeDoubleArray() {
+            return someDoubleArray;
+        }
+
+        public void setSomeDoubleArray(double[] someDoubleArray) {
+            this.someDoubleArray = someDoubleArray;
+        }
     }
 
     private String someField;
     private SomeNestedClass[] someArray;
     private SomeNestedClass[] someRenamedArray;
     private SomeNestedClass[] yetAnotherArray;
+    private int someInt = 0;
+    private int[] someIntArray;
+    private double someDouble = 0.0;
+    private double[] someDoubleArray;
 
     public String getSomeField() {
         return someField;
@@ -98,5 +138,37 @@ public abstract class BaseClass {
 
     public void setYetAnotherArray(SomeNestedClass[] yetAnotherArray) {
         this.yetAnotherArray = yetAnotherArray;
+    }
+
+    public int getSomeInt() {
+        return someInt;
+    }
+
+    public void setSomeInt(int someInt) {
+        this.someInt = someInt;
+    }
+
+    public int[] getSomeIntArray() {
+        return someIntArray;
+    }
+
+    public void setSomeIntArray(int[] someIntArray) {
+        this.someIntArray = someIntArray;
+    }
+
+    public double getSomeDouble() {
+        return someDouble;
+    }
+
+    public void setSomeDouble(double someDouble) {
+        this.someDouble = someDouble;
+    }
+
+    public double[] getSomeDoubleArray() {
+        return someDoubleArray;
+    }
+
+    public void setSomeDoubleArray(double[] someDoubleArray) {
+        this.someDoubleArray = someDoubleArray;
     }
 }
