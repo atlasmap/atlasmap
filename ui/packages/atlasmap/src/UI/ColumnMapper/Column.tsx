@@ -13,14 +13,15 @@ const styles = StyleSheet.create({
 });
 
 export interface IColumnProps {
-  totalColumns: number;
+  totalColumns?: number;
   visible?: boolean;
 }
 
 export const Column: FunctionComponent<IColumnProps> = ({
-  totalColumns,
+  totalColumns = 1,
   visible = true,
   children,
+  ...props
 }) => {
   const style = useMemo(() => ({ flex: `0 0 ${100 / totalColumns}%` }), [
     totalColumns,
@@ -29,6 +30,7 @@ export const Column: FunctionComponent<IColumnProps> = ({
     <div
       className={css(styles.column, !visible && styles.hidden)}
       style={style}
+      {...props}
     >
       {children}
     </div>
