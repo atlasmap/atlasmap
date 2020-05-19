@@ -86,7 +86,7 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
   const mappingAction = multiplicity && (
     <MappingTransformation
       name={multiplicity.name}
-      mappingExpressionEnabled={mappingExpressionEnabled}
+      disableTransformation={mappingExpressionEnabled}
       transformationsOptions={multiplicity.transformationsOptions}
       transformationsArguments={multiplicity.transformationsArguments}
       onTransformationChange={multiplicity.onChange}
@@ -120,7 +120,7 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
             name={t.name}
             transformationsOptions={sourceTransformationsOptions}
             transformationsArguments={t.arguments}
-            mappingExpressionEnabled={mappingExpressionEnabled}
+            disableTransformation={mappingExpressionEnabled}
             onTransformationChange={(value) =>
               onTransformationChange(isSource, index, t.name, value)
             }
