@@ -8,14 +8,10 @@ import {
 import { DataMapperUtil } from "@atlasmap/core";
 
 export interface IUseSidebarProps {
-  mappingExpressionEnabled: boolean;
   onRemoveMapping: () => void;
 }
 
-export function useSidebar({
-  mappingExpressionEnabled,
-  onRemoveMapping,
-}: IUseSidebarProps) {
+export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
   const {
     selectedMapping,
     deselectMapping,
@@ -29,6 +25,7 @@ export function useSidebar({
     addToCurrentMapping,
     notifications,
     markNotificationRead,
+    mappingExpressionEnabled,
 
     //mapping details
     getMappingActions,

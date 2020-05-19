@@ -290,7 +290,6 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   ]);
 
   const renderSidebar = useSidebar({
-    mappingExpressionEnabled: mappingExpressionEnabled,
     onRemoveMapping: handlers.onDeleteSelectedMapping,
   });
 
