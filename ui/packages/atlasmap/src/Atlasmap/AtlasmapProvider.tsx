@@ -57,7 +57,6 @@ import {
   mappingExpressionObservable,
   mappingExpressionRemoveField,
   newMapping,
-  onConditionalMappingExpressionEnabled,
   onFieldPreviewChange,
   toggleExpressionMode,
   removeMapping,
@@ -512,7 +511,7 @@ export function useAtlasmap() {
     mappingExpressionObservable,
     mappingExpressionRemoveField,
     mappingHasSourceCollection,
-    onConditionalMappingExpressionEnabled,
+    mappingExpressionEnabled: initializationService.cfg.mappingService.conditionalMappingExpressionEnabled(),
     currentMappingExpression: MappingUtil.getMappingExpressionStr(
       true,
       initializationService.cfg.mappings?.activeMapping,

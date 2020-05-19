@@ -8,10 +8,14 @@ import {
 import { DataMapperUtil } from "@atlasmap/core";
 
 export interface IUseSidebarProps {
+  mappingExpressionEnabled: boolean;
   onRemoveMapping: () => void;
 }
 
-export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
+export function useSidebar({
+  mappingExpressionEnabled,
+  onRemoveMapping,
+}: IUseSidebarProps) {
   const {
     selectedMapping,
     deselectMapping,
@@ -140,6 +144,7 @@ export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
           onRemoveMappedField={handleRemoveMappedField}
           showSourcesIndex={showSourcesIndex}
           showTargetsIndex={showTargetsIndex}
+          mappingExpressionEnabled={mappingExpressionEnabled}
           multiplicity={multiplicity}
           sourceTransformationsOptions={sourceTransformationsOptions}
           targetTransformationsOptions={targetTransformationsOptions}
@@ -178,5 +183,6 @@ export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
     removeMappedFieldFromCurrentMapping,
     isFieldAddableToSelection,
     addToCurrentMapping,
+    mappingExpressionEnabled,
   ]);
 }

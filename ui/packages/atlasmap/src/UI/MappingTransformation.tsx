@@ -46,6 +46,7 @@ export interface IMappingTransformationProps {
   name: string;
   transformationsOptions: ITransformationSelectOption[];
   transformationsArguments?: ITransformationArgument[];
+  mappingExpressionEnabled: boolean;
   onTransformationArgumentChange: (name: string, value: string) => void;
   onTransformationChange: (value: string) => void;
   onRemoveTransformation?: () => void;
@@ -56,6 +57,7 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
   name,
   transformationsOptions,
   transformationsArguments = [],
+  mappingExpressionEnabled,
   onTransformationArgumentChange,
   onTransformationChange,
   onRemoveTransformation,
@@ -69,6 +71,7 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
           <FormSelect
             value={name}
             id={id}
+            isDisabled={mappingExpressionEnabled}
             onChange={onTransformationChange}
             data-testid={id}
           >
@@ -96,6 +99,7 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
               <FormSelect
                 value={a.value}
                 id={a.name}
+                isDisabled={mappingExpressionEnabled}
                 onChange={(value) =>
                   onTransformationArgumentChange(a.name, value)
                 }

@@ -30,6 +30,7 @@ export interface IMappingDetailsViewProps {
   sourceTransformationsOptions: { name: string; value: string }[];
   targetTransformationsOptions: { name: string; value: string }[];
   onClose: () => void;
+  mappingExpressionEnabled: boolean;
   onRemoveMapping: () => void;
   onRemoveMappedField: (isSource: boolean, index: number) => void;
   onIndexChange: (
@@ -70,6 +71,7 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
   showTargetsIndex,
   sourceTransformationsOptions,
   onClose,
+  mappingExpressionEnabled,
   onRemoveMapping,
   onRemoveMappedField,
   onIndexChange,
@@ -84,6 +86,7 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
   const mappingAction = multiplicity && (
     <MappingTransformation
       name={multiplicity.name}
+      mappingExpressionEnabled={mappingExpressionEnabled}
       transformationsOptions={multiplicity.transformationsOptions}
       transformationsArguments={multiplicity.transformationsArguments}
       onTransformationChange={multiplicity.onChange}
@@ -117,6 +120,7 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
             name={t.name}
             transformationsOptions={sourceTransformationsOptions}
             transformationsArguments={t.arguments}
+            mappingExpressionEnabled={mappingExpressionEnabled}
             onTransformationChange={(value) =>
               onTransformationChange(isSource, index, t.name, value)
             }

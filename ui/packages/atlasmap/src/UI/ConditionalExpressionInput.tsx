@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 
 export interface IConditionalExpressionInputProps
   extends IExpressionContentProps {
-  onConditionalMappingExpressionEnabled: () => boolean;
+  mappingExpressionEnabled: boolean;
   onToggleExpressionMode: () => void;
 }
 
@@ -31,7 +31,7 @@ export const ConditionalExpressionInput: FunctionComponent<IConditionalExpressio
   mappingExpressionObservable,
   mappingExpressionRemoveField,
   mappingExpression,
-  onConditionalMappingExpressionEnabled,
+  mappingExpressionEnabled,
   onToggleExpressionMode,
   trailerId,
 }) => {
@@ -53,7 +53,7 @@ export const ConditionalExpressionInput: FunctionComponent<IConditionalExpressio
             aria-label="Enable/ Disable conditional mapping expression"
             tabIndex={-1}
             onClick={onToggle}
-            disabled={!onConditionalMappingExpressionEnabled()}
+            disabled={!mappingExpressionEnabled}
             data-testid={"enable-disable-conditional-mapping-expression-button"}
           >
             <i>
@@ -63,7 +63,7 @@ export const ConditionalExpressionInput: FunctionComponent<IConditionalExpressio
         </Tooltip>
       </ToolbarItem>
       <ToolbarItem className={css(styles.toolbarItem)}>
-        {onConditionalMappingExpressionEnabled() && (
+        {mappingExpressionEnabled && (
           <ExpressionContent
             executeFieldSearch={executeFieldSearch}
             mappingExpressionAddField={mappingExpressionAddField}
