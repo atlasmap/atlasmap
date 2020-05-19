@@ -118,6 +118,7 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
                 id={a.name}
                 type="text"
                 name={a.name}
+                isDisabled={disableTransformation}
                 defaultValue={
                   a.value
                 } /* uncontrolled component because the state will be updated slowly after some API call */

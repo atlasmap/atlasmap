@@ -52,7 +52,7 @@ export const example = () => (
     onTransformationArgumentChange={action("onActionArgumentChange")}
     onTransformationChange={action("onActionChange")}
     onRemoveTransformation={action("onRemoveTransformation")}
-    disableTransformation={false}
+    disableTransformation={boolean("Expression not enabled", false)}
   />
 );
 
@@ -64,6 +64,6 @@ export const nonRemovable = () => (
     noPaddings={boolean("Hide paddings", true)}
     onTransformationArgumentChange={action("onActionArgumentChange")}
     onTransformationChange={action("onActionChange")}
-    disableTransformation={false}
+    disableTransformation={boolean("Expression not enabled", false)}
   />
 );
