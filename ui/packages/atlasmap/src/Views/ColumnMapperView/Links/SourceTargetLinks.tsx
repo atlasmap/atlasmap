@@ -7,7 +7,7 @@ import React, {
 
 import { css, StyleSheet } from "@patternfly/react-styles";
 
-import { NodesArc } from "../../../UI";
+import { NodesArc, useToggle } from "../../../UI";
 import { IAtlasmapMapping } from "../../../Views";
 import { SOURCES_FIELD_ID_PREFIX, TARGETS_FIELD_ID_PREFIX } from "../Columns";
 
@@ -28,46 +28,20 @@ export const SourceTargetLinks: FunctionComponent<ISourceTargetLinksProps> = ({
   selectedMappingId,
   onSelectMapping,
 }) => {
-  const links = useMemo(() => {
-    return mappings.reduce<ReactElement[]>((lines, m) => {
-      const handleClick = (event: MouseEvent) => {
-        onSelectMapping(m);
-        event.stopPropagation();
-      };
-
-      const isSelected = m.id === selectedMappingId;
-      const color = isSelected
-        ? "var(--pf-global--active-color--100)"
-        : undefined;
-      const hoverColor = !isSelected
-        ? "var(--pf-global--active-color--400)"
-        : undefined;
-      const mappingLines = m.sourceFields.reduce<ReactElement[]>(
-        (lines, start) => {
-          const linesFromSource = m.targetFields.map((end) => (
-            <NodesArc
-              key={`${start.id}${end.id}`}
-              start={`${SOURCES_FIELD_ID_PREFIX}${start.id}`}
-              end={`${TARGETS_FIELD_ID_PREFIX}${end.id}`}
-              color={color}
-              hoveredColor={hoverColor}
-              onClick={handleClick}
-              className={css(styles.arc)}
-            />
-          ));
-          return [...lines, ...linesFromSource];
-        },
-        [],
-      );
-      return isSelected
-        ? [...lines, ...mappingLines]
-        : [...mappingLines, ...lines];
-    }, []);
-  }, [mappings, onSelectMapping, selectedMappingId]);
+  const sortedMappings = useMemo(
+    () => mappings.sort((a) => (a.id === selectedMappingId ? 1 : -1)),
+    [mappings, selectedMappingId],
+  );
 
   return (
     <>
-      {links}
+      {sortedMappings.map((m) => (
+        <MappingLines
+          mapping={m}
+          onClick={() => onSelectMapping(m)}
+          isSelected={m.id === selectedMappingId}
+        />
+      ))}
 
       <NodesArc
         start={"dnd-start"}
@@ -76,4 +50,51 @@ export const SourceTargetLinks: FunctionComponent<ISourceTargetLinksProps> = ({
       />
     </>
   );
+};
+
+interface IMappingLinesProps {
+  mapping: IAtlasmapMapping;
+  isSelected: boolean;
+  onClick: () => void;
+}
+
+const MappingLines: FunctionComponent<IMappingLinesProps> = ({
+  mapping,
+  isSelected,
+  onClick,
+}) => {
+  const {
+    state: isHovered,
+    toggleOn: toggleHoveredOn,
+    toggleOff: toggleHoveredOff,
+  } = useToggle(false);
+
+  const handleClick = (event: MouseEvent) => {
+    onClick();
+    event.stopPropagation();
+  };
+
+  const color = isSelected ? "var(--pf-global--active-color--100)" : undefined;
+  const hoverColor = !isSelected
+    ? "var(--pf-global--active-color--400)"
+    : undefined;
+  const mappingLines = mapping.sourceFields.reduce<ReactElement[]>(
+    (lines, start) => {
+      const linesFromSource = mapping.targetFields.map((end) => (
+        <NodesArc
+          key={`${start.id}${end.id}`}
+          start={`${SOURCES_FIELD_ID_PREFIX}${start.id}`}
+          end={`${TARGETS_FIELD_ID_PREFIX}${end.id}`}
+          color={isHovered ? hoverColor : color}
+          onClick={handleClick}
+          onMouseEnter={toggleHoveredOn}
+          onMouseLeave={toggleHoveredOff}
+          className={css(styles.arc)}
+        />
+      ));
+      return [...lines, ...linesFromSource];
+    },
+    [],
+  );
+  return <g>{mappingLines}</g>;
 };
