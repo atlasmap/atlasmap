@@ -7,7 +7,7 @@ import { TreeFocusProvider } from "./TreeFocusProvider";
 
 const styles = StyleSheet.create({
   accordion: {
-    padding: "0 1.3rem 0 0.5rem !important",
+    padding: "0 1rem 0 0 !important", // TODO: this padding should be 0 and the right spacing should be given by DocumentGroup
   },
 });
 

@@ -23,26 +23,37 @@ import { AngleDownIcon, AngleRightIcon } from "@patternfly/react-icons";
 import { TruncatedString } from "./TruncatedString";
 
 const styles = StyleSheet.create({
-  card: {},
+  card: {
+    padding: "0 !important",
+  },
   stacked: {
     margin: "1rem 0",
   },
   head: {
-    paddingLeft: "0.5rem !important",
-    paddingRight: "0.5rem !important",
+    padding: "0.5rem 0 !important",
   },
   header: {
     width: "100%",
     overflow: "hidden",
   },
+  actions: {
+    alignSelf: "center",
+  },
   headerButton: {
     maxWidth: "100%",
   },
-  noPadding: {
+  bodyNoPadding: {
     padding: "0 !important",
   },
+  bodyWithPadding: {
+    padding: "0 1rem 1rem !important",
+  },
+  noCardPadding: {},
   hidden: {
     display: "none",
+  },
+  noShadows: {
+    boxShadow: "none !important",
   },
   dropTarget: {
     "&:before": {
@@ -68,6 +79,7 @@ export interface IDocumentProps
   stacked?: boolean;
   scrollIntoView?: boolean;
   noPadding?: boolean;
+  noShadows?: boolean;
   startExpanded?: boolean;
   onSelect?: () => void;
   onDeselect?: () => void;
@@ -90,6 +102,7 @@ export const Document = forwardRef<
       selectable = false,
       scrollIntoView = false,
       noPadding = false,
+      noShadows = false,
       startExpanded = true,
       onSelect,
       onDeselect,
@@ -144,6 +157,7 @@ export const Document = forwardRef<
           isCompact={true}
           className={css(
             styles.card,
+            noShadows && styles.noShadows,
             dropAccepted && !dropTarget && styles.dropAccepted,
             dropTarget && styles.dropTarget,
           )}
@@ -153,7 +167,9 @@ export const Document = forwardRef<
         >
           {(title || actions) && (
             <CardHead className={css(styles.head)}>
-              <CardActions>{actions?.filter((a) => a)}</CardActions>
+              <CardActions className={css(styles.actions)}>
+                {actions?.filter((a) => a)}
+              </CardActions>
               {title && (
                 <CardHeader className={css(styles.header)}>
                   <Button
@@ -176,7 +192,7 @@ export const Document = forwardRef<
           )}
           <CardBody
             className={css(
-              noPadding && styles.noPadding,
+              noPadding ? styles.bodyNoPadding : styles.bodyWithPadding,
               !isExpanded && styles.hidden,
             )}
           >
