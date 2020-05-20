@@ -27,7 +27,6 @@ export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
     markNotificationRead,
 
     //mapping details
-    getMappingActions,
     getMultiplicityActions,
     getMultiplicityActionDelimiters,
     handleIndexChange,
@@ -94,17 +93,6 @@ export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
             ),
         };
       }
-      const sourceTransformations = getMappingActions(true);
-      const sourceTransformationsOptions = sourceTransformations.map((a) => ({
-        name: DataMapperUtil.toDisplayable(a.name),
-        value: a.name,
-      }));
-      const targetTransformations = getMappingActions(false);
-      const targetTransformationsOptions = targetTransformations.map((a) => ({
-        name: DataMapperUtil.toDisplayable(a.name),
-        value: a.name,
-      }));
-
       const handleRemoveMappedField = (isSource: boolean, index: number) => {
         const amField = selectedMapping.mapping.getMappedFieldForIndex(
           "" + (index + 1),
@@ -141,8 +129,6 @@ export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
           showSourcesIndex={showSourcesIndex}
           showTargetsIndex={showTargetsIndex}
           multiplicity={multiplicity}
-          sourceTransformationsOptions={sourceTransformationsOptions}
-          targetTransformationsOptions={targetTransformationsOptions}
           onIndexChange={handleIndexChange}
           onNewTransformation={handleNewTransformation}
           onRemoveTransformation={handleRemoveTransformation}
@@ -157,7 +143,6 @@ export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
   }, [
     selectedMapping,
     fromMappedFieldToIMappingField,
-    getMappingActions,
     constants,
     properties,
     flatSources,

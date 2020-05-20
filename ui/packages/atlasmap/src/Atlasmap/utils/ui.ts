@@ -1,13 +1,15 @@
-import { ErrorLevel, ErrorInfo, ErrorType } from "@atlasmap/core";
 import ky from "ky";
 import { Observable } from "rxjs";
-import { INotification, IAtlasmapNamespace } from "../../Views/models";
 
 import {
   ConfigModel,
+  DataMapperUtil,
   DocumentDefinition,
   DocumentManagementService,
   ErrorHandlerService,
+  ErrorInfo,
+  ErrorLevel,
+  ErrorType,
   ExpressionModel,
   Field,
   FieldAction,
@@ -23,15 +25,17 @@ import {
   NamespaceModel,
   TransitionMode,
   TransitionModel,
-  DataMapperUtil,
 } from "@atlasmap/core";
 
+import { ITransformationArgument, ITransformationSelectOption } from "../../UI";
 import {
   IAtlasmapDocument,
+  IAtlasmapField,
+  IAtlasmapGroup,
   IAtlasmapMappedField,
   IAtlasmapMapping,
-  IAtlasmapGroup,
-  IAtlasmapField,
+  IAtlasmapNamespace,
+  INotification,
 } from "../../Views";
 
 const api = ky.create({ headers: { "ATLASMAP-XSRF-TOKEN": "awesome" } });
@@ -148,11 +152,27 @@ export function fromMappedFieldToIMappingField(
     amField: field.field,
     transformations: field.actions.map((a) => ({
       name: a.name,
-      arguments: a.argumentValues.map((av) => ({
-        label: DataMapperUtil.toDisplayable(av.name),
-        name: av.name,
-        value: av.value,
-      })),
+      options: getMappingActions(field.isSource()).map(
+        (a): ITransformationSelectOption => ({
+          name: DataMapperUtil.toDisplayable(a.name),
+          value: a.name,
+        }),
+      ),
+      arguments: a.definition.arguments.map(
+        (av, idx): ITransformationArgument => ({
+          label: DataMapperUtil.toDisplayable(av.name),
+          name: av.name,
+          value: a.argumentValues[idx].value,
+          options: av.values
+            ? av.values.map(
+                (avv): ITransformationSelectOption => ({
+                  name: avv,
+                  value: avv,
+                }),
+              )
+            : undefined,
+        }),
+      ),
     })),
   };
 }

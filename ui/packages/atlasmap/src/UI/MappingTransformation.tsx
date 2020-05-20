@@ -6,7 +6,7 @@ import {
   FormSelectOption,
   InputGroup,
   TextInput,
-  InputGroupText,
+  FormGroup,
 } from "@patternfly/react-core";
 import { TrashIcon } from "@patternfly/react-icons";
 import { css, StyleSheet } from "@patternfly/react-styles";
@@ -90,8 +90,7 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
       </div>
       {transformationsArguments.map((a, idx) => (
         <div className={css(styles.spaced)} key={idx}>
-          <InputGroup>
-            <InputGroupText>{a.label}</InputGroupText>
+          <FormGroup label={a.label} fieldId={a.name}>
             {a.options ? (
               <FormSelect
                 value={a.value}
@@ -123,7 +122,7 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
                 data-testid={`insert-transformation-parameter-${a.name}-input-field`}
               />
             )}
-          </InputGroup>
+          </FormGroup>
         </div>
       ))}
     </div>

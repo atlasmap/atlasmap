@@ -27,8 +27,6 @@ export interface IMappingDetailsViewProps {
     onChange: (newName: string) => void;
     onArgumentChange: (argumentName: string, argumentValue: string) => void;
   };
-  sourceTransformationsOptions: { name: string; value: string }[];
-  targetTransformationsOptions: { name: string; value: string }[];
   onClose: () => void;
   onRemoveMapping: () => void;
   onRemoveMappedField: (isSource: boolean, index: number) => void;
@@ -68,7 +66,6 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
   addableTargets,
   showSourcesIndex,
   showTargetsIndex,
-  sourceTransformationsOptions,
   onClose,
   onRemoveMapping,
   onRemoveMappedField,
@@ -115,7 +112,7 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
           <MappingTransformation
             key={transformationIndex}
             name={t.name}
-            transformationsOptions={sourceTransformationsOptions}
+            transformationsOptions={t.options}
             transformationsArguments={t.arguments}
             onTransformationChange={(value) =>
               onTransformationChange(isSource, index, t.name, value)
