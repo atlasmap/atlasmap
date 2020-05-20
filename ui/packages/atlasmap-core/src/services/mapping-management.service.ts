@@ -723,6 +723,7 @@ export class MappingManagementService {
       }
     } else {
       mapping.transition.mode = TransitionMode.ONE_TO_ONE;
+      mapping.transition.transitionFieldAction = null;
     }
 
     // Update conditional expression field references if enabled.

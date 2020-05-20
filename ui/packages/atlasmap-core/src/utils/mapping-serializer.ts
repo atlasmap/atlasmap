@@ -94,7 +94,7 @@ export class MappingSerializer {
       }
     } else {
       if (mapping.transition.isOneToManyMode()) {
-        const mappingAction = this.serializeAction(mapping.transition.transitionFieldAction, cfg);
+        const mappingAction = this.serializeAction(mapping.transition.transitionFieldAction!, cfg);
         if (!serializedInputFields[0].actions) {
           serializedInputFields[0].actions = [];
         }
