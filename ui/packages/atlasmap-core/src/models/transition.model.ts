@@ -53,7 +53,7 @@ export class TransitionModel {
   lookupTableName: string | null = null;
   expression!: ExpressionModel;
   enableExpression = false;
-  transitionFieldAction!: FieldAction;
+  transitionFieldAction: FieldAction | null = null;
 
   constructor() {
     TransitionModel.initialize();
