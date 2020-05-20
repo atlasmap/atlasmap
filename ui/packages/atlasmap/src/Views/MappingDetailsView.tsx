@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 
-import { Alert, AlertActionCloseButton } from "@patternfly/react-core";
+import { Alert, AlertActionCloseButton, Badge } from "@patternfly/react-core";
 
 import { MappingDetailsSidebar } from "../Layout";
 import {
@@ -9,6 +9,7 @@ import {
   MappingField,
   MappingFields,
   MappingTransformation,
+  Document,
 } from "../UI";
 import { IAtlasmapField, IAtlasmapMappedField, INotification } from "./models";
 
@@ -81,15 +82,17 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
   multiplicity,
 }) => {
   const mappingAction = multiplicity && (
-    <MappingTransformation
-      name={multiplicity.name}
-      disableTransformation={mappingExpressionEnabled}
-      transformationsOptions={multiplicity.transformationsOptions}
-      transformationsArguments={multiplicity.transformationsArguments}
-      onTransformationChange={multiplicity.onChange}
-      onTransformationArgumentChange={multiplicity.onArgumentChange}
-      noPaddings={true}
-    />
+    <div style={{ margin: "1rem 0" }}>
+      <MappingTransformation
+        name={multiplicity.name}
+        disableTransformation={mappingExpressionEnabled}
+        transformationsOptions={multiplicity.transformationsOptions}
+        transformationsArguments={multiplicity.transformationsArguments}
+        onTransformationChange={multiplicity.onChange}
+        onTransformationArgumentChange={multiplicity.onArgumentChange}
+        noPaddings={true}
+      />
+    </div>
   );
 
   const renderMappingField = (
@@ -157,24 +160,35 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
     index: number,
   ) => renderMappingField(false, showTargetsIndex, f, index);
 
+  const errors = notifications.filter((n) => n.variant === "danger");
+  const warnings = notifications.filter((n) => n.variant === "warning");
+  const messages = notifications.filter(
+    (n) => n.variant !== "warning" && n.variant !== "danger",
+  );
+
   return (
     <MappingDetailsSidebar onDelete={onRemoveMapping} onClose={onClose}>
-      {notifications.map((n, idx) => (
-        <Alert
-          key={idx}
-          variant={n.variant}
-          title={n.description}
-          isInline={true}
-          action={
-            <AlertActionCloseButton
-              title={n.title}
-              variantLabel={`${n.variant} alert`}
-              onClose={() => onNotificationRead(n.id)}
-              data-testid={`dismiss-mapping-notification-${n.id}`}
-            />
-          }
+      {errors.length > 0 && (
+        <NotificationsGroup
+          notifications={errors}
+          title={"Errors"}
+          onNotificationRead={onNotificationRead}
         />
-      ))}
+      )}
+      {warnings.length > 0 && (
+        <NotificationsGroup
+          notifications={warnings}
+          title={"Warnings"}
+          onNotificationRead={onNotificationRead}
+        />
+      )}
+      {messages.length > 0 && (
+        <NotificationsGroup
+          notifications={messages}
+          title={"Messages"}
+          onNotificationRead={onNotificationRead}
+        />
+      )}
       {mappingAction}
       <MappingFields title={"Sources"}>
         {sources.map(renderSourceMappingField)}
@@ -207,5 +221,45 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
         )}
       </MappingFields>
     </MappingDetailsSidebar>
+  );
+};
+
+interface INotificationsGroupProps {
+  title: string;
+  notifications: INotification[];
+  onNotificationRead: (id: string) => void;
+}
+
+const NotificationsGroup: FunctionComponent<INotificationsGroupProps> = ({
+  title,
+  notifications,
+  onNotificationRead,
+}) => {
+  return (
+    <Document
+      title={title}
+      noShadows={true}
+      noPadding={true}
+      actions={[<Badge key={1}>{notifications.length}</Badge>]}
+    >
+      <div style={{ maxHeight: 200, overflow: "auto" }}>
+        {notifications.map((n, idx) => (
+          <Alert
+            key={idx}
+            variant={n.variant}
+            title={n.description}
+            isInline={true}
+            action={
+              <AlertActionCloseButton
+                title={n.title}
+                variantLabel={`${n.variant} alert`}
+                onClose={() => onNotificationRead(n.id)}
+                data-testid={`dismiss-mapping-notification-${n.id}`}
+              />
+            }
+          />
+        ))}
+      </div>
+    </Document>
   );
 };

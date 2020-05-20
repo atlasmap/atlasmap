@@ -24,7 +24,9 @@ export interface ITransformationArgument {
 }
 
 const styles = StyleSheet.create({
-  wrapper: {
+  wrapper: {},
+  wrapperPadded: {
+    padding: "1rem",
     "& + &": {
       borderTop:
         "var(--pf-global--BorderWidth--md) solid var(--pf-global--BorderColor--300)",
@@ -33,9 +35,6 @@ const styles = StyleSheet.create({
       borderBottom:
         "var(--pf-global--BorderWidth--sm) solid var(--pf-global--BorderColor--100)",
     },
-  },
-  wrapperPadded: {
-    padding: "1rem",
   },
   spaced: {
     margin: "var(--pf-global--spacer--form-element) 0",
