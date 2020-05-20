@@ -15,10 +15,11 @@
   "scripts": {
     "start": "tsdx watch",
     "build:module": "tsdx build",
-    "build": "npm-run-all build:module",
-    "test": "tsdx test",
+    "build": "npm-run-all build:module test",
+    "test": "tsdx test --runInBand",
     "test:coverage": "tsdx test --coverage --coverageReporters=text-lcov | coveralls",
-    "lint": "tsdx lint src/react",
+    "lint": "",
+    "lint:disabled": "tsdx lint src test",
     "format": "yarn lint --fix"
   },
   "peerDependencies": {
@@ -72,7 +73,10 @@
     "testEnvironment": "jsdom",
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"
-    }
+    },
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/(?!(ky)/)"
+    ]
   },
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",

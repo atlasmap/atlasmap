@@ -1,2 +1,6 @@
 node
 _netlify
+
+# compiled output
+test-resources/inspected
+test-resources/fieldActions
