@@ -1,5 +1,5 @@
 import { Field, MappingModel } from "@atlasmap/core";
-import { ITransformationArgument } from "../UI";
+import { ITransformationArgument, ITransformationSelectOption } from "../UI";
 import { AlertProps } from "@patternfly/react-core";
 
 export type ElementId = string;
@@ -56,6 +56,7 @@ export interface IAtlasmapDocument {
 export interface IAtlasmapMappedField extends IAtlasmapField {
   transformations: Array<{
     name: string;
+    options: Array<ITransformationSelectOption>;
     arguments: Array<ITransformationArgument>;
   }>;
 }
