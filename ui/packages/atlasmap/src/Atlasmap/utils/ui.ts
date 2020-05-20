@@ -366,9 +366,6 @@ export function onFieldPreviewChange(field: IAtlasmapField, value: string) {
   field.amField.value = value;
   initializationService.cfg.mappingService.notifyMappingUpdated();
 }
-export function onConditionalMappingExpressionEnabled() {
-  return initializationService.cfg.mappingService.conditionalMappingExpressionEnabled();
-}
 
 export function toggleExpressionMode() {
   initializationService.cfg.mappingService.toggleExpressionMode();

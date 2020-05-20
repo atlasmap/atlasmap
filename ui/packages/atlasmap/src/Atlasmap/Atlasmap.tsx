@@ -68,7 +68,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     mappingExpressionInsertText,
     mappingExpressionObservable,
     mappingExpressionRemoveField,
-    onConditionalMappingExpressionEnabled,
+    mappingExpressionEnabled,
     isMappingExpressionEmpty,
     trailerId,
     isFieldAddableToSelection,
@@ -112,13 +112,11 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         mappingExpressionAddField={mappingExpressionAddField}
         mappingExpressionClearText={mappingExpressionClearText}
         isMappingExpressionEmpty={isMappingExpressionEmpty}
+        mappingExpressionEnabled={mappingExpressionEnabled}
         mappingExpressionInit={mappingExpressionInit}
         mappingExpressionInsertText={mappingExpressionInsertText}
         mappingExpressionObservable={mappingExpressionObservable}
         mappingExpressionRemoveField={mappingExpressionRemoveField}
-        onConditionalMappingExpressionEnabled={
-          onConditionalMappingExpressionEnabled
-        }
         onToggleExpressionMode={handlers.onToggleExpressionMode}
         trailerId={trailerId}
       />

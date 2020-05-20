@@ -25,6 +25,7 @@ export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
     addToCurrentMapping,
     notifications,
     markNotificationRead,
+    mappingExpressionEnabled,
 
     //mapping details
     getMappingActions,
@@ -140,6 +141,7 @@ export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
           onRemoveMappedField={handleRemoveMappedField}
           showSourcesIndex={showSourcesIndex}
           showTargetsIndex={showTargetsIndex}
+          mappingExpressionEnabled={mappingExpressionEnabled}
           multiplicity={multiplicity}
           sourceTransformationsOptions={sourceTransformationsOptions}
           targetTransformationsOptions={targetTransformationsOptions}
@@ -178,5 +180,6 @@ export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
     removeMappedFieldFromCurrentMapping,
     isFieldAddableToSelection,
     addToCurrentMapping,
+    mappingExpressionEnabled,
   ]);
 }
