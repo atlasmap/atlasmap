@@ -21,12 +21,27 @@ export enum TransitionMode {
   ONE_TO_MANY = 'ONE_TO_MANY',
   ENUM = 'ENUM',
   MANY_TO_ONE = 'MANY_TO_ONE',
-  FOR_EACH = 'FOR_EACH'
+  FOR_EACH = 'FOR_EACH',
 }
 
 export enum TransitionDelimiter {
-  NONE, AMPERSAND, AT_SIGN, BACKSLASH, COLON, COMMA, DASH, EQUAL, HASH,
-  MULTI_SPACE, PERIOD, PIPE, SEMICOLON, SLASH, SPACE, UNDERSCORE, USER_DEFINED
+  NONE,
+  AMPERSAND,
+  AT_SIGN,
+  BACKSLASH,
+  COLON,
+  COMMA,
+  DASH,
+  EQUAL,
+  HASH,
+  MULTI_SPACE,
+  PERIOD,
+  PIPE,
+  SEMICOLON,
+  SLASH,
+  SPACE,
+  UNDERSCORE,
+  USER_DEFINED,
 }
 
 export class TransitionDelimiterModel {
@@ -36,7 +51,11 @@ export class TransitionDelimiterModel {
   actualDelimiter = '';
 
   constructor(
-    delimiter: TransitionDelimiter, serializedValue: string | null, prettyName: string, actualDelimiter: string) {
+    delimiter: TransitionDelimiter,
+    serializedValue: string | null,
+    prettyName: string,
+    actualDelimiter: string
+  ) {
     this.delimiter = delimiter;
     this.serializedValue = serializedValue;
     this.prettyName = prettyName;
@@ -62,23 +81,142 @@ export class TransitionModel {
   static initialize() {
     if (TransitionModel.delimiterModels.length === 0) {
       const models: TransitionDelimiterModel[] = [];
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.NONE, null, '[None]', ''));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.AMPERSAND, 'Ampersand', 'Ampersand [&]', '\&'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.AT_SIGN, 'AtSign', 'At Sign [@]', '\@'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.BACKSLASH, 'Backslash', 'Backslash [\\]', '\\'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.COLON, 'Colon', 'Colon [:]', '\:'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.COMMA, 'Comma', 'Comma [,]', '\,'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.DASH, 'Dash', 'Dash [-]', '\-'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.EQUAL, 'Equal', 'Equal [=]', '\='));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.HASH, 'Hash', 'Hash [#]', '\#'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.MULTI_SPACE, 'MultiSpace', 'Multi Spaces', '  '));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.PERIOD, 'Period', 'Period [.]', '\.'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.PIPE, 'Pipe', 'Pipe [|]', '\|'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.SEMICOLON, 'Semicolon', 'Semicolon [;]', '\;'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.SLASH, 'Slash', 'Slash [/]', '\/'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.SPACE, 'Space', 'Space [ ]', ' '));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.UNDERSCORE, 'Underscore', 'Underscore [_]', '\_'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.USER_DEFINED, 'User defined', 'User defined', ''));
+      models.push(
+        new TransitionDelimiterModel(
+          TransitionDelimiter.NONE,
+          null,
+          '[None]',
+          ''
+        )
+      );
+      models.push(
+        new TransitionDelimiterModel(
+          TransitionDelimiter.AMPERSAND,
+          'Ampersand',
+          'Ampersand [&]',
+          '&'
+        )
+      );
+      models.push(
+        new TransitionDelimiterModel(
+          TransitionDelimiter.AT_SIGN,
+          'AtSign',
+          'At Sign [@]',
+          '@'
+        )
+      );
+      models.push(
+        new TransitionDelimiterModel(
+          TransitionDelimiter.BACKSLASH,
+          'Backslash',
+          'Backslash [\\]',
+          '\\'
+        )
+      );
+      models.push(
+        new TransitionDelimiterModel(
+          TransitionDelimiter.COLON,
+          'Colon',
+          'Colon [:]',
+          ':'
+        )
+      );
+      models.push(
+        new TransitionDelimiterModel(
+          TransitionDelimiter.COMMA,
+          'Comma',
+          'Comma [,]',
+          ','
+        )
+      );
+      models.push(
+        new TransitionDelimiterModel(
+          TransitionDelimiter.DASH,
+          'Dash',
+          'Dash [-]',
+          '-'
+        )
+      );
+      models.push(
+        new TransitionDelimiterModel(
+          TransitionDelimiter.EQUAL,
+          'Equal',
+          'Equal [=]',
+          '='
+        )
+      );
+      models.push(
+        new TransitionDelimiterModel(
+          TransitionDelimiter.HASH,
+          'Hash',
+          'Hash [#]',
+          '#'
+        )
+      );
+      models.push(
+        new TransitionDelimiterModel(
+          TransitionDelimiter.MULTI_SPACE,
+          'MultiSpace',
+          'Multi Spaces',
+          '  '
+        )
+      );
+      models.push(
+        new TransitionDelimiterModel(
+          TransitionDelimiter.PERIOD,
+          'Period',
+          'Period [.]',
+          '.'
+        )
+      );
+      models.push(
+        new TransitionDelimiterModel(
+          TransitionDelimiter.PIPE,
+          'Pipe',
+          'Pipe [|]',
+          '|'
+        )
+      );
+      models.push(
+        new TransitionDelimiterModel(
+          TransitionDelimiter.SEMICOLON,
+          'Semicolon',
+          'Semicolon [;]',
+          ';'
+        )
+      );
+      models.push(
+        new TransitionDelimiterModel(
+          TransitionDelimiter.SLASH,
+          'Slash',
+          'Slash [/]',
+          '/'
+        )
+      );
+      models.push(
+        new TransitionDelimiterModel(
+          TransitionDelimiter.SPACE,
+          'Space',
+          'Space [ ]',
+          ' '
+        )
+      );
+      models.push(
+        new TransitionDelimiterModel(
+          TransitionDelimiter.UNDERSCORE,
+          'Underscore',
+          'Underscore [_]',
+          '_'
+        )
+      );
+      models.push(
+        new TransitionDelimiterModel(
+          TransitionDelimiter.USER_DEFINED,
+          'User defined',
+          'User defined',
+          ''
+        )
+      );
       TransitionModel.delimiterModels = models;
     }
   }
@@ -112,8 +250,8 @@ export class TransitionModel {
         break;
       }
       default: {
-         actionName = '';
-         break;
+        actionName = '';
+        break;
       }
     }
     return actionName;
@@ -125,9 +263,15 @@ export class TransitionModel {
       transitionFieldActionName = ' (' + this.transitionFieldAction.name + ')';
     }
     if (this.mode === TransitionMode.ONE_TO_MANY) {
-      return TransitionModel.getMappingModeName(this.mode) + transitionFieldActionName;
+      return (
+        TransitionModel.getMappingModeName(this.mode) +
+        transitionFieldActionName
+      );
     } else if (this.mode === TransitionMode.MANY_TO_ONE) {
-      return TransitionModel.getMappingModeName(this.mode) + transitionFieldActionName;
+      return (
+        TransitionModel.getMappingModeName(this.mode) +
+        transitionFieldActionName
+      );
     } else if (this.mode === TransitionMode.ENUM) {
       return 'Enum (table: ' + this.lookupTableName + ')';
     }
@@ -153,5 +297,4 @@ export class TransitionModel {
   isEnumerationMode(): boolean {
     return this.mode === TransitionMode.ENUM;
   }
-
 }

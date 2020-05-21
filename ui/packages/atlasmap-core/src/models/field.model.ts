@@ -32,7 +32,7 @@ export class Field {
   type: string;
   value: string;
   column: number;
-  serviceObject: any = new Object();
+  serviceObject: any = {};
   parentField: Field;
   partOfMapping = false;
   partOfTransformation = false;
@@ -57,10 +57,13 @@ export class Field {
       return false;
     }
     if (field.isTerminal()) {
-      return (field.partOfMapping === false);
+      return field.partOfMapping === false;
     }
     for (const childField of field.children) {
-      if (childField.hasUnmappedChildren || Field.fieldHasUnmappedChild(childField)) {
+      if (
+        childField.hasUnmappedChildren ||
+        Field.fieldHasUnmappedChild(childField)
+      ) {
         return true;
       }
     }
@@ -85,11 +88,11 @@ export class Field {
 
   static getField(fieldPath: string, fields: Field[]): Field {
     // TODO: check this non null operator
-    return fields.find(field => fieldPath === field.path)!;
+    return fields.find((field) => fieldPath === field.path)!;
   }
 
   static alphabetizeFields(fields: Field[]): void {
-    const fieldsByName: { [key: string]: Field; } = {};
+    const fieldsByName: { [key: string]: Field } = {};
     const fieldNames: string[] = [];
     for (const field of fields) {
       // if field is a dupe, discard it
@@ -144,11 +147,11 @@ export class Field {
     if (this.isCollection && !this.isPrimitive) {
       return true;
     }
-    return (this.type === 'COMPLEX');
+    return this.type === 'COMPLEX';
   }
 
   isStringField(): boolean {
-    return (this.type === 'STRING');
+    return this.type === 'STRING';
   }
 
   isTerminal(): boolean {
@@ -158,7 +161,7 @@ export class Field {
     if (this.isCollection && !this.isPrimitive) {
       return false;
     }
-    return (this.type !== 'COMPLEX');
+    return this.type !== 'COMPLEX';
   }
 
   copy(): Field {
@@ -204,7 +207,7 @@ export class Field {
   }
 
   isInCollection(): boolean {
-    return (this.getCollectionParentField() != null);
+    return this.getCollectionParentField() != null;
   }
 
   getCollectionCount(): number {
@@ -220,7 +223,7 @@ export class Field {
   }
 
   isSource(): boolean {
-    return (this.docDef != null) && this.docDef.isSource;
+    return this.docDef != null && this.docDef.isSource;
   }
 
   getCollectionType(): string | null {
@@ -244,15 +247,18 @@ export class Field {
   }
 
   isPropertyOrConstant(): boolean {
-    return (this.docDef == null) ? false : this.docDef.isPropertyOrConstant;
+    return this.docDef == null ? false : this.docDef.isPropertyOrConstant;
   }
 
   isProperty(): boolean {
-    return (this.docDef == null) ? false : this.docDef.type === DocumentType.PROPERTY;
+    return this.docDef == null
+      ? false
+      : this.docDef.type === DocumentType.PROPERTY;
   }
 
   isConstant(): boolean {
-    return (this.docDef == null) ? false : this.docDef.type === DocumentType.CONSTANT;
+    return this.docDef == null
+      ? false
+      : this.docDef.type === DocumentType.CONSTANT;
   }
-
 }

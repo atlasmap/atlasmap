@@ -22,14 +22,13 @@ import atlasMappingTestJson from '../../../../test-resources/mapping/atlasmappin
 import atlasMappingExprPropJson from '../../../../test-resources/mapping/atlasmapping-expr-prop.json';
 
 describe('MappingSerializer', () => {
-
   let cfg: ConfigModel;
   beforeEach(() => {
     cfg = ConfigModel.getConfig();
     cfg.clearDocs();
-    cfg.mappings = new MappingDefinition;
-    cfg.errorService = new ErrorHandlerService;
-    const api = ky.create({ headers: { "ATLASMAP-XSRF-TOKEN": "awesome" } });
+    cfg.mappings = new MappingDefinition();
+    cfg.errorService = new ErrorHandlerService();
+    const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
     cfg.fieldActionService = new FieldActionService(api);
     cfg.fieldActionService.cfg = cfg;
     cfg.logger = log.getLogger('config');
@@ -105,7 +104,8 @@ describe('MappingSerializer', () => {
     contact.name = 'salesforce.Contact';
     contact.isSource = false;
     contact.id = 'salesforce.Contact';
-    contact.uri = 'atlas:java?className=org.apache.camel.salesforce.dto.Contact';
+    contact.uri =
+      'atlas:java?className=org.apache.camel.salesforce.dto.Contact';
     const desc = new Field();
     desc.name = 'Description';
     desc.path = '/Description';
@@ -173,181 +173,240 @@ describe('MappingSerializer', () => {
 
   test('deserialize & serialize mapping definition', (done) => {
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
-    return cfg.fieldActionService.fetchFieldActions().then(() => {
-      const mappingJson = atlasMappingTestJson
-      MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
-      MappingUtil.updateMappingsFromDocuments(cfg);
-      expect(cfg?.mappings?.mappings?.length).toEqual(Object.keys(mappingJson?.AtlasMapping?.mappings?.mapping).length);
+    return cfg.fieldActionService
+      .fetchFieldActions()
+      .then(() => {
+        const mappingJson = atlasMappingTestJson;
+        MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
+        MappingUtil.updateMappingsFromDocuments(cfg);
+        expect(cfg?.mappings?.mappings?.length).toEqual(
+          Object.keys(mappingJson?.AtlasMapping?.mappings?.mapping).length
+        );
 
-      const serialized = MappingSerializer.serializeMappings(cfg);
-      //console.log(JSON.stringify(serialized, null, 2));
-      expect(Object.keys(serialized.AtlasMapping?.mappings?.mapping).length).toEqual(cfg?.mappings?.mappings?.length);
-      done();
-    }).catch((error) => {
-      fail(error);
-    });
+        const serialized = MappingSerializer.serializeMappings(cfg);
+        //console.log(JSON.stringify(serialized, null, 2));
+        expect(
+          Object.keys(serialized.AtlasMapping?.mappings?.mapping).length
+        ).toEqual(cfg?.mappings?.mappings?.length);
+        done();
+      })
+      .catch((error) => {
+        fail(error);
+      });
   });
 
   test('deserialize & serialize conditional expression mapping definitions', (done) => {
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
-    return cfg.fieldActionService.fetchFieldActions().then(() => {
-      cfg.mappings = new MappingDefinition;
-      let fieldMapping = null;
-      const mappingJson = atlasMappingExprPropJson;
-      let expressionIndex = 0;
+    return cfg.fieldActionService
+      .fetchFieldActions()
+      .then(() => {
+        cfg.mappings = new MappingDefinition();
+        let fieldMapping = null;
+        const mappingJson = atlasMappingExprPropJson;
+        let expressionIndex = 0;
 
-      // Find the expression input field group from the raw JSON.
-      for (fieldMapping of mappingJson.AtlasMapping.mappings.mapping) {
-
-        if (fieldMapping.inputFieldGroup) {
-          const firstAction = fieldMapping?.inputFieldGroup?.actions[0];
-          if (firstAction) {
-            if (firstAction['@type'] === 'Expression') {
-              break;
+        // Find the expression input field group from the raw JSON.
+        for (fieldMapping of mappingJson.AtlasMapping.mappings.mapping) {
+          if (fieldMapping.inputFieldGroup) {
+            const firstAction = fieldMapping?.inputFieldGroup?.actions[0];
+            if (firstAction) {
+              if (firstAction['@type'] === 'Expression') {
+                break;
+              }
             }
           }
+          expressionIndex++;
         }
-        expressionIndex++;
-      }
 
-      MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
-      MappingUtil.updateMappingsFromDocuments(cfg);
-      expect(cfg.mappings.mappings.length).toEqual(Object.keys(mappingJson.AtlasMapping?.mappings?.mapping).length);
+        MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
+        MappingUtil.updateMappingsFromDocuments(cfg);
+        expect(cfg.mappings.mappings.length).toEqual(
+          Object.keys(mappingJson.AtlasMapping?.mappings?.mapping).length
+        );
 
-      const mapping = cfg.mappings?.mappings[expressionIndex];
-      expect(mapping).toBeDefined();
+        const mapping = cfg.mappings?.mappings[expressionIndex];
+        expect(mapping).toBeDefined();
 
-      const mfields = mapping.getMappedFields(true);
-      let i = 0;
-      if (!fieldMapping?.inputFieldGroup?.field) {
-        fail();
-      }
-      for (const field of fieldMapping?.inputFieldGroup?.field) {
-
-        // Constants have only a path - no name.
-        if (!field.name) {
-          expect(mfields[i].parsedData?.parsedPath).toEqual(field.path);
-        } else {
-          expect(mfields[i].parsedData?.parsedName).toEqual(field.name);
+        const mfields = mapping.getMappedFields(true);
+        let i = 0;
+        if (!fieldMapping?.inputFieldGroup?.field) {
+          fail();
         }
-        i++;
-      }
-      expect(fieldMapping.inputFieldGroup.field[0].docId).toContain('DOC.Properties');
+        for (const field of fieldMapping?.inputFieldGroup?.field) {
+          // Constants have only a path - no name.
+          if (!field.name) {
+            expect(mfields[i].parsedData?.parsedPath).toEqual(field.path);
+          } else {
+            expect(mfields[i].parsedData?.parsedName).toEqual(field.name);
+          }
+          i++;
+        }
+        expect(fieldMapping.inputFieldGroup.field[0].docId).toContain(
+          'DOC.Properties'
+        );
 
-      const serialized = MappingSerializer.serializeMappings(cfg);
-      //console.log(JSON.stringify(serialized, null, 2));
-      expect(Object.keys(serialized.AtlasMapping?.mappings?.mapping).length).toEqual(cfg.mappings?.mappings?.length);
-      done();
-    }).catch((error) => {
-      fail(error);
-    });
+        const serialized = MappingSerializer.serializeMappings(cfg);
+        //console.log(JSON.stringify(serialized, null, 2));
+        expect(
+          Object.keys(serialized.AtlasMapping?.mappings?.mapping).length
+        ).toEqual(cfg.mappings?.mappings?.length);
+        done();
+      })
+      .catch((error) => {
+        fail(error);
+      });
   });
 
   test('serialize many-to-one action', (done) => {
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
-    return cfg.fieldActionService.fetchFieldActions().then(() => {
-      const mapping = new MappingModel();
-      mapping.transition.mode = TransitionMode.MANY_TO_ONE;
-      const actionDef = cfg.fieldActionService.getActionDefinitionForName('Concatenate', Multiplicity.MANY_TO_ONE)
-      if (!actionDef) {
-        fail('Concatenate action defiition not found');
-      }
-      mapping.transition.transitionFieldAction = FieldAction.create(actionDef);
-      const f = new Field();
-      f.path = '/Text';
-      const docDef = cfg.getDocForIdentifier('twitter4j.Status', true);
-      if (!docDef) {
-        fail('twitter4j.Status document not found');
-      }
-      f.docDef = docDef;
-      mapping.addField(f, true);
-      const json = MappingSerializer.serializeFieldMapping(cfg, mapping, 'm1', true);
-      expect(json.inputField).toBeFalsy();
-      expect(json.inputFieldGroup.field.length).toEqual(1);
-      expect(json.inputFieldGroup.field[0].actions).toBeFalsy();
-      expect(json.inputFieldGroup.actions.length).toEqual(1);
-      expect(json.inputFieldGroup.actions[0]['@type']).toEqual('Concatenate');
-      const f2 = new Field();
-      f2.path = '/User/Name';
-      f2.docDef = f.docDef;
-      mapping.addField(f, true);
-      const json2 = MappingSerializer.serializeFieldMapping(cfg, mapping, 'm1', true);
-      expect(json2.inputField).toBeFalsy();
-      expect(json2.inputFieldGroup.field.length).toEqual(2);
-      expect(json2.inputFieldGroup.field[0].actions).toBeFalsy();
-      expect(json2.inputFieldGroup.actions.length).toEqual(1);
-      expect(json2.inputFieldGroup.actions[0]['@type']).toEqual('Concatenate');
-      done();
-    }).catch((error) => {
-      fail(error);
-    });
+    return cfg.fieldActionService
+      .fetchFieldActions()
+      .then(() => {
+        const mapping = new MappingModel();
+        mapping.transition.mode = TransitionMode.MANY_TO_ONE;
+        const actionDef = cfg.fieldActionService.getActionDefinitionForName(
+          'Concatenate',
+          Multiplicity.MANY_TO_ONE
+        );
+        if (!actionDef) {
+          fail('Concatenate action defiition not found');
+        }
+        mapping.transition.transitionFieldAction = FieldAction.create(
+          actionDef
+        );
+        const f = new Field();
+        f.path = '/Text';
+        const docDef = cfg.getDocForIdentifier('twitter4j.Status', true);
+        if (!docDef) {
+          fail('twitter4j.Status document not found');
+        }
+        f.docDef = docDef;
+        mapping.addField(f, true);
+        const json = MappingSerializer.serializeFieldMapping(
+          cfg,
+          mapping,
+          'm1',
+          true
+        );
+        expect(json.inputField).toBeFalsy();
+        expect(json.inputFieldGroup.field.length).toEqual(1);
+        expect(json.inputFieldGroup.field[0].actions).toBeFalsy();
+        expect(json.inputFieldGroup.actions.length).toEqual(1);
+        expect(json.inputFieldGroup.actions[0]['@type']).toEqual('Concatenate');
+        const f2 = new Field();
+        f2.path = '/User/Name';
+        f2.docDef = f.docDef;
+        mapping.addField(f, true);
+        const json2 = MappingSerializer.serializeFieldMapping(
+          cfg,
+          mapping,
+          'm1',
+          true
+        );
+        expect(json2.inputField).toBeFalsy();
+        expect(json2.inputFieldGroup.field.length).toEqual(2);
+        expect(json2.inputFieldGroup.field[0].actions).toBeFalsy();
+        expect(json2.inputFieldGroup.actions.length).toEqual(1);
+        expect(json2.inputFieldGroup.actions[0]['@type']).toEqual(
+          'Concatenate'
+        );
+        done();
+      })
+      .catch((error) => {
+        fail(error);
+      });
   });
 
   test('serialize one-to-many action', (done) => {
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
-    return cfg.fieldActionService.fetchFieldActions().then(() => {
-      const mapping = new MappingModel();
-      mapping.transition.mode = TransitionMode.ONE_TO_MANY;
-      const actionDef = cfg.fieldActionService.getActionDefinitionForName('Split', Multiplicity.ONE_TO_MANY)
-      if (!actionDef) {
-        fail('Split action definition not found');
-      }
-      mapping.transition.transitionFieldAction = FieldAction.create(actionDef);
-      const f = new Field();
-      f.path = '/Text';
-      const docDef = cfg.getDocForIdentifier('twitter4j.Status', true);
-      if (!docDef) {
-        fail('twitter4j.Status document definition not found');
-      }
-      f.docDef = docDef;
-      mapping.addField(f, true);
-      const json = MappingSerializer.serializeFieldMapping(cfg, mapping, 'm1', true);
-      expect(json.inputField[0].actions.length).toEqual(1);
-      expect(json.inputField[0].actions[0]['@type']).toEqual('Split');
-      done();
-    }).catch((error) => {
-      fail(error);
-      done();
-    });
+    return cfg.fieldActionService
+      .fetchFieldActions()
+      .then(() => {
+        const mapping = new MappingModel();
+        mapping.transition.mode = TransitionMode.ONE_TO_MANY;
+        const actionDef = cfg.fieldActionService.getActionDefinitionForName(
+          'Split',
+          Multiplicity.ONE_TO_MANY
+        );
+        if (!actionDef) {
+          fail('Split action definition not found');
+        }
+        mapping.transition.transitionFieldAction = FieldAction.create(
+          actionDef
+        );
+        const f = new Field();
+        f.path = '/Text';
+        const docDef = cfg.getDocForIdentifier('twitter4j.Status', true);
+        if (!docDef) {
+          fail('twitter4j.Status document definition not found');
+        }
+        f.docDef = docDef;
+        mapping.addField(f, true);
+        const json = MappingSerializer.serializeFieldMapping(
+          cfg,
+          mapping,
+          'm1',
+          true
+        );
+        expect(json.inputField[0].actions.length).toEqual(1);
+        expect(json.inputField[0].actions[0]['@type']).toEqual('Split');
+        done();
+      })
+      .catch((error) => {
+        fail(error);
+        done();
+      });
   });
 
   test('serialize expression action', (done) => {
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
-    return cfg.fieldActionService.fetchFieldActions().then(() => {
-      const mapping = new MappingModel();
-      mapping.transition.mode = TransitionMode.ONE_TO_ONE;
-      mapping.transition.enableExpression = true;
-      mapping.transition.expression = new ExpressionModel(mapping, cfg);
-      mapping.transition.expression.insertText('{0}');
-      const f = new Field();
-      f.path = '/Text';
-      const docDef = cfg.getDocForIdentifier('twitter4j.Status', true);
-      if (!docDef) {
-        fail('twitter4j.Status document definition not found');
-      }
-      f.docDef = docDef;
-      mapping.addField(f, true);
-      const json = MappingSerializer.serializeFieldMapping(cfg, mapping, 'm1', true);
-      expect(json.inputField[0].actions).toBeUndefined();
-      expect(json.expression).toBeDefined();
-      expect(json.expression).toEqual('{0}');
-      const f2 = new Field();
-      f2.path = '/User/Name';
-      f2.docDef = f.docDef;
-      mapping.addField(f2, true);
-      mapping.transition.mode = TransitionMode.MANY_TO_ONE;
-      mapping.transition.expression = new ExpressionModel(mapping, cfg);
-      mapping.transition.expression.insertText('{0} + {1}');
-      const json2 = MappingSerializer.serializeFieldMapping(cfg, mapping, 'm1', true);
-      expect(json2.inputField).toBeFalsy();
-      expect(json2.inputFieldGroup.field.length).toEqual(2);
-      expect(json2.inputFieldGroup.field[0].actions).toBeFalsy();
-      expect(json2.expression).toBeDefined();
-      expect(json2.expression).toEqual('{0} + {1}');
-      done();
-    }).catch((error) => {
-      fail(error);
-    });
+    return cfg.fieldActionService
+      .fetchFieldActions()
+      .then(() => {
+        const mapping = new MappingModel();
+        mapping.transition.mode = TransitionMode.ONE_TO_ONE;
+        mapping.transition.enableExpression = true;
+        mapping.transition.expression = new ExpressionModel(mapping, cfg);
+        mapping.transition.expression.insertText('{0}');
+        const f = new Field();
+        f.path = '/Text';
+        const docDef = cfg.getDocForIdentifier('twitter4j.Status', true);
+        if (!docDef) {
+          fail('twitter4j.Status document definition not found');
+        }
+        f.docDef = docDef;
+        mapping.addField(f, true);
+        const json = MappingSerializer.serializeFieldMapping(
+          cfg,
+          mapping,
+          'm1',
+          true
+        );
+        expect(json.inputField[0].actions).toBeUndefined();
+        expect(json.expression).toBeDefined();
+        expect(json.expression).toEqual('{0}');
+        const f2 = new Field();
+        f2.path = '/User/Name';
+        f2.docDef = f.docDef;
+        mapping.addField(f2, true);
+        mapping.transition.mode = TransitionMode.MANY_TO_ONE;
+        mapping.transition.expression = new ExpressionModel(mapping, cfg);
+        mapping.transition.expression.insertText('{0} + {1}');
+        const json2 = MappingSerializer.serializeFieldMapping(
+          cfg,
+          mapping,
+          'm1',
+          true
+        );
+        expect(json2.inputField).toBeFalsy();
+        expect(json2.inputFieldGroup.field.length).toEqual(2);
+        expect(json2.inputFieldGroup.field[0].actions).toBeFalsy();
+        expect(json2.expression).toBeDefined();
+        expect(json2.expression).toEqual('{0} + {1}');
+        done();
+      })
+      .catch((error) => {
+        fail(error);
+      });
   });
-
 });

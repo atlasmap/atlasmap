@@ -4,17 +4,19 @@ import ky from 'ky/umd';
 import log from 'loglevel';
 
 import { FieldActionService } from '../../src/services/field-action.service';
-import { Multiplicity, FieldActionDefinition } from '../../src/models/field-action.model';
+import {
+  Multiplicity,
+  FieldActionDefinition,
+} from '../../src/models/field-action.model';
 import { MappingModel } from '../../src/models/mapping.model';
 import { Field } from '../../src/models/field.model';
 
 import atlasmapFieldActionJson from '../../../../test-resources/fieldActions/atlasmap-field-action.json';
 
 describe('FieldActionService', () => {
-
   let service: FieldActionService;
   beforeEach(() => {
-    const api = ky.create({ headers: { "ATLASMAP-XSRF-TOKEN": "awesome" } });
+    const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
     service = new FieldActionService(api);
     service.cfg.logger = log.getLogger('copnfig');
   });
@@ -53,7 +55,6 @@ describe('FieldActionService', () => {
       done();
     });
   });
-
 });
 
 describe('FieldActionService.appliesToField()', () => {
@@ -72,13 +73,15 @@ describe('FieldActionService.appliesToField()', () => {
     mapping.targetFields.splice(0);
     target = new Field();
     mapping.addField(target, false);
-    const api = ky.create({ headers: { "ATLASMAP-XSRF-TOKEN": "awesome" } });
+    const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
     service = new FieldActionService(api);
     service.cfg.logger = log.getLogger('copnfig');
   });
 
   test('return false if FieldMappingPair is null', () => {
-    expect(service.appliesToField(action, new MappingModel, false)).toBe(false);
+    expect(service.appliesToField(action, new MappingModel(), false)).toBe(
+      false
+    );
   });
 
   test('should return false if source or target is null', () => {
@@ -139,5 +142,4 @@ describe('FieldActionService.appliesToField()', () => {
     action.sourceType = 'STRING';
     expect(service.appliesToField(action, mapping, false)).toBe(false);
   });
-
 });

@@ -28,8 +28,8 @@ export class MappingDefinition {
   templateText: string | null = null;
 
   private tables: LookupTable[] = [];
-  private tablesBySourceTargetKey: { [key: string]: LookupTable; } = {};
-  private tablesByName: { [key: string]: LookupTable; } = {};
+  private tablesBySourceTargetKey: { [key: string]: LookupTable } = {};
+  private tablesByName: { [key: string]: LookupTable } = {};
 
   constructor() {
     // Mapping definition ID must be 0 until https://github.com/atlasmap/atlasmap/issues/1577
@@ -38,7 +38,7 @@ export class MappingDefinition {
   }
 
   templateExists(): boolean {
-    return ((this.templateText != null) && (this.templateText !== ''));
+    return this.templateText != null && this.templateText !== '';
   }
 
   addTable(table: LookupTable): void {
@@ -51,7 +51,10 @@ export class MappingDefinition {
     return this.tablesByName[name];
   }
 
-  getTableBySourceTarget(sourceIdentifier: string, targetIdentifier: string): LookupTable {
+  getTableBySourceTarget(
+    sourceIdentifier: string,
+    targetIdentifier: string
+  ): LookupTable {
     const key: string = sourceIdentifier + ':' + targetIdentifier;
     return this.tablesBySourceTargetKey[key];
   }
@@ -109,5 +112,4 @@ export class MappingDefinition {
   removeMapping(m: MappingModel): boolean {
     return DataMapperUtil.removeItemFromArray(m, this.mappings);
   }
-
 }
