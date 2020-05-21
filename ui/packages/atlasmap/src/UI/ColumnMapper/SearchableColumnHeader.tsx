@@ -46,6 +46,11 @@ export const SearchableColumnHeader: FunctionComponent<ISearchableColumnHeaderPr
           key={"search"}
           onClick={toggleSearch}
           data-testid={`search-${title}-button`}
+          style={{
+            color: showSearch
+              ? "var(--pf-global--primary-color--100)"
+              : undefined,
+          }}
         >
           <SearchIcon />
         </Button>,
