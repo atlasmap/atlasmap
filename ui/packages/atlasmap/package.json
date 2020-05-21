@@ -17,8 +17,8 @@
     "build:module": "tsdx build",
     "build:storybook": "build-storybook --quiet",
     "build": "npm-run-all lint test build:module",
-    "test": "tsdx test",
-    "test:coverage": "tsdx test --coverage --coverageReporters=text-lcov | coveralls",
+    "test": "tsdx test --runInBand",
+    "test:coverage": "tsdx test --coverage --runInBand",
     "lint": "tsdx lint src test",
     "format": "yarn lint --fix",
     "storybook": "start-storybook -p 6006"
