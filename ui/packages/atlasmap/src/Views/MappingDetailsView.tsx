@@ -82,17 +82,14 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
   multiplicity,
 }) => {
   const mappingAction = multiplicity && (
-    <div style={{ margin: "1rem 0" }}>
-      <MappingTransformation
-        name={multiplicity.name}
-        disableTransformation={mappingExpressionEnabled}
-        transformationsOptions={multiplicity.transformationsOptions}
-        transformationsArguments={multiplicity.transformationsArguments}
-        onTransformationChange={multiplicity.onChange}
-        onTransformationArgumentChange={multiplicity.onArgumentChange}
-        noPaddings={true}
-      />
-    </div>
+    <MappingTransformation
+      name={multiplicity.name}
+      disableTransformation={mappingExpressionEnabled}
+      transformationsOptions={multiplicity.transformationsOptions}
+      transformationsArguments={multiplicity.transformationsArguments}
+      onTransformationChange={multiplicity.onChange}
+      onTransformationArgumentChange={multiplicity.onArgumentChange}
+    />
   );
 
   const renderMappingField = (
@@ -114,30 +111,32 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
         index={index + 1}
         canShowIndex={canShowIndex}
       >
-        {f.transformations.map((t, transformationIndex) => (
-          <MappingTransformation
-            key={transformationIndex}
-            name={t.name}
-            transformationsOptions={t.options}
-            transformationsArguments={t.arguments}
-            disableTransformation={mappingExpressionEnabled}
-            onTransformationChange={(value) =>
-              onTransformationChange(isSource, index, t.name, value)
-            }
-            onTransformationArgumentChange={(name, value) =>
-              onTransformationArgumentChange(
-                isSource,
-                index,
-                t.name,
-                name,
-                value,
-              )
-            }
-            onRemoveTransformation={() =>
-              onRemoveTransformation(isSource, index, t.name)
-            }
-          />
-        ))}
+        <div className={"pf-c-form"}>
+          {f.transformations.map((t, transformationIndex) => (
+            <MappingTransformation
+              key={transformationIndex}
+              name={t.name}
+              transformationsOptions={t.options}
+              transformationsArguments={t.arguments}
+              disableTransformation={mappingExpressionEnabled}
+              onTransformationChange={(value) =>
+                onTransformationChange(isSource, index, t.name, value)
+              }
+              onTransformationArgumentChange={(name, value) =>
+                onTransformationArgumentChange(
+                  isSource,
+                  index,
+                  t.name,
+                  name,
+                  value,
+                )
+              }
+              onRemoveTransformation={() =>
+                onRemoveTransformation(isSource, index, t.name)
+              }
+            />
+          ))}
+        </div>
       </MappingField>
     ) : (
       <MappingField
@@ -189,37 +188,39 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
           onNotificationRead={onNotificationRead}
         />
       )}
-      {mappingAction}
-      <MappingFields title={"Sources"}>
-        {sources.map(renderSourceMappingField)}
-        {addableSources.length > 0 && (
-          <AddFieldTypeahead
-            ariaLabelTypeAhead={"Select source to add to the mapping"}
-            placeholderText={"Select source to add to the mapping"}
-            fields={addableSources.map((s) => ({
-              label: s.path,
-              group: s.amField.docDef.name,
-              onAdd: () => onAddFieldToMapping(true, s),
-            }))}
-            data-testid={"add-source-to-mapping"}
-          />
-        )}
-      </MappingFields>
-      <MappingFields title={"Targets"}>
-        {targets.map(renderTargetMappingField)}
-        {addableTargets.length > 0 && (
-          <AddFieldTypeahead
-            ariaLabelTypeAhead={"Select target to add to the mapping"}
-            placeholderText={"Select target to add to the mapping"}
-            fields={addableTargets.map((s) => ({
-              label: s.path,
-              group: s.amField.docDef.name,
-              onAdd: () => onAddFieldToMapping(false, s),
-            }))}
-            data-testid={"add-target-to-mapping"}
-          />
-        )}
-      </MappingFields>
+      <div className={"pf-c-form"}>
+        {mappingAction}
+        <MappingFields title={"Sources"}>
+          {sources.map(renderSourceMappingField)}
+          {addableSources.length > 0 && (
+            <AddFieldTypeahead
+              ariaLabelTypeAhead={"Select source to add to the mapping"}
+              placeholderText={"Select source to add to the mapping"}
+              fields={addableSources.map((s) => ({
+                label: s.path,
+                group: s.amField.docDef.name,
+                onAdd: () => onAddFieldToMapping(true, s),
+              }))}
+              data-testid={"add-source-to-mapping"}
+            />
+          )}
+        </MappingFields>
+        <MappingFields title={"Targets"}>
+          {targets.map(renderTargetMappingField)}
+          {addableTargets.length > 0 && (
+            <AddFieldTypeahead
+              ariaLabelTypeAhead={"Select target to add to the mapping"}
+              placeholderText={"Select target to add to the mapping"}
+              fields={addableTargets.map((s) => ({
+                label: s.path,
+                group: s.amField.docDef.name,
+                onAdd: () => onAddFieldToMapping(false, s),
+              }))}
+              data-testid={"add-target-to-mapping"}
+            />
+          )}
+        </MappingFields>
+      </div>
     </MappingDetailsSidebar>
   );
 };
