@@ -17,7 +17,7 @@
     "build:module": "tsdx build",
     "build": "npm-run-all build:module test",
     "test": "tsdx test --runInBand",
-    "test:coverage": "tsdx test --coverage --coverageReporters=text-lcov | coveralls",
+    "test:coverage": "tsdx test --coverage --runInBand",
     "lint": "tsdx lint src test",
     "format": "yarn lint --fix"
   },

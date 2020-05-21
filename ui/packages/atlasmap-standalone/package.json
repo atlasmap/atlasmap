@@ -35,7 +35,8 @@
     "start": "react-scripts start",
     "build:module": "react-scripts build",
     "build": "npm-run-all build:module test",
-    "test": "react-scripts test --watchAll=false",
+    "test": "react-scripts test --watchAll=false --runInBand",
+    "test:coverage": "react-scripts test --watchAll=false --coverage --runInBand",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
