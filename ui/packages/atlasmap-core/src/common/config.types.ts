@@ -23,26 +23,26 @@ export enum DocumentType {
   CORE = 'Core',
   CSV = 'CSV',
   CONSTANT = 'Constants',
-  PROPERTY = 'Property'
+  PROPERTY = 'Property',
 }
 
 export enum InspectionType {
   JAVA_CLASS = 'JAVA_CLASS',
   SCHEMA = 'SCHEMA',
   INSTANCE = 'INSTANCE',
-  UNKNOWN = 'UNKNOWN'
+  UNKNOWN = 'UNKNOWN',
 }
 
 export const enum FieldMode {
   CREATE,
-  EDIT
+  EDIT,
 }
 
 export enum CollectionType {
   ARRAY = 'ARRAY',
   LIST = 'LIST',
   MAP = 'MAP',
-  NONE = 'NONE'
+  NONE = 'NONE',
 }
 
 export const collectionTypes = [
@@ -50,7 +50,7 @@ export const collectionTypes = [
   [CollectionType[CollectionType.LIST], 'List'],
   [CollectionType[CollectionType.MAP], 'Map'],
   [CollectionType[CollectionType.NONE], 'None'],
-]
+];
 
 export const constantTypes = [
   ['BOOLEAN', 'Boolean'],
@@ -76,7 +76,7 @@ export const constantTypes = [
   ['UNSIGNED_INTEGER', 'Unsigned Integer'],
   ['UNSIGNED_LONG', 'Unsigned Long'],
   ['UNSIGNED_SHORT', 'Unsigned Short'],
-]
+];
 
 export const propertyTypes = [
   ['ANY', 'Any'],
@@ -103,4 +103,4 @@ export const propertyTypes = [
   ['UNSIGNED_INTEGER', 'Unsigned Integer'],
   ['UNSIGNED_LONG', 'Unsigned Long'],
   ['UNSIGNED_SHORT', 'Unsigned Short'],
-]
+];

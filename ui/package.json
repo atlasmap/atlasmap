@@ -15,7 +15,6 @@
     "build": "lerna run --stream build",
     "build:module": "lerna run --stream build:module",
     "build:storybook": "lerna run --stream build:storybook",
-    "build:module": "lerna run --stream build:module",
     "lint": "lerna run --stream lint",
     "test": "lerna run --stream test",
     "test:coverage": "lerna run --stream test:coverage"

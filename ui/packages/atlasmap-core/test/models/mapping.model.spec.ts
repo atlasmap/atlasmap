@@ -3,11 +3,9 @@
 import { MappingModel } from '../../src/models/mapping.model';
 
 describe('MappingModel', () => {
-
   test('initialize', () => {
-    const mapping = new MappingModel;
-    expect(mapping.uuid).toContain('mapping.')
+    const mapping = new MappingModel();
+    expect(mapping.uuid).toContain('mapping.');
     expect(mapping.cfg);
   });
-
 });

@@ -14,13 +14,19 @@
     limitations under the License.
 */
 import log from 'loglevel';
-log.setDefaultLevel(log.levels.WARN);
 import { inflate } from 'pako';
 import { Subject, Observable } from 'rxjs';
 
-import { DocumentType, InspectionType, CollectionType } from '../common/config.types';
+import {
+  DocumentType,
+  InspectionType,
+  CollectionType,
+} from '../common/config.types';
 import { DataMapperUtil } from '../common/data-mapper-util';
-import { DocumentInitializationModel, ConfigModel } from '../models/config.model';
+import {
+  DocumentInitializationModel,
+  ConfigModel,
+} from '../models/config.model';
 import { DocumentDefinition } from '../models/document-definition.model';
 import { MappingDefinition } from '../models/mapping-definition.model';
 
@@ -32,23 +38,34 @@ import { FileManagementService } from './file-management.service';
 import { LookupTableUtil } from '../utils/lookup-table-util';
 import { MappingSerializer } from '../utils/mapping-serializer';
 import { MappingUtil } from '../utils/mapping-util';
-import { ErrorScope, ErrorType, ErrorInfo, ErrorLevel } from '../models/error.model';
+import {
+  ErrorScope,
+  ErrorType,
+  ErrorInfo,
+  ErrorLevel,
+} from '../models/error.model';
+log.setDefaultLevel(log.levels.WARN);
 
 export class InitializationService {
   cfg: ConfigModel = ConfigModel.getConfig();
 
   systemInitializedSource = new Subject<void>();
-  systemInitialized$: Observable<void> = this.systemInitializedSource.asObservable();
+  systemInitialized$: Observable<
+    void
+  > = this.systemInitializedSource.asObservable();
 
   initializationStatusChangedSource = new Subject<void>();
-  initializationStatusChanged$: Observable<void> = this.initializationStatusChangedSource.asObservable();
+  initializationStatusChanged$: Observable<
+    void
+  > = this.initializationStatusChangedSource.asObservable();
 
   constructor(
     private documentService: DocumentManagementService,
     private mappingService: MappingManagementService,
     private errorService: ErrorHandlerService,
     private fieldActionService: FieldActionService,
-    private fileService: FileManagementService) {
+    private fileService: FileManagementService
+  ) {
     this.resetConfig();
 
     this.cfg.documentService.initialize();
@@ -79,21 +96,39 @@ export class InitializationService {
    * @param inspectionType
    * @param isSource
    */
-  async initializeUserDoc(docBody: any, docName: string, docType: DocumentType, inspectionType: InspectionType, isSource: boolean) {
+  async initializeUserDoc(
+    docBody: any,
+    docName: string,
+    docType: DocumentType,
+    inspectionType: InspectionType,
+    isSource: boolean
+  ) {
     let docdef: DocumentDefinition;
-    const javaArchive = (docType === DocumentType.JAVA_ARCHIVE);
+    const javaArchive = docType === DocumentType.JAVA_ARCHIVE;
     if (this.cfg.mappingService == null) {
-      this.cfg.errorService.addError(new ErrorInfo({
-        message: 'Mapping service is not configured, validation service will not be used.',
-        level: ErrorLevel.WARN, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL}));
+      this.cfg.errorService.addError(
+        new ErrorInfo({
+          message:
+            'Mapping service is not configured, validation service will not be used.',
+          level: ErrorLevel.WARN,
+          scope: ErrorScope.APPLICATION,
+          type: ErrorType.INTERNAL,
+        })
+      );
     } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
-      this.cfg.errorService.addError(new ErrorInfo({
-        message: 'Mapping service URL is not configured, validation service will not be used.',
-        level: ErrorLevel.WARN, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL}));
+      this.cfg.errorService.addError(
+        new ErrorInfo({
+          message:
+            'Mapping service URL is not configured, validation service will not be used.',
+          level: ErrorLevel.WARN,
+          scope: ErrorScope.APPLICATION,
+          type: ErrorType.INTERNAL,
+        })
+      );
     }
 
     // Clear out the existing document if importing the same name.
-    if (docdef = this.cfg.getDocForIdentifier(docName, isSource)!) {
+    if ((docdef = this.cfg.getDocForIdentifier(docName, isSource)!)) {
       if (isSource) {
         DataMapperUtil.removeItemFromArray(docdef, this.cfg.sourceDocs);
       } else {
@@ -105,64 +140,105 @@ export class InitializationService {
       if (docType === DocumentType.JAVA) {
         docdef = this.addJavaDocument(docName, isSource);
       } else {
-        docdef = this.addNonJavaDocument(docName, docType, inspectionType, docBody, isSource);
+        docdef = this.addNonJavaDocument(
+          docName,
+          docType,
+          inspectionType,
+          docBody,
+          isSource
+        );
       }
       docdef.name = docName;
       docdef.updateFromMappings(this.cfg.mappings!); // TODO: check this non null operator
     }
 
-    this.cfg.documentService.fetchClassPath().toPromise()
+    this.cfg.documentService
+      .fetchClassPath()
+      .toPromise()
       .then((classPath: string) => {
         this.cfg.initCfg.classPath = classPath;
 
         // Push the user-defined java archive file to the runtime service.
         if (javaArchive) {
-          this.cfg.documentService.setLibraryToService(docBody, async(success) => {
-            if (success) {
-              await this.cfg.fieldActionService.fetchFieldActions()
-              .catch((error: any) => {
-                this.handleError(error);
-              });
+          this.cfg.documentService.setLibraryToService(
+            docBody,
+            async (success) => {
+              if (success) {
+                await this.cfg.fieldActionService
+                  .fetchFieldActions()
+                  .catch((error: any) => {
+                    this.handleError(error);
+                  });
+              }
             }
-          });
+          );
           this.updateStatus();
         } else {
           log.debug(`Fetching user document: name=${docdef.name}, id=${docdef.id},\
 isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionType}`);
-          this.cfg.documentService.fetchDocument(docdef, this.cfg.initCfg.classPath).toPromise()
-          .then(async(doc: DocumentDefinition) => {
-
-            if (doc.fields.length === 0) {
-              if (isSource) {
-                DataMapperUtil.removeItemFromArray(docdef, this.cfg.sourceDocs);
-              } else {
-                DataMapperUtil.removeItemFromArray(docdef, this.cfg.targetDocs);
+          this.cfg.documentService
+            .fetchDocument(docdef, this.cfg.initCfg.classPath)
+            .toPromise()
+            .then(async (doc: DocumentDefinition) => {
+              if (doc.fields.length === 0) {
+                if (isSource) {
+                  DataMapperUtil.removeItemFromArray(
+                    docdef,
+                    this.cfg.sourceDocs
+                  );
+                } else {
+                  DataMapperUtil.removeItemFromArray(
+                    docdef,
+                    this.cfg.targetDocs
+                  );
+                }
               }
-            }
-            log.debug(`Fetched user document: name=${docdef.name}, id=${docdef.id},\
+              log.debug(`Fetched user document: name=${docdef.name}, id=${docdef.id},\
 isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionType}`);
-            this.updateStatus();
-          })
-          .catch((error: any) => {
-            if (error.status === 0) {
-              this.handleError('Unable to fetch document ' + docName + ' from the runtime service.', error);
-            } else {
-              this.handleError('Could not load document \'' + docdef.id + '\': ' + error.status + ' ' + error.statusText, error);
-            }
-          });
+              this.updateStatus();
+            })
+            .catch((error: any) => {
+              if (error.status === 0) {
+                this.handleError(
+                  'Unable to fetch document ' +
+                    docName +
+                    ' from the runtime service.',
+                  error
+                );
+              } else {
+                this.handleError(
+                  "Could not load document '" +
+                    docdef.id +
+                    "': " +
+                    error.status +
+                    ' ' +
+                    error.statusText,
+                  error
+                );
+              }
+            });
         }
       })
       .catch((error: any) => {
         if (error.status === 0) {
-          this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+          this.handleError(
+            'Fatal network error: Could not connect to AtlasMap design runtime service.',
+            error
+          );
         } else {
-          this.handleError('Could not load Maven class path: ' + error.status + ' ' + error.statusText, error);
+          this.handleError(
+            'Could not load Maven class path: ' +
+              error.status +
+              ' ' +
+              error.statusText,
+            error
+          );
         }
       });
   }
 
   async initialize(): Promise<boolean> {
-    return new Promise<boolean>(async(resolve, reject) => {
+    return new Promise<boolean>(async (resolve, reject) => {
       this.cfg.setConstantPropertyDocs();
       this.cfg.errorService.resetAll();
       this.cfg.fieldActionService.isInitialized = false;
@@ -170,13 +246,25 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
       this.cfg.initCfg.mappingInitialized = false;
 
       if (this.cfg.mappingService == null) {
-        this.cfg.errorService.addError(new ErrorInfo({
-          message: 'Mapping service is not configured, validation service will not be used.',
-          level: ErrorLevel.WARN, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL}));
+        this.cfg.errorService.addError(
+          new ErrorInfo({
+            message:
+              'Mapping service is not configured, validation service will not be used.',
+            level: ErrorLevel.WARN,
+            scope: ErrorScope.APPLICATION,
+            type: ErrorType.INTERNAL,
+          })
+        );
       } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
-        this.cfg.errorService.addError(new ErrorInfo({
-          message: 'Mapping service URL is not configured, validation service will not be used.',
-          level: ErrorLevel.WARN, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL}));
+        this.cfg.errorService.addError(
+          new ErrorInfo({
+            message:
+              'Mapping service URL is not configured, validation service will not be used.',
+            level: ErrorLevel.WARN,
+            scope: ErrorScope.APPLICATION,
+            type: ErrorType.INTERNAL,
+          })
+        );
       }
 
       if (!this.cfg.fieldActionService) {
@@ -187,7 +275,7 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
 
       // Verify the runtime service is out there.
       try {
-        if (!await this.cfg.mappingService.runtimeServiceActive()) {
+        if (!(await this.cfg.mappingService.runtimeServiceActive())) {
           this.handleError('The AtlasMap runtime service is not available.');
           reject();
           return;
@@ -204,7 +292,9 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
       } else {
         this.updateLoadingStatus('Loading Maven class path.');
         // fetch class path
-        this.cfg.documentService.fetchClassPath().toPromise()
+        this.cfg.documentService
+          .fetchClassPath()
+          .toPromise()
           .then((classPath: string) => {
             this.cfg.initCfg.classPath = classPath;
             this.fetchDocuments();
@@ -212,69 +302,94 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
           })
           .catch((error: any) => {
             if (error.status === 0) {
-              this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+              this.handleError(
+                'Fatal network error: Could not connect to AtlasMap design runtime service.',
+                error
+              );
             } else {
-              this.handleError('Could not load Maven class path: ' + error.status + ' ' + error.statusText, error);
+              this.handleError(
+                'Could not load Maven class path: ' +
+                  error.status +
+                  ' ' +
+                  error.statusText,
+                error
+              );
             }
             reject(error);
           });
       }
 
       // Fetch adm-catalog-files.gz if it exists.
-      this.cfg.fileService.getCurrentMappingCatalog().subscribe( async(catalog: Uint8Array) => {
-        // If catalog is null then no compressed mappings catalog is available on the server.
-        if (catalog === null) {
-          if (this.cfg.mappings === null) {
-            this.cfg.mappings = new MappingDefinition();
+      this.cfg.fileService
+        .getCurrentMappingCatalog()
+        .subscribe(async (catalog: Uint8Array) => {
+          // If catalog is null then no compressed mappings catalog is available on the server.
+          if (catalog === null) {
+            if (this.cfg.mappings === null) {
+              this.cfg.mappings = new MappingDefinition();
+            }
+
+            // load field actions - do this even with no documents so the default field actions are loaded.
+            await this.cfg.fieldActionService
+              .fetchFieldActions()
+              .catch((error: any) => {
+                this.handleError(
+                  'Failure to load field actions on initialization.',
+                  error
+                );
+                reject(error);
+                return;
+              });
+            this.updateStatus();
+            resolve(true);
+            return;
           }
 
-          // load field actions - do this even with no documents so the default field actions are loaded.
-          await this.cfg.fieldActionService.fetchFieldActions()
-          .catch((error: any) => {
-            this.handleError('Failure to load field actions on initialization.', error);
-            reject(error);
-            return;
-          });
+          await this.processMappingsCatalogFiles(catalog);
+
+          // load both default and custom field actions
+          await this.cfg.fieldActionService
+            .fetchFieldActions()
+            .catch((error: any) => {
+              this.handleError(
+                'Failure to load field actions on initialization.',
+                error
+              );
+              reject(error);
+              return;
+            });
+
+          // load mappings
+          if (this.cfg.mappings == null) {
+            this.cfg.mappings = new MappingDefinition();
+            if (this.cfg.mappingFiles.length > 0) {
+              await this.fetchMappings(this.cfg.mappingFiles);
+            } else {
+              this.cfg.fileService
+                .findMappingFiles('UI')
+                .toPromise()
+                .then(
+                  async (files: string[]) => {
+                    // It's okay if no mapping files are found - resolve false so the caller will know.
+                    if (!(await this.fetchMappings(files))) {
+                      resolve(false);
+                    }
+                  },
+                  (error: any) => {
+                    if (error.status === 0) {
+                      this.handleError(
+                        'Fatal network error: Could not connect to AtlasMap design runtime service.',
+                        error
+                      );
+                      reject(error);
+                    }
+                  }
+                );
+            }
+          }
           this.updateStatus();
           resolve(true);
-          return;
-        }
-
-        await this.processMappingsCatalogFiles(catalog);
-
-        // load both default and custom field actions
-        await this.cfg.fieldActionService.fetchFieldActions()
-        .catch((error: any) => {
-          this.handleError('Failure to load field actions on initialization.', error);
-          reject(error);
-          return;
         });
-
-        // load mappings
-        if (this.cfg.mappings == null) {
-          this.cfg.mappings = new MappingDefinition();
-          if (this.cfg.mappingFiles.length > 0) {
-            await this.fetchMappings(this.cfg.mappingFiles);
-          } else {
-            this.cfg.fileService.findMappingFiles('UI').toPromise()
-              .then( async(files: string[]) => {
-                // It's okay if no mapping files are found - resolve false so the caller will know.
-                if (!await this.fetchMappings(files)) {
-                  resolve(false);
-                }
-              },
-              (error: any) => {
-                if (error.status === 0) {
-                  this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
-                  reject(error);
-                }
-              }
-            );
-          }
-        }
-        this.updateStatus();
-        resolve(true);
-      });
       resolve(true);
     });
   }
@@ -282,11 +397,22 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
   processMappingsDocuments(mappingsSchemaAggregate: string): any {
     let mInfo: any = null;
     try {
-      mInfo = DocumentManagementService.getMappingsInfo(mappingsSchemaAggregate);
+      mInfo = DocumentManagementService.getMappingsInfo(
+        mappingsSchemaAggregate
+      );
     } catch (error) {
-      this.cfg.errorService.addError(new ErrorInfo({
-        message: 'Unable to process mapping information from the data mappings file. ' + '\n' + error.message,
-        level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
+      this.cfg.errorService.addError(
+        new ErrorInfo({
+          message:
+            'Unable to process mapping information from the data mappings file. ' +
+            '\n' +
+            error.message,
+          level: ErrorLevel.ERROR,
+          scope: ErrorScope.APPLICATION,
+          type: ErrorType.INTERNAL,
+          object: error,
+        })
+      );
       return null;
     }
 
@@ -299,8 +425,13 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
     // Reinitialize the model documents.
     for (metaFragment of mInfo.exportMeta) {
       fragData = mInfo.exportBlockData[fragIndex].value;
-      this.initializeUserDoc(fragData, metaFragment.name, metaFragment.documentType,
-        metaFragment.inspectionType, (metaFragment.isSource === 'true'));
+      this.initializeUserDoc(
+        fragData,
+        metaFragment.name,
+        metaFragment.documentType,
+        metaFragment.inspectionType,
+        metaFragment.isSource === 'true'
+      );
       fragIndex++;
     }
     this.cfg.mappingService.notifyMappingUpdated();
@@ -315,24 +446,48 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
   async updateMappings(mInfo: any): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       try {
-        this.cfg.fileService.setMappingToService(mInfo.exportMappings.value).toPromise()
-          .then(async() => {
+        this.cfg.fileService
+          .setMappingToService(mInfo.exportMappings.value)
+          .toPromise()
+          .then(async () => {
             resolve(true);
-        }).catch((error: any) => {
-          if (error.status === 0) {
-            this.cfg.errorService.addError(new ErrorInfo({
-              message: 'Fatal network error: Unable to connect to the AtlasMap design runtime service.',
-              level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
-          } else {
-            this.cfg.errorService.addError(new ErrorInfo({
-              message: `Unable to update the mappings file to the AtlasMap design runtime service. ${error.status} ${error.statusText}`,
-              level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
-          }
-          reject(error);
-        });
+          })
+          .catch((error: any) => {
+            if (error.status === 0) {
+              this.cfg.errorService.addError(
+                new ErrorInfo({
+                  message:
+                    'Fatal network error: Unable to connect to the AtlasMap design runtime service.',
+                  level: ErrorLevel.ERROR,
+                  scope: ErrorScope.APPLICATION,
+                  type: ErrorType.INTERNAL,
+                  object: error,
+                })
+              );
+            } else {
+              this.cfg.errorService.addError(
+                new ErrorInfo({
+                  message: `Unable to update the mappings file to the AtlasMap design runtime service. ${error.status} ${error.statusText}`,
+                  level: ErrorLevel.ERROR,
+                  scope: ErrorScope.APPLICATION,
+                  type: ErrorType.INTERNAL,
+                  object: error,
+                })
+              );
+            }
+            reject(error);
+          });
       } catch (error) {
-        this.cfg.errorService.addError(new ErrorInfo({message: 'Unable to decompress the aggregate mappings catalog buffer.',
-          level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
+        this.cfg.errorService.addError(
+          new ErrorInfo({
+            message:
+              'Unable to decompress the aggregate mappings catalog buffer.',
+            level: ErrorLevel.ERROR,
+            scope: ErrorScope.APPLICATION,
+            type: ErrorType.INTERNAL,
+            object: error,
+          })
+        );
         reject(error);
       }
     });
@@ -346,23 +501,44 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
   async updateCatalog(compressedCatalog: Uint8Array): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       // Update .../target/mappings/adm-catalog-files.gz
-      const fileContent: Blob = new Blob([compressedCatalog], {type: 'application/octet-stream'});
-      this.cfg.fileService.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/0').toPromise()
-        .then(async() => {
-        resolve(true);
-      }).catch((error: any) => {
-        if (error.status === 0) {
-          this.cfg.errorService.addError(new ErrorInfo({
-            message: 'Fatal network error: Unable to connect to the AtlasMap design runtime service.',
-            level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
-        } else {
-          this.cfg.errorService.addError(new ErrorInfo({
-            message: `Unable to update the catalog mappings file to the AtlasMap design runtime service. \
-${error.status} ${error.statusText}`,
-            level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
-          resolve(false);
-        }
+      const fileContent: Blob = new Blob([compressedCatalog], {
+        type: 'application/octet-stream',
       });
+      this.cfg.fileService
+        .setBinaryFileToService(
+          fileContent,
+          this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/0'
+        )
+        .toPromise()
+        .then(async () => {
+          resolve(true);
+        })
+        .catch((error: any) => {
+          if (error.status === 0) {
+            this.cfg.errorService.addError(
+              new ErrorInfo({
+                message:
+                  'Fatal network error: Unable to connect to the AtlasMap design runtime service.',
+                level: ErrorLevel.ERROR,
+                scope: ErrorScope.APPLICATION,
+                type: ErrorType.INTERNAL,
+                object: error,
+              })
+            );
+          } else {
+            this.cfg.errorService.addError(
+              new ErrorInfo({
+                message: `Unable to update the catalog mappings file to the AtlasMap design runtime service. \
+${error.status} ${error.statusText}`,
+                level: ErrorLevel.ERROR,
+                scope: ErrorScope.APPLICATION,
+                type: ErrorType.INTERNAL,
+                object: error,
+              })
+            );
+            resolve(false);
+          }
+        });
     });
   }
 
@@ -372,57 +548,81 @@ ${error.status} ${error.statusText}`,
    *
    * @param compressedCatalog - gzip binary buffer
    */
-  async processMappingsCatalogFiles(compressedCatalog: Uint8Array): Promise<boolean> {
-    return new Promise<boolean>(async(resolve, reject) => {
+  async processMappingsCatalogFiles(
+    compressedCatalog: Uint8Array
+  ): Promise<boolean> {
+    return new Promise<boolean>(async (resolve, reject) => {
       try {
-
         // Inflate the compressed content.
         const decompress = inflate(compressedCatalog);
-        const mappingsDocuments =
-          new Uint8Array(decompress).reduce((data, byte) => data + String.fromCharCode(byte), '');
+        const mappingsDocuments = new Uint8Array(decompress).reduce(
+          (data, byte) => data + String.fromCharCode(byte),
+          ''
+        );
         const mInfo = this.processMappingsDocuments(mappingsDocuments);
 
         // Reinitialize the model mappings.
         if (mInfo && mInfo.exportMappings) {
           const catalogMappingsName = MappingSerializer.deserializeAtlasMappingName(
-            DocumentManagementService.getMappingsInfo(mInfo.exportMappings.value));
-
-            // If the live UI mappings name does not match the UI mappings name extracted from the
-            // catalog file then use the mappings from the catalog file.  Otherwise use the live
-            // UI file.
-            this.cfg.fileService.findMappingFiles('UI').toPromise()
-              .then( async(files: string[]) => {
-
-              await this.updateCatalog(compressedCatalog);
-              await this.cfg.fieldActionService.fetchFieldActions()
-              .catch((error: any) => {
-                this.handleError('Failure to load field actions.', error);
-              });
-              if (catalogMappingsName !== files[0]) {
-                await this.updateMappings(mInfo);
-              }
-              resolve(true);
-            },
-            (error: any) => {
-              if (error.status === 0) {
-                this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
-              }
-              reject(error);
-            }
+            DocumentManagementService.getMappingsInfo(
+              mInfo.exportMappings.value
+            )
           );
+
+          // If the live UI mappings name does not match the UI mappings name extracted from the
+          // catalog file then use the mappings from the catalog file.  Otherwise use the live
+          // UI file.
+          this.cfg.fileService
+            .findMappingFiles('UI')
+            .toPromise()
+            .then(
+              async (files: string[]) => {
+                await this.updateCatalog(compressedCatalog);
+                await this.cfg.fieldActionService
+                  .fetchFieldActions()
+                  .catch((error: any) => {
+                    this.handleError('Failure to load field actions.', error);
+                  });
+                if (catalogMappingsName !== files[0]) {
+                  await this.updateMappings(mInfo);
+                }
+                resolve(true);
+              },
+              (error: any) => {
+                if (error.status === 0) {
+                  this.handleError(
+                    'Fatal network error: Could not connect to AtlasMap design runtime service.',
+                    error
+                  );
+                }
+                reject(error);
+              }
+            );
         } else {
           resolve(true);
         }
       } catch (error) {
-        this.cfg.errorService.addError(new ErrorInfo({message: 'Unable to decompress the aggregate mappings catalog buffer.',
-          level: ErrorLevel.ERROR, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: error}));
+        this.cfg.errorService.addError(
+          new ErrorInfo({
+            message:
+              'Unable to decompress the aggregate mappings catalog buffer.',
+            level: ErrorLevel.ERROR,
+            scope: ErrorScope.APPLICATION,
+            type: ErrorType.INTERNAL,
+            object: error,
+          })
+        );
         reject(error);
       }
     });
   }
 
-  addJavaDocument(className: string, isSource: boolean,
-    collectionType?: CollectionType, collectionClassName?: string): DocumentDefinition {
+  addJavaDocument(
+    className: string,
+    isSource: boolean,
+    collectionType?: CollectionType,
+    collectionClassName?: string
+  ): DocumentDefinition {
     const model: DocumentInitializationModel = new DocumentInitializationModel();
     model.id = className;
     model.type = DocumentType.JAVA;
@@ -435,8 +635,12 @@ ${error.status} ${error.statusText}`,
   }
 
   private addNonJavaDocument(
-    name: string, documentType: DocumentType, inspectionType: InspectionType,
-    inspectionSource: string, isSource: boolean): DocumentDefinition {
+    name: string,
+    documentType: DocumentType,
+    inspectionType: InspectionType,
+    inspectionSource: string,
+    isSource: boolean
+  ): DocumentDefinition {
     const model: DocumentInitializationModel = new DocumentInitializationModel();
     model.id = name;
     model.type = documentType;
@@ -456,47 +660,93 @@ ${error.status} ${error.statusText}`,
 
       const docName: string = docDef.name;
 
-      if (docDef.type === DocumentType.JAVA_ARCHIVE && this.cfg.initCfg.baseJavaInspectionServiceUrl == null) {
-        this.cfg.errorService.addError(new ErrorInfo({
-          message: `Java inspection service is not configured. Document will not be loaded: ${docName}`,
-          level: ErrorLevel.WARN, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: docDef}));
+      if (
+        docDef.type === DocumentType.JAVA_ARCHIVE &&
+        this.cfg.initCfg.baseJavaInspectionServiceUrl == null
+      ) {
+        this.cfg.errorService.addError(
+          new ErrorInfo({
+            message: `Java inspection service is not configured. Document will not be loaded: ${docName}`,
+            level: ErrorLevel.WARN,
+            scope: ErrorScope.APPLICATION,
+            type: ErrorType.INTERNAL,
+            object: docDef,
+          })
+        );
         docDef.initialized = true;
         this.updateStatus();
         continue;
-      } else if (docDef.type === DocumentType.XML && this.cfg.initCfg.baseXMLInspectionServiceUrl == null) {
-        this.cfg.errorService.addError(new ErrorInfo({
-          message: `XML inspection service is not configured. Document will not be loaded: ${docName}`,
-          level: ErrorLevel.WARN, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: docDef}));
+      } else if (
+        docDef.type === DocumentType.XML &&
+        this.cfg.initCfg.baseXMLInspectionServiceUrl == null
+      ) {
+        this.cfg.errorService.addError(
+          new ErrorInfo({
+            message: `XML inspection service is not configured. Document will not be loaded: ${docName}`,
+            level: ErrorLevel.WARN,
+            scope: ErrorScope.APPLICATION,
+            type: ErrorType.INTERNAL,
+            object: docDef,
+          })
+        );
         docDef.initialized = true;
         this.updateStatus();
         continue;
-      } else if (docDef.type === DocumentType.JSON && this.cfg.initCfg.baseJSONInspectionServiceUrl == null) {
-        this.cfg.errorService.addError(new ErrorInfo({
-          message: `JSON inspection service is not configured. Document will not be loaded: ${docName}`,
-          level: ErrorLevel.WARN, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: docDef}));
+      } else if (
+        docDef.type === DocumentType.JSON &&
+        this.cfg.initCfg.baseJSONInspectionServiceUrl == null
+      ) {
+        this.cfg.errorService.addError(
+          new ErrorInfo({
+            message: `JSON inspection service is not configured. Document will not be loaded: ${docName}`,
+            level: ErrorLevel.WARN,
+            scope: ErrorScope.APPLICATION,
+            type: ErrorType.INTERNAL,
+            object: docDef,
+          })
+        );
         docDef.initialized = true;
         this.updateStatus();
         continue;
-      } else if (docDef.type === DocumentType.CSV && this.cfg.initCfg.baseCSVInspectionServiceUrl == null) {
-        this.cfg.errorService.addError(new ErrorInfo({
-          message: `CSV inspection service is not configured. Document will not be loaded: ${docName}`,
-          level: ErrorLevel.WARN, scope: ErrorScope.APPLICATION, type: ErrorType.INTERNAL, object: docDef}));
+      } else if (
+        docDef.type === DocumentType.CSV &&
+        this.cfg.initCfg.baseCSVInspectionServiceUrl == null
+      ) {
+        this.cfg.errorService.addError(
+          new ErrorInfo({
+            message: `CSV inspection service is not configured. Document will not be loaded: ${docName}`,
+            level: ErrorLevel.WARN,
+            scope: ErrorScope.APPLICATION,
+            type: ErrorType.INTERNAL,
+            object: docDef,
+          })
+        );
         docDef.initialized = true;
         this.updateStatus();
         continue;
       }
 
       // TODO: check this non null operator
-      this.cfg.documentService.fetchDocument(docDef, this.cfg.initCfg.classPath!).toPromise()
+      this.cfg.documentService
+        .fetchDocument(docDef, this.cfg.initCfg.classPath!)
+        .toPromise()
         .then(() => {
           this.updateStatus();
         })
         .catch((error: any) => {
           if (error.status === 0) {
-            this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+            this.handleError(
+              'Fatal network error: Could not connect to AtlasMap design runtime service.',
+              error
+            );
           } else {
-            const errDetail = error.status ? error.status + ':' + error.statusText : error.toString();
-            this.handleError(`Could not load Document \'${docDef.name}\'(${docDef.id}): ${errDetail}`, error);
+            const errDetail = error.status
+              ? error.status + ':' + error.statusText
+              : error.toString();
+            this.handleError(
+              `Could not load Document '${docDef.name}'(${docDef.id}): ${errDetail}`,
+              error
+            );
           }
         });
     }
@@ -513,19 +763,27 @@ ${error.status} ${error.statusText}`,
         resolve(false);
       }
 
-      this.cfg.mappingService.fetchMappings(mappingFiles, this.cfg.mappings!).toPromise() // TODO: check this non null operator
+      this.cfg.mappingService
+        .fetchMappings(mappingFiles, this.cfg.mappings!)
+        .toPromise() // TODO: check this non null operator
         .then(() => {
-        this.cfg.initCfg.mappingInitialized = true;
-        this.updateStatus();
-        this.cfg.mappingService.notifyMappingUpdated().then(() => resolve(true));
-      }).catch((error: any) => {
-        if (error.status === 0) {
-          this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
-        } else {
-          this.handleError('Could not load mapping definitions.', error);
-        }
-        reject(error);
-      });
+          this.cfg.initCfg.mappingInitialized = true;
+          this.updateStatus();
+          this.cfg.mappingService
+            .notifyMappingUpdated()
+            .then(() => resolve(true));
+        })
+        .catch((error: any) => {
+          if (error.status === 0) {
+            this.handleError(
+              'Fatal network error: Could not connect to AtlasMap design runtime service.',
+              error
+            );
+          } else {
+            this.handleError('Could not load mapping definitions.', error);
+          }
+          reject(error);
+        });
     });
   }
 
@@ -538,9 +796,15 @@ ${error.status} ${error.statusText}`,
       }
     }
 
-    if ((documentCount === finishedDocCount) && this.cfg.fieldActionService.isInitialized) {
+    if (
+      documentCount === finishedDocCount &&
+      this.cfg.fieldActionService.isInitialized
+    ) {
       if (this.cfg.preloadedMappingJson) {
-        MappingSerializer.deserializeMappingServiceJSON(JSON.parse(this.cfg.preloadedMappingJson), this.cfg);
+        MappingSerializer.deserializeMappingServiceJSON(
+          JSON.parse(this.cfg.preloadedMappingJson),
+          this.cfg
+        );
         this.cfg.preloadedMappingJson = null;
       }
       if (this.cfg.mappings) {
@@ -558,8 +822,15 @@ ${error.status} ${error.statusText}`,
 
   private handleError(message: string, error?: any) {
     message = 'Data Mapper UI Initialization Error: ' + message;
-    this.cfg.errorService.addError(new ErrorInfo({message: message, scope: ErrorScope.APPLICATION,
-      level: ErrorLevel.ERROR, type: ErrorType.INTERNAL, object: error}));
+    this.cfg.errorService.addError(
+      new ErrorInfo({
+        message: message,
+        scope: ErrorScope.APPLICATION,
+        level: ErrorLevel.ERROR,
+        type: ErrorType.INTERNAL,
+        object: error,
+      })
+    );
     this.updateLoadingStatus(message);
     this.cfg.initCfg.initializationErrorOccurred = true;
     this.cfg.initCfg.initialized = true;
@@ -576,5 +847,4 @@ ${error.status} ${error.statusText}`,
     this.cfg.initCfg.loadingStatus = status;
     this.initializationStatusChangedSource.next();
   }
-
 }

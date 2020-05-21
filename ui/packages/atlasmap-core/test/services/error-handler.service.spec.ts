@@ -1,27 +1,39 @@
 /* tslint:disable:no-unused-variable */
 
 import { ErrorHandlerService } from '../../src/services/error-handler.service';
-import { ErrorInfo, ErrorScope, ErrorType, ErrorLevel } from '../../src/models/error.model';
+import {
+  ErrorInfo,
+  ErrorScope,
+  ErrorType,
+  ErrorLevel,
+} from '../../src/models/error.model';
 import { MappingModel } from '../../src/models/mapping.model';
 
 describe('ErrorHandlerService', () => {
-
   test('filterWith()', () => {
     const mapping1 = new MappingModel();
     const mapping2 = new MappingModel();
     const errors = [
       new ErrorInfo({
-        message: 'app', scope: ErrorScope.APPLICATION, type: ErrorType.USER,
-        level: ErrorLevel.ERROR
+        message: 'app',
+        scope: ErrorScope.APPLICATION,
+        type: ErrorType.USER,
+        level: ErrorLevel.ERROR,
       }),
       new ErrorInfo({
-        message: 'mapping1', mapping: mapping1, scope: ErrorScope.MAPPING,
-        type: ErrorType.VALIDATION, level: ErrorLevel.ERROR
+        message: 'mapping1',
+        mapping: mapping1,
+        scope: ErrorScope.MAPPING,
+        type: ErrorType.VALIDATION,
+        level: ErrorLevel.ERROR,
       }),
       new ErrorInfo({
-        message: 'mapping2', mapping: mapping2, scope: ErrorScope.MAPPING,
-        type: ErrorType.VALIDATION, level: ErrorLevel.WARN
-      })
+        message: 'mapping2',
+        mapping: mapping2,
+        scope: ErrorScope.MAPPING,
+        type: ErrorType.VALIDATION,
+        level: ErrorLevel.WARN,
+      }),
     ];
     const noFilter = ErrorHandlerService.filterWith(errors);
     expect(noFilter.length).toEqual(1);
@@ -34,13 +46,17 @@ describe('ErrorHandlerService', () => {
     expect(m2.length).toEqual(2);
     expect(m2[0].message).toEqual('app');
     expect(m2[1].message).toEqual('mapping2');
-    const m2Level = ErrorHandlerService.filterWith(errors, mapping2, ErrorLevel.ERROR);
+    const m2Level = ErrorHandlerService.filterWith(
+      errors,
+      mapping2,
+      ErrorLevel.ERROR
+    );
     expect(m2Level.length).toEqual(1);
     expect(m2Level[0].message).toEqual('app');
   });
 
   test('addError() and removeError()', () => {
-    const service = new ErrorHandlerService;
+    const service = new ErrorHandlerService();
     expect(service.getErrors().length).toEqual(0);
     service.addError(new ErrorInfo({ message: 'test' }));
     const errors = service.getErrors();
@@ -51,7 +67,7 @@ describe('ErrorHandlerService', () => {
   });
 
   test('clearAllErrors()', () => {
-    const service = new ErrorHandlerService;
+    const service = new ErrorHandlerService();
     expect(service.getErrors().length).toEqual(0);
     service.addError(new ErrorInfo({ message: 'cae' }));
     service.addError(new ErrorInfo({ message: 'cae2' }));
@@ -70,7 +86,8 @@ describe('ErrorHandlerService', () => {
     service.addError(
       new ErrorInfo({ message: 'cpe' }),
       new ErrorInfo({ message: 'cpe2', type: ErrorType.PREVIEW }),
-      new ErrorInfo({ message: 'cpe3', type: ErrorType.USER }));
+      new ErrorInfo({ message: 'cpe3', type: ErrorType.USER })
+    );
     let errors = service.getErrors();
     expect(errors.length).toEqual(3);
     expect(errors[0].message).toEqual('cpe3');
@@ -89,7 +106,8 @@ describe('ErrorHandlerService', () => {
     service.addError(
       new ErrorInfo({ message: 'cve' }),
       new ErrorInfo({ message: 'cve2', type: ErrorType.VALIDATION }),
-      new ErrorInfo({ message: 'cve3', type: ErrorType.PREVIEW }));
+      new ErrorInfo({ message: 'cve3', type: ErrorType.PREVIEW })
+    );
     let errors = service.getErrors();
     expect(errors.length).toEqual(3);
     expect(errors[0].message).toEqual('cve3');
@@ -103,12 +121,13 @@ describe('ErrorHandlerService', () => {
   });
 
   test('should support clearFieldErrors()', () => {
-    const service = new ErrorHandlerService;
+    const service = new ErrorHandlerService();
     expect(service.getErrors().length).toEqual(0);
     service.addError(
       new ErrorInfo({ message: 'cfe' }),
       new ErrorInfo({ message: 'cfe2', scope: ErrorScope.FIELD }),
-      new ErrorInfo({ message: 'cfe3', scope: ErrorScope.MAPPING }));
+      new ErrorInfo({ message: 'cfe3', scope: ErrorScope.MAPPING })
+    );
     let errors = service.getErrors();
     expect(errors.length).toEqual(3);
     expect(errors[0].message).toEqual('cfe3');
@@ -122,7 +141,7 @@ describe('ErrorHandlerService', () => {
   });
 
   test('async subscription', (done) => {
-    const service = new ErrorHandlerService;
+    const service = new ErrorHandlerService();
     const subscription = service.subscribe((errors) => {
       expect(errors.length).toEqual(1);
       expect(errors[0].message).toEqual('async');
@@ -133,7 +152,7 @@ describe('ErrorHandlerService', () => {
   });
 
   test('should support form error async subscription', (done) => {
-    const service = new ErrorHandlerService;
+    const service = new ErrorHandlerService();
     const subject = service.createFormErrorChannel();
     subject.subscribe((errors) => {
       expect(errors.length).toEqual(1);
@@ -145,5 +164,4 @@ describe('ErrorHandlerService', () => {
     });
     service.isRequiredFieldValid(null, 'form async');
   });
-
 });

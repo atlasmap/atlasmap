@@ -14,7 +14,12 @@
     limitations under the License.
 */
 
-import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from '../models/error.model';
+import {
+  ErrorInfo,
+  ErrorLevel,
+  ErrorScope,
+  ErrorType,
+} from '../models/error.model';
 import { Subject, Subscription } from 'rxjs';
 import { MappingModel } from '../models/mapping.model';
 
@@ -43,13 +48,18 @@ export class ErrorHandlerService {
    * @param mapping {@link MappingModel} to filter {@link ErrorScope.MAPPING} errors
    * @param level {@link ErrorLevel} to filter with
    */
-  static filterWith(errors: ErrorInfo[], mapping?: MappingModel, level?: ErrorLevel): ErrorInfo[] {
+  static filterWith(
+    errors: ErrorInfo[],
+    mapping?: MappingModel,
+    level?: ErrorLevel
+  ): ErrorInfo[] {
     if (!errors || errors.length === 0) {
       return [];
     }
-    return errors.filter(e =>
-      (!e.mapping || (mapping && e.mapping === mapping))
-        && (!level || !e.level || e.level === level)
+    return errors.filter(
+      (e) =>
+        (!e.mapping || (mapping && e.mapping === mapping)) &&
+        (!level || !e.level || e.level === level)
     );
   }
 
@@ -58,13 +68,14 @@ export class ErrorHandlerService {
    * @param errors one or more {@link ErrorInfo} object(s)
    */
   addError(...errors: ErrorInfo[]): void {
-    errors.forEach(error => {
+    errors.forEach((error) => {
       if (error.object && error.object.message) {
         // TODO show error.object in more polished way... maybe with better error console
-        error.message += ('\n' + error.object.message);
+        error.message += '\n' + error.object.message;
       }
-      const store = ErrorScope.FORM === error.scope ? this.formErrors : this.errors;
-      if (store.find(e => e.message === error.message)) {
+      const store =
+        ErrorScope.FORM === error.scope ? this.formErrors : this.errors;
+      if (store.find((e) => e.message === error.message)) {
         return;
       }
       store.unshift(error);
@@ -85,7 +96,11 @@ export class ErrorHandlerService {
    * @param identifier Error ID
    */
   removeError(identifier: string, scope?: ErrorScope): void {
-    if (scope === ErrorScope.FORM && this.formErrorUpdatedSource && !this.formErrorUpdatedSource.closed) {
+    if (
+      scope === ErrorScope.FORM &&
+      this.formErrorUpdatedSource &&
+      !this.formErrorUpdatedSource.closed
+    ) {
       this.formErrors = this.excludeByIdentifier(this.formErrors, identifier);
     } else {
       this.errors = this.excludeByIdentifier(this.errors, identifier);
@@ -117,7 +132,7 @@ export class ErrorHandlerService {
    * Remove all preview errors.
    */
   clearPreviewErrors(): void {
-    this.errors = this.errors.filter(e => e.type !== ErrorType.PREVIEW);
+    this.errors = this.errors.filter((e) => e.type !== ErrorType.PREVIEW);
     this.emitUpdatedEvent();
   }
 
@@ -125,8 +140,11 @@ export class ErrorHandlerService {
    * Remove all mapping validation errors.
    */
   clearValidationErrors(mapping?: MappingModel): void {
-    this.errors = this.errors.filter(e =>
-      e.type !== ErrorType.VALIDATION && (!mapping || !e.mapping || e.mapping !== mapping));
+    this.errors = this.errors.filter(
+      (e) =>
+        e.type !== ErrorType.VALIDATION &&
+        (!mapping || !e.mapping || e.mapping !== mapping)
+    );
     this.emitUpdatedEvent();
   }
 
@@ -134,7 +152,7 @@ export class ErrorHandlerService {
    * Remove all field scoped errors.
    */
   clearFieldErrors() {
-    this.errors = this.errors.filter(e => e.scope !== ErrorScope.FIELD);
+    this.errors = this.errors.filter((e) => e.scope !== ErrorScope.FIELD);
     this.emitUpdatedEvent();
   }
 
@@ -166,7 +184,9 @@ export class ErrorHandlerService {
     }
     this.formErrors = [];
     this.formErrorUpdatedSource = new Subject();
-    this.formErrorUpdatedSource.subscribe({ complete: () => this.formErrors = [] });
+    this.formErrorUpdatedSource.subscribe({
+      complete: () => (this.formErrors = []),
+    });
     return this.formErrorUpdatedSource;
   }
 
@@ -175,10 +195,19 @@ export class ErrorHandlerService {
    * @param value - A form field to validate
    * @param fieldDescription - used in error diagnostic
    */
-  isRequiredFieldValid(value: string | null, fieldDescription: string): boolean {
+  isRequiredFieldValid(
+    value: string | null,
+    fieldDescription: string
+  ): boolean {
     if (value == null || '' === value) {
       const errorMessage: string = fieldDescription + ' is required.';
-      this.addError(new ErrorInfo({message: errorMessage, level: ErrorLevel.ERROR, scope: ErrorScope.FORM}));
+      this.addError(
+        new ErrorInfo({
+          message: errorMessage,
+          level: ErrorLevel.ERROR,
+          scope: ErrorScope.FORM,
+        })
+      );
       this.emitUpdatedEvent(ErrorScope.FORM);
       return false;
     }
@@ -195,8 +224,10 @@ export class ErrorHandlerService {
     }
   }
 
-  private excludeByIdentifier(errors: ErrorInfo[], identifier: string): ErrorInfo[] {
-    return errors.filter(e => e.identifier !== identifier);
+  private excludeByIdentifier(
+    errors: ErrorInfo[],
+    identifier: string
+  ): ErrorInfo[] {
+    return errors.filter((e) => e.identifier !== identifier);
   }
-
 }

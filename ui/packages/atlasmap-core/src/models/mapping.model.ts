@@ -44,7 +44,7 @@ export class MappedField {
     if (mappedFields == null || mappedFields.length === 0) {
       return [];
     }
-    const fieldsByPath: { [key: string]: MappedField; } = {};
+    const fieldsByPath: { [key: string]: MappedField } = {};
     const fieldPaths: string[] = [];
     for (const mappedField of mappedFields) {
       if (mappedField == null || mappedField.field == null) {
@@ -73,7 +73,6 @@ export class MappedField {
   removeAction(action: FieldAction): void {
     DataMapperUtil.removeItemFromArray(action, this.actions);
   }
-
 }
 
 export class MappingModel {
@@ -85,7 +84,7 @@ export class MappingModel {
   transition: TransitionModel = new TransitionModel();
 
   constructor() {
-    this.uuid = 'mapping.' + Math.floor((Math.random() * 1000000) + 1).toString();
+    this.uuid = 'mapping.' + Math.floor(Math.random() * 1000000 + 1).toString();
     this.cfg = ConfigModel.getConfig();
   }
 
@@ -115,7 +114,7 @@ export class MappingModel {
    */
   addField(field: Field, first: boolean): MappedField {
     const mappedFields = this.getMappedFields(field.isSource());
-    if (mappedFields.length == 1) {
+    if (mappedFields.length === 1) {
       const mappedField: MappedField = mappedFields[0];
       if (!mappedField.field) {
         mappedField.field = field;
@@ -139,7 +138,10 @@ export class MappingModel {
    */
   removeField(field: Field) {
     const mappedFields = this.getMappedFields(field.isSource());
-    DataMapperUtil.removeItemFromArray(mappedFields.find(mf => mf.field === field), mappedFields);
+    DataMapperUtil.removeItemFromArray(
+      mappedFields.find((mf) => mf.field === field),
+      mappedFields
+    );
   }
 
   /**
@@ -160,7 +162,9 @@ export class MappingModel {
   }
 
   hasMappedField(isSource: boolean) {
-    return isSource ? this.sourceFields.length > 0 : this.targetFields.length > 0;
+    return isSource
+      ? this.sourceFields.length > 0
+      : this.targetFields.length > 0;
   }
 
   isEmpty() {
@@ -179,7 +183,10 @@ export class MappingModel {
     if (!mappedField || !mappedField.field) {
       return;
     }
-    DataMapperUtil.removeItemFromArray(mappedField, this.getMappedFields(mappedField.field!.isSource()));
+    DataMapperUtil.removeItemFromArray(
+      mappedField,
+      this.getMappedFields(mappedField.field!.isSource())
+    );
     this.cfg.mappingService.notifyMappingUpdated();
   }
 
@@ -196,12 +203,15 @@ export class MappingModel {
     return null;
   }
 
-  getMappedFieldByName(fieldPath: string, isSource: boolean): MappedField | null {
+  getMappedFieldByName(
+    fieldPath: string,
+    isSource: boolean
+  ): MappedField | null {
     if (!fieldPath) {
       return null;
     }
     const mappedFields = this.getMappedFields(isSource);
-    for (let i=0; i<mappedFields.length; i++) {
+    for (let i = 0; i < mappedFields.length; i++) {
       if (mappedFields[i].parsedData.parsedPath === fieldPath) {
         return mappedFields[i];
       }
@@ -224,7 +234,10 @@ export class MappingModel {
     if (!mappedField || !mappedField.field) {
       return null;
     }
-    return this.getMappedFields(mappedField.field.isSource()).indexOf(mappedField) + 1;
+    return (
+      this.getMappedFields(mappedField.field.isSource()).indexOf(mappedField) +
+      1
+    );
   }
 
   /**
@@ -252,7 +265,7 @@ export class MappingModel {
 
   getLastMappedField(isSource: boolean): MappedField | null {
     const fields: MappedField[] = this.getMappedFields(isSource);
-    if ((fields != null) && (fields.length > 0)) {
+    if (fields != null && fields.length > 0) {
       return fields[fields.length - 1];
     }
     return null;
@@ -339,8 +352,10 @@ export class MappingModel {
 
       for (const mappedOutputField of m.targetFields) {
         // TODO: check this non null operator
-        if (mappedOutputField.field?.docDef === field.docDef
-          && mappedOutputField.field!.path === field.path) {
+        if (
+          mappedOutputField.field?.docDef === field.docDef &&
+          mappedOutputField.field!.path === field.path
+        ) {
           if (m.isFieldMapped(field)) {
             return m.sourceFields[0].field!.name;
           }
@@ -349,5 +364,4 @@ export class MappingModel {
     }
     return null;
   }
-
 }

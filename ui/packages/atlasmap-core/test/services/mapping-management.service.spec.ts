@@ -5,11 +5,11 @@ import log from 'loglevel';
 
 import { MappingManagementService } from '../../src/services/mapping-management.service';
 import { Field } from '../../src/models/field.model';
-import { DocumentDefinition, MappingDefinition, MappingModel } from "../../src";
-import { ConfigModel } from "../../src/models/config.model";
+import { DocumentDefinition, MappingDefinition, MappingModel } from '../../src';
+import { ConfigModel } from '../../src/models/config.model';
 
 describe('MappingManagementService', () => {
-  const api = ky.create({ headers: { "ATLASMAP-XSRF-TOKEN": "awesome" } });
+  const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
   const service = new MappingManagementService(api);
   const cfg = ConfigModel.getConfig();
   cfg.logger = log.getLogger('config');
@@ -21,7 +21,12 @@ describe('MappingManagementService', () => {
     f.parentField = new Field();
     f.parentField.isCollection = true;
     f.isPrimitive = true;
-    expect(service.getFieldSelectionExclusionReason(new MappingModel, f.parentField)).toContain('parent');
+    expect(
+      service.getFieldSelectionExclusionReason(
+        new MappingModel(),
+        f.parentField
+      )
+    ).toContain('parent');
   });
 
   test('should clear out source fields when toggling expression with a source collection', () => {
@@ -115,5 +120,4 @@ describe('MappingManagementService', () => {
     expect(service.cfg.mappings?.activeMapping?.sourceFields?.length).toBe(1);
     expect(service.cfg.mappings?.activeMapping?.targetFields?.length).toBe(1);
   });
-
 });

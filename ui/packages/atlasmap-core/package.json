@@ -18,8 +18,7 @@
     "build": "npm-run-all build:module test",
     "test": "tsdx test --runInBand",
     "test:coverage": "tsdx test --coverage --coverageReporters=text-lcov | coveralls",
-    "lint": "",
-    "lint:disabled": "tsdx lint src test",
+    "lint": "tsdx lint src test",
     "format": "yarn lint --fix"
   },
   "peerDependencies": {

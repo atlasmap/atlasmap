@@ -23,7 +23,11 @@ import { DocumentManagementService } from '../services/document-management.servi
 import { MappingManagementService } from '../services/mapping-management.service';
 import { InitializationService } from '../services/initialization.service';
 
-import { DocumentType, InspectionType, CollectionType } from '../common/config.types';
+import {
+  DocumentType,
+  InspectionType,
+  CollectionType,
+} from '../common/config.types';
 import { FieldActionService } from '../services/field-action.service';
 import { FileManagementService } from '../services/file-management.service';
 
@@ -31,7 +35,7 @@ export class DataMapperInitializationModel {
   dataMapperVersion = '0.9.2017.07.28';
   initialized = false;
   loadingStatus = 'Loading.';
-  admHttpTimeout = 30000;  // 30 seconds
+  admHttpTimeout = 30000; // 30 seconds
   initializationErrorOccurred = false;
 
   baseJavaInspectionServiceUrl?: string;
@@ -65,10 +69,6 @@ export class DataMapperInitializationModel {
   disableNavbar = true;
 
   mappingInitialized = false;
-
-  constructor() {
-  }
-
 }
 
 export class DocumentInitializationModel {
@@ -93,7 +93,7 @@ export class ConfigModel {
   static xmlServicesPackagePrefix = 'io.atlasmap.xml.v2';
   private static cfg: ConfigModel = new ConfigModel();
 
-  initCfg: DataMapperInitializationModel = new DataMapperInitializationModel;
+  initCfg: DataMapperInitializationModel = new DataMapperInitializationModel();
 
   /* current ui state config */
   showMappingDetailTray = false;
@@ -180,19 +180,26 @@ export class ConfigModel {
     docDef.selectedRoot = docInitModel.selectedRoot;
 
     if (docDef.type === DocumentType.XSD) {
-      docDef.uri = 'atlas:' + 'xml' + ':' + docDef.id;
+      docDef.uri = 'atlas:xml:' + docDef.id;
     } else if (docDef.type === DocumentType.JAVA_ARCHIVE) {
-      docDef.uri = 'atlas:' + 'java' + ':' + docDef.id;
+      docDef.uri = 'atlas:java:' + docDef.id;
     } else {
       docDef.uri = 'atlas:' + docDef.type.toLowerCase() + ':' + docDef.id;
     }
 
-    if (docDef.type === DocumentType.JAVA || docDef.type === DocumentType.JAVA_ARCHIVE) {
+    if (
+      docDef.type === DocumentType.JAVA ||
+      docDef.type === DocumentType.JAVA_ARCHIVE
+    ) {
       docDef.uri += '?className=' + docDef.inspectionSource;
-      if (docInitModel.collectionType && docInitModel.collectionType !== CollectionType.NONE) {
+      if (
+        docInitModel.collectionType &&
+        docInitModel.collectionType !== CollectionType.NONE
+      ) {
         docDef.uri += '&collectionType=' + docInitModel.collectionType;
         if (docInitModel.collectionClassName) {
-          docDef.uri += '&collectionClassName=' + docInitModel.collectionClassName;
+          docDef.uri +=
+            '&collectionClassName=' + docInitModel.collectionClassName;
         }
       }
     }
@@ -228,8 +235,11 @@ export class ConfigModel {
    * @param cfg
    * @param isSource
    */
-  getDocUriMap(cfg: ConfigModel, isSource: boolean): {[key: string]: DocumentDefinition} {
-    const docMap: {[key: string]: DocumentDefinition} = {};
+  getDocUriMap(
+    cfg: ConfigModel,
+    isSource: boolean
+  ): { [key: string]: DocumentDefinition } {
+    const docMap: { [key: string]: DocumentDefinition } = {};
     for (const doc of cfg.getDocs(isSource)) {
       docMap[doc.uri] = doc;
     }
@@ -268,19 +278,24 @@ export class ConfigModel {
     return false;
   }
 
-  getDocForIdentifier(documentId: string, isSource: boolean): DocumentDefinition | null {
+  getDocForIdentifier(
+    documentId: string,
+    isSource: boolean
+  ): DocumentDefinition | null {
     // TODO: check this non null operator
-    return this.getDocs(isSource).find(d => d.id === documentId)!;
+    return this.getDocs(isSource).find((d) => d.id === documentId)!;
   }
 
   getFirstXmlDoc(isSource: boolean): DocumentDefinition {
     const docs: DocumentDefinition[] = this.getDocsWithoutPropertyDoc(isSource);
     // TODO: check this non null operator
-    return docs.find(doc => doc.type === DocumentType.XML)!;
+    return docs.find((doc) => doc.type === DocumentType.XML)!;
   }
 
   getAllDocs(): DocumentDefinition[] {
-    return [this.propertyDoc, this.constantDoc].concat(this.sourceDocs).concat(this.targetDocs);
+    return [this.propertyDoc, this.constantDoc]
+      .concat(this.sourceDocs)
+      .concat(this.targetDocs);
   }
 
   documentsAreLoaded(): boolean {
@@ -291,5 +306,4 @@ export class ConfigModel {
     }
     return true;
   }
-
 }

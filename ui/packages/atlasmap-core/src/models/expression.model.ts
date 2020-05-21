@@ -39,7 +39,6 @@ export abstract class ExpressionNode {
 }
 
 export class TextNode extends ExpressionNode {
-
   static readonly PREFIX = 'expression-text-';
 
   constructor(public str: string) {
@@ -53,19 +52,17 @@ export class TextNode extends ExpressionNode {
   toHTML(): string {
     return `<span id="${this.uuid}">${this.str.replace(/ /g, '&nbsp;')}</span>`;
   }
-
 }
 
 export class FieldNode extends ExpressionNode {
-
   static readonly PREFIX = 'expression-field-';
 
   constructor(
     private mapping: MappingModel,
     public field?: MappedField,
     public metaStr?: string,
-    index: number = 0)
-  {
+    index: number = 0
+  ) {
     super(FieldNode.PREFIX);
     if (!field) {
       if (metaStr) {
@@ -73,7 +70,10 @@ export class FieldNode extends ExpressionNode {
         this.field = mapping.getMappedFieldByName(fieldParts[1], true)!;
       } else {
         // TODO: check this non null operator
-        this.field = mapping.getMappedFieldForIndex((index+1).toString(), true)!;
+        this.field = mapping.getMappedFieldForIndex(
+          (index + 1).toString(),
+          true
+        )!;
       }
     }
     if (field && !field.parsedData.parsedPath && field.field) {
@@ -85,11 +85,13 @@ export class FieldNode extends ExpressionNode {
     if (!this.field || !this.field.field) {
       return '';
     }
-    return '${' +
+    return (
+      '${' +
       this.field.field.docDef.id +
       ':' +
       this.field.parsedData.parsedPath +
-      '}';
+      '}'
+    );
   }
 
   toHTML(): string {
@@ -99,11 +101,12 @@ export class FieldNode extends ExpressionNode {
     } else {
       // TODO: check this non null operator
       return `<span contenteditable="false" id="${this.uuid}"
-        title="Field index '${this.mapping.getIndexForMappedField(this.field!)! - 1}' is not available"
+        title="Field index '${
+          this.mapping.getIndexForMappedField(this.field!)! - 1
+        }' is not available"
         class="expressionFieldLabel label label-danger">N/A</span>`;
     }
   }
-
 }
 
 export class ExpressionModel {
@@ -117,7 +120,9 @@ export class ExpressionModel {
   constructor(private mapping: MappingModel, private cfg: ConfigModel) {}
 
   generateInitialExpression() {
-    this.mapping.getUserMappedFields(true).forEach(f => this.appendFieldNode(f));
+    this.mapping
+      .getUserMappedFields(true)
+      .forEach((f) => this.appendFieldNode(f));
   }
 
   get nodes(): ReadonlyArray<ExpressionNode> {
@@ -136,7 +141,7 @@ export class ExpressionModel {
     if (!nodeId) {
       return this.getLastNode();
     }
-    return this._nodes.find(n => n.getUuid() === nodeId);
+    return this._nodes.find((n) => n.getUuid() === nodeId);
   }
 
   setConfigModel(cfg: ConfigModel) {
@@ -153,7 +158,11 @@ export class ExpressionModel {
    * @param startOffset
    * @param endOffset
    */
-  clearText(nodeId?: string, startOffset?: number, endOffset?: number): any | null {
+  clearText(
+    nodeId?: string,
+    startOffset?: number,
+    endOffset?: number
+  ): any | null {
     let targetNode: TextNode | null = null;
     if (!nodeId) {
       const lastNode = this.getLastNode();
@@ -166,13 +175,16 @@ export class ExpressionModel {
         targetNode.str = targetNode.str.substring(0, keyPos);
       }
     } else {
-      const node = this._nodes.find(n => n.getUuid() === nodeId);
+      const node = this._nodes.find((n) => n.getUuid() === nodeId);
       if (!(node instanceof TextNode) || !endOffset) {
         return null;
       }
       targetNode = node;
       // TODO: check this non null operator
-      const cleanStr = targetNode.str.replace(targetNode.str.substring(startOffset!, endOffset), '');
+      const cleanStr = targetNode.str.replace(
+        targetNode.str.substring(startOffset!, endOffset),
+        ''
+      );
       targetNode.str = cleanStr;
     }
     this.updateCache();
@@ -209,8 +221,11 @@ export class ExpressionModel {
    * @param insertPosition target node to insert the string
    * @param offset position offset in the target node to insert the string
    */
-  insertNodes(newNodes: ExpressionNode[], insertPosition?: string, offset?: number) {
-
+  insertNodes(
+    newNodes: ExpressionNode[],
+    insertPosition?: string,
+    offset?: number
+  ) {
     // No position was specified - append to the end
     if (!insertPosition) {
       const last = this.getLastNode();
@@ -220,8 +235,16 @@ export class ExpressionModel {
         (last as TextNode).str += (newNodes[0] as TextNode).str;
         newNodes.splice(0, 1, last);
         this._nodes.splice(this.getLastNodeIndex(), 1, ...newNodes);
-      } else if (last instanceof FieldNode && newNodes[0] instanceof FieldNode) {
-        this._nodes.splice(this.getLastNodeIndex(), 0, new TextNode(' + '), ...newNodes);
+      } else if (
+        last instanceof FieldNode &&
+        newNodes[0] instanceof FieldNode
+      ) {
+        this._nodes.splice(
+          this.getLastNodeIndex(),
+          0,
+          new TextNode(' + '),
+          ...newNodes
+        );
       } else {
         this._nodes.push(...newNodes);
       }
@@ -232,7 +255,7 @@ export class ExpressionModel {
 
     // Requires position handling
     const updatedEvent = new ExpressionUpdatedEvent();
-    const targetNode = this._nodes.find(n => n.getUuid() === insertPosition);
+    const targetNode = this._nodes.find((n) => n.getUuid() === insertPosition);
     // TODO: check this non null operator
     const targetNodeIndex = this._nodes.indexOf(targetNode!);
 
@@ -260,7 +283,8 @@ export class ExpressionModel {
             mergedTextNode.str += post;
           } else {
             mergedTextNode = targetNode;
-            mergedTextNode.str = (newNodes[lastNewNodeIndex]as TextNode).str + post;
+            mergedTextNode.str =
+              (newNodes[lastNewNodeIndex] as TextNode).str + post;
           }
           newNodes.splice(lastNewNodeIndex, 1, mergedTextNode);
         } else {
@@ -274,8 +298,10 @@ export class ExpressionModel {
       }
       this._nodes.splice(targetNodeIndex, 1, ...newNodes);
       const lastAddedIndex = targetNodeIndex + newNodes.length - 1;
-      if (this._nodes[lastAddedIndex] instanceof FieldNode
-          && this.nodes[lastAddedIndex + 1] instanceof FieldNode) {
+      if (
+        this._nodes[lastAddedIndex] instanceof FieldNode &&
+        this.nodes[lastAddedIndex + 1] instanceof FieldNode
+      ) {
         // insert a glue in between FieldNodes so that it won't break syntax and caret can go into
         const space = new TextNode(' + ');
         this._nodes.splice(lastAddedIndex + 1, 0, space);
@@ -286,7 +312,8 @@ export class ExpressionModel {
         updatedEvent.offset = 0;
       } else {
         updatedEvent.node = this._nodes[lastAddedIndex];
-        updatedEvent.offset = (this._nodes[lastAddedIndex] as TextNode).str.length - post.length;
+        updatedEvent.offset =
+          (this._nodes[lastAddedIndex] as TextNode).str.length - post.length;
       }
       this.updateCache();
       this.expressionUpdatedSource.next(updatedEvent);
@@ -300,13 +327,23 @@ export class ExpressionModel {
     }
     const nextNodeIndex = offset === 0 ? targetNodeIndex : targetNodeIndex + 1;
     const nextNode = this._nodes[nextNodeIndex];
-    if (nextNode instanceof TextNode && newNodes[newNodes.length - 1] instanceof TextNode) {
-      updatedEvent.offset = (newNodes[newNodes.length - 1] as TextNode).str.length;
-      nextNode.str = (newNodes[newNodes.length - 1] as TextNode).str + (nextNode as TextNode).str;
+    if (
+      nextNode instanceof TextNode &&
+      newNodes[newNodes.length - 1] instanceof TextNode
+    ) {
+      updatedEvent.offset = (newNodes[
+        newNodes.length - 1
+      ] as TextNode).str.length;
+      nextNode.str =
+        (newNodes[newNodes.length - 1] as TextNode).str +
+        (nextNode as TextNode).str;
       newNodes.pop();
       this._nodes.splice(nextNodeIndex, 1, ...newNodes);
       updatedEvent.node = nextNode;
-    } else if (nextNode instanceof FieldNode && newNodes[newNodes.length - 1] instanceof FieldNode) {
+    } else if (
+      nextNode instanceof FieldNode &&
+      newNodes[newNodes.length - 1] instanceof FieldNode
+    ) {
       // insert a glue in between FieldNodes so that it won't break syntax and caret can go into
       const space = new TextNode(' + ');
       this._nodes.splice(nextNodeIndex, 0, ...newNodes, space);
@@ -319,7 +356,9 @@ export class ExpressionModel {
         updatedEvent.offset = 0;
       } else {
         updatedEvent.node = newNodes[newNodes.length - 1];
-        updatedEvent.offset = (newNodes[newNodes.length - 1] as TextNode).str.length;
+        updatedEvent.offset = (newNodes[
+          newNodes.length - 1
+        ] as TextNode).str.length;
       }
     }
     this.updateCache();
@@ -327,7 +366,6 @@ export class ExpressionModel {
   }
 
   removeToken(tokenPosition?: string, offset?: number, removeNext?: boolean) {
-
     // No position was specified - remove from the end
     if (!tokenPosition) {
       const last = this.getLastNode();
@@ -336,7 +374,11 @@ export class ExpressionModel {
       }
       if (last instanceof FieldNode) {
         const removed = this._nodes.pop() as FieldNode;
-        if (!this._nodes.find(n => n instanceof FieldNode && n.field === removed.field)) {
+        if (
+          !this._nodes.find(
+            (n) => n instanceof FieldNode && n.field === removed.field
+          )
+        ) {
           // TODO: check this non null operator
           this.mapping.removeMappedField(removed.field!);
           this.cfg.mappingService.updateMappedField(this.mapping);
@@ -355,8 +397,10 @@ export class ExpressionModel {
     }
 
     // Requires position handling
-    let updatedEvent: ExpressionUpdatedEvent | undefined = new ExpressionUpdatedEvent();
-    let targetNode = this._nodes.find(n => n.getUuid() === tokenPosition);
+    let updatedEvent:
+      | ExpressionUpdatedEvent
+      | undefined = new ExpressionUpdatedEvent();
+    let targetNode = this._nodes.find((n) => n.getUuid() === tokenPosition);
     // TODO: check this non null operator
     let targetNodeIndex = this._nodes.indexOf(targetNode!);
     if (removeNext) {
@@ -368,34 +412,49 @@ export class ExpressionModel {
         return;
       }
       targetNode = this._nodes[--targetNodeIndex];
-      offset = targetNode instanceof TextNode ? (targetNode as TextNode).str.length : 1;
+      offset =
+        targetNode instanceof TextNode
+          ? (targetNode as TextNode).str.length
+          : 1;
     }
     if (targetNode instanceof FieldNode) {
       const removed = this._nodes.splice(targetNodeIndex, 1);
       const targetFieldNode: FieldNode = removed[0] as FieldNode;
-      if (!this._nodes.find(n => n instanceof FieldNode && n.field === targetFieldNode.field)) {
+      if (
+        !this._nodes.find(
+          (n) => n instanceof FieldNode && n.field === targetFieldNode.field
+        )
+      ) {
         // TODO: check this non null operator
         this.mapping.removeMappedField(targetFieldNode.field!);
         this.cfg.mappingService.updateMappedField(this.mapping);
       }
       if (this._nodes.length > targetNodeIndex) {
-        if (this._nodes[targetNodeIndex - 1] instanceof TextNode
-            && this._nodes[targetNodeIndex] instanceof TextNode) {
-          const newOffset = (this._nodes[targetNodeIndex - 1] as TextNode).str.length;
-          (this._nodes[targetNodeIndex - 1] as TextNode).str
-              += (this._nodes[targetNodeIndex] as TextNode).str;
+        if (
+          this._nodes[targetNodeIndex - 1] instanceof TextNode &&
+          this._nodes[targetNodeIndex] instanceof TextNode
+        ) {
+          const newOffset = (this._nodes[targetNodeIndex - 1] as TextNode).str
+            .length;
+          (this._nodes[targetNodeIndex - 1] as TextNode).str += (this._nodes[
+            targetNodeIndex
+          ] as TextNode).str;
           this._nodes.splice(targetNodeIndex, 1);
           updatedEvent.node = this._nodes[targetNodeIndex - 1];
           updatedEvent.offset = newOffset;
-        } else if (this._nodes[targetNodeIndex - 1] instanceof FieldNode
-            && this._nodes[targetNodeIndex] instanceof FieldNode) {
+        } else if (
+          this._nodes[targetNodeIndex - 1] instanceof FieldNode &&
+          this._nodes[targetNodeIndex] instanceof FieldNode
+        ) {
           const glue = new TextNode(' + ');
           this._nodes.splice(targetNodeIndex, 0, glue);
           updatedEvent.node = glue;
           updatedEvent.offset = 3;
         } else if (this._nodes[targetNodeIndex - 1] instanceof TextNode) {
           updatedEvent.node = this._nodes[targetNodeIndex - 1];
-          updatedEvent.offset = (this._nodes[targetNodeIndex - 1] as TextNode).str.length;
+          updatedEvent.offset = (this._nodes[
+            targetNodeIndex - 1
+          ] as TextNode).str.length;
         } else if (this._nodes[targetNodeIndex] instanceof TextNode) {
           updatedEvent.node = this._nodes[targetNodeIndex];
           updatedEvent.offset = 0;
@@ -407,11 +466,21 @@ export class ExpressionModel {
     } else {
       const targetString = (targetNode as TextNode).str;
       // TODO: check this non null operator
-      (targetNode as TextNode).str = offset === 0 ? targetString.substr(1)
-        : targetString.substring(0, offset) + targetString.substring(offset! + 1);
+      (targetNode as TextNode).str =
+        offset === 0
+          ? targetString.substr(1)
+          : targetString.substring(0, offset) +
+            targetString.substring(offset! + 1);
       if ((targetNode as TextNode).str.length === 0) {
-        this.cfg.errorService.addError(new ErrorInfo({message: 'At least one space is required between field references.',
-          level: ErrorLevel.ERROR, scope: ErrorScope.MAPPING, type: ErrorType.USER, mapping: this.mapping}));
+        this.cfg.errorService.addError(
+          new ErrorInfo({
+            message: 'At least one space is required between field references.',
+            level: ErrorLevel.ERROR,
+            scope: ErrorScope.MAPPING,
+            type: ErrorType.USER,
+            mapping: this.mapping,
+          })
+        );
         return;
       }
       updatedEvent.node = targetNode;
@@ -444,9 +513,15 @@ export class ExpressionModel {
    * @param insertPosition
    * @param offset
    */
-  updateFieldReference(mapping: MappingModel, insertPosition?: string, offset?: number) {
+  updateFieldReference(
+    mapping: MappingModel,
+    insertPosition?: string,
+    offset?: number
+  ) {
     const mappedFields = mapping.getUserMappedFields(true);
-    let fieldNodes = this._nodes.filter(n => n instanceof FieldNode) as FieldNode[];
+    let fieldNodes = this._nodes.filter(
+      (n) => n instanceof FieldNode
+    ) as FieldNode[];
 
     // Remove the field from the expression if unmapped.
     for (const node of fieldNodes) {
@@ -456,19 +531,30 @@ export class ExpressionModel {
       }
       const index = this._nodes.indexOf(node);
       this._nodes.splice(index, 1);
-      if (this._nodes.length > index && this._nodes[index - 1] instanceof TextNode
-          && this._nodes[index] instanceof TextNode) {
-        (this._nodes[index - 1] as TextNode).str += (this._nodes[index] as TextNode).str;
+      if (
+        this._nodes.length > index &&
+        this._nodes[index - 1] instanceof TextNode &&
+        this._nodes[index] instanceof TextNode
+      ) {
+        (this._nodes[index - 1] as TextNode).str += (this._nodes[
+          index
+        ] as TextNode).str;
         this._nodes.splice(index, 1);
       }
     }
 
     // Add the specified field into the expression - append if no insert position is specified.
-    fieldNodes = this._nodes.filter(n => n instanceof FieldNode) as FieldNode[];
+    fieldNodes = this._nodes.filter(
+      (n) => n instanceof FieldNode
+    ) as FieldNode[];
     for (const mfield of mappedFields) {
-      if (!fieldNodes.find(n => n.field === mfield)) {
+      if (!fieldNodes.find((n) => n.field === mfield)) {
         if (insertPosition) {
-          this.insertNodes([new FieldNode(this.mapping, mfield)], insertPosition, offset);
+          this.insertNodes(
+            [new FieldNode(this.mapping, mfield)],
+            insertPosition,
+            offset
+          );
         } else {
           this.appendFieldNode(mfield);
         }
@@ -498,25 +584,32 @@ export class ExpressionModel {
     return this.expressionHTML;
   }
 
-  addConditionalExpressionNode(mappedField: MappedField, nodeId: string, offset: number): void {
-    this.insertNodes([new FieldNode(this.mapping, mappedField)], nodeId, offset);
+  addConditionalExpressionNode(
+    mappedField: MappedField,
+    nodeId: string,
+    offset: number
+  ): void {
+    this.insertNodes(
+      [new FieldNode(this.mapping, mappedField)],
+      nodeId,
+      offset
+    );
   }
 
   private updateCache() {
     let answer = '';
-    this._nodes.forEach(node => answer += node.toText());
+    this._nodes.forEach((node) => (answer += node.toText()));
     this.textCache = answer;
     answer = '';
-    this._nodes.forEach(node => answer += node.toHTML());
-    this.expressionHTML = answer;  // trigger expr box render
+    this._nodes.forEach((node) => (answer += node.toHTML()));
+    this.expressionHTML = answer; // trigger expr box render
   }
 
   private createNodesFromText(text: string): ExpressionNode[] {
     const answer = [];
     let position = -1;
-    let fn = null;
 
-    while ((text.search(/\$\{[a-zA-Z0-9\.:\/\<\>\_]+\}/)) !== -1 ) {
+    while (text.search(/\$\{[a-zA-Z0-9.:/<>_]+\}/) !== -1) {
       position = text.search(/\$/);
       if (position !== 0) {
         answer.push(new TextNode(text.substring(0, position)));
@@ -531,8 +624,15 @@ export class ExpressionModel {
       }
 
       if (!fn || !fn.field) {
-        this.cfg.errorService.addError(new ErrorInfo({message: `Unable to map expression element to field node.`,
-          level: ErrorLevel.ERROR, scope: ErrorScope.MAPPING, type: ErrorType.INTERNAL, mapping: this.mapping}));
+        this.cfg.errorService.addError(
+          new ErrorInfo({
+            message: `Unable to map expression element to field node.`,
+            level: ErrorLevel.ERROR,
+            scope: ErrorScope.MAPPING,
+            type: ErrorType.INTERNAL,
+            mapping: this.mapping,
+          })
+        );
       } else {
         answer.push(fn);
       }
@@ -547,7 +647,7 @@ export class ExpressionModel {
   private appendFieldNode(mfield: MappedField) {
     const lastNode = this._nodes.pop();
     if (lastNode instanceof FieldNode) {
-        this._nodes.push(lastNode, new TextNode(' + '));
+      this._nodes.push(lastNode, new TextNode(' + '));
     } else if (lastNode instanceof TextNode) {
       if (lastNode.str.length === 0) {
         this._nodes.push(new TextNode(' + '));
@@ -557,6 +657,4 @@ export class ExpressionModel {
     }
     this._nodes.push(new FieldNode(this.mapping, mfield));
   }
-
 }
-

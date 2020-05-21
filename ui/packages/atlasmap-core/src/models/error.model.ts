@@ -20,14 +20,14 @@ export enum ErrorLevel {
   DEBUG = 'DEBUG',
   INFO = 'INFO',
   WARN = 'WARN',
-  ERROR = 'ERROR'
- }
+  ERROR = 'ERROR',
+}
 
 export enum ErrorScope {
   APPLICATION = 'APPLICATION',
   MAPPING = 'MAPPING',
   FIELD = 'FIELD',
-  FORM = 'FORM'
+  FORM = 'FORM',
 }
 
 export enum ErrorType {
@@ -35,7 +35,7 @@ export enum ErrorType {
   USER = 'USER',
   VALIDATION = 'VALIDATION',
   PREVIEW = 'PREVIEW',
-  FORM = 'FORM'
+  FORM = 'FORM',
 }
 
 export class ErrorInfo {
@@ -59,5 +59,4 @@ export class ErrorInfo {
   get identifier() {
     return this._identifier;
   }
-
 }
