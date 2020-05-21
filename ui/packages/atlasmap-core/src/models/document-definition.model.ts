@@ -251,6 +251,7 @@ export class DocumentDefinition {
     for (const field of this.fields) {
       this.populateFieldParentPaths(field, null, 0);
       this.populateFieldData(field);
+      this.populateChildren(field);
     }
 
     this.fieldPaths.sort();
