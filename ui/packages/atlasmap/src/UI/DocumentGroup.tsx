@@ -30,7 +30,10 @@ export interface IDocumentGroupProps {
 export const DocumentGroup = forwardRef<
   HTMLSpanElement,
   PropsWithChildren<IDocumentGroupProps>
->(({ name, type, icon, showType = false, expanded }, ref) => {
+>(function DocumentGroup(
+  { name, type, icon, showType = false, expanded },
+  ref,
+) {
   const spanRef = useRef<HTMLSpanElement | null>(null);
 
   const handleRef = (el: HTMLSpanElement | null) => {

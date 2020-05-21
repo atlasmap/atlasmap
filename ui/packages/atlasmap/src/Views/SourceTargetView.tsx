@@ -36,35 +36,36 @@ export const SourceTargetView: FunctionComponent<ISourceTargetViewProps> = ({
   targetEvents,
 }) => {
   return (
-    <ColumnMapper role={"main"}>
+    <>
       <NodeRefProvider>
-        <Columns>
-          <Column data-testid={"column-source-area"} totalColumns={2}>
-            <SourcesColumn
-              properties={properties}
-              constants={constants}
-              sources={sources}
-              showTypes={showTypes}
-              {...sourceEvents}
-            />
-          </Column>
+        <ColumnMapper role={"main"}>
+          <Columns>
+            <Column data-testid={"column-source-area"} totalColumns={2}>
+              <SourcesColumn
+                properties={properties}
+                constants={constants}
+                sources={sources}
+                showTypes={showTypes}
+                {...sourceEvents}
+              />
+            </Column>
 
-          <Column data-testid={"column-target-area"} totalColumns={2}>
-            <TargetsColumn
-              showMappingPreview={showMappingPreview}
-              showTypes={showTypes}
-              targets={targets}
-              {...targetEvents}
-            />
-          </Column>
-        </Columns>
-
+            <Column data-testid={"column-target-area"} totalColumns={2}>
+              <TargetsColumn
+                showMappingPreview={showMappingPreview}
+                showTypes={showTypes}
+                targets={targets}
+                {...targetEvents}
+              />
+            </Column>
+          </Columns>
+        </ColumnMapper>
         <SourceTargetLinks
           mappings={mappings}
           selectedMappingId={selectedMappingId}
           onSelectMapping={onSelectMapping}
         />
       </NodeRefProvider>
-    </ColumnMapper>
+    </>
   );
 };

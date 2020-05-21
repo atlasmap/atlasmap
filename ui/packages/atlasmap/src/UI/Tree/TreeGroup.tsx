@@ -49,7 +49,10 @@ export interface ITreeGroupProps {
 export const TreeGroup = forwardRef<
   HTMLDivElement,
   PropsWithChildren<ITreeGroupProps>
->(({ id, expanded, level, setSize, position, renderLabel, children }, ref) => {
+>(function TreeGroup(
+  { id, expanded, level, setSize, position, renderLabel, children },
+  ref,
+) {
   const divRef = useRef<HTMLDivElement | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const toggleExpand = useCallback(() => {

@@ -9,34 +9,34 @@ import { useCanvas } from "./CanvasContext";
 import { Coords } from "./models";
 import { useNodeRect } from "./NodeRefProvider";
 
-function leftCoords(rect: DOMRect, clipped?: boolean) {
-  const { left, y, height } = rect;
+function leftCoords(rect: DOMRect) {
+  const { left, y } = rect;
   return {
     x: left,
-    y: y + (clipped ? 0 : height / 2),
+    y: y,
   };
 }
 
-function rightCoords(rect: DOMRect, clipped?: boolean) {
-  const { right, y, height } = rect;
+function rightCoords(rect: DOMRect) {
+  const { right, y } = rect;
   return {
     x: right,
-    y: y + (clipped ? 0 : height / 2),
+    y: y,
   };
 }
 
-function topCoords(rect: DOMRect, clipped?: boolean) {
-  const { x, top, width } = rect;
+function topCoords(rect: DOMRect) {
+  const { x, top } = rect;
   return {
-    x: x + (clipped ? 0 : width / 2),
+    x: x,
     y: top,
   };
 }
 
-function bottomCoords(rect: DOMRect, clipped?: boolean) {
-  const { x, bottom, width } = rect;
+function bottomCoords(rect: DOMRect) {
+  const { x, bottom } = rect;
   return {
-    x: x + (clipped ? 0 : width / 2),
+    x: x,
     y: bottom,
   };
 }
@@ -84,8 +84,8 @@ export const NodesArc: FunctionComponent<INodesArcProps> = ({
           const end = getRect(bottomId);
           if (start && end) {
             setCoords({
-              start: topCoords(start, start.clipped),
-              end: bottomCoords(end, end.clipped),
+              start: topCoords(start),
+              end: bottomCoords(end),
               startSideSize: start.clipped ? 0 : start.width,
               endSideSize: end.clipped ? 0 : end.width,
             });
@@ -100,8 +100,8 @@ export const NodesArc: FunctionComponent<INodesArcProps> = ({
           const end = getRect(rightId);
           if (start && end) {
             setCoords({
-              start: leftCoords(start, start.clipped),
-              end: rightCoords(end, end.clipped),
+              start: leftCoords(start),
+              end: rightCoords(end),
               startSideSize: start.clipped ? 0 : start.height,
               endSideSize: end.clipped ? 0 : end.height,
             });

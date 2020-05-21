@@ -13,6 +13,9 @@ const styles = StyleSheet.create({
   arc: {
     cursor: "pointer",
   },
+  group: {
+    pointerEvents: "all",
+  },
 });
 
 export interface ISourceTargetLinksProps {
@@ -32,7 +35,16 @@ export const SourceTargetLinks: FunctionComponent<ISourceTargetLinksProps> = ({
   );
 
   return (
-    <>
+    <svg
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        pointerEvents: "none",
+      }}
+    >
       {sortedMappings.map((m) => (
         <MappingLines
           mapping={m}
@@ -47,7 +59,7 @@ export const SourceTargetLinks: FunctionComponent<ISourceTargetLinksProps> = ({
         end={"dnd-target-field"}
         color={"var(--pf-global--active-color--400)"}
       />
-    </>
+    </svg>
   );
 };
 
@@ -95,5 +107,5 @@ const MappingLines: FunctionComponent<IMappingLinesProps> = ({
     },
     [],
   );
-  return <g>{mappingLines}</g>;
+  return <g className={css(styles.group)}>{mappingLines}</g>;
 };

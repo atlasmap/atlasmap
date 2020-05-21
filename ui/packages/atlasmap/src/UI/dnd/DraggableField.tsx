@@ -22,7 +22,10 @@ export interface IDraggableProps
 }
 
 export const DraggableField = forwardRef<HTMLElement, IDraggableProps>(
-  ({ field, onDrop, as: As = "div", children, ...props }, ref) => {
+  function DraggableField(
+    { field, onDrop, as: As = "div", children, ...props },
+    ref,
+  ) {
     const [{ isDragging }, dragRef, preview] = useDrag<
       IDragAndDropField,
       IDragAndDropField,

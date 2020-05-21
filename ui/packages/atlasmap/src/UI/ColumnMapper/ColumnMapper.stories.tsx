@@ -20,6 +20,8 @@ import {
   TreeGroup,
 } from "..";
 import { TreeItem } from "../Tree/TreeItem";
+import { ImportIcon, AddCircleOIcon } from "@patternfly/react-icons";
+import { Button } from "@patternfly/react-core";
 
 export default {
   title: "ColumnMapper",
@@ -36,6 +38,14 @@ export const example = () => (
             <SearchableColumnHeader
               title={"Source"}
               onSearch={action("onSearch")}
+              actions={[
+                <Button variant={"plain"} key={1}>
+                  <ImportIcon />
+                </Button>,
+                <Button variant={"plain"} key={2}>
+                  <AddCircleOIcon />
+                </Button>,
+              ]}
             />
             <NodeRef id={"Source"}>
               <ColumnBody>
@@ -199,6 +209,14 @@ export const example = () => (
             <SearchableColumnHeader
               title={"Target"}
               onSearch={action("onSearch")}
+              actions={[
+                <Button variant={"plain"} key={1}>
+                  <ImportIcon />
+                </Button>,
+                <Button variant={"plain"} key={2}>
+                  <AddCircleOIcon />
+                </Button>,
+              ]}
             />
             <NodeRef id={"Target"}>
               <ColumnBody>

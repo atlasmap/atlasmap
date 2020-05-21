@@ -13,7 +13,10 @@ export interface IHTMLObjectProps extends SVGProps<SVGForeignObjectElement> {
 }
 
 export const HTMLObject = forwardRef<SVGForeignObjectElement, IHTMLObjectProps>(
-  ({ children, width, height, x, y, className, ...props }, ref) => {
+  function HTMLObject(
+    { children, width, height, x, y, className, ...props },
+    ref,
+  ) {
     return (
       <foreignObject
         width={width}

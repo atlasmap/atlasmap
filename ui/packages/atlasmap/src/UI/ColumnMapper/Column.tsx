@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
     flexFlow: "column nowrap",
     display: "flex",
     minWidth: "400px",
+    padding: "1rem",
   },
   hidden: {
     opacity: 0,

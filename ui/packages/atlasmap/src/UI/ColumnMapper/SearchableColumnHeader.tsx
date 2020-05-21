@@ -4,29 +4,16 @@ import { Button, InputGroup, TextInput } from "@patternfly/react-core";
 import { SearchIcon } from "@patternfly/react-icons";
 
 import { ColumnHeader, IColumnHeaderProps } from "./ColumnHeader";
-import { useToggle } from "../useToggle";
 
 export interface ISearchableColumnHeaderProps extends IColumnHeaderProps {
   onSearch: (content: string) => void;
-  autoFocus?: boolean;
 }
 
 export const SearchableColumnHeader: FunctionComponent<ISearchableColumnHeaderProps> = ({
   title,
   actions = [],
   onSearch,
-  autoFocus = true,
 }) => {
-  const cleanSearchOnTogglingSearchOff = (toggled: boolean) => {
-    if (!toggled) {
-      onSearch("");
-    }
-    return toggled;
-  };
-  const { state: showSearch, toggle: toggleSearch } = useToggle(
-    false,
-    cleanSearchOnTogglingSearchOff,
-  );
   const searchRef = useRef<HTMLInputElement | null>(null);
   const onSearchSubmit = (event: FormEvent<HTMLFormElement>) => {
     if (searchRef.current) {
@@ -39,34 +26,13 @@ export const SearchableColumnHeader: FunctionComponent<ISearchableColumnHeaderPr
     <ColumnHeader
       title={title}
       actions={[
-        <Button
-          variant={"plain"}
-          isInline={true}
-          aria-label="Toggle search input"
-          key={"search"}
-          onClick={toggleSearch}
-          data-testid={`search-${title}-button`}
-          style={{
-            color: showSearch
-              ? "var(--pf-global--primary-color--100)"
-              : undefined,
-          }}
-        >
-          <SearchIcon />
-        </Button>,
-        ...actions,
-      ]}
-    >
-      {showSearch && (
-        <form onSubmit={onSearchSubmit}>
+        <form onSubmit={onSearchSubmit} key="search-form">
           <InputGroup>
             <TextInput
               name={"search"}
               id={"search"}
               type="search"
-              placeholder="Search fields..."
               aria-label="Search fields"
-              autoFocus={autoFocus}
               onChange={onSearch}
               ref={searchRef}
               data-testid={`search-${title}-fields-input-field`}
@@ -75,12 +41,14 @@ export const SearchableColumnHeader: FunctionComponent<ISearchableColumnHeaderPr
               type={"submit"}
               aria-label="Search"
               data-testid={`run-search-${title}-button`}
+              variant={"control"}
             >
-              Search
+              <SearchIcon />
             </Button>
           </InputGroup>
-        </form>
-      )}
-    </ColumnHeader>
+        </form>,
+        ...actions,
+      ]}
+    />
   );
 };
