@@ -29,6 +29,36 @@ describe('MappingManagementService', () => {
     ).toContain('parent');
   });
 
+  test('should not validate if no mappings', async () => {
+    const mappingDefinition = new MappingDefinition();
+
+    service.cfg = new ConfigModel();
+    service.cfg.mappings = mappingDefinition;
+
+    let result = await service.validateMappings();
+
+    expect(result).toBe(false);
+  });
+
+  test('should not validate if no complete mapping', async () => {
+    const source = new Field();
+
+    const mappingModel = new MappingModel();
+    mappingModel.addField(source, false);
+
+    const mappingDefinition = new MappingDefinition();
+    mappingDefinition.mappings.push(mappingModel);
+    mappingModel.cfg.mappings = mappingDefinition;
+    mappingDefinition.activeMapping = mappingModel;
+
+    service.cfg = new ConfigModel();
+    service.cfg.mappings = mappingDefinition;
+
+    let result = await service.validateMappings();
+
+    expect(result).toBe(false);
+  });
+
   test('should clear out source fields when toggling expression with a source collection', () => {
     const source = new Field();
     source.isPrimitive = true;

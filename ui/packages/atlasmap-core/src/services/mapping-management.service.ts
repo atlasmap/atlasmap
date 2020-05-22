@@ -740,16 +740,18 @@ export class MappingManagementService {
   /**
    * Invoke the runtime service to both validate and save the current active mapping.
    */
-  private async validateMappings(): Promise<boolean> {
+  async validateMappings(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       if (
         this.cfg.initCfg.baseMappingServiceUrl === null ||
-        this.cfg.mappings === null
+        this.cfg.mappings === null ||
+        this.cfg.mappings.mappings.filter((m) => m.isFullyMapped()).length === 0
       ) {
-        // validation service not configured or required
+        // validation service not configured or required or no complete mappings
         resolve(false);
         return;
       }
+
       this.cfg.errorService.clearValidationErrors();
       const payload: any = MappingSerializer.serializeMappings(this.cfg);
       const url: string =
@@ -832,7 +834,7 @@ export class MappingManagementService {
           this.cfg.mappings.mappings.push(activeMapping);
         }
 
-        // Validate even if there is no active mapping.  It may be due to a mapping removal.
+        // Validate even if there is no active mapping. It may be due to a mapping removal.
         await this.validateMappings();
       }
       this.mappingUpdatedSource.next();
