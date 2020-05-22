@@ -12,7 +12,7 @@ export function useToggle(
     const newState = onToggle ? await onToggle(!state) : !state;
     setState(newState);
   }, [onToggle, state]);
-  const toggleOff = () => setState(false);
-  const toggleOn = () => setState(true);
+  const toggleOff = useCallback(() => setState(false), []);
+  const toggleOn = useCallback(() => setState(true), []);
   return { state, toggle, toggleOff, toggleOn, setToggle: setState };
 }

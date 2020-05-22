@@ -46,7 +46,7 @@ export function exportAtlasFile(fileName: string) {
   if (fileName.split(".").pop() !== "adm") {
     fileName = fileName.concat(".adm");
   }
-  cfg.fileService.exportMappingsCatalog(fileName);
+  return cfg.fileService.exportMappingsCatalog(fileName);
 }
 
 /**

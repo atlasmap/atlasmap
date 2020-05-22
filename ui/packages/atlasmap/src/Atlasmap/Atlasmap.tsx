@@ -23,6 +23,7 @@ import { useAtlasmap } from "./AtlasmapProvider";
 import { useAtlasmapDialogs } from "./useAtlasmapDialogs";
 import { IUseContextToolbarData, useContextToolbar } from "./useContextToolbar";
 import { useSidebar } from "./useSidebar";
+import { getPropertyValue, getPropertyType, getConstantType } from "./utils";
 
 export interface IAtlasmapProps {
   allowImport?: boolean;
@@ -73,6 +74,9 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     trailerId,
     isFieldAddableToSelection,
     isFieldRemovableFromSelection,
+    onAddToMapping,
+    onRemoveFromMapping,
+    onCreateMapping,
   } = useAtlasmap();
 
   const { handlers, dialogs } = useAtlasmapDialogs({
@@ -90,8 +94,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     showExportAtlasFileToolbarItem: allowExport,
     showResetToolbarItem: allowReset,
     ...toolbarOptions,
-    onImportAtlasFile: (file) => handlers.onImportDocument(file, false),
-    onExportAtlasFile: handlers.onExportAtlasFile,
+    onImportAtlasFile: handlers.onImportAtlasCatalog,
+    onExportAtlasFile: handlers.onExportAtlasCatalog,
     onResetAtlasmap: handlers.onResetAtlasmap,
   });
 
@@ -126,19 +130,29 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   const sourceEvents = useMemo<ISourceColumnCallbacks>(
     () => ({
       canDrop: () => true,
-      onDrop: (s, t) =>
-        handlers.onCreateMapping(s, t.payload as IAtlasmapField),
+      onDrop: (s, t) => onCreateMapping(s, t.payload as IAtlasmapField),
       onShowMappingDetails: selectMapping,
       canAddToSelectedMapping: (f) => isFieldAddableToSelection("source", f),
-      onAddToSelectedMapping: handlers.onAddToMapping,
+      onAddToSelectedMapping: onAddToMapping,
       canRemoveFromSelectedMapping: (f) =>
         isFieldRemovableFromSelection("source", f),
-      onRemoveFromSelectedMapping: handlers.onRemoveFromMapping,
+      onRemoveFromSelectedMapping: onRemoveFromMapping,
       onCreateConstant: handlers.onCreateConstant,
-      onEditConstant: handlers.onEditConstant,
+      onEditConstant: (constant) => {
+        const [value] = constant.split(" ");
+        const valueType = getConstantType(value);
+
+        handlers.onEditConstant({ value, valueType });
+      },
       onDeleteConstant: handlers.onDeleteConstant,
       onCreateProperty: handlers.onCreateProperty,
-      onEditProperty: handlers.onEditProperty,
+      onEditProperty: (property) => {
+        const [leftPart] = property.split(" ");
+        const value = getPropertyValue(leftPart);
+        const valueType = getPropertyType(leftPart);
+
+        handlers.onEditProperty({ name: leftPart, value, valueType });
+      },
       onDeleteProperty: handlers.onDeleteProperty,
       onDeleteDocument: allowDelete
         ? (id) => handlers.onDeleteDocument(id, true)
@@ -153,10 +167,12 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       shouldShowMappingPreviewForField,
       onFieldPreviewChange,
       canStartMapping: () => true, // TODO: check that there is at least one target field unmapped and compatible
-      onStartMapping: (field) => handlers.onCreateMapping(field, undefined),
+      onStartMapping: (field) => onCreateMapping(field, undefined),
     }),
     [
       selectMapping,
+      onAddToMapping,
+      onRemoveFromMapping,
       handlers,
       allowDelete,
       allowCustomJavaClasses,
@@ -164,6 +180,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       searchSources,
       shouldShowMappingPreviewForField,
       onFieldPreviewChange,
+      onCreateMapping,
       isFieldAddableToSelection,
       isFieldRemovableFromSelection,
     ],
@@ -172,14 +189,13 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   const targetEvents = useMemo<ITargetsColumnCallbacks>(
     () => ({
       canDrop: (f) => !f.isConnected,
-      onDrop: (s, t) =>
-        handlers.onCreateMapping(t.payload as IAtlasmapField, s),
+      onDrop: (s, t) => onCreateMapping(t.payload as IAtlasmapField, s),
       canAddToSelectedMapping: (f) => isFieldAddableToSelection("target", f),
       onShowMappingDetails: selectMapping,
-      onAddToSelectedMapping: handlers.onAddToMapping,
+      onAddToSelectedMapping: onAddToMapping,
       canRemoveFromSelectedMapping: (f) =>
         isFieldRemovableFromSelection("target", f),
-      onRemoveFromSelectedMapping: handlers.onRemoveFromMapping,
+      onRemoveFromSelectedMapping: onRemoveFromMapping,
       onDeleteDocument: allowDelete
         ? (id) => handlers.onDeleteDocument(id, false)
         : undefined,
@@ -193,19 +209,22 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       shouldShowMappingPreviewForField,
       onFieldPreviewChange,
       canStartMapping: (field) => !field.isConnected,
-      onStartMapping: (field) => handlers.onCreateMapping(undefined, field),
+      onStartMapping: (field) => onCreateMapping(undefined, field),
     }),
     [
       selectMapping,
-      handlers,
+      onAddToMapping,
+      onRemoveFromMapping,
       allowDelete,
       allowCustomJavaClasses,
       allowImport,
       searchTargets,
       shouldShowMappingPreviewForField,
       onFieldPreviewChange,
+      onCreateMapping,
       isFieldAddableToSelection,
       isFieldRemovableFromSelection,
+      handlers,
     ],
   );
 
@@ -264,7 +283,20 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
           <NamespaceTableView
             sources={sources}
             onCreateNamespace={handlers.onCreateNamespace}
-            onEditNamespace={handlers.onEditNamespace}
+            onEditNamespace={(
+              docName: string,
+              alias: string,
+              uri: string,
+              locationUri: string,
+              targetNamespace: boolean,
+            ) =>
+              handlers.onEditNamespace(docName, {
+                alias,
+                uri,
+                locationUri,
+                targetNamespace,
+              })
+            }
             onDeleteNamespace={handlers.deleteNamespace}
           />
         );
