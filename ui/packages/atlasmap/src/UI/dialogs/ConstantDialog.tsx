@@ -82,6 +82,7 @@ export const ConstantDialog: FunctionComponent<IConstantDialogProps> = ({
             id={"name"}
             autoFocus={true}
             isRequired={true}
+            data-testid={"constant-name-text-input"}
           />
         </FormGroup>
         <FormGroup label={"Value type"} fieldId={"valueType"}>
@@ -89,6 +90,7 @@ export const ConstantDialog: FunctionComponent<IConstantDialogProps> = ({
             value={valueType}
             aria-label={"Select value type"}
             onChange={setValueType}
+            data-testid={"constant-type-form-select"}
           >
             {valueTypeOptions.map(({ label, value }, idx) => (
               <FormSelectOption key={idx} value={value} label={label} />

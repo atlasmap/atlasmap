@@ -25,7 +25,7 @@ export const MappingDetailsSidebar: FunctionComponent<IMappingDetailsSidebarProp
   children,
 }) => {
   return (
-    <Stack>
+    <Stack data-testid="column-mapping-details-area">
       <StackItem>
         <ColumnHeader
           title={"Mapping Details"}

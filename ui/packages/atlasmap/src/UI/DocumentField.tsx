@@ -114,7 +114,10 @@ export const DocumentField = forwardRef<
       >
         <div className={css(styles.row)}>
           {icon && <div className={css(styles.nameIcon)}>{icon}</div>}
-          <div className={css(styles.nameWrapper)}>
+          <div
+            className={css(styles.nameWrapper)}
+            data-testid={`document-${name}-field`}
+          >
             <TruncatedString>{name}</TruncatedString>
             <span>{showType && ` (${type})`}</span>
             <span className={styles.statusIcons}>

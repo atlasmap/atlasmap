@@ -32,7 +32,7 @@ export const example = () => (
     <ColumnMapper onClick={action("onClick")}>
       <NodeRefProvider>
         <Columns>
-          <Column totalColumns={3}>
+          <Column data-testid={"column-source-area"} totalColumns={3}>
             <SearchableColumnHeader
               title={"Source"}
               onSearch={action("onSearch")}
@@ -160,7 +160,7 @@ export const example = () => (
               </ColumnBody>
             </NodeRef>
           </Column>
-          <Column totalColumns={3}>
+          <Column data-testid={"column-mappings-area"} totalColumns={3}>
             <ColumnHeader title={"Mapping"} />
             <NodeRef id={"Mapping"}>
               <ColumnBody>
@@ -195,7 +195,7 @@ export const example = () => (
               </ColumnBody>
             </NodeRef>
           </Column>
-          <Column totalColumns={3}>
+          <Column data-testid={"column-target-area"} totalColumns={3}>
             <SearchableColumnHeader
               title={"Target"}
               onSearch={action("onSearch")}

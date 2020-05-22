@@ -21,7 +21,7 @@ export default {
 
 export const sourcesColumn = () => (
   <CanvasProvider>
-    <Column totalColumns={1}>
+    <Column data-testid={"column-source-area"} totalColumns={1}>
       <SourcesColumn
         onCreateConstant={action("onCreateConstant")}
         onEditConstant={action("onEditConstant")}
@@ -55,7 +55,7 @@ export const sourcesColumn = () => (
 
 export const targetsColumn = () => (
   <CanvasProvider>
-    <Column totalColumns={1}>
+    <Column data-testid={"column-target-area"} totalColumns={1}>
       <TargetsColumn
         onDeleteDocument={action("onDeleteDocument")}
         onImportDocument={action("onImportDocument")}
@@ -81,7 +81,7 @@ export const targetsColumn = () => (
 
 export const mappingsColumn = () => (
   <CanvasProvider>
-    <Column totalColumns={1}>
+    <Column data-testid={"column-mappings-area"} totalColumns={1}>
       <MappingsColumn
         showMappingPreview={boolean("Show mapping preview", true)}
         onFieldPreviewChange={action("onFieldPreviewChange")}

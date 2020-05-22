@@ -46,7 +46,11 @@ export const DocumentGroup = forwardRef<
   };
 
   return (
-    <span className={css(styles.buttonContent)} ref={handleRef}>
+    <span
+      className={css(styles.buttonContent)}
+      ref={handleRef}
+      data-testid={`field-group-${name}-expanded-${expanded}-field`}
+    >
       <span className={css(styles.buttonIcon)}>
         {icon || (expanded ? <FolderOpenIcon /> : <FolderCloseIcon />)}
       </span>
