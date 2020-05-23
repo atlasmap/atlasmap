@@ -14615,6 +14615,11 @@ react-popper@^1.3.7:
     typed-styles "^0.0.7"
     warning "^4.0.2"
 
+react-sage@^0.0.42:
+  version "0.0.42"
+  resolved "https://registry.yarnpkg.com/react-sage/-/react-sage-0.0.42.tgz#19af0603099bb3f249ad901348303ac24f57781f"
+  integrity sha512-IjzU1V8P8mokH2Ty//feZVMcIQkKLYSlS42DCHpxugOr6Clad7gtpsjL/NZZFtbOH0H42fdEazqR2lLMFpxRpQ==
+
 react-scripts@3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/react-scripts/-/react-scripts-3.4.1.tgz#f551298b5c71985cc491b9acf3c8e8c0ae3ada0a"

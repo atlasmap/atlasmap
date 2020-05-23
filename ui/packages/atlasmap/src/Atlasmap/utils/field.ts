@@ -56,6 +56,17 @@ export function editConstant(
   createConstant(constValue, constType);
 }
 
+export function getConstantType(constVal: string): string {
+  const cfg = ConfigModel.getConfig();
+  const field = cfg.constantDoc.getField(
+    cfg.constantDoc.pathSeparator + constVal,
+  );
+  if (!field) {
+    return "";
+  }
+  return field.type;
+}
+
 export function getConstantTypeIndex(constVal: string): number {
   const cfg = ConfigModel.getConfig();
   const field = cfg.constantDoc.getField(
@@ -131,6 +142,17 @@ export function getPropertyValue(propName: string): string {
     return "";
   }
   return field.value;
+}
+
+export function getPropertyType(propName: string): string {
+  const cfg = ConfigModel.getConfig();
+  const field = cfg.propertyDoc.getField(
+    cfg.propertyDoc.pathSeparator + propName,
+  );
+  if (!field) {
+    return "";
+  }
+  return field.type;
 }
 
 export function getPropertyTypeIndex(propName: string): number {

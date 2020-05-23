@@ -1,5 +1,5 @@
-import React, { FunctionComponent } from "react";
-import { FilePicker } from "react-file-picker";
+import React, { FunctionComponent, useEffect, useRef } from "react";
+import { useFilePicker } from "react-sage";
 
 import { Button, ToolbarItem, Tooltip } from "@patternfly/react-core";
 import {
@@ -25,31 +25,47 @@ const styles = StyleSheet.create({
 export const ImportAtlasFileToolbarItem: FunctionComponent<{
   disabled?: boolean;
   onFile: (file: File) => void;
-}> = ({ disabled = false, onFile }) => (
-  <ToolbarItem>
-    <Tooltip
-      position={"auto"}
-      enableFlip={true}
-      content={
-        <div>
-          Import an AtlasMap mappings catalog file (.adm) or Java archive
-          (.jar).
-        </div>
+}> = ({ disabled = false, onFile }) => {
+  const { files, onClick, HiddenFileInput } = useFilePicker({
+    maxFileSize: 1,
+  });
+  const previouslyUploadedFiles = useRef<File[] | null>(null);
+
+  useEffect(() => {
+    if (previouslyUploadedFiles.current !== files) {
+      previouslyUploadedFiles.current = files;
+      if (files?.length === 1) {
+        onFile(files[0]);
       }
-    >
-      <FilePicker extensions={["adm", "jar"]} onChange={onFile}>
+    }
+  }, [files, onFile]);
+
+  return (
+    <ToolbarItem>
+      <Tooltip
+        position={"auto"}
+        enableFlip={true}
+        content={
+          <div>
+            Import an AtlasMap mappings catalog file (.adm) or Java archive
+            (.jar).
+          </div>
+        }
+      >
         <Button
           variant={"plain"}
           aria-label="Import mappings"
           isDisabled={disabled}
           data-testid="import-mappings-button"
+          onClick={onClick}
         >
           <ImportIcon />
         </Button>
-      </FilePicker>
-    </Tooltip>
-  </ToolbarItem>
-);
+      </Tooltip>
+      <HiddenFileInput accept=".adm, .jar" multiple={false} />
+    </ToolbarItem>
+  );
+};
 
 export const ExportAtlasFileToolbarItem: FunctionComponent<{
   disabled?: boolean;

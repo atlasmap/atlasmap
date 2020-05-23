@@ -435,6 +435,28 @@ export function useAtlasmap() {
     resetAtlasmap();
   }, [onReset]);
 
+  const onAddToMapping = useCallback((node: IAtlasmapField) => {
+    const field = (node as IAtlasmapField).amField;
+    addToCurrentMapping(field);
+  }, []);
+
+  const onRemoveFromMapping = useCallback((node: IAtlasmapField) => {
+    const field = (node as IAtlasmapField).amField;
+    removeFromCurrentMapping(field);
+  }, []);
+
+  const onCreateMapping = useCallback(
+    (
+      source: IAtlasmapField | undefined,
+      target: IAtlasmapField | undefined,
+    ) => {
+      const sourceField = (source as IAtlasmapField | undefined)?.amField;
+      const targetField = (target as IAtlasmapField | undefined)?.amField;
+      createMapping(sourceField, targetField);
+    },
+    [],
+  );
+
   const isMappingExpressionEmpty =
     initializationService.cfg.mappings?.activeMapping?.transition?.expression
       ?.nodes.length === 0;
@@ -556,5 +578,8 @@ export function useAtlasmap() {
     createNamespace,
     editNamespace,
     deleteNamespace,
+    onAddToMapping,
+    onRemoveFromMapping,
+    onCreateMapping,
   };
 }

@@ -95,6 +95,8 @@ public class E2ETest {
         WebElement fileInput = driver.findElement(By.xpath("//div[@id='data-toolbar']//input[@type='file']"));
         String cwd = System.getProperty("user.dir");
         fileInput.sendKeys(cwd + "/src/test/resources/json-schema-source-to-xml-schema-target.adm");
+        WebElement confirmBtn = driver.findElement(By.xpath("//button[@data-testid='confirmation-dialog-confirm-button']"));
+        confirmBtn.click();
         waitForLoad.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//article[@aria-label='JSONSchemaSource']")));
         WebElement orderBtn = driver.findElement(By.xpath("//button[@id='sources-field-atlas:json:JSONSchemaSource:source:/order-toggle']"));
         orderBtn.click();
@@ -115,10 +117,11 @@ public class E2ETest {
         WebElement exportBtn = driver.findElement(By.xpath("//button[@data-testid='export-mappings-button']"));
         exportBtn.click();
         WebElement dialogDiv = driver.findElement(By.xpath("//div[@role='dialog' and @aria-label='Export Mappings and Documents.']"));
-        WebElement exportInput = dialogDiv.findElement(By.xpath(".//input[@aria-label='Export Mappings and Documents.']"));
+        WebElement exportInput = dialogDiv.findElement(By.id("filename"));
         String exportAdmFileName = UUID.randomUUID().toString() + "-exported.adm";
+        exportInput.clear();
         exportInput.sendKeys(exportAdmFileName);
-        WebElement confirmBtn = dialogDiv.findElement(By.xpath(".//button[@data-testid='single-input-dialog-confirm-button']"));
+        confirmBtn = dialogDiv.findElement(By.xpath(".//button[@data-testid='confirmation-dialog-confirm-button']"));
         WatchService watcher = FileSystems.getDefault().newWatchService();
         Path dirPath = Paths.get(DLDIR);
         dirPath.register(watcher, StandardWatchEventKinds.ENTRY_CREATE);

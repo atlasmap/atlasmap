@@ -1,21 +1,25 @@
-import { useCallback, useRef } from "react";
+import React, { useCallback, useMemo } from "react";
+import { createPortal } from "react-dom";
 
-import { collectionTypes, constantTypes, propertyTypes } from "@atlasmap/core";
-
-import {
-  useConfirmationDialog,
-  useInputTextSelectDialog,
-  useSingleInputDialog,
-  useNamespaceDialog,
-} from "../UI";
-import { GroupId, IAtlasmapMapping, IAtlasmapField } from "../Views";
-import {
-  getConstantTypeIndex,
-  getPropertyTypeIndex,
-  getPropertyValue,
-  enableCustomClass,
-} from "./utils";
+import { IConstant, INamespace, IProperty } from "../UI";
 import { useAtlasmap } from "./AtlasmapProvider";
+import {
+  useConstantDialog,
+  useDeleteConstantDialog,
+  useDeleteDocumentDialog,
+  useDeleteMappingDialog,
+  useDeletePropertyDialog,
+  useExportCatalogDialog,
+  useImportCatalogDialog,
+  useImportDocumentDialog,
+  useNamespaceDialog,
+  usePropertyDialog,
+  useRemoveMappedFieldDialog,
+  useResetAtlasmapDialog,
+  useToggleExpressionModeDialog,
+  useCustomClassDialog,
+} from "./dialogs";
+import { enableCustomClass } from "./utils";
 
 export interface IUseAtlasmapDialogsProps {
   modalContainer: HTMLElement;
@@ -25,437 +29,187 @@ export function useAtlasmapDialogs({
 }: IUseAtlasmapDialogsProps) {
   const {
     selectedMapping,
-    deselectMapping,
-    removeMapping,
-    deleteAtlasFile,
-    exportAtlasFile,
-    importAtlasFile,
-    resetAtlasmap,
     createConstant,
-    deleteConstant,
     editConstant,
     createProperty,
-    deleteProperty,
     editProperty,
-    documentExists,
-    addToCurrentMapping,
-    createMapping,
-    removeFromCurrentMapping,
     createNamespace,
     editNamespace,
     deleteNamespace,
-    toggleExpressionMode,
-    mappingHasSourceCollection,
   } = useAtlasmap();
 
-  const [importDialog, openImportDialog] = useConfirmationDialog({
-    modalContainer,
-    title: "Overwrite selected document?",
-    content:
-      "Are you sure you want to overwrite the selected document and remove any associated mappings?",
-  });
-
-  const defaultCatalogName = "atlasmap-mapping.adm";
-  const [exportDialog, openExportDialog] = useSingleInputDialog({
-    modalContainer,
-    title: "Export Mappings and Documents.",
-    content: "Please enter a name for your exported catalog file",
-    placeholder: defaultCatalogName,
-  });
-
-  const title = useRef<string>("");
-  const textVal1 = useRef<string>("");
-  const textVal2 = useRef<string>("");
-  const textVal3 = useRef<string>("");
-  const booleanVal = useRef<boolean>(false);
-  const selectIndex = useRef<number>(0);
-
-  const [createNamespaceDialog, openCreateNamespaceDialog] = useNamespaceDialog(
-    {
-      docName: title.current,
-      initAlias: textVal1,
-      initUri: textVal2,
-      initLocationUri: textVal3,
-      initIsTarget: booleanVal,
-      modalContainer,
-    },
+  //#region constant dialogs
+  const [createConstantDialog, openCreateConstantDialog] = useConstantDialog(
+    "Create Constant",
   );
-
-  const [editNamespaceDialog, openEditNamespaceDialog] = useNamespaceDialog({
-    docName: title.current,
-    initAlias: textVal1,
-    initUri: textVal2,
-    initLocationUri: textVal3,
-    initIsTarget: booleanVal,
-    modalContainer,
-  });
-
-  const [
-    createConstantDialog,
-    openCreateConstantDialog,
-  ] = useInputTextSelectDialog({
-    modalContainer,
-    title: "Create Constant",
-    textLabel1: "Value",
-    textValue1: textVal1,
-    text1ReadOnly: false,
-    textLabel2: "",
-    textValue2: textVal2,
-    selectLabel: "Value Type",
-    selectValues: constantTypes,
-    selectDefault: selectIndex,
-  });
-
-  const [
-    deleteConstantDialog,
-    openDeleteConstantDialog,
-  ] = useConfirmationDialog({
-    modalContainer,
-    title: "Delete constant?",
-    content:
-      "Are you sure you want to delete the selected constant and remove any associated mapping references?",
-  });
-
-  const [editConstantDialog, openEditConstantDialog] = useInputTextSelectDialog(
-    {
-      modalContainer,
-      title: "Edit Constant",
-      textLabel1: "Value",
-      textValue1: textVal1,
-      text1ReadOnly: false,
-      textLabel2: "",
-      textValue2: textVal2,
-      selectLabel: "Value Type",
-      selectValues: constantTypes,
-      selectDefault: selectIndex,
-    },
-  );
-
-  const [
-    createPropertyDialog,
-    openCreatePropertyDialog,
-  ] = useInputTextSelectDialog({
-    modalContainer,
-    title: "Create Property",
-    textLabel1: "Name",
-    textValue1: textVal1,
-    text1ReadOnly: false,
-    textLabel2: "Value",
-    textValue2: textVal2,
-    selectLabel: "Value Type",
-    selectValues: propertyTypes,
-    selectDefault: selectIndex,
-  });
-
-  const [
-    deletePropertyDialog,
-    openDeletePropertyDialog,
-  ] = useConfirmationDialog({
-    modalContainer,
-    title: "Delete property?",
-    content:
-      "Are you sure you want to delete the selected property and remove any associated mapping references?",
-  });
-
-  const [editPropertyDialog, openEditPropertyDialog] = useInputTextSelectDialog(
-    {
-      modalContainer,
-      title: "Edit Property",
-      textLabel1: "Name",
-      textValue1: textVal1,
-      text1ReadOnly: true,
-      textLabel2: "Value",
-      textValue2: textVal2,
-      selectLabel: "Value Type",
-      selectValues: propertyTypes,
-      selectDefault: selectIndex,
-    },
-  );
-
-  const [resetDialog, openResetDialog] = useConfirmationDialog({
-    modalContainer,
-    title: "Reset All Mappings and Imports?",
-    content:
-      "Are you sure you want to reset all mappings and clear all imported documents?",
-  });
-
-  const [
-    toggleExpressionModeDialog,
-    openToggleExpressionModeDialog,
-  ] = useConfirmationDialog({
-    modalContainer,
-    title: "Disable Expression?",
-    content:
-      "If you disable an expression with a source collection, all source fields will be removed from the mapping.  Proceed with expression disable?",
-  });
-
-  const [deleteDocumentDialog] = useConfirmationDialog({
-    modalContainer,
-    title: "Remove selected document?",
-    content:
-      "Are you sure you want to remove the selected document and any associated mappings?",
-  });
-
-  const [
-    removeMappedFieldDialog,
-    openRemoveMappedFieldDialog,
-  ] = useConfirmationDialog({
-    modalContainer,
-    title: "Remove field?",
-    content: "Are you sure you want to remove this field?",
-  });
-
-  const [deleteMappingDialog, openDeleteMappingDialog] = useConfirmationDialog({
-    modalContainer,
-    title: "Remove Mapping?",
-    content: "Are you sure you want to remove the current mapping?",
-  });
-
-  const [
-    createEnableCustomClassDialog,
-    openCreateEnableCustomClassDialog,
-  ] = useInputTextSelectDialog({
-    modalContainer,
-    title: "Enable Custom Class",
-    textLabel1: "Custom Class Package Name",
-    textValue1: textVal1,
-    text1ReadOnly: false,
-    textLabel2: "",
-    textValue2: textVal2,
-    selectLabel: "Collection Type",
-    selectValues: collectionTypes,
-    selectDefault: selectIndex,
-  });
-
-  const onExportAtlasFile = useCallback(() => {
-    openExportDialog((value: string) => {
-      if (value.length === 0) {
-        value = defaultCatalogName;
-      }
-      exportAtlasFile(value);
-    });
-  }, [exportAtlasFile, openExportDialog]);
-
-  const onCreateNamespace = (docName: string) => {
-    title.current = docName;
-    textVal1.current = "";
-    textVal2.current = "";
-    textVal3.current = "";
-    booleanVal.current = false;
-    openCreateNamespaceDialog(
-      (
-        docName: string,
-        _initAlias: string,
-        alias: string,
-        uri: string,
-        locationUri: string,
-        isTarget: boolean,
-      ) => {
-        createNamespace(docName, alias, uri, locationUri, isTarget);
-      },
-    );
-  };
-
-  const onEditNamespace = (
-    docName: string,
-    alias: string,
-    uri: string,
-    locationUri: string,
-    isTarget: boolean,
-  ) => {
-    title.current = docName;
-    textVal1.current = alias;
-    textVal2.current = uri;
-    textVal3.current = locationUri;
-    booleanVal.current = isTarget;
-    openEditNamespaceDialog(
-      (
-        docName: string,
-        initAlias: string,
-        alias: string,
-        uri: string,
-        locationUri: string,
-        isTarget: boolean,
-      ) => {
-        editNamespace(docName, initAlias, alias, uri, locationUri, isTarget);
-      },
-    );
-  };
-
   const onCreateConstant = useCallback(() => {
-    textVal1.current = "";
-    selectIndex.current = 12;
-    openCreateConstantDialog(
-      (value: string, _value2: string, valueType: string) => {
-        createConstant(value, valueType);
-      },
-    );
+    openCreateConstantDialog(({ value, valueType }) => {
+      createConstant(value, valueType);
+    });
   }, [createConstant, openCreateConstantDialog]);
 
-  const onDeleteConstant = useCallback(
-    (constValue: string) =>
-      openDeleteConstantDialog(() => deleteConstant(constValue)),
-    [deleteConstant, openDeleteConstantDialog],
+  const [editConstantDialog, openEditConstantDialog] = useConstantDialog(
+    "Edit Constant",
   );
-
   const onEditConstant = useCallback(
-    (selectedValue: string) => {
-      const originalValue = selectedValue.split(" ")[0];
-      textVal1.current = originalValue;
-      textVal2.current = "";
-      selectIndex.current = getConstantTypeIndex(originalValue);
-      openEditConstantDialog(
-        (value: string, _value2: string, valueType: string) => {
-          editConstant(originalValue, value, valueType);
-        },
-      );
+    (constant: IConstant) => {
+      openEditConstantDialog(({ value, valueType }) => {
+        editConstant(constant.value, value, valueType);
+      }, constant);
     },
     [editConstant, openEditConstantDialog],
   );
+  const [deleteConstantDialog, onDeleteConstant] = useDeleteConstantDialog();
+  //#endregion
 
+  //#region property dialogs
+  const [createPropertyDialog, openCreatePropertyDialog] = usePropertyDialog(
+    "Create Property",
+  );
   const onCreateProperty = useCallback(() => {
-    textVal1.current = "";
-    textVal2.current = "";
-    selectIndex.current = 13;
-    openCreatePropertyDialog(
-      (name: string, value: string, valueType: string) => {
-        createProperty(name, value, valueType);
-      },
-    );
+    openCreatePropertyDialog(({ name, value, valueType }) => {
+      createProperty(name, value, valueType);
+    });
   }, [createProperty, openCreatePropertyDialog]);
 
-  const onDeleteProperty = useCallback(
-    (propName: string) =>
-      openDeletePropertyDialog(() => deleteProperty(propName)),
-    [deleteProperty, openDeletePropertyDialog],
+  const [editPropertyDialog, openEditPropertyDialog] = usePropertyDialog(
+    "Edit Property",
   );
-
   const onEditProperty = useCallback(
-    (selectedName: string) => {
-      textVal1.current = selectedName.split(" ")[0];
-      textVal2.current = getPropertyValue(textVal1.current);
-      selectIndex.current = getPropertyTypeIndex(textVal1.current);
-
-      openEditPropertyDialog(
-        (name: string, value: string, valueType: string) => {
-          editProperty(name, value, valueType);
-        },
-      );
+    (property: IProperty) => {
+      openEditPropertyDialog(({ name, value, valueType }) => {
+        editProperty(name, value, valueType);
+      }, property);
     },
     [editProperty, openEditPropertyDialog],
   );
+  const [deletePropertyDialog, onDeleteProperty] = useDeletePropertyDialog();
+  //#endregion
 
-  const getCustomClass = useCallback(
-    (
-      getCustomClassSelections: (
-        selectClass: string,
-        selectCollection: string,
-      ) => void,
-    ) => {
-      textVal1.current = "";
-      textVal2.current = "";
-      selectIndex.current = 3;
-      openCreateEnableCustomClassDialog(getCustomClassSelections);
-    },
-    [openCreateEnableCustomClassDialog],
-  );
+  //#region atlasmap catalog
+  const [importCatalogDialog, onImportAtlasCatalog] = useImportCatalogDialog();
+  const [exportCatalogDialog, onExportAtlasCatalog] = useExportCatalogDialog();
+  const [resetDialog, onResetAtlasmap] = useResetAtlasmapDialog();
+  const [
+    toggleExpressionModeDialog,
+    onToggleExpressionMode,
+  ] = useToggleExpressionModeDialog();
+  //#endregion
 
-  const onEnableCustomClass = useCallback(
-    (isSource: boolean): void => {
-      getCustomClass((selectedClass: string, selectedCollection: string) =>
-        enableCustomClass(selectedClass, selectedCollection, isSource),
-      );
-    },
-    [getCustomClass],
-  );
-
-  const onToggleExpressionMode = useCallback((): void => {
-    if (mappingHasSourceCollection()) {
-      openToggleExpressionModeDialog(toggleExpressionMode);
-    } else {
-      toggleExpressionMode();
-    }
-  }, [
-    mappingHasSourceCollection,
-    openToggleExpressionModeDialog,
-    toggleExpressionMode,
-  ]);
-
-  const onResetAtlasmap = useCallback(() => openResetDialog(resetAtlasmap), [
-    openResetDialog,
-    resetAtlasmap,
-  ]);
-
-  const onImportDocument = useCallback(
-    (selectedFile: File, isSource: boolean) => {
-      if (documentExists(selectedFile, isSource)) {
-        openImportDialog(() => importAtlasFile(selectedFile, isSource));
-      } else {
-        importAtlasFile(selectedFile, isSource);
-      }
-    },
-    [documentExists, importAtlasFile, openImportDialog],
-  );
-  const onDeleteDocument = useCallback(
-    (id: GroupId, isSource: boolean) => deleteAtlasFile(id, isSource),
-    [deleteAtlasFile],
-  );
-  const onRemoveMappedField = useCallback(
-    (removeMappedField: () => void) =>
-      openRemoveMappedFieldDialog(removeMappedField),
-    [openRemoveMappedFieldDialog],
-  );
-
-  const onNewTransformation = useCallback(() => void 0, []);
-  const onRemoveTransformation = useCallback(() => void 0, []);
-
-  const onDeleteMapping = useCallback(
-    (mapping: IAtlasmapMapping) => {
-      openDeleteMappingDialog(() => {
-        removeMapping(mapping.mapping);
-        deselectMapping();
-      });
-    },
-    [deselectMapping, openDeleteMappingDialog, removeMapping],
-  );
-
+  //#region editor dialogs
+  const [importDocumentDialog, onImportDocument] = useImportDocumentDialog();
+  const [deleteDocumentDialog, onDeleteDocument] = useDeleteDocumentDialog();
+  const [
+    removeMappedFieldDialog,
+    onRemoveMappedField,
+  ] = useRemoveMappedFieldDialog();
+  const [deleteMappingDialog, onDeleteMapping] = useDeleteMappingDialog();
   const onDeleteSelectedMapping = useCallback(() => {
     if (selectedMapping) {
       onDeleteMapping(selectedMapping);
     }
   }, [onDeleteMapping, selectedMapping]);
+  //#endregion
 
-  const onAddToMapping = useCallback(
-    (node: IAtlasmapField) => {
-      const field = (node as IAtlasmapField).amField;
-      addToCurrentMapping(field);
+  //#region namespace table dialogs
+  const [createNamespaceDialog, openCreateNamespaceDialog] = useNamespaceDialog(
+    "Create namespace",
+  );
+  const onCreateNamespace = useCallback(
+    (docName: string) => {
+      openCreateNamespaceDialog(
+        ({ alias, uri, locationUri, targetNamespace }) =>
+          createNamespace(docName, alias, uri, locationUri, targetNamespace),
+      );
     },
-    [addToCurrentMapping],
+    [createNamespace, openCreateNamespaceDialog],
+  );
+  const [editNamespaceDialog, openEditNamespaceDialog] = useNamespaceDialog(
+    "Edit namespace",
+  );
+  const onEditNamespace = useCallback(
+    (docName: string, namespace: INamespace) => {
+      openEditNamespaceDialog(
+        ({ alias, uri, locationUri, targetNamespace }) =>
+          editNamespace(
+            docName,
+            namespace.alias,
+            alias,
+            uri,
+            locationUri,
+            targetNamespace,
+          ),
+        namespace,
+      );
+    },
+    [editNamespace, openEditNamespaceDialog],
+  );
+  //#endregion
+
+  const [
+    createEnableCustomClassDialog,
+    openCreateEnableCustomClassDialog,
+  ] = useCustomClassDialog("Enable Custom Class");
+
+  const onEnableCustomClass = useCallback(
+    (isSource: boolean): void => {
+      openCreateEnableCustomClassDialog(({ value, collectionType }) =>
+        enableCustomClass(value, collectionType, isSource),
+      );
+    },
+    [openCreateEnableCustomClassDialog],
   );
 
-  const onRemoveFromMapping = useCallback(
-    (node: IAtlasmapField) => {
-      const field = (node as IAtlasmapField).amField;
-      removeFromCurrentMapping(field);
-    },
-    [removeFromCurrentMapping],
-  );
-
-  const onCreateMapping = useCallback(
-    (
-      source: IAtlasmapField | undefined,
-      target: IAtlasmapField | undefined,
-    ) => {
-      const sourceField = (source as IAtlasmapField | undefined)?.amField;
-      const targetField = (target as IAtlasmapField | undefined)?.amField;
-      createMapping(sourceField, targetField);
-    },
-    [createMapping],
+  const portal = useMemo(
+    () =>
+      createPortal(
+        <>
+          {importCatalogDialog}
+          {exportCatalogDialog}
+          {importDocumentDialog}
+          {deleteDocumentDialog}
+          {createConstantDialog}
+          {deleteConstantDialog}
+          {editConstantDialog}
+          {createPropertyDialog}
+          {deletePropertyDialog}
+          {editPropertyDialog}
+          {resetDialog}
+          {removeMappedFieldDialog}
+          {deleteMappingDialog}
+          {createEnableCustomClassDialog}
+          {createNamespaceDialog}
+          {editNamespaceDialog}
+          {toggleExpressionModeDialog}
+        </>,
+        modalContainer,
+      ),
+    [
+      createConstantDialog,
+      createEnableCustomClassDialog,
+      createNamespaceDialog,
+      createPropertyDialog,
+      deleteConstantDialog,
+      deleteDocumentDialog,
+      deleteMappingDialog,
+      deletePropertyDialog,
+      editConstantDialog,
+      editNamespaceDialog,
+      editPropertyDialog,
+      exportCatalogDialog,
+      importCatalogDialog,
+      importDocumentDialog,
+      modalContainer,
+      removeMappedFieldDialog,
+      resetDialog,
+      toggleExpressionModeDialog,
+    ],
   );
 
   return {
     handlers: {
-      onExportAtlasFile,
+      onImportAtlasCatalog,
+      onExportAtlasCatalog,
       onCreateConstant,
       onDeleteConstant,
       onEditConstant,
@@ -466,36 +220,14 @@ export function useAtlasmapDialogs({
       onImportDocument,
       onDeleteDocument,
       onRemoveMappedField,
-      onNewTransformation,
-      onRemoveTransformation,
       onDeleteMapping,
       onDeleteSelectedMapping,
-      onAddToMapping,
-      onRemoveFromMapping,
-      onCreateMapping,
       onEnableCustomClass,
       onCreateNamespace,
       onEditNamespace,
       deleteNamespace,
       onToggleExpressionMode,
     },
-    dialogs: [
-      exportDialog,
-      importDialog,
-      deleteDocumentDialog,
-      createConstantDialog,
-      deleteConstantDialog,
-      editConstantDialog,
-      createPropertyDialog,
-      deletePropertyDialog,
-      editPropertyDialog,
-      resetDialog,
-      removeMappedFieldDialog,
-      deleteMappingDialog,
-      createEnableCustomClassDialog,
-      createNamespaceDialog,
-      editNamespaceDialog,
-      toggleExpressionModeDialog,
-    ],
+    dialogs: portal,
   };
 }
