@@ -1,9 +1,9 @@
 {
   "name": "@atlasmap/standalone",
-  "version": "2.1.0-SNAPSHOT",
+  "version": "2.0.3",
   "private": true,
   "dependencies": {
-    "@atlasmap/atlasmap": "^2.1.0-SNAPSHOT",
+    "@atlasmap/atlasmap": "^2.0.3",
     "@patternfly/react-core": "^3.77.2",
     "@patternfly/react-icons": "^3.10.15",
     "@patternfly/react-styles": "^3.5.7",
@@ -54,7 +54,6 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {},
   "jest": {
     "moduleNameMapper": {
       "ky": "ky/umd"
