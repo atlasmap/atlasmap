@@ -46,6 +46,7 @@ export const MainLayout: FunctionComponent<IMainLayoutProps> = memo(
         sideBarOpen={showSidebar}
         sideBar={<Sidebar show={showSidebar} children={renderSidebar} />}
         className={css(styles.view)}
+        data-testid="datamapper-root-view"
       >
         {children}
       </TopologyView>

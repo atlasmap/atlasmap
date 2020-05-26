@@ -125,6 +125,7 @@ export const SourcesColumn: FunctionComponent<
           onCustomClassSearch && (
             <EnableJavaClassAction
               onCustomClassSearch={() => onCustomClassSearch(true)}
+              data-testid={"enable-specific-java-classes-Source-button"}
               key={"java"}
             />
           ),

@@ -8,6 +8,7 @@ export interface IEnableJavaClassActionProps {
 
 export const EnableJavaClassAction: FunctionComponent<IEnableJavaClassActionProps> = ({
   onCustomClassSearch,
+  ...props
 }) => {
   function onEnableClassSearch(): void {
     onCustomClassSearch();
@@ -28,6 +29,7 @@ export const EnableJavaClassAction: FunctionComponent<IEnableJavaClassActionProp
         variant="plain"
         onClick={onEnableClassSearch}
         aria-label="Enable specific Java classes from your previously imported Java archive."
+        {...props}
       >
         <AddCircleOIcon />
       </Button>

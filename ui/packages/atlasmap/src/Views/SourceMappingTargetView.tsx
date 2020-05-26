@@ -53,7 +53,7 @@ export const SourceMappingTargetView: FunctionComponent<ISourceMappingTargetView
     <ColumnMapper role={"main"}>
       <NodeRefProvider>
         <Columns>
-          <Column totalColumns={3}>
+          <Column data-testid={"column-source-area"} totalColumns={3}>
             <SourcesColumn
               properties={properties}
               constants={constants}
@@ -62,7 +62,7 @@ export const SourceMappingTargetView: FunctionComponent<ISourceMappingTargetView
               {...sourceEvents}
             />
           </Column>
-          <Column totalColumns={3}>
+          <Column data-testid={"column-mappings-area"} totalColumns={3}>
             <MappingsColumn
               mappings={mappings}
               selectedMappingId={selectedMappingId}
@@ -72,7 +72,7 @@ export const SourceMappingTargetView: FunctionComponent<ISourceMappingTargetView
               {...mappingEvents}
             />
           </Column>
-          <Column totalColumns={3}>
+          <Column data-testid={"column-target-area"} totalColumns={3}>
             <TargetsColumn
               showMappingPreview={showMappingPreview}
               showTypes={showTypes}

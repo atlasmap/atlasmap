@@ -87,16 +87,23 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
             id={"name"}
             autoFocus={true}
             isRequired={true}
+            data-testid={"property-name-text-input"}
           />
         </FormGroup>
         <FormGroup label={"Value"} fieldId={"value"}>
-          <TextInput value={value} onChange={setValue} id={"value"} />
+          <TextInput
+            value={value}
+            onChange={setValue}
+            id={"value"}
+            data-testid={"property-value-text-input"}
+          />
         </FormGroup>
         <FormGroup label={"Value type"} fieldId={"valueType"}>
           <FormSelect
             value={valueType}
             aria-label={"Select value type"}
             onChange={setValueType}
+            data-testid={"property-type-form-select"}
           >
             {valueTypeOptions.map(({ label, value }, idx) => (
               <FormSelectOption key={idx} value={value} label={label} />

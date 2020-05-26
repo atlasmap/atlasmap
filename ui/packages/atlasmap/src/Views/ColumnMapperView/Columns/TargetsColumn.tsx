@@ -91,6 +91,7 @@ export const TargetsColumn: FunctionComponent<
           onCustomClassSearch && (
             <EnableJavaClassAction
               onCustomClassSearch={() => onCustomClassSearch(false)}
+              data-testid={"enable-specific-java-classes-Target-button"}
               key={"java"}
             />
           ),

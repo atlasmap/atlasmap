@@ -87,6 +87,7 @@ export const CustomClassDialog: FunctionComponent<ICustomClassDialogProps> = ({
             autoFocus={true}
             isRequired={true}
             placeholder={"com.package.class"}
+            data-testid={"class-package-name-text-input"}
           />
         </FormGroup>
         <FormGroup label={"Collection type"} fieldId={"valueType"}>
@@ -94,6 +95,7 @@ export const CustomClassDialog: FunctionComponent<ICustomClassDialogProps> = ({
             value={collectionType}
             aria-label={"Select value type"}
             onChange={setCollectionType}
+            data-testid={"collection-type-form-select"}
           >
             {collectionTypeOptions.map(({ label, value }, idx) => (
               <FormSelectOption key={idx} value={value} label={label} />

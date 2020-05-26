@@ -47,6 +47,7 @@ export const ExportCatalogDialog: FunctionComponent<IExportCatalogDialogProps> =
               id={"filename"}
               isRequired={true}
               autoFocus={true}
+              data-testid={"export-catalog-dialog-text-input"}
             />
             <InputGroupText>.adm</InputGroupText>
           </InputGroup>

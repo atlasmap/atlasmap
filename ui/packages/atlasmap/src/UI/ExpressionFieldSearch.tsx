@@ -160,6 +160,7 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
     <div
       aria-label="Expression Field Search"
       className={css(styles.searchMenu)}
+      data-testid={"expression-field-search"}
     >
       <Select
         isExpanded={true}

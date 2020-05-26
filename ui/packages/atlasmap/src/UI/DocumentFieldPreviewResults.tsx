@@ -28,6 +28,7 @@ export const DocumentFieldPreviewResults: FunctionComponent<IDocumentFieldPrevie
           aria-label="Mapping results preview"
           placeholder="Results will be displayed here"
           isDisabled={true}
+          data-testid={`results-document-mapping-preview-${id}-field`}
         />
       </FormGroup>
     </Form>

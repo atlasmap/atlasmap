@@ -70,7 +70,7 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
 }) => {
   const id = `mapping-field-${name}`;
   return (
-    <div className={css(styles.field)} aria-labelledby={id}>
+    <div className={css(styles.field)} aria-labelledby={id} data-testid={id}>
       <Split>
         <SplitItem isFilled>
           <Title size={"sm"} id={id} className={css(styles.title)}>

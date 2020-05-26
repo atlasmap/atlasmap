@@ -36,6 +36,7 @@ export const DocumentFieldPreview: FunctionComponent<IDocumentFieldPreviewProps>
           defaultValue={value || ""}
           aria-label="Type sample data here"
           placeholder="Type sample data here"
+          data-testid={`input-document-mapping-preview-${id}-field`}
         />
       </FormGroup>
     </Form>

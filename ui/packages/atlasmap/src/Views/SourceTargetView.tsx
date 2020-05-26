@@ -39,7 +39,7 @@ export const SourceTargetView: FunctionComponent<ISourceTargetViewProps> = ({
     <ColumnMapper role={"main"}>
       <NodeRefProvider>
         <Columns>
-          <Column totalColumns={2}>
+          <Column data-testid={"column-source-area"} totalColumns={2}>
             <SourcesColumn
               properties={properties}
               constants={constants}
@@ -49,7 +49,7 @@ export const SourceTargetView: FunctionComponent<ISourceTargetViewProps> = ({
             />
           </Column>
 
-          <Column totalColumns={2}>
+          <Column data-testid={"column-target-area"} totalColumns={2}>
             <TargetsColumn
               showMappingPreview={showMappingPreview}
               showTypes={showTypes}
