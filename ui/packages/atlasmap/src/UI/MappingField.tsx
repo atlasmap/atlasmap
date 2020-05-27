@@ -110,8 +110,8 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
             </Tooltip>
           </Title>
         </SplitItem>
-        <SplitItem>
-          {onNewTransformation && (
+        {onNewTransformation && (
+          <SplitItem>
             <Button
               variant={"plain"}
               onClick={onNewTransformation}
@@ -120,7 +120,9 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
             >
               <BoltIcon />
             </Button>
-          )}
+          </SplitItem>
+        )}
+        <SplitItem>
           <Button
             variant={"plain"}
             onClick={onDelete}
