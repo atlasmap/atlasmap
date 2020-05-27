@@ -657,7 +657,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         ArrayList<Action> actions = field.getActions();
         FieldType targetType = field.getFieldType();
 
-        if (actions == null || actions == null || actions.isEmpty()) {
+        if (actions == null || actions.isEmpty()) {
             return field;
         }
 

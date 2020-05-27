@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.management.ObjectName;
 
@@ -54,6 +55,7 @@ import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.Collection;
 import io.atlasmap.v2.ConstantField;
+import io.atlasmap.v2.CopyTo;
 import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceKey;
 import io.atlasmap.v2.DataSourceMetadata;
@@ -520,6 +522,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                             session.head().setSourceField(group);
                             DefaultAtlasExpressionProcessor.processExpression(session, mapping.getExpression());
                         } else {
+                            applyCopyToActions(mapping.getInputField(), mapping);
                             processSourceFieldMappings(session, mapping.getInputField());
                         }
                     } else {
@@ -644,6 +647,51 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
             Field processed = applyFieldActions(session, session.head().getSourceField());
             session.head().setSourceField(processed);
             sourceFields.set(i, processed);
+        }
+    }
+
+    /**
+     * Checks for CopyTo actions and correctly sets the path for targetField by setting the indexes specified in each action
+     */
+    private void applyCopyToActions(List<Field> sourceFields, Mapping mapping) {
+        for (Field sourceField : sourceFields) {
+
+            if (sourceField instanceof FieldGroup) {
+                applyCopyToActions(((FieldGroup) sourceField).getField(), mapping);
+                continue;
+            }
+
+            if (sourceField.getActions() == null) {
+                continue;
+            }
+
+            List<CopyTo> copyTos = sourceField.getActions().stream().filter(a -> a instanceof CopyTo).map(a -> (CopyTo) a).collect(Collectors.toList());
+            if (copyTos.size() == 0) {
+                return;
+            }
+
+            if (copyTos.stream().flatMap(c -> c.getIndexes().stream().filter(i -> i < 0)).count() > 0) {
+                throw new IllegalArgumentException("Indexes must be >= 0");
+            }
+
+            /*
+             * For each index present in CopyTo, set the corresponding index in the path.
+             * each index of copyTo is supposed to have a counterpart in the path.
+             */
+            for (CopyTo copyTo : copyTos) {
+                for (Field field : mapping.getOutputField()) {
+                    AtlasPath path = new AtlasPath(field.getPath());
+                    List<AtlasPath.SegmentContext> segments = path.getCollectionSegments(true);
+                    for (int i = 0; i < copyTo.getIndexes().size(); i++) {
+                        if (i < segments.size()) { // In case there are too many indexes specified
+                            path.setCollectionIndex(i + 1, copyTo.getIndexes().get(i));// +1 since 0 is the root segment
+                        }
+                    }
+                    field.setPath(path.toString());
+                }
+                // The processor associated to this action is a fake. It shall not execute, so remove the action.
+                sourceField.getActions().remove(copyTo);
+            }
         }
     }
 
