@@ -19,8 +19,6 @@ import io.atlasmap.spi.FunctionFactory;
 
 public abstract class BaseFunctionFactory implements FunctionFactory {
 
-    public static final String FUNCTION_PATH = "$FUNCTION";
- 
     public String getName() {
         return getClass().getSimpleName();
     }

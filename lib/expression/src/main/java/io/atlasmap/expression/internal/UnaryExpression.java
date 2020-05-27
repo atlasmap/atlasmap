@@ -16,6 +16,8 @@
  */
 package io.atlasmap.expression.internal;
 
+import static io.atlasmap.v2.AtlasModelFactory.wrapWithField;
+
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashSet;
@@ -25,7 +27,7 @@ import java.util.List;
 import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.ExpressionContext;
 import io.atlasmap.expression.ExpressionException;
-import io.atlasmap.expression.parser.ParseException;
+import io.atlasmap.v2.Field;
 
 
 /**
@@ -44,13 +46,13 @@ public abstract class UnaryExpression implements Expression {
 
     public static Expression createNegate(Expression left) {
         return new UnaryExpression(left) {
-            public Object evaluate(ExpressionContext expressionContext) throws ExpressionException {
-                Object rvalue = right.evaluate(expressionContext);
+            public Field evaluate(ExpressionContext expressionContext) throws ExpressionException {
+                Object rvalue = right.evaluate(expressionContext).getValue();
                 if (rvalue == null) {
-                    return null;
+                    return wrapWithField(null);
                 }
                 if (rvalue instanceof Number) {
-                    return negate((Number)rvalue);
+                    return wrapWithField(negate((Number)rvalue));
                 }
                 return null;
             }
@@ -75,20 +77,20 @@ public abstract class UnaryExpression implements Expression {
         final Collection<Object> inList = t;
 
         return new BooleanUnaryExpression(right) {
-            public Object evaluate(ExpressionContext expressionContext) throws ExpressionException {
+            public Field evaluate(ExpressionContext expressionContext) throws ExpressionException {
 
-                Object rvalue = right.evaluate(expressionContext);
+                Object rvalue = right.evaluate(expressionContext).getValue();
                 if (rvalue == null) {
-                    return null;
+                    return wrapWithField(null);
                 }
                 if (rvalue.getClass() != String.class) {
-                    return null;
+                    return wrapWithField(null);
                 }
 
                 if ((inList != null && inList.contains(rvalue)) ^ not) {
-                    return Boolean.TRUE;
+                    return wrapWithField(Boolean.TRUE);
                 } else {
-                    return Boolean.FALSE;
+                    return wrapWithField(Boolean.FALSE);
                 }
 
             }
@@ -130,19 +132,19 @@ public abstract class UnaryExpression implements Expression {
         }
 
         public boolean matches(ExpressionContext message) throws ExpressionException {
-            Object object = evaluate(message);
+            Object object = evaluate(message).getValue();
             return object != null && object == Boolean.TRUE;
         }
     };
 
     public static BooleanExpression createNOT(BooleanExpression left) {
         return new BooleanUnaryExpression(left) {
-            public Object evaluate(ExpressionContext expressionContext) throws ExpressionException {
-                Boolean lvalue = (Boolean)right.evaluate(expressionContext);
+            public Field evaluate(ExpressionContext expressionContext) throws ExpressionException {
+                Boolean lvalue = (Boolean)right.evaluate(expressionContext).getValue();
                 if (lvalue == null) {
-                    return null;
+                    return wrapWithField(null);
                 }
-                return lvalue.booleanValue() ? Boolean.FALSE : Boolean.TRUE;
+                return wrapWithField(lvalue.booleanValue() ? Boolean.FALSE : Boolean.TRUE);
             }
 
             public String getExpressionSymbol() {
@@ -153,15 +155,15 @@ public abstract class UnaryExpression implements Expression {
 
     public static BooleanExpression createBooleanCast(Expression left) {
         return new BooleanUnaryExpression(left) {
-            public Object evaluate(ExpressionContext expressionContext) throws ExpressionException {
-                Object rvalue = right.evaluate(expressionContext);
+            public Field evaluate(ExpressionContext expressionContext) throws ExpressionException {
+                Object rvalue = right.evaluate(expressionContext).getValue();
                 if (rvalue == null) {
                     return null;
                 }
                 if (!rvalue.getClass().equals(Boolean.class)) {
-                    return Boolean.FALSE;
+                    return wrapWithField(Boolean.FALSE);
                 }
-                return ((Boolean)rvalue).booleanValue() ? Boolean.TRUE : Boolean.FALSE;
+                return wrapWithField(((Boolean)rvalue).booleanValue() ? Boolean.TRUE : Boolean.FALSE);
             }
 
             public String toString() {

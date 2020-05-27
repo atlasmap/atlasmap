@@ -17,11 +17,15 @@ package io.atlasmap.v2;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SuppressWarnings("squid:S3776")
 public class AtlasModelFactory {
+
+    public static final String GENERATED_PATH = "$ATLASMAP";
 
     private AtlasModelFactory() {
     }
@@ -266,4 +270,34 @@ public class AtlasModelFactory {
         tmp.append("]");
         return tmp.toString();
     }
+
+    public static Field wrapWithField(Object val) {
+        if (val instanceof java.util.Collection) {
+            java.util.Collection c = (java.util.Collection)val;
+            FieldGroup group = new FieldGroup();
+            group.setPath(GENERATED_PATH);
+            c.forEach(sub -> group.getField().add(wrapWithField(sub)));
+            return group;
+        }
+        SimpleField answer = new SimpleField();
+        answer.setPath(GENERATED_PATH);
+        answer.setValue(val);
+        return answer;
+    }
+
+    public static Object unwrapField(Field f) {
+        if (f == null) {
+            return null;
+        }
+        if (f instanceof FieldGroup) {
+            List<Object> l = new LinkedList<>();
+            for (Field sub : ((FieldGroup)f).getField()) {
+                l.add(unwrapField(sub));
+            }
+            return l;
+        } else {
+            return f.getValue();
+        }
+    }
+
 }

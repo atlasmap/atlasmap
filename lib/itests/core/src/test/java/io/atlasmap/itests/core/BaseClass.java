@@ -15,10 +15,14 @@
  */
 package io.atlasmap.itests.core;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 public abstract class BaseClass {
 
     static class SomeNestedClass {
         private String someField;
+        private String someString;
         private SomeNestedClass[] someArray;
         private SomeNestedClass[] someRenamedArray;
         private SomeNestedClass[] yetAnotherArray;
@@ -26,6 +30,9 @@ public abstract class BaseClass {
         private int[] someIntArray;
         private double someDouble = 0.0;
         private double[] someDoubleArray;
+        private BigDecimal someBigDecimal;
+        private BigInteger someBigInteger;
+        private long someLong;
 
         public String getSomeField() {
             return someField;
@@ -97,9 +104,42 @@ public abstract class BaseClass {
         public void setSomeDoubleArray(double[] someDoubleArray) {
             this.someDoubleArray = someDoubleArray;
         }
+
+        public BigDecimal getSomeBigDecimal() {
+            return someBigDecimal;
+        }
+
+        public void setSomeBigDecimal(BigDecimal someBigDecimal) {
+            this.someBigDecimal = someBigDecimal;
+        }
+
+        public BigInteger getSomeBigInteger() {
+            return someBigInteger;
+        }
+
+        public void setSomeBigInteger(BigInteger someBigInteger) {
+            this.someBigInteger = someBigInteger;
+        }
+
+        public long getSomeLong() {
+            return someLong;
+        }
+
+        public void setSomeLong(long someLong) {
+            this.someLong = someLong;
+        }
+
+        public String getSomeString() {
+            return someString;
+        }
+
+        public void setSomeString(String someString) {
+            this.someString = someString;
+        }
     }
 
     private String someField;
+    private String someString;
     private SomeNestedClass[] someArray;
     private SomeNestedClass[] someRenamedArray;
     private SomeNestedClass[] yetAnotherArray;
@@ -107,6 +147,9 @@ public abstract class BaseClass {
     private int[] someIntArray;
     private double someDouble = 0.0;
     private double[] someDoubleArray;
+    private BigDecimal someBigDecimal;
+    private BigInteger someBigInteger;
+    private long someLong;
 
     public String getSomeField() {
         return someField;
@@ -171,4 +214,37 @@ public abstract class BaseClass {
     public void setSomeDoubleArray(double[] someDoubleArray) {
         this.someDoubleArray = someDoubleArray;
     }
+
+    public BigDecimal getSomeBigDecimal() {
+        return someBigDecimal;
+    }
+
+    public void setSomeBigDecimal(BigDecimal someBigDecimal) {
+        this.someBigDecimal = someBigDecimal;
+    }
+
+    public BigInteger getSomeBigInteger() {
+        return someBigInteger;
+    }
+
+    public void setSomeBigInteger(BigInteger someBigInteger) {
+        this.someBigInteger = someBigInteger;
+    }
+
+    public long getSomeLong() {
+        return someLong;
+    }
+
+    public void setSomeLong(long someLong) {
+        this.someLong = someLong;
+    }
+
+    public String getSomeString() {
+        return someString;
+    }
+
+    public void setSomeString(String someString) {
+        this.someString = someString;
+    }
+
 }

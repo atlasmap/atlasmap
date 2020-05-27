@@ -37,14 +37,14 @@ public class SELECT extends BaseFunctionFactory {
         Expression parentExpression = args.get(0);
         Expression selectExpression =args.get(1);
         return (ctx) -> {
-            Field parent = (Field) parentExpression.evaluate(ctx);
+            Field parent = parentExpression.evaluate(ctx);
             List<Field> collection = parent instanceof FieldGroup ? ((FieldGroup)parent).getField() : Arrays.asList(parent);
             List<Field> selected = new ArrayList<>();
             final FieldGroup answer = AtlasModelFactory.createFieldGroupFrom(parent, true);
-            answer.setPath(FUNCTION_PATH);
+            answer.setPath(AtlasModelFactory.GENERATED_PATH);
             for (Field f : collection) {
                 Field fs = (Field) selectExpression.evaluate((subCtx) -> {
-                    if (subCtx != null && FUNCTION_PATH.equals(answer.getPath())) {
+                    if (subCtx != null && AtlasModelFactory.GENERATED_PATH.equals(answer.getPath())) {
                         answer.setPath(parent.getPath() +
                             (subCtx.startsWith(AtlasPath.PATH_SEPARATOR) ? subCtx : (AtlasPath.PATH_SEPARATOR + subCtx)));
                     }

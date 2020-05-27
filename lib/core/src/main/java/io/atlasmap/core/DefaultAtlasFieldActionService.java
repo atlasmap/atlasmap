@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import io.atlasmap.api.AtlasSession;
@@ -626,23 +627,16 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         }
     }
 
-    public Object buildAndProcessAction(ActionProcessor actionProcessor, Map<String, Object> actionParameters, List<Object> valueOrField) {
+    public Object buildAndProcessAction(ActionProcessor actionProcessor, Map<String, Object> actionParameters, List<Field> fields) {
         List<Object> flattenedValue = new ArrayList<>();
-        for (Object item : valueOrField) {
+        for (Field item : fields) {
             if (item instanceof FieldGroup) {
                 FieldGroup fieldGroup = (FieldGroup)item;
                 List<Object> values = new ArrayList<>();
                 extractNestedListValuesFromFieldGroup(fieldGroup, values); //preserve top level list of parameters and arguments
                 flattenedValue.addAll(values);
-            } else if (item instanceof Field) {
-                flattenedValue.add(((Field)item).getValue());
             } else {
-                Object o = flattenList(item);
-                if (o instanceof Collection) {
-                    flattenedValue.addAll((Collection<?>)o);
-                } else {
-                    flattenedValue.add(item);
-                }
+                flattenedValue.add((item).getValue());
             }
         }
         FieldType valueType = determineFieldType(flattenedValue);
@@ -874,23 +868,14 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         Multiplicity multiplicity = detail.getMultiplicity()!= null ? detail.getMultiplicity() : Multiplicity.ONE_TO_ONE;
 
         if (sourceObject instanceof List) {
-            List<Object> tmpSourceList = (List<Object>) sourceObject;
-            for (int i = 0; i < tmpSourceList.size(); i++) {
-                Object subValue = tmpSourceList.get(i);
-                FieldType subType = (subValue != null ? getConversionService().fieldTypeFromClass(subValue.getClass()) : FieldType.NONE);
-                if (subValue != null && !isAssignableFieldType(detail.getSourceType(), subType)) {
-                    subValue = getConversionService().convertType(subValue, subType, detail.getSourceType());
-                    tmpSourceList.set(i, subValue);
-                }
-                if (multiplicity != Multiplicity.MANY_TO_ONE) {
-                    subValue = processor.process(action, subValue);
-                    tmpSourceList.set(i, subValue);
-                }
-            }
+            convertCollectionValues((List<Object>) sourceObject, detail.getSourceType());
         } else if (!isAssignableFieldType(detail.getSourceType(), sourceType)) {
             sourceObject = getConversionService().convertType(sourceObject, sourceType, detail.getSourceType());
         }
-        if (!(sourceObject instanceof List) || multiplicity == Multiplicity.MANY_TO_ONE) {
+
+        if (sourceObject instanceof List && multiplicity != Multiplicity.MANY_TO_ONE) {
+            processActionForEachCollectionItem(action, processor, (List<Object>) sourceObject);
+        } else {
             sourceObject = processor.process(action, sourceObject);
         }
 
@@ -900,6 +885,34 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
             sourceObject = Arrays.asList(((Collection<?>) sourceObject).toArray());
         }
         return sourceObject;
+    }
+
+    private void processActionForEachCollectionItem(Action action, ActionProcessor processor, List<Object> collection)
+     throws AtlasException {
+        for (int i=0; i<collection.size(); i++) {
+            Object subValue = collection.get(i);
+            if (subValue instanceof List) {
+                processActionForEachCollectionItem(action, processor, (List<Object>)subValue);
+                continue;
+            }
+            subValue = processor.process(action, subValue);
+            collection.set(i, subValue);
+        }
+    }
+
+    private void convertCollectionValues(List<Object> sourceList, FieldType type) throws AtlasConversionException {
+        for (int i = 0; i < sourceList.size(); i++) {
+            Object subValue = sourceList.get(i);
+            if (subValue instanceof List) {
+                convertCollectionValues((List<Object>) subValue, type);
+                continue;
+            }
+            FieldType subType = (subValue != null ? getConversionService().fieldTypeFromClass(subValue.getClass()) : FieldType.NONE);
+            if (subValue != null && !isAssignableFieldType(type, subType)) {
+                subValue = getConversionService().convertType(subValue, subType, type);
+                sourceList.set(i, subValue);
+            }
+        }
     }
 
     private boolean isAssignableFieldType(FieldType expected, FieldType actual) {

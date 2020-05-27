@@ -21,6 +21,7 @@ import java.io.StringReader;
 import io.atlasmap.expression.internal.LRUCache;
 import io.atlasmap.expression.parser.ParseException;
 import io.atlasmap.expression.parser.Parser;
+import io.atlasmap.v2.Field;
 
 /**
  *
@@ -41,7 +42,7 @@ public interface Expression {
      * @return
      * @throws ExpressionException
      */
-    Object evaluate(ExpressionContext expressionContext) throws ExpressionException;
+    Field evaluate(ExpressionContext expressionContext) throws ExpressionException;
 
     static Expression parse(String expessionText, FunctionResolver functionResolver) throws ExpressionException {
         if (functionResolver == null) {
@@ -73,4 +74,5 @@ public interface Expression {
     static void clearCache() {
         cache.clear();
     }
+
 }

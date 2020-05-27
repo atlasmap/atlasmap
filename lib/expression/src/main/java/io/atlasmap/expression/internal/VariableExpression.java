@@ -21,6 +21,7 @@ package io.atlasmap.expression.internal;
 import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.ExpressionContext;
 import io.atlasmap.expression.ExpressionException;
+import io.atlasmap.v2.Field;
 
 /**
  * Represents a property expression
@@ -35,7 +36,7 @@ public class VariableExpression implements Expression {
         this.name = name;
     }
 
-    public Object evaluate(ExpressionContext expressionContext) throws ExpressionException {
+    public Field evaluate(ExpressionContext expressionContext) throws ExpressionException {
         return expressionContext.getVariable(name);
     }
 

@@ -1,0 +1,168 @@
+{
+  "AtlasMapping": {
+    "jsonType": "io.atlasmap.v2.AtlasMapping",
+    "dataSource": [
+      {
+        "jsonType": "io.atlasmap.v2.DataSource",
+        "id": "SourceClass",
+        "uri": "atlas:java?className=io.atlasmap.itests.core.SourceClass",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType": "io.atlasmap.v2.DataSource",
+        "id": "TargetClass",
+        "uri": "atlas:java?className=io.atlasmap.itests.core.TargetClass",
+        "dataSourceType": "TARGET"
+      }
+    ],
+    "mappings": {
+      "mapping": [
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "expression": "if(LT(${SourceClass:/someBigDecimal}, ${SourceClass:/someBigInteger}), ${SourceClass:/someLong}, ${SourceClass:/someDouble})",
+          "inputFieldGroup": {
+            "jsonType": "io.atlasmap.v2.FieldGroup",
+            "actions": [],
+            "field": [
+              {
+                "jsonType": "io.atlasmap.java.v2.JavaField",
+                "docId": "SourceClass",
+                "index": 0,
+                "path": "/someBigDecimal",
+                "fieldType": "DECIMAL",
+                "name": "someBigDecimal"
+              },
+              {
+                "jsonType": "io.atlasmap.java.v2.JavaField",
+                "docId": "SourceClass",
+                "index": 1,
+                "path": "/someBigInteger",
+                "fieldType": "BIG_INTEGER",
+                "name": "someBigInteger"
+              },
+              {
+                "jsonType": "io.atlasmap.java.v2.JavaField",
+                "docId": "SourceClass",
+                "index": 2,
+                "path": "/someLong",
+                "fieldType": "LONG",
+                "name": "someLong"
+              },
+              {
+                "jsonType": "io.atlasmap.java.v2.JavaField",
+                "docId": "SourceClass",
+                "index": 3,
+                "path": "/someDouble",
+                "fieldType": "DOUBLE",
+                "name": "someDouble"
+              }
+            ]
+          },
+          "inputField": [],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.java.v2.JavaField",
+              "docId": "TargetClass",
+              "path": "/someField",
+              "fieldType": "STRING",
+              "name": "someField"
+            }
+          ],
+          "id": "mapping.930638"
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "expression": "if(${SourceClass:/someBigDecimal} < ${SourceClass:/someBigInteger}, ${SourceClass:/someLong}, ${SourceClass:/someDouble})",
+          "inputFieldGroup": {
+            "jsonType": "io.atlasmap.v2.FieldGroup",
+            "actions": [],
+            "field": [
+              {
+                "jsonType": "io.atlasmap.java.v2.JavaField",
+                "docId": "SourceClass",
+                "index": 0,
+                "path": "/someBigDecimal",
+                "fieldType": "DECIMAL",
+                "name": "someBigDecimal"
+              },
+              {
+                "jsonType": "io.atlasmap.java.v2.JavaField",
+                "docId": "SourceClass",
+                "index": 1,
+                "path": "/someBigInteger",
+                "fieldType": "BIG_INTEGER",
+                "name": "someBigInteger"
+              },
+              {
+                "jsonType": "io.atlasmap.java.v2.JavaField",
+                "docId": "SourceClass",
+                "index": 2,
+                "path": "/someLong",
+                "fieldType": "LONG",
+                "name": "someLong"
+              },
+              {
+                "jsonType": "io.atlasmap.java.v2.JavaField",
+                "docId": "SourceClass",
+                "index": 3,
+                "path": "/someDouble",
+                "fieldType": "DOUBLE",
+                "name": "someDouble"
+              }
+            ]
+          },
+          "inputField": [],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.java.v2.JavaField",
+              "docId": "TargetClass",
+              "path": "/someString",
+              "fieldType": "STRING",
+              "name": "someString"
+            }
+          ],
+          "id": "mapping.930639"
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "expression": "if(isempty(${SourceClass:/someField}), 10, 20)",
+          "inputFieldGroup": {
+            "jsonType": "io.atlasmap.v2.FieldGroup",
+            "actions": [],
+            "field": [
+              {
+                "jsonType": "io.atlasmap.java.v2.JavaField",
+                "docId": "SourceClass",
+                "index": 0,
+                "path": "/someField",
+                "fieldType": "STRING",
+                "name": "someField"
+              }
+            ]
+          },
+          "inputField": [],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.java.v2.JavaField",
+              "docId": "TargetClass",
+              "path": "/someInt",
+              "fieldType": "INTEGER",
+              "name": "someInt"
+            }
+          ],
+          "id": "mapping.930639"
+        }
+      ]
+    },
+    "lookupTables": {
+      "lookupTable": []
+    },
+    "constants": {
+      "constant": []
+    },
+    "properties": {
+      "property": []
+    },
+    "name": "UI.0"
+  }
+}

@@ -20,6 +20,7 @@ import java.util.List;
 import io.atlasmap.core.BaseFunctionFactory;
 import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.parser.ParseException;
+import io.atlasmap.v2.AtlasModelFactory;
 
 public class TOLOWER extends BaseFunctionFactory {
 
@@ -30,11 +31,8 @@ public class TOLOWER extends BaseFunctionFactory {
         }
         Expression arg = args.get(0);
         return (ctx) -> {
-            Object value = arg.evaluate(ctx);
-            if (value == null) {
-                return null;
-            }
-            return value.toString().toLowerCase();
+            Object value = arg.evaluate(ctx).getValue();
+            return AtlasModelFactory.wrapWithField(value == null ? null : value.toString().toLowerCase());
         };
     }
 

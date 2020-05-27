@@ -15,6 +15,9 @@
  */
 package io.atlasmap.actions;
 
+import static io.atlasmap.v2.AtlasModelFactory.wrapWithField;
+import static io.atlasmap.v2.AtlasModelFactory.unwrapField;
+
 import java.util.List;
 
 import io.atlasmap.core.DefaultAtlasFunctionResolver;
@@ -22,6 +25,7 @@ import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.ExpressionException;
 import io.atlasmap.spi.AtlasActionProcessor;
 import io.atlasmap.spi.AtlasFieldAction;
+import io.atlasmap.v2.Field;
 
 public class ExpressionFieldAction implements AtlasFieldAction {
 
@@ -32,13 +36,14 @@ public class ExpressionFieldAction implements AtlasFieldAction {
         }
 
         Expression parsedExpression = Expression.parse(action.getExpression(), DefaultAtlasFunctionResolver.getInstance());
-        return parsedExpression.evaluate((index) -> {
+        Field answer = parsedExpression.evaluate((index) -> {
             try {
-                return args.get(Integer.parseInt(index));
+                return wrapWithField(args.get(Integer.parseInt(index)));
             } catch (Throwable e) {
                 throw new ExpressionException("Invalid variable: " + index);
             }
         });
+        return unwrapField(answer);
     }
 
 }

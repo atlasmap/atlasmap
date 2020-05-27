@@ -16,11 +16,14 @@
  */
 package io.atlasmap.expression.internal;
 
+import static io.atlasmap.v2.AtlasModelFactory.wrapWithField;
+
 import java.math.BigDecimal;
 
 import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.ExpressionContext;
 import io.atlasmap.expression.ExpressionException;
+import io.atlasmap.v2.Field;
 
 
 /**
@@ -96,8 +99,8 @@ public class ConstantExpression implements Expression {
         return new ConstantExpression(value);
     }
 
-    public Object evaluate(ExpressionContext expressionContext) throws ExpressionException {
-        return value;
+    public Field evaluate(ExpressionContext expressionContext) throws ExpressionException {
+        return wrapWithField(value);
     }
 
     public Object getValue() {

@@ -18,6 +18,8 @@ package io.atlasmap.itests.core;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -33,7 +35,6 @@ import io.atlasmap.core.AtlasMappingService;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.itests.core.BaseClass.SomeNestedClass;
 import io.atlasmap.v2.AtlasMapping;
-import junit.framework.Assert;
 
 public class ExpressionTest {
 
@@ -129,5 +130,47 @@ public class ExpressionTest {
         assertEquals(TargetClass.class, output.getClass());
         TargetClass target = TargetClass.class.cast(output);
         assertEquals((double)3.0, target.getSomeDouble(), 0.01);
+    }
+
+    @Test
+    public void testCompare() throws Exception {
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-expression2-compare.json");
+        AtlasMapping mapping = mappingService.loadMapping(url);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasSession session = context.createSession();
+        SourceClass source = new SourceClass();
+        source.setSomeBigDecimal(new BigDecimal("1"));
+        source.setSomeBigInteger(new BigInteger("2"));
+        source.setSomeLong(3L);
+        source.setSomeDouble(4D);
+        session.setSourceDocument("SourceClass", source);
+
+        context.process(session);
+        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        Object output = session.getTargetDocument("TargetClass");
+        assertEquals(TargetClass.class, output.getClass());
+        TargetClass target = TargetClass.class.cast(output);
+        assertEquals("3", target.getSomeField());
+        assertEquals("3", target.getSomeString());
+        assertEquals(10, target.getSomeInt());
+    }
+
+    @Test
+    public void testPlus() throws Exception {
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-expression2-oper.json");
+        AtlasMapping mapping = mappingService.loadMapping(url);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasSession session = context.createSession();
+        SourceClass source = new SourceClass();
+        source.setSomeField("first");
+        source.setSomeString("second");
+        session.setSourceDocument("SourceClass", source);
+
+        context.process(session);
+        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        Object output = session.getTargetDocument("TargetClass");
+        assertEquals(TargetClass.class, output.getClass());
+        TargetClass target = TargetClass.class.cast(output);
+        assertEquals("firstsecond", target.getSomeField());
     }
 }

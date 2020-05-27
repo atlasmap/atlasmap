@@ -38,6 +38,10 @@
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-model</artifactId>
+    </dependency>
 
     <!-- Testing Dependencies -->
     <dependency>
