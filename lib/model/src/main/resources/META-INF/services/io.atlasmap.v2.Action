@@ -36,6 +36,7 @@ io.atlasmap.v2.LastIndexOf
 io.atlasmap.v2.Length
 io.atlasmap.v2.Lowercase
 io.atlasmap.v2.LowercaseChar
+io.atlasmap.v2.CopyTo
 io.atlasmap.v2.Maximum
 io.atlasmap.v2.Minimum
 io.atlasmap.v2.Multiply
