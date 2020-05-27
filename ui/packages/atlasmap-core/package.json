@@ -35,7 +35,8 @@
     "printWidth": 80,
     "semi": true,
     "singleQuote": true,
-    "trailingComma": "es5"
+    "trailingComma": "es5",
+    "endOfLine":"auto"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
