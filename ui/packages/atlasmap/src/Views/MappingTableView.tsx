@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, MouseEvent } from "react";
 
 import {
   Bullseye,
@@ -9,10 +9,17 @@ import {
 } from "@patternfly/react-core";
 import { TableIcon } from "@patternfly/react-icons";
 import { css, StyleSheet } from "@patternfly/react-styles";
-import { Table, TableBody, TableHeader } from "@patternfly/react-table";
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  IRow,
+  ICell,
+} from "@patternfly/react-table";
 
 import { MainContent } from "../Layout";
 import { IAtlasmapField, IAtlasmapMapping } from "../Views";
+import { selectMapping } from "../Atlasmap";
 
 const emptyContent = [
   {
@@ -62,6 +69,7 @@ export const MappingTableView: FunctionComponent<IMappingTableProps> = ({
             cells: [
               {
                 title: sources,
+                data: mapping.id,
               },
               {
                 title: targets,
@@ -74,6 +82,16 @@ export const MappingTableView: FunctionComponent<IMappingTableProps> = ({
         });
 
   const columns = ["Sources", "Targets", "Types"];
+
+  const onSelectMapping = (_event: MouseEvent, row: IRow) => {
+    const mapping: IAtlasmapMapping | undefined = mappings.find(
+      (mapping) => (row.cells?.[0] as ICell).data === mapping.id,
+    );
+    if (mapping) {
+      selectMapping(mapping);
+    }
+  };
+
   return (
     <MainContent>
       <Title size={"lg"} headingLevel={"h1"} className={css(styles.title)}>
@@ -81,7 +99,7 @@ export const MappingTableView: FunctionComponent<IMappingTableProps> = ({
       </Title>
       <Table aria-label="Mappings" cells={columns} rows={rows}>
         <TableHeader />
-        <TableBody />
+        <TableBody onRowClick={onSelectMapping} />
       </Table>
     </MainContent>
   );
