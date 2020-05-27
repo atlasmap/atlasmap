@@ -16,13 +16,15 @@
  */
 package io.atlasmap.expression;
 
+import static io.atlasmap.v2.AtlasModelFactory.wrapWithField;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.HashMap;
-import java.util.Map;
 
 import io.atlasmap.expression.internal.ComparisonExpression;
 import io.atlasmap.expression.parser.ParseException;
+import io.atlasmap.v2.Field;
 import junit.framework.TestCase;
 
 import io.atlasmap.expression.internal.BooleanExpression;
@@ -61,11 +63,11 @@ public class ExpressionTest extends TestCase {
             }
             Expression arg = args.get(0);
             return (ctx) -> {
-                Object value = arg.evaluate(ctx);
+                Object value = arg.evaluate(ctx).getValue();
                 if (value == null) {
-                    return null;
+                    return wrapWithField(null);
                 }
-                return value.toString().toLowerCase();
+                return wrapWithField(value.toString().toLowerCase());
             };
         } else if ("CONCATENATE".equals(name)) {
             if (args.size() < 3) {
@@ -74,12 +76,12 @@ public class ExpressionTest extends TestCase {
 
             return (ctx) -> {
                 String value = "";
-                String delimiter = args.get(0).evaluate(ctx).toString();
+                String delimiter = args.get(0).evaluate(ctx).getValue().toString();
 
                 for (int i = 1; i < args.size(); i++) {
-                    value += (i == 1 ? "" : delimiter) + args.get(i).evaluate(ctx);
+                    value += (i == 1 ? "" : delimiter) + args.get(i).evaluate(ctx).getValue();
                 }
-                return value;
+                return wrapWithField(value);
             };
         }
 
@@ -162,14 +164,14 @@ public class ExpressionTest extends TestCase {
             return null;
         }
 
-        public Object getVariable(String name) {
+        public Field getVariable(String name) {
             if ("JMSType".equals(name)) {
-                return type;
+                return wrapWithField(type);
             }
             if ("JMSMessageID".equals(name)) {
-                return messageId;
+                return wrapWithField(messageId);
             }
-            return properties.get(name);
+            return wrapWithField(properties.get(name));
         }
 
         public <T> T getDestination() {
@@ -457,7 +459,7 @@ public class ExpressionTest extends TestCase {
         Expression selector = null;
         selector = Expression.parse(text, FUNCTION_RESOLVER);
         assertTrue("Created a valid selector", selector != null);
-        Object value = selector.evaluate(message);
+        Object value = selector.evaluate(message).getValue();
         assertEquals("Selector for: " + text, expected, value);
     }
 

@@ -44,11 +44,7 @@ public class FILTER extends BaseFunctionFactory {
             for (Field f : collection) {
                 if (
                     filterExpression.matches((subCtx) -> {
-                        Field extracted = AtlasPath.extractChildren(f, subCtx);
-                        if (extracted instanceof FieldGroup) {
-                            return extracted;
-                        }
-                        return extracted != null ? extracted.getValue() : null;
+                        return AtlasPath.extractChildren(f, subCtx);
                     })
                 ) {
                     adjustRootCollectionIndex(f, index);

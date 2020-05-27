@@ -18,12 +18,8 @@ package io.atlasmap.core;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import io.atlasmap.v2.AtlasModelFactory;
-import io.atlasmap.v2.Audit;
-import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;

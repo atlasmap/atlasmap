@@ -15,6 +15,8 @@
  */
 package io.atlasmap.functions;
 
+import static io.atlasmap.v2.AtlasModelFactory.wrapWithField;
+
 import java.util.List;
 
 import io.atlasmap.core.BaseFunctionFactory;
@@ -23,6 +25,7 @@ import io.atlasmap.expression.ExpressionContext;
 import io.atlasmap.expression.ExpressionException;
 import io.atlasmap.expression.internal.BooleanExpression;
 import io.atlasmap.expression.parser.ParseException;
+import io.atlasmap.v2.Field;
 
 public class ISEMPTY extends BaseFunctionFactory {
 
@@ -33,15 +36,15 @@ public class ISEMPTY extends BaseFunctionFactory {
         }
         final Expression arg = args.get(0);
         return new BooleanExpression() {
-            public Object evaluate(ExpressionContext ctx) throws ExpressionException {
-                Object value = arg.evaluate(ctx);
+            public Field evaluate(ExpressionContext ctx) throws ExpressionException {
+                Object value = arg.evaluate(ctx).getValue();
                 if (value == null || value.toString().isEmpty()) {
-                    return Boolean.TRUE;
+                    return wrapWithField(Boolean.TRUE);
                 }
-                return Boolean.FALSE;
+                return wrapWithField(Boolean.FALSE);
             };
             public boolean matches(ExpressionContext ctx) throws ExpressionException {
-                Object answer = evaluate(ctx);
+                Object answer = evaluate(ctx).getValue();
                 return answer != null && answer == Boolean.TRUE;
             }
         };

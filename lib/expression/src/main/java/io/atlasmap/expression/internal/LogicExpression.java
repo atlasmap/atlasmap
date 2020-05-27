@@ -16,9 +16,11 @@
  */
 package io.atlasmap.expression.internal;
 
+import static io.atlasmap.v2.AtlasModelFactory.wrapWithField;
 
 import io.atlasmap.expression.ExpressionContext;
 import io.atlasmap.expression.ExpressionException;
+import io.atlasmap.v2.Field;
 
 /**
  * A filter performing a comparison of two objects
@@ -38,16 +40,16 @@ public abstract class LogicExpression extends BinaryExpression implements Boolea
     public static BooleanExpression createOR(BooleanExpression lvalue, BooleanExpression rvalue) {
         return new LogicExpression(lvalue, rvalue) {
 
-            public Object evaluate(ExpressionContext expressionContext) throws ExpressionException {
+            public Field evaluate(ExpressionContext expressionContext) throws ExpressionException {
 
-                Boolean lv = (Boolean)left.evaluate(expressionContext);
+                Boolean lv = (Boolean)left.evaluate(expressionContext).getValue();
                 // Can we do an OR shortcut??
                 if (lv != null && lv.booleanValue()) {
-                    return Boolean.TRUE;
+                    return wrapWithField(Boolean.TRUE);
                 }
 
-                Boolean rv = (Boolean)right.evaluate(expressionContext);
-                return rv == null ? null : rv;
+                Boolean rv = (Boolean)right.evaluate(expressionContext).getValue();
+                return wrapWithField(rv == null ? null : rv);
             }
 
             public String getExpressionSymbol() {
@@ -59,20 +61,20 @@ public abstract class LogicExpression extends BinaryExpression implements Boolea
     public static BooleanExpression createAND(BooleanExpression lvalue, BooleanExpression rvalue) {
         return new LogicExpression(lvalue, rvalue) {
 
-            public Object evaluate(ExpressionContext expressionContext) throws ExpressionException {
+            public Field evaluate(ExpressionContext expressionContext) throws ExpressionException {
 
-                Boolean lv = (Boolean)left.evaluate(expressionContext);
+                Boolean lv = (Boolean)left.evaluate(expressionContext).getValue();
 
                 // Can we do an AND shortcut??
                 if (lv == null) {
                     return null;
                 }
                 if (!lv.booleanValue()) {
-                    return Boolean.FALSE;
+                    return wrapWithField(Boolean.FALSE);
                 }
 
-                Boolean rv = (Boolean)right.evaluate(expressionContext);
-                return rv == null ? null : rv;
+                Boolean rv = (Boolean)right.evaluate(expressionContext).getValue();
+                return wrapWithField(rv == null ? null : rv);
             }
 
             public String getExpressionSymbol() {
@@ -81,10 +83,10 @@ public abstract class LogicExpression extends BinaryExpression implements Boolea
         };
     }
 
-    public abstract Object evaluate(ExpressionContext expressionContext) throws ExpressionException;
+    public abstract Field evaluate(ExpressionContext expressionContext) throws ExpressionException;
 
     public boolean matches(ExpressionContext message) throws ExpressionException {
-        Object object = evaluate(message);
+        Object object = evaluate(message).getValue();
         return object != null && object == Boolean.TRUE;
     }
 

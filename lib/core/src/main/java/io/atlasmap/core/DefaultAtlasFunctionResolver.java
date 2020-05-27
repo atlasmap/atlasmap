@@ -25,8 +25,10 @@ import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.FunctionResolver;
 import io.atlasmap.expression.parser.ParseException;
 import io.atlasmap.spi.FunctionFactory;
+import io.atlasmap.v2.Field;
 import io.atlasmap.v2.ActionParameter;
 import io.atlasmap.v2.ActionParameters;
+import io.atlasmap.v2.AtlasModelFactory;
 
 public class DefaultAtlasFunctionResolver implements FunctionResolver {
 
@@ -63,7 +65,7 @@ public class DefaultAtlasFunctionResolver implements FunctionResolver {
         } else {
             //lookup action
             return (ctx) -> {
-                List<Object> arguments = new ArrayList<>();
+                List<Field> arguments = new ArrayList<>();
                 for (Expression arg: args) {
                     arguments.add(arg.evaluate(ctx));
                 }
@@ -82,7 +84,7 @@ public class DefaultAtlasFunctionResolver implements FunctionResolver {
                     if (actionDetailParameters != null && actionDetailParameters.getParameter() != null) {
                         for (ActionParameter parameter : actionDetailParameters.getParameter()) {
                             if (!arguments.isEmpty()) {
-                                Object parameterValue = arguments.remove(0);
+                                Object parameterValue = arguments.remove(0).getValue();
                                 actionParameters.put(parameter.getName(), parameterValue);
                             } else {
                                 throw new IllegalArgumentException(String.format("The transformation '%s' expects more parameters. The parameter '%s' is missing", name, parameter.getName()));
@@ -93,7 +95,8 @@ public class DefaultAtlasFunctionResolver implements FunctionResolver {
                         throw new IllegalArgumentException(String.format("The transformation '%s' expects more arguments", name));
                     }
 
-                    return fieldActionService.buildAndProcessAction(actionProcessor, actionParameters, arguments);
+                    Object answer = fieldActionService.buildAndProcessAction(actionProcessor, actionParameters, arguments);
+                    return AtlasModelFactory.wrapWithField(answer);
                 } else {
                     throw new IllegalArgumentException(String.format("The expression function or transformation '%s' was not found", name));
                 }

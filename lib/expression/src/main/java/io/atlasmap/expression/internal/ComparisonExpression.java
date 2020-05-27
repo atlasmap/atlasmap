@@ -16,6 +16,8 @@
  */
 package io.atlasmap.expression.internal;
 
+import static io.atlasmap.v2.AtlasModelFactory.wrapWithField;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.HashSet;
@@ -26,6 +28,7 @@ import java.util.regex.Pattern;
 import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.ExpressionContext;
 import io.atlasmap.expression.ExpressionException;
+import io.atlasmap.v2.Field;
 
 
 /**
@@ -129,25 +132,25 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
         /**
          * @see org.apache.activemq.filter.Expression#evaluate(ExpressionContext)
          */
-        public Object evaluate(ExpressionContext expressionContext) throws ExpressionException {
+        public Field evaluate(ExpressionContext expressionContext) throws ExpressionException {
 
-            Object rv = this.getRight().evaluate(expressionContext);
+            Object rv = this.getRight().evaluate(expressionContext).getValue();
 
             if (rv == null) {
                 return null;
             }
 
             if (!(rv instanceof String)) {
-                return Boolean.FALSE;
+                return wrapWithField(Boolean.FALSE);
                 // throw new RuntimeException("LIKE can only operate on String
                 // identifiers. LIKE attemped on: '" + rv.getClass());
             }
 
-            return likePattern.matcher((String)rv).matches() ? Boolean.TRUE : Boolean.FALSE;
+            return wrapWithField(likePattern.matcher((String)rv).matches() ? Boolean.TRUE : Boolean.FALSE);
         }
 
         public boolean matches(ExpressionContext message) throws ExpressionException {
-            Object object = evaluate(message);
+            Object object = evaluate(message).getValue();
             return object != null && object == Boolean.TRUE;
         }
     }
@@ -206,21 +209,21 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
     private static BooleanExpression doCreateEqual(Expression left, Expression right) {
         return new ComparisonExpression(left, right) {
 
-            public Object evaluate(ExpressionContext expressionContext) throws ExpressionException {
-                Object lv = left.evaluate(expressionContext);
-                Object rv = right.evaluate(expressionContext);
+            public Field evaluate(ExpressionContext expressionContext) throws ExpressionException {
+                Object lv = left.evaluate(expressionContext).getValue();
+                Object rv = right.evaluate(expressionContext).getValue();
 
-                // Iff one of the values is null
+                // If one of the values is null
                 if (lv == null ^ rv == null) {
-                    return Boolean.FALSE;
+                    return wrapWithField(Boolean.FALSE);
                 }
                 if (lv == rv || lv.equals(rv)) {
-                    return Boolean.TRUE;
+                    return wrapWithField(Boolean.TRUE);
                 }
                 if (lv instanceof Comparable && rv instanceof Comparable) {
-                    return compare((Comparable)lv, (Comparable)rv);
+                    return wrapWithField(compare((Comparable)lv, (Comparable)rv));
                 }
-                return Boolean.FALSE;
+                return wrapWithField(Boolean.FALSE);
             }
 
             protected boolean asBoolean(int answer) {
@@ -325,16 +328,16 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
         }
     }
 
-    public Object evaluate(ExpressionContext expressionContext) throws ExpressionException {
-        Comparable<Comparable> lv = (Comparable)left.evaluate(expressionContext);
+    public Field evaluate(ExpressionContext expressionContext) throws ExpressionException {
+        Comparable<Comparable> lv = (Comparable)left.evaluate(expressionContext).getValue();
         if (lv == null) {
-            return null;
+            return wrapWithField(null);
         }
-        Comparable rv = (Comparable)right.evaluate(expressionContext);
+        Comparable rv = (Comparable)right.evaluate(expressionContext).getValue();
         if (rv == null) {
-            return null;
+            return wrapWithField(null);
         }
-        return compare(lv, rv);
+        return wrapWithField(compare(lv, rv));
     }
 
     protected Boolean compare(Comparable lv, Comparable rv) {
@@ -528,7 +531,7 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
     protected abstract boolean asBoolean(int answer);
 
     public boolean matches(ExpressionContext message) throws ExpressionException {
-        Object object = evaluate(message);
+        Object object = evaluate(message).getValue();
         return object != null && object == Boolean.TRUE;
     }
 

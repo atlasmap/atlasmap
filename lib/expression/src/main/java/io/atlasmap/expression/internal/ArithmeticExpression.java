@@ -16,10 +16,12 @@
  */
 package io.atlasmap.expression.internal;
 
+import static io.atlasmap.v2.AtlasModelFactory.wrapWithField;
 
 import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.ExpressionContext;
 import io.atlasmap.expression.ExpressionException;
+import io.atlasmap.v2.Field;
 
 /**
  * An expression which performs an operation on two expression values
@@ -44,13 +46,15 @@ public abstract class ArithmeticExpression extends BinaryExpression {
 
     public static Expression createPlus(Expression left, Expression right) {
         return new ArithmeticExpression(left, right) {
-            protected Object evaluate(Object lvalue, Object rvalue) {
+            protected Field evaluate(Field lfield, Field rfield) {
+                Object lvalue = lfield.getValue();
+                Object rvalue = rfield.getValue();
                 if (lvalue instanceof String) {
                     String text = (String)lvalue;
                     String answer = text + rvalue;
-                    return answer;
+                    return wrapWithField(answer);
                 } else {
-                    return plus(asNumber(lvalue), asNumber(rvalue));
+                    return wrapWithField(plus(asNumber(lvalue), asNumber(rvalue)));
                 }
             }
 
@@ -62,8 +66,10 @@ public abstract class ArithmeticExpression extends BinaryExpression {
 
     public static Expression createMinus(Expression left, Expression right) {
         return new ArithmeticExpression(left, right) {
-            protected Object evaluate(Object lvalue, Object rvalue) {
-                return minus(asNumber(lvalue), asNumber(rvalue));
+            protected Field evaluate(Field lfield, Field rfield) {
+                Object lvalue = lfield.getValue();
+                Object rvalue = rfield.getValue();
+                return wrapWithField(minus(asNumber(lvalue), asNumber(rvalue)));
             }
 
             public String getExpressionSymbol() {
@@ -75,8 +81,10 @@ public abstract class ArithmeticExpression extends BinaryExpression {
     public static Expression createMultiply(Expression left, Expression right) {
         return new ArithmeticExpression(left, right) {
 
-            protected Object evaluate(Object lvalue, Object rvalue) {
-                return multiply(asNumber(lvalue), asNumber(rvalue));
+            protected Field evaluate(Field lfield, Field rfield) {
+                Object lvalue = lfield.getValue();
+                Object rvalue = rfield.getValue();
+                return wrapWithField(multiply(asNumber(lvalue), asNumber(rvalue)));
             }
 
             public String getExpressionSymbol() {
@@ -88,8 +96,10 @@ public abstract class ArithmeticExpression extends BinaryExpression {
     public static Expression createDivide(Expression left, Expression right) {
         return new ArithmeticExpression(left, right) {
 
-            protected Object evaluate(Object lvalue, Object rvalue) {
-                return divide(asNumber(lvalue), asNumber(rvalue));
+            protected Field evaluate(Field lfield, Field rfield) {
+                Object lvalue = lfield.getValue();
+                Object rvalue = rfield.getValue();
+                return wrapWithField(divide(asNumber(lvalue), asNumber(rvalue)));
             }
 
             public String getExpressionSymbol() {
@@ -101,8 +111,10 @@ public abstract class ArithmeticExpression extends BinaryExpression {
     public static Expression createMod(Expression left, Expression right) {
         return new ArithmeticExpression(left, right) {
 
-            protected Object evaluate(Object lvalue, Object rvalue) {
-                return mod(asNumber(lvalue), asNumber(rvalue));
+            protected Field evaluate(Field lfield, Field rfield) {
+                Object lvalue = lfield.getValue();
+                Object rvalue = rfield.getValue();
+                return wrapWithField(mod(asNumber(lvalue), asNumber(rvalue)));
             }
 
             public String getExpressionSymbol() {
@@ -186,16 +198,16 @@ public abstract class ArithmeticExpression extends BinaryExpression {
         }
     }
 
-    public Object evaluate(ExpressionContext message) throws ExpressionException {
-        Object lvalue = left.evaluate(message);
-        if (lvalue == null) {
+    public Field evaluate(ExpressionContext message) throws ExpressionException {
+        Field lfield = left.evaluate(message);
+        if (lfield == null || lfield.getValue() == null) {
+            return wrapWithField(null);
+        }
+        Field rfield = right.evaluate(message);
+        if (rfield == null || rfield.getValue() == null) {
             return null;
         }
-        Object rvalue = right.evaluate(message);
-        if (rvalue == null) {
-            return null;
-        }
-        return evaluate(lvalue, rvalue);
+        return evaluate(lfield, rfield);
     }
 
     /**
@@ -203,6 +215,6 @@ public abstract class ArithmeticExpression extends BinaryExpression {
      * @param rvalue
      * @return
      */
-    protected abstract Object evaluate(Object lvalue, Object rvalue);
+    protected abstract Field evaluate(Field lvalue, Field rvalue);
 
 }
