@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>BigDecimalConverter.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.converters</a> &gt; <span class="el_source">BigDecimalConverter.java</span></div><h1>BigDecimalConverter.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ * &lt;p&gt;
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * &lt;p&gt;
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * &lt;p&gt;
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.converters;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
+
+import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.spi.AtlasConverter;
+import io.atlasmap.spi.AtlasConversionConcern;
+import io.atlasmap.spi.AtlasConversionInfo;
+import io.atlasmap.v2.FieldType;
+
+<span class="fc" id="L34">public class BigDecimalConverter implements AtlasConverter&lt;BigInteger&gt; {</span>
+
+    @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.DECIMAL)
+    public BigDecimal toBigDecimal(BigDecimal value) {
+<span class="nc" id="L38">        return value;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.BIG_INTEGER)
+    public BigInteger toBigInteger(BigDecimal value) {
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        return value != null ? value.toBigInteger() : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.BOOLEAN)
+    public Boolean toBoolean(BigDecimal value) {
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L49">            return null;</span>
+        }
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        return value.intValue() == 0 ? Boolean.FALSE : Boolean.TRUE;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.BYTE,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public Byte toByte(BigDecimal value) throws AtlasConversionException {
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L58">            return null;</span>
+        }
+        try {
+<span class="fc" id="L61">            return value.toBigInteger().byteValueExact();</span>
+<span class="nc" id="L62">        } catch (ArithmeticException e) {</span>
+<span class="nc" id="L63">            throw new AtlasConversionException(String.format(</span>
+                    &quot;BigDecimal %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE&quot;, value));
+        }
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.CHAR,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public Character toCharacter(BigDecimal value) throws AtlasConversionException {
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L72">            return null;</span>
+        }
+        try {
+<span class="fc" id="L75">            Character.valueOf((char) value.intValueExact());</span>
+<span class="nc" id="L76">        } catch (ArithmeticException e) {</span>
+<span class="nc" id="L77">            throw new AtlasConversionException(String.format(</span>
+                    &quot;BigDecimal %s is greater than Character.MAX_VALUE or less than Character.MIN_VALUE&quot;, value));
+<span class="fc" id="L79">        }</span>
+<span class="fc" id="L80">        return Character.valueOf((char) value.intValue());</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.DATE_TIME,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public Date toDate(BigDecimal date) throws AtlasConversionException {
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        if (date == null) {</span>
+<span class="nc" id="L87">            return null;</span>
+        }
+        try {
+<span class="fc" id="L90">            long dateLong = date.toBigInteger().longValueExact();</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">            if (dateLong &gt;= Instant.MIN.getEpochSecond()) {</span>
+<span class="fc" id="L92">                return Date.from(Instant.ofEpochMilli(dateLong));</span>
+            }
+<span class="nc" id="L94">            return new Date(dateLong);</span>
+<span class="nc" id="L95">        } catch (ArithmeticException e) {</span>
+<span class="nc" id="L96">            throw new AtlasConversionException(String.format(</span>
+                    &quot;BigDecimal %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, date));
+        }
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.DOUBLE,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public Double toDouble(BigDecimal value) throws AtlasConversionException {
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L105">            return null;</span>
+        }
+<span class="fc" id="L107">        Double answer = value.toBigInteger().doubleValue();</span>
+<span class="pc bpc" id="L108" title="2 of 4 branches missed.">        if (answer == Double.NEGATIVE_INFINITY || answer == Double.POSITIVE_INFINITY) {</span>
+<span class="nc" id="L109">            throw new AtlasConversionException(String.format(</span>
+                    &quot;BigDecimal %s is greater than Double.MAX_VALUE or less than Double.MIN_VALUE&quot;, value));
+        }
+<span class="fc" id="L112">        return answer;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.FLOAT,
+            concerns = AtlasConversionConcern.RANGE)
+    public Float toFloat(BigDecimal value) throws AtlasConversionException {
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L119">            return null;</span>
+        }
+<span class="fc" id="L121">        Float answer = value.floatValue();</span>
+<span class="pc bpc" id="L122" title="2 of 4 branches missed.">        if (answer == Float.NEGATIVE_INFINITY || answer == Float.POSITIVE_INFINITY) {</span>
+<span class="nc" id="L123">            throw new AtlasConversionException(String.format(</span>
+                    &quot;BigDecimal %s is greater than Float.MAX_VALUE or less than Float.MIN_VALUE&quot;, value));
+        }
+<span class="fc" id="L126">        return answer;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.INTEGER,
+            concerns = AtlasConversionConcern.RANGE)
+    public Integer toInteger(BigDecimal value) throws AtlasConversionException {
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L133">            return null;</span>
+        }
+        try {
+<span class="fc" id="L136">            return value.intValueExact();</span>
+<span class="nc" id="L137">        } catch (ArithmeticException e) {</span>
+<span class="nc" id="L138">            throw new AtlasConversionException(String.format(</span>
+                    &quot;BigDecimal %s is greater than Integer.MAX_VALUE or less than Integer.MIN_VALUE&quot;, value));
+        }
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.DATE,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public LocalDate toLocalDate(BigDecimal value) throws AtlasConversionException {
+<span class="pc bpc" id="L146" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L147">            return null;</span>
+        }
+        try {
+<span class="fc" id="L150">            long longValue = value.toBigInteger().longValueExact();</span>
+<span class="fc" id="L151">            return Instant.ofEpochMilli(longValue).atZone(ZoneId.systemDefault()).toLocalDate();</span>
+<span class="nc" id="L152">        } catch (ArithmeticException e) {</span>
+<span class="nc" id="L153">            throw new AtlasConversionException(String.format(</span>
+                    &quot;BigDecimal %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));
+        }
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.TIME,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public LocalTime toLocalTime(BigDecimal value) throws AtlasConversionException {
+<span class="pc bpc" id="L161" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L162">            return null;</span>
+        }
+        try {
+<span class="fc" id="L165">            long longValue = value.toBigInteger().longValueExact();</span>
+<span class="fc" id="L166">            return Instant.ofEpochMilli(longValue).atZone(ZoneId.systemDefault()).toLocalTime();</span>
+<span class="nc" id="L167">        } catch (ArithmeticException e) {</span>
+<span class="nc" id="L168">            throw new AtlasConversionException(String.format(</span>
+                    &quot;BigDecimal %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));
+        }
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.DATE_TIME,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public LocalDateTime toLocalDateTime(BigDecimal value) throws AtlasConversionException {
+<span class="nc bnc" id="L176" title="All 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L177">            return null;</span>
+        }
+        try {
+<span class="nc" id="L180">            long longValue = value.toBigInteger().longValueExact();</span>
+<span class="nc" id="L181">            return Instant.ofEpochMilli(longValue).atZone(ZoneId.systemDefault()).toLocalDateTime();</span>
+<span class="nc" id="L182">        } catch (ArithmeticException e) {</span>
+<span class="nc" id="L183">            throw new AtlasConversionException(String.format(</span>
+                    &quot;BigDecimal %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));
+        }
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.LONG,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public Long toLong(BigDecimal value) throws AtlasConversionException {
+<span class="pc bpc" id="L191" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L192">            return null;</span>
+        }
+        try {
+<span class="fc" id="L195">            return value.toBigInteger().longValueExact();</span>
+<span class="nc" id="L196">        } catch (ArithmeticException e) {</span>
+<span class="nc" id="L197">            throw new AtlasConversionException(String.format(</span>
+                    &quot;BigDecimal %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));
+        }
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.NUMBER)
+    public Number toNumber(BigDecimal value) {
+<span class="nc" id="L204">        return value;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.SHORT,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public Short toShort(BigDecimal value) throws AtlasConversionException {
+<span class="pc bpc" id="L210" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L211">            return null;</span>
+        }
+        try {
+<span class="fc" id="L214">            return value.toBigInteger().shortValueExact();</span>
+<span class="nc" id="L215">        } catch (ArithmeticException e) {</span>
+<span class="nc" id="L216">            throw new AtlasConversionException(</span>
+<span class="nc" id="L217">                    String.format(&quot;BigDecimal %s is greater than Short.MAX_VALUE or less than Short.MIN_VALUE&quot;, value));</span>
+        }
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.STRING)
+    public String toString(BigDecimal value) {
+<span class="pc bpc" id="L223" title="1 of 2 branches missed.">        return value != null ? value.toString() : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.DATE_TIME_TZ,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public ZonedDateTime toZonedDateTime(BigDecimal value) throws AtlasConversionException {
+<span class="pc bpc" id="L229" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L230">            return null;</span>
+        }
+        try {
+<span class="fc" id="L233">            long longValue = value.longValueExact();</span>
+<span class="fc" id="L234">            return Instant.ofEpochMilli(longValue).atZone(ZoneId.systemDefault());</span>
+<span class="nc" id="L235">        } catch (ArithmeticException e) {</span>
+<span class="nc" id="L236">            throw new AtlasConversionException(String.format(</span>
+                    &quot;BigDecimal %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

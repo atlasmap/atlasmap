@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DefaultAtlasValidationService.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.core</a> &gt; <span class="el_source">DefaultAtlasValidationService.java</span></div><h1>DefaultAtlasValidationService.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ * &lt;p&gt;
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * &lt;p&gt;
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * &lt;p&gt;
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.core;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import io.atlasmap.api.AtlasValidationService;
+import io.atlasmap.spi.AtlasValidator;
+import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.BaseMapping;
+import io.atlasmap.v2.DataSource;
+import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
+import io.atlasmap.v2.LookupTable;
+import io.atlasmap.v2.LookupTables;
+import io.atlasmap.v2.Mapping;
+import io.atlasmap.v2.MappingType;
+import io.atlasmap.v2.Mappings;
+import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
+import io.atlasmap.v2.ValidationStatus;
+import io.atlasmap.validators.CompositeValidator;
+import io.atlasmap.validators.LookupTableNameValidator;
+import io.atlasmap.validators.NonNullValidator;
+import io.atlasmap.validators.NotEmptyValidator;
+import io.atlasmap.validators.PositiveIntegerValidator;
+import io.atlasmap.validators.StringPatternValidator;
+
+<span class="fc" id="L49">public class DefaultAtlasValidationService implements AtlasValidationService {</span>
+
+<span class="fc" id="L51">    enum Validators {</span>
+<span class="fc" id="L52">        MAPPING_NAME (() -&gt; {</span>
+<span class="fc" id="L53">            StringPatternValidator namePattern = new StringPatternValidator(</span>
+                ValidationScope.ALL,
+                &quot;Mapping name must not contain spaces nor special characters other than period (.) and underscore (_), but was '%s'&quot;,
+                &quot;[^A-Za-z0-9_.]&quot;);
+<span class="fc" id="L57">            NonNullValidator nameNotNull = new NonNullValidator(</span>
+                ValidationScope.ALL, &quot;Mapping name must not be null nor empty&quot;);
+<span class="fc" id="L59">            return new CompositeValidator(namePattern, nameNotNull);</span>
+        }),
+<span class="fc" id="L61">        DATASOURCE_TARGET_URI (() -&gt;</span>
+<span class="fc" id="L62">            new NonNullValidator(ValidationScope.DATA_SOURCE, &quot;DataSource target uri must not be null nor empty&quot;)</span>
+        ),
+<span class="fc" id="L64">        DATASOURCE_SOURCE_URI (() -&gt;</span>
+<span class="fc" id="L65">            new NonNullValidator(ValidationScope.DATA_SOURCE, &quot;DataSource source uri must not be null nor empty&quot;)</span>
+        ),
+
+<span class="fc" id="L68">        MAPPINGS_NOT_NULL (() -&gt;</span>
+<span class="fc" id="L69">            new NonNullValidator(ValidationScope.MAPPING, &quot;Field mappings must not be null&quot;)</span>
+        ),
+<span class="fc" id="L71">        MAPPINGS_NOT_EMPTY(() -&gt;</span>
+<span class="fc" id="L72">            new NotEmptyValidator(ValidationScope.MAPPING, &quot;Field mappings should not be empty&quot;)</span>
+        ),
+
+<span class="fc" id="L75">        COMBINE_INPUT_NOT_NULL (() -&gt;</span>
+<span class="fc" id="L76">            new NonNullValidator(ValidationScope.MAPPING, &quot;Source field should not be null&quot;)</span>
+        ),
+<span class="fc" id="L78">        COMBINE_INPUT_FIELD_NOT_EMPTY (() -&gt;</span>
+<span class="fc" id="L79">            new NotEmptyValidator(ValidationScope.MAPPING, &quot;Source field should not be empty&quot;)</span>
+        ),
+<span class="fc" id="L81">        COMBINE_OUTPUT_NOT_NULL (() -&gt;</span>
+<span class="fc" id="L82">            new NonNullValidator(ValidationScope.MAPPING, &quot;Target element must not be null&quot;)</span>
+        ),
+<span class="fc" id="L84">        COMBINE_OUTPUT_FIELD_NOT_EMPTY (() -&gt;</span>
+<span class="fc" id="L85">            new NotEmptyValidator(ValidationScope.MAPPING, &quot;Target field must not be empty&quot;)</span>
+        ),
+<span class="fc" id="L87">        COMBINE_INPUT_FIELD_NOT_NULL (() -&gt;</span>
+<span class="fc" id="L88">            new NonNullValidator(</span>
+                ValidationScope.MAPPING, &quot;Source fields should not be null&quot;)
+        ),
+<span class="fc" id="L91">        COMBINE_INPUT_FIELD_FIELD_ACTION_INDEX_POSITIVE (() -&gt;</span>
+<span class="fc" id="L92">            new PositiveIntegerValidator(</span>
+                ValidationScope.MAPPING, &quot;MapAction index must exists and be greater than or equal to zero (0), but was '%s'&quot;)
+        ),
+
+<span class="fc" id="L96">        MAP_INPUT_NOT_NULL (() -&gt;</span>
+<span class="fc" id="L97">            new NonNullValidator(ValidationScope.MAPPING, &quot;Source field must not be null&quot;)</span>
+        ),
+<span class="fc" id="L99">        MAP_INPUT_FIELD_NOT_EMPTY (() -&gt;</span>
+<span class="fc" id="L100">            new NotEmptyValidator(ValidationScope.MAPPING, &quot;Source field must not be empty&quot;)</span>
+        ),
+<span class="fc" id="L102">        MAP_OUTPUT_NOT_NULL (() -&gt;</span>
+<span class="fc" id="L103">            new NonNullValidator(ValidationScope.MAPPING, &quot;Target field should not be null&quot;)</span>
+        ),
+<span class="fc" id="L105">        MAP_OUTPUT_FIELD_NOT_EMPTY (() -&gt;</span>
+<span class="fc" id="L106">            new NotEmptyValidator(ValidationScope.MAPPING, &quot;Target field should not be empty&quot;)</span>
+        ),
+
+<span class="fc" id="L109">        SEPARATE_INPUT_NOT_NULL (() -&gt;</span>
+<span class="fc" id="L110">            new NonNullValidator(ValidationScope.MAPPING, &quot;Source field must not be null&quot;)</span>
+        ),
+<span class="fc" id="L112">        SEPARATE_INPUT_FIELD_NOT_NULL (() -&gt;</span>
+<span class="fc" id="L113">            new NonNullValidator(ValidationScope.MAPPING, &quot;Source field must not be null&quot;)</span>
+        ),
+<span class="fc" id="L115">        SEPARATE_INPUT_FIELD_NOT_EMPTY (() -&gt;</span>
+<span class="fc" id="L116">            new NotEmptyValidator(ValidationScope.MAPPING, &quot;Source field must not be empty&quot;)</span>
+        ),
+<span class="fc" id="L118">        SEPARATE_OUTPUT_NOT_NULL (() -&gt;</span>
+<span class="fc" id="L119">            new NonNullValidator(ValidationScope.MAPPING, &quot;Target field should not be null&quot;)</span>
+        ),
+<span class="fc" id="L121">        SEPARATE_OUTPUT_FIELD_NOT_NULL (() -&gt;</span>
+<span class="fc" id="L122">            new NonNullValidator(ValidationScope.MAPPING, &quot;Target fields should not be null&quot;)</span>
+        ),
+<span class="fc" id="L124">        SEPARATE_OUTPUT_FIELD_NOT_EMPTY (() -&gt;</span>
+<span class="fc" id="L125">            new NotEmptyValidator(ValidationScope.MAPPING, &quot;Target fields should not be empty&quot;)</span>
+        ),
+<span class="fc" id="L127">        SEPARATE_OUTPUT_FIELD_FIELD_ACTION_NOT_EMPTY (() -&gt;</span>
+<span class="fc" id="L128">            new NotEmptyValidator(ValidationScope.MAPPING, &quot;Field actions cannot be null or empty&quot;)</span>
+        ),
+<span class="fc" id="L130">        SEPARATE_OUTPUT_FIELD_FIELD_ACTION_INDEX_POSITIVE (() -&gt;</span>
+<span class="fc" id="L131">            new PositiveIntegerValidator(ValidationScope.MAPPING, &quot;MapAction index must exists and be greater than or equal to zero (0), but was '%s'&quot;)</span>
+        ),
+
+<span class="fc" id="L134">        LOOKUPTABLE_NAME_CHECK_FOR_DUPLICATE (() -&gt;</span>
+<span class="fc" id="L135">            new LookupTableNameValidator(&quot;LookupTables contain duplicated LookupTable names '%s'.&quot;)</span>
+        );
+
+        private final AtlasValidator validator;
+<span class="fc" id="L139">        private Validators(Supplier&lt;AtlasValidator&gt; s) {</span>
+<span class="fc" id="L140">            validator = s.get();</span>
+<span class="fc" id="L141">        }</span>
+
+        public AtlasValidator get() {
+<span class="fc" id="L144">            return validator;</span>
+        }
+    }
+
+    @Override
+    public List&lt;Validation&gt; validateMapping(AtlasMapping mapping) {
+<span class="fc" id="L150">        List&lt;Validation&gt; validations = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L151">        Validators.MAPPING_NAME.get().validate(mapping.getName(), validations, null);</span>
+
+<span class="fc" id="L153">        List&lt;DataSource&gt; dataSources = mapping.getDataSource();</span>
+<span class="fc bfc" id="L154" title="All 2 branches covered.">        for (DataSource ds : dataSources) {</span>
+<span class="pc bpc" id="L155" title="1 of 3 branches missed.">            switch (ds.getDataSourceType()) {</span>
+            case SOURCE:
+<span class="fc" id="L157">                Validators.DATASOURCE_SOURCE_URI.get().validate(ds.getUri(), validations, ds.getId());</span>
+<span class="fc" id="L158">                break;</span>
+            case TARGET:
+<span class="fc" id="L160">                Validators.DATASOURCE_TARGET_URI.get().validate(ds.getUri(), validations, ds.getId());</span>
+<span class="fc" id="L161">                break;</span>
+            default:
+<span class="nc" id="L163">                throw new IllegalArgumentException(String.format(&quot;Unknown DataSource type '%s'&quot;, ds.getDataSourceType()));</span>
+            }
+<span class="fc" id="L165">        }</span>
+<span class="fc" id="L166">        validateFieldMappings(mapping.getMappings(), mapping.getLookupTables(), validations);</span>
+<span class="fc" id="L167">        return validations;</span>
+    }
+
+    private void validateFieldMappings(Mappings mappings, LookupTables lookupTables, List&lt;Validation&gt; validations) {
+<span class="fc" id="L171">        Validators.MAPPINGS_NOT_NULL.get().validate(mappings, validations, null);</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        if (mappings != null) {</span>
+<span class="fc" id="L173">            Validators.MAPPINGS_NOT_EMPTY.get().validate(mappings.getMapping(), validations, null, ValidationStatus.WARN);</span>
+
+<span class="fc" id="L175">            List&lt;BaseMapping&gt; fieldMappings = mappings.getMapping();</span>
+<span class="pc bpc" id="L176" title="2 of 4 branches missed.">            if (fieldMappings != null &amp;&amp; !fieldMappings.isEmpty()) {</span>
+<span class="fc" id="L177">                List&lt;Mapping&gt; mapFieldMappings = fieldMappings.stream()</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">                        .filter(p -&gt; p.getMappingType() == MappingType.MAP).map(p -&gt; (Mapping) p)</span>
+<span class="fc" id="L179">                        .collect(Collectors.toList());</span>
+<span class="fc" id="L180">                List&lt;Mapping&gt; combineFieldMappings = fieldMappings.stream()</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">                        .filter(p -&gt; p.getMappingType() == MappingType.COMBINE).map(p -&gt; (Mapping) p)</span>
+<span class="fc" id="L182">                        .collect(Collectors.toList());</span>
+<span class="fc" id="L183">                List&lt;Mapping&gt; separateFieldMappings = fieldMappings.stream()</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">                        .filter(p -&gt; p.getMappingType() == MappingType.SEPARATE).map(p -&gt; (Mapping) p)</span>
+<span class="fc" id="L185">                        .collect(Collectors.toList());</span>
+<span class="fc" id="L186">                List&lt;Mapping&gt; lookupFieldMappings = fieldMappings.stream()</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">                        .filter(p -&gt; p.getMappingType() == MappingType.LOOKUP).map(p -&gt; (Mapping) p)</span>
+<span class="fc" id="L188">                        .collect(Collectors.toList());</span>
+<span class="fc" id="L189">                Set&lt;String&gt; usedIds = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L190">                validateMapMapping(mapFieldMappings, validations, usedIds);</span>
+<span class="fc" id="L191">                validateCombineMapping(combineFieldMappings, validations, usedIds);</span>
+<span class="fc" id="L192">                validateSeparateMapping(separateFieldMappings, validations, usedIds);</span>
+<span class="fc" id="L193">                validateLookupTables(lookupFieldMappings, lookupTables, validations, usedIds);</span>
+            }
+        }
+<span class="fc" id="L196">    }</span>
+
+    private void validateLookupTables(List&lt;Mapping&gt; lookupFieldMappings, LookupTables lookupTables,
+            List&lt;Validation&gt; validations, Set&lt;String&gt; usedIds) {
+<span class="pc bpc" id="L200" title="1 of 6 branches missed.">        if (lookupTables != null &amp;&amp; lookupTables.getLookupTable() != null &amp;&amp; !lookupTables.getLookupTable().isEmpty()) {</span>
+            // check for duplicate names
+<span class="fc" id="L202">            Validators.LOOKUPTABLE_NAME_CHECK_FOR_DUPLICATE.get().validate(lookupTables, validations, null);</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">            if (lookupFieldMappings.isEmpty()) {</span>
+<span class="fc" id="L204">                Validation validation = new Validation();</span>
+<span class="fc" id="L205">                validation.setScope(ValidationScope.LOOKUP_TABLE);</span>
+<span class="fc" id="L206">                validation.setMessage(&quot;LookupTables are defined but no LookupFields are utilized.&quot;);</span>
+<span class="fc" id="L207">                validation.setStatus(ValidationStatus.WARN);</span>
+<span class="fc" id="L208">                validations.add(validation);</span>
+<span class="fc" id="L209">            } else {</span>
+<span class="fc" id="L210">                validateLookupFieldMapping(lookupFieldMappings, lookupTables, validations, usedIds);</span>
+            }
+        }
+<span class="fc" id="L213">    }</span>
+
+    // mapping field validations
+    private void validateLookupFieldMapping(List&lt;Mapping&gt; fieldMappings, LookupTables lookupTables,
+            List&lt;Validation&gt; validations, Set&lt;String&gt; usedIds) {
+<span class="fc" id="L218">        Set&lt;String&gt; lookupFieldMappingTableNameRefs = fieldMappings.stream().map(Mapping::getLookupTableName)</span>
+<span class="fc" id="L219">                .collect(Collectors.toSet());</span>
+
+<span class="fc" id="L221">        Set&lt;String&gt; tableNames = lookupTables.getLookupTable().stream().map(LookupTable::getName)</span>
+<span class="fc" id="L222">                .collect(Collectors.toSet());</span>
+
+<span class="pc bpc" id="L224" title="2 of 4 branches missed.">        if (!lookupFieldMappingTableNameRefs.isEmpty() &amp;&amp; !tableNames.isEmpty()) {</span>
+<span class="fc" id="L225">            Set&lt;String&gt; disjoint = Stream.concat(lookupFieldMappingTableNameRefs.stream(), tableNames.stream())</span>
+<span class="fc" id="L226">                    .collect(Collectors.toMap(Function.identity(), t -&gt; true, (a, b) -&gt; null)).keySet();</span>
+<span class="fc bfc" id="L227" title="All 2 branches covered.">            if (!disjoint.isEmpty()) {</span>
+
+<span class="fc" id="L229">                boolean isInFieldList = !lookupFieldMappingTableNameRefs.stream().filter(disjoint::contains)</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">                        .collect(Collectors.toList()).isEmpty();</span>
+<span class="fc" id="L231">                boolean isInTableNameList = !tableNames.stream().filter(disjoint::contains).collect(Collectors.toList())</span>
+<span class="fc bfc" id="L232" title="All 2 branches covered.">                        .isEmpty();</span>
+                // which list has the disjoin.... if its the lookup fields then ERROR
+<span class="fc bfc" id="L234" title="All 2 branches covered.">                if (isInFieldList) {</span>
+<span class="fc" id="L235">                    Validation validation = new Validation();</span>
+<span class="fc" id="L236">                    validation.setScope(ValidationScope.LOOKUP_TABLE);</span>
+<span class="fc" id="L237">                    validation.setMessage(</span>
+<span class="fc" id="L238">                            &quot;One ore more LookupFieldMapping references a non existent LookupTable name in the mapping: &quot; + disjoint.toString());</span>
+<span class="fc" id="L239">                    validation.setStatus(ValidationStatus.ERROR);</span>
+<span class="fc" id="L240">                    validations.add(validation);</span>
+                }
+
+                // check that if a name exists in table names that at least one field mapping
+                // uses it, else WARN
+<span class="fc bfc" id="L245" title="All 2 branches covered.">                if (isInTableNameList) {</span>
+<span class="fc" id="L246">                    Validation validation = new Validation();</span>
+<span class="fc" id="L247">                    validation.setScope(ValidationScope.LOOKUP_TABLE);</span>
+<span class="fc" id="L248">                    validation.setMessage(&quot;A LookupTable is defined but not used by any LookupField: &quot; + disjoint.toString());</span>
+<span class="fc" id="L249">                    validation.setStatus(ValidationStatus.WARN);</span>
+<span class="fc" id="L250">                    validations.add(validation);</span>
+                }
+            }
+        }
+
+<span class="fc bfc" id="L255" title="All 2 branches covered.">        for (Mapping fieldMapping : fieldMappings) {</span>
+<span class="fc" id="L256">            String mappingId = fieldMapping.getId();</span>
+<span class="fc" id="L257">            validateMappingId(mappingId, usedIds, validations);</span>
+<span class="pc bpc" id="L258" title="1 of 2 branches missed.">            if (fieldMapping.getInputField() != null) {</span>
+<span class="fc" id="L259">                Validators.MAP_INPUT_FIELD_NOT_EMPTY.get().validate(fieldMapping.getInputField(), validations, mappingId);</span>
+            }
+<span class="fc" id="L261">            Validators.MAP_OUTPUT_NOT_NULL.get().validate(fieldMapping.getOutputField(), validations,</span>
+                    mappingId, ValidationStatus.WARN);
+<span class="pc bpc" id="L263" title="1 of 2 branches missed.">            if (fieldMapping.getOutputField() != null) {</span>
+<span class="fc" id="L264">                Validators.MAP_OUTPUT_FIELD_NOT_EMPTY.get().validate(fieldMapping.getOutputField(), validations,</span>
+                        mappingId, ValidationStatus.WARN);
+            }
+<span class="fc" id="L267">        }</span>
+
+<span class="fc" id="L269">    }</span>
+
+    private void validateMapMapping(List&lt;Mapping&gt; fieldMappings, List&lt;Validation&gt; validations, Set&lt;String&gt; usedIds) {
+<span class="fc bfc" id="L272" title="All 2 branches covered.">        for (Mapping fieldMapping : fieldMappings) {</span>
+<span class="fc" id="L273">            String mappingId = fieldMapping.getId();</span>
+<span class="fc" id="L274">            FieldGroup sourceFieldGroup = fieldMapping.getInputFieldGroup();</span>
+<span class="fc bfc" id="L275" title="All 2 branches covered.">            List&lt;Field&gt; sourceFields = sourceFieldGroup != null ? sourceFieldGroup.getField() : fieldMapping.getInputField();</span>
+<span class="fc" id="L276">            validateMappingId(mappingId, usedIds, validations);</span>
+<span class="fc" id="L277">            Validators.MAP_INPUT_NOT_NULL.get().validate(sourceFields, validations, mappingId);</span>
+<span class="pc bpc" id="L278" title="1 of 2 branches missed.">            if (fieldMapping.getInputField() != null) {</span>
+<span class="fc" id="L279">                Validators.MAP_INPUT_FIELD_NOT_EMPTY.get().validate(sourceFields, validations, mappingId);</span>
+            }
+<span class="fc" id="L281">            Validators.MAP_OUTPUT_NOT_NULL.get().validate(fieldMapping.getOutputField(), validations,</span>
+                    mappingId, ValidationStatus.WARN);
+<span class="pc bpc" id="L283" title="1 of 2 branches missed.">            if (fieldMapping.getOutputField() != null) {</span>
+<span class="fc" id="L284">                Validators.MAP_OUTPUT_FIELD_NOT_EMPTY.get().validate(fieldMapping.getOutputField(), validations,</span>
+                        mappingId, ValidationStatus.WARN);
+            }
+<span class="fc" id="L287">        }</span>
+<span class="fc" id="L288">    }</span>
+
+    private void validateSeparateMapping(List&lt;Mapping&gt; fieldMappings, List&lt;Validation&gt; validations, Set&lt;String&gt; usedIds) {
+<span class="fc bfc" id="L291" title="All 2 branches covered.">        for (Mapping fieldMapping : fieldMappings) {</span>
+<span class="fc" id="L292">            String mappingId = fieldMapping.getId();</span>
+<span class="fc" id="L293">            validateMappingId(mappingId, usedIds, validations);</span>
+<span class="fc" id="L294">            Validators.SEPARATE_INPUT_NOT_NULL.get().validate(fieldMapping.getInputField(), validations, mappingId);</span>
+<span class="pc bpc" id="L295" title="1 of 2 branches missed.">            if (fieldMapping.getInputField() != null) {</span>
+<span class="fc" id="L296">                Validators.SEPARATE_INPUT_FIELD_NOT_EMPTY.get().validate(fieldMapping.getInputField(), validations, mappingId);</span>
+                // source must be a String type
+            }
+
+<span class="fc" id="L300">            Validators.SEPARATE_OUTPUT_NOT_NULL.get().validate(fieldMapping.getOutputField(), validations,</span>
+                    mappingId, ValidationStatus.WARN);
+<span class="fc" id="L302">            Validators.SEPARATE_OUTPUT_FIELD_NOT_EMPTY.get().validate(fieldMapping.getOutputField(), validations,</span>
+                    mappingId, ValidationStatus.WARN);
+
+<span class="pc bpc" id="L305" title="1 of 2 branches missed.">            if (fieldMapping.getOutputField() != null) {</span>
+<span class="fc bfc" id="L306" title="All 2 branches covered.">                for (Field field : fieldMapping.getOutputField()) {</span>
+<span class="fc" id="L307">                    Validators.SEPARATE_OUTPUT_FIELD_NOT_NULL.get().validate(field, validations, mappingId);</span>
+<span class="pc bpc" id="L308" title="2 of 4 branches missed.">                    if (field.getIndex() == null || field.getIndex() &lt; 0) {</span>
+<span class="nc" id="L309">                        Validators.SEPARATE_OUTPUT_FIELD_FIELD_ACTION_INDEX_POSITIVE.get().validate(field.getIndex(),</span>
+                                validations, mappingId);
+                    }
+<span class="fc" id="L312">                }</span>
+            }
+<span class="fc" id="L314">        }</span>
+<span class="fc" id="L315">    }</span>
+
+    private void validateCombineMapping(List&lt;Mapping&gt; fieldMappings, List&lt;Validation&gt; validations, Set&lt;String&gt; usedIds) {
+<span class="fc bfc" id="L318" title="All 2 branches covered.">        for (Mapping fieldMapping : fieldMappings) {</span>
+<span class="fc" id="L319">            String mappingId = fieldMapping.getId();</span>
+<span class="fc" id="L320">            validateMappingId(mappingId, usedIds, validations);</span>
+<span class="fc" id="L321">            Validators.COMBINE_OUTPUT_NOT_NULL.get().validate(fieldMapping.getOutputField(), validations, mappingId);</span>
+<span class="pc bpc" id="L322" title="1 of 2 branches missed.">            if (fieldMapping.getOutputField() != null) {</span>
+<span class="fc" id="L323">                Validators.COMBINE_OUTPUT_FIELD_NOT_EMPTY.get().validate(fieldMapping.getOutputField(), validations, mappingId);</span>
+                // source must be a String type
+            }
+
+<span class="fc" id="L327">            Validators.COMBINE_INPUT_NOT_NULL.get().validate(fieldMapping.getInputField(), validations,</span>
+                    mappingId, ValidationStatus.WARN);
+<span class="fc" id="L329">            Validators.COMBINE_INPUT_FIELD_NOT_EMPTY.get().validate(fieldMapping.getInputField(), validations,</span>
+                    mappingId, ValidationStatus.WARN);
+
+<span class="pc bpc" id="L332" title="1 of 2 branches missed.">            if (fieldMapping.getInputField() != null) {</span>
+<span class="fc bfc" id="L333" title="All 2 branches covered.">                for (Field field : fieldMapping.getInputField()) {</span>
+<span class="fc" id="L334">                    Validators.COMBINE_INPUT_FIELD_NOT_NULL.get().validate(field, validations, mappingId);</span>
+<span class="pc bpc" id="L335" title="2 of 4 branches missed.">                    if (field.getIndex() == null || field.getIndex() &lt; 0) {</span>
+<span class="nc" id="L336">                        Validators.COMBINE_INPUT_FIELD_FIELD_ACTION_INDEX_POSITIVE.get().validate(field.getIndex(),</span>
+                                validations, mappingId);
+                    }
+<span class="fc" id="L339">                }</span>
+            }
+<span class="fc" id="L341">        }</span>
+<span class="fc" id="L342">    }</span>
+
+    private void validateMappingId(String id, Set&lt;String&gt; usedIds, List&lt;Validation&gt; validations) {
+<span class="fc bfc" id="L345" title="All 2 branches covered.">        if (id == null) {</span>
+<span class="fc" id="L346">            return;</span>
+        }
+<span class="pc bpc" id="L348" title="1 of 2 branches missed.">        if (usedIds.contains(id)) {</span>
+<span class="nc" id="L349">            Validation validation = new Validation();</span>
+<span class="nc" id="L350">            validation.setScope(ValidationScope.MAPPING);</span>
+<span class="nc" id="L351">            validation.setMessage(String.format(&quot;Duplicated mapping ID '%s' is found&quot;, id));</span>
+<span class="nc" id="L352">            validation.setStatus(ValidationStatus.WARN);</span>
+<span class="nc" id="L353">            validations.add(validation);</span>
+<span class="nc" id="L354">        } else {</span>
+<span class="fc" id="L355">            usedIds.add(id);</span>
+        }
+<span class="fc" id="L357">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

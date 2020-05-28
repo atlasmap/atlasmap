@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>XmlFieldReader.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-xml-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.xml.core</a> &gt; <span class="el_source">XmlFieldReader.java</span></div><h1>XmlFieldReader.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.xml.core;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import io.atlasmap.core.AtlasPath;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.AtlasUtil;
+import io.atlasmap.core.AtlasPath.SegmentContext;
+import io.atlasmap.spi.AtlasConversionService;
+import io.atlasmap.spi.AtlasFieldReader;
+import io.atlasmap.spi.AtlasInternalSession;
+import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.AtlasModelFactory;
+import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.CollectionType;
+import io.atlasmap.v2.DataSource;
+import io.atlasmap.v2.DataSourceType;
+import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
+import io.atlasmap.v2.FieldType;
+import io.atlasmap.xml.core.XmlPath.XmlSegmentContext;
+import io.atlasmap.xml.v2.AtlasXmlModelFactory;
+import io.atlasmap.xml.v2.XmlDataSource;
+import io.atlasmap.xml.v2.XmlField;
+import io.atlasmap.xml.v2.XmlNamespace;
+import io.atlasmap.xml.v2.XmlNamespaces;
+
+public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldReader {
+
+<span class="fc" id="L54">    private static final Logger LOG = LoggerFactory.getLogger(XmlFieldReader.class);</span>
+
+    private AtlasConversionService conversionService;
+    private Document document;
+
+    public XmlFieldReader(ClassLoader cl, AtlasConversionService conversionService) {
+<span class="fc" id="L60">        super(cl);</span>
+<span class="fc" id="L61">        this.conversionService = conversionService;</span>
+<span class="fc" id="L62">    }</span>
+
+    public XmlFieldReader(ClassLoader cl, AtlasConversionService conversionService, Map&lt;String, String&gt; namespaces) {
+<span class="fc" id="L65">        super(cl, namespaces);</span>
+<span class="fc" id="L66">        this.conversionService = conversionService;</span>
+<span class="fc" id="L67">    }</span>
+
+    public Field read(AtlasInternalSession session) throws AtlasException {
+<span class="fc" id="L70">        Field field = session.head().getSourceField();</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        if (document == null) {</span>
+<span class="fc" id="L72">            AtlasUtil.addAudit(session, field.getDocId(),</span>
+<span class="fc" id="L73">                    String.format(&quot;Cannot read field '%s' of document '%s', document is null&quot;,</span>
+<span class="fc" id="L74">                            field.getPath(), field.getDocId()),</span>
+<span class="fc" id="L75">                    field.getPath(), AuditStatus.ERROR, null);</span>
+<span class="fc" id="L76">            return field;</span>
+        }
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        if (field == null) {</span>
+<span class="fc" id="L79">            throw new AtlasException(new IllegalArgumentException(&quot;Argument 'field' cannot be null&quot;));</span>
+        }
+<span class="pc bpc" id="L81" title="1 of 4 branches missed.">        if (!(field instanceof XmlField) &amp;&amp; !(field instanceof FieldGroup)) {</span>
+<span class="nc" id="L82">            throw new AtlasException(String.format(&quot;Unsupported field type '%s'&quot;, field.getClass()));</span>
+        }
+
+<span class="fc" id="L85">        seedDocumentNamespaces(document);</span>
+
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L88">            LOG.debug(&quot;Reading source value for field: &quot; + field.getPath());</span>
+        }
+<span class="fc" id="L90">        Optional&lt;XmlNamespaces&gt; xmlNamespaces = getSourceNamespaces(session, field);</span>
+<span class="fc" id="L91">        XmlPath path = new XmlPath(field.getPath());</span>
+<span class="fc" id="L92">        List&lt;Field&gt; fields = getFieldsForPath(session, xmlNamespaces, document.getDocumentElement(), field, path, 0);</span>
+
+<span class="fc bfc" id="L94" title="All 4 branches covered.">        if (path.hasCollection() &amp;&amp; !path.isIndexedCollection()) {</span>
+<span class="fc" id="L95">            FieldGroup fieldGroup = AtlasModelFactory.createFieldGroupFrom(field, true);</span>
+<span class="fc" id="L96">            fieldGroup.getField().addAll(fields);</span>
+<span class="fc" id="L97">            session.head().setSourceField(fieldGroup);</span>
+<span class="fc" id="L98">            return fieldGroup;</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        } else if (fields.size() == 1) {</span>
+<span class="fc" id="L100">            field.setValue(fields.get(0).getValue());</span>
+<span class="fc" id="L101">            return field;</span>
+        } else {
+<span class="fc" id="L103">            return field;</span>
+        }
+    }
+
+    private List&lt;Field&gt; getFieldsForPath(AtlasInternalSession session, Optional&lt;XmlNamespaces&gt; xmlNamespaces,
+     Element node, Field field, XmlPath path, int depth) throws AtlasException {
+<span class="fc" id="L109">        List&lt;Field&gt; fields = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L110">        List&lt;XmlSegmentContext&gt; segments = path.getXmlSegments(false);</span>
+<span class="pc bpc" id="L111" title="1 of 2 branches missed.">        if (segments.size() &lt; depth) {</span>
+<span class="nc" id="L112">            throw new AtlasException(String.format(&quot;depth '%s' exceeds segment size '%s'&quot;, depth, segments.size()));</span>
+        }
+
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (segments.size() == depth) {</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">            if (field.getFieldType() == FieldType.COMPLEX) {</span>
+<span class="fc" id="L117">                FieldGroup group = (FieldGroup) field;</span>
+<span class="fc" id="L118">                populateChildFields(session, xmlNamespaces, node, group, path);</span>
+<span class="fc" id="L119">                fields.add(group);</span>
+<span class="fc" id="L120">            } else {</span>
+<span class="fc" id="L121">                XmlField xmlField = AtlasXmlModelFactory.cloneField((XmlField)field, true);</span>
+<span class="fc" id="L122">                copyValue(session, segments.get(depth - 1), node, xmlField);</span>
+<span class="fc" id="L123">                xmlField.setIndex(null); //reset index for subfields</span>
+<span class="fc" id="L124">                fields.add(xmlField);</span>
+            }
+<span class="fc" id="L126">            return fields;</span>
+        }
+
+        // segments.size() &gt; depth
+<span class="fc" id="L130">        XmlSegmentContext segment = segments.get(depth);</span>
+<span class="pc bpc" id="L131" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L132">            LOG.debug(&quot;Now processing segment: &quot; + segment.getName());</span>
+        }
+<span class="fc bfc" id="L134" title="All 2 branches covered.">        if (depth == 0) {</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">            if (segment.getName().startsWith(XmlIOHelper.getNodeNameWithoutNamespaceAlias(node))) {</span>
+<span class="fc" id="L136">                Optional&lt;String&gt; rootNamespace = Optional.empty();</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">                if (segment.getNamespace() != null) {</span>
+<span class="fc" id="L138">                    rootNamespace = getNamespace(xmlNamespaces, segment.getNamespace());</span>
+                }
+<span class="pc bpc" id="L140" title="1 of 4 branches missed.">                if (!rootNamespace.isPresent() || rootNamespace.get().equals(node.getNamespaceURI())) {</span>
+                    // processing root node part of path such as the &quot;XOA&quot; part of
+                    // &quot;/XOA/contact&lt;&gt;/firstName&quot;, skip.
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L144">                        LOG.debug(&quot;Skipping root segment: &quot; + segment);</span>
+                    }
+<span class="pc bpc" id="L146" title="1 of 2 branches missed.">                    if (segments.size() &gt; 1) {</span>
+<span class="fc" id="L147">                        depth = 1;</span>
+<span class="fc" id="L148">                        segment = segments.get(depth);</span>
+                    }
+                }
+            }
+        }
+
+<span class="pc bpc" id="L154" title="1 of 4 branches missed.">        if (segment.isAttribute() &amp;&amp; segments.size() == depth + 1) {</span>
+            //if last segment is attribute
+<span class="fc" id="L156">            List&lt;Field&gt; attrFields = getFieldsForPath(session, xmlNamespaces, node, field, path, depth + 1);</span>
+<span class="fc" id="L157">            fields.addAll(attrFields);</span>
+<span class="fc" id="L158">            return fields;</span>
+        }
+
+<span class="fc" id="L161">        String fieldName = segment.getName();</span>
+<span class="fc" id="L162">        String fieldNamespace = segment.getNamespace();</span>
+<span class="fc" id="L163">        Optional&lt;String&gt; namespace = getNamespace(xmlNamespaces, fieldNamespace);</span>
+<span class="fc" id="L164">        List&lt;Element&gt; children = XmlIOHelper.getChildrenWithNameStripAlias(fieldName, namespace, node);</span>
+<span class="pc bpc" id="L165" title="1 of 4 branches missed.">        if (children == null || children.isEmpty()) {</span>
+<span class="pc bpc" id="L166" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L167">                LOG.debug(&quot;Skipping source value set, couldn't find children with name '&quot; + fieldName</span>
+                        + &quot;', for segment: &quot; + segment);
+            }
+<span class="fc" id="L170">            return fields;</span>
+        }
+
+<span class="fc bfc" id="L173" title="All 2 branches covered.">        if (segment.getCollectionType() == CollectionType.NONE) {</span>
+<span class="fc" id="L174">            List&lt;Field&gt; childFields = getFieldsForPath(session, xmlNamespaces, children.get(0), field, path, depth + 1);</span>
+<span class="fc" id="L175">            fields.addAll(childFields);</span>
+<span class="fc" id="L176">            return fields;</span>
+        }
+
+        // collection
+<span class="fc" id="L180">        Integer index = segment.getCollectionIndex();</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">        if (index != null) {</span>
+<span class="pc bpc" id="L182" title="1 of 2 branches missed.">            if (index &lt; children.size()) {</span>
+<span class="fc" id="L183">                List&lt;Field&gt; arrayFields = getFieldsForPath(session, xmlNamespaces, children.get(index), field, path,</span>
+                        depth + 1);
+<span class="fc" id="L185">                fields.addAll(arrayFields);</span>
+<span class="pc bnc" id="L186" title="All 2 branches missed.">            } else if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L187">                LOG.debug(&quot;Skipping source value set, children list can't fit index &quot; + index + &quot;, children list size: &quot;</span>
+<span class="nc" id="L188">                    + children.size());</span>
+            }
+        } else {
+            //if index not included, iterate over all
+<span class="fc bfc" id="L192" title="All 2 branches covered.">            for (int i=0; i&lt;children.size(); i++) {</span>
+                Field itemField;
+<span class="fc bfc" id="L194" title="All 2 branches covered.">                if (field instanceof FieldGroup) {</span>
+<span class="fc" id="L195">                    itemField = AtlasXmlModelFactory.cloneFieldGroup((FieldGroup)field);</span>
+<span class="fc" id="L196">                    AtlasPath.setCollectionIndexRecursively((FieldGroup)itemField, depth + 1, i);</span>
+                 } else {
+<span class="fc" id="L198">                    itemField = AtlasXmlModelFactory.cloneField((XmlField)field, false);</span>
+<span class="fc" id="L199">                    AtlasPath itemPath = new AtlasPath(field.getPath());</span>
+<span class="fc" id="L200">                    itemPath.setCollectionIndex(depth + 1, i);</span>
+<span class="fc" id="L201">                    itemField.setPath(itemPath.toString());</span>
+                 }
+<span class="fc" id="L203">                List&lt;Field&gt; arrayFields = getFieldsForPath(</span>
+<span class="fc" id="L204">                    session, xmlNamespaces, children.get(i), itemField, new XmlPath(itemField.getPath()), depth + 1);</span>
+<span class="fc" id="L205">                fields.addAll(arrayFields);</span>
+            }
+        }
+<span class="fc" id="L208">        return fields;</span>
+    }
+
+    private void populateChildFields(AtlasInternalSession session, Optional&lt;XmlNamespaces&gt; xmlNamespaces,
+     Element node, FieldGroup fieldGroup, AtlasPath path) throws AtlasException {
+<span class="fc" id="L213">        List&lt;Field&gt; newChildren = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L214" title="All 2 branches covered.">        for (Field child : fieldGroup.getField()) {</span>
+<span class="fc" id="L215">            XmlPath childPath = new XmlPath(child.getPath());</span>
+<span class="fc" id="L216">            String fieldNamespace = childPath.getLastSegment().getNamespace();</span>
+<span class="fc" id="L217">            Optional&lt;String&gt; namespace = getNamespace(xmlNamespaces, fieldNamespace);</span>
+<span class="fc" id="L218">            List&lt;Element&gt; children = XmlIOHelper.getChildrenWithNameStripAlias(childPath.getLastSegment().getName(), namespace, node);</span>
+<span class="pc bpc" id="L219" title="1 of 2 branches missed.">            if (childPath.getLastSegment().getCollectionType() != CollectionType.NONE) {</span>
+<span class="nc" id="L220">                FieldGroup childGroup = populateCollectionItems(session, xmlNamespaces, children, child);</span>
+<span class="nc" id="L221">                newChildren.add(childGroup);</span>
+<span class="nc" id="L222">            } else {</span>
+<span class="pc bpc" id="L223" title="1 of 2 branches missed.">                if (child instanceof FieldGroup) {</span>
+<span class="nc" id="L224">                    populateChildFields(session, xmlNamespaces, children.get(0), (FieldGroup)child, childPath);</span>
+                } else {
+<span class="fc" id="L226">                    copyValue(session, childPath.getLastSegment(), children.get(0), (XmlField)child);</span>
+                }
+<span class="fc" id="L228">                newChildren.add(child);</span>
+            }
+<span class="fc" id="L230">        }</span>
+<span class="fc" id="L231">        fieldGroup.getField().clear();</span>
+<span class="fc" id="L232">        fieldGroup.getField().addAll(newChildren);</span>
+<span class="fc" id="L233">    }</span>
+
+    private FieldGroup populateCollectionItems(AtlasInternalSession session, Optional&lt;XmlNamespaces&gt; xmlNamespaces,
+     List&lt;Element&gt; elements, Field field) throws AtlasException {
+<span class="nc bnc" id="L237" title="All 2 branches missed.">        FieldGroup group = field instanceof FieldGroup ?</span>
+<span class="nc" id="L238">         (FieldGroup)field : AtlasModelFactory.createFieldGroupFrom(field, true);</span>
+<span class="nc bnc" id="L239" title="All 2 branches missed.">        for (int i=0; i&lt;elements.size(); i++) {</span>
+<span class="nc" id="L240">            XmlPath itemPath = new XmlPath(group.getPath());</span>
+<span class="nc" id="L241">            List&lt;SegmentContext&gt; segments = itemPath.getSegments(true);</span>
+<span class="nc" id="L242">            itemPath.setCollectionIndex(segments.size() - 1, i);</span>
+<span class="nc bnc" id="L243" title="All 2 branches missed.">            if (field instanceof FieldGroup) {</span>
+<span class="nc" id="L244">                FieldGroup itemGroup = AtlasXmlModelFactory.cloneFieldGroup((FieldGroup)field);</span>
+<span class="nc" id="L245">                AtlasPath.setCollectionIndexRecursively(itemGroup, segments.size(), i);</span>
+<span class="nc" id="L246">                populateChildFields(session, xmlNamespaces, elements.get(i), itemGroup, itemPath);</span>
+<span class="nc" id="L247">                group.getField().add(itemGroup);</span>
+<span class="nc" id="L248">            } else {</span>
+<span class="nc" id="L249">                XmlField itemField = (XmlField) AtlasXmlModelFactory.cloneField((XmlField)field, false);</span>
+<span class="nc" id="L250">                itemField.setPath(itemPath.toString());</span>
+<span class="nc" id="L251">                copyValue(session, itemPath.getLastSegment(), elements.get(i), itemField);</span>
+<span class="nc" id="L252">                group.getField().add(itemField);</span>
+            }
+        }
+<span class="nc" id="L255">        return group;</span>
+    }
+
+    private void copyValue(AtlasInternalSession session, XmlSegmentContext sc, Element node, XmlField xmlField) {
+<span class="fc bfc" id="L259" title="All 2 branches covered.">        if (xmlField.getFieldType() == null) {</span>
+<span class="fc" id="L260">            xmlField.setFieldType(FieldType.STRING);</span>
+        }
+
+        String value;
+<span class="fc bfc" id="L264" title="All 2 branches covered.">        if (sc.isAttribute()) {</span>
+<span class="fc" id="L265">            String attributeName = sc.getQName();</span>
+<span class="fc" id="L266">            value = node.getAttribute(attributeName);</span>
+<span class="fc" id="L267">        } else {</span>
+<span class="fc" id="L268">            value = node.getTextContent();</span>
+        }
+
+<span class="pc bpc" id="L271" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L272">            return;</span>
+        }
+
+<span class="fc bfc" id="L275" title="All 2 branches covered.">        if (xmlField.getFieldType() == FieldType.STRING) {</span>
+<span class="fc" id="L276">            xmlField.setValue(value);</span>
+        } else {
+            Object convertedValue;
+            try {
+<span class="fc" id="L280">                convertedValue = conversionService.convertType(value, xmlField.getFormat(),</span>
+<span class="fc" id="L281">                    xmlField.getFieldType(), null);</span>
+<span class="fc" id="L282">                xmlField.setValue(convertedValue);</span>
+<span class="fc" id="L283">            } catch (AtlasConversionException e) {</span>
+<span class="fc" id="L284">                AtlasUtil.addAudit(session, xmlField.getDocId(),</span>
+<span class="fc" id="L285">                        String.format(&quot;Failed to convert field value '%s' into type '%s'&quot;, value,</span>
+<span class="fc" id="L286">                            xmlField.getFieldType()),</span>
+<span class="fc" id="L287">                    xmlField.getPath(), AuditStatus.ERROR, value);</span>
+<span class="fc" id="L288">            }</span>
+        }
+<span class="fc" id="L290">    }</span>
+
+    public void setDocument(Document document) throws AtlasException {
+<span class="fc" id="L293">        this.document = document;</span>
+<span class="fc" id="L294">    }</span>
+
+    private Optional&lt;XmlNamespaces&gt; getSourceNamespaces(AtlasInternalSession session, Field field) {
+<span class="fc" id="L297">        DataSource dataSource = null;</span>
+<span class="fc" id="L298">        AtlasMapping mapping = session.getMapping();</span>
+        // this is to simplify tests which uses mocks
+<span class="pc bpc" id="L300" title="1 of 6 branches missed.">        if (mapping == null || mapping.getDataSource() == null || field.getDocId() == null) {</span>
+<span class="fc" id="L301">            return Optional.empty();</span>
+        }
+<span class="fc" id="L303">        List&lt;DataSource&gt; dataSources = mapping.getDataSource();</span>
+<span class="pc bpc" id="L304" title="1 of 2 branches missed.">        for (DataSource source : dataSources) {</span>
+<span class="pc bpc" id="L305" title="1 of 2 branches missed.">            if (!source.getDataSourceType().equals(DataSourceType.SOURCE)) {</span>
+<span class="nc" id="L306">                continue;</span>
+            }
+<span class="fc bfc" id="L308" title="All 2 branches covered.">            if (field.getDocId().equals(source.getId())) {</span>
+<span class="fc" id="L309">                dataSource = source;</span>
+<span class="fc" id="L310">                break;</span>
+            }
+<span class="fc" id="L312">        }</span>
+<span class="pc bpc" id="L313" title="1 of 4 branches missed.">        if (dataSource == null || !XmlDataSource.class.isInstance(dataSource)) {</span>
+<span class="fc" id="L314">            return Optional.empty();</span>
+        }
+<span class="fc" id="L316">        XmlDataSource xmlDataSource = XmlDataSource.class.cast(dataSource);</span>
+<span class="fc bfc" id="L317" title="All 2 branches covered.">        return xmlDataSource.getXmlNamespaces() != null ? Optional.of(xmlDataSource.getXmlNamespaces()) : Optional.empty();</span>
+    }
+
+    private Optional&lt;String&gt; getNamespace(Optional&lt;XmlNamespaces&gt; xmlNamespaces, String namespaceAlias) {
+<span class="fc" id="L321">        Optional&lt;String&gt; namespace = Optional.empty();</span>
+<span class="fc bfc" id="L322" title="All 2 branches covered.">        if (xmlNamespaces.isPresent()) {</span>
+<span class="fc bfc" id="L323" title="All 2 branches covered.">            for (XmlNamespace xmlNamespace : xmlNamespaces.get().getXmlNamespace()) {</span>
+<span class="pc bpc" id="L324" title="1 of 4 branches missed.">                if ((xmlNamespace.getAlias() == null &amp;&amp; namespaceAlias == null)</span>
+<span class="fc bfc" id="L325" title="All 2 branches covered.">                    || xmlNamespace.getAlias().equals(namespaceAlias)) {</span>
+<span class="fc" id="L326">                    namespace = Optional.of(xmlNamespace.getUri());</span>
+<span class="fc" id="L327">                    break;</span>
+                }
+<span class="fc" id="L329">            }</span>
+        }
+<span class="fc" id="L331">        return namespace;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

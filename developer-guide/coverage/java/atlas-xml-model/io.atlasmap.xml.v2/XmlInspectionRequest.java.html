@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>XmlInspectionRequest.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-xml-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.xml.v2</a> &gt; <span class="el_source">XmlInspectionRequest.java</span></div><h1>XmlInspectionRequest.java</h1><pre class="source lang-java linenums">package io.atlasmap.xml.v2;
+
+import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import io.atlasmap.v2.StringList;
+
+@JsonRootName(&quot;XmlInspectionRequest&quot;)
+@JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
+<span class="fc" id="L10">public class XmlInspectionRequest implements Serializable {</span>
+
+    private final static long serialVersionUID = 1L;
+
+    protected StringList fieldNameBlacklist;
+
+    protected StringList typeNameBlacklist;
+
+    protected StringList namespaceBlacklist;
+
+    protected String xmlData;
+
+    protected String uri;
+
+    protected InspectionType type;
+
+    /**
+     * Gets the value of the fieldNameBlacklist property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link StringList }
+     *     
+     */
+    public StringList getFieldNameBlacklist() {
+<span class="fc" id="L35">        return fieldNameBlacklist;</span>
+    }
+
+    /**
+     * Sets the value of the fieldNameBlacklist property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link StringList }
+     *     
+     */
+    public void setFieldNameBlacklist(StringList value) {
+<span class="nc" id="L47">        this.fieldNameBlacklist = value;</span>
+<span class="nc" id="L48">    }</span>
+
+    /**
+     * Gets the value of the typeNameBlacklist property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link StringList }
+     *     
+     */
+    public StringList getTypeNameBlacklist() {
+<span class="fc" id="L59">        return typeNameBlacklist;</span>
+    }
+
+    /**
+     * Sets the value of the typeNameBlacklist property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link StringList }
+     *     
+     */
+    public void setTypeNameBlacklist(StringList value) {
+<span class="nc" id="L71">        this.typeNameBlacklist = value;</span>
+<span class="nc" id="L72">    }</span>
+
+    /**
+     * Gets the value of the namespaceBlacklist property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link StringList }
+     *     
+     */
+    public StringList getNamespaceBlacklist() {
+<span class="fc" id="L83">        return namespaceBlacklist;</span>
+    }
+
+    /**
+     * Sets the value of the namespaceBlacklist property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link StringList }
+     *     
+     */
+    public void setNamespaceBlacklist(StringList value) {
+<span class="nc" id="L95">        this.namespaceBlacklist = value;</span>
+<span class="nc" id="L96">    }</span>
+
+    /**
+     * Gets the value of the xmlData property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getXmlData() {
+<span class="fc" id="L107">        return xmlData;</span>
+    }
+
+    /**
+     * Sets the value of the xmlData property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setXmlData(String value) {
+<span class="fc" id="L119">        this.xmlData = value;</span>
+<span class="fc" id="L120">    }</span>
+
+    /**
+     * Gets the value of the uri property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getUri() {
+<span class="fc" id="L131">        return uri;</span>
+    }
+
+    /**
+     * Sets the value of the uri property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setUri(String value) {
+<span class="nc" id="L143">        this.uri = value;</span>
+<span class="nc" id="L144">    }</span>
+
+    /**
+     * Gets the value of the type property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link InspectionType }
+     *     
+     */
+    public InspectionType getType() {
+<span class="fc" id="L155">        return type;</span>
+    }
+
+    /**
+     * Sets the value of the type property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link InspectionType }
+     *     
+     */
+    public void setType(InspectionType value) {
+<span class="fc" id="L167">        this.type = value;</span>
+<span class="fc" id="L168">    }</span>
+
+    public boolean equals(Object object) {
+<span class="nc bnc" id="L171" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L172">            return false;</span>
+        }
+<span class="nc bnc" id="L174" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L175">            return true;</span>
+        }
+<span class="nc" id="L177">        final XmlInspectionRequest that = ((XmlInspectionRequest) object);</span>
+        {
+            StringList leftFieldNameBlacklist;
+<span class="nc" id="L180">            leftFieldNameBlacklist = this.getFieldNameBlacklist();</span>
+            StringList rightFieldNameBlacklist;
+<span class="nc" id="L182">            rightFieldNameBlacklist = that.getFieldNameBlacklist();</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">            if (this.fieldNameBlacklist!= null) {</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">                if (that.fieldNameBlacklist!= null) {</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">                    if (!leftFieldNameBlacklist.equals(rightFieldNameBlacklist)) {</span>
+<span class="nc" id="L186">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L189">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L192" title="All 2 branches missed.">                if (that.fieldNameBlacklist!= null) {</span>
+<span class="nc" id="L193">                    return false;</span>
+                }
+            }
+        }
+        {
+            StringList leftTypeNameBlacklist;
+<span class="nc" id="L199">            leftTypeNameBlacklist = this.getTypeNameBlacklist();</span>
+            StringList rightTypeNameBlacklist;
+<span class="nc" id="L201">            rightTypeNameBlacklist = that.getTypeNameBlacklist();</span>
+<span class="nc bnc" id="L202" title="All 2 branches missed.">            if (this.typeNameBlacklist!= null) {</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">                if (that.typeNameBlacklist!= null) {</span>
+<span class="nc bnc" id="L204" title="All 2 branches missed.">                    if (!leftTypeNameBlacklist.equals(rightTypeNameBlacklist)) {</span>
+<span class="nc" id="L205">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L208">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L211" title="All 2 branches missed.">                if (that.typeNameBlacklist!= null) {</span>
+<span class="nc" id="L212">                    return false;</span>
+                }
+            }
+        }
+        {
+            StringList leftNamespaceBlacklist;
+<span class="nc" id="L218">            leftNamespaceBlacklist = this.getNamespaceBlacklist();</span>
+            StringList rightNamespaceBlacklist;
+<span class="nc" id="L220">            rightNamespaceBlacklist = that.getNamespaceBlacklist();</span>
+<span class="nc bnc" id="L221" title="All 2 branches missed.">            if (this.namespaceBlacklist!= null) {</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">                if (that.namespaceBlacklist!= null) {</span>
+<span class="nc bnc" id="L223" title="All 2 branches missed.">                    if (!leftNamespaceBlacklist.equals(rightNamespaceBlacklist)) {</span>
+<span class="nc" id="L224">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L227">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L230" title="All 2 branches missed.">                if (that.namespaceBlacklist!= null) {</span>
+<span class="nc" id="L231">                    return false;</span>
+                }
+            }
+        }
+        {
+            String leftXmlData;
+<span class="nc" id="L237">            leftXmlData = this.getXmlData();</span>
+            String rightXmlData;
+<span class="nc" id="L239">            rightXmlData = that.getXmlData();</span>
+<span class="nc bnc" id="L240" title="All 2 branches missed.">            if (this.xmlData!= null) {</span>
+<span class="nc bnc" id="L241" title="All 2 branches missed.">                if (that.xmlData!= null) {</span>
+<span class="nc bnc" id="L242" title="All 2 branches missed.">                    if (!leftXmlData.equals(rightXmlData)) {</span>
+<span class="nc" id="L243">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L246">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L249" title="All 2 branches missed.">                if (that.xmlData!= null) {</span>
+<span class="nc" id="L250">                    return false;</span>
+                }
+            }
+        }
+        {
+            String leftUri;
+<span class="nc" id="L256">            leftUri = this.getUri();</span>
+            String rightUri;
+<span class="nc" id="L258">            rightUri = that.getUri();</span>
+<span class="nc bnc" id="L259" title="All 2 branches missed.">            if (this.uri!= null) {</span>
+<span class="nc bnc" id="L260" title="All 2 branches missed.">                if (that.uri!= null) {</span>
+<span class="nc bnc" id="L261" title="All 2 branches missed.">                    if (!leftUri.equals(rightUri)) {</span>
+<span class="nc" id="L262">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L265">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L268" title="All 2 branches missed.">                if (that.uri!= null) {</span>
+<span class="nc" id="L269">                    return false;</span>
+                }
+            }
+        }
+        {
+            InspectionType leftType;
+<span class="nc" id="L275">            leftType = this.getType();</span>
+            InspectionType rightType;
+<span class="nc" id="L277">            rightType = that.getType();</span>
+<span class="nc bnc" id="L278" title="All 2 branches missed.">            if (this.type!= null) {</span>
+<span class="nc bnc" id="L279" title="All 2 branches missed.">                if (that.type!= null) {</span>
+<span class="nc bnc" id="L280" title="All 2 branches missed.">                    if (!leftType.equals(rightType)) {</span>
+<span class="nc" id="L281">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L284">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L287" title="All 2 branches missed.">                if (that.type!= null) {</span>
+<span class="nc" id="L288">                    return false;</span>
+                }
+            }
+        }
+<span class="nc" id="L292">        return true;</span>
+    }
+
+    public int hashCode() {
+<span class="nc" id="L296">        int currentHashCode = 1;</span>
+        {
+<span class="nc" id="L298">            currentHashCode = (currentHashCode* 31);</span>
+            StringList theFieldNameBlacklist;
+<span class="nc" id="L300">            theFieldNameBlacklist = this.getFieldNameBlacklist();</span>
+<span class="nc bnc" id="L301" title="All 2 branches missed.">            if (this.fieldNameBlacklist!= null) {</span>
+<span class="nc" id="L302">                currentHashCode += theFieldNameBlacklist.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L306">            currentHashCode = (currentHashCode* 31);</span>
+            StringList theTypeNameBlacklist;
+<span class="nc" id="L308">            theTypeNameBlacklist = this.getTypeNameBlacklist();</span>
+<span class="nc bnc" id="L309" title="All 2 branches missed.">            if (this.typeNameBlacklist!= null) {</span>
+<span class="nc" id="L310">                currentHashCode += theTypeNameBlacklist.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L314">            currentHashCode = (currentHashCode* 31);</span>
+            StringList theNamespaceBlacklist;
+<span class="nc" id="L316">            theNamespaceBlacklist = this.getNamespaceBlacklist();</span>
+<span class="nc bnc" id="L317" title="All 2 branches missed.">            if (this.namespaceBlacklist!= null) {</span>
+<span class="nc" id="L318">                currentHashCode += theNamespaceBlacklist.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L322">            currentHashCode = (currentHashCode* 31);</span>
+            String theXmlData;
+<span class="nc" id="L324">            theXmlData = this.getXmlData();</span>
+<span class="nc bnc" id="L325" title="All 2 branches missed.">            if (this.xmlData!= null) {</span>
+<span class="nc" id="L326">                currentHashCode += theXmlData.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L330">            currentHashCode = (currentHashCode* 31);</span>
+            String theUri;
+<span class="nc" id="L332">            theUri = this.getUri();</span>
+<span class="nc bnc" id="L333" title="All 2 branches missed.">            if (this.uri!= null) {</span>
+<span class="nc" id="L334">                currentHashCode += theUri.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L338">            currentHashCode = (currentHashCode* 31);</span>
+            InspectionType theType;
+<span class="nc" id="L340">            theType = this.getType();</span>
+<span class="nc bnc" id="L341" title="All 2 branches missed.">            if (this.type!= null) {</span>
+<span class="nc" id="L342">                currentHashCode += theType.hashCode();</span>
+            }
+        }
+<span class="nc" id="L345">        return currentHashCode;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

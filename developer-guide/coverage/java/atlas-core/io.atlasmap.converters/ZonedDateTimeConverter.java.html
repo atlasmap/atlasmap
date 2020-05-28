@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ZonedDateTimeConverter.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.converters</a> &gt; <span class="el_source">ZonedDateTimeConverter.java</span></div><h1>ZonedDateTimeConverter.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ * &lt;p&gt;
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * &lt;p&gt;
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * &lt;p&gt;
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.converters;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.spi.AtlasConverter;
+import io.atlasmap.spi.AtlasConversionConcern;
+import io.atlasmap.spi.AtlasConversionInfo;
+import io.atlasmap.v2.FieldType;
+
+<span class="fc" id="L34">public class ZonedDateTimeConverter implements AtlasConverter&lt;ZonedDateTime&gt; {</span>
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DECIMAL,
+            concerns = AtlasConversionConcern.TIMEZONE)
+    public BigDecimal toBigDecimal(ZonedDateTime value) {
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        return value != null ? BigDecimal.valueOf(getEpochMilli(value)) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.BIG_INTEGER,
+            concerns = AtlasConversionConcern.TIMEZONE)
+    public BigInteger toBigInteger(ZonedDateTime value) {
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">        return value != null ? BigInteger.valueOf(getEpochMilli(value)) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.BYTE,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.TIMEZONE})
+    public Byte toByte(ZonedDateTime value) throws AtlasConversionException {
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L52">            return null;</span>
+        }
+<span class="nc" id="L54">        Long longValue = getEpochMilli(value);</span>
+<span class="nc bnc" id="L55" title="All 4 branches missed.">        if (longValue &gt;= Byte.MIN_VALUE &amp;&amp; longValue &lt;= Byte.MAX_VALUE) {</span>
+<span class="nc" id="L56">            return longValue.byteValue();</span>
+        }
+<span class="nc" id="L58">        throw new AtlasConversionException(</span>
+<span class="nc" id="L59">                String.format(&quot;ZonedDateTime %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE&quot;, value));</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
+    public Calendar toCalendar(ZonedDateTime value) {
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        return value != null ? GregorianCalendar.from(value) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME,
+            concerns = AtlasConversionConcern.TIMEZONE)
+    public Date toDate(ZonedDateTime value) {
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        return value != null ? Date.from(value.toInstant()) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DOUBLE,
+            concerns = AtlasConversionConcern.TIMEZONE)
+    public Double toDouble(ZonedDateTime value) {
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">        return value != null ? getEpochMilli(value).doubleValue() : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.FLOAT,
+            concerns = AtlasConversionConcern.TIMEZONE)
+    public Float toFloat(ZonedDateTime value) {
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        return value != null ? getEpochMilli(value).floatValue() : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
+    public GregorianCalendar toGregorianCalendar(ZonedDateTime value) {
+<span class="nc bnc" id="L87" title="All 2 branches missed.">        return value != null ? GregorianCalendar.from(value) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.INTEGER,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.TIMEZONE})
+    public Integer toInteger(ZonedDateTime value) throws AtlasConversionException {
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L94">            return null;</span>
+        }
+<span class="nc" id="L96">        Long longValue = getEpochMilli(value);</span>
+<span class="nc bnc" id="L97" title="All 4 branches missed.">        if (longValue &gt; Integer.MAX_VALUE || longValue &lt; Integer.MIN_VALUE) {</span>
+<span class="nc" id="L98">            throw new AtlasConversionException(String</span>
+<span class="nc" id="L99">                    .format(&quot;ZonedDateTime %s is greater than Integer.MAX_VALUE or less than Integer.MIN_VALUE&quot;, value));</span>
+        }
+<span class="nc" id="L101">        return longValue.intValue();</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE)
+    public LocalDate toLocalDate(ZonedDateTime value) {
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">        return value != null ? value.toLocalDate() : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME)
+    public LocalDateTime toLocalDateTime(ZonedDateTime value) {
+<span class="nc bnc" id="L111" title="All 2 branches missed.">        return value != null ? value.toLocalDateTime() : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.TIME)
+    public LocalTime toLocalTime(ZonedDateTime value) {
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">        return value != null ? value.toLocalTime() : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.LONG,
+            concerns = AtlasConversionConcern.TIMEZONE)
+    public Long toLong(ZonedDateTime value) {
+<span class="pc bpc" id="L122" title="1 of 2 branches missed.">        return value != null ? getEpochMilli(value) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.SHORT,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.TIMEZONE})
+    public Short toShort(ZonedDateTime value) throws AtlasConversionException {
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L129">            return null;</span>
+        }
+<span class="nc" id="L131">        Long longValue = getEpochMilli(value);</span>
+<span class="nc bnc" id="L132" title="All 4 branches missed.">        if (longValue &gt; Short.MAX_VALUE || longValue &lt; Short.MIN_VALUE) {</span>
+<span class="nc" id="L133">            throw new AtlasConversionException(</span>
+<span class="nc" id="L134">                    String.format(&quot;LocalDateTime %s is greater than Short.MAX_VALUE or less than Short.MIN_VALUE&quot;, value));</span>
+        }
+<span class="nc" id="L136">        return longValue.shortValue();</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.STRING)
+    public String toString(ZonedDateTime value) {
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">        return value != null ? value.toString() : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.NUMBER,
+            concerns = AtlasConversionConcern.TIMEZONE)
+    public Number toNumber(ZonedDateTime value) {
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        return value != null ? getEpochMilli(value) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE)
+    public java.sql.Date toSqlDate(ZonedDateTime value) {
+<span class="nc bnc" id="L152" title="All 2 branches missed.">        return value != null ? java.sql.Date.valueOf(value.toLocalDate()) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.TIME)
+    public java.sql.Time toSqlTime(ZonedDateTime value) {
+<span class="nc bnc" id="L157" title="All 2 branches missed.">        return value != null ? java.sql.Time.valueOf(value.toLocalTime()) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME)
+    public java.sql.Timestamp toSqlTimestamp(ZonedDateTime value) {
+<span class="nc bnc" id="L162" title="All 2 branches missed.">        return value != null ? java.sql.Timestamp.valueOf(value.toLocalDateTime()) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
+    public ZonedDateTime toZonedDateTime(ZonedDateTime value) {
+<span class="nc" id="L167">        return value;</span>
+    }
+
+    private Long getEpochMilli(ZonedDateTime value) {
+<span class="fc" id="L171">        return value.toInstant().toEpochMilli();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

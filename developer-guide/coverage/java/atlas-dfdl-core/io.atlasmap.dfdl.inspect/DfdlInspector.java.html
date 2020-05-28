@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DfdlInspector.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-dfdl-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.dfdl.inspect</a> &gt; <span class="el_source">DfdlInspector.java</span></div><h1>DfdlInspector.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.dfdl.inspect;
+
+import org.apache.daffodil.japi.Daffodil;
+import org.apache.daffodil.japi.DataProcessor;
+import org.apache.daffodil.japi.ParseResult;
+import org.apache.daffodil.japi.ProcessorFactory;
+import org.apache.daffodil.japi.infoset.W3CDOMInfosetOutputter;
+import org.apache.daffodil.japi.io.InputSourceDataInputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.dfdl.core.DfdlConstants;
+import io.atlasmap.dfdl.core.DfdlSchemaResolver;
+import io.atlasmap.xml.core.XmlIOHelper;
+import io.atlasmap.xml.inspect.XmlInstanceInspector;
+import io.atlasmap.xml.inspect.XmlSchemaInspector;
+import io.atlasmap.xml.v2.XmlDocument;
+
+import java.io.File;
+import java.net.URI;
+import java.util.Map;
+
+import org.apache.daffodil.japi.Compiler;
+
+public class DfdlInspector {
+<span class="fc" id="L42">    private static final Logger LOG = LoggerFactory.getLogger(DfdlInspector.class);</span>
+
+    private ClassLoader classLoader;
+    private DfdlSchemaResolver schemaResolver;
+<span class="fc" id="L46">    private XmlInstanceInspector xmlInstanceInspector = new XmlInstanceInspector();</span>
+<span class="fc" id="L47">    private XmlSchemaInspector xmlSchemaInspector = new XmlSchemaInspector();</span>
+    private XmlDocument output;
+
+<span class="fc" id="L50">    public DfdlInspector(ClassLoader loader) {</span>
+<span class="fc" id="L51">        this.classLoader = loader;</span>
+<span class="fc" id="L52">        xmlSchemaInspector.setClassLoader(loader);</span>
+<span class="fc" id="L53">        this.schemaResolver = new DfdlSchemaResolver(loader);</span>
+<span class="fc" id="L54">    }</span>
+
+    public void inspectInstance(String dfdlSchemaName, Map&lt;String, String&gt; options) throws Exception {
+<span class="nc" id="L57">        String example = options.get(DfdlConstants.OPTION_EXAMPLE_DATA);</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">        if (example == null) {</span>
+<span class="nc" id="L59">            LOG.error(&quot;DFDL instance inspection requires example data, but it was not specified&quot;);</span>
+<span class="nc" id="L60">            return;</span>
+        }
+
+<span class="nc" id="L63">        Compiler c = Daffodil.compiler();</span>
+<span class="nc" id="L64">        ProcessorFactory pf = c.compileSource(schemaResolver.resolve(dfdlSchemaName, options));</span>
+<span class="nc" id="L65">        DataProcessor dp = pf.onPath(&quot;/&quot;);</span>
+<span class="nc" id="L66">        W3CDOMInfosetOutputter output = new W3CDOMInfosetOutputter();</span>
+<span class="nc" id="L67">        ParseResult result = dp.parse(new InputSourceDataInputStream(example.getBytes()), output);</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        if (result.isError()) {</span>
+<span class="nc" id="L69">            StringBuffer buf = new StringBuffer(&quot;DFDL inspection failed&quot;);</span>
+<span class="nc" id="L70">            result.getDiagnostics().forEach(d -&gt; {</span>
+<span class="nc" id="L71">                buf.append(&quot;; &quot;).append(d.getMessage());</span>
+<span class="nc" id="L72">            });</span>
+<span class="nc" id="L73">            throw new AtlasException(buf.toString());</span>
+        }
+
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        if (LOG.isTraceEnabled()) {</span>
+            try {
+<span class="nc" id="L78">                LOG.trace(new XmlIOHelper(classLoader).writeDocumentToString(false, output.getResult()));</span>
+<span class="nc" id="L79">            } catch (Exception e) {}</span>
+        }
+<span class="nc" id="L81">        xmlInstanceInspector.inspect(output.getResult());</span>
+<span class="nc" id="L82">        this.output = xmlInstanceInspector.getXmlDocument();</span>
+<span class="nc" id="L83">    }</span>
+
+    public void inspectSchema(String dfdlSchemaName, Map&lt;String, String&gt; options) throws Exception {
+<span class="fc" id="L86">        URI uri = schemaResolver.resolve(dfdlSchemaName, options);</span>
+<span class="fc" id="L87">        xmlSchemaInspector.inspect(new File(uri));</span>
+<span class="fc" id="L88">        this.output = xmlSchemaInspector.getXmlDocument();</span>
+<span class="fc" id="L89">    }</span>
+
+	public XmlDocument getXmlDocument() {
+<span class="fc" id="L92">        return this.output;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

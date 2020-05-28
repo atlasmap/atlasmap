@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>XmlIOHelper.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-xml-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.xml.core</a> &gt; <span class="el_source">XmlIOHelper.java</span></div><h1>XmlIOHelper.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.xml.core;
+
+import java.io.StringWriter;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import io.atlasmap.api.AtlasException;
+
+public final class XmlIOHelper {
+
+    private TransformerFactory transformerFactory;
+
+<span class="fc" id="L38">    public XmlIOHelper(ClassLoader cl) {</span>
+<span class="fc" id="L39">        ClassLoader origTccl = Thread.currentThread().getContextClassLoader();</span>
+        try {
+<span class="fc" id="L41">            Thread.currentThread().setContextClassLoader(cl);</span>
+<span class="fc" id="L42">            this.transformerFactory = TransformerFactory.newInstance();</span>
+        } finally {
+<span class="fc" id="L44">            Thread.currentThread().setContextClassLoader(origTccl);</span>
+        }
+<span class="fc" id="L46">    }</span>
+
+    public static List&lt;Element&gt; getChildrenWithName(String name, Element parentNode) {
+<span class="fc" id="L49">        List&lt;Element&gt; children = new LinkedList&lt;&gt;();</span>
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">        if (parentNode == null) {</span>
+<span class="nc" id="L51">            return children;</span>
+        }
+<span class="fc" id="L53">        NodeList nodeChildren = parentNode.getChildNodes();</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        for (int i = 0; i &lt; nodeChildren.getLength(); i++) {</span>
+<span class="fc" id="L55">            Node child = nodeChildren.item(i);</span>
+<span class="fc bfc" id="L56" title="All 4 branches covered.">            if ((child instanceof Element) &amp;&amp; child.getNodeName().equals(name)) {</span>
+<span class="fc" id="L57">                children.add((Element) child);</span>
+            }
+        }
+<span class="fc" id="L60">        return children;</span>
+    }
+
+    public static List&lt;Element&gt; getChildrenWithNameStripAlias(String name, Optional&lt;String&gt; namespace, Element parentNode) {
+<span class="fc" id="L64">        List&lt;Element&gt; children = new LinkedList&lt;&gt;();</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (parentNode == null) {</span>
+<span class="nc" id="L66">            return children;</span>
+        }
+<span class="fc" id="L68">        NodeList nodeChildren = parentNode.getChildNodes();</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        for (int i = 0; i &lt; nodeChildren.getLength(); i++) {</span>
+<span class="fc" id="L70">            Node child = nodeChildren.item(i);</span>
+<span class="fc" id="L71">            String nodeName = getNodeNameWithoutNamespaceAlias(child);</span>
+<span class="fc bfc" id="L72" title="All 4 branches covered.">            if ((child instanceof Element) &amp;&amp; nodeName.equals(name)) {</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">                if (!namespace.isPresent()) {</span>
+<span class="fc" id="L74">                    children.add((Element) child);</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">                } else if (namespace.get().equals(child.getNamespaceURI())) {</span>
+<span class="fc" id="L76">                    children.add((Element) child);</span>
+                }
+            }
+        }
+<span class="fc" id="L80">        return children;</span>
+    }
+
+    public String writeDocumentToString(boolean stripSpaces, Node node) throws AtlasException {
+        try {
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">            if (node == null) {</span>
+<span class="nc" id="L86">                return &quot;&quot;;</span>
+            }
+<span class="fc" id="L88">            Transformer transformer = transformerFactory.newTransformer();</span>
+<span class="fc" id="L89">            StringWriter writer = new StringWriter();</span>
+<span class="fc" id="L90">            transformer.transform(new DOMSource(node), new StreamResult(writer));</span>
+
+<span class="fc" id="L92">            String result = writer.getBuffer().toString();</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">            if (stripSpaces) {</span>
+<span class="fc" id="L94">                result = result.replaceAll(&quot;\n|\r&quot;, &quot;&quot;);</span>
+<span class="fc" id="L95">                result = result.replaceAll(&quot;&gt; *?&lt;&quot;, &quot;&gt;&lt;&quot;);</span>
+            }
+<span class="fc" id="L97">            return result;</span>
+<span class="nc" id="L98">        } catch (Exception e) {</span>
+<span class="nc" id="L99">            throw new AtlasException(e);</span>
+        }
+    }
+
+    public static String getNodeNameWithoutNamespaceAlias(Node child) {
+<span class="fc" id="L104">        String nodeName = child.getNodeName();</span>
+<span class="fc" id="L105">        int index = nodeName.indexOf(&quot;:&quot;);</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        if (index &gt;= 0) {</span>
+<span class="fc" id="L107">            nodeName = nodeName.substring(index + 1);</span>
+        }
+<span class="fc" id="L109">        return nodeName;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

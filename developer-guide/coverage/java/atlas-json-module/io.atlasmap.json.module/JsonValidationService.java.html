@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>JsonValidationService.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-json-module</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.json.module</a> &gt; <span class="el_source">JsonValidationService.java</span></div><h1>JsonValidationService.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ * &lt;p&gt;
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * &lt;p&gt;
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * &lt;p&gt;
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.json.module;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import io.atlasmap.core.validate.BaseModuleValidationService;
+import io.atlasmap.json.v2.JsonField;
+import io.atlasmap.spi.AtlasConversionService;
+import io.atlasmap.spi.AtlasFieldActionService;
+import io.atlasmap.spi.AtlasModuleDetail;
+import io.atlasmap.spi.AtlasValidator;
+import io.atlasmap.spi.FieldDirection;
+import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
+import io.atlasmap.v2.ValidationStatus;
+import io.atlasmap.validators.NonNullValidator;
+
+public class JsonValidationService extends BaseModuleValidationService&lt;JsonField&gt; {
+
+<span class="fc" id="L36">    private static Map&lt;String, AtlasValidator&gt; validatorMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L37">    private AtlasModuleDetail moduleDetail = JsonModule.class.getAnnotation(AtlasModuleDetail.class);</span>
+
+    public JsonValidationService(AtlasConversionService conversionService, AtlasFieldActionService fieldActionService) {
+<span class="fc" id="L40">        super(conversionService, fieldActionService);</span>
+<span class="fc" id="L41">        init();</span>
+<span class="fc" id="L42">    }</span>
+
+    public void init() {
+<span class="fc" id="L45">        NonNullValidator javaFilePathNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
+                &quot;The path element must not be null nor empty&quot;);
+<span class="fc" id="L47">        NonNullValidator inputFieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
+                &quot;Field type should not be null nor empty&quot;);
+<span class="fc" id="L49">        NonNullValidator outputFieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
+                &quot;Field type should not be null nor empty&quot;);
+<span class="fc" id="L51">        NonNullValidator fieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
+                &quot;Filed type should not be null nor empty&quot;);
+
+<span class="fc" id="L54">        validatorMap.put(&quot;json.field.type.not.null&quot;, fieldTypeNonNullValidator);</span>
+<span class="fc" id="L55">        validatorMap.put(&quot;json.field.path.not.null&quot;, javaFilePathNonNullValidator);</span>
+<span class="fc" id="L56">        validatorMap.put(&quot;input.field.type.not.null&quot;, inputFieldTypeNonNullValidator);</span>
+<span class="fc" id="L57">        validatorMap.put(&quot;output.field.type.not.null&quot;, outputFieldTypeNonNullValidator);</span>
+<span class="fc" id="L58">    }</span>
+
+    public void destroy() {
+<span class="nc" id="L61">        validatorMap.clear();</span>
+<span class="nc" id="L62">    }</span>
+
+    @Override
+    protected AtlasModuleDetail getModuleDetail() {
+<span class="fc" id="L66">        return moduleDetail;</span>
+    }
+
+    @Override
+    protected Class&lt;JsonField&gt; getFieldType() {
+<span class="fc" id="L71">        return JsonField.class;</span>
+    }
+
+    @Override
+    protected String getModuleFieldName(JsonField field) {
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        return field.getName() != null ? field.getName() : field.getPath();</span>
+    }
+
+    @Override
+    protected void validateModuleField(String mappingId, JsonField field, FieldDirection direction, List&lt;Validation&gt; validations) {
+        // TODO check that it is a valid type on the AtlasContext
+
+<span class="fc" id="L83">        validatorMap.get(&quot;json.field.type.not.null&quot;).validate(field, validations, mappingId, ValidationStatus.WARN);</span>
+
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        if (field.getPath() == null) {</span>
+<span class="fc" id="L86">            validatorMap.get(&quot;json.field.path.not.null&quot;).validate(field.getPath(), validations, mappingId);</span>
+        }
+<span class="fc" id="L88">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

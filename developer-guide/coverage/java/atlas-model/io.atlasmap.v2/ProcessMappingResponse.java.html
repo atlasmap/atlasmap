@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ProcessMappingResponse.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.v2</a> &gt; <span class="el_source">ProcessMappingResponse.java</span></div><h1>ProcessMappingResponse.java</h1><pre class="source lang-java linenums">package io.atlasmap.v2;
+
+import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+@JsonRootName(&quot;ProcessMappingResponse&quot;)
+@JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
+<span class="nc" id="L9">public class ProcessMappingResponse implements Serializable {</span>
+
+    private final static long serialVersionUID = 1L;
+
+    protected Mapping mapping;
+
+    protected Audits audits;
+
+    protected AtlasMappingResult atlasMappingResult;
+
+    /**
+     * Gets the value of the mapping property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Mapping }
+     *     
+     */
+    public Mapping getMapping() {
+<span class="nc" id="L28">        return mapping;</span>
+    }
+
+    /**
+     * Sets the value of the mapping property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Mapping }
+     *     
+     */
+    public void setMapping(Mapping value) {
+<span class="nc" id="L40">        this.mapping = value;</span>
+<span class="nc" id="L41">    }</span>
+
+    /**
+     * Gets the value of the audits property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Audits }
+     *     
+     */
+    public Audits getAudits() {
+<span class="nc" id="L52">        return audits;</span>
+    }
+
+    /**
+     * Sets the value of the audits property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Audits }
+     *     
+     */
+    public void setAudits(Audits value) {
+<span class="nc" id="L64">        this.audits = value;</span>
+<span class="nc" id="L65">    }</span>
+
+    /**
+     * Gets the value of the atlasMappingResult property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link AtlasMappingResult }
+     *     
+     */
+    public AtlasMappingResult getAtlasMappingResult() {
+<span class="nc" id="L76">        return atlasMappingResult;</span>
+    }
+
+    /**
+     * Sets the value of the atlasMappingResult property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link AtlasMappingResult }
+     *     
+     */
+    public void setAtlasMappingResult(AtlasMappingResult value) {
+<span class="nc" id="L88">        this.atlasMappingResult = value;</span>
+<span class="nc" id="L89">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

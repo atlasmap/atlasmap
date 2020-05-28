@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>JavaService.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-java-service</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.java.service</a> &gt; <span class="el_source">JavaService.java</span></div><h1>JavaService.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.java.service;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.container.ResourceContext;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import io.atlasmap.core.DefaultAtlasConversionService;
+import io.atlasmap.java.inspect.ClassInspectionService;
+import io.atlasmap.java.inspect.MavenClasspathHelper;
+import io.atlasmap.java.v2.ClassInspectionRequest;
+import io.atlasmap.java.v2.ClassInspectionResponse;
+import io.atlasmap.java.v2.JavaClass;
+import io.atlasmap.java.v2.MavenClasspathRequest;
+import io.atlasmap.java.v2.MavenClasspathResponse;
+import io.atlasmap.service.AtlasService;
+import io.atlasmap.v2.CollectionType;
+import io.atlasmap.v2.Json;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+@Path(&quot;/java/&quot;)
+<span class="fc" id="L58">public class JavaService {</span>
+
+<span class="fc" id="L60">    private static final Logger LOG = LoggerFactory.getLogger(JavaService.class);</span>
+
+    @Context
+    private ResourceContext resourceContext;
+
+    protected byte[] toJson(Object value) {
+        try {
+<span class="fc" id="L67">            return Json.mapper().writeValueAsBytes(value);</span>
+<span class="nc" id="L68">        } catch (JsonProcessingException e) {</span>
+<span class="nc" id="L69">            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    protected &lt;T&gt; T fromJson(InputStream value, Class&lt;T&gt;clazz) {
+        try {
+<span class="nc" id="L75">            return Json.mapper().readValue(value, clazz);</span>
+<span class="nc" id="L76">        } catch (IOException e) {</span>
+<span class="nc" id="L77">            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);</span>
+        }
+    }
+
+    @GET
+    @Path(&quot;/simple&quot;)
+    @Produces(MediaType.TEXT_PLAIN)
+    @Operation(summary = &quot;Simple&quot;, description =&quot;Simple hello service&quot;)
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = String.class)), description = &quot;Return a response&quot;))
+    public String simpleHelloWorld(@Parameter(description = &quot;From&quot;) @QueryParam(&quot;from&quot;) String from) {
+<span class="nc" id="L87">        return &quot;Got it! &quot; + from;</span>
+    }
+
+    @GET
+    @Path(&quot;/class&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = &quot;Inspect Class&quot;, description =&quot;Inspect a Java Class with specified fully qualified class name and return a Document object&quot;)
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = JavaClass.class)), description = &quot;Return a Document object represented by JavaClass&quot;))
+    public Response getClass(@Parameter(description = &quot;The fully qualified class name to inspect&quot;) @QueryParam(&quot;className&quot;) String className) {
+<span class="fc" id="L96">        ClassInspectionService classInspectionService = new ClassInspectionService();</span>
+<span class="fc" id="L97">        classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());</span>
+<span class="fc" id="L98">        JavaClass c = classInspectionService.inspectClass(className, CollectionType.NONE, null);</span>
+<span class="fc" id="L99">        classInspectionService = null;</span>
+<span class="fc" id="L100">        return Response.ok().entity(toJson(c)).build();</span>
+    }
+
+    @POST
+    @Path(&quot;/mavenclasspath&quot;)
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON })
+    @Operation(summary = &quot;Generate Maven Classpath&quot;, description =&quot;Retrieve a maven classpath string&quot;)
+    @RequestBody(description = &quot;MavenClasspathRequest object&quot;,  content = @Content(schema = @Schema(implementation = MavenClasspathRequest.class)))
+    @ApiResponses(@ApiResponse(
+            responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = MavenClasspathResponse.class)),
+            description = &quot;Return a MavenClasspathResponse object which contains classpath string&quot;))
+    public Response generateClasspath(InputStream requestIn) {
+<span class="nc" id="L113">        MavenClasspathRequest request = fromJson(requestIn, MavenClasspathRequest.class);</span>
+<span class="nc" id="L114">        MavenClasspathResponse response = new MavenClasspathResponse();</span>
+<span class="nc" id="L115">        MavenClasspathHelper mavenClasspathHelper = null;</span>
+        try {
+<span class="nc" id="L117">            mavenClasspathHelper = new MavenClasspathHelper();</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">            if (request.getExecuteTimeout() != null) {</span>
+<span class="nc" id="L119">                mavenClasspathHelper.setProcessMaxExecutionTime(request.getExecuteTimeout());</span>
+            }
+
+<span class="nc" id="L122">            long startTime = System.currentTimeMillis();</span>
+<span class="nc" id="L123">            String mavenResponse = mavenClasspathHelper.generateClasspathFromPom(request.getPomXmlData());</span>
+<span class="nc" id="L124">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
+<span class="nc" id="L125">            response.setClasspath(mavenResponse);</span>
+
+<span class="nc" id="L127">        } catch (Exception e) {</span>
+<span class="nc" id="L128">            LOG.error(&quot;Error generating classpath from maven: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L129">            response.setErrorMessage(e.getMessage());</span>
+<span class="nc" id="L130">        }</span>
+
+<span class="nc" id="L132">        return Response.ok().entity(toJson(response)).build();</span>
+    }
+
+    @POST
+    @Path(&quot;/class&quot;)
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON })
+    @Operation(summary = &quot;Inspect Class&quot;, description =&quot;Inspect a Java Class with specified fully qualified class name and return a Document object&quot;)
+    @RequestBody(description = &quot;MavenClasspathRequest object&quot;, content = @Content(schema = @Schema(implementation = MavenClasspathRequest.class)))
+    @ApiResponses(@ApiResponse(
+            responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = JavaClass.class)), description = &quot;Return a Document object represented by JavaClass&quot;))
+    public Response inspectClass(InputStream requestIn) {
+<span class="nc" id="L144">        ClassInspectionRequest request = fromJson(requestIn, ClassInspectionRequest.class);</span>
+<span class="nc" id="L145">        ClassInspectionResponse response = new ClassInspectionResponse();</span>
+<span class="nc" id="L146">        ClassInspectionService classInspectionService = new ClassInspectionService();</span>
+<span class="nc" id="L147">        classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());</span>
+
+<span class="nc" id="L149">        configureInspectionService(classInspectionService, request);</span>
+
+<span class="nc bnc" id="L151" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L152">            LOG.debug(&quot;Class inspection request: {}&quot;, new String(toJson(request)));</span>
+        }
+
+<span class="nc" id="L155">        long startTime = System.currentTimeMillis();</span>
+        try {
+<span class="nc" id="L157">            JavaClass c = null;</span>
+<span class="nc bnc" id="L158" title="All 4 branches missed.">            if (request.getClasspath() == null || request.getClasspath().isEmpty()) {</span>
+<span class="nc" id="L159">                AtlasService atlasService = resourceContext.getResource(AtlasService.class);</span>
+<span class="nc" id="L160">                c = classInspectionService.inspectClass(</span>
+<span class="nc" id="L161">                        atlasService.getLibraryLoader(),</span>
+<span class="nc" id="L162">                        request.getClassName(),</span>
+<span class="nc" id="L163">                        request.getCollectionType(),</span>
+<span class="nc" id="L164">                        request.getCollectionClassName());</span>
+<span class="nc" id="L165">            } else {</span>
+<span class="nc" id="L166">                c = classInspectionService.inspectClass(request.getClassName(), request.getCollectionType(), request.getClasspath());</span>
+            }
+<span class="nc" id="L168">            response.setJavaClass(c);</span>
+<span class="nc" id="L169">        } catch (Exception e) {</span>
+<span class="nc" id="L170">            LOG.error(&quot;Error inspecting class with classpath: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L171">            response.setErrorMessage(e.getMessage());</span>
+        } finally {
+<span class="nc" id="L173">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
+        }
+
+<span class="nc bnc" id="L176" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L177">            LOG.debug(&quot;Class inspection response: {}&quot;, new String(toJson(response)));</span>
+        }
+<span class="nc" id="L179">        return Response.ok().entity(toJson(response)).build();</span>
+    }
+
+    protected void configureInspectionService(ClassInspectionService classInspectionService,
+            ClassInspectionRequest request) {
+<span class="nc bnc" id="L184" title="All 4 branches missed.">        if (request.getFieldNameBlacklist() != null &amp;&amp; request.getFieldNameBlacklist().getString() != null</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">                &amp;&amp; !request.getFieldNameBlacklist().getString().isEmpty()) {</span>
+<span class="nc" id="L186">            classInspectionService.getFieldBlacklist().addAll(request.getFieldNameBlacklist().getString());</span>
+        }
+
+<span class="nc bnc" id="L189" title="All 2 branches missed.">        if (request.isDisablePrivateOnlyFields() != null) {</span>
+<span class="nc" id="L190">            classInspectionService.setDisablePrivateOnlyFields(request.isDisablePrivateOnlyFields());</span>
+        }
+
+<span class="nc bnc" id="L193" title="All 2 branches missed.">        if (request.isDisableProtectedOnlyFields() != null) {</span>
+<span class="nc" id="L194">            classInspectionService.setDisableProtectedOnlyFields(request.isDisableProtectedOnlyFields());</span>
+        }
+
+<span class="nc bnc" id="L197" title="All 2 branches missed.">        if (request.isDisablePublicOnlyFields() != null) {</span>
+<span class="nc" id="L198">            classInspectionService.setDisablePublicOnlyFields(request.isDisablePublicOnlyFields());</span>
+        }
+
+<span class="nc bnc" id="L201" title="All 2 branches missed.">        if (request.isDisablePublicGetterSetterFields() != null) {</span>
+<span class="nc" id="L202">            classInspectionService.setDisablePublicGetterSetterFields(request.isDisablePublicGetterSetterFields());</span>
+        }
+
+<span class="nc" id="L205">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

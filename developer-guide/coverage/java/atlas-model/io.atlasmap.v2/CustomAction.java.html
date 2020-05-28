@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>CustomAction.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.v2</a> &gt; <span class="el_source">CustomAction.java</span></div><h1>CustomAction.java</h1><pre class="source lang-java linenums">package io.atlasmap.v2;
+
+import java.io.Serializable;
+
+<span class="fc" id="L5">public class CustomAction extends Action implements Serializable {</span>
+
+    private final static long serialVersionUID = 1L;
+
+    protected String name;
+
+    protected String className;
+
+    protected String methodName;
+
+    protected FieldType inputFieldType;
+
+    protected FieldType outputFieldType;
+
+    /**
+     * Gets the value of the name property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getName() {
+<span class="fc" id="L28">        return name;</span>
+    }
+
+    /**
+     * Sets the value of the name property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setName(String value) {
+<span class="fc" id="L40">        this.name = value;</span>
+<span class="fc" id="L41">    }</span>
+
+    /**
+     * Gets the value of the className property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getClassName() {
+<span class="fc" id="L52">        return className;</span>
+    }
+
+    /**
+     * Sets the value of the className property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setClassName(String value) {
+<span class="fc" id="L64">        this.className = value;</span>
+<span class="fc" id="L65">    }</span>
+
+    /**
+     * Gets the value of the methodName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getMethodName() {
+<span class="fc" id="L76">        return methodName;</span>
+    }
+
+    /**
+     * Sets the value of the methodName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setMethodName(String value) {
+<span class="fc" id="L88">        this.methodName = value;</span>
+<span class="fc" id="L89">    }</span>
+
+    /**
+     * Gets the value of the inputFieldType property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link FieldType }
+     *     
+     */
+    public FieldType getInputFieldType() {
+<span class="fc" id="L100">        return inputFieldType;</span>
+    }
+
+    /**
+     * Sets the value of the inputFieldType property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link FieldType }
+     *     
+     */
+    public void setInputFieldType(FieldType value) {
+<span class="fc" id="L112">        this.inputFieldType = value;</span>
+<span class="fc" id="L113">    }</span>
+
+    /**
+     * Gets the value of the outputFieldType property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link FieldType }
+     *     
+     */
+    public FieldType getOutputFieldType() {
+<span class="fc" id="L124">        return outputFieldType;</span>
+    }
+
+    /**
+     * Sets the value of the outputFieldType property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link FieldType }
+     *     
+     */
+    public void setOutputFieldType(FieldType value) {
+<span class="fc" id="L136">        this.outputFieldType = value;</span>
+<span class="fc" id="L137">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

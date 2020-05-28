@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>Json.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.v2</a> &gt; <span class="el_source">Json.java</span></div><h1>Json.java</h1><pre class="source lang-java linenums">package io.atlasmap.v2;
+
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+
+public class Json {
+
+<span class="fc" id="L11">    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()</span>
+<span class="fc" id="L12">        .registerModule(new AtlasJsonModule())</span>
+<span class="fc" id="L13">        .enable(SerializationFeature.INDENT_OUTPUT)</span>
+<span class="fc" id="L14">        .configure(SerializationFeature.WRAP_ROOT_VALUE, true)</span>
+<span class="fc" id="L15">        .configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true)</span>
+<span class="fc" id="L16">        .configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)</span>
+<span class="fc" id="L17">        .setSerializationInclusion(Include.NON_NULL);</span>
+
+    private Json() {
+    }
+
+    public static ObjectMapper mapper() {
+<span class="fc" id="L23">        return OBJECT_MAPPER;</span>
+    }
+
+    public static ObjectMapper withClassLoader(ClassLoader classLoader) {
+<span class="fc" id="L27">        return OBJECT_MAPPER.setTypeFactory(TypeFactory.defaultInstance().withClassLoader(classLoader));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

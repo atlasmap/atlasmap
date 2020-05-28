@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DefaultAtlasModuleInfo.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.core</a> &gt; <span class="el_source">DefaultAtlasModuleInfo.java</span></div><h1>DefaultAtlasModuleInfo.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.core;
+
+import java.lang.reflect.Constructor;
+import java.util.List;
+
+import io.atlasmap.mxbean.AtlasModuleInfoMXBean;
+import io.atlasmap.spi.AtlasModule;
+import io.atlasmap.spi.AtlasModuleInfo;
+
+public class DefaultAtlasModuleInfo implements AtlasModuleInfo, AtlasModuleInfoMXBean {
+    private String name;
+    private String uri;
+    private Boolean sourceSupported;
+    private Boolean targetSupported;
+    private Class&lt;AtlasModule&gt; moduleClass;
+    private Constructor&lt;AtlasModule&gt; constructor;
+    private List&lt;String&gt; formats;
+    private List&lt;String&gt; packageNames;
+
+    public DefaultAtlasModuleInfo(String name, String uri, Class&lt;AtlasModule&gt; moduleClass, Constructor&lt;AtlasModule&gt; constructor,
+<span class="fc" id="L36">            List&lt;String&gt; formats, List&lt;String&gt; packageNames) {</span>
+<span class="fc" id="L37">        this.name = name;</span>
+<span class="fc" id="L38">        this.uri = uri;</span>
+<span class="fc" id="L39">        this.moduleClass = moduleClass;</span>
+<span class="fc" id="L40">        this.constructor = constructor;</span>
+<span class="fc" id="L41">        this.formats = formats;</span>
+<span class="fc" id="L42">        this.packageNames = packageNames;</span>
+<span class="fc" id="L43">    }</span>
+
+    @Override
+    public String getModuleClassName() {
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (moduleClass != null) {</span>
+<span class="fc" id="L48">            return moduleClass.getName();</span>
+        }
+<span class="fc" id="L50">        return null;</span>
+    }
+
+    public Constructor&lt;AtlasModule&gt; getConstructor() {
+<span class="fc" id="L54">        return constructor;</span>
+    }
+
+    public List&lt;String&gt; getFormats() {
+<span class="fc" id="L58">        return formats;</span>
+    }
+
+    @Override
+    public Class&lt;AtlasModule&gt; getModuleClass() {
+<span class="fc" id="L63">        return moduleClass;</span>
+    }
+
+    @Override
+    public String[] getDataFormats() {
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        if (formats != null) {</span>
+<span class="fc" id="L69">            return formats.toArray(new String[formats.size()]);</span>
+        }
+<span class="fc" id="L71">        return new String[0];</span>
+    }
+
+    @Override
+    public String[] getPackageNames() {
+<span class="fc bfc" id="L76" title="All 4 branches covered.">        if (packageNames == null || packageNames.size() &lt; 1) {</span>
+<span class="fc" id="L77">            return new String[0];</span>
+        }
+
+<span class="fc" id="L80">        return packageNames.toArray(new String[packageNames.size()]);</span>
+    }
+
+    @Override
+    public String getName() {
+<span class="fc" id="L85">        return name;</span>
+    }
+
+    @Override
+    public String getUri() {
+<span class="fc" id="L90">        return uri;</span>
+    }
+
+    @Override
+    public Boolean isSourceSupported() {
+<span class="fc" id="L95">        return sourceSupported;</span>
+    }
+
+    @Override
+    public Boolean isTargetSupported() {
+<span class="fc" id="L100">        return targetSupported;</span>
+    }
+
+    @Override
+    public String getClassName() {
+<span class="fc" id="L105">        return this.getClass().getName();</span>
+    }
+
+    @Override
+    public String getVersion() {
+<span class="fc" id="L110">        return this.getClass().getPackage().getImplementationVersion();</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L115">        return &quot;DefaultAtlasModuleInfo [name=&quot; + name + &quot;, uri=&quot; + uri + &quot;, sourceSupported=&quot; + sourceSupported</span>
+                + &quot;, targetSupported=&quot; + targetSupported + &quot;, moduleClass=&quot; + moduleClass + &quot;, constructor=&quot;
+                + constructor + &quot;, formats=&quot; + formats + &quot;, packageNames=&quot; + packageNames + &quot;]&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

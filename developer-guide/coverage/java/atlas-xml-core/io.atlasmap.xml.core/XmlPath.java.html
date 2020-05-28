@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>XmlPath.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-xml-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.xml.core</a> &gt; <span class="el_source">XmlPath.java</span></div><h1>XmlPath.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.xml.core;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import io.atlasmap.core.AtlasPath;
+import io.atlasmap.v2.CollectionType;
+
+public class XmlPath extends AtlasPath {
+
+    public static final String PATH_NAMESPACE_SEPARATOR = &quot;:&quot;;
+
+    public XmlPath(String path) {
+<span class="fc" id="L31">        super(path);</span>
+<span class="fc" id="L32">    }</span>
+
+    public XmlPath(String path, Map&lt;String, String&gt; namespacesToReplace) {
+<span class="fc" id="L35">        super(updatedPath(path, namespacesToReplace));</span>
+<span class="fc" id="L36">    }</span>
+
+    public List&lt;XmlSegmentContext&gt; getXmlSegments(boolean includeRoot) {
+<span class="fc" id="L39">        List&lt;XmlSegmentContext&gt; answer = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">        int start = includeRoot ? 0 : 1;</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        for (int i=start; i&lt;segmentContexts.size(); i++) {</span>
+<span class="fc" id="L42">            answer.add((XmlSegmentContext)segmentContexts.get(i));</span>
+        }
+<span class="fc" id="L44">        return Collections.unmodifiableList(answer);</span>
+    }
+
+    public XmlSegmentContext getLastSegment() {
+<span class="fc" id="L48">        return (XmlSegmentContext) super.getLastSegment();</span>
+    }
+
+    public XmlPath getLastSegmentParentPath() {
+<span class="nc bnc" id="L52" title="All 4 branches missed.">        if (this.segmentContexts.isEmpty() || this.segmentContexts.size() == 1) {</span>
+<span class="nc" id="L53">            return null;</span>
+        }
+
+<span class="nc" id="L56">        XmlPath parentPath = new XmlPath(null);</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        for (int i = 0; i &lt; this.segmentContexts.size() - 1; i++) {</span>
+<span class="nc" id="L58">            parentPath.appendField(this.segmentContexts.get(i).getExpression());</span>
+        }
+<span class="nc" id="L60">        return parentPath;</span>
+    }
+
+    protected XmlSegmentContext createSegmentContext(String expression) {
+<span class="fc" id="L64">        return new XmlSegmentContext(expression);</span>
+    }
+
+    private static String updatedPath(String fieldPath, Map&lt;String, String&gt; namespacesToReplace) {
+
+<span class="fc" id="L69">        boolean isStartedWtSlash = false;</span>
+<span class="fc" id="L70">        String path = fieldPath;</span>
+<span class="fc" id="L71">        String updatedPath = &quot;&quot;;</span>
+<span class="pc bpc" id="L72" title="2 of 4 branches missed.">        if (namespacesToReplace != null &amp;&amp; namespacesToReplace.size() &gt; 0) {</span>
+
+<span class="pc bpc" id="L74" title="2 of 4 branches missed.">            if (path != null &amp;&amp; !&quot;&quot;.equals(path)) {</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">                if (path.startsWith(PATH_SEPARATOR)) {</span>
+<span class="fc" id="L76">                    path = path.replaceFirst(PATH_SEPARATOR, &quot;&quot;);</span>
+<span class="fc" id="L77">                    isStartedWtSlash = true;</span>
+                }
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">                if (path.contains(PATH_SEPARATOR)) {</span>
+<span class="fc" id="L80">                    String[] parts = path.split(PATH_SEPARATOR_ESCAPED, 512);</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">                    for (String part : parts) {</span>
+<span class="fc" id="L82">                        int index = part.indexOf(PATH_NAMESPACE_SEPARATOR);</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">                        if (index &gt;= 0) {</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">                            if (part.startsWith(PATH_ATTRIBUTE_PREFIX)) {</span>
+<span class="fc" id="L85">                                String namespace = part.substring(1, index);</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">                                if (namespacesToReplace.containsKey(namespace)) {</span>
+<span class="fc" id="L87">                                    updatedPath = updatedPath + PATH_SEPARATOR + PATH_ATTRIBUTE_PREFIX + namespacesToReplace.get(namespace)</span>
+<span class="fc" id="L88">                                            + part.substring(index);</span>
+                                } else {
+<span class="fc" id="L90">                                    updatedPath = updatedPath + PATH_SEPARATOR + part;</span>
+                                }
+<span class="fc" id="L92">                            } else {</span>
+<span class="fc" id="L93">                                String namespace = part.substring(0, index);</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">                                if (namespacesToReplace.containsKey(namespace)) {</span>
+<span class="fc" id="L95">                                    updatedPath = updatedPath + PATH_SEPARATOR + namespacesToReplace.get(namespace)</span>
+<span class="fc" id="L96">                                            + part.substring(index);</span>
+                                } else {
+<span class="fc" id="L98">                                    updatedPath = updatedPath + PATH_SEPARATOR + part;</span>
+                                }
+<span class="fc" id="L100">                            }</span>
+                        } else {
+<span class="fc" id="L102">                            updatedPath = updatedPath + PATH_SEPARATOR + part;</span>
+                        }
+                    }
+<span class="fc" id="L105">                } else {</span>
+<span class="nc" id="L106">                    updatedPath = path;</span>
+                }
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">                if (!isStartedWtSlash) {</span>
+<span class="nc" id="L109">                    updatedPath = updatedPath.substring(1);</span>
+                }
+            } else {
+<span class="nc" id="L112">                updatedPath = path;</span>
+            }
+
+        }
+<span class="fc" id="L116">        return updatedPath;</span>
+
+    }
+
+    public static class XmlSegmentContext extends SegmentContext {
+        private String namespace;
+        private String qname;
+
+        public XmlSegmentContext(String expression) {
+<span class="fc" id="L125">            super(expression);</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">            if (getExpression().contains(PATH_NAMESPACE_SEPARATOR)) {</span>
+<span class="fc" id="L127">                String[] splitted = getExpression().split(PATH_NAMESPACE_SEPARATOR);</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">                namespace = isAttribute() ? splitted[0].replaceFirst(PATH_ATTRIBUTE_PREFIX, &quot;&quot;) : splitted[0];</span>
+<span class="fc" id="L129">                qname = namespace + PATH_NAMESPACE_SEPARATOR + getName();</span>
+<span class="fc" id="L130">            } else {</span>
+<span class="fc" id="L131">                qname = getName();</span>
+            }
+<span class="fc" id="L133">        }</span>
+
+        public String getNamespace() {
+<span class="fc" id="L136">            return namespace;</span>
+        }
+
+        public String getQName() {
+<span class="fc" id="L140">            return qname;</span>
+        }
+
+        protected XmlSegmentContext rebuild() {
+<span class="nc" id="L144">            StringBuilder buf = new StringBuilder();</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">            if (isAttribute()) {</span>
+<span class="nc" id="L146">                buf.append(PATH_ATTRIBUTE_PREFIX);</span>
+            }
+<span class="nc" id="L148">            buf.append(qname);</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">            String index = getCollectionIndex() != null ? getCollectionIndex().toString() : &quot;&quot;;</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">            if (getCollectionType() == CollectionType.ARRAY) {</span>
+<span class="nc" id="L151">                buf.append(PATH_ARRAY_START).append(index).append(PATH_ARRAY_END);</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">            } else if (getCollectionType() == CollectionType.LIST) {</span>
+<span class="nc" id="L153">                buf.append(PATH_LIST_START).append(index).append(PATH_LIST_END);</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">            } else if (getCollectionType() == CollectionType.MAP) {</span>
+<span class="nc" id="L155">                buf.append(PATH_LIST_START).append(getMapKey()).append(PATH_LIST_END);</span>
+            }
+<span class="nc" id="L157">            return new XmlSegmentContext(buf.toString());</span>
+        }
+
+        @Override
+        public String toString() {
+<span class="nc bnc" id="L162" title="All 2 branches missed.">            return getCollectionType() == CollectionType.MAP</span>
+<span class="nc" id="L163">                ? String.format(&quot;XmlSegmentContext [namespace=%s, name=%s, expression=%s, collectionType=%s, mapKey=%s]&quot;,</span>
+<span class="nc" id="L164">                    namespace, getName(), getExpression(), getCollectionType(), getMapKey())</span>
+<span class="nc" id="L165">                : String.format(</span>
+                    &quot;XmlSegmentContext [namespace=%s, name=%s, expression=%s, collectionType=%s, collectionIndex=%s]&quot;,
+<span class="nc" id="L167">                    namespace, getName(), getExpression(), getCollectionType(), getCollectionIndex());</span>
+        }
+
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

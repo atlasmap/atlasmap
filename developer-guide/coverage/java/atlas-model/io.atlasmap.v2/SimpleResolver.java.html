@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>SimpleResolver.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.v2</a> &gt; <span class="el_source">SimpleResolver.java</span></div><h1>SimpleResolver.java</h1><pre class="source lang-java linenums">package io.atlasmap.v2;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.ServiceLoader;
+
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.databind.DatabindContext;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+
+<span class="fc" id="L14">public class SimpleResolver implements TypeIdResolver {</span>
+
+<span class="fc" id="L16">    protected final HashMap&lt;Class&lt;?&gt;, String&gt; typeToId = new HashMap&lt;Class&lt;?&gt;, String&gt;();</span>
+<span class="fc" id="L17">    protected final HashMap&lt;String, JavaType&gt; idToType = new HashMap&lt;String, JavaType&gt;();</span>
+
+    private JavaType baseType;
+    private ClassLoader classLoader;
+
+    @Override
+    public void init(JavaType baseType) {
+<span class="fc" id="L24">        this.baseType = baseType;</span>
+<span class="fc" id="L25">        Class&lt;?&gt; baseClass = baseType.getRawClass();</span>
+
+<span class="fc bfc" id="L27" title="All 2 branches covered.">        ServiceLoader&lt;?&gt; implementations = ServiceLoader.load(baseClass, this.classLoader != null ? this.classLoader : baseClass.getClassLoader());</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">        for (Object o : implementations) {</span>
+<span class="fc" id="L29">            Class&lt;?&gt; c = o.getClass();</span>
+<span class="pc bpc" id="L30" title="2 of 4 branches missed.">            if (c != baseClass &amp;&amp; baseClass.isAssignableFrom(c)) {</span>
+<span class="fc" id="L31">                JsonTypeName jsonAnnoation = c.getAnnotation(JsonTypeName.class);</span>
+
+                // Use short ids for classes in the same package..
+<span class="fc" id="L34">                String id = null;</span>
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">                if ( c.getPackage().getName().equals(baseClass.getPackage().getName()) ) {</span>
+<span class="pc bpc" id="L36" title="3 of 4 branches missed.">                    if (jsonAnnoation != null &amp;&amp; jsonAnnoation.value() != null) {</span>
+<span class="nc" id="L37">                        id = jsonAnnoation.value();</span>
+                    } else {
+<span class="fc" id="L39">                        id = c.getSimpleName();</span>
+                    }
+                } else {
+                    // All other extensions need fully qualified names.
+<span class="nc" id="L43">                    id = c.getName();</span>
+                }
+<span class="fc" id="L45">                typeToId.put(c, id);</span>
+<span class="fc" id="L46">                idToType.put(id, TypeFactory.defaultInstance().constructSpecializedType(baseType, c));</span>
+            }
+<span class="fc" id="L48">        }</span>
+<span class="fc" id="L49">    }</span>
+
+    @Override
+    public JsonTypeInfo.Id getMechanism() {
+<span class="nc" id="L53">        return JsonTypeInfo.Id.CUSTOM;</span>
+    }
+
+    @Override
+    public String idFromValue(Object value) {
+<span class="fc" id="L58">        return idFromValueAndType(value, value.getClass());</span>
+    }
+
+    @Override
+    public String idFromValueAndType(Object value, Class&lt;?&gt; aClass) {
+<span class="fc" id="L63">        String rc = typeToId.get(aClass);</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        if (rc == null) {</span>
+<span class="nc" id="L65">            throw new IllegalArgumentException(&quot;Invalid type: &quot; + aClass);</span>
+        }
+<span class="fc" id="L67">        return rc;</span>
+    }
+
+    @Override
+    public String idFromBaseType() {
+<span class="nc" id="L72">        return idFromValueAndType(null, baseType.getRawClass());</span>
+    }
+
+    @Override
+    public JavaType typeFromId(DatabindContext databindContext, String id) throws IOException {
+<span class="fc" id="L77">        JavaType rc = idToType.get(id);</span>
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">        if (rc == null) {</span>
+<span class="nc" id="L79">            throw new IllegalArgumentException(&quot;Invalid type id: &quot; + id);</span>
+        }
+<span class="fc" id="L81">        return rc;</span>
+    }
+
+    @Override
+    public String getDescForKnownTypeIds() {
+<span class="nc" id="L86">        return &quot;valid values: &quot; + idToType.keySet();</span>
+    }
+
+    public void setClassLoader(ClassLoader classLoader) {
+<span class="fc" id="L90">        this.classLoader = classLoader;</span>
+<span class="fc" id="L91">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

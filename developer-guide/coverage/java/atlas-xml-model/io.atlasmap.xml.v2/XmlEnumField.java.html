@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>XmlEnumField.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-xml-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.xml.v2</a> &gt; <span class="el_source">XmlEnumField.java</span></div><h1>XmlEnumField.java</h1><pre class="source lang-java linenums">package io.atlasmap.xml.v2;
+
+import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import io.atlasmap.v2.Field;
+
+@JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
+<span class="nc" id="L8">public class XmlEnumField extends Field implements Serializable {</span>
+
+    private final static long serialVersionUID = 1L;
+
+    protected String name;
+
+    protected Integer ordinal;
+
+    protected String typeName;
+
+    /**
+     * Gets the value of the name property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getName() {
+<span class="nc" id="L27">        return name;</span>
+    }
+
+    /**
+     * Sets the value of the name property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setName(String value) {
+<span class="nc" id="L39">        this.name = value;</span>
+<span class="nc" id="L40">    }</span>
+
+    /**
+     * Gets the value of the ordinal property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getOrdinal() {
+<span class="nc" id="L51">        return ordinal;</span>
+    }
+
+    /**
+     * Sets the value of the ordinal property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setOrdinal(Integer value) {
+<span class="nc" id="L63">        this.ordinal = value;</span>
+<span class="nc" id="L64">    }</span>
+
+    /**
+     * Gets the value of the typeName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getTypeName() {
+<span class="nc" id="L75">        return typeName;</span>
+    }
+
+    /**
+     * Sets the value of the typeName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTypeName(String value) {
+<span class="nc" id="L87">        this.typeName = value;</span>
+<span class="nc" id="L88">    }</span>
+
+    public boolean equals(Object object) {
+<span class="nc bnc" id="L91" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L92">            return false;</span>
+        }
+<span class="nc bnc" id="L94" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L95">            return true;</span>
+        }
+<span class="nc bnc" id="L97" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
+<span class="nc" id="L98">            return false;</span>
+        }
+<span class="nc" id="L100">        final XmlEnumField that = ((XmlEnumField) object);</span>
+        {
+            String leftName;
+<span class="nc" id="L103">            leftName = this.getName();</span>
+            String rightName;
+<span class="nc" id="L105">            rightName = that.getName();</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">            if (this.name!= null) {</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">                if (that.name!= null) {</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">                    if (!leftName.equals(rightName)) {</span>
+<span class="nc" id="L109">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L112">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L115" title="All 2 branches missed.">                if (that.name!= null) {</span>
+<span class="nc" id="L116">                    return false;</span>
+                }
+            }
+        }
+        {
+            Integer leftOrdinal;
+<span class="nc" id="L122">            leftOrdinal = this.getOrdinal();</span>
+            Integer rightOrdinal;
+<span class="nc" id="L124">            rightOrdinal = that.getOrdinal();</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">            if (this.ordinal!= null) {</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">                if (that.ordinal!= null) {</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">                    if (!leftOrdinal.equals(rightOrdinal)) {</span>
+<span class="nc" id="L128">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L131">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L134" title="All 2 branches missed.">                if (that.ordinal!= null) {</span>
+<span class="nc" id="L135">                    return false;</span>
+                }
+            }
+        }
+        {
+            String leftTypeName;
+<span class="nc" id="L141">            leftTypeName = this.getTypeName();</span>
+            String rightTypeName;
+<span class="nc" id="L143">            rightTypeName = that.getTypeName();</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">            if (this.typeName!= null) {</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">                if (that.typeName!= null) {</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">                    if (!leftTypeName.equals(rightTypeName)) {</span>
+<span class="nc" id="L147">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L150">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L153" title="All 2 branches missed.">                if (that.typeName!= null) {</span>
+<span class="nc" id="L154">                    return false;</span>
+                }
+            }
+        }
+<span class="nc" id="L158">        return true;</span>
+    }
+
+    public int hashCode() {
+<span class="nc" id="L162">        int currentHashCode = 1;</span>
+<span class="nc" id="L163">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
+        {
+<span class="nc" id="L165">            currentHashCode = (currentHashCode* 31);</span>
+            String theName;
+<span class="nc" id="L167">            theName = this.getName();</span>
+<span class="nc bnc" id="L168" title="All 2 branches missed.">            if (this.name!= null) {</span>
+<span class="nc" id="L169">                currentHashCode += theName.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L173">            currentHashCode = (currentHashCode* 31);</span>
+            Integer theOrdinal;
+<span class="nc" id="L175">            theOrdinal = this.getOrdinal();</span>
+<span class="nc bnc" id="L176" title="All 2 branches missed.">            if (this.ordinal!= null) {</span>
+<span class="nc" id="L177">                currentHashCode += theOrdinal.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L181">            currentHashCode = (currentHashCode* 31);</span>
+            String theTypeName;
+<span class="nc" id="L183">            theTypeName = this.getTypeName();</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">            if (this.typeName!= null) {</span>
+<span class="nc" id="L185">                currentHashCode += theTypeName.hashCode();</span>
+            }
+        }
+<span class="nc" id="L188">        return currentHashCode;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

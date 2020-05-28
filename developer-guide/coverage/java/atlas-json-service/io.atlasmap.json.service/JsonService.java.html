@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>JsonService.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-json-service</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.json.service</a> &gt; <span class="el_source">JsonService.java</span></div><h1>JsonService.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.json.service;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import io.atlasmap.json.inspect.JsonInspectionService;
+import io.atlasmap.json.v2.InspectionType;
+import io.atlasmap.json.v2.JsonDocument;
+import io.atlasmap.json.v2.JsonInspectionRequest;
+import io.atlasmap.json.v2.JsonInspectionResponse;
+import io.atlasmap.v2.Json;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+@Path(&quot;/json/&quot;)
+<span class="fc" id="L51">public class JsonService {</span>
+
+<span class="fc" id="L53">    private static final Logger LOG = LoggerFactory.getLogger(JsonService.class);</span>
+
+    protected byte[] toJson(Object value) {
+        try {
+<span class="fc" id="L57">            return Json.mapper().writeValueAsBytes(value);</span>
+<span class="nc" id="L58">        } catch (JsonProcessingException e) {</span>
+<span class="nc" id="L59">            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    protected &lt;T&gt; T fromJson(InputStream value, Class&lt;T&gt;clazz) {
+        try {
+<span class="fc" id="L65">            return Json.mapper().readValue(value, clazz);</span>
+<span class="nc" id="L66">        } catch (IOException e) {</span>
+<span class="nc" id="L67">            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);</span>
+        }
+    }
+
+    @GET
+    @Path(&quot;/simple&quot;)
+    @Produces(MediaType.TEXT_PLAIN)
+    @Operation(summary =&quot;Simple&quot;, description = &quot;Simple hello service&quot;)
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = String.class)), description = &quot;Return a response&quot;))
+    public String simpleHelloWorld(@Parameter(description = &quot;From&quot;) @QueryParam(&quot;from&quot;) String from) {
+<span class="nc" id="L77">        return &quot;Got it! &quot; + from;</span>
+    }
+
+    @GET
+    @Path(&quot;/inspect&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary =&quot;Inspect JSON via URI&quot;, description = &quot;*NOT IMPLEMENTED* Inspect a JSON schema or instance located at specified URI and return a Document object&quot;)
+    @RequestBody(description = &quot;Inspection type, one of `instance` or `Schema`&quot;, content = @Content(schema = @Schema(implementation = InspectionType.class)))
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = JsonDocument.class)), description = &quot;Return a Document object represented by JsonDocument&quot;))
+    public Response getClass(
+            @Parameter(description =&quot;URI for JSON schema or instance&quot;) @QueryParam(&quot;uri&quot;) String uri,
+            @QueryParam(&quot;type&quot;) String type) {
+<span class="nc" id="L89">        JsonDocument d = null;</span>
+
+        try {
+
+<span class="nc bnc" id="L93" title="All 2 branches missed.">            if (type == null) {</span>
+<span class="nc" id="L94">                throw new Exception(&quot;uri and type parameters must be specified&quot;);</span>
+            }
+<span class="nc" id="L96">            InspectionType inspectType = InspectionType.valueOf(type);</span>
+
+<span class="nc" id="L98">            switch (inspectType) {</span>
+            case INSTANCE:
+                // d = s.inspectXmlDocument(new File(uri)); break;
+            case SCHEMA:
+                // d = s.inspectSchema(new File(uri)); break;
+            default:
+<span class="nc" id="L104">                throw new Exception(&quot;Unknown type specified: &quot; + type);</span>
+            }
+<span class="nc" id="L106">        } catch (Exception e) {</span>
+<span class="nc" id="L107">            LOG.error(&quot;Error inspecting xml: &quot; + e.getMessage(), e);</span>
+        }
+
+<span class="nc" id="L110">        return Response.ok().entity(toJson(d)).build();</span>
+    }
+
+    @POST
+    @Path(&quot;/inspect&quot;)
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON })
+    @Operation(summary =&quot;Inspect JSON&quot;, description = &quot;Inspect a JSON schema or instance and return a Document object&quot;)
+    @RequestBody(description = &quot;JsonInspectionRequest object&quot;,  content = @Content(schema = @Schema(implementation = JsonInspectionRequest.class)))
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = JsonInspectionResponse.class)), description = &quot;Return a Document object represented by JsonDocument&quot;))
+    public Response inspectClass(InputStream requestIn) {
+<span class="fc" id="L121">        JsonInspectionRequest request = fromJson(requestIn, JsonInspectionRequest.class);</span>
+<span class="fc" id="L122">        long startTime = System.currentTimeMillis();</span>
+
+<span class="fc" id="L124">        JsonInspectionResponse response = new JsonInspectionResponse();</span>
+<span class="fc" id="L125">        JsonDocument d = null;</span>
+
+        try {
+
+<span class="pc bpc" id="L129" title="2 of 4 branches missed.">            if (request.getType() == null || request.getJsonData() == null) {</span>
+<span class="nc" id="L130">                response.setErrorMessage(</span>
+                        &quot;Json data and Instance or Schema inspection type must be specified in request&quot;);
+            } else {
+<span class="fc" id="L133">                JsonInspectionService s = new JsonInspectionService();</span>
+
+<span class="fc" id="L135">                String jsonData = cleanJsonData(request.getJsonData());</span>
+<span class="pc bpc" id="L136" title="1 of 2 branches missed.">                if (!validJsonData(jsonData)) {</span>
+<span class="nc" id="L137">                    response.setErrorMessage(&quot;Invalid json payload specified&quot;);</span>
+                } else {
+<span class="pc bpc" id="L139" title="2 of 3 branches missed.">                    switch (request.getType()) {</span>
+                    case INSTANCE:
+<span class="nc" id="L141">                        d = s.inspectJsonDocument(jsonData);</span>
+<span class="nc" id="L142">                        break;</span>
+                    case SCHEMA:
+<span class="fc" id="L144">                        d = s.inspectJsonSchema(jsonData);</span>
+<span class="fc" id="L145">                        break;</span>
+                    default:
+<span class="nc" id="L147">                        response.setErrorMessage(&quot;Unsupported inspection type: &quot; + request.getType());</span>
+                        break;
+                    }
+                }
+            }
+<span class="nc" id="L152">        } catch (Exception e) {</span>
+<span class="nc" id="L153">            LOG.error(&quot;Error inspecting json: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L154">            response.setErrorMessage(e.getMessage());</span>
+        } finally {
+<span class="fc" id="L156">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
+        }
+
+<span class="fc" id="L159">        response.setJsonDocument(d);</span>
+<span class="fc" id="L160">        return Response.ok().entity(toJson(response)).build();</span>
+    }
+
+    protected boolean validJsonData(String jsonData) {
+<span class="pc bpc" id="L164" title="2 of 4 branches missed.">        if (jsonData == null || jsonData.isEmpty()) {</span>
+<span class="nc" id="L165">            return false;</span>
+        }
+
+<span class="fc bfc" id="L168" title="All 4 branches covered.">        return jsonData.startsWith(&quot;{&quot;) || jsonData.startsWith(&quot;[&quot;);</span>
+    }
+
+    protected String cleanJsonData(String jsonData) {
+<span class="fc" id="L172">        return jsonData.trim();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

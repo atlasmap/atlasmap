@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>BooleanConverter.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.converters</a> &gt; <span class="el_source">BooleanConverter.java</span></div><h1>BooleanConverter.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ * &lt;p&gt;
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * &lt;p&gt;
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * &lt;p&gt;
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.converters;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
+import io.atlasmap.spi.AtlasConverter;
+import io.atlasmap.spi.AtlasConversionConcern;
+import io.atlasmap.spi.AtlasConversionInfo;
+import io.atlasmap.v2.FieldType;
+
+<span class="fc" id="L26">public class BooleanConverter implements AtlasConverter&lt;Boolean&gt; {</span>
+
+    private static final String STRING_VALUES = &quot;true|false&quot;;
+
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.DECIMAL)
+    public BigDecimal toBigDecimal(Boolean value) {
+<span class="pc bpc" id="L32" title="2 of 4 branches missed.">        return value != null ? BigDecimal.valueOf(value ? 1 : 0) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.BIG_INTEGER)
+    public BigInteger toBigInteger(Boolean value) {
+<span class="pc bpc" id="L37" title="2 of 4 branches missed.">        return value != null ? BigInteger.valueOf(value ? 1 : 0) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.BOOLEAN)
+    public Boolean toBoolean(Boolean value, String sourceFormat, String targetFormat) {
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        return value != null ? Boolean.valueOf(value) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.BYTE)
+    public Byte toByte(Boolean value) {
+<span class="fc bfc" id="L47" title="All 4 branches covered.">        return value != null ? (byte) (value ? 1 : 0) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.CHAR)
+    public Character toCharacter(Boolean value) {
+<span class="fc bfc" id="L52" title="All 4 branches covered.">        return value != null ? (char) (value ? 1 : 0) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.DOUBLE)
+    public Double toDouble(Boolean value) {
+<span class="fc bfc" id="L57" title="All 4 branches covered.">        return value != null ? value ? 1.0d : 0.0d : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.FLOAT)
+    public Float toFloat(Boolean value) {
+<span class="fc bfc" id="L62" title="All 4 branches covered.">        return value != null ? (value ? 1.0f : 0.0f) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.INTEGER)
+    public Integer toInteger(Boolean value) {
+<span class="fc bfc" id="L67" title="All 4 branches covered.">        return value != null ? (value ? 1 : 0) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.LONG)
+    public Long toLong(Boolean value) {
+<span class="fc bfc" id="L72" title="All 4 branches covered.">        return value != null ? (value ? 1L : 0L) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.NUMBER)
+    public Number toNumber(Boolean value) {
+<span class="fc" id="L77">        return toShort(value);</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.SHORT)
+    public Short toShort(Boolean value) {
+<span class="fc bfc" id="L82" title="All 4 branches covered.">        return value != null ? (short) (value ? 1 : 0) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.STRING, concerns = {
+            AtlasConversionConcern.CONVENTION })
+    public String toString(Boolean value, String sourceFormat, String targetFormat) {
+<span class="fc bfc" id="L88" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L89">            return null;</span>
+        }
+        // TODO optimize/save defaults
+<span class="pc bpc" id="L92" title="3 of 4 branches missed.">        String format = targetFormat != null &amp;&amp; !&quot;&quot;.equals(targetFormat) ? targetFormat : STRING_VALUES;</span>
+<span class="fc" id="L93">        String[] values = format.split(&quot;\\|&quot;);</span>
+<span class="fc" id="L94">        String trueValue = &quot;&quot;;</span>
+<span class="fc" id="L95">        String falseValue = &quot;&quot;;</span>
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        if (values.length == 2) {</span>
+<span class="fc" id="L97">            trueValue = values[0];</span>
+<span class="fc" id="L98">            falseValue = values[1];</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">        } else if (values.length == 1) {</span>
+<span class="nc" id="L100">            trueValue = values[0];</span>
+        }
+<span class="fc bfc" id="L102" title="All 2 branches covered.">        return String.valueOf((value ? trueValue : falseValue));</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

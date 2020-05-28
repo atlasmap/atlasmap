@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DateFieldActions.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.actions</a> &gt; <span class="el_source">DateFieldActions.java</span></div><h1>DateFieldActions.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.actions;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
+import io.atlasmap.spi.AtlasActionProcessor;
+import io.atlasmap.spi.AtlasFieldAction;
+import io.atlasmap.v2.AddDays;
+import io.atlasmap.v2.AddSeconds;
+import io.atlasmap.v2.CurrentDate;
+import io.atlasmap.v2.CurrentDateTime;
+import io.atlasmap.v2.CurrentTime;
+import io.atlasmap.v2.DayOfMonth;
+import io.atlasmap.v2.DayOfWeek;
+import io.atlasmap.v2.DayOfYear;
+import io.atlasmap.v2.FieldType;
+
+@SuppressWarnings({&quot;squid:S3776&quot;,     // Cognitive complexity of method
+    &quot;squid:S1118&quot;,     // Add private constructor
+    &quot;squid:S1226&quot;,     // Introduce new variable
+    &quot;squid:S3358&quot; })   // Extract nested ternary
+<span class="fc" id="L39">public class DateFieldActions implements AtlasFieldAction {</span>
+
+    @AtlasActionProcessor(sourceType = FieldType.ANY_DATE)
+    public static ZonedDateTime addDays(AddDays addDays, ZonedDateTime input) {
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (addDays == null) {</span>
+<span class="fc" id="L44">            throw new IllegalArgumentException(&quot;AddDays action must be specified&quot;);</span>
+        }
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (input == null) {</span>
+<span class="fc" id="L47">            return null;</span>
+        }
+
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">        return input.plusDays(addDays.getDays() == null ? 0L : addDays.getDays());</span>
+    }
+
+    @AtlasActionProcessor(sourceType = FieldType.ANY_DATE)
+    public static ZonedDateTime addSeconds(AddSeconds addSeconds, ZonedDateTime input) {
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (addSeconds == null) {</span>
+<span class="fc" id="L56">            throw new IllegalArgumentException(&quot;AddSeconds action must be specified&quot;);</span>
+        }
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (input == null) {</span>
+<span class="fc" id="L59">            return null;</span>
+        }
+
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        return input.plusSeconds(addSeconds.getSeconds() == null ? 0L : addSeconds.getSeconds());</span>
+    }
+
+    @AtlasActionProcessor
+    public static ZonedDateTime currentDate(CurrentDate action) {
+<span class="fc" id="L67">        return LocalDate.now().atStartOfDay(ZoneId.systemDefault());</span>
+    }
+
+    @AtlasActionProcessor
+    public static ZonedDateTime currentDateTime(CurrentDateTime action) {
+<span class="fc" id="L72">        return LocalDate.now().atStartOfDay(ZoneId.systemDefault());</span>
+    }
+
+    @AtlasActionProcessor
+    public static ZonedDateTime currentTime(CurrentTime action) {
+<span class="fc" id="L77">        return LocalTime.now().atDate(LocalDate.now()).atZone(ZoneId.systemDefault());</span>
+    }
+
+    @AtlasActionProcessor(sourceType = FieldType.ANY_DATE)
+    public static Integer dayOfMonth(DayOfMonth action, ZonedDateTime input) {
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        return input == null ? null : input.getDayOfMonth();</span>
+    }
+
+    @AtlasActionProcessor(sourceType = FieldType.ANY_DATE)
+    public static Integer dayOfWeek(DayOfWeek action, ZonedDateTime input) {
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        return input == null ? null : input.getDayOfWeek().getValue();</span>
+    }
+
+    @AtlasActionProcessor(sourceType = FieldType.ANY_DATE)
+    public static Integer dayOfYear(DayOfYear action, ZonedDateTime input) {
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        return input == null ? null : input.getDayOfYear();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

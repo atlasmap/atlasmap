@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>JavaClass.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-java-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.java.v2</a> &gt; <span class="el_source">JavaClass.java</span></div><h1>JavaClass.java</h1><pre class="source lang-java linenums">package io.atlasmap.java.v2;
+
+import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+@JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
+<span class="fc" id="L7">public class JavaClass extends JavaField implements Serializable {</span>
+
+    private final static long serialVersionUID = 1L;
+
+    protected JavaEnumFields javaEnumFields;
+
+    protected JavaFields javaFields;
+
+    protected String packageName;
+
+    protected Boolean annotation;
+
+    protected Boolean annonymous;
+
+    protected Boolean enumeration;
+
+    protected Boolean _interface;
+
+    protected Boolean localClass;
+
+    protected Boolean memberClass;
+
+    protected String uri;
+
+    /**
+     * Gets the value of the javaEnumFields property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link JavaEnumFields }
+     *     
+     */
+    public JavaEnumFields getJavaEnumFields() {
+<span class="fc" id="L40">        return javaEnumFields;</span>
+    }
+
+    /**
+     * Sets the value of the javaEnumFields property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link JavaEnumFields }
+     *     
+     */
+    public void setJavaEnumFields(JavaEnumFields value) {
+<span class="fc" id="L52">        this.javaEnumFields = value;</span>
+<span class="fc" id="L53">    }</span>
+
+    /**
+     * Gets the value of the javaFields property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link JavaFields }
+     *     
+     */
+    public JavaFields getJavaFields() {
+<span class="fc" id="L64">        return javaFields;</span>
+    }
+
+    /**
+     * Sets the value of the javaFields property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link JavaFields }
+     *     
+     */
+    public void setJavaFields(JavaFields value) {
+<span class="fc" id="L76">        this.javaFields = value;</span>
+<span class="fc" id="L77">    }</span>
+
+    /**
+     * Gets the value of the packageName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getPackageName() {
+<span class="fc" id="L88">        return packageName;</span>
+    }
+
+    /**
+     * Sets the value of the packageName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setPackageName(String value) {
+<span class="fc" id="L100">        this.packageName = value;</span>
+<span class="fc" id="L101">    }</span>
+
+    /**
+     * Gets the value of the annotation property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isAnnotation() {
+<span class="fc" id="L112">        return annotation;</span>
+    }
+
+    /**
+     * Sets the value of the annotation property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setAnnotation(Boolean value) {
+<span class="fc" id="L124">        this.annotation = value;</span>
+<span class="fc" id="L125">    }</span>
+
+    /**
+     * Gets the value of the annonymous property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isAnnonymous() {
+<span class="fc" id="L136">        return annonymous;</span>
+    }
+
+    /**
+     * Sets the value of the annonymous property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setAnnonymous(Boolean value) {
+<span class="fc" id="L148">        this.annonymous = value;</span>
+<span class="fc" id="L149">    }</span>
+
+    /**
+     * Gets the value of the enumeration property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isEnumeration() {
+<span class="fc" id="L160">        return enumeration;</span>
+    }
+
+    /**
+     * Sets the value of the enumeration property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setEnumeration(Boolean value) {
+<span class="fc" id="L172">        this.enumeration = value;</span>
+<span class="fc" id="L173">    }</span>
+
+    /**
+     * Gets the value of the interface property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isInterface() {
+<span class="fc" id="L184">        return _interface;</span>
+    }
+
+    /**
+     * Sets the value of the interface property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setInterface(Boolean value) {
+<span class="fc" id="L196">        this._interface = value;</span>
+<span class="fc" id="L197">    }</span>
+
+    /**
+     * Gets the value of the localClass property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isLocalClass() {
+<span class="fc" id="L208">        return localClass;</span>
+    }
+
+    /**
+     * Sets the value of the localClass property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setLocalClass(Boolean value) {
+<span class="fc" id="L220">        this.localClass = value;</span>
+<span class="fc" id="L221">    }</span>
+
+    /**
+     * Gets the value of the memberClass property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isMemberClass() {
+<span class="fc" id="L232">        return memberClass;</span>
+    }
+
+    /**
+     * Sets the value of the memberClass property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setMemberClass(Boolean value) {
+<span class="fc" id="L244">        this.memberClass = value;</span>
+<span class="fc" id="L245">    }</span>
+
+    /**
+     * Gets the value of the uri property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getUri() {
+<span class="fc" id="L256">        return uri;</span>
+    }
+
+    /**
+     * Sets the value of the uri property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setUri(String value) {
+<span class="fc" id="L268">        this.uri = value;</span>
+<span class="fc" id="L269">    }</span>
+
+    public boolean equals(Object object) {
+<span class="nc bnc" id="L272" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L273">            return false;</span>
+        }
+<span class="nc bnc" id="L275" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L276">            return true;</span>
+        }
+<span class="nc bnc" id="L278" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
+<span class="nc" id="L279">            return false;</span>
+        }
+<span class="nc" id="L281">        final JavaClass that = ((JavaClass) object);</span>
+        {
+            JavaEnumFields leftJavaEnumFields;
+<span class="nc" id="L284">            leftJavaEnumFields = this.getJavaEnumFields();</span>
+            JavaEnumFields rightJavaEnumFields;
+<span class="nc" id="L286">            rightJavaEnumFields = that.getJavaEnumFields();</span>
+<span class="nc bnc" id="L287" title="All 2 branches missed.">            if (this.javaEnumFields!= null) {</span>
+<span class="nc bnc" id="L288" title="All 2 branches missed.">                if (that.javaEnumFields!= null) {</span>
+<span class="nc bnc" id="L289" title="All 2 branches missed.">                    if (!leftJavaEnumFields.equals(rightJavaEnumFields)) {</span>
+<span class="nc" id="L290">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L293">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L296" title="All 2 branches missed.">                if (that.javaEnumFields!= null) {</span>
+<span class="nc" id="L297">                    return false;</span>
+                }
+            }
+        }
+        {
+            JavaFields leftJavaFields;
+<span class="nc" id="L303">            leftJavaFields = this.getJavaFields();</span>
+            JavaFields rightJavaFields;
+<span class="nc" id="L305">            rightJavaFields = that.getJavaFields();</span>
+<span class="nc bnc" id="L306" title="All 2 branches missed.">            if (this.javaFields!= null) {</span>
+<span class="nc bnc" id="L307" title="All 2 branches missed.">                if (that.javaFields!= null) {</span>
+<span class="nc bnc" id="L308" title="All 2 branches missed.">                    if (!leftJavaFields.equals(rightJavaFields)) {</span>
+<span class="nc" id="L309">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L312">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L315" title="All 2 branches missed.">                if (that.javaFields!= null) {</span>
+<span class="nc" id="L316">                    return false;</span>
+                }
+            }
+        }
+        {
+            String leftPackageName;
+<span class="nc" id="L322">            leftPackageName = this.getPackageName();</span>
+            String rightPackageName;
+<span class="nc" id="L324">            rightPackageName = that.getPackageName();</span>
+<span class="nc bnc" id="L325" title="All 2 branches missed.">            if (this.packageName!= null) {</span>
+<span class="nc bnc" id="L326" title="All 2 branches missed.">                if (that.packageName!= null) {</span>
+<span class="nc bnc" id="L327" title="All 2 branches missed.">                    if (!leftPackageName.equals(rightPackageName)) {</span>
+<span class="nc" id="L328">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L331">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L334" title="All 2 branches missed.">                if (that.packageName!= null) {</span>
+<span class="nc" id="L335">                    return false;</span>
+                }
+            }
+        }
+        {
+            Boolean leftAnnotation;
+<span class="nc" id="L341">            leftAnnotation = this.isAnnotation();</span>
+            Boolean rightAnnotation;
+<span class="nc" id="L343">            rightAnnotation = that.isAnnotation();</span>
+<span class="nc bnc" id="L344" title="All 2 branches missed.">            if (this.annotation!= null) {</span>
+<span class="nc bnc" id="L345" title="All 2 branches missed.">                if (that.annotation!= null) {</span>
+<span class="nc bnc" id="L346" title="All 2 branches missed.">                    if (!leftAnnotation.equals(rightAnnotation)) {</span>
+<span class="nc" id="L347">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L350">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L353" title="All 2 branches missed.">                if (that.annotation!= null) {</span>
+<span class="nc" id="L354">                    return false;</span>
+                }
+            }
+        }
+        {
+            Boolean leftAnnonymous;
+<span class="nc" id="L360">            leftAnnonymous = this.isAnnonymous();</span>
+            Boolean rightAnnonymous;
+<span class="nc" id="L362">            rightAnnonymous = that.isAnnonymous();</span>
+<span class="nc bnc" id="L363" title="All 2 branches missed.">            if (this.annonymous!= null) {</span>
+<span class="nc bnc" id="L364" title="All 2 branches missed.">                if (that.annonymous!= null) {</span>
+<span class="nc bnc" id="L365" title="All 2 branches missed.">                    if (!leftAnnonymous.equals(rightAnnonymous)) {</span>
+<span class="nc" id="L366">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L369">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L372" title="All 2 branches missed.">                if (that.annonymous!= null) {</span>
+<span class="nc" id="L373">                    return false;</span>
+                }
+            }
+        }
+        {
+            Boolean leftEnumeration;
+<span class="nc" id="L379">            leftEnumeration = this.isEnumeration();</span>
+            Boolean rightEnumeration;
+<span class="nc" id="L381">            rightEnumeration = that.isEnumeration();</span>
+<span class="nc bnc" id="L382" title="All 2 branches missed.">            if (this.enumeration!= null) {</span>
+<span class="nc bnc" id="L383" title="All 2 branches missed.">                if (that.enumeration!= null) {</span>
+<span class="nc bnc" id="L384" title="All 2 branches missed.">                    if (!leftEnumeration.equals(rightEnumeration)) {</span>
+<span class="nc" id="L385">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L388">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L391" title="All 2 branches missed.">                if (that.enumeration!= null) {</span>
+<span class="nc" id="L392">                    return false;</span>
+                }
+            }
+        }
+        {
+            Boolean leftInterface;
+<span class="nc" id="L398">            leftInterface = this.isInterface();</span>
+            Boolean rightInterface;
+<span class="nc" id="L400">            rightInterface = that.isInterface();</span>
+<span class="nc bnc" id="L401" title="All 2 branches missed.">            if (this._interface!= null) {</span>
+<span class="nc bnc" id="L402" title="All 2 branches missed.">                if (that._interface!= null) {</span>
+<span class="nc bnc" id="L403" title="All 2 branches missed.">                    if (!leftInterface.equals(rightInterface)) {</span>
+<span class="nc" id="L404">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L407">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L410" title="All 2 branches missed.">                if (that._interface!= null) {</span>
+<span class="nc" id="L411">                    return false;</span>
+                }
+            }
+        }
+        {
+            Boolean leftLocalClass;
+<span class="nc" id="L417">            leftLocalClass = this.isLocalClass();</span>
+            Boolean rightLocalClass;
+<span class="nc" id="L419">            rightLocalClass = that.isLocalClass();</span>
+<span class="nc bnc" id="L420" title="All 2 branches missed.">            if (this.localClass!= null) {</span>
+<span class="nc bnc" id="L421" title="All 2 branches missed.">                if (that.localClass!= null) {</span>
+<span class="nc bnc" id="L422" title="All 2 branches missed.">                    if (!leftLocalClass.equals(rightLocalClass)) {</span>
+<span class="nc" id="L423">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L426">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L429" title="All 2 branches missed.">                if (that.localClass!= null) {</span>
+<span class="nc" id="L430">                    return false;</span>
+                }
+            }
+        }
+        {
+            Boolean leftMemberClass;
+<span class="nc" id="L436">            leftMemberClass = this.isMemberClass();</span>
+            Boolean rightMemberClass;
+<span class="nc" id="L438">            rightMemberClass = that.isMemberClass();</span>
+<span class="nc bnc" id="L439" title="All 2 branches missed.">            if (this.memberClass!= null) {</span>
+<span class="nc bnc" id="L440" title="All 2 branches missed.">                if (that.memberClass!= null) {</span>
+<span class="nc bnc" id="L441" title="All 2 branches missed.">                    if (!leftMemberClass.equals(rightMemberClass)) {</span>
+<span class="nc" id="L442">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L445">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L448" title="All 2 branches missed.">                if (that.memberClass!= null) {</span>
+<span class="nc" id="L449">                    return false;</span>
+                }
+            }
+        }
+        {
+            String leftUri;
+<span class="nc" id="L455">            leftUri = this.getUri();</span>
+            String rightUri;
+<span class="nc" id="L457">            rightUri = that.getUri();</span>
+<span class="nc bnc" id="L458" title="All 2 branches missed.">            if (this.uri!= null) {</span>
+<span class="nc bnc" id="L459" title="All 2 branches missed.">                if (that.uri!= null) {</span>
+<span class="nc bnc" id="L460" title="All 2 branches missed.">                    if (!leftUri.equals(rightUri)) {</span>
+<span class="nc" id="L461">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L464">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L467" title="All 2 branches missed.">                if (that.uri!= null) {</span>
+<span class="nc" id="L468">                    return false;</span>
+                }
+            }
+        }
+<span class="nc" id="L472">        return true;</span>
+    }
+
+    public int hashCode() {
+<span class="nc" id="L476">        int currentHashCode = 1;</span>
+<span class="nc" id="L477">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
+        {
+<span class="nc" id="L479">            currentHashCode = (currentHashCode* 31);</span>
+            JavaEnumFields theJavaEnumFields;
+<span class="nc" id="L481">            theJavaEnumFields = this.getJavaEnumFields();</span>
+<span class="nc bnc" id="L482" title="All 2 branches missed.">            if (this.javaEnumFields!= null) {</span>
+<span class="nc" id="L483">                currentHashCode += theJavaEnumFields.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L487">            currentHashCode = (currentHashCode* 31);</span>
+            JavaFields theJavaFields;
+<span class="nc" id="L489">            theJavaFields = this.getJavaFields();</span>
+<span class="nc bnc" id="L490" title="All 2 branches missed.">            if (this.javaFields!= null) {</span>
+<span class="nc" id="L491">                currentHashCode += theJavaFields.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L495">            currentHashCode = (currentHashCode* 31);</span>
+            String thePackageName;
+<span class="nc" id="L497">            thePackageName = this.getPackageName();</span>
+<span class="nc bnc" id="L498" title="All 2 branches missed.">            if (this.packageName!= null) {</span>
+<span class="nc" id="L499">                currentHashCode += thePackageName.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L503">            currentHashCode = (currentHashCode* 31);</span>
+            Boolean theAnnotation;
+<span class="nc" id="L505">            theAnnotation = this.isAnnotation();</span>
+<span class="nc bnc" id="L506" title="All 2 branches missed.">            if (this.annotation!= null) {</span>
+<span class="nc" id="L507">                currentHashCode += theAnnotation.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L511">            currentHashCode = (currentHashCode* 31);</span>
+            Boolean theAnnonymous;
+<span class="nc" id="L513">            theAnnonymous = this.isAnnonymous();</span>
+<span class="nc bnc" id="L514" title="All 2 branches missed.">            if (this.annonymous!= null) {</span>
+<span class="nc" id="L515">                currentHashCode += theAnnonymous.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L519">            currentHashCode = (currentHashCode* 31);</span>
+            Boolean theEnumeration;
+<span class="nc" id="L521">            theEnumeration = this.isEnumeration();</span>
+<span class="nc bnc" id="L522" title="All 2 branches missed.">            if (this.enumeration!= null) {</span>
+<span class="nc" id="L523">                currentHashCode += theEnumeration.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L527">            currentHashCode = (currentHashCode* 31);</span>
+            Boolean theInterface;
+<span class="nc" id="L529">            theInterface = this.isInterface();</span>
+<span class="nc bnc" id="L530" title="All 2 branches missed.">            if (this._interface!= null) {</span>
+<span class="nc" id="L531">                currentHashCode += theInterface.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L535">            currentHashCode = (currentHashCode* 31);</span>
+            Boolean theLocalClass;
+<span class="nc" id="L537">            theLocalClass = this.isLocalClass();</span>
+<span class="nc bnc" id="L538" title="All 2 branches missed.">            if (this.localClass!= null) {</span>
+<span class="nc" id="L539">                currentHashCode += theLocalClass.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L543">            currentHashCode = (currentHashCode* 31);</span>
+            Boolean theMemberClass;
+<span class="nc" id="L545">            theMemberClass = this.isMemberClass();</span>
+<span class="nc bnc" id="L546" title="All 2 branches missed.">            if (this.memberClass!= null) {</span>
+<span class="nc" id="L547">                currentHashCode += theMemberClass.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L551">            currentHashCode = (currentHashCode* 31);</span>
+            String theUri;
+<span class="nc" id="L553">            theUri = this.getUri();</span>
+<span class="nc bnc" id="L554" title="All 2 branches missed.">            if (this.uri!= null) {</span>
+<span class="nc" id="L555">                currentHashCode += theUri.hashCode();</span>
+            }
+        }
+<span class="nc" id="L558">        return currentHashCode;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

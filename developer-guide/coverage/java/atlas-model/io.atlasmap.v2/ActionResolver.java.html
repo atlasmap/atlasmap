@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ActionResolver.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.v2</a> &gt; <span class="el_source">ActionResolver.java</span></div><h1>ActionResolver.java</h1><pre class="source lang-java linenums">package io.atlasmap.v2;
+
+import java.io.IOException;
+
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.DatabindContext;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+
+public class ActionResolver implements TypeIdResolver {
+
+    private static ActionResolver instance;
+    private SimpleResolver delegate;
+
+    private ActionResolver() {
+<span class="fc" id="L17">        this(null);</span>
+<span class="fc" id="L18">    }</span>
+
+<span class="fc" id="L20">    private ActionResolver(ClassLoader classLoader) {</span>
+<span class="fc" id="L21">        delegate = new SimpleResolver();</span>
+<span class="fc" id="L22">        delegate.setClassLoader(classLoader);</span>
+<span class="fc" id="L23">        delegate.init(TypeFactory.defaultInstance().constructType(Action.class));</span>
+<span class="fc" id="L24">    }</span>
+
+    public static ActionResolver getInstance(ClassLoader classLoader) {
+<span class="fc" id="L27">        instance = new ActionResolver(classLoader);</span>
+<span class="fc" id="L28">        return instance;</span>
+    }
+
+    public static ActionResolver getInstance() {
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        if (instance == null) {</span>
+<span class="fc" id="L33">            instance = new ActionResolver();</span>
+        }
+<span class="fc" id="L35">        return instance;</span>
+    }
+
+    public String toId(Class&lt;?&gt; aClass) {
+<span class="fc" id="L39">        return delegate.idFromValueAndType(null, aClass);</span>
+    }
+
+    public Class&lt;? extends Action&gt; fromId(String id) throws IOException {
+<span class="nc" id="L43">        return (Class&lt;? extends Action&gt;) delegate.typeFromId(null, id).getRawClass();</span>
+    }
+
+    @Override
+    public void init(JavaType baseType) {
+<span class="fc" id="L48">    }</span>
+
+    @Override
+    public JsonTypeInfo.Id getMechanism() {
+<span class="nc" id="L52">        return delegate.getMechanism();</span>
+    }
+
+    @Override
+    public String idFromValue(Object value) {
+<span class="fc" id="L57">        return delegate.idFromValue(value);</span>
+    }
+
+    @Override
+    public String idFromValueAndType(Object value, Class&lt;?&gt; aClass) {
+<span class="nc" id="L62">        return delegate.idFromValueAndType(value, aClass);</span>
+    }
+
+    @Override
+    public String idFromBaseType() {
+<span class="nc" id="L67">        return delegate.idFromBaseType();</span>
+    }
+
+    @Override
+    public JavaType typeFromId(DatabindContext databindContext, String id) throws IOException {
+<span class="fc" id="L72">        return delegate.typeFromId(databindContext, id);</span>
+    }
+
+    @Override
+    public String getDescForKnownTypeIds() {
+<span class="nc" id="L77">        return delegate.getDescForKnownTypeIds();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

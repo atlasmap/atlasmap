@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>JsonInspectionException.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-json-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.json.inspect</a> &gt; <span class="el_source">JsonInspectionException.java</span></div><h1>JsonInspectionException.java</h1><pre class="source lang-java linenums">package io.atlasmap.json.inspect;
+
+/**
+ */
+public class JsonInspectionException extends Exception {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * Constructs a new exception with the specified detail message. The cause is
+     * not initialized, and may subsequently be initialized by a call to
+     * {@link #initCause}.
+     *
+     * @param message
+     *            the detail message. The detail message is saved for later
+     *            retrieval by the {@link #getMessage()} method.
+     */
+    public JsonInspectionException(String message) {
+<span class="fc" id="L19">        super(message);</span>
+<span class="fc" id="L20">    }</span>
+
+    /**
+     * Constructs a new exception with the specified detail message and cause.
+     * &lt;p&gt;
+     * Note that the detail message associated with {@code cause} is &lt;i&gt;not&lt;/i&gt;
+     * automatically incorporated in this exception's detail message.
+     *
+     * @param message
+     *            the detail message (which is saved for later retrieval by the
+     *            {@link #getMessage()} method).
+     * @param cause
+     *            the cause (which is saved for later retrieval by the
+     *            {@link #getCause()} method). (A &lt;tt&gt;null&lt;/tt&gt; value is permitted,
+     *            and indicates that the cause is nonexistent or unknown.)
+     * @since 1.4
+     */
+    public JsonInspectionException(String message, Throwable cause) {
+<span class="nc" id="L38">        super(message, cause);</span>
+<span class="nc" id="L39">    }</span>
+
+    /**
+     * Constructs a new exception with the specified cause and a detail message of
+     * &lt;tt&gt;(cause==null ? null : cause.toString())&lt;/tt&gt; (which typically contains
+     * the class and detail message of &lt;tt&gt;cause&lt;/tt&gt;). This constructor is useful
+     * for exceptions that are little more than wrappers for other throwables (for
+     * example, {@link java.security.PrivilegedActionException}).
+     *
+     * @param cause
+     *            the cause (which is saved for later retrieval by the
+     *            {@link #getCause()} method). (A &lt;tt&gt;null&lt;/tt&gt; value is permitted,
+     *            and indicates that the cause is nonexistent or unknown.)
+     * @since 1.4
+     */
+    public JsonInspectionException(Throwable cause) {
+<span class="fc" id="L55">        super(cause);</span>
+<span class="fc" id="L56">    }</span>
+
+    /**
+     * Constructs a new exception with the specified detail message, cause,
+     * suppression enabled or disabled, and writable stack trace enabled or
+     * disabled.
+     *
+     * @param message
+     *            the detail message.
+     * @param cause
+     *            the cause. (A {@code null} value is permitted, and indicates that
+     *            the cause is nonexistent or unknown.)
+     * @param enableSuppression
+     *            whether or not suppression is enabled or disabled
+     * @param writableStackTrace
+     *            whether or not the stack trace should be writable
+     * @since 1.7
+     */
+    public JsonInspectionException(String message, Throwable cause, boolean enableSuppression,
+            boolean writableStackTrace) {
+<span class="nc" id="L76">        super(message, cause, enableSuppression, writableStackTrace);</span>
+<span class="nc" id="L77">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

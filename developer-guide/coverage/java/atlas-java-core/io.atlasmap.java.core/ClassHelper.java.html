@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ClassHelper.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-java-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.java.core</a> &gt; <span class="el_source">ClassHelper.java</span></div><h1>ClassHelper.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ * &lt;p&gt;
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * &lt;p&gt;
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * &lt;p&gt;
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.java.core;
+
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.AtlasPath;
+import io.atlasmap.core.AtlasPath.SegmentContext;
+import io.atlasmap.java.core.accessor.FieldAccessor;
+import io.atlasmap.java.core.accessor.GetterAccessor;
+import io.atlasmap.java.core.accessor.JavaChildAccessor;
+import io.atlasmap.core.AtlasUtil;
+import io.atlasmap.spi.AtlasInternalSession;
+import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.CollectionType;
+
+<span class="nc" id="L44">public class ClassHelper {</span>
+
+    public static List&lt;String&gt; getterMethodNames(String fieldName) {
+<span class="fc" id="L47">        List&lt;String&gt; opts = new ArrayList&lt;String&gt;();</span>
+<span class="fc" id="L48">        opts.add(getMethodNameFromFieldName(fieldName));</span>
+<span class="fc" id="L49">        opts.add(isMethodNameFromFieldName(fieldName));</span>
+<span class="fc" id="L50">        return opts;</span>
+    }
+
+    public static String getMethodNameFromFieldName(String fieldName) {
+<span class="fc" id="L54">        return &quot;get&quot; + StringUtil.capitalizeFirstLetter(fieldName);</span>
+    }
+
+    public static String isMethodNameFromFieldName(String fieldName) {
+<span class="fc" id="L58">        return &quot;is&quot; + StringUtil.capitalizeFirstLetter(fieldName);</span>
+    }
+
+    public static Method detectGetterMethod(Class&lt;?&gt; clazz, String methodName) throws NoSuchMethodException {
+
+<span class="fc" id="L63">        Method[] methods = clazz.getMethods();</span>
+
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        for (Method method : methods) {</span>
+<span class="pc bpc" id="L66" title="1 of 4 branches missed.">            if (method.getName().equals(methodName) &amp;&amp; method.getParameterCount() == 0) {</span>
+<span class="fc" id="L67">                return method;</span>
+            }
+        }
+
+<span class="fc" id="L71">        throw new NoSuchMethodException(</span>
+<span class="fc" id="L72">                String.format(&quot;No matching getter method for class=%s method=%s&quot;, clazz.getName(), methodName));</span>
+    }
+
+    public static Map&lt;String, Method&gt; detectAllGetterMethods(Class&lt;?&gt; clazz) throws Exception {
+<span class="nc" id="L76">        Map&lt;String, Method&gt; answer = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L77">        Method[] methods = clazz.getMethods();</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        for (Method method : methods) {</span>
+<span class="nc bnc" id="L79" title="All 4 branches missed.">            if (method.getName().startsWith(&quot;get&quot;) &amp;&amp; method.getParameterTypes().length == 0</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">             &amp;&amp; method.getReturnType() != Void.class) {</span>
+<span class="nc" id="L81">                 answer.put(StringUtil.getFieldNameFromGetter(method.getName()), method);</span>
+<span class="nc bnc" id="L82" title="All 4 branches missed.">            } else if (method.getName().startsWith(&quot;is&quot;) &amp;&amp; method.getParameterTypes().length == 0</span>
+<span class="nc bnc" id="L83" title="All 4 branches missed.">             &amp;&amp; (method.getReturnType() == boolean.class || method.getReturnType() == Boolean.class)) {</span>
+<span class="nc" id="L84">                 answer.put(StringUtil.getFieldNameFromGetter(method.getName()), method);</span>
+            }
+        }
+<span class="nc" id="L87">        return answer;</span>
+    }
+
+    public static List&lt;Field&gt; detectAllJavaFields(Class&lt;?&gt; clazz) {
+<span class="nc" id="L91">        List&lt;Field&gt; answer = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L92">        Class&lt;?&gt; targetClazz = clazz;</span>
+<span class="nc bnc" id="L93" title="All 4 branches missed.">        while (targetClazz != null &amp;&amp; targetClazz != Object.class) {</span>
+            try {
+<span class="nc" id="L95">                Field[] fields = targetClazz.getDeclaredFields();</span>
+<span class="nc" id="L96">                answer.addAll(Arrays.asList(fields));</span>
+<span class="nc" id="L97">            } catch (Exception e) {</span>
+<span class="nc" id="L98">                e.getMessage(); // ignore</span>
+<span class="nc" id="L99">                targetClazz = targetClazz.getSuperclass();</span>
+<span class="nc" id="L100">            }</span>
+        }
+<span class="nc" id="L102">        return answer;</span>
+    }
+
+    public static Method detectSetterMethod(Class&lt;?&gt; clazz, String methodName, Class&lt;?&gt; paramType)
+            throws NoSuchMethodException {
+<span class="fc" id="L107">        List&lt;Method&gt; candidates = new ArrayList&lt;Method&gt;();</span>
+
+<span class="fc" id="L109">        Method[] methods = clazz.getMethods();</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        for (Method method : methods) {</span>
+<span class="fc bfc" id="L111" title="All 4 branches covered.">            if (method.getName().equals(methodName) &amp;&amp; method.getParameterCount() == 1) {</span>
+<span class="fc" id="L112">                candidates.add(method);</span>
+            }
+        }
+
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        String paramTypeClassName = paramType == null ? null : paramType.getName();</span>
+
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        if (candidates.size() == 0) {</span>
+<span class="fc" id="L119">            throw new NoSuchMethodException(</span>
+<span class="fc" id="L120">                    String.format(&quot;No matching setter found for class=%s method=%s paramType=%s&quot;, clazz.getName(),</span>
+                            methodName, paramTypeClassName));
+        }
+
+<span class="fc bfc" id="L124" title="All 2 branches covered.">        if (paramType != null) {</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">            for (Method candidate : candidates) {</span>
+                // Getter and setter w/ same returnType &amp; paramType
+<span class="fc bfc" id="L127" title="All 2 branches covered.">                if (candidate.getParameterTypes()[0].isAssignableFrom(paramType)) {</span>
+<span class="fc" id="L128">                    return candidate;</span>
+                }
+<span class="fc" id="L130">            }</span>
+<span class="fc" id="L131">            throw new NoSuchMethodException(</span>
+<span class="fc" id="L132">                    String.format(&quot;No matching setter found for class=%s method=%s paramType=%s&quot;, clazz.getName(),</span>
+                            methodName, paramTypeClassName));
+        }
+
+        // paramType is null, let's do some more digging...
+
+<span class="fc bfc" id="L138" title="All 2 branches covered.">        if (candidates.size() == 1) {</span>
+<span class="fc" id="L139">            return candidates.get(0);</span>
+        }
+
+<span class="fc" id="L142">        Method getter = null;</span>
+<span class="fc" id="L143">        Class&lt;?&gt; returnType = null;</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        for (String prefix : Arrays.asList(&quot;get&quot;, &quot;is&quot;)) {</span>
+            try {
+<span class="fc" id="L146">                getter = detectGetterMethod(clazz, methodName.replace(&quot;set&quot;, prefix));</span>
+<span class="fc" id="L147">                returnType = getter.getReturnType();</span>
+<span class="fc" id="L148">                break;</span>
+<span class="fc" id="L149">            } catch (NoSuchMethodException nsme) {</span>
+                // System.out.println(&quot;\t\t could not find getter &quot; + methodName.replace(&quot;set&quot;,
+                // prefix));
+            }
+<span class="fc" id="L153">        }</span>
+
+        // Solid match
+<span class="fc bfc" id="L156" title="All 2 branches covered.">        for (Method candidate : candidates) {</span>
+            // Getter and setter w/ same returnType &amp; paramType
+<span class="fc" id="L158">            Class&lt;?&gt; candidateReturnType = candidate.getParameterTypes()[0];</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">            if (returnType == null) {</span>
+<span class="pc bpc" id="L160" title="1 of 2 branches missed.">                if (candidateReturnType == null) {</span>
+<span class="nc" id="L161">                    return candidate;</span>
+                }
+<span class="pc bpc" id="L163" title="1 of 2 branches missed.">            } else if (returnType.isAssignableFrom(candidateReturnType)) {</span>
+<span class="fc" id="L164">                return candidate;</span>
+            }
+<span class="fc" id="L166">        }</span>
+
+        // Not as good of a match .. find one with a matching converter
+        /*
+         * for (Method candidate : candidates) {
+         * if(candidate.getParameterTypes()[0].equals(String.class)) { return candidate;
+         * } }
+         */
+
+        // Yikes! User should specify type, or provide a converter
+<span class="fc" id="L176">        throw new NoSuchMethodException(String.format(&quot;Unable to auto-detect setter class=%s method=%s paramType=%s&quot;,</span>
+<span class="fc" id="L177">                clazz.getName(), methodName, paramTypeClassName));</span>
+    }
+
+    public static Class&lt;?&gt; detectClassFromTypeArgument(Type type) {
+<span class="fc" id="L181">        return detectClassFromTypeArgumentAt(type, 0);</span>
+    }
+
+    public static Class&lt;?&gt; detectClassFromTypeArgumentAt(Type type, int pos) {
+<span class="pc bpc" id="L185" title="2 of 4 branches missed.">        if (type == null || !(type instanceof ParameterizedType)) {</span>
+<span class="nc" id="L186">            return Object.class;</span>
+        }
+<span class="fc" id="L188">        ParameterizedType genericType = (ParameterizedType) type;</span>
+<span class="fc" id="L189">        Type[] typeArgs = genericType.getActualTypeArguments();</span>
+<span class="pc bpc" id="L190" title="2 of 4 branches missed.">        if (typeArgs == null || typeArgs.length &lt;= pos) {</span>
+<span class="nc" id="L191">            return Object.class;</span>
+        }
+<span class="pc bpc" id="L193" title="1 of 2 branches missed.">        return typeArgs[pos] instanceof Class ? (Class&lt;?&gt;) typeArgs[pos] : Object.class;</span>
+    }
+
+    public static Method lookupGetterMethod(Object object, String name) {
+<span class="fc" id="L197">        List&lt;String&gt; getters = getterMethodNames(name);</span>
+<span class="fc" id="L198">        Method getterMethod = null;</span>
+<span class="pc bpc" id="L199" title="1 of 2 branches missed.">        for (String getter : getters) {</span>
+            try {
+<span class="fc" id="L201">                getterMethod = detectGetterMethod(object.getClass(), getter);</span>
+<span class="fc" id="L202">                break;</span>
+<span class="nc" id="L203">            } catch (NoSuchMethodException e) {</span>
+                // exhaust options
+            }
+<span class="nc" id="L206">        }</span>
+
+<span class="pc bpc" id="L208" title="1 of 2 branches missed.">        if (getterMethod == null) {</span>
+<span class="nc" id="L209">            return null;</span>
+        } else {
+<span class="fc" id="L211">            getterMethod.setAccessible(true);</span>
+<span class="fc" id="L212">            return getterMethod;</span>
+        }
+    }
+
+    public static Field lookupJavaField(Object source, String fieldName) {
+<span class="nc bnc" id="L217" title="All 2 branches missed.">        Class&lt;?&gt; targetClazz = source != null ? source.getClass() : null;</span>
+<span class="nc bnc" id="L218" title="All 4 branches missed.">        while (targetClazz != null &amp;&amp; targetClazz != Object.class) {</span>
+            try {
+<span class="nc" id="L220">                Field field = targetClazz.getDeclaredField(fieldName);</span>
+<span class="nc" id="L221">                field.setAccessible(true);</span>
+<span class="nc" id="L222">                return field;</span>
+<span class="nc" id="L223">            } catch (Exception e) {</span>
+<span class="nc" id="L224">                e.getMessage(); // ignore</span>
+<span class="nc" id="L225">                targetClazz = targetClazz.getSuperclass();</span>
+<span class="nc" id="L226">            }</span>
+        }
+<span class="nc" id="L228">        return null;</span>
+    }
+
+    public static JavaChildAccessor lookupAccessor(Object source, String name) {
+<span class="pc bpc" id="L232" title="2 of 4 branches missed.">        if (source == null || AtlasUtil.isEmpty(name)) {</span>
+<span class="nc" id="L233">            return null;</span>
+        }
+<span class="fc" id="L235">        Method m = lookupGetterMethod(source, name);</span>
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">        if (m != null) {</span>
+<span class="fc" id="L237">            return new GetterAccessor(source, name, m);</span>
+        }
+<span class="nc" id="L239">        Field f = lookupJavaField(source, name);</span>
+<span class="nc bnc" id="L240" title="All 2 branches missed.">        if (f != null) {</span>
+<span class="nc" id="L241">            return new FieldAccessor(source, name, f);</span>
+        }
+<span class="nc" id="L243">        return null;</span>
+    }
+
+	public static List&lt;JavaChildAccessor&gt; lookupAllAccessors(Object source) throws Exception {
+<span class="nc" id="L247">        List&lt;JavaChildAccessor&gt; answer = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L248" title="All 2 branches missed.">        if (source == null) {</span>
+<span class="nc" id="L249">            return answer;</span>
+        }
+<span class="nc" id="L251">        Set&lt;String&gt; names = new HashSet&lt;&gt;();</span>
+<span class="nc" id="L252">        Map&lt;String, Method&gt; getters = detectAllGetterMethods(source.getClass());</span>
+<span class="nc" id="L253">        getters.forEach((k, v) -&gt; {</span>
+<span class="nc" id="L254">            answer.add(new GetterAccessor(source, k, v));</span>
+<span class="nc" id="L255">            names.add(k);</span>
+
+<span class="nc" id="L257">        });</span>
+<span class="nc" id="L258">        List&lt;Field&gt; fields = detectAllJavaFields(source.getClass());</span>
+<span class="nc" id="L259">        fields.forEach(f -&gt; {</span>
+<span class="nc bnc" id="L260" title="All 2 branches missed.">            if (!names.contains(f.getName())) {</span>
+<span class="nc" id="L261">                answer.add(new FieldAccessor(source, f.getName(), f));</span>
+            }
+<span class="nc" id="L263">        });</span>
+<span class="nc" id="L264">        return answer;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

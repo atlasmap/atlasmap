@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>AbstractAtlasMapMojo.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlasmap-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.maven</a> &gt; <span class="el_source">AbstractAtlasMapMojo.java</span></div><h1>AbstractAtlasMapMojo.java</h1><pre class="source lang-java linenums">package io.atlasmap.maven;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.artifact.Artifact;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.collection.CollectRequest;
+import org.eclipse.aether.graph.Dependency;
+import org.eclipse.aether.graph.DependencyNode;
+import org.eclipse.aether.repository.RemoteRepository;
+import org.eclipse.aether.resolution.DependencyRequest;
+import org.eclipse.aether.resolution.DependencyResolutionException;
+import org.eclipse.aether.resolution.DependencyResult;
+import org.eclipse.aether.util.graph.visitor.PreorderNodeListGenerator;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.atlasmap.v2.Json;
+
+<span class="nc" id="L34">public abstract class AbstractAtlasMapMojo extends AbstractMojo {</span>
+
+    @Component
+    private RepositorySystem system;
+
+    @Parameter(defaultValue = &quot;${project.remoteProjectRepositories}&quot;, readonly = true)
+    private List&lt;RemoteRepository&gt; remoteRepos;
+
+    @Parameter(defaultValue = &quot;${repositorySystemSession}&quot;, readonly = true)
+    private RepositorySystemSession repoSession;
+
+    /**
+     * The directory where inspections get generated to.
+     */
+    @Parameter(defaultValue = &quot;${project.build.directory}/generated-sources/atlasmap&quot;)
+    private File outputDir;
+
+    /**
+     * The file name to generate.
+     */
+    @Parameter()
+    private File outputFile;
+
+    protected List&lt;URL&gt; resolveClasspath(List&lt;String&gt; artifacts) throws MojoFailureException {
+<span class="nc" id="L58">        final List&lt;URL&gt; urls = new ArrayList&lt;&gt;();</span>
+
+        try {
+<span class="nc bnc" id="L61" title="All 2 branches missed.">            for (String gav : artifacts) {</span>
+<span class="nc" id="L62">                Artifact artifact = new DefaultArtifact(gav);</span>
+
+<span class="nc" id="L64">                getLog().debug(&quot;Resolving dependencies for artifact: &quot; + artifact);</span>
+
+<span class="nc" id="L66">                CollectRequest collectRequest = new CollectRequest();</span>
+<span class="nc" id="L67">                collectRequest.setRoot(new Dependency(artifact, &quot;&quot;));</span>
+<span class="nc" id="L68">                collectRequest.setRepositories(getRemoteRepos());</span>
+
+<span class="nc" id="L70">                DependencyRequest dependencyRequest = new DependencyRequest();</span>
+<span class="nc" id="L71">                dependencyRequest.setCollectRequest(collectRequest);</span>
+<span class="nc" id="L72">                DependencyResult dependencyResult = getSystem().resolveDependencies(getRepoSession(), dependencyRequest);</span>
+
+<span class="nc" id="L74">                PreorderNodeListGenerator nlg = new PreorderNodeListGenerator();</span>
+<span class="nc" id="L75">                dependencyResult.getRoot().accept(nlg);</span>
+
+<span class="nc" id="L77">                Iterator&lt;DependencyNode&gt; it = nlg.getNodes().iterator();</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">                while (it.hasNext()) {</span>
+<span class="nc" id="L79">                    DependencyNode node = it.next();</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">                    if (node.getDependency() != null) {</span>
+<span class="nc" id="L81">                        Artifact x = node.getDependency().getArtifact();</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">                        if (x.getFile() != null) {</span>
+<span class="nc" id="L83">                            getLog().debug(&quot;Found dependency: &quot; + x + &quot; for artifact: &quot; + artifact);</span>
+<span class="nc" id="L84">                            urls.add(x.getFile().toURI().toURL());</span>
+                        }
+                    }
+<span class="nc" id="L87">                }</span>
+<span class="nc" id="L88">            }</span>
+<span class="nc" id="L89">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L90">            throw new MojoFailureException(e.getMessage(), e);</span>
+<span class="nc" id="L91">        } catch (DependencyResolutionException e) {</span>
+<span class="nc" id="L92">            throw new MojoFailureException(e.getMessage(), e);</span>
+<span class="nc" id="L93">        } catch (MalformedURLException e) {</span>
+<span class="nc" id="L94">            throw new MojoFailureException(e.getMessage(), e);</span>
+<span class="nc" id="L95">        }</span>
+
+<span class="nc" id="L97">        return urls;</span>
+    }
+
+    protected void writeToJsonFile(String name, Object object) throws MojoExecutionException {
+        try {
+<span class="nc" id="L102">            ObjectMapper objectMapper = Json.mapper();</span>
+<span class="nc" id="L103">            File target = outputFile;</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">            if (target == null) {</span>
+<span class="nc" id="L105">                target = new File(outputDir, name + &quot;.json&quot;);</span>
+            }
+<span class="nc" id="L107">            objectMapper.writeValue(target, object);</span>
+<span class="nc" id="L108">            getLog().info(&quot;Created: &quot; + target);</span>
+<span class="nc" id="L109">        } catch (JsonProcessingException e) {</span>
+<span class="nc" id="L110">            throw new MojoExecutionException(e.getMessage(), e);</span>
+<span class="nc" id="L111">        } catch (IOException e) {</span>
+<span class="nc" id="L112">            throw new MojoExecutionException(e.getMessage(), e);</span>
+<span class="nc" id="L113">        }</span>
+<span class="nc" id="L114">    }</span>
+
+    public RepositorySystem getSystem() {
+<span class="nc" id="L117">        return system;</span>
+    }
+
+    public void setSystem(RepositorySystem system) {
+<span class="nc" id="L121">        this.system = system;</span>
+<span class="nc" id="L122">    }</span>
+
+    public List&lt;RemoteRepository&gt; getRemoteRepos() {
+<span class="nc" id="L125">        return remoteRepos;</span>
+    }
+
+    public void setRemoteRepos(List&lt;RemoteRepository&gt; remoteRepos) {
+<span class="nc" id="L129">        this.remoteRepos = remoteRepos;</span>
+<span class="nc" id="L130">    }</span>
+
+    public RepositorySystemSession getRepoSession() {
+<span class="nc" id="L133">        return repoSession;</span>
+    }
+
+    public void setRepoSession(RepositorySystemSession repoSession) {
+<span class="nc" id="L137">        this.repoSession = repoSession;</span>
+<span class="nc" id="L138">    }</span>
+
+    public File getOutputDir() {
+<span class="nc" id="L141">        return outputDir;</span>
+    }
+
+    public void setOutputDir(File outputDir) {
+<span class="nc" id="L145">        this.outputDir = outputDir;</span>
+<span class="nc" id="L146">    }</span>
+
+    public File getOutputFile() {
+<span class="nc" id="L149">        return outputFile;</span>
+    }
+
+    public void setOutputFile(File outputFile) {
+<span class="nc" id="L153">        this.outputFile = outputFile;</span>
+<span class="nc" id="L154">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

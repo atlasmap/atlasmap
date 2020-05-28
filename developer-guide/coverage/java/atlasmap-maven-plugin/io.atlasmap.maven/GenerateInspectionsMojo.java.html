@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>GenerateInspectionsMojo.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlasmap-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.maven</a> &gt; <span class="el_source">GenerateInspectionsMojo.java</span></div><h1>GenerateInspectionsMojo.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ * &lt;p&gt;
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * &lt;p&gt;
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * &lt;p&gt;
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.maven;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+
+import io.atlasmap.core.DefaultAtlasConversionService;
+import io.atlasmap.java.inspect.ClassInspectionService;
+import io.atlasmap.java.v2.JavaClass;
+import io.atlasmap.json.inspect.JsonInspectionService;
+import io.atlasmap.json.v2.JsonDocument;
+import io.atlasmap.v2.CollectionType;
+import io.atlasmap.xml.inspect.XmlInspectionService;
+import io.atlasmap.xml.v2.XmlDocument;
+
+@Mojo(name = &quot;generate-inspections&quot;)
+<span class="nc" id="L46">public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {</span>
+
+    public static final String DEFAULT_OUTPUT_FILE_PREFIX = &quot;atlasmap-inspection&quot;;
+
+    /**
+     * A list of {@code &lt;groupId&gt;:&lt;artifactId&gt;[:&lt;extension&gt;[:&lt;classifier&gt;]]:&lt;version&gt;} of
+     * the artifacts to resolve.
+     */
+    @Parameter
+    private List&lt;String&gt; artifacts;
+
+    /**
+     * The class name that should be inspected.
+     */
+    @Parameter(property = &quot;className&quot;)
+    private String className;
+
+    /**
+     * The collection type that should be inspected.
+     */
+    @Parameter(property = &quot;collectionType&quot;)
+    private String collectionType;
+
+    /**
+     * The class name that should be inspected.
+     */
+    @Parameter(property = &quot;collectionClassName&quot;)
+    private String collectionClassName;
+
+    /**
+     * Allows you to configure the plugin with: &lt;code&gt;
+     *
+     *     &lt;configuration&gt;
+     *         &lt;inspections&gt;
+     *             &lt;inspection&gt;
+     *                 &lt;artifacts&gt;
+     *                     &lt;artifact&gt;io.atlasmap:atlas-java-generateInspection-test:1.1&lt;/artifact&gt;
+     *                 &lt;/artifacts&gt;
+     *                 &lt;className&gt;org.some.JavaClass&lt;/className&gt;
+     *             &lt;/inspection&gt;
+     *             &lt;inspection&gt;
+     *                 &lt;artifacts&gt;
+     *                     &lt;artifact&gt;io.atlasmap:other:1.1&lt;/artifact&gt;
+     *                 &lt;/artifacts&gt;
+     *                 &lt;classNames&gt;
+     *                     &lt;className&gt;org.some.JavaClass1&lt;/className&gt;
+     *                     &lt;className&gt;org.some.JavaClass2&lt;/className&gt;
+     *                 &lt;/classNames&gt;
+     *             &lt;/inspection&gt;
+     *             &lt;inspection&gt;
+     *                 &lt;fileName&gt;src/test/resources&lt;/fileName&gt;
+     *                 &lt;inspectionType&gt;SCHEMA&lt;/inspectionType&gt;
+     *             &lt;/inspection&gt;
+     *         &lt;/inspections&gt;
+     *     &lt;/configuration&gt;
+     *
+     * &lt;/code&gt;
+     */
+    @Parameter()
+    private List&lt;Inspection&gt; inspections;
+
+<span class="nc" id="L107">    public enum InspectionType {</span>
+<span class="nc" id="L108">        SCHEMA, INSTANCE</span>
+    }
+
+<span class="nc" id="L111">    public static class Inspection {</span>
+        private List&lt;String&gt; artifacts;
+        private String className;
+        private String collectionType;
+        private String collectionClassName;
+        private List&lt;String&gt; classNames;
+        private String fileName;
+        private InspectionType inspectionType;
+
+        public String getClassName() {
+<span class="nc" id="L121">            return className;</span>
+        }
+
+        public List&lt;String&gt; getClassNames() {
+<span class="nc" id="L125">            return classNames;</span>
+        }
+
+        public void setClassName(String className) {
+<span class="nc" id="L129">            this.className = className;</span>
+<span class="nc" id="L130">        }</span>
+
+        public void setClassNames(List&lt;String&gt; classNames) {
+<span class="nc" id="L133">            this.classNames = classNames;</span>
+<span class="nc" id="L134">        }</span>
+
+        public String getCollectionType() {
+<span class="nc" id="L137">            return collectionType;</span>
+        }
+
+        public void setCollectionType(String collectionType) {
+<span class="nc" id="L141">            this.collectionType = collectionType;</span>
+<span class="nc" id="L142">        }</span>
+
+        public String getCollectionClassName() {
+<span class="nc" id="L145">            return collectionClassName;</span>
+        }
+
+        public void setCollectionClassName(String collectionClassName) {
+<span class="nc" id="L149">            this.collectionClassName = collectionClassName;</span>
+<span class="nc" id="L150">        }</span>
+
+        public List&lt;String&gt; getArtifacts() {
+<span class="nc" id="L153">            return artifacts;</span>
+        }
+
+        public void setArtifacts(List&lt;String&gt; artifacts) {
+<span class="nc" id="L157">            this.artifacts = artifacts;</span>
+<span class="nc" id="L158">        }</span>
+
+        public String getFileName() {
+<span class="nc" id="L161">            return this.fileName;</span>
+        }
+
+        public void setFileName(String fileName) {
+<span class="nc" id="L165">            this.fileName = fileName;</span>
+<span class="nc" id="L166">        }</span>
+
+        public InspectionType getInspectionType() {
+<span class="nc" id="L169">            return this.inspectionType;</span>
+        }
+
+        public void setInspectionType(InspectionType inspectionType) {
+<span class="nc" id="L173">            this.inspectionType = inspectionType;</span>
+<span class="nc" id="L174">        }</span>
+    }
+
+    public void execute() throws MojoExecutionException, MojoFailureException {
+<span class="nc bnc" id="L178" title="All 2 branches missed.">        if (getOutputDir() != null) {</span>
+<span class="nc" id="L179">            getOutputDir().mkdirs();</span>
+        }
+<span class="nc" id="L181">        CollectionType collectionType = CollectionType.NONE;</span>
+<span class="nc bnc" id="L182" title="All 2 branches missed.">        if (this.collectionType != null) {</span>
+<span class="nc" id="L183">            collectionType = CollectionType.valueOf(this.collectionType);</span>
+        }
+<span class="nc bnc" id="L185" title="All 4 branches missed.">        if (this.artifacts != null &amp;&amp; this.className != null) {</span>
+<span class="nc" id="L186">            generateJavaInspection(this.artifacts, Arrays.asList(className), collectionType, collectionClassName);</span>
+        }
+<span class="nc bnc" id="L188" title="All 2 branches missed.">        if (inspections != null) {</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">            for (Inspection inspection : inspections) {</span>
+<span class="nc" id="L190">                ArrayList&lt;String&gt; classNames = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">                if (inspection.classNames != null) {</span>
+<span class="nc" id="L192">                    classNames.addAll(inspection.classNames);</span>
+<span class="nc bnc" id="L193" title="All 2 branches missed.">                } else if (inspection.className != null) {</span>
+<span class="nc" id="L194">                    classNames.add(inspection.className);</span>
+                } else {
+<span class="nc" id="L196">                    generateFileInspection(inspection);</span>
+                }
+<span class="nc" id="L198">                collectionType = CollectionType.NONE;</span>
+<span class="nc bnc" id="L199" title="All 2 branches missed.">                if (inspection.collectionType != null) {</span>
+<span class="nc" id="L200">                    collectionType = CollectionType.valueOf(inspection.collectionType);</span>
+                }
+<span class="nc" id="L202">                generateJavaInspection(inspection.artifacts, classNames, collectionType, inspection.collectionClassName);</span>
+<span class="nc" id="L203">            }</span>
+        }
+<span class="nc" id="L205">    }</span>
+
+    private void generateJavaInspection(List&lt;String&gt; artifacts, Collection&lt;String&gt; classNames,
+            CollectionType collectionType, String collectionClassName) throws MojoFailureException, MojoExecutionException {
+
+<span class="nc bnc" id="L210" title="All 2 branches missed.">        List&lt;URL&gt; urls = artifacts == null ? Collections.emptyList() : resolveClasspath(artifacts);</span>
+
+<span class="nc" id="L212">        ClassLoader origTccl = Thread.currentThread().getContextClassLoader();</span>
+<span class="nc bnc" id="L213" title="All 2 branches missed.">        for (String className : classNames) {</span>
+<span class="nc" id="L214">            Class&lt;?&gt; clazz = null;</span>
+<span class="nc" id="L215">            JavaClass c = null;</span>
+            // Not even this plugin will be available on this new URLClassLoader
+<span class="nc" id="L217">            try (URLClassLoader loader = new URLClassLoader(urls.toArray(new URL[urls.size()]), origTccl)) {</span>
+<span class="nc" id="L218">                clazz = loader.loadClass(className);</span>
+<span class="nc" id="L219">                ClassInspectionService classInspectionService = new ClassInspectionService();</span>
+<span class="nc" id="L220">                classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());</span>
+<span class="nc" id="L221">                c = classInspectionService.inspectClass(loader, clazz, collectionType, collectionClassName);</span>
+<span class="nc" id="L222">            } catch (ClassNotFoundException | IOException e) {</span>
+<span class="nc" id="L223">                throw new MojoExecutionException(e.getMessage(), e);</span>
+<span class="nc" id="L224">            }</span>
+
+<span class="nc" id="L226">            writeToJsonFile(DEFAULT_OUTPUT_FILE_PREFIX + &quot;-&quot; + className, c);</span>
+<span class="nc" id="L227">        }</span>
+<span class="nc" id="L228">    }</span>
+
+    private void generateFileInspection(Inspection inspection) throws MojoFailureException {
+<span class="nc" id="L231">        File file = new File(inspection.fileName);</span>
+<span class="nc bnc" id="L232" title="All 2 branches missed.">        if (!file.exists()) {</span>
+<span class="nc" id="L233">            getLog().warn(String.format(&quot;Ignoring '%s'&quot;, inspection.fileName));</span>
+<span class="nc" id="L234">            return;</span>
+        }
+
+<span class="nc bnc" id="L237" title="All 2 branches missed.">        if (file.isDirectory()) {</span>
+<span class="nc bnc" id="L238" title="All 2 branches missed.">            for (File child : file.listFiles()) {</span>
+<span class="nc bnc" id="L239" title="All 4 branches missed.">                if (!child.exists() || child.isDirectory()) {</span>
+<span class="nc" id="L240">                    getLog().warn(String.format(&quot;Ignoring '%s'&quot;, child.getAbsolutePath()));</span>
+<span class="nc" id="L241">                    continue;</span>
+                }
+<span class="nc bnc" id="L243" title="All 2 branches missed.">                if (child.getName().toLowerCase().endsWith(&quot;.json&quot;)) {</span>
+<span class="nc bnc" id="L244" title="All 2 branches missed.">                    if (inspection.inspectionType == InspectionType.INSTANCE) {</span>
+<span class="nc" id="L245">                        generateJsonInstanceInspection(child.getAbsolutePath());</span>
+                    } else {
+                        // schema inspection by default
+<span class="nc" id="L248">                        generateJsonSchemaInspection(child.getAbsolutePath());</span>
+                    }
+<span class="nc bnc" id="L250" title="All 2 branches missed.">                } else if (child.getName().toLowerCase().endsWith(&quot;.xsd&quot;)) {</span>
+<span class="nc" id="L251">                    generateXmlSchemaInspection(child.getAbsolutePath());</span>
+<span class="nc bnc" id="L252" title="All 2 branches missed.">                } else if (child.getName().toLowerCase().endsWith(&quot;.xml&quot;)) {</span>
+<span class="nc bnc" id="L253" title="All 2 branches missed.">                    if (inspection.inspectionType == InspectionType.SCHEMA) {</span>
+                        // In case it's SchemaSet - XML contains XSDs. InspectionType.SCHEMA have to be specified.
+<span class="nc" id="L255">                        generateXmlSchemaInspection(child.getAbsolutePath());</span>
+                    } else {
+<span class="nc" id="L257">                        generateXmlInstanceInspection(child.getAbsolutePath());</span>
+                    }
+                } else {
+<span class="nc" id="L260">                    getLog().warn(String.format(&quot;Ignoring unsupported file type '%s'&quot;, child.getAbsolutePath()));</span>
+<span class="nc" id="L261">                    continue;</span>
+                }
+            }
+<span class="nc" id="L264">            return;</span>
+        }
+
+<span class="nc bnc" id="L267" title="All 2 branches missed.">        if (file.getName().toLowerCase().endsWith(&quot;.json&quot;)) {</span>
+<span class="nc bnc" id="L268" title="All 2 branches missed.">            if (inspection.inspectionType == InspectionType.INSTANCE) {</span>
+<span class="nc" id="L269">                generateJsonInstanceInspection(file.getAbsolutePath());</span>
+            } else {
+                // schema inspection by default
+<span class="nc" id="L272">                generateJsonSchemaInspection(file.getAbsolutePath());</span>
+            }
+<span class="nc bnc" id="L274" title="All 2 branches missed.">        } else if (file.getName().toLowerCase().endsWith(&quot;.xsd&quot;)) {</span>
+<span class="nc" id="L275">            generateXmlSchemaInspection(file.getAbsolutePath());</span>
+<span class="nc bnc" id="L276" title="All 2 branches missed.">        } else if (file.getName().toLowerCase().endsWith(&quot;.xml&quot;)) {</span>
+<span class="nc bnc" id="L277" title="All 2 branches missed.">            if (inspection.inspectionType == InspectionType.SCHEMA) {</span>
+                // In case it's SchemaSet - XML contains XSDs. InspectionType.SCHEMA have to be specified.
+<span class="nc" id="L279">                generateXmlSchemaInspection(file.getAbsolutePath());</span>
+            } else {
+<span class="nc" id="L281">                generateXmlInstanceInspection(file.getAbsolutePath());</span>
+            }
+        } else {
+<span class="nc" id="L284">            throw new MojoFailureException(String.format(&quot;Inspection type '%s' is not supported&quot;, inspection.getClass().getName()));</span>
+        }
+<span class="nc" id="L286">    }</span>
+
+    private void generateJsonSchemaInspection(String fileName) throws MojoFailureException {
+        try {
+<span class="nc" id="L290">            Path path = Paths.get(fileName);</span>
+<span class="nc" id="L291">            String schema = new String(Files.readAllBytes(path));</span>
+<span class="nc" id="L292">            JsonDocument d = new JsonInspectionService().inspectJsonSchema(schema);</span>
+<span class="nc" id="L293">            String name = path.getFileName().toString();</span>
+<span class="nc" id="L294">            String outputName = name.substring(0, name.length() - 5);</span>
+<span class="nc" id="L295">            writeToJsonFile(DEFAULT_OUTPUT_FILE_PREFIX + &quot;-&quot; + outputName, d);</span>
+<span class="nc" id="L296">        } catch (Exception e) {</span>
+<span class="nc" id="L297">            throw new MojoFailureException(e.getMessage(), e);</span>
+<span class="nc" id="L298">        }</span>
+<span class="nc" id="L299">    }</span>
+
+    private void generateJsonInstanceInspection(String fileName) throws MojoFailureException {
+        try {
+<span class="nc" id="L303">            Path path = Paths.get(fileName);</span>
+<span class="nc" id="L304">            String schema = new String(Files.readAllBytes(path));</span>
+<span class="nc" id="L305">            JsonDocument d = new JsonInspectionService().inspectJsonDocument(schema);</span>
+<span class="nc" id="L306">            String name = path.getFileName().toString();</span>
+<span class="nc" id="L307">            String outputName = name.substring(0, name.length() - 5);</span>
+<span class="nc" id="L308">            writeToJsonFile(DEFAULT_OUTPUT_FILE_PREFIX + &quot;-&quot; + outputName, d);</span>
+<span class="nc" id="L309">        } catch (Exception e) {</span>
+<span class="nc" id="L310">            throw new MojoFailureException(e.getMessage(), e);</span>
+<span class="nc" id="L311">        }</span>
+<span class="nc" id="L312">    }</span>
+
+    private void generateXmlSchemaInspection(String fileName) throws MojoFailureException {
+        try {
+<span class="nc" id="L316">            File f = new File(fileName);</span>
+<span class="nc" id="L317">            XmlDocument d = new XmlInspectionService().inspectSchema(f);</span>
+<span class="nc" id="L318">            String outputName = f.getName().substring(0, f.getName().length() - 4);</span>
+<span class="nc" id="L319">            writeToJsonFile(DEFAULT_OUTPUT_FILE_PREFIX + &quot;-&quot; + outputName, d);</span>
+<span class="nc" id="L320">        } catch (Exception e) {</span>
+<span class="nc" id="L321">            throw new MojoFailureException(e.getMessage(), e);</span>
+<span class="nc" id="L322">        }</span>
+<span class="nc" id="L323">    }</span>
+
+    private void generateXmlInstanceInspection(String fileName) throws MojoFailureException {
+        try {
+<span class="nc" id="L327">            File f = new File(fileName);</span>
+<span class="nc" id="L328">            XmlDocument d = new XmlInspectionService().inspectXmlDocument(f);</span>
+<span class="nc" id="L329">            String outputName = f.getName().substring(0, f.getName().length() - 4);</span>
+<span class="nc" id="L330">            writeToJsonFile(DEFAULT_OUTPUT_FILE_PREFIX + &quot;-&quot; + outputName, d);</span>
+<span class="nc" id="L331">        } catch (Exception e) {</span>
+<span class="nc" id="L332">            throw new MojoFailureException(e.getMessage(), e);</span>
+<span class="nc" id="L333">        }</span>
+<span class="nc" id="L334">    }</span>
+
+    public List&lt;String&gt; getArtifacts() {
+<span class="nc" id="L337">        return artifacts;</span>
+    }
+
+    public void setArtifacts(List&lt;String&gt; artifacts) {
+<span class="nc" id="L341">        this.artifacts = artifacts;</span>
+<span class="nc" id="L342">    }</span>
+
+    public String getClassName() {
+<span class="nc" id="L345">        return className;</span>
+    }
+
+    public void setClassName(String className) {
+<span class="nc" id="L349">        this.className = className;</span>
+<span class="nc" id="L350">    }</span>
+
+    public List&lt;Inspection&gt; getInspections() {
+<span class="nc" id="L353">        return inspections;</span>
+    }
+
+    public void setInspections(List&lt;Inspection&gt; inspections) {
+<span class="nc" id="L357">        this.inspections = inspections;</span>
+<span class="nc" id="L358">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

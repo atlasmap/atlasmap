@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>AtlasComponent.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">camel3-atlasmap</a> &gt; <a href="index.source.html" class="el_package">org.apache.camel.component.atlasmap</a> &gt; <span class="el_source">AtlasComponent.java</span></div><h1>AtlasComponent.java</h1><pre class="source lang-java linenums">/**
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.camel.component.atlasmap;
+
+import java.util.Map;
+
+import org.apache.camel.Endpoint;
+import org.apache.camel.spi.Metadata;
+import org.apache.camel.support.DefaultComponent;
+import org.apache.camel.support.ResourceHelper;
+
+import io.atlasmap.api.AtlasContextFactory;
+
+/**
+ * @version
+ */
+<span class="fc" id="L32">public class AtlasComponent extends DefaultComponent {</span>
+
+    @Metadata(label = &quot;advanced&quot;)
+    private AtlasContextFactory atlasContextFactory;
+
+    public AtlasContextFactory getAtlasContextFactory() {
+<span class="fc" id="L38">        return atlasContextFactory;</span>
+    }
+
+    /**
+     * To use the {@link AtlasContextFactory} otherwise a new engine is created
+     */
+    public void setAtlasContextFactory(AtlasContextFactory atlasContextFactory) {
+<span class="nc" id="L45">        this.atlasContextFactory = atlasContextFactory;</span>
+<span class="nc" id="L46">    }</span>
+
+    protected Endpoint createEndpoint(String uri, String remaining, Map&lt;String, Object&gt; parameters) throws Exception {
+<span class="fc" id="L49">        boolean cache = getAndRemoveParameter(parameters, &quot;contentCache&quot;, Boolean.class, Boolean.TRUE);</span>
+<span class="fc" id="L50">        String sourceMapName = getAndRemoveParameter(parameters, &quot;sourceMapName&quot;, String.class);</span>
+<span class="fc" id="L51">        String targetMapName = getAndRemoveParameter(parameters, &quot;targetMapName&quot;, String.class);</span>
+
+<span class="fc" id="L53">        AtlasEndpoint endpoint = new AtlasEndpoint(uri, this, remaining);</span>
+<span class="fc" id="L54">        setProperties(endpoint, parameters);</span>
+<span class="fc" id="L55">        endpoint.setContentCache(cache);</span>
+<span class="fc" id="L56">        endpoint.setSourceMapName(sourceMapName);</span>
+<span class="fc" id="L57">        endpoint.setTargetMapName(targetMapName);</span>
+<span class="fc" id="L58">        endpoint.setAtlasContextFactory(getAtlasContextFactory());</span>
+
+        // if its a http resource then append any remaining parameters and update the
+        // resource uri
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        if (ResourceHelper.isHttpUri(remaining)) {</span>
+<span class="nc" id="L63">            String remainingAndParameters = ResourceHelper.appendParameters(remaining, parameters);</span>
+<span class="nc" id="L64">            endpoint.setResourceUri(remainingAndParameters);</span>
+        }
+
+<span class="fc" id="L67">        return endpoint;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

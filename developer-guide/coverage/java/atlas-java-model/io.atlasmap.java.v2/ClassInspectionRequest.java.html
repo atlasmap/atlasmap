@@ -1,0 +1,561 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ClassInspectionRequest.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-java-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.java.v2</a> &gt; <span class="el_source">ClassInspectionRequest.java</span></div><h1>ClassInspectionRequest.java</h1><pre class="source lang-java linenums">package io.atlasmap.java.v2;
+
+import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import io.atlasmap.v2.CollectionType;
+import io.atlasmap.v2.StringList;
+
+@JsonRootName(&quot;ClassInspectionRequest&quot;)
+@JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
+<span class="fc" id="L11">public class ClassInspectionRequest implements Serializable {</span>
+
+    private final static long serialVersionUID = 1L;
+
+    protected StringList fieldNameBlacklist;
+
+    protected StringList classNameBlacklist;
+    protected String classpath;
+
+    protected String className;
+
+    protected CollectionType collectionType;
+
+    protected String collectionClassName;
+
+    protected Boolean disablePrivateOnlyFields;
+
+    protected Boolean disableProtectedOnlyFields;
+
+    protected Boolean disablePublicOnlyFields;
+
+    protected Boolean disablePublicGetterSetterFields;
+
+    /**
+     * Gets the value of the fieldNameBlacklist property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link StringList }
+     *     
+     */
+    public StringList getFieldNameBlacklist() {
+<span class="fc" id="L43">        return fieldNameBlacklist;</span>
+    }
+
+    /**
+     * Sets the value of the fieldNameBlacklist property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link StringList }
+     *     
+     */
+    public void setFieldNameBlacklist(StringList value) {
+<span class="fc" id="L55">        this.fieldNameBlacklist = value;</span>
+<span class="fc" id="L56">    }</span>
+
+    /**
+     * Gets the value of the classNameBlacklist property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link StringList }
+     *     
+     */
+    public StringList getClassNameBlacklist() {
+<span class="fc" id="L67">        return classNameBlacklist;</span>
+    }
+
+    /**
+     * Sets the value of the classNameBlacklist property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link StringList }
+     *     
+     */
+    public void setClassNameBlacklist(StringList value) {
+<span class="nc" id="L79">        this.classNameBlacklist = value;</span>
+<span class="nc" id="L80">    }</span>
+
+    /**
+     * Gets the value of the classpath property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getClasspath() {
+<span class="fc" id="L91">        return classpath;</span>
+    }
+
+    /**
+     * Sets the value of the classpath property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setClasspath(String value) {
+<span class="fc" id="L103">        this.classpath = value;</span>
+<span class="fc" id="L104">    }</span>
+
+    /**
+     * Gets the value of the className property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getClassName() {
+<span class="fc" id="L115">        return className;</span>
+    }
+
+    /**
+     * Sets the value of the className property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setClassName(String value) {
+<span class="fc" id="L127">        this.className = value;</span>
+<span class="fc" id="L128">    }</span>
+
+    /**
+     * Gets the value of the collectionType property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link CollectionType }
+     *     
+     */
+    public CollectionType getCollectionType() {
+<span class="fc" id="L139">        return collectionType;</span>
+    }
+
+    /**
+     * Sets the value of the collectionType property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link CollectionType }
+     *     
+     */
+    public void setCollectionType(CollectionType value) {
+<span class="nc" id="L151">        this.collectionType = value;</span>
+<span class="nc" id="L152">    }</span>
+
+    /**
+     * Gets the value of the collectionClassName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getCollectionClassName() {
+<span class="fc" id="L163">        return collectionClassName;</span>
+    }
+
+    /**
+     * Sets the value of the collectionClassName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setCollectionClassName(String value) {
+<span class="nc" id="L175">        this.collectionClassName = value;</span>
+<span class="nc" id="L176">    }</span>
+
+    /**
+     * Gets the value of the disablePrivateOnlyFields property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isDisablePrivateOnlyFields() {
+<span class="fc" id="L187">        return disablePrivateOnlyFields;</span>
+    }
+
+    /**
+     * Sets the value of the disablePrivateOnlyFields property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setDisablePrivateOnlyFields(Boolean value) {
+<span class="nc" id="L199">        this.disablePrivateOnlyFields = value;</span>
+<span class="nc" id="L200">    }</span>
+
+    /**
+     * Gets the value of the disableProtectedOnlyFields property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isDisableProtectedOnlyFields() {
+<span class="fc" id="L211">        return disableProtectedOnlyFields;</span>
+    }
+
+    /**
+     * Sets the value of the disableProtectedOnlyFields property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setDisableProtectedOnlyFields(Boolean value) {
+<span class="nc" id="L223">        this.disableProtectedOnlyFields = value;</span>
+<span class="nc" id="L224">    }</span>
+
+    /**
+     * Gets the value of the disablePublicOnlyFields property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isDisablePublicOnlyFields() {
+<span class="fc" id="L235">        return disablePublicOnlyFields;</span>
+    }
+
+    /**
+     * Sets the value of the disablePublicOnlyFields property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setDisablePublicOnlyFields(Boolean value) {
+<span class="nc" id="L247">        this.disablePublicOnlyFields = value;</span>
+<span class="nc" id="L248">    }</span>
+
+    /**
+     * Gets the value of the disablePublicGetterSetterFields property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isDisablePublicGetterSetterFields() {
+<span class="fc" id="L259">        return disablePublicGetterSetterFields;</span>
+    }
+
+    /**
+     * Sets the value of the disablePublicGetterSetterFields property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setDisablePublicGetterSetterFields(Boolean value) {
+<span class="nc" id="L271">        this.disablePublicGetterSetterFields = value;</span>
+<span class="nc" id="L272">    }</span>
+
+    public boolean equals(Object object) {
+<span class="nc bnc" id="L275" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L276">            return false;</span>
+        }
+<span class="nc bnc" id="L278" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L279">            return true;</span>
+        }
+<span class="nc" id="L281">        final ClassInspectionRequest that = ((ClassInspectionRequest) object);</span>
+        {
+            StringList leftFieldNameBlacklist;
+<span class="nc" id="L284">            leftFieldNameBlacklist = this.getFieldNameBlacklist();</span>
+            StringList rightFieldNameBlacklist;
+<span class="nc" id="L286">            rightFieldNameBlacklist = that.getFieldNameBlacklist();</span>
+<span class="nc bnc" id="L287" title="All 2 branches missed.">            if (this.fieldNameBlacklist!= null) {</span>
+<span class="nc bnc" id="L288" title="All 2 branches missed.">                if (that.fieldNameBlacklist!= null) {</span>
+<span class="nc bnc" id="L289" title="All 2 branches missed.">                    if (!leftFieldNameBlacklist.equals(rightFieldNameBlacklist)) {</span>
+<span class="nc" id="L290">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L293">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L296" title="All 2 branches missed.">                if (that.fieldNameBlacklist!= null) {</span>
+<span class="nc" id="L297">                    return false;</span>
+                }
+            }
+        }
+        {
+            StringList leftClassNameBlacklist;
+<span class="nc" id="L303">            leftClassNameBlacklist = this.getClassNameBlacklist();</span>
+            StringList rightClassNameBlacklist;
+<span class="nc" id="L305">            rightClassNameBlacklist = that.getClassNameBlacklist();</span>
+<span class="nc bnc" id="L306" title="All 2 branches missed.">            if (this.classNameBlacklist!= null) {</span>
+<span class="nc bnc" id="L307" title="All 2 branches missed.">                if (that.classNameBlacklist!= null) {</span>
+<span class="nc bnc" id="L308" title="All 2 branches missed.">                    if (!leftClassNameBlacklist.equals(rightClassNameBlacklist)) {</span>
+<span class="nc" id="L309">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L312">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L315" title="All 2 branches missed.">                if (that.classNameBlacklist!= null) {</span>
+<span class="nc" id="L316">                    return false;</span>
+                }
+            }
+        }
+        {
+            String leftClasspath;
+<span class="nc" id="L322">            leftClasspath = this.getClasspath();</span>
+            String rightClasspath;
+<span class="nc" id="L324">            rightClasspath = that.getClasspath();</span>
+<span class="nc bnc" id="L325" title="All 2 branches missed.">            if (this.classpath!= null) {</span>
+<span class="nc bnc" id="L326" title="All 2 branches missed.">                if (that.classpath!= null) {</span>
+<span class="nc bnc" id="L327" title="All 2 branches missed.">                    if (!leftClasspath.equals(rightClasspath)) {</span>
+<span class="nc" id="L328">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L331">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L334" title="All 2 branches missed.">                if (that.classpath!= null) {</span>
+<span class="nc" id="L335">                    return false;</span>
+                }
+            }
+        }
+        {
+            String leftClassName;
+<span class="nc" id="L341">            leftClassName = this.getClassName();</span>
+            String rightClassName;
+<span class="nc" id="L343">            rightClassName = that.getClassName();</span>
+<span class="nc bnc" id="L344" title="All 2 branches missed.">            if (this.className!= null) {</span>
+<span class="nc bnc" id="L345" title="All 2 branches missed.">                if (that.className!= null) {</span>
+<span class="nc bnc" id="L346" title="All 2 branches missed.">                    if (!leftClassName.equals(rightClassName)) {</span>
+<span class="nc" id="L347">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L350">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L353" title="All 2 branches missed.">                if (that.className!= null) {</span>
+<span class="nc" id="L354">                    return false;</span>
+                }
+            }
+        }
+        {
+            CollectionType leftCollectionType;
+<span class="nc" id="L360">            leftCollectionType = this.getCollectionType();</span>
+            CollectionType rightCollectionType;
+<span class="nc" id="L362">            rightCollectionType = that.getCollectionType();</span>
+<span class="nc bnc" id="L363" title="All 2 branches missed.">            if (this.collectionType!= null) {</span>
+<span class="nc bnc" id="L364" title="All 2 branches missed.">                if (that.collectionType!= null) {</span>
+<span class="nc bnc" id="L365" title="All 2 branches missed.">                    if (!leftCollectionType.equals(rightCollectionType)) {</span>
+<span class="nc" id="L366">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L369">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L372" title="All 2 branches missed.">                if (that.collectionType!= null) {</span>
+<span class="nc" id="L373">                    return false;</span>
+                }
+            }
+        }
+        {
+            String leftCollectionClassName;
+<span class="nc" id="L379">            leftCollectionClassName = this.getCollectionClassName();</span>
+            String rightCollectionClassName;
+<span class="nc" id="L381">            rightCollectionClassName = that.getCollectionClassName();</span>
+<span class="nc bnc" id="L382" title="All 2 branches missed.">            if (this.collectionClassName!= null) {</span>
+<span class="nc bnc" id="L383" title="All 2 branches missed.">                if (that.collectionClassName!= null) {</span>
+<span class="nc bnc" id="L384" title="All 2 branches missed.">                    if (!leftCollectionClassName.equals(rightCollectionClassName)) {</span>
+<span class="nc" id="L385">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L388">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L391" title="All 2 branches missed.">                if (that.collectionClassName!= null) {</span>
+<span class="nc" id="L392">                    return false;</span>
+                }
+            }
+        }
+        {
+            Boolean leftDisablePrivateOnlyFields;
+<span class="nc" id="L398">            leftDisablePrivateOnlyFields = this.isDisablePrivateOnlyFields();</span>
+            Boolean rightDisablePrivateOnlyFields;
+<span class="nc" id="L400">            rightDisablePrivateOnlyFields = that.isDisablePrivateOnlyFields();</span>
+<span class="nc bnc" id="L401" title="All 2 branches missed.">            if (this.disablePrivateOnlyFields!= null) {</span>
+<span class="nc bnc" id="L402" title="All 2 branches missed.">                if (that.disablePrivateOnlyFields!= null) {</span>
+<span class="nc bnc" id="L403" title="All 2 branches missed.">                    if (!leftDisablePrivateOnlyFields.equals(rightDisablePrivateOnlyFields)) {</span>
+<span class="nc" id="L404">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L407">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L410" title="All 2 branches missed.">                if (that.disablePrivateOnlyFields!= null) {</span>
+<span class="nc" id="L411">                    return false;</span>
+                }
+            }
+        }
+        {
+            Boolean leftDisableProtectedOnlyFields;
+<span class="nc" id="L417">            leftDisableProtectedOnlyFields = this.isDisableProtectedOnlyFields();</span>
+            Boolean rightDisableProtectedOnlyFields;
+<span class="nc" id="L419">            rightDisableProtectedOnlyFields = that.isDisableProtectedOnlyFields();</span>
+<span class="nc bnc" id="L420" title="All 2 branches missed.">            if (this.disableProtectedOnlyFields!= null) {</span>
+<span class="nc bnc" id="L421" title="All 2 branches missed.">                if (that.disableProtectedOnlyFields!= null) {</span>
+<span class="nc bnc" id="L422" title="All 2 branches missed.">                    if (!leftDisableProtectedOnlyFields.equals(rightDisableProtectedOnlyFields)) {</span>
+<span class="nc" id="L423">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L426">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L429" title="All 2 branches missed.">                if (that.disableProtectedOnlyFields!= null) {</span>
+<span class="nc" id="L430">                    return false;</span>
+                }
+            }
+        }
+        {
+            Boolean leftDisablePublicOnlyFields;
+<span class="nc" id="L436">            leftDisablePublicOnlyFields = this.isDisablePublicOnlyFields();</span>
+            Boolean rightDisablePublicOnlyFields;
+<span class="nc" id="L438">            rightDisablePublicOnlyFields = that.isDisablePublicOnlyFields();</span>
+<span class="nc bnc" id="L439" title="All 2 branches missed.">            if (this.disablePublicOnlyFields!= null) {</span>
+<span class="nc bnc" id="L440" title="All 2 branches missed.">                if (that.disablePublicOnlyFields!= null) {</span>
+<span class="nc bnc" id="L441" title="All 2 branches missed.">                    if (!leftDisablePublicOnlyFields.equals(rightDisablePublicOnlyFields)) {</span>
+<span class="nc" id="L442">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L445">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L448" title="All 2 branches missed.">                if (that.disablePublicOnlyFields!= null) {</span>
+<span class="nc" id="L449">                    return false;</span>
+                }
+            }
+        }
+        {
+            Boolean leftDisablePublicGetterSetterFields;
+<span class="nc" id="L455">            leftDisablePublicGetterSetterFields = this.isDisablePublicGetterSetterFields();</span>
+            Boolean rightDisablePublicGetterSetterFields;
+<span class="nc" id="L457">            rightDisablePublicGetterSetterFields = that.isDisablePublicGetterSetterFields();</span>
+<span class="nc bnc" id="L458" title="All 2 branches missed.">            if (this.disablePublicGetterSetterFields!= null) {</span>
+<span class="nc bnc" id="L459" title="All 2 branches missed.">                if (that.disablePublicGetterSetterFields!= null) {</span>
+<span class="nc bnc" id="L460" title="All 2 branches missed.">                    if (!leftDisablePublicGetterSetterFields.equals(rightDisablePublicGetterSetterFields)) {</span>
+<span class="nc" id="L461">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L464">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L467" title="All 2 branches missed.">                if (that.disablePublicGetterSetterFields!= null) {</span>
+<span class="nc" id="L468">                    return false;</span>
+                }
+            }
+        }
+<span class="nc" id="L472">        return true;</span>
+    }
+
+    public int hashCode() {
+<span class="nc" id="L476">        int currentHashCode = 1;</span>
+        {
+<span class="nc" id="L478">            currentHashCode = (currentHashCode* 31);</span>
+            StringList theFieldNameBlacklist;
+<span class="nc" id="L480">            theFieldNameBlacklist = this.getFieldNameBlacklist();</span>
+<span class="nc bnc" id="L481" title="All 2 branches missed.">            if (this.fieldNameBlacklist!= null) {</span>
+<span class="nc" id="L482">                currentHashCode += theFieldNameBlacklist.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L486">            currentHashCode = (currentHashCode* 31);</span>
+            StringList theClassNameBlacklist;
+<span class="nc" id="L488">            theClassNameBlacklist = this.getClassNameBlacklist();</span>
+<span class="nc bnc" id="L489" title="All 2 branches missed.">            if (this.classNameBlacklist!= null) {</span>
+<span class="nc" id="L490">                currentHashCode += theClassNameBlacklist.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L494">            currentHashCode = (currentHashCode* 31);</span>
+            String theClasspath;
+<span class="nc" id="L496">            theClasspath = this.getClasspath();</span>
+<span class="nc bnc" id="L497" title="All 2 branches missed.">            if (this.classpath!= null) {</span>
+<span class="nc" id="L498">                currentHashCode += theClasspath.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L502">            currentHashCode = (currentHashCode* 31);</span>
+            String theClassName;
+<span class="nc" id="L504">            theClassName = this.getClassName();</span>
+<span class="nc bnc" id="L505" title="All 2 branches missed.">            if (this.className!= null) {</span>
+<span class="nc" id="L506">                currentHashCode += theClassName.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L510">            currentHashCode = (currentHashCode* 31);</span>
+            CollectionType theCollectionType;
+<span class="nc" id="L512">            theCollectionType = this.getCollectionType();</span>
+<span class="nc bnc" id="L513" title="All 2 branches missed.">            if (this.collectionType!= null) {</span>
+<span class="nc" id="L514">                currentHashCode += theCollectionType.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L518">            currentHashCode = (currentHashCode* 31);</span>
+            String theCollectionClassName;
+<span class="nc" id="L520">            theCollectionClassName = this.getCollectionClassName();</span>
+<span class="nc bnc" id="L521" title="All 2 branches missed.">            if (this.collectionClassName!= null) {</span>
+<span class="nc" id="L522">                currentHashCode += theCollectionClassName.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L526">            currentHashCode = (currentHashCode* 31);</span>
+            Boolean theDisablePrivateOnlyFields;
+<span class="nc" id="L528">            theDisablePrivateOnlyFields = this.isDisablePrivateOnlyFields();</span>
+<span class="nc bnc" id="L529" title="All 2 branches missed.">            if (this.disablePrivateOnlyFields!= null) {</span>
+<span class="nc" id="L530">                currentHashCode += theDisablePrivateOnlyFields.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L534">            currentHashCode = (currentHashCode* 31);</span>
+            Boolean theDisableProtectedOnlyFields;
+<span class="nc" id="L536">            theDisableProtectedOnlyFields = this.isDisableProtectedOnlyFields();</span>
+<span class="nc bnc" id="L537" title="All 2 branches missed.">            if (this.disableProtectedOnlyFields!= null) {</span>
+<span class="nc" id="L538">                currentHashCode += theDisableProtectedOnlyFields.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L542">            currentHashCode = (currentHashCode* 31);</span>
+            Boolean theDisablePublicOnlyFields;
+<span class="nc" id="L544">            theDisablePublicOnlyFields = this.isDisablePublicOnlyFields();</span>
+<span class="nc bnc" id="L545" title="All 2 branches missed.">            if (this.disablePublicOnlyFields!= null) {</span>
+<span class="nc" id="L546">                currentHashCode += theDisablePublicOnlyFields.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L550">            currentHashCode = (currentHashCode* 31);</span>
+            Boolean theDisablePublicGetterSetterFields;
+<span class="nc" id="L552">            theDisablePublicGetterSetterFields = this.isDisablePublicGetterSetterFields();</span>
+<span class="nc bnc" id="L553" title="All 2 branches missed.">            if (this.disablePublicGetterSetterFields!= null) {</span>
+<span class="nc" id="L554">                currentHashCode += theDisablePublicGetterSetterFields.hashCode();</span>
+            }
+        }
+<span class="nc" id="L557">        return currentHashCode;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

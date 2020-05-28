@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DefaultAtlasPropertyStrategy.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.core</a> &gt; <span class="el_source">DefaultAtlasPropertyStrategy.java</span></div><h1>DefaultAtlasPropertyStrategy.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.core;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.api.AtlasUnsupportedException;
+import io.atlasmap.spi.AtlasConversionService;
+import io.atlasmap.spi.AtlasPropertyStrategy;
+import io.atlasmap.spi.AtlasPropertyType;
+import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.AtlasModelFactory;
+import io.atlasmap.v2.FieldType;
+import io.atlasmap.v2.Property;
+import io.atlasmap.v2.PropertyField;
+
+<span class="fc" id="L37">public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {</span>
+<span class="fc" id="L38">    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasPropertyStrategy.class);</span>
+
+<span class="fc" id="L40">    private boolean environmentPropertiesEnabled = true;</span>
+<span class="fc" id="L41">    private boolean systemPropertiesEnabled = true;</span>
+<span class="fc" id="L42">    private boolean mappingDefinedPropertiesEnabled = true;</span>
+<span class="fc" id="L43">    private boolean runtimePropertiesEnabled = true;</span>
+
+<span class="fc" id="L45">    private List&lt;AtlasPropertyType&gt; propertyOrder = Arrays.asList(</span>
+            AtlasPropertyType.RUNTIME_PROPERTIES,
+            AtlasPropertyType.JAVA_SYSTEM_PROPERTIES,
+            AtlasPropertyType.ENVIRONMENT_VARIABLES,
+            AtlasPropertyType.MAPPING_DEFINED_PROPERTIES);
+
+<span class="fc" id="L51">    private AtlasConversionService atlasConversionService = null;</span>
+
+    @Override
+    public void processPropertyField(AtlasMapping atlasMapping, PropertyField propertyField,
+            Map&lt;String, Object&gt; runtimeProperties) throws AtlasUnsupportedException, AtlasConversionException {
+<span class="fc bfc" id="L56" title="All 6 branches covered.">        if (propertyField == null || propertyField.getName() == null || propertyField.getName().trim().length() == 0) {</span>
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L58">                LOG.debug(String.format(&quot;Null or empty PropertyField specified popertyField=%s&quot;,</span>
+<span class="nc" id="L59">                        AtlasModelFactory.toString(propertyField)));</span>
+            }
+<span class="fc" id="L61">            return;</span>
+        }
+
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        for (AtlasPropertyType propType : getPropertyOrder()) {</span>
+<span class="pc bpc" id="L65" title="1 of 5 branches missed.">            switch (propType) {</span>
+            case RUNTIME_PROPERTIES:
+<span class="fc bfc" id="L67" title="All 2 branches covered.">                if (processRuntimeProperties(propertyField, runtimeProperties)) {</span>
+<span class="fc" id="L68">                    return;</span>
+                }
+                break;
+            case JAVA_SYSTEM_PROPERTIES:
+<span class="fc bfc" id="L72" title="All 2 branches covered.">                if (processJavaSystemProperty(propertyField)) {</span>
+<span class="fc" id="L73">                    return;</span>
+                }
+                break;
+            case ENVIRONMENT_VARIABLES:
+<span class="fc bfc" id="L77" title="All 2 branches covered.">                if (processEnvironmentVariable(propertyField)) {</span>
+<span class="fc" id="L78">                    return;</span>
+                }
+                break;
+            case MAPPING_DEFINED_PROPERTIES:
+<span class="fc bfc" id="L82" title="All 2 branches covered.">                if (processMappingDefinedProperties(propertyField, atlasMapping)) {</span>
+<span class="fc" id="L83">                    return;</span>
+                }
+                break;
+            default:
+<span class="nc" id="L87">                throw new AtlasUnsupportedException(</span>
+<span class="nc" id="L88">                        String.format(&quot;Unsupported PropertyType detected type=%s for field=%s&quot;, propType,</span>
+<span class="nc" id="L89">                                AtlasModelFactory.toString(propertyField)));</span>
+            }
+<span class="fc" id="L91">        }</span>
+<span class="fc" id="L92">    }</span>
+
+    protected boolean processEnvironmentVariable(PropertyField propertyField)
+        throws AtlasConversionException {
+
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        if (!isEnvironmentPropertiesEnabled()) {</span>
+<span class="fc" id="L98">            return false;</span>
+        }
+
+        try {
+<span class="fc bfc" id="L102" title="All 2 branches covered.">            if (System.getenv(propertyField.getName()) != null) {</span>
+<span class="fc" id="L103">                Object propertyValue = System.getenv(propertyField.getName());</span>
+<span class="pc bpc" id="L104" title="1 of 4 branches missed.">                if (getAtlasConversionService() != null &amp;&amp; propertyField.getFieldType() != null) {</span>
+<span class="nc" id="L105">                    propertyField.setValue(getAtlasConversionService().convertType(propertyValue,</span>
+<span class="nc" id="L106">                            null, atlasConversionService.classFromFieldType(propertyField.getFieldType()), null));</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L108">                        LOG.debug(String.format(</span>
+                                &quot;Assigned environment variable property for property field name=%s value=%s&quot;,
+<span class="nc" id="L110">                                propertyField.getName(), propertyField.getValue()));</span>
+                    }
+                } else {
+<span class="fc" id="L113">                    propertyField.setValue(propertyValue);</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L115">                        LOG.debug(String.format(</span>
+                                &quot;Assigned environment variable for property field name=%s value=%s&quot;,
+<span class="nc" id="L117">                                propertyField.getName(), propertyField.getValue()));</span>
+                    }
+                }
+<span class="fc" id="L120">                return true;</span>
+            }
+<span class="nc" id="L122">        } catch (SecurityException e) {</span>
+<span class="nc" id="L123">            LOG.error(String.format(&quot;SecurityException while processing environment variable for propertyField=%s&quot;,</span>
+<span class="nc" id="L124">                    AtlasModelFactory.toString(propertyField)), e);</span>
+<span class="fc" id="L125">        }</span>
+<span class="fc" id="L126">        return false;</span>
+    }
+
+    protected boolean processJavaSystemProperty(PropertyField propertyField)
+        throws AtlasConversionException {
+
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        if (!isSystemPropertiesEnabled()) {</span>
+<span class="fc" id="L133">            return false;</span>
+        }
+
+        try {
+<span class="fc bfc" id="L137" title="All 2 branches covered.">            if (System.getProperty(propertyField.getName()) != null) {</span>
+<span class="fc" id="L138">                Object propertyValue = System.getProperty(propertyField.getName());</span>
+<span class="pc bpc" id="L139" title="1 of 4 branches missed.">                if (getAtlasConversionService() != null &amp;&amp; propertyField.getFieldType() != null) {</span>
+<span class="nc" id="L140">                    propertyField.setValue(getAtlasConversionService().convertType(propertyValue,</span>
+<span class="nc" id="L141">                            null, atlasConversionService.classFromFieldType(propertyField.getFieldType()), null));</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L143">                        LOG.debug(String.format(</span>
+                                &quot;Assigned Java system property for property field name=%s value=%s&quot;,
+<span class="nc" id="L145">                                propertyField.getName(), propertyField.getValue()));</span>
+                    }
+                } else {
+<span class="fc" id="L148">                    propertyField.setValue(propertyValue);</span>
+<span class="pc bpc" id="L149" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L150">                        LOG.debug(String.format(</span>
+                                &quot;Assigned Java system property for property field name=%s value=%s&quot;,
+<span class="nc" id="L152">                                propertyField.getName(), propertyField.getValue()));</span>
+                    }
+                }
+<span class="fc" id="L155">                return true;</span>
+            }
+<span class="nc" id="L157">        } catch (SecurityException e) {</span>
+<span class="nc" id="L158">            LOG.error(String.format(&quot;SecurityException while processing Java system property for propertyField=%s&quot;,</span>
+<span class="nc" id="L159">                    AtlasModelFactory.toString(propertyField)), e);</span>
+<span class="fc" id="L160">        }</span>
+<span class="fc" id="L161">        return false;</span>
+    }
+
+    protected boolean processMappingDefinedProperties(PropertyField propertyField, AtlasMapping atlasMapping)
+            throws AtlasConversionException {
+
+<span class="fc bfc" id="L167" title="All 2 branches covered.">        if (!isMappingDefinedPropertiesEnabled()) {</span>
+<span class="fc" id="L168">            return false;</span>
+        }
+
+<span class="fc bfc" id="L171" title="All 4 branches covered.">        if (atlasMapping == null || atlasMapping.getProperties() == null</span>
+<span class="pc bpc" id="L172" title="1 of 2 branches missed.">                || atlasMapping.getProperties().getProperty() == null</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">                || atlasMapping.getProperties().getProperty().isEmpty()) {</span>
+<span class="fc" id="L174">            return false;</span>
+        }
+
+<span class="fc bfc" id="L177" title="All 2 branches covered.">        for (Property prop : atlasMapping.getProperties().getProperty()) {</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">            if (propertyField.getName().equals(prop.getName())) {</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">                if (getAtlasConversionService() != null</span>
+<span class="pc bpc" id="L180" title="2 of 4 branches missed.">                        &amp;&amp; (propertyField.getFieldType() != null || prop.getFieldType() != null)) {</span>
+<span class="fc" id="L181">                    propertyField.setValue(getAtlasConversionService().convertType(prop.getValue(), FieldType.STRING,</span>
+<span class="pc bpc" id="L182" title="1 of 2 branches missed.">                            (propertyField.getFieldType() != null ? propertyField.getFieldType()</span>
+<span class="fc" id="L183">                                    : prop.getFieldType())));</span>
+<span class="pc bpc" id="L184" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L185">                        LOG.debug(</span>
+<span class="nc" id="L186">                                String.format(&quot;Assigned Mapping defined property for property field name=%s value=%s&quot;,</span>
+<span class="nc" id="L187">                                        propertyField.getName(), propertyField.getValue()));</span>
+                    }
+                } else {
+<span class="fc" id="L190">                    propertyField.setValue(prop.getValue());</span>
+<span class="pc bpc" id="L191" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L192">                        LOG.debug(</span>
+<span class="nc" id="L193">                                String.format(&quot;Assigned Mapping defined property for property field name=%s value=%s&quot;,</span>
+<span class="nc" id="L194">                                        propertyField.getName(), propertyField.getValue()));</span>
+                    }
+                }
+<span class="fc" id="L197">                return true;</span>
+            }
+<span class="fc" id="L199">        }</span>
+<span class="fc" id="L200">        return false;</span>
+    }
+
+    protected boolean processRuntimeProperties(PropertyField propertyField, Map&lt;String, Object&gt; runtimeProperties)
+            throws AtlasConversionException {
+
+<span class="fc bfc" id="L206" title="All 6 branches covered.">        if (!isRuntimePropertiesEnabled() || runtimeProperties == null || runtimeProperties.isEmpty()) {</span>
+<span class="fc" id="L207">            return false;</span>
+        }
+
+<span class="fc" id="L210">        String key = propertyField.getName();</span>
+<span class="pc bpc" id="L211" title="2 of 6 branches missed.">        if (key == null || key.isEmpty() || !runtimeProperties.containsKey(key)) {</span>
+<span class="fc" id="L212">            return false;</span>
+        }
+
+<span class="pc bpc" id="L215" title="1 of 4 branches missed.">        if (getAtlasConversionService() != null &amp;&amp; propertyField.getFieldType() != null) {</span>
+<span class="nc" id="L216">            propertyField.setValue(getAtlasConversionService().convertType(runtimeProperties.get(key),</span>
+<span class="nc" id="L217">                    null, atlasConversionService.classFromFieldType(propertyField.getFieldType()), null));</span>
+<span class="nc bnc" id="L218" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L219">                LOG.debug(String.format(</span>
+                        &quot;Assigned Runtime defined property for property field name=%s value=%s&quot;,
+<span class="nc" id="L221">                        propertyField.getName(), propertyField.getValue()));</span>
+            }
+        } else {
+<span class="fc" id="L224">            propertyField.setValue(runtimeProperties.get(key));</span>
+<span class="pc bpc" id="L225" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L226">                LOG.debug(String.format(</span>
+                        &quot;Assigned Runtime defined property for property field name=%s value=%s&quot;,
+<span class="nc" id="L228">                        propertyField.getName(), propertyField.getValue()));</span>
+            }
+        }
+<span class="fc" id="L231">        return true;</span>
+    }
+
+    public void setPropertyOrderValue(List&lt;String&gt; propertyValues) {
+<span class="fc" id="L235">        List&lt;AtlasPropertyType&gt; tmp = null;</span>
+
+<span class="fc bfc" id="L237" title="All 2 branches covered.">        for (String v : propertyValues) {</span>
+<span class="fc bfc" id="L238" title="All 2 branches covered.">            if (tmp == null) {</span>
+<span class="fc" id="L239">                tmp = new LinkedList&lt;AtlasPropertyType&gt;();</span>
+            }
+
+            try {
+<span class="fc" id="L243">                tmp.add(AtlasPropertyType.fromValue(v));</span>
+<span class="fc" id="L244">            } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L245">                LOG.error(String.format(&quot;Invalid AtlasPropertyType specified '%s'&quot;, v));</span>
+<span class="fc" id="L246">            }</span>
+<span class="fc" id="L247">        }</span>
+
+<span class="fc" id="L249">        propertyOrder = null;</span>
+<span class="fc" id="L250">        propertyOrder = tmp;</span>
+<span class="fc" id="L251">    }</span>
+
+    public boolean isEnvironmentPropertiesEnabled() {
+<span class="fc" id="L254">        return environmentPropertiesEnabled;</span>
+    }
+
+    public void setEnvironmentPropertiesEnabled(boolean environmentPropertiesEnabled) {
+<span class="fc" id="L258">        this.environmentPropertiesEnabled = environmentPropertiesEnabled;</span>
+<span class="fc" id="L259">    }</span>
+
+    public boolean isSystemPropertiesEnabled() {
+<span class="fc" id="L262">        return systemPropertiesEnabled;</span>
+    }
+
+    public void setSystemPropertiesEnabled(boolean systemPropertiesEnabled) {
+<span class="fc" id="L266">        this.systemPropertiesEnabled = systemPropertiesEnabled;</span>
+<span class="fc" id="L267">    }</span>
+
+    public boolean isMappingDefinedPropertiesEnabled() {
+<span class="fc" id="L270">        return mappingDefinedPropertiesEnabled;</span>
+    }
+
+    public void setMappingDefinedPropertiesEnabled(boolean mappingDefinedPropertiesEnabled) {
+<span class="fc" id="L274">        this.mappingDefinedPropertiesEnabled = mappingDefinedPropertiesEnabled;</span>
+<span class="fc" id="L275">    }</span>
+
+    public boolean isRuntimePropertiesEnabled() {
+<span class="fc" id="L278">        return runtimePropertiesEnabled;</span>
+    }
+
+    public void setRuntimePropertiesEnabled(boolean runtimePropertiesEnabled) {
+<span class="fc" id="L282">        this.runtimePropertiesEnabled = runtimePropertiesEnabled;</span>
+<span class="fc" id="L283">    }</span>
+
+    public List&lt;AtlasPropertyType&gt; getPropertyOrder() {
+<span class="fc" id="L286">        return propertyOrder;</span>
+    }
+
+    public void setPropertyOrder(List&lt;AtlasPropertyType&gt; propertyOrder) {
+<span class="fc" id="L290">        this.propertyOrder = propertyOrder;</span>
+<span class="fc" id="L291">    }</span>
+
+    public AtlasConversionService getAtlasConversionService() {
+<span class="fc" id="L294">        return atlasConversionService;</span>
+    }
+
+    public void setAtlasConversionService(AtlasConversionService atlasConversionService) {
+<span class="fc" id="L298">        this.atlasConversionService = atlasConversionService;</span>
+<span class="fc" id="L299">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>JsonDataSource.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-json-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.json.v2</a> &gt; <span class="el_source">JsonDataSource.java</span></div><h1>JsonDataSource.java</h1><pre class="source lang-java linenums">
+package io.atlasmap.json.v2;
+
+import java.io.Serializable;
+import io.atlasmap.v2.DataSource;
+
+<span class="fc" id="L7">public class JsonDataSource extends DataSource implements Serializable {</span>
+
+    private final static long serialVersionUID = 1L;
+
+    protected String template;
+
+    /**
+     * Gets the value of the template property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getTemplate() {
+<span class="fc" id="L22">        return template;</span>
+    }
+
+    /**
+     * Sets the value of the template property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTemplate(String value) {
+<span class="fc" id="L34">        this.template = value;</span>
+<span class="fc" id="L35">    }</span>
+
+    public boolean equals(Object object) {
+<span class="nc bnc" id="L38" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L39">            return false;</span>
+        }
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L42">            return true;</span>
+        }
+<span class="nc bnc" id="L44" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
+<span class="nc" id="L45">            return false;</span>
+        }
+<span class="nc" id="L47">        final JsonDataSource that = ((JsonDataSource) object);</span>
+        {
+            String leftTemplate;
+<span class="nc" id="L50">            leftTemplate = this.getTemplate();</span>
+            String rightTemplate;
+<span class="nc" id="L52">            rightTemplate = that.getTemplate();</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">            if (this.template!= null) {</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">                if (that.template!= null) {</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">                    if (!leftTemplate.equals(rightTemplate)) {</span>
+<span class="nc" id="L56">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L59">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L62" title="All 2 branches missed.">                if (that.template!= null) {</span>
+<span class="nc" id="L63">                    return false;</span>
+                }
+            }
+        }
+<span class="nc" id="L67">        return true;</span>
+    }
+
+    public int hashCode() {
+<span class="nc" id="L71">        int currentHashCode = 1;</span>
+<span class="nc" id="L72">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
+        {
+<span class="nc" id="L74">            currentHashCode = (currentHashCode* 31);</span>
+            String theTemplate;
+<span class="nc" id="L76">            theTemplate = this.getTemplate();</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">            if (this.template!= null) {</span>
+<span class="nc" id="L78">                currentHashCode += theTemplate.hashCode();</span>
+            }
+        }
+<span class="nc" id="L81">        return currentHashCode;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

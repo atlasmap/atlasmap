@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>MultipleFieldSelectionValidator.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.core.validate</a> &gt; <span class="el_source">MultipleFieldSelectionValidator.java</span></div><h1>MultipleFieldSelectionValidator.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ * &lt;p&gt;
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * &lt;p&gt;
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * &lt;p&gt;
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.core.validate;
+
+import java.util.List;
+
+import io.atlasmap.core.AtlasPath;
+import io.atlasmap.spi.FieldDirection;
+import io.atlasmap.v2.CollectionType;
+import io.atlasmap.v2.Field;
+import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
+import io.atlasmap.v2.ValidationStatus;
+
+public class MultipleFieldSelectionValidator {
+
+    private BaseModuleValidationService&lt;?&gt; service;
+
+<span class="nc" id="L32">    public MultipleFieldSelectionValidator(BaseModuleValidationService&lt;?&gt; service) {</span>
+<span class="nc" id="L33">        this.service = service;</span>
+<span class="nc" id="L34">    }</span>
+
+    public void validate(List&lt;Validation&gt; validations, String mappingId, FieldDirection direction, List&lt;Field&gt; fields) {
+<span class="nc bnc" id="L37" title="All 2 branches missed.">        if (fields.size() &lt;= 1) {</span>
+<span class="nc" id="L38">            return;</span>
+        }
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        for (Field f : fields) {</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">            if (!service.matchDocIdOrNull(f.getDocId())) {</span>
+<span class="nc" id="L42">                continue;</span>
+            }
+<span class="nc" id="L44">            AtlasPath path = new AtlasPath(f.getPath());</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">            if (path.hasCollection()) {</span>
+<span class="nc" id="L46">                Validation validation = new Validation();</span>
+<span class="nc" id="L47">                validation.setScope(ValidationScope.MAPPING);</span>
+<span class="nc" id="L48">                validation.setId(mappingId);</span>
+<span class="nc" id="L49">                validation.setMessage(String.format(</span>
+                    &quot;A %s field contained in a collection can not be selected with other %s field: ['%s']&quot;,
+<span class="nc" id="L51">                    direction.value(), direction.value(), f.getPath()));</span>
+<span class="nc" id="L52">                validation.setStatus(ValidationStatus.ERROR);</span>
+<span class="nc" id="L53">                validations.add(validation);</span>
+            }
+<span class="nc" id="L55">        }</span>
+<span class="nc" id="L56">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>XmlDocument.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-xml-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.xml.v2</a> &gt; <span class="el_source">XmlDocument.java</span></div><h1>XmlDocument.java</h1><pre class="source lang-java linenums">
+package io.atlasmap.xml.v2;
+
+import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import io.atlasmap.v2.Document;
+
+@JsonRootName(&quot;XmlDocument&quot;)
+@JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
+<span class="fc" id="L11">public class XmlDocument extends Document implements Serializable {</span>
+
+    private final static long serialVersionUID = 1L;
+
+    protected XmlNamespaces xmlNamespaces;
+
+    /**
+     * Gets the value of the xmlNamespaces property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link XmlNamespaces }
+     *     
+     */
+    public XmlNamespaces getXmlNamespaces() {
+<span class="fc" id="L26">        return xmlNamespaces;</span>
+    }
+
+    /**
+     * Sets the value of the xmlNamespaces property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XmlNamespaces }
+     *     
+     */
+    public void setXmlNamespaces(XmlNamespaces value) {
+<span class="fc" id="L38">        this.xmlNamespaces = value;</span>
+<span class="fc" id="L39">    }</span>
+
+    public boolean equals(Object object) {
+<span class="nc bnc" id="L42" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L43">            return false;</span>
+        }
+<span class="nc bnc" id="L45" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L46">            return true;</span>
+        }
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
+<span class="nc" id="L49">            return false;</span>
+        }
+<span class="nc" id="L51">        final XmlDocument that = ((XmlDocument) object);</span>
+        {
+            XmlNamespaces leftXmlNamespaces;
+<span class="nc" id="L54">            leftXmlNamespaces = this.getXmlNamespaces();</span>
+            XmlNamespaces rightXmlNamespaces;
+<span class="nc" id="L56">            rightXmlNamespaces = that.getXmlNamespaces();</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">            if (this.xmlNamespaces!= null) {</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">                if (that.xmlNamespaces!= null) {</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">                    if (!leftXmlNamespaces.equals(rightXmlNamespaces)) {</span>
+<span class="nc" id="L60">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L63">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L66" title="All 2 branches missed.">                if (that.xmlNamespaces!= null) {</span>
+<span class="nc" id="L67">                    return false;</span>
+                }
+            }
+        }
+<span class="nc" id="L71">        return true;</span>
+    }
+
+    public int hashCode() {
+<span class="nc" id="L75">        int currentHashCode = 1;</span>
+<span class="nc" id="L76">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
+        {
+<span class="nc" id="L78">            currentHashCode = (currentHashCode* 31);</span>
+            XmlNamespaces theXmlNamespaces;
+<span class="nc" id="L80">            theXmlNamespaces = this.getXmlNamespaces();</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">            if (this.xmlNamespaces!= null) {</span>
+<span class="nc" id="L82">                currentHashCode += theXmlNamespaces.hashCode();</span>
+            }
+        }
+<span class="nc" id="L85">        return currentHashCode;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

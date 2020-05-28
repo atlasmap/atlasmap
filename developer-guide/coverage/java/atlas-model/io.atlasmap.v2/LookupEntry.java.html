@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>LookupEntry.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.v2</a> &gt; <span class="el_source">LookupEntry.java</span></div><h1>LookupEntry.java</h1><pre class="source lang-java linenums">package io.atlasmap.v2;
+
+import java.io.Serializable;
+
+<span class="fc" id="L5">public class LookupEntry implements Serializable {</span>
+
+    private final static long serialVersionUID = 1L;
+
+    protected String sourceValue;
+
+    protected FieldType sourceType;
+
+    protected String targetValue;
+
+    protected FieldType targetType;
+
+    /**
+     * Gets the value of the sourceValue property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getSourceValue() {
+<span class="fc" id="L26">        return sourceValue;</span>
+    }
+
+    /**
+     * Sets the value of the sourceValue property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setSourceValue(String value) {
+<span class="fc" id="L38">        this.sourceValue = value;</span>
+<span class="fc" id="L39">    }</span>
+
+    /**
+     * Gets the value of the sourceType property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link FieldType }
+     *     
+     */
+    public FieldType getSourceType() {
+<span class="fc" id="L50">        return sourceType;</span>
+    }
+
+    /**
+     * Sets the value of the sourceType property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link FieldType }
+     *     
+     */
+    public void setSourceType(FieldType value) {
+<span class="fc" id="L62">        this.sourceType = value;</span>
+<span class="fc" id="L63">    }</span>
+
+    /**
+     * Gets the value of the targetValue property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getTargetValue() {
+<span class="fc" id="L74">        return targetValue;</span>
+    }
+
+    /**
+     * Sets the value of the targetValue property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTargetValue(String value) {
+<span class="fc" id="L86">        this.targetValue = value;</span>
+<span class="fc" id="L87">    }</span>
+
+    /**
+     * Gets the value of the targetType property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link FieldType }
+     *     
+     */
+    public FieldType getTargetType() {
+<span class="fc" id="L98">        return targetType;</span>
+    }
+
+    /**
+     * Sets the value of the targetType property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link FieldType }
+     *     
+     */
+    public void setTargetType(FieldType value) {
+<span class="fc" id="L110">        this.targetType = value;</span>
+<span class="fc" id="L111">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

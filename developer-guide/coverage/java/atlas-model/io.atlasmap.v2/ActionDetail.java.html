@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ActionDetail.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.v2</a> &gt; <span class="el_source">ActionDetail.java</span></div><h1>ActionDetail.java</h1><pre class="source lang-java linenums">package io.atlasmap.v2;
+
+import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
+import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
+
+@JsonRootName(&quot;ActionDetail&quot;)
+<span class="fc" id="L12">public class ActionDetail implements Serializable {</span>
+
+    private final static long serialVersionUID = 1L;
+
+    protected ActionParameters parameters;
+
+    protected String name;
+
+    protected Boolean custom;
+
+    protected String className;
+
+    protected String method;
+
+    protected FieldType sourceType;
+
+    protected FieldType targetType;
+
+    protected Multiplicity multiplicity;
+
+    protected ObjectSchema actionSchema;
+
+    /**
+     * Gets the value of the parameters property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ActionParameters }
+     *     
+     */
+    public ActionParameters getParameters() {
+<span class="fc" id="L43">        return parameters;</span>
+    }
+
+    /**
+     * Sets the value of the parameters property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ActionParameters }
+     *     
+     */
+    public void setParameters(ActionParameters value) {
+<span class="fc" id="L55">        this.parameters = value;</span>
+<span class="fc" id="L56">    }</span>
+
+    /**
+     * Gets the value of the name property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getName() {
+<span class="fc" id="L67">        return name;</span>
+    }
+
+    /**
+     * Sets the value of the name property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setName(String value) {
+<span class="fc" id="L79">        this.name = value;</span>
+<span class="fc" id="L80">    }</span>
+
+    /**
+     * Gets the value of the custom property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isCustom() {
+<span class="fc" id="L91">        return custom;</span>
+    }
+
+    /**
+     * Sets the value of the custom property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setCustom(Boolean value) {
+<span class="fc" id="L103">        this.custom = value;</span>
+<span class="fc" id="L104">    }</span>
+
+    /**
+     * Gets the value of the className property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getClassName() {
+<span class="fc" id="L115">        return className;</span>
+    }
+
+    /**
+     * Sets the value of the className property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setClassName(String value) {
+<span class="fc" id="L127">        this.className = value;</span>
+<span class="fc" id="L128">    }</span>
+
+    /**
+     * Gets the value of the method property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getMethod() {
+<span class="fc" id="L139">        return method;</span>
+    }
+
+    /**
+     * Sets the value of the method property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setMethod(String value) {
+<span class="fc" id="L151">        this.method = value;</span>
+<span class="fc" id="L152">    }</span>
+
+    /**
+     * Gets the value of the sourceType property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link FieldType }
+     *     
+     */
+    public FieldType getSourceType() {
+<span class="fc" id="L163">        return sourceType;</span>
+    }
+
+    /**
+     * Sets the value of the sourceType property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link FieldType }
+     *     
+     */
+    public void setSourceType(FieldType value) {
+<span class="fc" id="L175">        this.sourceType = value;</span>
+<span class="fc" id="L176">    }</span>
+
+    /**
+     * Gets the value of the targetType property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link FieldType }
+     *     
+     */
+    public FieldType getTargetType() {
+<span class="fc" id="L187">        return targetType;</span>
+    }
+
+    /**
+     * Sets the value of the targetType property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link FieldType }
+     *     
+     */
+    public void setTargetType(FieldType value) {
+<span class="fc" id="L199">        this.targetType = value;</span>
+<span class="fc" id="L200">    }</span>
+
+    /**
+     * Gets the value of the multiplicity property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Multiplicity }
+     *     
+     */
+    public Multiplicity getMultiplicity() {
+<span class="fc" id="L211">        return multiplicity;</span>
+    }
+
+    /**
+     * Sets the value of the multiplicity property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Multiplicity }
+     *     
+     */
+    public void setMultiplicity(Multiplicity value) {
+<span class="fc" id="L223">        this.multiplicity = value;</span>
+<span class="fc" id="L224">    }</span>
+
+    public JsonSchema getActionSchema() {
+<span class="fc" id="L227">        return actionSchema;</span>
+    }
+
+    public void setActionSchema(ObjectSchema actionSchema) {
+<span class="fc" id="L231">        this.actionSchema = actionSchema;</span>
+<span class="fc" id="L232">    }</span>
+
+    public void setActionSchema(Class&lt;? extends Action&gt; clazz) throws JsonMappingException {
+
+<span class="fc bfc" id="L236" title="All 2 branches covered.">        if (clazz == null) {</span>
+<span class="fc" id="L237">            setActionSchema((ObjectSchema)null);</span>
+<span class="fc" id="L238">            return;</span>
+        }
+
+<span class="fc" id="L241">        setClassName(clazz.getName());</span>
+<span class="fc" id="L242">        ObjectMapper mapper = new ObjectMapper();</span>
+<span class="fc" id="L243">        JsonSchemaGenerator schemaGen = new JsonSchemaGenerator(mapper);</span>
+<span class="fc" id="L244">        AtlasSchemaFactoryWrapper visitor = new AtlasSchemaFactoryWrapper();</span>
+<span class="fc" id="L245">        mapper.acceptJsonFormatVisitor(clazz, visitor);</span>
+<span class="fc" id="L246">        JsonSchema schema = visitor.finalSchema();</span>
+<span class="fc" id="L247">        ObjectSchema objectSchema = schema.asObjectSchema();</span>
+
+        // see: https://json-schema.org/understanding-json-schema/reference/generic.html#constant-values
+<span class="fc" id="L250">        String id = ActionResolver.getInstance().toId(clazz);</span>
+<span class="fc" id="L251">        objectSchema.setId(id);</span>
+<span class="fc" id="L252">        AtlasSchemaFactoryWrapper.ExtendedJsonSchema keyField = (AtlasSchemaFactoryWrapper.ExtendedJsonSchema) objectSchema.getProperties().get(&quot;@type&quot;);</span>
+<span class="fc" id="L253">        keyField.getMetadata().put(&quot;const&quot;, id);</span>
+<span class="fc" id="L254">        setActionSchema(objectSchema);</span>
+<span class="fc" id="L255">    }</span>
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

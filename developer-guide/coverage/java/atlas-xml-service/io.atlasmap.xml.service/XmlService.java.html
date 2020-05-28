@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>XmlService.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-xml-service</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.xml.service</a> &gt; <span class="el_source">XmlService.java</span></div><h1>XmlService.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.xml.service;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import io.atlasmap.v2.Json;
+import io.atlasmap.xml.inspect.XmlInspectionService;
+import io.atlasmap.xml.v2.InspectionType;
+import io.atlasmap.xml.v2.XmlDocument;
+import io.atlasmap.xml.v2.XmlInspectionRequest;
+import io.atlasmap.xml.v2.XmlInspectionResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+@Path(&quot;/xml/&quot;)
+<span class="fc" id="L51">public class XmlService {</span>
+
+<span class="fc" id="L53">    private static final Logger LOG = LoggerFactory.getLogger(XmlService.class);</span>
+
+    protected byte[] toJson(Object value) {
+        try {
+<span class="fc" id="L57">            return Json.mapper().writeValueAsBytes(value);</span>
+<span class="nc" id="L58">        } catch (JsonProcessingException e) {</span>
+<span class="nc" id="L59">            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    protected &lt;T&gt; T fromJson(InputStream value, Class&lt;T&gt;clazz) {
+        try {
+<span class="nc" id="L65">            return Json.mapper().readValue(value, clazz);</span>
+<span class="nc" id="L66">        } catch (IOException e) {</span>
+<span class="nc" id="L67">            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);</span>
+        }
+    }
+
+    @GET
+    @Path(&quot;/simple&quot;)
+    @Produces(MediaType.TEXT_PLAIN)
+    @Operation(summary = &quot;Simple&quot;, description = &quot;Simple hello service&quot;)
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = String.class)), description = &quot;Return a response&quot;))
+    public String simpleHelloWorld(@QueryParam(&quot;from&quot;) String from) {
+<span class="nc" id="L77">        return &quot;Got it! &quot; + from;</span>
+    }
+
+
+    @GET
+    @Path(&quot;/inspect&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = &quot;Inspect XML via URI&quot;, description = &quot;Inspect a XML schema or instance located at specified URI and return a Document object&quot;)
+    @RequestBody(description = &quot;Inspection type, one of `instance` or `Schema`&quot;, content = @Content(schema = @Schema(implementation = InspectionType.class)))
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = XmlDocument.class)), description = &quot;Return a Document object represented by XmlDocument&quot;))
+    public Response getClass(@QueryParam(&quot;uri&quot;) String uri, @QueryParam(&quot;type&quot;) String type) {
+<span class="nc" id="L88">        XmlDocument d = null;</span>
+
+        try {
+
+<span class="nc bnc" id="L92" title="All 2 branches missed.">            if (type == null) {</span>
+<span class="nc" id="L93">                throw new Exception(&quot;uri and type parameters must be specified&quot;);</span>
+            }
+<span class="nc" id="L95">            InspectionType inspectType = InspectionType.valueOf(type);</span>
+<span class="nc" id="L96">            XmlInspectionService s = new XmlInspectionService();</span>
+
+<span class="nc bnc" id="L98" title="All 3 branches missed.">            switch (inspectType) {</span>
+            case INSTANCE:
+<span class="nc" id="L100">                d = s.inspectXmlDocument(new File(uri));</span>
+<span class="nc" id="L101">                break;</span>
+            case SCHEMA:
+<span class="nc" id="L103">                d = s.inspectSchema(new File(uri));</span>
+<span class="nc" id="L104">                break;</span>
+            default:
+<span class="nc" id="L106">                throw new Exception(&quot;Unknown type specified: &quot; + type);</span>
+            }
+<span class="nc" id="L108">        } catch (Exception e) {</span>
+<span class="nc" id="L109">            LOG.error(&quot;Error inspecting xml: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L110">        }</span>
+
+<span class="nc" id="L112">        return Response.ok().entity(toJson(d)).build();</span>
+    }
+
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON })
+    @Path(&quot;/inspect&quot;)
+    @Operation(summary = &quot;Inspect XML&quot;, description = &quot;Inspect a XML schema or instance and return a Document object&quot;)
+    @RequestBody(description = &quot;XmlInspectionRequest object&quot;, content = @Content(schema = @Schema(implementation = XmlInspectionRequest.class)))
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;,  content = @Content(schema = @Schema(implementation = XmlInspectionResponse.class)), description = &quot;Return a Document object represented by XmlDocument&quot;))
+    public Response inspectClass(InputStream request) {
+<span class="nc" id="L123">        return inspectClass(fromJson(request, XmlInspectionRequest.class));</span>
+    }
+
+    public Response inspectClass(XmlInspectionRequest request) {
+<span class="fc" id="L127">        long startTime = System.currentTimeMillis();</span>
+
+<span class="fc" id="L129">        XmlInspectionResponse response = new XmlInspectionResponse();</span>
+<span class="fc" id="L130">        XmlDocument d = null;</span>
+
+        try {
+
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">            if (request.getType() == null) {</span>
+<span class="nc" id="L135">                response.setErrorMessage(&quot;Instance or Schema type must be specified in request&quot;);</span>
+            } else {
+<span class="fc" id="L137">                XmlInspectionService s = new XmlInspectionService();</span>
+
+<span class="pc bpc" id="L139" title="2 of 3 branches missed.">                switch (request.getType()) {</span>
+                case INSTANCE:
+<span class="nc" id="L141">                    d = s.inspectXmlDocument(request.getXmlData());</span>
+<span class="nc" id="L142">                    break;</span>
+                case SCHEMA:
+<span class="fc" id="L144">                    d = s.inspectSchema(request.getXmlData());</span>
+<span class="fc" id="L145">                    break;</span>
+                default:
+<span class="nc" id="L147">                    response.setErrorMessage(&quot;Unsupported inspection type: &quot; + request.getType());</span>
+                    break;
+                }
+            }
+<span class="nc" id="L151">        } catch (Exception e) {</span>
+<span class="nc" id="L152">            LOG.error(&quot;Error inspecting xml: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L153">            response.setErrorMessage(e.getMessage());</span>
+        } finally {
+<span class="fc" id="L155">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
+        }
+
+<span class="fc" id="L158">        response.setXmlDocument(d);</span>
+<span class="fc" id="L159">        return Response.ok().entity(toJson(response)).build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

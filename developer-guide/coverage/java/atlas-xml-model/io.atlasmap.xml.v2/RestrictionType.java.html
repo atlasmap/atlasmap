@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>RestrictionType.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-xml-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.xml.v2</a> &gt; <span class="el_source">RestrictionType.java</span></div><h1>RestrictionType.java</h1><pre class="source lang-java linenums">package io.atlasmap.xml.v2;
+
+<span class="fc" id="L3">public enum RestrictionType {</span>
+
+<span class="fc" id="L5">    ALL(&quot;All&quot;),</span>
+<span class="fc" id="L6">    ENUMERATION(&quot;enumeration&quot;),</span>
+<span class="fc" id="L7">    FRACTION_DIGITS(&quot;fractionDigits&quot;),</span>
+<span class="fc" id="L8">    LENGTH(&quot;length&quot;),</span>
+<span class="fc" id="L9">    MAX_EXCLUSIVE(&quot;maxExclusive&quot;),</span>
+<span class="fc" id="L10">    MAX_INCLUSIVE(&quot;maxInclusive&quot;),</span>
+<span class="fc" id="L11">    MAX_LENGTH(&quot;maxLength&quot;),</span>
+<span class="fc" id="L12">    MIN_EXCLUSIVE(&quot;minExclusive&quot;),</span>
+<span class="fc" id="L13">    MIN_INCLUSIVE(&quot;minInclusive&quot;),</span>
+<span class="fc" id="L14">    MIN_LENGTH(&quot;minLength&quot;),</span>
+<span class="fc" id="L15">    PATTERN(&quot;pattern&quot;),</span>
+<span class="fc" id="L16">    TOTAL_DIGITS(&quot;totalDigits&quot;),</span>
+<span class="fc" id="L17">    WHITE_SPACE(&quot;whiteSpace&quot;),</span>
+<span class="fc" id="L18">    NONE(&quot;None&quot;);</span>
+
+    private final String value;
+
+<span class="fc" id="L22">    RestrictionType(String v) {</span>
+<span class="fc" id="L23">        value = v;</span>
+<span class="fc" id="L24">    }</span>
+
+    public String value() {
+<span class="fc" id="L27">        return value;</span>
+    }
+
+    public static RestrictionType fromValue(String v) {
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        for (RestrictionType c: RestrictionType.values()) {</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">            if (c.value.equals(v)) {</span>
+<span class="fc" id="L33">                return c;</span>
+            }
+        }
+<span class="nc" id="L36">        throw new IllegalArgumentException(v);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

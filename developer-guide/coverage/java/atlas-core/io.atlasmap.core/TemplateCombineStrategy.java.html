@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>TemplateCombineStrategy.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.core</a> &gt; <span class="el_source">TemplateCombineStrategy.java</span></div><h1>TemplateCombineStrategy.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.core;
+
+import java.text.MessageFormat;
+import java.text.StringCharacterIterator;
+import java.util.Map;
+
+/**
+ * A template-based combine strategy that uses a template in place of a delimiter to combine the input using
+ * {@link MessageFormat#format(String, Object...)}.
+ * &lt;p&gt;
+ * &lt;strong&gt;Warning:&lt;/strong&gt; The indexes in the template must be one-based, unlike the
+ * {@link MessageFormat#format(String, Object...)} method, which expects zero-based indexes.
+ * &lt;/p&gt;
+ */
+<span class="fc" id="L30">public class TemplateCombineStrategy extends DefaultAtlasCombineStrategy {</span>
+
+    @Override
+    public String combineValues(Map&lt;Integer, String&gt; values, String template) {
+<span class="pc bpc" id="L34" title="2 of 4 branches missed.">        if (values == null || values.isEmpty()) {</span>
+<span class="nc" id="L35">            return null;</span>
+        }
+
+        // Default to default combine with default delimiter if template is missing
+<span class="pc bpc" id="L39" title="2 of 4 branches missed.">        if (template == null || template.isEmpty()) {</span>
+<span class="nc" id="L40">            return combineValues(values);</span>
+        }
+
+<span class="fc" id="L43">        StringBuilder templateBuilder = new StringBuilder();</span>
+
+        // Convert indexes in template to zero-based (since specified by user as one-based)
+<span class="fc" id="L46">        StringCharacterIterator iter = new StringCharacterIterator(template);</span>
+<span class="fc" id="L47">        boolean escaped = false;</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        for (char chr = iter.first(); chr != StringCharacterIterator.DONE; chr = iter.next()) {</span>
+<span class="fc" id="L49">            templateBuilder.append(chr);</span>
+<span class="pc bpc" id="L50" title="3 of 4 branches missed.">            if (chr == '\'' &amp;&amp; !escaped) {</span>
+<span class="nc" id="L51">                escaped = true;</span>
+            } else {
+<span class="pc bpc" id="L53" title="1 of 4 branches missed.">                if (chr == '{' &amp;&amp; !escaped) {</span>
+<span class="fc" id="L54">                    StringBuilder indexBuilder = new StringBuilder();</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">                    for (chr = iter.next(); Character.isDigit(chr); chr = iter.next()) {</span>
+<span class="fc" id="L56">                        indexBuilder.append(chr);</span>
+                    }
+<span class="fc" id="L58">                    templateBuilder.append(Integer.valueOf(indexBuilder.toString()) - 1);</span>
+<span class="fc" id="L59">                    templateBuilder.append(chr);</span>
+                }
+<span class="fc" id="L61">                escaped = false;</span>
+            }
+        }
+
+<span class="fc" id="L65">        values = DefaultAtlasCombineStrategy.sortByKey(values);</span>
+<span class="fc" id="L66">        return MessageFormat.format(templateBuilder.toString(), values.values().toArray());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

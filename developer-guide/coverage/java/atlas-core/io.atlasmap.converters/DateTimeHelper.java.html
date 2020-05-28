@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DateTimeHelper.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.converters</a> &gt; <span class="el_source">DateTimeHelper.java</span></div><h1>DateTimeHelper.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ * &lt;p&gt;
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * &lt;p&gt;
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * &lt;p&gt;
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.converters;
+
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+<span class="nc" id="L28">public class DateTimeHelper {</span>
+
+    public static GregorianCalendar convertDateToGregorianCalendar(Date date, String timeZone) {
+<span class="fc" id="L31">        return GregorianCalendar.from(DateTimeHelper.toZonedDateTime(date, timeZone));</span>
+    }
+
+    public static Date convertSqlDateToDate(java.sql.Date date, String timeZone) {
+<span class="fc" id="L35">        return Date.from(date.toLocalDate().atStartOfDay(zoneId(timeZone)).toInstant());</span>
+    }
+
+    public static java.sql.Date convertDateToSqlDate(Date date, String timeZone) {
+<span class="fc" id="L39">        return java.sql.Date.valueOf(DateTimeHelper.convertDateToLocalDate(date, timeZone));</span>
+    }
+
+    public static Date convertSqlTimeToDate(Time time, String timeZone) {
+<span class="fc" id="L43">        return DateTimeHelper.convertLocalTimeToDate(time.toLocalTime(), timeZone); // ?</span>
+    }
+
+    public static LocalDate convertDateToLocalDate(Date date, String timeZone) {
+<span class="fc" id="L47">        return LocalDateTime.ofInstant(date.toInstant(), zoneId(timeZone)).toLocalDate();</span>
+    }
+
+    public static Date convertLocalTimeToDate(LocalTime localTime, String timeZone) {
+<span class="fc" id="L51">        return Date.from(localTime.atDate(LocalDate.now()).atZone(zoneId(timeZone)).toInstant());</span>
+    }
+
+    public static LocalTime convertDateToLocalTime(Date date, String timeZone) {
+<span class="fc" id="L55">        return LocalDateTime.ofInstant(date.toInstant(), zoneId(timeZone)).toLocalTime();</span>
+    }
+
+    public static Date convertLocalDateTimeToDate(LocalDateTime localDateTime, String timeZone) {
+<span class="fc" id="L59">        return Date.from(localDateTime.atZone(zoneId(timeZone)).toInstant());</span>
+    }
+
+    public static LocalDateTime convertDateToLocalDateTime(Date date, String timeZone) {
+<span class="fc" id="L63">        return LocalDateTime.ofInstant(date.toInstant(), zoneId(timeZone));</span>
+    }
+
+    public static Time convertDateToTime(Date date, String timeZone) {
+<span class="fc" id="L67">        return Time.valueOf(LocalDateTime.ofInstant(date.toInstant(), zoneId(timeZone)).toLocalTime());</span>
+    }
+
+    public static ZonedDateTime toZonedDateTime(Calendar calendar) {
+<span class="fc" id="L71">        return ZonedDateTime.ofInstant(calendar.toInstant(), calendar.getTimeZone().toZoneId());</span>
+    }
+
+    public static ZonedDateTime toZonedDateTime(Date date, String timeZone) {
+<span class="fc" id="L75">        return ZonedDateTime.ofInstant(date.toInstant(), zoneId(timeZone));</span>
+    }
+
+    public static ZonedDateTime toZonedDateTime(LocalDate date, String timeZone) {
+<span class="nc" id="L79">        return date.atStartOfDay(zoneId(timeZone));</span>
+    }
+
+    public static ZonedDateTime toZonedDateTime(LocalTime time, String timeZone) {
+<span class="nc" id="L83">        return toZonedDateTime(time.atDate(LocalDate.now()), timeZone);</span>
+    }
+
+    public static ZonedDateTime toZonedDateTime(LocalDateTime date, String timeZone) {
+<span class="nc" id="L87">        return date.atZone(zoneId(timeZone));</span>
+    }
+
+    private static ZoneId zoneId(String timeZone) {
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        return timeZone != null ? ZoneId.of(timeZone) : ZoneId.systemDefault();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

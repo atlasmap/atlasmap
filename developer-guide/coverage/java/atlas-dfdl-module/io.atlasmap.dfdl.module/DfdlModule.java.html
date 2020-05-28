@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DfdlModule.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-dfdl-module</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.dfdl.module</a> &gt; <span class="el_source">DfdlModule.java</span></div><h1>DfdlModule.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.dfdl.module;
+
+import java.io.ByteArrayOutputStream;
+import java.net.URI;
+import java.nio.channels.Channels;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.daffodil.japi.Daffodil;
+import org.apache.daffodil.japi.DataProcessor;
+import org.apache.daffodil.japi.Diagnostic;
+import org.apache.daffodil.japi.ParseResult;
+import org.apache.daffodil.japi.ProcessorFactory;
+import org.apache.daffodil.japi.UnparseResult;
+import org.apache.daffodil.japi.infoset.W3CDOMInfosetInputter;
+import org.apache.daffodil.japi.infoset.W3CDOMInfosetOutputter;
+import org.apache.daffodil.japi.io.InputSourceDataInputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.dfdl.core.DfdlConstants;
+import io.atlasmap.dfdl.core.DfdlSchemaResolver;
+import io.atlasmap.spi.AtlasModuleDetail;
+import io.atlasmap.xml.module.XmlModule;
+
+@AtlasModuleDetail(name = &quot;DfdlModule&quot;, uri = &quot;atlas:dfdl&quot;, modes = { &quot;SOURCE&quot;, &quot;TARGET&quot; }, dataFormats = {
+        &quot;dfdl&quot; }, configPackages = { &quot;io.atlasmap.dfdl.v2&quot; })
+<span class="fc" id="L46">public class DfdlModule extends XmlModule {</span>
+<span class="fc" id="L47">    private static final Logger LOG = LoggerFactory.getLogger(DfdlModule.class);</span>
+
+    private DfdlSchemaResolver schemaResolver;
+    private DataProcessor daffodil;
+
+    @Override
+    public void init() throws AtlasException {
+<span class="fc" id="L54">        super.init();</span>
+<span class="fc" id="L55">        this.schemaResolver = new DfdlSchemaResolver(getClassLoader());</span>
+<span class="fc" id="L56">        String type = getUriDataType();</span>
+
+        // FIXME temporary hack until we get a room for carrying DFDL options in catalog file
+        // https://github.com/atlasmap/atlasmap/issues/1476
+<span class="fc" id="L60">        Map&lt;String, String&gt; options = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        for (Entry&lt;String, String&gt; e : getUriParameters().entrySet()) {</span>
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">            if (e.getKey().startsWith(DfdlConstants.OPTION_PREFIX)) {</span>
+<span class="fc" id="L63">                options.put(e.getKey(), e.getValue());</span>
+            }
+<span class="fc" id="L65">        }</span>
+
+        try {
+<span class="fc" id="L68">            URI dfdl = this.schemaResolver.resolve(type, options);</span>
+<span class="fc" id="L69">            org.apache.daffodil.japi.Compiler compiler = Daffodil.compiler();</span>
+<span class="fc" id="L70">            ProcessorFactory factory = compiler.compileSource(dfdl);</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">            if (factory.isError()) {</span>
+<span class="nc" id="L72">                StringBuffer buf = new StringBuffer(&quot;Faield ti initialize DFDL module: [&quot;);</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">                for (Diagnostic d : factory.getDiagnostics()) {</span>
+<span class="nc" id="L74">                    buf.append(d.getMessage()).append(&quot;; &quot;);</span>
+<span class="nc" id="L75">                }</span>
+<span class="nc" id="L76">                buf.append(&quot;]&quot;);</span>
+<span class="nc" id="L77">                throw new AtlasException(buf.toString());</span>
+            }
+<span class="fc" id="L79">            this.daffodil = factory.onPath(&quot;/&quot;);</span>
+<span class="nc" id="L80">        } catch (Exception e) {</span>
+<span class="nc" id="L81">            throw new AtlasException(&quot;Failed to initialize DFDL module:&quot;, e);</span>
+<span class="fc" id="L82">        }</span>
+<span class="fc" id="L83">    }</span>
+
+    @Override
+    protected DfdlValidationService createValidationService() {
+<span class="fc" id="L87">        DfdlValidationService dfdlValidationService = new DfdlValidationService(getConversionService(), getFieldActionService());</span>
+<span class="fc" id="L88">        dfdlValidationService.setMode(getMode());</span>
+<span class="fc" id="L89">        dfdlValidationService.setDocId(getDocId());</span>
+<span class="fc" id="L90">        return dfdlValidationService;</span>
+    }
+
+    @Override
+    protected Document convertToXmlDocument(String source, boolean namespaced) throws AtlasException {
+<span class="fc" id="L95">        W3CDOMInfosetOutputter output = new W3CDOMInfosetOutputter();</span>
+<span class="fc" id="L96">        ParseResult result = this.daffodil.parse(new InputSourceDataInputStream(source.getBytes()), output);</span>
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">        if (result.isError()) {</span>
+<span class="nc" id="L98">            StringBuffer buf = new StringBuffer(&quot;DFDL document read error&quot;);</span>
+<span class="nc" id="L99">            result.getDiagnostics().forEach(d -&gt; {</span>
+<span class="nc" id="L100">                buf.append(&quot;; &quot;).append(d.getMessage());</span>
+<span class="nc" id="L101">            });</span>
+<span class="nc" id="L102">            throw new AtlasException(buf.toString());</span>
+        }
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        if (LOG.isTraceEnabled()) {</span>
+            try {
+<span class="nc" id="L106">                LOG.trace(&quot;DFDL: converted to XML &gt;&gt;&gt; &quot; + getXmlIOHelper().writeDocumentToString(false, output.getResult()));</span>
+<span class="nc" id="L107">            } catch (Exception e) {}</span>
+        }
+<span class="fc" id="L109">        return output.getResult();</span>
+    }
+
+    @Override
+    protected String convertFromXmlDocument(Document xml) throws AtlasException {
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">        if (LOG.isTraceEnabled()) {</span>
+            try {
+<span class="nc" id="L116">                LOG.trace(&quot;DFDL: converting from XML &gt;&gt;&gt; &quot; + getXmlIOHelper().writeDocumentToString(false, xml));</span>
+<span class="nc" id="L117">            } catch (Exception e) {}</span>
+        }
+<span class="fc" id="L119">        W3CDOMInfosetInputter input = new W3CDOMInfosetInputter(xml);</span>
+<span class="fc" id="L120">        ByteArrayOutputStream bos = new ByteArrayOutputStream();</span>
+<span class="fc" id="L121">        UnparseResult result = this.daffodil.unparse(input, Channels.newChannel(bos));</span>
+<span class="pc bpc" id="L122" title="1 of 2 branches missed.">        if (result.isError()) {</span>
+<span class="nc" id="L123">            StringBuffer buf = new StringBuffer(&quot;DFDL document read error&quot;);</span>
+<span class="nc" id="L124">            result.getDiagnostics().forEach(d -&gt; {</span>
+<span class="nc" id="L125">                buf.append(&quot;; &quot;).append(d.getMessage());</span>
+<span class="nc" id="L126">            });</span>
+<span class="nc" id="L127">            throw new AtlasException(buf.toString());</span>
+        }
+<span class="fc" id="L129">        return new String(bos.toByteArray());</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

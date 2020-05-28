@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>AtlasRewritingXSVisitor.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-xml-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.xml.core.schema</a> &gt; <span class="el_source">AtlasRewritingXSVisitor.java</span></div><h1>AtlasRewritingXSVisitor.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2020 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.xml.core.schema;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.xml.XMLConstants;
+
+import com.sun.xml.xsom.*;
+import com.sun.xml.xsom.visitor.XSVisitor;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+/**
+ * Rewrite XML document instance to conform XML schema as a XSOM {@link XSVisitor}.
+ */
+public class AtlasRewritingXSVisitor implements XSVisitor {
+    private final Node source;
+    private final Node target;
+
+<span class="fc" id="L39">    public AtlasRewritingXSVisitor(Node source, Node target) {</span>
+<span class="fc" id="L40">        this.source = source;</span>
+<span class="fc" id="L41">        this.target = target;</span>
+<span class="fc" id="L42">    }</span>
+
+    @Override
+    public void attributeUse(XSAttributeUse use) {
+<span class="nc" id="L46">        attributeDecl(use.getDecl());</span>
+<span class="nc" id="L47">    }</span>
+
+    @Override
+    public void modelGroupDecl(XSModelGroupDecl decl) {
+<span class="nc" id="L51">        modelGroup(decl.getModelGroup());</span>
+<span class="nc" id="L52">    }</span>
+
+    @Override
+    public void modelGroup(XSModelGroup model) {
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        for (XSParticle term : model.getChildren()) {</span>
+<span class="fc" id="L57">            term.visit(this);</span>
+        }
+<span class="fc" id="L59">    }</span>
+
+    @Override
+    public void particle(XSParticle particle) {
+<span class="fc" id="L63">        XSTerm term = particle.getTerm();</span>
+<span class="fc" id="L64">        term.visit(this);</span>
+<span class="fc" id="L65">    }</span>
+
+    @Override
+    public void complexType(XSComplexType complex) {
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        for (XSAttributeUse use : complex.getAttributeUses()) {</span>
+<span class="nc" id="L70">            attributeUse(use);</span>
+<span class="nc" id="L71">        }</span>
+
+<span class="fc" id="L73">        XSContentType contentType = complex.getContentType();</span>
+<span class="fc" id="L74">        contentType.visit(this);</span>
+<span class="fc" id="L75">    }</span>
+
+    @Override
+    public void elementDecl(XSElementDecl decl) {
+<span class="fc" id="L79">        String namespaceUri = decl.getTargetNamespace();</span>
+<span class="fc" id="L80">        String localName = decl.getName();</span>
+
+        try {
+<span class="fc bfc" id="L83" title="All 2 branches covered.">            for (Element child : getChildElements(source, namespaceUri, localName)) {</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">                Document targetDoc = (target instanceof Document ? (Document)target : target.getOwnerDocument());</span>
+                Element targetChild;
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">                if (namespaceUri == null) {</span>
+<span class="nc" id="L87">                    targetChild = targetDoc.createElement(localName);</span>
+                } else {
+<span class="fc" id="L89">                    targetChild = targetDoc.createElementNS(namespaceUri, localName);</span>
+                }
+<span class="fc" id="L91">                target.appendChild(targetChild);</span>
+
+<span class="fc" id="L93">                XSType type = decl.getType();</span>
+<span class="fc" id="L94">                type.visit(new AtlasRewritingXSVisitor(child, targetChild));</span>
+<span class="fc" id="L95">            }</span>
+<span class="nc" id="L96">        } catch (Exception e) {</span>
+<span class="nc" id="L97">            throw new RuntimeException(e);</span>
+<span class="fc" id="L98">        }</span>
+<span class="fc" id="L99">    }</span>
+
+    @Override
+    public void attributeDecl(XSAttributeDecl decl) {
+<span class="nc" id="L103">        String namespaceUri = decl.getTargetNamespace();</span>
+<span class="nc" id="L104">        String localName = decl.getName();</span>
+
+<span class="nc" id="L106">        String attribute = getAttribute(source, namespaceUri, localName);</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">        if (attribute != null) {</span>
+            try {
+<span class="nc bnc" id="L109" title="All 4 branches missed.">                if (namespaceUri == null || XMLConstants.NULL_NS_URI.equals(namespaceUri)) {</span>
+<span class="nc" id="L110">                    ((Element)target).setAttribute(localName, attribute);</span>
+                } else {
+<span class="nc" id="L112">                    ((Element)target).setAttributeNS(namespaceUri, localName, attribute);</span>
+                }
+<span class="nc" id="L114">            } catch (Exception e) {</span>
+<span class="nc" id="L115">                throw new RuntimeException(e);</span>
+<span class="nc" id="L116">            }</span>
+        }
+<span class="nc" id="L118">    }</span>
+
+    @Override
+    public void simpleType(XSSimpleType simpleType) {
+<span class="fc" id="L122">        String value = source.getTextContent();</span>
+<span class="pc bpc" id="L123" title="1 of 2 branches missed.">        if (value != null) {</span>
+            try {
+<span class="fc" id="L125">                target.setTextContent(value);</span>
+<span class="nc" id="L126">            } catch (Exception e) {</span>
+<span class="nc" id="L127">                throw new RuntimeException(e);</span>
+<span class="fc" id="L128">            }</span>
+        }
+<span class="fc" id="L130">    }</span>
+
+    @Override
+    public void empty(XSContentType empty) {
+<span class="nc" id="L134">    }</span>
+
+    @Override
+    public void facet(XSFacet facet) {
+<span class="nc" id="L138">    }</span>
+
+    @Override
+    public void annotation(XSAnnotation ann) {
+<span class="nc" id="L142">    }</span>
+
+    @Override
+    public void schema(XSSchema schema) {
+<span class="nc" id="L146">    }</span>
+
+    @Override
+    public void notation(XSNotation notation) {
+<span class="nc" id="L150">    }</span>
+
+    @Override
+    public void identityConstraint(XSIdentityConstraint decl) {
+<span class="nc" id="L154">    }</span>
+
+    @Override
+    public void xpath(XSXPath xp) {
+<span class="nc" id="L158">    }</span>
+
+    @Override
+    public void wildcard(XSWildcard wc) {
+<span class="nc" id="L162">    }</span>
+
+    @Override
+    public void attGroupDecl(XSAttGroupDecl decl) {
+<span class="nc" id="L166">    }</span>
+
+    private List&lt;Element&gt; getChildElements(Node node, String namespaceUri, String localName) {
+<span class="fc" id="L169">        List&lt;Element&gt; answer = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L170">        NodeList nodeList = node.getChildNodes();</span>
+<span class="fc bfc" id="L171" title="All 2 branches covered.">        for (int i = 0; i &lt; nodeList.getLength(); i++) {</span>
+<span class="fc" id="L172">            Node n = nodeList.item(i);</span>
+<span class="pc bpc" id="L173" title="1 of 2 branches missed.">            if (n.getNodeType() != Node.ELEMENT_NODE) {</span>
+<span class="nc" id="L174">                continue;</span>
+            }
+<span class="fc" id="L176">            Element e = (Element)n;</span>
+<span class="pc bpc" id="L177" title="1 of 4 branches missed.">            if ((namespaceUri == null || XMLConstants.NULL_NS_URI.equals(namespaceUri))</span>
+<span class="pc bpc" id="L178" title="3 of 4 branches missed.">              &amp;&amp; (e.getNamespaceURI() == null || XMLConstants.NULL_NS_URI.equals(e.getNamespaceURI()))) {</span>
+<span class="pc bpc" id="L179" title="1 of 4 branches missed.">                  if (localName != null &amp;&amp; localName.equals((e.getTagName()))) {</span>
+<span class="fc" id="L180">                      answer.add(e);</span>
+                  }
+<span class="pc bpc" id="L182" title="3 of 6 branches missed.">            } else if (namespaceUri != null &amp;&amp; namespaceUri.equals(e.getNamespaceURI())</span>
+<span class="pc bpc" id="L183" title="1 of 2 branches missed.">             &amp;&amp; localName != null &amp;&amp; localName.equals(e.getLocalName())) {</span>
+<span class="fc" id="L184">                 answer.add(e);</span>
+             }
+        }
+<span class="fc" id="L187">        return answer;</span>
+    }
+
+    private String getAttribute(Node node, String namespaceUri, String localName) {
+<span class="nc bnc" id="L191" title="All 2 branches missed.">        if (namespaceUri == null) {</span>
+<span class="nc" id="L192">            namespaceUri = XMLConstants.NULL_NS_URI;</span>
+        }
+<span class="nc" id="L194">        NamedNodeMap attrMap = node.getAttributes();</span>
+<span class="nc bnc" id="L195" title="All 2 branches missed.">        if (attrMap == null) {</span>
+<span class="nc" id="L196">            return null;</span>
+        }
+<span class="nc" id="L198">        Node attr = attrMap.getNamedItemNS(namespaceUri, localName);</span>
+<span class="nc bnc" id="L199" title="All 2 branches missed.">        return attr != null ? attr.getNodeValue() : null;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

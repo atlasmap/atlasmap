@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DefaultAtlasSeparateStrategy.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.core</a> &gt; <span class="el_source">DefaultAtlasSeparateStrategy.java</span></div><h1>DefaultAtlasSeparateStrategy.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.core;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import io.atlasmap.spi.AtlasSeparateStrategy;
+import io.atlasmap.spi.StringDelimiter;
+
+<span class="fc" id="L25">public class DefaultAtlasSeparateStrategy implements AtlasSeparateStrategy {</span>
+
+<span class="fc" id="L27">    public static final Integer DEFAULT_SEPARATE_LIMIT = new Integer(512);</span>
+<span class="fc" id="L28">    public static final StringDelimiter DEFAULT_SEPARATE_DELIMITER = StringDelimiter.MULTI_SPACE;</span>
+
+<span class="fc" id="L30">    private StringDelimiter delimiter = DEFAULT_SEPARATE_DELIMITER;</span>
+<span class="fc" id="L31">    private Integer limit = DEFAULT_SEPARATE_LIMIT;</span>
+
+    @Override
+    public StringDelimiter getDelimiter() {
+<span class="fc" id="L35">        return delimiter;</span>
+    }
+
+    @Override
+    public void setDelimiter(StringDelimiter delimiter) {
+<span class="fc" id="L40">        this.delimiter = delimiter;</span>
+<span class="fc" id="L41">    }</span>
+
+    @Override
+    public Integer getLimit() {
+<span class="fc" id="L45">        return limit;</span>
+    }
+
+    @Override
+    public void setLimit(Integer limit) {
+<span class="fc" id="L50">        this.limit = limit;</span>
+<span class="fc" id="L51">    }</span>
+
+    @Override
+    public List&lt;String&gt; separateValue(String value) {
+<span class="fc" id="L55">        return separateValue(value, getDelimiter(), getLimit());</span>
+    }
+
+    @Override
+    public List&lt;String&gt; separateValue(String value, StringDelimiter delimiter) {
+<span class="fc" id="L60">        return separateValue(value, delimiter, getLimit());</span>
+    }
+
+    @Override
+    public List&lt;String&gt; separateValue(String value, StringDelimiter delimiter, Integer limit) {
+<span class="fc" id="L65">        List&lt;String&gt; values = new ArrayList&lt;String&gt;();</span>
+<span class="fc bfc" id="L66" title="All 4 branches covered.">        if (value == null || value.isEmpty()) {</span>
+<span class="fc" id="L67">            return values;</span>
+        }
+
+<span class="fc bfc" id="L70" title="All 4 branches covered.">        values.addAll(Arrays.asList(value.split((delimiter == null ? DEFAULT_SEPARATE_DELIMITER.getRegex() : delimiter.getRegex()),</span>
+<span class="fc" id="L71">                (limit == null ? DEFAULT_SEPARATE_LIMIT : limit))));</span>
+<span class="fc" id="L72">        return values;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

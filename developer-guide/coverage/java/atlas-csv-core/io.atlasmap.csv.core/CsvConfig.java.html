@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>CsvConfig.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-csv-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.csv.core</a> &gt; <span class="el_source">CsvConfig.java</span></div><h1>CsvConfig.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.csv.core;
+
+import org.apache.commons.csv.CSVFormat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Map;
+
+
+public class CsvConfig {
+<span class="fc" id="L26">    private static final Logger LOG = LoggerFactory.getLogger(CsvConfig.class);</span>
+
+    private String format;
+    private Character delimiter;
+    private boolean firstRecordAsHeader;
+    private String headers;
+    private Character commentMarker;
+    private Character escape;
+    private Boolean ignoreEmptyLines;
+    private Boolean ignoreHeaderCase;
+    private Boolean ignoreSurroundingSpaces;
+    private String nullString;
+    private Character quote;
+    private Boolean allowDuplicateHeaderNames;
+    private Boolean allowMissingColumnNames;
+
+    public CsvConfig() {
+<span class="fc" id="L43">        this(null);</span>
+<span class="fc" id="L44">    }</span>
+
+<span class="fc" id="L46">    public CsvConfig(String format) {</span>
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">        if (format == null) {</span>
+<span class="fc" id="L48">            this.format = &quot;Default&quot;;</span>
+        } else {
+<span class="nc" id="L50">            this.format = format;</span>
+        }
+<span class="fc" id="L52">        this.delimiter = CSVFormat.valueOf(this.format).getDelimiter();</span>
+<span class="fc" id="L53">    }</span>
+
+    public static CsvConfig newConfig(Map&lt;String, String&gt; config) {
+<span class="fc" id="L56">        CsvConfig csvConfig = new CsvConfig(config.get(&quot;format&quot;));</span>
+<span class="fc" id="L57">        String delimiter = config.get(&quot;delimiter&quot;);</span>
+
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        for (Map.Entry&lt;String, String&gt; entry: config.entrySet()) {</span>
+<span class="pc bpc" id="L60" title="12 of 13 branches missed.">            switch (entry.getKey()) {</span>
+                case &quot;delimiter&quot;:
+<span class="nc" id="L62">                    csvConfig.delimiter = delimiter.charAt(0);</span>
+<span class="nc" id="L63">                    break;</span>
+                case &quot;firstRecordAsHeader&quot;:
+<span class="pc bpc" id="L65" title="2 of 4 branches missed.">                    csvConfig.firstRecordAsHeader = entry.getValue() == null || Boolean.valueOf(entry.getValue());</span>
+<span class="fc" id="L66">                    break;</span>
+                case &quot;commentMarker&quot;:
+<span class="nc" id="L68">                    csvConfig.commentMarker = entry.getValue().charAt(0);</span>
+<span class="nc" id="L69">                    break;</span>
+                case &quot;headers&quot;:
+<span class="nc" id="L71">                    csvConfig.headers = entry.getValue();</span>
+<span class="nc" id="L72">                    break;</span>
+                case &quot;escape&quot;:
+<span class="nc" id="L74">                    csvConfig.escape = entry.getValue().charAt(0);</span>
+<span class="nc" id="L75">                    break;</span>
+                case &quot;ignoreEmptyLines&quot;:
+<span class="nc bnc" id="L77" title="All 4 branches missed.">                    csvConfig.ignoreEmptyLines = entry.getValue() == null || Boolean.valueOf(entry.getValue());</span>
+<span class="nc" id="L78">                    break;</span>
+                case &quot;ignoreHeaderCase&quot;:
+<span class="nc bnc" id="L80" title="All 4 branches missed.">                    csvConfig.ignoreHeaderCase = entry.getValue() == null || Boolean.valueOf(entry.getValue());</span>
+<span class="nc" id="L81">                    break;</span>
+                case &quot;ignoreSurroundingSpaces&quot;:
+<span class="nc bnc" id="L83" title="All 4 branches missed.">                    csvConfig.ignoreSurroundingSpaces = entry.getValue() == null || Boolean.valueOf(entry.getValue());</span>
+<span class="nc" id="L84">                    break;</span>
+                case &quot;nullString&quot;:
+<span class="nc" id="L86">                    csvConfig.nullString = entry.getValue();</span>
+<span class="nc" id="L87">                    break;</span>
+                case &quot;quote&quot;:
+<span class="nc" id="L89">                    csvConfig.quote = entry.getValue().charAt(0);</span>
+<span class="nc" id="L90">                    break;</span>
+                case &quot;allowDuplicateHeaderNames&quot;:
+<span class="nc bnc" id="L92" title="All 4 branches missed.">                    csvConfig.allowDuplicateHeaderNames = entry.getValue() == null || Boolean.valueOf(entry.getValue());</span>
+<span class="nc" id="L93">                    break;</span>
+                case &quot;allowMissingColumnNames&quot;:
+<span class="nc bnc" id="L95" title="All 4 branches missed.">                    csvConfig.allowMissingColumnNames = entry.getValue() == null || Boolean.valueOf(entry.getValue());</span>
+                    break;
+            }
+<span class="fc" id="L98">        }</span>
+<span class="fc" id="L99">        return csvConfig;</span>
+    }
+
+    CSVFormat newCsvFormat() {
+        CSVFormat csvFormat;
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        csvFormat = (format != null) ? CSVFormat.valueOf(format) : CSVFormat.DEFAULT;</span>
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        csvFormat = (delimiter != null) ? csvFormat.withDelimiter(delimiter) : csvFormat;</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        csvFormat = firstRecordAsHeader ? csvFormat.withFirstRecordAsHeader() : csvFormat;</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">        csvFormat = (headers != null) ? csvFormat.withHeader(getParsedHeaders()) : csvFormat;</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        csvFormat = (commentMarker != null) ? csvFormat.withCommentMarker(commentMarker): csvFormat;</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">        csvFormat = (escape != null) ? csvFormat.withEscape(escape): csvFormat;</span>
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">        csvFormat = (ignoreEmptyLines != null) ? csvFormat.withIgnoreEmptyLines(ignoreEmptyLines): csvFormat;</span>
+<span class="pc bpc" id="L111" title="1 of 2 branches missed.">        csvFormat = (ignoreHeaderCase != null) ? csvFormat.withIgnoreHeaderCase(ignoreHeaderCase): csvFormat;</span>
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">        csvFormat = (ignoreSurroundingSpaces != null) ? csvFormat.withIgnoreSurroundingSpaces(ignoreSurroundingSpaces): csvFormat;</span>
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">        csvFormat = (nullString != null) ? csvFormat.withNullString(nullString): csvFormat;</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">        csvFormat = (quote != null) ? csvFormat.withQuote(quote): csvFormat;</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        csvFormat = (allowDuplicateHeaderNames != null) ? csvFormat.withAllowDuplicateHeaderNames(allowDuplicateHeaderNames): csvFormat;</span>
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">        csvFormat = (allowMissingColumnNames != null) ? csvFormat.withAllowMissingColumnNames(allowMissingColumnNames): csvFormat;</span>
+<span class="fc" id="L117">        return csvFormat;</span>
+    }
+
+    public String getFormat() {
+<span class="nc" id="L121">        return format;</span>
+    }
+
+    public void setDelimiter(Character delimiter) {
+<span class="fc" id="L125">        this.delimiter = delimiter;</span>
+<span class="fc" id="L126">    }</span>
+
+    public char getDelimiter() {
+<span class="nc" id="L129">        return delimiter;</span>
+    }
+
+    public void setFirstRecordAsHeader(boolean firstRecordAsHeader) {
+<span class="fc" id="L133">        this.firstRecordAsHeader = firstRecordAsHeader;</span>
+<span class="fc" id="L134">    }</span>
+
+    public boolean isFirstRecordAsHeader() {
+<span class="fc" id="L137">        return firstRecordAsHeader;</span>
+    }
+
+    public void setHeaders(String headers) {
+<span class="fc" id="L141">        this.headers = headers;</span>
+<span class="fc" id="L142">    }</span>
+
+    public String getHeaders() {
+<span class="nc" id="L145">        return headers;</span>
+    }
+
+    public String[] getParsedHeaders() {
+<span class="fc" id="L149">        return headers.split(delimiter.toString());</span>
+    }
+
+    public void setCommentMarker(Character commentMarker) {
+<span class="nc" id="L153">        this.commentMarker = commentMarker;</span>
+<span class="nc" id="L154">    }</span>
+
+    public Character getCommentMarker() {
+<span class="nc" id="L157">        return commentMarker;</span>
+    }
+
+    public Character getEscape() {
+<span class="nc" id="L161">        return escape;</span>
+    }
+
+    public void setEscape(Character escape) {
+<span class="nc" id="L165">        this.escape = escape;</span>
+<span class="nc" id="L166">    }</span>
+
+    public Boolean getIgnoreEmptyLines() {
+<span class="nc" id="L169">        return ignoreEmptyLines;</span>
+    }
+
+    public void setIgnoreEmptyLines(Boolean ignoreEmptyLines) {
+<span class="fc" id="L173">        this.ignoreEmptyLines = ignoreEmptyLines;</span>
+<span class="fc" id="L174">    }</span>
+
+    public Boolean getIgnoreHeaderCase() {
+<span class="nc" id="L177">        return ignoreHeaderCase;</span>
+    }
+
+    public void setIgnoreHeaderCase(Boolean ignoreHeaderCase) {
+<span class="fc" id="L181">        this.ignoreHeaderCase = ignoreHeaderCase;</span>
+<span class="fc" id="L182">    }</span>
+
+    public Boolean getIgnoreSurroundingSpaces() {
+<span class="nc" id="L185">        return ignoreSurroundingSpaces;</span>
+    }
+
+    public void setIgnoreSurroundingSpaces(Boolean ignoreSurroundingSpaces) {
+<span class="fc" id="L189">        this.ignoreSurroundingSpaces = ignoreSurroundingSpaces;</span>
+<span class="fc" id="L190">    }</span>
+
+    public String getNullString() {
+<span class="nc" id="L193">        return nullString;</span>
+    }
+
+    public void setNullString(String nullString) {
+<span class="fc" id="L197">        this.nullString = nullString;</span>
+<span class="fc" id="L198">    }</span>
+
+    public Character getQuote() {
+<span class="nc" id="L201">        return quote;</span>
+    }
+
+    public void setQuote(Character quote) {
+<span class="nc" id="L205">        this.quote = quote;</span>
+<span class="nc" id="L206">    }</span>
+
+    public Boolean getAllowDuplicateHeaderNames() {
+<span class="nc" id="L209">        return allowDuplicateHeaderNames;</span>
+    }
+
+    public void setAllowDuplicateHeaderNames(Boolean allowDuplicateHeaderNames) {
+<span class="fc" id="L213">        this.allowDuplicateHeaderNames = allowDuplicateHeaderNames;</span>
+<span class="fc" id="L214">    }</span>
+
+    public Boolean getAllowMissingColumnNames() {
+<span class="nc" id="L217">        return allowMissingColumnNames;</span>
+    }
+
+    public void setAllowMissingColumnNames(Boolean allowMissingColumnNames) {
+<span class="fc" id="L221">        this.allowMissingColumnNames = allowMissingColumnNames;</span>
+<span class="fc" id="L222">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

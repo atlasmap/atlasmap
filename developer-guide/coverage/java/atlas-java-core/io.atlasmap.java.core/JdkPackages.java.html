@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>JdkPackages.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-java-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.java.core</a> &gt; <span class="el_source">JdkPackages.java</span></div><h1>JdkPackages.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.java.core;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+<span class="nc" id="L22">public class JdkPackages {</span>
+
+<span class="fc" id="L24">    private static final List&lt;String&gt; JDK8_PACKAGES = Arrays.asList(&quot;java.applet&quot;, &quot;java.awt&quot;, &quot;java.awt.color&quot;,</span>
+            &quot;java.awt.datatransfer&quot;, &quot;java.awt.dnd&quot;, &quot;java.awt.event&quot;, &quot;java.awt.font&quot;, &quot;java.awt.geom&quot;, &quot;java.awt.im&quot;,
+            &quot;java.awt.im.spi&quot;, &quot;java.awt.image&quot;, &quot;java.awt.image.renderable&quot;, &quot;java.awt.print&quot;, &quot;java.beans&quot;,
+            &quot;java.beans.beancontext&quot;, &quot;java.io&quot;, &quot;java.lang&quot;, &quot;java.lang.annotation&quot;, &quot;java.lang.instrument&quot;,
+            &quot;java.lang.invoke&quot;, &quot;java.lang.management&quot;, &quot;java.lang.ref&quot;, &quot;java.lang.reflect&quot;, &quot;java.math&quot;, &quot;java.net&quot;,
+            &quot;java.nio&quot;, &quot;java.nio.channels&quot;, &quot;java.nio.channels.spi&quot;, &quot;java.nio.charset&quot;, &quot;java.nio.charset.spi&quot;,
+            &quot;java.nio.file&quot;, &quot;java.nio.file.attribute&quot;, &quot;java.nio.file.spi&quot;, &quot;java.rmi&quot;, &quot;java.rmi.activation&quot;,
+            &quot;java.rmi.dgc&quot;, &quot;java.rmi.registry&quot;, &quot;java.rmi.server&quot;, &quot;java.security&quot;, &quot;java.security.acl&quot;,
+            &quot;java.security.cert&quot;, &quot;java.security.interfaces&quot;, &quot;java.security.spec&quot;, &quot;java.sql&quot;, &quot;java.text&quot;,
+            &quot;java.text.spi&quot;, &quot;java.time&quot;, &quot;java.time.chrono&quot;, &quot;java.time.format&quot;, &quot;java.time.temporal&quot;,
+            &quot;java.time.zone&quot;, &quot;java.util&quot;, &quot;java.util.concurrent&quot;, &quot;java.util.concurrent.atomic&quot;,
+            &quot;java.util.concurrent.locks&quot;, &quot;java.util.function&quot;, &quot;java.util.jar&quot;, &quot;java.util.logging&quot;, &quot;java.util.prefs&quot;,
+            &quot;java.util.regex&quot;, &quot;java.util.spi&quot;, &quot;java.util.stream&quot;, &quot;java.util.zip&quot;, &quot;javax.accessibility&quot;,
+            &quot;javax.activation&quot;, &quot;javax.activity&quot;, &quot;javax.annotation&quot;, &quot;javax.annotation.processing&quot;, &quot;javax.crypto&quot;,
+            &quot;javax.crypto.interfaces&quot;, &quot;javax.crypto.spec&quot;, &quot;javax.imageio&quot;, &quot;javax.imageio.event&quot;,
+            &quot;javax.imageio.metadata&quot;, &quot;javax.imageio.plugins.bmp&quot;, &quot;javax.imageio.plugins.jpeg&quot;, &quot;javax.imageio.spi&quot;,
+            &quot;javax.imageio.stream&quot;, &quot;javax.jws&quot;, &quot;javax.jws.soap&quot;, &quot;javax.lang.model&quot;, &quot;javax.lang.model.element&quot;,
+            &quot;javax.lang.model.type&quot;, &quot;javax.lang.model.util&quot;, &quot;javax.management&quot;, &quot;javax.management.loading&quot;,
+            &quot;javax.management.modelmbean&quot;, &quot;javax.management.monitor&quot;, &quot;javax.management.openmbean&quot;,
+            &quot;javax.management.relation&quot;, &quot;javax.management.remote&quot;, &quot;javax.management.remote.rmi&quot;,
+            &quot;javax.management.timer&quot;, &quot;javax.naming&quot;, &quot;javax.naming.directory&quot;, &quot;javax.naming.event&quot;,
+            &quot;javax.naming.ldap&quot;, &quot;javax.naming.spi&quot;, &quot;javax.net&quot;, &quot;javax.net.ssl&quot;, &quot;javax.print&quot;,
+            &quot;javax.print.attribute&quot;, &quot;javax.print.attribute.standard&quot;, &quot;javax.print.event&quot;, &quot;javax.rmi&quot;,
+            &quot;javax.rmi.CORBA&quot;, &quot;javax.rmi.ssl&quot;, &quot;javax.script&quot;, &quot;javax.security.auth&quot;, &quot;javax.security.auth.callback&quot;,
+            &quot;javax.security.auth.kerberos&quot;, &quot;javax.security.auth.login&quot;, &quot;javax.security.auth.spi&quot;,
+            &quot;javax.security.auth.x500&quot;, &quot;javax.security.cert&quot;, &quot;javax.security.sasl&quot;, &quot;javax.sound.midi&quot;,
+            &quot;javax.sound.midi.spi&quot;, &quot;javax.sound.sampled&quot;, &quot;javax.sound.sampled.spi&quot;, &quot;javax.sql&quot;, &quot;javax.sql.rowset&quot;,
+            &quot;javax.sql.rowset.serial&quot;, &quot;javax.sql.rowset.spi&quot;, &quot;javax.swing&quot;, &quot;javax.swing.border&quot;,
+            &quot;javax.swing.colorchooser&quot;, &quot;javax.swing.event&quot;, &quot;javax.swing.filechooser&quot;, &quot;javax.swing.plaf&quot;,
+            &quot;javax.swing.plaf.basic&quot;, &quot;javax.swing.plaf.metal&quot;, &quot;javax.swing.plaf.multi&quot;, &quot;javax.swing.plaf.nimbus&quot;,
+            &quot;javax.swing.plaf.synth&quot;, &quot;javax.swing.table&quot;, &quot;javax.swing.text&quot;, &quot;javax.swing.text.html&quot;,
+            &quot;javax.swing.text.html.parser&quot;, &quot;javax.swing.text.rtf&quot;, &quot;javax.swing.tree&quot;, &quot;javax.swing.undo&quot;,
+            &quot;javax.tools&quot;, &quot;javax.transaction&quot;, &quot;javax.transaction.xa&quot;, &quot;javax.xml&quot;, &quot;javax.xml.bind&quot;,
+            &quot;javax.xml.bind.annotation&quot;, &quot;javax.xml.bind.annotation.adapters&quot;, &quot;javax.xml.bind.attachment&quot;,
+            &quot;javax.xml.bind.helpers&quot;, &quot;javax.xml.bind.util&quot;, &quot;javax.xml.crypto&quot;, &quot;javax.xml.crypto.dom&quot;,
+            &quot;javax.xml.crypto.dsig&quot;, &quot;javax.xml.crypto.dsig.dom&quot;, &quot;javax.xml.crypto.dsig.keyinfo&quot;,
+            &quot;javax.xml.crypto.dsig.spec&quot;, &quot;javax.xml.datatype&quot;, &quot;javax.xml.namespace&quot;, &quot;javax.xml.parsers&quot;,
+            &quot;javax.xml.soap&quot;, &quot;javax.xml.stream&quot;, &quot;javax.xml.stream.events&quot;, &quot;javax.xml.stream.util&quot;,
+            &quot;javax.xml.transform&quot;, &quot;javax.xml.transform.dom&quot;, &quot;javax.xml.transform.sax&quot;, &quot;javax.xml.transform.stax&quot;,
+            &quot;javax.xml.transform.stream&quot;, &quot;javax.xml.validation&quot;, &quot;javax.xml.ws&quot;, &quot;javax.xml.ws.handler&quot;,
+            &quot;javax.xml.ws.handler.soap&quot;, &quot;javax.xml.ws.http&quot;, &quot;javax.xml.ws.soap&quot;, &quot;javax.xml.ws.spi&quot;,
+            &quot;javax.xml.ws.spi.http&quot;, &quot;javax.xml.ws.wsaddressing&quot;, &quot;javax.xml.xpath&quot;, &quot;org.ietf.jgss&quot;, &quot;org.omg.CORBA&quot;,
+            &quot;org.omg.CORBA.DynAnyPackage&quot;, &quot;org.omg.CORBA.ORBPackage&quot;, &quot;org.omg.CORBA.TypeCodePackage&quot;,
+            &quot;org.omg.CORBA.portable&quot;, &quot;org.omg.CORBA_2_3&quot;, &quot;org.omg.CORBA_2_3.portable&quot;, &quot;org.omg.CosNaming&quot;,
+            &quot;org.omg.CosNaming.NamingContextExtPackage&quot;, &quot;org.omg.CosNaming.NamingContextPackage&quot;, &quot;org.omg.Dynamic&quot;,
+            &quot;org.omg.DynamicAny&quot;, &quot;org.omg.DynamicAny.DynAnyFactoryPackage&quot;, &quot;org.omg.DynamicAny.DynAnyPackage&quot;,
+            &quot;org.omg.IOP&quot;, &quot;org.omg.IOP.CodecFactoryPackage&quot;, &quot;org.omg.IOP.CodecPackage&quot;, &quot;org.omg.Messaging&quot;,
+            &quot;org.omg.PortableInterceptor&quot;, &quot;org.omg.PortableInterceptor.ORBInitInfoPackage&quot;, &quot;org.omg.PortableServer&quot;,
+            &quot;org.omg.PortableServer.CurrentPackage&quot;, &quot;org.omg.PortableServer.POAManagerPackage&quot;,
+            &quot;org.omg.PortableServer.POAPackage&quot;, &quot;org.omg.PortableServer.ServantLocatorPackage&quot;,
+            &quot;org.omg.PortableServer.portable&quot;, &quot;org.omg.SendingContext&quot;, &quot;org.omg.stub.java.rmi&quot;, &quot;org.w3c.dom&quot;,
+            &quot;org.w3c.dom.bootstrap&quot;, &quot;org.w3c.dom.events&quot;, &quot;org.w3c.dom.ls&quot;, &quot;org.w3c.dom.views&quot;, &quot;org.xml.sax&quot;,
+            &quot;org.xml.sax.ext&quot;, &quot;org.xml.sax.helpers&quot;);
+
+<span class="fc" id="L78">    private static final List&lt;String&gt; VENDOR_PACKAGES = Arrays.asList(&quot;sun&quot;);</span>
+
+    public static Boolean contains(String packageName) {
+<span class="pc bpc" id="L81" title="2 of 4 branches missed.">        if (packageName == null || packageName.length() &lt; 1) {</span>
+<span class="nc" id="L82">            return false;</span>
+        }
+
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        if (getJdkPackageList().contains(packageName)) {</span>
+<span class="fc" id="L86">            return true;</span>
+        }
+
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        for (String vpkg : VENDOR_PACKAGES) {</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">            if (packageName.startsWith(vpkg)) {</span>
+<span class="nc" id="L91">                return true;</span>
+            }
+<span class="fc" id="L93">        }</span>
+<span class="fc" id="L94">        return false;</span>
+    }
+
+    public static List&lt;String&gt; getJdkPackageList() {
+<span class="fc" id="L98">        return getJdkPackageList(getRuntimeVersion());</span>
+    }
+
+    public static List&lt;String&gt; getJdkPackageList(String version) {
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        if (version == null) {</span>
+<span class="nc" id="L103">            return new ArrayList&lt;String&gt;();</span>
+        }
+
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">        switch (version) {</span>
+        case &quot;1.8&quot;:
+<span class="fc" id="L108">            return JDK8_PACKAGES;</span>
+        default:
+<span class="nc" id="L110">            return new ArrayList&lt;String&gt;();</span>
+        }
+    }
+
+    private static String getRuntimeVersion() {
+<span class="fc" id="L115">        return System.getProperty(&quot;java.specification.version&quot;);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>XmlNamespace.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-xml-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.xml.v2</a> &gt; <span class="el_source">XmlNamespace.java</span></div><h1>XmlNamespace.java</h1><pre class="source lang-java linenums">package io.atlasmap.xml.v2;
+
+import java.io.Serializable;
+
+<span class="fc" id="L5">public class XmlNamespace implements Serializable {</span>
+
+    private final static long serialVersionUID = 1L;
+
+    protected String alias;
+
+    protected String uri;
+
+    protected String locationUri;
+
+    protected Boolean targetNamespace;
+
+    /**
+     * Gets the value of the alias property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getAlias() {
+<span class="fc" id="L26">        return alias;</span>
+    }
+
+    /**
+     * Sets the value of the alias property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setAlias(String value) {
+<span class="fc" id="L38">        this.alias = value;</span>
+<span class="fc" id="L39">    }</span>
+
+    /**
+     * Gets the value of the uri property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getUri() {
+<span class="fc" id="L50">        return uri;</span>
+    }
+
+    /**
+     * Sets the value of the uri property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setUri(String value) {
+<span class="fc" id="L62">        this.uri = value;</span>
+<span class="fc" id="L63">    }</span>
+
+    /**
+     * Gets the value of the locationUri property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getLocationUri() {
+<span class="fc" id="L74">        return locationUri;</span>
+    }
+
+    /**
+     * Sets the value of the locationUri property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setLocationUri(String value) {
+<span class="fc" id="L86">        this.locationUri = value;</span>
+<span class="fc" id="L87">    }</span>
+
+    /**
+     * Gets the value of the targetNamespace property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isTargetNamespace() {
+<span class="fc" id="L98">        return targetNamespace;</span>
+    }
+
+    /**
+     * Sets the value of the targetNamespace property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setTargetNamespace(Boolean value) {
+<span class="fc" id="L110">        this.targetNamespace = value;</span>
+<span class="fc" id="L111">    }</span>
+
+    public boolean equals(Object object) {
+<span class="pc bpc" id="L114" title="2 of 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L115">            return false;</span>
+        }
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L118">            return true;</span>
+        }
+<span class="fc" id="L120">        final XmlNamespace that = ((XmlNamespace) object);</span>
+        {
+            String leftAlias;
+<span class="fc" id="L123">            leftAlias = this.getAlias();</span>
+            String rightAlias;
+<span class="fc" id="L125">            rightAlias = that.getAlias();</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">            if (this.alias!= null) {</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">                if (that.alias!= null) {</span>
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">                    if (!leftAlias.equals(rightAlias)) {</span>
+<span class="nc" id="L129">                        return false;</span>
+                    }
+                } else {
+<span class="fc" id="L132">                    return false;</span>
+                }
+            } else {
+<span class="pc bpc" id="L135" title="1 of 2 branches missed.">                if (that.alias!= null) {</span>
+<span class="nc" id="L136">                    return false;</span>
+                }
+            }
+        }
+        {
+            String leftUri;
+<span class="fc" id="L142">            leftUri = this.getUri();</span>
+            String rightUri;
+<span class="fc" id="L144">            rightUri = that.getUri();</span>
+<span class="pc bpc" id="L145" title="1 of 2 branches missed.">            if (this.uri!= null) {</span>
+<span class="pc bpc" id="L146" title="1 of 2 branches missed.">                if (that.uri!= null) {</span>
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">                    if (!leftUri.equals(rightUri)) {</span>
+<span class="nc" id="L148">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L151">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L154" title="All 2 branches missed.">                if (that.uri!= null) {</span>
+<span class="nc" id="L155">                    return false;</span>
+                }
+            }
+        }
+        {
+            String leftLocationUri;
+<span class="fc" id="L161">            leftLocationUri = this.getLocationUri();</span>
+            String rightLocationUri;
+<span class="fc" id="L163">            rightLocationUri = that.getLocationUri();</span>
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">            if (this.locationUri!= null) {</span>
+<span class="nc bnc" id="L165" title="All 2 branches missed.">                if (that.locationUri!= null) {</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">                    if (!leftLocationUri.equals(rightLocationUri)) {</span>
+<span class="nc" id="L167">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L170">                    return false;</span>
+                }
+            } else {
+<span class="pc bpc" id="L173" title="1 of 2 branches missed.">                if (that.locationUri!= null) {</span>
+<span class="nc" id="L174">                    return false;</span>
+                }
+            }
+        }
+        {
+            Boolean leftTargetNamespace;
+<span class="fc" id="L180">            leftTargetNamespace = this.isTargetNamespace();</span>
+            Boolean rightTargetNamespace;
+<span class="fc" id="L182">            rightTargetNamespace = that.isTargetNamespace();</span>
+<span class="pc bpc" id="L183" title="1 of 2 branches missed.">            if (this.targetNamespace!= null) {</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">                if (that.targetNamespace!= null) {</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">                    if (!leftTargetNamespace.equals(rightTargetNamespace)) {</span>
+<span class="nc" id="L186">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L189">                    return false;</span>
+                }
+            } else {
+<span class="pc bpc" id="L192" title="1 of 2 branches missed.">                if (that.targetNamespace!= null) {</span>
+<span class="nc" id="L193">                    return false;</span>
+                }
+            }
+        }
+<span class="fc" id="L197">        return true;</span>
+    }
+
+    public int hashCode() {
+<span class="nc" id="L201">        int currentHashCode = 1;</span>
+        {
+<span class="nc" id="L203">            currentHashCode = (currentHashCode* 31);</span>
+            String theAlias;
+<span class="nc" id="L205">            theAlias = this.getAlias();</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">            if (this.alias!= null) {</span>
+<span class="nc" id="L207">                currentHashCode += theAlias.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L211">            currentHashCode = (currentHashCode* 31);</span>
+            String theUri;
+<span class="nc" id="L213">            theUri = this.getUri();</span>
+<span class="nc bnc" id="L214" title="All 2 branches missed.">            if (this.uri!= null) {</span>
+<span class="nc" id="L215">                currentHashCode += theUri.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L219">            currentHashCode = (currentHashCode* 31);</span>
+            String theLocationUri;
+<span class="nc" id="L221">            theLocationUri = this.getLocationUri();</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">            if (this.locationUri!= null) {</span>
+<span class="nc" id="L223">                currentHashCode += theLocationUri.hashCode();</span>
+            }
+        }
+        {
+<span class="nc" id="L227">            currentHashCode = (currentHashCode* 31);</span>
+            Boolean theTargetNamespace;
+<span class="nc" id="L229">            theTargetNamespace = this.isTargetNamespace();</span>
+<span class="nc bnc" id="L230" title="All 2 branches missed.">            if (this.targetNamespace!= null) {</span>
+<span class="nc" id="L231">                currentHashCode += theTargetNamespace.hashCode();</span>
+            }
+        }
+<span class="nc" id="L234">        return currentHashCode;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

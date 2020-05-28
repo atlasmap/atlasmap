@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>XmlInstanceInspector.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-xml-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.xml.inspect</a> &gt; <span class="el_source">XmlInstanceInspector.java</span></div><h1>XmlInstanceInspector.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.xml.inspect;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.xml.XMLConstants;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import io.atlasmap.v2.CollectionType;
+import io.atlasmap.v2.FieldStatus;
+import io.atlasmap.v2.FieldType;
+import io.atlasmap.v2.Fields;
+import io.atlasmap.xml.core.XmlComplexTypeFactory;
+import io.atlasmap.xml.core.XmlPath;
+import io.atlasmap.xml.v2.AtlasXmlModelFactory;
+import io.atlasmap.xml.v2.XmlComplexType;
+import io.atlasmap.xml.v2.XmlDocument;
+import io.atlasmap.xml.v2.XmlField;
+import io.atlasmap.xml.v2.XmlFields;
+import io.atlasmap.xml.v2.XmlNamespace;
+import io.atlasmap.xml.v2.XmlNamespaces;
+
+<span class="fc" id="L46">public class XmlInstanceInspector {</span>
+
+<span class="fc" id="L48">    private static final Logger LOG = LoggerFactory.getLogger(XmlInstanceInspector.class);</span>
+<span class="fc" id="L49">    private XmlDocument xmlDocument = AtlasXmlModelFactory.createXmlDocument();</span>
+
+    public void inspect(Document document) {
+<span class="fc" id="L52">        xmlDocument.setFields(new Fields());</span>
+<span class="fc" id="L53">        parseDocument(document.getDocumentElement());</span>
+<span class="fc" id="L54">    }</span>
+
+    public XmlDocument getXmlDocument() {
+<span class="fc" id="L57">        return xmlDocument;</span>
+    }
+
+    private void parseDocument(Node rootNode) {
+<span class="pc bpc" id="L61" title="2 of 4 branches missed.">        if (rootNode.getParentNode() == null || rootNode.getParentNode().getNodeType() != Node.DOCUMENT_NODE) {</span>
+<span class="nc" id="L62">            return;</span>
+        }
+
+<span class="fc" id="L65">        XmlComplexType rootComplexType = createXmlComplexType(rootNode, null);</span>
+<span class="fc" id="L66">        xmlDocument.getFields().getField().add(rootComplexType);</span>
+<span class="fc" id="L67">        mapAttributes(rootNode, rootComplexType);</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        if (rootNode.hasChildNodes()) {</span>
+<span class="fc" id="L69">            mapChildNodes(rootNode.getChildNodes(), rootComplexType);</span>
+        }
+<span class="fc" id="L71">    }</span>
+
+    private void mapChildNodes(NodeList nodes, XmlComplexType rootComplexType) {
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        for (int i = 0; i &lt; nodes.getLength(); i++) {</span>
+<span class="fc" id="L75">            Node childNode = nodes.item(i);</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">            if (!Arrays.asList(new Short[]{Node.ELEMENT_NODE, Node.ATTRIBUTE_NODE}).contains(childNode.getNodeType())) {</span>
+<span class="fc" id="L77">                continue;</span>
+            }
+<span class="fc bfc" id="L79" title="All 2 branches covered.">            if (childNode.hasAttributes()) {</span>
+<span class="fc" id="L80">                mapAttributes(childNode, rootComplexType);</span>
+            }
+<span class="fc bfc" id="L82" title="All 2 branches covered.">            if (((Element) childNode).getElementsByTagName(&quot;*&quot;).getLength() &gt; 0) {</span>
+<span class="fc" id="L83">                mapParentNode(childNode, rootComplexType);</span>
+            } else {
+<span class="fc" id="L85">                mapNodeToXmlField(childNode, rootComplexType);</span>
+            }
+<span class="fc bfc" id="L87" title="All 2 branches covered.">            if (childNode.getNamespaceURI() != null) {</span>
+<span class="fc" id="L88">                mapNamespace(childNode);</span>
+            }
+        }
+<span class="fc" id="L91">    }</span>
+
+    private void mapNamespace(Node node) {
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        if (xmlDocument.getXmlNamespaces() == null) {</span>
+<span class="fc" id="L95">            XmlNamespaces namespaces = new XmlNamespaces();</span>
+<span class="fc" id="L96">            xmlDocument.setXmlNamespaces(namespaces);</span>
+        }
+<span class="fc" id="L98">        XmlNamespace namespace = new XmlNamespace();</span>
+<span class="fc" id="L99">        namespace.setAlias(node.getPrefix());</span>
+<span class="fc" id="L100">        namespace.setUri(node.getNamespaceURI());</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        if (!xmlDocument.getXmlNamespaces().getXmlNamespace().contains(namespace)) {</span>
+<span class="fc" id="L102">            xmlDocument.getXmlNamespaces().getXmlNamespace().add(namespace);</span>
+        }
+<span class="fc" id="L104">    }</span>
+
+    private void mapParentNode(Node node, XmlComplexType parent) {
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        if (!node.hasChildNodes()) {</span>
+<span class="nc" id="L108">            return;</span>
+        }
+<span class="fc" id="L110">        NodeList childNodes = node.getChildNodes();</span>
+<span class="fc" id="L111">        XmlComplexType childParent = null;</span>
+<span class="fc" id="L112">        XmlField[] existing = parent.getXmlFields().getXmlField().stream().filter(f -&gt;</span>
+<span class="pc bpc" id="L113" title="1 of 4 branches missed.">            f.getName().equals(node.getNodeName()) &amp;&amp; f.getFieldType() == FieldType.COMPLEX).toArray(XmlField[]::new);</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (existing.length &gt; 0) {</span>
+<span class="fc" id="L115">            childParent = (XmlComplexType) existing[0];</span>
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">            if (existing.length &gt; 1) {</span>
+<span class="nc" id="L117">                LOG.warn(&quot;Ignoring duplicate complex field '{}'&quot;, childParent.getPath());</span>
+            }
+<span class="fc" id="L119">            updateCollectionType(node.getParentNode(), childParent);</span>
+        } else {
+<span class="fc" id="L121">            childParent = createXmlComplexType(node, parent);</span>
+<span class="fc" id="L122">            parent.getXmlFields().getXmlField().add(childParent);</span>
+        }
+
+<span class="fc bfc" id="L125" title="All 2 branches covered.">        if (node.hasAttributes()) {</span>
+<span class="fc" id="L126">            mapAttributes(node, childParent);</span>
+        }
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        for (int i = 0; i &lt; childNodes.getLength(); i++) {</span>
+<span class="fc" id="L129">            Node e = childNodes.item(i);</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">            if (e.getNodeType() != Node.ELEMENT_NODE) {</span>
+<span class="fc" id="L131">                continue;</span>
+            }
+            // do we have child elements?
+<span class="fc" id="L134">            NodeList childElements = ((Element) e).getElementsByTagName(&quot;*&quot;);</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">            if (childElements.getLength() &gt; 0) {</span>
+<span class="fc" id="L136">                mapParentNode(e, childParent);</span>
+            } else {
+<span class="fc" id="L138">                mapNodeToXmlField(e, childParent);</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">                if (e.hasAttributes()) {</span>
+<span class="fc" id="L140">                    mapAttributes(e, childParent);</span>
+                }
+            }
+        }
+<span class="fc" id="L144">    }</span>
+
+    private void mapAttributes(Node node, XmlComplexType xmlComplexType) {
+<span class="fc" id="L147">        NamedNodeMap attrs = node.getAttributes();</span>
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">        if (attrs == null) {</span>
+<span class="nc" id="L149">            return;</span>
+        }
+<span class="fc bfc" id="L151" title="All 2 branches covered.">        for (int i = 0; i &lt; attrs.getLength(); i++) {</span>
+<span class="fc" id="L152">            Node attrNode = attrs.item(i);</span>
+            // don't map default namespace attribute ...
+<span class="fc bfc" id="L154" title="All 2 branches covered.">            if (attrNode.getNamespaceURI() != null</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">                    &amp;&amp; attrNode.getNamespaceURI().equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {</span>
+<span class="fc" id="L156">                continue;</span>
+<span class="fc bfc" id="L157" title="All 2 branches covered.">            } else if (attrNode.getNamespaceURI() != null</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">                    &amp;&amp; attrNode.getNamespaceURI().equals(XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI)) {</span>
+<span class="fc" id="L159">                mapNamespace(attrNode);</span>
+<span class="fc" id="L160">                xmlComplexType.setTypeName(attrNode.getTextContent());</span>
+<span class="fc" id="L161">                continue;</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">            } else if (attrNode.getNamespaceURI() != null) {</span>
+<span class="fc" id="L163">                mapNamespace(attrNode);</span>
+            }
+<span class="fc" id="L165">            mapNodeToXmlField(attrNode, xmlComplexType);</span>
+        }
+<span class="fc" id="L167">    }</span>
+
+    private void mapNodeToXmlField(Node node, XmlComplexType parentComplexType) {
+<span class="fc" id="L170">        XmlField xmlField = null;</span>
+<span class="fc bfc" id="L171" title="All 2 branches covered.">        if (node.getNodeType() == Node.ATTRIBUTE_NODE) {</span>
+<span class="fc" id="L172">            XmlField[] existing = parentComplexType.getXmlFields().getXmlField().stream().filter(f -&gt;</span>
+<span class="pc bpc" id="L173" title="1 of 4 branches missed.">                f.getName().equals(node.getNodeName()) &amp;&amp; f.isAttribute()).toArray(XmlField[]::new);</span>
+<span class="fc bfc" id="L174" title="All 2 branches covered.">            if (existing.length &gt; 0) {</span>
+<span class="fc" id="L175">                xmlField = existing[0];</span>
+<span class="pc bpc" id="L176" title="1 of 2 branches missed.">                if (existing.length &gt; 1) {</span>
+<span class="nc" id="L177">                    LOG.error(&quot;Ignoring duplicated attribute '{}'&quot;, xmlField.getPath());</span>
+                }
+            }
+<span class="fc" id="L180">        } else {</span>
+<span class="fc" id="L181">            XmlField[] existing = parentComplexType.getXmlFields().getXmlField().stream().filter(f -&gt;</span>
+<span class="pc bpc" id="L182" title="1 of 4 branches missed.">                f.getName().equals(node.getNodeName()) &amp;&amp; !f.isAttribute()).toArray(XmlField[]::new);</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">            if (existing.length &gt; 0) {</span>
+<span class="fc" id="L184">                xmlField = existing[0];</span>
+<span class="pc bpc" id="L185" title="1 of 2 branches missed.">                if (existing.length &gt; 1) {</span>
+<span class="nc" id="L186">                    LOG.warn(&quot;Ignoring duplicated element '{}'&quot;, xmlField.getPath());</span>
+                }
+            }
+        }
+<span class="fc bfc" id="L190" title="All 2 branches covered.">        if (xmlField == null) {</span>
+<span class="fc" id="L191">            xmlField = AtlasXmlModelFactory.createXmlField();</span>
+<span class="fc" id="L192">            xmlField.setValue(node.getTextContent());</span>
+<span class="fc" id="L193">            xmlField.setFieldType(FieldType.STRING);</span>
+<span class="fc" id="L194">            xmlField.setName(node.getNodeName());</span>
+<span class="fc" id="L195">            xmlField.setStatus(FieldStatus.SUPPORTED);</span>
+<span class="fc bfc" id="L196" title="All 2 branches covered.">            xmlField.setAttribute(node.getNodeType() == Node.ATTRIBUTE_NODE);</span>
+<span class="fc" id="L197">            parentComplexType.getXmlFields().getXmlField().add(xmlField);</span>
+<span class="fc" id="L198">            StringBuffer fieldPath = new StringBuffer();</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">            if (node.getNodeType() == Node.ATTRIBUTE_NODE) {</span>
+<span class="fc" id="L200">                fieldPath.append(XmlPath.PATH_ATTRIBUTE_PREFIX);</span>
+            }
+<span class="fc" id="L202">            fieldPath.append(node.getNodeName());</span>
+<span class="fc" id="L203">            XmlPath path = new XmlPath(parentComplexType.getPath());</span>
+<span class="fc" id="L204">            path.appendField(fieldPath.toString());</span>
+<span class="fc" id="L205">            xmlField.setPath(path.toString());</span>
+        }
+<span class="fc bfc" id="L207" title="All 2 branches covered.">        if (node.getNodeType() == Node.ELEMENT_NODE) {</span>
+<span class="fc" id="L208">            updateCollectionType(node.getParentNode(), xmlField);</span>
+        }
+<span class="fc" id="L210">    }</span>
+
+    private XmlComplexType createXmlComplexType(Node childNode, XmlComplexType parentField) {
+<span class="fc" id="L213">        XmlComplexType childComplexType = XmlComplexTypeFactory.createXmlComlexField();</span>
+<span class="fc" id="L214">        childComplexType.setXmlFields(new XmlFields());</span>
+<span class="fc" id="L215">        childComplexType.setName(childNode.getNodeName());</span>
+<span class="fc" id="L216">        XmlPath path = null;</span>
+<span class="fc bfc" id="L217" title="All 2 branches covered.">        if (parentField == null) {</span>
+<span class="fc" id="L218">            path = new XmlPath(XmlPath.PATH_SEPARATOR + childNode.getNodeName());</span>
+        } else {
+<span class="fc" id="L220">            path = new XmlPath(parentField.getPath());</span>
+<span class="fc" id="L221">            Element parentElement = (Element)childNode.getParentNode();</span>
+<span class="fc bfc" id="L222" title="All 2 branches covered.">            if (isCollection(parentElement, childNode.getNodeName())) {</span>
+<span class="fc" id="L223">                childComplexType.setCollectionType(CollectionType.LIST);</span>
+<span class="fc" id="L224">                path.appendField(childNode.getNodeName() + XmlPath.PATH_LIST_START + XmlPath.PATH_LIST_END);</span>
+            } else {
+<span class="fc" id="L226">                childComplexType.setCollectionType(CollectionType.NONE);</span>
+<span class="fc" id="L227">                path.appendField(childNode.getNodeName());</span>
+            }
+        }
+<span class="fc" id="L230">        childComplexType.setPath(path.toString());</span>
+<span class="fc" id="L231">        return childComplexType;</span>
+    }
+
+    private void updateCollectionType(Node parentNode, XmlField field) {
+<span class="fc bfc" id="L235" title="All 2 branches covered.">        if (field.getCollectionType() == CollectionType.LIST</span>
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">            || parentNode.getNodeType() != Node.ELEMENT_NODE) {</span>
+<span class="fc" id="L237">            return;</span>
+        }
+
+<span class="fc bfc" id="L240" title="All 2 branches covered.">        if (!isCollection((Element)parentNode, field.getName())) {</span>
+<span class="fc" id="L241">            return;</span>
+        }
+
+<span class="fc" id="L244">        field.setCollectionType(CollectionType.LIST);</span>
+<span class="fc" id="L245">        field.setPath(field.getPath() + XmlPath.PATH_LIST_START + XmlPath.PATH_LIST_END);</span>
+        // Propagate parent collection to descendants
+<span class="fc bfc" id="L247" title="All 2 branches covered.">        if (field instanceof XmlComplexType) {</span>
+<span class="fc" id="L248">            XmlComplexType complex = (XmlComplexType)field;</span>
+<span class="fc bfc" id="L249" title="All 2 branches covered.">            for (XmlField child : complex.getXmlFields().getXmlField()) {</span>
+<span class="fc" id="L250">                updateFieldPathFromParent(child, complex);</span>
+<span class="fc" id="L251">            }</span>
+        }
+<span class="fc" id="L253">    }</span>
+
+    private boolean isCollection(Element parent, String name) {
+<span class="fc" id="L256">        NodeList siblings = parent.getChildNodes();</span>
+<span class="fc" id="L257">        List&lt;Element&gt; dups = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L258" title="All 2 branches covered.">        for (int i=0; i&lt;siblings.getLength(); i++) {</span>
+<span class="fc" id="L259">            Node n = siblings.item(i);</span>
+<span class="fc bfc" id="L260" title="All 4 branches covered.">            if (n.getNodeType() == Node.ELEMENT_NODE &amp;&amp; n.getNodeName().equals(name)) {</span>
+<span class="fc" id="L261">                dups.add((Element)n);</span>
+            }
+        }
+<span class="fc bfc" id="L264" title="All 2 branches covered.">        return dups.size() &gt; 1;</span>
+    }
+
+    private void updateFieldPathFromParent(XmlField child, XmlComplexType parent) {
+<span class="fc" id="L268">        XmlPath oldPath = new XmlPath(child.getPath());</span>
+<span class="fc" id="L269">        XmlPath newPath = new XmlPath(parent.getPath());</span>
+<span class="fc" id="L270">        newPath.appendField(oldPath.getLastSegment().getExpression());</span>
+<span class="fc" id="L271">        child.setPath(newPath.toString());</span>
+<span class="fc bfc" id="L272" title="All 2 branches covered.">        if (child instanceof XmlComplexType) {</span>
+<span class="fc bfc" id="L273" title="All 2 branches covered.">            for (XmlField grandChild : ((XmlComplexType)child).getXmlFields().getXmlField()) {</span>
+<span class="fc" id="L274">                updateFieldPathFromParent(grandChild, (XmlComplexType)child);</span>
+<span class="fc" id="L275">            }</span>
+        }
+<span class="fc" id="L277">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

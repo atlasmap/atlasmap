@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>AtlasUtil.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.core</a> &gt; <span class="el_source">AtlasUtil.java</span></div><h1>AtlasUtil.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.core;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.JarURLConnection;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+import io.atlasmap.spi.AtlasInternalSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.atlasmap.api.AtlasSession;
+import io.atlasmap.v2.Audit;
+import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationStatus;
+
+<span class="nc" id="L50">public class AtlasUtil {</span>
+    public static final int SPLIT_LIMIT = 4;
+    public static final String NEW_LINE_CHARS = &quot;(?m)$^|[\\r\\n]+\\z&quot;;
+<span class="fc" id="L53">    private static final Logger LOG = LoggerFactory.getLogger(AtlasUtil.class);</span>
+
+    public static Properties loadPropertiesFromURL(URL url) throws Exception {
+<span class="fc" id="L56">        try (InputStream is = url.openStream()) {</span>
+<span class="fc" id="L57">            Properties prop = new Properties();</span>
+<span class="fc" id="L58">            prop.load(is);</span>
+<span class="fc" id="L59">            return prop;</span>
+        }
+    }
+
+    public static boolean isEmpty(String string) {
+<span class="fc bfc" id="L64" title="All 6 branches covered.">        return string == null || string.isEmpty() || string.matches(&quot;^\\s+$&quot;);</span>
+    }
+
+    public static boolean matchUriModule(String uriA, String uriB) {
+<span class="fc bfc" id="L68" title="All 4 branches covered.">        if (uriA == null || uriB == null) {</span>
+<span class="fc" id="L69">            return false;</span>
+        }
+
+<span class="fc bfc" id="L72" title="All 4 branches covered.">        if (getUriModule(uriA) == null || getUriModule(uriB) == null) {</span>
+<span class="fc" id="L73">            return false;</span>
+        }
+
+<span class="fc" id="L76">        return getUriModule(uriA).equalsIgnoreCase(getUriModule(uriB));</span>
+
+    }
+
+    protected static void validateUri(String atlasUri) {
+<span class="fc bfc" id="L81" title="All 2 branches covered.">        if (!atlasUri.startsWith(&quot;atlas:&quot;)) {</span>
+<span class="fc" id="L82">            throw new IllegalStateException(</span>
+                    &quot;Invalid atlas uri &quot; + atlasUri + &quot; does not begin with 'atlas:': &quot; + atlasUri);
+        }
+
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        if (countCharacters(atlasUri, '?') &gt; 1) {</span>
+<span class="fc" id="L87">            throw new IllegalStateException(&quot;Invalid atlas uri &quot; + atlasUri + &quot; multiple '?' characters: &quot; + atlasUri);</span>
+        }
+<span class="fc" id="L89">    }</span>
+
+    protected static List&lt;String&gt; getUriPartsAsArray(String atlasUri) {
+
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        if (atlasUri == null) {</span>
+<span class="fc" id="L94">            return null;</span>
+        }
+
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        if (AtlasUtil.isEmpty(atlasUri)) {</span>
+<span class="fc" id="L98">            return Arrays.asList(new String[0]);</span>
+        }
+
+<span class="fc" id="L101">        validateUri(atlasUri);</span>
+
+<span class="fc" id="L103">        String[] pass1 = null;</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        if (atlasUri.contains(&quot;?&quot;)) {</span>
+<span class="fc" id="L105">            pass1 = atlasUri.split(&quot;\\?&quot;, 2);</span>
+        }
+
+<span class="fc" id="L108">        List&lt;String&gt; parts = new ArrayList&lt;String&gt;();</span>
+<span class="pc bpc" id="L109" title="1 of 4 branches missed.">        if (pass1 != null &amp;&amp; pass1.length &gt;= 1) {</span>
+<span class="fc" id="L110">            parts.addAll(Arrays.asList(pass1[0].split(&quot;:&quot;, 4)));</span>
+        } else {
+<span class="fc" id="L112">            parts.addAll(Arrays.asList(atlasUri.split(&quot;:&quot;, 4)));</span>
+        }
+
+<span class="fc" id="L115">        return parts;</span>
+    }
+
+    /**
+     * Returns the &quot;scheme&quot; piece of an Atlas uri
+     *
+     * ie. atlas:stringseparated:csv?quoteChar=&amp;quot;
+     *
+     *
+     * scheme: atlas module: stringseparated remaining: csv config: quoteChar=&amp;quot;
+     *
+     * if atlasUri is null, returns null. if empty or no scheme present, returns
+     * empty. otherwise, the $scheme is returned
+     *
+     *@param atlasUri URI string
+     * @return URI scheme
+     *
+     */
+    public static String getUriScheme(String atlasUri) {
+<span class="fc" id="L134">        List&lt;String&gt; uriA = AtlasUtil.getUriPartsAsArray(atlasUri);</span>
+<span class="pc bpc" id="L135" title="2 of 6 branches missed.">        if (uriA == null || uriA.size() &lt; 1 || isEmpty(uriA.get(0))) {</span>
+<span class="fc" id="L136">            return null;</span>
+        }
+
+<span class="fc" id="L139">        return uriA.get(0);</span>
+    }
+
+    public static String getUriModule(String atlasUri) {
+<span class="fc" id="L143">        List&lt;String&gt; uriA = AtlasUtil.getUriPartsAsArray(atlasUri);</span>
+<span class="pc bpc" id="L144" title="2 of 6 branches missed.">        if (uriA == null || uriA.size() &lt; 2 || isEmpty(uriA.get(1))) {</span>
+<span class="fc" id="L145">            return null;</span>
+        }
+
+<span class="fc" id="L148">        return uriA.get(1);</span>
+    }
+
+    public static String getUriDataType(String atlasUri) {
+<span class="fc" id="L152">        List&lt;String&gt; uriA = AtlasUtil.getUriPartsAsArray(atlasUri);</span>
+<span class="pc bpc" id="L153" title="1 of 6 branches missed.">        if (uriA == null || uriA.size() &lt; 3 || isEmpty(uriA.get(2))) {</span>
+<span class="fc" id="L154">            return null;</span>
+        }
+
+<span class="fc" id="L157">        return uriA.get(2);</span>
+    }
+
+    public static String getUriModuleVersion(String atlasUri) {
+<span class="fc" id="L161">        List&lt;String&gt; uriA = AtlasUtil.getUriPartsAsArray(atlasUri);</span>
+<span class="pc bpc" id="L162" title="2 of 6 branches missed.">        if (uriA == null || uriA.size() &lt; 4 || isEmpty(uriA.get(3))) {</span>
+<span class="fc" id="L163">            return null;</span>
+        }
+
+<span class="fc" id="L166">        return uriA.get(3);</span>
+    }
+
+    public static String getUriParameterValue(String atlasUri, String key) {
+<span class="fc" id="L170">        Map&lt;String, String&gt; params = getUriParameters(atlasUri);</span>
+<span class="pc bpc" id="L171" title="1 of 4 branches missed.">        if (params == null || params.isEmpty()) {</span>
+<span class="fc" id="L172">            return null;</span>
+        }
+
+<span class="fc" id="L175">        return params.get(key);</span>
+    }
+
+    public static Map&lt;String, String&gt; getUriParameters(String atlasUri) {
+
+<span class="fc bfc" id="L180" title="All 2 branches covered.">        if (atlasUri == null) {</span>
+<span class="fc" id="L181">            return null;</span>
+        }
+
+<span class="fc" id="L184">        Map&lt;String, String&gt; params = new HashMap&lt;String, String&gt;();</span>
+<span class="fc bfc" id="L185" title="All 2 branches covered.">        if (AtlasUtil.isEmpty(atlasUri)) {</span>
+<span class="fc" id="L186">            return params;</span>
+        }
+
+<span class="fc" id="L189">        validateUri(atlasUri);</span>
+
+<span class="fc" id="L191">        String[] pass1 = null;</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">        if (atlasUri.contains(&quot;?&quot;)) {</span>
+<span class="fc" id="L193">            pass1 = atlasUri.split(&quot;\\?&quot;, 2);</span>
+        }
+
+<span class="pc bpc" id="L196" title="2 of 8 branches missed.">        if (pass1 == null || pass1.length &lt; 2 || pass1[1] == null || pass1[1].length() &lt; 1) {</span>
+<span class="fc" id="L197">            return params;</span>
+        }
+
+<span class="fc" id="L200">        String allParams = null;</span>
+        try {
+<span class="fc" id="L202">            allParams = URLDecoder.decode(pass1[1], &quot;UTF-8&quot;);</span>
+<span class="nc" id="L203">        } catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L204">            LOG.error(&quot;Unable to parse uri&quot; + atlasUri + &quot; for configuration parameters&quot;, e);</span>
+<span class="nc" id="L205">            return params;</span>
+<span class="fc" id="L206">        }</span>
+
+<span class="pc bpc" id="L208" title="1 of 2 branches missed.">        if (allParams == null) {</span>
+<span class="nc" id="L209">            return null;</span>
+        }
+
+<span class="fc" id="L212">        String[] configs = allParams.split(&quot;&amp;&quot;, SPLIT_LIMIT);</span>
+<span class="pc bpc" id="L213" title="2 of 4 branches missed.">        if (configs == null || configs.length &lt; 1) {</span>
+<span class="nc" id="L214">            return params;</span>
+        }
+
+<span class="fc bfc" id="L217" title="All 2 branches covered.">        for (int i = 0; i &lt; configs.length; i++) {</span>
+<span class="fc bfc" id="L218" title="All 2 branches covered.">            if (!configs[i].contains(&quot;=&quot;)) {</span>
+<span class="fc" id="L219">                LOG.warn(&quot;Invalid configuration parameter: &quot; + configs[i] + &quot; for uri: '&quot; + atlasUri + &quot;'&quot;);</span>
+<span class="fc" id="L220">                continue;</span>
+            }
+
+<span class="fc" id="L223">            String[] cfgs = configs[i].split(&quot;=&quot;);</span>
+<span class="pc bpc" id="L224" title="1 of 4 branches missed.">            if (cfgs == null || cfgs.length != 2) {</span>
+<span class="fc" id="L225">                LOG.warn(&quot;Invalid configuration parameter: &quot; + configs[i] + &quot; for uri: '&quot; + atlasUri + &quot;'&quot;);</span>
+<span class="fc" id="L226">                continue;</span>
+            }
+
+<span class="fc" id="L229">            params.put(cfgs[0], cfgs[1]);</span>
+        }
+
+<span class="fc" id="L232">        return params;</span>
+    }
+
+    public static int countCharacters(String text, char match) {
+<span class="fc" id="L236">        int count = 0;</span>
+<span class="fc bfc" id="L237" title="All 2 branches covered.">        for (int i = 0; i &lt; text.length(); i++) {</span>
+<span class="fc bfc" id="L238" title="All 2 branches covered.">            if (text.charAt(i) == match) {</span>
+<span class="fc" id="L239">                count++;</span>
+            }
+        }
+<span class="fc" id="L242">        return count;</span>
+    }
+
+    public static List&lt;Class&lt;?&gt;&gt; findClassesForPackage(String scannedPackage) {
+<span class="fc" id="L246">        String scannedPath = scannedPackage.replace('.', '/');</span>
+<span class="fc" id="L247">        URL scannedUrl = getResource(scannedPath);</span>
+
+<span class="fc bfc" id="L249" title="All 2 branches covered.">        if (scannedUrl == null) {</span>
+<span class="fc" id="L250">            throw new IllegalArgumentException(String.format(&quot;Unable to detect resources for url='%s' for package='%s'&quot;,</span>
+                    scannedPath, scannedPackage));
+        }
+
+<span class="pc bpc" id="L254" title="1 of 2 branches missed.">        if (&quot;jar&quot;.equals(scannedUrl.getProtocol())) {</span>
+<span class="fc" id="L255">            return findClassesFromJar(scannedUrl);</span>
+        }
+
+<span class="nc" id="L258">        File scannedFd = new File(scannedUrl.getFile());</span>
+<span class="nc" id="L259">        List&lt;Class&lt;?&gt;&gt; classes = new ArrayList&lt;Class&lt;?&gt;&gt;();</span>
+
+<span class="nc bnc" id="L261" title="All 2 branches missed.">        if (scannedFd.listFiles() == null) {</span>
+<span class="nc" id="L262">            return classes;</span>
+        }
+
+<span class="nc bnc" id="L265" title="All 2 branches missed.">        for (File file : scannedFd.listFiles()) {</span>
+<span class="nc" id="L266">            classes.addAll(find(file, scannedPackage));</span>
+        }
+
+<span class="nc" id="L269">        return classes;</span>
+    }
+
+    public static void addAudit(AtlasSession session, String docId, String message, String path, AuditStatus status,
+            String value) {
+<span class="fc" id="L274">        session.getAudits().getAudit().add(createAudit(status, docId, path, value, message));</span>
+<span class="fc" id="L275">    }</span>
+
+    public static Audit createAudit(AuditStatus status, String docId, String path, String value, String message) {
+<span class="fc" id="L278">        Audit audit = new Audit();</span>
+<span class="fc" id="L279">        audit.setDocId(docId);</span>
+<span class="fc" id="L280">        audit.setMessage(message);</span>
+<span class="fc" id="L281">        audit.setPath(path);</span>
+<span class="fc" id="L282">        audit.setStatus(status);</span>
+<span class="fc" id="L283">        audit.setValue(value);</span>
+<span class="fc" id="L284">        return audit;</span>
+    }
+
+    public static void addAudit(AtlasSession session, Validation validation) {
+<span class="fc" id="L288">        Audit audit = new Audit();</span>
+<span class="fc" id="L289">        audit.setDocId(validation.getId());</span>
+<span class="fc" id="L290">        audit.setMessage(validation.getMessage());</span>
+<span class="fc" id="L291">        audit.setStatus(AtlasUtil.toAuditStatus(validation.getStatus()));</span>
+<span class="fc" id="L292">        session.getAudits().getAudit().add(audit);</span>
+<span class="fc" id="L293">    }</span>
+
+    public static void addAudits(AtlasInternalSession session, String docId, List&lt;Audit&gt; audits) {
+<span class="nc bnc" id="L296" title="All 2 branches missed.">        for (Audit audit: audits) {</span>
+<span class="nc" id="L297">            audit.setDocId(docId);</span>
+<span class="nc" id="L298">            session.getAudits().getAudit().add(audit);</span>
+<span class="nc" id="L299">        }</span>
+<span class="nc" id="L300">    }</span>
+
+    public static AuditStatus toAuditStatus(ValidationStatus vstatus) {
+<span class="pc bpc" id="L303" title="1 of 6 branches missed.">        switch (vstatus) {</span>
+        case ERROR:
+<span class="fc" id="L305">            return AuditStatus.ERROR;</span>
+        case WARN:
+<span class="fc" id="L307">            return AuditStatus.WARN;</span>
+        case INFO:
+<span class="fc" id="L309">            return AuditStatus.INFO;</span>
+        case ALL:
+<span class="fc" id="L311">            return AuditStatus.ALL;</span>
+        case NONE:
+<span class="fc" id="L313">            return AuditStatus.NONE;</span>
+        default:
+<span class="nc" id="L315">            return null;</span>
+        }
+    }
+
+    protected static URL getResource(String scannedPath) {
+<span class="fc" id="L320">        URL url = null;</span>
+
+<span class="fc" id="L322">        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();</span>
+<span class="pc bpc" id="L323" title="1 of 2 branches missed.">        if (classLoader == null) {</span>
+<span class="nc" id="L324">            classLoader = AtlasUtil.class.getClassLoader();</span>
+        }
+
+<span class="pc bpc" id="L327" title="1 of 2 branches missed.">        if (classLoader != null) {</span>
+<span class="fc" id="L328">            url = classLoader.getResource(scannedPath);</span>
+<span class="fc bfc" id="L329" title="All 2 branches covered.">            if (url != null) {</span>
+<span class="fc" id="L330">                return url;</span>
+            }
+        }
+
+<span class="fc" id="L334">        return ClassLoader.getSystemResource(scannedPath);</span>
+    }
+
+    protected static List&lt;Class&lt;?&gt;&gt; find(File file, String scannedPackage) {
+<span class="fc" id="L338">        List&lt;Class&lt;?&gt;&gt; classes = new ArrayList&lt;Class&lt;?&gt;&gt;();</span>
+<span class="fc" id="L339">        String resource = scannedPackage + '.' + file.getName();</span>
+<span class="fc bfc" id="L340" title="All 2 branches covered.">        if (file.isDirectory()) {</span>
+<span class="fc bfc" id="L341" title="All 2 branches covered.">            for (File child : file.listFiles()) {</span>
+<span class="fc" id="L342">                classes.addAll(find(child, resource));</span>
+            }
+<span class="pc bpc" id="L344" title="1 of 2 branches missed.">        } else if (resource.endsWith(&quot;.class&quot;)) {</span>
+<span class="nc" id="L345">            int endIndex = resource.length() - &quot;.class&quot;.length();</span>
+<span class="nc" id="L346">            String className = resource.substring(0, endIndex);</span>
+            try {
+<span class="nc" id="L348">                classes.add(Class.forName(className));</span>
+<span class="nc" id="L349">            } catch (ClassNotFoundException ignore) {</span>
+<span class="nc" id="L350">            }</span>
+        }
+<span class="fc" id="L352">        return classes;</span>
+    }
+
+    protected static List&lt;Class&lt;?&gt;&gt; findClassesFromJar(URL jarFileUrl) {
+<span class="fc" id="L356">        List&lt;Class&lt;?&gt;&gt; classNames = new ArrayList&lt;Class&lt;?&gt;&gt;();</span>
+
+<span class="fc" id="L358">        JarURLConnection connection = null;</span>
+
+        try {
+<span class="fc" id="L361">            connection = (JarURLConnection) jarFileUrl.openConnection();</span>
+<span class="nc" id="L362">        } catch (IOException e) {</span>
+<span class="nc" id="L363">            LOG.warn(String.format(&quot;Unable to load classes from jar file=%s msg=%s&quot;, jarFileUrl, e.getMessage()), e);</span>
+<span class="nc" id="L364">            return classNames;</span>
+<span class="fc" id="L365">        }</span>
+
+<span class="fc" id="L367">        try (ZipInputStream zip = new ZipInputStream(</span>
+<span class="fc" id="L368">                new FileInputStream(new File(connection.getJarFileURL().toURI())))) {</span>
+<span class="fc bfc" id="L369" title="All 2 branches covered.">            for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {</span>
+<span class="fc bfc" id="L370" title="All 4 branches covered.">                if (!entry.isDirectory() &amp;&amp; entry.getName().endsWith(&quot;.class&quot;)) {</span>
+<span class="fc" id="L371">                    String className = entry.getName().replace('/', '.');</span>
+<span class="fc" id="L372">                    className = className.substring(0, className.length() - &quot;.class&quot;.length());</span>
+<span class="fc" id="L373">                    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();</span>
+<span class="pc bpc" id="L374" title="1 of 2 branches missed.">                    if (classLoader == null) {</span>
+<span class="nc" id="L375">                        classLoader = AtlasUtil.class.getClassLoader();</span>
+                    }
+                    try {
+<span class="fc" id="L378">                        Class&lt;?&gt; clazz = Class.forName(className, false, classLoader);</span>
+<span class="fc" id="L379">                        classNames.add(clazz);</span>
+<span class="nc" id="L380">                    } catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L381">                        LOG.warn(String.format(&quot;Unable to load class=%s from jar file=%s msg=%s&quot;, className,</span>
+<span class="nc" id="L382">                                jarFileUrl, e.getMessage()), e);</span>
+<span class="fc" id="L383">                    }</span>
+                }
+            }
+<span class="fc" id="L386">        } catch (URISyntaxException | IOException e) {</span>
+<span class="fc" id="L387">            LOG.warn(String.format(&quot;Unable to load classes from jar file=%s msg=%s&quot;, jarFileUrl, e.getMessage()), e);</span>
+<span class="fc" id="L388">        }</span>
+<span class="fc" id="L389">        return classNames;</span>
+    }
+
+    public static String getChainedMessage(Throwable t) {
+<span class="nc" id="L393">        StringBuilder buf = new StringBuilder();</span>
+<span class="nc" id="L394">        buf.append(t.getMessage());</span>
+<span class="nc" id="L395">        Throwable target = t;</span>
+<span class="nc bnc" id="L396" title="All 2 branches missed.">        while((target = target.getCause()) != null) {</span>
+<span class="nc bnc" id="L397" title="All 4 branches missed.">            if (target.getMessage() != null &amp;&amp; !target.getMessage().isEmpty()) {</span>
+<span class="nc" id="L398">                buf.append(&quot; - &quot;);</span>
+<span class="nc" id="L399">                buf.append(target.getMessage());</span>
+            }
+        }
+<span class="nc" id="L402">        return buf.toString();</span>
+    }
+
+    public static String escapeForUri(String source) {
+<span class="pc bpc" id="L406" title="1 of 2 branches missed.">        if (source == null) {</span>
+<span class="nc" id="L407">            return null;</span>
+        }
+<span class="fc" id="L409">        return source.replaceAll(Pattern.quote(&quot;!&quot;), &quot;%21&quot;)</span>
+<span class="fc" id="L410">                     .replaceAll(Pattern.quote(&quot;#&quot;), &quot;%23&quot;)</span>
+<span class="fc" id="L411">                     .replaceAll(Pattern.quote(&quot;$&quot;), &quot;%24&quot;)</span>
+<span class="fc" id="L412">                     .replaceAll(Pattern.quote(&quot;&amp;&quot;), &quot;%26&quot;)</span>
+<span class="fc" id="L413">                     .replaceAll(Pattern.quote(&quot;'&quot;), &quot;%27&quot;)</span>
+<span class="fc" id="L414">                     .replaceAll(Pattern.quote(&quot;(&quot;), &quot;%28&quot;)</span>
+<span class="fc" id="L415">                     .replaceAll(Pattern.quote(&quot;)&quot;), &quot;%29&quot;)</span>
+<span class="fc" id="L416">                     .replaceAll(Pattern.quote(&quot;*&quot;), &quot;%2A&quot;)</span>
+<span class="fc" id="L417">                     .replaceAll(Pattern.quote(&quot;+&quot;), &quot;%2B&quot;)</span>
+<span class="fc" id="L418">                     .replaceAll(Pattern.quote(&quot;,&quot;), &quot;%2C&quot;)</span>
+<span class="fc" id="L419">                     .replaceAll(Pattern.quote(&quot;/&quot;), &quot;%2F&quot;)</span>
+<span class="fc" id="L420">                     .replaceAll(Pattern.quote(&quot;:&quot;), &quot;%3A&quot;)</span>
+<span class="fc" id="L421">                     .replaceAll(Pattern.quote(&quot;;&quot;), &quot;%3B&quot;)</span>
+<span class="fc" id="L422">                     .replaceAll(Pattern.quote(&quot;=&quot;), &quot;%3D&quot;)</span>
+<span class="fc" id="L423">                     .replaceAll(Pattern.quote(&quot;?&quot;), &quot;%3F&quot;)</span>
+<span class="fc" id="L424">                     .replaceAll(Pattern.quote(&quot;@&quot;), &quot;%40&quot;)</span>
+<span class="fc" id="L425">                     .replaceAll(Pattern.quote(&quot;[&quot;), &quot;%5B&quot;)</span>
+<span class="fc" id="L426">                     .replaceAll(Pattern.quote(&quot;]&quot;), &quot;%5D&quot;);</span>
+    }
+
+    public static String unescapeFromUri(String uri) {
+<span class="fc bfc" id="L430" title="All 2 branches covered.">        if (uri == null) {</span>
+<span class="fc" id="L431">            return null;</span>
+        }
+<span class="fc" id="L433">        return uri.replaceAll(&quot;%21&quot;, &quot;!&quot;)</span>
+<span class="fc" id="L434">                  .replaceAll(&quot;%23&quot;, &quot;#&quot;)</span>
+<span class="fc" id="L435">                  .replaceAll(&quot;%24&quot;, &quot;$&quot;)</span>
+<span class="fc" id="L436">                  .replaceAll(&quot;%26&quot;, &quot;&amp;&quot;)</span>
+<span class="fc" id="L437">                  .replaceAll(&quot;%27&quot;, &quot;'&quot;)</span>
+<span class="fc" id="L438">                  .replaceAll(&quot;%28&quot;, &quot;(&quot;)</span>
+<span class="fc" id="L439">                  .replaceAll(&quot;%29&quot;, &quot;)&quot;)</span>
+<span class="fc" id="L440">                  .replaceAll(&quot;%2A&quot;, &quot;*&quot;)</span>
+<span class="fc" id="L441">                  .replaceAll(&quot;%2B&quot;, &quot;+&quot;)</span>
+<span class="fc" id="L442">                  .replaceAll(&quot;%2C&quot;, &quot;,&quot;)</span>
+<span class="fc" id="L443">                  .replaceAll(&quot;%2F&quot;, &quot;/&quot;)</span>
+<span class="fc" id="L444">                  .replaceAll(&quot;%3A&quot;, &quot;:&quot;)</span>
+<span class="fc" id="L445">                  .replaceAll(&quot;%3B&quot;, &quot;;&quot;)</span>
+<span class="fc" id="L446">                  .replaceAll(&quot;%3D&quot;, &quot;=&quot;)</span>
+<span class="fc" id="L447">                  .replaceAll(&quot;%3F&quot;, &quot;?&quot;)</span>
+<span class="fc" id="L448">                  .replaceAll(&quot;%40&quot;, &quot;@&quot;)</span>
+<span class="fc" id="L449">                  .replaceAll(&quot;%5B&quot;, &quot;[&quot;)</span>
+<span class="fc" id="L450">                  .replaceAll(&quot;%5D&quot;, &quot;]&quot;);</span>
+    }
+
+    public static void deleteDirectory(File targetDir) {
+<span class="fc" id="L454">        File[] allContents = targetDir.listFiles();</span>
+<span class="pc bpc" id="L455" title="1 of 2 branches missed.">        if (allContents != null) {</span>
+<span class="nc bnc" id="L456" title="All 2 branches missed.">            for (File file : allContents) {</span>
+<span class="nc bnc" id="L457" title="All 2 branches missed.">                if (!file.isDirectory()) {</span>
+<span class="nc" id="L458">                    file.delete();</span>
+                } else {
+<span class="nc" id="L460">                    deleteDirectory(file);</span>
+                }
+            }
+        }
+<span class="fc" id="L464">        targetDir.delete();</span>
+<span class="fc" id="L465">        return;</span>
+    }
+
+    public static void deleteDirectoryContents(File targetDir) {
+<span class="nc" id="L469">        File[] allContents = targetDir.listFiles();</span>
+<span class="nc bnc" id="L470" title="All 2 branches missed.">        if (allContents != null) {</span>
+<span class="nc bnc" id="L471" title="All 2 branches missed.">            for (File element : allContents) {</span>
+<span class="nc bnc" id="L472" title="All 2 branches missed.">                if (element.isFile())</span>
+<span class="nc" id="L473">                    element.delete();</span>
+<span class="nc bnc" id="L474" title="All 2 branches missed.">                else if (element.isDirectory())</span>
+<span class="nc" id="L475">                    deleteDirectory(element);</span>
+            }
+        }
+<span class="nc" id="L478">        return;</span>
+    }
+
+    public static void copyFile(Path sourcePath, Path destPath) throws IOException {
+<span class="nc" id="L482">        File source = new File(sourcePath.toString());</span>
+<span class="nc" id="L483">        File dest = new File(destPath.toString());</span>
+
+<span class="nc bnc" id="L485" title="All 2 branches missed.">        if (!dest.exists()) {</span>
+<span class="nc" id="L486">            dest.createNewFile();</span>
+        }
+<span class="nc" id="L488">        InputStream in = null;</span>
+<span class="nc" id="L489">        OutputStream out = null;</span>
+        try {
+<span class="nc" id="L491">            in = new FileInputStream(source);</span>
+<span class="nc" id="L492">            out = new FileOutputStream(dest);</span>
+
+            // Transfer bytes from in to out
+<span class="nc" id="L495">            byte[] buf = new byte[1024];</span>
+            int len;
+<span class="nc bnc" id="L497" title="All 2 branches missed.">            while ((len = in.read(buf)) &gt; 0) {</span>
+<span class="nc" id="L498">                out.write(buf, 0, len);</span>
+            }
+        }
+        finally {
+<span class="nc bnc" id="L502" title="All 2 branches missed.">            if (in != null) {</span>
+<span class="nc" id="L503">                in.close();</span>
+            }
+<span class="nc bnc" id="L505" title="All 2 branches missed.">            if (out != null) {</span>
+<span class="nc" id="L506">                out.close();</span>
+            }
+        }
+<span class="nc" id="L509">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

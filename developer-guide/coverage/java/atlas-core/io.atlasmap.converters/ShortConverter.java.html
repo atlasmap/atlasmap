@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ShortConverter.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.converters</a> &gt; <span class="el_source">ShortConverter.java</span></div><h1>ShortConverter.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ * &lt;p&gt;
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * &lt;p&gt;
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * &lt;p&gt;
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.converters;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
+
+import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.spi.AtlasConverter;
+import io.atlasmap.api.AtlasUnsupportedException;
+import io.atlasmap.spi.AtlasConversionConcern;
+import io.atlasmap.spi.AtlasConversionInfo;
+import io.atlasmap.v2.FieldType;
+
+<span class="fc" id="L35">public class ShortConverter implements AtlasConverter&lt;Short&gt; {</span>
+
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.DECIMAL)
+    public BigDecimal toBigDecimal(Short value) {
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        return value != null ? BigDecimal.valueOf(value) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.BIG_INTEGER)
+    public BigInteger toBigInteger(Short value) {
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        return value != null ? BigInteger.valueOf(value) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.CONVENTION)
+    public Boolean toBoolean(Short value) {
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L50">            return null;</span>
+        }
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        return value == 0 ? Boolean.FALSE : Boolean.TRUE;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.RANGE)
+    public Byte toByte(Short value) throws AtlasConversionException {
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L58">            return null;</span>
+        }
+<span class="pc bpc" id="L60" title="1 of 4 branches missed.">        if (value &gt;= Byte.MIN_VALUE &amp;&amp; value &lt;= Byte.MAX_VALUE) {</span>
+<span class="fc" id="L61">            return value.byteValue();</span>
+        }
+<span class="fc" id="L63">        throw new AtlasConversionException(new AtlasUnsupportedException(</span>
+<span class="fc" id="L64">                String.format(&quot;Short %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE&quot;, value)));</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.CHAR, concerns = {
+            AtlasConversionConcern.RANGE, AtlasConversionConcern.CONVENTION })
+    public Character toCharacter(Short value) throws AtlasConversionException {
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L71">            return null;</span>
+        }
+
+<span class="pc bpc" id="L74" title="1 of 4 branches missed.">        if (value &lt; Character.MIN_VALUE || value &gt; Character.MAX_VALUE) {</span>
+<span class="fc" id="L75">            throw new AtlasConversionException(String</span>
+<span class="fc" id="L76">                    .format(&quot;Short %s is greater than Character.MAX_VALUE  or less than Character.MIN_VALUE&quot;, value));</span>
+        }
+<span class="fc" id="L78">        return Character.valueOf((char) value.intValue());</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.DATE_TIME)
+    public Date toDate(Short value) {
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        if (value &gt;= Instant.MIN.getEpochSecond()) {</span>
+<span class="fc" id="L84">            return Date.from(Instant.ofEpochMilli(value));</span>
+        }
+<span class="nc" id="L86">        return new Date(value);</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.DOUBLE)
+    public Double toDouble(Short value) {
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L92">            return null;</span>
+        }
+<span class="fc" id="L94">        return value.doubleValue();</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.FLOAT)
+    public Float toFloat(Short value) {
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L100">            return null;</span>
+        }
+<span class="fc" id="L102">        return value.floatValue();</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.INTEGER)
+    public Integer toInteger(Short value) {
+<span class="fc bfc" id="L107" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L108">            return null;</span>
+        }
+<span class="fc" id="L110">        return value.intValue();</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.DATE)
+    public LocalDate toLocalDate(Short value) {
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDate() : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.TIME)
+    public LocalTime toLocalTime(Short value) {
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalTime() : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.DATE_TIME)
+    public LocalDateTime toLocalDateTime(Short value) {
+<span class="nc bnc" id="L125" title="All 2 branches missed.">        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDateTime() : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.LONG)
+    public Long toLong(Short value) {
+<span class="fc bfc" id="L130" title="All 2 branches covered.">        return value != null ? value.longValue() : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.NUMBER)
+    public Number toNumber(Short value) {
+<span class="nc" id="L135">        return value;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.SHORT)
+    public Short toShort(Short value) {
+<span class="fc bfc" id="L140" title="All 2 branches covered.">        return value != null ? new Short(value) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.STRING)
+    public String toString(Short value) {
+<span class="fc bfc" id="L145" title="All 2 branches covered.">        return value != null ? String.valueOf(value) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.DATE_TIME_TZ)
+    public ZonedDateTime toZonedDateTime(Short value) {
+<span class="pc bpc" id="L150" title="1 of 2 branches missed.">        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()) : null;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

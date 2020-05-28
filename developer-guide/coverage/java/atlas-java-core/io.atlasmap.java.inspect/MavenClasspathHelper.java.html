@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>MavenClasspathHelper.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-java-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.java.inspect</a> &gt; <span class="el_source">MavenClasspathHelper.java</span></div><h1>MavenClasspathHelper.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.java.inspect;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Stream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.atlasmap.java.core.StringUtil;
+
+<span class="nc" id="L37">public class MavenClasspathHelper {</span>
+
+    public static final String WORKING_FOLDER_PREFIX = &quot;atlas-mapping-mvn-&quot;;
+
+<span class="nc" id="L41">    private static final Logger LOG = LoggerFactory.getLogger(MavenClasspathHelper.class);</span>
+
+<span class="nc" id="L43">    private long processCheckInterval = 1000L;</span>
+<span class="nc" id="L44">    private long processMaxExecutionTime = 5000L;</span>
+<span class="nc" id="L45">    private String baseFolder = System.getProperty(&quot;java.io.tmpdir&quot;);</span>
+
+    public String generateClasspathFromPom(String pom) throws Exception {
+
+<span class="nc bnc" id="L49" title="All 4 branches missed.">        if (pom == null || pom.isEmpty()) {</span>
+<span class="nc" id="L50">            return null;</span>
+        }
+
+<span class="nc bnc" id="L53" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L54">            LOG.debug(&quot;Generating classpath from pom:\n&quot; + pom);</span>
+        }
+
+<span class="nc" id="L57">        Path workingDirectory = createWorkingDirectory();</span>
+<span class="nc" id="L58">        Path pomFile = Paths.get(workingDirectory.toString(), &quot;pom.xml&quot;);</span>
+<span class="nc" id="L59">        Files.write(pomFile, pom.getBytes());</span>
+
+<span class="nc" id="L61">        List&lt;String&gt; cmd = new LinkedList&lt;String&gt;();</span>
+<span class="nc" id="L62">        cmd.add(&quot;mvn&quot;);</span>
+<span class="nc" id="L63">        cmd.add(&quot;org.apache.maven.plugins:maven-dependency-plugin:3.0.0:build-classpath&quot;);</span>
+<span class="nc" id="L64">        cmd.add(&quot;-DincludeScope=runtime&quot;);</span>
+
+<span class="nc" id="L66">        String result = executeMavenProcess(workingDirectory.toString(), cmd);</span>
+
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        if (result != null) {</span>
+<span class="nc" id="L69">            result = parseClasspathFromMavenOutput(result);</span>
+        } else {
+<span class="nc" id="L71">            LOG.error(&quot;MavenProcess returned unexpected result: &quot; + result);</span>
+<span class="nc" id="L72">            throw new InspectionException(&quot;Unable to generate classpath from pom file&quot;);</span>
+        }
+
+        try {
+<span class="nc" id="L76">            deleteWorkingDirectory(workingDirectory);</span>
+<span class="nc" id="L77">        } catch (IOException ioe) {</span>
+<span class="nc" id="L78">            LOG.warn(&quot;Cleanup of working directory failed to complete: &quot; + ioe.getMessage(), ioe);</span>
+<span class="nc" id="L79">        }</span>
+
+<span class="nc" id="L81">        return result;</span>
+    }
+
+    protected String executeMavenProcess(String workingDirectory, List&lt;String&gt; cmd) throws IOException {
+<span class="nc" id="L85">        String mavenOutputFilePath = workingDirectory + File.separator + &quot;maven.output.txt&quot;;</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L87">            LOG.debug(&quot;Starting to execute process for command: &quot; + cmd + &quot;\n\tworkingDirectory: &quot; + workingDirectory</span>
+                    + &quot;\n\tmvn output log: &quot; + mavenOutputFilePath);
+        }
+
+<span class="nc" id="L91">        File cwd = null;</span>
+<span class="nc" id="L92">        long startTime = System.currentTimeMillis();</span>
+<span class="nc" id="L93">        long totalTime = 0;</span>
+<span class="nc" id="L94">        Process process = null;</span>
+<span class="nc" id="L95">        StringBuilder outputMessage = new StringBuilder();</span>
+
+<span class="nc bnc" id="L97" title="All 8 branches missed.">        if (workingDirectory == null || workingDirectory.isEmpty() || cmd == null || cmd.isEmpty()</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">                || cmd.get(0).isEmpty()) {</span>
+<span class="nc" id="L99">            LOG.error(&quot;Invalid workingDirectory: &quot; + workingDirectory + &quot; or command: &quot; + cmd + &quot; specified&quot;);</span>
+<span class="nc" id="L100">            throw new IllegalArgumentException(&quot;Working directory and command must be specified&quot;);</span>
+        }
+
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        if (workingDirectory != null) {</span>
+<span class="nc" id="L104">            cwd = new File(workingDirectory);</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">            if (!cwd.exists()) {</span>
+<span class="nc" id="L106">                throw new IOException(&quot;Working Directory does not exist: &quot; + workingDirectory);</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">            } else if (!cwd.isDirectory()) {</span>
+<span class="nc" id="L108">                throw new IOException(&quot;Working Directory is not a directory: &quot; + workingDirectory);</span>
+            }
+        }
+
+<span class="nc" id="L112">        InputStream stdout = null;</span>
+<span class="nc" id="L113">        BufferedReader reader = null;</span>
+
+<span class="nc" id="L115">        long lastTimeDebugPrinted = 0;</span>
+
+        try {
+<span class="nc" id="L118">            ProcessBuilder processBuilder = new ProcessBuilder(cmd);</span>
+<span class="nc" id="L119">            processBuilder.redirectErrorStream(true);</span>
+<span class="nc" id="L120">            processBuilder.directory(new File(workingDirectory));</span>
+
+<span class="nc" id="L122">            process = processBuilder.start();</span>
+<span class="nc" id="L123">            boolean running = true;</span>
+<span class="nc" id="L124">            int r = -1;</span>
+
+<span class="nc bnc" id="L126" title="All 2 branches missed.">            if (process != null) {</span>
+                try {
+<span class="nc" id="L128">                    stdout = process.getInputStream();</span>
+<span class="nc" id="L129">                    reader = new BufferedReader(new InputStreamReader(stdout));</span>
+<span class="nc" id="L130">                } catch (Exception e) {</span>
+<span class="nc" id="L131">                    LOG.error(&quot;Error reading output for command: &quot; + cmd + &quot; msg: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L132">                }</span>
+            }
+
+<span class="nc" id="L135">            Path mavenOutputFile = Paths.get(mavenOutputFilePath);</span>
+
+<span class="nc bnc" id="L137" title="All 2 branches missed.">            while (running) {</span>
+<span class="nc" id="L138">                Thread.sleep(getProcessCheckInterval());</span>
+<span class="nc" id="L139">                totalTime = totalTime + getProcessCheckInterval();</span>
+
+<span class="nc bnc" id="L141" title="All 2 branches missed.">                if (process != null) {</span>
+                    try {
+<span class="nc" id="L143">                        StringBuilder currentUpdate = new StringBuilder();</span>
+<span class="nc" id="L144">                        String line = null;</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">                        while ((line = reader.readLine()) != null) {</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">                            if (outputMessage.length() &gt; 0) {</span>
+<span class="nc" id="L147">                                outputMessage.append(line).append(&quot;\n&quot;);</span>
+<span class="nc" id="L148">                                currentUpdate.append(line).append(&quot;\n&quot;);</span>
+                            } else {
+<span class="nc" id="L150">                                outputMessage.append(line);</span>
+                            }
+                        }
+<span class="nc bnc" id="L153" title="All 2 branches missed.">                        if (currentUpdate.length() &gt; 0) {</span>
+                            try {
+<span class="nc" id="L155">                                Files.write(mavenOutputFile, currentUpdate.toString().getBytes(),</span>
+                                        StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+<span class="nc" id="L157">                            } catch (Exception e) {</span>
+<span class="nc" id="L158">                                LOG.error(</span>
+                                        &quot;Error writing output for command: &quot; + cmd + &quot; to file: &quot; + mavenOutputFilePath,
+                                        e);
+<span class="nc" id="L161">                            }</span>
+                        }
+<span class="nc" id="L163">                    } catch (Exception e) {</span>
+<span class="nc" id="L164">                        LOG.error(&quot;Error reading output for command: &quot; + cmd + &quot; msg: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L165">                    }</span>
+                }
+
+<span class="nc bnc" id="L168" title="All 2 branches missed.">                if (totalTime &gt;= getProcessMaxExecutionTime()) {</span>
+<span class="nc" id="L169">                    process.destroy();</span>
+<span class="nc" id="L170">                    running = false;</span>
+<span class="nc" id="L171">                    throw new IOException(&quot;Command &quot; + cmd + &quot; killed due to exceeding max process time&quot;);</span>
+                }
+
+                try {
+<span class="nc" id="L175">                    r = process.exitValue();</span>
+<span class="nc" id="L176">                    running = false;</span>
+<span class="nc bnc" id="L177" title="All 2 branches missed.">                    if (r != 0) {</span>
+<span class="nc" id="L178">                        outputMessage.append(&quot;Command returned non-zero exit code: &quot; + r);</span>
+                    }
+<span class="nc" id="L180">                } catch (IllegalThreadStateException itse) {</span>
+<span class="nc bnc" id="L181" title="All 4 branches missed.">                    if (LOG.isDebugEnabled() &amp;&amp; (System.currentTimeMillis() - lastTimeDebugPrinted &gt; 10000)) {</span>
+<span class="nc" id="L182">                        String timeHMS = StringUtil.formatTimeHMS(System.currentTimeMillis() - startTime);</span>
+<span class="nc" id="L183">                        LOG.debug(&quot;Command still running: &quot; + cmd + &quot;, msg: &quot; + itse.getMessage() + &quot;, elapsed: &quot;</span>
+                                + timeHMS);
+<span class="nc" id="L185">                        lastTimeDebugPrinted = System.currentTimeMillis();</span>
+                    }
+<span class="nc" id="L187">                }</span>
+            }
+
+<span class="nc" id="L190">        } catch (IllegalArgumentException iae) {</span>
+<span class="nc" id="L191">            String errMsg = &quot;Unable to execute command: &quot; + cmd + &quot; error: &quot; + iae.getMessage();</span>
+<span class="nc" id="L192">            LOG.error(errMsg, iae);</span>
+<span class="nc" id="L193">            throw new IOException(errMsg, iae);</span>
+<span class="nc" id="L194">        } catch (IOException ioe) {</span>
+<span class="nc" id="L195">            String errMsg = &quot;Unable to execute command: &quot; + cmd + &quot; error: &quot; + ioe.getMessage();</span>
+<span class="nc" id="L196">            LOG.error(errMsg, ioe);</span>
+<span class="nc" id="L197">            throw new IOException(errMsg, ioe);</span>
+<span class="nc" id="L198">        } catch (InterruptedException intre) {</span>
+<span class="nc" id="L199">            String errMsg = &quot;Command interrupted cmd: &quot; + cmd + &quot; error: &quot; + intre.getMessage();</span>
+<span class="nc" id="L200">            LOG.error(errMsg, intre);</span>
+<span class="nc" id="L201">            throw new IOException(errMsg, intre);</span>
+        } finally {
+<span class="nc bnc" id="L203" title="All 2 branches missed.">            if (reader != null) {</span>
+                try {
+<span class="nc" id="L205">                    reader.close();</span>
+<span class="nc" id="L206">                } catch (Exception e) {</span>
+<span class="nc" id="L207">                    LOG.warn(&quot;Error closing BufferedReader for cmd: &quot; + cmd, e);</span>
+                } finally {
+<span class="nc" id="L209">                    reader = null;</span>
+                }
+            }
+<span class="nc bnc" id="L212" title="All 2 branches missed.">            if (stdout != null) {</span>
+                try {
+<span class="nc" id="L214">                    stdout.close();</span>
+<span class="nc" id="L215">                } catch (Exception e) {</span>
+<span class="nc" id="L216">                    LOG.warn(&quot;Error closing InputStream for cmd: &quot; + cmd, e);</span>
+                } finally {
+<span class="nc" id="L218">                    stdout = null;</span>
+                }
+            }
+
+<span class="nc bnc" id="L222" title="All 2 branches missed.">            if (process != null) {</span>
+                try {
+<span class="nc" id="L224">                    process.destroy();</span>
+<span class="nc" id="L225">                } catch (Throwable t) {</span>
+<span class="nc" id="L226">                    LOG.error(</span>
+<span class="nc" id="L227">                            &quot;Error while attempting to destroy process for command: &quot; + cmd + &quot; msg: &quot; + t.getMessage(),</span>
+                            t);
+<span class="nc" id="L229">                }</span>
+            }
+
+<span class="nc bnc" id="L232" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L233">                LOG.debug(&quot;Exiting process for command: &quot; + cmd + &quot; exec time(ms): &quot;</span>
+<span class="nc" id="L234">                        + (System.currentTimeMillis() - startTime) + &quot; workingDirectory: &quot; + workingDirectory);</span>
+            }
+        }
+
+<span class="nc bnc" id="L238" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L239">            LOG.debug(&quot;Output for command: &quot; + cmd + &quot;\n&quot; + outputMessage.toString());</span>
+        }
+
+<span class="nc" id="L242">        return outputMessage.toString();</span>
+    }
+
+    protected Path createWorkingDirectory() throws IOException {
+<span class="nc" id="L246">        return Files.createTempDirectory(WORKING_FOLDER_PREFIX);</span>
+    }
+
+    protected void deleteWorkingDirectory(Path tempDirectory) throws IOException {
+<span class="nc" id="L250">        Files.deleteIfExists(Paths.get(tempDirectory.toString(), &quot;pom.xml&quot;));</span>
+<span class="nc" id="L251">        Files.deleteIfExists(Paths.get(tempDirectory.toString(), &quot;maven.output.txt&quot;));</span>
+<span class="nc" id="L252">        Files.deleteIfExists(tempDirectory);</span>
+<span class="nc" id="L253">    }</span>
+
+    public Integer cleanupTempFolders() throws IOException {
+<span class="nc" id="L256">        Integer count = new Integer(0);</span>
+<span class="nc" id="L257">        try (Stream&lt;Path&gt; tmpFolders = Files.list(Paths.get(System.getProperty(&quot;java.io.tmpdir&quot;)))) {</span>
+<span class="nc bnc" id="L258" title="All 2 branches missed.">            for (Path tmpFolder : tmpFolders.toArray(Path[]::new)) {</span>
+                try {
+<span class="nc bnc" id="L260" title="All 2 branches missed.">                    if (tmpFolder.getFileName().toString().startsWith(WORKING_FOLDER_PREFIX)) {</span>
+<span class="nc" id="L261">                        deleteWorkingDirectory(tmpFolder);</span>
+<span class="nc" id="L262">                        count++;</span>
+<span class="nc bnc" id="L263" title="All 2 branches missed.">                        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L264">                            LOG.debug(&quot;Deleted tempFolder: &quot; + tmpFolder.getFileName());</span>
+                        }
+                    }
+<span class="nc" id="L267">                } catch (IOException ioe) {</span>
+<span class="nc" id="L268">                    LOG.warn(&quot;Error when attempting to delete tempFolder: &quot; + tmpFolder.getFileName() + &quot; msg: &quot;</span>
+<span class="nc" id="L269">                            + ioe.getMessage(), ioe);</span>
+<span class="nc" id="L270">                }</span>
+            }
+        }
+<span class="nc" id="L273">        return count;</span>
+    }
+
+    private String parseClasspathFromMavenOutput(String commandOutput) throws IOException {
+<span class="nc" id="L277">        BufferedReader reader = new BufferedReader(new StringReader(commandOutput));</span>
+<span class="nc" id="L278">        boolean useNextLine = true;</span>
+<span class="nc" id="L279">        String result = null;</span>
+        String line;
+<span class="nc bnc" id="L281" title="All 2 branches missed.">        while ((line = reader.readLine()) != null) {</span>
+<span class="nc bnc" id="L282" title="All 2 branches missed.">            if (useNextLine) {</span>
+<span class="nc" id="L283">                useNextLine = false;</span>
+<span class="nc" id="L284">                result = line;</span>
+            }
+<span class="nc bnc" id="L286" title="All 2 branches missed.">            if (line.startsWith(&quot;[INFO] Dependencies classpath:&quot;)) {</span>
+<span class="nc" id="L287">                useNextLine = true;</span>
+            }
+        }
+<span class="nc" id="L290">        return result;</span>
+    }
+
+    public long getProcessCheckInterval() {
+<span class="nc" id="L294">        return processCheckInterval;</span>
+    }
+
+    public void setProcessCheckInterval(long processCheckInterval) {
+<span class="nc" id="L298">        this.processCheckInterval = processCheckInterval;</span>
+<span class="nc" id="L299">    }</span>
+
+    public long getProcessMaxExecutionTime() {
+<span class="nc" id="L302">        return processMaxExecutionTime;</span>
+    }
+
+    public void setProcessMaxExecutionTime(long processMaxExecutionTime) {
+<span class="nc" id="L306">        this.processMaxExecutionTime = processMaxExecutionTime;</span>
+<span class="nc" id="L307">    }</span>
+
+    public String getBaseFolder() {
+<span class="nc" id="L310">        return baseFolder;</span>
+    }
+
+    public void setBaseFolder(String baseFolder) {
+<span class="nc" id="L314">        this.baseFolder = baseFolder;</span>
+<span class="nc" id="L315">    }</span>
+
+    protected String generateJavaCommand() {
+<span class="nc" id="L318">        return System.getProperty(&quot;java.home&quot;) + File.separator + &quot;bin&quot; + File.separator + &quot;java&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

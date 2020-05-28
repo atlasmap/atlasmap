@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>Modifier.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-java-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.java.v2</a> &gt; <span class="el_source">Modifier.java</span></div><h1>Modifier.java</h1><pre class="source lang-java linenums">package io.atlasmap.java.v2;
+
+<span class="fc" id="L3">public enum Modifier {</span>
+
+<span class="fc" id="L5">    ALL(&quot;All&quot;),</span>
+<span class="fc" id="L6">    ABSTRACT(&quot;Abstract&quot;),</span>
+<span class="fc" id="L7">    FINAL(&quot;Final&quot;),</span>
+<span class="fc" id="L8">    INTERFACE(&quot;Interface&quot;),</span>
+<span class="fc" id="L9">    NATIVE(&quot;Native&quot;),</span>
+<span class="fc" id="L10">    PACKAGE_PRIVATE(&quot;Package Private&quot;),</span>
+<span class="fc" id="L11">    PUBLIC(&quot;Public&quot;),</span>
+<span class="fc" id="L12">    PROTECTED(&quot;Protected&quot;),</span>
+<span class="fc" id="L13">    PRIVATE(&quot;Private&quot;),</span>
+<span class="fc" id="L14">    STATIC(&quot;Static&quot;),</span>
+<span class="fc" id="L15">    STRICT(&quot;Strict&quot;),</span>
+<span class="fc" id="L16">    SYNCHRONIZED(&quot;Synchronized&quot;),</span>
+<span class="fc" id="L17">    TRANSIENT(&quot;Transient&quot;),</span>
+<span class="fc" id="L18">    VOLATILE(&quot;Volatile&quot;),</span>
+<span class="fc" id="L19">    NONE(&quot;None&quot;);</span>
+
+    private final String value;
+
+<span class="fc" id="L23">    Modifier(String v) {</span>
+<span class="fc" id="L24">        value = v;</span>
+<span class="fc" id="L25">    }</span>
+
+    public String value() {
+<span class="nc" id="L28">        return value;</span>
+    }
+
+    public static Modifier fromValue(String v) {
+<span class="nc bnc" id="L32" title="All 2 branches missed.">        for (Modifier c: Modifier.values()) {</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">            if (c.value.equals(v)) {</span>
+<span class="nc" id="L34">                return c;</span>
+            }
+        }
+<span class="nc" id="L37">        throw new IllegalArgumentException(v);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

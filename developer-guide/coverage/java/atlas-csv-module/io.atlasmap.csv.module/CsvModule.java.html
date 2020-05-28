@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>CsvModule.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-csv-module</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.csv.module</a> &gt; <span class="el_source">CsvModule.java</span></div><h1>CsvModule.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.csv.module;
+
+import io.atlasmap.core.AtlasUtil;
+import io.atlasmap.core.BaseAtlasModule;
+import io.atlasmap.csv.core.CsvConfig;
+import io.atlasmap.csv.core.CsvFieldReader;
+import io.atlasmap.csv.core.CsvFieldWriter;
+import io.atlasmap.csv.v2.CsvField;
+import io.atlasmap.spi.AtlasInternalSession;
+import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.spi.AtlasModuleDetail;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
+@AtlasModuleDetail(name = &quot;CsvModule&quot;, uri = &quot;atlas:csv&quot;, modes = { &quot;SOURCE&quot;, &quot;TARGET&quot; }, dataFormats = {
+        &quot;csv&quot; }, configPackages = { &quot;io.atlasmap.csv.v2&quot; })
+<span class="fc" id="L39">public class CsvModule extends BaseAtlasModule {</span>
+<span class="fc" id="L40">    private static final Logger LOG = LoggerFactory.getLogger(CsvModule.class);</span>
+
+    @Override
+    public void processPreValidation(AtlasInternalSession session) throws AtlasException {
+
+<span class="fc" id="L45">    }</span>
+
+    @Override
+    public void processPreSourceExecution(AtlasInternalSession session) throws AtlasException {
+<span class="fc" id="L49">        Object sourceDocument = session.getSourceDocument(getDocId());</span>
+<span class="fc" id="L50">        InputStream sourceInputStream = null;</span>
+
+<span class="pc bpc" id="L52" title="4 of 6 branches missed.">        if (sourceDocument == null || !((sourceDocument instanceof String) || (sourceDocument instanceof InputStream))) {</span>
+<span class="nc" id="L53">            AtlasUtil.addAudit(session, getDocId(), String.format(</span>
+<span class="nc" id="L54">                &quot;Null, non-String or non-Stream source document: docId='%s'&quot;, getDocId()),</span>
+                null, AuditStatus.WARN, null);
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        } else if (sourceDocument instanceof String){</span>
+<span class="fc" id="L57">            String sourceDocumentString = String.class.cast(sourceDocument);</span>
+<span class="fc" id="L58">            sourceInputStream = new ByteArrayInputStream(sourceDocumentString.getBytes());</span>
+<span class="fc" id="L59">        } else {</span>
+<span class="nc" id="L60">            sourceInputStream = (InputStream) sourceDocument;</span>
+        }
+
+<span class="fc" id="L63">        CsvConfig csvConfig = CsvConfig.newConfig(getUriParameters());</span>
+<span class="fc" id="L64">        CsvFieldReader reader = new CsvFieldReader(csvConfig);</span>
+<span class="fc" id="L65">        reader.setDocument(sourceInputStream);</span>
+<span class="fc" id="L66">        session.setFieldReader(getDocId(), reader);</span>
+
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L69">            LOG.debug(&quot;{}: processPreSourceExecution completed&quot;, getDocId());</span>
+        }
+<span class="fc" id="L71">    }</span>
+
+    @Override
+    public void processPreTargetExecution(AtlasInternalSession session) throws AtlasException {
+<span class="fc" id="L75">        CsvConfig csvConfig = CsvConfig.newConfig(getUriParameters());</span>
+<span class="fc" id="L76">        CsvFieldWriter writer = new CsvFieldWriter(csvConfig);</span>
+<span class="fc" id="L77">        session.setFieldWriter(getDocId(), writer);</span>
+
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L80">            LOG.debug(&quot;{}: processPreTargetExcution completed&quot;, getDocId());</span>
+        }
+<span class="fc" id="L82">    }</span>
+
+    @Override
+    public void readSourceValue(AtlasInternalSession session) throws AtlasException {
+<span class="fc" id="L86">        Field sourceField = session.head().getSourceField();</span>
+<span class="fc" id="L87">        CsvFieldReader reader = session.getFieldReader(getDocId(), CsvFieldReader.class);</span>
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        if (reader == null) {</span>
+<span class="nc" id="L89">            AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(</span>
+<span class="nc" id="L90">                &quot;Source document '%s' doesn't exist&quot;, getDocId()),</span>
+<span class="nc" id="L91">                sourceField.getPath(), AuditStatus.ERROR, null);</span>
+<span class="nc" id="L92">            return;</span>
+        }
+
+<span class="fc" id="L95">        reader.read(session);</span>
+
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L98">            LOG.debug(&quot;{}: processSourceFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}]&quot;,</span>
+<span class="nc" id="L99">                getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(),</span>
+<span class="nc" id="L100">                sourceField.getValue());</span>
+        }
+<span class="fc" id="L102">    }</span>
+
+    @Override
+    public void writeTargetValue(AtlasInternalSession session) throws AtlasException {
+<span class="fc" id="L106">        CsvFieldWriter writer = session.getFieldWriter(getDocId(), CsvFieldWriter.class);</span>
+<span class="fc" id="L107">        writer.write(session);</span>
+<span class="fc" id="L108">    }</span>
+
+    @Override
+    public void processPostSourceExecution(AtlasInternalSession session) throws AtlasException {
+<span class="fc" id="L112">        session.removeFieldReader(getDocId());</span>
+
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L115">            LOG.debug(&quot;{}: processPostSourceExecution completed&quot;, getDocId());</span>
+        }
+<span class="fc" id="L117">    }</span>
+
+    @Override
+    public void processPostTargetExecution(AtlasInternalSession session) throws AtlasException {
+<span class="fc" id="L121">        CsvFieldWriter writer = session.getFieldWriter(getDocId(), CsvFieldWriter.class);</span>
+<span class="pc bpc" id="L122" title="2 of 4 branches missed.">        if (writer != null &amp;&amp; writer.getDocument() != null) {</span>
+<span class="fc" id="L123">            String targetDocumentString = writer.toCsv();</span>
+<span class="fc" id="L124">            session.setTargetDocument(getDocId(), targetDocumentString);</span>
+<span class="fc" id="L125">        } else {</span>
+<span class="nc" id="L126">            AtlasUtil.addAudit(session, getDocId(), String</span>
+<span class="nc" id="L127">                    .format(&quot;No target document created for DataSource:[id=%s, uri=%s]&quot;, getDocId(), this.getUri()),</span>
+                null, AuditStatus.WARN, null);
+        }
+<span class="fc" id="L130">        session.removeFieldWriter(getDocId());</span>
+
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L133">            LOG.debug(&quot;{}: processPostTargetExecution completed&quot;, getDocId());</span>
+        }
+<span class="fc" id="L135">    }</span>
+
+    @Override
+    public Field cloneField(Field field) throws AtlasException {
+<span class="nc" id="L139">        return CsvField.cloneOf((CsvField) field);</span>
+    }
+
+    @Override
+    public Boolean isSupportedField(Field field) {
+<span class="pc bpc" id="L144" title="1 of 4 branches missed.">        return field instanceof CsvField || field instanceof FieldGroup;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

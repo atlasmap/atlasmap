@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>NumberType.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.v2</a> &gt; <span class="el_source">NumberType.java</span></div><h1>NumberType.java</h1><pre class="source lang-java linenums">package io.atlasmap.v2;
+
+<span class="fc" id="L3">public enum NumberType {</span>
+
+<span class="fc" id="L5">    BIG_INTEGER(&quot;Big Integer&quot;),</span>
+<span class="fc" id="L6">    BYTE(&quot;Byte&quot;),</span>
+<span class="fc" id="L7">    DECIMAL(&quot;Decimal&quot;),</span>
+<span class="fc" id="L8">    DOUBLE(&quot;Double&quot;),</span>
+<span class="fc" id="L9">    FLOAT(&quot;Float&quot;),</span>
+<span class="fc" id="L10">    INTEGER(&quot;Integer&quot;),</span>
+<span class="fc" id="L11">    LONG(&quot;Long&quot;),</span>
+<span class="fc" id="L12">    SHORT(&quot;Short&quot;);</span>
+
+    private final String value;
+
+<span class="fc" id="L16">    NumberType(String v) {</span>
+<span class="fc" id="L17">        value = v;</span>
+<span class="fc" id="L18">    }</span>
+
+    public String value() {
+<span class="nc" id="L21">        return value;</span>
+    }
+
+    public static NumberType fromValue(String v) {
+<span class="nc bnc" id="L25" title="All 2 branches missed.">        for (NumberType c: NumberType.values()) {</span>
+<span class="nc bnc" id="L26" title="All 2 branches missed.">            if (c.value.equals(v)) {</span>
+<span class="nc" id="L27">                return c;</span>
+            }
+        }
+<span class="nc" id="L30">        throw new IllegalArgumentException(v);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

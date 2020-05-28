@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DistanceUnitType.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.v2</a> &gt; <span class="el_source">DistanceUnitType.java</span></div><h1>DistanceUnitType.java</h1><pre class="source lang-java linenums">package io.atlasmap.v2;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
+<span class="fc" id="L6">public enum DistanceUnitType {</span>
+
+<span class="fc" id="L8">    METER_M(&quot;Meter (m)&quot;),</span>
+<span class="fc" id="L9">    MILE_MI(&quot;Mile (mi)&quot;),</span>
+<span class="fc" id="L10">    YARD_YD(&quot;Yard (yd)&quot;),</span>
+<span class="fc" id="L11">    FOOT_FT(&quot;Foot (ft)&quot;),</span>
+<span class="fc" id="L12">    INCH_IN(&quot;Inch (in)&quot;);</span>
+
+    private final String value;
+
+<span class="fc" id="L16">    DistanceUnitType(String v) {</span>
+<span class="fc" id="L17">        value = v;</span>
+<span class="fc" id="L18">    }</span>
+
+    @JsonValue
+    public String value() {
+<span class="fc" id="L22">        return value;</span>
+    }
+
+    @JsonCreator
+    public static DistanceUnitType fromValue(String v) {
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">        for (DistanceUnitType c: DistanceUnitType.values()) {</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">            if (c.value.equals(v)) {</span>
+<span class="fc" id="L29">                return c;</span>
+            }
+        }
+<span class="nc" id="L32">        throw new IllegalArgumentException(v);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -1,0 +1,594 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DefaultAtlasConversionService.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.core</a> &gt; <span class="el_source">DefaultAtlasConversionService.java</span></div><h1>DefaultAtlasConversionService.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ * &lt;p&gt;
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * &lt;p&gt;
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * &lt;p&gt;
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.core;
+
+import static java.util.Objects.hash;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.ServiceLoader;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.spi.AtlasConverter;
+import io.atlasmap.spi.AtlasConversionInfo;
+import io.atlasmap.spi.AtlasConversionService;
+import io.atlasmap.v2.FieldType;
+
+public class DefaultAtlasConversionService implements AtlasConversionService {
+
+<span class="fc" id="L47">    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasConversionService.class);</span>
+<span class="fc" id="L48">    private static final Set&lt;String&gt; PRIMITIVE_CLASSNAMES = Collections.unmodifiableSet(</span>
+<span class="fc" id="L49">            new HashSet&lt;&gt;(Arrays.asList(&quot;boolean&quot;, &quot;byte&quot;, &quot;char&quot;, &quot;double&quot;, &quot;float&quot;, &quot;int&quot;, &quot;long&quot;, &quot;short&quot;)));</span>
+<span class="fc" id="L50">    private static final Set&lt;FieldType&gt; PRIMITIVE_FIELDTYPES = Collections.unmodifiableSet(new HashSet&lt;&gt;(</span>
+<span class="fc" id="L51">            Arrays.asList(FieldType.BOOLEAN, FieldType.BYTE, FieldType.CHAR, FieldType.DECIMAL, FieldType.DOUBLE,</span>
+                    FieldType.FLOAT, FieldType.INTEGER, FieldType.LONG, FieldType.SHORT, FieldType.STRING)));
+<span class="fc" id="L53">    private static final Set&lt;String&gt; BOXED_PRIMITIVE_CLASSNAMES = Collections.unmodifiableSet(new HashSet&lt;&gt;(</span>
+<span class="fc" id="L54">            Arrays.asList(&quot;java.lang.Boolean&quot;, &quot;java.lang.Byte&quot;, &quot;java.lang.Character&quot;, &quot;java.lang.Double&quot;,</span>
+                    &quot;java.lang.Float&quot;, &quot;java.lang.Integer&quot;, &quot;java.lang.Long&quot;, &quot;java.lang.Short&quot;, &quot;java.lang.String&quot;)));
+
+<span class="fc" id="L57">    private static volatile DefaultAtlasConversionService instance = null;</span>
+<span class="fc" id="L58">    private static final Object singletonLock = new Object();</span>
+
+<span class="fc" id="L60">    private Map&lt;ConverterKey, ConverterMethodHolder&gt; converterMethods = null;</span>
+<span class="fc" id="L61">    private Map&lt;ConverterKey, ConverterMethodHolder&gt; customConverterMethods = null;</span>
+
+    // Used as the lookup key in the converter methods map
+    private class ConverterKey {
+        private String sourceClassName;
+        private String targetClassName;
+
+<span class="fc" id="L68">        public ConverterKey(String sourceClassName, String targetClassName) {</span>
+<span class="fc" id="L69">            this.sourceClassName = sourceClassName;</span>
+<span class="fc" id="L70">            this.targetClassName = targetClassName;</span>
+<span class="fc" id="L71">        }</span>
+
+        @Override
+        public boolean equals(Object obj) {
+<span class="pc bpc" id="L75" title="2 of 4 branches missed.">            if (obj != null &amp;&amp; obj instanceof ConverterKey) {</span>
+<span class="fc" id="L76">                ConverterKey s = (ConverterKey) obj;</span>
+<span class="pc bpc" id="L77" title="2 of 4 branches missed.">                return sourceClassName.equals(s.sourceClassName) &amp;&amp; targetClassName.equals(s.targetClassName);</span>
+            }
+<span class="nc" id="L79">            return false;</span>
+        }
+
+        @Override
+        public int hashCode() {
+<span class="fc" id="L84">            return hash(sourceClassName, targetClassName);</span>
+        }
+    }
+
+    // used to hold converter and method for future reflection use
+    private class ConverterMethodHolder {
+        private AtlasConverter&lt;?&gt; converter;
+        private Method method;
+        private boolean staticMethod;
+        private boolean containsFormat;
+
+        public ConverterMethodHolder(AtlasConverter&lt;?&gt; converter, Method method, boolean staticMethod,
+<span class="fc" id="L96">                boolean containsFormat) {</span>
+<span class="fc" id="L97">            this.converter = converter;</span>
+<span class="fc" id="L98">            this.method = method;</span>
+<span class="fc" id="L99">            this.staticMethod = staticMethod;</span>
+<span class="fc" id="L100">            this.containsFormat = containsFormat;</span>
+<span class="fc" id="L101">        }</span>
+
+        public AtlasConverter&lt;?&gt; getConverter() {
+<span class="fc" id="L104">            return converter;</span>
+        }
+    }
+
+<span class="fc" id="L108">    private DefaultAtlasConversionService() {</span>
+<span class="fc" id="L109">    }</span>
+
+    public static DefaultAtlasConversionService getInstance() {
+<span class="fc" id="L112">        DefaultAtlasConversionService result = instance;</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        if (result == null) {</span>
+<span class="fc" id="L114">            synchronized (singletonLock) {</span>
+<span class="fc" id="L115">                result = instance;</span>
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">                if (result == null) {</span>
+<span class="fc" id="L117">                    result = new DefaultAtlasConversionService();</span>
+<span class="fc" id="L118">                    result.init();</span>
+<span class="fc" id="L119">                    instance = result;</span>
+                }
+<span class="fc" id="L121">            }</span>
+        }
+<span class="fc" id="L123">        return result;</span>
+    }
+
+    public static Set&lt;String&gt; listPrimitiveClassNames() {
+<span class="fc" id="L127">        return PRIMITIVE_CLASSNAMES;</span>
+    }
+
+    @Override
+    public Optional&lt;AtlasConverter&lt;?&gt;&gt; findMatchingConverter(FieldType source, FieldType target) {
+
+        // get the default types
+<span class="fc" id="L134">        Class&lt;?&gt; sourceClass = classFromFieldType(source);</span>
+<span class="fc" id="L135">        Class&lt;?&gt; targetClass = classFromFieldType(target);</span>
+
+<span class="fc bfc" id="L137" title="All 4 branches covered.">        if (sourceClass != null &amp;&amp; targetClass != null) {</span>
+<span class="fc" id="L138">            return findMatchingConverter(sourceClass.getCanonicalName(), targetClass.getCanonicalName());</span>
+        }
+<span class="fc" id="L140">        return Optional.empty();</span>
+    }
+
+    @Override
+    public Optional&lt;AtlasConverter&lt;?&gt;&gt; findMatchingConverter(String sourceClassName, String targetClassName) {
+<span class="fc" id="L145">        ConverterKey converterKey = new ConverterKey(sourceClassName, targetClassName);</span>
+<span class="pc bpc" id="L146" title="1 of 2 branches missed.">        if (customConverterMethods.containsKey(converterKey)) {</span>
+<span class="nc" id="L147">            return Optional.of(customConverterMethods.get(converterKey).getConverter());</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">        } else if (converterMethods.containsKey(converterKey)) {</span>
+<span class="fc" id="L149">            return Optional.of(converterMethods.get(converterKey).getConverter());</span>
+        } else {
+<span class="fc" id="L151">            return Optional.empty();</span>
+        }
+    }
+
+    private void init() {
+<span class="fc" id="L156">        loadConverters();</span>
+<span class="fc" id="L157">    }</span>
+
+    @SuppressWarnings(&quot;rawtypes&quot;)
+    private void loadConverters() {
+<span class="fc" id="L161">        ClassLoader classLoader = this.getClass().getClassLoader();</span>
+<span class="fc" id="L162">        final ServiceLoader&lt;AtlasConverter&gt; converterServiceLoader = ServiceLoader.load(AtlasConverter.class,</span>
+                classLoader);
+<span class="fc" id="L164">        final ServiceLoader&lt;io.atlasmap.api.AtlasConverter&gt; compat = ServiceLoader.load(io.atlasmap.api.AtlasConverter.class,</span>
+                classLoader);
+
+        // used to load up methods first;
+<span class="fc" id="L168">        Map&lt;ConverterKey, ConverterMethodHolder&gt; methodsLoadMap = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L169">        Map&lt;ConverterKey, ConverterMethodHolder&gt; customMethodsLoadMap = new LinkedHashMap&lt;&gt;();</span>
+
+<span class="fc" id="L171">        converterServiceLoader.forEach(atlasConverter -&gt; loadConverterMethod(atlasConverter, methodsLoadMap, customMethodsLoadMap));</span>
+<span class="pc" id="L172">        compat.forEach(atlasConverter -&gt; loadConverterMethod(atlasConverter, methodsLoadMap, customMethodsLoadMap));</span>
+
+<span class="pc bpc" id="L174" title="1 of 2 branches missed.">        if (!methodsLoadMap.isEmpty()) {</span>
+<span class="fc" id="L175">            converterMethods = Collections.unmodifiableMap(methodsLoadMap);</span>
+        }
+<span class="pc bpc" id="L177" title="1 of 2 branches missed.">        if (!methodsLoadMap.isEmpty()) {</span>
+<span class="fc" id="L178">            customConverterMethods = Collections.unmodifiableMap(customMethodsLoadMap);</span>
+        }
+<span class="fc" id="L180">    }</span>
+
+    private void loadConverterMethod(AtlasConverter&lt;?&gt; atlasConverter,
+        Map&lt;ConverterKey, ConverterMethodHolder&gt; methodsLoadMap, Map&lt;ConverterKey, ConverterMethodHolder&gt; customMethodsLoadMap) {
+<span class="pc bpc" id="L184" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L185">            LOG.debug(&quot;Loading converter : &quot; + atlasConverter.getClass().getCanonicalName());</span>
+        }
+
+<span class="fc" id="L188">        boolean inbuiltConverter = atlasConverter.getClass().getPackage().getName().startsWith(&quot;io.atlasmap&quot;);</span>
+
+<span class="fc" id="L190">        Class&lt;?&gt; klass = atlasConverter.getClass();</span>
+        // collect all the specific conversion methods on the class
+<span class="fc bfc" id="L192" title="All 2 branches covered.">        while (klass != Object.class) {</span>
+<span class="fc" id="L193">            final List&lt;Method&gt; allMethods = new ArrayList&lt;&gt;(Arrays.asList(klass.getDeclaredMethods()));</span>
+<span class="fc bfc" id="L194" title="All 2 branches covered.">            for (final Method method : allMethods) {</span>
+                // we filter out methods which aren't annotated @AtlasconversionInfo and have to
+                // also filter out methods which are synthetic methods to avoid duplicates
+<span class="pc bpc" id="L197" title="1 of 4 branches missed.">                if (method.isAnnotationPresent(AtlasConversionInfo.class) &amp;&amp; method.getParameters().length &gt; 0</span>
+<span class="pc bpc" id="L198" title="1 of 2 branches missed.">                        &amp;&amp; !method.isSynthetic()) {</span>
+<span class="fc" id="L199">                    String sourceClassName = method.getParameters()[0].getType().getCanonicalName();</span>
+<span class="fc" id="L200">                    ConverterKey coordinate = new ConverterKey(sourceClassName,</span>
+<span class="fc" id="L201">                            method.getReturnType().getCanonicalName());</span>
+                    // if the method has three arguments and the last two as strings then they used
+                    // as the format attributes
+<span class="fc" id="L204">                    boolean containsFormat = false;</span>
+<span class="pc bpc" id="L205" title="1 of 4 branches missed.">                    if (method.getParameters().length == 3 &amp;&amp; method.getParameters()[1].getType() == String.class</span>
+<span class="pc bpc" id="L206" title="1 of 2 branches missed.">                            &amp;&amp; method.getParameters()[2].getType() == String.class) {</span>
+<span class="fc" id="L207">                        containsFormat = true;</span>
+                    }
+
+<span class="fc" id="L210">                    boolean staticMethod = Modifier.isStatic(method.getModifiers());</span>
+<span class="fc" id="L211">                    ConverterMethodHolder methodHolder = new ConverterMethodHolder(atlasConverter, method, staticMethod,</span>
+                            containsFormat);
+<span class="pc bpc" id="L213" title="1 of 2 branches missed.">                    if (inbuiltConverter) {</span>
+<span class="pc bpc" id="L214" title="1 of 2 branches missed.">                        if (!methodsLoadMap.containsKey(coordinate)) {</span>
+<span class="fc" id="L215">                            methodsLoadMap.put(coordinate, methodHolder);</span>
+                        } else {
+<span class="nc" id="L217">                            LOG.warn(&quot;Converter between &quot; + sourceClassName + &quot; and &quot;</span>
+<span class="nc" id="L218">                                    + method.getReturnType().getCanonicalName() + &quot; aleady exists.&quot;);</span>
+                        }
+                    } else {
+<span class="nc bnc" id="L221" title="All 2 branches missed.">                        if (!customMethodsLoadMap.containsKey(coordinate)) {</span>
+<span class="nc" id="L222">                            customMethodsLoadMap.put(coordinate, methodHolder);</span>
+                        } else {
+<span class="nc" id="L224">                            LOG.warn(&quot;Custom converter between &quot; + sourceClassName + &quot; and &quot;</span>
+<span class="nc" id="L225">                                    + method.getReturnType().getCanonicalName() + &quot; aleady exists.&quot;);</span>
+                        }
+                    }
+                }
+<span class="fc" id="L229">            }</span>
+            // move to the upper class in the hierarchy in search for more methods
+<span class="fc" id="L231">            klass = klass.getSuperclass();</span>
+<span class="fc" id="L232">        }</span>
+<span class="fc" id="L233">    }</span>
+
+    @Override
+    public Object copyPrimitive(Object sourceValue) {
+
+<span class="fc bfc" id="L238" title="All 2 branches covered.">        if (sourceValue == null) {</span>
+<span class="fc" id="L239">            return null;</span>
+        }
+
+<span class="fc" id="L242">        Class&lt;?&gt; clazz = sourceValue.getClass();</span>
+<span class="pc bpc" id="L243" title="1 of 2 branches missed.">        if (clazz == null) {</span>
+<span class="nc" id="L244">            return clazz;</span>
+<span class="pc bpc" id="L245" title="1 of 2 branches missed.">        } else if (boolean.class.getName().equals(clazz.getName())) {</span>
+<span class="nc" id="L246">            return Boolean.valueOf((boolean) sourceValue);</span>
+<span class="fc bfc" id="L247" title="All 2 branches covered.">        } else if (Boolean.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L248">            return Boolean.valueOf((Boolean) sourceValue);</span>
+<span class="pc bpc" id="L249" title="1 of 2 branches missed.">        } else if (byte.class.getName().equals(clazz.getName())) {</span>
+<span class="nc" id="L250">            return Byte.valueOf((byte) sourceValue);</span>
+<span class="fc bfc" id="L251" title="All 2 branches covered.">        } else if (Byte.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L252">            return Byte.valueOf((Byte) sourceValue);</span>
+<span class="pc bpc" id="L253" title="1 of 2 branches missed.">        } else if (char.class.getName().equals(clazz.getName())) {</span>
+<span class="nc" id="L254">            return Character.valueOf((char) sourceValue);</span>
+<span class="fc bfc" id="L255" title="All 2 branches covered.">        } else if (Character.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L256">            return Character.valueOf((Character) sourceValue);</span>
+<span class="pc bpc" id="L257" title="1 of 2 branches missed.">        } else if (double.class.getName().equals(clazz.getName())) {</span>
+<span class="nc" id="L258">            return Double.valueOf((double) sourceValue);</span>
+<span class="fc bfc" id="L259" title="All 2 branches covered.">        } else if (Double.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L260">            return Double.valueOf((Double) sourceValue);</span>
+<span class="pc bpc" id="L261" title="1 of 2 branches missed.">        } else if (float.class.getName().equals(clazz.getName())) {</span>
+<span class="nc" id="L262">            return Float.valueOf((float) sourceValue);</span>
+<span class="fc bfc" id="L263" title="All 2 branches covered.">        } else if (Float.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L264">            return Float.valueOf((Float) sourceValue);</span>
+<span class="pc bpc" id="L265" title="1 of 2 branches missed.">        } else if (int.class.getName().equals(clazz.getName())) {</span>
+<span class="nc" id="L266">            return Integer.valueOf((int) sourceValue);</span>
+<span class="fc bfc" id="L267" title="All 2 branches covered.">        } else if (Integer.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L268">            return Integer.valueOf((Integer) sourceValue);</span>
+<span class="pc bpc" id="L269" title="1 of 2 branches missed.">        } else if (long.class.getName().equals(clazz.getName())) {</span>
+<span class="nc" id="L270">            return Long.valueOf((long) sourceValue);</span>
+<span class="fc bfc" id="L271" title="All 2 branches covered.">        } else if (Long.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L272">            return Long.valueOf((Long) sourceValue);</span>
+<span class="pc bpc" id="L273" title="1 of 2 branches missed.">        } else if (short.class.getName().equals(clazz.getName())) {</span>
+<span class="nc" id="L274">            return Short.valueOf((short) sourceValue);</span>
+<span class="fc bfc" id="L275" title="All 2 branches covered.">        } else if (Short.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L276">            return Short.valueOf((Short) sourceValue);</span>
+        }
+
+        // can't count on java copy
+<span class="fc" id="L280">        return sourceValue;</span>
+    }
+
+    @Override
+    public Object convertType(Object sourceValue, FieldType origSourceType, FieldType targetType)
+            throws AtlasConversionException {
+
+<span class="pc bpc" id="L287" title="1 of 4 branches missed.">        if (origSourceType == null || targetType == null) {</span>
+<span class="fc" id="L288">            throw new AtlasConversionException(&quot;FieldTypes must be specified on convertType method.&quot;);</span>
+        }
+<span class="fc bfc" id="L290" title="All 2 branches covered.">        if (isAssignableFieldType(origSourceType, targetType)) {</span>
+<span class="fc" id="L291">            return sourceValue;</span>
+        }
+<span class="fc" id="L293">        return convertType(sourceValue, null, classFromFieldType(targetType), null);</span>
+    }
+
+    @Override
+    public Object convertType(Object sourceValue, String sourceFormat, FieldType targetType, String targetFormat)
+            throws AtlasConversionException {
+<span class="fc" id="L299">        return convertType(sourceValue, sourceFormat, classFromFieldType(targetType), targetFormat);</span>
+    }
+
+    @Override
+    public Object convertType(Object sourceValue, String sourceFormat, Class&lt;?&gt; targetType, String targetFormat)
+            throws AtlasConversionException {
+
+<span class="pc bpc" id="L306" title="2 of 4 branches missed.">        if (sourceValue == null || targetType == null) {</span>
+<span class="nc" id="L307">            throw new AtlasConversionException(&quot;AutoConversion requires sourceValue and targetType to be specified&quot;);</span>
+        }
+
+<span class="fc bfc" id="L310" title="All 2 branches covered.">        if (targetType.isInstance(sourceValue)) {</span>
+<span class="fc" id="L311">            return sourceValue;</span>
+        }
+
+<span class="fc" id="L314">        ConverterMethodHolder methodHolder = getConverter(sourceValue, targetType);</span>
+<span class="fc bfc" id="L315" title="All 2 branches covered.">        if (methodHolder != null) {</span>
+            try {
+<span class="pc bpc" id="L317" title="1 of 2 branches missed.">                Object target = methodHolder.staticMethod ? null : methodHolder.converter;</span>
+<span class="fc bfc" id="L318" title="All 2 branches covered.">                if (methodHolder.containsFormat) {</span>
+<span class="fc" id="L319">                    return methodHolder.method.invoke(target, sourceValue, sourceFormat, targetFormat);</span>
+                }
+<span class="fc" id="L321">                return methodHolder.method.invoke(target, sourceValue);</span>
+<span class="fc" id="L322">            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {</span>
+<span class="fc" id="L323">                throw new AtlasConversionException(&quot;Invoking type convertor failed&quot;, e);</span>
+            }
+        }
+<span class="fc" id="L326">        throw new AtlasConversionException(&quot;Type Conversion is not supported for sT=&quot;</span>
+<span class="fc" id="L327">                + sourceValue.getClass().getCanonicalName() + &quot; tT=&quot; + targetType.getCanonicalName());</span>
+    }
+
+    @Override
+    public boolean isConvertionAvailableFor(Object sourceValue, Class&lt;?&gt; targetType) {
+<span class="pc bpc" id="L332" title="1 of 4 branches missed.">        return targetType.isInstance(sourceValue) || getConverter(sourceValue, targetType) != null;</span>
+    }
+
+    private ConverterMethodHolder getConverter(Object sourceValue, Class&lt;?&gt; targetType) {
+<span class="fc" id="L336">        Class&lt;?&gt; boxedSourceClass = sourceValue.getClass();</span>
+<span class="pc bpc" id="L337" title="1 of 2 branches missed.">        if (sourceValue.getClass().isPrimitive()) {</span>
+<span class="nc" id="L338">            boxedSourceClass = boxOrUnboxPrimitive(boxedSourceClass);</span>
+        }
+<span class="fc" id="L340">        Class&lt;?&gt; boxedTargetClass = targetType;</span>
+<span class="fc bfc" id="L341" title="All 2 branches covered.">        if (targetType.isPrimitive()) {</span>
+<span class="fc" id="L342">            boxedTargetClass = boxOrUnboxPrimitive(boxedTargetClass);</span>
+        }
+
+<span class="fc" id="L345">        ConverterKey converterKey = new ConverterKey(boxedSourceClass.getCanonicalName(),</span>
+<span class="fc" id="L346">                boxedTargetClass.getCanonicalName());</span>
+        // use custom converter first
+<span class="fc" id="L348">        ConverterMethodHolder methodHolder = customConverterMethods.get(converterKey);</span>
+<span class="pc bpc" id="L349" title="1 of 2 branches missed.">        if (methodHolder == null) {</span>
+            // try the inbuilt defaults
+<span class="fc" id="L351">            methodHolder = converterMethods.get(converterKey);</span>
+        }
+<span class="fc" id="L353">        return methodHolder;</span>
+    }
+
+    @Override
+    public Boolean isPrimitive(String className) {
+<span class="fc bfc" id="L358" title="All 2 branches covered.">        if (className == null) {</span>
+<span class="fc" id="L359">            return false;</span>
+        }
+<span class="fc bfc" id="L361" title="All 2 branches covered.">        if (PRIMITIVE_CLASSNAMES.contains(className)) {</span>
+<span class="fc" id="L362">            return true;</span>
+        }
+<span class="fc" id="L364">        return false;</span>
+    }
+
+    @Override
+    public Boolean isPrimitive(Class&lt;?&gt; clazz) {
+<span class="fc bfc" id="L369" title="All 2 branches covered.">        if (clazz == null) {</span>
+<span class="fc" id="L370">            return false;</span>
+        }
+<span class="fc bfc" id="L372" title="All 2 branches covered.">        if (PRIMITIVE_CLASSNAMES.contains(clazz.getCanonicalName())) {</span>
+<span class="fc" id="L373">            return true;</span>
+        }
+<span class="fc" id="L375">        return false;</span>
+    }
+
+    @Override
+    public Boolean isPrimitive(FieldType fieldType) {
+<span class="fc bfc" id="L380" title="All 2 branches covered.">        if (fieldType == null) {</span>
+<span class="fc" id="L381">            return false;</span>
+        }
+<span class="fc" id="L383">        return PRIMITIVE_FIELDTYPES.contains(fieldType);</span>
+    }
+
+    @Override
+    public Boolean isBoxedPrimitive(Class&lt;?&gt; clazz) {
+<span class="fc bfc" id="L388" title="All 2 branches covered.">        if (clazz == null) {</span>
+<span class="fc" id="L389">            return false;</span>
+        }
+<span class="fc" id="L391">        return BOXED_PRIMITIVE_CLASSNAMES.contains(clazz.getCanonicalName());</span>
+    }
+
+    @Override
+    public Class&lt;?&gt; boxOrUnboxPrimitive(String clazzName) {
+<span class="nc" id="L396">        return classFromFieldType(fieldTypeFromClass(clazzName));</span>
+    }
+
+    @Override
+    public Class&lt;?&gt; boxOrUnboxPrimitive(Class&lt;?&gt; clazz) {
+<span class="fc bfc" id="L401" title="All 2 branches covered.">        if (clazz == null) {</span>
+<span class="fc" id="L402">            return clazz;</span>
+<span class="fc bfc" id="L403" title="All 2 branches covered.">        } else if (boolean.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L404">            return Boolean.class;</span>
+<span class="fc bfc" id="L405" title="All 2 branches covered.">        } else if (Boolean.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L406">            return boolean.class;</span>
+<span class="fc bfc" id="L407" title="All 2 branches covered.">        } else if (byte.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L408">            return Byte.class;</span>
+<span class="fc bfc" id="L409" title="All 2 branches covered.">        } else if (Byte.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L410">            return byte.class;</span>
+<span class="fc bfc" id="L411" title="All 2 branches covered.">        } else if (char.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L412">            return Character.class;</span>
+<span class="fc bfc" id="L413" title="All 2 branches covered.">        } else if (Character.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L414">            return char.class;</span>
+<span class="fc bfc" id="L415" title="All 2 branches covered.">        } else if (double.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L416">            return Double.class;</span>
+<span class="fc bfc" id="L417" title="All 2 branches covered.">        } else if (Double.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L418">            return double.class;</span>
+<span class="fc bfc" id="L419" title="All 2 branches covered.">        } else if (float.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L420">            return Float.class;</span>
+<span class="fc bfc" id="L421" title="All 2 branches covered.">        } else if (Float.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L422">            return float.class;</span>
+<span class="fc bfc" id="L423" title="All 2 branches covered.">        } else if (int.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L424">            return Integer.class;</span>
+<span class="fc bfc" id="L425" title="All 2 branches covered.">        } else if (Integer.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L426">            return int.class;</span>
+<span class="fc bfc" id="L427" title="All 2 branches covered.">        } else if (long.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L428">            return Long.class;</span>
+<span class="fc bfc" id="L429" title="All 2 branches covered.">        } else if (Long.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L430">            return long.class;</span>
+<span class="fc bfc" id="L431" title="All 2 branches covered.">        } else if (short.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L432">            return Short.class;</span>
+<span class="fc bfc" id="L433" title="All 2 branches covered.">        } else if (Short.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L434">            return short.class;</span>
+        }
+<span class="fc" id="L436">        return clazz;</span>
+    }
+
+    @Override
+    public FieldType fieldTypeFromClass(Class&lt;?&gt; clazz) {
+<span class="fc bfc" id="L441" title="All 2 branches covered.">        if (clazz == null) {</span>
+<span class="fc" id="L442">            return null;</span>
+        }
+
+<span class="fc" id="L445">        return fieldTypeFromClass(clazz.getName());</span>
+    }
+
+    @Override
+    public FieldType fieldTypeFromClass(String className) {
+<span class="fc bfc" id="L450" title="All 4 branches covered.">        if (className == null || className.isEmpty()) {</span>
+<span class="fc" id="L451">            return FieldType.NONE;</span>
+        }
+
+<span class="pc bpc" id="L454" title="3 of 20 branches missed.">        switch (className) {</span>
+        case &quot;java.lang.Object&quot;:
+<span class="fc" id="L456">            return FieldType.ANY;</span>
+        case &quot;java.math.BigInteger&quot;:
+<span class="nc" id="L458">            return FieldType.BIG_INTEGER;</span>
+        case &quot;boolean&quot;:
+        case &quot;java.lang.Boolean&quot;:
+<span class="fc" id="L461">            return FieldType.BOOLEAN;</span>
+        case &quot;byte&quot;:
+        case &quot;java.lang.Byte&quot;:
+<span class="fc" id="L464">            return FieldType.BYTE;</span>
+        case &quot;[B&quot;:
+        case &quot;[Ljava.lang.Byte&quot;:
+<span class="nc" id="L467">            return FieldType.BYTE_ARRAY;</span>
+        case &quot;char&quot;:
+<span class="fc" id="L469">            return FieldType.CHAR;</span>
+        case &quot;java.lang.Character&quot;:
+<span class="fc" id="L471">            return FieldType.CHAR;</span>
+        case &quot;java.math.BigDecimal&quot;:
+<span class="nc" id="L473">            return FieldType.DECIMAL;</span>
+        case &quot;double&quot;:
+        case &quot;java.lang.Double&quot;:
+<span class="fc" id="L476">            return FieldType.DOUBLE;</span>
+        case &quot;float&quot;:
+        case &quot;java.lang.Float&quot;:
+<span class="fc" id="L479">            return FieldType.FLOAT;</span>
+        case &quot;int&quot;:
+        case &quot;java.lang.Integer&quot;:
+        case &quot;java.util.concurrent.atomic.AtomicInteger&quot;:
+<span class="fc" id="L483">            return FieldType.INTEGER;</span>
+        case &quot;long&quot;:
+        case &quot;java.lang.Long&quot;:
+        case &quot;java.util.concurrent.atomic.AtomicLong&quot;:
+<span class="fc" id="L487">            return FieldType.LONG;</span>
+        case &quot;java.lang.Number&quot;:
+<span class="fc" id="L489">            return FieldType.NUMBER;</span>
+        case &quot;short&quot;:
+        case &quot;java.lang.Short&quot;:
+<span class="fc" id="L492">            return FieldType.SHORT;</span>
+        case &quot;java.lang.String&quot;:
+<span class="fc" id="L494">            return FieldType.STRING;</span>
+        case &quot;java.sql.Date&quot;:
+        case &quot;java.time.LocalDate&quot;:
+        case &quot;java.time.Month&quot;:
+        case &quot;java.time.MonthDay&quot;:
+        case &quot;java.time.Year&quot;:
+        case &quot;java.time.YearMonth&quot;:
+<span class="fc" id="L501">            return FieldType.DATE;</span>
+        case &quot;java.sql.Time&quot;:
+        case &quot;java.time.LocalTime&quot;:
+<span class="fc" id="L504">            return FieldType.TIME;</span>
+        case &quot;java.sql.Timestamp&quot;:
+        case &quot;java.time.LocalDateTime&quot;:
+        case &quot;java.util.Date&quot;:
+<span class="fc" id="L508">            return FieldType.DATE_TIME;</span>
+        case &quot;java.time.ZonedDateTime&quot;:
+        case &quot;java.util.Calendar&quot;:
+        case &quot;java.util.GregorianCalendar&quot;:
+<span class="fc" id="L512">            return FieldType.DATE_TIME_TZ;</span>
+        default:
+<span class="fc" id="L514">            return FieldType.COMPLEX;</span>
+        }
+    }
+
+    @Override
+    public Class&lt;?&gt; classFromFieldType(FieldType fieldType) {
+<span class="fc bfc" id="L520" title="All 2 branches covered.">        if (fieldType == null) {</span>
+<span class="fc" id="L521">            return null;</span>
+        }
+
+<span class="pc bpc" id="L524" title="2 of 21 branches missed.">        switch (fieldType) {</span>
+        case ANY:
+<span class="fc" id="L526">            return Object.class;</span>
+        case BIG_INTEGER:
+<span class="fc" id="L528">            return BigInteger.class;</span>
+        case BOOLEAN:
+<span class="fc" id="L530">            return Boolean.class;</span>
+        case BYTE:
+<span class="fc" id="L532">            return Byte.class;</span>
+        case BYTE_ARRAY:
+<span class="nc" id="L534">            return Byte[].class;</span>
+        case CHAR:
+<span class="fc" id="L536">            return java.lang.Character.class;</span>
+        case COMPLEX:
+            // COMPLEX doesn't have representative class
+<span class="fc" id="L539">            return null;</span>
+        case DATE:
+<span class="fc" id="L541">            return java.time.LocalDate.class;</span>
+        case DATE_TIME:
+<span class="fc" id="L543">            return Date.class;</span>
+        case DATE_TZ:
+        case TIME_TZ:
+        case DATE_TIME_TZ:
+<span class="fc" id="L547">            return java.time.ZonedDateTime.class;</span>
+        case DECIMAL:
+<span class="fc" id="L549">            return java.math.BigDecimal.class;</span>
+        case DOUBLE:
+<span class="fc" id="L551">            return java.lang.Double.class;</span>
+        case FLOAT:
+<span class="fc" id="L553">            return java.lang.Float.class;</span>
+        case INTEGER:
+<span class="fc" id="L555">            return java.lang.Integer.class;</span>
+        case LONG:
+<span class="fc" id="L557">            return java.lang.Long.class;</span>
+        case NONE:
+<span class="fc" id="L559">            return null;</span>
+        case NUMBER:
+<span class="fc" id="L561">            return java.lang.Number.class;</span>
+        case SHORT:
+<span class="fc" id="L563">            return java.lang.Short.class;</span>
+        case STRING:
+<span class="fc" id="L565">            return java.lang.String.class;</span>
+        case TIME:
+<span class="fc" id="L567">            return java.time.LocalTime.class;</span>
+        default:
+<span class="nc" id="L569">            throw new IllegalArgumentException(</span>
+<span class="nc" id="L570">                    String.format(&quot;Unsupported field type '%s': corresponding Java class needs to be added in DefaultAtlasConversionService&quot;,</span>
+                            fieldType));
+        }
+    }
+
+    @Override
+    public Boolean isAssignableFieldType(FieldType source, FieldType target) {
+<span class="pc bpc" id="L577" title="2 of 4 branches missed.">        if (source == null || target == null) {</span>
+<span class="nc" id="L578">            return Boolean.FALSE;</span>
+        }
+<span class="fc bfc" id="L580" title="All 4 branches covered.">        if (source.equals(target) || target == FieldType.ANY) {</span>
+<span class="fc" id="L581">            return Boolean.TRUE;</span>
+        }
+
+        // Check umbrella field types
+<span class="fc bfc" id="L585" title="All 2 branches covered.">        if (target == FieldType.NUMBER) {</span>
+<span class="fc bfc" id="L586" title="All 16 branches covered.">            return source == FieldType.BIG_INTEGER || source == FieldType.BYTE || source == FieldType.DECIMAL</span>
+                    || source == FieldType.DOUBLE || source == FieldType.FLOAT || source == FieldType.INTEGER
+                    || source == FieldType.LONG || source == FieldType.SHORT;
+        }
+
+<span class="fc" id="L591">        return Boolean.FALSE;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

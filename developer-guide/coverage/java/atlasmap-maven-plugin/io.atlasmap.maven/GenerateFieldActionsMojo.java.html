@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>GenerateFieldActionsMojo.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlasmap-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.maven</a> &gt; <span class="el_source">GenerateFieldActionsMojo.java</span></div><h1>GenerateFieldActionsMojo.java</h1><pre class="source lang-java linenums">package io.atlasmap.maven;
+
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+
+import io.atlasmap.core.DefaultAtlasConversionService;
+import io.atlasmap.core.DefaultAtlasFieldActionService;
+import io.atlasmap.v2.ActionDetails;
+
+@Mojo(name = &quot;generate-field-actions&quot;)
+<span class="nc" id="L19">public class GenerateFieldActionsMojo extends AbstractAtlasMapMojo {</span>
+
+    public static final String DEFAULT_OUTPUT_FILE_PREFIX = &quot;atlasmap-field-action&quot;;
+
+    /**
+     * A list of {@code &lt;groupId&gt;:&lt;artifactId&gt;[:&lt;extension&gt;[:&lt;classifier&gt;]]:&lt;version&gt;} of
+     * the artifacts to resolve.
+     */
+    @Parameter
+    private List&lt;String&gt; artifacts;
+
+    /**
+     * A list of jar files to search field actions.
+     */
+    @Parameter
+    private List&lt;String&gt; jars;
+
+    /**
+     * The directory where field action metadata get generated to.
+     * Use this property when you want to output to different directory than inspection outputDir.
+     */
+    @Parameter
+    private File fieldActionOutputDir;
+
+    /**
+     * Allows you to configure the plugin with: &lt;code&gt;
+     *
+     *     &lt;configuration&gt;
+     *         &lt;fieldActions&gt;
+     *             &lt;fieldAction&gt;
+     *                 &lt;artifacts&gt;
+     *                     &lt;artifact&gt;io.atlasmap:atlas-java-generateFieldAction-test:1.1&lt;/artifact&gt;
+     *                 &lt;/artifacts&gt;
+     *             &lt;/fieldAction&gt;
+     *             &lt;fieldAction&gt;
+     *                 &lt;jars&gt;
+     *                     &lt;jar&gt;src/test/resources/my-field-actions.jar&lt;/jar&gt;
+     *                 &lt;/jars&gt;
+     *             &lt;/fieldAction&gt;
+     *         &lt;/fieldAxtions&gt;
+     *     &lt;/configuration&gt;
+     *
+     * &lt;/code&gt;
+     */
+    @Parameter()
+    private List&lt;FieldAction&gt; fieldActions;
+
+<span class="nc" id="L66">    public static class FieldAction {</span>
+        private List&lt;String&gt; artifacts;
+        private List&lt;String&gt; jars;
+
+        public List&lt;String&gt; getArtifacts() {
+<span class="nc" id="L71">            return artifacts;</span>
+        }
+
+        public void setArtifacts(List&lt;String&gt; artifacts) {
+<span class="nc" id="L75">            this.artifacts = artifacts;</span>
+<span class="nc" id="L76">        }</span>
+
+        public List&lt;String&gt; getJars() {
+<span class="nc" id="L79">            return this.jars;</span>
+        }
+
+        public void setJars(List&lt;String&gt; jars) {
+<span class="nc" id="L83">            this.jars = jars;</span>
+<span class="nc" id="L84">        }</span>
+
+        @Override
+        public String toString() {
+<span class="nc" id="L88">            return &quot;{artifacts:&quot; + artifacts + &quot;, jars:&quot; + jars + &quot;}&quot;;</span>
+        }
+    }
+
+    @Override
+    public void execute() throws MojoExecutionException, MojoFailureException {
+<span class="nc bnc" id="L94" title="All 2 branches missed.">        if (getFieldActionOutputDir() != null) {</span>
+<span class="nc" id="L95">            getFieldActionOutputDir().mkdirs();</span>
+<span class="nc" id="L96">            this.setOutputDir(getFieldActionOutputDir());</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">        } else if (getOutputDir() != null) {</span>
+<span class="nc" id="L98">            getOutputDir().mkdirs();</span>
+        }
+<span class="nc" id="L100">        List&lt;URL&gt; urls = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        if (this.artifacts != null) {</span>
+<span class="nc" id="L102">            urls.addAll(resolveClasspath(artifacts));</span>
+        }
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        if (this.jars != null) {</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">            for (String jar : jars) {</span>
+                File jarFile;
+<span class="nc bnc" id="L107" title="All 6 branches missed.">                if (jar == null || jar.isEmpty() || !(jarFile = new File(jar)).exists()) {</span>
+<span class="nc" id="L108">                    getLog().warn(String.format(&quot;Could not load jar file '%s' - ignoring&quot;, jar));</span>
+<span class="nc" id="L109">                    continue;</span>
+                }
+                try {
+<span class="nc" id="L112">                    urls.add(jarFile.toURI().toURL());</span>
+<span class="nc" id="L113">                } catch (Exception e) {</span>
+<span class="nc" id="L114">                    getLog().warn(String.format(&quot;Could not load jar file '%s' - ignoring&quot;, jar), e);</span>
+<span class="nc" id="L115">                }</span>
+<span class="nc" id="L116">            }</span>
+        }
+<span class="nc bnc" id="L118" title="All 2 branches missed.">        if (fieldActions != null) {</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">            for (FieldAction fieldAction : fieldActions) {</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">                if (fieldAction.artifacts != null) {</span>
+<span class="nc" id="L121">                    urls.addAll(resolveClasspath(fieldAction.artifacts));</span>
+                }
+<span class="nc bnc" id="L123" title="All 2 branches missed.">                if (fieldAction.jars != null) {</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">                    for (String jar : fieldAction.jars) {</span>
+                        File jarFile;
+<span class="nc bnc" id="L126" title="All 6 branches missed.">                        if (jar == null || jar.isEmpty() || !(jarFile = new File(jar)).exists()) {</span>
+<span class="nc" id="L127">                            getLog().warn(String.format(&quot;Could not load jar file '%s' - ignoring&quot;, jar));</span>
+<span class="nc" id="L128">                            continue;</span>
+                        }
+                        try {
+<span class="nc" id="L131">                            urls.add(jarFile.toURI().toURL());</span>
+<span class="nc" id="L132">                        } catch (Exception e) {</span>
+<span class="nc" id="L133">                            getLog().warn(String.format(&quot;Could not load jar file '%s' - ignoring&quot;, jar), e);</span>
+<span class="nc" id="L134">                        }</span>
+<span class="nc" id="L135">                    }</span>
+                }
+<span class="nc" id="L137">            }</span>
+        }
+<span class="nc bnc" id="L139" title="All 2 branches missed.">        if (!urls.isEmpty()) {</span>
+<span class="nc" id="L140">            generateFieldAction(urls);</span>
+        }
+<span class="nc" id="L142">    }</span>
+
+    private void generateFieldAction(List&lt;URL&gt; urls)
+            throws MojoFailureException, MojoExecutionException {
+
+<span class="nc" id="L147">        DefaultAtlasFieldActionService fieldActionService = DefaultAtlasFieldActionService.getInstance();</span>
+<span class="nc" id="L148">        ClassLoader origTccl = Thread.currentThread().getContextClassLoader();</span>
+<span class="nc" id="L149">        ActionDetails answer = new ActionDetails();</span>
+<span class="nc" id="L150">        try (URLClassLoader loader = new URLClassLoader(urls.toArray(new URL[urls.size()]), origTccl)) {</span>
+<span class="nc" id="L151">            fieldActionService.init(loader);</span>
+<span class="nc" id="L152">        } catch (Exception e) {</span>
+<span class="nc" id="L153">            throw new MojoExecutionException(&quot;Could not load field actions:&quot;, e);</span>
+<span class="nc" id="L154">        }</span>
+<span class="nc" id="L155">        answer.getActionDetail().addAll(fieldActionService.listActionDetails());</span>
+
+<span class="nc" id="L157">        writeToJsonFile(DEFAULT_OUTPUT_FILE_PREFIX, answer);</span>
+<span class="nc" id="L158">    }</span>
+
+    public List&lt;String&gt; getArtifacts() {
+<span class="nc" id="L161">        return artifacts;</span>
+    }
+
+    public void setArtifacts(List&lt;String&gt; artifacts) {
+<span class="nc" id="L165">        this.artifacts = artifacts;</span>
+<span class="nc" id="L166">    }</span>
+
+    public List&lt;FieldAction&gt; getFieldActions() {
+<span class="nc" id="L169">        return fieldActions;</span>
+    }
+
+    public void setFieldActions(List&lt;FieldAction&gt; fieldActions) {
+<span class="nc" id="L173">        this.fieldActions = fieldActions;</span>
+<span class="nc" id="L174">    }</span>
+
+    public File getFieldActionOutputDir() {
+<span class="nc" id="L177">        return fieldActionOutputDir;</span>
+    }
+
+    public void setFieldActionOutputDir(File outputDir) {
+<span class="nc" id="L181">        this.fieldActionOutputDir = outputDir;</span>
+<span class="nc" id="L182">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

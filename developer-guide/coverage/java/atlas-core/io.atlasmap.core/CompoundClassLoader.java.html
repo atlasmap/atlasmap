@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>CompoundClassLoader.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.core</a> &gt; <span class="el_source">CompoundClassLoader.java</span></div><h1>CompoundClassLoader.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.core;
+
+import java.net.URL;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+<span class="fc" id="L29">class CompoundClassLoader extends ClassLoader {</span>
+<span class="fc" id="L30">    private static final Logger LOG = LoggerFactory.getLogger(CompoundClassLoader.class);</span>
+
+<span class="fc" id="L32">    private Set&lt;ClassLoader&gt; delegates = new HashSet&lt;&gt;();</span>
+
+    @Override
+    public Class&lt;?&gt; loadClass(String name) throws ClassNotFoundException {
+<span class="pc bpc" id="L36" title="1 of 2 branches missed.">        for (ClassLoader cl : delegates) {</span>
+            try {
+<span class="fc" id="L38">                return cl.loadClass(name);</span>
+<span class="nc" id="L39">            } catch (Throwable t) {</span>
+<span class="nc" id="L40">                LOG.debug(&quot;Class '{}' was not found with ClassLoader '{}': {}&quot;, name, cl);</span>
+<span class="nc" id="L41">                LOG.debug(t.getMessage(), t);</span>
+            }
+<span class="nc" id="L43">        }</span>
+<span class="nc" id="L44">        throw new ClassNotFoundException(name);</span>
+    }
+
+    @Override
+    public URL getResource(String name) {
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        for (ClassLoader cl : delegates) {</span>
+<span class="fc" id="L50">            URL url = cl.getResource(name);</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">            if (url != null) {</span>
+<span class="fc" id="L52">                return url;</span>
+            }
+<span class="fc" id="L54">            LOG.debug(&quot;Resource '{}' was not found with ClassLoader '{}': {}&quot;, name, cl);</span>
+<span class="fc" id="L55">        }</span>
+<span class="fc" id="L56">        return null;</span>
+    }
+
+    @Override
+    public Enumeration&lt;URL&gt; getResources(String name) {
+<span class="fc" id="L61">        List&lt;URL&gt; answer = new LinkedList&lt;&gt;();</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        for (ClassLoader cl : delegates) {</span>
+            try {
+<span class="fc" id="L64">                Enumeration&lt;URL&gt; urls = cl.getResources(name);</span>
+<span class="pc bpc" id="L65" title="1 of 4 branches missed.">                while (urls != null &amp;&amp; urls.hasMoreElements()) {</span>
+<span class="fc" id="L66">                    answer.add(urls.nextElement());</span>
+                }
+<span class="nc" id="L68">            } catch (Exception e) {</span>
+<span class="nc" id="L69">                LOG.debug(&quot;I/O error while looking for a resource '{}' with ClassLoader '{}': {}&quot;, name, cl);</span>
+<span class="nc" id="L70">                LOG.debug(e.getMessage(), e);</span>
+<span class="fc" id="L71">            }</span>
+<span class="fc" id="L72">        }</span>
+<span class="fc" id="L73">        return Collections.enumeration(answer);</span>
+    }
+
+    public synchronized void add(ClassLoader cl) {
+<span class="fc" id="L77">        delegates.add(cl);</span>
+<span class="fc" id="L78">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

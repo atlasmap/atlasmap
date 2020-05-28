@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DefaultAtlasModuleInfoRegistry.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.core</a> &gt; <span class="el_source">DefaultAtlasModuleInfoRegistry.java</span></div><h1>DefaultAtlasModuleInfoRegistry.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.core;
+
+import java.lang.management.ManagementFactory;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.management.ObjectName;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.atlasmap.spi.AtlasModuleInfo;
+import io.atlasmap.spi.AtlasModuleInfoRegistry;
+
+public class DefaultAtlasModuleInfoRegistry implements AtlasModuleInfoRegistry {
+<span class="fc" id="L32">    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasModuleInfoRegistry.class);</span>
+    private final String jmxObjectNamePrefix;
+<span class="fc" id="L34">    private final Set&lt;AtlasModuleInfo&gt; moduleInfos = new HashSet&lt;&gt;();</span>
+
+<span class="fc" id="L36">    public DefaultAtlasModuleInfoRegistry(DefaultAtlasContextFactory factory) {</span>
+<span class="fc" id="L37">        jmxObjectNamePrefix = factory.getJmxObjectName() + &quot;,modules=AvailableModules,moduleName=&quot;;</span>
+<span class="fc" id="L38">    }</span>
+
+    @Override
+    public AtlasModuleInfo lookupByUri(String uri) {
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (uri == null) {</span>
+<span class="fc" id="L43">            return null;</span>
+        }
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        for (AtlasModuleInfo module : moduleInfos) {</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">            if (uri.startsWith(module.getUri())) {</span>
+<span class="fc" id="L47">                return module;</span>
+            }
+<span class="fc" id="L49">        }</span>
+<span class="fc" id="L50">        return null;</span>
+    }
+
+    @Override
+    public Set&lt;AtlasModuleInfo&gt; getAll() {
+<span class="fc" id="L55">        return Collections.unmodifiableSet(moduleInfos);</span>
+    }
+
+    @Override
+    public void register(AtlasModuleInfo module) {
+<span class="fc" id="L60">        moduleInfos.add(module);</span>
+<span class="fc" id="L61">        registerModuleJmx(module);</span>
+<span class="fc" id="L62">    }</span>
+
+    @Override
+    public int size() {
+<span class="fc" id="L66">        return moduleInfos.size();</span>
+    }
+
+    @Override
+    public synchronized void unregisterAll() {
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        for (AtlasModuleInfo info : moduleInfos) {</span>
+<span class="fc" id="L72">            unregisterModuleJmx(info);</span>
+<span class="fc" id="L73">        }</span>
+<span class="fc" id="L74">        moduleInfos.clear();</span>
+<span class="fc" id="L75">    }</span>
+
+    private void registerModuleJmx(AtlasModuleInfo module) {
+        try {
+<span class="fc" id="L79">            String n = jmxObjectNamePrefix + module.getName();</span>
+<span class="fc" id="L80">            ObjectName on = new ObjectName(n);</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">            if (!ManagementFactory.getPlatformMBeanServer().isRegistered(on)) {</span>
+<span class="fc" id="L82">                ManagementFactory.getPlatformMBeanServer().registerMBean(module, on);</span>
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L84">                    LOG.debug(&quot;Registered AtlasModule '&quot; + module.getName() + &quot;' with JMX&quot;);</span>
+                }
+            }
+<span class="nc" id="L87">        } catch (Exception e) {</span>
+<span class="nc" id="L88">            LOG.warn(&quot;Unable to register AtlasModule '&quot; + module.getName() + &quot;' with JMX&quot;, e);</span>
+<span class="fc" id="L89">        }</span>
+<span class="fc" id="L90">    }</span>
+
+    private void unregisterModuleJmx(AtlasModuleInfo module) {
+        try {
+<span class="fc" id="L94">            String n = jmxObjectNamePrefix + module.getName();</span>
+<span class="fc" id="L95">            ObjectName on = new ObjectName(n);</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">            if (ManagementFactory.getPlatformMBeanServer().isRegistered(on)) {</span>
+<span class="fc" id="L97">                ManagementFactory.getPlatformMBeanServer().unregisterMBean(on);</span>
+            }
+<span class="nc" id="L99">        } catch (Exception e) {</span>
+<span class="nc" id="L100">            LOG.warn(&quot;Unable to unregister module '&quot; + module.getName() + &quot;' from JMX&quot;);</span>
+<span class="fc" id="L101">        }</span>
+<span class="fc" id="L102">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>Collection.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.v2</a> &gt; <span class="el_source">Collection.java</span></div><h1>Collection.java</h1><pre class="source lang-java linenums">package io.atlasmap.v2;
+
+import java.io.Serializable;
+import java.math.BigInteger;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+@Deprecated
+@JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
+<span class="fc" id="L9">public class Collection</span>
+    extends BaseMapping
+    implements Serializable
+{
+
+    private final static long serialVersionUID = 1L;
+
+    protected Mappings mappings;
+
+    protected BigInteger collectionSize;
+
+    protected CollectionType collectionType;
+
+    /**
+     * Gets the value of the mappings property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Mappings }
+     *     
+     */
+    public Mappings getMappings() {
+<span class="fc" id="L31">        return mappings;</span>
+    }
+
+    /**
+     * Sets the value of the mappings property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Mappings }
+     *     
+     */
+    public void setMappings(Mappings value) {
+<span class="fc" id="L43">        this.mappings = value;</span>
+<span class="fc" id="L44">    }</span>
+
+    /**
+     * Gets the value of the collectionSize property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigInteger }
+     *     
+     */
+    public BigInteger getCollectionSize() {
+<span class="fc" id="L55">        return collectionSize;</span>
+    }
+
+    /**
+     * Sets the value of the collectionSize property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigInteger }
+     *     
+     */
+    public void setCollectionSize(BigInteger value) {
+<span class="fc" id="L67">        this.collectionSize = value;</span>
+<span class="fc" id="L68">    }</span>
+
+    /**
+     * Gets the value of the collectionType property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link CollectionType }
+     *     
+     */
+    public CollectionType getCollectionType() {
+<span class="fc" id="L79">        return collectionType;</span>
+    }
+
+    /**
+     * Sets the value of the collectionType property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link CollectionType }
+     *     
+     */
+    public void setCollectionType(CollectionType value) {
+<span class="fc" id="L91">        this.collectionType = value;</span>
+<span class="fc" id="L92">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

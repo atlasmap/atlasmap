@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>JavaMappingFieldPairValidator.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-java-module</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.java.module</a> &gt; <span class="el_source">JavaMappingFieldPairValidator.java</span></div><h1>JavaMappingFieldPairValidator.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ * &lt;p&gt;
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * &lt;p&gt;
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * &lt;p&gt;
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.java.module;
+
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import io.atlasmap.spi.AtlasConverter;
+import io.atlasmap.core.validate.MappingFieldPairValidator;
+import io.atlasmap.java.v2.JavaField;
+import io.atlasmap.spi.AtlasConversionInfo;
+import io.atlasmap.spi.AtlasConversionService;
+import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldType;
+import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
+import io.atlasmap.v2.ValidationStatus;
+
+public class JavaMappingFieldPairValidator extends MappingFieldPairValidator {
+
+    private JavaValidationService service;
+    private AtlasConversionService conversionService;
+    
+    JavaMappingFieldPairValidator(JavaValidationService service, AtlasConversionService conversion) {
+<span class="fc" id="L40">        super(service);</span>
+<span class="fc" id="L41">        this.service = service;</span>
+<span class="fc" id="L42">        this.conversionService = conversion;</span>
+<span class="fc" id="L43">    }</span>
+
+    @Override
+    protected void doValidateFieldTypes(List&lt;Validation&gt; validations, String mappingId,
+            Field sourceField, Field targetField, FieldType sourceFieldType) {
+<span class="pc bpc" id="L48" title="1 of 6 branches missed.">        if ((sourceField instanceof JavaField &amp;&amp; targetField instanceof JavaField) &amp;&amp; ((sourceFieldType == null</span>
+<span class="pc bpc" id="L49" title="2 of 4 branches missed.">                || targetField.getFieldType() == null)</span>
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">                || (sourceFieldType == FieldType.COMPLEX || targetField.getFieldType() == FieldType.COMPLEX))) {</span>
+            // making an assumption that anything marked as COMPLEX would require the use of
+            // the class name to find a validator.
+<span class="nc bnc" id="L53" title="All 4 branches missed.">            if (((JavaField)sourceField).getClassName() != null &amp;&amp; ((JavaField)targetField).getClassName() != null) {</span>
+<span class="nc" id="L54">                validateClassConversion(mappingId, (JavaField) sourceField, (JavaField) targetField, validations);</span>
+<span class="nc" id="L55">                return;</span>
+            }
+        }
+
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (sourceField.getFieldType() != targetField.getFieldType()) {</span>
+<span class="fc" id="L60">            super.doValidateFieldTypes(validations, mappingId, sourceField, targetField, sourceFieldType);</span>
+        }
+<span class="fc" id="L62">    }</span>
+
+    private void validateClassConversion(String mappingId, JavaField inputField, JavaField outField,
+            List&lt;Validation&gt; validations) {
+        // skip converter check for COMPLEX source field (possible for conditional mapping)
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        if (inputField.getFieldType() == FieldType.COMPLEX) {</span>
+<span class="nc" id="L68">            return;</span>
+        }
+
+<span class="nc" id="L71">        Optional&lt;AtlasConverter&lt;?&gt;&gt; atlasConverter = conversionService</span>
+<span class="nc" id="L72">                .findMatchingConverter(inputField.getClassName(), outField.getClassName());</span>
+
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        if (!atlasConverter.isPresent()) {</span>
+<span class="nc" id="L75">            Validation validation = new Validation();</span>
+<span class="nc" id="L76">            validation.setScope(ValidationScope.MAPPING);</span>
+<span class="nc" id="L77">            validation.setId(mappingId);</span>
+<span class="nc" id="L78">            validation</span>
+<span class="nc" id="L79">                    .setMessage(String.format(&quot;Conversion from '%s' to '%s' is required but no converter is available&quot;,</span>
+<span class="nc" id="L80">                            inputField.getClassName(), outField.getClassName()));</span>
+<span class="nc" id="L81">            validation.setStatus(ValidationStatus.ERROR);</span>
+<span class="nc" id="L82">            validations.add(validation);</span>
+<span class="nc" id="L83">        } else {</span>
+            AtlasConversionInfo conversionInfo;
+            // find the method that does the conversion
+<span class="nc" id="L86">            Method[] methods = atlasConverter.get().getClass().getMethods();</span>
+<span class="nc" id="L87">            conversionInfo = Arrays.stream(methods).map(method -&gt; method.getAnnotation(AtlasConversionInfo.class))</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">                    .filter(atlasConversionInfo -&gt; atlasConversionInfo != null)</span>
+<span class="nc" id="L89">                    .filter(atlasConversionInfo -&gt; atlasConversionInfo.sourceType()</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">                            .compareTo(inputField.getFieldType()) == 0</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">                            &amp;&amp; atlasConversionInfo.targetType().compareTo(outField.getFieldType()) == 0)</span>
+<span class="nc" id="L92">                    .findFirst().orElse(null);</span>
+
+<span class="nc bnc" id="L94" title="All 2 branches missed.">            if (conversionInfo != null) {</span>
+<span class="nc" id="L95">                populateConversionConcerns(validations, mappingId,</span>
+<span class="nc" id="L96">                     conversionInfo, service.getModuleFieldName(inputField), service.getModuleFieldName(outField));</span>
+            }
+        }
+<span class="nc" id="L99">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>NumberFieldActions.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.actions</a> &gt; <span class="el_source">NumberFieldActions.java</span></div><h1>NumberFieldActions.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.actions;
+
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.atlasmap.spi.AtlasActionProcessor;
+import io.atlasmap.spi.AtlasFieldAction;
+import io.atlasmap.v2.AbsoluteValue;
+import io.atlasmap.v2.Add;
+import io.atlasmap.v2.AreaUnitType;
+import io.atlasmap.v2.Average;
+import io.atlasmap.v2.Ceiling;
+import io.atlasmap.v2.ConvertAreaUnit;
+import io.atlasmap.v2.ConvertDistanceUnit;
+import io.atlasmap.v2.ConvertMassUnit;
+import io.atlasmap.v2.ConvertVolumeUnit;
+import io.atlasmap.v2.DistanceUnitType;
+import io.atlasmap.v2.Divide;
+import io.atlasmap.v2.Floor;
+import io.atlasmap.v2.MassUnitType;
+import io.atlasmap.v2.Maximum;
+import io.atlasmap.v2.Minimum;
+import io.atlasmap.v2.Multiply;
+import io.atlasmap.v2.Round;
+import io.atlasmap.v2.Subtract;
+import io.atlasmap.v2.VolumeUnitType;
+
+<span class="fc" id="L49">public class NumberFieldActions implements AtlasFieldAction {</span>
+<span class="fc" id="L50">    private static final Logger LOG = LoggerFactory.getLogger(NumberFieldActions.class);</span>
+
+    // 1D
+    private static final double KILO_GRAMS_IN_A_POUND = 0.45359237;
+    private static final double YARDS_IN_A_MILE = 1760.0;
+    private static final double FEET_IN_A_YARD = 3.0;
+    private static final double INCHES_IN_A_FOOT = 12.0;
+    private static final double METERS_IN_A_INCH = 0.0254;
+    // 2D
+<span class="fc" id="L59">    private static final double SQUARE_FEET_IN_A_SQUARE_METER = Math.pow(1.0 / METERS_IN_A_INCH / INCHES_IN_A_FOOT,</span>
+            2.0);
+<span class="fc" id="L61">    private static final double SQUARE_METERS_IN_A_SQUARE_MILE = Math</span>
+<span class="fc" id="L62">            .pow(YARDS_IN_A_MILE * FEET_IN_A_YARD * INCHES_IN_A_FOOT * METERS_IN_A_INCH, 2.0);</span>
+<span class="fc" id="L63">    private static final double SQUARE_FEET_IN_A_SQUARE_MILE = Math.pow(YARDS_IN_A_MILE * FEET_IN_A_YARD, 2.0);</span>
+    // 3D
+    private static final double LITERS_IN_A_CUBIC_METER = 1000.0;
+<span class="fc" id="L66">    private static final double CUBIC_FEET_IN_A_CUBIC_METER = Math.pow(1.0 / METERS_IN_A_INCH / INCHES_IN_A_FOOT, 3.0);</span>
+    private static final double GALLONS_US_FLUID_IN_A_CUBIC_METER = 264.17205236;
+
+    private static Map&lt;MassUnitType, Map&lt;MassUnitType, Double&gt;&gt; massConvertionTable;
+    static {
+<span class="fc" id="L71">        Map&lt;MassUnitType, Map&lt;MassUnitType, Double&gt;&gt; rootTable = new EnumMap&lt;&gt;(MassUnitType.class);</span>
+<span class="fc" id="L72">        Map&lt;MassUnitType, Double&gt; kgRates = new EnumMap&lt;&gt;(MassUnitType.class);</span>
+<span class="fc" id="L73">        kgRates.put(MassUnitType.KILOGRAM_KG, 1.0);</span>
+<span class="fc" id="L74">        kgRates.put(MassUnitType.POUND_LB, 1.0 / KILO_GRAMS_IN_A_POUND);</span>
+<span class="fc" id="L75">        rootTable.put(MassUnitType.KILOGRAM_KG, Collections.unmodifiableMap(kgRates));</span>
+<span class="fc" id="L76">        Map&lt;MassUnitType, Double&gt; lbsRates = new EnumMap&lt;&gt;(MassUnitType.class);</span>
+<span class="fc" id="L77">        lbsRates.put(MassUnitType.KILOGRAM_KG, KILO_GRAMS_IN_A_POUND);</span>
+<span class="fc" id="L78">        lbsRates.put(MassUnitType.POUND_LB, 1.0);</span>
+<span class="fc" id="L79">        rootTable.put(MassUnitType.POUND_LB, Collections.unmodifiableMap(lbsRates));</span>
+<span class="fc" id="L80">        massConvertionTable = Collections.unmodifiableMap(rootTable);</span>
+    }
+
+    private static Map&lt;DistanceUnitType, Map&lt;DistanceUnitType, Double&gt;&gt; distanceConvertionTable;
+    static {
+<span class="fc" id="L85">        Map&lt;DistanceUnitType, Map&lt;DistanceUnitType, Double&gt;&gt; rootTable = new EnumMap&lt;&gt;(DistanceUnitType.class);</span>
+<span class="fc" id="L86">        Map&lt;DistanceUnitType, Double&gt; mRates = new EnumMap&lt;&gt;(DistanceUnitType.class);</span>
+<span class="fc" id="L87">        mRates.put(DistanceUnitType.METER_M, 1.0);</span>
+<span class="fc" id="L88">        mRates.put(DistanceUnitType.FOOT_FT, 1.0 / METERS_IN_A_INCH / INCHES_IN_A_FOOT);</span>
+<span class="fc" id="L89">        mRates.put(DistanceUnitType.YARD_YD, 1.0 / METERS_IN_A_INCH / INCHES_IN_A_FOOT / FEET_IN_A_YARD);</span>
+<span class="fc" id="L90">        mRates.put(DistanceUnitType.MILE_MI, 1.0 / METERS_IN_A_INCH / INCHES_IN_A_FOOT / FEET_IN_A_YARD / YARDS_IN_A_MILE);</span>
+<span class="fc" id="L91">        mRates.put(DistanceUnitType.INCH_IN, 1.0 / METERS_IN_A_INCH);</span>
+<span class="fc" id="L92">        rootTable.put(DistanceUnitType.METER_M, Collections.unmodifiableMap(mRates));</span>
+<span class="fc" id="L93">        Map&lt;DistanceUnitType, Double&gt; ftRates = new EnumMap&lt;&gt;(DistanceUnitType.class);</span>
+<span class="fc" id="L94">        ftRates.put(DistanceUnitType.METER_M, INCHES_IN_A_FOOT * METERS_IN_A_INCH);</span>
+<span class="fc" id="L95">        ftRates.put(DistanceUnitType.FOOT_FT, 1.0);</span>
+<span class="fc" id="L96">        ftRates.put(DistanceUnitType.YARD_YD, 1.0 / FEET_IN_A_YARD);</span>
+<span class="fc" id="L97">        ftRates.put(DistanceUnitType.MILE_MI, 1.0 / FEET_IN_A_YARD / YARDS_IN_A_MILE);</span>
+<span class="fc" id="L98">        ftRates.put(DistanceUnitType.INCH_IN, INCHES_IN_A_FOOT);</span>
+<span class="fc" id="L99">        rootTable.put(DistanceUnitType.FOOT_FT, Collections.unmodifiableMap(ftRates));</span>
+<span class="fc" id="L100">        Map&lt;DistanceUnitType, Double&gt; ydRates = new EnumMap&lt;&gt;(DistanceUnitType.class);</span>
+<span class="fc" id="L101">        ydRates.put(DistanceUnitType.METER_M, FEET_IN_A_YARD * INCHES_IN_A_FOOT * METERS_IN_A_INCH);</span>
+<span class="fc" id="L102">        ydRates.put(DistanceUnitType.FOOT_FT, FEET_IN_A_YARD);</span>
+<span class="fc" id="L103">        ydRates.put(DistanceUnitType.YARD_YD, 1.0);</span>
+<span class="fc" id="L104">        ydRates.put(DistanceUnitType.MILE_MI, 1.0 / YARDS_IN_A_MILE);</span>
+<span class="fc" id="L105">        ydRates.put(DistanceUnitType.INCH_IN, FEET_IN_A_YARD * INCHES_IN_A_FOOT);</span>
+<span class="fc" id="L106">        rootTable.put(DistanceUnitType.YARD_YD, Collections.unmodifiableMap(ydRates));</span>
+<span class="fc" id="L107">        Map&lt;DistanceUnitType, Double&gt; miRates = new EnumMap&lt;&gt;(DistanceUnitType.class);</span>
+<span class="fc" id="L108">        miRates.put(DistanceUnitType.METER_M, YARDS_IN_A_MILE * FEET_IN_A_YARD * INCHES_IN_A_FOOT * METERS_IN_A_INCH);</span>
+<span class="fc" id="L109">        miRates.put(DistanceUnitType.FOOT_FT, YARDS_IN_A_MILE * FEET_IN_A_YARD);</span>
+<span class="fc" id="L110">        miRates.put(DistanceUnitType.YARD_YD, YARDS_IN_A_MILE);</span>
+<span class="fc" id="L111">        miRates.put(DistanceUnitType.MILE_MI, 1.0);</span>
+<span class="fc" id="L112">        miRates.put(DistanceUnitType.INCH_IN, YARDS_IN_A_MILE * FEET_IN_A_YARD * INCHES_IN_A_FOOT);</span>
+<span class="fc" id="L113">        rootTable.put(DistanceUnitType.MILE_MI, Collections.unmodifiableMap(miRates));</span>
+<span class="fc" id="L114">        Map&lt;DistanceUnitType, Double&gt; inRates = new EnumMap&lt;&gt;(DistanceUnitType.class);</span>
+<span class="fc" id="L115">        inRates.put(DistanceUnitType.METER_M, METERS_IN_A_INCH);</span>
+<span class="fc" id="L116">        inRates.put(DistanceUnitType.FOOT_FT, 1.0 / INCHES_IN_A_FOOT);</span>
+<span class="fc" id="L117">        inRates.put(DistanceUnitType.YARD_YD, 1.0 / INCHES_IN_A_FOOT / FEET_IN_A_YARD);</span>
+<span class="fc" id="L118">        inRates.put(DistanceUnitType.MILE_MI, 1.0 / INCHES_IN_A_FOOT / FEET_IN_A_YARD / YARDS_IN_A_MILE);</span>
+<span class="fc" id="L119">        inRates.put(DistanceUnitType.INCH_IN, 1.0);</span>
+<span class="fc" id="L120">        rootTable.put(DistanceUnitType.INCH_IN, Collections.unmodifiableMap(inRates));</span>
+<span class="fc" id="L121">        distanceConvertionTable = Collections.unmodifiableMap(rootTable);</span>
+    }
+
+    private static Map&lt;AreaUnitType, Map&lt;AreaUnitType, Double&gt;&gt; areaConvertionTable;
+    static {
+<span class="fc" id="L126">        Map&lt;AreaUnitType, Map&lt;AreaUnitType, Double&gt;&gt; rootTable = new EnumMap&lt;&gt;(AreaUnitType.class);</span>
+<span class="fc" id="L127">        Map&lt;AreaUnitType, Double&gt; m2Rates = new EnumMap&lt;&gt;(AreaUnitType.class);</span>
+<span class="fc" id="L128">        m2Rates.put(AreaUnitType.SQUARE_METER, 1.0);</span>
+<span class="fc" id="L129">        m2Rates.put(AreaUnitType.SQUARE_FOOT, SQUARE_FEET_IN_A_SQUARE_METER);</span>
+<span class="fc" id="L130">        m2Rates.put(AreaUnitType.SQUARE_MILE, 1.0 / SQUARE_METERS_IN_A_SQUARE_MILE);</span>
+<span class="fc" id="L131">        rootTable.put(AreaUnitType.SQUARE_METER, Collections.unmodifiableMap(m2Rates));</span>
+<span class="fc" id="L132">        Map&lt;AreaUnitType, Double&gt; ft2Rates = new EnumMap&lt;&gt;(AreaUnitType.class);</span>
+<span class="fc" id="L133">        ft2Rates.put(AreaUnitType.SQUARE_METER, 1.0 / SQUARE_FEET_IN_A_SQUARE_METER);</span>
+<span class="fc" id="L134">        ft2Rates.put(AreaUnitType.SQUARE_FOOT, 1.0);</span>
+<span class="fc" id="L135">        ft2Rates.put(AreaUnitType.SQUARE_MILE, 1.0 / SQUARE_FEET_IN_A_SQUARE_MILE);</span>
+<span class="fc" id="L136">        rootTable.put(AreaUnitType.SQUARE_FOOT, Collections.unmodifiableMap(ft2Rates));</span>
+<span class="fc" id="L137">        Map&lt;AreaUnitType, Double&gt; mi2Rates = new EnumMap&lt;&gt;(AreaUnitType.class);</span>
+<span class="fc" id="L138">        mi2Rates.put(AreaUnitType.SQUARE_METER, SQUARE_METERS_IN_A_SQUARE_MILE);</span>
+<span class="fc" id="L139">        mi2Rates.put(AreaUnitType.SQUARE_FOOT, SQUARE_FEET_IN_A_SQUARE_MILE);</span>
+<span class="fc" id="L140">        mi2Rates.put(AreaUnitType.SQUARE_MILE, 1.0);</span>
+<span class="fc" id="L141">        rootTable.put(AreaUnitType.SQUARE_MILE, Collections.unmodifiableMap(mi2Rates));</span>
+<span class="fc" id="L142">        areaConvertionTable = Collections.unmodifiableMap(rootTable);</span>
+    }
+
+    private static Map&lt;VolumeUnitType, Map&lt;VolumeUnitType, Double&gt;&gt; volumeConvertionTable;
+    static {
+<span class="fc" id="L147">        Map&lt;VolumeUnitType, Map&lt;VolumeUnitType, Double&gt;&gt; rootTable = new EnumMap&lt;&gt;(VolumeUnitType.class);</span>
+<span class="fc" id="L148">        Map&lt;VolumeUnitType, Double&gt; m3Rates = new EnumMap&lt;&gt;(VolumeUnitType.class);</span>
+<span class="fc" id="L149">        m3Rates.put(VolumeUnitType.CUBIC_METER, 1.0);</span>
+<span class="fc" id="L150">        m3Rates.put(VolumeUnitType.LITER, LITERS_IN_A_CUBIC_METER);</span>
+<span class="fc" id="L151">        m3Rates.put(VolumeUnitType.CUBIC_FOOT, CUBIC_FEET_IN_A_CUBIC_METER);</span>
+<span class="fc" id="L152">        m3Rates.put(VolumeUnitType.GALLON_US_FLUID, GALLONS_US_FLUID_IN_A_CUBIC_METER);</span>
+<span class="fc" id="L153">        rootTable.put(VolumeUnitType.CUBIC_METER, Collections.unmodifiableMap(m3Rates));</span>
+<span class="fc" id="L154">        Map&lt;VolumeUnitType, Double&gt; literRates = new EnumMap&lt;&gt;(VolumeUnitType.class);</span>
+<span class="fc" id="L155">        literRates.put(VolumeUnitType.CUBIC_METER, 1.0 / LITERS_IN_A_CUBIC_METER);</span>
+<span class="fc" id="L156">        literRates.put(VolumeUnitType.LITER, 1.0);</span>
+<span class="fc" id="L157">        literRates.put(VolumeUnitType.CUBIC_FOOT, 1.0 / LITERS_IN_A_CUBIC_METER * CUBIC_FEET_IN_A_CUBIC_METER);</span>
+<span class="fc" id="L158">        literRates.put(VolumeUnitType.GALLON_US_FLUID,</span>
+<span class="fc" id="L159">                1.0 / LITERS_IN_A_CUBIC_METER * GALLONS_US_FLUID_IN_A_CUBIC_METER);</span>
+<span class="fc" id="L160">        rootTable.put(VolumeUnitType.LITER, Collections.unmodifiableMap(literRates));</span>
+<span class="fc" id="L161">        Map&lt;VolumeUnitType, Double&gt; cftRates = new EnumMap&lt;&gt;(VolumeUnitType.class);</span>
+<span class="fc" id="L162">        cftRates.put(VolumeUnitType.CUBIC_METER, 1.0 / CUBIC_FEET_IN_A_CUBIC_METER);</span>
+<span class="fc" id="L163">        cftRates.put(VolumeUnitType.LITER, 1.0 / CUBIC_FEET_IN_A_CUBIC_METER * LITERS_IN_A_CUBIC_METER);</span>
+<span class="fc" id="L164">        cftRates.put(VolumeUnitType.CUBIC_FOOT, 1.0);</span>
+<span class="fc" id="L165">        cftRates.put(VolumeUnitType.GALLON_US_FLUID,</span>
+<span class="fc" id="L166">                1.0 / CUBIC_FEET_IN_A_CUBIC_METER * GALLONS_US_FLUID_IN_A_CUBIC_METER);</span>
+<span class="fc" id="L167">        rootTable.put(VolumeUnitType.CUBIC_FOOT, Collections.unmodifiableMap(cftRates));</span>
+<span class="fc" id="L168">        Map&lt;VolumeUnitType, Double&gt; galUsFluidRates = new EnumMap&lt;&gt;(VolumeUnitType.class);</span>
+<span class="fc" id="L169">        galUsFluidRates.put(VolumeUnitType.CUBIC_METER, 1.0 / GALLONS_US_FLUID_IN_A_CUBIC_METER);</span>
+<span class="fc" id="L170">        galUsFluidRates.put(VolumeUnitType.LITER, 1.0 / GALLONS_US_FLUID_IN_A_CUBIC_METER * LITERS_IN_A_CUBIC_METER);</span>
+<span class="fc" id="L171">        galUsFluidRates.put(VolumeUnitType.CUBIC_FOOT,</span>
+<span class="fc" id="L172">                1.0 / GALLONS_US_FLUID_IN_A_CUBIC_METER * CUBIC_FEET_IN_A_CUBIC_METER);</span>
+<span class="fc" id="L173">        galUsFluidRates.put(VolumeUnitType.GALLON_US_FLUID, 1.0);</span>
+<span class="fc" id="L174">        rootTable.put(VolumeUnitType.GALLON_US_FLUID, Collections.unmodifiableMap(galUsFluidRates));</span>
+<span class="fc" id="L175">        volumeConvertionTable = Collections.unmodifiableMap(rootTable);</span>
+<span class="fc" id="L176">    }</span>
+
+    @AtlasActionProcessor
+    public static Number absoluteValue(AbsoluteValue action, Number input) {
+<span class="fc bfc" id="L180" title="All 2 branches covered.">        if (input == null) {</span>
+<span class="fc" id="L181">            return 0;</span>
+        }
+<span class="fc bfc" id="L183" title="All 2 branches covered.">        if (input instanceof BigDecimal) {</span>
+<span class="fc" id="L184">            return ((BigDecimal) input).abs();</span>
+        }
+<span class="fc bfc" id="L186" title="All 2 branches covered.">        if (requiresDoubleResult(input)) {</span>
+<span class="fc" id="L187">            return Math.abs(input.doubleValue());</span>
+        }
+<span class="fc" id="L189">        return Math.abs(input.longValue());</span>
+    }
+
+    @AtlasActionProcessor
+    public static Number add(Add action, List&lt;Number&gt; inputs) {
+<span class="fc bfc" id="L194" title="All 2 branches covered.">        if (inputs == null) {</span>
+<span class="fc" id="L195">            return 0;</span>
+        }
+
+<span class="fc" id="L198">        Number sum = 0L;</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">        for (Object entry : inputs) {</span>
+<span class="fc bfc" id="L200" title="All 2 branches covered.">            if (entry instanceof Number) {</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">                if (sum instanceof BigDecimal) {</span>
+<span class="fc" id="L202">                    sum = ((BigDecimal) sum).add(BigDecimal.valueOf(((Number) entry).doubleValue()));</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">                } else if (entry instanceof BigDecimal) {</span>
+<span class="fc" id="L204">                    sum = BigDecimal.valueOf(sum.doubleValue()).add((BigDecimal) entry);</span>
+<span class="fc bfc" id="L205" title="All 4 branches covered.">                } else if (requiresDoubleResult(sum) || requiresDoubleResult(entry)) {</span>
+<span class="fc" id="L206">                    sum = sum.doubleValue() + ((Number) entry).doubleValue();</span>
+                } else {
+<span class="fc" id="L208">                    sum = sum.longValue() + ((Number) entry).longValue();</span>
+                }
+            } else {
+<span class="fc" id="L211">                warnIgnoringValue(&quot;Add&quot;, entry);</span>
+            }
+<span class="fc" id="L213">        }</span>
+
+<span class="fc" id="L215">        return sum;</span>
+    }
+
+    @AtlasActionProcessor
+    public static Number average(Average action, List&lt;Number&gt; inputs) {
+<span class="fc bfc" id="L220" title="All 2 branches covered.">        if (inputs == null) {</span>
+<span class="fc" id="L221">            return 0;</span>
+        }
+<span class="fc" id="L223">        return add(null, inputs).doubleValue() / inputs.size();</span>
+    }
+
+    @AtlasActionProcessor
+    public static Number ceiling(Ceiling action, Number input) {
+<span class="fc bfc" id="L228" title="All 2 branches covered.">        return input == null ? 0L : (long)Math.ceil(input.doubleValue());</span>
+    }
+
+    @AtlasActionProcessor
+    public static Number convertMassUnit(ConvertMassUnit convertMassUnit, Number input) {
+<span class="fc bfc" id="L233" title="All 2 branches covered.">        if (input == null) {</span>
+<span class="fc" id="L234">            return 0;</span>
+        }
+
+<span class="pc bpc" id="L237" title="1 of 4 branches missed.">        if (convertMassUnit == null || convertMassUnit.getFromUnit() == null</span>
+<span class="fc bfc" id="L238" title="All 2 branches covered.">                || convertMassUnit.getToUnit() == null) {</span>
+<span class="fc" id="L239">            throw new IllegalArgumentException(&quot;ConvertMassUnit must be specified  with fromUnit and toUnit&quot;);</span>
+        }
+
+<span class="fc" id="L242">        MassUnitType fromUnit = convertMassUnit.getFromUnit();</span>
+<span class="fc" id="L243">        MassUnitType toUnit = convertMassUnit.getToUnit();</span>
+<span class="fc" id="L244">        double rate = massConvertionTable.get(fromUnit).get(toUnit);</span>
+<span class="fc" id="L245">        return doMultiply(input, rate);</span>
+    }
+
+    @AtlasActionProcessor
+    public static Number convertDistanceUnit(ConvertDistanceUnit convertDistanceUnit, Number input) {
+<span class="fc bfc" id="L250" title="All 2 branches covered.">        if (input == null) {</span>
+<span class="fc" id="L251">            return 0;</span>
+        }
+
+<span class="pc bpc" id="L254" title="1 of 4 branches missed.">        if (convertDistanceUnit == null || convertDistanceUnit.getFromUnit() == null</span>
+<span class="pc bpc" id="L255" title="1 of 2 branches missed.">                || convertDistanceUnit.getToUnit() == null) {</span>
+<span class="fc" id="L256">            throw new IllegalArgumentException(&quot;ConvertDistanceUnit must be specified  with fromUnit and toUnit&quot;);</span>
+        }
+
+<span class="fc" id="L259">        DistanceUnitType fromUnit = convertDistanceUnit.getFromUnit();</span>
+<span class="fc" id="L260">        DistanceUnitType toUnit = convertDistanceUnit.getToUnit();</span>
+<span class="fc" id="L261">        double rate = distanceConvertionTable.get(fromUnit).get(toUnit);</span>
+<span class="fc" id="L262">        return doMultiply(input, rate);</span>
+    }
+
+    @AtlasActionProcessor
+    public static Number convertAreaUnit(ConvertAreaUnit convertAreaUnit, Number input) {
+<span class="fc bfc" id="L267" title="All 2 branches covered.">        if (input == null) {</span>
+<span class="fc" id="L268">            return 0;</span>
+        }
+
+<span class="pc bpc" id="L271" title="1 of 4 branches missed.">        if (convertAreaUnit == null || convertAreaUnit.getFromUnit() == null</span>
+<span class="pc bpc" id="L272" title="1 of 2 branches missed.">                || convertAreaUnit.getToUnit() == null) {</span>
+<span class="fc" id="L273">            throw new IllegalArgumentException(&quot;ConvertAreaUnit must be specified  with fromUnit and toUnit&quot;);</span>
+        }
+
+<span class="fc" id="L276">        AreaUnitType fromUnit = convertAreaUnit.getFromUnit();</span>
+<span class="fc" id="L277">        AreaUnitType toUnit = convertAreaUnit.getToUnit();</span>
+<span class="fc" id="L278">        double rate = areaConvertionTable.get(fromUnit).get(toUnit);</span>
+<span class="fc" id="L279">        return doMultiply(input, rate);</span>
+    }
+
+    @AtlasActionProcessor
+    public static Number convertVolumeUnit(ConvertVolumeUnit convertVolumeUnit, Number input) {
+<span class="fc bfc" id="L284" title="All 2 branches covered.">        if (input == null) {</span>
+<span class="fc" id="L285">            return 0;</span>
+        }
+
+<span class="pc bpc" id="L288" title="1 of 4 branches missed.">        if (convertVolumeUnit == null || convertVolumeUnit.getFromUnit() == null</span>
+<span class="pc bpc" id="L289" title="1 of 2 branches missed.">                || convertVolumeUnit.getToUnit() == null) {</span>
+<span class="fc" id="L290">            throw new IllegalArgumentException(&quot;ConvertVolumeUnit must be specified  with fromUnit and toUnit&quot;);</span>
+        }
+
+<span class="fc" id="L293">        VolumeUnitType fromUnit = convertVolumeUnit.getFromUnit();</span>
+<span class="fc" id="L294">        VolumeUnitType toUnit = convertVolumeUnit.getToUnit();</span>
+<span class="fc" id="L295">        double rate = volumeConvertionTable.get(fromUnit).get(toUnit);</span>
+<span class="fc" id="L296">        return doMultiply(input, rate);</span>
+    }
+
+    @AtlasActionProcessor
+    public static Number divide(Divide divide, List&lt;Number&gt; inputs) {
+<span class="fc bfc" id="L301" title="All 2 branches covered.">        if (inputs == null) {</span>
+<span class="fc" id="L302">            return 0;</span>
+        }
+
+<span class="fc" id="L305">        Number quotient = null;</span>
+<span class="fc bfc" id="L306" title="All 2 branches covered.">        for (Object entry : inputs) {</span>
+<span class="fc bfc" id="L307" title="All 2 branches covered.">            if (entry instanceof Number) {</span>
+<span class="fc bfc" id="L308" title="All 2 branches covered.">                if (quotient == null) {</span>
+<span class="fc" id="L309">                    quotient = (Number) entry;</span>
+<span class="fc bfc" id="L310" title="All 2 branches covered.">                } else if (quotient instanceof BigDecimal) {</span>
+<span class="fc" id="L311">                    quotient = ((BigDecimal) quotient).divide(BigDecimal.valueOf(((Number) entry).doubleValue()));</span>
+<span class="pc bpc" id="L312" title="1 of 2 branches missed.">                } else if (entry instanceof BigDecimal) {</span>
+<span class="nc" id="L313">                    quotient = BigDecimal.valueOf(quotient.doubleValue()).divide((BigDecimal) entry);</span>
+                } else {
+<span class="fc" id="L315">                    quotient = quotient.doubleValue() / ((Number) entry).doubleValue();</span>
+                }
+            } else {
+<span class="fc" id="L318">                warnIgnoringValue(&quot;Divide&quot;, entry);</span>
+            }
+<span class="fc" id="L320">        }</span>
+
+<span class="fc" id="L322">        return quotient;</span>
+    }
+
+    @AtlasActionProcessor
+    public static Number floor(Floor floor, Number input) {
+<span class="fc bfc" id="L327" title="All 2 branches covered.">        return input == null ? 0L : (long)Math.floor(input.doubleValue());</span>
+    }
+
+    @AtlasActionProcessor
+    public static Number maximum(Maximum maximum, List&lt;Number&gt; inputs) {
+<span class="fc bfc" id="L332" title="All 2 branches covered.">        if (inputs == null) {</span>
+<span class="fc" id="L333">            return 0;</span>
+        }
+
+<span class="fc" id="L336">        Number max = null;</span>
+<span class="fc bfc" id="L337" title="All 2 branches covered.">        for (Object entry : inputs) {</span>
+<span class="fc bfc" id="L338" title="All 2 branches covered.">            if (entry instanceof Number) {</span>
+<span class="pc bpc" id="L339" title="1 of 4 branches missed.">                if (max instanceof BigDecimal &amp;&amp; entry instanceof BigDecimal) {</span>
+<span class="fc" id="L340">                    max = ((BigDecimal) entry).max((BigDecimal)max);</span>
+<span class="pc bpc" id="L341" title="1 of 4 branches missed.">                } else if (max == null || ((Number) entry).doubleValue() &gt; max.doubleValue()) {</span>
+<span class="fc" id="L342">                    max = (Number) entry;</span>
+                }
+            } else {
+<span class="fc" id="L345">                warnIgnoringValue(&quot;Maximum&quot;, entry);</span>
+            }
+<span class="fc" id="L347">        }</span>
+
+<span class="fc" id="L349">        return max;</span>
+    }
+
+    @AtlasActionProcessor
+    public static Number minimum(Minimum minimum, List&lt;Number&gt; inputs) {
+<span class="fc bfc" id="L354" title="All 2 branches covered.">        if (inputs == null) {</span>
+<span class="fc" id="L355">            return 0;</span>
+        }
+
+<span class="fc" id="L358">        Number min = null;</span>
+<span class="fc bfc" id="L359" title="All 2 branches covered.">        for (Object entry : inputs) {</span>
+<span class="fc bfc" id="L360" title="All 2 branches covered.">            if (entry instanceof Number) {</span>
+<span class="pc bpc" id="L361" title="1 of 4 branches missed.">                if (min instanceof BigDecimal &amp;&amp; entry instanceof BigDecimal) {</span>
+<span class="fc" id="L362">                    min = ((BigDecimal) entry).min((BigDecimal)min);</span>
+<span class="pc bpc" id="L363" title="1 of 4 branches missed.">                } else if (min == null || ((Number) entry).doubleValue() &lt; min.doubleValue()) {</span>
+<span class="fc" id="L364">                    min = (Number) entry;</span>
+                }
+            } else {
+<span class="fc" id="L367">                warnIgnoringValue(&quot;Minimum&quot;, entry);</span>
+            }
+<span class="fc" id="L369">        }</span>
+
+<span class="fc" id="L371">        return min;</span>
+    }
+
+    @AtlasActionProcessor
+    public static Number multiply(Multiply multiply, List&lt;Number&gt; inputs) {
+<span class="fc bfc" id="L376" title="All 2 branches covered.">        if (inputs == null) {</span>
+<span class="fc" id="L377">            return 0;</span>
+        }
+
+<span class="fc" id="L380">        Number product = 1L;</span>
+<span class="fc bfc" id="L381" title="All 2 branches covered.">        for (Object entry : inputs) {</span>
+<span class="fc bfc" id="L382" title="All 2 branches covered.">            if (entry instanceof Number) {</span>
+<span class="fc bfc" id="L383" title="All 2 branches covered.">                if (product instanceof BigDecimal) {</span>
+<span class="fc" id="L384">                    product = ((BigDecimal) product).multiply(BigDecimal.valueOf(((Number) entry).doubleValue()));</span>
+<span class="fc bfc" id="L385" title="All 2 branches covered.">                } else if (entry instanceof BigDecimal) {</span>
+<span class="fc" id="L386">                    product = BigDecimal.valueOf(product.doubleValue()).multiply((BigDecimal) entry);</span>
+<span class="fc bfc" id="L387" title="All 4 branches covered.">                } else if (requiresDoubleResult(product) || requiresDoubleResult(entry)) {</span>
+<span class="fc" id="L388">                    product = product.doubleValue() * ((Number) entry).doubleValue();</span>
+                } else {
+<span class="fc" id="L390">                    product = product.longValue() * ((Number) entry).longValue();</span>
+                }
+            } else {
+<span class="fc" id="L393">                warnIgnoringValue(&quot;Multiply&quot;, entry);</span>
+            }
+<span class="fc" id="L395">        }</span>
+
+<span class="fc" id="L397">        return product;</span>
+    }
+
+    @AtlasActionProcessor
+    public static Number round(Round action, Number input) {
+<span class="fc bfc" id="L402" title="All 2 branches covered.">        return input == null ? 0L : Math.round(input.doubleValue());</span>
+    }
+
+    @AtlasActionProcessor
+    public static Number subtract(Subtract subtract, List&lt;Number&gt; inputs) {
+<span class="fc bfc" id="L407" title="All 2 branches covered.">        if (inputs == null) {</span>
+<span class="fc" id="L408">            return 0;</span>
+        }
+
+<span class="fc" id="L411">        Number difference = null;</span>
+<span class="fc bfc" id="L412" title="All 2 branches covered.">        for (Object entry : inputs) {</span>
+<span class="fc bfc" id="L413" title="All 2 branches covered.">            if (entry instanceof Number) {</span>
+<span class="fc bfc" id="L414" title="All 2 branches covered.">                if (difference == null) {</span>
+<span class="fc" id="L415">                    difference = (Number) entry;</span>
+<span class="fc bfc" id="L416" title="All 2 branches covered.">                } else if (difference instanceof BigDecimal) {</span>
+<span class="fc" id="L417">                    difference = ((BigDecimal) difference).subtract(BigDecimal.valueOf(((Number) entry).doubleValue()));</span>
+<span class="pc bpc" id="L418" title="1 of 2 branches missed.">                } else if (entry instanceof BigDecimal) {</span>
+<span class="nc" id="L419">                    difference = BigDecimal.valueOf(difference.doubleValue()).subtract((BigDecimal) entry);</span>
+<span class="pc bpc" id="L420" title="1 of 4 branches missed.">                } else if (requiresDoubleResult(difference) || requiresDoubleResult(entry)) {</span>
+<span class="fc" id="L421">                    difference = difference.doubleValue() - ((Number) entry).doubleValue();</span>
+                } else {
+<span class="fc" id="L423">                    difference = difference.longValue() - ((Number) entry).longValue();</span>
+                }
+            } else {
+<span class="fc" id="L426">                warnIgnoringValue(&quot;Subtract&quot;, entry);</span>
+            }
+<span class="fc" id="L428">        }</span>
+
+<span class="fc" id="L430">        return difference;</span>
+    }
+
+    private static Number doMultiply(Number input, double rate) {
+<span class="fc bfc" id="L434" title="All 2 branches covered.">        if (input instanceof BigDecimal) {</span>
+<span class="fc" id="L435">            return ((BigDecimal) input).multiply(BigDecimal.valueOf(rate));</span>
+        }
+<span class="fc" id="L437">        return (input.doubleValue() * rate);</span>
+    }
+
+    private static boolean requiresDoubleResult(Object object) {
+<span class="fc bfc" id="L441" title="All 4 branches covered.">        return object instanceof Double || object instanceof Float;</span>
+    }
+
+    /**
+     * @TODO Add audit via @AtlasSession instead - https://github.com/atlasmap/atlasmap/issues/1269
+     * @param value value
+     */
+    private static void warnIgnoringValue(String action, Object value) {
+<span class="pc bpc" id="L449" title="1 of 2 branches missed.">        LOG.warn(&quot;The source collection/arry/map must only contain numbers for '{}' transformation - ignoring '{}'&quot;,</span>
+            action, value != null ? value : &quot;null&quot;);
+<span class="fc" id="L451">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

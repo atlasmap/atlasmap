@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>CsvDfdlSchemaGenerator.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-dfdl-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.dfdl.core.schema</a> &gt; <span class="el_source">CsvDfdlSchemaGenerator.java</span></div><h1>CsvDfdlSchemaGenerator.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.dfdl.core.schema;
+
+import java.io.InputStream;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
+import io.atlasmap.dfdl.core.DfdlSchemaGenerator;
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.dfdl.core.DfdlConstants;
+import io.atlasmap.xml.core.XmlIOHelper;
+
+/**
+ * An implementation of {@code DfdlSchemaGenerator} for CSV document.
+ * This class uses &quot;csv-template.dfdl.xsd&quot; as a template. By consuming CSV header line
+ * as an option, it fills corresponding element into schema.
+ */
+<span class="fc" id="L49">public class CsvDfdlSchemaGenerator implements DfdlSchemaGenerator {</span>
+    public static final String NAME = &quot;csv&quot;;
+    public static final String DEFAULT_DELIMITER = &quot;,&quot;;
+
+<span class="fc" id="L53">    private static final Logger LOG = LoggerFactory.getLogger(CsvDfdlSchemaGenerator.class);</span>
+    private static final String TEMPLATE_FILE = &quot;csv-template.dfdl.xsd&quot;;
+    private static final String NS_XS = &quot;http://www.w3.org/2001/XMLSchema&quot;;
+    private static final String NS_DFDL = &quot;http://www.ogf.org/dfdl/dfdl-1.0/&quot;;
+    private static final String NS_ATLAS = &quot;http://atlasmap.io/dfdl/csv&quot;;
+
+<span class="fc" id="L59">    private XmlIOHelper helper = new XmlIOHelper(CsvDfdlSchemaGenerator.class.getClassLoader());</span>
+
+<span class="fc" id="L61">    public enum Options {</span>
+<span class="fc" id="L62">        HEADER(DfdlConstants.OPTION_PREFIX + &quot;.csv.header&quot;),</span>
+<span class="fc" id="L63">        EXAMPLE(DfdlConstants.OPTION_EXAMPLE_DATA),</span>
+<span class="fc" id="L64">        DELIMITER(DfdlConstants.OPTION_PREFIX + &quot;.csv.delimiter&quot;);</span>
+
+        private final String value;
+
+<span class="fc" id="L68">        Options(String value) {</span>
+<span class="fc" id="L69">            this.value = value;</span>
+<span class="fc" id="L70">        }</span>
+
+        public String value() {
+<span class="fc" id="L73">            return this.value;</span>
+        }
+    }
+
+    @Override
+    public String getName() {
+<span class="fc" id="L79">        return NAME;</span>
+    }
+
+    @Override
+    public String[] getOptions() {
+<span class="nc" id="L84">        return EnumSet.allOf(Options.class).stream().map(e -&gt; e.value).toArray(String[]::new);</span>
+    }
+
+    @Override
+    public Document generate(ClassLoader classLoader, Map&lt;String, String&gt; options) throws Exception {
+<span class="fc" id="L89">        String header = (String) options.get(Options.HEADER.value());</span>
+<span class="fc" id="L90">        String example = (String) options.get(Options.EXAMPLE.value());</span>
+<span class="fc" id="L91">        String delimiter = (String) options.get(Options.DELIMITER.value());</span>
+<span class="pc bpc" id="L92" title="6 of 8 branches missed.">        if ((header == null || header.isEmpty()) &amp;&amp; (example == null || example.isEmpty())) {</span>
+<span class="nc" id="L93">            throw new AtlasException(String.format(&quot;'%s' or '%s' must be specified to generate CSV DFDL schema&quot;,</span>
+<span class="nc" id="L94">                Options.HEADER.value(), Options.EXAMPLE.value()));</span>
+        }
+<span class="pc bpc" id="L96" title="2 of 4 branches missed.">        header = header!= null &amp;&amp; !header.isEmpty() ? header.split(&quot;\\R&quot;)[0] : example.split(&quot;\\R&quot;)[0];</span>
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">        if (delimiter == null) {</span>
+<span class="nc" id="L98">            delimiter = DEFAULT_DELIMITER;</span>
+        }
+<span class="fc" id="L100">        String[] fieldNames = header.split(delimiter);</span>
+
+<span class="fc" id="L102">        InputStream is = classLoader.getResourceAsStream(TEMPLATE_FILE);</span>
+<span class="fc" id="L103">        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();</span>
+<span class="fc" id="L104">        factory.setNamespaceAware(true);</span>
+<span class="fc" id="L105">        Document xsd = factory.newDocumentBuilder().parse(is);</span>
+<span class="fc" id="L106">        XPath xpath = XPathFactory.newInstance().newXPath();</span>
+<span class="fc" id="L107">        xpath.setNamespaceContext(new NamespaceResolver());</span>
+<span class="fc" id="L108">        String targetPath = &quot;//xs:schema/xs:element[@name='file']/xs:complexType/xs:sequence&quot;</span>
+                        + &quot;/xs:element[@name='record']/xs:complexType/xs:sequence&quot;;
+<span class="fc" id="L110">        Node parentNode = (Node) xpath.compile(targetPath).evaluate(xsd, XPathConstants.NODE);</span>
+<span class="pc bpc" id="L111" title="1 of 2 branches missed.">        if (parentNode == null) {</span>
+<span class="nc" id="L112">            throw new AtlasException(String.format(&quot;Invalid DFDL template for CSV format: path '%s' could not be found&quot;, targetPath));</span>
+        }
+<span class="fc" id="L114">        parentNode.getAttributes().getNamedItemNS(NS_DFDL, &quot;separator&quot;).setNodeValue(delimiter);</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        for (String fieldName : fieldNames) {</span>
+<span class="fc" id="L116">            Element e = xsd.createElementNS(NS_XS, &quot;element&quot;);</span>
+<span class="fc" id="L117">            e.setAttribute(&quot;name&quot;, fieldName);</span>
+<span class="fc" id="L118">            e.setAttribute(&quot;type&quot;, &quot;xs:string&quot;);</span>
+<span class="fc" id="L119">            e.setAttribute(&quot;minOccurs&quot;, &quot;1&quot;);</span>
+<span class="fc" id="L120">            e.setAttribute(&quot;maxOccurs&quot;, &quot;1&quot;);</span>
+<span class="fc" id="L121">            parentNode.appendChild(e);</span>
+        }
+<span class="fc bfc" id="L123" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L124">            LOG.debug(&quot;Generated CSV DFDL Schema:&quot;);</span>
+<span class="fc" id="L125">            LOG.debug(helper.writeDocumentToString(false, xsd));</span>
+        }
+<span class="fc" id="L127">        return xsd;</span>
+    }
+
+    class NamespaceResolver implements NamespaceContext {
+<span class="fc" id="L131">        private Map&lt;String, String&gt; nsmap = new HashMap&lt;&gt;();</span>
+
+<span class="fc" id="L133">        public NamespaceResolver() {</span>
+<span class="fc" id="L134">            nsmap.put(&quot;xs&quot;, NS_XS);</span>
+<span class="fc" id="L135">            nsmap.put(&quot;dfdl&quot;, NS_DFDL);</span>
+<span class="fc" id="L136">            nsmap.put(&quot;atlas&quot;, NS_ATLAS);</span>
+<span class="fc" id="L137">        }</span>
+
+        @Override
+        public String getNamespaceURI(String prefix) {
+<span class="fc" id="L141">            return nsmap.get(prefix);</span>
+        }
+
+        @Override
+        public String getPrefix(String namespaceURI) {
+<span class="nc bnc" id="L146" title="All 2 branches missed.">            for (Entry&lt;String, String&gt; set : nsmap.entrySet()) {</span>
+<span class="nc bnc" id="L147" title="All 2 branches missed.">                if (set.getValue().equals(namespaceURI)) {</span>
+<span class="nc" id="L148">                    return set.getKey();</span>
+                }
+<span class="nc" id="L150">            }</span>
+<span class="nc" id="L151">            return null;</span>
+        }
+
+        @Override
+        public Iterator&lt;String&gt; getPrefixes(String namespaceURI) {
+<span class="nc" id="L156">            List&lt;String&gt; prefixes = new LinkedList&lt;&gt;();</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">            for (Entry&lt;String, String&gt; set : nsmap.entrySet()) {</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">                if (set.getValue().equals(namespaceURI)) {</span>
+<span class="nc" id="L159">                    prefixes.add(set.getKey());</span>
+                }
+<span class="nc" id="L161">            }</span>
+<span class="nc" id="L162">            return prefixes.iterator();</span>
+        }
+
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

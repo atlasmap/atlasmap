@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>AtlasJavaModelFactory.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-java-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.java.v2</a> &gt; <span class="el_source">AtlasJavaModelFactory.java</span></div><h1>AtlasJavaModelFactory.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.java.v2;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.atlasmap.v2.AtlasModelFactory;
+import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
+
+<span class="nc" id="L25">public class AtlasJavaModelFactory {</span>
+
+    public static final String URI_FORMAT = &quot;atlas:java?className=%s&quot;;
+
+    public static JavaClass createJavaClass() {
+<span class="fc" id="L30">        JavaClass javaClass = new JavaClass();</span>
+<span class="fc" id="L31">        javaClass.setJavaEnumFields(new JavaEnumFields());</span>
+<span class="fc" id="L32">        javaClass.setJavaFields(new JavaFields());</span>
+<span class="fc" id="L33">        return javaClass;</span>
+    }
+
+    public static JavaField createJavaField() {
+<span class="fc" id="L37">        JavaField javaField = new JavaField();</span>
+<span class="fc" id="L38">        javaField.setModifiers(new ModifierList());</span>
+<span class="fc" id="L39">        return javaField;</span>
+    }
+
+    public static FieldGroup cloneFieldGroup(FieldGroup group) {
+<span class="fc" id="L43">        FieldGroup clone = AtlasModelFactory.copyFieldGroup(group);</span>
+<span class="fc" id="L44">        List&lt;Field&gt; newChildren = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        for (Field child : group.getField()) {</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">            if (child instanceof FieldGroup) {</span>
+<span class="nc" id="L47">                newChildren.add(cloneFieldGroup((FieldGroup)child));</span>
+            } else {
+<span class="fc" id="L49">                newChildren.add(cloneJavaField(child, true));</span>
+            }
+<span class="fc" id="L51">        }</span>
+<span class="fc" id="L52">        clone.getField().addAll(newChildren);</span>
+<span class="fc" id="L53">        return clone;</span>
+    }
+
+    public static Field cloneJavaField(Field field, boolean withActions) {
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        if (field instanceof FieldGroup) {</span>
+<span class="nc" id="L58">            FieldGroup clone = AtlasModelFactory.createFieldGroupFrom(field, withActions);</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">            for (Field f : ((FieldGroup)field).getField()) {</span>
+<span class="nc" id="L60">                clone.getField().add(cloneJavaField(f, withActions));</span>
+<span class="nc" id="L61">            }</span>
+<span class="nc" id="L62">            return clone;</span>
+        }
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        Field clone = field instanceof JavaEnumField ? new JavaEnumField() : new JavaField();</span>
+<span class="fc" id="L65">        copyField(field, clone, withActions);</span>
+<span class="fc" id="L66">        return clone;</span>
+    }
+
+    public static void copyField(Field from, Field to, boolean withActions) {
+<span class="fc" id="L70">        AtlasModelFactory.copyField(from, to, withActions);</span>
+
+<span class="pc bpc" id="L72" title="2 of 4 branches missed.">        if (from instanceof JavaField &amp;&amp; to instanceof JavaField) {</span>
+<span class="fc" id="L73">            JavaField fromJava = (JavaField) from;</span>
+<span class="fc" id="L74">            JavaField toJava = (JavaField)to;</span>
+
+            // defined by JavaField
+<span class="fc" id="L77">            toJava.setAnnotations(fromJava.getAnnotations());</span>
+<span class="fc" id="L78">            toJava.setClassName(fromJava.getClassName());</span>
+<span class="fc" id="L79">            toJava.setCollectionClassName(fromJava.getCollectionClassName());</span>
+<span class="fc" id="L80">            toJava.setGetMethod(fromJava.getGetMethod());</span>
+<span class="fc" id="L81">            toJava.setModifiers(fromJava.getModifiers());</span>
+<span class="fc" id="L82">            toJava.setName(fromJava.getName());</span>
+<span class="fc" id="L83">            toJava.setParameterizedTypes(fromJava.getParameterizedTypes());</span>
+<span class="fc" id="L84">            toJava.setPrimitive(fromJava.isPrimitive());</span>
+<span class="fc" id="L85">            toJava.setSetMethod(fromJava.getSetMethod());</span>
+<span class="fc" id="L86">            toJava.setSynthetic(fromJava.isSynthetic());</span>
+<span class="fc" id="L87">            return;</span>
+        }
+<span class="nc bnc" id="L89" title="All 4 branches missed.">        if (from instanceof JavaEnumField &amp;&amp; to instanceof JavaEnumField) {</span>
+<span class="nc" id="L90">            JavaEnumField fromEnum = (JavaEnumField) from;</span>
+<span class="nc" id="L91">            JavaEnumField toEnum = (JavaEnumField)to;</span>
+
+            // defined by JavaEnumField
+<span class="nc" id="L94">            toEnum.setClassName(fromEnum.getClassName());</span>
+<span class="nc" id="L95">            toEnum.setName(fromEnum.getName());</span>
+<span class="nc" id="L96">            toEnum.setOrdinal(fromEnum.getOrdinal());</span>
+<span class="nc" id="L97">            return;</span>
+        }
+        // TODO: needs to be atlasexception, but that's not a dependency for some reason
+        // on this project.
+<span class="nc" id="L101">        throw new RuntimeException(String.format(</span>
+                &quot;Unsupported field type to copy: from=%s, to=%s&quot;, from, to));
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

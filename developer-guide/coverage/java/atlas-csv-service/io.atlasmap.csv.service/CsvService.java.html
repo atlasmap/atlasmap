@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>CsvService.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-csv-service</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.csv.service</a> &gt; <span class="el_source">CsvService.java</span></div><h1>CsvService.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.csv.service;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.container.ResourceContext;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import io.atlasmap.csv.core.CsvConfig;
+import io.atlasmap.csv.core.CsvFieldReader;
+import io.atlasmap.csv.v2.CsvInspectionResponse;
+import io.atlasmap.v2.Document;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import io.atlasmap.v2.Json;
+import io.swagger.v3.oas.annotations.Operation;
+
+@Path(&quot;/csv/&quot;)
+<span class="fc" id="L51">public class CsvService {</span>
+
+<span class="fc" id="L53">    private static final Logger LOG = LoggerFactory.getLogger(CsvService.class);</span>
+
+    @Context
+    private ResourceContext resourceContext;
+
+    protected byte[] toJson(Object value) {
+        try {
+<span class="fc" id="L60">            return Json.mapper().writeValueAsBytes(value);</span>
+<span class="nc" id="L61">        } catch (JsonProcessingException e) {</span>
+<span class="nc" id="L62">            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    @GET
+    @Path(&quot;/simple&quot;)
+    @Produces(MediaType.TEXT_PLAIN)
+    @Operation(summary = &quot;Simple&quot;, description = &quot;Simple hello service&quot;)
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = String.class)), description = &quot;Return a response&quot;))
+    public String simpleHelloWorld(@QueryParam(&quot;from&quot;) String from) {
+<span class="nc" id="L72">        return &quot;Got it! &quot; + from;</span>
+    }
+
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON })
+    @Path(&quot;/inspect&quot;)
+    @Operation(summary = &quot;Inspect CSV&quot;, description = &quot;Inspect a CSV instance and return a Document object&quot;)
+    @RequestBody(description = &quot;Csv&quot;, content = @Content(mediaType = &quot;text/csv&quot;, schema = @Schema(implementation = String.class)))
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = CsvInspectionResponse.class)),
+        description = &quot;Return a Document object&quot;))
+    public Response inspect(InputStream request, @QueryParam(&quot;format&quot;) String format, @QueryParam(&quot;delimiter&quot;) String delimiter,
+                            @QueryParam(&quot;firstRecordAsHeader&quot;) Boolean firstRecordAsHeader, @QueryParam(&quot;headers&quot;) String headers,
+                            @QueryParam(&quot;commentMarker&quot;) String commentMarker,
+                            @QueryParam(&quot;escape&quot;) String escape,
+                            @QueryParam(&quot;ignoreEmptyLines&quot;) Boolean ignoreEmptyLines,
+                            @QueryParam(&quot;ignoreHeaderCase&quot;) Boolean ignoreHeaderCase,
+                            @QueryParam(&quot;ignoreSurroundingSpaces&quot;) Boolean ignoreSurroundingSpaces,
+                            @QueryParam(&quot;nullString&quot;) String nullString,
+                            @QueryParam(&quot;quote&quot;) String quote,
+                            @QueryParam(&quot;allowDuplicateHeaderNames&quot;) Boolean allowDuplicateHeaderNames,
+                            @QueryParam(&quot;allowMissingColumnNames&quot;) Boolean allowMissingColumnNames) throws IOException  {
+<span class="fc" id="L94">        long startTime = System.currentTimeMillis();</span>
+
+<span class="fc" id="L96">        CsvInspectionResponse response = new CsvInspectionResponse();</span>
+        try {
+<span class="fc" id="L98">            CsvConfig csvConfig = new CsvConfig(format);</span>
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">            if (delimiter != null) {</span>
+<span class="fc" id="L100">                csvConfig.setDelimiter(delimiter.charAt(0));</span>
+            }
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">            if (firstRecordAsHeader != null) {</span>
+<span class="fc" id="L103">                csvConfig.setFirstRecordAsHeader(firstRecordAsHeader);</span>
+            }
+<span class="fc" id="L105">            csvConfig.setHeaders(headers);</span>
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">            if (commentMarker != null) {</span>
+<span class="nc" id="L107">                csvConfig.setCommentMarker(commentMarker.charAt(0));</span>
+            }
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">            if (escape != null) {</span>
+<span class="nc" id="L110">                csvConfig.setEscape(escape.charAt(0));</span>
+            }
+<span class="fc" id="L112">            csvConfig.setIgnoreEmptyLines(ignoreEmptyLines);</span>
+<span class="fc" id="L113">            csvConfig.setIgnoreHeaderCase(ignoreHeaderCase);</span>
+<span class="fc" id="L114">            csvConfig.setIgnoreSurroundingSpaces(ignoreSurroundingSpaces);</span>
+<span class="fc" id="L115">            csvConfig.setNullString(nullString);</span>
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">            if (quote != null) {</span>
+<span class="nc" id="L117">                csvConfig.setQuote(quote.charAt(0));</span>
+            }
+<span class="fc" id="L119">            csvConfig.setAllowDuplicateHeaderNames(allowDuplicateHeaderNames);</span>
+<span class="fc" id="L120">            csvConfig.setAllowMissingColumnNames(allowMissingColumnNames);</span>
+
+<span class="fc" id="L122">            CsvFieldReader csvFieldReader = new CsvFieldReader(csvConfig);</span>
+<span class="fc" id="L123">            csvFieldReader.setDocument(request);</span>
+
+<span class="fc" id="L125">            Document document = csvFieldReader.readSchema();</span>
+<span class="fc" id="L126">            response.setCsvDocument(document);</span>
+<span class="fc" id="L127">            request.close();</span>
+<span class="nc" id="L128">        } catch (Exception e) {</span>
+<span class="nc" id="L129">            LOG.error(&quot;Error inspecting CSV: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L130">            response.setErrorMessage(e.getMessage());</span>
+        } finally {
+<span class="fc" id="L132">            request.close();;</span>
+<span class="fc" id="L133">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
+        }
+
+<span class="fc" id="L136">        return Response.ok().entity(toJson(response)).build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -1,0 +1,668 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>AtlasService.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-service</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.service</a> &gt; <span class="el_source">AtlasService.java</span></div><h1>AtlasService.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.service;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.Paths;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
+
+import io.atlasmap.v2.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import io.atlasmap.api.AtlasContext;
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.api.AtlasSession;
+import io.atlasmap.core.ADMArchiveHandler;
+import io.atlasmap.core.AtlasUtil;
+import io.atlasmap.core.DefaultAtlasContextFactory;
+import io.atlasmap.core.DefaultAtlasFieldActionService;
+import io.atlasmap.service.AtlasLibraryLoader.AtlasLibraryLoaderListener;
+import io.atlasmap.v2.ActionDetails;
+import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.Audits;
+import io.atlasmap.v2.Json;
+import io.atlasmap.v2.Mapping;
+import io.atlasmap.v2.ProcessMappingRequest;
+import io.atlasmap.v2.ProcessMappingResponse;
+import io.atlasmap.v2.StringMap;
+import io.atlasmap.v2.StringMapEntry;
+import io.atlasmap.v2.Validations;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+@Path(&quot;/&quot;)
+public class AtlasService {
+
+    static final String MAPPING_NAME_PREFIX = &quot;UI.&quot;;
+    static final String ATLASMAP_ADM_PATH = &quot;atlasmap.adm.path&quot;;
+    static final String ATLASMAP_WORKSPACE = &quot;atlasmap.workspace&quot;;
+<span class="fc" id="L81">    private static final Logger LOG = LoggerFactory.getLogger(AtlasService.class);</span>
+
+<span class="fc" id="L83">    private final DefaultAtlasContextFactory atlasContextFactory = DefaultAtlasContextFactory.getInstance();</span>
+    private final AtlasContext defaultContext;
+
+<span class="fc" id="L86">    private String baseFolder = &quot;&quot;;</span>
+<span class="fc" id="L87">    private String mappingFolder = &quot;&quot;;</span>
+<span class="fc" id="L88">    private String libFolder = &quot;&quot;;</span>
+    private AtlasLibraryLoader libraryLoader;
+
+<span class="fc" id="L91">    public AtlasService() throws AtlasException {</span>
+<span class="fc" id="L92">        this.defaultContext = atlasContextFactory.createContext(new AtlasMapping());</span>
+
+<span class="fc" id="L94">        String atlasmapWorkspace = System.getProperty(ATLASMAP_WORKSPACE);</span>
+<span class="pc bpc" id="L95" title="3 of 4 branches missed.">        if (atlasmapWorkspace != null &amp;&amp; atlasmapWorkspace.length() &gt; 0) {</span>
+<span class="nc" id="L96">            baseFolder = atlasmapWorkspace;</span>
+        }
+        else {
+<span class="fc" id="L99">            baseFolder = &quot;target&quot;;</span>
+        }
+
+<span class="fc" id="L102">        mappingFolder = baseFolder + File.separator + &quot;mappings&quot;;</span>
+<span class="fc" id="L103">        libFolder = baseFolder + File.separator + &quot;lib&quot;;</span>
+
+<span class="fc" id="L105">        this.libraryLoader = new AtlasLibraryLoader(libFolder);</span>
+
+        // Add atlas-core in case it runs on modular class loader
+<span class="fc" id="L108">        this.libraryLoader.addAlternativeLoader(DefaultAtlasFieldActionService.class.getClassLoader());</span>
+<span class="fc" id="L109">        this.libraryLoader.addListener(new AtlasLibraryLoaderListener() {</span>
+            @Override
+            public void onUpdate(AtlasLibraryLoader loader) {
+<span class="fc" id="L112">                ((DefaultAtlasFieldActionService)atlasContextFactory.getFieldActionService()).init(libraryLoader);</span>
+<span class="fc" id="L113">            }</span>
+        });
+
+<span class="fc" id="L116">        String atlasmapAdmPath = System.getProperty(ATLASMAP_ADM_PATH);</span>
+<span class="pc bpc" id="L117" title="3 of 4 branches missed.">        if (atlasmapAdmPath != null &amp;&amp; atlasmapAdmPath.length() &gt; 0) {</span>
+<span class="nc" id="L118">            this.libraryLoader.clearLibaries();</span>
+<span class="nc" id="L119">            ADMArchiveHandler admHandler = new ADMArchiveHandler(this.libraryLoader);</span>
+<span class="nc" id="L120">            java.nio.file.Path mappingDirPath = Paths.get(getMappingSubDirectory(0));</span>
+<span class="nc" id="L121">            admHandler.setPersistDirectory(mappingDirPath);</span>
+<span class="nc" id="L122">            admHandler.setIgnoreLibrary(false);</span>
+<span class="nc" id="L123">            admHandler.setLibraryDirectory(Paths.get(libFolder));</span>
+<span class="nc" id="L124">            admHandler.load(Paths.get(atlasmapAdmPath));</span>
+<span class="nc" id="L125">            admHandler.persist();</span>
+<span class="nc" id="L126">            this.libraryLoader.reload();</span>
+<span class="nc" id="L127">            return;</span>
+        }
+
+<span class="fc" id="L130">        ((DefaultAtlasFieldActionService)atlasContextFactory.getFieldActionService()).init(libraryLoader);</span>
+<span class="fc" id="L131">    }</span>
+
+    @GET
+    @Path(&quot;/fieldActions&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = &quot;List FieldActions&quot;, description = &quot;Retrieves a list of available field action&quot;)
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = ActionDetails.class)) , description = &quot;Return a list of field action detail&quot;))
+    public Response listFieldActions(@Context UriInfo uriInfo) {
+<span class="fc" id="L139">        ActionDetails details = new ActionDetails();</span>
+
+<span class="pc bpc" id="L141" title="2 of 4 branches missed.">        if (atlasContextFactory == null || atlasContextFactory.getFieldActionService() == null) {</span>
+<span class="nc" id="L142">            return Response.ok().entity(toJson(details)).build();</span>
+        }
+
+<span class="fc" id="L145">        details.getActionDetail().addAll(atlasContextFactory.getFieldActionService().listActionDetails());</span>
+<span class="fc" id="L146">        byte[] serialized = toJson(details);</span>
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L148">            LOG.debug(new String(serialized));</span>
+        }
+<span class="fc" id="L150">        return Response.ok().entity(serialized).build();</span>
+    }
+
+    @Deprecated
+    @GET
+    @Path(&quot;/mappings&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = &quot;List Mappings&quot;, description = &quot;Retrieves a list of mapping file name saved with specified mappingDefinitionId&quot;)
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = StringMap.class)) , description = &quot;Return a list of a pair of mapping file name and content&quot;))
+    public Response listMappingsOld(@Context UriInfo uriInfo, @QueryParam(&quot;filter&quot;) final String filter)
+    {
+<span class="nc" id="L161">        return listMappings(uriInfo, filter, 0);</span>
+    }
+
+    @GET
+    @Path(&quot;/mappings/{mappingDefinitionId}&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = &quot;List Mappings&quot;, description = &quot;Retrieves a list of mapping file name saved with specified mappingDefinitionId&quot;)
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = StringMap.class)) , description = &quot;Return a list of a pair of mapping file name and content&quot;))
+    public Response listMappings(@Context UriInfo uriInfo, @QueryParam(&quot;filter&quot;) final String filter,
+                                 @Parameter(description = &quot;Mapping Definition ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId) {
+<span class="fc" id="L171">        StringMap sMap = new StringMap();</span>
+<span class="fc" id="L172">        LOG.debug(&quot;listMappings with filter '{}'&quot;, filter);</span>
+
+        try {
+<span class="fc" id="L175">            ADMArchiveHandler handler = loadExplodedMappingDirectory(mappingDefinitionId);</span>
+<span class="fc" id="L176">            AtlasMapping map = handler.getMappingDefinition();</span>
+<span class="pc bpc" id="L177" title="1 of 2 branches missed.">            if (map == null) {</span>
+<span class="fc" id="L178">                return Response.ok().entity(toJson(sMap)).build();</span>
+            }
+<span class="nc" id="L180">            StringMapEntry mapEntry = new StringMapEntry();</span>
+<span class="nc" id="L181">            mapEntry.setName(map.getName());</span>
+<span class="nc" id="L182">            UriBuilder builder = uriInfo.getBaseUriBuilder().path(&quot;v2&quot;).path(&quot;atlas&quot;).path(&quot;mapping&quot;)</span>
+<span class="nc" id="L183">                .path(map.getName());</span>
+<span class="nc" id="L184">            mapEntry.setValue(builder.build().toString());</span>
+<span class="nc" id="L185">            sMap.getStringMapEntry().add(mapEntry);</span>
+
+<span class="nc" id="L187">            byte[] serialized = toJson(sMap);</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L189">                LOG.debug(new String(serialized));</span>
+            }
+<span class="nc" id="L191">            return Response.ok().entity(serialized).build();</span>
+<span class="nc" id="L192">        } catch (AtlasException e) {</span>
+<span class="nc" id="L193">            LOG.error(&quot;Error retrieving mapping definition file for ID:&quot; + mappingDefinitionId + &quot;\n&quot; +</span>
+<span class="nc" id="L194">                e.getMessage(), e);</span>
+<span class="nc" id="L195">            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    @Deprecated
+    @DELETE
+    @Path(&quot;/mapping&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = &quot;Remove Mapping&quot;, description = &quot;Remove a mapping file saved on the server&quot;)
+    @ApiResponses({
+        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Specified mapping file was removed successfully&quot;),
+        @ApiResponse(responseCode = &quot;204&quot;, description = &quot;Mapping file was not found&quot;)})
+    public Response removeMappingRequestOld() {
+<span class="nc" id="L208">        return removeMappingRequest(0);</span>
+    }
+
+    @DELETE
+    @Path(&quot;/mapping/{mappingDefinitionId}&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = &quot;Remove Mapping&quot;, description = &quot;Remove a mapping file saved on the server&quot;)
+    @ApiResponses({
+        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Specified mapping file was removed successfully&quot;),
+        @ApiResponse(responseCode = &quot;204&quot;, description = &quot;Mapping file was not found&quot;)})
+    public Response removeMappingRequest(@Parameter(description = &quot;Mapping ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId) {
+
+<span class="nc" id="L220">        java.nio.file.Path mappingDirPath = Paths.get(getMappingSubDirectory(mappingDefinitionId));</span>
+<span class="nc" id="L221">        File mappingDirFile = mappingDirPath.toFile();</span>
+
+<span class="nc bnc" id="L223" title="All 4 branches missed.">        if (mappingDirFile == null || !mappingDirFile.exists()) {</span>
+<span class="nc" id="L224">            return Response.noContent().build();</span>
+        }
+
+<span class="nc bnc" id="L227" title="All 2 branches missed.">        if (!mappingDirFile.isDirectory()) {</span>
+<span class="nc" id="L228">            LOG.warn(&quot;Removing invalid file '{}' in a persistent directory&quot;, mappingDirFile.getAbsolutePath());</span>
+        } else {
+<span class="nc" id="L230">            AtlasUtil.deleteDirectory(mappingDirFile);</span>
+        }
+
+<span class="nc" id="L233">        return Response.ok().build();</span>
+    }
+
+    @Deprecated
+    @DELETE
+    @Path(&quot;/mapping/RESET&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = &quot;Remove Mapping by ID&quot;, description = &quot;Remove mapping file and catalogs related to specified ID&quot;)
+    @ApiResponses({
+        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Mapping file and Catalogs were removed successfully&quot;),
+        @ApiResponse(responseCode = &quot;204&quot;, description = &quot;Unable to remove mapping file and Catalogs for the specified ID&quot;)})
+    public Response resetMappingByIdOld()
+    {
+<span class="nc" id="L246">        return resetMappingById(0);</span>
+    }
+
+    @DELETE
+    @Path(&quot;/mapping/RESET/{mappingDefinitionId}&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = &quot;Remove Mapping by ID&quot;, description = &quot;Remove mapping file and catalogs related to specified ID&quot;)
+    @ApiResponses({
+        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Mapping file and Catalogs were removed successfully&quot;),
+        @ApiResponse(responseCode = &quot;204&quot;, description = &quot;Unable to remove mapping file and Catalogs for the specified ID&quot;)})
+    public Response resetMappingById(@Parameter(description = &quot;Mapping ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId) {
+<span class="nc" id="L257">        LOG.debug(&quot;resetMappingById {} &quot;, mappingDefinitionId);</span>
+
+<span class="nc" id="L259">        java.nio.file.Path mappingFolderPath = Paths.get(getMappingSubDirectory(mappingDefinitionId));</span>
+<span class="nc" id="L260">        File mappingFolderFile = mappingFolderPath.toFile();</span>
+
+<span class="nc bnc" id="L262" title="All 4 branches missed.">        if (mappingFolderFile == null || !mappingFolderFile.exists()) {</span>
+<span class="nc" id="L263">            return Response.ok().build();</span>
+        }
+
+<span class="nc bnc" id="L266" title="All 2 branches missed.">        if (!mappingFolderFile.isDirectory()) {</span>
+<span class="nc" id="L267">            LOG.warn(&quot;{} is not a directory - removing anyway&quot;, mappingFolderFile.getAbsolutePath());</span>
+        }
+<span class="nc" id="L269">        AtlasUtil.deleteDirectory(mappingFolderFile);</span>
+<span class="nc" id="L270">        return Response.ok().build();</span>
+    }
+
+    @DELETE
+    @Path(&quot;/mapping/RESET/ALL&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary =  &quot;Remove All Mappings&quot;, description = &quot;Remove all mapping files and catalogs saved on the server&quot;)
+    @ApiResponses({
+        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;All mapping files were removed successfully&quot;),
+        @ApiResponse(responseCode = &quot;204&quot;, description = &quot;Unable to remove all mapping files&quot;)})
+    public Response resetAllMappings() {
+<span class="nc" id="L281">        LOG.debug(&quot;resetAllMappings&quot;);</span>
+
+<span class="nc" id="L283">        java.nio.file.Path mappingFolderPath = Paths.get(mappingFolder);</span>
+<span class="nc" id="L284">        File mappingFolderPathFile = mappingFolderPath.toFile();</span>
+
+<span class="nc bnc" id="L286" title="All 4 branches missed.">        if (mappingFolderPathFile == null || !mappingFolderPathFile.exists()) {</span>
+<span class="nc" id="L287">            return Response.ok().build();</span>
+        }
+
+<span class="nc" id="L290">        AtlasUtil.deleteDirectoryContents(mappingFolderPathFile);</span>
+<span class="nc" id="L291">        return Response.ok().build();</span>
+    }
+
+    @DELETE
+    @Path(&quot;/mapping/resetLibs&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = &quot;Remove All User-Defined JAR libraries&quot;, description = &quot;Remove all user-defined JAR files saved on the server&quot;)
+    @ApiResponses({
+        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;All user-defined JAR files were removed successfully&quot;),
+        @ApiResponse(responseCode = &quot;204&quot;, description = &quot;Unable to remove all user-defined JAR files&quot;)})
+    public Response resetUserLibs() {
+<span class="nc" id="L302">        LOG.debug(&quot;resetUserLibs&quot;);</span>
+<span class="nc" id="L303">        this.libraryLoader.clearLibaries();</span>
+<span class="nc" id="L304">        return Response.ok().build();</span>
+    }
+
+    @Deprecated
+    @GET
+    @Path(&quot;/mapping/{mappingFormat}&quot;)
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_OCTET_STREAM})
+    @Operation(summary = &quot;Get Mapping&quot;, description = &quot;Retrieve a mapping file saved on the server&quot;)
+    @ApiResponses({
+        @ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation =  AtlasMapping.class)), description = &quot;Return a mapping file content&quot;),
+        @ApiResponse(responseCode = &quot;204&quot;, description = &quot;Mapping file was not found&quot;),
+        @ApiResponse(responseCode = &quot;500&quot;, description = &quot;Mapping file access error&quot;)})
+    public Response getMappingRequestOld(
+      @Parameter(description = &quot;Mapping Format&quot;) @PathParam(&quot;mappingFormat&quot;) MappingFileType mappingFormat)
+    {
+<span class="nc" id="L319">        return getMappingRequest(mappingFormat, 0);</span>
+    }
+
+    @GET
+    @Path(&quot;/mapping/{mappingFormat}/{mappingDefinitionId}&quot;)
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_OCTET_STREAM})
+    @Operation(summary = &quot;Get Mapping&quot;, description = &quot;Retrieve a mapping file saved on the server&quot;)
+    @ApiResponses({
+        @ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = AtlasMapping.class)), description = &quot;Return a mapping file content&quot;),
+        @ApiResponse(responseCode = &quot;204&quot;, description = &quot;Mapping file was not found&quot;),
+        @ApiResponse(responseCode = &quot;500&quot;, description = &quot;Mapping file access error&quot;)})
+    public Response getMappingRequest(
+      @Parameter(description = &quot;Mapping Format&quot;) @PathParam(&quot;mappingFormat&quot;) MappingFileType mappingFormat,
+      @Parameter(description = &quot;Mapping ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId) {
+<span class="fc" id="L333">        LOG.debug(&quot;getMappingRequest: {} '{}'&quot;, mappingFormat, mappingDefinitionId);</span>
+<span class="fc" id="L334">        ADMArchiveHandler admHandler = loadExplodedMappingDirectory(mappingDefinitionId);</span>
+
+<span class="pc bpc" id="L336" title="3 of 4 branches missed.">        switch (mappingFormat) {</span>
+        case JSON:
+<span class="fc" id="L338">            byte[] serialized = null;</span>
+            try {
+<span class="fc" id="L340">                serialized = admHandler.getMappingDefinitionBytes();</span>
+<span class="nc" id="L341">            } catch (Exception e) {</span>
+<span class="nc" id="L342">                LOG.error(&quot;Error retrieving mapping definition file for ID:&quot; + mappingDefinitionId, e);</span>
+<span class="nc" id="L343">                throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
+<span class="fc" id="L344">            }</span>
+<span class="pc bpc" id="L345" title="3 of 4 branches missed.">            if (LOG.isDebugEnabled() &amp;&amp; serialized != null) {</span>
+<span class="nc" id="L346">                LOG.debug(new String(serialized));</span>
+            }
+<span class="pc bpc" id="L348" title="1 of 2 branches missed.">            if (serialized == null) {</span>
+<span class="nc" id="L349">                LOG.debug(&quot;Mapping definition not found for ID:{}&quot;, mappingDefinitionId);</span>
+<span class="nc" id="L350">                return Response.noContent().build();</span>
+            }
+<span class="fc" id="L352">            return Response.ok().entity(serialized).build();</span>
+        case GZ:
+            try {
+<span class="nc bnc" id="L355" title="All 2 branches missed.">                if (admHandler.getGzippedADMDigestBytes() == null) {</span>
+<span class="nc" id="L356">                    LOG.debug(&quot;ADM Digest file not found for ID:{}&quot;, mappingDefinitionId);</span>
+<span class="nc" id="L357">                    return Response.noContent().build();</span>
+                }
+<span class="nc" id="L359">                return Response.ok().entity(admHandler.getGzippedADMDigestBytes()).build();</span>
+<span class="nc" id="L360">            } catch (Exception e) {</span>
+<span class="nc" id="L361">                LOG.error(&quot;Error getting compressed ADM digest file.\n&quot; + e.getMessage(), e);</span>
+<span class="nc" id="L362">                throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
+            }
+        case ZIP:
+<span class="nc" id="L365">            try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {</span>
+<span class="nc" id="L366">                admHandler.setIgnoreLibrary(false);</span>
+<span class="nc" id="L367">                admHandler.setLibraryDirectory(Paths.get(this.libFolder));</span>
+<span class="nc" id="L368">                admHandler.export(out);</span>
+<span class="nc" id="L369">                return Response.ok().entity(out.toByteArray()).build();</span>
+<span class="nc" id="L370">            } catch (Exception e) {</span>
+<span class="nc" id="L371">                LOG.error(&quot;Error getting ADM archive file.\n&quot; + e.getMessage(), e);</span>
+<span class="nc" id="L372">                throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
+            }
+        default:
+<span class="nc" id="L375">            throw new WebApplicationException(&quot;Unrecognized mapping format: &quot; + mappingFormat, Status.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    @Deprecated
+    @PUT
+    @Path(&quot;/mapping/{mappingFormat}&quot;)
+    @Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_OCTET_STREAM})
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = &quot;Create Mapping&quot;, description = &quot;Save a mapping file on the server&quot;)
+    @RequestBody(description = &quot;Mapping file content&quot;, content = @Content(schema = @Schema(implementation = AtlasMapping.class)))
+    @ApiResponses({
+        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Succeeded&quot;),
+        @ApiResponse(responseCode = &quot;500&quot;, description = &quot;Mapping file save error&quot;)})
+    public Response createMappingRequestOld(InputStream mapping,
+    @Parameter(description = &quot;Mapping Format&quot;) @PathParam(&quot;mappingFormat&quot;) MappingFileType mappingFormat,
+    @Context UriInfo uriInfo) {
+<span class="nc" id="L392">        return createMappingRequest(mapping, mappingFormat, 0, uriInfo);</span>
+    }
+
+    @PUT
+    @Path(&quot;/mapping/{mappingFormat}/{mappingDefinitionId}&quot;)
+    @Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_OCTET_STREAM})
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = &quot;Create Mapping&quot;, description = &quot;Save a mapping file on the server&quot;)
+    @RequestBody(description = &quot;Mapping file content&quot;, content = @Content(schema = @Schema(implementation = AtlasMapping.class)))
+    @ApiResponses({
+        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Succeeded&quot;),
+        @ApiResponse(responseCode = &quot;500&quot;, description = &quot;Mapping file save error&quot;)})
+    public Response createMappingRequest(InputStream mapping,
+      @Parameter(description = &quot;Mapping Format&quot;) @PathParam(&quot;mappingFormat&quot;) MappingFileType mappingFormat,
+      @Parameter(description = &quot;Mapping ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId,
+      @Context UriInfo uriInfo) {
+<span class="nc" id="L408">        LOG.debug(&quot;createMappingRequest (save) with format '{}'&quot;, mappingFormat);</span>
+<span class="nc" id="L409">        UriBuilder builder = uriInfo.getAbsolutePathBuilder();</span>
+<span class="nc" id="L410">        ADMArchiveHandler admHandler = loadExplodedMappingDirectory(mappingDefinitionId);</span>
+
+<span class="nc bnc" id="L412" title="All 5 branches missed.">        switch (mappingFormat) {</span>
+        case JSON:
+            try {
+<span class="nc" id="L415">                admHandler.setMappingDefinitionBytes(mapping);</span>
+<span class="nc" id="L416">                admHandler.persist();</span>
+<span class="nc" id="L417">                builder.path(admHandler.getMappingDefinition().getName());</span>
+<span class="nc" id="L418">            } catch (AtlasException e) {</span>
+<span class="nc" id="L419">                LOG.error(&quot;Error saving Mapping Definition file.\n&quot; + e.getMessage(), e);</span>
+<span class="nc" id="L420">                throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
+<span class="nc" id="L421">            }</span>
+<span class="nc" id="L422">            return Response.ok().location(builder.build()).build();</span>
+        case GZ:
+<span class="nc" id="L424">            LOG.debug(&quot;  saveGzippedADMDigestRequest '{}' - ID: {}&quot;, admHandler.getGzippedADMDigestFileName(), mappingDefinitionId);</span>
+            try {
+<span class="nc" id="L426">                admHandler.setGzippedADMDigest(mapping);</span>
+<span class="nc" id="L427">                admHandler.persist();</span>
+<span class="nc" id="L428">            } catch (AtlasException e) {</span>
+<span class="nc" id="L429">                LOG.error(&quot;Error saving gzipped ADM digest file.\n&quot; + e.getMessage(), e);</span>
+<span class="nc" id="L430">                throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
+<span class="nc" id="L431">            }</span>
+<span class="nc" id="L432">            builder.path(admHandler.getGzippedADMDigestFileName());</span>
+<span class="nc" id="L433">            return Response.ok().location(builder.build()).build();</span>
+        case ZIP:
+<span class="nc" id="L435">            LOG.debug(&quot;  importADMArchiveRequest - ID:'{}'&quot;, mappingDefinitionId);</span>
+            try {
+<span class="nc" id="L437">                admHandler.setIgnoreLibrary(false);</span>
+<span class="nc" id="L438">                admHandler.setLibraryDirectory(Paths.get(libFolder));</span>
+<span class="nc" id="L439">                admHandler.load(mapping);</span>
+<span class="nc" id="L440">                admHandler.persist();</span>
+<span class="nc" id="L441">            } catch (Exception e) {</span>
+<span class="nc" id="L442">                LOG.error(&quot;Error importing ADM archive.\n&quot; + e.getMessage(), e);</span>
+<span class="nc" id="L443">                throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
+<span class="nc" id="L444">            }</span>
+<span class="nc" id="L445">            builder.path(&quot;atlasmap-&quot; + mappingDefinitionId + &quot;.adm&quot;);</span>
+<span class="nc" id="L446">            return Response.ok().location(builder.build()).build();</span>
+        case XML:
+<span class="nc" id="L448">            throw new WebApplicationException(&quot;XML mapping format is no longer supported. Please use JSON format instead.&quot;);</span>
+        default:
+<span class="nc" id="L450">            throw new WebApplicationException(&quot;Unrecognized mapping format: &quot; + mappingFormat, Status.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    @Deprecated
+    @POST
+    @Path(&quot;/mapping&quot;)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = &quot;Update Mapping&quot;, description = &quot;Update existing mapping file on the server&quot;)
+    @RequestBody(description = &quot;Mapping file content&quot;, content = @Content(schema = @Schema(implementation = AtlasMapping.class)))
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, description = &quot;Succeeded&quot;))
+    public Response updateMappingRequestOld(
+            InputStream mapping,
+            @Context UriInfo uriInfo)
+    {
+<span class="nc" id="L466">        return updateMappingRequest(mapping, 0, uriInfo);</span>
+    }
+
+    @POST
+    @Path(&quot;/mapping/{mappingDefinitionId}&quot;)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = &quot;Update Mapping&quot;, description = &quot;Update existing mapping file on the server&quot;)
+    @RequestBody(description = &quot;Mapping file content&quot;, content = @Content(schema = @Schema(implementation = AtlasMapping.class)))
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, description = &quot;Succeeded&quot;))
+    public Response updateMappingRequest(
+            InputStream mapping,
+            @Parameter(description = &quot;Mapping Definition ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId,
+            @Context UriInfo uriInfo) {
+<span class="nc" id="L480">        ADMArchiveHandler handler = loadExplodedMappingDirectory(mappingDefinitionId);</span>
+<span class="nc" id="L481">        UriBuilder builder = uriInfo.getAbsolutePathBuilder();</span>
+        try {
+<span class="nc" id="L483">            handler.setMappingDefinitionBytes(mapping);</span>
+<span class="nc" id="L484">            handler.persist();</span>
+<span class="nc" id="L485">            builder.path(handler.getMappingDefinition().getName());</span>
+<span class="nc" id="L486">        } catch (AtlasException e) {</span>
+<span class="nc" id="L487">            LOG.error(&quot;Error saving Mapping Definition file.\n&quot; + e.getMessage(), e);</span>
+<span class="nc" id="L488">            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
+<span class="nc" id="L489">        }</span>
+
+<span class="nc" id="L491">        return Response.ok().location(builder.build()).build();</span>
+    }
+
+    @Deprecated
+    @PUT
+    @Path(&quot;/mapping/validate&quot;)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = &quot;Validate Mapping&quot;, description = &quot;Validate mapping file&quot;)
+    @RequestBody(description = &quot;Mapping file content&quot;, content = @Content(schema = @Schema(implementation = AtlasMapping.class)))
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = Validations.class)), description = &quot;Return a validation result&quot;))
+    public Response validateMappingRequestOld(InputStream mapping,
+                                           @Context UriInfo uriInfo)
+    {
+<span class="nc" id="L505">        return validateMappingRequest(mapping, 0, uriInfo);</span>
+    }
+
+    @PUT
+    @Path(&quot;/mapping/validate/{mappingDefinitionId}&quot;)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = &quot;Validate Mapping&quot;, description = &quot;Validate mapping file&quot;)
+    @RequestBody(description = &quot;Mapping file content&quot;, content = @Content(schema = @Schema(implementation = AtlasMapping.class)))
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation =  Validations.class)), description = &quot;Return a validation result&quot;))
+    public Response validateMappingRequest(InputStream mapping,
+                                           @Parameter(description = &quot;Mapping ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId,
+                                           @Context UriInfo uriInfo) {
+        try {
+<span class="nc" id="L519">            AtlasMapping atlasMapping = fromJson(mapping, AtlasMapping.class);</span>
+<span class="nc" id="L520">            LOG.debug(&quot;Validate mappings: {}&quot;, atlasMapping.getName());</span>
+<span class="nc" id="L521">            return validateMapping(mappingDefinitionId, atlasMapping, uriInfo);</span>
+<span class="nc" id="L522">        } catch (AtlasException | IOException e) {</span>
+<span class="nc" id="L523">            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    @PUT
+    @Path(&quot;/mapping/process&quot;)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = &quot;Process Mapping&quot;, description = &quot;Process Mapping by feeding input data&quot;)
+    @RequestBody(description = &quot;Mapping file content&quot;, content = @Content(schema = @Schema(implementation = AtlasMapping.class)))
+    @ApiResponses({
+        @ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = ProcessMappingResponse.class)), description = &quot;Return a mapping result&quot;),
+        @ApiResponse(responseCode = &quot;204&quot;, description = &quot;Skipped empty mapping execution&quot;) })
+    public Response processMappingRequest(InputStream request, @Context UriInfo uriInfo) {
+<span class="nc" id="L537">        ProcessMappingRequest pmr = fromJson(request, ProcessMappingRequest.class);</span>
+<span class="nc bnc" id="L538" title="All 2 branches missed.">        if (pmr.getAtlasMapping() != null) {</span>
+<span class="nc" id="L539">            throw new WebApplicationException(&quot;Whole mapping execution is not yet supported&quot;);</span>
+        }
+<span class="nc" id="L541">        Mapping mapping = pmr.getMapping();</span>
+<span class="nc bnc" id="L542" title="All 2 branches missed.">        if (mapping == null) {</span>
+<span class="nc" id="L543">            return Response.noContent().build();</span>
+        }
+<span class="nc" id="L545">        Audits audits = null;</span>
+        try {
+<span class="nc bnc" id="L547" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L548">                LOG.debug(&quot;Preview request: {}&quot;, new String(toJson(mapping)));</span>
+            }
+<span class="nc" id="L550">            audits = defaultContext.processPreview(mapping);</span>
+<span class="nc" id="L551">        } catch (AtlasException e) {</span>
+<span class="nc" id="L552">            throw new WebApplicationException(&quot;Unable to process mapping preview&quot;, e);</span>
+<span class="nc" id="L553">        }</span>
+<span class="nc" id="L554">        ProcessMappingResponse response = new ProcessMappingResponse();</span>
+<span class="nc" id="L555">        response.setMapping(mapping);</span>
+<span class="nc bnc" id="L556" title="All 2 branches missed.">        if (audits != null) {</span>
+<span class="nc" id="L557">            response.setAudits(audits);</span>
+        }
+<span class="nc" id="L559">        byte[] serialized = toJson(response);</span>
+<span class="nc bnc" id="L560" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L561">            LOG.debug(&quot;Preview outcome: {}&quot;, new String(serialized));</span>
+        }
+<span class="nc" id="L563">        return Response.ok().entity(serialized).build();</span>
+    }
+
+    @GET
+    @Path(&quot;/ping&quot;)
+    @Operation(summary = &quot;Ping&quot;, description = &quot;Simple liveness check method used in liveness checks. Must not be protected via authetication.&quot;)
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(type = &quot;string&quot;)), description = &quot;Return 'pong'&quot;))
+    public Response ping() {
+<span class="nc" id="L571">	LOG.debug(&quot;Ping...  responding with 'pong'.&quot;);</span>
+<span class="nc" id="L572">	return Response.ok().entity(toJson(&quot;pong&quot;)).build();</span>
+    }
+
+    @PUT
+    @Path(&quot;/library&quot;)
+    @Operation(summary = &quot;Upload Library&quot;, description = &quot;Upload a Java library archive file&quot;)
+    @Consumes({MediaType.APPLICATION_OCTET_STREAM})
+    @ApiResponses(@ApiResponse(
+            responseCode = &quot;200&quot;, description = &quot;Library upload successful.&quot;))
+    public Response uploadLibrary(InputStream requestIn) {
+<span class="pc bpc" id="L582" title="1 of 2 branches missed.">        if (requestIn == null) {</span>
+<span class="nc" id="L583">            throw new WebApplicationException(&quot;No library file found in request body&quot;);</span>
+        }
+
+        try {
+<span class="fc" id="L587">            libraryLoader.addJarFromStream(requestIn);</span>
+<span class="nc" id="L588">        } catch (Exception e) {</span>
+<span class="nc bnc" id="L589" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L590">                LOG.error(&quot;&quot;, e);</span>
+            }
+<span class="nc" id="L592">            throw new WebApplicationException(&quot;Could not read file part: &quot; + e.getMessage());</span>
+<span class="fc" id="L593">        }</span>
+<span class="fc" id="L594">        return Response.ok().build();</span>
+    }
+
+    public AtlasLibraryLoader getLibraryLoader() {
+<span class="nc" id="L598">        return this.libraryLoader;</span>
+    }
+
+    protected Response validateMapping(Integer mappingDefinitionId, AtlasMapping mapping, UriInfo uriInfo) throws IOException, AtlasException {
+        // TODO Separate save mapping from validation - https://github.com/atlasmap/atlasmap/issues/1946
+<span class="nc" id="L603">        ADMArchiveHandler handler = loadExplodedMappingDirectory(mappingDefinitionId);</span>
+<span class="nc" id="L604">        handler.setMappingDefinition(mapping);</span>
+<span class="nc" id="L605">        handler.persist();</span>
+
+<span class="nc" id="L607">        AtlasContext context = atlasContextFactory.createContext(mapping);</span>
+<span class="nc" id="L608">        AtlasSession session = context.createSession();</span>
+<span class="nc" id="L609">        context.processValidation(session);</span>
+<span class="nc" id="L610">        Validations validations = session.getValidations();</span>
+
+<span class="nc bnc" id="L612" title="All 2 branches missed.">        if (session.getValidations() == null) {</span>
+<span class="nc" id="L613">            validations = new Validations();</span>
+        }
+
+<span class="nc" id="L616">        return Response.ok().entity(toJson(validations)).build();</span>
+    }
+
+    private byte[] toJson(Object value) {
+        try {
+<span class="fc" id="L621">            return Json.mapper().writeValueAsBytes(value);</span>
+<span class="nc" id="L622">        } catch (JsonProcessingException e) {</span>
+<span class="nc" id="L623">            throw new WebApplicationException(e, Status.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    private &lt;T&gt; T fromJson(InputStream value, Class&lt;T&gt;clazz) {
+        try {
+<span class="nc bnc" id="L629" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L630">                BufferedReader reader = new BufferedReader(new InputStreamReader(value));</span>
+<span class="nc" id="L631">                StringBuffer buf = new StringBuffer();</span>
+                String line;
+<span class="nc bnc" id="L633" title="All 2 branches missed.">                while ((line = reader.readLine()) != null) {</span>
+<span class="nc" id="L634">                    buf.append(line);</span>
+                }
+<span class="nc" id="L636">                LOG.debug(buf.toString());</span>
+<span class="nc" id="L637">                return Json.mapper().readValue(buf.toString(), clazz);</span>
+            }
+<span class="nc" id="L639">            return Json.mapper().readValue(value, clazz);</span>
+<span class="nc" id="L640">        } catch (IOException e) {</span>
+<span class="nc" id="L641">            throw new WebApplicationException(e, Status.BAD_REQUEST);</span>
+        }
+    }
+
+    private String getMappingSubDirectory(Integer mappingDefinitionId) {
+<span class="fc" id="L646">        return this.mappingFolder + File.separator + mappingDefinitionId;</span>
+    }
+
+    private ADMArchiveHandler loadExplodedMappingDirectory(Integer mappingDefinitionId) {
+<span class="fc" id="L650">        java.nio.file.Path mappingDirPath = Paths.get(getMappingSubDirectory(mappingDefinitionId));</span>
+<span class="fc" id="L651">        File mappingDirFile = mappingDirPath.toFile();</span>
+<span class="fc bfc" id="L652" title="All 2 branches covered.">        if (!mappingDirFile.exists()) {</span>
+<span class="fc" id="L653">            mappingDirFile.mkdirs();</span>
+        }
+
+<span class="fc" id="L656">        ADMArchiveHandler admHandler = new ADMArchiveHandler(this.libraryLoader);</span>
+<span class="fc" id="L657">        admHandler.setIgnoreLibrary(true);</span>
+        try {
+<span class="fc" id="L659">            admHandler.load(mappingDirPath);</span>
+<span class="nc" id="L660">        } catch (Exception e) {</span>
+<span class="nc" id="L661">            LOG.error(&quot;Unexpected error while loading mapping directory.\n&quot; + e.getMessage(), e);</span>
+<span class="nc" id="L662">            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
+<span class="fc" id="L663">        }</span>
+<span class="fc" id="L664">        return admHandler;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

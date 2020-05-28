@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>CsvFields.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-csv-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.csv.v2</a> &gt; <span class="el_source">CsvFields.java</span></div><h1>CsvFields.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.csv.v2;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+<span class="fc" id="L22">public class CsvFields implements Serializable {</span>
+
+    private final static long serialVersionUID = 1L;
+
+    protected List&lt;CsvField&gt; csvField;
+
+    /**
+     * Gets the value of the csvField property.
+     *
+     * &lt;p&gt;
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a &lt;CODE&gt;set&lt;/CODE&gt; method for the csvField property.
+     *
+     * &lt;p&gt;
+     * For example, to add a new item, do as follows:
+     * &lt;pre&gt;
+     *    getCsvField().add(newItem);
+     * &lt;/pre&gt;
+     *
+     *
+     * &lt;p&gt;
+     * Objects of the following type(s) are allowed in the list
+     * {@link CsvField }
+     *
+     *
+     */
+    public List&lt;CsvField&gt; getCsvField() {
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        if (csvField == null) {</span>
+<span class="fc" id="L52">            csvField = new ArrayList&lt;CsvField&gt;();</span>
+        }
+<span class="fc" id="L54">        return this.csvField;</span>
+    }
+
+    public boolean equals(Object object) {
+<span class="nc bnc" id="L58" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L59">            return false;</span>
+        }
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L62">            return true;</span>
+        }
+<span class="nc" id="L64">        final CsvFields that = ((CsvFields) object);</span>
+        {
+            List&lt;CsvField&gt; leftCsvField;
+<span class="nc bnc" id="L67" title="All 4 branches missed.">            leftCsvField = (((this.csvField != null)&amp;&amp;(!this.csvField.isEmpty()))?this.getCsvField():null);</span>
+            List&lt;CsvField&gt; rightCsvField;
+<span class="nc bnc" id="L69" title="All 4 branches missed.">            rightCsvField = (((that.csvField!= null)&amp;&amp;(!that.csvField.isEmpty()))?that.getCsvField():null);</span>
+<span class="nc bnc" id="L70" title="All 4 branches missed.">            if ((this.csvField != null)&amp;&amp;(!this.csvField.isEmpty())) {</span>
+<span class="nc bnc" id="L71" title="All 4 branches missed.">                if ((that.csvField!= null)&amp;&amp;(!that.csvField.isEmpty())) {</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">                    if (!leftCsvField.equals(rightCsvField)) {</span>
+<span class="nc" id="L73">                        return false;</span>
+                    }
+                } else {
+<span class="nc" id="L76">                    return false;</span>
+                }
+            } else {
+<span class="nc bnc" id="L79" title="All 4 branches missed.">                if ((that.csvField!= null)&amp;&amp;(!that.csvField.isEmpty())) {</span>
+<span class="nc" id="L80">                    return false;</span>
+                }
+            }
+        }
+<span class="nc" id="L84">        return true;</span>
+    }
+
+    public int hashCode() {
+<span class="nc" id="L88">        int currentHashCode = 1;</span>
+        {
+<span class="nc" id="L90">            currentHashCode = (currentHashCode* 31);</span>
+            List&lt;CsvField&gt; theCsvField;
+<span class="nc bnc" id="L92" title="All 4 branches missed.">            theCsvField = (((this.csvField != null)&amp;&amp;(!this.csvField.isEmpty()))?this.getCsvField():null);</span>
+<span class="nc bnc" id="L93" title="All 4 branches missed.">            if ((this.csvField != null)&amp;&amp;(!this.csvField.isEmpty())) {</span>
+<span class="nc" id="L94">                currentHashCode += theCsvField.hashCode();</span>
+            }
+        }
+<span class="nc" id="L97">        return currentHashCode;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

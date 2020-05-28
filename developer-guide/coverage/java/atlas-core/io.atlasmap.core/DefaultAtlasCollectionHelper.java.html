@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DefaultAtlasCollectionHelper.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.core</a> &gt; <span class="el_source">DefaultAtlasCollectionHelper.java</span></div><h1>DefaultAtlasCollectionHelper.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.core;
+
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.spi.AtlasCollectionHelper;
+import io.atlasmap.spi.AtlasFieldActionService;
+import io.atlasmap.v2.Action;
+import io.atlasmap.v2.ActionDetail;
+import io.atlasmap.v2.CollectionType;
+import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
+import io.atlasmap.v2.Multiplicity;
+
+import java.util.List;
+
+public class DefaultAtlasCollectionHelper implements AtlasCollectionHelper {
+
+    private AtlasFieldActionService fieldActionService;
+
+<span class="nc" id="L34">    public DefaultAtlasCollectionHelper() {</span>
+<span class="nc" id="L35">        this.fieldActionService = DefaultAtlasFieldActionService.getInstance();</span>
+<span class="nc" id="L36">    }</span>
+
+<span class="fc" id="L38">    public DefaultAtlasCollectionHelper(AtlasFieldActionService fieldActionService) {</span>
+<span class="fc" id="L39">        this.fieldActionService = fieldActionService;</span>
+<span class="fc" id="L40">    }</span>
+
+    public int determineTargetCollectionCount(Field targetField) {
+<span class="fc" id="L43">        AtlasPath targetPath = new AtlasPath(targetField.getPath());</span>
+<span class="fc" id="L44">        int targetCollectionCount = targetPath.getCollectionSegmentCount();</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        if (targetField.getIndex() != null) {</span>
+<span class="fc" id="L46">            targetCollectionCount++; //adjust based on index</span>
+        }
+<span class="fc" id="L48">        return targetCollectionCount;</span>
+    }
+
+    public int determineSourceCollectionCount(Field sourceParentField, Field sourceField) {
+<span class="fc" id="L52">        AtlasPath sourcePath = new AtlasPath(sourceField.getPath());</span>
+<span class="fc" id="L53">        int sourceCollectionCount = sourcePath.getCollectionSegmentCount();</span>
+<span class="fc" id="L54">        sourceCollectionCount += getCollectionCountAdjustmentForActions(sourceParentField);</span>
+<span class="fc" id="L55">        sourceCollectionCount += getCollectionCountAdjustmentForActions(sourceField);</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        if (sourceField.getIndex() != null) {</span>
+<span class="fc" id="L57">            sourceCollectionCount--; //adjust based on index</span>
+        }
+<span class="fc" id="L59">        return sourceCollectionCount;</span>
+    }
+
+    private int getCollectionCountAdjustmentForActions(Field sourceField) {
+<span class="fc" id="L63">        int sourceCollectionCount = 0;</span>
+<span class="fc bfc" id="L64" title="All 4 branches covered.">        if (sourceField != null &amp;&amp; sourceField.getActions() != null) {</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">            for (Action action : sourceField.getActions()) {</span>
+<span class="fc" id="L66">                ActionDetail actionDetail = null;</span>
+                try {
+<span class="fc" id="L68">                    actionDetail = fieldActionService.findActionDetail(action, sourceField.getFieldType());</span>
+<span class="nc" id="L69">                } catch (AtlasException e) {</span>
+<span class="nc" id="L70">                    throw new RuntimeException(e);</span>
+<span class="fc" id="L71">                }</span>
+
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">                if (actionDetail != null) {</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">                    if (Multiplicity.ONE_TO_MANY.equals(actionDetail.getMultiplicity())) {</span>
+<span class="fc" id="L75">                        sourceCollectionCount++;</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">                    } else if (Multiplicity.MANY_TO_ONE.equals(actionDetail.getMultiplicity())) {</span>
+<span class="fc" id="L77">                        sourceCollectionCount--;</span>
+                    }
+                }
+<span class="fc" id="L80">            }</span>
+        }
+<span class="fc" id="L82">        return sourceCollectionCount;</span>
+    }
+
+    public void copyCollectionIndexes(Field sourceParentField, Field sourceField, Field targetField, Field previousTargetField) {
+<span class="fc" id="L86">        AtlasPath sourcePath = new AtlasPath(sourceField.getPath());</span>
+<span class="fc" id="L87">        AtlasPath targetPath = new AtlasPath(targetField.getPath());</span>
+<span class="fc" id="L88">        int targetCollectionCount = determineTargetCollectionCount(targetField);</span>
+<span class="fc" id="L89">        int sourceCollectionCount = determineSourceCollectionCount(sourceParentField, sourceField);</span>
+<span class="fc" id="L90">        int targetIndex = 0;</span>
+<span class="fc" id="L91">        int collectionCount = 0;</span>
+<span class="fc" id="L92">        List&lt;AtlasPath.SegmentContext&gt; targetSegments = targetPath.getSegments(true);</span>
+
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        if (targetCollectionCount &gt; sourceCollectionCount) {</span>
+            //Put 0 index in excessive target collections, if targetCollectionCount &gt; sourceCollectionCount
+<span class="fc bfc" id="L96" title="All 2 branches covered.">            while (collectionCount &lt; targetCollectionCount - sourceCollectionCount) {</span>
+<span class="fc" id="L97">                AtlasPath.SegmentContext targetSegment = targetSegments.get(targetIndex);</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">                if (targetSegment.getCollectionType() != CollectionType.NONE) {</span>
+<span class="fc" id="L99">                    targetPath.setCollectionIndex(targetIndex, 0);</span>
+<span class="fc" id="L100">                    collectionCount++;</span>
+                }
+<span class="fc" id="L102">                targetIndex++;</span>
+<span class="fc" id="L103">            }</span>
+        }
+
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        AtlasPath previousTargetPath = previousTargetField != null ? new AtlasPath(previousTargetField.getPath()) : null;</span>
+<span class="fc" id="L107">        List&lt;AtlasPath.SegmentContext&gt; sourceCollectionSegments = sourcePath.getCollectionSegments(true);</span>
+<span class="fc" id="L108">        AtlasPath.SegmentContext lastSourceSegment = sourcePath.getLastSegment();</span>
+<span class="fc" id="L109">        AtlasPath.SegmentContext lastTargetCollectionSegment = targetPath.getLastCollectionSegment();</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        for (AtlasPath.SegmentContext sourceSegment : sourcePath.getSegments(true)) {</span>
+<span class="fc bfc" id="L111" title="All 4 branches covered.">            if (sourceSegment.getCollectionType() == CollectionType.NONE &amp;&amp; sourceSegment != lastSourceSegment) {</span>
+                //always process last segment even if not a collection (in case e.g. split has been applied)
+<span class="fc" id="L113">                continue;</span>
+            }
+
+<span class="fc bfc" id="L116" title="All 2 branches covered.">            while (targetSegments.size() &gt; targetIndex) {</span>
+<span class="fc" id="L117">                AtlasPath.SegmentContext targetSegment = targetSegments.get(targetIndex);</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">                if (targetSegment.getCollectionType() != CollectionType.NONE) {</span>
+<span class="fc" id="L119">                    collectionCount++;</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">                    if (sourceSegment.getCollectionIndex() != null) {</span>
+<span class="fc bfc" id="L121" title="All 4 branches covered.">                        if (sourceCollectionCount &gt; targetCollectionCount &amp;&amp; targetCollectionCount == collectionCount) {</span>
+                            //if needs to flatten excessive rightmost source collections
+<span class="fc" id="L123">                            int nextCollectionIndex = determineNextCollectionIndex(previousTargetPath, sourceCollectionSegments);</span>
+<span class="fc" id="L124">                            targetPath.setCollectionIndex(targetIndex, nextCollectionIndex);</span>
+<span class="fc" id="L125">                        } else {</span>
+<span class="fc" id="L126">                            targetPath.setCollectionIndex(targetIndex, sourceSegment.getCollectionIndex());</span>
+                        }
+
+<span class="fc" id="L129">                        targetIndex++;</span>
+<span class="fc" id="L130">                        break;</span>
+<span class="pc bpc" id="L131" title="2 of 4 branches missed.">                    } else if (targetSegment == lastTargetCollectionSegment &amp;&amp; sourceParentField instanceof FieldGroup) {</span>
+                        //if the last collection target segment, but no collection index specified (e.g. after split)
+<span class="fc" id="L133">                        int nextCollectionIndex = determineNextCollectionIndex(previousTargetPath, sourceCollectionSegments);</span>
+<span class="fc" id="L134">                        targetPath.setCollectionIndex(targetIndex, nextCollectionIndex);</span>
+
+<span class="fc" id="L136">                        targetIndex++;</span>
+<span class="fc" id="L137">                        break;</span>
+                    }
+                }
+
+<span class="fc" id="L141">                targetIndex++;</span>
+<span class="fc" id="L142">            }</span>
+<span class="fc" id="L143">        }</span>
+
+<span class="fc" id="L145">        targetField.setPath(targetPath.toString());</span>
+<span class="fc" id="L146">    }</span>
+
+    private int determineNextCollectionIndex(AtlasPath previousTargetPath, List&lt;AtlasPath.SegmentContext&gt; sourceCollectionSegments) {
+<span class="fc" id="L149">        int nextCollectionIndex = 0;</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        if (previousTargetPath != null) {</span>
+<span class="fc" id="L151">            List&lt;AtlasPath.SegmentContext&gt; previousTargetCollectionSegments = previousTargetPath.getCollectionSegments(true);</span>
+<span class="fc" id="L152">            boolean parentIndexesChanged = false;</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">            for (int i = previousTargetCollectionSegments.size() - 2; i &gt;= 0; i--) {</span>
+<span class="fc" id="L154">                if (!previousTargetCollectionSegments.get(i).getCollectionIndex()</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">                    .equals(sourceCollectionSegments.get(i).getCollectionIndex())) {</span>
+<span class="fc" id="L156">                    parentIndexesChanged = true;</span>
+<span class="fc" id="L157">                    break;</span>
+                }
+            }
+
+<span class="fc bfc" id="L161" title="All 2 branches covered.">            if (!parentIndexesChanged) {</span>
+                //determine previous collection index
+<span class="fc" id="L163">                nextCollectionIndex = previousTargetCollectionSegments</span>
+<span class="fc" id="L164">                    .get(previousTargetCollectionSegments.size() - 1).getCollectionIndex();</span>
+<span class="fc" id="L165">                nextCollectionIndex++;</span>
+            }
+        }
+<span class="fc" id="L168">        return nextCollectionIndex;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

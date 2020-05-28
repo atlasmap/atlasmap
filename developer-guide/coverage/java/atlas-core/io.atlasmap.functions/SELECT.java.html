@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>SELECT.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.functions</a> &gt; <span class="el_source">SELECT.java</span></div><h1>SELECT.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ * &lt;p&gt;
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * &lt;p&gt;
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * &lt;p&gt;
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.functions;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import io.atlasmap.core.AtlasPath;
+import io.atlasmap.core.BaseFunctionFactory;
+import io.atlasmap.expression.Expression;
+import io.atlasmap.expression.parser.ParseException;
+import io.atlasmap.v2.AtlasModelFactory;
+import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
+
+<span class="fc" id="L30">public class SELECT extends BaseFunctionFactory {</span>
+
+    @Override
+    public Expression create(List&lt;Expression&gt; args) throws ParseException {
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">        if (args.size() != 2) {</span>
+<span class="nc" id="L35">            throw new ParseException(&quot;SELECT expects 2 arguments.&quot;);</span>
+        }
+<span class="fc" id="L37">        Expression parentExpression = args.get(0);</span>
+<span class="fc" id="L38">        Expression selectExpression =args.get(1);</span>
+<span class="fc" id="L39">        return (ctx) -&gt; {</span>
+<span class="fc" id="L40">            Field parent = (Field) parentExpression.evaluate(ctx);</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">            List&lt;Field&gt; collection = parent instanceof FieldGroup ? ((FieldGroup)parent).getField() : Arrays.asList(parent);</span>
+<span class="fc" id="L42">            List&lt;Field&gt; selected = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L43">            final FieldGroup answer = AtlasModelFactory.createFieldGroupFrom(parent, true);</span>
+<span class="fc" id="L44">            answer.setPath(FUNCTION_PATH);</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">            for (Field f : collection) {</span>
+<span class="fc" id="L46">                Field fs = (Field) selectExpression.evaluate((subCtx) -&gt; {</span>
+<span class="pc bpc" id="L47" title="1 of 4 branches missed.">                    if (subCtx != null &amp;&amp; FUNCTION_PATH.equals(answer.getPath())) {</span>
+<span class="fc" id="L48">                        answer.setPath(parent.getPath() +</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">                            (subCtx.startsWith(AtlasPath.PATH_SEPARATOR) ? subCtx : (AtlasPath.PATH_SEPARATOR + subCtx)));</span>
+                    }
+<span class="fc" id="L51">                    return AtlasPath.extractChildren(f, subCtx);</span>
+                });
+<span class="fc" id="L53">                selected.add(fs);</span>
+<span class="fc" id="L54">            }</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">            if (selected.size() == 1) {</span>
+<span class="nc" id="L56">                return selected.get(0);</span>
+            }
+<span class="fc" id="L58">            answer.getField().addAll(selected);</span>
+<span class="fc" id="L59">            return answer;</span>
+        };
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
