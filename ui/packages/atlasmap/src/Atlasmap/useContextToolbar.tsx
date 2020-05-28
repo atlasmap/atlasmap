@@ -5,9 +5,6 @@ import { ToolbarGroup } from "@patternfly/react-core";
 import { ContextToolbar } from "../Layout";
 import { useToggle } from "../UI";
 import {
-  ExportAtlasFileToolbarItem,
-  ImportAtlasFileToolbarItem,
-  ResetToolbarItem,
   ToggleColumnMapperViewToolbarItem,
   ToggleFreeViewToolbarItem,
   ToggleMappedFieldsToolbarItem,
@@ -17,6 +14,7 @@ import {
   ToggleNamespaceTableViewToolbarItem,
   ToggleTypesToolbarItem,
   ToggleUnmappedFieldsToolbarItem,
+  AtlasmapToolbarItem,
 } from "./toolbarItems";
 import { useAtlasmap } from "./AtlasmapProvider";
 
@@ -28,12 +26,14 @@ export type Views =
 
 export interface IUseContextToolbarHandlers {
   onImportAtlasFile: (file: File) => void;
+  onImportJarFile: (file: File) => void;
   onExportAtlasFile: () => void;
   onResetAtlasmap: () => void;
 }
 
 export interface IUseContextToolbarData {
   showImportAtlasFileToolbarItem?: boolean;
+  showImportJarFileToolbarItem?: boolean;
   showExportAtlasFileToolbarItem?: boolean;
   showResetToolbarItem?: boolean;
 
@@ -51,6 +51,7 @@ export interface IUseContextToolbarData {
 
 export function useContextToolbar({
   showImportAtlasFileToolbarItem = true,
+  showImportJarFileToolbarItem = true,
   showExportAtlasFileToolbarItem = true,
   showResetToolbarItem = true,
 
@@ -66,6 +67,7 @@ export function useContextToolbar({
   showToggleUnmappedFieldsToolbarItem = true,
 
   onImportAtlasFile,
+  onImportJarFile,
   onExportAtlasFile,
   onResetAtlasmap,
 }: IUseContextToolbarData & IUseContextToolbarHandlers) {
@@ -97,43 +99,54 @@ export function useContextToolbar({
   const contextToolbar = useMemo(
     () => (
       <ContextToolbar>
-        <ToolbarGroup>
-          {showImportAtlasFileToolbarItem && (
-            <ImportAtlasFileToolbarItem onFile={onImportAtlasFile} />
-          )}
-          {showExportAtlasFileToolbarItem && (
-            <ExportAtlasFileToolbarItem onClick={onExportAtlasFile} />
-          )}
-          {showResetToolbarItem && (
-            <ResetToolbarItem onClick={onResetAtlasmap} />
-          )}
-        </ToolbarGroup>
-        <ToolbarGroup>
-          {showColumnMapperViewToolbarItem && (
-            <ToggleColumnMapperViewToolbarItem
-              toggled={activeView === "ColumnMapper"}
-              onClick={() => setActiveView("ColumnMapper")}
+        {(showImportAtlasFileToolbarItem ||
+          showImportJarFileToolbarItem ||
+          showExportAtlasFileToolbarItem ||
+          showResetToolbarItem) && (
+          <ToolbarGroup>
+            <AtlasmapToolbarItem
+              showImportAtlasFileToolbarItem={showImportAtlasFileToolbarItem}
+              showImportJarFileToolbarItem={showImportJarFileToolbarItem}
+              showExportAtlasFileToolbarItem={showExportAtlasFileToolbarItem}
+              showResetToolbarItem={showResetToolbarItem}
+              onImportAtlasFile={onImportAtlasFile}
+              onImportJarFile={onImportJarFile}
+              onExportAtlasFile={onExportAtlasFile}
+              onResetAtlasmap={onResetAtlasmap}
             />
-          )}
-          {showMappingTableViewToolbarItem && (
-            <ToggleMappingTableViewToolbarItem
-              toggled={activeView === "MappingTable"}
-              onClick={() => setActiveView("MappingTable")}
-            />
-          )}
-          {showFreeViewToolbarItem && (
-            <ToggleFreeViewToolbarItem
-              toggled={activeView === "FreeView"}
-              onClick={() => setActiveView("FreeView")}
-            />
-          )}
-          {showNamespaceTableViewToolbarItem && (
-            <ToggleNamespaceTableViewToolbarItem
-              toggled={activeView === "NamespaceTable"}
-              onClick={() => setActiveView("NamespaceTable")}
-            />
-          )}
-        </ToolbarGroup>
+          </ToolbarGroup>
+        )}
+        {(showColumnMapperViewToolbarItem ||
+          showMappingTableViewToolbarItem ||
+          showFreeViewToolbarItem ||
+          showNamespaceTableViewToolbarItem) && (
+          <ToolbarGroup>
+            {showColumnMapperViewToolbarItem && (
+              <ToggleColumnMapperViewToolbarItem
+                toggled={activeView === "ColumnMapper"}
+                onClick={() => setActiveView("ColumnMapper")}
+              />
+            )}
+            {showMappingTableViewToolbarItem && (
+              <ToggleMappingTableViewToolbarItem
+                toggled={activeView === "MappingTable"}
+                onClick={() => setActiveView("MappingTable")}
+              />
+            )}
+            {showFreeViewToolbarItem && (
+              <ToggleFreeViewToolbarItem
+                toggled={activeView === "FreeView"}
+                onClick={() => setActiveView("FreeView")}
+              />
+            )}
+            {showNamespaceTableViewToolbarItem && (
+              <ToggleNamespaceTableViewToolbarItem
+                toggled={activeView === "NamespaceTable"}
+                onClick={() => setActiveView("NamespaceTable")}
+              />
+            )}
+          </ToolbarGroup>
+        )}
         <ToolbarGroup>
           {showToggleMappingColumnToolbarItem &&
             activeView === "ColumnMapper" && (
@@ -177,16 +190,18 @@ export function useContextToolbar({
     ),
     [
       showImportAtlasFileToolbarItem,
-      onImportAtlasFile,
+      showImportJarFileToolbarItem,
       showExportAtlasFileToolbarItem,
-      onExportAtlasFile,
       showResetToolbarItem,
+      onImportAtlasFile,
+      onImportJarFile,
+      onExportAtlasFile,
       onResetAtlasmap,
       showColumnMapperViewToolbarItem,
-      activeView,
       showMappingTableViewToolbarItem,
-      showNamespaceTableViewToolbarItem,
       showFreeViewToolbarItem,
+      showNamespaceTableViewToolbarItem,
+      activeView,
       showToggleMappingColumnToolbarItem,
       showMappingColumn,
       toggleShowMappingColumn,

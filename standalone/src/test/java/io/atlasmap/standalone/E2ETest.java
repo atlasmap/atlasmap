@@ -90,7 +90,10 @@ public class E2ETest {
         driver.get("http://127.0.0.1:" + port);
         WebDriverWait waitForLoad = new WebDriverWait(driver, 5);
         waitForLoad.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//article[@aria-label='Properties']")));
-        WebElement importBtn = driver.findElement(By.xpath("//button[@data-testid='import-mappings-button']"));
+        WebElement atlasmapMenuBtn = driver.findElement(By.xpath("//button[@data-testid='atlasmap-menu-button']"));
+        atlasmapMenuBtn.click();
+        waitForLoad.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@data-testid='import-mappings-button']")));
+        WebElement importBtn = driver.findElement(By.xpath("//a[@data-testid='import-mappings-button']"));
         importBtn.click();
         WebElement fileInput = driver.findElement(By.xpath("//div[@id='data-toolbar']//input[@type='file']"));
         String cwd = System.getProperty("user.dir");
@@ -114,7 +117,10 @@ public class E2ETest {
             "//div[@role='dialog']//div[@aria-labelledby='mapping-field-city']")));
         assertNotNull(detailsCity);
 
-        WebElement exportBtn = driver.findElement(By.xpath("//button[@data-testid='export-mappings-button']"));
+        atlasmapMenuBtn = driver.findElement(By.xpath("//button[@data-testid='atlasmap-menu-button']"));
+        atlasmapMenuBtn.click();
+        waitForLoad.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@data-testid='export-mappings-button']")));
+        WebElement exportBtn = driver.findElement(By.xpath("//a[@data-testid='export-mappings-button']"));
         exportBtn.click();
         WebElement dialogDiv = driver.findElement(By.xpath("//div[@role='dialog' and @aria-label='Export Mappings and Documents.']"));
         WebElement exportInput = dialogDiv.findElement(By.id("filename"));
