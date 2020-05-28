@@ -37,7 +37,7 @@ export function useCustomClassDialog(
       }))}
       onCancel={toggleOff}
       onConfirm={onConfirm}
-      {...(initialCustomClass || {})}
+      {...(initialCustomClass || { collectionType: "NONE" })}
     />
   );
   const onOpenCustomClassDialog = useCallback(
