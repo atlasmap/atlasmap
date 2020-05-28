@@ -8,7 +8,8 @@ cd ..
 cd docs
 ../mvnw -Phtml,pdf package
 ../mvnw -f pom-javadoc.xml -pl \!io.atlasmap:atlasmap-lib-all javadoc:aggregate
-mkdir -p target/generated-docs/html/developer-guide/coverage/{java,ui}
+mkdir -p target/generated-docs/html/developer-guide/coverage/java
+mkdir target/generated-docs/html/developer-guide/coverage/ui
 cp -a ../coverage-report/target/site/jacoco-aggregate/* target/generated-docs/html/developer-guide/coverage/java
 for dir in `ls --color=never ../ui/packages`; do
   mkdir target/generated-docs/html/developer-guide/coverage/ui/${dir}
