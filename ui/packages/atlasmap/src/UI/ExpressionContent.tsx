@@ -165,9 +165,12 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     const startContainer = range.startContainer;
     const startOffset = range.startOffset;
 
+    // On initial caret positioning before the first field node, the markup
+    // and start container are the same.
     if (markup && startContainer === markup) {
       if (startOffset === 0) {
-        mappingExpressionInsertText(key, getCaretPositionNodeId(), 0);
+        const initialElement = startContainer.childNodes[0] as Element;
+        mappingExpressionInsertText(key, initialElement.getAttribute("id")!, 0);
       } else {
         mappingExpressionInsertText(key);
       }
@@ -462,6 +465,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
               onPaste={onPaste}
               ref={(el) => (markup = el)}
               tabIndex={-1}
+              style={{ paddingLeft: 8 }}
             />
           </Tooltip>
         </FormGroup>
