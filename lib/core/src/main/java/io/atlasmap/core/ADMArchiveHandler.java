@@ -180,6 +180,14 @@ public class ADMArchiveHandler {
 
         Path mdPath = this.persistDirectory.resolve(getMappingDefinitionFileName());
         if (getMappingDefinitionBytes() != null) {
+            try {
+                jsonMapper.readValue(getMappingDefinitionBytes(), AtlasMapping.class);
+            } catch (Exception e) {
+                LOG.warn("Invalid serialized mapping definition content detected, discarding");
+                this.mappingDefinitionBytes = null;
+            }
+        }
+        if (getMappingDefinitionBytes() != null) {
             try (FileOutputStream out = new FileOutputStream(mdPath.toFile())) {
                 out.write(getMappingDefinitionBytes());
             } catch (Exception e) {
@@ -197,16 +205,17 @@ public class ADMArchiveHandler {
         }
     }
 
-    public AtlasMapping getMappingDefinition() throws AtlasException {
-        try {
-            if (this.mappingDefinition == null && this.mappingDefinitionBytes != null) {
+    public AtlasMapping getMappingDefinition() {
+        if (this.mappingDefinition == null && this.mappingDefinitionBytes != null) {
+            try {
                 this.mappingDefinition = jsonMapper.readValue(this.mappingDefinitionBytes,
-                        AtlasMapping.class);
+                    AtlasMapping.class);
+            } catch (Exception e) {
+                LOG.warn("Invalid serialized mapping definition content detected, discarding");
+                this.mappingDefinitionBytes = null;
             }
-            return this.mappingDefinition;
-        } catch (Exception e) {
-            throw new AtlasException(e);
         }
+        return this.mappingDefinition;
     }
 
     public void setMappingDefinition(AtlasMapping mapping) {

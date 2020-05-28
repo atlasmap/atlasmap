@@ -171,29 +171,23 @@ public class AtlasService {
         StringMap sMap = new StringMap();
         LOG.debug("listMappings with filter '{}'", filter);
 
-        try {
-            ADMArchiveHandler handler = loadExplodedMappingDirectory(mappingDefinitionId);
-            AtlasMapping map = handler.getMappingDefinition();
-            if (map == null) {
-                return Response.ok().entity(toJson(sMap)).build();
-            }
-            StringMapEntry mapEntry = new StringMapEntry();
-            mapEntry.setName(map.getName());
-            UriBuilder builder = uriInfo.getBaseUriBuilder().path("v2").path("atlas").path("mapping")
-                .path(map.getName());
-            mapEntry.setValue(builder.build().toString());
-            sMap.getStringMapEntry().add(mapEntry);
-
-            byte[] serialized = toJson(sMap);
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(new String(serialized));
-            }
-            return Response.ok().entity(serialized).build();
-        } catch (AtlasException e) {
-            LOG.error("Error retrieving mapping definition file for ID:" + mappingDefinitionId + "\n" +
-                e.getMessage(), e);
-            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
+        ADMArchiveHandler handler = loadExplodedMappingDirectory(mappingDefinitionId);
+        AtlasMapping map = handler.getMappingDefinition();
+        if (map == null) {
+            return Response.ok().entity(toJson(sMap)).build();
         }
+        StringMapEntry mapEntry = new StringMapEntry();
+        mapEntry.setName(map.getName());
+        UriBuilder builder = uriInfo.getBaseUriBuilder().path("v2").path("atlas").path("mapping")
+            .path(map.getName());
+        mapEntry.setValue(builder.build().toString());
+        sMap.getStringMapEntry().add(mapEntry);
+
+        byte[] serialized = toJson(sMap);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(new String(serialized));
+        }
+        return Response.ok().entity(serialized).build();
     }
 
     @Deprecated
@@ -414,7 +408,9 @@ public class AtlasService {
             try {
                 admHandler.setMappingDefinitionBytes(mapping);
                 admHandler.persist();
-                builder.path(admHandler.getMappingDefinition().getName());
+                if (admHandler.getMappingDefinition() != null) {
+                    builder.path(admHandler.getMappingDefinition().getName());
+                }
             } catch (AtlasException e) {
                 LOG.error("Error saving Mapping Definition file.\n" + e.getMessage(), e);
                 throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);

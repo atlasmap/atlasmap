@@ -16,6 +16,7 @@
 package io.atlasmap.core;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -77,4 +78,18 @@ public class ADMArchiveHandlerTest {
         assertTrue(persistPath.resolve(handler.getGzippedADMDigestFileName()).toFile().exists());
     }
 
+    @Test
+    public void testPersistIgnoreInvalidBytes() throws Exception {
+        ADMArchiveHandler handler = new ADMArchiveHandler();
+        byte[] mappingBytes = "no data".getBytes();
+        handler.setMappingDefinitionBytes(new ByteArrayInputStream(mappingBytes));
+        Path persistPath = Paths.get("target/test3");
+        AtlasUtil.deleteDirectory(persistPath.toFile());
+        persistPath.toFile().mkdirs();
+        handler.setPersistDirectory(persistPath);
+        handler.persist();
+        assertFalse(persistPath.resolve(handler.getMappingDefinitionFileName()).toFile().exists());
+        handler.setMappingDefinitionBytes(new ByteArrayInputStream(mappingBytes));
+        assertNull(handler.getMappingDefinition());
+    }
 }
