@@ -1,5 +1,5 @@
 image:https://maven-badges.herokuapp.com/maven-central/io.atlasmap/atlas-parent/badge.svg?style=flat-square[caption="Runtime @ Maven Central", link=https://maven-badges.herokuapp.com/maven-central/io.atlasmap/atlas-parent/]
-image:https://badge.fury.io/js/%40atlasmap%2Fatlasmap-data-mapper.svg[caption="UI @ NPM", link=https://badge.fury.io/js/%40atlasmap%2Fatlasmap-data-mapper]
+image:https://badge.fury.io/js/%40atlasmap%2Fatlasmap.svg[caption="UI @ NPM", link=https://badge.fury.io/js/%40atlasmap%2Fatlasmap]
 image:https://circleci.com/gh/atlasmap/atlasmap.svg?style=shield[caption="CircleCI", link=https://circleci.com/gh/atlasmap/atlasmap]
 image:https://api.codacy.com/project/badge/Grade/4acba1646e0a4cbabac3a76ad5df4df7[caption="Codacy Grade", link=https://www.codacy.com/app/atlasmapio/atlasmap?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=atlasmap/atlasmap&amp;utm_campaign=Badge_Grade]
 image:https://api.codacy.com/project/badge/Coverage/4acba1646e0a4cbabac3a76ad5df4df7[caption="Codacy Coverage", link=https://www.codacy.com/app/atlasmapio/atlasmap?utm_source=github.com&utm_medium=referral&utm_content=atlasmap/atlasmap&utm_campaign=Badge_Coverage]
