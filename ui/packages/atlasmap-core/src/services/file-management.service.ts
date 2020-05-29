@@ -586,7 +586,7 @@ export class FileManagementService {
           if (body) {
             observer.next(body);
           } else {
-            observer.next('no data');
+            observer.next(undefined);
           }
           observer.complete();
         })
