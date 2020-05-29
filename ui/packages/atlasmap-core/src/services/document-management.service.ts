@@ -77,7 +77,7 @@ export class DocumentManagementService {
    * @param buffer
    */
   static generateExportMappings(buffer: string): string {
-    if (buffer === null || buffer.length === 0) {
+    if (!buffer || buffer.length === 0) {
       return '';
     }
     const metaStr =
