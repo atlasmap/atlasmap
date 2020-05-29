@@ -19,7 +19,6 @@ import {
 
 import { MainContent } from "../Layout";
 import { IAtlasmapField, IAtlasmapMapping } from "../Views";
-import { selectMapping } from "../Atlasmap";
 
 const emptyContent = [
   {
@@ -48,10 +47,12 @@ const styles = StyleSheet.create({
 
 export interface IMappingTableProps {
   mappings: IAtlasmapMapping[];
+  onSelectMapping: (mapping: IAtlasmapMapping) => void;
 }
 
 export const MappingTableView: FunctionComponent<IMappingTableProps> = ({
   mappings,
+  onSelectMapping,
 }) => {
   const rows =
     mappings.length === 0
@@ -83,12 +84,12 @@ export const MappingTableView: FunctionComponent<IMappingTableProps> = ({
 
   const columns = ["Sources", "Targets", "Types"];
 
-  const onSelectMapping = (_event: MouseEvent, row: IRow) => {
+  const handleSelectMapping = (_event: MouseEvent, row: IRow) => {
     const mapping: IAtlasmapMapping | undefined = mappings.find(
       (mapping) => (row.cells?.[0] as ICell).data === mapping.id,
     );
     if (mapping) {
-      selectMapping(mapping);
+      onSelectMapping(mapping);
     }
   };
 
@@ -99,7 +100,7 @@ export const MappingTableView: FunctionComponent<IMappingTableProps> = ({
       </Title>
       <Table aria-label="Mappings" cells={columns} rows={rows}>
         <TableHeader />
-        <TableBody onRowClick={onSelectMapping} />
+        <TableBody onRowClick={handleSelectMapping} />
       </Table>
     </MainContent>
   );

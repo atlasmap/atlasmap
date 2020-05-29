@@ -282,7 +282,12 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
           />
         );
       case "MappingTable":
-        return <MappingTableView mappings={mappings} />;
+        return (
+          <MappingTableView
+            mappings={mappings}
+            onSelectMapping={selectMapping}
+          />
+        );
       case "NamespaceTable":
         return (
           <NamespaceTableView
