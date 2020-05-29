@@ -56,7 +56,7 @@ import io.atlasmap.v2.Json;
  * <li>Java libraries (jar files in lib/ directory)</li>
  * </ul>
  * </p>
- * @see {@link #load} {@link #export}
+ * {@link #load(Path)} {@link #export(OutputStream)}
  * 
  * <p>This handler follows lazy loading strategy as much as
  * possible, i.e. defer to serialize/deserialize until it is really required.
@@ -65,7 +65,8 @@ import io.atlasmap.v2.Json;
  * if {@link #isIgnoreLibrary} is set to {@code false}.</p>
  * 
  * <p>
- * TODO https://github.com/atlasmap/atlasmap/issues/1476
+ * TODO <a href="https://github.com/atlasmap/atlasmap/issues/1476">
+ * https://github.com/atlasmap/atlasmap/issues/1476</a>
  * A gzipped digest file have to be splitted into individual schemas and a catalog file.
  * </p>
  */
