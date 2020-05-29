@@ -94,6 +94,7 @@ export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
             ),
         };
       }
+
       const handleRemoveMappedField = (isSource: boolean, index: number) => {
         const amField = selectedMapping.mapping.getMappedFieldForIndex(
           "" + (index + 1),

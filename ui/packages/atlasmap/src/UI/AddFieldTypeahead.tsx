@@ -11,6 +11,15 @@ import {
   SelectGroup,
 } from "@patternfly/react-core";
 import { useToggle } from "./useToggle";
+import { css, StyleSheet } from "@patternfly/react-styles";
+
+const styles = StyleSheet.create({
+  select: {
+    "& .pf-c-select__menu": {
+      maxWidth: "100%",
+    },
+  },
+});
 
 export interface IAddFieldTypeaheadField {
   label: string;
@@ -94,6 +103,7 @@ export const AddFieldTypeahead: FunctionComponent<IAddFieldTypeaheadProps> = ({
         onFilter={filterFields}
         onSelect={onSelect}
         maxHeight={300}
+        className={css(styles.select)}
       >
         {renderOptions(fields)}
       </Select>
