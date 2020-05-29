@@ -60,6 +60,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     onFieldPreviewChange,
     searchSources,
     searchTargets,
+    importAtlasFile,
     // expression
     currentMappingExpression,
     executeFieldSearch,
@@ -91,10 +92,12 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     contextToolbar,
   } = useContextToolbar({
     showImportAtlasFileToolbarItem: allowImport,
+    showImportJarFileToolbarItem: allowImport,
     showExportAtlasFileToolbarItem: allowExport,
     showResetToolbarItem: allowReset,
     ...toolbarOptions,
     onImportAtlasFile: handlers.onImportAtlasCatalog,
+    onImportJarFile: (file) => importAtlasFile(file, false),
     onExportAtlasFile: handlers.onExportAtlasCatalog,
     onResetAtlasmap: handlers.onResetAtlasmap,
   });
@@ -111,18 +114,20 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   const viewToolbar = (
     <ViewToolbar>
       <ConditionalExpressionInput
-        mappingExpression={currentMappingExpression}
+        mappingExpression={
+          mappingExpressionEnabled ? currentMappingExpression : undefined
+        }
         executeFieldSearch={executeFieldSearch}
         mappingExpressionAddField={mappingExpressionAddField}
         mappingExpressionClearText={mappingExpressionClearText}
         isMappingExpressionEmpty={isMappingExpressionEmpty}
-        mappingExpressionEnabled={mappingExpressionEnabled}
         mappingExpressionInit={mappingExpressionInit}
         mappingExpressionInsertText={mappingExpressionInsertText}
         mappingExpressionObservable={mappingExpressionObservable}
         mappingExpressionRemoveField={mappingExpressionRemoveField}
-        onToggleExpressionMode={handlers.onToggleExpressionMode}
         trailerId={trailerId}
+        disabled={!selectedMapping}
+        onToggle={handlers.onToggleExpressionMode}
       />
     </ViewToolbar>
   );

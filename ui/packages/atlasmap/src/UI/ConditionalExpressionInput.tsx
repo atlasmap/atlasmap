@@ -1,10 +1,5 @@
 import React, { FunctionComponent } from "react";
-import {
-  ToolbarGroup,
-  ToolbarItem,
-  Button,
-  Tooltip,
-} from "@patternfly/react-core";
+import { ToolbarGroup, ToolbarItem } from "@patternfly/react-core";
 import { css, StyleSheet } from "@patternfly/react-styles";
 import {
   ExpressionContent,
@@ -16,10 +11,7 @@ const styles = StyleSheet.create({
 });
 
 export interface IConditionalExpressionInputProps
-  extends IExpressionContentProps {
-  mappingExpressionEnabled: boolean;
-  onToggleExpressionMode: () => void;
-}
+  extends IExpressionContentProps {}
 
 export const ConditionalExpressionInput: FunctionComponent<IConditionalExpressionInputProps> = ({
   executeFieldSearch,
@@ -31,52 +23,27 @@ export const ConditionalExpressionInput: FunctionComponent<IConditionalExpressio
   mappingExpressionObservable,
   mappingExpressionRemoveField,
   mappingExpression,
-  mappingExpressionEnabled,
-  onToggleExpressionMode,
   trailerId,
+  disabled,
+  onToggle,
 }) => {
-  function onToggle() {
-    onToggleExpressionMode();
-  }
-
   return (
     <ToolbarGroup className={css(styles.toolbarItem)} role={"form"}>
-      <ToolbarItem>
-        <Tooltip
-          content={"Enable/ Disable conditional mapping expression."}
-          enableFlip={true}
-          entryDelay={1000}
-          position={"left"}
-        >
-          <Button
-            variant={"plain"}
-            aria-label="Enable/ Disable conditional mapping expression"
-            tabIndex={-1}
-            onClick={onToggle}
-            disabled={!mappingExpressionEnabled}
-            data-testid={"enable-disable-conditional-mapping-expression-button"}
-          >
-            <i>
-              f<sub>(x)</sub>
-            </i>
-          </Button>
-        </Tooltip>
-      </ToolbarItem>
       <ToolbarItem className={css(styles.toolbarItem)}>
-        {mappingExpressionEnabled && (
-          <ExpressionContent
-            executeFieldSearch={executeFieldSearch}
-            mappingExpressionAddField={mappingExpressionAddField}
-            mappingExpressionClearText={mappingExpressionClearText}
-            isMappingExpressionEmpty={isMappingExpressionEmpty}
-            mappingExpressionInit={mappingExpressionInit}
-            mappingExpressionInsertText={mappingExpressionInsertText}
-            mappingExpressionObservable={mappingExpressionObservable}
-            mappingExpressionRemoveField={mappingExpressionRemoveField}
-            mappingExpression={mappingExpression}
-            trailerId={trailerId}
-          />
-        )}
+        <ExpressionContent
+          disabled={disabled}
+          executeFieldSearch={executeFieldSearch}
+          mappingExpressionAddField={mappingExpressionAddField}
+          mappingExpressionClearText={mappingExpressionClearText}
+          isMappingExpressionEmpty={isMappingExpressionEmpty}
+          mappingExpressionInit={mappingExpressionInit}
+          mappingExpressionInsertText={mappingExpressionInsertText}
+          mappingExpressionObservable={mappingExpressionObservable}
+          mappingExpressionRemoveField={mappingExpressionRemoveField}
+          mappingExpression={mappingExpression}
+          trailerId={trailerId}
+          onToggle={onToggle}
+        />
       </ToolbarItem>
     </ToolbarGroup>
   );

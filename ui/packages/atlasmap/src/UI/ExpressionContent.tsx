@@ -1,7 +1,22 @@
-import { FunctionComponent, useEffect, useCallback } from "react";
-import React, { KeyboardEvent } from "react";
-import { Tooltip, Form, FormGroup } from "@patternfly/react-core";
-import { Subscription, Observable } from "rxjs";
+import React, {
+  FunctionComponent,
+  KeyboardEvent,
+  useCallback,
+  useEffect,
+} from "react";
+import { Observable, Subscription } from "rxjs";
+
+import {
+  Button,
+  Form,
+  FormGroup,
+  InputGroup,
+  Tooltip,
+  TextInput,
+} from "@patternfly/react-core";
+import { css } from "@patternfly/react-styles";
+import styles from "@patternfly/react-styles/css/components/FormControl/form-control";
+
 import { ExpressionFieldSearch } from "./ExpressionFieldSearch";
 
 let atIndex = -1;
@@ -56,6 +71,8 @@ export interface IExpressionContentProps {
   ) => void;
   mappingExpression?: string;
   trailerId: string;
+  disabled: boolean;
+  onToggle: () => void;
 }
 
 function updateExpressionMarkup(reset?: boolean) {
@@ -144,6 +161,8 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   mappingExpressionRemoveField,
   mappingExpression,
   trailerId,
+  disabled,
+  onToggle,
 }) => {
   let selectedField: string;
 
@@ -438,36 +457,72 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   };
 
   useEffect(() => {
-    initMappingExpression();
-    return () => uninitializeMappingExpression();
-  }, [initMappingExpression, mappingExpression]);
+    if (mappingExpression !== undefined) {
+      initMappingExpression();
+      return () => uninitializeMappingExpression();
+    }
+    return;
+  }, [mappingExpression, initMappingExpression]);
 
   return (
     <>
       <Form>
         <FormGroup fieldId="expressionContent">
-          <Tooltip
-            content={"Enter text or '@' for source fields menu."}
-            enableFlip={true}
-            entryDelay={2000}
-            position={"left"}
-          >
-            <div
-              id="expressionMarkup"
-              key="expressionMarkup-div"
-              aria-label="Expression Content"
-              contentEditable
-              className="ExpressionFieldSearch"
-              suppressContentEditableWarning={true}
-              onChange={onChange}
-              onKeyDown={onKeyDown}
-              onKeyPress={onKeyPress}
-              onPaste={onPaste}
-              ref={(el) => (markup = el)}
-              tabIndex={-1}
-              style={{ paddingLeft: 8 }}
-            />
-          </Tooltip>
+          <InputGroup>
+            <Tooltip
+              content={"Enable/ Disable conditional mapping expression."}
+              enableFlip={true}
+              entryDelay={1000}
+              position={"left"}
+            >
+              <Button
+                variant={"control"}
+                aria-label="Enable/ Disable conditional mapping expression"
+                tabIndex={-1}
+                onClick={onToggle}
+                data-testid={
+                  "enable-disable-conditional-mapping-expression-button"
+                }
+                isDisabled={disabled}
+              >
+                <i>
+                  f
+                  <small style={{ position: "relative", bottom: -3 }}>
+                    (x)
+                  </small>
+                </i>
+              </Button>
+            </Tooltip>
+            {!disabled && mappingExpression !== undefined ? (
+              <Tooltip
+                content={"Enter text or '@' for source fields menu."}
+                enableFlip={true}
+                entryDelay={2000}
+                position={"left"}
+              >
+                <div
+                  id="expressionMarkup"
+                  key="expressionMarkup-div"
+                  aria-label="Expression Content"
+                  contentEditable
+                  className={css(styles.formControl, "ExpressionFieldSearch")}
+                  suppressContentEditableWarning={true}
+                  onChange={onChange}
+                  onKeyDown={onKeyDown}
+                  onKeyPress={onKeyPress}
+                  onPaste={onPaste}
+                  ref={(el) => (markup = el)}
+                  tabIndex={-1}
+                  style={{ paddingLeft: 8 }}
+                />
+              </Tooltip>
+            ) : (
+              <TextInput
+                isDisabled={true}
+                aria-label={"Expression content"}
+              /> /* this to render a disabled field */
+            )}
+          </InputGroup>
         </FormGroup>
       </Form>
       <div>

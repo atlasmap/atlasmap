@@ -95,7 +95,7 @@ export const wiredToTheBackend = () => (
         ),
         showToggleMappingColumnToolbarItem: boolean(
           "showToggleMappingColumnToolbarItem",
-          true,
+          false,
         ),
         showMappingTableViewToolbarItem: boolean(
           "showToggleMappingTableToolbarItem",
@@ -114,7 +114,10 @@ export const wiredToTheBackend = () => (
           "showToggleUnmappedFieldsToolbarItem",
           true,
         ),
-        showFreeViewToolbarItem: boolean("showToggleFreeViewToolbarItem", true),
+        showFreeViewToolbarItem: boolean(
+          "showToggleFreeViewToolbarItem",
+          false,
+        ),
       }}
     />
   </AtlasmapProvider>

@@ -8,6 +8,7 @@ import { Sidebar } from "./Sidebar";
 
 const styles = StyleSheet.create({
   view: {
+    background: "#fff",
     "& .pf-topology-container": {
       overflow: "hidden",
     },
