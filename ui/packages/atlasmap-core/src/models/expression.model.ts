@@ -472,16 +472,16 @@ export class ExpressionModel {
           : targetString.substring(0, offset) +
             targetString.substring(offset! + 1);
       if ((targetNode as TextNode).str.length === 0) {
+        (targetNode as TextNode).str = ' ';
         this.cfg.errorService.addError(
           new ErrorInfo({
             message: 'At least one space is required between field references.',
-            level: ErrorLevel.ERROR,
+            level: ErrorLevel.WARN,
             scope: ErrorScope.MAPPING,
             type: ErrorType.USER,
             mapping: this.mapping,
           })
         );
-        return;
       }
       updatedEvent.node = targetNode;
       updatedEvent.offset = offset;
