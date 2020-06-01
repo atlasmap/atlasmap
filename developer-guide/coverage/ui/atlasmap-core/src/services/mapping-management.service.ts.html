@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20.21% </span>
+                <span class="strong">19.2% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>96/475</span>
+                <span class='fraction'>91/474</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">15.85% </span>
+                <span class="strong">14.29% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>39/246</span>
+                <span class='fraction'>35/245</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">18.64% </span>
+                <span class="strong">13.79% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>11/59</span>
+                <span class='fraction'>8/58</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">21.5% </span>
+                <span class="strong">20.37% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>92/428</span>
+                <span class='fraction'>87/427</span>
             </div>
         
             
@@ -1076,8 +1076,7 @@
 <a name='L1018'></a><a href='#L1018'>1018</a>
 <a name='L1019'></a><a href='#L1019'>1019</a>
 <a name='L1020'></a><a href='#L1020'>1020</a>
-<a name='L1021'></a><a href='#L1021'>1021</a>
-<a name='L1022'></a><a href='#L1022'>1022</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1021'></a><a href='#L1021'>1021</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1146,15 +1145,15 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">57x</span>
+<span class="cline-any cline-yes">49x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1820,15 +1819,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -2840,16 +2838,15 @@ export class MappingManagementService {
   /**
    * Invoke the runtime service to both validate and save the current active mapping.
    */
-  async validateMappings(): Promise&lt;boolean&gt; {
-    return new Promise&lt;boolean&gt;((resolve) =&gt; {
-      <span class="missing-if-branch" title="else path not taken" >E</span>if (
+<span class="fstat-no" title="function not covered" >  private async v</span>alidateMappings(): Promise&lt;boolean&gt; {
+<span class="cstat-no" title="statement not covered" >    return new Promise&lt;boolean&gt;(<span class="fstat-no" title="function not covered" >(r</span>esolve) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      if (</span>
         this.cfg.initCfg.baseMappingServiceUrl === null ||
-        this.cfg.mappings === null ||
-        this.cfg.mappings.mappings.filter((m) =&gt; m.isFullyMapped()).length === 0
+        this.cfg.mappings === null
       ) {
-        // validation service not configured or required or no complete mappings
-        resolve(false);
-        return;
+        // validation service not configured or required
+<span class="cstat-no" title="statement not covered" >        resolve(false);</span>
+<span class="cstat-no" title="statement not covered" >        return;</span>
       }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      this.cfg.errorService.clearValidationErrors();</span>
@@ -3126,7 +3123,7 @@ export class MappingManagementService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri May 29 2020 18:16:47 GMT+0000 (Coordinated Universal Time)
+                at Mon Jun 01 2020 17:37:46 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
