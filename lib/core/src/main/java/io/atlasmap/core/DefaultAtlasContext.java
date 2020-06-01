@@ -31,6 +31,7 @@ import java.util.UUID;
 
 import javax.management.ObjectName;
 
+import io.atlasmap.v2.Mappings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -450,6 +451,15 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         for (Validation v : session.getValidations().getValidation()) {
             AtlasUtil.addAudit(session, v);
         }
+
+        // Additional runtime only audit
+        Mappings mappings = session.getMapping().getMappings();
+        if (mappings != null && mappings.getMapping().isEmpty()) {
+            AtlasUtil.addAudit(session, null,
+                String.format("Field mappings should not be empty"),
+                null, AuditStatus.WARN, null);
+        }
+
         session.getValidations().getValidation().clear();
         if (session.hasErrors()) {
             if (LOG.isDebugEnabled()) {

@@ -71,6 +71,25 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     }
 
     @Test
+    public void testProcessWithoutMappings() throws AtlasException {
+        recreateSession();
+        context.process(session);
+        assertFalse(printAudit(session), session.hasErrors());
+        assertTrue(printAudit(session), session.hasWarns());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Field mappings should not be empty",
+            session.getAudits().getAudit().get(0).getMessage());
+    }
+
+    @Test
+    public void testProcessValidationWithoutMappings() throws AtlasException {
+        recreateSession();
+        context.processValidation(session);
+        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(printAudit(session), session.hasWarns());
+    }
+
+    @Test
     public void testCombineNonStringFields() throws AtlasException {
         Mapping m = (Mapping) AtlasModelFactory.createMapping(MappingType.COMBINE);
         mapping.getMappings().getMapping().add(m);

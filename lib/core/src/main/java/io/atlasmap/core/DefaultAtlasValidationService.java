@@ -68,9 +68,6 @@ public class DefaultAtlasValidationService implements AtlasValidationService {
         MAPPINGS_NOT_NULL (() ->
             new NonNullValidator(ValidationScope.MAPPING, "Field mappings must not be null")
         ),
-        MAPPINGS_NOT_EMPTY(() ->
-            new NotEmptyValidator(ValidationScope.MAPPING, "Field mappings should not be empty")
-        ),
 
         COMBINE_INPUT_NOT_NULL (() ->
             new NonNullValidator(ValidationScope.MAPPING, "Source field should not be null")
@@ -170,8 +167,6 @@ public class DefaultAtlasValidationService implements AtlasValidationService {
     private void validateFieldMappings(Mappings mappings, LookupTables lookupTables, List<Validation> validations) {
         Validators.MAPPINGS_NOT_NULL.get().validate(mappings, validations, null);
         if (mappings != null) {
-            Validators.MAPPINGS_NOT_EMPTY.get().validate(mappings.getMapping(), validations, null, ValidationStatus.WARN);
-
             List<BaseMapping> fieldMappings = mappings.getMapping();
             if (fieldMappings != null && !fieldMappings.isEmpty()) {
                 List<Mapping> mapFieldMappings = fieldMappings.stream()
