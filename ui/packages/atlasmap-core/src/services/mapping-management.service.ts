@@ -740,14 +740,13 @@ export class MappingManagementService {
   /**
    * Invoke the runtime service to both validate and save the current active mapping.
    */
-  async validateMappings(): Promise<boolean> {
+  private async validateMappings(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       if (
         this.cfg.initCfg.baseMappingServiceUrl === null ||
-        this.cfg.mappings === null ||
-        this.cfg.mappings.mappings.filter((m) => m.isFullyMapped()).length === 0
+        this.cfg.mappings === null
       ) {
-        // validation service not configured or required or no complete mappings
+        // validation service not configured or required
         resolve(false);
         return;
       }
