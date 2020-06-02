@@ -677,9 +677,9 @@ export class MappingManagementService {
   }
 
   willClearOutSourceFieldsOnTogglingExpression() {
-    if (this.cfg.mappings!.activeMapping!.transition.enableExpression) {
+    if (this.cfg.mappings?.activeMapping?.transition.enableExpression) {
       return (
-        this.cfg.mappings!.activeMapping!.getFirstCollectionField(true) != null
+        this.cfg.mappings.activeMapping.getFirstCollectionField(true) != null
       );
     } else {
       return false;
