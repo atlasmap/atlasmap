@@ -1,0 +1,60 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "SourceClass",
+      "uri" : "atlas:java?className=io.atlasmap.itests.core.SourceClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "TargetClass",
+      "uri" : "atlas:java?className=io.atlasmap.itests.core.TargetClass",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "expression" : "${SourceClass:/someField} + ${SourceClass:/someAnotherField}",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "docId" : "SourceClass",
+            "index" : 0,
+            "path" : "/someField",
+            "fieldType" : "STRING",
+            "name" : "someField"
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "docId" : "SourceClass",
+            "index" : 1,
+            "path" : "/someAnotherField",
+            "fieldType" : "STRING",
+            "name" : "someAnotherField"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "TargetClass",
+          "path" : "/someField",
+          "fieldType" : "STRING",
+          "name" : "someField"
+        } ],
+        "id" : "mapping.418050"
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "constants" : {
+      "constant" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "UI.0"
+  }
+}

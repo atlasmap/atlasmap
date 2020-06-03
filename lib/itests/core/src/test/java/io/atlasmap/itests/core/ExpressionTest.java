@@ -130,4 +130,23 @@ public class ExpressionTest {
         TargetClass target = TargetClass.class.cast(output);
         assertEquals((double)3.0, target.getSomeDouble(), 0.01);
     }
+
+    @Test
+    public void testConcatenate() throws Exception {
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-expression-concatenate-json.json");
+        AtlasMapping mapping = mappingService.loadMapping(url);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasSession session = context.createSession();
+        SourceClass source = new SourceClass();
+        source.setSomeField("first");
+        source.setSomeAnotherField("second");
+        session.setSourceDocument("SourceClass", source);
+
+        context.process(session);
+        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        Object output = session.getTargetDocument("TargetClass");
+        assertEquals(TargetClass.class, output.getClass());
+        TargetClass target = TargetClass.class.cast(output);
+        assertEquals("firstsecond", target.getSomeField());
+    }
 }

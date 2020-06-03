@@ -27,18 +27,19 @@ public abstract class BaseClass {
         private double someDouble = 0.0;
         private double[] someDoubleArray;
 
-        public String getSomeField() {
-            return someField;
-        }
-        public void setSomeField(String someField) {
-            this.someField = someField;
-        }
-
         public SomeNestedClass() {
 
         }
 
         public SomeNestedClass(String someField) {
+            this.someField = someField;
+        }
+
+        public String getSomeField() {
+            return someField;
+        }
+
+        public void setSomeField(String someField) {
             this.someField = someField;
         }
 
@@ -100,6 +101,7 @@ public abstract class BaseClass {
     }
 
     private String someField;
+    private String someAnotherField;
     private SomeNestedClass[] someArray;
     private SomeNestedClass[] someRenamedArray;
     private SomeNestedClass[] yetAnotherArray;
@@ -114,6 +116,14 @@ public abstract class BaseClass {
 
     public void setSomeField(String someField) {
         this.someField = someField;
+    }
+
+    public String getSomeAnotherField() {
+        return someAnotherField;
+    }
+
+    public void setSomeAnotherField(String someAnotherField) {
+        this.someAnotherField = someAnotherField;
     }
 
     public SomeNestedClass[] getSomeArray() {

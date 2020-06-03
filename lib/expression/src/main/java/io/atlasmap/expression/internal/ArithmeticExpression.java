@@ -20,10 +20,11 @@ package io.atlasmap.expression.internal;
 import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.ExpressionContext;
 import io.atlasmap.expression.ExpressionException;
+import io.atlasmap.v2.Field;
 
 /**
  * An expression which performs an operation on two expression values
- * 
+ *
  * @version $Revision: 1.2 $
  */
 public abstract class ArithmeticExpression extends BinaryExpression {
@@ -45,6 +46,13 @@ public abstract class ArithmeticExpression extends BinaryExpression {
     public static Expression createPlus(Expression left, Expression right) {
         return new ArithmeticExpression(left, right) {
             protected Object evaluate(Object lvalue, Object rvalue) {
+                if (lvalue instanceof Field) {
+                    lvalue = ((Field) lvalue).getValue();
+                }
+                if (rvalue instanceof Field) {
+                    rvalue = ((Field) rvalue).getValue();
+                }
+
                 if (lvalue instanceof String) {
                     String text = (String)lvalue;
                     String answer = text + rvalue;
