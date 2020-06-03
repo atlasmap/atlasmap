@@ -77,8 +77,8 @@ export function useAtlasmapDialogs({
   );
   const onEditProperty = useCallback(
     (property: IProperty) => {
-      openEditPropertyDialog(({ name, value, valueType }) => {
-        editProperty(name, value, valueType);
+      openEditPropertyDialog(({ name, value, valueType, initialName }) => {
+        editProperty(name, value, valueType, initialName);
       }, property);
     },
     [editProperty, openEditPropertyDialog],

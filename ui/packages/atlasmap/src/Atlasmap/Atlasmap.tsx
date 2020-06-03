@@ -156,7 +156,12 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         const value = getPropertyValue(leftPart);
         const valueType = getPropertyType(leftPart);
 
-        handlers.onEditProperty({ name: leftPart, value, valueType });
+        handlers.onEditProperty({
+          name: leftPart,
+          value,
+          valueType,
+          initialName: leftPart,
+        });
       },
       onDeleteProperty: handlers.onDeleteProperty,
       onDeleteDocument: allowDelete

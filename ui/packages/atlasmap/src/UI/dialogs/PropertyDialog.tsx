@@ -27,6 +27,7 @@ export interface IProperty {
   name: string;
   value: string;
   valueType: string;
+  initialName: string;
 }
 
 export interface IPropertyDialogProps {
@@ -60,9 +61,9 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
   }, [initialName, initialValue, initialValueType]);
 
   const handleOnConfirm = useCallback(() => {
-    onConfirm({ name, value, valueType });
+    onConfirm({ name, value, valueType, initialName });
     reset();
-  }, [name, onConfirm, reset, value, valueType]);
+  }, [initialName, name, onConfirm, reset, value, valueType]);
 
   const handleOnCancel = useCallback(() => {
     onCancel();
