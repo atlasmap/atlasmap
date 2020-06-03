@@ -160,7 +160,6 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
           name: leftPart,
           value,
           valueType,
-          initialName: leftPart,
         });
       },
       onDeleteProperty: handlers.onDeleteProperty,

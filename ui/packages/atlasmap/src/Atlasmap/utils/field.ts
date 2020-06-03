@@ -119,20 +119,17 @@ export function editProperty(
   propName: string,
   propValue: string,
   propType: string,
-  originalName: string,
+  newName: string,
 ): void {
   const cfg = ConfigModel.getConfig();
   let field = cfg.propertyDoc.getField(
     cfg.propertyDoc.pathSeparator + propName,
   );
   if (!field) {
-    field = cfg.propertyDoc.getField(
-      cfg.propertyDoc.pathSeparator + originalName,
-    );
-    if (!field) {
-      return;
-    }
-    field.name = propName;
+    return;
+  }
+  if (propName !== newName) {
+    field.name = newName;
   }
   field.value = propValue;
   field.type = propType;
