@@ -37,7 +37,7 @@ public class DfdlInspectionRequest extends XmlInspectionRequest implements Seria
      * 
      * @return
      *     possible object is
-     *     {@link Map<String, String> }
+     *     {@link Map }
      *     
      */
     public Map<String, String> getOptions() {
@@ -47,9 +47,9 @@ public class DfdlInspectionRequest extends XmlInspectionRequest implements Seria
     /**
      * Sets the value of the options property.
      * 
-     * @param value
+     * @param options
      *     allowed object is
-     *     {@link Map<String, String> }
+     *     {@link Map }
      *     
      */
     public void setOptions(Map<String, String> options) {

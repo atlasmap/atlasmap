@@ -150,8 +150,8 @@ public class ConstantExpression implements Expression {
      * Encodes the value of string so that it looks like it would look like when
      * it was provided in a selector.
      * 
-     * @param string
-     * @return
+     * @param s {@link String} to encode
+     * @return encoded {@link String}
      */
     public static String encodeString(String s) {
         StringBuffer b = new StringBuffer();

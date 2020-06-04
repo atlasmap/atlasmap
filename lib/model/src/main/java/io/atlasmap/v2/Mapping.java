@@ -113,7 +113,7 @@ public class Mapping extends BaseMapping implements Serializable {
      * Objects of the following type(s) are allowed in the list
      * {@link Field }
      * 
-     * 
+     * @return A list of source fields represented by {@link Field}
      */
     public List<Field> getInputField() {
         if (inputField == null) {
@@ -142,7 +142,7 @@ public class Mapping extends BaseMapping implements Serializable {
      * Objects of the following type(s) are allowed in the list
      * {@link Field }
      * 
-     * 
+     * @return A list of target fields represented by {@link Field}
      */
     public List<Field> getOutputField() {
         if (outputField == null) {

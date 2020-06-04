@@ -72,7 +72,7 @@
     <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
     <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
     <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
-    <!-- 3.1.0 changed aggregate behavior drastically, no idea how to generate single aggregated one -->
+    <!-- DO NOT CHANGE - 3.1.0 changed aggregate behavior drastically, no idea how to generate single aggregated one -->
     <maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
     <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
     <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
@@ -141,7 +141,7 @@
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>${maven-javadoc-plugin.version}</version>
           <configuration>
-            <failOnError>false</failOnError>
+            <failOnError>true</failOnError>
           </configuration>
         </plugin>
         <plugin>

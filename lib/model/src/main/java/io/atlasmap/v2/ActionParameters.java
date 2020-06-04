@@ -29,7 +29,7 @@ public class ActionParameters implements Serializable {
      * Objects of the following type(s) are allowed in the list
      * {@link ActionParameter }
      * 
-     * 
+     * @return A list of {@link ActionParameter}
      */
     public List<ActionParameter> getParameter() {
         if (parameter == null) {

@@ -34,7 +34,7 @@ public class AtlasMappingResult implements Serializable {
      * Objects of the following type(s) are allowed in the list
      * {@link TargetDocument }
      * 
-     * 
+     * @return A list of {@link TargetDocument}
      */
     public List<TargetDocument> getTargetDocuments() {
         if (targetDocuments == null) {

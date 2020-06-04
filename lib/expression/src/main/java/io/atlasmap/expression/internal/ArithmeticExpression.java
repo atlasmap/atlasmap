@@ -36,8 +36,9 @@ public abstract class ArithmeticExpression extends BinaryExpression {
     boolean convertStringExpressions = false;
 
     /**
-     * @param left
-     * @param right
+     * Constructor.
+     * @param left The left {@link Expression}
+     * @param right The right {@link Expression}
      */
     public ArithmeticExpression(Expression left, Expression right) {
         super(left, right);
@@ -211,9 +212,10 @@ public abstract class ArithmeticExpression extends BinaryExpression {
     }
 
     /**
-     * @param lvalue
-     * @param rvalue
-     * @return
+     * Evaluate expression.
+     * @param lvalue {@link Field} represents left value
+     * @param rvalue {@link Field} represents right value
+     * @return {@link Field} reporesents a result
      */
     protected abstract Field evaluate(Field lvalue, Field rvalue);
 

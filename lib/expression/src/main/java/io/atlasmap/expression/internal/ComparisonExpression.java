@@ -44,8 +44,8 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
     private static final Set<Character> REGEXP_CONTROL_CHARS = new HashSet<Character>();
 
     /**
-     * @param left
-     * @param right
+     * @param left left {@link Expression}
+     * @param right right {@link Expression}
      */
     public ComparisonExpression(Expression left, Expression right) {
         super(left, right);
@@ -296,9 +296,9 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
     }
 
     /**
-     * Only Numeric expressions can be used in >, >=, < or <= expressions.s
+     * Only Numeric expressions can be used in &gt;, &gt;=, &lt; or &lt;= expressions.s
      * 
-     * @param expr
+     * @param expr {@link Expression}
      */
     public static void checkLessThanOperand(Expression expr) {
         if (expr instanceof ConstantExpression) {
@@ -317,8 +317,8 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
 
 
     /**
-     * @param left
-     * @param right
+     * @param left left {@link Expression}
+     * @param right right {@link Expression}
      */
     private static void checkEqualOperandCompatability(Expression left, Expression right) {
         if (left instanceof ConstantExpression && right instanceof ConstantExpression) {

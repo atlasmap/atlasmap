@@ -33,7 +33,7 @@ public class ActionDetails implements Serializable {
      * Objects of the following type(s) are allowed in the list
      * {@link ActionDetail }
      * 
-     * 
+     * @return A list of {@link ActionDetail}
      */
     public List<ActionDetail> getActionDetail() {
         if (actionDetail == null) {

@@ -30,7 +30,7 @@ public class Audits implements Serializable {
      * Objects of the following type(s) are allowed in the list
      * {@link Audit }
      * 
-     * 
+     * @return a list of {@link Audit}
      */
     public List<Audit> getAudit() {
         if (audit == null) {

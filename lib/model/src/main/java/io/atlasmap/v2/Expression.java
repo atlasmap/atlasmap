@@ -25,7 +25,7 @@ public class Expression extends Action implements Serializable {
     /**
      * Sets the value of the string property.
      * 
-     * @param value
+     * @param expression
      *     allowed object is
      *     {@link String }
      *     

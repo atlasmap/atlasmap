@@ -46,7 +46,8 @@ import io.atlasmap.v2.DataSourceMetadata;
 import io.atlasmap.v2.Json;
 
 /**
- * <p>The API for handling ADM archive. It encapsulates ADM archive structure
+ * <div>
+ * The API for handling ADM archive. It encapsulates ADM archive structure
  * and format and isolate file/stream I/O from other part.
  * ADM archive is a zipped archive file or its exploded directory which contains
  * <ul>
@@ -55,20 +56,22 @@ import io.atlasmap.v2.Json;
  *  and mapping definition in a single JSON file (adm-catalog-files-n.gz)</li>
  * <li>Java libraries (jar files in lib/ directory)</li>
  * </ul>
- * </p>
+ * </div>
  * {@link #load(Path)} {@link #export(OutputStream)}
  * 
- * <p>This handler follows lazy loading strategy as much as
+ * <div>
+ * This handler follows lazy loading strategy as much as
  * possible, i.e. defer to serialize/deserialize until it is really required.
  * Also note that at this moment Java library directory is not managed by this class.
  * Only when it imports/exports ADM archive file, library jars are extracted/bundled
- * if {@link #isIgnoreLibrary} is set to {@code false}.</p>
+ * if {@link #isIgnoreLibrary} is set to {@code false}.
+ * </div>
  * 
- * <p>
+ * <div>
  * TODO <a href="https://github.com/atlasmap/atlasmap/issues/1476">
  * https://github.com/atlasmap/atlasmap/issues/1476</a>
  * A gzipped digest file have to be splitted into individual schemas and a catalog file.
- * </p>
+ * </div>
  */
 public class ADMArchiveHandler {
 
@@ -104,6 +107,7 @@ public class ADMArchiveHandler {
     /**
      * Load an ADM archive file or an exploded directory.
      * @param path {@code java.nio.file.Path} of the ADM archive file or an exploded directory
+     * @throws AtlasException If it fails to load
      */
     public void load(Path path) throws AtlasException {
         clear();
@@ -123,6 +127,7 @@ public class ADMArchiveHandler {
     /**
      * Load an ADM archive from stream.
      * @param in InputStream to read an ADM Archive
+     * @throws AtlasException If it fails to load
      */
     public void load(InputStream in) throws AtlasException {
         loadADMStream(in);
@@ -131,6 +136,7 @@ public class ADMArchiveHandler {
     /**
      * Export into an ADM archive. 
      * @param out OutputStream to write an ADM archive
+     * @throws AtlasException If it fails to export
      */
     public void export(OutputStream out) throws AtlasException {
         LOG.debug("Creating ADM archive file for ID:'{}'", this.mappingDefinitionId);
@@ -173,6 +179,7 @@ public class ADMArchiveHandler {
 
     /**
      * Persist ADM archive into a directory.
+     * @throws AtlasException If it fails to persist
      */
     public void persist() throws AtlasException {
         if (this.persistDirectory == null) {

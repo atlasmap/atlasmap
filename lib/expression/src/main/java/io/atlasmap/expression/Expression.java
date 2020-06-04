@@ -38,9 +38,9 @@ public interface Expression {
     /**
      * Execute the expression against the given context.
      *
-     * @param expressionContext
-     * @return
-     * @throws ExpressionException
+     * @param expressionContext {@link ExpressionContext}
+     * @return {@link Field} represents a result
+     * @throws ExpressionException If evaluation fails
      */
     Field evaluate(ExpressionContext expressionContext) throws ExpressionException;
 

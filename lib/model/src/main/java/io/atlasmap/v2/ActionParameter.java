@@ -37,7 +37,7 @@ public class ActionParameter implements Serializable {
      * Objects of the following type(s) are allowed in the list
      * {@link String }
      * 
-     * 
+     * @return A list of parameter values
      */
     public List<String> getValues() {
         if (values == null) {

@@ -248,7 +248,7 @@ public abstract class UnaryExpression implements Expression {
      * Returns the symbol that represents this binary expression. For example,
      * addition is represented by "+"
      * 
-     * @return
+     * @return expression symbol string
      */
     public abstract String getExpressionSymbol();
 

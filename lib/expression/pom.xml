@@ -26,9 +26,7 @@
     <relativePath>..</relativePath>
   </parent>
 
-  <groupId>io.atlasmap</groupId>
   <artifactId>atlas-expression</artifactId>
-  <version>2.1.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>Atlas :: Expression</name>
@@ -56,7 +54,6 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>javacc-maven-plugin</artifactId>
-        <version>2.6</version>
         <executions>
           <execution>
             <phase>generate-sources</phase>
@@ -65,6 +62,12 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <excludePackageNames>io.atlasmap.expression.parser</excludePackageNames>
+        </configuration>
       </plugin>
     </plugins>
   </build>

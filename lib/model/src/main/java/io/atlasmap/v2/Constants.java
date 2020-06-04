@@ -30,7 +30,7 @@ public class Constants implements Serializable {
      * Objects of the following type(s) are allowed in the list
      * {@link Constant }
      * 
-     * 
+     * @return A list of {@link Constant}
      */
     public List<Constant> getConstant() {
         if (constant == null) {

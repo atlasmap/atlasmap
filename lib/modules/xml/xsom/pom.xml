@@ -204,7 +204,14 @@
                     <ignoreYear>false</ignoreYear>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                  <additionalJOptions>
+                    <additionalJOption>-Xdoclint:none</additionalJOption>
+                  </additionalJOptions>
+                </configuration>
+            </plugin>
         </plugins>
         <pluginManagement>
             <plugins>

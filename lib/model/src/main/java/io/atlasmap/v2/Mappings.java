@@ -30,7 +30,7 @@ public class Mappings implements Serializable {
      * Objects of the following type(s) are allowed in the list
      * {@link BaseMapping }
      * 
-     * 
+     * @return A list of {@link BaseMapping}
      */
     public List<BaseMapping> getMapping() {
         if (mapping == null) {

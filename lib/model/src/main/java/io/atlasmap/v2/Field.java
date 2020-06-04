@@ -66,7 +66,6 @@ public abstract class Field
      * {@link Camelize }
      * {@link Capitalize }
      * {@link Ceiling }
-     * {@link CollectionSize }
      * {@link Concatenate }
      * {@link Contains }
      * {@link ConvertAreaUnit }
@@ -119,7 +118,7 @@ public abstract class Field
      * {@link Uppercase }
      * {@link UppercaseChar }
      *
-     *
+     *@return A list of {@link Action}
      */
     public ArrayList<Action> getActions() {
         return this.actions;
@@ -128,9 +127,7 @@ public abstract class Field
     /**
      * Sets the value of the actions property.
      *
-     * @param actions
-     *     allowed object is
-     *     {@link List<Action> }
+     * @param actions A list of {@link Action}
      *
      */
     @JsonDeserialize(using = ActionListUpgradeDeserializer.class)

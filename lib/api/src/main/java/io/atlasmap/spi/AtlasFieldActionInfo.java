@@ -22,7 +22,7 @@ import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldType;
 
 /**
- * @deprecated Use <link>io.atlasmap.spi.AtlasActionProcessor</link> instead
+ * @deprecated Use {@link io.atlasmap.spi.AtlasActionProcessor} instead
  */
 @Deprecated
 @Retention(RetentionPolicy.RUNTIME)
