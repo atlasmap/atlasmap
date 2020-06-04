@@ -6,7 +6,7 @@ import io.atlasmap.v2.*;
 
 public class PaulsFieldActions implements AtlasFieldAction {
 
-    @AtlasActionProcessor(sourceType = FieldType.STRING)
+    @AtlasActionProcessor
     public static String myCustomFieldAction(PaulsFieldActionsModel myCustomFieldAction, String input) {
         return myCustomFieldAction.getPaulsParam() + input;
     }
