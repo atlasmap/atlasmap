@@ -22,8 +22,8 @@ import java.util.Map;
 /**
  * A Simple LRU Cache
  * 
- * @param <K>
- * @param <V>
+ * @param <K> key
+ * @param <V> value
  */
 
 public class LRUCache<K, V> extends LinkedHashMap<K, V> {
@@ -40,7 +40,7 @@ public class LRUCache<K, V> extends LinkedHashMap<K, V> {
     /**
      * Constructs a LRUCache with a maximum capacity
      * 
-     * @param maximumCacheSize
+     * @param maximumCacheSize maximum cache size
      */
     public LRUCache(int maximumCacheSize) {
         this(0, maximumCacheSize, 0.75f, true);
@@ -51,7 +51,7 @@ public class LRUCache<K, V> extends LinkedHashMap<K, V> {
      * initial capacity, maximumCacheSize,load factor and ordering mode.
      * 
      * @param initialCapacity the initial capacity.
-     * @param maximumCacheSize
+     * @param maximumCacheSize maximum cache size
      * @param loadFactor the load factor.
      * @param accessOrder the ordering mode - <tt>true</tt> for access-order,
      *                <tt>false</tt> for insertion-order.

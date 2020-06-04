@@ -33,7 +33,7 @@ public class LookupTable implements Serializable {
      * Objects of the following type(s) are allowed in the list
      * {@link LookupEntry }
      * 
-     * 
+     * @return A list of {@link LookupEntry}
      */
     public List<LookupEntry> getLookupEntry() {
         if (lookupEntry == null) {

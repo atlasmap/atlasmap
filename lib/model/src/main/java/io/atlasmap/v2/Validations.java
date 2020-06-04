@@ -32,7 +32,7 @@ public class Validations implements Serializable {
      * Objects of the following type(s) are allowed in the list
      * {@link Validation }
      * 
-     * 
+     * @return A list of {@link Validation}
      */
     public List<Validation> getValidation() {
         if (validation == null) {

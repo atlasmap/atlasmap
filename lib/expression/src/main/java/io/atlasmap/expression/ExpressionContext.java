@@ -29,8 +29,9 @@ public interface ExpressionContext {
     /**
      * Extracts the named variable
      *
-     * @param name
-     * @return
+     * @param name variable name
+     * @return {@link Field} represents variable value
+     * @throws ExpressionException If variable cannot be retrieved
      */
     Field getVariable(String name) throws ExpressionException;
 

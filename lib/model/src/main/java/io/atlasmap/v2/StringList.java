@@ -32,7 +32,7 @@ public class StringList implements Serializable {
      * Objects of the following type(s) are allowed in the list
      * {@link String }
      * 
-     * 
+     * @return A list of {@link String}
      */
     public List<String> getString() {
         if (string == null) {

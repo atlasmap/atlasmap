@@ -21,26 +21,26 @@ public interface AtlasCollectionHelper {
 
     /**
      * Determines target collection count based on path and actions
-     * @param targetField
-     * @return
+     * @param targetField target field
+     * @return target collection count
      */
     int determineTargetCollectionCount(Field targetField);
 
     /**
      * Determines source collection count based on path and actions
-     * @param sourceParentField
-     * @param sourceField
-     * @return
+     * @param sourceParentField source parent field
+     * @param sourceField source field
+     * @return source collection count
      */
     int determineSourceCollectionCount(Field sourceParentField, Field sourceField);
 
     /**
      * Copies over collection indexes from source to target applying adjustments if collection counts differ
      *
-     * @param sourceParentField
-     * @param sourceField
-     * @param targetField
-     * @param previousTargetField
+     * @param sourceParentField source parent field
+     * @param sourceField source field
+     * @param targetField target field
+     * @param previousTargetField previous target fiend
      */
     void copyCollectionIndexes(Field sourceParentField, Field sourceField, Field targetField, Field previousTargetField);
 

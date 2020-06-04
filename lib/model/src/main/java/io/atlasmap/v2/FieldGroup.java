@@ -31,7 +31,7 @@ public class FieldGroup extends Field implements Serializable
      * Objects of the following type(s) are allowed in the list
      * {@link Field }
      * 
-     * 
+     * @return A list of {@link Field}
      */
     public List<Field> getField() {
         if (field == null) {

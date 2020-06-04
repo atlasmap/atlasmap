@@ -32,7 +32,7 @@ public class StringMap implements Serializable {
      * Objects of the following type(s) are allowed in the list
      * {@link StringMapEntry }
      * 
-     * 
+     * @return A list of {@link StringMapEntry}
      */
     public List<StringMapEntry> getStringMapEntry() {
         if (stringMapEntry == null) {

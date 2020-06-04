@@ -30,7 +30,7 @@ public class Properties implements Serializable {
      * Objects of the following type(s) are allowed in the list
      * {@link Property }
      * 
-     * 
+     * @return A list of {@link Property}
      */
     public List<Property> getProperty() {
         if (property == null) {

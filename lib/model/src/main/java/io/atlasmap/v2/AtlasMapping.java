@@ -60,7 +60,7 @@ public class AtlasMapping implements Serializable {
      * Objects of the following type(s) are allowed in the list
      * {@link DataSource }
      * 
-     * 
+     * @return A list of {@link DataSource}
      */
     public List<DataSource> getDataSource() {
         if (dataSource == null) {

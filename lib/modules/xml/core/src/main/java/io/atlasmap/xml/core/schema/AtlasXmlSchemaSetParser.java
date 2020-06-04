@@ -85,8 +85,9 @@ public class AtlasXmlSchemaSetParser {
     /**
      * Parse single XML Schema or SchemaSet which contains multiple XML Schema and
      * build a {@link XSSchemaSet}.
-     * @param root DOM {@link Document} instance of XML Schema
+     * @param doc DOM {@link Document} instance of XML Schema
      * @return parsed {@link XSSchemaSet}
+     * @throws AtlasException If it fails to parse
      */
     public XSSchemaSet parse(Document doc) throws AtlasException {
         XSOMParser xsomParser = createXSOMParser();
@@ -109,6 +110,7 @@ public class AtlasXmlSchemaSetParser {
      * build a {@link XSSchemaSet}.
      * @param in {@link InputStream} of XML Schema document
      * @return parsed {@link XSSchemaSet}
+     * @throws AtlasException If it fails to parse
      */
     public XSSchemaSet parse(InputStream in) throws AtlasException {
         try {
@@ -122,8 +124,9 @@ public class AtlasXmlSchemaSetParser {
     /**
      * Parse single XML Schema or SchemaSet which contains multiple XML Schema and
      * build a {@link Schema}.
-     * @return
-     * @throws AtlasException
+     * @param in {@link InputStream} to read schema contents from
+     * @return Created {@link Schema}
+     * @throws AtlasException If it fails to parse
      */
     public Schema createSchema(InputStream in) throws AtlasException {
         SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);

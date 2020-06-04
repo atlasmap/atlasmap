@@ -302,7 +302,7 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         this.conversionService = conversionService;
     }
 
-    /**
+    /*
      * vvv Remove in 2.0 vvv
      */
 

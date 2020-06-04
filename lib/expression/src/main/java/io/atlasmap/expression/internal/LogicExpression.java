@@ -30,8 +30,8 @@ import io.atlasmap.v2.Field;
 public abstract class LogicExpression extends BinaryExpression implements BooleanExpression {
 
     /**
-     * @param left
-     * @param right
+     * @param left left {@link BooleanExpression}
+     * @param right right {@link BooleanExpression}
      */
     public LogicExpression(BooleanExpression left, BooleanExpression right) {
         super(left, right);
