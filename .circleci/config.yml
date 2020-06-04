@@ -132,7 +132,7 @@ jobs:
       - run:
           name: Build AtlasMap
           command: |
-            ./mvnw --batch-mode -Pcoverage,fabric8 -Dfabric8.mode=kubernetes -Dwebdriver.chrome.driver=/usr/bin/chromedriver clean install | tee -a build_log.txt
+            ./mvnw --batch-mode -Pcoverage,fabric8 -Dfabric8.mode=kubernetes -Dwebdriver.chrome.driver=/usr/bin/chromedriver clean checkstyle:check install | tee -a build_log.txt
       - store_artifacts:
           path: build_log.txt
       - <<: *save_junit
