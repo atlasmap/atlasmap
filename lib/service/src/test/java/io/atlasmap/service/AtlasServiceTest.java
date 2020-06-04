@@ -112,7 +112,8 @@ public class AtlasServiceTest {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         int answer = compiler.run(System.in, System.out, System.err,
                 "-d", "target/tmp",
-                "src/test/resources/upload/io/atlasmap/service/my/MyFieldActions.java");
+                "src/test/resources/upload/io/atlasmap/service/my/MyFieldActions.java",
+                "src/test/resources/upload/io/atlasmap/service/my/MyFieldActionsModel.java");
         assertEquals(0, answer);
         JarOutputStream jarOut = new JarOutputStream(new FileOutputStream("target/tmp/my.jar"));
         jarOut.putNextEntry(new JarEntry("io/"));
@@ -133,6 +134,15 @@ public class AtlasServiceTest {
         }
         in.close();
         jarOut.closeEntry();
+        classEntry = new JarEntry("io/atlasmap/service/my/MyFieldActionsModel.class");
+        jarOut.putNextEntry(classEntry);
+        in = new BufferedInputStream(new FileInputStream("target/tmp/io/atlasmap/service/my/MyFieldActionsModel.class"));
+        count = -1;
+        while ((count = in.read(buffer)) != -1) {
+            jarOut.write(buffer, 0, count);
+        }
+        in.close();
+        jarOut.closeEntry();
 
         jarOut.putNextEntry(new JarEntry("META-INF/"));
         jarOut.closeEntry();
@@ -146,6 +156,14 @@ public class AtlasServiceTest {
         }
         in.close();
         jarOut.closeEntry();
+        svcEntry = new JarEntry("META-INF/services/io.atlasmap.v2.Action");
+        jarOut.putNextEntry(svcEntry);
+        in = new BufferedInputStream(new FileInputStream("src/test/resources/upload/META-INF/services/io.atlasmap.v2.Action"));
+        while ((count = in.read(buffer)) != -1) {
+            jarOut.write(buffer, 0, count);
+        }
+        in.close();
+        jarOut.closeEntry();
         jarOut.close();
         FileInputStream jarIn = new FileInputStream("target/tmp/my.jar");
         Response resUL = service.uploadLibrary(jarIn);
@@ -153,7 +171,7 @@ public class AtlasServiceTest {
         Response resFA = service.listFieldActions(null);
         assertEquals(200, resFA.getStatus());
         String responseJson = new String((byte[])resFA.getEntity());
-        assertTrue(responseJson, responseJson.contains("MyCustomFieldAction"));
+        assertTrue(responseJson, responseJson.contains("myCustomFieldAction"));
     }
 
     protected UriInfo generateTestUriInfo(String baseUri, String absoluteUri) throws Exception {
