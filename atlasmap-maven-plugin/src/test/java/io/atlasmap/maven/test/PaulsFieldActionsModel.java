@@ -1,12 +1,8 @@
 package io.atlasmap.maven.test;
 
 import java.io.Serializable;
-
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-
-import io.atlasmap.v2.Action;
-import io.atlasmap.v2.AtlasActionProperty;
-import io.atlasmap.v2.FieldType;
+import io.atlasmap.v2.*;
 
 public class PaulsFieldActionsModel extends Action implements Serializable {
 
