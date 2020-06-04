@@ -569,12 +569,12 @@ export class MappingManagementService {
               for (const toRead of answer.targetFields) {
                 // TODO: check these non null operator
                 if (
-                  toWrite.field!.docDef.id === toRead.parsedData.parsedDocID &&
-                  toWrite.field!.path === toRead.parsedData.parsedPath
+                  toWrite.field?.docDef?.id === toRead.parsedData.parsedDocID &&
+                  toWrite.field?.path === toRead.parsedData.parsedPath
                 ) {
                   // TODO let field component subscribe mappingPreviewOutputSource instead of doing this
                   // TODO: check this non null operator
-                  toWrite.field!.value = toRead.parsedData.parsedValue!;
+                  toWrite.field.value = toRead.parsedData.parsedValue!;
                   const index = answer.targetFields.indexOf(toRead);
                   if (index !== -1) {
                     answer.targetFields.splice(index, 1);
