@@ -66,7 +66,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      * {@link Camelize }
      * {@link Capitalize }
      * {@link Ceiling }
-     * {@link CollectionSize }
      * {@link Concatenate }
      * {@link Contains }
      * {@link ConvertAreaUnit }
@@ -119,24 +118,22 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      * {@link Uppercase }
      * {@link UppercaseChar }
      *
-     *
+     *@return A list of {@link Action}
      */
     public ArrayList&lt;Action&gt; getActions() {
-<span class="fc" id="L125">        return this.actions;</span>
+<span class="fc" id="L124">        return this.actions;</span>
     }
 
     /**
      * Sets the value of the actions property.
      *
-     * @param actions
-     *     allowed object is
-     *     {@link List&lt;Action&gt; }
+     * @param actions A list of {@link Action}
      *
      */
     @JsonDeserialize(using = ActionListUpgradeDeserializer.class)
     public void setActions(ArrayList&lt;Action&gt; actions) {
-<span class="fc" id="L138">        this.actions = actions;</span>
-<span class="fc" id="L139">    }</span>
+<span class="fc" id="L135">        this.actions = actions;</span>
+<span class="fc" id="L136">    }</span>
 
     /**
      * Gets the value of the value property.
@@ -147,7 +144,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public Object getValue() {
-<span class="fc" id="L150">        return value;</span>
+<span class="fc" id="L147">        return value;</span>
     }
 
     /**
@@ -159,8 +156,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public void setValue(Object value) {
-<span class="fc" id="L162">        this.value = value;</span>
-<span class="fc" id="L163">    }</span>
+<span class="fc" id="L159">        this.value = value;</span>
+<span class="fc" id="L160">    }</span>
 
     /**
      * Gets the value of the arrayDimensions property.
@@ -171,7 +168,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public Integer getArrayDimensions() {
-<span class="fc" id="L174">        return arrayDimensions;</span>
+<span class="fc" id="L171">        return arrayDimensions;</span>
     }
 
     /**
@@ -183,8 +180,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public void setArrayDimensions(Integer value) {
-<span class="fc" id="L186">        this.arrayDimensions = value;</span>
-<span class="fc" id="L187">    }</span>
+<span class="fc" id="L183">        this.arrayDimensions = value;</span>
+<span class="fc" id="L184">    }</span>
 
     /**
      * Gets the value of the arraySize property.
@@ -195,7 +192,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public Integer getArraySize() {
-<span class="fc" id="L198">        return arraySize;</span>
+<span class="fc" id="L195">        return arraySize;</span>
     }
 
     /**
@@ -207,8 +204,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public void setArraySize(Integer value) {
-<span class="fc" id="L210">        this.arraySize = value;</span>
-<span class="fc" id="L211">    }</span>
+<span class="fc" id="L207">        this.arraySize = value;</span>
+<span class="fc" id="L208">    }</span>
 
     /**
      * Gets the value of the collectionType property.
@@ -219,7 +216,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public CollectionType getCollectionType() {
-<span class="fc" id="L222">        return collectionType;</span>
+<span class="fc" id="L219">        return collectionType;</span>
     }
 
     /**
@@ -231,8 +228,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public void setCollectionType(CollectionType value) {
-<span class="fc" id="L234">        this.collectionType = value;</span>
-<span class="fc" id="L235">    }</span>
+<span class="fc" id="L231">        this.collectionType = value;</span>
+<span class="fc" id="L232">    }</span>
 
     /**
      * Gets the value of the docId property.
@@ -243,7 +240,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public String getDocId() {
-<span class="fc" id="L246">        return docId;</span>
+<span class="fc" id="L243">        return docId;</span>
     }
 
     /**
@@ -255,8 +252,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public void setDocId(String value) {
-<span class="fc" id="L258">        this.docId = value;</span>
-<span class="fc" id="L259">    }</span>
+<span class="fc" id="L255">        this.docId = value;</span>
+<span class="fc" id="L256">    }</span>
 
     /**
      * Gets the value of the index property.
@@ -267,7 +264,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public Integer getIndex() {
-<span class="fc" id="L270">        return index;</span>
+<span class="fc" id="L267">        return index;</span>
     }
 
     /**
@@ -279,8 +276,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public void setIndex(Integer value) {
-<span class="fc" id="L282">        this.index = value;</span>
-<span class="fc" id="L283">    }</span>
+<span class="fc" id="L279">        this.index = value;</span>
+<span class="fc" id="L280">    }</span>
 
     /**
      * Gets the value of the path property.
@@ -291,7 +288,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public String getPath() {
-<span class="fc" id="L294">        return path;</span>
+<span class="fc" id="L291">        return path;</span>
     }
 
     /**
@@ -303,8 +300,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public void setPath(String value) {
-<span class="fc" id="L306">        this.path = value;</span>
-<span class="fc" id="L307">    }</span>
+<span class="fc" id="L303">        this.path = value;</span>
+<span class="fc" id="L304">    }</span>
 
     /**
      * Gets the value of the required property.
@@ -315,7 +312,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public Boolean isRequired() {
-<span class="fc" id="L318">        return required;</span>
+<span class="fc" id="L315">        return required;</span>
     }
 
     /**
@@ -327,8 +324,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public void setRequired(Boolean value) {
-<span class="fc" id="L330">        this.required = value;</span>
-<span class="fc" id="L331">    }</span>
+<span class="fc" id="L327">        this.required = value;</span>
+<span class="fc" id="L328">    }</span>
 
     /**
      * Gets the value of the status property.
@@ -339,7 +336,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public FieldStatus getStatus() {
-<span class="fc" id="L342">        return status;</span>
+<span class="fc" id="L339">        return status;</span>
     }
 
     /**
@@ -351,8 +348,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public void setStatus(FieldStatus value) {
-<span class="fc" id="L354">        this.status = value;</span>
-<span class="fc" id="L355">    }</span>
+<span class="fc" id="L351">        this.status = value;</span>
+<span class="fc" id="L352">    }</span>
 
     /**
      * Gets the value of the fieldType property.
@@ -363,7 +360,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public FieldType getFieldType() {
-<span class="fc" id="L366">        return fieldType;</span>
+<span class="fc" id="L363">        return fieldType;</span>
     }
 
     /**
@@ -375,8 +372,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public void setFieldType(FieldType value) {
-<span class="fc" id="L378">        this.fieldType = value;</span>
-<span class="fc" id="L379">    }</span>
+<span class="fc" id="L375">        this.fieldType = value;</span>
+<span class="fc" id="L376">    }</span>
 
     /**
      * Gets the value of the format property.
@@ -387,7 +384,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public String getFormat() {
-<span class="fc" id="L390">        return format;</span>
+<span class="fc" id="L387">        return format;</span>
     }
 
     /**
@@ -399,8 +396,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public void setFormat(String value) {
-<span class="nc" id="L402">        this.format = value;</span>
-<span class="nc" id="L403">    }</span>
+<span class="nc" id="L399">        this.format = value;</span>
+<span class="nc" id="L400">    }</span>
 
     /**
      * Gets the value of the name property.
@@ -411,7 +408,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public String getName() {
-<span class="fc" id="L414">        return name;</span>
+<span class="fc" id="L411">        return name;</span>
     }
 
     /**
@@ -423,7 +420,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
      *
      */
     public void setName(String value) {
-<span class="fc" id="L426">        this.name = value;</span>
-<span class="fc" id="L427">    }</span>
+<span class="fc" id="L423">        this.name = value;</span>
+<span class="fc" id="L424">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
