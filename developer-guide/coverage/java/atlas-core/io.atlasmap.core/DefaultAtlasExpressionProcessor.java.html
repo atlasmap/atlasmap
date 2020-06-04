@@ -72,14 +72,14 @@ import io.atlasmap.v2.SimpleField;
 <span class="nc" id="L72">                    throw new ExpressionException(e);</span>
                 }
             });
-<span class="fc bfc" id="L75" title="All 2 branches covered.">            if (answer instanceof Field) {</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">            if (answer instanceof Field) {</span>
 <span class="fc" id="L76">                session.head().setSourceField((Field)answer);</span>
             } else {
-<span class="fc" id="L78">                Field from = session.head().getSourceField();</span>
-<span class="fc" id="L79">                SimpleField to = new SimpleField();</span>
-<span class="fc" id="L80">                AtlasModelFactory.copyField(from, to, false);</span>
-<span class="fc" id="L81">                to.setValue(answer);</span>
-<span class="fc" id="L82">                session.head().setSourceField(to);</span>
+<span class="nc" id="L78">                Field from = session.head().getSourceField();</span>
+<span class="nc" id="L79">                SimpleField to = new SimpleField();</span>
+<span class="nc" id="L80">                AtlasModelFactory.copyField(from, to, false);</span>
+<span class="nc" id="L81">                to.setValue(answer);</span>
+<span class="nc" id="L82">                session.head().setSourceField(to);</span>
             }
 <span class="nc" id="L84">        } catch (Exception e) {</span>
 <span class="nc" id="L85">            AtlasUtil.addAudit(session, null,</span>

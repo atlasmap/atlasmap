@@ -145,8 +145,8 @@ public class JavaFieldWriterUtil {
 
     public Object getChildObject(Object parentObject, SegmentContext segment) throws AtlasException {
 <span class="fc" id="L147">        String fieldName = segment.getName();</span>
-<span class="pc bpc" id="L148" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L149">            LOG.debug(</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L149">            LOG.debug(</span>
                     &quot;Retrieving child '&quot; + fieldName + &quot;'.\n\tparentObject: &quot; + parentObject);
         }
 
@@ -175,11 +175,11 @@ public class JavaFieldWriterUtil {
 <span class="nc" id="L175">            throw new AtlasException(e);</span>
 <span class="fc" id="L176">        }</span>
 
-<span class="pc bpc" id="L178" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc bnc" id="L179" title="All 2 branches missed.">            if (childObject == null) {</span>
-<span class="nc" id="L180">                LOG.debug(&quot;Could not find child object for path: &quot; + fieldName);</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">            if (childObject == null) {</span>
+<span class="fc" id="L180">                LOG.debug(&quot;Could not find child object for path: &quot; + fieldName);</span>
             } else {
-<span class="nc" id="L182">                LOG.debug(&quot;Found child object for path '&quot; + fieldName + &quot;': &quot; + childObject);</span>
+<span class="fc" id="L182">                LOG.debug(&quot;Found child object for path '&quot; + fieldName + &quot;': &quot; + childObject);</span>
             }
         }
 
@@ -214,8 +214,8 @@ public class JavaFieldWriterUtil {
     }
 
     public Object createComplexChildObject(Object parentObject, SegmentContext segmentContext) throws AtlasException {
-<span class="pc bpc" id="L217" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L218">            LOG.debug(&quot;Creating object for segment:'{} \n\tparentObject: {}&quot;, segmentContext, parentObject);</span>
+<span class="fc bfc" id="L217" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L218">            LOG.debug(&quot;Creating object for segment:'{} \n\tparentObject: {}&quot;, segmentContext, parentObject);</span>
         }
 
         Class&lt;?&gt; clazz;
@@ -243,8 +243,8 @@ public class JavaFieldWriterUtil {
     }
 
     public void setChildObject(Object parentObject, Object childObject, SegmentContext segmentContext) throws AtlasException {
-<span class="pc bpc" id="L246" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L247">            LOG.debug(&quot;Setting object for segment:'&quot; + segmentContext.getExpression() + &quot;'.\n\tchildObject: &quot; + childObject</span>
+<span class="fc bfc" id="L246" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L247">            LOG.debug(&quot;Setting object for segment:'&quot; + segmentContext.getExpression() + &quot;'.\n\tchildObject: &quot; + childObject</span>
                     + &quot;\n\tparentObject: &quot; + parentObject);
         }
 
@@ -541,20 +541,20 @@ public class JavaFieldWriterUtil {
 
 <span class="fc" id="L542">        Method m = null;</span>
 <span class="fc bfc" id="L543" title="All 2 branches covered.">        for (Class&lt;?&gt; clazz : classTree) {</span>
-<span class="pc bpc" id="L544" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L545">                LOG.debug(&quot;Looking for setter '&quot; + setterMethodName + &quot;' on this class: &quot; + clazz.getName());</span>
+<span class="fc bfc" id="L544" title="All 2 branches covered.">            if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L545">                LOG.debug(&quot;Looking for setter '&quot; + setterMethodName + &quot;' on this class: &quot; + clazz.getName());</span>
             }
             try {
 <span class="fc" id="L548">                m = ClassHelper.detectSetterMethod(clazz, setterMethodName, targetType);</span>
 <span class="pc bpc" id="L549" title="1 of 2 branches missed.">                if (m != null) {</span>
-<span class="pc bpc" id="L550" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L551">                        LOG.debug(&quot;Found setter '&quot; + setterMethodName + &quot;' on this class: &quot; + clazz.getName());</span>
+<span class="fc bfc" id="L550" title="All 2 branches covered.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L551">                        LOG.debug(&quot;Found setter '&quot; + setterMethodName + &quot;' on this class: &quot; + clazz.getName());</span>
                     }
 <span class="fc" id="L553">                    return m;</span>
                 }
 <span class="fc" id="L555">            } catch (NoSuchMethodException e) {</span>
-<span class="pc bpc" id="L556" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L557">                    LOG.debug(&quot;Did not find setter '&quot; + setterMethodName + &quot;' on this class: &quot; + clazz.getName(), e);</span>
+<span class="fc bfc" id="L556" title="All 2 branches covered.">                if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L557">                    LOG.debug(&quot;Did not find setter '&quot; + setterMethodName + &quot;' on this class: &quot; + clazz.getName(), e);</span>
                 }
 <span class="nc" id="L559">            }</span>
 
@@ -562,20 +562,20 @@ public class JavaFieldWriterUtil {
 <span class="pc bpc" id="L562" title="1 of 4 branches missed.">            if (conversionService.isPrimitive(targetType) || conversionService.isBoxedPrimitive(targetType)) {</span>
                 try {
 <span class="pc bpc" id="L564" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L565">                        LOG.debug(&quot;Looking for boxed setter '&quot; + setterMethodName + &quot;' on this class: &quot;</span>
-<span class="nc" id="L566">                                + clazz.getName());</span>
+<span class="fc" id="L565">                        LOG.debug(&quot;Looking for boxed setter '&quot; + setterMethodName + &quot;' on this class: &quot;</span>
+<span class="fc" id="L566">                                + clazz.getName());</span>
                     }
 <span class="fc" id="L568">                    m = ClassHelper.detectSetterMethod(clazz, setterMethodName,</span>
 <span class="fc" id="L569">                            conversionService.boxOrUnboxPrimitive(targetType));</span>
 <span class="pc bpc" id="L570" title="1 of 2 branches missed.">                    if (m != null) {</span>
 <span class="pc bpc" id="L571" title="1 of 2 branches missed.">                        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L572">                            LOG.debug(&quot;Found setter '&quot; + setterMethodName + &quot;' on this class: &quot; + clazz.getName());</span>
+<span class="fc" id="L572">                            LOG.debug(&quot;Found setter '&quot; + setterMethodName + &quot;' on this class: &quot; + clazz.getName());</span>
                         }
 <span class="fc" id="L574">                        return m;</span>
                     }
 <span class="fc" id="L576">                } catch (NoSuchMethodException e) {</span>
 <span class="pc bpc" id="L577" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L578">                        LOG.debug(&quot;Did not find setter '&quot; + setterMethodName + &quot;' on this class: &quot; + clazz.getName(),</span>
+<span class="fc" id="L578">                        LOG.debug(&quot;Did not find setter '&quot; + setterMethodName + &quot;' on this class: &quot; + clazz.getName(),</span>
                                 e);
                     }
 <span class="nc" id="L581">                }</span>
@@ -626,9 +626,9 @@ public class JavaFieldWriterUtil {
         // Collections.reverse(reverseTree);
         // return reverseTree;
 
-<span class="pc bpc" id="L629" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L630">            LOG.debug(&quot;Found &quot; + classTree.size() + &quot; mappable classes for class '&quot;</span>
-<span class="nc" id="L631">                    + clazz.getName() + &quot;': &quot; + classTree);</span>
+<span class="fc bfc" id="L629" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L630">            LOG.debug(&quot;Found &quot; + classTree.size() + &quot; mappable classes for class '&quot;</span>
+<span class="fc" id="L631">                    + clazz.getName() + &quot;': &quot; + classTree);</span>
         }
 
 <span class="fc" id="L634">        return classTree;</span>

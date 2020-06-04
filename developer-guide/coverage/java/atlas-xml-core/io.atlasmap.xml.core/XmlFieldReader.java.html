@@ -84,8 +84,8 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
 
 <span class="fc" id="L85">        seedDocumentNamespaces(document);</span>
 
-<span class="pc bpc" id="L87" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L88">            LOG.debug(&quot;Reading source value for field: &quot; + field.getPath());</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L88">            LOG.debug(&quot;Reading source value for field: &quot; + field.getPath());</span>
         }
 <span class="fc" id="L90">        Optional&lt;XmlNamespaces&gt; xmlNamespaces = getSourceNamespaces(session, field);</span>
 <span class="fc" id="L91">        XmlPath path = new XmlPath(field.getPath());</span>
@@ -128,8 +128,8 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
 
         // segments.size() &gt; depth
 <span class="fc" id="L130">        XmlSegmentContext segment = segments.get(depth);</span>
-<span class="pc bpc" id="L131" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L132">            LOG.debug(&quot;Now processing segment: &quot; + segment.getName());</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L132">            LOG.debug(&quot;Now processing segment: &quot; + segment.getName());</span>
         }
 <span class="fc bfc" id="L134" title="All 2 branches covered.">        if (depth == 0) {</span>
 <span class="fc bfc" id="L135" title="All 2 branches covered.">            if (segment.getName().startsWith(XmlIOHelper.getNodeNameWithoutNamespaceAlias(node))) {</span>
@@ -140,8 +140,8 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
 <span class="pc bpc" id="L140" title="1 of 4 branches missed.">                if (!rootNamespace.isPresent() || rootNamespace.get().equals(node.getNamespaceURI())) {</span>
                     // processing root node part of path such as the &quot;XOA&quot; part of
                     // &quot;/XOA/contact&lt;&gt;/firstName&quot;, skip.
-<span class="pc bpc" id="L143" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L144">                        LOG.debug(&quot;Skipping root segment: &quot; + segment);</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L144">                        LOG.debug(&quot;Skipping root segment: &quot; + segment);</span>
                     }
 <span class="pc bpc" id="L146" title="1 of 2 branches missed.">                    if (segments.size() &gt; 1) {</span>
 <span class="fc" id="L147">                        depth = 1;</span>
@@ -163,8 +163,8 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
 <span class="fc" id="L163">        Optional&lt;String&gt; namespace = getNamespace(xmlNamespaces, fieldNamespace);</span>
 <span class="fc" id="L164">        List&lt;Element&gt; children = XmlIOHelper.getChildrenWithNameStripAlias(fieldName, namespace, node);</span>
 <span class="pc bpc" id="L165" title="1 of 4 branches missed.">        if (children == null || children.isEmpty()) {</span>
-<span class="pc bpc" id="L166" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L167">                LOG.debug(&quot;Skipping source value set, couldn't find children with name '&quot; + fieldName</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">            if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L167">                LOG.debug(&quot;Skipping source value set, couldn't find children with name '&quot; + fieldName</span>
                         + &quot;', for segment: &quot; + segment);
             }
 <span class="fc" id="L170">            return fields;</span>

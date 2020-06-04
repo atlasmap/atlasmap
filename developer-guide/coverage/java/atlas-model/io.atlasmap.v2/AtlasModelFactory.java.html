@@ -17,109 +17,113 @@ package io.atlasmap.v2;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SuppressWarnings(&quot;squid:S3776&quot;)
 public class AtlasModelFactory {
 
+    public static final String GENERATED_PATH = &quot;$ATLASMAP&quot;;
+
     private AtlasModelFactory() {
     }
 
     @SuppressWarnings(&quot;unchecked&quot;)
     public static &lt;T extends BaseMapping&gt; T createMapping(MappingType type) {
-<span class="fc" id="L31">        T fm = null;</span>
-<span class="pc bpc" id="L32" title="1 of 2 branches missed.">        if (type == null) {</span>
-<span class="nc" id="L33">            return null;</span>
+<span class="fc" id="L35">        T fm = null;</span>
+<span class="pc bpc" id="L36" title="1 of 2 branches missed.">        if (type == null) {</span>
+<span class="nc" id="L37">            return null;</span>
         }
 
-<span class="pc bpc" id="L36" title="1 of 3 branches missed.">        switch (type) {</span>
+<span class="pc bpc" id="L40" title="1 of 3 branches missed.">        switch (type) {</span>
         case COLLECTION:
-<span class="fc" id="L38">            fm = (T) new Collection();</span>
-<span class="fc" id="L39">            ((Collection) fm).setMappingType(type);</span>
-<span class="fc" id="L40">            return fm;</span>
+<span class="fc" id="L42">            fm = (T) new Collection();</span>
+<span class="fc" id="L43">            ((Collection) fm).setMappingType(type);</span>
+<span class="fc" id="L44">            return fm;</span>
         case COMBINE:
         case LOOKUP:
         case MAP:
         case SEPARATE:
-<span class="fc" id="L45">            fm = (T) new Mapping();</span>
-<span class="fc" id="L46">            ((Mapping) fm).setMappingType(type);</span>
-<span class="fc" id="L47">            return fm;</span>
+<span class="fc" id="L49">            fm = (T) new Mapping();</span>
+<span class="fc" id="L50">            ((Mapping) fm).setMappingType(type);</span>
+<span class="fc" id="L51">            return fm;</span>
         default:
-<span class="nc" id="L49">            throw new IllegalStateException(String.format(&quot;Unsupported mappingType=%s&quot;, type.value()));</span>
+<span class="nc" id="L53">            throw new IllegalStateException(String.format(&quot;Unsupported mappingType=%s&quot;, type.value()));</span>
         }
     }
 
     public static AtlasMapping createAtlasMapping() {
-<span class="fc" id="L54">        AtlasMapping mapping = new AtlasMapping();</span>
-<span class="fc" id="L55">        mapping.setMappings(new Mappings());</span>
-<span class="fc" id="L56">        mapping.setProperties(new Properties());</span>
-<span class="fc" id="L57">        mapping.setLookupTables(new LookupTables());</span>
-<span class="fc" id="L58">        return mapping;</span>
+<span class="fc" id="L58">        AtlasMapping mapping = new AtlasMapping();</span>
+<span class="fc" id="L59">        mapping.setMappings(new Mappings());</span>
+<span class="fc" id="L60">        mapping.setProperties(new Properties());</span>
+<span class="fc" id="L61">        mapping.setLookupTables(new LookupTables());</span>
+<span class="fc" id="L62">        return mapping;</span>
     }
 
     public static Collection createCollection() {
-<span class="nc" id="L62">        Collection collectionMapping = new Collection();</span>
-<span class="nc" id="L63">        collectionMapping.setMappings(new Mappings());</span>
-<span class="nc" id="L64">        collectionMapping.setMappingType(MappingType.COLLECTION);</span>
-<span class="nc" id="L65">        return collectionMapping;</span>
+<span class="nc" id="L66">        Collection collectionMapping = new Collection();</span>
+<span class="nc" id="L67">        collectionMapping.setMappings(new Mappings());</span>
+<span class="nc" id="L68">        collectionMapping.setMappingType(MappingType.COLLECTION);</span>
+<span class="nc" id="L69">        return collectionMapping;</span>
     }
 
     public static MockDocument createMockDocument() {
-<span class="nc" id="L69">        MockDocument mockDocument = new MockDocument();</span>
-<span class="nc" id="L70">        mockDocument.setFields(new Fields());</span>
-<span class="nc" id="L71">        return mockDocument;</span>
+<span class="nc" id="L73">        MockDocument mockDocument = new MockDocument();</span>
+<span class="nc" id="L74">        mockDocument.setFields(new Fields());</span>
+<span class="nc" id="L75">        return mockDocument;</span>
     }
 
     public static MockField createMockField() {
-<span class="fc" id="L75">        return new MockField();</span>
+<span class="fc" id="L79">        return new MockField();</span>
     }
 
     public static PropertyField createPropertyField() {
-<span class="fc" id="L79">        return new PropertyField();</span>
+<span class="fc" id="L83">        return new PropertyField();</span>
     }
 
     public static BaseMapping cloneMapping(BaseMapping baseMapping, boolean deepClone) {
-<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (baseMapping.getMappingType().equals(MappingType.COLLECTION)) {</span>
-<span class="nc" id="L84">            Collection mapping = (Collection) baseMapping;</span>
-<span class="nc" id="L85">            Collection clone = new Collection();</span>
-<span class="nc" id="L86">            clone.setAlias(mapping.getAlias());</span>
-<span class="nc" id="L87">            clone.setDescription(mapping.getDescription());</span>
-<span class="nc" id="L88">            clone.setMappingType(mapping.getMappingType());</span>
-<span class="nc bnc" id="L89" title="All 2 branches missed.">            if (deepClone) {</span>
-<span class="nc" id="L90">                clone.setMappings(new Mappings());</span>
-<span class="nc bnc" id="L91" title="All 2 branches missed.">                for (BaseMapping m : mapping.getMappings().getMapping()) {</span>
-<span class="nc" id="L92">                    clone.getMappings().getMapping().add(cloneMapping(m, deepClone));</span>
-<span class="nc" id="L93">                }</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">        if (baseMapping.getMappingType().equals(MappingType.COLLECTION)) {</span>
+<span class="nc" id="L88">            Collection mapping = (Collection) baseMapping;</span>
+<span class="nc" id="L89">            Collection clone = new Collection();</span>
+<span class="nc" id="L90">            clone.setAlias(mapping.getAlias());</span>
+<span class="nc" id="L91">            clone.setDescription(mapping.getDescription());</span>
+<span class="nc" id="L92">            clone.setMappingType(mapping.getMappingType());</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">            if (deepClone) {</span>
+<span class="nc" id="L94">                clone.setMappings(new Mappings());</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">                for (BaseMapping m : mapping.getMappings().getMapping()) {</span>
+<span class="nc" id="L96">                    clone.getMappings().getMapping().add(cloneMapping(m, deepClone));</span>
+<span class="nc" id="L97">                }</span>
             }
-<span class="nc" id="L95">            return clone;</span>
+<span class="nc" id="L99">            return clone;</span>
         }
         // Non-collection mapping
-<span class="nc" id="L98">        Mapping mapping = (Mapping) baseMapping;</span>
-<span class="nc" id="L99">        Mapping clone = new Mapping();</span>
-<span class="nc" id="L100">        clone.setAlias(mapping.getAlias());</span>
-<span class="nc" id="L101">        clone.setDelimiter(mapping.getDelimiter());</span>
-<span class="nc" id="L102">        clone.setDelimiterString(mapping.getDelimiterString());</span>
-<span class="nc" id="L103">        clone.setDescription(mapping.getDescription());</span>
-<span class="nc" id="L104">        clone.setLookupTableName(mapping.getLookupTableName());</span>
-<span class="nc bnc" id="L105" title="All 2 branches missed.">        if (mapping.getMappingType() != null) {</span>
-<span class="nc" id="L106">            clone.setMappingType(MappingType.fromValue(mapping.getMappingType().value()));</span>
+<span class="nc" id="L102">        Mapping mapping = (Mapping) baseMapping;</span>
+<span class="nc" id="L103">        Mapping clone = new Mapping();</span>
+<span class="nc" id="L104">        clone.setAlias(mapping.getAlias());</span>
+<span class="nc" id="L105">        clone.setDelimiter(mapping.getDelimiter());</span>
+<span class="nc" id="L106">        clone.setDelimiterString(mapping.getDelimiterString());</span>
+<span class="nc" id="L107">        clone.setDescription(mapping.getDescription());</span>
+<span class="nc" id="L108">        clone.setLookupTableName(mapping.getLookupTableName());</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">        if (mapping.getMappingType() != null) {</span>
+<span class="nc" id="L110">            clone.setMappingType(MappingType.fromValue(mapping.getMappingType().value()));</span>
         }
-<span class="nc" id="L108">        clone.setStrategy(mapping.getStrategy());</span>
-<span class="nc" id="L109">        clone.setStrategyClassName(mapping.getStrategyClassName());</span>
-<span class="nc bnc" id="L110" title="All 2 branches missed.">        if (deepClone) {</span>
-<span class="nc bnc" id="L111" title="All 2 branches missed.">            for (Field f : mapping.getInputField()) {</span>
-<span class="nc" id="L112">                clone.getInputField().add(cloneField(f));</span>
-<span class="nc" id="L113">            }</span>
-<span class="nc bnc" id="L114" title="All 2 branches missed.">            for (Field f : mapping.getOutputField()) {</span>
-<span class="nc" id="L115">                clone.getOutputField().add(cloneField(f));</span>
-<span class="nc" id="L116">            }</span>
+<span class="nc" id="L112">        clone.setStrategy(mapping.getStrategy());</span>
+<span class="nc" id="L113">        clone.setStrategyClassName(mapping.getStrategyClassName());</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">        if (deepClone) {</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">            for (Field f : mapping.getInputField()) {</span>
+<span class="nc" id="L116">                clone.getInputField().add(cloneField(f));</span>
+<span class="nc" id="L117">            }</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">            for (Field f : mapping.getOutputField()) {</span>
+<span class="nc" id="L119">                clone.getOutputField().add(cloneField(f));</span>
+<span class="nc" id="L120">            }</span>
         }
-<span class="nc" id="L118">        return clone;</span>
+<span class="nc" id="L122">        return clone;</span>
     }
 
     public static Field cloneField(Field f) {
-<span class="nc" id="L122">        throw new IllegalArgumentException(&quot;Use module specific factories to clone fields&quot;);</span>
+<span class="nc" id="L126">        throw new IllegalArgumentException(&quot;Use module specific factories to clone fields&quot;);</span>
     }
 
     /**
@@ -129,142 +133,172 @@ public class AtlasModelFactory {
      * @return copied FieldGroup
      */
     public static FieldGroup copyFieldGroup(FieldGroup fg) {
-<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        if (fg == null) {</span>
-<span class="nc" id="L133">            return null;</span>
+<span class="pc bpc" id="L136" title="1 of 2 branches missed.">        if (fg == null) {</span>
+<span class="nc" id="L137">            return null;</span>
         }
-<span class="fc" id="L135">        FieldGroup newfg = new FieldGroup();</span>
-<span class="fc" id="L136">        copyField(fg, newfg, true);</span>
-<span class="fc" id="L137">        return newfg;</span>
+<span class="fc" id="L139">        FieldGroup newfg = new FieldGroup();</span>
+<span class="fc" id="L140">        copyField(fg, newfg, true);</span>
+<span class="fc" id="L141">        return newfg;</span>
     }
 
     public static SimpleField cloneFieldToSimpleField(Field field) {
-<span class="pc bpc" id="L141" title="1 of 2 branches missed.">        if (field == null) {</span>
-<span class="nc" id="L142">            return null;</span>
+<span class="pc bpc" id="L145" title="1 of 2 branches missed.">        if (field == null) {</span>
+<span class="nc" id="L146">            return null;</span>
         }
 
-<span class="fc" id="L145">        SimpleField f = new SimpleField();</span>
-<span class="fc" id="L146">        copyField(field, f, true);</span>
-<span class="fc" id="L147">        return f;</span>
+<span class="fc" id="L149">        SimpleField f = new SimpleField();</span>
+<span class="fc" id="L150">        copyField(field, f, true);</span>
+<span class="fc" id="L151">        return f;</span>
     }
 
     public static void copyField(Field from, Field to, boolean withActions) {
-<span class="fc bfc" id="L151" title="All 2 branches covered.">        if (withActions) {</span>
-<span class="fc" id="L152">            to.setActions(cloneFieldActions(from.getActions()));</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">        if (withActions) {</span>
+<span class="fc" id="L156">            to.setActions(cloneFieldActions(from.getActions()));</span>
         }
-<span class="pc bpc" id="L154" title="1 of 2 branches missed.">        if (from.getArrayDimensions() != null) {</span>
-<span class="nc" id="L155">            to.setArrayDimensions(Integer.valueOf(from.getArrayDimensions()));</span>
+<span class="pc bpc" id="L158" title="1 of 2 branches missed.">        if (from.getArrayDimensions() != null) {</span>
+<span class="nc" id="L159">            to.setArrayDimensions(Integer.valueOf(from.getArrayDimensions()));</span>
         }
-<span class="pc bpc" id="L157" title="1 of 2 branches missed.">        if (from.getArraySize() != null) {</span>
-<span class="nc" id="L158">            to.setArraySize(Integer.valueOf(from.getArraySize()));</span>
+<span class="pc bpc" id="L161" title="1 of 2 branches missed.">        if (from.getArraySize() != null) {</span>
+<span class="nc" id="L162">            to.setArraySize(Integer.valueOf(from.getArraySize()));</span>
         }
-<span class="fc bfc" id="L160" title="All 2 branches covered.">        if (from.getCollectionType() != null) {</span>
-<span class="fc" id="L161">            to.setCollectionType(CollectionType.fromValue(from.getCollectionType().value()));</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        if (from.getCollectionType() != null) {</span>
+<span class="fc" id="L165">            to.setCollectionType(CollectionType.fromValue(from.getCollectionType().value()));</span>
         }
-<span class="fc bfc" id="L163" title="All 2 branches covered.">        if (from.getDocId() != null) {</span>
-<span class="fc" id="L164">            to.setDocId(from.getDocId());</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">        if (from.getDocId() != null) {</span>
+<span class="fc" id="L168">            to.setDocId(from.getDocId());</span>
         }
-<span class="fc bfc" id="L166" title="All 2 branches covered.">        if (from.getFieldType() != null) {</span>
-<span class="fc" id="L167">            to.setFieldType(FieldType.fromValue(from.getFieldType().value()));</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">        if (from.getFieldType() != null) {</span>
+<span class="fc" id="L171">            to.setFieldType(FieldType.fromValue(from.getFieldType().value()));</span>
         }
-<span class="fc bfc" id="L169" title="All 2 branches covered.">        if (from.getIndex() != null) {</span>
-<span class="fc" id="L170">            to.setIndex(Integer.valueOf(from.getIndex()));</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">        if (from.getIndex() != null) {</span>
+<span class="fc" id="L174">            to.setIndex(Integer.valueOf(from.getIndex()));</span>
         }
-<span class="fc bfc" id="L172" title="All 2 branches covered.">        if (from.getPath() != null) {</span>
-<span class="fc" id="L173">            to.setPath(from.getPath());</span>
+<span class="fc bfc" id="L176" title="All 2 branches covered.">        if (from.getPath() != null) {</span>
+<span class="fc" id="L177">            to.setPath(from.getPath());</span>
         }
-<span class="pc bpc" id="L175" title="1 of 2 branches missed.">        if (from.isRequired() != null) {</span>
-<span class="nc" id="L176">            to.setRequired(Boolean.valueOf(from.isRequired()));</span>
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">        if (from.isRequired() != null) {</span>
+<span class="nc" id="L180">            to.setRequired(Boolean.valueOf(from.isRequired()));</span>
         }
-<span class="pc bpc" id="L178" title="1 of 2 branches missed.">        if (from.getStatus() != null) {</span>
-<span class="nc" id="L179">            to.setStatus(FieldStatus.fromValue(from.getStatus().value()));</span>
+<span class="pc bpc" id="L182" title="1 of 2 branches missed.">        if (from.getStatus() != null) {</span>
+<span class="nc" id="L183">            to.setStatus(FieldStatus.fromValue(from.getStatus().value()));</span>
         }
-<span class="fc bfc" id="L181" title="All 2 branches covered.">        if (from.getName() != null) {</span>
-<span class="fc" id="L182">            to.setName(from.getName());</span>
+<span class="fc bfc" id="L185" title="All 2 branches covered.">        if (from.getName() != null) {</span>
+<span class="fc" id="L186">            to.setName(from.getName());</span>
         }
         // We can't clone so don't set value
-<span class="fc" id="L185">    }</span>
+<span class="fc" id="L189">    }</span>
 
     public static FieldGroup createFieldGroupFrom(Field field, boolean withActions) {
-<span class="fc" id="L188">        FieldGroup answer = new FieldGroup();</span>
-<span class="fc" id="L189">        copyField(field, answer, withActions);</span>
-<span class="fc" id="L190">        return answer;</span>
+<span class="fc" id="L192">        FieldGroup answer = new FieldGroup();</span>
+<span class="fc" id="L193">        copyField(field, answer, withActions);</span>
+<span class="fc" id="L194">        return answer;</span>
     }
 
     public static ArrayList&lt;Action&gt; cloneFieldActions(ArrayList&lt;Action&gt; actions) {
-<span class="fc bfc" id="L194" title="All 2 branches covered.">        if (actions == null) {</span>
-<span class="fc" id="L195">            return null;</span>
+<span class="fc bfc" id="L198" title="All 2 branches covered.">        if (actions == null) {</span>
+<span class="fc" id="L199">            return null;</span>
         }
 
-<span class="fc" id="L198">        ArrayList&lt;Action&gt; n = new ArrayList&lt;Action&gt;();</span>
+<span class="fc" id="L202">        ArrayList&lt;Action&gt; n = new ArrayList&lt;Action&gt;();</span>
 
-<span class="pc bpc" id="L200" title="2 of 4 branches missed.">        if (actions == null || actions.isEmpty()) {</span>
-<span class="nc" id="L201">            return n;</span>
+<span class="pc bpc" id="L204" title="2 of 4 branches missed.">        if (actions == null || actions.isEmpty()) {</span>
+<span class="nc" id="L205">            return n;</span>
         }
 
-<span class="fc bfc" id="L204" title="All 2 branches covered.">        for (Action a : actions) {</span>
-<span class="fc" id="L205">            n.add(cloneAction(a));</span>
-<span class="fc" id="L206">        }</span>
-<span class="fc" id="L207">        return n;</span>
+<span class="fc bfc" id="L208" title="All 2 branches covered.">        for (Action a : actions) {</span>
+<span class="fc" id="L209">            n.add(cloneAction(a));</span>
+<span class="fc" id="L210">        }</span>
+<span class="fc" id="L211">        return n;</span>
     }
 
     public static Action cloneAction(Action action) {
-<span class="pc bpc" id="L211" title="1 of 2 branches missed.">        if (action == null) {</span>
-<span class="nc" id="L212">            return null;</span>
+<span class="pc bpc" id="L215" title="1 of 2 branches missed.">        if (action == null) {</span>
+<span class="nc" id="L216">            return null;</span>
         }
         try {
-<span class="fc" id="L215">            ObjectMapper mapper = new ObjectMapper();</span>
-<span class="fc" id="L216">            String s = mapper.writeValueAsString(action);</span>
-<span class="fc" id="L217">            System.out.println(s);</span>
-<span class="fc" id="L218">            return mapper.readerFor(Action.class).readValue(s);</span>
-<span class="nc" id="L219">        } catch (IOException e) {</span>
-<span class="nc" id="L220">            throw new RuntimeException(e);</span>
+<span class="fc" id="L219">            ObjectMapper mapper = new ObjectMapper();</span>
+<span class="fc" id="L220">            String s = mapper.writeValueAsString(action);</span>
+<span class="fc" id="L221">            System.out.println(s);</span>
+<span class="fc" id="L222">            return mapper.readerFor(Action.class).readValue(s);</span>
+<span class="nc" id="L223">        } catch (IOException e) {</span>
+<span class="nc" id="L224">            throw new RuntimeException(e);</span>
         }
     }
 
     protected static String baseFieldToString(Field f) {
-<span class="pc bpc" id="L225" title="1 of 2 branches missed.">        if (f == null) {</span>
-<span class="nc" id="L226">            return &quot;&quot;;</span>
+<span class="pc bpc" id="L229" title="1 of 2 branches missed.">        if (f == null) {</span>
+<span class="nc" id="L230">            return &quot;&quot;;</span>
         }
-<span class="fc" id="L228">        StringBuilder tmp = new StringBuilder();</span>
-<span class="fc" id="L229">        tmp.append(&quot; arrayDimensions=&quot; + f.getArrayDimensions());</span>
-<span class="fc" id="L230">        tmp.append(&quot; arraySize=&quot; + f.getArraySize());</span>
-<span class="pc bpc" id="L231" title="1 of 2 branches missed.">        tmp.append(&quot; collectionType=&quot; + (f.getCollectionType() != null ? f.getCollectionType().value() : null));</span>
-<span class="fc" id="L232">        tmp.append(&quot; docId=&quot; + f.getDocId());</span>
-<span class="pc bpc" id="L233" title="3 of 4 branches missed.">        if (f.getActions() != null &amp;&amp; f.getActions() != null) {</span>
-<span class="nc bnc" id="L234" title="All 2 branches missed.">            if (!f.getActions().isEmpty()) {</span>
-<span class="nc" id="L235">                tmp.append(&quot; fieldActions#=&quot; + f.getActions().size());</span>
+<span class="fc" id="L232">        StringBuilder tmp = new StringBuilder();</span>
+<span class="fc" id="L233">        tmp.append(&quot; arrayDimensions=&quot; + f.getArrayDimensions());</span>
+<span class="fc" id="L234">        tmp.append(&quot; arraySize=&quot; + f.getArraySize());</span>
+<span class="pc bpc" id="L235" title="1 of 2 branches missed.">        tmp.append(&quot; collectionType=&quot; + (f.getCollectionType() != null ? f.getCollectionType().value() : null));</span>
+<span class="fc" id="L236">        tmp.append(&quot; docId=&quot; + f.getDocId());</span>
+<span class="pc bpc" id="L237" title="3 of 4 branches missed.">        if (f.getActions() != null &amp;&amp; f.getActions() != null) {</span>
+<span class="nc bnc" id="L238" title="All 2 branches missed.">            if (!f.getActions().isEmpty()) {</span>
+<span class="nc" id="L239">                tmp.append(&quot; fieldActions#=&quot; + f.getActions().size());</span>
             } else {
-<span class="nc" id="L237">                tmp.append(&quot; fieldActions#=0&quot;);</span>
+<span class="nc" id="L241">                tmp.append(&quot; fieldActions#=0&quot;);</span>
             }
         } else {
-<span class="fc" id="L240">            tmp.append(&quot; fieldActions#=&quot;);</span>
+<span class="fc" id="L244">            tmp.append(&quot; fieldActions#=&quot;);</span>
         }
-<span class="pc bpc" id="L242" title="1 of 2 branches missed.">        tmp.append(&quot; fieldType=&quot; + (f.getFieldType() != null ? f.getFieldType().value() : null));</span>
-<span class="fc" id="L243">        tmp.append(&quot; index=&quot; + f.getIndex());</span>
-<span class="fc" id="L244">        tmp.append(&quot; path=&quot; + f.getPath());</span>
-<span class="pc bpc" id="L245" title="1 of 2 branches missed.">        tmp.append(&quot; fieldStatus=&quot; + (f.getStatus() != null ? f.getStatus().value() : null));</span>
-<span class="fc" id="L246">        tmp.append(&quot; value=&quot; + f.getValue());</span>
-<span class="fc" id="L247">        return tmp.toString();</span>
+<span class="fc bfc" id="L246" title="All 2 branches covered.">        tmp.append(&quot; fieldType=&quot; + (f.getFieldType() != null ? f.getFieldType().value() : null));</span>
+<span class="fc" id="L247">        tmp.append(&quot; index=&quot; + f.getIndex());</span>
+<span class="fc" id="L248">        tmp.append(&quot; path=&quot; + f.getPath());</span>
+<span class="pc bpc" id="L249" title="1 of 2 branches missed.">        tmp.append(&quot; fieldStatus=&quot; + (f.getStatus() != null ? f.getStatus().value() : null));</span>
+<span class="fc" id="L250">        tmp.append(&quot; value=&quot; + f.getValue());</span>
+<span class="fc" id="L251">        return tmp.toString();</span>
     }
 
     public static String toString(PropertyField f) {
-<span class="nc" id="L251">        StringBuilder tmp = new StringBuilder(&quot;PropertyField [name=&quot;);</span>
-<span class="nc bnc" id="L252" title="All 4 branches missed.">        if (f != null &amp;&amp; f.getName() != null) {</span>
-<span class="nc" id="L253">            tmp.append(f.getName());</span>
+<span class="nc" id="L255">        StringBuilder tmp = new StringBuilder(&quot;PropertyField [name=&quot;);</span>
+<span class="nc bnc" id="L256" title="All 4 branches missed.">        if (f != null &amp;&amp; f.getName() != null) {</span>
+<span class="nc" id="L257">            tmp.append(f.getName());</span>
         }
-<span class="nc" id="L255">        tmp.append(baseFieldToString(f));</span>
-<span class="nc" id="L256">        tmp.append(&quot;]&quot;);</span>
-<span class="nc" id="L257">        return tmp.toString();</span>
+<span class="nc" id="L259">        tmp.append(baseFieldToString(f));</span>
+<span class="nc" id="L260">        tmp.append(&quot;]&quot;);</span>
+<span class="nc" id="L261">        return tmp.toString();</span>
     }
 
     public static String toString(Field f) {
-<span class="fc" id="L261">        StringBuilder tmp = new StringBuilder(&quot;Field [name=&quot;);</span>
-<span class="pc bpc" id="L262" title="1 of 2 branches missed.">        if (f != null) {</span>
-<span class="fc" id="L263">            tmp.append(f.getClass().getSimpleName());</span>
+<span class="fc" id="L265">        StringBuilder tmp = new StringBuilder(&quot;Field [name=&quot;);</span>
+<span class="pc bpc" id="L266" title="1 of 2 branches missed.">        if (f != null) {</span>
+<span class="fc" id="L267">            tmp.append(f.getClass().getSimpleName());</span>
         }
-<span class="fc" id="L265">        tmp.append(baseFieldToString(f));</span>
-<span class="fc" id="L266">        tmp.append(&quot;]&quot;);</span>
-<span class="fc" id="L267">        return tmp.toString();</span>
+<span class="fc" id="L269">        tmp.append(baseFieldToString(f));</span>
+<span class="fc" id="L270">        tmp.append(&quot;]&quot;);</span>
+<span class="fc" id="L271">        return tmp.toString();</span>
     }
+
+    public static Field wrapWithField(Object val) {
+<span class="fc bfc" id="L275" title="All 2 branches covered.">        if (val instanceof java.util.Collection) {</span>
+<span class="fc" id="L276">            java.util.Collection c = (java.util.Collection)val;</span>
+<span class="fc" id="L277">            FieldGroup group = new FieldGroup();</span>
+<span class="fc" id="L278">            group.setPath(GENERATED_PATH);</span>
+<span class="fc" id="L279">            c.forEach(sub -&gt; group.getField().add(wrapWithField(sub)));</span>
+<span class="fc" id="L280">            return group;</span>
+        }
+<span class="fc" id="L282">        SimpleField answer = new SimpleField();</span>
+<span class="fc" id="L283">        answer.setPath(GENERATED_PATH);</span>
+<span class="fc" id="L284">        answer.setValue(val);</span>
+<span class="fc" id="L285">        return answer;</span>
+    }
+
+    public static Object unwrapField(Field f) {
+<span class="pc bpc" id="L289" title="1 of 2 branches missed.">        if (f == null) {</span>
+<span class="nc" id="L290">            return null;</span>
+        }
+<span class="fc bfc" id="L292" title="All 2 branches covered.">        if (f instanceof FieldGroup) {</span>
+<span class="fc" id="L293">            List&lt;Object&gt; l = new LinkedList&lt;&gt;();</span>
+<span class="fc bfc" id="L294" title="All 2 branches covered.">            for (Field sub : ((FieldGroup)f).getField()) {</span>
+<span class="fc" id="L295">                l.add(unwrapField(sub));</span>
+<span class="fc" id="L296">            }</span>
+<span class="fc" id="L297">            return l;</span>
+        } else {
+<span class="fc" id="L299">            return f.getValue();</span>
+        }
+    }
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -58,12 +58,12 @@ import io.atlasmap.v2.Validations;
 <span class="fc" id="L58">            validations.getValidation().addAll(jsonValidations);</span>
         }
 
-<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L62">            LOG.debug(&quot;Detected &quot; + jsonValidations.size() + &quot; json validation notices&quot;);</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L62">            LOG.debug(&quot;Detected &quot; + jsonValidations.size() + &quot; json validation notices&quot;);</span>
         }
 
-<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L66">            LOG.debug(&quot;{}: processPreValidation completed&quot;, getDocId());</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L66">            LOG.debug(&quot;{}: processPreValidation completed&quot;, getDocId());</span>
         }
 <span class="fc" id="L68">    }</span>
 
@@ -82,8 +82,8 @@ import io.atlasmap.v2.Validations;
 <span class="fc" id="L82">        fieldReader.setDocument(sourceDocumentString);</span>
 <span class="fc" id="L83">        session.setFieldReader(getDocId(), fieldReader);</span>
 
-<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L86">            LOG.debug(&quot;{} processPreSourceExcution completed&quot;, getDocId());</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L86">            LOG.debug(&quot;{} processPreSourceExcution completed&quot;, getDocId());</span>
         }
 <span class="fc" id="L88">    }</span>
 
@@ -92,8 +92,8 @@ import io.atlasmap.v2.Validations;
 <span class="fc" id="L92">        JsonFieldWriter writer = new JsonFieldWriter();</span>
 <span class="fc" id="L93">        session.setFieldWriter(getDocId(), writer);</span>
 
-<span class="pc bpc" id="L95" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L96">            LOG.debug(&quot;{} processPreTargetExcution completed&quot;, getDocId());</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L96">            LOG.debug(&quot;{} processPreTargetExcution completed&quot;, getDocId());</span>
         }
 <span class="fc" id="L98">    }</span>
 
@@ -109,10 +109,10 @@ import io.atlasmap.v2.Validations;
         }
 <span class="fc" id="L110">        reader.read(session);</span>
 
-<span class="pc bpc" id="L112" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L113">            LOG.debug(&quot;{}: processSourceFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}]&quot;,</span>
-<span class="nc" id="L114">                    getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(),</span>
-<span class="nc" id="L115">                    sourceField.getValue());</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L113">            LOG.debug(&quot;{}: processSourceFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}]&quot;,</span>
+<span class="fc" id="L114">                    getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(),</span>
+<span class="fc" id="L115">                    sourceField.getValue());</span>
         }
 <span class="fc" id="L117">    }</span>
 
@@ -181,12 +181,12 @@ import io.atlasmap.v2.Validations;
 <span class="nc" id="L181">            session.head().setTargetField(targetFieldGroup);</span>
         }
 
-<span class="pc bpc" id="L184" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L185">            LOG.debug(</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L185">            LOG.debug(</span>
                     &quot;{}: processTargetFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}], TargetField:[docId={}, path={}, type={}, value={}]&quot;,
-<span class="nc" id="L187">                    getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(),</span>
-<span class="nc" id="L188">                    sourceField.getValue(), targetField.getDocId(), targetField.getPath(), targetField.getFieldType(),</span>
-<span class="nc" id="L189">                    targetField.getValue());</span>
+<span class="fc" id="L187">                    getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(),</span>
+<span class="fc" id="L188">                    sourceField.getValue(), targetField.getDocId(), targetField.getPath(), targetField.getFieldType(),</span>
+<span class="fc" id="L189">                    targetField.getValue());</span>
         }
 <span class="fc" id="L191">    }</span>
 
@@ -209,8 +209,8 @@ import io.atlasmap.v2.Validations;
     public void processPostSourceExecution(AtlasInternalSession session) throws AtlasException {
 <span class="fc" id="L210">        session.removeFieldReader(getDocId());</span>
 
-<span class="pc bpc" id="L212" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L213">            LOG.debug(&quot;{}: processPostSourceExecution completed&quot;, getDocId());</span>
+<span class="fc bfc" id="L212" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L213">            LOG.debug(&quot;{}: processPostSourceExecution completed&quot;, getDocId());</span>
         }
 <span class="fc" id="L215">    }</span>
 
@@ -220,9 +220,9 @@ import io.atlasmap.v2.Validations;
 <span class="pc bpc" id="L220" title="1 of 4 branches missed.">        if (writer != null &amp;&amp; writer.getRootNode() != null) {</span>
 <span class="fc" id="L221">            String outputBody = writer.getRootNode().toString();</span>
 <span class="fc" id="L222">            session.setTargetDocument(getDocId(), outputBody);</span>
-<span class="pc bpc" id="L223" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L224">                LOG.debug(String.format(&quot;processPostTargetExecution converting JsonNode to string size=%s&quot;,</span>
-<span class="nc" id="L225">                        outputBody.length()));</span>
+<span class="fc bfc" id="L223" title="All 2 branches covered.">            if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L224">                LOG.debug(String.format(&quot;processPostTargetExecution converting JsonNode to string size=%s&quot;,</span>
+<span class="fc" id="L225">                        outputBody.length()));</span>
             }
 <span class="fc" id="L227">        } else {</span>
 <span class="fc" id="L228">            AtlasUtil.addAudit(session, getDocId(), String</span>
@@ -231,8 +231,8 @@ import io.atlasmap.v2.Validations;
         }
 <span class="fc" id="L232">        session.removeFieldWriter(getDocId());</span>
 
-<span class="pc bpc" id="L234" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L235">            LOG.debug(&quot;{}: processPostTargetExecution completed&quot;, getDocId());</span>
+<span class="fc bfc" id="L234" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L235">            LOG.debug(&quot;{}: processPostTargetExecution completed&quot;, getDocId());</span>
         }
 <span class="fc" id="L237">    }</span>
 

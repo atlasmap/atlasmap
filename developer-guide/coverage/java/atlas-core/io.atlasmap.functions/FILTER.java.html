@@ -44,42 +44,38 @@ import io.atlasmap.v2.FieldGroup;
 <span class="fc bfc" id="L44" title="All 2 branches covered.">            for (Field f : collection) {</span>
 <span class="fc" id="L45">                if (</span>
 <span class="fc bfc" id="L46" title="All 2 branches covered.">                    filterExpression.matches((subCtx) -&gt; {</span>
-<span class="fc" id="L47">                        Field extracted = AtlasPath.extractChildren(f, subCtx);</span>
-<span class="pc bpc" id="L48" title="1 of 2 branches missed.">                        if (extracted instanceof FieldGroup) {</span>
-<span class="nc" id="L49">                            return extracted;</span>
-                        }
-<span class="pc bpc" id="L51" title="1 of 2 branches missed.">                        return extracted != null ? extracted.getValue() : null;</span>
+<span class="fc" id="L47">                        return AtlasPath.extractChildren(f, subCtx);</span>
                     })
                 ) {
-<span class="fc" id="L54">                    adjustRootCollectionIndex(f, index);</span>
-<span class="fc" id="L55">                    index++;</span>
-<span class="fc" id="L56">                    filtered.getField().add(f);</span>
+<span class="fc" id="L50">                    adjustRootCollectionIndex(f, index);</span>
+<span class="fc" id="L51">                    index++;</span>
+<span class="fc" id="L52">                    filtered.getField().add(f);</span>
                 }
-<span class="fc" id="L58">            }</span>
-<span class="fc" id="L59">            return filtered;</span>
+<span class="fc" id="L54">            }</span>
+<span class="fc" id="L55">            return filtered;</span>
         };
     }
 
     private void adjustRootCollectionIndex(Field f, int index) {
-<span class="fc" id="L64">        AtlasPath filteredPath = new AtlasPath(f.getPath());</span>
-<span class="fc" id="L65">        Integer collectionSegmentIndex = null;</span>
-<span class="fc" id="L66">        List&lt;AtlasPath.SegmentContext&gt; filteredSegments = filteredPath.getSegments(true);</span>
-<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if (filteredSegments.get(0).getCollectionIndex() != null) {</span>
-<span class="nc" id="L68">            collectionSegmentIndex = 0;</span>
-<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        } else if (filteredSegments.get(1).getCollectionIndex() != null) {</span>
-<span class="fc" id="L70">            collectionSegmentIndex = 1;</span>
+<span class="fc" id="L60">        AtlasPath filteredPath = new AtlasPath(f.getPath());</span>
+<span class="fc" id="L61">        Integer collectionSegmentIndex = null;</span>
+<span class="fc" id="L62">        List&lt;AtlasPath.SegmentContext&gt; filteredSegments = filteredPath.getSegments(true);</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">        if (filteredSegments.get(0).getCollectionIndex() != null) {</span>
+<span class="nc" id="L64">            collectionSegmentIndex = 0;</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        } else if (filteredSegments.get(1).getCollectionIndex() != null) {</span>
+<span class="fc" id="L66">            collectionSegmentIndex = 1;</span>
         }
 
-<span class="pc bpc" id="L73" title="1 of 2 branches missed.">        if (collectionSegmentIndex != null) {</span>
-<span class="pc bpc" id="L74" title="1 of 2 branches missed.">            if (f instanceof FieldGroup) {</span>
-<span class="fc" id="L75">                AtlasPath.setCollectionIndexRecursively((FieldGroup) f, collectionSegmentIndex, index);</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        if (collectionSegmentIndex != null) {</span>
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">            if (f instanceof FieldGroup) {</span>
+<span class="fc" id="L71">                AtlasPath.setCollectionIndexRecursively((FieldGroup) f, collectionSegmentIndex, index);</span>
             } else {
-<span class="nc" id="L77">                filteredPath.setCollectionIndex(collectionSegmentIndex, index);</span>
-<span class="nc" id="L78">                f.setPath(filteredPath.getOriginalPath());</span>
+<span class="nc" id="L73">                filteredPath.setCollectionIndex(collectionSegmentIndex, index);</span>
+<span class="nc" id="L74">                f.setPath(filteredPath.getOriginalPath());</span>
             }
 
         }
-<span class="fc" id="L82">    }</span>
+<span class="fc" id="L78">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

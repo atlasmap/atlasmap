@@ -82,9 +82,9 @@ public class JavaFieldWriter implements AtlasFieldWriter {
             }
 
 <span class="pc bpc" id="L84" title="1 of 2 branches missed.">            for (SegmentContext segmentContext : path.getSegments(false)) {</span>
-<span class="pc bpc" id="L85" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L86">                    LOG.debug(&quot;Now processing segment: &quot; + segmentContext);</span>
-<span class="nc" id="L87">                    LOG.debug(&quot;Parent object is currently: &quot; + writeDocumentToString(false, parentObject));</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">                if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L86">                    LOG.debug(&quot;Now processing segment: &quot; + segmentContext);</span>
+<span class="fc" id="L87">                    LOG.debug(&quot;Parent object is currently: &quot; + writeDocumentToString(false, parentObject));</span>
                 }
 
 <span class="fc bfc" id="L90" title="All 2 branches covered.">                if (segmentContext == path.getLastSegment()) {</span>
@@ -232,17 +232,17 @@ public class JavaFieldWriter implements AtlasFieldWriter {
 
     private String writeDocumentToString(boolean stripSpaces, Object object) throws AtlasException {
         try {
-<span class="nc bnc" id="L235" title="All 2 branches missed.">            if (object == null) {</span>
+<span class="pc bpc" id="L235" title="1 of 2 branches missed.">            if (object == null) {</span>
 <span class="nc" id="L236">                return &quot;&quot;;</span>
             }
 
-<span class="nc" id="L239">            String result = object.toString();</span>
+<span class="fc" id="L239">            String result = object.toString();</span>
 
-<span class="nc bnc" id="L241" title="All 2 branches missed.">            if (stripSpaces) {</span>
+<span class="pc bpc" id="L241" title="1 of 2 branches missed.">            if (stripSpaces) {</span>
 <span class="nc" id="L242">                result = result.replaceAll(&quot;\n|\r&quot;, &quot;&quot;);</span>
 <span class="nc" id="L243">                result = result.replaceAll(&quot;&gt; *?&lt;&quot;, &quot;&gt;&lt;&quot;);</span>
             }
-<span class="nc" id="L245">            return result;</span>
+<span class="fc" id="L245">            return result;</span>
 <span class="nc" id="L246">        } catch (Exception e) {</span>
 <span class="nc" id="L247">            throw new AtlasException(e);</span>
         }

@@ -170,8 +170,8 @@ public class JavaValidationService extends BaseModuleValidationService&lt;JavaFi
 <span class="fc" id="L170">            int minor = 0xFFFF &amp; data.readShort();</span>
 <span class="fc" id="L171">            major = new Integer(0xFFFF &amp; data.readShort());</span>
 
-<span class="pc bpc" id="L173" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L174">                LOG.debug(String.format(&quot;Detected class: %s version major: %s minor: %s&quot;, className, magic, minor));</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">            if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L174">                LOG.debug(String.format(&quot;Detected class: %s version major: %s minor: %s&quot;, className, magic, minor));</span>
             }
 <span class="nc" id="L176">        } catch (IOException e) {</span>
 <span class="nc" id="L177">            LOG.error(String.format(&quot;Error detected version for class: %s msg: %s&quot;, className, e.getMessage()), e);</span>

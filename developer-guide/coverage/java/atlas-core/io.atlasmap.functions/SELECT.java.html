@@ -37,14 +37,14 @@ import io.atlasmap.v2.FieldGroup;
 <span class="fc" id="L37">        Expression parentExpression = args.get(0);</span>
 <span class="fc" id="L38">        Expression selectExpression =args.get(1);</span>
 <span class="fc" id="L39">        return (ctx) -&gt; {</span>
-<span class="fc" id="L40">            Field parent = (Field) parentExpression.evaluate(ctx);</span>
+<span class="fc" id="L40">            Field parent = parentExpression.evaluate(ctx);</span>
 <span class="pc bpc" id="L41" title="1 of 2 branches missed.">            List&lt;Field&gt; collection = parent instanceof FieldGroup ? ((FieldGroup)parent).getField() : Arrays.asList(parent);</span>
 <span class="fc" id="L42">            List&lt;Field&gt; selected = new ArrayList&lt;&gt;();</span>
 <span class="fc" id="L43">            final FieldGroup answer = AtlasModelFactory.createFieldGroupFrom(parent, true);</span>
-<span class="fc" id="L44">            answer.setPath(FUNCTION_PATH);</span>
+<span class="fc" id="L44">            answer.setPath(AtlasModelFactory.GENERATED_PATH);</span>
 <span class="fc bfc" id="L45" title="All 2 branches covered.">            for (Field f : collection) {</span>
 <span class="fc" id="L46">                Field fs = (Field) selectExpression.evaluate((subCtx) -&gt; {</span>
-<span class="pc bpc" id="L47" title="1 of 4 branches missed.">                    if (subCtx != null &amp;&amp; FUNCTION_PATH.equals(answer.getPath())) {</span>
+<span class="pc bpc" id="L47" title="1 of 4 branches missed.">                    if (subCtx != null &amp;&amp; AtlasModelFactory.GENERATED_PATH.equals(answer.getPath())) {</span>
 <span class="fc" id="L48">                        answer.setPath(parent.getPath() +</span>
 <span class="pc bpc" id="L49" title="1 of 2 branches missed.">                            (subCtx.startsWith(AtlasPath.PATH_SEPARATOR) ? subCtx : (AtlasPath.PATH_SEPARATOR + subCtx)));</span>
                     }

@@ -20,21 +20,19 @@ import java.util.List;
 import io.atlasmap.core.BaseFunctionFactory;
 import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.parser.ParseException;
+import io.atlasmap.v2.AtlasModelFactory;
 
-<span class="fc" id="L24">public class TOLOWER extends BaseFunctionFactory {</span>
+<span class="fc" id="L25">public class TOLOWER extends BaseFunctionFactory {</span>
 
     @Override
     public Expression create(List&lt;Expression&gt; args) throws ParseException {
-<span class="pc bpc" id="L28" title="1 of 2 branches missed.">        if (args.size() != 1) {</span>
-<span class="nc" id="L29">            throw new ParseException(&quot;TOLOWER expects 1 argument.&quot;);</span>
+<span class="pc bpc" id="L29" title="1 of 2 branches missed.">        if (args.size() != 1) {</span>
+<span class="nc" id="L30">            throw new ParseException(&quot;TOLOWER expects 1 argument.&quot;);</span>
         }
-<span class="fc" id="L31">        Expression arg = args.get(0);</span>
-<span class="fc" id="L32">        return (ctx) -&gt; {</span>
-<span class="fc" id="L33">            Object value = arg.evaluate(ctx);</span>
-<span class="pc bpc" id="L34" title="1 of 2 branches missed.">            if (value == null) {</span>
-<span class="nc" id="L35">                return null;</span>
-            }
-<span class="fc" id="L37">            return value.toString().toLowerCase();</span>
+<span class="fc" id="L32">        Expression arg = args.get(0);</span>
+<span class="fc" id="L33">        return (ctx) -&gt; {</span>
+<span class="fc" id="L34">            Object value = arg.evaluate(ctx).getValue();</span>
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">            return AtlasModelFactory.wrapWithField(value == null ? null : value.toString().toLowerCase());</span>
         };
     }
 

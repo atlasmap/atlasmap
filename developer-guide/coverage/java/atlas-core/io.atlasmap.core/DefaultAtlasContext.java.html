@@ -438,8 +438,8 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         }
 
 <span class="fc" id="L440">        DefaultAtlasSession session = (DefaultAtlasSession) userSession;</span>
-<span class="pc bpc" id="L441" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc bnc" id="L442" title="All 2 branches missed.">            LOG.debug(&quot;Begin process {}&quot;, (session == null ? null : session.toString()));</span>
+<span class="fc bfc" id="L441" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="pc bpc" id="L442" title="1 of 2 branches missed.">            LOG.debug(&quot;Begin process {}&quot;, (session == null ? null : session.toString()));</span>
         }
 
 <span class="fc" id="L445">        session.head().unset();</span>
@@ -560,16 +560,16 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 <span class="fc" id="L560">            module.processPostTargetExecution(session);</span>
 <span class="fc" id="L561">        }</span>
 
-<span class="pc bpc" id="L563" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc bnc" id="L564" title="All 2 branches missed.">            LOG.debug(&quot;End process {}&quot;, session == null ? null : session.toString());</span>
+<span class="fc bfc" id="L563" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="pc bpc" id="L564" title="1 of 2 branches missed.">            LOG.debug(&quot;End process {}&quot;, session == null ? null : session.toString());</span>
         }
 <span class="fc" id="L566">    }</span>
 
     // just unwrap collection mappings to be compatible with older UI
     private final List&lt;Mapping&gt; unwrapCollectionMappings(DefaultAtlasSession session, BaseMapping baseMapping) {
 <span class="fc bfc" id="L570" title="All 4 branches covered.">        if (baseMapping.getMappingType() == null || !baseMapping.getMappingType().equals(MappingType.COLLECTION)) {</span>
-<span class="pc bpc" id="L571" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L572">                LOG.debug(&quot;Mapping is not a collection mapping, not cloning: {}&quot;, baseMapping);</span>
+<span class="fc bfc" id="L571" title="All 2 branches covered.">            if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L572">                LOG.debug(&quot;Mapping is not a collection mapping, not cloning: {}&quot;, baseMapping);</span>
             }
 <span class="fc" id="L574">            return Arrays.asList((Mapping) baseMapping);</span>
         }
@@ -872,8 +872,8 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         }
 
 <span class="fc" id="L874">        DefaultAtlasSession session = (DefaultAtlasSession) userSession;</span>
-<span class="pc bpc" id="L875" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L876">            LOG.debug(&quot;Begin processValidation {}&quot;, session);</span>
+<span class="fc bfc" id="L875" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L876">            LOG.debug(&quot;Begin processValidation {}&quot;, session);</span>
         }
 
 <span class="fc" id="L879">        List&lt;Validation&gt; validations = getContextFactory().getValidationService().validateMapping(session.getMapping());</span>
@@ -881,8 +881,8 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 <span class="fc" id="L881">            session.getValidations().getValidation().addAll(validations);</span>
         }
 
-<span class="pc bpc" id="L884" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc bnc" id="L885" title="All 2 branches missed.">            LOG.debug(&quot;Detected {} core validation notices&quot;, validations == null ? 0 : validations.size());</span>
+<span class="fc bfc" id="L884" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="pc bpc" id="L885" title="1 of 2 branches missed.">            LOG.debug(&quot;Detected {} core validation notices&quot;, validations == null ? 0 : validations.size());</span>
         }
 
 <span class="fc bfc" id="L888" title="All 2 branches covered.">        for (AtlasModule module : getSourceModules().values()) {</span>
@@ -892,8 +892,8 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 <span class="fc" id="L892">            module.processPreValidation(session);</span>
 <span class="fc" id="L893">        }</span>
 
-<span class="pc bpc" id="L895" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L896">            LOG.debug(&quot;End processValidation {}&quot;, session);</span>
+<span class="fc bfc" id="L895" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L896">            LOG.debug(&quot;End processValidation {}&quot;, session);</span>
         }
 <span class="fc" id="L898">    }</span>
 

@@ -64,9 +64,9 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
 <span class="fc" id="L64">            throw new AtlasException(new IllegalArgumentException(&quot;Argument 'field' cannot be null&quot;));</span>
         }
 
-<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L68">            LOG.debug(&quot;Now processing field path={} type={} value={}&quot;, targetField.getPath(), targetField.getFieldType(),</span>
-<span class="nc" id="L69">                    targetField.getValue());</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L68">            LOG.debug(&quot;Now processing field path={} type={} value={}&quot;, targetField.getPath(), targetField.getFieldType(),</span>
+<span class="fc" id="L69">                    targetField.getValue());</span>
         }
 
 <span class="fc" id="L72">        XmlPath path = new XmlPath(targetField.getPath());</span>
@@ -74,16 +74,16 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
 <span class="fc" id="L74">        Element parentNode = null;</span>
 <span class="fc" id="L75">        XmlSegmentContext parentSegment = null;</span>
 <span class="fc bfc" id="L76" title="All 2 branches covered.">        for (XmlSegmentContext segment : path.getXmlSegments(false)) {</span>
-<span class="pc bpc" id="L77" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L78">                LOG.debug(&quot;Now processing segment: {}&quot;, segment);</span>
-<span class="nc" id="L79">                LOG.debug(&quot;Parent element is currently: {}&quot;, xmlHelper.writeDocumentToString(true, parentNode));</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">            if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L78">                LOG.debug(&quot;Now processing segment: {}&quot;, segment);</span>
+<span class="fc" id="L79">                LOG.debug(&quot;Parent element is currently: {}&quot;, xmlHelper.writeDocumentToString(true, parentNode));</span>
             }
 <span class="fc bfc" id="L81" title="All 2 branches covered.">            if (parentNode == null) {</span>
                 // processing root node
 <span class="fc" id="L83">                parentNode = document.getDocumentElement();</span>
 <span class="fc bfc" id="L84" title="All 2 branches covered.">                if (parentNode == null) {</span>
-<span class="pc bpc" id="L85" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L86">                        LOG.debug(&quot;Creating root element with name: {}&quot;, segment.getName());</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L86">                        LOG.debug(&quot;Creating root element with name: {}&quot;, segment.getName());</span>
                     }
                     // no root node exists yet, create root node with this segment name;
 <span class="fc" id="L89">                    Element rootNode = createElement(segment);</span>
@@ -98,11 +98,11 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
                 }
 <span class="fc" id="L99">                parentSegment = segment;</span>
             } else {
-<span class="pc bpc" id="L101" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc bnc" id="L102" title="All 2 branches missed.">                    if (segment.equals(lastSegment)) {</span>
-<span class="nc" id="L103">                        LOG.debug(&quot;Now processing field value segment: {}&quot;, segment);</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">                if (LOG.isDebugEnabled()) {</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">                    if (segment.equals(lastSegment)) {</span>
+<span class="fc" id="L103">                        LOG.debug(&quot;Now processing field value segment: {}&quot;, segment);</span>
                     } else {
-<span class="nc" id="L105">                        LOG.debug(&quot;Now processing parent segment: {}&quot;, segment);</span>
+<span class="fc" id="L105">                        LOG.debug(&quot;Now processing parent segment: {}&quot;, segment);</span>
                     }
                 }
 
@@ -143,9 +143,9 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
 <span class="fc" id="L143">    }</span>
 
     private void writeValue(Element parentNode, XmlSegmentContext segment, Field field) throws AtlasException {
-<span class="pc bpc" id="L146" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L147">            LOG.debug(&quot;Writing field value in parent node '{}', parentNode: {}&quot;,</span>
-<span class="nc" id="L148">                    segment, xmlHelper.writeDocumentToString(true, parentNode));</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L147">            LOG.debug(&quot;Writing field value in parent node '{}', parentNode: {}&quot;,</span>
+<span class="fc" id="L148">                    segment, xmlHelper.writeDocumentToString(true, parentNode));</span>
         }
 <span class="fc" id="L150">        String value = convertValue(field);</span>
 <span class="fc bfc" id="L151" title="All 2 branches covered.">        if (segment.isAttribute()) {</span>
@@ -178,15 +178,15 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
 <span class="fc" id="L178">            parentNode.setTextContent(value);</span>
         }
 
-<span class="pc bpc" id="L181" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L182">            LOG.debug(&quot;Parent node after value written: {}&quot;, xmlHelper.writeDocumentToString(true, parentNode));</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L182">            LOG.debug(&quot;Parent node after value written: {}&quot;, xmlHelper.writeDocumentToString(true, parentNode));</span>
         }
 <span class="fc" id="L184">    }</span>
 
     private Element getChildNode(Element parentNode, XmlSegmentContext parentSegment, XmlSegmentContext segment) throws AtlasException {
-<span class="pc bpc" id="L187" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L188">            LOG.debug(&quot;Looking for child node '{}' in parent '{}': {}&quot;,</span>
-<span class="nc" id="L189">                    segment, parentSegment, xmlHelper.writeDocumentToString(true, parentNode));</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L188">            LOG.debug(&quot;Looking for child node '{}' in parent '{}': {}&quot;,</span>
+<span class="fc" id="L189">                    segment, parentSegment, xmlHelper.writeDocumentToString(true, parentNode));</span>
         }
 <span class="pc bpc" id="L191" title="1 of 2 branches missed.">        if (parentNode == null) {</span>
 <span class="nc" id="L192">            return null;</span>
@@ -197,9 +197,9 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
 <span class="fc" id="L197">            cleanedSegmentName = namespaceAlias + &quot;:&quot; + cleanedSegmentName;</span>
         }
 <span class="fc" id="L199">        List&lt;Element&gt; children = XmlIOHelper.getChildrenWithName(cleanedSegmentName, parentNode);</span>
-<span class="pc bpc" id="L200" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L201">            LOG.debug(&quot;Found {} children in '{}' with the name '{}'&quot;,</span>
-<span class="nc" id="L202">                    children.size(), parentSegment, cleanedSegmentName);</span>
+<span class="fc bfc" id="L200" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L201">            LOG.debug(&quot;Found {} children in '{}' with the name '{}'&quot;,</span>
+<span class="fc" id="L202">                    children.size(), parentSegment, cleanedSegmentName);</span>
         }
 <span class="fc bfc" id="L204" title="All 2 branches covered.">        Element childNode = children.size() &gt; 0 ? children.get(0) : null;</span>
 <span class="fc bfc" id="L205" title="All 4 branches covered.">        if (children.size() &gt; 0 &amp;&amp; segment.getCollectionType() != CollectionType.NONE) {</span>
@@ -209,20 +209,20 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
 <span class="fc" id="L209">                childNode = children.get(index);</span>
             }
         }
-<span class="pc bpc" id="L212" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc bnc" id="L213" title="All 2 branches missed.">            if (childNode == null) {</span>
-<span class="nc" id="L214">                LOG.debug(&quot;Could not find child node '{}' in parent '{}'&quot;, segment, parentSegment);</span>
+<span class="fc bfc" id="L212" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc bfc" id="L213" title="All 2 branches covered.">            if (childNode == null) {</span>
+<span class="fc" id="L214">                LOG.debug(&quot;Could not find child node '{}' in parent '{}'&quot;, segment, parentSegment);</span>
             } else {
-<span class="nc" id="L216">                LOG.debug(&quot;Found child node '{}' in parent '{}', class: {}, node: {}&quot;,</span>
-<span class="nc" id="L217">                        segment, parentSegment, childNode.getClass().getName(), xmlHelper.writeDocumentToString(true, childNode));</span>
+<span class="fc" id="L216">                LOG.debug(&quot;Found child node '{}' in parent '{}', class: {}, node: {}&quot;,</span>
+<span class="fc" id="L217">                        segment, parentSegment, childNode.getClass().getName(), xmlHelper.writeDocumentToString(true, childNode));</span>
             }
         }
 <span class="fc" id="L220">        return childNode;</span>
     }
 
     private Element createParentNode(Element parentNode, XmlSegmentContext parentSegment, XmlSegmentContext segment) throws AtlasException {
-<span class="pc bpc" id="L224" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L225">            LOG.debug(&quot;Creating parent node '{}' under previous parent '{}'.&quot;, segment, parentSegment);</span>
+<span class="fc bfc" id="L224" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L225">            LOG.debug(&quot;Creating parent node '{}' under previous parent '{}'.&quot;, segment, parentSegment);</span>
         }
 <span class="fc" id="L227">        Element childNode = null;</span>
 <span class="fc" id="L228">        String cleanedSegmentName = segment.getName();</span>
@@ -239,8 +239,8 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
 <span class="fc" id="L239">            List&lt;Element&gt; children = XmlIOHelper.getChildrenWithName(cleanedSegmentName, parentNode);</span>
 
 <span class="pc bpc" id="L241" title="1 of 2 branches missed.">            if (children.size() &lt; (index + 1)) {</span>
-<span class="pc bpc" id="L242" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L243">                    LOG.debug(&quot;Child Element Array is too small, resizing to accomodate index: {}, current array: {}&quot;, index, children);</span>
+<span class="fc bfc" id="L242" title="All 2 branches covered.">                if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L243">                    LOG.debug(&quot;Child Element Array is too small, resizing to accomodate index: {}, current array: {}&quot;, index, children);</span>
                 }
                 // if our array doesn't have index + 1 items in it, add objects until we have
                 // the index available
@@ -248,8 +248,8 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
 <span class="fc" id="L248">                    Element child = (Element) parentNode.appendChild(createElement(segment));</span>
 <span class="fc" id="L249">                    children.add(child);</span>
 <span class="fc" id="L250">                }</span>
-<span class="pc bpc" id="L251" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L252">                    LOG.debug(&quot;Child Element Array after resizing: {}&quot;, children);</span>
+<span class="fc bfc" id="L251" title="All 2 branches covered.">                if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L252">                    LOG.debug(&quot;Child Element Array after resizing: {}&quot;, children);</span>
                 }
             }
 <span class="fc" id="L255">            children = XmlIOHelper.getChildrenWithName(cleanedSegmentName, parentNode);</span>
@@ -257,20 +257,20 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
 <span class="fc" id="L257">        } else {</span>
 <span class="fc" id="L258">            childNode = (Element) parentNode.appendChild(createElement(segment));</span>
         }
-<span class="pc bpc" id="L260" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L261">            LOG.debug(&quot;Parent Node '{}' after adding child parent node '{}': {}&quot;,</span>
-<span class="nc" id="L262">                    parentSegment, segment, xmlHelper.writeDocumentToString(true, parentNode));</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L261">            LOG.debug(&quot;Parent Node '{}' after adding child parent node '{}': {}&quot;,</span>
+<span class="fc" id="L262">                    parentSegment, segment, xmlHelper.writeDocumentToString(true, parentNode));</span>
         }
 <span class="fc" id="L264">        return childNode;</span>
     }
 
     private Element createElement(XmlSegmentContext segment) throws AtlasException {
-<span class="pc bpc" id="L268" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L269">            LOG.debug(&quot;Creating element for segment '{}'.&quot;, segment);</span>
+<span class="fc bfc" id="L268" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L269">            LOG.debug(&quot;Creating element for segment '{}'.&quot;, segment);</span>
         }
 <span class="pc bpc" id="L271" title="1 of 2 branches missed.">        if (this.enableElementNamespaces) {</span>
-<span class="pc bpc" id="L272" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L273">                LOG.debug(&quot;Element namespaces are enabled, determining namespace.&quot;);</span>
+<span class="fc bfc" id="L272" title="All 2 branches covered.">            if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L273">                LOG.debug(&quot;Element namespaces are enabled, determining namespace.&quot;);</span>
             }
 <span class="fc" id="L275">            String namespaceAlias = null;</span>
 <span class="fc" id="L276">            String namespaceUri = null;</span>
@@ -296,9 +296,9 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
 <span class="fc" id="L296">        FieldType type = field.getFieldType();</span>
 <span class="fc" id="L297">        Object originalValue = field.getValue();</span>
 <span class="pc bpc" id="L298" title="1 of 2 branches missed.">        String value = originalValue != null ? String.valueOf(originalValue) : null;</span>
-<span class="pc bpc" id="L299" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc bnc" id="L300" title="All 2 branches missed.">            String valueClass = originalValue == null ? &quot;null&quot; : originalValue.getClass().getName();</span>
-<span class="nc" id="L301">            LOG.debug(&quot;Converted field value. Type: {}, originalValue: {}({}), to: '{}&quot;,</span>
+<span class="fc bfc" id="L299" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="pc bpc" id="L300" title="1 of 2 branches missed.">            String valueClass = originalValue == null ? &quot;null&quot; : originalValue.getClass().getName();</span>
+<span class="fc" id="L301">            LOG.debug(&quot;Converted field value. Type: {}, originalValue: {}({}), to: '{}&quot;,</span>
                     type, originalValue, valueClass, value);
         }
 <span class="fc" id="L304">        return value;</span>

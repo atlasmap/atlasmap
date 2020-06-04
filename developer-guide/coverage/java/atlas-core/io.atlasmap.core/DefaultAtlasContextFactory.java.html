@@ -328,8 +328,8 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 <span class="pc" id="L328">            }</span>
 <span class="fc" id="L329">        }</span>
 
-<span class="pc bpc" id="L331" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L332">            LOG.debug(&quot;Loaded: {} of {} detected modules&quot;, getModuleInfoRegistry().size(), serviceClasses.size());</span>
+<span class="fc bfc" id="L331" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L332">            LOG.debug(&quot;Loaded: {} of {} detected modules&quot;, getModuleInfoRegistry().size(), serviceClasses.size());</span>
         }
 <span class="fc" id="L334">    }</span>
 
@@ -351,8 +351,8 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         }
 
 <span class="pc bpc" id="L353" title="1 of 4 branches missed.">        if (isAtlasModuleInterface(clazz, moduleInterface) &amp;&amp; clazz.isAnnotationPresent(AtlasModuleDetail.class)) {</span>
-<span class="pc bpc" id="L354" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L355">                LOG.debug(&quot;{} is a '{}' implementation&quot;, clazz.getCanonicalName(), moduleInterface.getSimpleName());</span>
+<span class="fc bfc" id="L354" title="All 2 branches covered.">            if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L355">                LOG.debug(&quot;{} is a '{}' implementation&quot;, clazz.getCanonicalName(), moduleInterface.getSimpleName());</span>
             }
 <span class="fc" id="L357">            return true;</span>
         }
@@ -421,8 +421,8 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
             }
         }
 
-<span class="pc bpc" id="L424" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L425">            LOG.debug(&quot;Module: {} supports data formats: {}&quot;, clazz.getCanonicalName(), dataFormats);</span>
+<span class="fc bfc" id="L424" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L425">            LOG.debug(&quot;Module: {} supports data formats: {}&quot;, clazz.getCanonicalName(), dataFormats);</span>
         }
 
 <span class="fc" id="L428">        return dataFormats;</span>
@@ -443,8 +443,8 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
             }
         }
 
-<span class="pc bpc" id="L446" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L447">            LOG.debug(&quot;Module: {} config packages: {}&quot;, clazz.getCanonicalName(), configPackages);</span>
+<span class="fc bfc" id="L446" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L447">            LOG.debug(&quot;Module: {} config packages: {}&quot;, clazz.getCanonicalName(), configPackages);</span>
         }
 
 <span class="fc" id="L450">        return configPackages;</span>
@@ -466,8 +466,8 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 <span class="fc" id="L466">            factory.setObjectName();</span>
 <span class="pc bpc" id="L467" title="1 of 2 branches missed.">            if (!ManagementFactory.getPlatformMBeanServer().isRegistered(factory.getJmxObjectName())) {</span>
 <span class="fc" id="L468">                ManagementFactory.getPlatformMBeanServer().registerMBean(factory, factory.getJmxObjectName());</span>
-<span class="pc bpc" id="L469" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L470">                    LOG.debug(&quot;Registered AtlasContextFactory with JMX&quot;);</span>
+<span class="fc bfc" id="L469" title="All 2 branches covered.">                if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L470">                    LOG.debug(&quot;Registered AtlasContextFactory with JMX&quot;);</span>
                 }
             }
 <span class="nc" id="L473">        } catch (Exception e) {</span>

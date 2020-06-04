@@ -48,10 +48,10 @@ public class TargetValueConverter {
         }
 <span class="fc" id="L49">        Object sourceValue = sourceField.getValue();</span>
 
-<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L52">            LOG.debug(&quot;processTargetMapping srcPath={} srcVal={} srcType={}  tgtPath={} tgtdocId={}&quot;,</span>
-<span class="nc" id="L53">                sourceField.getPath(), sourceField.getValue(), sourceField.getFieldType(),</span>
-<span class="nc" id="L54">                targetField.getPath(), targetField.getDocId());</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L52">            LOG.debug(&quot;processTargetMapping srcPath={} srcVal={} srcType={}  tgtPath={} tgtdocId={}&quot;,</span>
+<span class="fc" id="L53">                sourceField.getPath(), sourceField.getValue(), sourceField.getFieldType(),</span>
+<span class="fc" id="L54">                targetField.getPath(), targetField.getDocId());</span>
         }
 
 <span class="fc bfc" id="L57" title="All 2 branches covered.">        String targetClassName = (targetField instanceof JavaField) ? ((JavaField) targetField).getClassName() : null;</span>

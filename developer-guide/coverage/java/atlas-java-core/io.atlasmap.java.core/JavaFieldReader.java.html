@@ -44,9 +44,9 @@ import io.atlasmap.v2.FieldType;
 <span class="fc" id="L44">            AtlasPath path = new AtlasPath(field.getPath());</span>
 
 <span class="fc" id="L46">            List&lt;Field&gt; fields = getFieldsForPath(session, sourceDocument, field, path, 0);</span>
-<span class="pc bpc" id="L47" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L48">                LOG.debug(&quot;Processed input field sPath=&quot; + field.getPath() + &quot; sV=&quot; + field.getValue()</span>
-<span class="nc" id="L49">                    + &quot; sT=&quot; + field.getFieldType() + &quot; docId: &quot; + field.getDocId());</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">            if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L48">                LOG.debug(&quot;Processed input field sPath=&quot; + field.getPath() + &quot; sV=&quot; + field.getValue()</span>
+<span class="fc" id="L49">                    + &quot; sT=&quot; + field.getFieldType() + &quot; docId: &quot; + field.getDocId());</span>
             }
 
 <span class="fc bfc" id="L52" title="All 4 branches covered.">            if (path.hasCollection() &amp;&amp; !path.isIndexedCollection()) {</span>

@@ -82,8 +82,8 @@ public final class XmlIOHelper {
 
     public String writeDocumentToString(boolean stripSpaces, Node node) throws AtlasException {
         try {
-<span class="pc bpc" id="L85" title="1 of 2 branches missed.">            if (node == null) {</span>
-<span class="nc" id="L86">                return &quot;&quot;;</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">            if (node == null) {</span>
+<span class="fc" id="L86">                return &quot;&quot;;</span>
             }
 <span class="fc" id="L88">            Transformer transformer = transformerFactory.newTransformer();</span>
 <span class="fc" id="L89">            StringWriter writer = new StringWriter();</span>

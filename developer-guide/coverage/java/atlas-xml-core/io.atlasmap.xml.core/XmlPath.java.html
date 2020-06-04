@@ -159,12 +159,12 @@ public class XmlPath extends AtlasPath {
 
         @Override
         public String toString() {
-<span class="nc bnc" id="L162" title="All 2 branches missed.">            return getCollectionType() == CollectionType.MAP</span>
-<span class="nc" id="L163">                ? String.format(&quot;XmlSegmentContext [namespace=%s, name=%s, expression=%s, collectionType=%s, mapKey=%s]&quot;,</span>
+<span class="pc bpc" id="L162" title="1 of 2 branches missed.">            return getCollectionType() == CollectionType.MAP</span>
+<span class="pc" id="L163">                ? String.format(&quot;XmlSegmentContext [namespace=%s, name=%s, expression=%s, collectionType=%s, mapKey=%s]&quot;,</span>
 <span class="nc" id="L164">                    namespace, getName(), getExpression(), getCollectionType(), getMapKey())</span>
-<span class="nc" id="L165">                : String.format(</span>
+<span class="fc" id="L165">                : String.format(</span>
                     &quot;XmlSegmentContext [namespace=%s, name=%s, expression=%s, collectionType=%s, collectionIndex=%s]&quot;,
-<span class="nc" id="L167">                    namespace, getName(), getExpression(), getCollectionType(), getCollectionIndex());</span>
+<span class="fc" id="L167">                    namespace, getName(), getExpression(), getCollectionType(), getCollectionIndex());</span>
         }
 
     }

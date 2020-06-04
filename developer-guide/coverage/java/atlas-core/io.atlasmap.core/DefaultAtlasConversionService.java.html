@@ -181,8 +181,8 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
 
     private void loadConverterMethod(AtlasConverter&lt;?&gt; atlasConverter,
         Map&lt;ConverterKey, ConverterMethodHolder&gt; methodsLoadMap, Map&lt;ConverterKey, ConverterMethodHolder&gt; customMethodsLoadMap) {
-<span class="pc bpc" id="L184" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L185">            LOG.debug(&quot;Loading converter : &quot; + atlasConverter.getClass().getCanonicalName());</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L185">            LOG.debug(&quot;Loading converter : &quot; + atlasConverter.getClass().getCanonicalName());</span>
         }
 
 <span class="fc" id="L188">        boolean inbuiltConverter = atlasConverter.getClass().getPackage().getName().startsWith(&quot;io.atlasmap&quot;);</span>

@@ -111,10 +111,10 @@ import io.atlasmap.v2.PropertyField;
                     }
                 } else {
 <span class="fc" id="L113">                    propertyField.setValue(propertyValue);</span>
-<span class="pc bpc" id="L114" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L115">                        LOG.debug(String.format(</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L115">                        LOG.debug(String.format(</span>
                                 &quot;Assigned environment variable for property field name=%s value=%s&quot;,
-<span class="nc" id="L117">                                propertyField.getName(), propertyField.getValue()));</span>
+<span class="fc" id="L117">                                propertyField.getName(), propertyField.getValue()));</span>
                     }
                 }
 <span class="fc" id="L120">                return true;</span>
@@ -146,10 +146,10 @@ import io.atlasmap.v2.PropertyField;
                     }
                 } else {
 <span class="fc" id="L148">                    propertyField.setValue(propertyValue);</span>
-<span class="pc bpc" id="L149" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L150">                        LOG.debug(String.format(</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L150">                        LOG.debug(String.format(</span>
                                 &quot;Assigned Java system property for property field name=%s value=%s&quot;,
-<span class="nc" id="L152">                                propertyField.getName(), propertyField.getValue()));</span>
+<span class="fc" id="L152">                                propertyField.getName(), propertyField.getValue()));</span>
                     }
                 }
 <span class="fc" id="L155">                return true;</span>
@@ -188,10 +188,10 @@ import io.atlasmap.v2.PropertyField;
                     }
                 } else {
 <span class="fc" id="L190">                    propertyField.setValue(prop.getValue());</span>
-<span class="pc bpc" id="L191" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L192">                        LOG.debug(</span>
-<span class="nc" id="L193">                                String.format(&quot;Assigned Mapping defined property for property field name=%s value=%s&quot;,</span>
-<span class="nc" id="L194">                                        propertyField.getName(), propertyField.getValue()));</span>
+<span class="fc bfc" id="L191" title="All 2 branches covered.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L192">                        LOG.debug(</span>
+<span class="fc" id="L193">                                String.format(&quot;Assigned Mapping defined property for property field name=%s value=%s&quot;,</span>
+<span class="fc" id="L194">                                        propertyField.getName(), propertyField.getValue()));</span>
                     }
                 }
 <span class="fc" id="L197">                return true;</span>
@@ -222,10 +222,10 @@ import io.atlasmap.v2.PropertyField;
             }
         } else {
 <span class="fc" id="L224">            propertyField.setValue(runtimeProperties.get(key));</span>
-<span class="pc bpc" id="L225" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L226">                LOG.debug(String.format(</span>
+<span class="fc bfc" id="L225" title="All 2 branches covered.">            if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L226">                LOG.debug(String.format(</span>
                         &quot;Assigned Runtime defined property for property field name=%s value=%s&quot;,
-<span class="nc" id="L228">                        propertyField.getName(), propertyField.getValue()));</span>
+<span class="fc" id="L228">                        propertyField.getName(), propertyField.getValue()));</span>
             }
         }
 <span class="fc" id="L231">        return true;</span>

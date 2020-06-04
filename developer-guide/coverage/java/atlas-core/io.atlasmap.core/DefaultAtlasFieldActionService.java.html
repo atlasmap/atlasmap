@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import io.atlasmap.api.AtlasSession;
@@ -52,53 +53,53 @@ import io.atlasmap.v2.SimpleField;
 
 public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
-<span class="fc" id="L55">    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasFieldActionService.class);</span>
-<span class="fc" id="L56">    private List&lt;ActionProcessor&gt; actionProcessors = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L57">    private ReadWriteLock actionProcessorsLock = new ReentrantReadWriteLock();</span>
-<span class="fc" id="L58">    private AtlasConversionService conversionService = null;</span>
-<span class="fc" id="L59">    private ActionResolver actionResolver = null;</span>
+<span class="fc" id="L56">    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasFieldActionService.class);</span>
+<span class="fc" id="L57">    private List&lt;ActionProcessor&gt; actionProcessors = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L58">    private ReadWriteLock actionProcessorsLock = new ReentrantReadWriteLock();</span>
+<span class="fc" id="L59">    private AtlasConversionService conversionService = null;</span>
+<span class="fc" id="L60">    private ActionResolver actionResolver = null;</span>
     private static DefaultAtlasFieldActionService instance;
 
-<span class="fc" id="L62">    private DefaultAtlasFieldActionService(AtlasConversionService conversionService) {</span>
-<span class="fc" id="L63">        this.conversionService = conversionService;</span>
-<span class="fc" id="L64">    }</span>
+<span class="fc" id="L63">    private DefaultAtlasFieldActionService(AtlasConversionService conversionService) {</span>
+<span class="fc" id="L64">        this.conversionService = conversionService;</span>
+<span class="fc" id="L65">    }</span>
 
     public static DefaultAtlasFieldActionService getInstance() {
-<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (instance == null) {</span>
-<span class="fc" id="L68">            synchronized (DefaultAtlasFieldActionService.class) {</span>
-<span class="pc bpc" id="L69" title="1 of 2 branches missed.">                if (instance == null) {</span>
-<span class="fc" id="L70">                    instance = new DefaultAtlasFieldActionService(DefaultAtlasConversionService.getInstance());</span>
-<span class="fc" id="L71">                    instance.init();</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        if (instance == null) {</span>
+<span class="fc" id="L69">            synchronized (DefaultAtlasFieldActionService.class) {</span>
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">                if (instance == null) {</span>
+<span class="fc" id="L71">                    instance = new DefaultAtlasFieldActionService(DefaultAtlasConversionService.getInstance());</span>
+<span class="fc" id="L72">                    instance.init();</span>
                 }
-<span class="fc" id="L73">            }</span>
+<span class="fc" id="L74">            }</span>
         }
-<span class="fc" id="L75">        return instance;</span>
+<span class="fc" id="L76">        return instance;</span>
     }
 
     public void init() {
         // TODO load custom field actions in application bundles
         // on hierarchical class loader environment
-<span class="fc" id="L81">        init(this.getClass().getClassLoader());</span>
-<span class="fc" id="L82">    }</span>
+<span class="fc" id="L82">        init(this.getClass().getClassLoader());</span>
+<span class="fc" id="L83">    }</span>
 
     private JavaType javaType(Type type) {
-<span class="nc" id="L85">        return TypeFactory.defaultInstance().constructType(type);</span>
+<span class="nc" id="L86">        return TypeFactory.defaultInstance().constructType(type);</span>
     }
 
     public void init(ClassLoader classLoader) {
-<span class="fc" id="L89">        Lock writeLock = actionProcessorsLock.writeLock();</span>
+<span class="fc" id="L90">        Lock writeLock = actionProcessorsLock.writeLock();</span>
         try {
-<span class="fc" id="L91">            writeLock.lock();</span>
-<span class="fc" id="L92">            actionProcessors.clear();</span>
-<span class="fc" id="L93">            this.actionResolver = ActionResolver.getInstance(classLoader);</span>
-<span class="fc" id="L94">            actionProcessors.addAll(loadFieldActions(classLoader));</span>
+<span class="fc" id="L92">            writeLock.lock();</span>
+<span class="fc" id="L93">            actionProcessors.clear();</span>
+<span class="fc" id="L94">            this.actionResolver = ActionResolver.getInstance(classLoader);</span>
+<span class="fc" id="L95">            actionProcessors.addAll(loadFieldActions(classLoader));</span>
         } finally {
-<span class="fc" id="L96">            writeLock.unlock();</span>
+<span class="fc" id="L97">            writeLock.unlock();</span>
         }
-<span class="fc" id="L98">    }</span>
+<span class="fc" id="L99">    }</span>
 
     public List&lt;ActionProcessor&gt; loadFieldActions() {
-<span class="nc" id="L101">        return loadFieldActions(this.getClass().getClassLoader());</span>
+<span class="nc" id="L102">        return loadFieldActions(this.getClass().getClassLoader());</span>
     }
 
     interface ActionProcessor {
@@ -108,399 +109,399 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
     }
 
     public List&lt;ActionProcessor&gt; loadFieldActions(ClassLoader classLoader) {
-<span class="fc" id="L111">        final ServiceLoader&lt;AtlasFieldAction&gt; fieldActionServiceLoader = ServiceLoader.load(AtlasFieldAction.class,</span>
+<span class="fc" id="L112">        final ServiceLoader&lt;AtlasFieldAction&gt; fieldActionServiceLoader = ServiceLoader.load(AtlasFieldAction.class,</span>
             classLoader);
-<span class="fc" id="L113">        final ServiceLoader&lt;io.atlasmap.api.AtlasFieldAction&gt; compat = ServiceLoader.load(io.atlasmap.api.AtlasFieldAction.class,</span>
+<span class="fc" id="L114">        final ServiceLoader&lt;io.atlasmap.api.AtlasFieldAction&gt; compat = ServiceLoader.load(io.atlasmap.api.AtlasFieldAction.class,</span>
             classLoader);
-<span class="fc" id="L115">        List&lt;ActionProcessor&gt; answer = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L116">        fieldActionServiceLoader.forEach(atlasFieldAction -&gt; createActionProcessor(atlasFieldAction, answer));</span>
-<span class="pc" id="L117">        compat.forEach(atlasFieldAction -&gt; createActionProcessor(atlasFieldAction, answer));</span>
+<span class="fc" id="L116">        List&lt;ActionProcessor&gt; answer = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L117">        fieldActionServiceLoader.forEach(atlasFieldAction -&gt; createActionProcessor(atlasFieldAction, answer));</span>
+<span class="pc" id="L118">        compat.forEach(atlasFieldAction -&gt; createActionProcessor(atlasFieldAction, answer));</span>
 
-<span class="pc bpc" id="L119" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L120">            LOG.debug(String.format(&quot;Loaded %s Field Actions&quot;, answer.size()));</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L121">            LOG.debug(String.format(&quot;Loaded %s Field Actions&quot;, answer.size()));</span>
         }
-<span class="fc" id="L122">        return answer;</span>
+<span class="fc" id="L123">        return answer;</span>
     }
 
     private void createActionProcessor(AtlasFieldAction atlasFieldAction, List&lt;ActionProcessor&gt; answer) {
-<span class="pc bpc" id="L126" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L127">            LOG.debug(&quot;Loading FieldAction class: &quot; + atlasFieldAction.getClass().getCanonicalName());</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L128">            LOG.debug(&quot;Loading FieldAction class: &quot; + atlasFieldAction.getClass().getCanonicalName());</span>
         }
 
-<span class="fc" id="L130">        Class&lt;?&gt; clazz = atlasFieldAction.getClass();</span>
-<span class="fc" id="L131">        Method[] methods = clazz.getMethods();</span>
-<span class="fc bfc" id="L132" title="All 2 branches covered.">        for (Method method : methods) {</span>
+<span class="fc" id="L131">        Class&lt;?&gt; clazz = atlasFieldAction.getClass();</span>
+<span class="fc" id="L132">        Method[] methods = clazz.getMethods();</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">        for (Method method : methods) {</span>
 
             // Continue supporting creating details from @AtlasFieldActionInfo
-<span class="fc" id="L135">            ActionProcessor det = createDetailFromFieldActionInfo(clazz, method);</span>
-<span class="fc bfc" id="L136" title="All 2 branches covered.">            if (det != null) {</span>
-<span class="fc" id="L137">                answer.add(det);</span>
+<span class="fc" id="L136">            ActionProcessor det = createDetailFromFieldActionInfo(clazz, method);</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">            if (det != null) {</span>
+<span class="fc" id="L138">                answer.add(det);</span>
             }
 
             // Also support using new simpler @AtlasActionProcessor
-<span class="fc" id="L141">            det = createDetailFromProcessor(clazz, method);</span>
-<span class="fc bfc" id="L142" title="All 2 branches covered.">            if (det != null) {</span>
-<span class="fc" id="L143">                answer.add(det);</span>
+<span class="fc" id="L142">            det = createDetailFromProcessor(clazz, method);</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">            if (det != null) {</span>
+<span class="fc" id="L144">                answer.add(det);</span>
             }
         }
-<span class="fc" id="L146">    }</span>
+<span class="fc" id="L147">    }</span>
 
     private ActionProcessor createDetailFromFieldActionInfo(final Class&lt;?&gt; clazz, final Method method) {
-<span class="fc" id="L149">        AtlasFieldActionInfo annotation = method.getAnnotation(AtlasFieldActionInfo.class);</span>
-<span class="fc bfc" id="L150" title="All 2 branches covered.">        if (annotation == null) {</span>
-<span class="fc" id="L151">            return null;</span>
+<span class="fc" id="L150">        AtlasFieldActionInfo annotation = method.getAnnotation(AtlasFieldActionInfo.class);</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">        if (annotation == null) {</span>
+<span class="fc" id="L152">            return null;</span>
         }
 
-<span class="fc" id="L154">        final ActionDetail det = new ActionDetail();</span>
-<span class="fc" id="L155">        det.setClassName(clazz.getName());</span>
-<span class="fc" id="L156">        det.setMethod(method.getName());</span>
-<span class="fc" id="L157">        det.setName(annotation.name());</span>
-<span class="fc" id="L158">        det.setSourceType(annotation.sourceType());</span>
-<span class="fc" id="L159">        det.setTargetType(annotation.targetType());</span>
-<span class="fc" id="L160">        CollectionType sourceCollection = annotation.sourceCollectionType();</span>
-<span class="fc" id="L161">        CollectionType targetCollection = annotation.sourceCollectionType();</span>
-<span class="pc bpc" id="L162" title="2 of 4 branches missed.">        if (sourceCollection != null &amp;&amp; sourceCollection != CollectionType.NONE) {</span>
-<span class="nc" id="L163">            det.setMultiplicity(Multiplicity.MANY_TO_ONE);</span>
-<span class="pc bpc" id="L164" title="2 of 4 branches missed.">        } else if (targetCollection != null &amp;&amp; targetCollection != CollectionType.NONE) {</span>
-<span class="nc" id="L165">            det.setMultiplicity(Multiplicity.ONE_TO_MANY);</span>
+<span class="fc" id="L155">        final ActionDetail det = new ActionDetail();</span>
+<span class="fc" id="L156">        det.setClassName(clazz.getName());</span>
+<span class="fc" id="L157">        det.setMethod(method.getName());</span>
+<span class="fc" id="L158">        det.setName(annotation.name());</span>
+<span class="fc" id="L159">        det.setSourceType(annotation.sourceType());</span>
+<span class="fc" id="L160">        det.setTargetType(annotation.targetType());</span>
+<span class="fc" id="L161">        CollectionType sourceCollection = annotation.sourceCollectionType();</span>
+<span class="fc" id="L162">        CollectionType targetCollection = annotation.sourceCollectionType();</span>
+<span class="pc bpc" id="L163" title="2 of 4 branches missed.">        if (sourceCollection != null &amp;&amp; sourceCollection != CollectionType.NONE) {</span>
+<span class="nc" id="L164">            det.setMultiplicity(Multiplicity.MANY_TO_ONE);</span>
+<span class="pc bpc" id="L165" title="2 of 4 branches missed.">        } else if (targetCollection != null &amp;&amp; targetCollection != CollectionType.NONE) {</span>
+<span class="nc" id="L166">            det.setMultiplicity(Multiplicity.ONE_TO_MANY);</span>
         } else {
-<span class="fc" id="L167">            det.setMultiplicity(Multiplicity.ONE_TO_ONE);</span>
+<span class="fc" id="L168">            det.setMultiplicity(Multiplicity.ONE_TO_ONE);</span>
         }
 
         Class&lt;? extends Action&gt; actionClazz;
         try {
-<span class="nc" id="L172">            actionClazz = (Class&lt;? extends Action&gt;) Class.forName(&quot;io.atlasmap.v2.&quot; + annotation.name());</span>
-<span class="fc" id="L173">        } catch (Exception e) {</span>
-<span class="fc" id="L174">            actionClazz = null;</span>
-<span class="fc" id="L175">            det.setCustom(true);</span>
-<span class="nc" id="L176">        }</span>
+<span class="nc" id="L173">            actionClazz = (Class&lt;? extends Action&gt;) Class.forName(&quot;io.atlasmap.v2.&quot; + annotation.name());</span>
+<span class="fc" id="L174">        } catch (Exception e) {</span>
+<span class="fc" id="L175">            actionClazz = null;</span>
+<span class="fc" id="L176">            det.setCustom(true);</span>
+<span class="nc" id="L177">        }</span>
 
         try {
-<span class="fc" id="L179">            det.setActionSchema(actionClazz);</span>
-<span class="nc" id="L180">        } catch (Exception e) {</span>
-<span class="nc" id="L181">            LOG.error(String.format(&quot;Could not get json schema for action=%s msg=%s&quot;, annotation.name(), e.getMessage()), e);</span>
-<span class="fc" id="L182">        }</span>
+<span class="fc" id="L180">            det.setActionSchema(actionClazz);</span>
+<span class="nc" id="L181">        } catch (Exception e) {</span>
+<span class="nc" id="L182">            LOG.error(String.format(&quot;Could not get json schema for action=%s msg=%s&quot;, annotation.name(), e.getMessage()), e);</span>
+<span class="fc" id="L183">        }</span>
 
         try {
             // TODO https://github.com/atlasmap/atlasmap/issues/538
-<span class="pc bpc" id="L186" title="2 of 4 branches missed.">            if (det.isCustom() == null || !det.isCustom()) {</span>
-<span class="nc" id="L187">                det.setParameters(detectFieldActionParameters(actionClazz));</span>
+<span class="pc bpc" id="L187" title="2 of 4 branches missed.">            if (det.isCustom() == null || !det.isCustom()) {</span>
+<span class="nc" id="L188">                det.setParameters(detectFieldActionParameters(actionClazz));</span>
             }
-<span class="nc" id="L189">        } catch (ClassNotFoundException e) {</span>
-<span class="nc" id="L190">            LOG.error(String.format(&quot;Error detecting parameters for field action=%s msg=%s&quot;, annotation.name(), e.getMessage()), e);</span>
-<span class="fc" id="L191">        }</span>
+<span class="nc" id="L190">        } catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L191">            LOG.error(String.format(&quot;Error detecting parameters for field action=%s msg=%s&quot;, annotation.name(), e.getMessage()), e);</span>
+<span class="fc" id="L192">        }</span>
 
-<span class="pc bpc" id="L193" title="1 of 2 branches missed.">        if (LOG.isTraceEnabled()) {</span>
-<span class="nc" id="L194">            LOG.trace(&quot;Loaded FieldAction: &quot; + det.getName());</span>
+<span class="pc bpc" id="L194" title="1 of 2 branches missed.">        if (LOG.isTraceEnabled()) {</span>
+<span class="nc" id="L195">            LOG.trace(&quot;Loaded FieldAction: &quot; + det.getName());</span>
         }
 
-<span class="fc" id="L197">        Class&lt;? extends Action&gt; finalActionClazz = actionClazz;</span>
-<span class="fc" id="L198">        return new ActionProcessor() {</span>
+<span class="fc" id="L198">        Class&lt;? extends Action&gt; finalActionClazz = actionClazz;</span>
+<span class="fc" id="L199">        return new ActionProcessor() {</span>
 
             @Override
             public ActionDetail getActionDetail() {
-<span class="fc" id="L202">                return det;</span>
+<span class="fc" id="L203">                return det;</span>
             }
 
             @Override
             public Class&lt;? extends Action&gt; getActionClass() {
-<span class="nc" id="L207">                return finalActionClazz;</span>
+<span class="nc" id="L208">                return finalActionClazz;</span>
             }
 
             @Override
             public Object process(Action action, Object sourceObject) throws AtlasException {
-<span class="nc bnc" id="L212" title="All 2 branches missed.">                if (det == null) {</span>
-<span class="nc" id="L213">                    return sourceObject;</span>
+<span class="nc bnc" id="L213" title="All 2 branches missed.">                if (det == null) {</span>
+<span class="nc" id="L214">                    return sourceObject;</span>
                 }
 
-<span class="nc" id="L216">                Object targetObject = null;</span>
+<span class="nc" id="L217">                Object targetObject = null;</span>
                 try {
-<span class="nc" id="L218">                    Object convertedSourceObject = convertSourceObject(sourceObject);</span>
+<span class="nc" id="L219">                    Object convertedSourceObject = convertSourceObject(sourceObject);</span>
 
-<span class="nc bnc" id="L220" title="All 2 branches missed.">                    if (Modifier.isStatic(method.getModifiers())) {</span>
+<span class="nc bnc" id="L221" title="All 2 branches missed.">                    if (Modifier.isStatic(method.getModifiers())) {</span>
                         // TODO eliminate Action parameter even for OOTB
                         // we can use annotation also for the parameters instead
                         // cf. https://github.com/atlasmap/atlasmap/issues/536
-<span class="nc bnc" id="L224" title="All 4 branches missed.">                        if (det.isCustom() != null &amp;&amp; det.isCustom()) {</span>
-<span class="nc bnc" id="L225" title="All 2 branches missed.">                            targetObject = det.getMultiplicity() == Multiplicity.ZERO_TO_ONE</span>
-<span class="nc" id="L226">                                ? method.invoke(null) : method.invoke(null, convertedSourceObject);</span>
+<span class="nc bnc" id="L225" title="All 4 branches missed.">                        if (det.isCustom() != null &amp;&amp; det.isCustom()) {</span>
+<span class="nc bnc" id="L226" title="All 2 branches missed.">                            targetObject = det.getMultiplicity() == Multiplicity.ZERO_TO_ONE</span>
+<span class="nc" id="L227">                                ? method.invoke(null) : method.invoke(null, convertedSourceObject);</span>
                         } else {
-<span class="nc bnc" id="L228" title="All 2 branches missed.">                            targetObject = det.getMultiplicity() == Multiplicity.ZERO_TO_ONE</span>
-<span class="nc" id="L229">                                ? method.invoke(null, action) : method.invoke(null, action, convertedSourceObject);</span>
+<span class="nc bnc" id="L229" title="All 2 branches missed.">                            targetObject = det.getMultiplicity() == Multiplicity.ZERO_TO_ONE</span>
+<span class="nc" id="L230">                                ? method.invoke(null, action) : method.invoke(null, action, convertedSourceObject);</span>
                         }
                     } else {
-<span class="nc" id="L232">                        Object object = clazz.newInstance();</span>
-<span class="nc bnc" id="L233" title="All 4 branches missed.">                        if (det.isCustom() != null &amp;&amp; det.isCustom()) {</span>
-<span class="nc bnc" id="L234" title="All 2 branches missed.">                            targetObject = det.getMultiplicity() == Multiplicity.ZERO_TO_ONE</span>
-<span class="nc" id="L235">                                ? method.invoke(object) : method.invoke(object, convertedSourceObject);</span>
+<span class="nc" id="L233">                        Object object = clazz.newInstance();</span>
+<span class="nc bnc" id="L234" title="All 4 branches missed.">                        if (det.isCustom() != null &amp;&amp; det.isCustom()) {</span>
+<span class="nc bnc" id="L235" title="All 2 branches missed.">                            targetObject = det.getMultiplicity() == Multiplicity.ZERO_TO_ONE</span>
+<span class="nc" id="L236">                                ? method.invoke(object) : method.invoke(object, convertedSourceObject);</span>
                         } else {
-<span class="nc bnc" id="L237" title="All 2 branches missed.">                            targetObject = det.getMultiplicity() == Multiplicity.ZERO_TO_ONE</span>
-<span class="nc" id="L238">                                ? method.invoke(object, action) : method.invoke(object, action, convertedSourceObject);</span>
+<span class="nc bnc" id="L238" title="All 2 branches missed.">                            targetObject = det.getMultiplicity() == Multiplicity.ZERO_TO_ONE</span>
+<span class="nc" id="L239">                                ? method.invoke(object, action) : method.invoke(object, action, convertedSourceObject);</span>
                         }
                     }
-<span class="nc" id="L241">                } catch (Throwable e) {</span>
-<span class="nc" id="L242">                    throw new AtlasException(String.format(&quot;Error processing action %s&quot;, det.getName()), e);</span>
-<span class="nc" id="L243">                }</span>
-<span class="nc" id="L244">                return targetObject;</span>
+<span class="nc" id="L242">                } catch (Throwable e) {</span>
+<span class="nc" id="L243">                    throw new AtlasException(String.format(&quot;Error processing action %s&quot;, det.getName()), e);</span>
+<span class="nc" id="L244">                }</span>
+<span class="nc" id="L245">                return targetObject;</span>
             }
 
             private Object convertSourceObject(Object sourceObject) throws AtlasConversionException {
                 Class&lt;?&gt; paramType;
-<span class="nc" id="L249">                int paramCount = method.getParameterCount();</span>
-<span class="nc bnc" id="L250" title="All 2 branches missed.">                if (paramCount &lt; 2) {</span>
-<span class="nc" id="L251">                    return null;</span>
+<span class="nc" id="L250">                int paramCount = method.getParameterCount();</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">                if (paramCount &lt; 2) {</span>
+<span class="nc" id="L252">                    return null;</span>
                 }
-<span class="nc" id="L253">                paramType = method.getParameterTypes()[1];</span>
-<span class="nc bnc" id="L254" title="All 2 branches missed.">                if (paramType.isInstance(sourceObject)) {</span>
-<span class="nc" id="L255">                    return sourceObject;</span>
+<span class="nc" id="L254">                paramType = method.getParameterTypes()[1];</span>
+<span class="nc bnc" id="L255" title="All 2 branches missed.">                if (paramType.isInstance(sourceObject)) {</span>
+<span class="nc" id="L256">                    return sourceObject;</span>
                 }
-<span class="nc" id="L257">                return conversionService.convertType(sourceObject, null, paramType, null);</span>
+<span class="nc" id="L258">                return conversionService.convertType(sourceObject, null, paramType, null);</span>
             }
         };
     }
 
     private ActionProcessor createDetailFromProcessor(Class&lt;?&gt; clazz, Method method) {
-<span class="fc" id="L263">        AtlasActionProcessor annotation = method.getAnnotation(AtlasActionProcessor.class);</span>
-<span class="fc bfc" id="L264" title="All 2 branches covered.">        if (annotation == null) {</span>
-<span class="fc" id="L265">            return null;</span>
+<span class="fc" id="L264">        AtlasActionProcessor annotation = method.getAnnotation(AtlasActionProcessor.class);</span>
+<span class="fc bfc" id="L265" title="All 2 branches covered.">        if (annotation == null) {</span>
+<span class="fc" id="L266">            return null;</span>
         }
 
-<span class="pc bpc" id="L268" title="1 of 2 branches missed.">        if (method.getParameterCount() &lt; 1) {</span>
-<span class="nc" id="L269">            LOG.debug(&quot;Invalid @AtlasActionProcessor method.  Expected at least 1 parameter: &quot; + method);</span>
+<span class="pc bpc" id="L269" title="1 of 2 branches missed.">        if (method.getParameterCount() &lt; 1) {</span>
+<span class="nc" id="L270">            LOG.debug(&quot;Invalid @AtlasActionProcessor method.  Expected at least 1 parameter: &quot; + method);</span>
         }
 
-<span class="fc" id="L272">        Class&lt;? extends Action&gt; actionClazz = null;</span>
-<span class="pc bpc" id="L273" title="1 of 2 branches missed.">        if (Action.class.isAssignableFrom(method.getParameterTypes()[0])) {</span>
-<span class="fc" id="L274">            actionClazz = (Class&lt;? extends Action&gt;) method.getParameterTypes()[0];</span>
+<span class="fc" id="L273">        Class&lt;? extends Action&gt; actionClazz = null;</span>
+<span class="pc bpc" id="L274" title="1 of 2 branches missed.">        if (Action.class.isAssignableFrom(method.getParameterTypes()[0])) {</span>
+<span class="fc" id="L275">            actionClazz = (Class&lt;? extends Action&gt;) method.getParameterTypes()[0];</span>
         } else {
-<span class="nc" id="L276">            LOG.debug(&quot;Invalid @AtlasActionProcessor method.  1st parameter does not subclass &quot; + Action.class.getName() + &quot;: &quot; + method);</span>
+<span class="nc" id="L277">            LOG.debug(&quot;Invalid @AtlasActionProcessor method.  1st parameter does not subclass &quot; + Action.class.getName() + &quot;: &quot; + method);</span>
         }
 
 
-<span class="fc" id="L280">        final Class&lt;?&gt; targetClass = method.getReturnType();</span>
-<span class="fc" id="L281">        String name = actionResolver.toId(actionClazz);</span>
+<span class="fc" id="L281">        final Class&lt;?&gt; targetClass = method.getReturnType();</span>
+<span class="fc" id="L282">        String name = actionResolver.toId(actionClazz);</span>
 
-<span class="fc" id="L283">        ActionDetail det = new ActionDetail();</span>
-<span class="fc" id="L284">        det.setClassName(clazz.getName());</span>
-<span class="fc" id="L285">        det.setMethod(method.getName());</span>
-<span class="fc" id="L286">        det.setName(name);</span>
-<span class="fc" id="L287">        det.setTargetType(toFieldType(targetClass, method.getGenericReturnType()));</span>
-<span class="pc bpc" id="L288" title="1 of 2 branches missed.">        if (!clazz.getPackage().getName().equals(&quot;io.atlasmap.actions&quot;)) {</span>
-<span class="nc" id="L289">            det.setCustom(true);</span>
+<span class="fc" id="L284">        ActionDetail det = new ActionDetail();</span>
+<span class="fc" id="L285">        det.setClassName(clazz.getName());</span>
+<span class="fc" id="L286">        det.setMethod(method.getName());</span>
+<span class="fc" id="L287">        det.setName(name);</span>
+<span class="fc" id="L288">        det.setTargetType(toFieldType(targetClass, method.getGenericReturnType()));</span>
+<span class="pc bpc" id="L289" title="1 of 2 branches missed.">        if (!clazz.getPackage().getName().equals(&quot;io.atlasmap.actions&quot;)) {</span>
+<span class="nc" id="L290">            det.setCustom(true);</span>
         }
 
-<span class="fc" id="L292">        Type[] genericParameterTypes = method.getGenericParameterTypes();</span>
-<span class="fc bfc" id="L293" title="All 2 branches covered.">        if (genericParameterTypes.length &gt;= 2) {</span>
-<span class="fc" id="L294">            Class&lt;?&gt; sourceClass = method.getParameterTypes()[1];</span>
-<span class="fc bfc" id="L295" title="All 2 branches covered.">            if (annotation.sourceType() != FieldType.NONE) {</span>
-<span class="fc" id="L296">                det.setSourceType(annotation.sourceType());</span>
+<span class="fc" id="L293">        Type[] genericParameterTypes = method.getGenericParameterTypes();</span>
+<span class="fc bfc" id="L294" title="All 2 branches covered.">        if (genericParameterTypes.length &gt;= 2) {</span>
+<span class="fc" id="L295">            Class&lt;?&gt; sourceClass = method.getParameterTypes()[1];</span>
+<span class="fc bfc" id="L296" title="All 2 branches covered.">            if (annotation.sourceType() != FieldType.NONE) {</span>
+<span class="fc" id="L297">                det.setSourceType(annotation.sourceType());</span>
             } else {
-<span class="fc" id="L298">                det.setSourceType(toFieldType(sourceClass, method.getGenericParameterTypes()[1]));</span>
+<span class="fc" id="L299">                det.setSourceType(toFieldType(sourceClass, method.getGenericParameterTypes()[1]));</span>
             }
-<span class="fc" id="L300">            CollectionType sourceCollection = toFieldCollectionType(sourceClass);</span>
-<span class="fc" id="L301">            CollectionType targetCollection = toFieldCollectionType(targetClass);</span>
-<span class="fc bfc" id="L302" title="All 2 branches covered.">            if (sourceCollection != CollectionType.NONE) {</span>
-<span class="pc bpc" id="L303" title="1 of 2 branches missed.">                if (targetCollection != CollectionType.NONE) {</span>
-<span class="nc" id="L304">                    det.setMultiplicity(Multiplicity.MANY_TO_MANY);</span>
+<span class="fc" id="L301">            CollectionType sourceCollection = toFieldCollectionType(sourceClass);</span>
+<span class="fc" id="L302">            CollectionType targetCollection = toFieldCollectionType(targetClass);</span>
+<span class="fc bfc" id="L303" title="All 2 branches covered.">            if (sourceCollection != CollectionType.NONE) {</span>
+<span class="pc bpc" id="L304" title="1 of 2 branches missed.">                if (targetCollection != CollectionType.NONE) {</span>
+<span class="nc" id="L305">                    det.setMultiplicity(Multiplicity.MANY_TO_MANY);</span>
                 } else {
-<span class="fc" id="L306">                    det.setMultiplicity(Multiplicity.MANY_TO_ONE);</span>
+<span class="fc" id="L307">                    det.setMultiplicity(Multiplicity.MANY_TO_ONE);</span>
                 }
-<span class="fc bfc" id="L308" title="All 2 branches covered.">            } else if (targetCollection != CollectionType.NONE) {</span>
-<span class="fc" id="L309">                det.setMultiplicity(Multiplicity.ONE_TO_MANY);</span>
+<span class="fc bfc" id="L309" title="All 2 branches covered.">            } else if (targetCollection != CollectionType.NONE) {</span>
+<span class="fc" id="L310">                det.setMultiplicity(Multiplicity.ONE_TO_MANY);</span>
             } else {
-<span class="fc" id="L311">                det.setMultiplicity(Multiplicity.ONE_TO_ONE);</span>
+<span class="fc" id="L312">                det.setMultiplicity(Multiplicity.ONE_TO_ONE);</span>
             }
-<span class="pc bpc" id="L313" title="1 of 2 branches missed.">        } else if (genericParameterTypes.length == 1) {</span>
-<span class="fc" id="L314">            det.setMultiplicity(Multiplicity.ZERO_TO_ONE);</span>
+<span class="pc bpc" id="L314" title="1 of 2 branches missed.">        } else if (genericParameterTypes.length == 1) {</span>
+<span class="fc" id="L315">            det.setMultiplicity(Multiplicity.ZERO_TO_ONE);</span>
         }
 
         try {
-<span class="fc" id="L318">            det.setActionSchema(actionClazz);</span>
-<span class="nc" id="L319">        } catch (Exception e) {</span>
-<span class="nc" id="L320">            LOG.error(String.format(&quot;Could not get json schema for action=%s msg=%s&quot;, clazz.getName(), e.getMessage()), e);</span>
-<span class="fc" id="L321">        }</span>
+<span class="fc" id="L319">            det.setActionSchema(actionClazz);</span>
+<span class="nc" id="L320">        } catch (Exception e) {</span>
+<span class="nc" id="L321">            LOG.error(String.format(&quot;Could not get json schema for action=%s msg=%s&quot;, clazz.getName(), e.getMessage()), e);</span>
+<span class="fc" id="L322">        }</span>
 
         try {
-<span class="fc" id="L324">            det.setParameters(detectFieldActionParameters(actionClazz));</span>
-<span class="nc" id="L325">        } catch (ClassNotFoundException e) {</span>
-<span class="nc" id="L326">            LOG.error(String.format(&quot;Error detecting parameters for field action=%s msg=%s&quot;, det.getName(), e.getMessage()), e);</span>
-<span class="fc" id="L327">        }</span>
+<span class="fc" id="L325">            det.setParameters(detectFieldActionParameters(actionClazz));</span>
+<span class="nc" id="L326">        } catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L327">            LOG.error(String.format(&quot;Error detecting parameters for field action=%s msg=%s&quot;, det.getName(), e.getMessage()), e);</span>
+<span class="fc" id="L328">        }</span>
 
-<span class="fc" id="L329">        Object o = null;</span>
+<span class="fc" id="L330">        Object o = null;</span>
         try {
-<span class="pc bpc" id="L331" title="1 of 2 branches missed.">            o = Modifier.isStatic(method.getModifiers()) ? clazz.newInstance() : null;</span>
-<span class="nc" id="L332">        } catch (Throwable e) {</span>
-<span class="nc" id="L333">            LOG.error(String.format(&quot;Error creating object instance for action=%s msg=%s&quot;, det.getName(), e.getMessage()), e);</span>
-<span class="fc" id="L334">        }</span>
-<span class="fc" id="L335">        final Object object = o;</span>
+<span class="pc bpc" id="L332" title="1 of 2 branches missed.">            o = Modifier.isStatic(method.getModifiers()) ? clazz.newInstance() : null;</span>
+<span class="nc" id="L333">        } catch (Throwable e) {</span>
+<span class="nc" id="L334">            LOG.error(String.format(&quot;Error creating object instance for action=%s msg=%s&quot;, det.getName(), e.getMessage()), e);</span>
+<span class="fc" id="L335">        }</span>
+<span class="fc" id="L336">        final Object object = o;</span>
 
-<span class="fc" id="L337">        Class&lt;? extends Action&gt; finalActionClazz = actionClazz;</span>
+<span class="fc" id="L338">        Class&lt;? extends Action&gt; finalActionClazz = actionClazz;</span>
 
-<span class="fc" id="L339">        return new ActionProcessor() {</span>
+<span class="fc" id="L340">        return new ActionProcessor() {</span>
             @Override
             public ActionDetail getActionDetail() {
-<span class="fc" id="L342">                return det;</span>
+<span class="fc" id="L343">                return det;</span>
             }
 
             @Override
             public Class&lt;? extends Action&gt; getActionClass() {
-<span class="fc" id="L347">                return finalActionClazz;</span>
+<span class="fc" id="L348">                return finalActionClazz;</span>
             }
 
             @Override
             public Object process(Action action, Object sourceObject) throws AtlasException {
                 try {
-<span class="fc bfc" id="L353" title="All 2 branches covered.">                    if( det.getMultiplicity() == Multiplicity.ZERO_TO_ONE ) {</span>
-<span class="fc" id="L354">                        return method.invoke(object, action);</span>
+<span class="fc bfc" id="L354" title="All 2 branches covered.">                    if( det.getMultiplicity() == Multiplicity.ZERO_TO_ONE ) {</span>
+<span class="fc" id="L355">                        return method.invoke(object, action);</span>
                     } else {
-<span class="fc" id="L356">                        sourceObject = convertSourceObject(sourceObject);</span>
-<span class="fc" id="L357">                        return method.invoke(object, action, sourceObject);</span>
+<span class="fc" id="L357">                        sourceObject = convertSourceObject(sourceObject);</span>
+<span class="fc" id="L358">                        return method.invoke(object, action, sourceObject);</span>
                     }
-<span class="nc" id="L359">                } catch (Throwable e) {</span>
-<span class="nc" id="L360">                    throw new AtlasException(String.format(&quot;Error processing action %s&quot;, det.getName()), e);</span>
+<span class="nc" id="L360">                } catch (Throwable e) {</span>
+<span class="nc" id="L361">                    throw new AtlasException(String.format(&quot;Error processing action %s&quot;, det.getName()), e);</span>
                 }
             }
 
             private Object convertSourceObject(Object sourceObject) throws AtlasConversionException {
-<span class="pc bpc" id="L365" title="1 of 2 branches missed.">                if (sourceObject == null) {</span>
-<span class="nc" id="L366">                    return null;</span>
+<span class="pc bpc" id="L366" title="1 of 2 branches missed.">                if (sourceObject == null) {</span>
+<span class="nc" id="L367">                    return null;</span>
                 }
 
                 Class&lt;?&gt; paramType;
-<span class="fc" id="L370">                paramType = method.getParameterTypes()[1];</span>
-<span class="fc" id="L371">                CollectionType paramCollectionType = toFieldCollectionType(paramType);</span>
-<span class="fc" id="L372">                CollectionType sourceCollectionType = toFieldCollectionType(sourceObject.getClass()) ;</span>
-<span class="fc bfc" id="L373" title="All 2 branches covered.">                if (paramCollectionType != CollectionType.NONE) {</span>
+<span class="fc" id="L371">                paramType = method.getParameterTypes()[1];</span>
+<span class="fc" id="L372">                CollectionType paramCollectionType = toFieldCollectionType(paramType);</span>
+<span class="fc" id="L373">                CollectionType sourceCollectionType = toFieldCollectionType(sourceObject.getClass()) ;</span>
+<span class="fc bfc" id="L374" title="All 2 branches covered.">                if (paramCollectionType != CollectionType.NONE) {</span>
                     List&lt;Object&gt; sourceList;
-<span class="fc" id="L375">                    Type itemType = method.getGenericParameterTypes()[1];</span>
-<span class="pc bpc" id="L376" title="1 of 2 branches missed.">                    Class&lt;?&gt; itemClass = paramType.isArray() ? paramType.getComponentType()</span>
-<span class="fc" id="L377">                        : (Class&lt;?&gt;)((ParameterizedType) itemType).getActualTypeArguments()[0];</span>
+<span class="fc" id="L376">                    Type itemType = method.getGenericParameterTypes()[1];</span>
+<span class="pc bpc" id="L377" title="1 of 2 branches missed.">                    Class&lt;?&gt; itemClass = paramType.isArray() ? paramType.getComponentType()</span>
+<span class="fc" id="L378">                        : (Class&lt;?&gt;)((ParameterizedType) itemType).getActualTypeArguments()[0];</span>
 
-<span class="fc bfc" id="L379" title="All 2 branches covered.">                    if (sourceCollectionType != CollectionType.NONE) {</span>
-<span class="pc bpc" id="L380" title="1 of 2 branches missed.">                        if (sourceCollectionType == CollectionType.ARRAY) {</span>
-<span class="nc" id="L381">                            sourceList = Arrays.asList(sourceObject);</span>
-<span class="pc bpc" id="L382" title="1 of 2 branches missed.">                        } else if (sourceCollectionType == CollectionType.LIST) {</span>
-<span class="fc" id="L383">                            sourceList = (List&lt;Object&gt;)sourceObject;</span>
-<span class="nc bnc" id="L384" title="All 2 branches missed.">                        } else if (sourceCollectionType == CollectionType.MAP) {</span>
-<span class="nc" id="L385">                            sourceList = new ArrayList(((Map)sourceObject).values());</span>
+<span class="fc bfc" id="L380" title="All 2 branches covered.">                    if (sourceCollectionType != CollectionType.NONE) {</span>
+<span class="pc bpc" id="L381" title="1 of 2 branches missed.">                        if (sourceCollectionType == CollectionType.ARRAY) {</span>
+<span class="nc" id="L382">                            sourceList = Arrays.asList(sourceObject);</span>
+<span class="pc bpc" id="L383" title="1 of 2 branches missed.">                        } else if (sourceCollectionType == CollectionType.LIST) {</span>
+<span class="fc" id="L384">                            sourceList = (List&lt;Object&gt;)sourceObject;</span>
+<span class="nc bnc" id="L385" title="All 2 branches missed.">                        } else if (sourceCollectionType == CollectionType.MAP) {</span>
+<span class="nc" id="L386">                            sourceList = new ArrayList(((Map)sourceObject).values());</span>
                         } else {
-<span class="nc" id="L387">                            sourceList = new ArrayList((Collection)sourceObject);</span>
+<span class="nc" id="L388">                            sourceList = new ArrayList((Collection)sourceObject);</span>
                         }
                     } else {
-<span class="fc" id="L390">                        sourceList = Arrays.asList(sourceObject);</span>
+<span class="fc" id="L391">                        sourceList = Arrays.asList(sourceObject);</span>
                     }
 
-<span class="fc" id="L393">                    convertItems(sourceList, itemClass);</span>
+<span class="fc" id="L394">                    convertItems(sourceList, itemClass);</span>
 
-<span class="pc bpc" id="L395" title="1 of 2 branches missed.">                    if (paramType.isArray()) {</span>
-<span class="nc" id="L396">                        return sourceList.toArray();</span>
+<span class="pc bpc" id="L396" title="1 of 2 branches missed.">                    if (paramType.isArray()) {</span>
+<span class="nc" id="L397">                        return sourceList.toArray();</span>
                     } else {
-<span class="fc" id="L398">                        return sourceList;</span>
+<span class="fc" id="L399">                        return sourceList;</span>
                     }
-<span class="fc bfc" id="L400" title="All 2 branches covered.">                } else if (paramType.isInstance(sourceObject)) {</span>
-<span class="fc" id="L401">                    return sourceObject;</span>
+<span class="fc bfc" id="L401" title="All 2 branches covered.">                } else if (paramType.isInstance(sourceObject)) {</span>
+<span class="fc" id="L402">                    return sourceObject;</span>
                 }
-<span class="fc" id="L403">                return conversionService.convertType(sourceObject, null, paramType, null);</span>
+<span class="fc" id="L404">                return conversionService.convertType(sourceObject, null, paramType, null);</span>
             }
         };
     }
 
     private void convertItems(List&lt;Object&gt; sourceList, Class&lt;?&gt; itemClass) throws AtlasConversionException {
-<span class="fc bfc" id="L409" title="All 2 branches covered.">        for (int i=0; i&lt;sourceList.size(); i++) {</span>
-<span class="fc" id="L410">            Object item = sourceList.get(i);</span>
-<span class="fc bfc" id="L411" title="All 2 branches covered.">            if (item != null) {</span>
-<span class="fc" id="L412">                item = conversionService.convertType(item, null, itemClass, null);</span>
+<span class="fc bfc" id="L410" title="All 2 branches covered.">        for (int i=0; i&lt;sourceList.size(); i++) {</span>
+<span class="fc" id="L411">            Object item = sourceList.get(i);</span>
+<span class="fc bfc" id="L412" title="All 2 branches covered.">            if (item != null) {</span>
+<span class="fc" id="L413">                item = conversionService.convertType(item, null, itemClass, null);</span>
             }
-<span class="fc" id="L414">            sourceList.set(i, item);</span>
+<span class="fc" id="L415">            sourceList.set(i, item);</span>
         }
-<span class="fc" id="L416">    }</span>
+<span class="fc" id="L417">    }</span>
 
-<span class="fc" id="L418">    private static Set&lt;String&gt; listClasses = new HashSet&lt;&gt;(Arrays.asList(&quot;java.util.List&quot;, &quot;java.util.ArrayList&quot;, &quot;java.util.LinkedList&quot;, &quot;java.util.Vector&quot;,</span>
+<span class="fc" id="L419">    private static Set&lt;String&gt; listClasses = new HashSet&lt;&gt;(Arrays.asList(&quot;java.util.List&quot;, &quot;java.util.ArrayList&quot;, &quot;java.util.LinkedList&quot;, &quot;java.util.Vector&quot;,</span>
             &quot;java.util.Stack&quot;, &quot;java.util.AbstractList&quot;, &quot;java.util.AbstractSequentialList&quot;));
-<span class="fc" id="L420">    private static Set&lt;String&gt; mapClasses =  new HashSet&lt;&gt;(Arrays.asList(&quot;java.util.Map&quot;, &quot;java.util.HashMap&quot;,</span>
+<span class="fc" id="L421">    private static Set&lt;String&gt; mapClasses =  new HashSet&lt;&gt;(Arrays.asList(&quot;java.util.Map&quot;, &quot;java.util.HashMap&quot;,</span>
         &quot;java.util.TreeMap&quot;, &quot;java.util.Hashtable&quot;, &quot;java.util.IdentityHashMap&quot;, &quot;java.util.LinkedHashMap&quot;,
         &quot;java.util.LinkedHashMap&quot;, &quot;java.util.SortedMap&quot;, &quot;java.util.WeakHashMap&quot;, &quot;java.util.Properties&quot;,
         &quot;java.util.concurrent.ConcurrentHashMap&quot;, &quot;java.util.concurrent.ConcurrentMap&quot;));
 
     private CollectionType toFieldCollectionType(Class&lt;?&gt; clazz) {
-<span class="fc bfc" id="L426" title="All 2 branches covered.">        if (clazz.isArray()) {</span>
-<span class="fc" id="L427">            return CollectionType.ARRAY;</span>
+<span class="fc bfc" id="L427" title="All 2 branches covered.">        if (clazz.isArray()) {</span>
+<span class="fc" id="L428">            return CollectionType.ARRAY;</span>
         }
-<span class="pc bpc" id="L429" title="1 of 2 branches missed.">        if (clazz == Collection.class) {</span>
-<span class="nc" id="L430">            return CollectionType.ALL;</span>
+<span class="pc bpc" id="L430" title="1 of 2 branches missed.">        if (clazz == Collection.class) {</span>
+<span class="nc" id="L431">            return CollectionType.ALL;</span>
         }
-<span class="fc bfc" id="L432" title="All 2 branches covered.">        if( listClasses.contains(clazz.getName())) {</span>
-<span class="fc" id="L433">            return CollectionType.LIST;</span>
+<span class="fc bfc" id="L433" title="All 2 branches covered.">        if( listClasses.contains(clazz.getName())) {</span>
+<span class="fc" id="L434">            return CollectionType.LIST;</span>
         }
-<span class="pc bpc" id="L435" title="1 of 2 branches missed.">        if( mapClasses.contains(clazz.getName())) {</span>
-<span class="nc" id="L436">            return CollectionType.MAP;</span>
+<span class="pc bpc" id="L436" title="1 of 2 branches missed.">        if( mapClasses.contains(clazz.getName())) {</span>
+<span class="nc" id="L437">            return CollectionType.MAP;</span>
         }
-<span class="fc" id="L438">        return CollectionType.NONE;</span>
+<span class="fc" id="L439">        return CollectionType.NONE;</span>
     }
 
     private FieldType toFieldType(Class&lt;?&gt; clazz, Type parameterType) {
-<span class="pc bpc" id="L442" title="2 of 5 branches missed.">        switch (toFieldCollectionType(clazz)) {</span>
+<span class="pc bpc" id="L443" title="2 of 5 branches missed.">        switch (toFieldCollectionType(clazz)) {</span>
             case ARRAY:
-<span class="fc" id="L444">                return toFieldType(clazz.getComponentType(), parameterType);</span>
+<span class="fc" id="L445">                return toFieldType(clazz.getComponentType(), parameterType);</span>
             case ALL:
-<span class="nc" id="L446">                Type t = ((ParameterizedType) parameterType).getActualTypeArguments()[0];</span>
-<span class="nc" id="L447">                return DefaultAtlasConversionService.getInstance().fieldTypeFromClass((Class)t);</span>
+<span class="nc" id="L447">                Type t = ((ParameterizedType) parameterType).getActualTypeArguments()[0];</span>
+<span class="nc" id="L448">                return DefaultAtlasConversionService.getInstance().fieldTypeFromClass((Class)t);</span>
             case LIST:
-<span class="fc" id="L449">                t = ((ParameterizedType) parameterType).getActualTypeArguments()[0];</span>
-<span class="fc" id="L450">                return DefaultAtlasConversionService.getInstance().fieldTypeFromClass((Class)t);</span>
+<span class="fc" id="L450">                t = ((ParameterizedType) parameterType).getActualTypeArguments()[0];</span>
+<span class="fc" id="L451">                return DefaultAtlasConversionService.getInstance().fieldTypeFromClass((Class)t);</span>
             case MAP:
-<span class="nc" id="L452">                t = ((ParameterizedType) parameterType).getActualTypeArguments()[1];</span>
-<span class="nc" id="L453">                return DefaultAtlasConversionService.getInstance().fieldTypeFromClass((Class)t);</span>
+<span class="nc" id="L453">                t = ((ParameterizedType) parameterType).getActualTypeArguments()[1];</span>
+<span class="nc" id="L454">                return DefaultAtlasConversionService.getInstance().fieldTypeFromClass((Class)t);</span>
             default:
-<span class="fc" id="L455">                return DefaultAtlasConversionService.getInstance().fieldTypeFromClass(clazz);</span>
+<span class="fc" id="L456">                return DefaultAtlasConversionService.getInstance().fieldTypeFromClass(clazz);</span>
         }
     }
 
 
     private ActionParameters detectFieldActionParameters(Class&lt;?&gt; actionClazz) throws ClassNotFoundException {
-<span class="fc" id="L461">        ActionParameters params = null;</span>
-<span class="fc bfc" id="L462" title="All 2 branches covered.">        for (Method method : actionClazz.getMethods()) {</span>
+<span class="fc" id="L462">        ActionParameters params = null;</span>
+<span class="fc bfc" id="L463" title="All 2 branches covered.">        for (Method method : actionClazz.getMethods()) {</span>
             // Find setters to avoid the get / is confusion
-<span class="fc bfc" id="L464" title="All 4 branches covered.">            if (method.getParameterCount() == 1 &amp;&amp; method.getName().startsWith(&quot;set&quot;)) {</span>
+<span class="fc bfc" id="L465" title="All 4 branches covered.">            if (method.getParameterCount() == 1 &amp;&amp; method.getName().startsWith(&quot;set&quot;)) {</span>
                 // We have a parameter
-<span class="fc bfc" id="L466" title="All 2 branches covered.">                if (params == null) {</span>
-<span class="fc" id="L467">                    params = new ActionParameters();</span>
+<span class="fc bfc" id="L467" title="All 2 branches covered.">                if (params == null) {</span>
+<span class="fc" id="L468">                    params = new ActionParameters();</span>
                 }
 
-<span class="fc" id="L470">                ActionParameter actionParam = null;</span>
-<span class="fc bfc" id="L471" title="All 2 branches covered.">                for (Parameter methodParam : method.getParameters()) {</span>
-<span class="fc" id="L472">                    actionParam = new ActionParameter();</span>
-<span class="fc" id="L473">                    actionParam.setName(camelize(method.getName().substring(&quot;set&quot;.length())));</span>
+<span class="fc" id="L471">                ActionParameter actionParam = null;</span>
+<span class="fc bfc" id="L472" title="All 2 branches covered.">                for (Parameter methodParam : method.getParameters()) {</span>
+<span class="fc" id="L473">                    actionParam = new ActionParameter();</span>
+<span class="fc" id="L474">                    actionParam.setName(camelize(method.getName().substring(&quot;set&quot;.length())));</span>
                     // TODO set displayName/description - https://github.com/atlasmap/atlasmap/issues/96
-<span class="fc" id="L475">                    actionParam.setFieldType(getConversionService().fieldTypeFromClass(methodParam.getType()));</span>
+<span class="fc" id="L476">                    actionParam.setFieldType(getConversionService().fieldTypeFromClass(methodParam.getType()));</span>
                     // TODO fix this dirty hack for https://github.com/atlasmap/atlasmap/issues/386
-<span class="fc bfc" id="L477" title="All 2 branches covered.">                    if (methodParam.getType().isEnum()) {</span>
-<span class="fc" id="L478">                        actionParam.setFieldType(FieldType.STRING);</span>
+<span class="fc bfc" id="L478" title="All 2 branches covered.">                    if (methodParam.getType().isEnum()) {</span>
+<span class="fc" id="L479">                        actionParam.setFieldType(FieldType.STRING);</span>
                         try {
-<span class="fc bfc" id="L480" title="All 2 branches covered.">                            for (Object e : methodParam.getType().getEnumConstants()) {</span>
-<span class="fc" id="L481">                                Method m = e.getClass().getDeclaredMethod(&quot;value&quot;, new Class[0]);</span>
-<span class="fc" id="L482">                                actionParam.getValues().add(m.invoke(e, new Object[0]).toString());</span>
+<span class="fc bfc" id="L481" title="All 2 branches covered.">                            for (Object e : methodParam.getType().getEnumConstants()) {</span>
+<span class="fc" id="L482">                                Method m = e.getClass().getDeclaredMethod(&quot;value&quot;, new Class[0]);</span>
+<span class="fc" id="L483">                                actionParam.getValues().add(m.invoke(e, new Object[0]).toString());</span>
                             }
-<span class="nc" id="L484">                        } catch (Exception e) {</span>
-<span class="nc" id="L485">                            LOG.debug(&quot;Failed to populate possible enum parameter values, ignoring...&quot;, e);</span>
-<span class="fc" id="L486">                        }</span>
+<span class="nc" id="L485">                        } catch (Exception e) {</span>
+<span class="nc" id="L486">                            LOG.debug(&quot;Failed to populate possible enum parameter values, ignoring...&quot;, e);</span>
+<span class="fc" id="L487">                        }</span>
                     }
-<span class="fc" id="L488">                    params.getParameter().add(actionParam);</span>
+<span class="fc" id="L489">                    params.getParameter().add(actionParam);</span>
                 }
             }
         }
 
-<span class="fc" id="L493">        return params;</span>
+<span class="fc" id="L494">        return params;</span>
     }
 
     @Override
     public List&lt;ActionDetail&gt; listActionDetails() {
-<span class="fc" id="L498">        Lock readLock = this.actionProcessorsLock.readLock();</span>
+<span class="fc" id="L499">        Lock readLock = this.actionProcessorsLock.readLock();</span>
         try {
-<span class="fc" id="L500">            readLock.lock();</span>
-<span class="fc" id="L501">            return actionProcessors.stream().map(x-&gt;x.getActionDetail()).collect(Collectors.toList());</span>
+<span class="fc" id="L501">            readLock.lock();</span>
+<span class="fc" id="L502">            return actionProcessors.stream().map(x-&gt;x.getActionDetail()).collect(Collectors.toList());</span>
         } finally {
-<span class="fc" id="L503">            readLock.unlock();</span>
+<span class="fc" id="L504">            readLock.unlock();</span>
         }
     }
 
@@ -513,13 +514,13 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
      */
     @Deprecated
     protected ActionDetail getActionDetailByActionName(String actionName) {
-<span class="fc bfc" id="L516" title="All 2 branches covered.">        for (ActionDetail actionDetail : listActionDetails()) {</span>
-<span class="fc bfc" id="L517" title="All 2 branches covered.">            if (actionDetail.getName().equals(actionName)) {</span>
-<span class="fc" id="L518">                return actionDetail;</span>
+<span class="fc bfc" id="L517" title="All 2 branches covered.">        for (ActionDetail actionDetail : listActionDetails()) {</span>
+<span class="fc bfc" id="L518" title="All 2 branches covered.">            if (actionDetail.getName().equals(actionName)) {</span>
+<span class="fc" id="L519">                return actionDetail;</span>
             }
-<span class="fc" id="L520">        }</span>
+<span class="fc" id="L521">        }</span>
 
-<span class="fc" id="L522">        return null;</span>
+<span class="fc" id="L523">        return null;</span>
     }
 
     /**
@@ -535,396 +536,408 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
      */
     @Override
     public ActionDetail findActionDetail(Action action, FieldType sourceType) throws AtlasException {
-<span class="fc" id="L538">        ActionProcessor processor = findActionProcessor(action, sourceType);</span>
-<span class="fc bfc" id="L539" title="All 2 branches covered.">        if( processor == null ) {</span>
-<span class="fc" id="L540">            return null;</span>
+<span class="fc" id="L539">        ActionProcessor processor = findActionProcessor(action, sourceType);</span>
+<span class="fc bfc" id="L540" title="All 2 branches covered.">        if( processor == null ) {</span>
+<span class="fc" id="L541">            return null;</span>
         }
-<span class="fc" id="L542">        return processor.getActionDetail();</span>
+<span class="fc" id="L543">        return processor.getActionDetail();</span>
     }
 
     public ActionProcessor findActionProcessor(Action action, FieldType sourceType) throws AtlasException {
-<span class="fc" id="L546">        CustomAction customAction = null;</span>
-<span class="pc bpc" id="L547" title="1 of 2 branches missed.">        if (action instanceof CustomAction) {</span>
-<span class="nc" id="L548">            customAction = (CustomAction) action;</span>
-<span class="nc bnc" id="L549" title="All 4 branches missed.">            if (customAction.getClassName() == null || customAction.getMethodName() == null) {</span>
-<span class="nc" id="L550">                throw new AtlasException(&quot;The class name and method name must be specified for custom FieldAction: &quot; + customAction.getName());</span>
+<span class="fc" id="L547">        CustomAction customAction = null;</span>
+<span class="pc bpc" id="L548" title="1 of 2 branches missed.">        if (action instanceof CustomAction) {</span>
+<span class="nc" id="L549">            customAction = (CustomAction) action;</span>
+<span class="nc bnc" id="L550" title="All 4 branches missed.">            if (customAction.getClassName() == null || customAction.getMethodName() == null) {</span>
+<span class="nc" id="L551">                throw new AtlasException(&quot;The class name and method name must be specified for custom FieldAction: &quot; + customAction.getName());</span>
             }
         }
-<span class="fc" id="L553">        List&lt;ActionProcessor&gt; matches = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L554">        Lock readLock = actionProcessorsLock.readLock();</span>
+<span class="fc" id="L554">        List&lt;ActionProcessor&gt; matches = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L555">        Lock readLock = actionProcessorsLock.readLock();</span>
         try {
-<span class="fc" id="L556">            readLock.lock();</span>
-<span class="fc bfc" id="L557" title="All 2 branches covered.">            for (ActionProcessor processor : actionProcessors) {</span>
-<span class="pc bpc" id="L558" title="1 of 2 branches missed.">                if (customAction != null) {</span>
-<span class="nc" id="L559">                    ActionDetail detail = processor.getActionDetail();</span>
-<span class="nc bnc" id="L560" title="All 2 branches missed.">                    if (customAction.getClassName().equals(detail.getClassName())</span>
-<span class="nc bnc" id="L561" title="All 2 branches missed.">                        &amp;&amp; customAction.getMethodName().equals(detail.getMethod())) {</span>
-<span class="nc" id="L562">                        matches.add(processor);</span>
-<span class="nc" id="L563">                        break;</span>
+<span class="fc" id="L557">            readLock.lock();</span>
+<span class="fc bfc" id="L558" title="All 2 branches covered.">            for (ActionProcessor processor : actionProcessors) {</span>
+<span class="pc bpc" id="L559" title="1 of 2 branches missed.">                if (customAction != null) {</span>
+<span class="nc" id="L560">                    ActionDetail detail = processor.getActionDetail();</span>
+<span class="nc bnc" id="L561" title="All 2 branches missed.">                    if (customAction.getClassName().equals(detail.getClassName())</span>
+<span class="nc bnc" id="L562" title="All 2 branches missed.">                        &amp;&amp; customAction.getMethodName().equals(detail.getMethod())) {</span>
+<span class="nc" id="L563">                        matches.add(processor);</span>
+<span class="nc" id="L564">                        break;</span>
                     }
-<span class="pc bfc" id="L565" title="All 2 branches covered.">                } else if (processor.getActionClass() == action.getClass()) {</span>
-<span class="fc" id="L566">                    matches.add(processor);</span>
+<span class="pc bfc" id="L566" title="All 2 branches covered.">                } else if (processor.getActionClass() == action.getClass()) {</span>
+<span class="fc" id="L567">                    matches.add(processor);</span>
                 }
-<span class="fc" id="L568">            }</span>
+<span class="fc" id="L569">            }</span>
         } finally {
-<span class="fc" id="L570">            readLock.unlock();</span>
+<span class="fc" id="L571">            readLock.unlock();</span>
         }
 
-<span class="fc" id="L573">        return findBestActionProcessor(matches, sourceType);</span>
+<span class="fc" id="L574">        return findBestActionProcessor(matches, sourceType);</span>
     }
 
     public ActionProcessor findActionProcessor(String name, Object value) {
-<span class="pc bpc" id="L577" title="1 of 2 branches missed.">        FieldType valueType = (value != null ? getConversionService().fieldTypeFromClass(value.getClass()) : FieldType.NONE);</span>
-<span class="fc" id="L578">        String uppercaseName = name.toUpperCase();</span>
+<span class="pc bpc" id="L578" title="1 of 2 branches missed.">        FieldType valueType = (value != null ? getConversionService().fieldTypeFromClass(value.getClass()) : FieldType.NONE);</span>
+<span class="fc" id="L579">        String uppercaseName = name.toUpperCase();</span>
 
-<span class="fc" id="L580">        List&lt;ActionProcessor&gt; processors = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L581">        Lock readLock = actionProcessorsLock.readLock();</span>
+<span class="fc" id="L581">        List&lt;ActionProcessor&gt; processors = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L582">        Lock readLock = actionProcessorsLock.readLock();</span>
         try {
-<span class="fc" id="L583">            readLock.lock();</span>
-<span class="fc bfc" id="L584" title="All 2 branches covered.">            for (ActionProcessor processor : actionProcessors) {</span>
-<span class="fc bfc" id="L585" title="All 2 branches covered.">                if (processor.getActionDetail().getName().toUpperCase().equals(uppercaseName)) {</span>
-<span class="fc" id="L586">                    processors.add(processor);</span>
+<span class="fc" id="L584">            readLock.lock();</span>
+<span class="fc bfc" id="L585" title="All 2 branches covered.">            for (ActionProcessor processor : actionProcessors) {</span>
+<span class="fc bfc" id="L586" title="All 2 branches covered.">                if (processor.getActionDetail().getName().toUpperCase().equals(uppercaseName)) {</span>
+<span class="fc" id="L587">                    processors.add(processor);</span>
                 }
-<span class="fc" id="L588">            }</span>
+<span class="fc" id="L589">            }</span>
         } finally {
-<span class="fc" id="L590">            readLock.unlock();</span>
+<span class="fc" id="L591">            readLock.unlock();</span>
         }
 
-<span class="fc" id="L593">        return findBestActionProcessor(processors, valueType);</span>
+<span class="fc" id="L594">        return findBestActionProcessor(processors, valueType);</span>
     }
 
     private ActionProcessor findBestActionProcessor(List&lt;ActionProcessor&gt; processors, FieldType valueType) {
-<span class="fc bfc" id="L597" title="All 2 branches covered.">        if (processors.isEmpty()) {</span>
-<span class="fc" id="L598">            return null;</span>
-<span class="pc bpc" id="L599" title="1 of 2 branches missed.">        } else if (processors.size() == 1) {</span>
-<span class="fc" id="L600">            return processors.get(0);</span>
-<span class="nc bnc" id="L601" title="All 4 branches missed.">        } else if (valueType != null &amp;&amp; !Arrays.asList(FieldType.ANY, FieldType.NONE).contains(valueType)) {</span>
-<span class="nc bnc" id="L602" title="All 2 branches missed.">            for (ActionProcessor processor: processors) {</span>
-<span class="nc bnc" id="L603" title="All 2 branches missed.">                if (valueType.equals(processor.getActionDetail().getSourceType())) {</span>
-<span class="nc" id="L604">                    return processor;</span>
+<span class="fc bfc" id="L598" title="All 2 branches covered.">        if (processors.isEmpty()) {</span>
+<span class="fc" id="L599">            return null;</span>
+<span class="pc bpc" id="L600" title="1 of 2 branches missed.">        } else if (processors.size() == 1) {</span>
+<span class="fc" id="L601">            return processors.get(0);</span>
+<span class="nc bnc" id="L602" title="All 4 branches missed.">        } else if (valueType != null &amp;&amp; !Arrays.asList(FieldType.ANY, FieldType.NONE).contains(valueType)) {</span>
+<span class="nc bnc" id="L603" title="All 2 branches missed.">            for (ActionProcessor processor: processors) {</span>
+<span class="nc bnc" id="L604" title="All 2 branches missed.">                if (valueType.equals(processor.getActionDetail().getSourceType())) {</span>
+<span class="nc" id="L605">                    return processor;</span>
                 }
-<span class="nc" id="L606">            }</span>
+<span class="nc" id="L607">            }</span>
         }
-<span class="nc" id="L608">        return processors.get(0);</span>
+<span class="nc" id="L609">        return processors.get(0);</span>
     }
 
     private Object flattenList(Object value) {
-<span class="fc bfc" id="L612" title="All 2 branches covered.">        if (value instanceof Iterable) {</span>
-<span class="fc" id="L613">            List&lt;Object&gt; extractedValues = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L614" title="All 2 branches covered.">            for (Object argument : (Iterable) value) {</span>
-<span class="pc bpc" id="L615" title="1 of 2 branches missed.">                if (argument instanceof Iterable) {</span>
-<span class="nc bnc" id="L616" title="All 2 branches missed.">                    for (Object item : (Iterable) argument) {</span>
-<span class="nc" id="L617">                        extractedValues.add(item);</span>
-<span class="nc" id="L618">                    }</span>
+<span class="nc bnc" id="L613" title="All 2 branches missed.">        if (value instanceof Iterable) {</span>
+<span class="nc" id="L614">            List&lt;Object&gt; extractedValues = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L615" title="All 2 branches missed.">            for (Object argument : (Iterable) value) {</span>
+<span class="nc bnc" id="L616" title="All 2 branches missed.">                if (argument instanceof Iterable) {</span>
+<span class="nc bnc" id="L617" title="All 2 branches missed.">                    for (Object item : (Iterable) argument) {</span>
+<span class="nc" id="L618">                        extractedValues.add(item);</span>
+<span class="nc" id="L619">                    }</span>
                 } else {
-<span class="fc" id="L620">                    extractedValues.add(argument);</span>
+<span class="nc" id="L621">                    extractedValues.add(argument);</span>
                 }
-<span class="fc" id="L622">            }</span>
-<span class="fc" id="L623">            return extractedValues;</span>
+<span class="nc" id="L623">            }</span>
+<span class="nc" id="L624">            return extractedValues;</span>
         } else {
-<span class="fc" id="L625">            return value;</span>
+<span class="nc" id="L626">            return value;</span>
         }
     }
 
-    public Object buildAndProcessAction(ActionProcessor actionProcessor, Map&lt;String, Object&gt; actionParameters, List&lt;Object&gt; valueOrField) {
-<span class="fc" id="L630">        List&lt;Object&gt; flattenedValue = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L631" title="All 2 branches covered.">        for (Object item : valueOrField) {</span>
-<span class="fc bfc" id="L632" title="All 2 branches covered.">            if (item instanceof FieldGroup) {</span>
-<span class="fc" id="L633">                FieldGroup fieldGroup = (FieldGroup)item;</span>
-<span class="fc" id="L634">                List&lt;Object&gt; values = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L635">                extractNestedListValuesFromFieldGroup(fieldGroup, values); //preserve top level list of parameters and arguments</span>
-<span class="fc" id="L636">                flattenedValue.addAll(values);</span>
-<span class="pc bpc" id="L637" title="1 of 2 branches missed.">            } else if (item instanceof Field) {</span>
-<span class="nc" id="L638">                flattenedValue.add(((Field)item).getValue());</span>
-            } else {
-<span class="fc" id="L640">                Object o = flattenList(item);</span>
-<span class="fc bfc" id="L641" title="All 2 branches covered.">                if (o instanceof Collection) {</span>
-<span class="fc" id="L642">                    flattenedValue.addAll((Collection&lt;?&gt;)o);</span>
-                } else {
-<span class="fc" id="L644">                    flattenedValue.add(item);</span>
-                }
+    public Object buildAndProcessAction(ActionProcessor actionProcessor, Map&lt;String, Object&gt; actionParameters, List&lt;Field&gt; fields) {
+<span class="fc" id="L631">        List&lt;Object&gt; flattenedValue = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L632" title="All 2 branches covered.">        for (Field item : fields) {</span>
+<span class="fc bfc" id="L633" title="All 2 branches covered.">            if (item instanceof FieldGroup) {</span>
+<span class="fc" id="L634">                FieldGroup fieldGroup = (FieldGroup)item;</span>
+<span class="fc" id="L635">                List&lt;Object&gt; values = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L636">                extractNestedListValuesFromFieldGroup(fieldGroup, values); //preserve top level list of parameters and arguments</span>
+<span class="fc" id="L637">                flattenedValue.addAll(values);</span>
+<span class="fc" id="L638">            } else {</span>
+<span class="fc" id="L639">                flattenedValue.add((item).getValue());</span>
             }
-<span class="fc" id="L647">        }</span>
-<span class="fc" id="L648">        FieldType valueType = determineFieldType(flattenedValue);</span>
+<span class="fc" id="L641">        }</span>
+<span class="fc" id="L642">        FieldType valueType = determineFieldType(flattenedValue);</span>
         try {
-<span class="fc" id="L650">            Action action = actionProcessor.getActionClass().newInstance();</span>
-<span class="fc bfc" id="L651" title="All 2 branches covered.">            for (Map.Entry&lt;String, Object&gt; property : actionParameters.entrySet()) {</span>
-<span class="fc" id="L652">                String setter = &quot;set&quot; + property.getKey().substring(0, 1).toUpperCase() + property.getKey().substring(1);</span>
-<span class="fc" id="L653">                action.getClass().getMethod(setter, property.getValue().getClass()).invoke(action, property.getValue());</span>
-<span class="fc" id="L654">            }</span>
+<span class="fc" id="L644">            Action action = actionProcessor.getActionClass().newInstance();</span>
+<span class="fc bfc" id="L645" title="All 2 branches covered.">            for (Map.Entry&lt;String, Object&gt; property : actionParameters.entrySet()) {</span>
+<span class="fc" id="L646">                String setter = &quot;set&quot; + property.getKey().substring(0, 1).toUpperCase() + property.getKey().substring(1);</span>
+<span class="fc" id="L647">                action.getClass().getMethod(setter, property.getValue().getClass()).invoke(action, property.getValue());</span>
+<span class="fc" id="L648">            }</span>
 
-<span class="fc" id="L656">            return processAction(action, actionProcessor, valueType, flattenedValue);</span>
-<span class="nc" id="L657">        } catch (Exception e) {</span>
-<span class="nc" id="L658">            throw new IllegalArgumentException(String.format(&quot;The action '%s' cannot be processed&quot;, actionProcessor.getActionDetail().getName()), e);</span>
+<span class="fc" id="L650">            return processAction(action, actionProcessor, valueType, flattenedValue);</span>
+<span class="nc" id="L651">        } catch (Exception e) {</span>
+<span class="nc" id="L652">            throw new IllegalArgumentException(String.format(&quot;The action '%s' cannot be processed&quot;, actionProcessor.getActionDetail().getName()), e);</span>
         }
     }
 
     @Override
     public Field processActions(AtlasInternalSession session, Field field) throws AtlasException {
-<span class="fc" id="L664">        ArrayList&lt;Action&gt; actions = field.getActions();</span>
-<span class="fc" id="L665">        FieldType targetType = field.getFieldType();</span>
+<span class="fc" id="L658">        ArrayList&lt;Action&gt; actions = field.getActions();</span>
+<span class="fc" id="L659">        FieldType targetType = field.getFieldType();</span>
 
-<span class="pc bpc" id="L667" title="1 of 6 branches missed.">        if (actions == null || actions == null || actions.isEmpty()) {</span>
-<span class="fc" id="L668">            return field;</span>
+<span class="pc bpc" id="L661" title="1 of 6 branches missed.">        if (actions == null || actions == null || actions.isEmpty()) {</span>
+<span class="fc" id="L662">            return field;</span>
         }
 
-<span class="pc bpc" id="L671" title="1 of 2 branches missed.">        if (FieldType.COMPLEX.equals(targetType)) {</span>
-<span class="nc" id="L672">            return field;</span>
+<span class="pc bpc" id="L665" title="1 of 2 branches missed.">        if (FieldType.COMPLEX.equals(targetType)) {</span>
+<span class="nc" id="L666">            return field;</span>
         }
 
-<span class="fc" id="L675">        Object sourceObject = field.getValue();</span>
-<span class="fc bfc" id="L676" title="All 2 branches covered.">        FieldType sourceType = (sourceObject != null ? getConversionService().fieldTypeFromClass(sourceObject.getClass()) : FieldType.NONE);</span>
+<span class="fc" id="L669">        Object sourceObject = field.getValue();</span>
+<span class="fc bfc" id="L670" title="All 2 branches covered.">        FieldType sourceType = (sourceObject != null ? getConversionService().fieldTypeFromClass(sourceObject.getClass()) : FieldType.NONE);</span>
 
-<span class="fc" id="L678">        FieldGroup fieldGroup = null;</span>
-<span class="fc bfc" id="L679" title="All 2 branches covered.">        if (field instanceof FieldGroup) {</span>
-<span class="fc" id="L680">            fieldGroup = (FieldGroup) field;</span>
+<span class="fc" id="L672">        FieldGroup fieldGroup = null;</span>
+<span class="fc bfc" id="L673" title="All 2 branches covered.">        if (field instanceof FieldGroup) {</span>
+<span class="fc" id="L674">            fieldGroup = (FieldGroup) field;</span>
 
-<span class="fc" id="L682">            List&lt;Object&gt; values = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L683" title="All 2 branches covered.">            if (hasExpressionAction(actions)) {</span>
-<span class="fc" id="L684">                extractNestedListValuesFromFieldGroup(fieldGroup, values); //preserve top level list of parameters and arguments</span>
-<span class="fc" id="L685">                field = findLastIndexField(fieldGroup); //arguments are last in the list</span>
+<span class="fc" id="L676">            List&lt;Object&gt; values = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L677" title="All 2 branches covered.">            if (hasExpressionAction(actions)) {</span>
+<span class="fc" id="L678">                extractNestedListValuesFromFieldGroup(fieldGroup, values); //preserve top level list of parameters and arguments</span>
+<span class="fc" id="L679">                field = findLastIndexField(fieldGroup); //arguments are last in the list</span>
             } else {
-<span class="fc" id="L687">                extractFlatListValuesFromFieldGroup(session, fieldGroup, values);</span>
+<span class="fc" id="L681">                extractFlatListValuesFromFieldGroup(session, fieldGroup, values);</span>
             }
 
-<span class="fc" id="L690">            sourceObject = values;</span>
-<span class="fc" id="L691">            sourceType = determineFieldType(values);</span>
+<span class="fc" id="L684">            sourceObject = values;</span>
+<span class="fc" id="L685">            sourceType = determineFieldType(values);</span>
         }
 
-<span class="fc" id="L694">        Object tmpSourceObject = sourceObject;</span>
-<span class="fc" id="L695">        FieldType currentType = sourceType;</span>
-<span class="fc bfc" id="L696" title="All 2 branches covered.">        for (Action action : actions) {</span>
-<span class="fc" id="L697">            ActionProcessor processor = findActionProcessor(action, currentType);</span>
-<span class="fc" id="L698">            ActionDetail detail = processor.getActionDetail();</span>
-<span class="pc bpc" id="L699" title="1 of 2 branches missed.">            if (detail == null) {</span>
-<span class="nc" id="L700">                AtlasUtil.addAudit(session, field.getDocId(), String.format(</span>
-<span class="nc" id="L701">                    &quot;Couldn't find metadata for a FieldAction '%s', ignoring...&quot;, action.getDisplayName()),</span>
-<span class="nc" id="L702">                    field.getPath(), AuditStatus.WARN, null);</span>
-<span class="nc" id="L703">                continue;</span>
+<span class="fc" id="L688">        Object tmpSourceObject = sourceObject;</span>
+<span class="fc" id="L689">        FieldType currentType = sourceType;</span>
+<span class="fc bfc" id="L690" title="All 2 branches covered.">        for (Action action : actions) {</span>
+<span class="fc" id="L691">            ActionProcessor processor = findActionProcessor(action, currentType);</span>
+<span class="fc" id="L692">            ActionDetail detail = processor.getActionDetail();</span>
+<span class="pc bpc" id="L693" title="1 of 2 branches missed.">            if (detail == null) {</span>
+<span class="nc" id="L694">                AtlasUtil.addAudit(session, field.getDocId(), String.format(</span>
+<span class="nc" id="L695">                    &quot;Couldn't find metadata for a FieldAction '%s', ignoring...&quot;, action.getDisplayName()),</span>
+<span class="nc" id="L696">                    field.getPath(), AuditStatus.WARN, null);</span>
+<span class="nc" id="L697">                continue;</span>
             }
 
-<span class="fc" id="L706">            tmpSourceObject = processAction(action, processor, currentType, tmpSourceObject);</span>
-<span class="fc" id="L707">            currentType = null;</span>
-<span class="fc bfc" id="L708" title="All 2 branches covered.">            if (tmpSourceObject instanceof List) {</span>
-<span class="pc bpc" id="L709" title="1 of 2 branches missed.">                for (Object item : ((List&lt;?&gt;) tmpSourceObject)) {</span>
-<span class="pc bpc" id="L710" title="1 of 2 branches missed.">                    if (item != null) {</span>
-<span class="fc" id="L711">                        currentType = conversionService.fieldTypeFromClass(item.getClass());</span>
-<span class="fc" id="L712">                        break;</span>
+<span class="fc" id="L700">            tmpSourceObject = processAction(action, processor, currentType, tmpSourceObject);</span>
+<span class="fc" id="L701">            currentType = null;</span>
+<span class="fc bfc" id="L702" title="All 2 branches covered.">            if (tmpSourceObject instanceof List) {</span>
+<span class="pc bpc" id="L703" title="1 of 2 branches missed.">                for (Object item : ((List&lt;?&gt;) tmpSourceObject)) {</span>
+<span class="pc bpc" id="L704" title="1 of 2 branches missed.">                    if (item != null) {</span>
+<span class="fc" id="L705">                        currentType = conversionService.fieldTypeFromClass(item.getClass());</span>
+<span class="fc" id="L706">                        break;</span>
                     }
-<span class="pc" id="L714">                }</span>
-<span class="pc bpc" id="L715" title="1 of 2 branches missed.">            } else if (tmpSourceObject != null) {</span>
-<span class="fc" id="L716">                currentType = conversionService.fieldTypeFromClass(tmpSourceObject.getClass());</span>
+<span class="pc" id="L708">                }</span>
+<span class="pc bpc" id="L709" title="1 of 2 branches missed.">            } else if (tmpSourceObject != null) {</span>
+<span class="fc" id="L710">                currentType = conversionService.fieldTypeFromClass(tmpSourceObject.getClass());</span>
             }
-<span class="fc" id="L718">        }</span>
+<span class="fc" id="L712">        }</span>
 
-<span class="fc bfc" id="L720" title="All 2 branches covered.">        if (fieldGroup != null) {</span>
-<span class="fc bfc" id="L721" title="All 2 branches covered.">            if (tmpSourceObject instanceof List) {</span>
+<span class="fc bfc" id="L714" title="All 2 branches covered.">        if (fieldGroup != null) {</span>
+<span class="fc bfc" id="L715" title="All 2 branches covered.">            if (tmpSourceObject instanceof List) {</span>
                 // n -&gt; n - reuse passed-in FieldGroup
-<span class="fc" id="L723">                List&lt;?&gt; sourceList = (List&lt;?&gt;) tmpSourceObject;</span>
-<span class="fc" id="L724">                Field lastSubField = null;</span>
-<span class="fc" id="L725">                FieldGroup existingFieldGroup = fieldGroup;</span>
-<span class="pc bpc" id="L726" title="1 of 2 branches missed.">                if (field instanceof FieldGroup) {</span>
-<span class="fc" id="L727">                    existingFieldGroup = (FieldGroup) field;</span>
+<span class="fc" id="L717">                List&lt;?&gt; sourceList = (List&lt;?&gt;) tmpSourceObject;</span>
+<span class="fc" id="L718">                Field lastSubField = null;</span>
+<span class="fc" id="L719">                FieldGroup existingFieldGroup = fieldGroup;</span>
+<span class="pc bpc" id="L720" title="1 of 2 branches missed.">                if (field instanceof FieldGroup) {</span>
+<span class="fc" id="L721">                    existingFieldGroup = (FieldGroup) field;</span>
                 }
 
-<span class="fc bfc" id="L730" title="All 2 branches covered.">                for (int i = 0; i &lt; sourceList.size(); i++) {</span>
-<span class="pc bpc" id="L731" title="1 of 2 branches missed.">                    if (existingFieldGroup.getField().size() &gt; i) {</span>
-<span class="fc" id="L732">                        lastSubField = existingFieldGroup.getField().get(i);</span>
+<span class="fc bfc" id="L724" title="All 2 branches covered.">                for (int i = 0; i &lt; sourceList.size(); i++) {</span>
+<span class="pc bpc" id="L725" title="1 of 2 branches missed.">                    if (existingFieldGroup.getField().size() &gt; i) {</span>
+<span class="fc" id="L726">                        lastSubField = existingFieldGroup.getField().get(i);</span>
                     } else {
-<span class="nc" id="L734">                        Field subField = new SimpleField();</span>
-<span class="nc" id="L735">                        AtlasModelFactory.copyField(lastSubField, subField, true);</span>
-<span class="nc" id="L736">                        existingFieldGroup.getField().add(subField);</span>
-<span class="nc" id="L737">                        lastSubField = subField;</span>
+<span class="nc" id="L728">                        Field subField = new SimpleField();</span>
+<span class="nc" id="L729">                        AtlasModelFactory.copyField(lastSubField, subField, true);</span>
+<span class="nc" id="L730">                        existingFieldGroup.getField().add(subField);</span>
+<span class="nc" id="L731">                        lastSubField = subField;</span>
                     }
-<span class="fc" id="L739">                    lastSubField.setValue(sourceList.get(i));</span>
-<span class="fc" id="L740">                    lastSubField.setFieldType(currentType);</span>
+<span class="fc" id="L733">                    lastSubField.setValue(sourceList.get(i));</span>
+<span class="fc" id="L734">                    lastSubField.setFieldType(currentType);</span>
                 }
-<span class="fc" id="L742">                field = existingFieldGroup;</span>
-<span class="fc" id="L743">            } else {</span>
+<span class="fc" id="L736">                field = existingFieldGroup;</span>
+<span class="fc" id="L737">            } else {</span>
                 // n -&gt; 1 - create new Field
-<span class="fc" id="L745">                Field newField = new SimpleField();</span>
-<span class="fc" id="L746">                AtlasModelFactory.copyField(field, newField, false);</span>
-<span class="fc" id="L747">                newField.setValue(tmpSourceObject);</span>
-<span class="fc" id="L748">                newField.setFieldType(currentType);</span>
-<span class="fc" id="L749">                field = newField;</span>
-<span class="fc" id="L750">            }</span>
-<span class="fc bfc" id="L751" title="All 2 branches covered.">        } else if (tmpSourceObject instanceof List) {</span>
+<span class="fc" id="L739">                Field newField = new SimpleField();</span>
+<span class="fc" id="L740">                AtlasModelFactory.copyField(field, newField, false);</span>
+<span class="fc" id="L741">                newField.setValue(tmpSourceObject);</span>
+<span class="fc" id="L742">                newField.setFieldType(currentType);</span>
+<span class="fc" id="L743">                field = newField;</span>
+<span class="fc" id="L744">            }</span>
+<span class="fc bfc" id="L745" title="All 2 branches covered.">        } else if (tmpSourceObject instanceof List) {</span>
             // 1 -&gt; n - create new FieldGroup
-<span class="fc" id="L753">            fieldGroup = AtlasModelFactory.createFieldGroupFrom(field, true);</span>
-<span class="fc bfc" id="L754" title="All 2 branches covered.">            for (Object subValue : (List&lt;?&gt;) tmpSourceObject) {</span>
-<span class="fc" id="L755">                Field subField = new SimpleField();</span>
-<span class="fc" id="L756">                AtlasModelFactory.copyField(field, subField, false);</span>
-<span class="fc" id="L757">                subField.setValue(subValue);</span>
-<span class="fc" id="L758">                subField.setFieldType(currentType);</span>
-<span class="fc" id="L759">                fieldGroup.getField().add(subField);</span>
-<span class="fc" id="L760">            }</span>
-<span class="fc" id="L761">            field = fieldGroup;</span>
+<span class="fc" id="L747">            fieldGroup = AtlasModelFactory.createFieldGroupFrom(field, true);</span>
+<span class="fc bfc" id="L748" title="All 2 branches covered.">            for (Object subValue : (List&lt;?&gt;) tmpSourceObject) {</span>
+<span class="fc" id="L749">                Field subField = new SimpleField();</span>
+<span class="fc" id="L750">                AtlasModelFactory.copyField(field, subField, false);</span>
+<span class="fc" id="L751">                subField.setValue(subValue);</span>
+<span class="fc" id="L752">                subField.setFieldType(currentType);</span>
+<span class="fc" id="L753">                fieldGroup.getField().add(subField);</span>
+<span class="fc" id="L754">            }</span>
+<span class="fc" id="L755">            field = fieldGroup;</span>
         } else {
             // 1 -&gt; 1 = reuse passed-in Field
-<span class="fc" id="L764">            field.setValue(tmpSourceObject);</span>
-<span class="fc" id="L765">            field.setFieldType(currentType);</span>
+<span class="fc" id="L758">            field.setValue(tmpSourceObject);</span>
+<span class="fc" id="L759">            field.setFieldType(currentType);</span>
         }
-<span class="fc" id="L767">        return field;</span>
+<span class="fc" id="L761">        return field;</span>
     }
 
     private FieldType determineFieldType(List&lt;Object&gt; values) {
-<span class="pc bpc" id="L771" title="1 of 2 branches missed.">        if (values.size() &gt; 0) {</span>
+<span class="pc bpc" id="L765" title="1 of 2 branches missed.">        if (values.size() &gt; 0) {</span>
             // Use last argument to determine type
-<span class="fc bfc" id="L773" title="All 2 branches covered.">            Optional&lt;Object&gt; o = values.stream().filter(v -&gt; v != null).reduce((a, b) -&gt; b);</span>
-<span class="pc bpc" id="L774" title="1 of 2 branches missed.">            if (o.isPresent()) {</span>
-<span class="fc bfc" id="L775" title="All 2 branches covered.">                if (o.get() instanceof List) {</span>
+<span class="fc bfc" id="L767" title="All 2 branches covered.">            Optional&lt;Object&gt; o = values.stream().filter(v -&gt; v != null).reduce((a, b) -&gt; b);</span>
+<span class="pc bpc" id="L768" title="1 of 2 branches missed.">            if (o.isPresent()) {</span>
+<span class="fc bfc" id="L769" title="All 2 branches covered.">                if (o.get() instanceof List) {</span>
                     // Check deeper level for expressions
-<span class="pc bpc" id="L777" title="1 of 2 branches missed.">                    o = ((List) o.get()).stream().filter(v -&gt; v != null).reduce((a, b) -&gt; b);</span>
+<span class="pc bpc" id="L771" title="1 of 2 branches missed.">                    o = ((List) o.get()).stream().filter(v -&gt; v != null).reduce((a, b) -&gt; b);</span>
                 }
-<span class="fc bfc" id="L779" title="All 2 branches covered.">                if (o.isPresent()) {</span>
-<span class="fc" id="L780">                    return getConversionService().fieldTypeFromClass(o.get().getClass());</span>
+<span class="fc bfc" id="L773" title="All 2 branches covered.">                if (o.isPresent()) {</span>
+<span class="fc" id="L774">                    return getConversionService().fieldTypeFromClass(o.get().getClass());</span>
                 }
             }
         }
-<span class="fc" id="L784">        return FieldType.NONE;</span>
+<span class="fc" id="L778">        return FieldType.NONE;</span>
     }
 
     private void extractFlatListValuesFromFieldGroup(AtlasSession session, FieldGroup fieldGroup, List&lt;Object&gt; values) {
-<span class="pc bpc" id="L788" title="3 of 6 branches missed.">        if (fieldGroup == null || fieldGroup.getField() == null || fieldGroup.getField().isEmpty()) {</span>
-<span class="nc" id="L789">            return;</span>
+<span class="pc bpc" id="L782" title="3 of 6 branches missed.">        if (fieldGroup == null || fieldGroup.getField() == null || fieldGroup.getField().isEmpty()) {</span>
+<span class="nc" id="L783">            return;</span>
         }
-<span class="fc bfc" id="L791" title="All 2 branches covered.">        for (Field subField : fieldGroup.getField()) {</span>
-<span class="fc" id="L792">            Integer index = subField.getIndex();</span>
-<span class="fc" id="L793">            Object value = null;</span>
-<span class="fc bfc" id="L794" title="All 2 branches covered.">            if (subField instanceof FieldGroup) {</span>
+<span class="fc bfc" id="L785" title="All 2 branches covered.">        for (Field subField : fieldGroup.getField()) {</span>
+<span class="fc" id="L786">            Integer index = subField.getIndex();</span>
+<span class="fc" id="L787">            Object value = null;</span>
+<span class="fc bfc" id="L788" title="All 2 branches covered.">            if (subField instanceof FieldGroup) {</span>
                 // Collection field
-<span class="fc" id="L796">                List&lt;Field&gt; fields = ((FieldGroup) subField).getField();</span>
-<span class="pc bpc" id="L797" title="2 of 4 branches missed.">                if (fields != null &amp;&amp; !fields.isEmpty()) {</span>
-<span class="pc bpc" id="L798" title="3 of 6 branches missed.">                    if (fieldGroup.getField().size() == 1 &amp;&amp; (index == 0 || index == null)) {</span>
+<span class="fc" id="L790">                List&lt;Field&gt; fields = ((FieldGroup) subField).getField();</span>
+<span class="pc bpc" id="L791" title="2 of 4 branches missed.">                if (fields != null &amp;&amp; !fields.isEmpty()) {</span>
+<span class="pc bpc" id="L792" title="3 of 6 branches missed.">                    if (fieldGroup.getField().size() == 1 &amp;&amp; (index == 0 || index == null)) {</span>
                         //For backwards compatibility treat as a collection in a SimpleField
-<span class="fc bfc" id="L800" title="All 2 branches covered.">                        for (Field field: fields) {</span>
-<span class="fc" id="L801">                            values.add(field.getValue());</span>
-<span class="fc" id="L802">                        }</span>
-<span class="fc" id="L803">                        break;</span>
+<span class="fc bfc" id="L794" title="All 2 branches covered.">                        for (Field field: fields) {</span>
+<span class="fc" id="L795">                            values.add(field.getValue());</span>
+<span class="fc" id="L796">                        }</span>
+<span class="fc" id="L797">                        break;</span>
                     } else {
-<span class="fc" id="L805">                        AtlasUtil.addAudit(session, subField.getDocId(), &quot;Using only the first element of &quot; +</span>
+<span class="fc" id="L799">                        AtlasUtil.addAudit(session, subField.getDocId(), &quot;Using only the first element of &quot; +</span>
                                 &quot;the collection since a single value is expected in a multi-field selection.&quot;,
-<span class="fc" id="L807">                            subField.getPath(), AuditStatus.WARN, null);</span>
-<span class="fc" id="L808">                        value = fields.get(0).getValue(); //get only the first value</span>
+<span class="fc" id="L801">                            subField.getPath(), AuditStatus.WARN, null);</span>
+<span class="fc" id="L802">                        value = fields.get(0).getValue(); //get only the first value</span>
                     }
                 }
-<span class="fc" id="L811">            } else {</span>
-<span class="fc" id="L812">                value = subField.getValue();</span>
+<span class="fc" id="L805">            } else {</span>
+<span class="fc" id="L806">                value = subField.getValue();</span>
             }
 
-<span class="fc bfc" id="L815" title="All 2 branches covered.">            if (index != null) {</span>
-<span class="fc bfc" id="L816" title="All 2 branches covered.">                while (index &gt;= values.size()) {</span>
-<span class="fc" id="L817">                    values.add(null);</span>
+<span class="fc bfc" id="L809" title="All 2 branches covered.">            if (index != null) {</span>
+<span class="fc bfc" id="L810" title="All 2 branches covered.">                while (index &gt;= values.size()) {</span>
+<span class="fc" id="L811">                    values.add(null);</span>
                 }
-<span class="fc" id="L819">                values.set(index, value);</span>
+<span class="fc" id="L813">                values.set(index, value);</span>
             } else {
-<span class="fc" id="L821">                values.add(value);</span>
+<span class="fc" id="L815">                values.add(value);</span>
             }
-<span class="fc" id="L823">        }</span>
-<span class="fc" id="L824">    }</span>
+<span class="fc" id="L817">        }</span>
+<span class="fc" id="L818">    }</span>
 
     private void extractNestedListValuesFromFieldGroup(FieldGroup fieldGroup, List&lt;Object&gt; values) {
-<span class="pc bpc" id="L827" title="2 of 6 branches missed.">        if (fieldGroup == null || fieldGroup.getField() == null || fieldGroup.getField().isEmpty()) {</span>
-<span class="fc" id="L828">            return;</span>
+<span class="pc bpc" id="L821" title="2 of 6 branches missed.">        if (fieldGroup == null || fieldGroup.getField() == null || fieldGroup.getField().isEmpty()) {</span>
+<span class="fc" id="L822">            return;</span>
         }
-<span class="fc bfc" id="L830" title="All 2 branches covered.">        for (Field subField : fieldGroup.getField()) {</span>
-<span class="fc" id="L831">            Object subValue = null;</span>
-<span class="fc bfc" id="L832" title="All 2 branches covered.">            if (subField instanceof FieldGroup) {</span>
-<span class="fc" id="L833">                List&lt;Object&gt; subValues = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L834">                extractNestedListValuesFromFieldGroup((FieldGroup)subField, subValues);</span>
-<span class="fc" id="L835">                subValue = subValues;</span>
-<span class="fc" id="L836">            } else {</span>
-<span class="fc" id="L837">                subValue = subField.getValue();</span>
+<span class="fc bfc" id="L824" title="All 2 branches covered.">        for (Field subField : fieldGroup.getField()) {</span>
+<span class="fc" id="L825">            Object subValue = null;</span>
+<span class="fc bfc" id="L826" title="All 2 branches covered.">            if (subField instanceof FieldGroup) {</span>
+<span class="fc" id="L827">                List&lt;Object&gt; subValues = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L828">                extractNestedListValuesFromFieldGroup((FieldGroup)subField, subValues);</span>
+<span class="fc" id="L829">                subValue = subValues;</span>
+<span class="fc" id="L830">            } else {</span>
+<span class="fc" id="L831">                subValue = subField.getValue();</span>
             }
-<span class="fc" id="L839">            Integer index = subField.getIndex();</span>
-<span class="fc bfc" id="L840" title="All 2 branches covered.">            if (index != null) {</span>
-<span class="fc bfc" id="L841" title="All 2 branches covered.">                while (index &gt;= values.size()) {</span>
-<span class="fc" id="L842">                    values.add(null);</span>
+<span class="fc" id="L833">            Integer index = subField.getIndex();</span>
+<span class="fc bfc" id="L834" title="All 2 branches covered.">            if (index != null) {</span>
+<span class="fc bfc" id="L835" title="All 2 branches covered.">                while (index &gt;= values.size()) {</span>
+<span class="fc" id="L836">                    values.add(null);</span>
                 }
-<span class="fc" id="L844">                values.set(index, subValue);</span>
+<span class="fc" id="L838">                values.set(index, subValue);</span>
             } else {
-<span class="fc" id="L846">                values.add(subValue);</span>
+<span class="fc" id="L840">                values.add(subValue);</span>
             }
-<span class="fc" id="L848">        }</span>
-<span class="fc" id="L849">    }</span>
+<span class="fc" id="L842">        }</span>
+<span class="fc" id="L843">    }</span>
 
     private boolean hasExpressionAction(List&lt;Action&gt; actions) {
-<span class="fc bfc" id="L852" title="All 2 branches covered.">        for (Action action: actions) {</span>
-<span class="fc bfc" id="L853" title="All 2 branches covered.">            if (action instanceof Expression) {</span>
-<span class="fc" id="L854">                return true;</span>
+<span class="fc bfc" id="L846" title="All 2 branches covered.">        for (Action action: actions) {</span>
+<span class="fc bfc" id="L847" title="All 2 branches covered.">            if (action instanceof Expression) {</span>
+<span class="fc" id="L848">                return true;</span>
             }
-<span class="fc" id="L856">        }</span>
-<span class="fc" id="L857">        return false;</span>
+<span class="fc" id="L850">        }</span>
+<span class="fc" id="L851">        return false;</span>
     }
 
     private Field findLastIndexField(FieldGroup fieldGroup) {
-<span class="fc" id="L861">        Field lastSubField = fieldGroup.getField().get(0);</span>
-<span class="fc bfc" id="L862" title="All 2 branches covered.">        for (Field subField: fieldGroup.getField()) {</span>
-<span class="fc bfc" id="L863" title="All 2 branches covered.">            int subFieldIndex = (subField.getIndex() == null) ? Integer.MAX_VALUE : subField.getIndex();</span>
-<span class="fc bfc" id="L864" title="All 2 branches covered.">            int lastSubFieldIndex = (lastSubField.getIndex() == null) ? Integer.MAX_VALUE: lastSubField.getIndex();</span>
-<span class="pc bpc" id="L865" title="1 of 2 branches missed.">            if (lastSubFieldIndex &lt;= subFieldIndex) {</span>
-<span class="fc" id="L866">                lastSubField = subField;</span>
+<span class="fc" id="L855">        Field lastSubField = fieldGroup.getField().get(0);</span>
+<span class="fc bfc" id="L856" title="All 2 branches covered.">        for (Field subField: fieldGroup.getField()) {</span>
+<span class="fc bfc" id="L857" title="All 2 branches covered.">            int subFieldIndex = (subField.getIndex() == null) ? Integer.MAX_VALUE : subField.getIndex();</span>
+<span class="fc bfc" id="L858" title="All 2 branches covered.">            int lastSubFieldIndex = (lastSubField.getIndex() == null) ? Integer.MAX_VALUE: lastSubField.getIndex();</span>
+<span class="pc bpc" id="L859" title="1 of 2 branches missed.">            if (lastSubFieldIndex &lt;= subFieldIndex) {</span>
+<span class="fc" id="L860">                lastSubField = subField;</span>
             }
-<span class="fc" id="L868">        }</span>
-<span class="fc" id="L869">        return lastSubField;</span>
+<span class="fc" id="L862">        }</span>
+<span class="fc" id="L863">        return lastSubField;</span>
     }
 
     private Object processAction(Action action, ActionProcessor processor, FieldType sourceType, Object sourceObject) throws AtlasException {
-<span class="fc" id="L873">        ActionDetail detail = processor.getActionDetail();</span>
-<span class="pc bpc" id="L874" title="1 of 2 branches missed.">        Multiplicity multiplicity = detail.getMultiplicity()!= null ? detail.getMultiplicity() : Multiplicity.ONE_TO_ONE;</span>
+<span class="fc" id="L867">        ActionDetail detail = processor.getActionDetail();</span>
+<span class="pc bpc" id="L868" title="1 of 2 branches missed.">        Multiplicity multiplicity = detail.getMultiplicity()!= null ? detail.getMultiplicity() : Multiplicity.ONE_TO_ONE;</span>
 
-<span class="fc bfc" id="L876" title="All 2 branches covered.">        if (sourceObject instanceof List) {</span>
-<span class="fc" id="L877">            List&lt;Object&gt; tmpSourceList = (List&lt;Object&gt;) sourceObject;</span>
-<span class="fc bfc" id="L878" title="All 2 branches covered.">            for (int i = 0; i &lt; tmpSourceList.size(); i++) {</span>
-<span class="fc" id="L879">                Object subValue = tmpSourceList.get(i);</span>
-<span class="fc bfc" id="L880" title="All 2 branches covered.">                FieldType subType = (subValue != null ? getConversionService().fieldTypeFromClass(subValue.getClass()) : FieldType.NONE);</span>
-<span class="fc bfc" id="L881" title="All 4 branches covered.">                if (subValue != null &amp;&amp; !isAssignableFieldType(detail.getSourceType(), subType)) {</span>
-<span class="fc" id="L882">                    subValue = getConversionService().convertType(subValue, subType, detail.getSourceType());</span>
-<span class="fc" id="L883">                    tmpSourceList.set(i, subValue);</span>
-                }
-<span class="fc bfc" id="L885" title="All 2 branches covered.">                if (multiplicity != Multiplicity.MANY_TO_ONE) {</span>
-<span class="fc" id="L886">                    subValue = processor.process(action, subValue);</span>
-<span class="fc" id="L887">                    tmpSourceList.set(i, subValue);</span>
-                }
-            }
-<span class="fc bfc" id="L890" title="All 2 branches covered.">        } else if (!isAssignableFieldType(detail.getSourceType(), sourceType)) {</span>
-<span class="fc" id="L891">            sourceObject = getConversionService().convertType(sourceObject, sourceType, detail.getSourceType());</span>
-        }
-<span class="fc bfc" id="L893" title="All 4 branches covered.">        if (!(sourceObject instanceof List) || multiplicity == Multiplicity.MANY_TO_ONE) {</span>
-<span class="fc" id="L894">            sourceObject = processor.process(action, sourceObject);</span>
+<span class="fc bfc" id="L870" title="All 2 branches covered.">        if (sourceObject instanceof List) {</span>
+<span class="fc" id="L871">            convertCollectionValues((List&lt;Object&gt;) sourceObject, detail.getSourceType());</span>
+<span class="fc bfc" id="L872" title="All 2 branches covered.">        } else if (!isAssignableFieldType(detail.getSourceType(), sourceType)) {</span>
+<span class="fc" id="L873">            sourceObject = getConversionService().convertType(sourceObject, sourceType, detail.getSourceType());</span>
         }
 
-<span class="pc bpc" id="L897" title="1 of 4 branches missed.">        if (sourceObject != null &amp;&amp; sourceObject.getClass().isArray()) {</span>
-<span class="fc" id="L898">            sourceObject = Arrays.asList((Object[]) sourceObject);</span>
-<span class="pc bpc" id="L899" title="1 of 4 branches missed.">        } else if ((sourceObject instanceof Collection) &amp;&amp; !(sourceObject instanceof List)) {</span>
-<span class="nc" id="L900">            sourceObject = Arrays.asList(((Collection&lt;?&gt;) sourceObject).toArray());</span>
+<span class="fc bfc" id="L876" title="All 4 branches covered.">        if (sourceObject instanceof List &amp;&amp; multiplicity != Multiplicity.MANY_TO_ONE) {</span>
+<span class="fc" id="L877">            processActionForEachCollectionItem(action, processor, (List&lt;Object&gt;) sourceObject);</span>
+        } else {
+<span class="fc" id="L879">            sourceObject = processor.process(action, sourceObject);</span>
         }
-<span class="fc" id="L902">        return sourceObject;</span>
+
+<span class="pc bpc" id="L882" title="1 of 4 branches missed.">        if (sourceObject != null &amp;&amp; sourceObject.getClass().isArray()) {</span>
+<span class="fc" id="L883">            sourceObject = Arrays.asList((Object[]) sourceObject);</span>
+<span class="pc bpc" id="L884" title="1 of 4 branches missed.">        } else if ((sourceObject instanceof Collection) &amp;&amp; !(sourceObject instanceof List)) {</span>
+<span class="nc" id="L885">            sourceObject = Arrays.asList(((Collection&lt;?&gt;) sourceObject).toArray());</span>
+        }
+<span class="fc" id="L887">        return sourceObject;</span>
     }
 
+    private void processActionForEachCollectionItem(Action action, ActionProcessor processor, List&lt;Object&gt; collection)
+     throws AtlasException {
+<span class="fc bfc" id="L892" title="All 2 branches covered.">        for (int i=0; i&lt;collection.size(); i++) {</span>
+<span class="fc" id="L893">            Object subValue = collection.get(i);</span>
+<span class="pc bpc" id="L894" title="1 of 2 branches missed.">            if (subValue instanceof List) {</span>
+<span class="nc" id="L895">                processActionForEachCollectionItem(action, processor, (List&lt;Object&gt;)subValue);</span>
+<span class="nc" id="L896">                continue;</span>
+            }
+<span class="fc" id="L898">            subValue = processor.process(action, subValue);</span>
+<span class="fc" id="L899">            collection.set(i, subValue);</span>
+        }
+<span class="fc" id="L901">    }</span>
+
+    private void convertCollectionValues(List&lt;Object&gt; sourceList, FieldType type) throws AtlasConversionException {
+<span class="fc bfc" id="L904" title="All 2 branches covered.">        for (int i = 0; i &lt; sourceList.size(); i++) {</span>
+<span class="fc" id="L905">            Object subValue = sourceList.get(i);</span>
+<span class="fc bfc" id="L906" title="All 2 branches covered.">            if (subValue instanceof List) {</span>
+<span class="fc" id="L907">                convertCollectionValues((List&lt;Object&gt;) subValue, type);</span>
+<span class="fc" id="L908">                continue;</span>
+            }
+<span class="fc bfc" id="L910" title="All 2 branches covered.">            FieldType subType = (subValue != null ? getConversionService().fieldTypeFromClass(subValue.getClass()) : FieldType.NONE);</span>
+<span class="fc bfc" id="L911" title="All 4 branches covered.">            if (subValue != null &amp;&amp; !isAssignableFieldType(type, subType)) {</span>
+<span class="fc" id="L912">                subValue = getConversionService().convertType(subValue, subType, type);</span>
+<span class="fc" id="L913">                sourceList.set(i, subValue);</span>
+            }
+        }
+<span class="fc" id="L916">    }</span>
+
     private boolean isAssignableFieldType(FieldType expected, FieldType actual) {
-<span class="fc bfc" id="L906" title="All 2 branches covered.">        if (FieldType.ANY.equals(expected)) {</span>
-<span class="fc" id="L907">            return true;</span>
+<span class="fc bfc" id="L919" title="All 2 branches covered.">        if (FieldType.ANY.equals(expected)) {</span>
+<span class="fc" id="L920">            return true;</span>
         }
-<span class="fc bfc" id="L909" title="All 2 branches covered.">        if (FieldType.ANY_DATE.equals(expected)) {</span>
-<span class="pc bpc" id="L910" title="2 of 4 branches missed.">            return FieldType.DATE.equals(actual) || FieldType.TIME.equals(actual)</span>
-<span class="pc bpc" id="L911" title="3 of 4 branches missed.">                || FieldType.DATE_TIME.equals(actual) || FieldType.DATE_TIME_TZ.equals(actual)</span>
-<span class="pc bnc" id="L912" title="All 4 branches missed.">                || FieldType.DATE_TZ.equals(actual) || FieldType.TIME_TZ.equals(actual);</span>
+<span class="fc bfc" id="L922" title="All 2 branches covered.">        if (FieldType.ANY_DATE.equals(expected)) {</span>
+<span class="pc bpc" id="L923" title="2 of 4 branches missed.">            return FieldType.DATE.equals(actual) || FieldType.TIME.equals(actual)</span>
+<span class="pc bpc" id="L924" title="3 of 4 branches missed.">                || FieldType.DATE_TIME.equals(actual) || FieldType.DATE_TIME_TZ.equals(actual)</span>
+<span class="pc bnc" id="L925" title="All 4 branches missed.">                || FieldType.DATE_TZ.equals(actual) || FieldType.TIME_TZ.equals(actual);</span>
         }
-<span class="fc" id="L914">        return expected.equals(actual);</span>
+<span class="fc" id="L927">        return expected.equals(actual);</span>
     }
 
     public AtlasConversionService getConversionService() {
-<span class="fc" id="L918">        return this.conversionService;</span>
+<span class="fc" id="L931">        return this.conversionService;</span>
     }
 
     private String camelize(String parameter) {
-<span class="pc bpc" id="L922" title="2 of 4 branches missed.">        if (parameter == null || parameter.length() == 0) {</span>
-<span class="nc" id="L923">            return parameter;</span>
+<span class="pc bpc" id="L935" title="2 of 4 branches missed.">        if (parameter == null || parameter.length() == 0) {</span>
+<span class="nc" id="L936">            return parameter;</span>
         }
-<span class="fc" id="L925">        char c[] = parameter.toCharArray();</span>
-<span class="fc" id="L926">        c[0] = Character.toLowerCase(c[0]);</span>
-<span class="fc" id="L927">        return new String(c);</span>
+<span class="fc" id="L938">        char c[] = parameter.toCharArray();</span>
+<span class="fc" id="L939">        c[0] = Character.toLowerCase(c[0]);</span>
+<span class="fc" id="L940">        return new String(c);</span>
     }
 
 }

@@ -83,12 +83,12 @@ import io.atlasmap.xml.v2.XmlNamespaces;
 <span class="fc" id="L83">        List&lt;Validation&gt; xmlValidations = createValidationService().validateMapping(atlasSession.getMapping());</span>
 <span class="fc" id="L84">        atlasSession.getValidations().getValidation().addAll(xmlValidations);</span>
 
-<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L87">            LOG.debug(&quot;Detected &quot; + xmlValidations.size() + &quot; xml validation notices&quot;);</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L87">            LOG.debug(&quot;Detected &quot; + xmlValidations.size() + &quot; xml validation notices&quot;);</span>
         }
 
-<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L91">            LOG.debug(&quot;{}: processPreValidation completed&quot;, getDocId());</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L91">            LOG.debug(&quot;{}: processPreValidation completed&quot;, getDocId());</span>
         }
 <span class="fc" id="L93">    }</span>
 
@@ -124,8 +124,8 @@ import io.atlasmap.xml.v2.XmlNamespaces;
 <span class="fc" id="L124">        reader.setDocument(sourceXmlDocument);</span>
 <span class="fc" id="L125">        session.setFieldReader(getDocId(), reader);</span>
 
-<span class="pc bpc" id="L127" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L128">            LOG.debug(&quot;{}: processPreSourceExecution completed&quot;, getDocId());</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L128">            LOG.debug(&quot;{}: processPreSourceExecution completed&quot;, getDocId());</span>
         }
 <span class="fc" id="L130">    }</span>
 
@@ -173,8 +173,8 @@ import io.atlasmap.xml.v2.XmlNamespaces;
 <span class="fc" id="L173">        XmlFieldWriter writer = new XmlFieldWriter(getClassLoader(), nsMap, template);</span>
 <span class="fc" id="L174">        session.setFieldWriter(getDocId(), writer);</span>
 
-<span class="pc bpc" id="L176" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L177">            LOG.debug(&quot;{}: processPreTargetExcution completed&quot;, getDocId());</span>
+<span class="fc bfc" id="L176" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L177">            LOG.debug(&quot;{}: processPreTargetExcution completed&quot;, getDocId());</span>
         }
 <span class="fc" id="L179">    }</span>
 
@@ -190,10 +190,10 @@ import io.atlasmap.xml.v2.XmlNamespaces;
         }
 <span class="fc" id="L191">        reader.read(session);</span>
 
-<span class="pc bpc" id="L193" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L194">            LOG.debug(&quot;{}: processSourceFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}]&quot;,</span>
-<span class="nc" id="L195">                    getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(),</span>
-<span class="nc" id="L196">                    sourceField.getValue());</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L194">            LOG.debug(&quot;{}: processSourceFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}]&quot;,</span>
+<span class="fc" id="L195">                    getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(),</span>
+<span class="fc" id="L196">                    sourceField.getValue());</span>
         }
 <span class="fc" id="L198">    }</span>
 
@@ -266,12 +266,12 @@ import io.atlasmap.xml.v2.XmlNamespaces;
 <span class="nc" id="L266">            session.head().setTargetField(targetFieldGroup);</span>
         }
 
-<span class="pc bpc" id="L269" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L270">            LOG.debug(</span>
+<span class="fc bfc" id="L269" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L270">            LOG.debug(</span>
                     &quot;{}: processTargetFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}], TargetField:[docId={}, path={}, type={}, value={}]&quot;,
-<span class="nc" id="L272">                    getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(),</span>
-<span class="nc" id="L273">                    sourceField.getValue(), targetField.getDocId(), targetField.getPath(), targetField.getFieldType(),</span>
-<span class="nc" id="L274">                    targetField.getValue());</span>
+<span class="fc" id="L272">                    getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(),</span>
+<span class="fc" id="L273">                    sourceField.getValue(), targetField.getDocId(), targetField.getPath(), targetField.getFieldType(),</span>
+<span class="fc" id="L274">                    targetField.getValue());</span>
         }
 <span class="fc" id="L276">    }</span>
 
@@ -295,8 +295,8 @@ import io.atlasmap.xml.v2.XmlNamespaces;
     public void processPostSourceExecution(AtlasInternalSession session) throws AtlasException {
 <span class="fc" id="L296">        session.removeFieldReader(getDocId());</span>
 
-<span class="pc bpc" id="L298" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L299">            LOG.debug(&quot;{}: processPostSourceExecution completed&quot;, getDocId());</span>
+<span class="fc bfc" id="L298" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L299">            LOG.debug(&quot;{}: processPostSourceExecution completed&quot;, getDocId());</span>
         }
 <span class="fc" id="L301">    }</span>
 
@@ -314,8 +314,8 @@ import io.atlasmap.xml.v2.XmlNamespaces;
         }
 <span class="fc" id="L315">        session.removeFieldWriter(getDocId());</span>
 
-<span class="pc bpc" id="L317" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L318">            LOG.debug(&quot;{}: processPostTargetExecution completed&quot;, getDocId());</span>
+<span class="fc bfc" id="L317" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L318">            LOG.debug(&quot;{}: processPostTargetExecution completed&quot;, getDocId());</span>
         }
 <span class="fc" id="L320">    }</span>
 
