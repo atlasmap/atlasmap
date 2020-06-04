@@ -19,6 +19,7 @@ import {
 
 import { MainContent } from "../Layout";
 import { IAtlasmapField, IAtlasmapMapping } from "../Views";
+import { DocumentFieldPreview } from "../UI";
 
 const emptyContent = [
   {
@@ -46,25 +47,53 @@ const styles = StyleSheet.create({
 });
 
 export interface IMappingTableProps {
-  mappings: IAtlasmapMapping[];
+  mappings: Array<IAtlasmapMapping>;
   onSelectMapping: (mapping: IAtlasmapMapping) => void;
+  shouldShowMappingPreview: (field: IAtlasmapMapping) => boolean;
+  onFieldPreviewChange: (field: IAtlasmapField, value: string) => void;
 }
 
 export const MappingTableView: FunctionComponent<IMappingTableProps> = ({
   mappings,
   onSelectMapping,
+  shouldShowMappingPreview,
+  onFieldPreviewChange,
 }) => {
+  const renderPreview = (
+    mapping: IAtlasmapMapping,
+    mappedField: IAtlasmapField,
+  ) =>
+    shouldShowMappingPreview(mapping) && (
+      <DocumentFieldPreview
+        id={mappedField.id}
+        value={mappedField.previewValue}
+        onChange={(value) => onFieldPreviewChange(mappedField, value)}
+      />
+    );
+
   const rows =
     mappings.length === 0
       ? emptyContent
       : mappings.map((mapping) => {
-          const sources = mapping.sourceFields.map((source) => {
-            const { name } = source as IAtlasmapField;
-            return <div key={name}>{name}</div>;
+          const sources = mapping.sourceFields.map((source, index) => {
+            const field: IAtlasmapField = source;
+            const { name } = field;
+            return (
+              <div key={index}>
+                {name}
+                {renderPreview(mapping, field)}
+              </div>
+            );
           });
-          const targets = mapping.targetFields.map((target) => {
-            const { name } = target as IAtlasmapField;
-            return <div key={name}>{name}</div>;
+          const targets = mapping.targetFields.map((target, index) => {
+            const field: IAtlasmapField = target;
+            const { name } = field;
+            return (
+              <div key={index}>
+                {name}
+                {renderPreview(mapping, field)}
+              </div>
+            );
           });
           return {
             cells: [

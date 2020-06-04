@@ -131,28 +131,28 @@ export function fromDocumentDefinitionToFieldGroup(
 }
 
 export function fromMappedFieldToIMappingField(
-  field: MappedField,
+  mappedField: MappedField,
 ): IAtlasmapMappedField | null {
-  if (!field.field || !field.field.docDef) {
+  if (!mappedField.field || !mappedField.field.docDef) {
     return null;
   }
   return {
-    id: `${field.field!.docDef.uri || field.field!.docDef.type}:${
-      field.field!.docDef.isSource ? "source" : "target"
-    }:${field.field!.path}`,
-    name: field.field!.getFieldLabel(false, false),
-    type: field.field!.type,
-    path: field.field!.path,
-    previewValue: "",
+    id: `${mappedField.field!.docDef.uri || mappedField.field!.docDef.type}:${
+      mappedField.field!.docDef.isSource ? "source" : "target"
+    }:${mappedField.field!.path}`,
+    name: mappedField.field!.getFieldLabel(false, false),
+    type: mappedField.field!.type,
+    path: mappedField.field!.path,
+    previewValue: mappedField.field!.value,
     hasTransformations: false,
     mappings: [],
     isCollection: false,
     isConnected: false,
     isDisabled: false,
-    amField: field.field,
-    transformations: field.actions.map((a) => ({
+    amField: mappedField.field,
+    transformations: mappedField.actions.map((a) => ({
       name: a.name,
-      options: getMappingActions(field.isSource()).map(
+      options: getMappingActions(mappedField.isSource()).map(
         (a): ITransformationSelectOption => ({
           name: DataMapperUtil.toDisplayable(a.name),
           value: a.name,

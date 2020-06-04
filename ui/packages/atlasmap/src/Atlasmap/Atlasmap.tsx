@@ -18,6 +18,7 @@ import {
   NamespaceTableView,
   SourceMappingTargetView,
   SourceTargetView,
+  IAtlasmapMapping,
 } from "../Views";
 import { useAtlasmap } from "./AtlasmapProvider";
 import { useAtlasmapDialogs } from "./useAtlasmapDialogs";
@@ -108,6 +109,14 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       !!selectedMapping &&
       field.isConnected &&
       !!field.mappings.find((m) => m.id === selectedMapping.id),
+    [selectedMapping, showMappingPreview],
+  );
+
+  const shouldShowMappingPreview = useCallback(
+    (mapping: IAtlasmapMapping) =>
+      showMappingPreview &&
+      !!selectedMapping &&
+      mapping.id === selectedMapping.id,
     [selectedMapping, showMappingPreview],
   );
 
@@ -290,6 +299,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
           <MappingTableView
             mappings={mappings}
             onSelectMapping={selectMapping}
+            shouldShowMappingPreview={shouldShowMappingPreview}
+            onFieldPreviewChange={onFieldPreviewChange}
           />
         );
       case "NamespaceTable":
@@ -323,9 +334,11 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     handlers,
     mappingEvents,
     mappings,
+    onFieldPreviewChange,
     properties,
     selectMapping,
     selectedMapping,
+    shouldShowMappingPreview,
     showMappingColumn,
     showMappingPreview,
     showTypes,
