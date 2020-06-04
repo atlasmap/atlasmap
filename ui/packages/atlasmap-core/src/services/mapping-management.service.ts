@@ -122,7 +122,7 @@ export class MappingManagementService {
     mappingFileNames: string[],
     mappingDefinition: MappingDefinition
   ): Observable<boolean> {
-    return new Observable<boolean>((observer: any) => {
+    return new Observable<boolean>((observer) => {
       if (mappingFileNames.length === 0) {
         observer.complete();
         return;

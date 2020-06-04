@@ -49,7 +49,7 @@ export class FileManagementService {
   }
 
   findMappingFiles(filter: string): Observable<string[]> {
-    return new Observable<string[]>((observer: any) => {
+    return new Observable<string[]>((observer) => {
       const url =
         this.cfg.initCfg.baseMappingServiceUrl +
         'mappings' +
@@ -87,7 +87,7 @@ export class FileManagementService {
    * Retrieve the current user data mappings catalog from the server as a GZIP compressed byte array buffer.
    */
   getCurrentMappingCatalog(): Observable<Uint8Array> {
-    return new Observable<Uint8Array>((observer: any) => {
+    return new Observable<Uint8Array>((observer) => {
       const baseURL: string =
         this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/';
       const url: string = baseURL;
@@ -125,7 +125,7 @@ export class FileManagementService {
   }
 
   getCurrentADMCatalog(): Observable<Uint8Array> {
-    return new Observable<Uint8Array>((observer: any) => {
+    return new Observable<Uint8Array>((observer) => {
       const baseURL: string =
         this.cfg.initCfg.baseMappingServiceUrl + 'mapping/ZIP/';
       const url: string = baseURL;
@@ -166,7 +166,7 @@ export class FileManagementService {
    * Establish an observable function to delete mapping files on the runtime.
    */
   resetMappings(): Observable<boolean> {
-    return new Observable<boolean>((observer: any) => {
+    return new Observable<boolean>((observer) => {
       const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/RESET';
       this.cfg.logger!.debug('Mapping Service Request - Reset');
       this.api
@@ -190,7 +190,7 @@ export class FileManagementService {
    * Establish an observable function to delete user-defined JAR library files on the runtime.
    */
   resetLibs(): Observable<boolean> {
-    return new Observable<boolean>((observer: any) => {
+    return new Observable<boolean>((observer) => {
       const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/resetLibs';
       this.cfg.logger!.debug(
         'Mapping Service Request - Reset User-Defined Libraries'
@@ -222,7 +222,7 @@ export class FileManagementService {
    * @param buffer - JSON content
    */
   setMappingToService(jsonBuffer: string): Observable<boolean> {
-    return new Observable<boolean>((observer: any) => {
+    return new Observable<boolean>((observer) => {
       const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON';
       const headers = {
         'Content-Type': 'application/json',
@@ -260,7 +260,7 @@ export class FileManagementService {
     compressedBuffer: any,
     url: string
   ): Observable<boolean> {
-    return new Observable<boolean>((observer: any) => {
+    return new Observable<boolean>((observer) => {
       this.cfg.logger!.debug('Set Compressed Mapping Service Request');
       this.api
         .put(url, { body: compressedBuffer })
@@ -573,7 +573,7 @@ export class FileManagementService {
    * Retrieve the current user AtlasMap data mappings from the server as a JSON object.
    */
   private getCurrentMappingJson(): Observable<any> {
-    return new Observable<any>((observer: any) => {
+    return new Observable<any>((observer) => {
       const baseURL: string =
         this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON/';
       this.api

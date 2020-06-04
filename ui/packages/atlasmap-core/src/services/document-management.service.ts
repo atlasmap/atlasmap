@@ -144,7 +144,7 @@ export class DocumentManagementService {
   }
 
   fetchClassPath(): Observable<string> {
-    return new Observable<string>((observer: any) => {
+    return new Observable<string>((observer) => {
       const requestBody = {
         MavenClasspathRequest: {
           jsonType:
@@ -180,7 +180,7 @@ export class DocumentManagementService {
     docDef: DocumentDefinition,
     classPath: string
   ): Observable<DocumentDefinition> {
-    return new Observable<DocumentDefinition>((observer: any) => {
+    return new Observable<DocumentDefinition>((observer) => {
       if (docDef.inspectionResult) {
         const responseJson: any = JSON.parse(docDef.inspectionResult);
         this.parseDocumentResponse(responseJson, docDef);
