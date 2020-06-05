@@ -33,6 +33,7 @@ public abstract class BaseClass {
         private BigDecimal someBigDecimal;
         private BigInteger someBigInteger;
         private long someLong;
+        private String[] someStringArray;
 
         public String getSomeField() {
             return someField;
@@ -136,6 +137,15 @@ public abstract class BaseClass {
         public void setSomeString(String someString) {
             this.someString = someString;
         }
+
+        public String[] getSomeStringArray() {
+            return someStringArray;
+        }
+
+        public void setSomeStringArray(String[] someStringArray) {
+            this.someStringArray = someStringArray;
+        }
+
     }
 
     private String someField;
@@ -150,6 +160,7 @@ public abstract class BaseClass {
     private BigDecimal someBigDecimal;
     private BigInteger someBigInteger;
     private long someLong;
+    private String[] someStringArray;
 
     public String getSomeField() {
         return someField;
@@ -245,6 +256,14 @@ public abstract class BaseClass {
 
     public void setSomeString(String someString) {
         this.someString = someString;
+    }
+
+    public String[] getSomeStringArray() {
+        return someStringArray;
+    }
+
+    public void setSomeStringArray(String[] someStringArray) {
+        this.someStringArray = someStringArray;
     }
 
 }

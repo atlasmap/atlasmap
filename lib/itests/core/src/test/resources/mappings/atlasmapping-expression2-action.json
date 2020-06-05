@@ -37,6 +37,31 @@
           "name" : "someDouble"
         } ],
         "id" : "mapping.930637"
+      },
+      {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "expression" : "Uppercase(${SourceClass:/someStringArray[]})",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "docId" : "SourceClass",
+            "index" : 0,
+            "path" : "/someStringArray[]",
+            "fieldType" : "STRING",
+            "name" : "someStringArray"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "TargetClass",
+          "path" : "/someStringArray[]",
+          "fieldType" : "STRING",
+          "name" : "someStringArray"
+        } ],
+        "id" : "mapping.930638"
       } ]
     },
     "lookupTables" : {

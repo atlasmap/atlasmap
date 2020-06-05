@@ -16,6 +16,7 @@
 package io.atlasmap.itests.core;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
 
 import java.math.BigDecimal;
@@ -115,13 +116,14 @@ public class ExpressionTest {
     }
 
     @Test
-    public void testAverage() throws Exception {
-        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-expression2-average.json");
+    public void testAction() throws Exception {
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-expression2-action.json");
         AtlasMapping mapping = mappingService.loadMapping(url);
         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
         AtlasSession session = context.createSession();
         SourceClass source = new SourceClass();
         source.setSomeIntArray(new int[]{1, 2, 3, 4, 5});
+        source.setSomeStringArray(new String[] {"one", "two", "three", "four"});
         session.setSourceDocument("SourceClass", source);
 
         context.process(session);
@@ -130,6 +132,7 @@ public class ExpressionTest {
         assertEquals(TargetClass.class, output.getClass());
         TargetClass target = TargetClass.class.cast(output);
         assertEquals((double)3.0, target.getSomeDouble(), 0.01);
+        assertArrayEquals(new String[] {"ONE", "TWO", "THREE", "FOUR"}, target.getSomeStringArray());
     }
 
     @Test
