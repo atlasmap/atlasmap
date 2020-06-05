@@ -243,7 +243,7 @@ public class AtlasModelFactory {
         } else {
 <span class="fc" id="L244">            tmp.append(&quot; fieldActions#=&quot;);</span>
         }
-<span class="fc bfc" id="L246" title="All 2 branches covered.">        tmp.append(&quot; fieldType=&quot; + (f.getFieldType() != null ? f.getFieldType().value() : null));</span>
+<span class="pc bpc" id="L246" title="1 of 2 branches missed.">        tmp.append(&quot; fieldType=&quot; + (f.getFieldType() != null ? f.getFieldType().value() : null));</span>
 <span class="fc" id="L247">        tmp.append(&quot; index=&quot; + f.getIndex());</span>
 <span class="fc" id="L248">        tmp.append(&quot; path=&quot; + f.getPath());</span>
 <span class="pc bpc" id="L249" title="1 of 2 branches missed.">        tmp.append(&quot; fieldStatus=&quot; + (f.getStatus() != null ? f.getStatus().value() : null));</span>
@@ -272,31 +272,39 @@ public class AtlasModelFactory {
     }
 
     public static Field wrapWithField(Object val) {
-<span class="fc bfc" id="L275" title="All 2 branches covered.">        if (val instanceof java.util.Collection) {</span>
-<span class="fc" id="L276">            java.util.Collection c = (java.util.Collection)val;</span>
-<span class="fc" id="L277">            FieldGroup group = new FieldGroup();</span>
-<span class="fc" id="L278">            group.setPath(GENERATED_PATH);</span>
-<span class="fc" id="L279">            c.forEach(sub -&gt; group.getField().add(wrapWithField(sub)));</span>
-<span class="fc" id="L280">            return group;</span>
+<span class="fc" id="L275">        return wrapWithField(val, &quot;/&quot;);</span>
+    }
+
+    public static Field wrapWithField(Object val, String parentPath) {
+<span class="fc bfc" id="L279" title="All 2 branches covered.">        if (val instanceof java.util.Collection) {</span>
+<span class="fc" id="L280">            Object[] collection = ((java.util.Collection)val).toArray();</span>
+<span class="fc" id="L281">            FieldGroup group = new FieldGroup();</span>
+<span class="fc" id="L282">            group.setPath(parentPath + GENERATED_PATH);</span>
+<span class="fc bfc" id="L283" title="All 2 branches covered.">            for (int i=0; i&lt;collection.length; i++) {</span>
+<span class="fc" id="L284">                Field sub = wrapWithField(collection[i], group.getPath());</span>
+<span class="fc" id="L285">                sub.setPath(sub.getPath() + &quot;[&quot; + i + &quot;]&quot;);</span>
+<span class="fc" id="L286">                group.getField().add(sub);</span>
+            }
+<span class="fc" id="L288">            return group;</span>
         }
-<span class="fc" id="L282">        SimpleField answer = new SimpleField();</span>
-<span class="fc" id="L283">        answer.setPath(GENERATED_PATH);</span>
-<span class="fc" id="L284">        answer.setValue(val);</span>
-<span class="fc" id="L285">        return answer;</span>
+<span class="fc" id="L290">        SimpleField answer = new SimpleField();</span>
+<span class="fc" id="L291">        answer.setPath(GENERATED_PATH);</span>
+<span class="fc" id="L292">        answer.setValue(val);</span>
+<span class="fc" id="L293">        return answer;</span>
     }
 
     public static Object unwrapField(Field f) {
-<span class="pc bpc" id="L289" title="1 of 2 branches missed.">        if (f == null) {</span>
-<span class="nc" id="L290">            return null;</span>
+<span class="pc bpc" id="L297" title="1 of 2 branches missed.">        if (f == null) {</span>
+<span class="nc" id="L298">            return null;</span>
         }
-<span class="fc bfc" id="L292" title="All 2 branches covered.">        if (f instanceof FieldGroup) {</span>
-<span class="fc" id="L293">            List&lt;Object&gt; l = new LinkedList&lt;&gt;();</span>
-<span class="fc bfc" id="L294" title="All 2 branches covered.">            for (Field sub : ((FieldGroup)f).getField()) {</span>
-<span class="fc" id="L295">                l.add(unwrapField(sub));</span>
-<span class="fc" id="L296">            }</span>
-<span class="fc" id="L297">            return l;</span>
+<span class="fc bfc" id="L300" title="All 2 branches covered.">        if (f instanceof FieldGroup) {</span>
+<span class="fc" id="L301">            List&lt;Object&gt; l = new LinkedList&lt;&gt;();</span>
+<span class="fc bfc" id="L302" title="All 2 branches covered.">            for (Field sub : ((FieldGroup)f).getField()) {</span>
+<span class="fc" id="L303">                l.add(unwrapField(sub));</span>
+<span class="fc" id="L304">            }</span>
+<span class="fc" id="L305">            return l;</span>
         } else {
-<span class="fc" id="L299">            return f.getValue();</span>
+<span class="fc" id="L307">            return f.getValue();</span>
         }
     }
 

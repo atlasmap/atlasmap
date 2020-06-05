@@ -117,15 +117,15 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 <span class="fc" id="L117">        fieldActionServiceLoader.forEach(atlasFieldAction -&gt; createActionProcessor(atlasFieldAction, answer));</span>
 <span class="pc" id="L118">        compat.forEach(atlasFieldAction -&gt; createActionProcessor(atlasFieldAction, answer));</span>
 
-<span class="fc bfc" id="L120" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
-<span class="fc" id="L121">            LOG.debug(String.format(&quot;Loaded %s Field Actions&quot;, answer.size()));</span>
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L121">            LOG.debug(String.format(&quot;Loaded %s Field Actions&quot;, answer.size()));</span>
         }
 <span class="fc" id="L123">        return answer;</span>
     }
 
     private void createActionProcessor(AtlasFieldAction atlasFieldAction, List&lt;ActionProcessor&gt; answer) {
-<span class="fc bfc" id="L127" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
-<span class="fc" id="L128">            LOG.debug(&quot;Loading FieldAction class: &quot; + atlasFieldAction.getClass().getCanonicalName());</span>
+<span class="pc bpc" id="L127" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L128">            LOG.debug(&quot;Loading FieldAction class: &quot; + atlasFieldAction.getClass().getCanonicalName());</span>
         }
 
 <span class="fc" id="L131">        Class&lt;?&gt; clazz = atlasFieldAction.getClass();</span>
