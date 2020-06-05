@@ -46,6 +46,8 @@
           <destDir>javadoc</destDir>
           <doctitle>AtlasMap Java API Reference (Javadoc)</doctitle>
           <windowtitle>AtlasMap Java API Reference (Javadoc)</windowtitle>
+          <excludePackageNames>io.atlasmap.expression.parser</excludePackageNames>
+          <failOnError>false</failOnError>
         </configuration>
       </plugin>
     </plugins>
