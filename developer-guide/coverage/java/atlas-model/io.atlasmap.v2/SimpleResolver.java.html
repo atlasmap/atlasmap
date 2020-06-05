@@ -32,7 +32,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
                 // Use short ids for classes in the same package..
 <span class="fc" id="L34">                String id = null;</span>
-<span class="pc bpc" id="L35" title="1 of 2 branches missed.">                if ( c.getPackage().getName().equals(baseClass.getPackage().getName()) ) {</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">                if ( c.getPackage().getName().equals(baseClass.getPackage().getName()) ) {</span>
 <span class="pc bpc" id="L36" title="3 of 4 branches missed.">                    if (jsonAnnoation != null &amp;&amp; jsonAnnoation.value() != null) {</span>
 <span class="nc" id="L37">                        id = jsonAnnoation.value();</span>
                     } else {
@@ -40,7 +40,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
                     }
                 } else {
                     // All other extensions need fully qualified names.
-<span class="nc" id="L43">                    id = c.getName();</span>
+<span class="fc" id="L43">                    id = c.getName();</span>
                 }
 <span class="fc" id="L45">                typeToId.put(c, id);</span>
 <span class="fc" id="L46">                idToType.put(id, TypeFactory.defaultInstance().constructSpecializedType(baseType, c));</span>

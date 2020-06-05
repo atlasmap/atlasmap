@@ -233,9 +233,9 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 
     public void setActionSchema(Class&lt;? extends Action&gt; clazz) throws JsonMappingException {
 
-<span class="fc bfc" id="L236" title="All 2 branches covered.">        if (clazz == null) {</span>
-<span class="fc" id="L237">            setActionSchema((ObjectSchema)null);</span>
-<span class="fc" id="L238">            return;</span>
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">        if (clazz == null) {</span>
+<span class="nc" id="L237">            setActionSchema((ObjectSchema)null);</span>
+<span class="nc" id="L238">            return;</span>
         }
 
 <span class="fc" id="L241">        setClassName(clazz.getName());</span>

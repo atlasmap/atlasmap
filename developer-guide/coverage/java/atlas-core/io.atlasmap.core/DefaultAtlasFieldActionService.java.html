@@ -134,8 +134,8 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
             // Continue supporting creating details from @AtlasFieldActionInfo
 <span class="fc" id="L136">            ActionProcessor det = createDetailFromFieldActionInfo(clazz, method);</span>
-<span class="fc bfc" id="L137" title="All 2 branches covered.">            if (det != null) {</span>
-<span class="fc" id="L138">                answer.add(det);</span>
+<span class="pc bpc" id="L137" title="1 of 2 branches missed.">            if (det != null) {</span>
+<span class="nc" id="L138">                answer.add(det);</span>
             }
 
             // Also support using new simpler @AtlasActionProcessor
@@ -148,59 +148,59 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
     private ActionProcessor createDetailFromFieldActionInfo(final Class&lt;?&gt; clazz, final Method method) {
 <span class="fc" id="L150">        AtlasFieldActionInfo annotation = method.getAnnotation(AtlasFieldActionInfo.class);</span>
-<span class="fc bfc" id="L151" title="All 2 branches covered.">        if (annotation == null) {</span>
+<span class="pc bpc" id="L151" title="1 of 2 branches missed.">        if (annotation == null) {</span>
 <span class="fc" id="L152">            return null;</span>
         }
 
-<span class="fc" id="L155">        final ActionDetail det = new ActionDetail();</span>
-<span class="fc" id="L156">        det.setClassName(clazz.getName());</span>
-<span class="fc" id="L157">        det.setMethod(method.getName());</span>
-<span class="fc" id="L158">        det.setName(annotation.name());</span>
-<span class="fc" id="L159">        det.setSourceType(annotation.sourceType());</span>
-<span class="fc" id="L160">        det.setTargetType(annotation.targetType());</span>
-<span class="fc" id="L161">        CollectionType sourceCollection = annotation.sourceCollectionType();</span>
-<span class="fc" id="L162">        CollectionType targetCollection = annotation.sourceCollectionType();</span>
-<span class="pc bpc" id="L163" title="2 of 4 branches missed.">        if (sourceCollection != null &amp;&amp; sourceCollection != CollectionType.NONE) {</span>
+<span class="nc" id="L155">        final ActionDetail det = new ActionDetail();</span>
+<span class="nc" id="L156">        det.setClassName(clazz.getName());</span>
+<span class="nc" id="L157">        det.setMethod(method.getName());</span>
+<span class="nc" id="L158">        det.setName(annotation.name());</span>
+<span class="nc" id="L159">        det.setSourceType(annotation.sourceType());</span>
+<span class="nc" id="L160">        det.setTargetType(annotation.targetType());</span>
+<span class="nc" id="L161">        CollectionType sourceCollection = annotation.sourceCollectionType();</span>
+<span class="nc" id="L162">        CollectionType targetCollection = annotation.sourceCollectionType();</span>
+<span class="nc bnc" id="L163" title="All 4 branches missed.">        if (sourceCollection != null &amp;&amp; sourceCollection != CollectionType.NONE) {</span>
 <span class="nc" id="L164">            det.setMultiplicity(Multiplicity.MANY_TO_ONE);</span>
-<span class="pc bpc" id="L165" title="2 of 4 branches missed.">        } else if (targetCollection != null &amp;&amp; targetCollection != CollectionType.NONE) {</span>
+<span class="nc bnc" id="L165" title="All 4 branches missed.">        } else if (targetCollection != null &amp;&amp; targetCollection != CollectionType.NONE) {</span>
 <span class="nc" id="L166">            det.setMultiplicity(Multiplicity.ONE_TO_MANY);</span>
         } else {
-<span class="fc" id="L168">            det.setMultiplicity(Multiplicity.ONE_TO_ONE);</span>
+<span class="nc" id="L168">            det.setMultiplicity(Multiplicity.ONE_TO_ONE);</span>
         }
 
         Class&lt;? extends Action&gt; actionClazz;
         try {
 <span class="nc" id="L173">            actionClazz = (Class&lt;? extends Action&gt;) Class.forName(&quot;io.atlasmap.v2.&quot; + annotation.name());</span>
-<span class="fc" id="L174">        } catch (Exception e) {</span>
-<span class="fc" id="L175">            actionClazz = null;</span>
-<span class="fc" id="L176">            det.setCustom(true);</span>
+<span class="nc" id="L174">        } catch (Exception e) {</span>
+<span class="nc" id="L175">            actionClazz = null;</span>
+<span class="nc" id="L176">            det.setCustom(true);</span>
 <span class="nc" id="L177">        }</span>
 
         try {
-<span class="fc" id="L180">            det.setActionSchema(actionClazz);</span>
+<span class="nc" id="L180">            det.setActionSchema(actionClazz);</span>
 <span class="nc" id="L181">        } catch (Exception e) {</span>
 <span class="nc" id="L182">            LOG.error(String.format(&quot;Could not get json schema for action=%s msg=%s&quot;, annotation.name(), e.getMessage()), e);</span>
-<span class="fc" id="L183">        }</span>
+<span class="nc" id="L183">        }</span>
 
         try {
             // TODO https://github.com/atlasmap/atlasmap/issues/538
-<span class="pc bpc" id="L187" title="2 of 4 branches missed.">            if (det.isCustom() == null || !det.isCustom()) {</span>
+<span class="nc bnc" id="L187" title="All 4 branches missed.">            if (det.isCustom() == null || !det.isCustom()) {</span>
 <span class="nc" id="L188">                det.setParameters(detectFieldActionParameters(actionClazz));</span>
             }
 <span class="nc" id="L190">        } catch (ClassNotFoundException e) {</span>
 <span class="nc" id="L191">            LOG.error(String.format(&quot;Error detecting parameters for field action=%s msg=%s&quot;, annotation.name(), e.getMessage()), e);</span>
-<span class="fc" id="L192">        }</span>
+<span class="nc" id="L192">        }</span>
 
-<span class="pc bpc" id="L194" title="1 of 2 branches missed.">        if (LOG.isTraceEnabled()) {</span>
+<span class="nc bnc" id="L194" title="All 2 branches missed.">        if (LOG.isTraceEnabled()) {</span>
 <span class="nc" id="L195">            LOG.trace(&quot;Loaded FieldAction: &quot; + det.getName());</span>
         }
 
-<span class="fc" id="L198">        Class&lt;? extends Action&gt; finalActionClazz = actionClazz;</span>
-<span class="fc" id="L199">        return new ActionProcessor() {</span>
+<span class="nc" id="L198">        Class&lt;? extends Action&gt; finalActionClazz = actionClazz;</span>
+<span class="nc" id="L199">        return new ActionProcessor() {</span>
 
             @Override
             public ActionDetail getActionDetail() {
-<span class="fc" id="L203">                return det;</span>
+<span class="nc" id="L203">                return det;</span>
             }
 
             @Override
@@ -286,8 +286,8 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 <span class="fc" id="L286">        det.setMethod(method.getName());</span>
 <span class="fc" id="L287">        det.setName(name);</span>
 <span class="fc" id="L288">        det.setTargetType(toFieldType(targetClass, method.getGenericReturnType()));</span>
-<span class="pc bpc" id="L289" title="1 of 2 branches missed.">        if (!clazz.getPackage().getName().equals(&quot;io.atlasmap.actions&quot;)) {</span>
-<span class="nc" id="L290">            det.setCustom(true);</span>
+<span class="fc bfc" id="L289" title="All 2 branches covered.">        if (!clazz.getPackage().getName().equals(&quot;io.atlasmap.actions&quot;)) {</span>
+<span class="fc" id="L290">            det.setCustom(true);</span>
         }
 
 <span class="fc" id="L293">        Type[] genericParameterTypes = method.getGenericParameterTypes();</span>
