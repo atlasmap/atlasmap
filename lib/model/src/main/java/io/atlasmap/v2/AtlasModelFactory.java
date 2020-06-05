@@ -272,11 +272,19 @@ public class AtlasModelFactory {
     }
 
     public static Field wrapWithField(Object val) {
+        return wrapWithField(val, "/");
+    }
+
+    public static Field wrapWithField(Object val, String parentPath) {
         if (val instanceof java.util.Collection) {
-            java.util.Collection c = (java.util.Collection)val;
+            Object[] collection = ((java.util.Collection)val).toArray();
             FieldGroup group = new FieldGroup();
-            group.setPath(GENERATED_PATH);
-            c.forEach(sub -> group.getField().add(wrapWithField(sub)));
+            group.setPath(parentPath + GENERATED_PATH);
+            for (int i=0; i<collection.length; i++) {
+                Field sub = wrapWithField(collection[i], group.getPath());
+                sub.setPath(sub.getPath() + "[" + i + "]");
+                group.getField().add(sub);
+            }
             return group;
         }
         SimpleField answer = new SimpleField();
