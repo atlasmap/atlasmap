@@ -20,7 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * A Simple LRU Cache
+ * A Simple LRU Cache.
  * 
  * @param <K> key
  * @param <V> value
@@ -31,14 +31,14 @@ public class LRUCache<K, V> extends LinkedHashMap<K, V> {
     protected int maxCacheSize = 10000;
 
     /**
-     * Default constructor for an LRU Cache The default capacity is 10000
+     * Default constructor for an LRU Cache The default capacity is 10000.
      */
     public LRUCache() {
         this(0,10000, 0.75f, true);
     }
 
     /**
-     * Constructs a LRUCache with a maximum capacity
+     * Constructs a LRUCache with a maximum capacity.
      * 
      * @param maximumCacheSize maximum cache size
      */

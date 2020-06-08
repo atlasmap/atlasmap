@@ -21,13 +21,14 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import io.atlasmap.xml.v2.XmlInspectionRequest;
 
 @JsonRootName("DfdlInspectionRequest")
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class DfdlInspectionRequest extends XmlInspectionRequest implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected String dfdlSchemaName;
     protected Map<String, String> options = new HashMap<>();

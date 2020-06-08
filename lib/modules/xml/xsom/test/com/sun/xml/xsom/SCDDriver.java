@@ -1,3 +1,4 @@
+package com.sun.xml.xsom;
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -38,32 +39,55 @@
  * holder.
  */
 
-import javax.xml.namespace.NamespaceContext;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.HashMap;
+
+import javax.xml.namespace.NamespaceContext;
+
+import org.xml.sax.Locator;
+
+import com.sun.xml.xsom.parser.XSOMParser;
+import com.sun.xml.xsom.util.ComponentNameFunction;
 
 /**
+ * Tests SCD.
  * @author Kohsuke Kawaguchi
  */
-public class MapNamespaceContext implements NamespaceContext {
+public class SCDDriver {
+    public static void main(String[] args) throws Exception {
+        XSOMParser p = new XSOMParser();
 
-    private final Map<String,String> core = new HashMap<String, String>();
+        for( int i=1; i<args.length; i++ )
+            p.parse(args[i]);
 
-    public MapNamespaceContext(String... mapping) {
-        for( int i=0; i<mapping.length; i+=2 )
-            core.put(mapping[i],mapping[i+1]);
+        XSSchemaSet r = p.getResult();
+        SCD scd = SCD.create(args[0], new DummyNSContext());
+        Collection<XSComponent> result = scd.select(r);
+        for( XSComponent c : result) {
+            System.out.println(c.apply(new ComponentNameFunction()));
+            print(c.getLocator());
+            System.out.println();
+        }
+        System.out.printf("%1d match(s)\n",result.size());
     }
 
-    public String getNamespaceURI(String prefix) {
-        return core.get(prefix);
+    private static void print(Locator locator) {
+        System.out.printf("line %1d of %2s\n", locator.getLineNumber(), locator.getSystemId());
+
     }
 
-    public String getPrefix(String namespaceURI) {
-        throw new UnsupportedOperationException();
-    }
+    private static class DummyNSContext implements NamespaceContext {
+        public String getNamespaceURI(String prefix) {
+            return prefix;
+        }
 
-    public Iterator getPrefixes(String namespaceURI) {
-        throw new UnsupportedOperationException();
+        public String getPrefix(String namespaceURI) {
+            return namespaceURI;
+        }
+
+        public Iterator getPrefixes(String namespaceURI) {
+            return Collections.singletonList(namespaceURI).iterator();
+        }
     }
 }

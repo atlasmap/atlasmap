@@ -40,13 +40,13 @@
 
 package com.sun.xml.xsom.impl;
 
-import com.sun.xml.xsom.XSComplexType;
-import com.sun.xml.xsom.XSType;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+
+import com.sun.xml.xsom.XSComplexType;
+import com.sun.xml.xsom.XSType;
 
 /**
  * 

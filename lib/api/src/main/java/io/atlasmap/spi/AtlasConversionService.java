@@ -18,7 +18,6 @@ package io.atlasmap.spi;
 import java.util.Optional;
 
 import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
 public interface AtlasConversionService {

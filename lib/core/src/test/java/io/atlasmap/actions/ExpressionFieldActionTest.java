@@ -28,7 +28,7 @@ import io.atlasmap.v2.Expression;
 
 public class ExpressionFieldActionTest {
 
-    /**
+    /*
      * functions
      */
 
@@ -94,7 +94,7 @@ public class ExpressionFieldActionTest {
         assertEquals("not empty", ExpressionFieldAction.process(action, Arrays.asList(" ")));
     }
 
-    /**
+    /*
      * operators
      */
     @Test

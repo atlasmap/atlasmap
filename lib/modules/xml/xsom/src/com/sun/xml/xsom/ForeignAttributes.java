@@ -40,9 +40,9 @@
 
 package com.sun.xml.xsom;
 
+import org.relaxng.datatype.ValidationContext;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
-import org.relaxng.datatype.ValidationContext;
 
 /**
  * Foreign attributes on schema elements.

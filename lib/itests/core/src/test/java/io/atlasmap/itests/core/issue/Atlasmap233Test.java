@@ -31,7 +31,7 @@ import io.atlasmap.itests.core.TestHelper;
 import io.atlasmap.v2.AtlasMapping;
 
 /**
- * https://github.com/atlasmap/atlasmap/issues/233
+ * https://github.com/atlasmap/atlasmap/issues/233 .
  */
 public class Atlasmap233Test {
 

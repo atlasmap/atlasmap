@@ -41,6 +41,7 @@
 package com.sun.xml.xsom;
 
 import org.xml.sax.Locator;
+
 import com.sun.xml.xsom.parser.AnnotationParser;
 
 /**

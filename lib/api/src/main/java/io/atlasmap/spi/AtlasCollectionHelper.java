@@ -20,14 +20,14 @@ import io.atlasmap.v2.Field;
 public interface AtlasCollectionHelper {
 
     /**
-     * Determines target collection count based on path and actions
+     * Determines target collection count based on path and actions.
      * @param targetField target field
      * @return target collection count
      */
     int determineTargetCollectionCount(Field targetField);
 
     /**
-     * Determines source collection count based on path and actions
+     * Determines source collection count based on path and actions.
      * @param sourceParentField source parent field
      * @param sourceField source field
      * @return source collection count
@@ -35,7 +35,7 @@ public interface AtlasCollectionHelper {
     int determineSourceCollectionCount(Field sourceParentField, Field sourceField);
 
     /**
-     * Copies over collection indexes from source to target applying adjustments if collection counts differ
+     * Copies over collection indexes from source to target applying adjustments if collection counts differ.
      *
      * @param sourceParentField source parent field
      * @param sourceField source field

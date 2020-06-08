@@ -40,14 +40,16 @@
 
 package com.sun.xml.xsom;
 
+import java.util.Collection;
+import java.util.List;
+
+import javax.xml.namespace.NamespaceContext;
+
+import org.xml.sax.Locator;
+
 import com.sun.xml.xsom.parser.SchemaDocument;
 import com.sun.xml.xsom.visitor.XSFunction;
 import com.sun.xml.xsom.visitor.XSVisitor;
-import org.xml.sax.Locator;
-
-import javax.xml.namespace.NamespaceContext;
-import java.util.List;
-import java.util.Collection;
 
 /**
  * Base interface for all the schema components.

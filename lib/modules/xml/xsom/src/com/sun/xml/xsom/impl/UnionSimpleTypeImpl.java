@@ -40,6 +40,13 @@
 
 package com.sun.xml.xsom.impl;
 
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import org.xml.sax.Locator;
+
 import com.sun.xml.xsom.XSFacet;
 import com.sun.xml.xsom.XSSimpleType;
 import com.sun.xml.xsom.XSUnionSimpleType;
@@ -47,12 +54,6 @@ import com.sun.xml.xsom.XSVariety;
 import com.sun.xml.xsom.impl.parser.SchemaDocumentImpl;
 import com.sun.xml.xsom.visitor.XSSimpleTypeFunction;
 import com.sun.xml.xsom.visitor.XSSimpleTypeVisitor;
-import org.xml.sax.Locator;
-
-import java.util.Iterator;
-import java.util.Set;
-import java.util.List;
-import java.util.Collections;
 
 public class UnionSimpleTypeImpl extends SimpleTypeImpl implements XSUnionSimpleType
 {

@@ -40,6 +40,10 @@
 
 package com.sun.xml.xsom.impl;
 
+import java.util.Iterator;
+
+import org.xml.sax.Locator;
+
 import com.sun.xml.xsom.XSAttGroupDecl;
 import com.sun.xml.xsom.XSAttributeUse;
 import com.sun.xml.xsom.XSWildcard;
@@ -47,9 +51,6 @@ import com.sun.xml.xsom.impl.parser.DelayedRef;
 import com.sun.xml.xsom.impl.parser.SchemaDocumentImpl;
 import com.sun.xml.xsom.visitor.XSFunction;
 import com.sun.xml.xsom.visitor.XSVisitor;
-import org.xml.sax.Locator;
-
-import java.util.Iterator;
 
 public class AttGroupDeclImpl extends AttributesHolder implements XSAttGroupDecl
 {

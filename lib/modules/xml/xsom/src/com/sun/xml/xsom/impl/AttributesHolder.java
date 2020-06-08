@@ -40,23 +40,23 @@
 
 package com.sun.xml.xsom.impl;
 
-import com.sun.xml.xsom.XSAttGroupDecl;
-import com.sun.xml.xsom.XSAttributeUse;
-import com.sun.xml.xsom.impl.parser.SchemaDocumentImpl;
-import com.sun.xml.xsom.impl.scd.Iterators;
-import com.sun.xml.xsom.impl.Ref.AttGroup;
-import org.xml.sax.Locator;
-
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
-import java.util.LinkedHashMap;
+
+import org.xml.sax.Locator;
+
+import com.sun.xml.xsom.XSAttGroupDecl;
+import com.sun.xml.xsom.XSAttributeUse;
+import com.sun.xml.xsom.impl.Ref.AttGroup;
+import com.sun.xml.xsom.impl.parser.SchemaDocumentImpl;
+import com.sun.xml.xsom.impl.scd.Iterators;
 
 public abstract class AttributesHolder extends DeclarationImpl {
 

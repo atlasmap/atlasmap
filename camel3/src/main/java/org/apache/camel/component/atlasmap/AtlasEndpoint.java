@@ -53,7 +53,7 @@ import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 
 /**
- * Transforms the message using an AtlasMap transformation
+ * Transforms the message using an AtlasMap transformation.
  */
 @UriEndpoint(firstVersion = "2.19.0", scheme = "atlas", title = "AtlasMap", syntax = "atlas:resourceUri", producerOnly = true, label = "transformation")
 public class AtlasEndpoint extends ResourceEndpoint {
@@ -117,7 +117,8 @@ public class AtlasEndpoint extends ResourceEndpoint {
 
     /**
      * Enables / disables the atlas map resource loader cache which is enabled by
-     * default
+     * default.
+     * @param loaderCache true to enable loader cache
      */
     public void setLoaderCache(boolean loaderCache) {
         this.loaderCache = loaderCache;
@@ -125,6 +126,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
 
     /**
      * Character encoding of the resource content.
+     * @param encoding encoding
      */
     public void setEncoding(String encoding) {
         this.encoding = encoding;
@@ -137,6 +139,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
     /**
      * The URI of the properties file which is used for AtlasContextFactory
      * initialization.
+     * @param file property file path
      */
     public void setPropertiesFile(String file) {
         propertiesFile = file;
@@ -150,6 +153,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
      * The Exchange property name for a source message map which hold
      * <code>java.util.Map&lt;String, Message&gt;</code> where the key is AtlasMap Document ID.
      * AtlasMap consumes Message bodies as source documents.
+     * @param name Exchange property name for source map
      */
     public void setSourceMapName(String name) {
         this.sourceMapName = name;
@@ -163,6 +167,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
      * The Exchange property name for a target document map which hold
      * <code>java.util.Map&lt;String, Object&gt;</code> where the key is AtlasMap Document ID.
      * AtlasMap populates multiple target documents into this map.
+     * @param name Exchange property name for target map
      */
     public void setTargetMapName(String name) {
         this.targetMapName = name;

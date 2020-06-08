@@ -40,6 +40,14 @@
 
 package com.sun.xml.xsom.impl;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
+import org.xml.sax.Locator;
+
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSModelGroup;
 import com.sun.xml.xsom.XSModelGroupDecl;
@@ -53,13 +61,6 @@ import com.sun.xml.xsom.visitor.XSTermVisitor;
 import com.sun.xml.xsom.visitor.XSVisitor;
 import com.sun.xml.xsom.visitor.XSWildcardFunction;
 import com.sun.xml.xsom.visitor.XSWildcardVisitor;
-import org.xml.sax.Locator;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 
 public abstract class WildcardImpl extends ComponentImpl implements XSWildcard, Ref.Term
 {

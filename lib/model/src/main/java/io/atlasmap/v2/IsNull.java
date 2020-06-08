@@ -4,6 +4,6 @@ import java.io.Serializable;
 
 public class IsNull extends Action implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
 }

@@ -1,3 +1,4 @@
+package com.sun.xml.xsom;
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -38,21 +39,17 @@
  * holder.
  */
 
-/*
- * XSOMParserTest.java
- * JUnit based test
- *
- * Created on April 13, 2006, 9:54 AM
- */
-
-import com.sun.xml.xsom.XSSchemaSet;
-import com.sun.xml.xsom.parser.XSOMParser;
-import com.sun.xml.xsom.parser.SchemaDocument;
-import junit.framework.*;
-import org.xml.sax.InputSource;
-
 import java.net.URL;
 import java.util.Set;
+
+import org.xml.sax.InputSource;
+
+import com.sun.xml.xsom.parser.SchemaDocument;
+import com.sun.xml.xsom.parser.XSOMParser;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 /**
  *

@@ -26,14 +26,14 @@ import org.junit.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
+import io.atlasmap.itests.reference.AtlasMappingBaseTest;
+import io.atlasmap.itests.reference.AtlasTestUtil;
 import io.atlasmap.java.test.BaseAddress;
 import io.atlasmap.java.test.BaseContact;
 import io.atlasmap.java.test.SourceAddress;
 import io.atlasmap.java.test.SourceContact;
 import io.atlasmap.java.test.TargetContact;
 import io.atlasmap.java.test.TargetOrder;
-import io.atlasmap.itests.reference.AtlasMappingBaseTest;
-import io.atlasmap.itests.reference.AtlasTestUtil;
 
 public class JavaJavaMultiSourceTest extends AtlasMappingBaseTest {
 

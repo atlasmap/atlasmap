@@ -3,12 +3,13 @@ package io.atlasmap.v2;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 @JsonRootName("AtlasMappingResult")
 public class AtlasMappingResult implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected List<TargetDocument> targetDocuments;
 

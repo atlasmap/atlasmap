@@ -49,7 +49,7 @@ import io.atlasmap.xml.v2.XmlField;
 
 public class XmlFieldWriterTest {
 
-    private static final String header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n";
+    private static final String HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n";
 
     private XmlFieldWriter writer = null;
 
@@ -599,7 +599,7 @@ public class XmlFieldWriterTest {
     }
 
     private void checkResult(String s) throws Exception {
-        String expected = header + s;
+        String expected = HEADER + s;
         if (document == null) {
             throw new Exception("document is not initialized.");
         }

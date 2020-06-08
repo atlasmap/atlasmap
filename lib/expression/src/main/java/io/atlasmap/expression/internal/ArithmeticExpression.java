@@ -24,7 +24,7 @@ import io.atlasmap.expression.ExpressionException;
 import io.atlasmap.v2.Field;
 
 /**
- * An expression which performs an operation on two expression values
+ * An expression which performs an operation on two expression values.
  * 
  * @version $Revision: 1.2 $
  */

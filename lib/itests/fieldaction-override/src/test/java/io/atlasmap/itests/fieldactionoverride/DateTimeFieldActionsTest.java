@@ -43,7 +43,7 @@ public class DateTimeFieldActionsTest {
         assertEquals("Thursday", DateTimeFieldActions.dayOfWeekString(null, "thur"));
         assertEquals("Friday", DateTimeFieldActions.dayOfWeekString(null, "fri"));
         assertEquals("Saturday", DateTimeFieldActions.dayOfWeekString(null, "sat"));
-        assertEquals("Funday", DateTimeFieldActions.dayOfWeekString(null, "foobar"));    
+        assertEquals("Funday", DateTimeFieldActions.dayOfWeekString(null, "foobar"));
     }
 
 }

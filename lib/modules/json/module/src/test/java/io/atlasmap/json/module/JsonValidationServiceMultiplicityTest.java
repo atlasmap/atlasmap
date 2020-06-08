@@ -18,12 +18,9 @@ package io.atlasmap.json.module;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.v2.AtlasMapping;
@@ -31,13 +28,8 @@ import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Mapping;
-import io.atlasmap.v2.Validation;
-import io.atlasmap.v2.ValidationScope;
-import io.atlasmap.v2.ValidationStatus;
 
 public class JsonValidationServiceMultiplicityTest extends BaseJsonValidationServiceTest {
-
-    private static final Logger LOG = LoggerFactory.getLogger(JsonValidationServiceMultiplicityTest.class);
 
     @Before
     public void setUp() {

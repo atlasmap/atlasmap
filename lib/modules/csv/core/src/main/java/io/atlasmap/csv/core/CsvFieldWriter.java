@@ -15,6 +15,15 @@
  */
 package io.atlasmap.csv.core;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.csv.v2.CsvField;
 import io.atlasmap.spi.AtlasFieldWriter;
@@ -24,14 +33,6 @@ import io.atlasmap.v2.Document;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.Fields;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CsvFieldWriter implements AtlasFieldWriter {
 

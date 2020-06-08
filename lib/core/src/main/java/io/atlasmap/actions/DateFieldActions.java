@@ -32,10 +32,6 @@ import io.atlasmap.v2.DayOfWeek;
 import io.atlasmap.v2.DayOfYear;
 import io.atlasmap.v2.FieldType;
 
-@SuppressWarnings({"squid:S3776",     // Cognitive complexity of method
-    "squid:S1118",     // Add private constructor
-    "squid:S1226",     // Introduce new variable
-    "squid:S3358" })   // Extract nested ternary
 public class DateFieldActions implements AtlasFieldAction {
 
     @AtlasActionProcessor(sourceType = FieldType.ANY_DATE)

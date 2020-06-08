@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Audits implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected List<Audit> audit;
 

@@ -27,10 +27,6 @@ import io.atlasmap.v2.IsNull;
 import io.atlasmap.v2.ItemAt;
 import io.atlasmap.v2.Length;
 
-@SuppressWarnings({"squid:S3776",     // Cognitive complexity of method
-    "squid:S1118",     // Add private constructor
-    "squid:S1226",     // Introduce new variable
-    "squid:S3358" })   // Extract nested ternary
 public class ObjectFieldActions implements AtlasFieldAction {
 
     @AtlasActionProcessor

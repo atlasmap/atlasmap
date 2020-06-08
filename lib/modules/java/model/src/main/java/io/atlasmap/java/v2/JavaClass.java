@@ -1,12 +1,13 @@
 package io.atlasmap.java.v2;
 
 import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class JavaClass extends JavaField implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected JavaEnumFields javaEnumFields;
 
@@ -20,7 +21,7 @@ public class JavaClass extends JavaField implements Serializable {
 
     protected Boolean enumeration;
 
-    protected Boolean _interface;
+    protected Boolean isInterface;
 
     protected Boolean localClass;
 
@@ -181,7 +182,7 @@ public class JavaClass extends JavaField implements Serializable {
      *     
      */
     public Boolean isInterface() {
-        return _interface;
+        return isInterface;
     }
 
     /**
@@ -193,7 +194,7 @@ public class JavaClass extends JavaField implements Serializable {
      *     
      */
     public void setInterface(Boolean value) {
-        this._interface = value;
+        this.isInterface = value;
     }
 
     /**
@@ -398,8 +399,8 @@ public class JavaClass extends JavaField implements Serializable {
             leftInterface = this.isInterface();
             Boolean rightInterface;
             rightInterface = that.isInterface();
-            if (this._interface!= null) {
-                if (that._interface!= null) {
+            if (this.isInterface!= null) {
+                if (that.isInterface!= null) {
                     if (!leftInterface.equals(rightInterface)) {
                         return false;
                     }
@@ -407,7 +408,7 @@ public class JavaClass extends JavaField implements Serializable {
                     return false;
                 }
             } else {
-                if (that._interface!= null) {
+                if (that.isInterface!= null) {
                     return false;
                 }
             }
@@ -527,7 +528,7 @@ public class JavaClass extends JavaField implements Serializable {
             currentHashCode = (currentHashCode* 31);
             Boolean theInterface;
             theInterface = this.isInterface();
-            if (this._interface!= null) {
+            if (this.isInterface!= null) {
                 currentHashCode += theInterface.hashCode();
             }
         }

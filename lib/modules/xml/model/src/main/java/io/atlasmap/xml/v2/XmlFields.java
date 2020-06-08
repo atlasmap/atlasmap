@@ -6,7 +6,7 @@ import java.util.List;
 
 public class XmlFields implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected List<XmlField> xmlField;
 
@@ -29,7 +29,7 @@ public class XmlFields implements Serializable {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link XmlField }
-     * 
+     * @return A list of {@link XmlField}
      * 
      */
     public List<XmlField> getXmlField() {

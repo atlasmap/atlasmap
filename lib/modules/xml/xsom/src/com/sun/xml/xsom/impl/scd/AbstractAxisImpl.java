@@ -40,6 +40,8 @@
 
 package com.sun.xml.xsom.impl.scd;
 
+import java.util.Iterator;
+
 import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSAttGroupDecl;
 import com.sun.xml.xsom.XSAttributeDecl;
@@ -59,8 +61,6 @@ import com.sun.xml.xsom.XSSimpleType;
 import com.sun.xml.xsom.XSWildcard;
 import com.sun.xml.xsom.XSXPath;
 import com.sun.xml.xsom.visitor.XSFunction;
-
-import java.util.Iterator;
 
 /**
  * Partial default implementation of {@link Axis}.

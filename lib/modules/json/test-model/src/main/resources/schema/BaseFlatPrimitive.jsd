@@ -56,91 +56,91 @@
         },
         "intArrayField": {
             "type": "array",
-            "items": { 
+            "items": {
                 "type": "integer"
             }
         },
         "shortArrayField": {
             "type": "array",
-            "items": { 
+            "items": {
                 "type": "integer"
             }
         },
         "longArrayField": {
             "type": "array",
-            "items": { 
+            "items": {
                 "type": "number"
-            }        
+            }
         },
         "doubleArrayField": {
             "type": "array",
-            "items": { 
+            "items": {
                 "type": "number"
-            }        
+            }
         },
         "floatArrayField": {
             "type": "array",
-            "items": { 
+            "items": {
                 "type": "number"
-            } 
+            }
         },
         "booleanArrayField": {
             "type": "array",
-            "items": { 
+            "items": {
                 "type": "boolean"
-            } 
+            }
         },
         "charArrayField": {
             "type": "array",
-            "items": { 
+            "items": {
                 "type": "string"
-            }         
+            }
         },
         "boxedIntArrayField": {
             "type": "array",
-            "items": { 
+            "items": {
                 "type": "integer"
-            } 
+            }
         },
         "boxedShortArrayField": {
             "type": "array",
-            "items": { 
+            "items": {
                 "type": "integer"
-            }         
+            }
         },
         "boxedLongArrayField": {
             "type": "array",
-            "items": { 
+            "items": {
                 "type": "number"
-            }         
+            }
         },
         "boxedDoubleArrayField": {
             "type": "array",
-            "items": { 
+            "items": {
                 "type": "number"
-            } 
+            }
         },
         "boxedFloatArrayField": {
             "type": "array",
-            "items": { 
+            "items": {
                 "type": "number"
             }
         },
         "boxedBooleanArrayField": {
             "type": "array",
-            "items": { 
+            "items": {
                 "type": "boolean"
             }
         },
         "boxedCharArrayField": {
             "type": "array",
-            "items": { 
+            "items": {
                 "type": "string"
-            } 
+            }
         },
         "boxedStringArrayField": {
             "type": "array",
-            "items": { 
+            "items": {
                 "type": "string"
             }
         }

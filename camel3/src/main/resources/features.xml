@@ -30,6 +30,6 @@
     <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xalan/${xalan-bundle-version}</bundle>
     <bundle>mvn:io.atlasmap/atlasmap-lib-all/${project.version}</bundle>
     <bundle>mvn:io.atlasmap/camel-atlasmap/${project.version}</bundle>
-  </feature> 
+  </feature>
 
 </features>

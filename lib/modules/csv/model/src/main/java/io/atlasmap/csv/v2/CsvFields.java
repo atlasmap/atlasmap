@@ -21,7 +21,7 @@ import java.util.List;
 
 public class CsvFields implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected List<CsvField> csvField;
 
@@ -44,7 +44,7 @@ public class CsvFields implements Serializable {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link CsvField }
-     *
+     *@return A list of {@link CsvField}
      *
      */
     public List<CsvField> getCsvField() {

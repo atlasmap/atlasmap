@@ -12,11 +12,11 @@ public enum Multiplicity {
 
     MANY_TO_MANY("ManyToMany");
 
+    private final String value;
+
     Multiplicity(String v) {
         value = v;
     }
-
-    private final String value;
 
     public String value() {
         return value;

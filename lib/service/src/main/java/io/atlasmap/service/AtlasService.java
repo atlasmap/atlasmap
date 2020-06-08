@@ -40,7 +40,6 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
-import io.atlasmap.v2.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +58,7 @@ import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.Json;
 import io.atlasmap.v2.Mapping;
+import io.atlasmap.v2.MappingFileType;
 import io.atlasmap.v2.ProcessMappingRequest;
 import io.atlasmap.v2.ProcessMappingResponse;
 import io.atlasmap.v2.StringMap;
@@ -564,8 +564,8 @@ public class AtlasService {
     @Operation(summary = "Ping", description = "Simple liveness check method used in liveness checks. Must not be protected via authetication.")
     @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(type = "string")), description = "Return 'pong'"))
     public Response ping() {
-	LOG.debug("Ping...  responding with 'pong'.");
-	return Response.ok().entity(toJson("pong")).build();
+        LOG.debug("Ping...  responding with 'pong'.");
+        return Response.ok().entity(toJson("pong")).build();
     }
 
     @PUT

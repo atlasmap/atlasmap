@@ -40,6 +40,21 @@ public class AtlasPath {
     protected List<SegmentContext> segmentContexts;
     private String originalPath = null;
 
+    public AtlasPath(String p) {
+        String path = p;
+        this.originalPath = path;
+        this.segmentContexts = parse(path);
+    }
+
+    protected AtlasPath(List<SegmentContext> segments) {
+        this.segmentContexts = segments;
+        this.originalPath = getSegmentPath(segments.get(segments.size() - 1));
+    }
+
+    private AtlasPath() {
+        this.segmentContexts = new ArrayList<>();
+    }
+
     /**
      * Extract child fields by feeding relative path.
      *
@@ -47,7 +62,7 @@ public class AtlasPath {
      * @param path Relative path string
      * @return extracted field(s)
      */
-	public static Field extractChildren(Field f, String path) {
+    public static Field extractChildren(Field f, String path) {
         if (f == null || path == null || path.isEmpty()) {
             return null;
         }
@@ -127,7 +142,7 @@ public class AtlasPath {
         answer.setPath(new AtlasPath(extractedSegments).toString());
         answer.getField().addAll(extracted);
         return answer;
-	}
+    }
 
     public static void setCollectionIndexRecursively(FieldGroup group, int segmentIndex, int index) {
         AtlasPath path = new AtlasPath(group.getPath());
@@ -142,21 +157,6 @@ public class AtlasPath {
                 f.setPath(fpath.toString());
             }
         }
-    }
-
-    public AtlasPath(String p) {
-        String path = p;
-        this.originalPath = path;
-        this.segmentContexts = parse(path);
-    }
-
-    protected AtlasPath(List<SegmentContext> segments) {
-        this.segmentContexts = segments;
-        this.originalPath = getSegmentPath(segments.get(segments.size() - 1));
-    }
-
-    private AtlasPath() {
-        this.segmentContexts = new ArrayList<>();
     }
 
     public AtlasPath appendField(String fieldExpression) {

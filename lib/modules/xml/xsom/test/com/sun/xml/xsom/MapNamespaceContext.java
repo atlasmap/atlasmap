@@ -1,3 +1,4 @@
+package com.sun.xml.xsom;
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -38,39 +39,33 @@
  * holder.
  */
 
-import com.sun.xml.xsom.parser.XSOMParser;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
-import javax.xml.parsers.SAXParserFactory;
-import java.io.IOException;
+import javax.xml.namespace.NamespaceContext;
 
 /**
  * @author Kohsuke Kawaguchi
  */
-public class ERDriver {
-    public static void main(String[] args) throws Exception {
-        XSOMParser p = new XSOMParser();
-        p.setEntityResolver(new EntityResolverImpl());
+public class MapNamespaceContext implements NamespaceContext {
 
-        // SAX parser -> XSOM ContentHandler
-        SAXParserFactory spf = SAXParserFactory.newInstance();
-        spf.setNamespaceAware(true);
-        XMLReader xr = spf.newSAXParser().getXMLReader();
-        xr.setContentHandler(p.getParserHandler());
+    private final Map<String,String> core = new HashMap<String, String>();
 
-        for( String arg : args )
-            xr.parse(arg);
-
-        System.out.println("done");
+    public MapNamespaceContext(String... mapping) {
+        for( int i=0; i<mapping.length; i+=2 )
+            core.put(mapping[i],mapping[i+1]);
     }
 
-    private static class EntityResolverImpl implements EntityResolver {
-        public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
-            System.out.printf("p:%s s:%s\n",publicId,systemId);
-            return null;
-        }
+    public String getNamespaceURI(String prefix) {
+        return core.get(prefix);
+    }
+
+    public String getPrefix(String namespaceURI) {
+        throw new UnsupportedOperationException();
+    }
+
+    public Iterator getPrefixes(String namespaceURI) {
+        throw new UnsupportedOperationException();
     }
 }

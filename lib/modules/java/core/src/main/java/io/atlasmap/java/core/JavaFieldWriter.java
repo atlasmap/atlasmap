@@ -40,7 +40,6 @@ public class JavaFieldWriter implements AtlasFieldWriter {
     private JavaFieldWriterUtil writerUtil;
     private TargetValueConverter converter;
     private Map<Field, Object> fieldParentQueue = new LinkedHashMap<>();
-    private CollectionType collectionType = CollectionType.NONE;
     private Class<?> collectionItemClass = null;
 
     public JavaFieldWriter(JavaFieldWriterUtil util) {
@@ -220,10 +219,6 @@ public class JavaFieldWriter implements AtlasFieldWriter {
 
     public void setTargetValueConverter(TargetValueConverter converter) {
         this.converter = converter;
-    }
-
-    public void setCollectionType(CollectionType type) {
-        this.collectionType = type;
     }
 
     public void setCollectionItemClass(Class<?> clazz) {

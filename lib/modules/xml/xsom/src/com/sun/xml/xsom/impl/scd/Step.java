@@ -40,15 +40,15 @@
 
 package com.sun.xml.xsom.impl.scd;
 
+import java.util.Iterator;
+
+import com.sun.xml.xsom.SCD;
 import com.sun.xml.xsom.XSComponent;
 import com.sun.xml.xsom.XSDeclaration;
 import com.sun.xml.xsom.XSFacet;
-import com.sun.xml.xsom.XSType;
-import com.sun.xml.xsom.SCD;
 import com.sun.xml.xsom.XSSchema;
+import com.sun.xml.xsom.XSType;
 import com.sun.xml.xsom.impl.UName;
-
-import java.util.Iterator;
 
 /**
  * Building block of {@link SCD}.

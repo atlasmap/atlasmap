@@ -15,8 +15,8 @@
  */
 package io.atlasmap.actions;
 
-import static io.atlasmap.v2.AtlasModelFactory.wrapWithField;
 import static io.atlasmap.v2.AtlasModelFactory.unwrapField;
+import static io.atlasmap.v2.AtlasModelFactory.wrapWithField;
 
 import java.util.List;
 

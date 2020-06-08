@@ -40,6 +40,10 @@
 
 package com.sun.xml.xsom.impl;
 
+import java.util.Set;
+
+import org.xml.sax.Locator;
+
 import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSContentType;
 import com.sun.xml.xsom.XSListSimpleType;
@@ -54,9 +58,6 @@ import com.sun.xml.xsom.visitor.XSContentTypeFunction;
 import com.sun.xml.xsom.visitor.XSContentTypeVisitor;
 import com.sun.xml.xsom.visitor.XSFunction;
 import com.sun.xml.xsom.visitor.XSVisitor;
-import org.xml.sax.Locator;
-
-import java.util.Set;
 
 public abstract class SimpleTypeImpl extends DeclarationImpl
     implements XSSimpleType, ContentTypeImpl, Ref.SimpleType

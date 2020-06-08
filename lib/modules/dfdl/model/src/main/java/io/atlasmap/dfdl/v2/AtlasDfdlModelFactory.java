@@ -15,9 +15,6 @@
  */
 package io.atlasmap.dfdl.v2;
 
-import io.atlasmap.v2.AtlasModelFactory;
-import io.atlasmap.v2.Field;
-import io.atlasmap.v2.Fields;
 import io.atlasmap.xml.v2.AtlasXmlModelFactory;
 
 public class AtlasDfdlModelFactory extends AtlasXmlModelFactory {

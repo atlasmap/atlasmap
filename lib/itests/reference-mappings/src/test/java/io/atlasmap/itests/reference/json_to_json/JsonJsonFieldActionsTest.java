@@ -15,8 +15,8 @@
  */
 package io.atlasmap.itests.reference.json_to_json;
 
-import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.itests.reference.AtlasBaseActionsTest;
+import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 

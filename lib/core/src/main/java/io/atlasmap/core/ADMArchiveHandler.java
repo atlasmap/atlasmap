@@ -31,12 +31,11 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.slf4j.Logger;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.v2.ADMDigest;
@@ -134,7 +133,7 @@ public class ADMArchiveHandler {
     }
 
     /**
-     * Export into an ADM archive. 
+     * Export into an ADM archive.
      * @param out OutputStream to write an ADM archive
      * @throws AtlasException If it fails to export
      */

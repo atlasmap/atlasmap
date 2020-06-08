@@ -25,7 +25,7 @@ public enum AtlasPropertyType {
 
     private final String value;
 
-    private AtlasPropertyType(String value) {
+    AtlasPropertyType(String value) {
         this.value = value;
     }
 

@@ -35,18 +35,18 @@ public abstract class BaseClass {
         private long someLong;
         private String[] someStringArray;
 
+        SomeNestedClass() {
+
+        }
+
+        SomeNestedClass(String someField) {
+            this.someField = someField;
+        }
+
         public String getSomeField() {
             return someField;
         }
         public void setSomeField(String someField) {
-            this.someField = someField;
-        }
-
-        public SomeNestedClass() {
-
-        }
-
-        public SomeNestedClass(String someField) {
             this.someField = someField;
         }
 

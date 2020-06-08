@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 @JsonTypeIdResolver(ActionResolver.class)
 public abstract class Action implements Serializable, FieldAction {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     @JsonProperty("@type")
     public String getType() {

@@ -40,9 +40,9 @@
 
 package com.sun.xml.xsom.parser;
 
-import com.sun.xml.xsom.XSSchema;
-
 import java.util.Set;
+
+import com.sun.xml.xsom.XSSchema;
 
 /**
  * Represents a parsed XML schema document.

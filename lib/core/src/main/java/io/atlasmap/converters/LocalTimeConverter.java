@@ -27,9 +27,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
+import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
 public class LocalTimeConverter implements AtlasConverter<LocalTime> {

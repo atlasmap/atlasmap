@@ -46,8 +46,8 @@ import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.Json;
 import io.atlasmap.v2.Mapping;
-import io.atlasmap.v2.Mappings;
 import io.atlasmap.v2.MappingType;
+import io.atlasmap.v2.Mappings;
 import io.atlasmap.v2.StringMap;
 import io.atlasmap.v2.StringMapEntry;
 

@@ -19,11 +19,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.time.Month;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +31,7 @@ import io.atlasmap.itests.core.TestHelper;
 import io.atlasmap.v2.AtlasMapping;
 
 /**
- * https://github.com/atlasmap/atlasmap/issues/704
+ * https://github.com/atlasmap/atlasmap/issues/704 .
  */
 public class PrependAppendTest {
 

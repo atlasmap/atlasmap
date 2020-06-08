@@ -23,10 +23,12 @@ public class AtlasSchemaFactoryWrapper extends SchemaFactoryWrapper {
             @JsonProperty
             protected FieldType atlasFieldType;
 
+            @SuppressWarnings("unused")
             public FieldType getAtlasFieldType() {
                 return atlasFieldType;
             }
 
+            @SuppressWarnings("unused")
             public void setAtlasFieldType(FieldType atlasFieldType) {
                 this.atlasFieldType = atlasFieldType;
             }
@@ -62,16 +64,15 @@ public class AtlasSchemaFactoryWrapper extends SchemaFactoryWrapper {
     }
 
     interface ExtendedJsonSchema {
-        @JsonAnyGetter
-        public HashMap<String, Object> getMetadata();
+        @JsonAnyGetter HashMap<String, Object> getMetadata();
 
         @JsonAnySetter
-        default public void setMetadata(String name, Object value) {
+        default void setMetadata(String name, Object value) {
             getMetadata().put(name, value);
         }
     }
 
-    static private class ExtendedStringSchema extends StringSchema implements ExtendedJsonSchema {
+    private static class ExtendedStringSchema extends StringSchema implements ExtendedJsonSchema {
         HashMap<String, Object> metadata = new HashMap<>();
         @JsonAnyGetter
         @Override
@@ -87,7 +88,7 @@ public class AtlasSchemaFactoryWrapper extends SchemaFactoryWrapper {
 
     }
 
-    static private void enrichMetadata(SimpleTypeSchema schema, BeanProperty property, HashMap<String, Object> metadata) {
+    private static void enrichMetadata(SimpleTypeSchema schema, BeanProperty property, HashMap<String, Object> metadata) {
         AtlasActionProperty atlasField = property.getAnnotation(AtlasActionProperty.class);
         if (atlasField != null) {
             schema.setTitle(atlasField.title());

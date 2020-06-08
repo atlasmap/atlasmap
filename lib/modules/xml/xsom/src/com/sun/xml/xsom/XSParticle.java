@@ -40,7 +40,7 @@
 
 package com.sun.xml.xsom;
 
-import java.math.*;
+import java.math.BigInteger;
 
 /**
  * Particle schema component.

@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ModifierList implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected List<Modifier> modifier;
 
@@ -30,7 +30,7 @@ public class ModifierList implements Serializable {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link Modifier }
-     * 
+     * @return A list of {@link Modifier}
      * 
      */
     public List<Modifier> getModifier() {

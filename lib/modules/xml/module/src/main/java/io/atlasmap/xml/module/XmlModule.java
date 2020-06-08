@@ -23,16 +23,14 @@ import java.util.Map;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.dom.DOMResult;
-import com.sun.xml.xsom.XSSchemaSet;
-import com.sun.xml.xsom.XSElementDecl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import com.sun.xml.xsom.XSElementDecl;
+import com.sun.xml.xsom.XSSchemaSet;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasValidationException;

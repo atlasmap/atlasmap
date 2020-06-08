@@ -11,7 +11,7 @@ public abstract class Field
     implements Serializable
 {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected ArrayList<Action> actions;
 

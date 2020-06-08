@@ -40,7 +40,30 @@ import io.atlasmap.api.AtlasSession;
 import io.atlasmap.spi.AtlasInternalSession.Head;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.StringDelimiter;
-import io.atlasmap.v2.*;
+import io.atlasmap.v2.Action;
+import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.AtlasModelFactory;
+import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.Audits;
+import io.atlasmap.v2.BaseMapping;
+import io.atlasmap.v2.Collection;
+import io.atlasmap.v2.Concatenate;
+import io.atlasmap.v2.ConstantField;
+import io.atlasmap.v2.DataSource;
+import io.atlasmap.v2.DataSourceType;
+import io.atlasmap.v2.Expression;
+import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
+import io.atlasmap.v2.FieldType;
+import io.atlasmap.v2.LookupEntry;
+import io.atlasmap.v2.LookupTable;
+import io.atlasmap.v2.Mapping;
+import io.atlasmap.v2.MappingType;
+import io.atlasmap.v2.Mappings;
+import io.atlasmap.v2.SimpleField;
+import io.atlasmap.v2.Split;
+import io.atlasmap.v2.Uppercase;
+import io.atlasmap.v2.Validations;
 
 public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
 

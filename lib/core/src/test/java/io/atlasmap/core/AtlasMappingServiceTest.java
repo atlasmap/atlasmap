@@ -9,10 +9,6 @@ import java.io.FileReader;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.bind.JAXBContext;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;

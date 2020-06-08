@@ -7,7 +7,7 @@
     "properties": {
     
         "primaryAddress": {
-            "$ref": "BaseAddress.jsd" 
+            "$ref": "BaseAddress.jsd"
         },
         "primaryContact": {
             "$ref": "BaseContact.jsd"

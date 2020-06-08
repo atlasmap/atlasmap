@@ -1,3 +1,4 @@
+package com.sun.xml.xsom;
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -37,9 +38,6 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
-import com.sun.xml.xsom.XSSchemaSet;
-import com.sun.xml.xsom.XSComponent;
 
 import java.util.Collection;
 

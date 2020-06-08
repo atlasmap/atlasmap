@@ -5,5 +5,5 @@
     "type": "object",
     "extends": {
         "$ref": "BaseOrder.jsd"
-    }     
+    }
 }

@@ -1,3 +1,4 @@
+package com.sun.xml.xsom;
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -38,10 +39,11 @@
  * holder.
  */
 
-import junit.framework.TestCase;
-import com.sun.xml.xsom.XSSchemaSet;
-import com.sun.xml.xsom.parser.XSOMParser;
 import org.xml.sax.SAXException;
+
+import com.sun.xml.xsom.parser.XSOMParser;
+
+import junit.framework.TestCase;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -53,7 +55,7 @@ public abstract class AbstractXSOMTest extends TestCase {
     protected final XSSchemaSet load(String... resourceNames) throws SAXException {
         XSOMParser p = new XSOMParser();
         for (String n : resourceNames) {
-            p.parse(getClass().getResource(n));
+            p.parse(getClass().getClassLoader().getResource(n));
         }
         return p.getResult();
     }

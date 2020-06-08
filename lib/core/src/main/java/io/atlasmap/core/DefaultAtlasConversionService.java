@@ -37,9 +37,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConversionService;
+import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
 public class DefaultAtlasConversionService implements AtlasConversionService {
@@ -55,7 +55,7 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
                     "java.lang.Float", "java.lang.Integer", "java.lang.Long", "java.lang.Short", "java.lang.String")));
 
     private static volatile DefaultAtlasConversionService instance = null;
-    private static final Object singletonLock = new Object();
+    private static final Object SINGLETON_LOCK = new Object();
 
     private Map<ConverterKey, ConverterMethodHolder> converterMethods = null;
     private Map<ConverterKey, ConverterMethodHolder> customConverterMethods = null;
@@ -111,7 +111,7 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
     public static DefaultAtlasConversionService getInstance() {
         DefaultAtlasConversionService result = instance;
         if (result == null) {
-            synchronized (singletonLock) {
+            synchronized (SINGLETON_LOCK) {
                 result = instance;
                 if (result == null) {
                     result = new DefaultAtlasConversionService();

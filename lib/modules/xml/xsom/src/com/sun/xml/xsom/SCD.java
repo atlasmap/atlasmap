@@ -40,6 +40,12 @@
 
 package com.sun.xml.xsom;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.xml.namespace.NamespaceContext;
+
 import com.sun.xml.xsom.impl.scd.Iterators;
 import com.sun.xml.xsom.impl.scd.ParseException;
 import com.sun.xml.xsom.impl.scd.SCDImpl;
@@ -47,11 +53,6 @@ import com.sun.xml.xsom.impl.scd.SCDParser;
 import com.sun.xml.xsom.impl.scd.Step;
 import com.sun.xml.xsom.impl.scd.TokenMgrError;
 import com.sun.xml.xsom.util.DeferedCollection;
-
-import javax.xml.namespace.NamespaceContext;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Schema Component Designator (SCD).

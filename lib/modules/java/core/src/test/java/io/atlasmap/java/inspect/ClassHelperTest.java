@@ -2,26 +2,14 @@ package io.atlasmap.java.inspect;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Test;
 
-import io.atlasmap.core.AtlasPath;
 import io.atlasmap.java.core.ClassHelper;
-import io.atlasmap.java.test.BaseOrder;
-import io.atlasmap.java.test.SourceAddress;
-import io.atlasmap.java.test.SourceContact;
-import io.atlasmap.java.test.SourceOrder;
-import io.atlasmap.java.test.SourceOrderList;
-import io.atlasmap.java.test.SourceParentOrder;
-import io.atlasmap.spi.AtlasInternalSession;
 
 public class ClassHelperTest {
 

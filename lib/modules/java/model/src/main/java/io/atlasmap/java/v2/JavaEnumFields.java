@@ -6,7 +6,7 @@ import java.util.List;
 
 public class JavaEnumFields implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected List<JavaEnumField> javaEnumField;
 
@@ -29,7 +29,7 @@ public class JavaEnumFields implements Serializable {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link JavaEnumField }
-     * 
+     * @return A list of {@link JavaEnumField}
      * 
      */
     public List<JavaEnumField> getJavaEnumField() {

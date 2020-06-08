@@ -7,9 +7,9 @@
     "properties": {
         "orders": {
             "type": "array",
-            "items": { 
-                "$ref": "BaseOrder.jsd" 
-            }         
+            "items": {
+                "$ref": "BaseOrder.jsd"
+            }
         },
         "orderBatchNumber": {
             "type": "integer"

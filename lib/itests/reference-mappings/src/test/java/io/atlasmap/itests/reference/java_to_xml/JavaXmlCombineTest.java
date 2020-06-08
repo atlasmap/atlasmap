@@ -15,10 +15,8 @@
  */
 package io.atlasmap.itests.reference.java_to_xml;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.xmlunit.assertj.XmlAssert.assertThat;
 
@@ -28,10 +26,10 @@ import org.junit.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.java.test.BaseContact;
-import io.atlasmap.java.test.SourceContact;
 import io.atlasmap.itests.reference.AtlasMappingBaseTest;
 import io.atlasmap.itests.reference.AtlasTestUtil;
+import io.atlasmap.java.test.BaseContact;
+import io.atlasmap.java.test.SourceContact;
 
 public class JavaXmlCombineTest extends AtlasMappingBaseTest {
 

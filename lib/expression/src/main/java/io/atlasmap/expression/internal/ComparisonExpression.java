@@ -32,16 +32,16 @@ import io.atlasmap.v2.Field;
 
 
 /**
- * A filter performing a comparison of two objects
+ * A filter performing a comparison of two objects.
  * 
  * @version $Revision: 1.2 $
  */
 public abstract class ComparisonExpression extends BinaryExpression implements BooleanExpression {
 
     public static final ThreadLocal<Boolean> CONVERT_STRING_EXPRESSIONS = new ThreadLocal<Boolean>();
+    private static final Set<Character> REGEXP_CONTROL_CHARS = new HashSet<Character>();
 
     boolean convertStringExpressions = false;
-    private static final Set<Character> REGEXP_CONTROL_CHARS = new HashSet<Character>();
 
     /**
      * @param left left {@link Expression}
@@ -87,9 +87,7 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
 
         Pattern likePattern;
 
-        /**
-         */
-        public LikeExpression(Expression right, String like, int escape) {
+        LikeExpression(Expression right, String like, int escape) {
             super(right);
 
             StringBuffer regexp = new StringBuffer(like.length() * 2);
@@ -296,7 +294,7 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
     }
 
     /**
-     * Only Numeric expressions can be used in &gt;, &gt;=, &lt; or &lt;= expressions.s
+     * Only Numeric expressions can be used in &gt;, &gt;=, &lt; or &lt;= expressions.
      * 
      * @param expr {@link Expression}
      */

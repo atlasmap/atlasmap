@@ -27,14 +27,14 @@ import io.atlasmap.v2.Field;
 
 
 /**
- * Represents a constant expression
+ * Represents a constant expression.
  * 
  * @version $Revision: 1.2 $
  */
 public class ConstantExpression implements Expression {
 
     static class BooleanConstantExpression extends ConstantExpression implements BooleanExpression {
-        public BooleanConstantExpression(Object value) {
+        BooleanConstantExpression(Object value) {
             super(value);
         }
 
@@ -108,7 +108,7 @@ public class ConstantExpression implements Expression {
     }
 
     /**
-     * @see java.lang.Object#toString()
+     * {@inheritDoc}
      */
     public String toString() {
         if (value == null) {
@@ -124,18 +124,16 @@ public class ConstantExpression implements Expression {
     }
 
     /**
+     * {@inheritDoc}
      * TODO: more efficient hashCode()
-     * 
-     * @see java.lang.Object#hashCode()
      */
     public int hashCode() {
         return toString().hashCode();
     }
 
     /**
+     * {@inheritDoc}
      * TODO: more efficient hashCode()
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
      */
     public boolean equals(Object o) {
 

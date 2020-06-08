@@ -43,8 +43,8 @@ package com.sun.xml.xsom.visitor;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSModelGroup;
 import com.sun.xml.xsom.XSModelGroupDecl;
-import com.sun.xml.xsom.XSWildcard;
 import com.sun.xml.xsom.XSTerm;
+import com.sun.xml.xsom.XSWildcard;
 
 /**
  * Function object that works on {@link XSTerm}.

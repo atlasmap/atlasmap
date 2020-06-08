@@ -35,11 +35,11 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import io.atlasmap.v2.Json;
 import io.atlasmap.dfdl.inspect.DfdlInspectionService;
 import io.atlasmap.dfdl.v2.DfdlInspectionRequest;
 import io.atlasmap.dfdl.v2.DfdlInspectionResponse;
 import io.atlasmap.service.AtlasService;
+import io.atlasmap.v2.Json;
 import io.atlasmap.xml.v2.XmlDocument;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

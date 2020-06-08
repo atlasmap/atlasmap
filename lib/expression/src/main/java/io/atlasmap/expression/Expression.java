@@ -33,7 +33,7 @@ import io.atlasmap.v2.Field;
  */
 public interface Expression {
 
-    LRUCache cache = new LRUCache(100);
+    LRUCache<String, Object> CACHE = new LRUCache<>(100);
 
     /**
      * Execute the expression against the given context.
@@ -50,7 +50,7 @@ public interface Expression {
                 throw new ParseException("Function not found: " + name);
             };
         }
-        Object result = cache.get(expessionText);
+        Object result = CACHE.get(expessionText);
         if (result instanceof ExpressionException) {
             throw (ExpressionException) result;
         } else if (result instanceof Expression) {
@@ -61,18 +61,18 @@ public interface Expression {
                 Parser parser = new Parser(new StringReader(actual));
                 parser.functionResolver = functionResolver;
                 Expression e = parser.parse();
-                cache.put(expessionText, e);
+                CACHE.put(expessionText, e);
                 return e;
             } catch (Throwable e) {
                 ExpressionException fe = new ExpressionException(actual, e);
-                cache.put(expessionText, fe);
+                CACHE.put(expessionText, fe);
                 throw fe;
             }
         }
     }
 
     static void clearCache() {
-        cache.clear();
+        CACHE.clear();
     }
 
 }

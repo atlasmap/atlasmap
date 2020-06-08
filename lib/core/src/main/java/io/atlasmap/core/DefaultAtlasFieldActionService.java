@@ -17,11 +17,8 @@ import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import io.atlasmap.api.AtlasSession;
-import io.atlasmap.v2.Expression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,9 +27,10 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.spi.AtlasFieldAction;
+import io.atlasmap.api.AtlasSession;
 import io.atlasmap.spi.AtlasActionProcessor;
 import io.atlasmap.spi.AtlasConversionService;
+import io.atlasmap.spi.AtlasFieldAction;
 import io.atlasmap.spi.AtlasFieldActionInfo;
 import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasInternalSession;
@@ -45,6 +43,7 @@ import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.CustomAction;
+import io.atlasmap.v2.Expression;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
@@ -54,11 +53,18 @@ import io.atlasmap.v2.SimpleField;
 public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasFieldActionService.class);
+    private static DefaultAtlasFieldActionService instance;
+    private static Set<String> listClasses = new HashSet<>(Arrays.asList("java.util.List", "java.util.ArrayList", "java.util.LinkedList", "java.util.Vector",
+            "java.util.Stack", "java.util.AbstractList", "java.util.AbstractSequentialList"));
+    private static Set<String> mapClasses =  new HashSet<>(Arrays.asList("java.util.Map", "java.util.HashMap",
+        "java.util.TreeMap", "java.util.Hashtable", "java.util.IdentityHashMap", "java.util.LinkedHashMap",
+        "java.util.LinkedHashMap", "java.util.SortedMap", "java.util.WeakHashMap", "java.util.Properties",
+        "java.util.concurrent.ConcurrentHashMap", "java.util.concurrent.ConcurrentMap"));
+
     private List<ActionProcessor> actionProcessors = new ArrayList<>();
     private ReadWriteLock actionProcessorsLock = new ReentrantReadWriteLock();
     private AtlasConversionService conversionService = null;
     private ActionResolver actionResolver = null;
-    private static DefaultAtlasFieldActionService instance;
 
     private DefaultAtlasFieldActionService(AtlasConversionService conversionService) {
         this.conversionService = conversionService;
@@ -415,13 +421,6 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
             sourceList.set(i, item);
         }
     }
-
-    private static Set<String> listClasses = new HashSet<>(Arrays.asList("java.util.List", "java.util.ArrayList", "java.util.LinkedList", "java.util.Vector",
-            "java.util.Stack", "java.util.AbstractList", "java.util.AbstractSequentialList"));
-    private static Set<String> mapClasses =  new HashSet<>(Arrays.asList("java.util.Map", "java.util.HashMap",
-        "java.util.TreeMap", "java.util.Hashtable", "java.util.IdentityHashMap", "java.util.LinkedHashMap",
-        "java.util.LinkedHashMap", "java.util.SortedMap", "java.util.WeakHashMap", "java.util.Properties",
-        "java.util.concurrent.ConcurrentHashMap", "java.util.concurrent.ConcurrentMap"));
 
     private CollectionType toFieldCollectionType(Class<?> clazz) {
         if (clazz.isArray()) {

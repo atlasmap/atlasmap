@@ -40,12 +40,13 @@
 
 package com.sun.xml.xsom.impl;
 
+import org.xml.sax.Locator;
+
 import com.sun.xml.xsom.XSFacet;
 import com.sun.xml.xsom.XmlString;
 import com.sun.xml.xsom.impl.parser.SchemaDocumentImpl;
 import com.sun.xml.xsom.visitor.XSFunction;
 import com.sun.xml.xsom.visitor.XSVisitor;
-import org.xml.sax.Locator;
 
 public class FacetImpl extends ComponentImpl implements XSFacet {
     public FacetImpl( SchemaDocumentImpl owner, AnnotationImpl _annon, Locator _loc, ForeignAttributesImpl _fa,

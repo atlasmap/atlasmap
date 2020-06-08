@@ -3,12 +3,13 @@ package io.atlasmap.v2;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 @JsonRootName("Validations")
 public class Validations implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected List<Validation> validation;
 

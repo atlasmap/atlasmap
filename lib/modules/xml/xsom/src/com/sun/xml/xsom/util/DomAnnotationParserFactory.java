@@ -40,11 +40,12 @@
 
 package com.sun.xml.xsom.util;
 
-import com.sun.xml.xsom.XSAnnotation;
-import com.sun.xml.xsom.parser.AnnotationContext;
-import com.sun.xml.xsom.parser.AnnotationParser;
-import com.sun.xml.xsom.parser.AnnotationParserFactory;
 import javax.xml.XMLConstants;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.sax.TransformerHandler;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -52,10 +53,10 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.sax.SAXTransformerFactory;
-import javax.xml.transform.sax.TransformerHandler;
+import com.sun.xml.xsom.XSAnnotation;
+import com.sun.xml.xsom.parser.AnnotationContext;
+import com.sun.xml.xsom.parser.AnnotationParser;
+import com.sun.xml.xsom.parser.AnnotationParserFactory;
 
 /**
  * {@link AnnotationParserFactory} that parses annotations into a W3C DOM.

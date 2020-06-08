@@ -15,31 +15,22 @@
  */
 package io.atlasmap.java.core;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import io.atlasmap.api.AtlasException;
-import io.atlasmap.core.AtlasPath;
-import io.atlasmap.core.AtlasPath.SegmentContext;
+import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.java.core.accessor.FieldAccessor;
 import io.atlasmap.java.core.accessor.GetterAccessor;
 import io.atlasmap.java.core.accessor.JavaChildAccessor;
-import io.atlasmap.core.AtlasUtil;
-import io.atlasmap.spi.AtlasInternalSession;
-import io.atlasmap.v2.AuditStatus;
-import io.atlasmap.v2.CollectionType;
 
 public class ClassHelper {
 
@@ -243,7 +234,7 @@ public class ClassHelper {
         return null;
     }
 
-	public static List<JavaChildAccessor> lookupAllAccessors(Object source) throws Exception {
+    public static List<JavaChildAccessor> lookupAllAccessors(Object source) throws Exception {
         List<JavaChildAccessor> answer = new ArrayList<>();
         if (source == null) {
             return answer;
@@ -262,6 +253,6 @@ public class ClassHelper {
             }
         });
         return answer;
-	}
+    }
 
 }

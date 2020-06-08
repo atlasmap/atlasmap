@@ -36,9 +36,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import io.atlasmap.dfdl.core.DfdlSchemaGenerator;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.dfdl.core.DfdlConstants;
+import io.atlasmap.dfdl.core.DfdlSchemaGenerator;
 import io.atlasmap.xml.core.XmlIOHelper;
 
 /**
@@ -130,7 +130,7 @@ public class CsvDfdlSchemaGenerator implements DfdlSchemaGenerator {
     class NamespaceResolver implements NamespaceContext {
         private Map<String, String> nsmap = new HashMap<>();
 
-        public NamespaceResolver() {
+        NamespaceResolver() {
             nsmap.put("xs", NS_XS);
             nsmap.put("dfdl", NS_DFDL);
             nsmap.put("atlas", NS_ATLAS);

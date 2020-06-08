@@ -6,8 +6,6 @@ import static org.xmlunit.assertj.XmlAssert.assertThat;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.bind.JAXBElement;
-
 import org.apache.camel.CamelContext;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;

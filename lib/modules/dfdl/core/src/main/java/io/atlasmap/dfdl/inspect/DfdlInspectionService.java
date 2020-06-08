@@ -26,10 +26,10 @@ public class DfdlInspectionService {
         this.inspector = new DfdlInspector(loader);
     }
 
-	public XmlDocument inspectDfdlInstance(String dfdlSchemaName, Map<String, String> options) throws Exception {
+    public XmlDocument inspectDfdlInstance(String dfdlSchemaName, Map<String, String> options) throws Exception {
         inspector.inspectInstance(dfdlSchemaName, options);
         return inspector.getXmlDocument();
-	}
+    }
 
     public XmlDocument inspectDfdlSchema(String dfdlSchemaName, Map<String, String> options) throws Exception {
         inspector.inspectSchema(dfdlSchemaName, options);

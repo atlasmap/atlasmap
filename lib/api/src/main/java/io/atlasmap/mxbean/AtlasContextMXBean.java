@@ -16,15 +16,17 @@
 package io.atlasmap.mxbean;
 
 public interface AtlasContextMXBean {
-    public String getUuid();
 
-    public String getMappingName();
+    String getUuid();
 
-    public String getMappingUri();
+    String getMappingName();
 
-    public String getClassName();
+    String getMappingUri();
 
-    public String getThreadName();
+    String getClassName();
 
-    public String getVersion();
+    String getThreadName();
+
+    String getVersion();
+
 }

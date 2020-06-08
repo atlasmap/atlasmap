@@ -1,11 +1,12 @@
 package io.atlasmap.java.v2;
 
 import java.io.Serializable;
+
 import io.atlasmap.v2.Collection;
 
 public class JavaCollection extends Collection implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected String collectionClassName;
 

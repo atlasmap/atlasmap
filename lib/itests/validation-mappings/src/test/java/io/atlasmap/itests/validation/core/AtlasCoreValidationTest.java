@@ -31,11 +31,11 @@ import org.junit.rules.TestName;
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
+import io.atlasmap.itests.validation.AtlasMappingBaseTest;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 import io.atlasmap.v2.Validations;
-import io.atlasmap.itests.validation.AtlasMappingBaseTest;
 import io.atlasmap.validators.AtlasValidationTestHelper;
 
 public class AtlasCoreValidationTest extends AtlasMappingBaseTest {

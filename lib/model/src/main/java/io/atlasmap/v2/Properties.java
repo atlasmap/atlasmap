@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Properties implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected List<Property> property;
 

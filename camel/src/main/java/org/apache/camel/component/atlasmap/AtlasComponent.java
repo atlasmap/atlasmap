@@ -39,7 +39,8 @@ public class AtlasComponent extends DefaultComponent {
     }
 
     /**
-     * To use the {@link AtlasContextFactory} otherwise a new engine is created
+     * To use the {@link AtlasContextFactory} otherwise a new engine is created.
+     * @param atlasContextFactory {@link AtlasContextFactory}
      */
     public void setAtlasContextFactory(AtlasContextFactory atlasContextFactory) {
         this.atlasContextFactory = atlasContextFactory;

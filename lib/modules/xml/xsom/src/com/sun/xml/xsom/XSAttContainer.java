@@ -40,8 +40,8 @@
 
 package com.sun.xml.xsom;
 
-import java.util.Iterator;
 import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * Common aspect of {@link XSComplexType} and {@link XSAttGroupDecl}

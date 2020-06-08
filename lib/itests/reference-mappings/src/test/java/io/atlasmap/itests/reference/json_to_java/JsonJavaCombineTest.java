@@ -28,8 +28,8 @@ import org.junit.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.java.test.TargetContact;
 import io.atlasmap.itests.reference.AtlasMappingBaseTest;
+import io.atlasmap.java.test.TargetContact;
 
 public class JsonJavaCombineTest extends AtlasMappingBaseTest {
 

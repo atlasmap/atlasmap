@@ -6,13 +6,13 @@ import static org.junit.Assert.assertTrue;
 
 import java.net.URL;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -22,11 +22,11 @@ import io.atlasmap.itests.core.TestHelper;
 import io.atlasmap.v2.AtlasMapping;
 
 /**
- * https://github.com/atlasmap/atlasmap/issues/1241
+ * https://github.com/atlasmap/atlasmap/issues/1241 .
  */
 public class AtlasMap1241Test {
 
-    private static Logger LOG = LoggerFactory.getLogger(Atlasmap759Test.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Atlasmap759Test.class);
 
     private AtlasMappingService mappingService;
 
