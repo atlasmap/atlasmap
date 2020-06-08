@@ -17,9 +17,9 @@ package io.atlasmap.itests.reference.java_to_java;
 
 import org.junit.Test;
 
+import io.atlasmap.itests.reference.AtlasBaseActionsTest;
 import io.atlasmap.java.test.TargetFlatPrimitiveClass;
 import io.atlasmap.java.v2.JavaField;
-import io.atlasmap.itests.reference.AtlasBaseActionsTest;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Length;

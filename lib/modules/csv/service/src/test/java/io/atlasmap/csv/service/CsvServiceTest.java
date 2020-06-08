@@ -15,23 +15,24 @@
  */
 package io.atlasmap.csv.service;
 
-import io.atlasmap.csv.v2.CsvComplexType;
-import io.atlasmap.csv.v2.CsvField;
-import io.atlasmap.csv.v2.CsvInspectionResponse;
-import io.atlasmap.v2.Field;
-import io.atlasmap.v2.Json;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
-import javax.ws.rs.core.Response;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import javax.ws.rs.core.Response;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import io.atlasmap.csv.v2.CsvComplexType;
+import io.atlasmap.csv.v2.CsvField;
+import io.atlasmap.csv.v2.CsvInspectionResponse;
+import io.atlasmap.v2.Json;
 
 public class CsvServiceTest {
 

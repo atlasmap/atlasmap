@@ -19,8 +19,8 @@ import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-import io.atlasmap.spi.AtlasFieldAction;
 import io.atlasmap.spi.AtlasActionProcessor;
+import io.atlasmap.spi.AtlasFieldAction;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.AtlasActionProperty;
 import io.atlasmap.v2.FieldType;
@@ -37,7 +37,6 @@ public class CustomActions implements AtlasFieldAction {
 
     @AtlasActionProcessor
     public static String concat(Concat action, Collection<String> input) {
-        @SuppressWarnings("unchecked")
         StringBuilder buf = new StringBuilder();
         boolean first = true;
         for (String i : input) {

@@ -22,8 +22,8 @@ import io.atlasmap.expression.parser.ParseException;
 
 public interface FunctionFactory {
 
-    public String getName();
+    String getName();
 
-    public abstract Expression create(List<Expression> args) throws ParseException;
+    Expression create(List<Expression> args) throws ParseException;
 
 }

@@ -22,12 +22,11 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.HashMap;
 
+import io.atlasmap.expression.internal.BooleanExpression;
 import io.atlasmap.expression.internal.ComparisonExpression;
 import io.atlasmap.expression.parser.ParseException;
 import io.atlasmap.v2.Field;
 import junit.framework.TestCase;
-
-import io.atlasmap.expression.internal.BooleanExpression;
 
 /**
  * @version $Revision: 1.7 $
@@ -318,7 +317,7 @@ public class ExpressionTest extends TestCase {
     }
 
 
-    /**
+    /*
      * Test cases from Mats Henricson
      */
     public void testMatsHenricsonUseCases() throws Exception {

@@ -40,6 +40,12 @@
 
 package com.sun.xml.xsom.impl.util;
 
+import java.io.IOException;
+import java.io.Writer;
+import java.math.BigInteger;
+import java.text.MessageFormat;
+import java.util.Iterator;
+
 import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSAttGroupDecl;
 import com.sun.xml.xsom.XSAttributeDecl;
@@ -61,21 +67,15 @@ import com.sun.xml.xsom.XSSimpleType;
 import com.sun.xml.xsom.XSType;
 import com.sun.xml.xsom.XSUnionSimpleType;
 import com.sun.xml.xsom.XSWildcard;
-import com.sun.xml.xsom.XSXPath;
 import com.sun.xml.xsom.XSWildcard.Any;
 import com.sun.xml.xsom.XSWildcard.Other;
 import com.sun.xml.xsom.XSWildcard.Union;
+import com.sun.xml.xsom.XSXPath;
 import com.sun.xml.xsom.impl.Const;
 import com.sun.xml.xsom.visitor.XSSimpleTypeVisitor;
 import com.sun.xml.xsom.visitor.XSTermVisitor;
 import com.sun.xml.xsom.visitor.XSVisitor;
 import com.sun.xml.xsom.visitor.XSWildcardFunction;
-
-import java.io.IOException;
-import java.io.Writer;
-import java.math.BigInteger;
-import java.text.MessageFormat;
-import java.util.Iterator;
 
 /**
  * Generates approximated XML Schema representation from

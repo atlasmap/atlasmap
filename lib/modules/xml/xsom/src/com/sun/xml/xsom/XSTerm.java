@@ -41,8 +41,8 @@
 package com.sun.xml.xsom;
 
 import com.sun.xml.xsom.visitor.XSTermFunction;
-import com.sun.xml.xsom.visitor.XSTermVisitor;
 import com.sun.xml.xsom.visitor.XSTermFunctionWithParam;
+import com.sun.xml.xsom.visitor.XSTermVisitor;
 
 /**
  * A component that can be referenced from {@link XSParticle}

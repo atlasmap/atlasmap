@@ -80,7 +80,7 @@
     <node.version>v12.16.3</node.version>
     <npm.version>6.14.5</npm.version>
     <yarn.version>v1.22.4</yarn.version>
-    <checkstyle.skip>true</checkstyle.skip>
+    <checkstyle.skip>false</checkstyle.skip>
   </properties>
 
   <modules>
@@ -119,6 +119,16 @@
         <plugin>
           <artifactId>maven-checkstyle-plugin</artifactId>
           <version>${maven-checkstyle-plugin.version}</version>
+          <configuration>
+            <sourceDirectories>
+              <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+            </sourceDirectories>
+            <includeTestSourceDirectory>false</includeTestSourceDirectory>
+            <configLocation>checkstyle.xml</configLocation>
+            <propertyExpansion>
+              checkstyle.suppression.file=checkstyle-suppressions.xml
+            </propertyExpansion>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-deploy-plugin</artifactId>
@@ -170,28 +180,6 @@
     </pluginManagement>
 
     <plugins>
-      <plugin>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>checkstyle</id>
-            <phase>test</phase>
-            <goals>
-              <goal>check</goal>
-            </goals>
-            <configuration>
-              <sourceDirectories>
-                <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
-              </sourceDirectories>
-              <includeTestSourceDirectory>true</includeTestSourceDirectory>
-              <configLocation>checkstyle.xml</configLocation>
-              <propertyExpansion>
-                checkstyle.suppression.file=checkstyle-suppressions.xml
-              </propertyExpansion>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
           <executions>

@@ -109,7 +109,7 @@ public interface AtlasModule {
 
     Field cloneField(Field field) throws AtlasException;
 
-	void setDataSourceMetadata(DataSourceMetadata meta);
+    void setDataSourceMetadata(DataSourceMetadata meta);
 
     DataSourceMetadata getDataSourceMetadata();
 

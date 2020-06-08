@@ -40,7 +40,6 @@ import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
-
 import io.atlasmap.v2.Validation;
 
 @AtlasModuleDetail(name = "JavaModule", uri = "atlas:java", modes = { "SOURCE", "TARGET" }, dataFormats = {
@@ -129,7 +128,6 @@ public class JavaModule extends BaseAtlasModule {
 
         JavaFieldWriter writer = new JavaFieldWriter(this.writerUtil);
         Class<?> clazz = writerUtil.loadClass(targetClassName);
-        writer.setCollectionType(collectionType);
         if (collectionType == CollectionType.ARRAY) {
             rootObject = Array.newInstance(clazz, 0);
         } else if (collectionType != CollectionType.NONE) {

@@ -45,8 +45,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.net.URL;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
 import javax.xml.parsers.SAXParserFactory;
 

@@ -37,7 +37,6 @@ import io.atlasmap.v2.Capitalize;
 import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
-// import io.atlasmap.v2.GenerateUUID;
 import io.atlasmap.v2.Length;
 import io.atlasmap.v2.Lowercase;
 import io.atlasmap.v2.Mapping;

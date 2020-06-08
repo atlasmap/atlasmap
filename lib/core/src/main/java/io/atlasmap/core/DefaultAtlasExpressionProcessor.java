@@ -31,7 +31,7 @@ import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.SimpleField;
 
 public class DefaultAtlasExpressionProcessor {
-    private static Logger LOG = LoggerFactory.getLogger(DefaultAtlasExpressionProcessor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasExpressionProcessor.class);
 
     public static void processExpression(DefaultAtlasSession session, String expression) {
         if (expression == null || expression.trim().isEmpty()) {

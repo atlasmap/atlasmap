@@ -49,6 +49,7 @@ import com.sun.xml.xsom.XSComponent;
 import com.sun.xml.xsom.XSContentType;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSFacet;
+import com.sun.xml.xsom.XSIdentityConstraint;
 import com.sun.xml.xsom.XSModelGroup;
 import com.sun.xml.xsom.XSModelGroupDecl;
 import com.sun.xml.xsom.XSNotation;
@@ -56,7 +57,6 @@ import com.sun.xml.xsom.XSParticle;
 import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSimpleType;
 import com.sun.xml.xsom.XSWildcard;
-import com.sun.xml.xsom.XSIdentityConstraint;
 import com.sun.xml.xsom.XSXPath;
 import com.sun.xml.xsom.visitor.XSFunction;
 

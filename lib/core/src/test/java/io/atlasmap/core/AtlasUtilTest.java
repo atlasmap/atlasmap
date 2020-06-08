@@ -15,12 +15,10 @@
  */
 package io.atlasmap.core;
 
-import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -116,7 +114,8 @@ public class AtlasUtilTest {
     public void testFindClassesForPackage() {
         List<Class<?>> classes = AtlasUtil.findClassesForPackage("io.atlasmap.v2");
         assertNotNull(classes);
-        assertThat(classes.stream().map(Class::getName).collect(Collectors.toList()), hasItems("io.atlasmap.v2.Field", "io.atlasmap.v2.AtlasMapping", "io.atlasmap.v2.Action", "io.atlasmap.v2.Capitalize"));
+        assertTrue(classes.stream().map(Class::getName).collect(Collectors.toList()).containsAll(
+                Arrays.asList("io.atlasmap.v2.Field", "io.atlasmap.v2.AtlasMapping", "io.atlasmap.v2.Action", "io.atlasmap.v2.Capitalize")));
     }
 
     @Test

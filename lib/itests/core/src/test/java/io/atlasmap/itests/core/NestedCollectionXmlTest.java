@@ -15,17 +15,8 @@
  */
 package io.atlasmap.itests.core;
 
-import io.atlasmap.api.AtlasContext;
-import io.atlasmap.api.AtlasException;
-import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.AtlasMappingService;
-import io.atlasmap.core.DefaultAtlasContextFactory;
-import io.atlasmap.v2.AtlasMapping;
-import io.atlasmap.v2.Mapping;
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -35,8 +26,18 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.atlasmap.api.AtlasContext;
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.api.AtlasSession;
+import io.atlasmap.core.AtlasMappingService;
+import io.atlasmap.core.DefaultAtlasContextFactory;
+import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.Mapping;
 public class NestedCollectionXmlTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(NestedCollectionXmlTest.class);

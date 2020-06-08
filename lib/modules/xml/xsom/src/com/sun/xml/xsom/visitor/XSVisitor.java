@@ -46,12 +46,10 @@ import com.sun.xml.xsom.XSAttributeDecl;
 import com.sun.xml.xsom.XSAttributeUse;
 import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSFacet;
+import com.sun.xml.xsom.XSIdentityConstraint;
 import com.sun.xml.xsom.XSNotation;
 import com.sun.xml.xsom.XSSchema;
-import com.sun.xml.xsom.XSIdentityConstraint;
 import com.sun.xml.xsom.XSXPath;
-import com.sun.xml.xsom.impl.IdentityConstraintImpl;
-import com.sun.xml.xsom.impl.XPathImpl;
 
 /**
  * Visitor for {@link com.sun.xml.xsom.XSComponent}

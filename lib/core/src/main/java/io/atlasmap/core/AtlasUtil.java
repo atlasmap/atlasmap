@@ -37,11 +37,11 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import io.atlasmap.spi.AtlasInternalSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasSession;
+import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Validation;
@@ -469,10 +469,11 @@ public class AtlasUtil {
         File[] allContents = targetDir.listFiles();
         if (allContents != null) {
             for (File element : allContents) {
-                if (element.isFile())
+                if (element.isFile()) {
                     element.delete();
-                else if (element.isDirectory())
+                } else if (element.isDirectory()) {
                     deleteDirectory(element);
+                }
             }
         }
         return;

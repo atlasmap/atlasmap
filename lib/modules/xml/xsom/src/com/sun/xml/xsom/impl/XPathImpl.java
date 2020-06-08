@@ -40,13 +40,14 @@
 
 package com.sun.xml.xsom.impl;
 
+import org.xml.sax.Locator;
+
 import com.sun.xml.xsom.XSIdentityConstraint;
 import com.sun.xml.xsom.XSXPath;
 import com.sun.xml.xsom.XmlString;
 import com.sun.xml.xsom.impl.parser.SchemaDocumentImpl;
 import com.sun.xml.xsom.visitor.XSFunction;
 import com.sun.xml.xsom.visitor.XSVisitor;
-import org.xml.sax.Locator;
 
 /**
  * @author Kohsuke Kawaguchi

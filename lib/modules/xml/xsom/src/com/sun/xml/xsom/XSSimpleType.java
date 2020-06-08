@@ -40,10 +40,10 @@
 
 package com.sun.xml.xsom;
 
+import java.util.List;
+
 import com.sun.xml.xsom.visitor.XSSimpleTypeFunction;
 import com.sun.xml.xsom.visitor.XSSimpleTypeVisitor;
-
-import java.util.List;
 
 /**
  * Simple type.

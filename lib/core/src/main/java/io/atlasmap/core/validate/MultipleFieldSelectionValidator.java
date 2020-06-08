@@ -19,7 +19,6 @@ import java.util.List;
 
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.spi.FieldDirection;
-import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;

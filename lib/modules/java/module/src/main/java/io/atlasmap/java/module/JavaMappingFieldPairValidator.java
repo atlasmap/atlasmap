@@ -20,11 +20,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.core.validate.MappingFieldPairValidator;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConversionService;
+import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Validation;

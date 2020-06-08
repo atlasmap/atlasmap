@@ -21,5 +21,9 @@
     "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
 
 <suppressions>
-  <suppress files="[\\/]generated-sources[\\/]" checks=".*"/>
+  <suppress checks=".*" files="[\\/]generated-sources[\\/]"/>
+  <suppress checks=".*" files="[\\/]licenses[\\/]"/>
+  <suppress checks=".*" files="com[\\/]sun[\\/]"/>
+  <suppress checks=".*" files=".+\.(?:html|class|adm|txt|MF|rng)$"/>
+  <suppress checks=".*" files="fhir-single.xsd"/>
 </suppressions>

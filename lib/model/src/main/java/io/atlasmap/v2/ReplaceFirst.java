@@ -4,14 +4,13 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class ReplaceFirst extends Action implements Serializable
-{
+public class ReplaceFirst extends Action implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    protected String match;
+    private String match;
 
-    protected String newString;
+    private String newString;
 
     /**
      * Gets the value of the match property.
@@ -19,7 +18,7 @@ public class ReplaceFirst extends Action implements Serializable
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     * 
      */
     public String getMatch() {
         return match;
@@ -27,7 +26,7 @@ public class ReplaceFirst extends Action implements Serializable
 
     /**
      * Sets the value of the match property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }

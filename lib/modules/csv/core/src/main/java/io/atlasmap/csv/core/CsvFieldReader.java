@@ -15,6 +15,17 @@
  */
 package io.atlasmap.csv.core;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.AtlasUtil;
@@ -31,17 +42,6 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Fields;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
-import sun.misc.IOUtils;
-
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * It accepts InputStream as a document in order to process big files efficiently.
@@ -179,8 +179,8 @@ public class CsvFieldReader implements AtlasFieldReader {
      * If firstRecordAsHeader is set to true it uses column names for field names, otherwise it uses an index
      * starting from 0.
      *
-     * @return
-     * @throws AtlasException
+     * @return {@link Document} built from CSV
+     * @throws AtlasException if it fails
      */
     public Document readSchema() throws AtlasException {
         CSVFormat csvFormat = csvConfig.newCsvFormat();

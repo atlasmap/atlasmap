@@ -18,7 +18,6 @@ package io.atlasmap.xml.inspect;
 import java.io.File;
 import java.nio.file.Paths;
 
-import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -36,10 +35,10 @@ public class XmlSchemaInspectionFhirTest extends BaseXmlInspectionServiceTest {
         XmlDocument xmlDocument = service.inspectSchema(schemaFile);
         Assert.assertNotNull(xmlDocument);
         Assert.assertNotNull(xmlDocument.getFields());
-        Assert.assertThat(xmlDocument.getFields().getField().size(), Is.is(1));
+        Assert.assertEquals(1, xmlDocument.getFields().getField().size());
         XmlComplexType root = (XmlComplexType) xmlDocument.getFields().getField().get(0);
         Assert.assertNotNull(root);
-        Assert.assertThat(root.getXmlFields().getXmlField().size(), Is.is(8));
+        Assert.assertEquals(8, root.getXmlFields().getXmlField().size());
         debugFields(xmlDocument.getFields());
     }
 

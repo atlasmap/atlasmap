@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Restrictions implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected List<Restriction> restriction;
 
@@ -29,7 +29,7 @@ public class Restrictions implements Serializable {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link Restriction }
-     * 
+     * @return A list of {@link Restriction}
      * 
      */
     public List<Restriction> getRestriction() {

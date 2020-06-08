@@ -15,6 +15,17 @@
  */
 package io.atlasmap.itests.core;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+
+import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
@@ -22,19 +33,6 @@ import io.atlasmap.core.AtlasMappingService;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Mapping;
-import org.junit.Before;
-import org.junit.Test;
-
-import javax.xml.soap.SOAPMessage;
-import java.lang.annotation.Target;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
 
 public class NestedCollectionJavaTest {
 

@@ -2,6 +2,7 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @Deprecated
@@ -11,7 +12,7 @@ public class Collection
     implements Serializable
 {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected Mappings mappings;
 

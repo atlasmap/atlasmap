@@ -30,8 +30,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
-import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.core.AtlasPath.SegmentContext;
+import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.json.v2.AtlasJsonModelFactory;
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.spi.AtlasConversionService;
@@ -169,7 +169,7 @@ public class JsonFieldReader implements AtlasFieldReader {
         return fields;
     }
 
-    private void populateChildFields(AtlasInternalSession session, JsonNode node, FieldGroup fieldGroup, AtlasPath path) 
+    private void populateChildFields(AtlasInternalSession session, JsonNode node, FieldGroup fieldGroup, AtlasPath path)
      throws AtlasException {
         List<Field> newChildren = new ArrayList<>();
         for (Field child : fieldGroup.getField()) {

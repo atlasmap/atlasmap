@@ -2,11 +2,12 @@
 package io.atlasmap.json.v2;
 
 import java.io.Serializable;
+
 import io.atlasmap.v2.DataSource;
 
 public class JsonDataSource extends DataSource implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected String template;
 

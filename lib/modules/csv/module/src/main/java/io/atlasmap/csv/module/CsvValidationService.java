@@ -15,6 +15,8 @@
  */
 package io.atlasmap.csv.module;
 
+import java.util.List;
+
 import io.atlasmap.core.validate.BaseModuleValidationService;
 import io.atlasmap.csv.v2.CsvField;
 import io.atlasmap.spi.AtlasConversionService;
@@ -22,8 +24,6 @@ import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.FieldDirection;
 import io.atlasmap.v2.Validation;
-
-import java.util.List;
 
 public class CsvValidationService extends BaseModuleValidationService<CsvField> {
 

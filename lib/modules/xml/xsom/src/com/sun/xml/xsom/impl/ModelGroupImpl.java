@@ -40,6 +40,11 @@
 
 package com.sun.xml.xsom.impl;
 
+import java.util.Arrays;
+import java.util.Iterator;
+
+import org.xml.sax.Locator;
+
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSModelGroup;
 import com.sun.xml.xsom.XSModelGroupDecl;
@@ -52,10 +57,6 @@ import com.sun.xml.xsom.visitor.XSTermFunction;
 import com.sun.xml.xsom.visitor.XSTermFunctionWithParam;
 import com.sun.xml.xsom.visitor.XSTermVisitor;
 import com.sun.xml.xsom.visitor.XSVisitor;
-import org.xml.sax.Locator;
-
-import java.util.Arrays;
-import java.util.Iterator;
 
 public class ModelGroupImpl extends ComponentImpl implements XSModelGroup, Ref.Term
 {

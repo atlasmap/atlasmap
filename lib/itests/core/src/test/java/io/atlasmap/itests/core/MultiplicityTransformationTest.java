@@ -28,8 +28,6 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-import io.atlasmap.itests.core.issue.Item;
-import io.atlasmap.v2.Audit;
 import org.hamcrest.FeatureMatcher;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,12 +36,14 @@ import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.AtlasMappingService;
 import io.atlasmap.core.DefaultAtlasContextFactory;
+import io.atlasmap.itests.core.issue.Item;
 import io.atlasmap.itests.core.issue.SourceClass;
 import io.atlasmap.itests.core.issue.TargetClass;
 import io.atlasmap.java.test.SourceFlatPrimitiveClass;
 import io.atlasmap.java.test.TargetFlatPrimitiveClass;
 import io.atlasmap.java.test.TargetTestClass;
 import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
 
 public class MultiplicityTransformationTest {

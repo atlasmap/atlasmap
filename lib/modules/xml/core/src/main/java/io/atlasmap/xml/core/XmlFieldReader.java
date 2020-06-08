@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import io.atlasmap.core.AtlasPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -28,8 +27,9 @@ import org.w3c.dom.Element;
 
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.core.AtlasUtil;
+import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.AtlasPath.SegmentContext;
+import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasFieldReader;
 import io.atlasmap.spi.AtlasInternalSession;

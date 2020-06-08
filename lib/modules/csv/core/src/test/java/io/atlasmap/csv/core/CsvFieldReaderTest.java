@@ -15,21 +15,21 @@
  */
 package io.atlasmap.csv.core;
 
-import io.atlasmap.csv.v2.CsvField;
-import io.atlasmap.spi.AtlasInternalSession;
-import io.atlasmap.v2.AuditStatus;
-import io.atlasmap.v2.Audits;
-import io.atlasmap.v2.Field;
-import io.atlasmap.v2.FieldGroup;
-import org.junit.Test;
-
-import java.io.ByteArrayInputStream;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import java.io.ByteArrayInputStream;
+
+import org.junit.Test;
+
+import io.atlasmap.csv.v2.CsvField;
+import io.atlasmap.spi.AtlasInternalSession;
+import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.Audits;
+import io.atlasmap.v2.FieldGroup;
 
 public class CsvFieldReaderTest {
 

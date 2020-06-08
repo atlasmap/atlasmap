@@ -1,6 +1,7 @@
 package io.atlasmap.v2;
 
 import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,7 +12,7 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 @JsonRootName("ActionDetail")
 public class ActionDetail implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected ActionParameters parameters;
 

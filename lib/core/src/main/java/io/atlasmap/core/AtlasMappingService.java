@@ -24,9 +24,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.api.AtlasException;
@@ -38,7 +35,7 @@ import io.atlasmap.v2.Json;
 public class AtlasMappingService implements Serializable {
 
     private static final long serialVersionUID = 1668362984516180517L;
-    private static final Logger LOG = LoggerFactory.getLogger(AtlasMappingService.class);
+
     private transient ObjectMapper jsonMapper = null;
 
     public AtlasMappingService() {

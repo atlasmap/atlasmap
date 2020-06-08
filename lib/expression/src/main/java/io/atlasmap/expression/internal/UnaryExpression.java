@@ -31,7 +31,7 @@ import io.atlasmap.v2.Field;
 
 
 /**
- * An expression which performs an operation on two expression values
+ * An expression which performs an operation on two expression values.
  * 
  * @version $Revision: 1.3 $
  */
@@ -127,7 +127,7 @@ public abstract class UnaryExpression implements Expression {
     }
 
     abstract static class BooleanUnaryExpression extends UnaryExpression implements BooleanExpression {
-        public BooleanUnaryExpression(Expression left) {
+        BooleanUnaryExpression(Expression left) {
             super(left);
         }
 
@@ -215,25 +215,23 @@ public abstract class UnaryExpression implements Expression {
     }
 
     /**
-     * @see java.lang.Object#toString()
+     * {@inheritDoc}
      */
     public String toString() {
         return "(" + getExpressionSymbol() + " " + right.toString() + ")";
     }
 
     /**
+     * {@inheritDoc}
      * TODO: more efficient hashCode()
-     * 
-     * @see java.lang.Object#hashCode()
      */
     public int hashCode() {
         return toString().hashCode();
     }
 
     /**
+     * {@inheritDoc}
      * TODO: more efficient hashCode()
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
      */
     public boolean equals(Object o) {
 

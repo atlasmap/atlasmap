@@ -21,7 +21,7 @@ import org.springframework.test.context.ContextConfiguration;
 @BootstrapWith(CamelTestContextBootstrapper.class)
 @ContextConfiguration
 public class AtlasMapExtractMappingsTest {
-	
+
     private static final String EXPECTED_BODY = "{\"order\":{\"orderId\":\"A123\"}}";
 
     @Autowired
@@ -31,7 +31,7 @@ public class AtlasMapExtractMappingsTest {
     protected MockEndpoint result;
 
     @EndpointInject(uri = "mock:result-n")
-    protected MockEndpoint result_n;
+    protected MockEndpoint resultN;
 
     @Test
     @DirtiesContext
@@ -51,7 +51,7 @@ public class AtlasMapExtractMappingsTest {
     @Test
     @DirtiesContext
     public void testXMLMappingsExtractionNumberedMappingFile() throws Exception {
-        result_n.setExpectedCount(1);
+        resultN.setExpectedCount(1);
 
         ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
         producerTemplate.sendBody("direct:start-n",
@@ -59,7 +59,7 @@ public class AtlasMapExtractMappingsTest {
 
         MockEndpoint.assertIsSatisfied(camelContext);
 
-        final Object body = result_n.getExchanges().get(0).getIn().getBody();
+        final Object body = resultN.getExchanges().get(0).getIn().getBody();
         assertEquals(EXPECTED_BODY, body);
     }
 }

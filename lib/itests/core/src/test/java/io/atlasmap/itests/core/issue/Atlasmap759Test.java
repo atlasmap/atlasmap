@@ -1,28 +1,21 @@
 package io.atlasmap.itests.core.issue;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.JsonNode;
-
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.time.Month;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -32,11 +25,11 @@ import io.atlasmap.itests.core.TestHelper;
 import io.atlasmap.v2.AtlasMapping;
 
 /**
- * https://github.com/atlasmap/atlasmap/issues/759
+ * https://github.com/atlasmap/atlasmap/issues/759 .
  */
 public class Atlasmap759Test {
 
-    private static Logger LOG = LoggerFactory.getLogger(Atlasmap759Test.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Atlasmap759Test.class);
 
     private AtlasMappingService mappingService;
 
@@ -58,6 +51,7 @@ public class Atlasmap759Test {
         while((line = r.readLine()) != null) {
             buf.append(line);
         }
+        r.close();
         session.setSourceDocument("-LYbkepiv8lNqAFpXmwF", buf.toString());
         context.process(session);
         assertFalse(TestHelper.printAudit(session), session.hasErrors());

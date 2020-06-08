@@ -31,7 +31,6 @@ import java.util.UUID;
 
 import javax.management.ObjectName;
 
-import io.atlasmap.v2.Mappings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,6 +64,7 @@ import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
+import io.atlasmap.v2.Mappings;
 import io.atlasmap.v2.PropertyField;
 import io.atlasmap.v2.SimpleField;
 import io.atlasmap.v2.Validation;
@@ -431,7 +431,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     }
 
     /**
-     * Process session lifecycle
+     * Process session lifecycle.
      *
      */
     @Override
@@ -572,7 +572,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     }
 
     // just unwrap collection mappings to be compatible with older UI
-    private final List<Mapping> unwrapCollectionMappings(DefaultAtlasSession session, BaseMapping baseMapping) {
+    private List<Mapping> unwrapCollectionMappings(DefaultAtlasSession session, BaseMapping baseMapping) {
         if (baseMapping.getMappingType() == null || !baseMapping.getMappingType().equals(MappingType.COLLECTION)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Mapping is not a collection mapping, not cloning: {}", baseMapping);
@@ -946,10 +946,10 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         session.getProperties().put("Atlas.CreatedDateTimeTZ", df.format(date));
     }
 
-	public void setDataSourceMetadata(Map<DataSourceKey, DataSourceMetadata> dataSourceMetadataMap) throws AtlasException {
+    public void setDataSourceMetadata(Map<DataSourceKey, DataSourceMetadata> dataSourceMetadataMap) throws AtlasException {
         this.dataSourceMetadataMap = dataSourceMetadataMap;
         init();
-	}
+    }
 
     public Map<String, AtlasModule> getSourceModules() {
         return sourceModules;

@@ -15,6 +15,11 @@
  */
 package io.atlasmap.dfdl.inspect;
 
+import java.io.File;
+import java.net.URI;
+import java.util.Map;
+
+import org.apache.daffodil.japi.Compiler;
 import org.apache.daffodil.japi.Daffodil;
 import org.apache.daffodil.japi.DataProcessor;
 import org.apache.daffodil.japi.ParseResult;
@@ -31,12 +36,6 @@ import io.atlasmap.xml.core.XmlIOHelper;
 import io.atlasmap.xml.inspect.XmlInstanceInspector;
 import io.atlasmap.xml.inspect.XmlSchemaInspector;
 import io.atlasmap.xml.v2.XmlDocument;
-
-import java.io.File;
-import java.net.URI;
-import java.util.Map;
-
-import org.apache.daffodil.japi.Compiler;
 
 public class DfdlInspector {
     private static final Logger LOG = LoggerFactory.getLogger(DfdlInspector.class);
@@ -88,8 +87,8 @@ public class DfdlInspector {
         this.output = xmlSchemaInspector.getXmlDocument();
     }
 
-	public XmlDocument getXmlDocument() {
+    public XmlDocument getXmlDocument() {
         return this.output;
-	}
+    }
 
 }

@@ -18,11 +18,11 @@ package io.atlasmap.csv.module;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import io.atlasmap.csv.v2.CsvField;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import io.atlasmap.csv.v2.CsvField;
 import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.PropertyField;
 

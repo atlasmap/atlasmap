@@ -1,13 +1,15 @@
 package io.atlasmap.xml.v2;
 
 import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import io.atlasmap.v2.DataSource;
 
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class XmlDataSource extends DataSource implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected XmlNamespaces xmlNamespaces;
 

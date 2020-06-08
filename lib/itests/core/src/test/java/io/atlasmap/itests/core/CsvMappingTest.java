@@ -15,6 +15,17 @@
  */
 package io.atlasmap.itests.core;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+
+import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
+
+import org.hamcrest.CoreMatchers;
+import org.junit.Before;
+import org.junit.Test;
+
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.AtlasMappingService;
@@ -22,16 +33,6 @@ import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Collection;
 import io.atlasmap.v2.Mapping;
-import org.hamcrest.CoreMatchers;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 
 public class CsvMappingTest {
 

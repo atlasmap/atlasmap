@@ -21,7 +21,7 @@ import io.atlasmap.v2.LookupEntry;
 import io.atlasmap.v2.LookupTable;
 
 /**
- * TODO consolidate with JavaFieldWriterUtil - https://github.com/atlasmap/atlasmap/issues/730
+ * TODO consolidate with JavaFieldWriterUtil - https://github.com/atlasmap/atlasmap/issues/730 .
  */
 public class TargetValueConverter {
     private static final Logger LOG = LoggerFactory.getLogger(TargetValueConverter.class);

@@ -21,7 +21,7 @@ public enum EnumValueClass {
 
     private String value;
 
-    private EnumValueClass(String value) {
+    EnumValueClass(String value) {
         this.value = value;
     }
 

@@ -40,9 +40,9 @@
 
 package com.sun.xml.xsom.impl;
 
-import com.sun.xml.xsom.XSDeclaration;
-
 import java.util.Comparator;
+
+import com.sun.xml.xsom.XSDeclaration;
 
 /**
  * UName.

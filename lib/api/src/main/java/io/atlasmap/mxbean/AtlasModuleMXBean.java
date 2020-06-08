@@ -19,52 +19,53 @@ import javax.management.openmbean.OpenDataException;
 import javax.management.openmbean.TabularData;
 
 public interface AtlasModuleMXBean {
-    public String getUuid();
 
-    public String getName();
+    String getUuid();
 
-    public String getClassName();
+    String getName();
 
-    public String getVersion();
+    String getClassName();
 
-    public String[] getDataFormats();
+    String getVersion();
 
-    public String[] getPackageNames();
+    String[] getDataFormats();
 
-    public String getModeName();
+    String[] getPackageNames();
 
-    public boolean isSourceSupported();
+    String getModeName();
 
-    public boolean isTargetSupported();
+    boolean isSourceSupported();
 
-    public Boolean isStatisticsEnabled();
+    boolean isTargetSupported();
 
-    public void setStatisticsEnabled(boolean enabled);
+    Boolean isStatisticsEnabled();
 
-    public long getSourceCount();
+    void setStatisticsEnabled(boolean enabled);
 
-    public long getSourceErrorCount();
+    long getSourceCount();
 
-    public long getSourceSuccessCount();
+    long getSourceErrorCount();
 
-    public long getSourceMinExecutionTime();
+    long getSourceSuccessCount();
 
-    public long getSourceMaxExecutionTime();
+    long getSourceMinExecutionTime();
 
-    public long getSourceTotalExecutionTime();
+    long getSourceMaxExecutionTime();
 
-    public long getTargetCount();
+    long getSourceTotalExecutionTime();
 
-    public long getTargetErrorCount();
+    long getTargetCount();
 
-    public long getTargetSuccessCount();
+    long getTargetErrorCount();
 
-    public long getTargetMinExecutionTime();
+    long getTargetSuccessCount();
 
-    public long getTargetMaxExecutionTime();
+    long getTargetMinExecutionTime();
 
-    public long getTargetTotalExecutionTime();
+    long getTargetMaxExecutionTime();
 
-    public TabularData readAndResetStatistics() throws OpenDataException;
+    long getTargetTotalExecutionTime();
+
+    TabularData readAndResetStatistics() throws OpenDataException;
 
 }

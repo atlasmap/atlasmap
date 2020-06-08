@@ -26,12 +26,12 @@ import org.junit.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
+import io.atlasmap.itests.reference.AtlasMappingBaseTest;
+import io.atlasmap.itests.reference.AtlasTestUtil;
 import io.atlasmap.java.test.BaseContact;
 import io.atlasmap.java.test.SourceContact;
 import io.atlasmap.java.test.TargetContact;
 import io.atlasmap.v2.Audit;
-import io.atlasmap.itests.reference.AtlasMappingBaseTest;
-import io.atlasmap.itests.reference.AtlasTestUtil;
 
 public class JavaJavaSeparateTest extends AtlasMappingBaseTest {
 

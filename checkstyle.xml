@@ -23,7 +23,6 @@
 <module name="Checker">
   <!-- http://checkstyle.sourceforge.net/config_filters.html -->
   <module name="SuppressWarningsFilter" />
-  <module name="SuppressWithNearbyCommentFilter"/>
   <module name="SuppressionFilter">
     <property name="file" value="${checkstyle.suppression.file}"/>
   </module>
@@ -41,7 +40,7 @@
   <!-- http://checkstyle.sourceforge.net/config_regexp.html -->
   <module name="RegexpSingleline">
     <!-- \s matches whitespace character, $ matches end of line. -->
-    <property name="format" value="\s+$"/>
+    <property name="format" value="(?![\*\s*])[^$]\s+$"/>
     <property name="message" value="Line has trailing spaces."/>
   </module>
 
@@ -52,13 +51,11 @@
   <!-- =========================================================== -->
 
   <module name="TreeWalker">
-    <property name="cacheFile" value="checkstyle.cache"/>
 
     <!-- http://checkstyle.sourceforge.net/config_annotation.html -->
     <module name="SuppressWarningsHolder" />
 
-    <!-- http://checkstyle.sourceforge.net/config_filters.html -->
-    <module name="FileContentsHolder"/>
+    <module name="SuppressWithNearbyCommentFilter"/>
 
     <!-- Checks for blocks. You know, those {}'s         -->
     <!-- See http://checkstyle.sf.net/config_blocks.html -->
@@ -100,6 +97,19 @@
     <module name="ParameterName" />
     <module name="StaticVariableName" />
 
+    <!-- Javadoc -->
+    <module name="JavadocStyle">
+      <property name="scope" value="public"/>
+    </module>
+    <module name="JavadocType">
+      <property name="scope" value="public"/>
+    </module>
+    <module name="JavadocMethod">
+      <property name="scope" value="public"/>
+    </module>
+    <module name="JavadocVariable">
+      <property name="scope" value="nothing"/>
+    </module>
   </module>
 </module>
 

@@ -30,7 +30,6 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.dfdl.core.DfdlSchemaGenerator;
 
 /**
  * DFDL schema resolver resolves DFDL schema file to be used to process DFDL document.

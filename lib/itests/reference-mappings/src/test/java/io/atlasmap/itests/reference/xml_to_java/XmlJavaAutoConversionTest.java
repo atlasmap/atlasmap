@@ -25,9 +25,9 @@ import org.junit.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.java.test.TargetFlatPrimitiveClass;
 import io.atlasmap.itests.reference.AtlasMappingBaseTest;
 import io.atlasmap.itests.reference.AtlasTestUtil;
+import io.atlasmap.java.test.TargetFlatPrimitiveClass;
 
 public class XmlJavaAutoConversionTest extends AtlasMappingBaseTest {
 

@@ -40,10 +40,10 @@
 
 package com.sun.xml.xsom;
 
-import com.sun.xml.xsom.parser.SchemaDocument;
-
 import java.util.Iterator;
 import java.util.Map;
+
+import com.sun.xml.xsom.parser.SchemaDocument;
 
 /**
  * Schema.

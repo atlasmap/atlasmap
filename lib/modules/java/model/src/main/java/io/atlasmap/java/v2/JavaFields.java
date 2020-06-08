@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 public class JavaFields implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected List<JavaField> javaField;
 
@@ -28,7 +28,7 @@ public class JavaFields implements Serializable {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link JavaField }
-     * 
+     * @return A list of {@link JavaField}
      * 
      */
     public List<JavaField> getJavaField() {

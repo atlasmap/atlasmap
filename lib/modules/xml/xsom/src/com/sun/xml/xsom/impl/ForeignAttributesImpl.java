@@ -40,10 +40,11 @@
 
 package com.sun.xml.xsom.impl;
 
-import com.sun.xml.xsom.ForeignAttributes;
 import org.relaxng.datatype.ValidationContext;
 import org.xml.sax.Locator;
 import org.xml.sax.helpers.AttributesImpl;
+
+import com.sun.xml.xsom.ForeignAttributes;
 
 /**
  * Remembers foreign attributes.

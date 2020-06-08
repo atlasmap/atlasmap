@@ -15,6 +15,8 @@
  */
 package io.atlasmap.core;
 
+import java.util.List;
+
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.spi.AtlasCollectionHelper;
 import io.atlasmap.spi.AtlasFieldActionService;
@@ -24,8 +26,6 @@ import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.Multiplicity;
-
-import java.util.List;
 
 public class DefaultAtlasCollectionHelper implements AtlasCollectionHelper {
 

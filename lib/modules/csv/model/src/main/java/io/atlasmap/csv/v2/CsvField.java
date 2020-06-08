@@ -16,11 +16,14 @@
 package io.atlasmap.csv.v2;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Field;
 
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class CsvField extends Field {
+
+    private static final long serialVersionUID = 1L;
 
     private Integer column;
 

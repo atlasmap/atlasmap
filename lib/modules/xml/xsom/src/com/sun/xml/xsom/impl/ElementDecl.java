@@ -40,6 +40,13 @@
 
 package com.sun.xml.xsom.impl;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.xml.sax.Locator;
+
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSIdentityConstraint;
 import com.sun.xml.xsom.XSModelGroup;
@@ -55,12 +62,6 @@ import com.sun.xml.xsom.visitor.XSTermFunction;
 import com.sun.xml.xsom.visitor.XSTermFunctionWithParam;
 import com.sun.xml.xsom.visitor.XSTermVisitor;
 import com.sun.xml.xsom.visitor.XSVisitor;
-import org.xml.sax.Locator;
-
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class ElementDecl extends DeclarationImpl implements XSElementDecl, Ref.Term
 {

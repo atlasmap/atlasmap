@@ -33,7 +33,6 @@ import io.atlasmap.v2.TrimRight;
 import io.atlasmap.v2.Uppercase;
 import io.atlasmap.v2.UppercaseChar;
 
-@SuppressWarnings("squid:S1118")
 public class StringSimpleFieldActions implements AtlasFieldAction {
 
     public static final String STRING_SEPARATOR_REGEX = "[\\s+\\:\\_\\+\\=\\-]+";

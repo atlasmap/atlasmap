@@ -23,7 +23,7 @@ import io.atlasmap.expression.ExpressionException;
 import io.atlasmap.v2.Field;
 
 /**
- * A filter performing a comparison of two objects
+ * A filter performing a comparison of two objects.
  * 
  * @version $Revision: 1.2 $
  */

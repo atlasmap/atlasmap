@@ -25,8 +25,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.spi.AtlasConversionInfo;
+import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
 public class SqlTimestampConverter implements AtlasConverter<Timestamp> {

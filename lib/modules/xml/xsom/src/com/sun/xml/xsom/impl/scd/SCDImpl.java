@@ -40,10 +40,10 @@
 
 package com.sun.xml.xsom.impl.scd;
 
+import java.util.Iterator;
+
 import com.sun.xml.xsom.SCD;
 import com.sun.xml.xsom.XSComponent;
-
-import java.util.Iterator;
 
 /**
  * Schema component designator.

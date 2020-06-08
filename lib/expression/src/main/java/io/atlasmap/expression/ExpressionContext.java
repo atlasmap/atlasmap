@@ -19,7 +19,7 @@ package io.atlasmap.expression;
 import io.atlasmap.v2.Field;
 
 /**
- * A Filterable is the object being evaluated by the filters.  It provides
+ * A Filterable is the object being evaluated by the filters. It provides
  * access to filtered properties.
  * 
  * @version $Revision: 1.4 $
@@ -27,7 +27,7 @@ import io.atlasmap.v2.Field;
 public interface ExpressionContext {
 
     /**
-     * Extracts the named variable
+     * Extracts the named variable.
      *
      * @param name variable name
      * @return {@link Field} represents variable value
@@ -36,3 +36,4 @@ public interface ExpressionContext {
     Field getVariable(String name) throws ExpressionException;
 
 }
+

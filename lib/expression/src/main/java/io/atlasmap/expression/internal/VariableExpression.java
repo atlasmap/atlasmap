@@ -24,7 +24,7 @@ import io.atlasmap.expression.ExpressionException;
 import io.atlasmap.v2.Field;
 
 /**
- * Represents a property expression
+ * Represents a property expression.
  *
  * @version $Revision: 1.5 $
  */
@@ -45,21 +45,21 @@ public class VariableExpression implements Expression {
     }
 
     /**
-     * @see java.lang.Object#toString()
+     * {@inheritDoc}
      */
     public String toString() {
         return "${" + name + "}";
     }
 
     /**
-     * @see java.lang.Object#hashCode()
+     * {@inheritDoc}
      */
     public int hashCode() {
         return name.hashCode();
     }
 
     /**
-     * @see java.lang.Object#equals(java.lang.Object)
+     *{@inheritDoc}
      */
     public boolean equals(Object o) {
         if (o == null || !this.getClass().equals(o.getClass())) {

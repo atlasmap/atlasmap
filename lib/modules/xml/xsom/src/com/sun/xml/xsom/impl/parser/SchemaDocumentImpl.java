@@ -40,12 +40,12 @@
 
 package com.sun.xml.xsom.impl.parser;
 
-import com.sun.xml.xsom.impl.SchemaImpl;
-import com.sun.xml.xsom.parser.SchemaDocument;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.sun.xml.xsom.impl.SchemaImpl;
+import com.sun.xml.xsom.parser.SchemaDocument;
 
 /**
  * {@link SchemaDocument} implementation.

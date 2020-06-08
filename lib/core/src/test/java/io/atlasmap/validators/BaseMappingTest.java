@@ -19,8 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.core.AtlasMappingUtil;
-// TODO: Fix circular dependency
-// import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.DataSource;

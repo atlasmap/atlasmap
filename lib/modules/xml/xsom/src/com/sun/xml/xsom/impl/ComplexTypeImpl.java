@@ -40,6 +40,15 @@
 
 package com.sun.xml.xsom.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.xml.sax.Locator;
+
 import com.sun.xml.xsom.XSAttGroupDecl;
 import com.sun.xml.xsom.XSAttributeDecl;
 import com.sun.xml.xsom.XSAttributeUse;
@@ -56,14 +65,6 @@ import com.sun.xml.xsom.impl.parser.SchemaDocumentImpl;
 import com.sun.xml.xsom.impl.scd.Iterators;
 import com.sun.xml.xsom.visitor.XSFunction;
 import com.sun.xml.xsom.visitor.XSVisitor;
-import java.util.ArrayList;
-import java.util.List;
-import org.xml.sax.Locator;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 public class ComplexTypeImpl extends AttributesHolder implements XSComplexType, Ref.ComplexType
 {

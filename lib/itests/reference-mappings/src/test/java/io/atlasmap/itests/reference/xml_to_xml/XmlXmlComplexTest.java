@@ -21,8 +21,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
-import javax.xml.bind.JAXBElement;
-
 import org.junit.Test;
 
 import io.atlasmap.api.AtlasContext;

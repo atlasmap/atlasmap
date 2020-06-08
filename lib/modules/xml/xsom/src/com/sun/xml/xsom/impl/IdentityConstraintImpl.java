@@ -40,16 +40,17 @@
 
 package com.sun.xml.xsom.impl;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.xml.sax.Locator;
+
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSIdentityConstraint;
 import com.sun.xml.xsom.XSXPath;
 import com.sun.xml.xsom.impl.parser.SchemaDocumentImpl;
 import com.sun.xml.xsom.visitor.XSFunction;
 import com.sun.xml.xsom.visitor.XSVisitor;
-import org.xml.sax.Locator;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * {@link XSIdentityConstraint} implementation.

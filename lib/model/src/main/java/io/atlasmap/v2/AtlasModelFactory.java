@@ -22,7 +22,6 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@SuppressWarnings("squid:S3776")
 public class AtlasModelFactory {
 
     public static final String GENERATED_PATH = "$ATLASMAP";

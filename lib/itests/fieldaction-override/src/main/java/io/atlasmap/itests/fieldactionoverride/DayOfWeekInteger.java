@@ -15,10 +15,7 @@
  */
 package io.atlasmap.itests.fieldactionoverride;
 
-import io.atlasmap.spi.AtlasFieldActionInfo;
 import io.atlasmap.v2.Action;
-import io.atlasmap.v2.CollectionType;
-import io.atlasmap.v2.FieldType;
 
 public class DayOfWeekInteger extends Action {
 

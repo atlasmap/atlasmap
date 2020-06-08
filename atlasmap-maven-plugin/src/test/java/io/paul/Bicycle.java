@@ -1,5 +1,4 @@
 package io.paul;
-import io.paul.GeoLocation;
 
 public class Bicycle {
     public int cadence;

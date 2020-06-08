@@ -43,25 +43,22 @@ public abstract class BinaryExpression implements Expression {
 
 
     /**
-     * @see java.lang.Object#toString()
+     * {@inheritDoc}
      */
     public String toString() {
         return "(" + left.toString() + " " + getExpressionSymbol() + " " + right.toString() + ")";
     }
 
     /**
+     * {@inheritDoc}
      * TODO: more efficient hashCode()
-     *
-     * @see java.lang.Object#hashCode()
      */
     public int hashCode() {
         return toString().hashCode();
     }
 
     /**
-     * TODO: more efficient hashCode()
-     *
-     * @see java.lang.Object#equals(java.lang.Object)
+     * {@inheritDoc}
      */
     public boolean equals(Object o) {
 

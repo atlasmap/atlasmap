@@ -19,7 +19,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
@@ -27,13 +26,13 @@ import org.junit.Test;
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.AtlasMappingService;
+import io.atlasmap.itests.reference.AtlasMappingBaseTest;
+import io.atlasmap.itests.reference.AtlasTestUtil;
 import io.atlasmap.json.test.AtlasJsonTestRootedMapper;
 import io.atlasmap.json.test.AtlasJsonTestUnrootedMapper;
 import io.atlasmap.json.test.TargetFlatPrimitive;
 import io.atlasmap.json.v2.AtlasJsonModelFactory;
 import io.atlasmap.json.v2.JsonField;
-import io.atlasmap.itests.reference.AtlasMappingBaseTest;
-import io.atlasmap.itests.reference.AtlasTestUtil;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.BaseMapping;

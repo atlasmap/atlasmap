@@ -15,6 +15,13 @@
  */
 package io.atlasmap.csv.module;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.core.BaseAtlasModule;
 import io.atlasmap.csv.core.CsvConfig;
@@ -22,17 +29,10 @@ import io.atlasmap.csv.core.CsvFieldReader;
 import io.atlasmap.csv.core.CsvFieldWriter;
 import io.atlasmap.csv.v2.CsvField;
 import io.atlasmap.spi.AtlasInternalSession;
+import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import io.atlasmap.api.AtlasException;
-import io.atlasmap.spi.AtlasModuleDetail;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 
 @AtlasModuleDetail(name = "CsvModule", uri = "atlas:csv", modes = { "SOURCE", "TARGET" }, dataFormats = {
         "csv" }, configPackages = { "io.atlasmap.csv.v2" })

@@ -6,7 +6,7 @@ import java.util.List;
 
 public class XmlEnumFields implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected List<XmlEnumField> xmlEnumField;
 
@@ -29,7 +29,7 @@ public class XmlEnumFields implements Serializable {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link XmlEnumField }
-     * 
+     * @return A list of {@link XmlEnumField}
      * 
      */
     public List<XmlEnumField> getXmlEnumField() {

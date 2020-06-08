@@ -19,8 +19,8 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
-import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.spi.AtlasConversionInfo;
+import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
 public class MockCustomConverter implements AtlasConverter<Date> {

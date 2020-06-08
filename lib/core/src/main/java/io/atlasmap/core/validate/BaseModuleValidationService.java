@@ -18,11 +18,8 @@ package io.atlasmap.core.validate;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.atlasmap.core.DefaultAtlasCollectionHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import io.atlasmap.api.AtlasValidationService;
+import io.atlasmap.core.DefaultAtlasCollectionHelper;
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.core.DefaultAtlasFieldActionService;
 import io.atlasmap.spi.AtlasConversionService;
@@ -43,8 +40,6 @@ import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
 public abstract class BaseModuleValidationService<T extends Field> implements AtlasValidationService {
-
-    private static final Logger LOG = LoggerFactory.getLogger(BaseModuleValidationService.class);
 
     private AtlasConversionService conversionService;
     private AtlasFieldActionService fieldActionService;

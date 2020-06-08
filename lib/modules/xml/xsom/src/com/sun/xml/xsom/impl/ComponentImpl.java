@@ -40,21 +40,23 @@
 
 package com.sun.xml.xsom.impl;
 
-import com.sun.xml.xsom.SCD;
-import com.sun.xml.xsom.XSAnnotation;
-import com.sun.xml.xsom.XSComponent;
-import com.sun.xml.xsom.XSSchemaSet;
-import com.sun.xml.xsom.util.ComponentNameFunction;
-import com.sun.xml.xsom.impl.parser.SchemaDocumentImpl;
-import com.sun.xml.xsom.parser.SchemaDocument;
-import org.xml.sax.Locator;
-
-import javax.xml.namespace.NamespaceContext;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
+import javax.xml.namespace.NamespaceContext;
+
+import org.xml.sax.Locator;
+
+import com.sun.xml.xsom.SCD;
+import com.sun.xml.xsom.XSAnnotation;
+import com.sun.xml.xsom.XSComponent;
+import com.sun.xml.xsom.XSSchemaSet;
+import com.sun.xml.xsom.impl.parser.SchemaDocumentImpl;
+import com.sun.xml.xsom.parser.SchemaDocument;
+import com.sun.xml.xsom.util.ComponentNameFunction;
 
 public abstract class ComponentImpl implements XSComponent
 {

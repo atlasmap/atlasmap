@@ -1,3 +1,4 @@
+package com.sun.xml.xsom;
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -38,56 +39,41 @@
  * holder.
  */
 
-import com.sun.xml.xsom.SCD;
-import com.sun.xml.xsom.XSComponent;
-import com.sun.xml.xsom.XSSchemaSet;
-import com.sun.xml.xsom.parser.XSOMParser;
-import com.sun.xml.xsom.util.ComponentNameFunction;
-import org.xml.sax.Locator;
+import java.io.IOException;
 
-import javax.xml.namespace.NamespaceContext;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Collection;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+
+import com.sun.xml.xsom.parser.XSOMParser;
 
 /**
- * Tests SCD.
  * @author Kohsuke Kawaguchi
  */
-public class SCDDriver {
+public class ERDriver {
     public static void main(String[] args) throws Exception {
         XSOMParser p = new XSOMParser();
+        p.setEntityResolver(new EntityResolverImpl());
 
-        for( int i=1; i<args.length; i++ )
-            p.parse(args[i]);
+        // SAX parser -> XSOM ContentHandler
+        SAXParserFactory spf = SAXParserFactory.newInstance();
+        spf.setNamespaceAware(true);
+        XMLReader xr = spf.newSAXParser().getXMLReader();
+        xr.setContentHandler(p.getParserHandler());
 
-        XSSchemaSet r = p.getResult();
-        SCD scd = SCD.create(args[0], new DummyNSContext());
-        Collection<XSComponent> result = scd.select(r);
-        for( XSComponent c : result) {
-            System.out.println(c.apply(new ComponentNameFunction()));
-            print(c.getLocator());
-            System.out.println();
-        }
-        System.out.printf("%1d match(s)\n",result.size());
+        for( String arg : args )
+            xr.parse(arg);
+
+        System.out.println("done");
     }
 
-    private static void print(Locator locator) {
-        System.out.printf("line %1d of %2s\n", locator.getLineNumber(), locator.getSystemId());
-
-    }
-
-    private static class DummyNSContext implements NamespaceContext {
-        public String getNamespaceURI(String prefix) {
-            return prefix;
-        }
-
-        public String getPrefix(String namespaceURI) {
-            return namespaceURI;
-        }
-
-        public Iterator getPrefixes(String namespaceURI) {
-            return Collections.singletonList(namespaceURI).iterator();
+    private static class EntityResolverImpl implements EntityResolver {
+        public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+            System.out.printf("p:%s s:%s\n",publicId,systemId);
+            return null;
         }
     }
 }

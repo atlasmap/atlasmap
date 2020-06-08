@@ -1,12 +1,13 @@
 package io.atlasmap.json.v2;
 
 import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class JsonComplexType extends JsonField implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected JsonFields jsonFields;
 

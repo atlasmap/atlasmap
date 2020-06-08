@@ -24,11 +24,11 @@ import org.junit.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
+import io.atlasmap.itests.reference.AtlasMappingBaseTest;
+import io.atlasmap.itests.reference.AtlasTestUtil;
 import io.atlasmap.json.test.AtlasJsonTestRootedMapper;
 import io.atlasmap.json.test.AtlasJsonTestUnrootedMapper;
 import io.atlasmap.json.test.TargetOrder;
-import io.atlasmap.itests.reference.AtlasMappingBaseTest;
-import io.atlasmap.itests.reference.AtlasTestUtil;
 
 public class JsonJsonComplexTest extends AtlasMappingBaseTest {
 

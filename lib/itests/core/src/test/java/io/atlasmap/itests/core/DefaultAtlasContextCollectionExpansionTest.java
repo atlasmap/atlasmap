@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.DefaultAtlasContext;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.core.DefaultAtlasSession;

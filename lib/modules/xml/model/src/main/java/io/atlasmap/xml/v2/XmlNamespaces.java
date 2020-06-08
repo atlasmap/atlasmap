@@ -6,7 +6,7 @@ import java.util.List;
 
 public class XmlNamespaces implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected List<XmlNamespace> xmlNamespace;
 
@@ -29,7 +29,7 @@ public class XmlNamespaces implements Serializable {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link XmlNamespace }
-     * 
+     * @return A list of {@link XmlNamespace}
      * 
      */
     public List<XmlNamespace> getXmlNamespace() {
