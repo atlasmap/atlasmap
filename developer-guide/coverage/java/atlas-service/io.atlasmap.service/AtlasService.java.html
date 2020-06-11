@@ -595,69 +595,64 @@ public class AtlasService {
     }
 
     protected Response validateMapping(Integer mappingDefinitionId, AtlasMapping mapping, UriInfo uriInfo) throws IOException, AtlasException {
-        // TODO Separate save mapping from validation - https://github.com/atlasmap/atlasmap/issues/1946
-<span class="nc" id="L599">        ADMArchiveHandler handler = loadExplodedMappingDirectory(mappingDefinitionId);</span>
-<span class="nc" id="L600">        handler.setMappingDefinition(mapping);</span>
-<span class="nc" id="L601">        handler.persist();</span>
+<span class="nc" id="L598">        AtlasContext context = atlasContextFactory.createContext(mapping);</span>
+<span class="nc" id="L599">        AtlasSession session = context.createSession();</span>
+<span class="nc" id="L600">        context.processValidation(session);</span>
+<span class="nc" id="L601">        Validations validations = session.getValidations();</span>
 
-<span class="nc" id="L603">        AtlasContext context = atlasContextFactory.createContext(mapping);</span>
-<span class="nc" id="L604">        AtlasSession session = context.createSession();</span>
-<span class="nc" id="L605">        context.processValidation(session);</span>
-<span class="nc" id="L606">        Validations validations = session.getValidations();</span>
-
-<span class="nc bnc" id="L608" title="All 2 branches missed.">        if (session.getValidations() == null) {</span>
-<span class="nc" id="L609">            validations = new Validations();</span>
+<span class="nc bnc" id="L603" title="All 2 branches missed.">        if (session.getValidations() == null) {</span>
+<span class="nc" id="L604">            validations = new Validations();</span>
         }
 
-<span class="nc" id="L612">        return Response.ok().entity(toJson(validations)).build();</span>
+<span class="nc" id="L607">        return Response.ok().entity(toJson(validations)).build();</span>
     }
 
     private byte[] toJson(Object value) {
         try {
-<span class="fc" id="L617">            return Json.mapper().writeValueAsBytes(value);</span>
-<span class="nc" id="L618">        } catch (JsonProcessingException e) {</span>
-<span class="nc" id="L619">            throw new WebApplicationException(e, Status.INTERNAL_SERVER_ERROR);</span>
+<span class="fc" id="L612">            return Json.mapper().writeValueAsBytes(value);</span>
+<span class="nc" id="L613">        } catch (JsonProcessingException e) {</span>
+<span class="nc" id="L614">            throw new WebApplicationException(e, Status.INTERNAL_SERVER_ERROR);</span>
         }
     }
 
     private &lt;T&gt; T fromJson(InputStream value, Class&lt;T&gt;clazz) {
         try {
-<span class="nc bnc" id="L625" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L626">                BufferedReader reader = new BufferedReader(new InputStreamReader(value));</span>
-<span class="nc" id="L627">                StringBuffer buf = new StringBuffer();</span>
+<span class="nc bnc" id="L620" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L621">                BufferedReader reader = new BufferedReader(new InputStreamReader(value));</span>
+<span class="nc" id="L622">                StringBuffer buf = new StringBuffer();</span>
                 String line;
-<span class="nc bnc" id="L629" title="All 2 branches missed.">                while ((line = reader.readLine()) != null) {</span>
-<span class="nc" id="L630">                    buf.append(line);</span>
+<span class="nc bnc" id="L624" title="All 2 branches missed.">                while ((line = reader.readLine()) != null) {</span>
+<span class="nc" id="L625">                    buf.append(line);</span>
                 }
-<span class="nc" id="L632">                LOG.debug(buf.toString());</span>
-<span class="nc" id="L633">                return Json.mapper().readValue(buf.toString(), clazz);</span>
+<span class="nc" id="L627">                LOG.debug(buf.toString());</span>
+<span class="nc" id="L628">                return Json.mapper().readValue(buf.toString(), clazz);</span>
             }
-<span class="nc" id="L635">            return Json.mapper().readValue(value, clazz);</span>
-<span class="nc" id="L636">        } catch (IOException e) {</span>
-<span class="nc" id="L637">            throw new WebApplicationException(e, Status.BAD_REQUEST);</span>
+<span class="nc" id="L630">            return Json.mapper().readValue(value, clazz);</span>
+<span class="nc" id="L631">        } catch (IOException e) {</span>
+<span class="nc" id="L632">            throw new WebApplicationException(e, Status.BAD_REQUEST);</span>
         }
     }
 
     private String getMappingSubDirectory(Integer mappingDefinitionId) {
-<span class="fc" id="L642">        return this.mappingFolder + File.separator + mappingDefinitionId;</span>
+<span class="fc" id="L637">        return this.mappingFolder + File.separator + mappingDefinitionId;</span>
     }
 
     private ADMArchiveHandler loadExplodedMappingDirectory(Integer mappingDefinitionId) {
-<span class="fc" id="L646">        java.nio.file.Path mappingDirPath = Paths.get(getMappingSubDirectory(mappingDefinitionId));</span>
-<span class="fc" id="L647">        File mappingDirFile = mappingDirPath.toFile();</span>
-<span class="fc bfc" id="L648" title="All 2 branches covered.">        if (!mappingDirFile.exists()) {</span>
-<span class="fc" id="L649">            mappingDirFile.mkdirs();</span>
+<span class="fc" id="L641">        java.nio.file.Path mappingDirPath = Paths.get(getMappingSubDirectory(mappingDefinitionId));</span>
+<span class="fc" id="L642">        File mappingDirFile = mappingDirPath.toFile();</span>
+<span class="fc bfc" id="L643" title="All 2 branches covered.">        if (!mappingDirFile.exists()) {</span>
+<span class="fc" id="L644">            mappingDirFile.mkdirs();</span>
         }
 
-<span class="fc" id="L652">        ADMArchiveHandler admHandler = new ADMArchiveHandler(this.libraryLoader);</span>
-<span class="fc" id="L653">        admHandler.setIgnoreLibrary(true);</span>
+<span class="fc" id="L647">        ADMArchiveHandler admHandler = new ADMArchiveHandler(this.libraryLoader);</span>
+<span class="fc" id="L648">        admHandler.setIgnoreLibrary(true);</span>
         try {
-<span class="fc" id="L655">            admHandler.load(mappingDirPath);</span>
-<span class="nc" id="L656">        } catch (Exception e) {</span>
-<span class="nc" id="L657">            LOG.error(&quot;Unexpected error while loading mapping directory.\n&quot; + e.getMessage(), e);</span>
-<span class="nc" id="L658">            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
-<span class="fc" id="L659">        }</span>
-<span class="fc" id="L660">        return admHandler;</span>
+<span class="fc" id="L650">            admHandler.load(mappingDirPath);</span>
+<span class="nc" id="L651">        } catch (Exception e) {</span>
+<span class="nc" id="L652">            LOG.error(&quot;Unexpected error while loading mapping directory.\n&quot; + e.getMessage(), e);</span>
+<span class="nc" id="L653">            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
+<span class="fc" id="L654">        }</span>
+<span class="fc" id="L655">        return admHandler;</span>
     }
 
 }
