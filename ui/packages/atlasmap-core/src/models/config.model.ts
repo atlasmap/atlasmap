@@ -118,7 +118,7 @@ export class ConfigModel {
   propertyDoc: DocumentDefinition = new DocumentDefinition();
   constantDoc: DocumentDefinition = new DocumentDefinition();
   mappingFiles: string[] = [];
-
+  mappingDefinitionId = 0;
   mappings: MappingDefinition | null = null;
 
   preloadedMappingJson: string | null = null;

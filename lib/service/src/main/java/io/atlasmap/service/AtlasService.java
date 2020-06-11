@@ -595,11 +595,6 @@ public class AtlasService {
     }
 
     protected Response validateMapping(Integer mappingDefinitionId, AtlasMapping mapping, UriInfo uriInfo) throws IOException, AtlasException {
-        // TODO Separate save mapping from validation - https://github.com/atlasmap/atlasmap/issues/1946
-        ADMArchiveHandler handler = loadExplodedMappingDirectory(mappingDefinitionId);
-        handler.setMappingDefinition(mapping);
-        handler.persist();
-
         AtlasContext context = atlasContextFactory.createContext(mapping);
         AtlasSession session = context.createSession();
         context.processValidation(session);

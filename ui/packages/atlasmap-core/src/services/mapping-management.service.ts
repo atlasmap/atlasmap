@@ -14,11 +14,12 @@
     limitations under the License.
 */
 
-import ky from 'ky';
+import ky, { Options } from 'ky';
 import log from 'loglevel';
 import { Observable, Subscription, Subject, forkJoin, from } from 'rxjs';
 import { timeout } from 'rxjs/operators';
 
+import { DocumentType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
 import { MappingModel, MappedField } from '../models/mapping.model';
@@ -738,9 +739,52 @@ export class MappingManagementService {
   }
 
   /**
-   * Invoke the runtime service to both validate and save the current active mapping.
+   * Invoke the runtime service to save the current active mapping.
+   * No validation will occur.
    */
-  private async validateMappings(): Promise<boolean> {
+  async updateMappings(payload: Options['json']): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      if (
+        this.cfg.initCfg.baseMappingServiceUrl === null ||
+        this.cfg.mappings === null
+      ) {
+        resolve(false);
+        return;
+      }
+
+      const url: string =
+        this.cfg.initCfg.baseMappingServiceUrl +
+        'mapping/' +
+        DocumentType.JSON +
+        '/' +
+        this.cfg.mappingDefinitionId;
+      this.cfg.logger!.debug(
+        `Mapping Update Service Request: ${JSON.stringify(payload)}\n`
+      );
+      this.api
+        .put(url, { json: payload })
+        .json()
+        .then((body: any) => {
+          this.cfg.logger!.debug(
+            `Mapping Update Service Response: ${JSON.stringify(body)}\n`
+          );
+          if (this.cfg.mappings === null) {
+            resolve(false);
+            return;
+          }
+          resolve(true);
+        })
+        .catch(() => {
+          this.cfg.logger!.warn('Unable to update mappings file.');
+          resolve(false);
+        });
+    });
+  }
+
+  /**
+   * Invoke the runtime service to validate the current active mapping.
+   */
+  private async validateMappings(payload: Options['json']): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       if (
         this.cfg.initCfg.baseMappingServiceUrl === null ||
@@ -752,9 +796,10 @@ export class MappingManagementService {
       }
 
       this.cfg.errorService.clearValidationErrors();
-      const payload: any = MappingSerializer.serializeMappings(this.cfg);
       const url: string =
-        this.cfg.initCfg.baseMappingServiceUrl + 'mapping/validate';
+        this.cfg.initCfg.baseMappingServiceUrl +
+        'mapping/validate/' +
+        this.cfg.mappingDefinitionId;
       this.cfg.logger!.debug(
         `Validation Service Request: ${JSON.stringify(payload)}\n`
       );
@@ -820,7 +865,8 @@ export class MappingManagementService {
   }
 
   /**
-   * Validate and save complete mappings.  Triggered either as an observable or directly.
+   * Validate and save complete mappings.  Triggered either as an observable
+   * or directly.
    */
   async notifyMappingUpdated(): Promise<boolean> {
     return new Promise<boolean>(async (resolve) => {
@@ -832,9 +878,10 @@ export class MappingManagementService {
         ) {
           this.cfg.mappings.mappings.push(activeMapping);
         }
-
-        // Validate even if there is no active mapping. It may be due to a mapping removal.
-        await this.validateMappings();
+        const payload: any = MappingSerializer.serializeMappings(this.cfg);
+        if (await this.validateMappings(payload)) {
+          await this.updateMappings(payload);
+        }
       }
       this.mappingUpdatedSource.next();
       this.notifyLineRefresh();

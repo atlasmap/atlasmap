@@ -112,8 +112,9 @@ export async function removeDocumentRef(
     } else {
       DataMapperUtil.removeItemFromArray(docDef, cfg.targetDocs);
     }
-    await cfg.mappingService.notifyMappingUpdated();
-    await cfg.fileService.exportMappingsCatalog("");
+    await cfg.mappingService
+      .notifyMappingUpdated()
+      .then(async () => await cfg.fileService.exportMappingsCatalog(""));
     resolve(true);
   });
 }
@@ -225,8 +226,9 @@ export function enableCustomClass(
               DataMapperUtil.removeItemFromArray(doc, cfg.targetDocs);
             }
           }
-          await cfg.mappingService.notifyMappingUpdated();
-          await cfg.fileService.exportMappingsCatalog("");
+          await cfg.mappingService
+            .notifyMappingUpdated()
+            .then(async () => await cfg.fileService.exportMappingsCatalog(""));
         })
         .catch((error: any) => {
           if (error.status === 0) {
