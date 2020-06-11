@@ -24,28 +24,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
@@ -191,8 +191,7 @@
 <a name='L133'></a><a href='#L133'>133</a>
 <a name='L134'></a><a href='#L134'>134</a>
 <a name='L135'></a><a href='#L135'>135</a>
-<a name='L136'></a><a href='#L136'>136</a>
-<a name='L137'></a><a href='#L137'>137</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L136'></a><a href='#L136'>136</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -253,18 +252,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -280,9 +267,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -349,7 +347,7 @@
 &nbsp;
 <span class="cstat-no" title="statement not covered" >import { MainContent } from "../Layout";</span>
 import { IAtlasmapField, IAtlasmapMapping } from "../Views";
-<span class="cstat-no" title="statement not covered" >import { DocumentFieldPreview } from "../UI";</span>
+<span class="cstat-no" title="statement not covered" >import { DocumentFieldPreview, DocumentFieldPreviewResults } from "../UI";</span>
 &nbsp;
 const emptyContent = <span class="cstat-no" title="statement not covered" >[</span>
   {
@@ -389,18 +387,6 @@ export const <span class="cstat-no" title="statement not covered" >MappingTableV
 <span class="cstat-no" title="statement not covered" >  shouldShowMappingPreview,</span>
 <span class="cstat-no" title="statement not covered" >  onFieldPreviewChange,</span>
 }) =&gt; {
-  const renderPreview = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span>
-    mapping: IAtlasmapMapping,
-    mappedField: IAtlasmapField,
-  ) =&gt;
-<span class="cstat-no" title="statement not covered" >    shouldShowMappingPreview(mapping) &amp;&amp; (</span>
-      &lt;DocumentFieldPreview
-        id={mappedField.id}
-        value={mappedField.previewValue}
-        onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onFieldPreviewChange(mappedField, value)}</span>
-      /&gt;
-    );
-&nbsp;
   const rows =
 <span class="cstat-no" title="statement not covered" >    mappings.length === 0</span>
       ? emptyContent
@@ -411,7 +397,13 @@ export const <span class="cstat-no" title="statement not covered" >MappingTableV
 <span class="cstat-no" title="statement not covered" >            return (</span>
               &lt;div key={index}&gt;
                 {name}
-                {renderPreview(mapping, field)}
+                {shouldShowMappingPreview(mapping) &amp;&amp; (
+                  &lt;DocumentFieldPreview
+                    id={field.id}
+                    value={field.previewValue}
+                    onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onFieldPreviewChange(field, value)}</span>
+                  /&gt;
+                )}
               &lt;/div&gt;
             );
           });
@@ -421,7 +413,12 @@ export const <span class="cstat-no" title="statement not covered" >MappingTableV
 <span class="cstat-no" title="statement not covered" >            return (</span>
               &lt;div key={index}&gt;
                 {name}
-                {renderPreview(mapping, field)}
+                {shouldShowMappingPreview(mapping) &amp;&amp; (
+                  &lt;DocumentFieldPreviewResults
+                    id={field.id}
+                    value={field.previewValue}
+                  /&gt;
+                )}
               &lt;/div&gt;
             );
           });
@@ -471,7 +468,7 @@ export const <span class="cstat-no" title="statement not covered" >MappingTableV
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Jun 08 2020 14:24:00 GMT+0000 (Coordinated Universal Time)
+                at Thu Jun 11 2020 11:21:48 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
