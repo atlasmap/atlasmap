@@ -19,7 +19,7 @@ import {
 
 import { MainContent } from "../Layout";
 import { IAtlasmapField, IAtlasmapMapping } from "../Views";
-import { DocumentFieldPreview } from "../UI";
+import { DocumentFieldPreview, DocumentFieldPreviewResults } from "../UI";
 
 const emptyContent = [
   {
@@ -59,18 +59,6 @@ export const MappingTableView: FunctionComponent<IMappingTableProps> = ({
   shouldShowMappingPreview,
   onFieldPreviewChange,
 }) => {
-  const renderPreview = (
-    mapping: IAtlasmapMapping,
-    mappedField: IAtlasmapField,
-  ) =>
-    shouldShowMappingPreview(mapping) && (
-      <DocumentFieldPreview
-        id={mappedField.id}
-        value={mappedField.previewValue}
-        onChange={(value) => onFieldPreviewChange(mappedField, value)}
-      />
-    );
-
   const rows =
     mappings.length === 0
       ? emptyContent
@@ -81,7 +69,13 @@ export const MappingTableView: FunctionComponent<IMappingTableProps> = ({
             return (
               <div key={index}>
                 {name}
-                {renderPreview(mapping, field)}
+                {shouldShowMappingPreview(mapping) && (
+                  <DocumentFieldPreview
+                    id={field.id}
+                    value={field.previewValue}
+                    onChange={(value) => onFieldPreviewChange(field, value)}
+                  />
+                )}
               </div>
             );
           });
@@ -91,7 +85,12 @@ export const MappingTableView: FunctionComponent<IMappingTableProps> = ({
             return (
               <div key={index}>
                 {name}
-                {renderPreview(mapping, field)}
+                {shouldShowMappingPreview(mapping) && (
+                  <DocumentFieldPreviewResults
+                    id={field.id}
+                    value={field.previewValue}
+                  />
+                )}
               </div>
             );
           });
