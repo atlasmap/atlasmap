@@ -86,6 +86,7 @@ export interface IDocumentXProps
   onDeselect?: () => void;
   isEditingTitle?: boolean;
   onTitleChange: (title: string) => void;
+  onStopEditingTitle: (cancel?: boolean) => void;
 }
 
 export const DocumentX = forwardRef<
@@ -111,6 +112,7 @@ export const DocumentX = forwardRef<
       onDeselect,
       isEditingTitle = false,
       onTitleChange,
+      onStopEditingTitle,
       children,
       ...props
     },
@@ -121,6 +123,7 @@ export const DocumentX = forwardRef<
     );
     const handleClick = useCallback(
       (event: MouseEvent) => {
+        console.log("mouse: ", event.currentTarget, event.target);
         event.stopPropagation();
         if (onSelect) {
           onSelect();
@@ -135,18 +138,22 @@ export const DocumentX = forwardRef<
         switch (event.key) {
           case "Enter":
           case "Space":
-            if (onSelect) {
+            if (isEditingTitle && event.key === "Enter") {
+              onStopEditingTitle();
+            } else if (onSelect) {
               onSelect();
             }
             break;
           case "Escape":
-            if (onDeselect) {
+            if (isEditingTitle) {
+              onStopEditingTitle(true);
+            } else if (onDeselect) {
               onDeselect();
             }
             break;
         }
       },
-      [onDeselect, onSelect],
+      [isEditingTitle, onDeselect, onSelect, onStopEditingTitle],
     );
     const makeCardSelected = selected || dropTarget || dropAccepted;
     // TODO: Figure out how to do select all on focus. nameRef code doesn't work as suggested by PatternFly docs
@@ -183,6 +190,7 @@ export const DocumentX = forwardRef<
                   aria-label="Edit title"
                   onChange={onTitleChange}
                   autoFocus
+                  onBlur={() => onStopEditingTitle()}
                 />
               ) : (
                 <Button
