@@ -27,7 +27,6 @@ export const transformationApproach = () =>
     >(undefined);
     const onSelectMapping = (m: IAtlasmapMapping) => setSelectedMappingId(m.id);
     const onMappingNameChange = (mapping: IAtlasmapMapping, name: string) => {
-      console.log("onMappingNameChange: ", name);
       mapping.name = name;
     };
 
