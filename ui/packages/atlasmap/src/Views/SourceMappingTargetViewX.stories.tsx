@@ -12,8 +12,8 @@ import {
   targets,
 } from "../stories/sampleData";
 import { CanvasProvider } from "../UI";
-import { IAtlasmapMapping } from ".";
 import { SourceMappingTargetViewX } from "./SourceMappingTargetViewX";
+import { IAtlasmapMapping } from ".";
 
 export default {
   title: "AtlasMap|Views",
@@ -26,6 +26,11 @@ export const transformationApproach = () =>
       string | undefined
     >(undefined);
     const onSelectMapping = (m: IAtlasmapMapping) => setSelectedMappingId(m.id);
+    const onMappingNameChange = (mapping: IAtlasmapMapping, name: string) => {
+      console.log("onMappingNameChange: ", name);
+      mapping.name = name;
+    };
+
     return (
       <CanvasProvider>
         <SourceMappingTargetViewX
@@ -78,15 +83,12 @@ export const transformationApproach = () =>
           }}
           mappingEvents={{
             canDrop: () => true,
-            onEditMapping: action("onEditMapping"),
             onFieldPreviewChange: action("onFieldPreviewChange"),
             onMouseOut: action("onMouseOut"),
             onMouseOver: action("onMouseOver"),
-            onSelectMapping: (mapping) => {
-              action("onSelectMapping");
-              setSelectedMappingId(mapping.id);
-            },
+            onSelectMapping: (mapping) => setSelectedMappingId(mapping.id),
             onDeselectMapping: action("onDeselectMapping"),
+            onMappingNameChange: onMappingNameChange,
           }}
           showTypes={boolean("Show types", false)}
           showMappingPreview={boolean("Show mapping preview", false)}

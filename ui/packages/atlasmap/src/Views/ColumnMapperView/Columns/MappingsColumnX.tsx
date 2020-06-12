@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useCallback } from "react";
+import React, { FunctionComponent, useCallback, useState } from "react";
 
 import { Split, SplitItem } from "@patternfly/react-core";
 
@@ -14,8 +14,8 @@ import {
   IDragAndDropField,
   NodeRef,
 } from "../../../UI";
-import { IAtlasmapField, IAtlasmapMapping } from "../../models";
-import { EditMappingAction } from "../Actions";
+import { IAtlasmapField, IAtlasmapMapping } from "../..";
+import { EditMappingNameAction } from "../Actions/EditMappingNameAction";
 import {
   MAPPINGS_DOCUMENT_ID_PREFIX,
   MAPPINGS_DROP_TYPE,
@@ -25,6 +25,7 @@ import {
   SOURCES_DRAGGABLE_TYPE,
   TARGETS_DRAGGABLE_TYPE,
 } from "./constants";
+import { DocumentX } from "../../../UI/DocumentX";
 
 export interface IMappingsColumnData
   extends Omit<Omit<IMappingDocumentData, "mapping">, "isSelected"> {
@@ -78,11 +79,11 @@ export const MappingsColumnX: FunctionComponent<
 export interface IMappingDocumentEvents {
   onSelectMapping: (mapping: IAtlasmapMapping) => void;
   onDeselectMapping: (mapping: IAtlasmapMapping) => void;
-  onEditMapping: (mapping: IAtlasmapMapping) => void;
   onFieldPreviewChange: (field: IAtlasmapField, value: string) => void;
   onMouseOver: (mapping: IAtlasmapMapping) => void;
   onMouseOut: () => void;
   canDrop: (target: IDragAndDropField, mapping: IAtlasmapMapping) => boolean;
+  onMappingNameChange: (mapping: IAtlasmapMapping, name: string) => void;
 }
 
 export interface IMappingDocumentData {
@@ -99,12 +100,16 @@ export const MappingDocument: FunctionComponent<
   showMappingPreview,
   onSelectMapping,
   onDeselectMapping,
-  onEditMapping,
   onFieldPreviewChange,
   onMouseOver,
   onMouseOut,
   canDrop,
+  onMappingNameChange,
 }) => {
+  const [isEditingMappingName, setEditingMappingName] = useState(false);
+  const [mappingName, setMappingName] = useState(mapping.name);
+  // const [origMappingName] = useState(mapping.name);
+
   const documentId = `${MAPPINGS_DOCUMENT_ID_PREFIX}${mapping.id}`;
   const handleSelect = useCallback(() => {
     if (!isSelected) {
@@ -134,14 +139,14 @@ export const MappingDocument: FunctionComponent<
           boundaryId={MAPPINGS_HEIGHT_BOUNDARY_ID}
           overrideWidth={MAPPINGS_WIDTH_BOUNDARY_ID}
         >
-          <Document
-            title={mapping.name}
+          <DocumentX
+            title={mappingName}
             dropAccepted={isDroppable}
             dropTarget={isTarget}
             actions={[
-              <EditMappingAction
+              <EditMappingNameAction
                 id={mapping.id}
-                onClick={() => onEditMapping(mapping)}
+                onClick={() => setEditingMappingName(true)}
                 key="edit"
               />,
             ]}
@@ -152,6 +157,11 @@ export const MappingDocument: FunctionComponent<
             onMouseOver={() => onMouseOver(mapping)}
             onMouseOut={onMouseOut}
             startExpanded={false}
+            isEditingTitle={isEditingMappingName}
+            onTitleChange={(title: string) => {
+              setMappingName(title);
+              onMappingNameChange(mapping, title);
+            }}
           >
             <Split>
               <SplitItem style={{ maxWidth: "50%", padding: "0 0 0 1rem" }}>
@@ -213,7 +223,7 @@ export const MappingDocument: FunctionComponent<
                 })}
               </SplitItem>
             </Split>
-          </Document>
+          </DocumentX>
         </NodeRef>
       )}
     </FieldDropTarget>
