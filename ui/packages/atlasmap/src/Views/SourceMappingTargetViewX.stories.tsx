@@ -16,7 +16,7 @@ import { SourceMappingTargetViewX } from "./SourceMappingTargetViewX";
 import { IAtlasmapMapping } from ".";
 
 export default {
-  title: "AtlasMap|Views",
+  title: "AtlasMap|Demo",
   decorators,
 };
 
