@@ -1,12 +1,10 @@
+import { css, StyleSheet } from "@patternfly/react-styles";
 import React, {
   FunctionComponent,
   MouseEvent,
   ReactElement,
   useMemo,
 } from "react";
-
-import { css, StyleSheet } from "@patternfly/react-styles";
-
 import { NodesArc, useToggle } from "../../../UI";
 import { IAtlasmapMapping } from "../../../Views";
 import { SOURCES_FIELD_ID_PREFIX, TARGETS_FIELD_ID_PREFIX } from "../Columns";
@@ -40,6 +38,7 @@ export const SourceTargetLinks: FunctionComponent<ISourceTargetLinksProps> = ({
           mapping={m}
           onClick={() => onSelectMapping(m)}
           isSelected={m.id === selectedMappingId}
+          key={m.id}
         />
       ))}
 
