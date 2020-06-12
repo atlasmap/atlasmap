@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useCallback, useState } from "react";
+import React, { FunctionComponent, useCallback, useState, useRef } from "react";
 
 import { Split, SplitItem } from "@patternfly/react-core";
 
@@ -108,7 +108,8 @@ export const MappingDocument: FunctionComponent<
 }) => {
   const [isEditingMappingName, setEditingMappingName] = useState(false);
   const [mappingName, setMappingName] = useState(mapping.name);
-  // const [origMappingName] = useState(mapping.name);
+  // TODO: Extend IAtlasmapMapping to have default name
+  const defaultMappingName = useRef(mapping.name);
 
   const documentId = `${MAPPINGS_DOCUMENT_ID_PREFIX}${mapping.id}`;
   const handleSelect = useCallback(() => {
@@ -160,7 +161,17 @@ export const MappingDocument: FunctionComponent<
             isEditingTitle={isEditingMappingName}
             onTitleChange={(title: string) => {
               setMappingName(title);
-              onMappingNameChange(mapping, title);
+            }}
+            onStopEditingTitle={(cancel) => {
+              console.log("stop: ", cancel, mapping.name, defaultMappingName);
+              if (cancel) {
+                setMappingName(mapping.name);
+              } else {
+                const name = mappingName || defaultMappingName.current;
+                setMappingName(name);
+                onMappingNameChange(mapping, name);
+              }
+              setEditingMappingName(false);
             }}
           >
             <Split>
