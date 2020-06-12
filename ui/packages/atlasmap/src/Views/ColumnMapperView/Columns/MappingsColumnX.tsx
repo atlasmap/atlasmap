@@ -163,7 +163,6 @@ export const MappingDocument: FunctionComponent<
               setMappingName(title);
             }}
             onStopEditingTitle={(cancel) => {
-              console.log("stop: ", cancel, mapping.name, defaultMappingName);
               if (cancel) {
                 setMappingName(mapping.name);
               } else {

@@ -18,6 +18,7 @@ import React, {
   ReactElement,
   ReactNode,
   useCallback,
+  useRef,
 } from "react";
 import { useToggle } from "./useToggle";
 import { AngleDownIcon, AngleRightIcon } from "@patternfly/react-icons";
@@ -157,6 +158,7 @@ export const DocumentX = forwardRef<
     );
     const makeCardSelected = selected || dropTarget || dropAccepted;
     // TODO: Figure out how to do select all on focus. nameRef code doesn't work as suggested by PatternFly docs
+    const nameRef = useRef<HTMLInputElement>(null);
 
     return (
       <div
@@ -179,9 +181,11 @@ export const DocumentX = forwardRef<
           aria-label={title}
         >
           <CardHead className={css(styles.head)}>
-            <CardActions className={css(styles.actions)}>
-              {actions?.filter((a) => a)}
-            </CardActions>
+            {!isEditingTitle && (
+              <CardActions className={css(styles.actions)}>
+                {actions?.filter((a) => a)}
+              </CardActions>
+            )}
             <CardHeader className={css(styles.header)}>
               {isEditingTitle ? (
                 <TextInput
@@ -191,6 +195,8 @@ export const DocumentX = forwardRef<
                   onChange={onTitleChange}
                   autoFocus
                   onBlur={() => onStopEditingTitle()}
+                  ref={nameRef}
+                  onFocus={() => nameRef.current?.select()}
                 />
               ) : (
                 <Button
