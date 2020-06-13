@@ -7,17 +7,15 @@ import {
   ISourcesColumnData,
   ITargetsColumnData,
   ITargetsColumnCallbacks,
-  SourceMappingTargetLinks,
   SourcesColumn,
   TargetsColumn,
+  ISourceMappingTargetLinksData,
+  IMappingsColumnData,
+  IMappingDocumentEvents,
 } from "./ColumnMapperView";
 import { IAtlasmapMapping } from "./models";
-import {
-  IMappingDocumentEvents,
-  MappingsColumnX,
-  IMappingsColumnData,
-} from "./ColumnMapperView/Columns/MappingsColumnX";
-import { ISourceMappingTargetLinksData } from "./ColumnMapperView/Links/SourceMappingTargetLinksX";
+import { MappingsColumn } from "./ColumnMapperView/Columns/MappingsColumn.story";
+import { SourceMappingTargetLinks } from "./ColumnMapperView/Links/SourceMappingTargetLinks.story";
 
 export interface ISourceMappingTargetViewProps
   extends ISourcesColumnData,
@@ -28,9 +26,11 @@ export interface ISourceMappingTargetViewProps
   sourceEvents: ISourceColumnCallbacks;
   mappingEvents: IMappingDocumentEvents;
   targetEvents: ITargetsColumnCallbacks;
+  onMappingNameChange: (mapping: IAtlasmapMapping, name: string) => void;
+  onRemoveMapping: (mapping: IAtlasmapMapping) => void;
 }
 
-export const SourceMappingTargetViewX: FunctionComponent<ISourceMappingTargetViewProps> = ({
+export const SourceMappingTargetViewStory: FunctionComponent<ISourceMappingTargetViewProps> = ({
   properties,
   constants,
   sources,
@@ -43,6 +43,8 @@ export const SourceMappingTargetViewX: FunctionComponent<ISourceMappingTargetVie
   sourceEvents,
   mappingEvents,
   targetEvents,
+  onMappingNameChange,
+  onRemoveMapping,
 }) => {
   const [highlightedMappingId, setHighlightedMappingId] = useState<
     string | undefined
@@ -65,13 +67,15 @@ export const SourceMappingTargetViewX: FunctionComponent<ISourceMappingTargetVie
             />
           </Column>
           <Column data-testid={"column-mappings-area"} totalColumns={3}>
-            <MappingsColumnX
+            <MappingsColumn
               mappings={mappings}
               selectedMappingId={selectedMappingId}
               showMappingPreview={showMappingPreview}
               onMouseOver={handleMouseOver}
               onMouseOut={handleMouseOut}
               {...mappingEvents}
+              onMappingNameChange={onMappingNameChange}
+              onRemoveMapping={onRemoveMapping}
             />
           </Column>
           <Column data-testid={"column-target-area"} totalColumns={3}>

@@ -7,6 +7,8 @@ import {
   Title,
   Button,
   TextInput,
+  Split,
+  SplitItem,
 } from "@patternfly/react-core";
 import { css, StyleSheet } from "@patternfly/react-styles";
 import React, {
@@ -86,11 +88,11 @@ export interface IDocumentXProps
   onSelect?: () => void;
   onDeselect?: () => void;
   isEditingTitle?: boolean;
-  onTitleChange: (title: string) => void;
-  onStopEditingTitle: (cancel?: boolean) => void;
+  onTitleChange?: (title: string) => void;
+  onStopEditingTitle?: (cancel?: boolean) => void;
 }
 
-export const DocumentX = forwardRef<
+export const Document = forwardRef<
   HTMLDivElement,
   PropsWithChildren<IDocumentXProps>
 >(
@@ -138,14 +140,14 @@ export const DocumentX = forwardRef<
         switch (event.key) {
           case "Enter":
           case "Space":
-            if (isEditingTitle && event.key === "Enter") {
+            if (isEditingTitle && event.key === "Enter" && onStopEditingTitle) {
               onStopEditingTitle();
             } else if (onSelect) {
               onSelect();
             }
             break;
           case "Escape":
-            if (isEditingTitle) {
+            if (isEditingTitle && onStopEditingTitle) {
               onStopEditingTitle(true);
             } else if (onDeselect) {
               onDeselect();
@@ -182,7 +184,11 @@ export const DocumentX = forwardRef<
           <CardHead className={css(styles.head)}>
             {!isEditingTitle && (
               <CardActions className={css(styles.actions)}>
-                {actions?.filter((a) => a)}
+                {actions?.filter((a) => (
+                  <Split>
+                    <SplitItem>{a}</SplitItem>
+                  </Split>
+                ))}
               </CardActions>
             )}
             <CardHeader className={css(styles.header)}>
@@ -193,7 +199,7 @@ export const DocumentX = forwardRef<
                   aria-label="Edit title"
                   onChange={onTitleChange}
                   autoFocus
-                  onBlur={() => onStopEditingTitle()}
+                  onBlur={() => onStopEditingTitle && onStopEditingTitle()}
                   ref={nameRef}
                   onFocus={() => nameRef.current?.select()}
                 />
