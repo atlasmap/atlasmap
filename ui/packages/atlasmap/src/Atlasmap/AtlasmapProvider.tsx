@@ -278,15 +278,15 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   );
 
   const onSubUpdate = useCallback(
-    function onSubUpdateCb(caller: string) {
-      console.log(
-        "onUpdates",
-        caller,
-        "initialized",
-        initializationService.cfg.initCfg.initialized,
-        "errors",
-        initializationService.cfg.initCfg.initializationErrorOccurred,
-      );
+    function onSubUpdateCb(_caller: string) {
+      // console.log(
+      //   "onUpdates",
+      //   caller,
+      //   "initialized",
+      //   initializationService.cfg.initCfg.initialized,
+      //   "errors",
+      //   initializationService.cfg.initCfg.initializationErrorOccurred,
+      // );
       onUpdates({
         pending: !initializationService.cfg.initCfg.initialized,
         error: initializationService.cfg.initCfg.initializationErrorOccurred,
