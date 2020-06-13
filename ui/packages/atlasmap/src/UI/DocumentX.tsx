@@ -124,7 +124,6 @@ export const DocumentX = forwardRef<
     );
     const handleClick = useCallback(
       (event: MouseEvent) => {
-        console.log("mouse: ", event.currentTarget, event.target);
         event.stopPropagation();
         if (onSelect) {
           onSelect();
@@ -205,6 +204,7 @@ export const DocumentX = forwardRef<
                   aria-label={"Expand/collapse this card"}
                   data-testid={`expand-collapse-${title}-button`}
                   className={css(styles.headerButton)}
+                  isFocus={false}
                 >
                   <Title size={"lg"} headingLevel={"h2"} aria-label={title}>
                     <TruncatedString title={title}>

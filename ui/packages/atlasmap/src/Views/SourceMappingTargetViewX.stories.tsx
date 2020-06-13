@@ -10,7 +10,7 @@ import {
   properties,
   sources,
   targets,
-} from "../stories/sampleData";
+} from "../stories/sampleDataX";
 import { CanvasProvider } from "../UI";
 import { SourceMappingTargetViewX } from "./SourceMappingTargetViewX";
 import { IAtlasmapMapping } from ".";
