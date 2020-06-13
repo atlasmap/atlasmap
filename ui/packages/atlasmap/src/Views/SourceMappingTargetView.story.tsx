@@ -28,6 +28,7 @@ export interface ISourceMappingTargetViewProps
   targetEvents: ITargetsColumnCallbacks;
   onMappingNameChange: (mapping: IAtlasmapMapping, name: string) => void;
   onRemoveMapping: (mapping: IAtlasmapMapping) => void;
+  showAllLinks: boolean;
 }
 
 export const SourceMappingTargetViewStory: FunctionComponent<ISourceMappingTargetViewProps> = ({
@@ -38,6 +39,7 @@ export const SourceMappingTargetViewStory: FunctionComponent<ISourceMappingTarge
   targets,
   showMappingPreview,
   showTypes,
+  showAllLinks,
   selectedMappingId,
   onSelectMapping,
   sourceEvents,
@@ -94,6 +96,7 @@ export const SourceMappingTargetViewStory: FunctionComponent<ISourceMappingTarge
           onSelectMapping={onSelectMapping}
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
+          showAllLinks={showAllLinks}
         />
       </NodeRefProvider>
     </ColumnMapper>

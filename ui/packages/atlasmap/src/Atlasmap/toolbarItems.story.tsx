@@ -443,3 +443,28 @@ export const ToggleUnmappedFieldsToolbarItem: FunctionComponent<{
     </Tooltip>
   </ToolbarItem>
 );
+
+export const ToggleAllLinksToolbarItem: FunctionComponent<{
+  toggled: boolean;
+  disabled?: boolean;
+  onClick: () => void;
+}> = ({ toggled, disabled = false, onClick }) => (
+  <ToolbarItem>
+    <Tooltip
+      position={"auto"}
+      enableFlip={true}
+      content={<div>Show links for all mappings</div>}
+    >
+      <Button
+        variant={"plain"}
+        aria-label="Show/hide links for all mappings"
+        onClick={onClick}
+        isDisabled={disabled}
+        className={css(toggled && styles.toggled)}
+        data-testid="show-hide-all-links-button"
+      >
+        <BezierCurveIcon />
+      </Button>
+    </Tooltip>
+  </ToolbarItem>
+);
