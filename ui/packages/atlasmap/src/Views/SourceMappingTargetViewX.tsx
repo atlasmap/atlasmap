@@ -2,9 +2,7 @@ import React, { FunctionComponent, useState } from "react";
 
 import { Column, ColumnMapper, Columns, NodeRefProvider } from "../UI";
 import {
-  IMappingsColumnData,
   ISourceColumnCallbacks,
-  ISourceMappingTargetLinksData,
   ISourceMappingTargetLinksEvents,
   ISourcesColumnData,
   ITargetsColumnData,
@@ -17,7 +15,9 @@ import { IAtlasmapMapping } from "./models";
 import {
   IMappingDocumentEvents,
   MappingsColumnX,
+  IMappingsColumnData,
 } from "./ColumnMapperView/Columns/MappingsColumnX";
+import { ISourceMappingTargetLinksData } from "./ColumnMapperView/Links/SourceMappingTargetLinksX";
 
 export interface ISourceMappingTargetViewProps
   extends ISourcesColumnData,
