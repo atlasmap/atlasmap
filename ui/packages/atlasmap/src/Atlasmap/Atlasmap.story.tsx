@@ -20,13 +20,13 @@ import {
   SourceMappingTargetView,
   IMappingDocumentEvents,
 } from "../Views";
-import { useAtlasmap } from "./AtlasmapProvider";
-import { useAtlasmapDialogs } from "./useAtlasmapDialogs";
+import { useAtlasmap } from "./AtlasmapProvider.story";
+import { useAtlasmapDialogs } from "./useAtlasmapDialogs.story";
 import {
   IUseContextToolbarData,
   useContextToolbar,
 } from "./useContextToolbar.story";
-import { useSidebar } from "./useSidebar";
+import { useSidebar } from "./useSidebar.story";
 import { getPropertyValue, getPropertyType, getConstantType } from "./utils";
 import { SourceMappingTargetViewStory } from "../Views/SourceMappingTargetView.story";
 
@@ -94,6 +94,7 @@ export const AtlasmapStory: FunctionComponent<IAtlasmapProps> = ({
     showMappingColumn,
     showMappingPreview,
     showTypes,
+    showAllLinks,
     contextToolbar,
   } = useContextToolbar({
     showImportAtlasFileToolbarItem: allowImport,
@@ -341,6 +342,7 @@ export const AtlasmapStory: FunctionComponent<IAtlasmapProps> = ({
             onSelectMapping={selectMapping}
             showMappingPreview={showMappingPreview}
             showTypes={showTypes}
+            showAllLinks={showAllLinks}
             sourceEvents={sourceEvents}
             mappingEvents={mappingEvents}
             targetEvents={targetEvents}
@@ -366,6 +368,7 @@ export const AtlasmapStory: FunctionComponent<IAtlasmapProps> = ({
     selectMapping,
     selectedMapping,
     shouldShowMappingPreview,
+    showAllLinks,
     showMappingColumn,
     showMappingPreview,
     showTypes,

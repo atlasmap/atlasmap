@@ -14,10 +14,11 @@ import {
   ToggleNamespaceTableViewToolbarItem,
   ToggleTypesToolbarItem,
   ToggleUnmappedFieldsToolbarItem,
+  ToggleAllLinksToolbarItem,
   AtlasmapToolbarItem,
   ToggleTransformationApproachToolbarItem,
 } from "./toolbarItems.story";
-import { useAtlasmap } from "./AtlasmapProvider";
+import { useAtlasmap } from "./AtlasmapProvider.story";
 
 export type Views =
   | "ColumnMapper"
@@ -50,6 +51,7 @@ export interface IUseContextToolbarData {
   showToggleTypesToolbarItem?: boolean;
   showToggleMappedFieldsToolbarItem?: boolean;
   showToggleUnmappedFieldsToolbarItem?: boolean;
+  showToggleAllLinksToolbarItem?: boolean;
 }
 
 export function useContextToolbar({
@@ -69,6 +71,7 @@ export function useContextToolbar({
   showToggleTypesToolbarItem = true,
   showToggleMappedFieldsToolbarItem = true,
   showToggleUnmappedFieldsToolbarItem = true,
+  showToggleAllLinksToolbarItem = true,
 
   onImportAtlasFile,
   onImportJarFile,
@@ -79,6 +82,7 @@ export function useContextToolbar({
     toggleMappingPreview: amToggleMappingPreview,
     toggleShowMappedFields: amToggleShowMappedFields,
     toggleShowUnmappedFields: amToggleShowUnmappedFields,
+    toggleShowAllLinks: amToggleShowAllLinks,
   } = useAtlasmap();
 
   const [activeView, setActiveView] = useState<Views>("ColumnMapper");
@@ -99,6 +103,10 @@ export function useContextToolbar({
     state: showUnmappedFields,
     toggle: toggleShowUnmappedFields,
   } = useToggle(true, amToggleShowUnmappedFields);
+  const { state: showAllLinks, toggle: toggleShowAllLinks } = useToggle(
+    false,
+    amToggleShowAllLinks,
+  );
 
   const contextToolbar = useMemo(
     () => (
@@ -200,6 +208,13 @@ export function useContextToolbar({
                 onClick={toggleShowUnmappedFields}
               />
             )}
+          {showToggleAllLinksToolbarItem &&
+            activeView === "TransformationApproach" && (
+              <ToggleAllLinksToolbarItem
+                toggled={showAllLinks}
+                onClick={toggleShowAllLinks}
+              />
+            )}
         </ToolbarGroup>
       </ContextToolbar>
     ),
@@ -233,6 +248,9 @@ export function useContextToolbar({
       showToggleUnmappedFieldsToolbarItem,
       showUnmappedFields,
       toggleShowUnmappedFields,
+      showToggleAllLinksToolbarItem,
+      showAllLinks,
+      toggleShowAllLinks,
     ],
   );
 
@@ -243,6 +261,7 @@ export function useContextToolbar({
     showTypes,
     showMappedFields,
     showUnmappedFields,
+    showAllLinks,
     contextToolbar,
   };
 }
