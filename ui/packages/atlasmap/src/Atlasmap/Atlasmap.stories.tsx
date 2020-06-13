@@ -5,6 +5,7 @@ import { AtlasmapStory } from "./Atlasmap.story";
 import { AtlasmapProvider, IAtlasmapProviderProps } from "./AtlasmapProvider";
 import { action } from "@storybook/addon-actions";
 import { html } from "../stories/htmlKnob";
+import { AtlasmapProviderStory } from "./AtlasmapProvider.story";
 
 const sampleExternalDocument = JSON.stringify(
   {
@@ -172,7 +173,7 @@ export const embeddedInSyndesis = () => {
 };
 
 export const transformationApproach = () => (
-  <AtlasmapProvider
+  <AtlasmapProviderStory
     baseJavaInspectionServiceUrl={text(
       "baseJavaInspectionServiceUrl",
       "http://localhost:8585/v2/atlas/java/",
@@ -233,5 +234,5 @@ export const transformationApproach = () => (
         ),
       }}
     />
-  </AtlasmapProvider>
+  </AtlasmapProviderStory>
 );
