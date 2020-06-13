@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useCallback, useState, useRef } from "react";
+import React, { FunctionComponent, useCallback, useState } from "react";
 
 import { Split, SplitItem } from "@patternfly/react-core";
 
@@ -26,10 +26,11 @@ import {
   TARGETS_DRAGGABLE_TYPE,
 } from "./constants";
 import { DocumentX } from "../../../UI/DocumentX";
+import { IMapping } from "../../../Views/modelsX";
 
 export interface IMappingsColumnData
   extends Omit<Omit<IMappingDocumentData, "mapping">, "isSelected"> {
-  mappings: IAtlasmapMapping[];
+  mappings: IMapping[];
   selectedMappingId?: string;
 }
 
@@ -87,7 +88,7 @@ export interface IMappingDocumentEvents {
 }
 
 export interface IMappingDocumentData {
-  mapping: IAtlasmapMapping;
+  mapping: IMapping;
   isSelected: boolean;
   showMappingPreview: boolean;
 }
@@ -108,8 +109,6 @@ export const MappingDocument: FunctionComponent<
 }) => {
   const [isEditingMappingName, setEditingMappingName] = useState(false);
   const [mappingName, setMappingName] = useState(mapping.name);
-  // TODO: Extend IAtlasmapMapping to have default name
-  const defaultMappingName = useRef(mapping.name);
 
   const documentId = `${MAPPINGS_DOCUMENT_ID_PREFIX}${mapping.id}`;
   const handleSelect = useCallback(() => {
@@ -166,7 +165,7 @@ export const MappingDocument: FunctionComponent<
               if (cancel) {
                 setMappingName(mapping.name);
               } else {
-                const name = mappingName || defaultMappingName.current;
+                const name = mappingName || mapping.defaultName;
                 setMappingName(name);
                 onMappingNameChange(mapping, name);
               }
