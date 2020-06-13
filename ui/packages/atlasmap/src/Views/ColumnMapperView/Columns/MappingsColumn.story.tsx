@@ -5,7 +5,6 @@ import { Split, SplitItem } from "@patternfly/react-core";
 import {
   ColumnBody,
   ColumnHeader,
-  Document,
   DocumentFieldPreview,
   DocumentFieldPreviewResults,
   DraggedField,
@@ -15,7 +14,6 @@ import {
   NodeRef,
 } from "../../../UI";
 import { IAtlasmapField, IAtlasmapMapping } from "../..";
-import { EditMappingNameAction } from "../Actions/EditMappingNameAction";
 import {
   MAPPINGS_DOCUMENT_ID_PREFIX,
   MAPPINGS_DROP_TYPE,
@@ -25,16 +23,17 @@ import {
   SOURCES_DRAGGABLE_TYPE,
   TARGETS_DRAGGABLE_TYPE,
 } from "./constants";
-import { DocumentX } from "../../../UI/DocumentX";
-import { IMapping } from "../../../Views/modelsX";
+import { Document } from "../../../UI/Document.story";
+import { EditMappingNameAction } from "../Actions/EditMappingNameAction.story";
+import { DeleteMappingAction } from "../Actions/DeleteMappingAction.story";
 
 export interface IMappingsColumnData
   extends Omit<Omit<IMappingDocumentData, "mapping">, "isSelected"> {
-  mappings: IMapping[];
+  mappings: IAtlasmapMapping[];
   selectedMappingId?: string;
 }
 
-export const MappingsColumnX: FunctionComponent<
+export const MappingsColumn: FunctionComponent<
   IMappingsColumnData & IMappingDocumentEvents
 > = ({ mappings, selectedMappingId, ...props }) => {
   return (
@@ -85,10 +84,11 @@ export interface IMappingDocumentEvents {
   onMouseOut: () => void;
   canDrop: (target: IDragAndDropField, mapping: IAtlasmapMapping) => boolean;
   onMappingNameChange: (mapping: IAtlasmapMapping, name: string) => void;
+  onRemoveMapping: (mapping: IAtlasmapMapping) => void;
 }
 
 export interface IMappingDocumentData {
-  mapping: IMapping;
+  mapping: IAtlasmapMapping;
   isSelected: boolean;
   showMappingPreview: boolean;
 }
@@ -106,6 +106,7 @@ export const MappingDocument: FunctionComponent<
   onMouseOut,
   canDrop,
   onMappingNameChange,
+  onRemoveMapping,
 }) => {
   const [isEditingMappingName, setEditingMappingName] = useState(false);
   const [mappingName, setMappingName] = useState(mapping.name);
@@ -139,7 +140,7 @@ export const MappingDocument: FunctionComponent<
           boundaryId={MAPPINGS_HEIGHT_BOUNDARY_ID}
           overrideWidth={MAPPINGS_WIDTH_BOUNDARY_ID}
         >
-          <DocumentX
+          <Document
             title={mappingName}
             dropAccepted={isDroppable}
             dropTarget={isTarget}
@@ -148,6 +149,11 @@ export const MappingDocument: FunctionComponent<
                 id={mapping.id}
                 onClick={() => setEditingMappingName(true)}
                 key="edit"
+              />,
+              <DeleteMappingAction
+                id={mapping.id}
+                onClick={() => onRemoveMapping(mapping)}
+                key="delete"
               />,
             ]}
             selected={isSelected}
@@ -165,7 +171,7 @@ export const MappingDocument: FunctionComponent<
               if (cancel) {
                 setMappingName(mapping.name);
               } else {
-                const name = mappingName || mapping.defaultName;
+                const name = mappingName || "Mapping";
                 setMappingName(name);
                 onMappingNameChange(mapping, name);
               }
@@ -232,7 +238,7 @@ export const MappingDocument: FunctionComponent<
                 })}
               </SplitItem>
             </Split>
-          </DocumentX>
+          </Document>
         </NodeRef>
       )}
     </FieldDropTarget>

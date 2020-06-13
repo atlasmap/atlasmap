@@ -4,7 +4,6 @@ import { css, StyleSheet } from "@patternfly/react-styles";
 
 import { NodesArc } from "../../../UI";
 import { IAtlasmapMapping } from "../..";
-import { IMapping } from "../../modelsX";
 import {
   MAPPINGS_DOCUMENT_ID_PREFIX,
   MAPPINGS_FIELD_ID_PREFIX,
@@ -25,7 +24,7 @@ export interface ISourceMappingTargetLinksEvents {
 }
 
 export interface ISourceMappingTargetLinksData {
-  mappings: IMapping[];
+  mappings: IAtlasmapMapping[];
   selectedMappingId?: string;
   highlightedMappingId?: string;
 }
@@ -40,7 +39,7 @@ export const SourceMappingTargetLinks: FunctionComponent<
   onMouseOver,
   onMouseOut,
 }) => {
-  const links = mappings.map((m) => {
+  const createLink = (m: IAtlasmapMapping) => {
     const handleClick = (event: MouseEvent) => {
       onSelectMapping(m);
       event.stopPropagation();
@@ -80,7 +79,12 @@ export const SourceMappingTargetLinks: FunctionComponent<
         />
       )),
     ];
-  });
+  };
+
+  // const links = mappings.map((m) => createLink(m));
+  const selectedMapping = mappings.find((m) => m.id === selectedMappingId);
+  const links = selectedMapping ? [createLink(selectedMapping)] : [];
+
   return (
     <>
       {links}
