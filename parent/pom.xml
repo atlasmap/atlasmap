@@ -60,7 +60,7 @@
     <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
     <log4j2.version>2.13.3</log4j2.version>
     <osgi.include.resource>{maven-resources}</osgi.include.resource>
-    <resteasy.version>4.5.3.Final</resteasy.version>
+    <resteasy.version>4.5.4.Final</resteasy.version>
     <resteasy-jaxrs.version>3.12.1.Final</resteasy-jaxrs.version>
     <logback.version>1.2.3</logback.version>
     <maven-version>3.6.3</maven-version>
