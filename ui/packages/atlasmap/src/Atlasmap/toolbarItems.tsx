@@ -1,19 +1,19 @@
-import React, { FunctionComponent, useEffect, useRef } from "react";
-import { useFilePicker } from "react-sage";
-
 import {
   Button,
+  Dropdown,
+  DropdownItem,
+  DropdownItemIcon,
+  DropdownSeparator,
+  DropdownToggle,
   ToolbarItem,
   Tooltip,
-  Dropdown,
-  DropdownToggle,
-  DropdownItem,
-  DropdownSeparator,
-  DropdownItemIcon,
 } from "@patternfly/react-core";
 import {
   BezierCurveIcon,
+  BoltIcon,
+  CaretDownIcon,
   CodeIcon,
+  ColumnsIcon,
   ExportIcon,
   EyeIcon,
   ImportIcon,
@@ -22,11 +22,11 @@ import {
   MapMarkedIcon,
   PficonDragdropIcon,
   TableIcon,
-  ColumnsIcon,
   TrashIcon,
-  CaretDownIcon,
 } from "@patternfly/react-icons";
 import { css, StyleSheet } from "@patternfly/react-styles";
+import React, { FunctionComponent, useEffect, useRef } from "react";
+import { useFilePicker } from "react-sage";
 import { useToggle } from "../UI";
 
 const styles = StyleSheet.create({
@@ -293,6 +293,31 @@ export const ToggleNamespaceTableViewToolbarItem: FunctionComponent<{
   </ToolbarItem>
 );
 
+export const ToggleTransformationApproachToolbarItem: FunctionComponent<{
+  toggled: boolean;
+  disabled?: boolean;
+  onClick: () => void;
+}> = ({ toggled, disabled = false, onClick }) => (
+  <ToolbarItem>
+    <Tooltip
+      position={"auto"}
+      enableFlip={true}
+      content={<div>Show transformation approach</div>}
+    >
+      <Button
+        variant={"plain"}
+        aria-label="Show/hide transformation approach"
+        onClick={onClick}
+        isDisabled={disabled}
+        className={css(toggled && styles.toggled)}
+        data-testid="show-hide-transformation-approach-button"
+      >
+        <BoltIcon />
+      </Button>
+    </Tooltip>
+  </ToolbarItem>
+);
+
 export const ToggleFreeViewToolbarItem: FunctionComponent<{
   toggled: boolean;
   disabled?: boolean;
@@ -413,6 +438,31 @@ export const ToggleUnmappedFieldsToolbarItem: FunctionComponent<{
         data-testid="show-hide-unmapped-fields-button"
       >
         <MapIcon />
+      </Button>
+    </Tooltip>
+  </ToolbarItem>
+);
+
+export const ToggleAllLinksToolbarItem: FunctionComponent<{
+  toggled: boolean;
+  disabled?: boolean;
+  onClick: () => void;
+}> = ({ toggled, disabled = false, onClick }) => (
+  <ToolbarItem>
+    <Tooltip
+      position={"auto"}
+      enableFlip={true}
+      content={<div>Show links for all mappings</div>}
+    >
+      <Button
+        variant={"plain"}
+        aria-label="Show/hide links for all mappings"
+        onClick={onClick}
+        isDisabled={disabled}
+        className={css(toggled && styles.toggled)}
+        data-testid="show-hide-all-links-button"
+      >
+        <BezierCurveIcon />
       </Button>
     </Tooltip>
   </ToolbarItem>

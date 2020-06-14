@@ -1,11 +1,9 @@
-import { text, boolean } from "@storybook/addon-knobs";
-import React from "react";
-import { Atlasmap } from "./Atlasmap";
-import { AtlasmapStory } from "./Atlasmap.story";
-import { AtlasmapProvider, IAtlasmapProviderProps } from "./AtlasmapProvider";
 import { action } from "@storybook/addon-actions";
+import { boolean, text } from "@storybook/addon-knobs";
+import React from "react";
 import { html } from "../stories/htmlKnob";
-import { AtlasmapProviderStory } from "./AtlasmapProvider.story";
+import { Atlasmap } from "./Atlasmap";
+import { AtlasmapProvider, IAtlasmapProviderProps } from "./AtlasmapProvider";
 
 const sampleExternalDocument = JSON.stringify(
   {
@@ -171,68 +169,3 @@ export const embeddedInSyndesis = () => {
     </AtlasmapProvider>
   );
 };
-
-export const transformationApproach = () => (
-  <AtlasmapProviderStory
-    baseJavaInspectionServiceUrl={text(
-      "baseJavaInspectionServiceUrl",
-      "http://localhost:8585/v2/atlas/java/",
-    )}
-    baseXMLInspectionServiceUrl={text(
-      "baseXMLInspectionServiceUrl",
-      "http://localhost:8585/v2/atlas/xml/",
-    )}
-    baseJSONInspectionServiceUrl={text(
-      "baseJSONInspectionServiceUrl",
-      "http://localhost:8585/v2/atlas/json/",
-    )}
-    baseCSVInspectionServiceUrl={text(
-      "baseCSVInspectionServiceUrl",
-      "http://localhost:8585/v2/atlas/csv/",
-    )}
-    baseMappingServiceUrl={text(
-      "baseMappingServiceUrl",
-      "http://localhost:8585/v2/atlas/",
-    )}
-    onMappingChange={action("onMappingChange")}
-  >
-    <AtlasmapStory
-      allowImport={boolean("allow Import", true)}
-      allowExport={boolean("allow Export", true)}
-      allowReset={boolean("allow Reset", true)}
-      allowDelete={boolean("allow Delete", true)}
-      allowCustomJavaClasses={boolean("allow Custom Java Classes", true)}
-      toolbarOptions={{
-        showToggleMappingPreviewToolbarItem: boolean(
-          "showToggleMappingPreviewToolbarItem",
-          true,
-        ),
-        showToggleMappingColumnToolbarItem: boolean(
-          "showToggleMappingColumnToolbarItem",
-          false,
-        ),
-        showMappingTableViewToolbarItem: boolean(
-          "showToggleMappingTableToolbarItem",
-          true,
-        ),
-        showNamespaceTableViewToolbarItem: boolean(
-          "showToggleNamespaceTableToolbarItem",
-          true,
-        ),
-        showToggleTypesToolbarItem: boolean("showToggleTypesToolbarItem", true),
-        showToggleMappedFieldsToolbarItem: boolean(
-          "showToggleMappedFieldsToolbarItem",
-          true,
-        ),
-        showToggleUnmappedFieldsToolbarItem: boolean(
-          "showToggleUnmappedFieldsToolbarItem",
-          true,
-        ),
-        showFreeViewToolbarItem: boolean(
-          "showToggleFreeViewToolbarItem",
-          false,
-        ),
-      }}
-    />
-  </AtlasmapProviderStory>
-);
