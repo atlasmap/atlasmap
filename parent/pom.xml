@@ -54,7 +54,6 @@
     <jetty-maven-plugin.version>9.4.30.v20200611</jetty-maven-plugin.version>
     <jsonschema2pojo-maven-plugin.version>1.0.2</jsonschema2pojo-maven-plugin.version>
     <junit.version>4.13</junit.version>
-    <karaf.version>4.2.8</karaf.version>
     <keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
     <license-maven-plugin.version>3.0</license-maven-plugin.version>
     <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
@@ -477,17 +476,6 @@
         <groupId>org.apache.daffodil</groupId>
         <artifactId>daffodil-japi_2.12</artifactId>
         <version>${daffodil.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.karaf</groupId>
-        <artifactId>apache-karaf</artifactId>
-        <type>tar.gz</type>
-        <version>${karaf.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.karaf.features</groupId>
-        <artifactId>org.apache.karaf.features.core</artifactId>
-        <version>${karaf.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.logging.log4j</groupId>
