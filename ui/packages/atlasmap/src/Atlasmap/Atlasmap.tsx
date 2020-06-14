@@ -11,20 +11,21 @@ import {
 } from "../UI";
 import {
   IAtlasmapField,
+  IAtlasmapMapping,
   IMappingDocumentEvents,
   ISourceColumnCallbacks,
   ITargetsColumnCallbacks,
   MappingTableView,
   NamespaceTableView,
   SourceMappingTargetView,
+  SourceMappingTargetXformView,
   SourceTargetView,
-  IAtlasmapMapping,
 } from "../Views";
 import { useAtlasmap } from "./AtlasmapProvider";
 import { useAtlasmapDialogs } from "./useAtlasmapDialogs";
 import { IUseContextToolbarData, useContextToolbar } from "./useContextToolbar";
 import { useSidebar } from "./useSidebar";
-import { getPropertyValue, getPropertyType, getConstantType } from "./utils";
+import { getConstantType, getPropertyType, getPropertyValue } from "./utils";
 
 export interface IAtlasmapProps {
   allowImport?: boolean;
@@ -47,7 +48,6 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
 }) => {
   const {
     pending,
-    // error,
     notifications,
     markNotificationRead,
     properties,
@@ -62,7 +62,6 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     searchSources,
     searchTargets,
     importAtlasFile,
-    // expression
     currentMappingExpression,
     executeFieldSearch,
     mappingExpressionAddField,
@@ -90,6 +89,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     showMappingColumn,
     showMappingPreview,
     showTypes,
+    showAllLinks,
     contextToolbar,
   } = useContextToolbar({
     showImportAtlasFileToolbarItem: allowImport,
@@ -325,6 +325,27 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
             onDeleteNamespace={handlers.deleteNamespace}
           />
         );
+      case "TransformationApproach":
+        return (
+          <SourceMappingTargetXformView
+            properties={properties}
+            constants={constants}
+            sources={sources}
+            mappings={mappings}
+            targets={targets}
+            selectedMappingId={selectedMapping?.id}
+            onSelectMapping={selectMapping}
+            showMappingPreview={showMappingPreview}
+            showTypes={showTypes}
+            showAllLinks={showAllLinks}
+            sourceEvents={sourceEvents}
+            mappingEvents={mappingEvents}
+            targetEvents={targetEvents}
+            onRemoveMapping={(mapping: IAtlasmapMapping) =>
+              handlers.onDeleteMapping(mapping)
+            }
+          />
+        );
       default:
         return <>TODO</>;
     }
@@ -339,6 +360,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     selectMapping,
     selectedMapping,
     shouldShowMappingPreview,
+    showAllLinks,
     showMappingColumn,
     showMappingPreview,
     showTypes,
@@ -358,9 +380,15 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         <MainLayout
           loading={pending}
           contextToolbar={contextToolbar}
-          viewToolbar={activeView !== "NamespaceTable" && viewToolbar}
+          viewToolbar={
+            activeView !== "NamespaceTable" &&
+            activeView !== "TransformationApproach" &&
+            viewToolbar
+          }
           controlBar={activeView === "FreeView" && <CanvasControlBar />}
-          showSidebar={!!selectedMapping}
+          showSidebar={
+            !!selectedMapping && activeView !== "TransformationApproach"
+          }
           renderSidebar={renderSidebar}
         >
           {currentView}

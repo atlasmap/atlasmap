@@ -1,23 +1,22 @@
 import React, { FunctionComponent, useState } from "react";
-
 import { Column, ColumnMapper, Columns, NodeRefProvider } from "../UI";
 import {
+  IMappingDocumentEvents,
+  IMappingsColumnData,
   ISourceColumnCallbacks,
+  ISourceMappingTargetLinksData,
   ISourceMappingTargetLinksEvents,
   ISourcesColumnData,
-  ITargetsColumnData,
   ITargetsColumnCallbacks,
+  ITargetsColumnData,
+  MappingsColumn,
+  SourceMappingTargetLinks,
   SourcesColumn,
   TargetsColumn,
-  ISourceMappingTargetLinksData,
-  IMappingsColumnData,
-  IMappingDocumentEvents,
 } from "./ColumnMapperView";
 import { IAtlasmapMapping } from "./models";
-import { MappingsColumn } from "./ColumnMapperView/Columns/MappingsColumn.story";
-import { SourceMappingTargetLinks } from "./ColumnMapperView/Links/SourceMappingTargetLinks.story";
 
-export interface ISourceMappingTargetViewProps
+export interface ISourceMappingTargetXformViewProps
   extends ISourcesColumnData,
     IMappingsColumnData,
     ITargetsColumnData,
@@ -26,12 +25,11 @@ export interface ISourceMappingTargetViewProps
   sourceEvents: ISourceColumnCallbacks;
   mappingEvents: IMappingDocumentEvents;
   targetEvents: ITargetsColumnCallbacks;
-  onMappingNameChange: (mapping: IAtlasmapMapping, name: string) => void;
-  onRemoveMapping: (mapping: IAtlasmapMapping) => void;
   showAllLinks: boolean;
+  onRemoveMapping: (mapping: IAtlasmapMapping) => void;
 }
 
-export const SourceMappingTargetViewStory: FunctionComponent<ISourceMappingTargetViewProps> = ({
+export const SourceMappingTargetXformView: FunctionComponent<ISourceMappingTargetXformViewProps> = ({
   properties,
   constants,
   sources,
@@ -45,7 +43,6 @@ export const SourceMappingTargetViewStory: FunctionComponent<ISourceMappingTarge
   sourceEvents,
   mappingEvents,
   targetEvents,
-  onMappingNameChange,
   onRemoveMapping,
 }) => {
   const [highlightedMappingId, setHighlightedMappingId] = useState<
@@ -73,10 +70,10 @@ export const SourceMappingTargetViewStory: FunctionComponent<ISourceMappingTarge
               mappings={mappings}
               selectedMappingId={selectedMappingId}
               showMappingPreview={showMappingPreview}
+              {...mappingEvents}
               onMouseOver={handleMouseOver}
               onMouseOut={handleMouseOut}
-              {...mappingEvents}
-              onMappingNameChange={onMappingNameChange}
+              usingTransformationApproach={true}
               onRemoveMapping={onRemoveMapping}
             />
           </Column>

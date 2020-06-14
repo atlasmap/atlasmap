@@ -67,9 +67,9 @@ export const SourceMappingTargetView: FunctionComponent<ISourceMappingTargetView
               mappings={mappings}
               selectedMappingId={selectedMappingId}
               showMappingPreview={showMappingPreview}
+              {...mappingEvents}
               onMouseOver={handleMouseOver}
               onMouseOut={handleMouseOut}
-              {...mappingEvents}
             />
           </Column>
           <Column data-testid={"column-target-area"} totalColumns={3}>
