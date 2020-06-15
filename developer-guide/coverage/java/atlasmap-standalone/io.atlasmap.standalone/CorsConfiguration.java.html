@@ -42,11 +42,11 @@ import org.springframework.web.filter.CorsFilter;
 //                return new org.springframework.web.cors.CorsConfiguration().applyPermitDefaultValues();
 //            }
 
-<span class="nc" id="L45">            org.springframework.web.cors.CorsConfiguration config = new org.springframework.web.cors.CorsConfiguration();</span>
-<span class="nc" id="L46">            config.setAllowedOrigins(allowedOrigins);</span>
-<span class="nc" id="L47">            config.setAllowedMethods(Arrays.asList(&quot;HEAD&quot;, &quot;GET&quot;, &quot;POST&quot;, &quot;PUT&quot;, &quot;DELETE&quot;, &quot;PATCH&quot;));</span>
-<span class="nc" id="L48">            config.applyPermitDefaultValues();</span>
-<span class="nc" id="L49">            return config;</span>
+<span class="fc" id="L45">            org.springframework.web.cors.CorsConfiguration config = new org.springframework.web.cors.CorsConfiguration();</span>
+<span class="fc" id="L46">            config.setAllowedOrigins(allowedOrigins);</span>
+<span class="fc" id="L47">            config.setAllowedMethods(Arrays.asList(&quot;HEAD&quot;, &quot;GET&quot;, &quot;POST&quot;, &quot;PUT&quot;, &quot;DELETE&quot;, &quot;PATCH&quot;));</span>
+<span class="fc" id="L48">            config.applyPermitDefaultValues();</span>
+<span class="fc" id="L49">            return config;</span>
         });
     }
 
