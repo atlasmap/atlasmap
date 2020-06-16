@@ -360,7 +360,16 @@ public class XmlModule extends BaseAtlasModule {
             if (namespaceUri == null) {
                 namespaceUri = XMLConstants.NULL_NS_URI;
             }
-            XSElementDecl rootDecl = schemaSet.getElementDecl(namespaceUri, sourceRoot.getLocalName());
+            String localName = sourceRoot.getLocalName();
+            if (XMLConstants.NULL_NS_URI.equals(namespaceUri)) {
+                localName = sourceRoot.getTagName();
+            }
+            XSElementDecl rootDecl = schemaSet.getElementDecl(namespaceUri, localName);
+            if (rootDecl == null) {
+                LOG.warn("Declaration of the root element '{}' was not found in the schema",
+                        namespaceUri != null ? namespaceUri + ":" + localName : localName);
+                return doc;
+            }
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             dbf.setNamespaceAware(true);
             Document targetDoc = dbf.newDocumentBuilder().newDocument();
