@@ -119,6 +119,12 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         if (this.atlasMappingUri != null) {
             this.mappingDefinition = factory.getMappingService().loadMapping(this.atlasMappingUri);
         }
+        if (this.mappingDefinition == null) {
+            LOG.warn("AtlasMap context cannot initialize without mapping definition, ignoring:"
+                    + " Mapping URI={}, Mapping Definition:={}"
+                    , this.atlasMappingUri, this.mappingDefinition);
+            return;
+        }
 
         sourceModules.clear();
         ConstantModule constant = new ConstantModule();
