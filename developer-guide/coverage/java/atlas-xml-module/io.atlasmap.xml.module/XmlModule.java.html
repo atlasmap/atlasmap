@@ -360,18 +360,27 @@ import io.atlasmap.xml.v2.XmlNamespaces;
 <span class="pc bpc" id="L360" title="1 of 2 branches missed.">            if (namespaceUri == null) {</span>
 <span class="nc" id="L361">                namespaceUri = XMLConstants.NULL_NS_URI;</span>
             }
-<span class="fc" id="L363">            XSElementDecl rootDecl = schemaSet.getElementDecl(namespaceUri, sourceRoot.getLocalName());</span>
-<span class="fc" id="L364">            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();</span>
-<span class="fc" id="L365">            dbf.setNamespaceAware(true);</span>
-<span class="fc" id="L366">            Document targetDoc = dbf.newDocumentBuilder().newDocument();</span>
-<span class="fc" id="L367">            rootDecl.visit(new AtlasRewritingXSVisitor(doc, targetDoc));</span>
-<span class="fc" id="L368">            return targetDoc;</span>
-<span class="nc" id="L369">        } catch (Exception e) {</span>
-<span class="nc" id="L370">            LOG.warn(&quot;Failed to load XML schema for the document '{}': {} - ignoring&quot;, getDocId(), e.getMessage());</span>
-<span class="nc bnc" id="L371" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L372">                LOG.debug(&quot;&quot;, e);</span>
+<span class="fc" id="L363">            String localName = sourceRoot.getLocalName();</span>
+<span class="pc bpc" id="L364" title="1 of 2 branches missed.">            if (XMLConstants.NULL_NS_URI.equals(namespaceUri)) {</span>
+<span class="nc" id="L365">                localName = sourceRoot.getTagName();</span>
             }
-<span class="nc" id="L374">            return doc;</span>
+<span class="fc" id="L367">            XSElementDecl rootDecl = schemaSet.getElementDecl(namespaceUri, localName);</span>
+<span class="pc bpc" id="L368" title="1 of 2 branches missed.">            if (rootDecl == null) {</span>
+<span class="nc bnc" id="L369" title="All 2 branches missed.">                LOG.warn(&quot;Declaration of the root element '{}' was not found in the schema&quot;,</span>
+                        namespaceUri != null ? namespaceUri + &quot;:&quot; + localName : localName);
+<span class="nc" id="L371">                return doc;</span>
+            }
+<span class="fc" id="L373">            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();</span>
+<span class="fc" id="L374">            dbf.setNamespaceAware(true);</span>
+<span class="fc" id="L375">            Document targetDoc = dbf.newDocumentBuilder().newDocument();</span>
+<span class="fc" id="L376">            rootDecl.visit(new AtlasRewritingXSVisitor(doc, targetDoc));</span>
+<span class="fc" id="L377">            return targetDoc;</span>
+<span class="nc" id="L378">        } catch (Exception e) {</span>
+<span class="nc" id="L379">            LOG.warn(&quot;Failed to load XML schema for the document '{}': {} - ignoring&quot;, getDocId(), e.getMessage());</span>
+<span class="nc bnc" id="L380" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L381">                LOG.debug(&quot;&quot;, e);</span>
+            }
+<span class="nc" id="L383">            return doc;</span>
         }
     }
 
