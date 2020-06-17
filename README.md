@@ -86,3 +86,10 @@ $ yarn start
 $ cd ${ATLASMAP}/ui
 $ yarn standalone
 ```
+
+## Before you submit a pull request changing Java code
+Before you submit your pull request, and if it is changing Java code, it is recommended to run checkstyle from top directory.
+```
+./mvnw checkstyle:check
+```
+Otherwise checkstyle errors will be reported as a build failure in pull request check.
