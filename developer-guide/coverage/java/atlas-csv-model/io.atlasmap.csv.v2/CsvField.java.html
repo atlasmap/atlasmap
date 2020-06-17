@@ -16,27 +16,30 @@
 package io.atlasmap.csv.v2;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Field;
 
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L23">public class CsvField extends Field {</span>
+<span class="fc" id="L24">public class CsvField extends Field {</span>
+
+    private static final long serialVersionUID = 1L;
 
     private Integer column;
 
     public void setColumn(Integer column) {
-<span class="fc" id="L28">        this.column = column;</span>
-<span class="fc" id="L29">    }</span>
+<span class="fc" id="L31">        this.column = column;</span>
+<span class="fc" id="L32">    }</span>
 
     public Integer getColumn() {
-<span class="fc" id="L32">        return column;</span>
+<span class="fc" id="L35">        return column;</span>
     }
 
     public static CsvField cloneOf(CsvField field) {
-<span class="fc" id="L36">        CsvField newField = new CsvField();</span>
-<span class="fc" id="L37">        AtlasModelFactory.copyField(field, newField, true);</span>
-<span class="fc" id="L38">        newField.setColumn(field.getColumn());</span>
-<span class="fc" id="L39">        return newField;</span>
+<span class="fc" id="L39">        CsvField newField = new CsvField();</span>
+<span class="fc" id="L40">        AtlasModelFactory.copyField(field, newField, true);</span>
+<span class="fc" id="L41">        newField.setColumn(field.getColumn());</span>
+<span class="fc" id="L42">        return newField;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

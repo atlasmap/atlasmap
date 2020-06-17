@@ -19,11 +19,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import io.atlasmap.spi.AtlasCollectionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.spi.AtlasCollectionHelper;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasInternalSession;

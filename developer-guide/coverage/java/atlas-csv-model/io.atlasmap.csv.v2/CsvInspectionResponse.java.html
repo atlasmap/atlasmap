@@ -17,42 +17,43 @@ package io.atlasmap.csv.v2;
 
 import java.io.Serializable;
 
-import io.atlasmap.v2.Document;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import io.atlasmap.v2.Document;
+
 @JsonRootName(&quot;CsvInspectionResponse&quot;)
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L26">public class CsvInspectionResponse implements Serializable {</span>
+<span class="fc" id="L27">public class CsvInspectionResponse implements Serializable {</span>
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private Document csvDocument;
     private String errorMessage;
     private long executionTime;
 
     public Document getCsvDocument() {
-<span class="fc" id="L35">        return csvDocument;</span>
+<span class="fc" id="L36">        return csvDocument;</span>
     }
 
     public String getErrorMessage() {
-<span class="fc" id="L39">        return errorMessage;</span>
+<span class="fc" id="L40">        return errorMessage;</span>
     }
 
     public long getExecutionTime() {
-<span class="fc" id="L43">        return executionTime;</span>
+<span class="fc" id="L44">        return executionTime;</span>
     }
 
     public void setCsvDocument(Document csvDocument) {
-<span class="fc" id="L47">        this.csvDocument = csvDocument;</span>
-<span class="fc" id="L48">    }</span>
+<span class="fc" id="L48">        this.csvDocument = csvDocument;</span>
+<span class="fc" id="L49">    }</span>
 
     public void setErrorMessage(String message) {
-<span class="nc" id="L51">        this.errorMessage = message;</span>
-<span class="nc" id="L52">    }</span>
+<span class="nc" id="L52">        this.errorMessage = message;</span>
+<span class="nc" id="L53">    }</span>
 
     public void setExecutionTime(long executionTime) {
-<span class="fc" id="L55">        this.executionTime = executionTime;</span>
-<span class="fc" id="L56">    }</span>
+<span class="fc" id="L56">        this.executionTime = executionTime;</span>
+<span class="fc" id="L57">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

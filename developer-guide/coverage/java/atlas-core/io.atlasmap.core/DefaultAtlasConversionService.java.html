@@ -37,9 +37,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConversionService;
+import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
 public class DefaultAtlasConversionService implements AtlasConversionService {
@@ -55,7 +55,7 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
                     &quot;java.lang.Float&quot;, &quot;java.lang.Integer&quot;, &quot;java.lang.Long&quot;, &quot;java.lang.Short&quot;, &quot;java.lang.String&quot;)));
 
 <span class="fc" id="L57">    private static volatile DefaultAtlasConversionService instance = null;</span>
-<span class="fc" id="L58">    private static final Object singletonLock = new Object();</span>
+<span class="fc" id="L58">    private static final Object SINGLETON_LOCK = new Object();</span>
 
 <span class="fc" id="L60">    private Map&lt;ConverterKey, ConverterMethodHolder&gt; converterMethods = null;</span>
 <span class="fc" id="L61">    private Map&lt;ConverterKey, ConverterMethodHolder&gt; customConverterMethods = null;</span>
@@ -111,7 +111,7 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
     public static DefaultAtlasConversionService getInstance() {
 <span class="fc" id="L112">        DefaultAtlasConversionService result = instance;</span>
 <span class="fc bfc" id="L113" title="All 2 branches covered.">        if (result == null) {</span>
-<span class="fc" id="L114">            synchronized (singletonLock) {</span>
+<span class="fc" id="L114">            synchronized (SINGLETON_LOCK) {</span>
 <span class="fc" id="L115">                result = instance;</span>
 <span class="pc bpc" id="L116" title="1 of 2 branches missed.">                if (result == null) {</span>
 <span class="fc" id="L117">                    result = new DefaultAtlasConversionService();</span>

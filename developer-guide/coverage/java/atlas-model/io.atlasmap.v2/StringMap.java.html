@@ -3,12 +3,13 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 @JsonRootName(&quot;StringMap&quot;)
-<span class="fc" id="L9">public class StringMap implements Serializable {</span>
+<span class="fc" id="L10">public class StringMap implements Serializable {</span>
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected List&lt;StringMapEntry&gt; stringMapEntry;
 
@@ -35,10 +36,10 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      * @return A list of {@link StringMapEntry}
      */
     public List&lt;StringMapEntry&gt; getStringMapEntry() {
-<span class="fc bfc" id="L38" title="All 2 branches covered.">        if (stringMapEntry == null) {</span>
-<span class="fc" id="L39">            stringMapEntry = new ArrayList&lt;StringMapEntry&gt;();</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        if (stringMapEntry == null) {</span>
+<span class="fc" id="L40">            stringMapEntry = new ArrayList&lt;StringMapEntry&gt;();</span>
         }
-<span class="fc" id="L41">        return this.stringMapEntry;</span>
+<span class="fc" id="L42">        return this.stringMapEntry;</span>
     }
 
 }

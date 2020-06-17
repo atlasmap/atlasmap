@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
 <span class="fc" id="L27">public class AtlasMapping implements Serializable {</span>
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected List&lt;DataSource&gt; dataSource;
 

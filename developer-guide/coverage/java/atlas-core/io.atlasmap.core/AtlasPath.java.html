@@ -40,6 +40,21 @@ public class AtlasPath {
     protected List&lt;SegmentContext&gt; segmentContexts;
 <span class="pc" id="L41">    private String originalPath = null;</span>
 
+<span class="fc" id="L43">    public AtlasPath(String p) {</span>
+<span class="fc" id="L44">        String path = p;</span>
+<span class="fc" id="L45">        this.originalPath = path;</span>
+<span class="fc" id="L46">        this.segmentContexts = parse(path);</span>
+<span class="fc" id="L47">    }</span>
+
+<span class="nc" id="L49">    protected AtlasPath(List&lt;SegmentContext&gt; segments) {</span>
+<span class="nc" id="L50">        this.segmentContexts = segments;</span>
+<span class="nc" id="L51">        this.originalPath = getSegmentPath(segments.get(segments.size() - 1));</span>
+<span class="nc" id="L52">    }</span>
+
+<span class="fc" id="L54">    private AtlasPath() {</span>
+<span class="fc" id="L55">        this.segmentContexts = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L56">    }</span>
+
     /**
      * Extract child fields by feeding relative path.
      *
@@ -47,116 +62,101 @@ public class AtlasPath {
      * @param path Relative path string
      * @return extracted field(s)
      */
-	public static Field extractChildren(Field f, String path) {
-<span class="pc bpc" id="L51" title="3 of 6 branches missed.">        if (f == null || path == null || path.isEmpty()) {</span>
-<span class="nc" id="L52">            return null;</span>
+    public static Field extractChildren(Field f, String path) {
+<span class="pc bpc" id="L66" title="3 of 6 branches missed.">        if (f == null || path == null || path.isEmpty()) {</span>
+<span class="nc" id="L67">            return null;</span>
         }
 
-<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if (path.equals(PATH_SEPARATOR)) {</span>
-<span class="nc" id="L56">            return f;</span>
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        if (path.equals(PATH_SEPARATOR)) {</span>
+<span class="nc" id="L71">            return f;</span>
         }
-<span class="pc bpc" id="L58" title="1 of 2 branches missed.">        if (!(f instanceof FieldGroup)) {</span>
-<span class="nc" id="L59">            return null;</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">        if (!(f instanceof FieldGroup)) {</span>
+<span class="nc" id="L74">            return null;</span>
         }
 
-<span class="fc" id="L62">        List&lt;Field&gt; extracted = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L63">        FieldGroup entryField = (FieldGroup)f;</span>
-<span class="fc" id="L64">        extracted.add(entryField);</span>
-<span class="fc" id="L65">        List&lt;SegmentContext&gt; entrySegments = new AtlasPath(entryField.getPath()).getSegments(true);</span>
-<span class="fc" id="L66">        SegmentContext entrySegment = entrySegments.get(entrySegments.size() - 1);</span>
-<span class="fc" id="L67">        List&lt;SegmentContext&gt; extractedSegments = new ArrayList&lt;&gt;(entrySegments);</span>
-<span class="fc" id="L68">        List&lt;SegmentContext&gt; relativeSegments = new AtlasPath(path).getSegments(true);</span>
-<span class="fc" id="L69">        SegmentContext relativeRootSegment = relativeSegments.get(0);</span>
+<span class="fc" id="L77">        List&lt;Field&gt; extracted = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L78">        FieldGroup entryField = (FieldGroup)f;</span>
+<span class="fc" id="L79">        extracted.add(entryField);</span>
+<span class="fc" id="L80">        List&lt;SegmentContext&gt; entrySegments = new AtlasPath(entryField.getPath()).getSegments(true);</span>
+<span class="fc" id="L81">        SegmentContext entrySegment = entrySegments.get(entrySegments.size() - 1);</span>
+<span class="fc" id="L82">        List&lt;SegmentContext&gt; extractedSegments = new ArrayList&lt;&gt;(entrySegments);</span>
+<span class="fc" id="L83">        List&lt;SegmentContext&gt; relativeSegments = new AtlasPath(path).getSegments(true);</span>
+<span class="fc" id="L84">        SegmentContext relativeRootSegment = relativeSegments.get(0);</span>
 
-<span class="fc" id="L71">        List&lt;Field&gt; selected = new ArrayList&lt;&gt;();</span>
-<span class="pc bpc" id="L72" title="2 of 4 branches missed.">        if (relativeRootSegment.getCollectionType() == null || relativeRootSegment.getCollectionType() == CollectionType.NONE) {</span>
-<span class="pc bpc" id="L73" title="1 of 2 branches missed.">            if (entrySegment.getCollectionType() != null</span>
-<span class="pc bpc" id="L74" title="1 of 2 branches missed.">                &amp;&amp; entrySegment.getCollectionType() != CollectionType.NONE</span>
-<span class="pc bpc" id="L75" title="1 of 2 branches missed.">                &amp;&amp; entrySegment.getCollectionIndex() == null) {</span>
-<span class="nc" id="L76">                selected.addAll(entryField.getField());</span>
+<span class="fc" id="L86">        List&lt;Field&gt; selected = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L87" title="2 of 4 branches missed.">        if (relativeRootSegment.getCollectionType() == null || relativeRootSegment.getCollectionType() == CollectionType.NONE) {</span>
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">            if (entrySegment.getCollectionType() != null</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">                &amp;&amp; entrySegment.getCollectionType() != CollectionType.NONE</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">                &amp;&amp; entrySegment.getCollectionIndex() == null) {</span>
+<span class="nc" id="L91">                selected.addAll(entryField.getField());</span>
             } else {
-<span class="fc" id="L78">                selected.add(entryField);</span>
+<span class="fc" id="L93">                selected.add(entryField);</span>
             }
-<span class="nc bnc" id="L80" title="All 2 branches missed.">        } else if (relativeRootSegment.getCollectionIndex() != null) {</span>
-<span class="nc bnc" id="L81" title="All 2 branches missed.">            if (entrySegment.getCollectionIndex() != null) {</span>
-<span class="nc bnc" id="L82" title="All 2 branches missed.">                if (entrySegment.getCollectionIndex() == relativeRootSegment.getCollectionIndex()) {</span>
-<span class="nc" id="L83">                    selected.add(entryField);</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">        } else if (relativeRootSegment.getCollectionIndex() != null) {</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">            if (entrySegment.getCollectionIndex() != null) {</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">                if (entrySegment.getCollectionIndex() == relativeRootSegment.getCollectionIndex()) {</span>
+<span class="nc" id="L98">                    selected.add(entryField);</span>
                 }
             } else {
-<span class="nc" id="L86">                selected.add(entryField.getField().get(relativeRootSegment.getCollectionIndex()));</span>
-<span class="nc" id="L87">                entrySegment.collectionIndex = relativeRootSegment.getCollectionIndex();</span>
-<span class="nc" id="L88">                extractedSegments.set(entrySegments.size() - 1, entrySegment.rebuild());</span>
+<span class="nc" id="L101">                selected.add(entryField.getField().get(relativeRootSegment.getCollectionIndex()));</span>
+<span class="nc" id="L102">                entrySegment.collectionIndex = relativeRootSegment.getCollectionIndex();</span>
+<span class="nc" id="L103">                extractedSegments.set(entrySegments.size() - 1, entrySegment.rebuild());</span>
             }
         } else {
-<span class="nc" id="L91">            selected.addAll(entryField.getField());</span>
+<span class="nc" id="L106">            selected.addAll(entryField.getField());</span>
         }
-<span class="fc" id="L93">        extracted = selected;</span>
+<span class="fc" id="L108">        extracted = selected;</span>
 
-<span class="fc bfc" id="L95" title="All 2 branches covered.">        for (int i=1; i&lt;relativeSegments.size(); i++) {</span>
-<span class="fc" id="L96">            SegmentContext segment = relativeSegments.get(i);</span>
-<span class="fc" id="L97">            extractedSegments.add(segment);</span>
-<span class="fc" id="L98">            selected = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        for (int i=1; i&lt;relativeSegments.size(); i++) {</span>
+<span class="fc" id="L111">            SegmentContext segment = relativeSegments.get(i);</span>
+<span class="fc" id="L112">            extractedSegments.add(segment);</span>
+<span class="fc" id="L113">            selected = new ArrayList&lt;&gt;();</span>
 
-<span class="fc bfc" id="L100" title="All 2 branches covered.">            for (Field f1 : extracted) {</span>
-<span class="fc" id="L101">                FieldGroup f1Group = (FieldGroup)f1;</span>
-<span class="pc bpc" id="L102" title="1 of 2 branches missed.">                for (Field f2 : f1Group.getField()) {</span>
-<span class="fc" id="L103">                    AtlasPath f2Path = new AtlasPath(f2.getPath());</span>
-<span class="fc bfc" id="L104" title="All 2 branches covered.">                    if (!segment.getName().equals(f2Path.getLastSegment().getName())) {</span>
-<span class="fc" id="L105">                        continue;</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">            for (Field f1 : extracted) {</span>
+<span class="fc" id="L116">                FieldGroup f1Group = (FieldGroup)f1;</span>
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">                for (Field f2 : f1Group.getField()) {</span>
+<span class="fc" id="L118">                    AtlasPath f2Path = new AtlasPath(f2.getPath());</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">                    if (!segment.getName().equals(f2Path.getLastSegment().getName())) {</span>
+<span class="fc" id="L120">                        continue;</span>
                     }
-<span class="pc bpc" id="L107" title="1 of 2 branches missed.">                    if (segment.getCollectionType() == CollectionType.NONE) {</span>
-<span class="fc" id="L108">                        selected.add(f2);</span>
+<span class="pc bpc" id="L122" title="1 of 2 branches missed.">                    if (segment.getCollectionType() == CollectionType.NONE) {</span>
+<span class="fc" id="L123">                        selected.add(f2);</span>
                     } else {
-<span class="nc" id="L110">                        FieldGroup f2Group = (FieldGroup)f2;</span>
-<span class="nc bnc" id="L111" title="All 2 branches missed.">                        if (segment.getCollectionIndex() != null) {</span>
-<span class="nc" id="L112">                            selected.add((f2Group.getField().get(segment.getCollectionIndex())));</span>
+<span class="nc" id="L125">                        FieldGroup f2Group = (FieldGroup)f2;</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">                        if (segment.getCollectionIndex() != null) {</span>
+<span class="nc" id="L127">                            selected.add((f2Group.getField().get(segment.getCollectionIndex())));</span>
                         } else {
-<span class="nc" id="L114">                            selected.addAll(f2Group.getField());</span>
+<span class="nc" id="L129">                            selected.addAll(f2Group.getField());</span>
                         }
                     }
-<span class="nc" id="L117">                    break;</span>
+<span class="nc" id="L132">                    break;</span>
                 }
-<span class="fc" id="L119">            }</span>
-<span class="fc" id="L120">            extracted = selected;</span>
+<span class="fc" id="L134">            }</span>
+<span class="fc" id="L135">            extracted = selected;</span>
         }
 
-<span class="pc bpc" id="L123" title="1 of 2 branches missed.">        if (extracted.size() == 1) {</span>
-<span class="fc" id="L124">            return extracted.get(0);</span>
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">        if (extracted.size() == 1) {</span>
+<span class="fc" id="L139">            return extracted.get(0);</span>
         }
-<span class="nc" id="L126">        FieldGroup answer = AtlasModelFactory.createFieldGroupFrom(f, true);</span>
-<span class="nc" id="L127">        answer.setPath(new AtlasPath(extractedSegments).toString());</span>
-<span class="nc" id="L128">        answer.getField().addAll(extracted);</span>
-<span class="nc" id="L129">        return answer;</span>
-	}
+<span class="nc" id="L141">        FieldGroup answer = AtlasModelFactory.createFieldGroupFrom(f, true);</span>
+<span class="nc" id="L142">        answer.setPath(new AtlasPath(extractedSegments).toString());</span>
+<span class="nc" id="L143">        answer.getField().addAll(extracted);</span>
+<span class="nc" id="L144">        return answer;</span>
+    }
 
     public static void setCollectionIndexRecursively(FieldGroup group, int segmentIndex, int index) {
-<span class="fc" id="L133">        AtlasPath path = new AtlasPath(group.getPath());</span>
-<span class="fc" id="L134">        path.setCollectionIndex(segmentIndex, index);</span>
-<span class="fc" id="L135">        group.setPath(path.toString());</span>
-<span class="fc bfc" id="L136" title="All 2 branches covered.">        for (Field f : group.getField()) {</span>
-<span class="pc bpc" id="L137" title="1 of 2 branches missed.">            if (f instanceof FieldGroup) {</span>
-<span class="nc" id="L138">                setCollectionIndexRecursively((FieldGroup)f, segmentIndex, index);</span>
+<span class="fc" id="L148">        AtlasPath path = new AtlasPath(group.getPath());</span>
+<span class="fc" id="L149">        path.setCollectionIndex(segmentIndex, index);</span>
+<span class="fc" id="L150">        group.setPath(path.toString());</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">        for (Field f : group.getField()) {</span>
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">            if (f instanceof FieldGroup) {</span>
+<span class="nc" id="L153">                setCollectionIndexRecursively((FieldGroup)f, segmentIndex, index);</span>
             } else {
-<span class="fc" id="L140">                AtlasPath fpath = new AtlasPath(f.getPath());</span>
-<span class="fc" id="L141">                fpath.setCollectionIndex(segmentIndex, index);</span>
-<span class="fc" id="L142">                f.setPath(fpath.toString());</span>
+<span class="fc" id="L155">                AtlasPath fpath = new AtlasPath(f.getPath());</span>
+<span class="fc" id="L156">                fpath.setCollectionIndex(segmentIndex, index);</span>
+<span class="fc" id="L157">                f.setPath(fpath.toString());</span>
             }
-<span class="fc" id="L144">        }</span>
-<span class="fc" id="L145">    }</span>
-
-<span class="fc" id="L147">    public AtlasPath(String p) {</span>
-<span class="fc" id="L148">        String path = p;</span>
-<span class="fc" id="L149">        this.originalPath = path;</span>
-<span class="fc" id="L150">        this.segmentContexts = parse(path);</span>
-<span class="fc" id="L151">    }</span>
-
-<span class="nc" id="L153">    protected AtlasPath(List&lt;SegmentContext&gt; segments) {</span>
-<span class="nc" id="L154">        this.segmentContexts = segments;</span>
-<span class="nc" id="L155">        this.originalPath = getSegmentPath(segments.get(segments.size() - 1));</span>
-<span class="nc" id="L156">    }</span>
-
-<span class="fc" id="L158">    private AtlasPath() {</span>
-<span class="fc" id="L159">        this.segmentContexts = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L159">        }</span>
 <span class="fc" id="L160">    }</span>
 
     public AtlasPath appendField(String fieldExpression) {

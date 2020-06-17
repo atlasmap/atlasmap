@@ -23,10 +23,10 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
+import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.ActionDetail;
 import io.atlasmap.v2.Field;

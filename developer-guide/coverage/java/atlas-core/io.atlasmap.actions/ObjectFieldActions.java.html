@@ -27,83 +27,79 @@ import io.atlasmap.v2.IsNull;
 import io.atlasmap.v2.ItemAt;
 import io.atlasmap.v2.Length;
 
-@SuppressWarnings({&quot;squid:S3776&quot;,     // Cognitive complexity of method
-    &quot;squid:S1118&quot;,     // Add private constructor
-    &quot;squid:S1226&quot;,     // Introduce new variable
-    &quot;squid:S3358&quot; })   // Extract nested ternary
-<span class="fc" id="L34">public class ObjectFieldActions implements AtlasFieldAction {</span>
+<span class="fc" id="L30">public class ObjectFieldActions implements AtlasFieldAction {</span>
 
     @AtlasActionProcessor
     public static Integer count(Count action, List&lt;Object&gt; inputs) {
-<span class="pc bpc" id="L38" title="1 of 2 branches missed.">        if (inputs == null) {</span>
-<span class="nc" id="L39">            return 0;</span>
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">        if (inputs == null) {</span>
+<span class="nc" id="L35">            return 0;</span>
         }
-<span class="fc" id="L41">        return inputs.size();</span>
+<span class="fc" id="L37">        return inputs.size();</span>
     }
 
     @AtlasActionProcessor
     public static Boolean contains(Contains contains, List&lt;Object&gt; inputs) {
-<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (contains == null) {</span>
-<span class="fc" id="L47">            throw new IllegalArgumentException(&quot;Contains action must be specified&quot;);</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (contains == null) {</span>
+<span class="fc" id="L43">            throw new IllegalArgumentException(&quot;Contains action must be specified&quot;);</span>
         }
-<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (inputs == null) {</span>
-<span class="fc bfc" id="L50" title="All 2 branches covered.">            return contains.getValue() == null;</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        if (inputs == null) {</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">            return contains.getValue() == null;</span>
         }
-<span class="fc" id="L52">        return collectionContains(inputs, contains);</span>
+<span class="fc" id="L48">        return collectionContains(inputs, contains);</span>
     }
 
     @AtlasActionProcessor
     public static Boolean equals(Equals equals, Object input) {
-<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (equals == null) {</span>
-<span class="fc" id="L58">            throw new IllegalArgumentException(&quot;Equals action must be specified&quot;);</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        if (equals == null) {</span>
+<span class="fc" id="L54">            throw new IllegalArgumentException(&quot;Equals action must be specified&quot;);</span>
         }
-<span class="fc bfc" id="L60" title="All 2 branches covered.">        if (input == null) {</span>
-<span class="pc bpc" id="L61" title="1 of 2 branches missed.">            return equals.getValue() == null;</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        if (input == null) {</span>
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">            return equals.getValue() == null;</span>
         }
 
-<span class="fc" id="L64">        return input.toString().equals(equals.getValue());</span>
+<span class="fc" id="L60">        return input.toString().equals(equals.getValue());</span>
     }
 
     @AtlasActionProcessor
     public static Boolean isNull(IsNull action, Object input) {
-<span class="fc bfc" id="L69" title="All 2 branches covered.">        return input == null;</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        return input == null;</span>
     }
 
     @AtlasActionProcessor
     public static Object itemAt(ItemAt itemAt, List&lt;Object&gt; inputs) {
-<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        if (inputs == null) {</span>
-<span class="nc" id="L75">            return null;</span>
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        if (inputs == null) {</span>
+<span class="nc" id="L71">            return null;</span>
         }
 
-<span class="pc bpc" id="L78" title="1 of 2 branches missed.">        Integer index = itemAt.getIndex() == null ? 0 : itemAt.getIndex();</span>
-<span class="fc" id="L79">        Object[] array = inputs.toArray(new Object[0]);</span>
-<span class="fc bfc" id="L80" title="All 2 branches covered.">        if (array.length &gt; index) {</span>
-<span class="fc" id="L81">            return array[index];</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        Integer index = itemAt.getIndex() == null ? 0 : itemAt.getIndex();</span>
+<span class="fc" id="L75">        Object[] array = inputs.toArray(new Object[0]);</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        if (array.length &gt; index) {</span>
+<span class="fc" id="L77">            return array[index];</span>
         } else {
-<span class="fc" id="L83">            throw new ArrayIndexOutOfBoundsException(String.format(</span>
-<span class="fc" id="L84">                    &quot;Collection '%s' has fewer (%s) than expected (%s)&quot;, array, array.length, index));</span>
+<span class="fc" id="L79">            throw new ArrayIndexOutOfBoundsException(String.format(</span>
+<span class="fc" id="L80">                    &quot;Collection '%s' has fewer (%s) than expected (%s)&quot;, array, array.length, index));</span>
         }
     }
 
     @AtlasActionProcessor
     public static Integer length(Length length, Object input) {
-<span class="fc bfc" id="L90" title="All 2 branches covered.">        if (input == null) {</span>
-<span class="fc" id="L91">            return -1;</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        if (input == null) {</span>
+<span class="fc" id="L87">            return -1;</span>
         }
-<span class="fc" id="L93">        return input.toString().length();</span>
+<span class="fc" id="L89">        return input.toString().length();</span>
     }
 
     private static boolean collectionContains(Collection&lt;?&gt; collection, Contains contains) {
-<span class="fc bfc" id="L97" title="All 2 branches covered.">        for (Object item : collection) {</span>
-<span class="fc bfc" id="L98" title="All 2 branches covered.">            if (item == null) {</span>
-<span class="pc bpc" id="L99" title="1 of 2 branches missed.">                if (contains.getValue() == null) {</span>
-<span class="fc" id="L100">                    return true;</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        for (Object item : collection) {</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">            if (item == null) {</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">                if (contains.getValue() == null) {</span>
+<span class="fc" id="L96">                    return true;</span>
                 }
-<span class="fc bfc" id="L102" title="All 2 branches covered.">            } else if (item.toString().equals(contains.getValue())) {</span>
-<span class="fc" id="L103">                return true;</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">            } else if (item.toString().equals(contains.getValue())) {</span>
+<span class="fc" id="L99">                return true;</span>
             }
-<span class="fc" id="L105">        }</span>
-<span class="fc" id="L106">        return false;</span>
+<span class="fc" id="L101">        }</span>
+<span class="fc" id="L102">        return false;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

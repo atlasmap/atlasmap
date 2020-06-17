@@ -2,16 +2,17 @@
 
 import java.io.Serializable;
 import java.math.BigInteger;
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @Deprecated
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L9">public class Collection</span>
+<span class="fc" id="L10">public class Collection</span>
     extends BaseMapping
     implements Serializable
 {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected Mappings mappings;
 
@@ -28,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Mappings getMappings() {
-<span class="fc" id="L31">        return mappings;</span>
+<span class="fc" id="L32">        return mappings;</span>
     }
 
     /**
@@ -40,8 +41,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setMappings(Mappings value) {
-<span class="fc" id="L43">        this.mappings = value;</span>
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L44">        this.mappings = value;</span>
+<span class="fc" id="L45">    }</span>
 
     /**
      * Gets the value of the collectionSize property.
@@ -52,7 +53,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public BigInteger getCollectionSize() {
-<span class="fc" id="L55">        return collectionSize;</span>
+<span class="fc" id="L56">        return collectionSize;</span>
     }
 
     /**
@@ -64,8 +65,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setCollectionSize(BigInteger value) {
-<span class="fc" id="L67">        this.collectionSize = value;</span>
-<span class="fc" id="L68">    }</span>
+<span class="fc" id="L68">        this.collectionSize = value;</span>
+<span class="fc" id="L69">    }</span>
 
     /**
      * Gets the value of the collectionType property.
@@ -76,7 +77,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public CollectionType getCollectionType() {
-<span class="fc" id="L79">        return collectionType;</span>
+<span class="fc" id="L80">        return collectionType;</span>
     }
 
     /**
@@ -88,8 +89,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setCollectionType(CollectionType value) {
-<span class="fc" id="L91">        this.collectionType = value;</span>
-<span class="fc" id="L92">    }</span>
+<span class="fc" id="L92">        this.collectionType = value;</span>
+<span class="fc" id="L93">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

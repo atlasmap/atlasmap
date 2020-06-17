@@ -3,12 +3,13 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 @JsonRootName(&quot;AtlasMappingResult&quot;)
-<span class="nc" id="L9">public class AtlasMappingResult implements Serializable {</span>
+<span class="nc" id="L10">public class AtlasMappingResult implements Serializable {</span>
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected List&lt;TargetDocument&gt; targetDocuments;
 
@@ -37,10 +38,10 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      * @return A list of {@link TargetDocument}
      */
     public List&lt;TargetDocument&gt; getTargetDocuments() {
-<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (targetDocuments == null) {</span>
-<span class="nc" id="L41">            targetDocuments = new ArrayList&lt;TargetDocument&gt;();</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (targetDocuments == null) {</span>
+<span class="nc" id="L42">            targetDocuments = new ArrayList&lt;TargetDocument&gt;();</span>
         }
-<span class="nc" id="L43">        return this.targetDocuments;</span>
+<span class="nc" id="L44">        return this.targetDocuments;</span>
     }
 
     /**
@@ -52,7 +53,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      *     
      */
     public Audits getAudits() {
-<span class="nc" id="L55">        return audits;</span>
+<span class="nc" id="L56">        return audits;</span>
     }
 
     /**
@@ -64,8 +65,8 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      *     
      */
     public void setAudits(Audits value) {
-<span class="nc" id="L67">        this.audits = value;</span>
-<span class="nc" id="L68">    }</span>
+<span class="nc" id="L68">        this.audits = value;</span>
+<span class="nc" id="L69">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

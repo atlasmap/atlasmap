@@ -19,7 +19,6 @@ import java.util.List;
 
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.spi.FieldDirection;
-import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
@@ -29,31 +28,31 @@ public class MultipleFieldSelectionValidator {
 
     private BaseModuleValidationService&lt;?&gt; service;
 
-<span class="nc" id="L32">    public MultipleFieldSelectionValidator(BaseModuleValidationService&lt;?&gt; service) {</span>
-<span class="nc" id="L33">        this.service = service;</span>
-<span class="nc" id="L34">    }</span>
+<span class="nc" id="L31">    public MultipleFieldSelectionValidator(BaseModuleValidationService&lt;?&gt; service) {</span>
+<span class="nc" id="L32">        this.service = service;</span>
+<span class="nc" id="L33">    }</span>
 
     public void validate(List&lt;Validation&gt; validations, String mappingId, FieldDirection direction, List&lt;Field&gt; fields) {
-<span class="nc bnc" id="L37" title="All 2 branches missed.">        if (fields.size() &lt;= 1) {</span>
-<span class="nc" id="L38">            return;</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">        if (fields.size() &lt;= 1) {</span>
+<span class="nc" id="L37">            return;</span>
         }
-<span class="nc bnc" id="L40" title="All 2 branches missed.">        for (Field f : fields) {</span>
-<span class="nc bnc" id="L41" title="All 2 branches missed.">            if (!service.matchDocIdOrNull(f.getDocId())) {</span>
-<span class="nc" id="L42">                continue;</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">        for (Field f : fields) {</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">            if (!service.matchDocIdOrNull(f.getDocId())) {</span>
+<span class="nc" id="L41">                continue;</span>
             }
-<span class="nc" id="L44">            AtlasPath path = new AtlasPath(f.getPath());</span>
-<span class="nc bnc" id="L45" title="All 2 branches missed.">            if (path.hasCollection()) {</span>
-<span class="nc" id="L46">                Validation validation = new Validation();</span>
-<span class="nc" id="L47">                validation.setScope(ValidationScope.MAPPING);</span>
-<span class="nc" id="L48">                validation.setId(mappingId);</span>
-<span class="nc" id="L49">                validation.setMessage(String.format(</span>
+<span class="nc" id="L43">            AtlasPath path = new AtlasPath(f.getPath());</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">            if (path.hasCollection()) {</span>
+<span class="nc" id="L45">                Validation validation = new Validation();</span>
+<span class="nc" id="L46">                validation.setScope(ValidationScope.MAPPING);</span>
+<span class="nc" id="L47">                validation.setId(mappingId);</span>
+<span class="nc" id="L48">                validation.setMessage(String.format(</span>
                     &quot;A %s field contained in a collection can not be selected with other %s field: ['%s']&quot;,
-<span class="nc" id="L51">                    direction.value(), direction.value(), f.getPath()));</span>
-<span class="nc" id="L52">                validation.setStatus(ValidationStatus.ERROR);</span>
-<span class="nc" id="L53">                validations.add(validation);</span>
+<span class="nc" id="L50">                    direction.value(), direction.value(), f.getPath()));</span>
+<span class="nc" id="L51">                validation.setStatus(ValidationStatus.ERROR);</span>
+<span class="nc" id="L52">                validations.add(validation);</span>
             }
-<span class="nc" id="L55">        }</span>
-<span class="nc" id="L56">    }</span>
+<span class="nc" id="L54">        }</span>
+<span class="nc" id="L55">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

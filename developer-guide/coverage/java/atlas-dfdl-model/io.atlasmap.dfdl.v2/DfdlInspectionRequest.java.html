@@ -21,16 +21,17 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import io.atlasmap.xml.v2.XmlInspectionRequest;
 
 @JsonRootName(&quot;DfdlInspectionRequest&quot;)
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L28">public class DfdlInspectionRequest extends XmlInspectionRequest implements Serializable {</span>
+<span class="fc" id="L29">public class DfdlInspectionRequest extends XmlInspectionRequest implements Serializable {</span>
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected String dfdlSchemaName;
-<span class="fc" id="L33">    protected Map&lt;String, String&gt; options = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L34">    protected Map&lt;String, String&gt; options = new HashMap&lt;&gt;();</span>
 
     /**
      * Gets the value of the options property.
@@ -41,7 +42,7 @@ import io.atlasmap.xml.v2.XmlInspectionRequest;
      *     
      */
     public Map&lt;String, String&gt; getOptions() {
-<span class="fc" id="L44">        return this.options;</span>
+<span class="fc" id="L45">        return this.options;</span>
     }
 
     /**
@@ -53,8 +54,8 @@ import io.atlasmap.xml.v2.XmlInspectionRequest;
      *     
      */
     public void setOptions(Map&lt;String, String&gt; options) {
-<span class="nc" id="L56">        this.options = options;</span>
-<span class="nc" id="L57">    }</span>
+<span class="nc" id="L57">        this.options = options;</span>
+<span class="nc" id="L58">    }</span>
 
     /**
      * Gets the value of the dfdlSchemaName property.
@@ -65,7 +66,7 @@ import io.atlasmap.xml.v2.XmlInspectionRequest;
      *     
      */
     public String getDfdlSchemaName() {
-<span class="fc" id="L68">        return dfdlSchemaName;</span>
+<span class="fc" id="L69">        return dfdlSchemaName;</span>
     }
 
     /**
@@ -77,64 +78,64 @@ import io.atlasmap.xml.v2.XmlInspectionRequest;
      *     
      */
     public void setDfdlSchemaName(String value) {
-<span class="fc" id="L80">        this.dfdlSchemaName = value;</span>
-<span class="fc" id="L81">    }</span>
+<span class="fc" id="L81">        this.dfdlSchemaName = value;</span>
+<span class="fc" id="L82">    }</span>
 
     public boolean equals(Object object) {
-<span class="nc bnc" id="L84" title="All 4 branches missed.">        if (!super.equals(object) || !(object instanceof DfdlInspectionRequest)) {</span>
-<span class="nc" id="L85">            return false;</span>
+<span class="nc bnc" id="L85" title="All 4 branches missed.">        if (!super.equals(object) || !(object instanceof DfdlInspectionRequest)) {</span>
+<span class="nc" id="L86">            return false;</span>
         }
-<span class="nc" id="L87">        final DfdlInspectionRequest that = ((DfdlInspectionRequest) object);</span>
+<span class="nc" id="L88">        final DfdlInspectionRequest that = ((DfdlInspectionRequest) object);</span>
         Map&lt;String, String&gt; leftOptions;
-<span class="nc" id="L89">        leftOptions = this.getOptions();</span>
+<span class="nc" id="L90">        leftOptions = this.getOptions();</span>
         Map&lt;String, String&gt; rightOptions;
-<span class="nc" id="L91">        rightOptions = that.getOptions();</span>
-<span class="nc bnc" id="L92" title="All 2 branches missed.">        if (leftOptions !=  null) {</span>
-<span class="nc bnc" id="L93" title="All 2 branches missed.">            if (rightOptions != null) {</span>
-<span class="nc bnc" id="L94" title="All 2 branches missed.">                if (!leftOptions.equals(rightOptions)) {</span>
-<span class="nc" id="L95">                    return false;</span>
+<span class="nc" id="L92">        rightOptions = that.getOptions();</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        if (leftOptions !=  null) {</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">            if (rightOptions != null) {</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">                if (!leftOptions.equals(rightOptions)) {</span>
+<span class="nc" id="L96">                    return false;</span>
                 }
             } else {
-<span class="nc" id="L98">                return false;</span>
+<span class="nc" id="L99">                return false;</span>
             }
         } else {
-<span class="nc bnc" id="L101" title="All 2 branches missed.">            if (rightOptions != null) {</span>
-<span class="nc" id="L102">                return false;</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">            if (rightOptions != null) {</span>
+<span class="nc" id="L103">                return false;</span>
             }
         }
         String leftDfdl;
-<span class="nc" id="L106">        leftDfdl = this.getDfdlSchemaName();</span>
+<span class="nc" id="L107">        leftDfdl = this.getDfdlSchemaName();</span>
         String rightDfdl;
-<span class="nc" id="L108">        rightDfdl = that.getDfdlSchemaName();</span>
-<span class="nc bnc" id="L109" title="All 2 branches missed.">        if (leftDfdl != null) {</span>
-<span class="nc bnc" id="L110" title="All 2 branches missed.">            if (rightDfdl != null) {</span>
-<span class="nc bnc" id="L111" title="All 2 branches missed.">                if (!leftDfdl.equals(rightDfdl)) {</span>
-<span class="nc" id="L112">                    return false;</span>
+<span class="nc" id="L109">        rightDfdl = that.getDfdlSchemaName();</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">        if (leftDfdl != null) {</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">            if (rightDfdl != null) {</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">                if (!leftDfdl.equals(rightDfdl)) {</span>
+<span class="nc" id="L113">                    return false;</span>
                 }
             } else {
-<span class="nc" id="L115">                return false;</span>
+<span class="nc" id="L116">                return false;</span>
             }
         } else {
-<span class="nc bnc" id="L118" title="All 2 branches missed.">            if (rightDfdl != null) {</span>
-<span class="nc" id="L119">                return false;</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">            if (rightDfdl != null) {</span>
+<span class="nc" id="L120">                return false;</span>
             }
         }
-<span class="nc" id="L122">        return true;</span>
+<span class="nc" id="L123">        return true;</span>
     }
 
     public int hashCode() {
-<span class="nc" id="L126">        int currentHashCode = super.hashCode();</span>
-<span class="nc" id="L127">        currentHashCode = (currentHashCode* 31);</span>
-<span class="nc" id="L128">        Map&lt;String, String&gt; theOptions = this.getOptions();</span>
-<span class="nc bnc" id="L129" title="All 2 branches missed.">        if (this.options != null) {</span>
-<span class="nc" id="L130">            currentHashCode += theOptions.hashCode();</span>
+<span class="nc" id="L127">        int currentHashCode = super.hashCode();</span>
+<span class="nc" id="L128">        currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L129">        Map&lt;String, String&gt; theOptions = this.getOptions();</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">        if (this.options != null) {</span>
+<span class="nc" id="L131">            currentHashCode += theOptions.hashCode();</span>
         }
-<span class="nc" id="L132">        currentHashCode = (currentHashCode* 31);</span>
-<span class="nc" id="L133">        String theDfdl = this.getDfdlSchemaName();</span>
-<span class="nc bnc" id="L134" title="All 2 branches missed.">        if (theDfdl != null) {</span>
-<span class="nc" id="L135">            currentHashCode += theDfdl.hashCode();</span>
+<span class="nc" id="L133">        currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L134">        String theDfdl = this.getDfdlSchemaName();</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">        if (theDfdl != null) {</span>
+<span class="nc" id="L136">            currentHashCode += theDfdl.hashCode();</span>
         }
-<span class="nc" id="L137">        return currentHashCode;</span>
+<span class="nc" id="L138">        return currentHashCode;</span>
     }
 
 }

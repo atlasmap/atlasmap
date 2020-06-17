@@ -30,7 +30,6 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.dfdl.core.DfdlSchemaGenerator;
 
 /**
  * DFDL schema resolver resolves DFDL schema file to be used to process DFDL document.
@@ -42,40 +41,40 @@ public class DfdlSchemaResolver {
     private ClassLoader classLoader;
     private Map&lt;String, DfdlSchemaGenerator&gt; dfdlGenerators;
 
-<span class="fc" id="L45">    public DfdlSchemaResolver(ClassLoader loader) {</span>
-<span class="fc" id="L46">        this.classLoader = loader;</span>
-<span class="fc" id="L47">        this.dfdlGenerators = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L48">        ServiceLoader&lt;DfdlSchemaGenerator&gt; schemaGenLoader = ServiceLoader.load(DfdlSchemaGenerator.class, this.classLoader);</span>
-<span class="fc bfc" id="L49" title="All 2 branches covered.">        for (DfdlSchemaGenerator generator : schemaGenLoader) {</span>
-<span class="fc" id="L50">            this.dfdlGenerators.put(generator.getName(), generator);</span>
-<span class="fc" id="L51">        }</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L44">    public DfdlSchemaResolver(ClassLoader loader) {</span>
+<span class="fc" id="L45">        this.classLoader = loader;</span>
+<span class="fc" id="L46">        this.dfdlGenerators = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L47">        ServiceLoader&lt;DfdlSchemaGenerator&gt; schemaGenLoader = ServiceLoader.load(DfdlSchemaGenerator.class, this.classLoader);</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        for (DfdlSchemaGenerator generator : schemaGenLoader) {</span>
+<span class="fc" id="L49">            this.dfdlGenerators.put(generator.getName(), generator);</span>
+<span class="fc" id="L50">        }</span>
+<span class="fc" id="L51">    }</span>
 
     public URI resolve(String dfdlSchemaName, Map&lt;String, String&gt; options) throws Exception {
-<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if (dfdlSchemaName == null) {</span>
-<span class="nc" id="L56">            throw new AtlasException(&quot;DFDL schema name must be specified&quot;);</span>
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        if (dfdlSchemaName == null) {</span>
+<span class="nc" id="L55">            throw new AtlasException(&quot;DFDL schema name must be specified&quot;);</span>
         }
-<span class="fc" id="L58">        URL url = null;</span>
+<span class="fc" id="L57">        URL url = null;</span>
         try {
-<span class="fc" id="L60">            url = classLoader.getResource(dfdlSchemaName + &quot;.dfdl.xsd&quot;);</span>
-<span class="pc" id="L61">        } catch (Exception e) {}</span>
-<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        if (url != null) {</span>
-<span class="nc" id="L63">            return url.toURI();</span>
+<span class="fc" id="L59">            url = classLoader.getResource(dfdlSchemaName + &quot;.dfdl.xsd&quot;);</span>
+<span class="pc" id="L60">        } catch (Exception e) {}</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        if (url != null) {</span>
+<span class="nc" id="L62">            return url.toURI();</span>
         }
 
-<span class="fc" id="L66">        DfdlSchemaGenerator generator = this.dfdlGenerators.get(dfdlSchemaName);</span>
-<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if (generator != null) {</span>
-<span class="fc" id="L68">            Document xsd = generator.generate(classLoader, options);</span>
-<span class="fc" id="L69">            File f = File.createTempFile(dfdlSchemaName, &quot;.dfdl.xsd&quot;);</span>
-<span class="fc" id="L70">            f.deleteOnExit();</span>
-<span class="fc" id="L71">            Transformer transformer = TransformerFactory.newInstance().newTransformer();</span>
-<span class="fc" id="L72">            DOMSource source = new DOMSource(xsd);</span>
-<span class="fc" id="L73">            StreamResult result = new StreamResult(f);</span>
-<span class="fc" id="L74">            transformer.transform(source, result);</span>
-<span class="fc" id="L75">            return f.toURI();</span>
+<span class="fc" id="L65">        DfdlSchemaGenerator generator = this.dfdlGenerators.get(dfdlSchemaName);</span>
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        if (generator != null) {</span>
+<span class="fc" id="L67">            Document xsd = generator.generate(classLoader, options);</span>
+<span class="fc" id="L68">            File f = File.createTempFile(dfdlSchemaName, &quot;.dfdl.xsd&quot;);</span>
+<span class="fc" id="L69">            f.deleteOnExit();</span>
+<span class="fc" id="L70">            Transformer transformer = TransformerFactory.newInstance().newTransformer();</span>
+<span class="fc" id="L71">            DOMSource source = new DOMSource(xsd);</span>
+<span class="fc" id="L72">            StreamResult result = new StreamResult(f);</span>
+<span class="fc" id="L73">            transformer.transform(source, result);</span>
+<span class="fc" id="L74">            return f.toURI();</span>
         }
 
-<span class="nc" id="L78">        throw new AtlasException(String.format(&quot;DFDL schema not found for '%s'&quot;, dfdlSchemaName));</span>
+<span class="nc" id="L77">        throw new AtlasException(String.format(&quot;DFDL schema not found for '%s'&quot;, dfdlSchemaName));</span>
     }
 
 }

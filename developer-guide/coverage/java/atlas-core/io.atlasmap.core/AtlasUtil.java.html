@@ -37,11 +37,11 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import io.atlasmap.spi.AtlasInternalSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasSession;
+import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Validation;
@@ -469,44 +469,45 @@ import io.atlasmap.v2.ValidationStatus;
 <span class="nc" id="L469">        File[] allContents = targetDir.listFiles();</span>
 <span class="nc bnc" id="L470" title="All 2 branches missed.">        if (allContents != null) {</span>
 <span class="nc bnc" id="L471" title="All 2 branches missed.">            for (File element : allContents) {</span>
-<span class="nc bnc" id="L472" title="All 2 branches missed.">                if (element.isFile())</span>
+<span class="nc bnc" id="L472" title="All 2 branches missed.">                if (element.isFile()) {</span>
 <span class="nc" id="L473">                    element.delete();</span>
-<span class="nc bnc" id="L474" title="All 2 branches missed.">                else if (element.isDirectory())</span>
+<span class="nc bnc" id="L474" title="All 2 branches missed.">                } else if (element.isDirectory()) {</span>
 <span class="nc" id="L475">                    deleteDirectory(element);</span>
+                }
             }
         }
-<span class="nc" id="L478">        return;</span>
+<span class="nc" id="L479">        return;</span>
     }
 
     public static void copyFile(Path sourcePath, Path destPath) throws IOException {
-<span class="nc" id="L482">        File source = new File(sourcePath.toString());</span>
-<span class="nc" id="L483">        File dest = new File(destPath.toString());</span>
+<span class="nc" id="L483">        File source = new File(sourcePath.toString());</span>
+<span class="nc" id="L484">        File dest = new File(destPath.toString());</span>
 
-<span class="nc bnc" id="L485" title="All 2 branches missed.">        if (!dest.exists()) {</span>
-<span class="nc" id="L486">            dest.createNewFile();</span>
+<span class="nc bnc" id="L486" title="All 2 branches missed.">        if (!dest.exists()) {</span>
+<span class="nc" id="L487">            dest.createNewFile();</span>
         }
-<span class="nc" id="L488">        InputStream in = null;</span>
-<span class="nc" id="L489">        OutputStream out = null;</span>
+<span class="nc" id="L489">        InputStream in = null;</span>
+<span class="nc" id="L490">        OutputStream out = null;</span>
         try {
-<span class="nc" id="L491">            in = new FileInputStream(source);</span>
-<span class="nc" id="L492">            out = new FileOutputStream(dest);</span>
+<span class="nc" id="L492">            in = new FileInputStream(source);</span>
+<span class="nc" id="L493">            out = new FileOutputStream(dest);</span>
 
             // Transfer bytes from in to out
-<span class="nc" id="L495">            byte[] buf = new byte[1024];</span>
+<span class="nc" id="L496">            byte[] buf = new byte[1024];</span>
             int len;
-<span class="nc bnc" id="L497" title="All 2 branches missed.">            while ((len = in.read(buf)) &gt; 0) {</span>
-<span class="nc" id="L498">                out.write(buf, 0, len);</span>
+<span class="nc bnc" id="L498" title="All 2 branches missed.">            while ((len = in.read(buf)) &gt; 0) {</span>
+<span class="nc" id="L499">                out.write(buf, 0, len);</span>
             }
         }
         finally {
-<span class="nc bnc" id="L502" title="All 2 branches missed.">            if (in != null) {</span>
-<span class="nc" id="L503">                in.close();</span>
+<span class="nc bnc" id="L503" title="All 2 branches missed.">            if (in != null) {</span>
+<span class="nc" id="L504">                in.close();</span>
             }
-<span class="nc bnc" id="L505" title="All 2 branches missed.">            if (out != null) {</span>
-<span class="nc" id="L506">                out.close();</span>
+<span class="nc bnc" id="L506" title="All 2 branches missed.">            if (out != null) {</span>
+<span class="nc" id="L507">                out.close();</span>
             }
         }
-<span class="nc" id="L509">    }</span>
+<span class="nc" id="L510">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

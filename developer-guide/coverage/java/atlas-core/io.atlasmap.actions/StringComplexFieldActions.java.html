@@ -20,8 +20,8 @@ import java.util.Locale;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import io.atlasmap.spi.AtlasFieldAction;
 import io.atlasmap.spi.AtlasActionProcessor;
+import io.atlasmap.spi.AtlasFieldAction;
 import io.atlasmap.v2.Append;
 import io.atlasmap.v2.Concatenate;
 import io.atlasmap.v2.EndsWith;

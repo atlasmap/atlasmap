@@ -23,13 +23,13 @@ import java.util.Map;
 
 import javax.management.openmbean.TabularData;
 
-import io.atlasmap.spi.AtlasCollectionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.mxbean.AtlasModuleMXBean;
+import io.atlasmap.spi.AtlasCollectionHelper;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasInternalSession;

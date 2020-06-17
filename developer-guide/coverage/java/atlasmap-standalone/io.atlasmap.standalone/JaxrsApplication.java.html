@@ -26,11 +26,11 @@ import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import io.atlasmap.csv.service.CsvService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.csv.service.CsvService;
 import io.atlasmap.dfdl.service.DfdlService;
 import io.atlasmap.java.service.JavaService;
 import io.atlasmap.java.v2.MavenClasspathResponse;

@@ -30,22 +30,22 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import io.atlasmap.csv.core.CsvConfig;
-import io.atlasmap.csv.core.CsvFieldReader;
-import io.atlasmap.csv.v2.CsvInspectionResponse;
-import io.atlasmap.v2.Document;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import io.atlasmap.csv.core.CsvConfig;
+import io.atlasmap.csv.core.CsvFieldReader;
+import io.atlasmap.csv.v2.CsvInspectionResponse;
+import io.atlasmap.v2.Document;
 import io.atlasmap.v2.Json;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @Path(&quot;/csv/&quot;)
 <span class="fc" id="L51">public class CsvService {</span>

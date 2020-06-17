@@ -3,13 +3,14 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 
 @JsonRootName(&quot;ActionDetails&quot;)
-<span class="fc" id="L10">public class ActionDetails implements Serializable {</span>
+<span class="fc" id="L11">public class ActionDetails implements Serializable {</span>
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected List&lt;ActionDetail&gt; actionDetail;
 
@@ -36,10 +37,10 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      * @return A list of {@link ActionDetail}
      */
     public List&lt;ActionDetail&gt; getActionDetail() {
-<span class="fc bfc" id="L39" title="All 2 branches covered.">        if (actionDetail == null) {</span>
-<span class="fc" id="L40">            actionDetail = new ArrayList&lt;ActionDetail&gt;();</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        if (actionDetail == null) {</span>
+<span class="fc" id="L41">            actionDetail = new ArrayList&lt;ActionDetail&gt;();</span>
         }
-<span class="fc" id="L42">        return this.actionDetail;</span>
+<span class="fc" id="L43">        return this.actionDetail;</span>
     }
 
 }

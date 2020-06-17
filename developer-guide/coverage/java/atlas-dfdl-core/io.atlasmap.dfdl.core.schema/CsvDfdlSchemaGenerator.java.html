@@ -36,9 +36,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import io.atlasmap.dfdl.core.DfdlSchemaGenerator;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.dfdl.core.DfdlConstants;
+import io.atlasmap.dfdl.core.DfdlSchemaGenerator;
 import io.atlasmap.xml.core.XmlIOHelper;
 
 /**
@@ -130,7 +130,7 @@ import io.atlasmap.xml.core.XmlIOHelper;
     class NamespaceResolver implements NamespaceContext {
 <span class="fc" id="L131">        private Map&lt;String, String&gt; nsmap = new HashMap&lt;&gt;();</span>
 
-<span class="fc" id="L133">        public NamespaceResolver() {</span>
+<span class="fc" id="L133">        NamespaceResolver() {</span>
 <span class="fc" id="L134">            nsmap.put(&quot;xs&quot;, NS_XS);</span>
 <span class="fc" id="L135">            nsmap.put(&quot;dfdl&quot;, NS_DFDL);</span>
 <span class="fc" id="L136">            nsmap.put(&quot;atlas&quot;, NS_ATLAS);</span>

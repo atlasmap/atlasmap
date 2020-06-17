@@ -4,14 +4,13 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-<span class="fc" id="L7">public class ReplaceFirst extends Action implements Serializable</span>
-{
+<span class="fc" id="L7">public class ReplaceFirst extends Action implements Serializable {</span>
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    protected String match;
+    private String match;
 
-    protected String newString;
+    private String newString;
 
     /**
      * Gets the value of the match property.
@@ -19,15 +18,15 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     * 
      */
     public String getMatch() {
-<span class="fc" id="L25">        return match;</span>
+<span class="fc" id="L24">        return match;</span>
     }
 
     /**
      * Sets the value of the match property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
@@ -36,8 +35,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
     @JsonPropertyDescription(&quot;The string to match&quot;)
     @AtlasActionProperty(title = &quot;Match&quot;, type = FieldType.STRING)
     public void setMatch(String value) {
-<span class="fc" id="L39">        this.match = value;</span>
-<span class="fc" id="L40">    }</span>
+<span class="fc" id="L38">        this.match = value;</span>
+<span class="fc" id="L39">    }</span>
 
     /**
      * Gets the value of the newString property.
@@ -48,7 +47,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
      *     
      */
     public String getNewString() {
-<span class="fc" id="L51">        return newString;</span>
+<span class="fc" id="L50">        return newString;</span>
     }
 
     /**
@@ -62,8 +61,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
     @JsonPropertyDescription(&quot;The string to replace with&quot;)
     @AtlasActionProperty(title = &quot;New string&quot;, type = FieldType.STRING)
     public void setNewString(String value) {
-<span class="fc" id="L65">        this.newString = value;</span>
-<span class="fc" id="L66">    }</span>
+<span class="fc" id="L64">        this.newString = value;</span>
+<span class="fc" id="L65">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

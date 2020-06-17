@@ -16,6 +16,7 @@
 package io.atlasmap.dfdl.v2;
 
 import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -23,9 +24,9 @@ import io.atlasmap.xml.v2.XmlInspectionResponse;
 
 @JsonRootName(&quot;DfdlInspectionResponse&quot;)
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L26">public class DfdlInspectionResponse extends XmlInspectionResponse implements Serializable {</span>
+<span class="fc" id="L27">public class DfdlInspectionResponse extends XmlInspectionResponse implements Serializable {</span>
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

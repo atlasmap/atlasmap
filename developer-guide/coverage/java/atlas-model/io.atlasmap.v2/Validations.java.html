@@ -3,12 +3,13 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 @JsonRootName(&quot;Validations&quot;)
-<span class="fc" id="L9">public class Validations implements Serializable {</span>
+<span class="fc" id="L10">public class Validations implements Serializable {</span>
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     protected List&lt;Validation&gt; validation;
 
@@ -35,10 +36,10 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      * @return A list of {@link Validation}
      */
     public List&lt;Validation&gt; getValidation() {
-<span class="fc bfc" id="L38" title="All 2 branches covered.">        if (validation == null) {</span>
-<span class="fc" id="L39">            validation = new ArrayList&lt;Validation&gt;();</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        if (validation == null) {</span>
+<span class="fc" id="L40">            validation = new ArrayList&lt;Validation&gt;();</span>
         }
-<span class="fc" id="L41">        return this.validation;</span>
+<span class="fc" id="L42">        return this.validation;</span>
     }
 
 }

@@ -27,7 +27,7 @@ import org.xml.sax.SAXException;
 class XSOMClasspathEntityResolver implements EntityResolver {
     private ClassLoader classLoader;
 
-<span class="fc" id="L30">    public XSOMClasspathEntityResolver(ClassLoader loader) {</span>
+<span class="fc" id="L30">    XSOMClasspathEntityResolver(ClassLoader loader) {</span>
 <span class="fc bfc" id="L31" title="All 2 branches covered.">        this.classLoader = loader != null ? loader : XSOMClasspathEntityResolver.class.getClassLoader();</span>
 <span class="fc" id="L32">    }</span>
 
