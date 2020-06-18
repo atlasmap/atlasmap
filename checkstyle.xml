@@ -23,8 +23,28 @@
 <module name="Checker">
   <!-- http://checkstyle.sourceforge.net/config_filters.html -->
   <module name="SuppressWarningsFilter" />
-  <module name="SuppressionFilter">
-    <property name="file" value="${checkstyle.suppression.file}"/>
+
+  <!-- https://github.com/atlasmap/atlasmap/issues/2195 -->
+  <!--  Inlined, since external file prevents running from sub module -->
+  <module name="SuppressionSingleFilter">
+    <property name="checks" value=".*"/>
+    <property name="files" value="[\\/]generated-sources[\\/]"/>
+  </module>
+  <module name="SuppressionSingleFilter">
+    <property name="checks" value=".*"/>
+    <property name="files" value="[\\/]licenses[\\/]"/>
+  </module>
+  <module name="SuppressionSingleFilter">
+    <property name="checks" value=".*"/>
+    <property name="files" value="com[\\/]sun[\\/]"/>
+  </module>
+  <module name="SuppressionSingleFilter">
+    <property name="checks" value=".*"/>
+    <property name="files" value=".+\.(?:html|class|adm|txt|MF|rng)$"/>
+  </module>
+  <module name="SuppressionSingleFilter">
+    <property name="checks" value=".*"/>
+    <property name="files" value="fhir-single.xsd"/>
   </module>
 
   <!-- http://checkstyle.sourceforge.net/config_misc.html -->
