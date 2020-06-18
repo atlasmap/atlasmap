@@ -29,6 +29,7 @@ export const MappingDetailsSidebar: FunctionComponent<IMappingDetailsSidebarProp
       <StackItem>
         <ColumnHeader
           title={"Mapping Details"}
+          variant={"plain"}
           actions={[
             <Button
               onClick={onClose}

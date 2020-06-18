@@ -12,31 +12,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export interface ILinkEdgeProps {
-  start: Coords;
-  end: Coords;
-  strokeWidth?: number;
-  color?: string;
-}
-
-const ArcEdge: FunctionComponent<ILinkEdgeProps> = ({
-  start,
-  end,
-  strokeWidth,
-  color,
-}) => {
-  return (
-    <line
-      x1={start.x}
-      y1={start.y}
-      x2={end.x}
-      y2={end.y}
-      stroke={color}
-      strokeWidth={strokeWidth}
-    />
-  );
-};
-
 export interface IArcProps extends Omit<SVGAttributes<SVGPathElement>, "end"> {
   start: Coords;
   end: Coords;
@@ -60,6 +35,7 @@ export const Arc: FunctionComponent<IArcProps> = ({
   endSideSize = strokeWidth,
   sideStrokeWidth = 5,
   className,
+  children,
   ...props
 }) => {
   const {
@@ -90,7 +66,11 @@ export const Arc: FunctionComponent<IArcProps> = ({
   startSideSize = startSideSize / 2;
   endSideSize = endSideSize / 2;
   return d ? (
-    <g onMouseEnter={toggleHoverOn} onMouseLeave={toggleHoverOff}>
+    <g
+      onMouseEnter={toggleHoverOn}
+      onMouseLeave={toggleHoverOff}
+      style={{ pointerEvents: "all" }}
+    >
       <path d={d} stroke={appliedColor} strokeWidth={s} fill={"none"} />
       <path
         d={d}
@@ -100,46 +80,7 @@ export const Arc: FunctionComponent<IArcProps> = ({
         className={css(props.onClick && styles.clickable)}
         {...props}
       />
-      <ArcEdge
-        start={
-          type === "horizontal"
-            ? {
-                x: start.x - sideStrokeWidth / 2,
-                y: start.y - startSideSize + 1,
-              }
-            : {
-                x: start.x - startSideSize + 1,
-                y: start.y - sideStrokeWidth / 2,
-              }
-        }
-        end={
-          type === "horizontal"
-            ? {
-                x: start.x - sideStrokeWidth / 2,
-                y: start.y + startSideSize - 1,
-              }
-            : {
-                x: start.x + startSideSize - 1,
-                y: start.y - sideStrokeWidth / 2,
-              }
-        }
-        color={appliedColor}
-        strokeWidth={sideStrokeWidth}
-      />
-      <ArcEdge
-        start={
-          type === "horizontal"
-            ? { x: end.x + sideStrokeWidth / 2, y: end.y - endSideSize + 1 }
-            : { x: end.x - endSideSize + 1, y: end.y + sideStrokeWidth / 2 }
-        }
-        end={
-          type === "horizontal"
-            ? { x: end.x + sideStrokeWidth / 2, y: end.y + endSideSize - 1 }
-            : { x: end.x + endSideSize - 1, y: end.y + sideStrokeWidth / 2 }
-        }
-        color={appliedColor}
-        strokeWidth={sideStrokeWidth}
-      />
+      {children}
     </g>
   ) : null;
 };

@@ -18,7 +18,7 @@ export interface ITreeItemProps extends HTMLAttributes<HTMLDivElement> {
 export const TreeItem = forwardRef<
   HTMLDivElement,
   PropsWithChildren<ITreeItemProps>
->(({ level, setSize, position, children, ...props }, ref) => {
+>(function TreeItem({ level, setSize, position, children, ...props }, ref) {
   const divRef = useRef<HTMLDivElement | null>(null);
   const { focused, handlers: focusHandlers } = useTreeFocus({
     ref: divRef,

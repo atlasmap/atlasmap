@@ -1,6 +1,6 @@
 import React from "react";
 
-import { render, fireEvent, act } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { SearchableColumnHeader } from "./SearchableColumnHeader";
@@ -13,17 +13,11 @@ describe("SearchableColumnHeader tests", () => {
   });
 
   test("change events are propagated when typing", async () => {
-    const searchButtonLabel = "Toggle search input";
     const searchInputLabel = "Search fields";
     const onSearchSpy = jest.fn();
-    const { getByLabelText, queryByLabelText, findByLabelText } = render(
+    const { findByLabelText } = render(
       <SearchableColumnHeader title={"Source"} onSearch={onSearchSpy} />,
     );
-    expect(queryByLabelText(searchInputLabel)).toBeNull();
-
-    act(() => {
-      fireEvent.click(getByLabelText(searchButtonLabel));
-    });
 
     const inputField = await findByLabelText(searchInputLabel);
 

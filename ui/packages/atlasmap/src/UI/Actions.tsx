@@ -1,20 +1,24 @@
 import React, { Children, FunctionComponent } from "react";
 
-import { Toolbar, ToolbarItem } from "@patternfly/react-core";
 import { css, StyleSheet } from "@patternfly/react-styles";
 
 const styles = StyleSheet.create({
+  toolbar: {
+    display: "flex",
+    flexFlow: "row no-wrap",
+  },
   toolbarItem: {
     minWidth: "1.5rem",
+    flex: "0 1 auto",
   },
 });
 
 export const Actions: FunctionComponent = ({ children }) => (
-  <Toolbar>
+  <div className={css(styles.toolbar)}>
     {Children.map(children, (c, idx) => (
-      <ToolbarItem className={css(styles.toolbarItem)} key={idx}>
+      <div className={css(styles.toolbarItem)} key={idx}>
         {c}
-      </ToolbarItem>
+      </div>
     ))}
-  </Toolbar>
+  </div>
 );

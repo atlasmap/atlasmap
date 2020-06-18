@@ -9,7 +9,6 @@ import {
   FormGroup,
 } from "@patternfly/react-core";
 import { TrashIcon } from "@patternfly/react-icons";
-import { css, StyleSheet } from "@patternfly/react-styles";
 
 export interface ITransformationSelectOption {
   name: string;
@@ -22,24 +21,6 @@ export interface ITransformationArgument {
   value: string;
   options?: ITransformationSelectOption[];
 }
-
-const styles = StyleSheet.create({
-  wrapper: {},
-  wrapperPadded: {
-    padding: "1rem",
-    "& + &": {
-      borderTop:
-        "var(--pf-global--BorderWidth--md) solid var(--pf-global--BorderColor--300)",
-    },
-    "&:last-child": {
-      borderBottom:
-        "var(--pf-global--BorderWidth--sm) solid var(--pf-global--BorderColor--100)",
-    },
-  },
-  spaced: {
-    margin: "var(--pf-global--spacer--form-element) 0",
-  },
-});
 
 export interface IMappingTransformationProps {
   name: string;
@@ -60,12 +41,11 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
   onTransformationArgumentChange,
   onTransformationChange,
   onRemoveTransformation,
-  noPaddings = false,
 }) => {
   const id = `user-field-action-${name}`;
   return (
-    <div className={css(styles.wrapper, !noPaddings && styles.wrapperPadded)}>
-      <div className={css(styles.spaced)}>
+    <>
+      <FormGroup fieldId={`${id}-transformation`}>
         <InputGroup style={{ background: "transparent" }}>
           <FormSelect
             value={name}
@@ -89,14 +69,15 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
             </Button>
           )}
         </InputGroup>
-      </div>
-      {transformationsArguments.map((a, idx) => (
-        <div className={css(styles.spaced)} key={idx}>
-          <FormGroup label={a.label} fieldId={a.name}>
+      </FormGroup>
+      {transformationsArguments.map((a, idx) => {
+        const argId = `${id}-transformation-${idx}`;
+        return (
+          <FormGroup fieldId={argId} label={a.label} key={idx}>
             {a.options ? (
               <FormSelect
                 value={a.value}
-                id={a.name}
+                id={argId}
                 isDisabled={disableTransformation}
                 onChange={(value) =>
                   onTransformationArgumentChange(a.name, value)
@@ -113,7 +94,7 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
               </FormSelect>
             ) : (
               <TextInput
-                id={a.name}
+                id={argId}
                 type="text"
                 name={a.name}
                 isDisabled={disableTransformation}
@@ -127,8 +108,8 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
               />
             )}
           </FormGroup>
-        </div>
-      ))}
-    </div>
+        );
+      })}
+    </>
   );
 };

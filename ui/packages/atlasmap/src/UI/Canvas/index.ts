@@ -3,6 +3,7 @@ export * from "./CanvasContext";
 export * from "./CanvasTransforms";
 export * from "./HTMLObject";
 export * from "./Arc";
+export * from "./ArcEdge";
 export * from "./models";
 export * from "./Movable";
 export * from "./NodeRef";

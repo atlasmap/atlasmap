@@ -4,6 +4,7 @@ import { boolean } from "@storybook/addon-knobs";
 import { action } from "@storybook/addon-actions";
 
 import { MappingTransformation } from "./MappingTransformation";
+import { Form } from "@patternfly/react-core";
 
 export default {
   title: "UI|Mapping Details/Transformation",
@@ -48,7 +49,6 @@ export const example = () => (
     name={"Sample transformation"}
     transformationsOptions={transformationsOptions}
     transformationsArguments={transformationsArguments}
-    noPaddings={boolean("Hide paddings", true)}
     onTransformationArgumentChange={action("onActionArgumentChange")}
     onTransformationChange={action("onActionChange")}
     onRemoveTransformation={action("onRemoveTransformation")}
@@ -61,9 +61,40 @@ export const nonRemovable = () => (
     name={"Sample transformation"}
     transformationsOptions={transformationsOptions}
     transformationsArguments={transformationsArguments}
-    noPaddings={boolean("Hide paddings", true)}
     onTransformationArgumentChange={action("onActionArgumentChange")}
     onTransformationChange={action("onActionChange")}
     disableTransformation={boolean("Expression not enabled", false)}
   />
+);
+
+export const stacked = () => (
+  <Form>
+    <MappingTransformation
+      name={"Sample transformation"}
+      transformationsOptions={transformationsOptions}
+      transformationsArguments={transformationsArguments}
+      onTransformationArgumentChange={action("onActionArgumentChange")}
+      onTransformationChange={action("onActionChange")}
+      onRemoveTransformation={action("onRemoveTransformation")}
+      disableTransformation={boolean("Expression not enabled", false)}
+    />
+    <MappingTransformation
+      name={"Sample transformation"}
+      transformationsOptions={transformationsOptions}
+      transformationsArguments={transformationsArguments}
+      onTransformationArgumentChange={action("onActionArgumentChange")}
+      onTransformationChange={action("onActionChange")}
+      onRemoveTransformation={action("onRemoveTransformation")}
+      disableTransformation={boolean("Expression not enabled", false)}
+    />
+    <MappingTransformation
+      name={"Sample transformation"}
+      transformationsOptions={transformationsOptions}
+      transformationsArguments={transformationsArguments}
+      onTransformationArgumentChange={action("onActionArgumentChange")}
+      onTransformationChange={action("onActionChange")}
+      onRemoveTransformation={action("onRemoveTransformation")}
+      disableTransformation={boolean("Expression not enabled", false)}
+    />
+  </Form>
 );

@@ -133,15 +133,19 @@ export function useNodeRect() {
               overrideWidthRect?.left || dimensions.left,
               boundaryRect.left,
             ),
-            boundaryRect.width + boundaryRect.left,
+            boundaryRect.width + boundaryRect.left - dimensions.width,
           );
+          const isXClipped = x !== (overrideWidthRect?.x || dimensions.x);
           const y = Math.min(
             Math.max(
-              overrideHeightRect?.top || dimensions.top,
+              overrideHeightRect?.top || dimensions.top + dimensions.height / 2,
               boundaryRect.top,
             ),
             boundaryRect.height + boundaryRect.top,
           );
+          const isYClipped =
+            y === boundaryRect.top ||
+            y === boundaryRect.height + boundaryRect.top;
           return {
             width,
             height,
@@ -152,9 +156,7 @@ export function useNodeRect() {
             right: x + width,
             bottom: y + height,
             toJSON: () => "",
-            clipped:
-              x !== (overrideWidthRect?.x || dimensions.x) ||
-              y !== (overrideHeightRect?.y || dimensions.y),
+            clipped: isXClipped || isYClipped,
           };
         }
         return dimensions;

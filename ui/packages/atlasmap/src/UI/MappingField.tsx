@@ -42,10 +42,10 @@ const styles = StyleSheet.create({
   },
   transformationsWrapper: {
     marginTop: "0.5rem",
-  },
-  transformations: {
+    padding: "0.5rem",
     background: "var(--pf-global--BackgroundColor--150)",
   },
+  transformations: {},
 });
 
 export interface IMappingFieldProps {
@@ -138,7 +138,7 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
         field.
         */}
       {children && Children.count(children) > 0 && (
-        <div className={css(styles.transformationsWrapper)}>
+        <div className={css("pf-c-form", styles.transformationsWrapper)}>
           <Title size={"xs"}>Transformations</Title>
           <div className={css(styles.transformations)}>{children}</div>
         </div>
