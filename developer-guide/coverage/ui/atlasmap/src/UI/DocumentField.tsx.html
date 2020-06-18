@@ -189,11 +189,7 @@
 <a name='L131'></a><a href='#L131'>131</a>
 <a name='L132'></a><a href='#L132'>132</a>
 <a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a>
-<a name='L135'></a><a href='#L135'>135</a>
-<a name='L136'></a><a href='#L136'>136</a>
-<a name='L137'></a><a href='#L137'>137</a>
-<a name='L138'></a><a href='#L138'>138</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L134'></a><a href='#L134'>134</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -271,7 +267,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -320,10 +315,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -410,63 +402,59 @@ export interface IDocumentFieldProps {
 export const DocumentField = forwardRef&lt;
   HTMLDivElement,
   PropsWithChildren&lt;IDocumentFieldProps&gt;
-&gt;(
-  (
-    {
-      name,
-      type,
-      icon,
-      statusIcons,
-      actions,
-<span class="branch-1 cbranch-no" title="branch not covered" >      showType = false,</span>
-<span class="branch-1 cbranch-no" title="branch not covered" >      isDragging = false,</span>
-<span class="branch-1 cbranch-no" title="branch not covered" >      isFocused = false,</span>
-<span class="branch-1 cbranch-no" title="branch not covered" >      isSelected = false,</span>
-<span class="branch-1 cbranch-no" title="branch not covered" >      isDisabled = false,</span>
-      children,
-    },
-    ref,
-  ) =&gt; {
-    const {
-      state: isHovering,
-      toggleOff: hideActions,
-      toggleOn: showActions,
-    } = useToggle(false);
-    return (
-      &lt;div
-        ref={ref}
-        className={css(
-          styles.element,
-          isDragging &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >styles.isDragging,</span>
-          isSelected &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >styles.isSelected,</span>
-          isDisabled &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >styles.isDisabled,</span>
-        )}
-        onMouseEnter={!isDisabled ? showActions : <span class="branch-1 cbranch-no" title="branch not covered" >undefined}</span>
-        onMouseLeave={!isDisabled ? hideActions : <span class="branch-1 cbranch-no" title="branch not covered" >undefined}</span>
-      &gt;
-        &lt;div className={css(styles.row)}&gt;
-          {icon &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >&lt;div className={css(styles.nameIcon)}&gt;{icon}&lt;/div&gt;}</span>
-          &lt;div
-            className={css(styles.nameWrapper)}
-            data-testid={`document-${name}-field`}
-          &gt;
-            &lt;TruncatedString&gt;{name}&lt;/TruncatedString&gt;
-            &lt;span&gt;{showType &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >` (${type})`}</span>&lt;/span&gt;
-            &lt;span className={styles.statusIcons}&gt;
-              {statusIcons &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >statusIcons?.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a)}</span></span>
-            &lt;/span&gt;
-          &lt;/div&gt;
-          {(isHovering || isFocused) &amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >actions </span>&amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >!isDisabled </span>&amp;&amp; (
-<span class="branch-4 cbranch-no" title="branch not covered" >            &lt;div className={css(styles.actions)}&gt;</span>
-              {actions?.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a)}</span>
-            &lt;/div&gt;
-          )}
-        &lt;/div&gt;
-        {children}
-      &lt;/div&gt;
-    );
+&gt;(function DocumentField(
+  {
+    name,
+    type,
+    icon,
+    statusIcons,
+    actions,
+<span class="branch-1 cbranch-no" title="branch not covered" >    showType = false,</span>
+<span class="branch-1 cbranch-no" title="branch not covered" >    isDragging = false,</span>
+<span class="branch-1 cbranch-no" title="branch not covered" >    isFocused = false,</span>
+<span class="branch-1 cbranch-no" title="branch not covered" >    isSelected = false,</span>
+<span class="branch-1 cbranch-no" title="branch not covered" >    isDisabled = false,</span>
+    children,
   },
-);
+  ref,
+) {
+  const {
+    state: isHovering,
+    toggleOff: hideActions,
+    toggleOn: showActions,
+  } = useToggle(false);
+  return (
+    &lt;div
+      ref={ref}
+      className={css(
+        styles.element,
+        isDragging &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >styles.isDragging,</span>
+        isSelected &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >styles.isSelected,</span>
+        isDisabled &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >styles.isDisabled,</span>
+      )}
+      onMouseEnter={!isDisabled ? showActions : <span class="branch-1 cbranch-no" title="branch not covered" >undefined}</span>
+      onMouseLeave={!isDisabled ? hideActions : <span class="branch-1 cbranch-no" title="branch not covered" >undefined}</span>
+    &gt;
+      &lt;div className={css(styles.row)}&gt;
+        {icon &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >&lt;div className={css(styles.nameIcon)}&gt;{icon}&lt;/div&gt;}</span>
+        &lt;div
+          className={css(styles.nameWrapper)}
+          data-testid={`document-${name}-field`}
+        &gt;
+          &lt;TruncatedString&gt;{name}&lt;/TruncatedString&gt;
+          &lt;span&gt;{showType &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >` (${type})`}</span>&lt;/span&gt;
+          &lt;span className={styles.statusIcons}&gt;
+            {statusIcons &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >statusIcons?.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a)}</span></span>
+          &lt;/span&gt;
+        &lt;/div&gt;
+        {(isHovering || isFocused) &amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >actions </span>&amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >!isDisabled </span>&amp;&amp; (
+<span class="branch-4 cbranch-no" title="branch not covered" >          &lt;div className={css(styles.actions)}&gt;{actions?.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a)}&lt;/div&gt;</span></span>
+        )}
+      &lt;/div&gt;
+      {children}
+    &lt;/div&gt;
+  );
+});
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -474,7 +462,7 @@ export const DocumentField = forwardRef&lt;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Jun 17 2020 21:34:38 GMT+0000 (Coordinated Universal Time)
+                at Thu Jun 18 2020 09:38:25 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

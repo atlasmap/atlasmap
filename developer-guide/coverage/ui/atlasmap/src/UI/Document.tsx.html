@@ -260,9 +260,7 @@
 <a name='L202'></a><a href='#L202'>202</a>
 <a name='L203'></a><a href='#L203'>203</a>
 <a name='L204'></a><a href='#L204'>204</a>
-<a name='L205'></a><a href='#L205'>205</a>
-<a name='L206'></a><a href='#L206'>206</a>
-<a name='L207'></a><a href='#L207'>207</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L205'></a><a href='#L205'>205</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -354,7 +352,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-yes">16x</span>
@@ -433,7 +430,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -558,122 +554,120 @@ export interface IDocumentProps
 export const Document = forwardRef&lt;
   HTMLDivElement,
   PropsWithChildren&lt;IDocumentProps&gt;
-&gt;(
-  (
-    {
-      id,
-      title,
-      actions,
-      footer,
-<span class="branch-1 cbranch-no" title="branch not covered" >      selected = false,</span>
-<span class="branch-1 cbranch-no" title="branch not covered" >      dropTarget = false,</span>
-<span class="branch-1 cbranch-no" title="branch not covered" >      dropAccepted = false,</span>
-<span class="branch-1 cbranch-no" title="branch not covered" >      stacked = true,</span>
-<span class="branch-1 cbranch-no" title="branch not covered" >      selectable = false,</span>
-<span class="branch-1 cbranch-no" title="branch not covered" >      scrollIntoView = false,</span>
-<span class="branch-1 cbranch-no" title="branch not covered" >      noPadding = false,</span>
-<span class="branch-1 cbranch-no" title="branch not covered" >      noShadows = false,</span>
-<span class="branch-1 cbranch-no" title="branch not covered" >      startExpanded = true,</span>
-      onSelect,
-      onDeselect,
-      children,
-      ...props
-    },
-    ref,
-  ) =&gt; {
-    const { state: isExpanded, toggle: toggleExpanded } = useToggle(
-      startExpanded,
-    );
-    const handleClick = useCallback(
-<span class="fstat-no" title="function not covered" >      (e</span>vent: MouseEvent) =&gt; {
-<span class="cstat-no" title="statement not covered" >        event.stopPropagation();</span>
-<span class="cstat-no" title="statement not covered" >        if (onSelect) {</span>
-<span class="cstat-no" title="statement not covered" >          onSelect();</span>
-        }
-      },
-      [onSelect],
-    );
-    const handleKey = useCallback(
-<span class="fstat-no" title="function not covered" >      (e</span>vent: KeyboardEvent) =&gt; {
-<span class="cstat-no" title="statement not covered" >        event.stopPropagation();</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >        switch (event.key) {</span>
-          case "Enter":
-          case "Space":
-<span class="cstat-no" title="statement not covered" >            if (onSelect) {</span>
-<span class="cstat-no" title="statement not covered" >              onSelect();</span>
-            }
-<span class="cstat-no" title="statement not covered" >            break;</span>
-          case "Escape":
-<span class="cstat-no" title="statement not covered" >            if (onDeselect) {</span>
-<span class="cstat-no" title="statement not covered" >              onDeselect();</span>
-            }
-<span class="cstat-no" title="statement not covered" >            break;</span>
-        }
-      },
-      [onDeselect, onSelect],
-    );
-    const makeCardSelected = selected || dropTarget || dropAccepted;
-&nbsp;
-    return (
-      &lt;div
-        className={css(stacked &amp;&amp; styles.stacked)}
-        onClick={handleClick}
-        onKeyDown={handleKey}
-        ref={ref}
-        {...props}
-      &gt;
-        &lt;Card
-          isCompact={true}
-          className={css(
-            styles.card,
-            noShadows &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >styles.noShadows,</span>
-            dropAccepted &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >!dropTarget </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >styles.dropAccepted,</span>
-            dropTarget &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >styles.dropTarget,</span>
-          )}
-          isSelected={makeCardSelected}
-          isSelectable={makeCardSelected || selectable}
-          aria-label={title}
-        &gt;
-          {(title || <span class="branch-1 cbranch-no" title="branch not covered" >actions)</span> &amp;&amp; (
-            &lt;CardHead className={css(styles.head)}&gt;
-              &lt;CardActions className={css(styles.actions)}&gt;
-                {<span class="branch-1 cbranch-no" title="branch not covered" >actions?.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a)}</span></span>
-              &lt;/CardActions&gt;
-              {title &amp;&amp; (
-                &lt;CardHeader className={css(styles.header)}&gt;
-                  &lt;Button
-                    variant={"plain"}
-                    onClick={toggleExpanded}
-                    aria-label={"Expand/collapse this card"}
-                    data-testid={`expand-collapse-${title}-button`}
-                    className={css(styles.headerButton)}
-                  &gt;
-                    &lt;Title size={"lg"} headingLevel={"h2"} aria-label={title}&gt;
-                      &lt;TruncatedString title={title}&gt;
-                        {isExpanded ? &lt;AngleDownIcon /&gt; : <span class="branch-1 cbranch-no" title="branch not covered" >&lt;AngleRightIcon /&gt;}</span>{" "}
-                        {title}
-                      &lt;/TruncatedString&gt;
-                    &lt;/Title&gt;
-                  &lt;/Button&gt;
-                &lt;/CardHeader&gt;
-              )}
-            &lt;/CardHead&gt;
-          )}
-          &lt;CardBody
-            className={css(
-              noPadding ? <span class="branch-0 cbranch-no" title="branch not covered" >styles.bodyNoPadding </span>: styles.bodyWithPadding,
-              !isExpanded &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >styles.hidden,</span>
-            )}
-          &gt;
-            {children}
-          &lt;/CardBody&gt;
-          {footer}
-        &lt;/Card&gt;
-      &lt;/div&gt;
-    );
+&gt;(function Document(
+  {
+    id,
+    title,
+    actions,
+    footer,
+<span class="branch-1 cbranch-no" title="branch not covered" >    selected = false,</span>
+<span class="branch-1 cbranch-no" title="branch not covered" >    dropTarget = false,</span>
+<span class="branch-1 cbranch-no" title="branch not covered" >    dropAccepted = false,</span>
+<span class="branch-1 cbranch-no" title="branch not covered" >    stacked = true,</span>
+<span class="branch-1 cbranch-no" title="branch not covered" >    selectable = false,</span>
+<span class="branch-1 cbranch-no" title="branch not covered" >    scrollIntoView = false,</span>
+<span class="branch-1 cbranch-no" title="branch not covered" >    noPadding = false,</span>
+<span class="branch-1 cbranch-no" title="branch not covered" >    noShadows = false,</span>
+<span class="branch-1 cbranch-no" title="branch not covered" >    startExpanded = true,</span>
+    onSelect,
+    onDeselect,
+    children,
+    ...props
   },
-);
+  ref,
+) {
+  const { state: isExpanded, toggle: toggleExpanded } = useToggle(
+    startExpanded,
+  );
+  const handleClick = useCallback(
+<span class="fstat-no" title="function not covered" >    (e</span>vent: MouseEvent) =&gt; {
+<span class="cstat-no" title="statement not covered" >      event.stopPropagation();</span>
+<span class="cstat-no" title="statement not covered" >      if (onSelect) {</span>
+<span class="cstat-no" title="statement not covered" >        onSelect();</span>
+      }
+    },
+    [onSelect],
+  );
+  const handleKey = useCallback(
+<span class="fstat-no" title="function not covered" >    (e</span>vent: KeyboardEvent) =&gt; {
+<span class="cstat-no" title="statement not covered" >      event.stopPropagation();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      switch (event.key) {</span>
+        case "Enter":
+        case "Space":
+<span class="cstat-no" title="statement not covered" >          if (onSelect) {</span>
+<span class="cstat-no" title="statement not covered" >            onSelect();</span>
+          }
+<span class="cstat-no" title="statement not covered" >          break;</span>
+        case "Escape":
+<span class="cstat-no" title="statement not covered" >          if (onDeselect) {</span>
+<span class="cstat-no" title="statement not covered" >            onDeselect();</span>
+          }
+<span class="cstat-no" title="statement not covered" >          break;</span>
+      }
+    },
+    [onDeselect, onSelect],
+  );
+  const makeCardSelected = selected || dropTarget || dropAccepted;
+&nbsp;
+  return (
+    &lt;div
+      className={css(stacked &amp;&amp; styles.stacked)}
+      onClick={handleClick}
+      onKeyDown={handleKey}
+      ref={ref}
+      {...props}
+    &gt;
+      &lt;Card
+        isCompact={true}
+        className={css(
+          styles.card,
+          noShadows &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >styles.noShadows,</span>
+          dropAccepted &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >!dropTarget </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >styles.dropAccepted,</span>
+          dropTarget &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >styles.dropTarget,</span>
+        )}
+        isSelected={makeCardSelected}
+        isSelectable={makeCardSelected || selectable}
+        aria-label={title}
+      &gt;
+        {(title || <span class="branch-1 cbranch-no" title="branch not covered" >actions)</span> &amp;&amp; (
+          &lt;CardHead className={css(styles.head)}&gt;
+            &lt;CardActions className={css(styles.actions)}&gt;
+              {<span class="branch-1 cbranch-no" title="branch not covered" >actions?.filter(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a)}</span></span>
+            &lt;/CardActions&gt;
+            {title &amp;&amp; (
+              &lt;CardHeader className={css(styles.header)}&gt;
+                &lt;Button
+                  variant={"plain"}
+                  onClick={toggleExpanded}
+                  aria-label={"Expand/collapse this card"}
+                  data-testid={`expand-collapse-${title}-button`}
+                  className={css(styles.headerButton)}
+                &gt;
+                  &lt;Title size={"lg"} headingLevel={"h2"} aria-label={title}&gt;
+                    &lt;TruncatedString title={title}&gt;
+                      {isExpanded ? &lt;AngleDownIcon /&gt; : <span class="branch-1 cbranch-no" title="branch not covered" >&lt;AngleRightIcon /&gt;}</span>{" "}
+                      {title}
+                    &lt;/TruncatedString&gt;
+                  &lt;/Title&gt;
+                &lt;/Button&gt;
+              &lt;/CardHeader&gt;
+            )}
+          &lt;/CardHead&gt;
+        )}
+        &lt;CardBody
+          className={css(
+            noPadding ? <span class="branch-0 cbranch-no" title="branch not covered" >styles.bodyNoPadding </span>: styles.bodyWithPadding,
+            !isExpanded &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >styles.hidden,</span>
+          )}
+        &gt;
+          {children}
+        &lt;/CardBody&gt;
+        {footer}
+      &lt;/Card&gt;
+    &lt;/div&gt;
+  );
+});
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -681,7 +675,7 @@ export const Document = forwardRef&lt;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Jun 17 2020 21:34:38 GMT+0000 (Coordinated Universal Time)
+                at Thu Jun 18 2020 09:38:25 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

@@ -24,14 +24,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>11/11</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>5/6</span>
             </div>
         
             
@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>11/11</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
@@ -149,10 +149,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -160,11 +164,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -174,56 +174,56 @@
 &nbsp;
 import { Actions } from "../Actions";
 &nbsp;
-import { BaseSizes, Level, LevelItem, Title } from "@patternfly/react-core";
+import { BaseSizes, Title } from "@patternfly/react-core";
 import { css, StyleSheet } from "@patternfly/react-styles";
 &nbsp;
 const styles = StyleSheet.create({
   header: {
     flex: "0 1 0",
   },
+  plain: {
+    background: "transparent",
+    border: "0 none transparent",
+  },
   toolbar: {
     background: "var(--pf-global--BackgroundColor--150)",
-    borderBottom: "1px solid var(--pf-global--BorderColor--100)",
-    padding: "1rem calc(2rem + 10px) 1rem 2rem",
+    border: "1px solid var(--pf-global--BorderColor--100)",
+    borderBottom: 0,
+    padding: "var(--pf-global--spacer--sm) var(--pf-global--spacer--md)",
     boxSizing: "initial",
-    "&amp; &gt; *:not(:last-child)": {
-      marginBottom: "1rem !important",
-    },
+    display: "flex",
+    flexFlow: "row no-wrap",
   },
   title: {
     display: "flex",
     alignItems: "center",
+    flex: "1 0 auto",
+    marginRight: "var(--pf-global--spacer--sm)",
     height: "36px",
-    paddingLeft: "1rem",
-  },
-  searchRow: {
-    margin: "1rem calc(2rem + 10px) 0 2rem",
   },
 });
 &nbsp;
 export interface IColumnHeaderProps {
   title: string;
+  variant?: "default" | "plain";
   actions?: (ReactElement | null | undefined)[];
 }
 &nbsp;
 export const ColumnHeader: FunctionComponent&lt;IColumnHeaderProps&gt; = ({
   title,
   actions,
+  variant,
   children,
 }) =&gt; {
   return (
     &lt;div className={css(styles.header)}&gt;
-      &lt;div className={css(styles.toolbar)}&gt;
-        &lt;Level gutter="md"&gt;
-          &lt;LevelItem className={css(styles.title)}&gt;
-            &lt;Title size={BaseSizes.lg}&gt;{title}&lt;/Title&gt;
-          &lt;/LevelItem&gt;
-          &lt;LevelItem&gt;
-            &lt;Actions&gt;{actions?.filter((a) =&gt; a)}&lt;/Actions&gt;
-          &lt;/LevelItem&gt;
-        &lt;/Level&gt;
+      &lt;div className={css(styles.toolbar, variant === "plain" &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >styles.plain)</span>}&gt;
+        &lt;div className={css(styles.title)}&gt;
+          &lt;Title size={BaseSizes.lg}&gt;{title}&lt;/Title&gt;
+        &lt;/div&gt;
+        &lt;Actions&gt;{actions?.filter((a) =&gt; a)}&lt;/Actions&gt;
       &lt;/div&gt;
-      {children &amp;&amp; &lt;div className={css(styles.searchRow)}&gt;{children}&lt;/div&gt;}
+      {children}
     &lt;/div&gt;
   );
 };
@@ -234,7 +234,7 @@ export const ColumnHeader: FunctionComponent&lt;IColumnHeaderProps&gt; = ({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Jun 17 2020 21:34:38 GMT+0000 (Coordinated Universal Time)
+                at Thu Jun 18 2020 09:38:25 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
