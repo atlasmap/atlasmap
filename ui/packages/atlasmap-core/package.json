@@ -15,7 +15,7 @@
   "scripts": {
     "start": "tsdx watch",
     "build:module": "tsdx build",
-    "build": "npm-run-all build:module test",
+    "build": "npm-run-all build:module test lint",
     "test": "tsdx test --runInBand",
     "test:coverage": "tsdx test --coverage --runInBand",
     "lint": "tsdx lint src test",
