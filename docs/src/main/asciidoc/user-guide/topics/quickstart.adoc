@@ -14,7 +14,7 @@ image:latest-maven-central-version-number.png[maven central 1.42.3].
 with an actual version number. 
 +
 ----
-wget http://central.maven.org/maven2/io/atlasmap/atlasmap-standalone/${VERSION}/atlasmap-standalone-${VERSION}.jar
+wget https://repo1.maven.org/maven2/io/atlasmap/atlasmap-standalone/${VERSION}/atlasmap-standalone-${VERSION}.jar
 ----
 
 . Run AtlasMap standalone by invoking the `java` command with the

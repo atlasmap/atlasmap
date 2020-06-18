@@ -14,7 +14,7 @@ Here is the shortest path to run standalone AtlasMap.
 1. Download AtlasMap standalone jar
 +
 ```
-wget http://central.maven.org/maven2/io/atlasmap/atlasmap-standalone/${VERSION}/atlasmap-standalone-${VERSION}.jar
+wget https://repo1.maven.org/maven2/io/atlasmap/atlasmap-standalone/${VERSION}/atlasmap-standalone-${VERSION}.jar
 ```
 +
 2. Run AtlasMap standalone
