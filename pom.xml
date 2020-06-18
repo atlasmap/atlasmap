@@ -125,9 +125,6 @@
             </sourceDirectories>
             <includeTestSourceDirectory>false</includeTestSourceDirectory>
             <configLocation>checkstyle.xml</configLocation>
-            <propertyExpansion>
-              checkstyle.suppression.file=checkstyle-suppressions.xml
-            </propertyExpansion>
           </configuration>
         </plugin>
         <plugin>
@@ -180,6 +177,18 @@
     </pluginManagement>
 
     <plugins>
+      <plugin>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>checkstyle</id>
+            <phase>test</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
           <executions>
