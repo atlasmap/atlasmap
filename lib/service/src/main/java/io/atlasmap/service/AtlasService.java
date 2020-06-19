@@ -625,9 +625,9 @@ public class AtlasService {
                     buf.append(line);
                 }
                 LOG.debug(buf.toString());
-                return Json.mapper().readValue(buf.toString(), clazz);
+                return Json.withClassLoader(this.libraryLoader).readValue(buf.toString(), clazz);
             }
-            return Json.mapper().readValue(value, clazz);
+            return Json.withClassLoader(this.libraryLoader).readValue(value, clazz);
         } catch (IOException e) {
             throw new WebApplicationException(e, Status.BAD_REQUEST);
         }

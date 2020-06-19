@@ -172,6 +172,10 @@ public class AtlasServiceTest {
         assertEquals(200, resFA.getStatus());
         String responseJson = new String((byte[])resFA.getEntity());
         assertTrue(responseJson, responseJson.contains("myCustomFieldAction"));
+
+        in = new BufferedInputStream(new FileInputStream("src/test/resources/mappings/atlasmapping-custom-action.json"));
+        Response resVD = service.validateMappingRequest(in, 0, null);
+        assertEquals(200, resVD.getStatus());
     }
 
     protected UriInfo generateTestUriInfo(String baseUri, String absoluteUri) throws Exception {

@@ -1,0 +1,65 @@
+{
+    "AtlasMapping": {
+        "jsonType": "io.atlasmap.v2.AtlasMapping",
+        "dataSource": [
+            {
+                "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+                "id": "complex-object-rooted",
+                "uri": "atlas:json:complex-object-rooted",
+                "dataSourceType": "SOURCE"
+            },
+            {
+                "jsonType": "io.atlasmap.v2.DataSource",
+                "id": "complex-schema",
+                "uri": "atlas:xml:complex-schema",
+                "dataSourceType": "TARGET"
+            }
+        ],
+        "mappings": {
+            "mapping": [
+                {
+                    "jsonType": "io.atlasmap.v2.Mapping",
+                    "id": "mapping.89188",
+                    "inputField": [
+                        {
+                            "jsonType": "io.atlasmap.json.v2.JsonField",
+                            "name": "addressLine1",
+                            "path": "/order/address/addressLine1",
+                            "fieldType": "STRING",
+                            "docId": "complex-object-rooted",
+                            "userCreated": false,
+                            "actions": [
+                                {
+                                    "param": "test",
+                                    "@type": "io.atlasmap.service.my.MyFieldActionsModel"
+                                }
+                            ]
+                        }
+                    ],
+                    "outputField": [
+                        {
+                            "jsonType": "io.atlasmap.xml.v2.XmlField",
+                            "name": "stringField",
+                            "path": "/data/stringField",
+                            "fieldType": "STRING",
+                            "docId": "complex-schema"
+                        }
+                    ]
+                }
+            ]
+        },
+        "name": "UI.0",
+        "lookupTables": {
+            "lookupTable": [
+            ]
+        },
+        "constants": {
+            "constant": [
+            ]
+        },
+        "properties": {
+            "property": [
+            ]
+        }
+    }
+}

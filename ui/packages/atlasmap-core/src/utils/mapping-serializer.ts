@@ -615,15 +615,7 @@ export class MappingSerializer {
 
   private static serializeAction(action: FieldAction, cfg: ConfigModel): any {
     let actionJson: any = MappingSerializer.processActionArguments(action, cfg);
-    if (action.definition.isCustom) {
-      actionJson = []; // ref https://github.com/atlasmap/atlasmap/issues/1757
-      actionJson['@type'] = 'CustomAction';
-      actionJson['name'] = action.definition.serviceObject.name;
-      actionJson['className'] = action.definition.serviceObject.className;
-      actionJson['methodName'] = action.definition.serviceObject.method;
-    } else {
-      actionJson['@type'] = action.definition.name;
-    }
+    actionJson['@type'] = action.definition.name;
     return actionJson;
   }
 

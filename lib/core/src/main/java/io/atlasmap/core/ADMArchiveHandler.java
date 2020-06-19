@@ -188,15 +188,16 @@ public class ADMArchiveHandler {
         Path mdPath = this.persistDirectory.resolve(getMappingDefinitionFileName());
         if (getMappingDefinitionBytes() != null) {
             try {
-                jsonMapper.readValue(getMappingDefinitionBytes(), AtlasMapping.class);
+                this.mappingDefinition = jsonMapper.readValue(getMappingDefinitionBytes(), AtlasMapping.class);
             } catch (Exception e) {
                 LOG.warn("Invalid serialized mapping definition content detected, discarding");
                 this.mappingDefinitionBytes = null;
+                this.mappingDefinition = null;
             }
         }
-        if (getMappingDefinitionBytes() != null) {
-            try (FileOutputStream out = new FileOutputStream(mdPath.toFile())) {
-                out.write(getMappingDefinitionBytes());
+        if (this.mappingDefinition  != null) {
+            try {
+                jsonMapper.writeValue(mdPath.toFile(), this.mappingDefinition);
             } catch (Exception e) {
                 LOG.warn("Failed to persist mapping definition", e);
             }
