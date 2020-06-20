@@ -512,9 +512,9 @@ public class AtlasService {
                                            @Parameter(description = &quot;Mapping ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId,
                                            @Context UriInfo uriInfo) {
         try {
-<span class="nc" id="L515">            AtlasMapping atlasMapping = fromJson(mapping, AtlasMapping.class);</span>
-<span class="nc" id="L516">            LOG.debug(&quot;Validate mappings: {}&quot;, atlasMapping.getName());</span>
-<span class="nc" id="L517">            return validateMapping(mappingDefinitionId, atlasMapping, uriInfo);</span>
+<span class="fc" id="L515">            AtlasMapping atlasMapping = fromJson(mapping, AtlasMapping.class);</span>
+<span class="fc" id="L516">            LOG.debug(&quot;Validate mappings: {}&quot;, atlasMapping.getName());</span>
+<span class="fc" id="L517">            return validateMapping(mappingDefinitionId, atlasMapping, uriInfo);</span>
 <span class="nc" id="L518">        } catch (AtlasException | IOException e) {</span>
 <span class="nc" id="L519">            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
         }
@@ -595,16 +595,16 @@ public class AtlasService {
     }
 
     protected Response validateMapping(Integer mappingDefinitionId, AtlasMapping mapping, UriInfo uriInfo) throws IOException, AtlasException {
-<span class="nc" id="L598">        AtlasContext context = atlasContextFactory.createContext(mapping);</span>
-<span class="nc" id="L599">        AtlasSession session = context.createSession();</span>
-<span class="nc" id="L600">        context.processValidation(session);</span>
-<span class="nc" id="L601">        Validations validations = session.getValidations();</span>
+<span class="fc" id="L598">        AtlasContext context = atlasContextFactory.createContext(mapping);</span>
+<span class="fc" id="L599">        AtlasSession session = context.createSession();</span>
+<span class="fc" id="L600">        context.processValidation(session);</span>
+<span class="fc" id="L601">        Validations validations = session.getValidations();</span>
 
-<span class="nc bnc" id="L603" title="All 2 branches missed.">        if (session.getValidations() == null) {</span>
+<span class="pc bpc" id="L603" title="1 of 2 branches missed.">        if (session.getValidations() == null) {</span>
 <span class="nc" id="L604">            validations = new Validations();</span>
         }
 
-<span class="nc" id="L607">        return Response.ok().entity(toJson(validations)).build();</span>
+<span class="fc" id="L607">        return Response.ok().entity(toJson(validations)).build();</span>
     }
 
     private byte[] toJson(Object value) {
@@ -617,7 +617,7 @@ public class AtlasService {
 
     private &lt;T&gt; T fromJson(InputStream value, Class&lt;T&gt;clazz) {
         try {
-<span class="nc bnc" id="L620" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="pc bpc" id="L620" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
 <span class="nc" id="L621">                BufferedReader reader = new BufferedReader(new InputStreamReader(value));</span>
 <span class="nc" id="L622">                StringBuffer buf = new StringBuffer();</span>
                 String line;
@@ -625,9 +625,9 @@ public class AtlasService {
 <span class="nc" id="L625">                    buf.append(line);</span>
                 }
 <span class="nc" id="L627">                LOG.debug(buf.toString());</span>
-<span class="nc" id="L628">                return Json.mapper().readValue(buf.toString(), clazz);</span>
+<span class="nc" id="L628">                return Json.withClassLoader(this.libraryLoader).readValue(buf.toString(), clazz);</span>
             }
-<span class="nc" id="L630">            return Json.mapper().readValue(value, clazz);</span>
+<span class="fc" id="L630">            return Json.withClassLoader(this.libraryLoader).readValue(value, clazz);</span>
 <span class="nc" id="L631">        } catch (IOException e) {</span>
 <span class="nc" id="L632">            throw new WebApplicationException(e, Status.BAD_REQUEST);</span>
         }
