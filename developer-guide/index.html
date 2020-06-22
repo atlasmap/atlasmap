@@ -569,7 +569,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Download AtlasMap standalone jar</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>wget https://repo1.maven.org/maven2/io/atlasmap/atlasmap-standalone/${VERSION}/atlasmap-standalone-${VERSION}.jar</code></pre>
+<pre class="highlight"><code>wget https://repo1.maven.org/maven2/io/atlasmap/atlasmap-standalone/${VERSION}/atlasmap-standalone-${VERSION}.jar</code></pre>
 </div>
 </div>
 </li>
@@ -577,7 +577,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Run AtlasMap standalone</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>$ java -jar atlasmap-standalone-${VERSION}.jar</code></pre>
+<pre class="highlight"><code>$ java -jar atlasmap-standalone-${VERSION}.jar</code></pre>
 </div>
 </div>
 </li>
@@ -598,7 +598,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Clone AtlasMap repository</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>$ git clone https://github.com/atlasmap/atlasmap ${ATLASMAP}</code></pre>
+<pre class="highlight"><code>$ git clone https://github.com/atlasmap/atlasmap ${ATLASMAP}</code></pre>
 </div>
 </div>
 </li>
@@ -606,7 +606,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Build AtlasMap runtime</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>$ cd ${ATLASMAP}
+<pre class="highlight"><code>$ cd ${ATLASMAP}
 $ ./mvnw clean install</code></pre>
 </div>
 </div>
@@ -626,7 +626,7 @@ $ ./mvnw clean install</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>$ cd ${ATLASMAP}/ui
+<pre class="highlight"><code>$ cd ${ATLASMAP}/ui
 $ yarn build:lib
 $ cd dist/lib
 $ yarn link
@@ -645,7 +645,7 @@ $ yarn link @atlasmap/atlasmap-data-mapper</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>$ cd ${ATLASMAP}/ui
+<pre class="highlight"><code>$ cd ${ATLASMAP}/ui
 $ yarn test:debug</code></pre>
 </div>
 </div>
@@ -654,20 +654,20 @@ $ yarn test:debug</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>$ yarn test:debug --main src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.spec.ts</code></pre>
+<pre class="highlight"><code>$ yarn test:debug --main src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.spec.ts</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Then Chromium window opens up. Push the <code>DEBUG</code> button. New DEBUG tab will open.
-<span class="image"><img src="images/Chromium.png" alt="Chromium"></span></p>
+<span class="image"><img src="Chromium.png" alt="Chromium"></span></p>
 </div>
 <div class="paragraph">
 <p>Then open Chrome DevTools, open TypeScript source file and put a breakpoint.
-<span class="image"><img src="images/DevTools.png" alt="DevTools"></span></p>
+<span class="image"><img src="DevTools.png" alt="DevTools"></span></p>
 </div>
 <div class="paragraph">
 <p>Once you reload DEBUG tab, it stops at the breakpoint and you can start step debugging.
-<span class="image"><img src="images/Breakpoint.png" alt="Breakpoint"></span></p>
+<span class="image"><img src="Breakpoint.png" alt="Breakpoint"></span></p>
 </div>
 </div>
 <div class="sect3">
@@ -771,39 +771,39 @@ Mock Java documents referenced are from the AtlasMap Services' <a href="https://
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="json">{
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">apiEndpoint</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">https://syndesis-staging.b6ff.rh-idev.openshiftapps.com/api/v1</span><span class="delimiter">&quot;</span></span>,
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Syndesis</span><span class="delimiter">&quot;</span></span>,
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">datamapper</span><span class="delimiter">&quot;</span></span>: {
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">baseJavaInspectionServiceUrl</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8585/v2/atlas/java/</span><span class="delimiter">&quot;</span></span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">baseXMLInspectionServiceUrl</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8585/v2/atlas/xml/</span><span class="delimiter">&quot;</span></span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">baseJSONInspectionServiceUrl</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8585/v2/atlas/json/</span><span class="delimiter">&quot;</span></span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">baseMappingServiceUrl</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8585/v2/atlas/</span><span class="delimiter">&quot;</span></span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">discardNonMockSources</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">addMockJSONMappings</span><span class="delimiter">&quot;</span></span>: <span class="value">false</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">addMockJavaSingleSource</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">addMockJavaSources</span><span class="delimiter">&quot;</span></span>: <span class="value">false</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">addMockXMLInstanceSources</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">addMockXMLSchemaSources</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">addMockJSONSources</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">addMockJavaTarget</span><span class="delimiter">&quot;</span></span>: <span class="value">false</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">addMockXMLInstanceTarget</span><span class="delimiter">&quot;</span></span>: <span class="value">false</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">addMockXMLSchemaTarget</span><span class="delimiter">&quot;</span></span>: <span class="value">false</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">addMockJSONTarget</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">debugDocumentServiceCalls</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">debugMappingServiceCalls</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">debugClassPathServiceCalls</span><span class="delimiter">&quot;</span></span>: <span class="value">false</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">debugValidationServiceCalls</span><span class="delimiter">&quot;</span></span>: <span class="value">false</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">debugFieldActionServiceCalls</span><span class="delimiter">&quot;</span></span>: <span class="value">false</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">debugDocumentParsing</span><span class="delimiter">&quot;</span></span>: <span class="value">false</span>
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "apiEndpoint": "https://syndesis-staging.b6ff.rh-idev.openshiftapps.com/api/v1",
+  "title": "Syndesis",
+  "datamapper": {
+    "baseJavaInspectionServiceUrl": "http://localhost:8585/v2/atlas/java/",
+    "baseXMLInspectionServiceUrl": "http://localhost:8585/v2/atlas/xml/",
+    "baseJSONInspectionServiceUrl": "http://localhost:8585/v2/atlas/json/",
+    "baseMappingServiceUrl": "http://localhost:8585/v2/atlas/",
+    "discardNonMockSources": true,
+    "addMockJSONMappings": false,
+    "addMockJavaSingleSource": true,
+    "addMockJavaSources": false,
+    "addMockXMLInstanceSources": true,
+    "addMockXMLSchemaSources": true,
+    "addMockJSONSources": true,
+    "addMockJavaTarget": false,
+    "addMockXMLInstanceTarget": false,
+    "addMockXMLSchemaTarget": false,
+    "addMockJSONTarget": true,
+    "debugDocumentServiceCalls": true,
+    "debugMappingServiceCalls": true,
+    "debugClassPathServiceCalls": false,
+    "debugValidationServiceCalls": false,
+    "debugFieldActionServiceCalls": false,
+    "debugDocumentParsing": false
   },
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">oauth</span><span class="delimiter">&quot;</span></span>: {
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">clientId</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">syndesis-ui</span><span class="delimiter">&quot;</span></span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">scopes</span><span class="delimiter">&quot;</span></span>: [<span class="string"><span class="delimiter">&quot;</span><span class="content">openid</span><span class="delimiter">&quot;</span></span>],
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">oidc</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">hybrid</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">issuer</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">https://syndesis-staging.b6ff.rh-idev.openshiftapps.com/auth/realms/syndesis</span><span class="delimiter">&quot;</span></span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">auto-link-github</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>
+  "oauth": {
+    "clientId": "syndesis-ui",
+    "scopes": ["openid"],
+    "oidc": true,
+    "hybrid": true,
+    "issuer": "https://syndesis-staging.b6ff.rh-idev.openshiftapps.com/auth/realms/syndesis",
+    "auto-link-github": true
   }
 }</code></pre>
 </div>
@@ -951,7 +951,7 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 <p>As you add fields into mapping, mapping transitions to a different state. Here is a state machine diagram for current mapping state transition.</p>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="images/AtlasMap_Mapping_State.svg" alt="AtlasMap Mapping State"></span></p>
+<p><span class="image"><img src="AtlasMap_Mapping_State.svg" alt="AtlasMap Mapping State"></span></p>
 </div>
 </div>
 </div>
@@ -1058,12 +1058,12 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">AtlasContextFactory factory = atlasContextFactory = DefaultAtlasContextFactory.getInstance(); <i class="conum" data-value="1"></i><b>(1)</b>
-AtlasContext context = factory.createContext(<span class="keyword">new</span> <span class="predefined-type">File</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">./my-mapping.xml</span><span class="delimiter">&quot;</span></span>)); <i class="conum" data-value="2"></i><b>(2)</b>
+<pre class="highlight"><code class="language-java" data-lang="java">AtlasContextFactory factory = atlasContextFactory = DefaultAtlasContextFactory.getInstance(); <i class="conum" data-value="1"></i><b>(1)</b>
+AtlasContext context = factory.createContext(new File("./my-mapping.xml")); <i class="conum" data-value="2"></i><b>(2)</b>
 AtlasSession session = context.createSession(); <i class="conum" data-value="3"></i><b>(3)</b>
-session.setSourceDocument(<span class="string"><span class="delimiter">&quot;</span><span class="content">myJsonSourceDoc</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">{...}</span><span class="delimiter">&quot;</span></span>); <i class="conum" data-value="4"></i><b>(4)</b>
+session.setSourceDocument("myJsonSourceDoc", "{...}"); <i class="conum" data-value="4"></i><b>(4)</b>
 context.process(session); <i class="conum" data-value="5"></i><b>(5)</b>
-<span class="predefined-type">Object</span> targetDoc = session.getTargetDocument(<span class="string"><span class="delimiter">&quot;</span><span class="content">myXmlTargetDoc</span><span class="delimiter">&quot;</span></span>); <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
+Object targetDoc = session.getTargetDocument("myXmlTargetDoc"); <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1234,13 +1234,13 @@ Also There is a <a href="#fieldAction">Reference</a> for all available FieldActi
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;camelContext</span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://camel.apache.org/schema/spring</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-    <span class="tag">&lt;route&gt;</span>
-        <span class="tag">&lt;from</span> <span class="attribute-name">uri</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">direct:start</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
-        <span class="tag">&lt;to</span> <span class="attribute-name">uri</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">atlas:atlasmapping.xml</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
-        <span class="tag">&lt;to</span> <span class="attribute-name">uri</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">mock:result</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
-    <span class="tag">&lt;/route&gt;</span>
-<span class="tag">&lt;/camelContext&gt;</span></code></pre>
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;camelContext xmlns="http://camel.apache.org/schema/spring"&gt;
+    &lt;route&gt;
+        &lt;from uri="direct:start" /&gt;
+        &lt;to uri="atlas:atlasmapping.xml" /&gt;
+        &lt;to uri="mock:result" /&gt;
+    &lt;/route&gt;
+&lt;/camelContext&gt;</code></pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
@@ -1904,97 +1904,8 @@ string.</p></td>
 <div id="footer">
 <div id="footer-text">
 Version 2.1.0-SNAPSHOT<br>
-Last updated 2020-06-22 14:12:14 UTC
+Last updated 2020-06-22 14:12:08 UTC
 </div>
 </div>
-<style>
-/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
-pre.CodeRay{background:#f7f7f8}
-.CodeRay .line-numbers{border-right:1px solid currentColor;opacity:.35;padding:0 .5em 0 0}
-.CodeRay span.line-numbers{display:inline-block;margin-right:.75em}
-.CodeRay .line-numbers strong{color:#000}
-table.CodeRay{border-collapse:separate;border:0;margin-bottom:0;background:none}
-table.CodeRay td{vertical-align:top;line-height:inherit}
-table.CodeRay td.line-numbers{text-align:right}
-table.CodeRay td.code{padding:0 0 0 .75em}
-.CodeRay .debug{color:#fff !important;background:#000080 !important}
-.CodeRay .annotation{color:#007}
-.CodeRay .attribute-name{color:#000080}
-.CodeRay .attribute-value{color:#700}
-.CodeRay .binary{color:#509}
-.CodeRay .comment{color:#998;font-style:italic}
-.CodeRay .char{color:#04d}
-.CodeRay .char .content{color:#04d}
-.CodeRay .char .delimiter{color:#039}
-.CodeRay .class{color:#458;font-weight:bold}
-.CodeRay .complex{color:#a08}
-.CodeRay .constant,.CodeRay .predefined-constant{color:#008080}
-.CodeRay .color{color:#099}
-.CodeRay .class-variable{color:#369}
-.CodeRay .decorator{color:#b0b}
-.CodeRay .definition{color:#099}
-.CodeRay .delimiter{color:#000}
-.CodeRay .doc{color:#970}
-.CodeRay .doctype{color:#34b}
-.CodeRay .doc-string{color:#d42}
-.CodeRay .escape{color:#666}
-.CodeRay .entity{color:#800}
-.CodeRay .error{color:#808}
-.CodeRay .exception{color:inherit}
-.CodeRay .filename{color:#099}
-.CodeRay .function{color:#900;font-weight:bold}
-.CodeRay .global-variable{color:#008080}
-.CodeRay .hex{color:#058}
-.CodeRay .integer,.CodeRay .float{color:#099}
-.CodeRay .include{color:#555}
-.CodeRay .inline{color:#000}
-.CodeRay .inline .inline{background:#ccc}
-.CodeRay .inline .inline .inline{background:#bbb}
-.CodeRay .inline .inline-delimiter{color:#d14}
-.CodeRay .inline-delimiter{color:#d14}
-.CodeRay .important{color:#555;font-weight:bold}
-.CodeRay .interpreted{color:#b2b}
-.CodeRay .instance-variable{color:#008080}
-.CodeRay .label{color:#970}
-.CodeRay .local-variable{color:#963}
-.CodeRay .octal{color:#40e}
-.CodeRay .predefined{color:#369}
-.CodeRay .preprocessor{color:#579}
-.CodeRay .pseudo-class{color:#555}
-.CodeRay .directive{font-weight:bold}
-.CodeRay .type{font-weight:bold}
-.CodeRay .predefined-type{color:inherit}
-.CodeRay .reserved,.CodeRay .keyword {color:#000;font-weight:bold}
-.CodeRay .key{color:#808}
-.CodeRay .key .delimiter{color:#606}
-.CodeRay .key .char{color:#80f}
-.CodeRay .value{color:#088}
-.CodeRay .regexp .delimiter{color:#808}
-.CodeRay .regexp .content{color:#808}
-.CodeRay .regexp .modifier{color:#808}
-.CodeRay .regexp .char{color:#d14}
-.CodeRay .regexp .function{color:#404;font-weight:bold}
-.CodeRay .string{color:#d20}
-.CodeRay .string .string .string{background:#ffd0d0}
-.CodeRay .string .content{color:#d14}
-.CodeRay .string .char{color:#d14}
-.CodeRay .string .delimiter{color:#d14}
-.CodeRay .shell{color:#d14}
-.CodeRay .shell .delimiter{color:#d14}
-.CodeRay .symbol{color:#990073}
-.CodeRay .symbol .content{color:#a60}
-.CodeRay .symbol .delimiter{color:#630}
-.CodeRay .tag{color:#008080}
-.CodeRay .tag-special{color:#d70}
-.CodeRay .variable{color:#036}
-.CodeRay .insert{background:#afa}
-.CodeRay .delete{background:#faa}
-.CodeRay .change{color:#aaf;background:#007}
-.CodeRay .head{color:#f8f;background:#505}
-.CodeRay .insert .insert{color:#080}
-.CodeRay .delete .delete{color:#800}
-.CodeRay .change .change{color:#66f}
-.CodeRay .head .head{color:#f4f}
-</style>
 </body>
 </html>
