@@ -1,6 +1,10 @@
 import React, { FunctionComponent } from "react";
 
-import { LayerGroupIcon } from "@patternfly/react-icons";
+import {
+  LayerGroupIcon,
+  FolderOpenIcon,
+  FolderCloseIcon,
+} from "@patternfly/react-icons";
 
 import {
   DelayedBoolean,
@@ -11,6 +15,16 @@ import {
   ITreeGroupProps,
 } from "../../../UI";
 import { AtlasmapDocumentType, IAtlasmapGroup } from "../../../Views";
+import { css, StyleSheet } from "@patternfly/react-styles";
+
+const style = StyleSheet.create({
+  collection: {
+    color: "white",
+    height: ".5rem",
+    marginLeft: "-1rem",
+    marginBottom: ".2rem",
+  },
+});
 
 export interface ITreeGroupAndNodeRefsAndDnDProps {
   fieldId: string;
@@ -66,15 +80,30 @@ export const TreeGroupAndNodeRefsAndDnD: FunctionComponent<ITreeGroupAndNodeRefs
               position={position}
               setSize={setSize}
               expanded={isOver === true ? true : undefined}
-              renderLabel={({ expanded }) => (
-                <DocumentGroup
-                  name={group.name}
-                  type={group.type}
-                  showType={showTypes}
-                  icon={group.isCollection ? <LayerGroupIcon /> : undefined}
-                  expanded={isOver || expanded}
-                />
-              )}
+              renderLabel={({ expanded }) => {
+                const icon = group.isCollection ? (
+                  isOver || expanded ? (
+                    <span>
+                      <FolderOpenIcon />
+                      <LayerGroupIcon className={css(style.collection)} />
+                    </span>
+                  ) : (
+                    <span>
+                      <FolderCloseIcon />
+                      <LayerGroupIcon className={css(style.collection)} />
+                    </span>
+                  )
+                ) : undefined;
+                return (
+                  <DocumentGroup
+                    name={group.name}
+                    type={group.type}
+                    showType={showTypes}
+                    icon={icon}
+                    expanded={isOver || expanded}
+                  />
+                );
+              }}
             >
               {children}
             </TreeGroup>
