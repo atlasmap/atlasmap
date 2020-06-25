@@ -129,7 +129,11 @@ function importAtlasGlobalFile(
  * @param isSource - true if selected file is associated with the Source panel,
  *                   false otherwise
  */
-export function importAtlasFile(selectedFile: File, isSource: boolean) {
+export function importAtlasFile(
+  selectedFile: File,
+  isSource: boolean,
+  parameters?: { [key: string]: string },
+) {
   const cfg = ConfigModel.getConfig();
   const userFileComps = selectedFile.name.split(".");
   const userFileSuffix: string = userFileComps[
@@ -139,7 +143,7 @@ export function importAtlasFile(selectedFile: File, isSource: boolean) {
   if (userFileSuffix === "ADM" || userFileSuffix === "JAR") {
     importAtlasGlobalFile(selectedFile, userFileSuffix, cfg);
   } else {
-    importInstanceSchema(selectedFile, cfg, isSource);
+    importInstanceSchema(selectedFile, cfg, isSource, parameters);
   }
 }
 

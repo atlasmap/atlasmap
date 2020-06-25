@@ -101,7 +101,8 @@ export class InitializationService {
     docName: string,
     docType: DocumentType,
     inspectionType: InspectionType,
-    isSource: boolean
+    isSource: boolean,
+    parameters?: { [key: string]: string }
   ) {
     let docdef: DocumentDefinition;
     const javaArchive = docType === DocumentType.JAVA_ARCHIVE;
@@ -145,7 +146,8 @@ export class InitializationService {
           docType,
           inspectionType,
           docBody,
-          isSource
+          isSource,
+          parameters
         );
       }
       docdef.name = docName;
@@ -639,13 +641,17 @@ ${error.status} ${error.statusText}`,
     documentType: DocumentType,
     inspectionType: InspectionType,
     inspectionSource: string,
-    isSource: boolean
+    isSource: boolean,
+    inspectionParameters?: { [key: string]: string }
   ): DocumentDefinition {
     const model: DocumentInitializationModel = new DocumentInitializationModel();
     model.id = name;
     model.type = documentType;
     model.inspectionType = inspectionType;
     model.inspectionSource = inspectionSource;
+    if (inspectionParameters) {
+      model.inspectionParameters = inspectionParameters;
+    }
     model.isSource = isSource;
     return this.cfg.addDocument(model);
   }

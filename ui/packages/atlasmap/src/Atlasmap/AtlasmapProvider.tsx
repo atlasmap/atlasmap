@@ -421,11 +421,11 @@ export function useAtlasmap() {
   const searchTargets = useCallback((term: string) => search(term, false), []);
 
   const handleImportAtlasFile = useCallback(
-    (file: File, isSource: boolean) => {
+    (file: File, isSource: boolean, parameters?: { [key: string]: string }) => {
       if (!isSource) {
         onLoading();
       }
-      importAtlasFile(file, isSource);
+      importAtlasFile(file, isSource, parameters);
     },
     [onLoading],
   );

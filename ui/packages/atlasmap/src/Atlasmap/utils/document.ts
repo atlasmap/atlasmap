@@ -80,6 +80,7 @@ async function importDoc(
   selectedFile: any,
   cfg: ConfigModel,
   isSource: boolean,
+  inspectionParameters?: { [key: string]: string },
 ): Promise<boolean> {
   return new Promise<boolean>(async (resolve) => {
     cfg.initCfg.initialized = false;
@@ -87,7 +88,12 @@ async function importDoc(
       "Importing Document " + selectedFile.name,
     );
     cfg.documentService
-      .processDocument(selectedFile, InspectionType.UNKNOWN, isSource)
+      .processDocument(
+        selectedFile,
+        InspectionType.UNKNOWN,
+        isSource,
+        inspectionParameters,
+      )
       .then(() => {
         cfg.fileService.exportMappingsCatalog("");
         resolve(true);
@@ -152,12 +158,13 @@ export async function importInstanceSchema(
   selectedFile: File,
   cfg: ConfigModel,
   isSource: boolean,
+  inspectionParameters?: { [key: string]: string },
 ) {
   const docDef = getDocDef(selectedFile.name, cfg, isSource);
   if (docDef) {
     await removeDocumentRef(docDef, cfg);
   }
-  await importDoc(selectedFile, cfg, isSource);
+  await importDoc(selectedFile, cfg, isSource, inspectionParameters);
 }
 
 /**

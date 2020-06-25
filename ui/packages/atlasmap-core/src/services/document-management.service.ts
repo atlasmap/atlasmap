@@ -204,7 +204,7 @@ export class DocumentManagementService {
         options = {
           body: payload,
           headers: this.headers,
-          searchParams: { firstRecordAsHeader: true },
+          searchParams: docDef.inspectionParameters,
         };
       }
 
@@ -275,7 +275,8 @@ export class DocumentManagementService {
   async processDocument(
     selectedFile: any,
     inspectionType: InspectionType,
-    isSource: boolean
+    isSource: boolean,
+    inspectionParameters?: { [key: string]: string }
   ): Promise<boolean> {
     return new Promise<boolean>(async (resolve) => {
       let fileBin = null;
@@ -388,7 +389,8 @@ export class DocumentManagementService {
             userFile,
             DocumentType.CSV,
             inspectionType,
-            isSource
+            isSource,
+            inspectionParameters
           );
           break;
 
