@@ -1,28 +1,28 @@
 import React, { FunctionComponent } from "react";
 
 import { Tooltip, Button } from "@patternfly/react-core";
-import { TrashIcon } from "@patternfly/react-icons";
+import { PlusIcon } from "@patternfly/react-icons";
 
-export interface IDeleteMappingActionProps {
+export interface IAddMappingActionProps {
   id: string;
   onClick: () => void;
 }
-export const DeleteMappingAction: FunctionComponent<IDeleteMappingActionProps> = ({
+export const AddMappingAction: FunctionComponent<IAddMappingActionProps> = ({
   id,
   onClick,
 }) => (
   <Tooltip
     position={"auto"}
     enableFlip={true}
-    content={<div>Remove mapping</div>}
+    content={<div>Add new mapping</div>}
   >
     <Button
       variant="plain"
       onClick={onClick}
-      aria-label="Remove mapping"
-      data-testid={`remove-${id}-mapping-button`}
+      aria-label="Add new mapping"
+      data-testid={`add-${id}-mapping-button`}
     >
-      <TrashIcon />
+      <PlusIcon />
     </Button>
   </Tooltip>
 );

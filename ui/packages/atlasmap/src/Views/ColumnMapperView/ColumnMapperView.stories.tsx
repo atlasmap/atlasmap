@@ -91,6 +91,7 @@ export const mappingsColumn = () => (
         onMouseOver={action("onMouseOver")}
         onMouseOut={action("onMouseOut")}
         canDrop={() => true}
+        onAddMapping={action("onAddMapping")}
         mappings={mappings}
       />
     </Column>
