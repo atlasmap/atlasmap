@@ -15,7 +15,12 @@ import {
   NodeRef,
 } from "../../../UI";
 import { IAtlasmapField, IAtlasmapMapping } from "../../models";
-import { DeleteMappingAction, EditMappingAction } from "../Actions";
+import {
+  DeleteMappingAction,
+  EditMappingAction,
+  AddMappingAction,
+  EditMappingNameAction,
+} from "../Actions";
 import {
   MAPPINGS_DOCUMENT_ID_PREFIX,
   MAPPINGS_DROP_TYPE,
@@ -25,7 +30,6 @@ import {
   SOURCES_DRAGGABLE_TYPE,
   TARGETS_DRAGGABLE_TYPE,
 } from "./constants";
-import { EditMappingNameAction } from "../Actions/EditMappingNameAction";
 
 export interface IMappingsColumnData
   extends Omit<Omit<IMappingDocumentData, "mapping">, "isSelected"> {
@@ -38,7 +42,16 @@ export const MappingsColumn: FunctionComponent<
 > = ({ mappings, selectedMappingId, ...props }) => {
   return (
     <>
-      <ColumnHeader title={"Mappings"} />
+      <ColumnHeader
+        title={"Mappings"}
+        actions={[
+          <AddMappingAction
+            id="addMapping"
+            onClick={props.onAddMapping}
+            key={"add"}
+          />,
+        ]}
+      />
       <NodeRef id={MAPPINGS_HEIGHT_BOUNDARY_ID}>
         <ColumnBody>
           <NodeRef id={MAPPINGS_WIDTH_BOUNDARY_ID}>
@@ -77,6 +90,7 @@ export const MappingsColumn: FunctionComponent<
 };
 
 export interface IMappingDocumentEvents {
+  onAddMapping: () => void;
   onSelectMapping: (mapping: IAtlasmapMapping) => void;
   onDeselectMapping: (mapping: IAtlasmapMapping) => void;
   onEditMapping: (mapping: IAtlasmapMapping) => void;

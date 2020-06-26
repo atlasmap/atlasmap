@@ -26,7 +26,6 @@ export interface ISourceMappingTargetXformViewProps
   mappingEvents: IMappingDocumentEvents;
   targetEvents: ITargetsColumnCallbacks;
   showAllLinks: boolean;
-  onRemoveMapping: (mapping: IAtlasmapMapping) => void;
 }
 
 export const SourceMappingTargetXformView: FunctionComponent<ISourceMappingTargetXformViewProps> = ({
@@ -43,7 +42,6 @@ export const SourceMappingTargetXformView: FunctionComponent<ISourceMappingTarge
   sourceEvents,
   mappingEvents,
   targetEvents,
-  onRemoveMapping,
 }) => {
   const [highlightedMappingId, setHighlightedMappingId] = useState<
     string | undefined
@@ -74,7 +72,6 @@ export const SourceMappingTargetXformView: FunctionComponent<ISourceMappingTarge
               onMouseOver={handleMouseOver}
               onMouseOut={handleMouseOut}
               usingTransformationApproach={true}
-              onRemoveMapping={onRemoveMapping}
             />
           </Column>
           <Column data-testid={"column-target-area"} totalColumns={3}>

@@ -248,6 +248,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
 
   const mappingEvents: IMappingDocumentEvents = useMemo(
     () => ({
+      onAddMapping: () => onCreateMapping(undefined, undefined),
       onSelectMapping: selectMapping,
       onDeselectMapping: deselectMapping,
       onEditMapping: () => void 0,
@@ -257,8 +258,10 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       canDrop: (f, m) =>
         !m.sourceFields.find((s) => s.id === f.id) &&
         !m.targetFields.find((t) => t.id === f.id),
+      onRemoveMapping: (mapping: IAtlasmapMapping) =>
+        handlers.onDeleteMapping(mapping),
     }),
-    [deselectMapping, selectMapping],
+    [deselectMapping, handlers, onCreateMapping, selectMapping],
   );
 
   const currentView = useMemo(() => {
@@ -341,9 +344,6 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
             sourceEvents={sourceEvents}
             mappingEvents={mappingEvents}
             targetEvents={targetEvents}
-            onRemoveMapping={(mapping: IAtlasmapMapping) =>
-              handlers.onDeleteMapping(mapping)
-            }
           />
         );
       default:
