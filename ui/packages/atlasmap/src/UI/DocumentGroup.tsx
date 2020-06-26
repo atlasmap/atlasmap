@@ -17,6 +17,9 @@ const styles = StyleSheet.create({
   buttonIcon: {
     marginRight: "1rem",
   },
+  collectionIcon: {
+    paddingLeft: "1.5rem",
+  },
 });
 
 export interface IDocumentGroupProps {
@@ -55,10 +58,11 @@ export const DocumentGroup = forwardRef<
       data-testid={`field-group-${name}-expanded-${expanded}-field`}
     >
       <span className={css(styles.buttonIcon)}>
-        {icon || (expanded ? <FolderOpenIcon /> : <FolderCloseIcon />)}
+        {expanded ? <FolderOpenIcon /> : <FolderCloseIcon />}
       </span>
       {name}
       {showType && ` (${type})`}
+      <span className={css(styles.collectionIcon)}>{icon}</span>
     </span>
   );
 });
