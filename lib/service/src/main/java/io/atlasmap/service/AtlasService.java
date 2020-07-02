@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -566,6 +567,31 @@ public class AtlasService {
     public Response ping() {
         LOG.debug("Ping...  responding with 'pong'.");
         return Response.ok().entity(toJson("pong")).build();
+    }
+
+    @GET
+    @Path("/library/list")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "List Library Classes",
+        description = "Retrieves a list of available Java library class names from uploaded JARs.")
+    @ApiResponses(@ApiResponse(
+        responseCode = "200", content = @Content(schema = @Schema(type = "ArrayList<String>")),
+        description = "Return a list of loadable class names"))
+    public Response listLibraryClasses(@Context UriInfo uriInfo) {
+        ArrayList<String> classNames;
+        try {
+            classNames = libraryLoader.getClassCandidates();
+        } catch (Exception e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.error("Library class retrieval error.", e);
+            }
+            throw new WebApplicationException("Error retrieving class names from uploaded JARs.");
+        }
+        byte[] serialized = toJson(classNames);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(new String(serialized));
+        }
+        return Response.ok().entity(serialized).build();
     }
 
     @PUT

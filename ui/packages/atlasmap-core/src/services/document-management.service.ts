@@ -36,6 +36,7 @@ import {
   ErrorScope,
   ErrorType,
 } from '../models/error.model';
+import { timeout } from 'rxjs/operators';
 
 export class DocumentManagementService {
   cfg!: ConfigModel;
@@ -229,6 +230,39 @@ export class DocumentManagementService {
           observer.complete();
         });
     });
+  }
+
+  getLibraryClassNames(): Observable<string[]> {
+    return new Observable<string[]>((observer: any) => {
+      if (typeof this.cfg.initCfg.baseMappingServiceUrl === 'undefined') {
+        observer.complete();
+        return;
+      }
+      const url: string =
+        this.cfg.initCfg.baseMappingServiceUrl + 'library/list';
+      this.cfg.logger!.debug('Library Class List Service Request: ' + url);
+      this.api
+        .get(url)
+        .json()
+        .then((body: any) => {
+          this.cfg.logger!.debug(
+            `Library Class List Service Response: ${JSON.stringify(body)}`
+          );
+          const classNames: string[] = body.ArrayList;
+          observer.next(classNames);
+          observer.complete();
+        })
+        .catch((error: any) => {
+          if (error.status !== DataMapperUtil.HTTP_STATUS_NO_CONTENT) {
+            this.handleError(
+              'Error occurred while accessing the user uploaded JARs from the runtime service.',
+              error
+            );
+            observer.error(error);
+          }
+          observer.complete();
+        });
+    }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
   }
 
   /**

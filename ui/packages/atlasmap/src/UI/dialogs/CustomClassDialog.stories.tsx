@@ -24,7 +24,8 @@ export const customClassDialog = () => (
     isOpen={boolean("Is open", true)}
     onCancel={action("onCancel")}
     onConfirm={action("onConfirm")}
-    value={text("Initial name", "")}
+    customClassName={text("Initial name", "")}
+    customClassNames={["className1", "className2", "className3"]}
     collectionType={select(
       "Initial collectionType",
       collectionTypeOptions,

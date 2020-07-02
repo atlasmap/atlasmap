@@ -20,15 +20,15 @@ export const EnableJavaClassAction: FunctionComponent<IEnableJavaClassActionProp
       enableFlip={true}
       content={
         <div>
-          Enable specific Java classes from your previously imported Java
-          archive.
+          Load a Java document based on classes from your previously imported
+          Java archive.
         </div>
       }
     >
       <Button
         variant="plain"
         onClick={onEnableClassSearch}
-        aria-label="Enable specific Java classes from your previously imported Java archive."
+        aria-label="Load a Java document based on classes from your previously imported Java archive."
         {...props}
       >
         <AddCircleOIcon />
