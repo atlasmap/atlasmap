@@ -80,6 +80,7 @@ export class DocumentInitializationModel {
   showFields = true;
   inspectionType: InspectionType;
   inspectionSource: string;
+  inspectionParameters: { [key: string]: string };
   inspectionResult: string;
   selectedRoot: string;
   collectionType?: CollectionType;
@@ -177,6 +178,7 @@ export class ConfigModel {
     docDef.inspectionType = docInitModel.inspectionType;
     docDef.inspectionSource = docInitModel.inspectionSource;
     docDef.inspectionResult = docInitModel.inspectionResult;
+    docDef.inspectionParameters = docInitModel.inspectionParameters;
     docDef.selectedRoot = docInitModel.selectedRoot;
 
     if (docDef.type === DocumentType.XSD) {

@@ -89,12 +89,12 @@ export class DocumentDefinition {
   description: string;
   uri: string;
   inspectionType: InspectionType;
+  inspectionParameters: { [key: string]: string };
   inspectionSource: string;
   inspectionResult: string;
   isSource: boolean;
   isPropertyOrConstant: boolean;
   selectedRoot: string;
-
   classPath: string;
   initialized = false;
   errorOccurred = false;
