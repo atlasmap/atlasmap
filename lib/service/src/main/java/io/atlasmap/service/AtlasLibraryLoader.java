@@ -93,7 +93,7 @@ public class AtlasLibraryLoader extends ClassLoader {
         reload();
     }
 
-    public ArrayList<String> getClassCandidates() throws AtlasException {
+    public ArrayList<String> getLibraryClassNames() throws AtlasException {
         final String classSuffix = ".class";
         ArrayList<String> classNames = new ArrayList<String>();
 

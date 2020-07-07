@@ -580,7 +580,7 @@ public class AtlasService {
     public Response listLibraryClasses(@Context UriInfo uriInfo) {
         ArrayList<String> classNames;
         try {
-            classNames = libraryLoader.getClassCandidates();
+            classNames = libraryLoader.getLibraryClassNames();
         } catch (Exception e) {
             if (LOG.isDebugEnabled()) {
                 LOG.error("Library class retrieval error.", e);
