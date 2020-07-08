@@ -493,6 +493,76 @@ ifdef::internal-generation[]
 endif::internal-generation[]
 
 
+[.listLibraryClasses]
+==== listLibraryClasses
+    
+`GET /library/list`
+
+List Library Classes
+
+===== Description 
+
+Retrieves a list of available Java library class names from uploaded JARs.
+
+
+// markup not found, no include::{specDir}library/list/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+
+
+
+
+
+===== Return Type
+
+
+<<ArrayList&lt;String&gt;>>
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return a list of loadable class names
+|  <<ArrayList&lt;String&gt;>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}library/list/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}library/list/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :library/list/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}library/list/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
 [.listMappings]
 ==== listMappings
     
