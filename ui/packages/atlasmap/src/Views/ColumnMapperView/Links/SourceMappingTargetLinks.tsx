@@ -27,6 +27,7 @@ export interface ISourceMappingTargetLinksData {
   mappings: IAtlasmapMapping[];
   selectedMappingId?: string;
   highlightedMappingId?: string;
+  showAllLinks?: boolean;
 }
 
 export const SourceMappingTargetLinks: FunctionComponent<
@@ -38,8 +39,9 @@ export const SourceMappingTargetLinks: FunctionComponent<
   onSelectMapping,
   onMouseOver,
   onMouseOut,
+  showAllLinks,
 }) => {
-  const links = mappings.map((m) => {
+  const createLink = (m: IAtlasmapMapping) => {
     const handleClick = (event: MouseEvent) => {
       onSelectMapping(m);
       event.stopPropagation();
@@ -79,7 +81,15 @@ export const SourceMappingTargetLinks: FunctionComponent<
         />
       )),
     ];
-  });
+  };
+
+  const selectedMapping = mappings.find((m) => m.id === selectedMappingId);
+  const links = showAllLinks
+    ? mappings.map(createLink)
+    : selectedMapping
+    ? [createLink(selectedMapping)]
+    : [];
+
   return (
     <>
       {links}

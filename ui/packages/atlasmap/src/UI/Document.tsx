@@ -6,6 +6,7 @@ import {
   CardHeader,
   Title,
   Button,
+  TextInput,
 } from "@patternfly/react-core";
 import { css, StyleSheet } from "@patternfly/react-styles";
 import React, {
@@ -17,6 +18,7 @@ import React, {
   ReactElement,
   ReactNode,
   useCallback,
+  useRef,
 } from "react";
 import { useToggle } from "./useToggle";
 import { AngleDownIcon, AngleRightIcon } from "@patternfly/react-icons";
@@ -83,6 +85,9 @@ export interface IDocumentProps
   startExpanded?: boolean;
   onSelect?: () => void;
   onDeselect?: () => void;
+  isEditingTitle?: boolean;
+  onTitleChange?: (title: string) => void;
+  onStopEditingTitle?: (cancel?: boolean) => void;
 }
 
 export const Document = forwardRef<
@@ -105,6 +110,9 @@ export const Document = forwardRef<
     startExpanded = true,
     onSelect,
     onDeselect,
+    isEditingTitle,
+    onTitleChange,
+    onStopEditingTitle,
     children,
     ...props
   },
@@ -129,20 +137,26 @@ export const Document = forwardRef<
       switch (event.key) {
         case "Enter":
         case "Space":
-          if (onSelect) {
+          if (isEditingTitle && event.key === "Enter" && onStopEditingTitle) {
+            onStopEditingTitle();
+          } else if (onSelect) {
             onSelect();
           }
           break;
         case "Escape":
-          if (onDeselect) {
+          if (isEditingTitle && onStopEditingTitle) {
+            onStopEditingTitle(true);
+          } else if (onDeselect) {
             onDeselect();
           }
           break;
       }
     },
-    [onDeselect, onSelect],
+    [isEditingTitle, onDeselect, onSelect, onStopEditingTitle],
   );
   const makeCardSelected = selected || dropTarget || dropAccepted;
+  // TODO: Figure out how to do select all on focus. nameRef code doesn't work as suggested by PatternFly docs
+  const nameRef = useRef<HTMLInputElement>(null);
 
   return (
     <div
@@ -171,20 +185,35 @@ export const Document = forwardRef<
             </CardActions>
             {title && (
               <CardHeader className={css(styles.header)}>
-                <Button
-                  variant={"plain"}
-                  onClick={toggleExpanded}
-                  aria-label={"Expand/collapse this card"}
-                  data-testid={`expand-collapse-${title}-button`}
-                  className={css(styles.headerButton)}
-                >
-                  <Title size={"lg"} headingLevel={"h2"} aria-label={title}>
-                    <TruncatedString title={title}>
-                      {isExpanded ? <AngleDownIcon /> : <AngleRightIcon />}{" "}
-                      {title}
-                    </TruncatedString>
-                  </Title>
-                </Button>
+                {isEditingTitle ? (
+                  <TextInput
+                    value={title}
+                    type="text"
+                    aria-label="Edit title"
+                    onChange={onTitleChange}
+                    autoFocus
+                    onBlur={() => onStopEditingTitle && onStopEditingTitle()}
+                    ref={nameRef}
+                    onFocus={() =>
+                      nameRef && nameRef.current && nameRef.current.select()
+                    }
+                  />
+                ) : (
+                  <Button
+                    variant={"plain"}
+                    onClick={toggleExpanded}
+                    aria-label={"Expand/collapse this card"}
+                    data-testid={`expand-collapse-${title}-button`}
+                    className={css(styles.headerButton)}
+                  >
+                    <Title size={"lg"} headingLevel={"h2"} aria-label={title}>
+                      <TruncatedString title={title}>
+                        {isExpanded ? <AngleDownIcon /> : <AngleRightIcon />}{" "}
+                        {title}
+                      </TruncatedString>
+                    </Title>
+                  </Button>
+                )}
               </CardHeader>
             )}
           </CardHead>

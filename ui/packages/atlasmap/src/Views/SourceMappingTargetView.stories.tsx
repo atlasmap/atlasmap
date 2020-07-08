@@ -83,6 +83,7 @@ export const sourceMappingTargetView = () =>
             onMouseOver: action("onMouseOver"),
             onSelectMapping: action("onSelectMapping"),
             onDeselectMapping: action("onDeselectMapping"),
+            onAddMapping: action("onAddMapping"),
           }}
           showTypes={boolean("Show types", false)}
           showMappingPreview={boolean("Show mapping preview", false)}
