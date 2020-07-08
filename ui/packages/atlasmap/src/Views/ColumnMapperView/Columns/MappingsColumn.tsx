@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useCallback } from "react";
+import React, { FunctionComponent, useCallback, useState } from "react";
 
 import { Split, SplitItem } from "@patternfly/react-core";
 
@@ -15,7 +15,12 @@ import {
   NodeRef,
 } from "../../../UI";
 import { IAtlasmapField, IAtlasmapMapping } from "../../models";
-import { EditMappingAction } from "../Actions";
+import {
+  DeleteMappingAction,
+  EditMappingAction,
+  AddMappingAction,
+  EditMappingNameAction,
+} from "../Actions";
 import {
   MAPPINGS_DOCUMENT_ID_PREFIX,
   MAPPINGS_DROP_TYPE,
@@ -37,7 +42,16 @@ export const MappingsColumn: FunctionComponent<
 > = ({ mappings, selectedMappingId, ...props }) => {
   return (
     <>
-      <ColumnHeader title={"Mappings"} />
+      <ColumnHeader
+        title={"Mappings"}
+        actions={[
+          <AddMappingAction
+            id="addMapping"
+            onClick={props.onAddMapping}
+            key={"add"}
+          />,
+        ]}
+      />
       <NodeRef id={MAPPINGS_HEIGHT_BOUNDARY_ID}>
         <ColumnBody>
           <NodeRef id={MAPPINGS_WIDTH_BOUNDARY_ID}>
@@ -76,6 +90,7 @@ export const MappingsColumn: FunctionComponent<
 };
 
 export interface IMappingDocumentEvents {
+  onAddMapping: () => void;
   onSelectMapping: (mapping: IAtlasmapMapping) => void;
   onDeselectMapping: (mapping: IAtlasmapMapping) => void;
   onEditMapping: (mapping: IAtlasmapMapping) => void;
@@ -83,12 +98,14 @@ export interface IMappingDocumentEvents {
   onMouseOver: (mapping: IAtlasmapMapping) => void;
   onMouseOut: () => void;
   canDrop: (target: IDragAndDropField, mapping: IAtlasmapMapping) => boolean;
+  onRemoveMapping?: (mapping: IAtlasmapMapping) => void;
 }
 
 export interface IMappingDocumentData {
   mapping: IAtlasmapMapping;
   isSelected: boolean;
   showMappingPreview: boolean;
+  usingTransformationApproach?: boolean;
 }
 
 export const MappingDocument: FunctionComponent<
@@ -104,7 +121,12 @@ export const MappingDocument: FunctionComponent<
   onMouseOver,
   onMouseOut,
   canDrop,
+  usingTransformationApproach,
+  onRemoveMapping,
 }) => {
+  const [isEditingMappingName, setEditingMappingName] = useState(false);
+  const [mappingName, setMappingName] = useState(mapping.name);
+
   const documentId = `${MAPPINGS_DOCUMENT_ID_PREFIX}${mapping.id}`;
   const handleSelect = useCallback(() => {
     if (!isSelected) {
@@ -116,6 +138,27 @@ export const MappingDocument: FunctionComponent<
       onDeselectMapping(mapping);
     }
   }, [isSelected, mapping, onDeselectMapping]);
+  const actions = usingTransformationApproach
+    ? [
+        <EditMappingNameAction
+          id={"editName" + mapping.id}
+          onClick={() => setEditingMappingName(true)}
+          key="editName"
+        />,
+        <DeleteMappingAction
+          id={"delete" + mapping.id}
+          onClick={() => onRemoveMapping && onRemoveMapping(mapping)}
+          key="delete"
+        />,
+      ]
+    : [
+        <EditMappingAction
+          id={"edit" + mapping.id}
+          onClick={() => onEditMapping(mapping)}
+          key="edit"
+        />,
+      ];
+
   return (
     <FieldDropTarget
       target={{
@@ -138,19 +181,27 @@ export const MappingDocument: FunctionComponent<
             title={mapping.name}
             dropAccepted={isDroppable}
             dropTarget={isTarget}
-            actions={[
-              <EditMappingAction
-                id={mapping.id}
-                onClick={() => onEditMapping(mapping)}
-                key="edit"
-              />,
-            ]}
+            actions={actions}
             selected={isSelected}
             selectable={true}
             onSelect={handleSelect}
             onDeselect={handleDeselect}
             onMouseOver={() => onMouseOver(mapping)}
             onMouseOut={onMouseOut}
+            isEditingTitle={isEditingMappingName}
+            onTitleChange={(title: string) => {
+              setMappingName(title);
+            }}
+            onStopEditingTitle={(cancel) => {
+              if (cancel) {
+                setMappingName(mapping.name);
+              } else {
+                const name = mappingName || "Mapping";
+                setMappingName(name);
+                mapping.name = name;
+              }
+              setEditingMappingName(false);
+            }}
           >
             <Split>
               <SplitItem style={{ maxWidth: "50%", padding: "0 0 0 1rem" }}>

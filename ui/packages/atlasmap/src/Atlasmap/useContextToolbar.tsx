@@ -1,10 +1,11 @@
-import React, { useMemo, useState } from "react";
-
 import { ToolbarGroup } from "@patternfly/react-core";
-
+import React, { useMemo, useState } from "react";
 import { ContextToolbar } from "../Layout";
 import { useToggle } from "../UI";
+import { useAtlasmap } from "./AtlasmapProvider";
 import {
+  AtlasmapToolbarItem,
+  ToggleAllLinksToolbarItem,
   ToggleColumnMapperViewToolbarItem,
   ToggleFreeViewToolbarItem,
   ToggleMappedFieldsToolbarItem,
@@ -12,17 +13,17 @@ import {
   ToggleMappingPreviewToolbarItem,
   ToggleMappingTableViewToolbarItem,
   ToggleNamespaceTableViewToolbarItem,
+  ToggleTransformationApproachToolbarItem,
   ToggleTypesToolbarItem,
   ToggleUnmappedFieldsToolbarItem,
-  AtlasmapToolbarItem,
 } from "./toolbarItems";
-import { useAtlasmap } from "./AtlasmapProvider";
 
 export type Views =
   | "ColumnMapper"
   | "MappingTable"
   | "NamespaceTable"
-  | "FreeView";
+  | "FreeView"
+  | "TransformationApproach";
 
 export interface IUseContextToolbarHandlers {
   onImportAtlasFile: (file: File) => void;
@@ -40,6 +41,7 @@ export interface IUseContextToolbarData {
   showColumnMapperViewToolbarItem?: boolean;
   showMappingTableViewToolbarItem?: boolean;
   showNamespaceTableViewToolbarItem?: boolean;
+  showTransformationApproachViewToolbarItem?: boolean;
   showFreeViewToolbarItem?: boolean;
 
   showToggleMappingColumnToolbarItem?: boolean;
@@ -47,6 +49,7 @@ export interface IUseContextToolbarData {
   showToggleTypesToolbarItem?: boolean;
   showToggleMappedFieldsToolbarItem?: boolean;
   showToggleUnmappedFieldsToolbarItem?: boolean;
+  showToggleAllLinksToolbarItem?: boolean;
 }
 
 export function useContextToolbar({
@@ -58,6 +61,7 @@ export function useContextToolbar({
   showColumnMapperViewToolbarItem = true,
   showMappingTableViewToolbarItem = true,
   showNamespaceTableViewToolbarItem = true,
+  showTransformationApproachViewToolbarItem = true,
   showFreeViewToolbarItem = false,
 
   showToggleMappingColumnToolbarItem = false,
@@ -65,6 +69,7 @@ export function useContextToolbar({
   showToggleTypesToolbarItem = true,
   showToggleMappedFieldsToolbarItem = true,
   showToggleUnmappedFieldsToolbarItem = true,
+  showToggleAllLinksToolbarItem = true,
 
   onImportAtlasFile,
   onImportJarFile,
@@ -95,6 +100,10 @@ export function useContextToolbar({
     state: showUnmappedFields,
     toggle: toggleShowUnmappedFields,
   } = useToggle(true, amToggleShowUnmappedFields);
+  const { state: showAllLinks, toggle: toggleShowAllLinks } = useToggle(
+    false,
+    () => !showAllLinks,
+  );
 
   const contextToolbar = useMemo(
     () => (
@@ -118,6 +127,7 @@ export function useContextToolbar({
         )}
         {(showColumnMapperViewToolbarItem ||
           showMappingTableViewToolbarItem ||
+          showTransformationApproachViewToolbarItem ||
           showFreeViewToolbarItem ||
           showNamespaceTableViewToolbarItem) && (
           <ToolbarGroup>
@@ -145,6 +155,12 @@ export function useContextToolbar({
                 onClick={() => setActiveView("NamespaceTable")}
               />
             )}
+            {showTransformationApproachViewToolbarItem && (
+              <ToggleTransformationApproachToolbarItem
+                toggled={activeView === "TransformationApproach"}
+                onClick={() => setActiveView("TransformationApproach")}
+              />
+            )}
           </ToolbarGroup>
         )}
         <ToolbarGroup>
@@ -157,7 +173,8 @@ export function useContextToolbar({
             )}
           {showToggleMappingPreviewToolbarItem &&
             (activeView === "ColumnMapper" ||
-              activeView === "MappingTable") && (
+              activeView === "MappingTable" ||
+              activeView === "TransformationApproach") && (
               <ToggleMappingPreviewToolbarItem
                 toggled={showMappingPreview}
                 onClick={toggleShowMappingPreview}
@@ -165,24 +182,34 @@ export function useContextToolbar({
             )}
           {showToggleTypesToolbarItem &&
             (activeView === "ColumnMapper" ||
-              activeView === "MappingTable") && (
+              activeView === "MappingTable" ||
+              activeView === "TransformationApproach") && (
               <ToggleTypesToolbarItem
                 toggled={showTypes}
                 onClick={toggleShowTypes}
               />
             )}
           {showToggleMappedFieldsToolbarItem &&
-            activeView === "ColumnMapper" && (
+            (activeView === "ColumnMapper" ||
+              activeView === "TransformationApproach") && (
               <ToggleMappedFieldsToolbarItem
                 toggled={showMappedFields}
                 onClick={toggleShowMappedFields}
               />
             )}
           {showToggleUnmappedFieldsToolbarItem &&
-            activeView === "ColumnMapper" && (
+            (activeView === "ColumnMapper" ||
+              activeView === "TransformationApproach") && (
               <ToggleUnmappedFieldsToolbarItem
                 toggled={showUnmappedFields}
                 onClick={toggleShowUnmappedFields}
+              />
+            )}
+          {showToggleAllLinksToolbarItem &&
+            activeView === "TransformationApproach" && (
+              <ToggleAllLinksToolbarItem
+                toggled={showAllLinks}
+                onClick={toggleShowAllLinks}
               />
             )}
         </ToolbarGroup>
@@ -199,6 +226,7 @@ export function useContextToolbar({
       onResetAtlasmap,
       showColumnMapperViewToolbarItem,
       showMappingTableViewToolbarItem,
+      showTransformationApproachViewToolbarItem,
       showFreeViewToolbarItem,
       showNamespaceTableViewToolbarItem,
       activeView,
@@ -217,6 +245,9 @@ export function useContextToolbar({
       showToggleUnmappedFieldsToolbarItem,
       showUnmappedFields,
       toggleShowUnmappedFields,
+      showToggleAllLinksToolbarItem,
+      showAllLinks,
+      toggleShowAllLinks,
     ],
   );
 
@@ -227,6 +258,7 @@ export function useContextToolbar({
     showTypes,
     showMappedFields,
     showUnmappedFields,
+    showAllLinks,
     contextToolbar,
   };
 }
