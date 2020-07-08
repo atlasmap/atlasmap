@@ -1,9 +1,9 @@
-import { text, boolean } from "@storybook/addon-knobs";
+import { action } from "@storybook/addon-actions";
+import { boolean, text } from "@storybook/addon-knobs";
 import React from "react";
+import { html } from "../stories/htmlKnob";
 import { Atlasmap } from "./Atlasmap";
 import { AtlasmapProvider, IAtlasmapProviderProps } from "./AtlasmapProvider";
-import { action } from "@storybook/addon-actions";
-import { html } from "../stories/htmlKnob";
 
 const sampleExternalDocument = JSON.stringify(
   {

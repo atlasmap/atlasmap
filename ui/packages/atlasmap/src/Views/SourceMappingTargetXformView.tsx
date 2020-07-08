@@ -1,5 +1,4 @@
 import React, { FunctionComponent, useState } from "react";
-
 import { Column, ColumnMapper, Columns, NodeRefProvider } from "../UI";
 import {
   IMappingDocumentEvents,
@@ -8,8 +7,8 @@ import {
   ISourceMappingTargetLinksData,
   ISourceMappingTargetLinksEvents,
   ISourcesColumnData,
-  ITargetsColumnData,
   ITargetsColumnCallbacks,
+  ITargetsColumnData,
   MappingsColumn,
   SourceMappingTargetLinks,
   SourcesColumn,
@@ -17,7 +16,7 @@ import {
 } from "./ColumnMapperView";
 import { IAtlasmapMapping } from "./models";
 
-export interface ISourceMappingTargetViewProps
+export interface ISourceMappingTargetXformViewProps
   extends ISourcesColumnData,
     IMappingsColumnData,
     ITargetsColumnData,
@@ -26,9 +25,10 @@ export interface ISourceMappingTargetViewProps
   sourceEvents: ISourceColumnCallbacks;
   mappingEvents: IMappingDocumentEvents;
   targetEvents: ITargetsColumnCallbacks;
+  showAllLinks: boolean;
 }
 
-export const SourceMappingTargetView: FunctionComponent<ISourceMappingTargetViewProps> = ({
+export const SourceMappingTargetXformView: FunctionComponent<ISourceMappingTargetXformViewProps> = ({
   properties,
   constants,
   sources,
@@ -36,6 +36,7 @@ export const SourceMappingTargetView: FunctionComponent<ISourceMappingTargetView
   targets,
   showMappingPreview,
   showTypes,
+  showAllLinks,
   selectedMappingId,
   onSelectMapping,
   sourceEvents,
@@ -70,6 +71,7 @@ export const SourceMappingTargetView: FunctionComponent<ISourceMappingTargetView
               {...mappingEvents}
               onMouseOver={handleMouseOver}
               onMouseOut={handleMouseOut}
+              usingTransformationApproach={true}
             />
           </Column>
           <Column data-testid={"column-target-area"} totalColumns={3}>
@@ -88,6 +90,7 @@ export const SourceMappingTargetView: FunctionComponent<ISourceMappingTargetView
           onSelectMapping={onSelectMapping}
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
+          showAllLinks={showAllLinks}
         />
       </NodeRefProvider>
     </ColumnMapper>

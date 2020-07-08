@@ -1,3 +1,11 @@
+import {
+  DocumentInitializationModel,
+  DocumentType,
+  InspectionType,
+  MappingSerializer,
+  MappingUtil,
+  search,
+} from "@atlasmap/core";
 import React, {
   createContext,
   FunctionComponent,
@@ -7,33 +15,38 @@ import React, {
   useReducer,
 } from "react";
 import { debounceTime } from "rxjs/operators";
-
-import {
-  MappingUtil,
-  search,
-  MappingSerializer,
-  InspectionType,
-  DocumentType,
-  DocumentInitializationModel,
-} from "@atlasmap/core";
-
 import { IAtlasmapDocument, IAtlasmapField } from "../Views";
+import {
+  DataActionPayload,
+  dataReducer,
+  IDataState,
+  initDataState,
+  initNotificationsState,
+  INotificationsState,
+  notificationsReducer,
+} from "./reducers";
 import {
   addToCurrentMapping,
   createConstant,
   createMapping,
+  createNamespace,
   createProperty,
   deleteAtlasFile,
   deleteConstant,
+  deleteNamespace,
   deleteProperty,
   deselectMapping,
   documentExists,
   editConstant,
+  editNamespace,
   editProperty,
   enableCustomClass,
+  errorInfoToNotification,
   executeFieldSearch,
   exportAtlasFile,
   fromDocumentDefinitionToFieldGroup,
+  fromFieldToIFieldsNode,
+  fromMappedFieldToIMappingField,
   fromMappingDefinitionToIMappings,
   fromMappingModelToImapping,
   getMappingActions,
@@ -42,12 +55,12 @@ import {
   getMultiplicityActions,
   handleActionChange,
   handleIndexChange,
-  handleNewTransformation,
-  handleTransformationChange,
-  handleTransformationArgumentChange,
-  handleRemoveTransformation,
-  handleMultiplicityChange,
   handleMultiplicityArgumentChange,
+  handleMultiplicityChange,
+  handleNewTransformation,
+  handleRemoveTransformation,
+  handleTransformationArgumentChange,
+  handleTransformationChange,
   importAtlasFile,
   initializationService,
   mappingExpressionAddField,
@@ -58,32 +71,17 @@ import {
   mappingExpressionRemoveField,
   newMapping,
   onFieldPreviewChange,
-  toggleExpressionMode,
+  removeFromCurrentMapping,
+  removeMappedFieldFromCurrentMapping,
   removeMapping,
   resetAtlasmap,
   selectMapping,
+  toggleExpressionMode,
   toggleMappingPreview,
   toggleShowMappedFields,
   toggleShowUnmappedFields,
   trailerId,
-  removeFromCurrentMapping,
-  removeMappedFieldFromCurrentMapping,
-  fromMappedFieldToIMappingField,
-  errorInfoToNotification,
-  createNamespace,
-  editNamespace,
-  deleteNamespace,
-  fromFieldToIFieldsNode,
 } from "./utils";
-import {
-  INotificationsState,
-  IDataState,
-  initDataState,
-  initNotificationsState,
-  dataReducer,
-  notificationsReducer,
-  DataActionPayload,
-} from "./reducers";
 
 // the document payload with get from Syndesis
 export interface IExternalDocumentProps {
