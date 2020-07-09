@@ -125,6 +125,7 @@ export interface IMappingDocumentData {
   mapping: IAtlasmapMapping;
   isSelected: boolean;
   showMappingPreview: boolean;
+  usingTransformationApproach?: boolean;
 }
 
 export const MappingDocument: FunctionComponent<
