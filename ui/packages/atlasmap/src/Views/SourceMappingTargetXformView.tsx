@@ -71,7 +71,6 @@ export const SourceMappingTargetXformView: FunctionComponent<ISourceMappingTarge
               {...mappingEvents}
               onMouseOver={handleMouseOver}
               onMouseOut={handleMouseOut}
-              usingTransformationApproach={true}
             />
           </Column>
           <Column data-testid={"column-target-area"} totalColumns={3}>
