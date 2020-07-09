@@ -18,6 +18,7 @@ import {
   TruncatedString,
   IDragAndDropField,
   NodeRef,
+  TransformationDocument,
 } from "../../../UI";
 import { IAtlasmapField, IAtlasmapMapping } from "../../models";
 import {
