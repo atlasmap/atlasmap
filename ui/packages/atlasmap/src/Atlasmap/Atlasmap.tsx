@@ -20,6 +20,7 @@ import {
   SourceMappingTargetView,
   SourceMappingTargetXformView,
   SourceTargetView,
+  ViewContext,
 } from "../Views";
 import { useAtlasmap } from "./AtlasmapProvider";
 import { useAtlasmapDialogs } from "./useAtlasmapDialogs";
@@ -283,19 +284,21 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
             targetEvents={targetEvents}
           />
         ) : (
-          <SourceTargetView
-            properties={properties}
-            constants={constants}
-            sources={sources}
-            mappings={mappings}
-            targets={targets}
-            selectedMappingId={selectedMapping?.id}
-            onSelectMapping={selectMapping}
-            showMappingPreview={showMappingPreview}
-            showTypes={showTypes}
-            sourceEvents={sourceEvents}
-            targetEvents={targetEvents}
-          />
+          <ViewContext.Provider value={{ usingTransformationApproach: false }}>
+            <SourceTargetView
+              properties={properties}
+              constants={constants}
+              sources={sources}
+              mappings={mappings}
+              targets={targets}
+              selectedMappingId={selectedMapping?.id}
+              onSelectMapping={selectMapping}
+              showMappingPreview={showMappingPreview}
+              showTypes={showTypes}
+              sourceEvents={sourceEvents}
+              targetEvents={targetEvents}
+            />
+          </ViewContext.Provider>
         );
       case "MappingTable":
         return (
@@ -330,21 +333,23 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         );
       case "TransformationApproach":
         return (
-          <SourceMappingTargetXformView
-            properties={properties}
-            constants={constants}
-            sources={sources}
-            mappings={mappings}
-            targets={targets}
-            selectedMappingId={selectedMapping?.id}
-            onSelectMapping={selectMapping}
-            showMappingPreview={showMappingPreview}
-            showTypes={showTypes}
-            showAllLinks={showAllLinks}
-            sourceEvents={sourceEvents}
-            mappingEvents={mappingEvents}
-            targetEvents={targetEvents}
-          />
+          <ViewContext.Provider value={{ usingTransformationApproach: true }}>
+            <SourceMappingTargetXformView
+              properties={properties}
+              constants={constants}
+              sources={sources}
+              mappings={mappings}
+              targets={targets}
+              selectedMappingId={selectedMapping?.id}
+              onSelectMapping={selectMapping}
+              showMappingPreview={showMappingPreview}
+              showTypes={showTypes}
+              showAllLinks={showAllLinks}
+              sourceEvents={sourceEvents}
+              mappingEvents={mappingEvents}
+              targetEvents={targetEvents}
+            />
+          </ViewContext.Provider>
         );
       default:
         return <>TODO</>;
