@@ -72,6 +72,11 @@ export const TreeGroupAndNodeRefsAndDnD: FunctionComponent<ITreeGroupAndNodeRefs
                   type={group.type}
                   showType={showTypes}
                   icon={group.isCollection ? <LayerGroupIcon /> : undefined}
+                  iconTooltip={
+                    group.isCollection
+                      ? "This object is a collection"
+                      : undefined
+                  }
                   expanded={isOver || expanded}
                 />
               )}
