@@ -104,20 +104,24 @@ public class CsvFieldWriter implements AtlasFieldWriter {
 <span class="fc bfc" id="L104" title="All 2 branches covered.">                for (Field field: fields) {</span>
 <span class="fc" id="L105">                    FieldGroup fieldGroup = (FieldGroup) field;</span>
 <span class="fc" id="L106">                    CsvField csvField = (CsvField) fieldGroup.getField().get(i);</span>
-<span class="pc bpc" id="L107" title="1 of 2 branches missed.">                    if (csvField.getColumn() != null) {</span>
-<span class="nc" id="L108">                        values.set(csvField.getColumn(), csvField.getValue().toString());</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">                    if (csvField.getColumn() != null) {</span>
+                        //Add missing values
+<span class="fc bfc" id="L109" title="All 2 branches covered.">                        for (int j = values.size(); j &lt; csvField.getColumn() + 1; j++) {</span>
+<span class="fc" id="L110">                            values.add(null);</span>
+                        }
+<span class="fc" id="L112">                        values.set(csvField.getColumn(), csvField.getValue().toString());</span>
                     } else {
-<span class="fc" id="L110">                        values.add(csvField.getValue().toString());</span>
+<span class="fc" id="L114">                        values.add(csvField.getValue().toString());</span>
                     }
-<span class="fc" id="L112">                }</span>
-<span class="fc" id="L113">                printer.printRecord(values);</span>
+<span class="fc" id="L116">                }</span>
+<span class="fc" id="L117">                printer.printRecord(values);</span>
             }
 
-<span class="fc" id="L116">            writer.flush();</span>
-<span class="fc" id="L117">            String csv = out.toString();</span>
-<span class="fc" id="L118">            return csv;</span>
-<span class="nc" id="L119">        } catch (IOException e) {</span>
-<span class="nc" id="L120">            throw new AtlasException(e);</span>
+<span class="fc" id="L120">            writer.flush();</span>
+<span class="fc" id="L121">            String csv = out.toString();</span>
+<span class="fc" id="L122">            return csv;</span>
+<span class="nc" id="L123">        } catch (IOException e) {</span>
+<span class="nc" id="L124">            throw new AtlasException(e);</span>
         }
     }
 }
