@@ -147,6 +147,45 @@ export function getDocDef(
 }
 
 /**
+ * Determine the user-defined class names associated with previously
+ * imported JARs.
+ */
+export async function getCustomClassNameOptions(): Promise<string[]> {
+  return new Promise<string[]>(async (resolve, reject) => {
+    const cfg = ConfigModel.getConfig();
+    cfg.documentService
+      .getLibraryClassNames()
+      .toPromise()
+      .then((classNames: string[]) => {
+        resolve(classNames);
+      })
+      .catch((error: any) => {
+        if (error.status === 0) {
+          cfg.errorService.addError(
+            new ErrorInfo({
+              message:
+                "Fatal network error: Could not connect to AtlasMap design runtime service.",
+              level: ErrorLevel.ERROR,
+              scope: ErrorScope.APPLICATION,
+              type: ErrorType.INTERNAL,
+            }),
+          );
+        } else {
+          cfg.errorService.addError(
+            new ErrorInfo({
+              message: "Could not find class names from uploaded JARs.",
+              level: ErrorLevel.WARN,
+              scope: ErrorScope.APPLICATION,
+              type: ErrorType.INTERNAL,
+            }),
+          );
+        }
+        reject();
+      });
+  });
+}
+
+/**
  * Import an instance or schema document into either the Source panel or Target
  * panel (JSON, XML, XSD).
  *
@@ -168,11 +207,9 @@ export async function importInstanceSchema(
 }
 
 /**
- * Enable the specified class package name and collection type in the
- * targetted panel for use in field mapping or custom transformations.
- * The user must have previously imported a JAR file containing the class.
- * The user-defined class will establish either an instance of mappable
- * fields or custom transformation methods.
+ * Enable the specified class name and collection type in the targetted
+ * panel for use in Java document loading. The user must have previously
+ * imported a JAR file containing the class.
  *
  * @param selectedClass
  * @param selectedCollection
@@ -210,7 +247,7 @@ export function enableCustomClass(
         .then(async (doc: DocumentDefinition) => {
           // No fields indicate the user is attempting to enable a custom
           // field action class.  Remove the document from the panel since
-          // it has no fields.
+          // it has no fields and issue a warning.
           if (doc.fields.length === 0) {
             // Make any custom field actions active.
             await cfg.fieldActionService
@@ -231,6 +268,14 @@ export function enableCustomClass(
             } else {
               DataMapperUtil.removeItemFromArray(doc, cfg.targetDocs);
             }
+            cfg.errorService.addError(
+              new ErrorInfo({
+                message: "The Java class you selected has no mappable fields.",
+                level: ErrorLevel.WARN,
+                scope: ErrorScope.APPLICATION,
+                type: ErrorType.USER,
+              }),
+            );
           }
           await cfg.mappingService.notifyMappingUpdated();
           await cfg.fileService.exportMappingsCatalog("");

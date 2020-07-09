@@ -16,11 +16,13 @@
 package io.atlasmap.service;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -29,6 +31,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,6 +91,35 @@ public class AtlasLibraryLoader extends ClassLoader {
             f.delete();
         }
         reload();
+    }
+
+    public ArrayList<String> getLibraryClassNames() throws AtlasException {
+        final String classSuffix = ".class";
+        ArrayList<String> classNames = new ArrayList<String>();
+
+        if (this.urlClassLoader == null) {
+            return classNames;
+        }
+        URL candidateURLs[] = this.urlClassLoader.getURLs();
+
+        for (int i=0; i < candidateURLs.length; i++) {
+            ZipInputStream zip;
+            try {
+                zip = new ZipInputStream(new FileInputStream(candidateURLs[i].getPath()));
+
+                for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
+                    if (!entry.isDirectory() && entry.getName().endsWith(classSuffix)) {
+                        String className = entry.getName().replace('/', '.');
+                        classNames.add(className.substring(0, className.length() - classSuffix.length()));
+                    }
+                }
+                zip.close();
+            } catch (IOException e) {
+                throw new AtlasException(String.format("URL library '%s' access error: %s",
+                    candidateURLs[i].getPath(), e.getMessage()));
+            }
+        }
+        return classNames;
     }
 
     public void reload() {

@@ -37,6 +37,7 @@ import {
   IAtlasmapNamespace,
   INotification,
 } from "../../Views";
+import { removeMapping } from "./field";
 
 const api = ky.create({ headers: { "ATLASMAP-XSRF-TOKEN": "awesome" } });
 
@@ -634,6 +635,10 @@ export function handleMultiplicityArgumentChange(
 }
 
 export function selectMapping(mapping: IAtlasmapMapping) {
+  const activeMapping = initializationService.cfg.mappings!.activeMapping;
+  if (activeMapping?.isEmpty()) {
+    removeMapping(activeMapping);
+  }
   initializationService.cfg.mappingService.selectMapping(mapping.mapping);
 }
 

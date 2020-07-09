@@ -7,3 +7,4 @@ export * from "./NamespaceTableView";
 export * from "./SourceMappingTargetView";
 export * from "./SourceMappingTargetXformView";
 export * from "./SourceTargetView";
+export * from "./ViewProvider";

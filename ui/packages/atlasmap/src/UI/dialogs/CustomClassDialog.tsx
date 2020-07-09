@@ -8,7 +8,6 @@ import React, {
 import {
   Form,
   FormGroup,
-  TextInput,
   FormSelect,
   FormSelectOption,
 } from "@patternfly/react-core";
@@ -24,13 +23,14 @@ interface ValueTypeOption {
 }
 
 export interface ICustomClass {
-  value: string;
+  customClassName: string;
   collectionType: string;
 }
 
 export interface ICustomClassDialogProps {
   title: string;
-  value?: string;
+  customClassName: string;
+  customClassNames: string[] | null;
   collectionType?: string;
   collectionTypeOptions: ValueTypeOption[];
   isOpen: IConfirmationDialogProps["isOpen"];
@@ -39,25 +39,31 @@ export interface ICustomClassDialogProps {
 }
 export const CustomClassDialog: FunctionComponent<ICustomClassDialogProps> = ({
   title,
-  value: initialValue = "",
+  customClassName: initialCustomClassName = "",
+  customClassNames,
   collectionType: initialCollectionType = "",
   collectionTypeOptions,
   isOpen,
   onCancel,
   onConfirm,
 }) => {
-  const [value, setValue] = useState(initialValue);
+  const [customClassName, setCustomClassName] = useState(
+    initialCustomClassName,
+  );
   const [collectionType, setCollectionType] = useState(initialCollectionType);
 
   const reset = useCallback(() => {
-    setValue(initialValue);
+    setCustomClassName(initialCustomClassName);
     setCollectionType(initialCollectionType);
-  }, [initialValue, initialCollectionType]);
+  }, [initialCustomClassName, initialCollectionType]);
 
   const handleOnConfirm = useCallback(() => {
-    onConfirm({ value: value, collectionType: collectionType });
+    onConfirm({
+      customClassName: customClassName,
+      collectionType: collectionType,
+    });
     reset();
-  }, [onConfirm, reset, value, collectionType]);
+  }, [onConfirm, reset, customClassName, collectionType]);
 
   const handleOnCancel = useCallback(() => {
     onCancel();
@@ -71,24 +77,28 @@ export const CustomClassDialog: FunctionComponent<ICustomClassDialogProps> = ({
     <ConfirmationDialog
       title={title}
       onCancel={handleOnCancel}
-      onConfirm={value.length > 0 ? handleOnConfirm : undefined}
+      onConfirm={customClassName.length > 0 ? handleOnConfirm : undefined}
       isOpen={isOpen}
     >
       <Form>
         <FormGroup
-          label={"Custom class package name"}
-          fieldId={"name"}
+          label={"Custom class name"}
+          fieldId={"custom-class-name"}
           isRequired={true}
         >
-          <TextInput
-            value={value}
-            onChange={setValue}
-            id={"name"}
+          <FormSelect
+            value={customClassName}
+            aria-label={"Select class name"}
             autoFocus={true}
-            isRequired={true}
-            placeholder={"com.package.class"}
-            data-testid={"class-package-name-text-input"}
-          />
+            onChange={setCustomClassName}
+            data-testid={"custom-class-name-form-select"}
+          >
+            {isOpen &&
+              customClassNames &&
+              customClassNames.map((value, idx) => (
+                <FormSelectOption key={idx} value={value} label={value} />
+              ))}
+          </FormSelect>
         </FormGroup>
         <FormGroup label={"Collection type"} fieldId={"valueType"}>
           <FormSelect

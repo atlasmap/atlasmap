@@ -149,12 +149,12 @@ export function useAtlasmapDialogs({
   const [
     createEnableCustomClassDialog,
     openCreateEnableCustomClassDialog,
-  ] = useCustomClassDialog("Enable Custom Class");
+  ] = useCustomClassDialog("Load Java Document From Custom Class");
 
   const onEnableCustomClass = useCallback(
     (isSource: boolean): void => {
-      openCreateEnableCustomClassDialog(({ value, collectionType }) =>
-        enableCustomClass(value, collectionType, isSource),
+      openCreateEnableCustomClassDialog(({ customClassName, collectionType }) =>
+        enableCustomClass(customClassName, collectionType, isSource),
       );
     },
     [openCreateEnableCustomClassDialog],
