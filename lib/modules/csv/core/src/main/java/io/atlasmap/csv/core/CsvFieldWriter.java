@@ -105,6 +105,10 @@ public class CsvFieldWriter implements AtlasFieldWriter {
                     FieldGroup fieldGroup = (FieldGroup) field;
                     CsvField csvField = (CsvField) fieldGroup.getField().get(i);
                     if (csvField.getColumn() != null) {
+                        //Add missing values
+                        for (int j = values.size(); j < csvField.getColumn() + 1; j++) {
+                            values.add(null);
+                        }
                         values.set(csvField.getColumn(), csvField.getValue().toString());
                     } else {
                         values.add(csvField.getValue().toString());
