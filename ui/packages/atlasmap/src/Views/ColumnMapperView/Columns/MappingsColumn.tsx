@@ -1,4 +1,9 @@
-import React, { FunctionComponent, useCallback, useState } from "react";
+import React, {
+  FunctionComponent,
+  useCallback,
+  useState,
+  useContext,
+} from "react";
 
 import { Split, SplitItem } from "@patternfly/react-core";
 
@@ -13,6 +18,7 @@ import {
   TruncatedString,
   IDragAndDropField,
   NodeRef,
+  TransformationDocument,
 } from "../../../UI";
 import { IAtlasmapField, IAtlasmapMapping } from "../../models";
 import {
@@ -30,6 +36,7 @@ import {
   SOURCES_DRAGGABLE_TYPE,
   TARGETS_DRAGGABLE_TYPE,
 } from "./constants";
+import { ViewContext } from "../..";
 
 export interface IMappingsColumnData
   extends Omit<Omit<IMappingDocumentData, "mapping">, "isSelected"> {
@@ -40,6 +47,8 @@ export interface IMappingsColumnData
 export const MappingsColumn: FunctionComponent<
   IMappingsColumnData & IMappingDocumentEvents
 > = ({ mappings, selectedMappingId, ...props }) => {
+  const context = useContext(ViewContext);
+
   return (
     <>
       <ColumnHeader
@@ -56,14 +65,25 @@ export const MappingsColumn: FunctionComponent<
         <ColumnBody>
           <NodeRef id={MAPPINGS_WIDTH_BOUNDARY_ID}>
             <div>
-              {mappings.map((m) => (
-                <MappingDocument
-                  key={m.id}
-                  mapping={m}
-                  isSelected={selectedMappingId === m.id}
-                  {...props}
-                />
-              ))}
+              {mappings.map((m) =>
+                // New approach doesn't use source/target fields in mappings
+                context?.usingTransformationApproach &&
+                m.sourceFields.length === 0 &&
+                m.targetFields.length === 0 ? (
+                  <TransformationDocument
+                    key={m.id}
+                    mapping={m}
+                    isSelected={selectedMappingId === m.id}
+                  />
+                ) : (
+                  <MappingDocument
+                    key={m.id}
+                    mapping={m}
+                    isSelected={selectedMappingId === m.id}
+                    {...props}
+                  />
+                ),
+              )}
             </div>
           </NodeRef>
           <DraggedField>
@@ -121,9 +141,10 @@ export const MappingDocument: FunctionComponent<
   onMouseOver,
   onMouseOut,
   canDrop,
-  usingTransformationApproach,
   onRemoveMapping,
 }) => {
+  const context = useContext(ViewContext);
+
   const [isEditingMappingName, setEditingMappingName] = useState(false);
   const [mappingName, setMappingName] = useState(mapping.name);
 
@@ -138,7 +159,7 @@ export const MappingDocument: FunctionComponent<
       onDeselectMapping(mapping);
     }
   }, [isSelected, mapping, onDeselectMapping]);
-  const actions = usingTransformationApproach
+  const actions = context?.usingTransformationApproach
     ? [
         <EditMappingNameAction
           id={"editName" + mapping.id}
