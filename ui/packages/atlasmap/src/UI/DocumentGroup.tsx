@@ -7,6 +7,7 @@ import React, {
 
 import { FolderCloseIcon, FolderOpenIcon } from "@patternfly/react-icons";
 import { css, StyleSheet } from "@patternfly/react-styles";
+import { Tooltip } from "@patternfly/react-core";
 
 const styles = StyleSheet.create({
   buttonContent: {
@@ -17,7 +18,7 @@ const styles = StyleSheet.create({
   buttonIcon: {
     marginRight: "1rem",
   },
-  collectionIcon: {
+  icon: {
     paddingLeft: "1.5rem",
   },
 });
@@ -25,6 +26,7 @@ const styles = StyleSheet.create({
 export interface IDocumentGroupProps {
   name: string;
   icon?: ReactElement;
+  iconTooltip?: string;
   type?: string;
   showType?: boolean;
   expanded?: boolean;
@@ -34,7 +36,7 @@ export const DocumentGroup = forwardRef<
   HTMLSpanElement,
   PropsWithChildren<IDocumentGroupProps>
 >(function DocumentGroup(
-  { name, type, icon, showType = false, expanded },
+  { name, type, icon, iconTooltip, showType = false, expanded },
   ref,
 ) {
   const spanRef = useRef<HTMLSpanElement | null>(null);
@@ -62,7 +64,11 @@ export const DocumentGroup = forwardRef<
       </span>
       {name}
       {showType && ` (${type})`}
-      <span className={css(styles.collectionIcon)}>{icon}</span>
+      {icon && (
+        <Tooltip enableFlip content={iconTooltip}>
+          <span className={css(styles.icon)}>{icon}</span>
+        </Tooltip>
+      )}
     </span>
   );
 });

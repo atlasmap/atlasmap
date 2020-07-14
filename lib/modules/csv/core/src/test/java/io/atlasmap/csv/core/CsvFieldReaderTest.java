@@ -125,6 +125,8 @@ public class CsvFieldReaderTest {
         FieldGroup field = (FieldGroup) csvFieldReader.read(session);
         assertEquals(0, audits.getAudit().size());
         assertThat(field.getField().get(0).getValue(), is("Smith"));
+        assertThat(field.getField().get(0).getPath(), is("/<0>/familyName"));
         assertThat(field.getField().get(1).getValue(), is("Johnson"));
+        assertThat(field.getField().get(1).getPath(), is("/<1>/familyName"));
     }
 }
