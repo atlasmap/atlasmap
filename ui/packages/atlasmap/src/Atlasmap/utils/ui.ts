@@ -272,6 +272,17 @@ export function executeFieldSearch(
   );
 }
 
+export function getField(fieldPath: string, isSource: boolean): Field | null {
+  let field: Field | null = null;
+  for (const doc of initializationService.cfg.getDocs(isSource)) {
+    field = Field.getField(fieldPath, doc.getAllFields());
+    if (field) {
+      break;
+    }
+  }
+  return field;
+}
+
 export function mappingExpressionAddField(
   selectedField: string,
   newTextNode: any,
@@ -282,25 +293,36 @@ export function mappingExpressionAddField(
   if (!mapping || !selectedField) {
     return;
   }
-  const mappedField = mapping.getMappedFieldByName(selectedField, true);
+  let mappedField = mapping.getMappedFieldByName(selectedField, true);
 
-  // If the selected field was not part of the original mapping then add
-  // it to the active mapping.
-  if (mappedField === null) {
-    let field: Field | null = null;
-    for (const doc of initializationService.cfg.getDocs(true)) {
-      field = Field.getField(selectedField, doc.getAllFields());
-      if (field) {
-        break;
-      }
-    }
-    if (field) {
-      initializationService.cfg.mappingService.fieldSelected(
-        field,
-        true,
+  if (!mappedField) {
+    // If the selected field was not part of the original mapping
+    // and is complex then add it as a reference node.
+    mappedField = mapping.getReferenceField(selectedField);
+
+    if (mappedField) {
+      mapping.transition!.expression!.addConditionalExpressionNode(
+        mappedField,
         newTextNode.getUuid(),
-        isTrailer ? newTextNode.toText().length : atIndex,
+        isTrailer ? newTextNode.str.length : atIndex,
       );
+    } else {
+      // Try adding the selected field to the active mapping.
+      let field: Field | null = null;
+      for (const doc of initializationService.cfg.getDocs(true)) {
+        field = Field.getField(selectedField, doc.getAllFields());
+        if (field) {
+          break;
+        }
+      }
+      if (field) {
+        initializationService.cfg.mappingService.fieldSelected(
+          field,
+          true,
+          newTextNode.getUuid(),
+          isTrailer ? newTextNode.toText().length : atIndex,
+        );
+      }
     }
   } else {
     mapping.transition!.expression!.addConditionalExpressionNode(
