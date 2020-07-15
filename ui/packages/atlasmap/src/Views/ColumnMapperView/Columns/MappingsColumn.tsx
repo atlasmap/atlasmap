@@ -18,7 +18,6 @@ import {
   TruncatedString,
   IDragAndDropField,
   NodeRef,
-  TransformationDocument,
 } from "../../../UI";
 import { IAtlasmapField, IAtlasmapMapping } from "../../models";
 import {
@@ -36,7 +35,8 @@ import {
   SOURCES_DRAGGABLE_TYPE,
   TARGETS_DRAGGABLE_TYPE,
 } from "./constants";
-import { ViewContext } from "../..";
+import { ViewContext } from "../../ViewProvider";
+import { TransformationDocument } from "./TransformationDocument";
 
 export interface IMappingsColumnData
   extends Omit<Omit<IMappingDocumentData, "mapping">, "isSelected"> {
@@ -47,8 +47,6 @@ export interface IMappingsColumnData
 export const MappingsColumn: FunctionComponent<
   IMappingsColumnData & IMappingDocumentEvents
 > = ({ mappings, selectedMappingId, ...props }) => {
-  const context = useContext(ViewContext);
-
   return (
     <>
       <ColumnHeader
@@ -65,25 +63,14 @@ export const MappingsColumn: FunctionComponent<
         <ColumnBody>
           <NodeRef id={MAPPINGS_WIDTH_BOUNDARY_ID}>
             <div>
-              {mappings.map((m) =>
-                // New approach doesn't use source/target fields in mappings
-                context?.usingTransformationApproach &&
-                m.sourceFields.length === 0 &&
-                m.targetFields.length === 0 ? (
-                  <TransformationDocument
-                    key={m.id}
-                    mapping={m}
-                    isSelected={selectedMappingId === m.id}
-                  />
-                ) : (
-                  <MappingDocument
-                    key={m.id}
-                    mapping={m}
-                    isSelected={selectedMappingId === m.id}
-                    {...props}
-                  />
-                ),
-              )}
+              {mappings.map((m) => (
+                <MappingDocument
+                  key={m.id}
+                  mapping={m}
+                  isSelected={selectedMappingId === m.id}
+                  {...props}
+                />
+              ))}
             </div>
           </NodeRef>
           <DraggedField>
@@ -146,7 +133,7 @@ export const MappingDocument: FunctionComponent<
   const context = useContext(ViewContext);
 
   const [isEditingMappingName, setEditingMappingName] = useState(false);
-  const [mappingName, setMappingName] = useState(mapping.name);
+  const [editedMappingName, setEditedMappingName] = useState("");
 
   const documentId = `${MAPPINGS_DOCUMENT_ID_PREFIX}${mapping.id}`;
   const handleSelect = useCallback(() => {
@@ -210,80 +197,85 @@ export const MappingDocument: FunctionComponent<
             onMouseOver={() => onMouseOver(mapping)}
             onMouseOut={onMouseOut}
             isEditingTitle={isEditingMappingName}
-            onTitleChange={(title: string) => {
-              setMappingName(title);
-            }}
+            onTitleChange={setEditedMappingName}
             onStopEditingTitle={(cancel) => {
               if (cancel) {
-                setMappingName(mapping.name);
+                setEditedMappingName(mapping.name);
               } else {
-                const name = mappingName || "Mapping";
-                setMappingName(name);
+                const name = editedMappingName || "Mapping";
+                setEditedMappingName(name);
                 mapping.name = name;
               }
               setEditingMappingName(false);
             }}
           >
-            <Split>
-              <SplitItem style={{ maxWidth: "50%", padding: "0 0 0 1rem" }}>
-                {mapping.sourceFields.map((mf) => {
-                  const fieldId = `${documentId}-${MAPPINGS_FIELD_ID_PREFIX}${mf.id}`;
-                  return (
-                    <NodeRef
-                      key={fieldId}
-                      id={fieldId}
-                      parentId={documentId}
-                      boundaryId={MAPPINGS_HEIGHT_BOUNDARY_ID}
-                      overrideWidth={MAPPINGS_WIDTH_BOUNDARY_ID}
-                    >
-                      <div>
-                        <TruncatedString>{mf.name}</TruncatedString>
-                        {isSelected && showMappingPreview && (
-                          <DocumentFieldPreview
-                            id={mf.id}
-                            value={mf.previewValue}
-                            onChange={(value) =>
-                              onFieldPreviewChange(mf, value)
-                            }
-                          />
-                        )}
-                      </div>
-                    </NodeRef>
-                  );
-                })}
-              </SplitItem>
-              <SplitItem isFilled />
-              <SplitItem
-                style={{
-                  maxWidth: "50%",
-                  padding: "0 1rem 0 0",
-                  textAlign: "right",
-                }}
-              >
-                {mapping.targetFields.map((mf) => {
-                  const fieldId = `${documentId}-${MAPPINGS_FIELD_ID_PREFIX}${mf.id}`;
-                  return (
-                    <NodeRef
-                      key={fieldId}
-                      id={fieldId}
-                      parentId={documentId}
-                      boundaryId={MAPPINGS_HEIGHT_BOUNDARY_ID}
-                      overrideWidth={MAPPINGS_WIDTH_BOUNDARY_ID}
-                    >
-                      <div>
-                        <TruncatedString>{mf.name}</TruncatedString>
-                        {isSelected && showMappingPreview && (
-                          <DocumentFieldPreviewResults
-                            id={mf.id}
-                            value={mf.previewValue}
-                          />
-                        )}
-                      </div>
-                    </NodeRef>
-                  );
-                })}
-              </SplitItem>
-            </Split>
+            {/* New approach doesn't use source/target fields in mappings */}
+            {context?.usingTransformationApproach &&
+            mapping.sourceFields.length === 0 &&
+            mapping.targetFields.length === 0 ? (
+              <TransformationDocument mapping={mapping} />
+            ) : (
+              <Split>
+                <SplitItem style={{ maxWidth: "50%", padding: "0 0 0 1rem" }}>
+                  {mapping.sourceFields.map((mf) => {
+                    const fieldId = `${documentId}-${MAPPINGS_FIELD_ID_PREFIX}${mf.id}`;
+                    return (
+                      <NodeRef
+                        key={fieldId}
+                        id={fieldId}
+                        parentId={documentId}
+                        boundaryId={MAPPINGS_HEIGHT_BOUNDARY_ID}
+                        overrideWidth={MAPPINGS_WIDTH_BOUNDARY_ID}
+                      >
+                        <div>
+                          <TruncatedString>{mf.name}</TruncatedString>
+                          {isSelected && showMappingPreview && (
+                            <DocumentFieldPreview
+                              id={mf.id}
+                              value={mf.previewValue}
+                              onChange={(value) =>
+                                onFieldPreviewChange(mf, value)
+                              }
+                            />
+                          )}
+                        </div>
+                      </NodeRef>
+                    );
+                  })}
+                </SplitItem>
+                <SplitItem isFilled />
+                <SplitItem
+                  style={{
+                    maxWidth: "50%",
+                    padding: "0 1rem 0 0",
+                    textAlign: "right",
+                  }}
+                >
+                  {mapping.targetFields.map((mf) => {
+                    const fieldId = `${documentId}-${MAPPINGS_FIELD_ID_PREFIX}${mf.id}`;
+                    return (
+                      <NodeRef
+                        key={fieldId}
+                        id={fieldId}
+                        parentId={documentId}
+                        boundaryId={MAPPINGS_HEIGHT_BOUNDARY_ID}
+                        overrideWidth={MAPPINGS_WIDTH_BOUNDARY_ID}
+                      >
+                        <div>
+                          <TruncatedString>{mf.name}</TruncatedString>
+                          {isSelected && showMappingPreview && (
+                            <DocumentFieldPreviewResults
+                              id={mf.id}
+                              value={mf.previewValue}
+                            />
+                          )}
+                        </div>
+                      </NodeRef>
+                    );
+                  })}
+                </SplitItem>
+              </Split>
+            )}
           </Document>
         </NodeRef>
       )}

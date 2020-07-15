@@ -6,6 +6,7 @@ import {
   ErrorType,
   InspectionType,
 } from "@atlasmap/core";
+
 import { getDocDef, importInstanceSchema, removeDocumentRef } from "./document";
 
 /**

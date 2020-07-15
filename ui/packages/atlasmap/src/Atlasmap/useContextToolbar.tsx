@@ -1,10 +1,10 @@
-import { ToolbarGroup } from "@patternfly/react-core";
 import React, { useMemo, useState } from "react";
+
+import { ToolbarGroup } from "@patternfly/react-core";
+
 import { ContextToolbar } from "../Layout";
 import { useToggle } from "../UI";
-import { useAtlasmap } from "./AtlasmapProvider";
 import {
-  AtlasmapToolbarItem,
   ToggleAllLinksToolbarItem,
   ToggleColumnMapperViewToolbarItem,
   ToggleFreeViewToolbarItem,
@@ -16,7 +16,9 @@ import {
   ToggleTransformationApproachToolbarItem,
   ToggleTypesToolbarItem,
   ToggleUnmappedFieldsToolbarItem,
+  AtlasmapToolbarItem,
 } from "./toolbarItems";
+import { useAtlasmap } from "./AtlasmapProvider";
 
 export type Views =
   | "ColumnMapper"

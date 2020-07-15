@@ -11,7 +11,6 @@ import {
 } from "../UI";
 import {
   IAtlasmapField,
-  IAtlasmapMapping,
   IMappingDocumentEvents,
   ISourceColumnCallbacks,
   ITargetsColumnCallbacks,
@@ -20,13 +19,14 @@ import {
   SourceMappingTargetView,
   SourceMappingTargetXformView,
   SourceTargetView,
+  IAtlasmapMapping,
   ViewContext,
 } from "../Views";
 import { useAtlasmap } from "./AtlasmapProvider";
 import { useAtlasmapDialogs } from "./useAtlasmapDialogs";
 import { IUseContextToolbarData, useContextToolbar } from "./useContextToolbar";
 import { useSidebar } from "./useSidebar";
-import { getConstantType, getPropertyType, getPropertyValue } from "./utils";
+import { getPropertyValue, getPropertyType, getConstantType } from "./utils";
 
 export interface IAtlasmapProps {
   allowImport?: boolean;
@@ -284,7 +284,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
             targetEvents={targetEvents}
           />
         ) : (
-          <ViewContext.Provider value={{ usingTransformationApproach: false }}>
+          <ViewContext.Provider value={undefined}>
             <SourceTargetView
               properties={properties}
               constants={constants}
@@ -333,7 +333,12 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         );
       case "TransformationApproach":
         return (
-          <ViewContext.Provider value={{ usingTransformationApproach: true }}>
+          <ViewContext.Provider
+            value={{
+              usingTransformationApproach: true,
+              initializeActiveMappingExpression: mappingExpressionInit,
+            }}
+          >
             <SourceMappingTargetXformView
               properties={properties}
               constants={constants}
@@ -359,6 +364,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     constants,
     handlers,
     mappingEvents,
+    mappingExpressionInit,
     mappings,
     onFieldPreviewChange,
     properties,

@@ -1,11 +1,3 @@
-import {
-  DocumentInitializationModel,
-  DocumentType,
-  InspectionType,
-  MappingSerializer,
-  MappingUtil,
-  search,
-} from "@atlasmap/core";
 import React, {
   createContext,
   FunctionComponent,
@@ -15,38 +7,33 @@ import React, {
   useReducer,
 } from "react";
 import { debounceTime } from "rxjs/operators";
-import { IAtlasmapDocument, IAtlasmapField } from "../Views";
+
 import {
-  DataActionPayload,
-  dataReducer,
-  IDataState,
-  initDataState,
-  initNotificationsState,
-  INotificationsState,
-  notificationsReducer,
-} from "./reducers";
+  MappingUtil,
+  search,
+  MappingSerializer,
+  InspectionType,
+  DocumentType,
+  DocumentInitializationModel,
+} from "@atlasmap/core";
+
+import { IAtlasmapDocument, IAtlasmapField } from "../Views";
 import {
   addToCurrentMapping,
   createConstant,
   createMapping,
-  createNamespace,
   createProperty,
   deleteAtlasFile,
   deleteConstant,
-  deleteNamespace,
   deleteProperty,
   deselectMapping,
   documentExists,
   editConstant,
-  editNamespace,
   editProperty,
   enableCustomClass,
-  errorInfoToNotification,
   executeFieldSearch,
   exportAtlasFile,
   fromDocumentDefinitionToFieldGroup,
-  fromFieldToIFieldsNode,
-  fromMappedFieldToIMappingField,
   fromMappingDefinitionToIMappings,
   fromMappingModelToImapping,
   getMappingActions,
@@ -55,12 +42,12 @@ import {
   getMultiplicityActions,
   handleActionChange,
   handleIndexChange,
-  handleMultiplicityArgumentChange,
-  handleMultiplicityChange,
   handleNewTransformation,
-  handleRemoveTransformation,
-  handleTransformationArgumentChange,
   handleTransformationChange,
+  handleTransformationArgumentChange,
+  handleRemoveTransformation,
+  handleMultiplicityChange,
+  handleMultiplicityArgumentChange,
   importAtlasFile,
   initializationService,
   mappingExpressionAddField,
@@ -71,17 +58,32 @@ import {
   mappingExpressionRemoveField,
   newMapping,
   onFieldPreviewChange,
-  removeFromCurrentMapping,
-  removeMappedFieldFromCurrentMapping,
+  toggleExpressionMode,
   removeMapping,
   resetAtlasmap,
   selectMapping,
-  toggleExpressionMode,
   toggleMappingPreview,
   toggleShowMappedFields,
   toggleShowUnmappedFields,
   trailerId,
+  removeFromCurrentMapping,
+  removeMappedFieldFromCurrentMapping,
+  fromMappedFieldToIMappingField,
+  errorInfoToNotification,
+  createNamespace,
+  editNamespace,
+  deleteNamespace,
+  fromFieldToIFieldsNode,
 } from "./utils";
+import {
+  INotificationsState,
+  IDataState,
+  initDataState,
+  initNotificationsState,
+  dataReducer,
+  notificationsReducer,
+  DataActionPayload,
+} from "./reducers";
 
 // the document payload with get from Syndesis
 export interface IExternalDocumentProps {
@@ -218,7 +220,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   const convertSources = useCallback(function convertSourcesCb() {
     return initializationService.cfg.sourceDocs
       .map(fromDocumentDefinitionToFieldGroup)
-      .filter((d) => d) as IAtlasmapDocument[];
+      .filter((d: any) => d) as IAtlasmapDocument[];
   }, []);
 
   const convertConstants = useCallback(function convertConstantsCb() {
@@ -236,7 +238,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   const convertTargets = useCallback(function convertTargetsCb() {
     return initializationService.cfg.targetDocs
       .map(fromDocumentDefinitionToFieldGroup)
-      .filter((d) => d) as IAtlasmapDocument[];
+      .filter((d: any) => d) as IAtlasmapDocument[];
   }, []);
 
   const convertMappings = useCallback(function convertMappingsCb() {
@@ -254,8 +256,8 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
 
   const convertSourcesToFlatArray = useCallback(
     function convertSourcesToFlatArrayCb(): IAtlasmapField[] {
-      return initializationService.cfg.sourceDocs.flatMap((s) =>
-        s.getAllFields().flatMap((f) => {
+      return initializationService.cfg.sourceDocs.flatMap((s: any) =>
+        s.getAllFields().flatMap((f: any) => {
           const af = fromFieldToIFieldsNode(f);
           return af ? [af] : [];
         }),
@@ -265,8 +267,8 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   );
   const convertTargetsToFlatArray = useCallback(
     function convertTargetsToFlatArrayCb() {
-      return initializationService.cfg.targetDocs.flatMap((t) =>
-        t.getAllFields().flatMap((f) => {
+      return initializationService.cfg.targetDocs.flatMap((t: any) =>
+        t.getAllFields().flatMap((f: any) => {
           const af = fromFieldToIFieldsNode(f);
           return af ? [af] : [];
         }),
@@ -303,7 +305,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
           notifications: initializationService.cfg.errorService
             .getErrors()
             .reverse()
-            .filter((e) => e.level !== "DEBUG")
+            .filter((e: any) => e.level !== "DEBUG")
             .map(errorInfoToNotification),
         },
       });
