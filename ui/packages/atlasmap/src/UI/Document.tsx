@@ -187,7 +187,7 @@ export const Document = forwardRef<
               <CardHeader className={css(styles.header)}>
                 {isEditingTitle ? (
                   <TextInput
-                    value={title}
+                    defaultValue={title}
                     type="text"
                     aria-label="Edit title"
                     onChange={onTitleChange}
