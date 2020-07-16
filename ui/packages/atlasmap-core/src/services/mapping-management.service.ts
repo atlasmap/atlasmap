@@ -1020,7 +1020,9 @@ export class MappingManagementService {
     let fields: Field[] = [];
     for (const docDef of configModel.getDocs(isSource)) {
       fields = fields.concat(docDef.getTerminalFields());
+      fields = fields.concat(docDef.getComplexFields());
     }
+    Field.alphabetizeFields(fields);
     let documentName = '';
     let fieldCount = -1;
 
@@ -1035,7 +1037,8 @@ export class MappingManagementService {
         displayName.toLowerCase().indexOf(filter.toLowerCase()) !== -1
       ) {
         if (
-          !configModel.mappingService.isFieldSelectable(activeMapping, field)
+          !configModel.mappingService.isFieldSelectable(activeMapping, field) &&
+          field.type !== 'COMPLEX'
         ) {
           continue;
         }

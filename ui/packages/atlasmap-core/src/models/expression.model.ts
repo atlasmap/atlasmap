@@ -59,7 +59,7 @@ export class FieldNode extends ExpressionNode {
 
   constructor(
     private mapping: MappingModel,
-    public field?: MappedField,
+    public field?: MappedField | null,
     public metaStr?: string,
     index: number = 0
   ) {
@@ -68,6 +68,9 @@ export class FieldNode extends ExpressionNode {
       if (metaStr) {
         const fieldParts = metaStr.split(':');
         this.field = mapping.getMappedFieldByName(fieldParts[1], true)!;
+        if (!this.field) {
+          this.field = mapping.getReferenceField(fieldParts[1]);
+        }
       } else {
         // TODO: check this non null operator
         this.field = mapping.getMappedFieldForIndex(
@@ -75,6 +78,7 @@ export class FieldNode extends ExpressionNode {
           true
         )!;
       }
+      field = this.field;
     }
     if (field && !field.parsedData.parsedPath && field.field) {
       field.parsedData.parsedPath = field.field.path;
@@ -106,6 +110,14 @@ export class FieldNode extends ExpressionNode {
         }' is not available"
         class="expressionFieldLabel label label-danger">N/A</span>`;
     }
+  }
+
+  hasComplexField(): boolean {
+    return (
+      this.field?.field?.serviceObject.fieldType === 'COMPLEX' &&
+      (this.field?.field?.serviceObject.status === 'SUPPORTED' ||
+        this.field?.field?.serviceObject.status === 'CACHED')
+    );
   }
 }
 
@@ -526,7 +538,7 @@ export class ExpressionModel {
     // Remove the field from the expression if unmapped.
     for (const node of fieldNodes) {
       // TODO: check this non null operator
-      if (mappedFields.includes(node.field!)) {
+      if (mappedFields.includes(node.field!) || node.hasComplexField()) {
         continue;
       }
       const index = this._nodes.indexOf(node);
@@ -609,7 +621,7 @@ export class ExpressionModel {
     const answer = [];
     let position = -1;
 
-    while (text.search(/\$\{[a-zA-Z0-9.:/<>_]+\}/) !== -1) {
+    while (text.search(/\$\{[a-zA-Z0-9.:/<>[\]_]+\}/) !== -1) {
       position = text.search(/\$/);
       if (position !== 0) {
         answer.push(new TextNode(text.substring(0, position)));

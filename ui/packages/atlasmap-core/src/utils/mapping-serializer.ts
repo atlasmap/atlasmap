@@ -160,13 +160,38 @@ export class MappingSerializer {
         serializedInputFields[0].actions.unshift(mappingAction);
       }
       if (mappingExpression.length > 0) {
-        jsonMapping = {
-          jsonType: jsonMappingType,
-          id: id,
-          expression: mappingExpression,
-          inputField: serializedInputFields,
-          outputField: serializedOutputFields,
-        };
+        if (serializedInputFields[0].jsonType?.includes('FieldGroup')) {
+          let serializedInputFieldGroup = serializedInputFields[0];
+          for (let i = 1; i < serializedInputFields.length; i++) {
+            if (
+              serializedInputFields[i].jsonType?.includes('FieldGroup') &&
+              serializedInputFields[i].field.path ===
+                serializedInputFields[0].field.path
+            ) {
+              serializedInputFieldGroup.field.push(
+                serializedInputFields[i].field[0]
+              );
+            }
+            // TODO - Support input fields from different complex parent fields
+            // in the same complex conditional expression.
+          }
+
+          jsonMapping = {
+            jsonType: jsonMappingType,
+            id: id,
+            expression: mappingExpression,
+            inputFieldGroup: serializedInputFieldGroup,
+            outputField: serializedOutputFields,
+          };
+        } else {
+          jsonMapping = {
+            jsonType: jsonMappingType,
+            id: id,
+            expression: mappingExpression,
+            inputField: serializedInputFields,
+            outputField: serializedOutputFields,
+          };
+        }
       } else {
         jsonMapping = {
           jsonType: jsonMappingType,
@@ -580,9 +605,23 @@ export class MappingSerializer {
       }
 
       this.serializeActions(cfg, mappedField, serializedField);
-      fieldsJson.push(serializedField);
-    }
 
+      // Collection-based fields require an input field group.
+      if (isSource && mappedField.field.parentField?.isCollection) {
+        const parentField = mappedField.field.parentField;
+        const inputFieldGroup = MappingSerializer.createInputFieldGroup(
+          mapping,
+          [serializedField],
+          cfg
+        );
+        inputFieldGroup['docId'] = parentField.docDef.id;
+        inputFieldGroup['fieldType'] = parentField.serviceObject.fieldType;
+        inputFieldGroup['path'] = parentField.path;
+        fieldsJson.push(inputFieldGroup);
+      } else {
+        fieldsJson.push(serializedField);
+      }
+    }
     return fieldsJson;
   }
 

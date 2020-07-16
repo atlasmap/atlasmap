@@ -92,20 +92,20 @@ export class Field {
   }
 
   static alphabetizeFields(fields: Field[]): void {
-    const fieldsByName: { [key: string]: Field } = {};
-    const fieldNames: string[] = [];
+    const fieldsByPath: { [key: string]: Field } = {};
+    const fieldPaths: string[] = [];
     for (const field of fields) {
       // if field is a dupe, discard it
-      if (fieldsByName[field.name] != null) {
+      if (fieldsByPath[field.path] != null) {
         continue;
       }
-      fieldsByName[field.name] = field;
-      fieldNames.push(field.name);
+      fieldsByPath[field.path] = field;
+      fieldPaths.push(field.path);
     }
-    fieldNames.sort();
+    fieldPaths.sort();
     fields.length = 0;
-    for (const name of fieldNames) {
-      fields.push(fieldsByName[name]);
+    for (const path of fieldPaths) {
+      fields.push(fieldsByPath[path]);
     }
 
     for (const field of fields) {

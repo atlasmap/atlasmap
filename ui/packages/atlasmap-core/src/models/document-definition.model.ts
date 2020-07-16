@@ -237,6 +237,10 @@ export class DocumentDefinition {
     return field;
   }
 
+  getComplexFields(): Field[] {
+    return this.discoverAllComplexFields(this.fields);
+  }
+
   getTerminalFields(): Field[] {
     return [...this.terminalFields];
   }
@@ -471,7 +475,6 @@ export class DocumentDefinition {
       }
     }
   }
-
   private prepareComplexFields(): void {
     const fields: Field[] = this.fields;
 
@@ -487,9 +490,27 @@ export class DocumentDefinition {
       for (const childField of cachedField.children) {
         childField.children = [];
       }
-      // alphebatize complex field's childrein
+      // alphabetize complex field's childrein
       Field.alphabetizeFields(cachedField.children);
     }
+  }
+
+  private discoverAllComplexFields(fields: Field[]): Field[] {
+    let complexFields: Field[] = [];
+
+    for (const field of fields) {
+      if (
+        field.type === 'COMPLEX' &&
+        (field.serviceObject.status === 'SUPPORTED' ||
+          field.serviceObject.status === 'CACHED')
+      ) {
+        complexFields.push(field.copy());
+      }
+      if (field.children) {
+        complexFields.concat(this.discoverAllComplexFields(field.children));
+      }
+    }
+    return complexFields;
   }
 
   private discoverComplexFields(fields: Field[]): void {
