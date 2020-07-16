@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.23% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>110/331</span>
+                <span class='fraction'>112/336</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">15.2% </span>
+                <span class="strong">13.37% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>26/171</span>
+                <span class='fraction'>27/202</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">47.83% </span>
+                <span class="strong">46.81% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>22/46</span>
+                <span class='fraction'>22/47</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">32.36% </span>
+                <span class="strong">32.48% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>100/309</span>
+                <span class='fraction'>102/314</span>
             </div>
         
             
@@ -716,7 +716,19 @@
 <a name='L658'></a><a href='#L658'>658</a>
 <a name='L659'></a><a href='#L659'>659</a>
 <a name='L660'></a><a href='#L660'>660</a>
-<a name='L661'></a><a href='#L661'>661</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L661'></a><a href='#L661'>661</a>
+<a name='L662'></a><a href='#L662'>662</a>
+<a name='L663'></a><a href='#L663'>663</a>
+<a name='L664'></a><a href='#L664'>664</a>
+<a name='L665'></a><a href='#L665'>665</a>
+<a name='L666'></a><a href='#L666'>666</a>
+<a name='L667'></a><a href='#L667'>667</a>
+<a name='L668'></a><a href='#L668'>668</a>
+<a name='L669'></a><a href='#L669'>669</a>
+<a name='L670'></a><a href='#L670'>670</a>
+<a name='L671'></a><a href='#L671'>671</a>
+<a name='L672'></a><a href='#L672'>672</a>
+<a name='L673'></a><a href='#L673'>673</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -786,6 +798,9 @@
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
@@ -793,6 +808,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -820,6 +836,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1437,7 +1461,7 @@ export class FieldNode extends ExpressionNode {
 &nbsp;
   constructor(
     private mapping: MappingModel,
-    public field?: MappedField,
+    public field?: MappedField | null,
     public metaStr?: string,
     <span class="missing-if-branch" title="if path not taken" >I</span>index: number = 0
   ) {
@@ -1446,6 +1470,9 @@ export class FieldNode extends ExpressionNode {
       <span class="missing-if-branch" title="if path not taken" >I</span>if (metaStr) {
         const fieldParts = <span class="cstat-no" title="statement not covered" >metaStr.split(':');</span>
 <span class="cstat-no" title="statement not covered" >        this.field = mapping.getMappedFieldByName(fieldParts[1], true)!;</span>
+<span class="cstat-no" title="statement not covered" >        if (!this.field) {</span>
+<span class="cstat-no" title="statement not covered" >          this.field = mapping.getReferenceField(fieldParts[1]);</span>
+        }
       } else {
         // TODO: check this non null operator
         this.field = mapping.getMappedFieldForIndex(
@@ -1453,8 +1480,9 @@ export class FieldNode extends ExpressionNode {
           true
         )!;
       }
+      field = this.field;
     }
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (field &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >!field.parsedData.parsedPath </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >field.field)</span> {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (field &amp;&amp; !field.parsedData.parsedPath &amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >field.field)</span> {
 <span class="cstat-no" title="statement not covered" >      field.parsedData.parsedPath = field.field.path;</span>
     }
   }
@@ -1484,6 +1512,14 @@ export class FieldNode extends ExpressionNode {
         }' is not available"
         class="expressionFieldLabel label label-danger"&gt;N/A&lt;/span&gt;`;
     }
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  hasComplexField(</span>): boolean {
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      this.field?.field?.serviceObject.fieldType === 'COMPLEX' &amp;&amp;
+      (this.field?.field?.serviceObject.status === 'SUPPORTED' ||
+        this.field?.field?.serviceObject.status === 'CACHED')
+    );
   }
 }
 &nbsp;
@@ -1904,7 +1940,7 @@ export class ExpressionModel {
     // Remove the field from the expression if unmapped.
 <span class="cstat-no" title="statement not covered" >    for (const node<span class="cstat-no" title="statement not covered" > of <span class="cstat-no" title="statement not covered" >f</span>ieldNodes)</span> {</span>
       // TODO: check this non null operator
-<span class="cstat-no" title="statement not covered" >      if (mappedFields.includes(node.field!)) {</span>
+<span class="cstat-no" title="statement not covered" >      if (mappedFields.includes(node.field!) || node.hasComplexField()) {</span>
 <span class="cstat-no" title="statement not covered" >        continue;</span>
       }
       const index = <span class="cstat-no" title="statement not covered" >this._nodes.indexOf(node);</span>
@@ -1987,7 +2023,7 @@ export class ExpressionModel {
     const answer = [];
     let position = -1;
 &nbsp;
-    while (text.search(/\$\{[a-zA-Z0-9.:/&lt;&gt;_]+\}/) !== -1) {
+    while (text.search(/\$\{[a-zA-Z0-9.:/&lt;&gt;[\]_]+\}/) !== -1) {
       position = text.search(/\$/);
       <span class="missing-if-branch" title="else path not taken" >E</span>if (position !== 0) {
         answer.push(new TextNode(text.substring(0, position)));
@@ -2043,7 +2079,7 @@ export class ExpressionModel {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Jul 13 2020 15:00:16 GMT+0000 (Coordinated Universal Time)
+                at Thu Jul 16 2020 19:33:09 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

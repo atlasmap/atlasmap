@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">18.9% </span>
+                <span class="strong">18.99% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>93/492</span>
+                <span class='fraction'>94/495</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">15.02% </span>
+                <span class="strong">14.91% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>41/273</span>
+                <span class='fraction'>41/275</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20.05% </span>
+                <span class="strong">20.13% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>89/444</span>
+                <span class='fraction'>90/447</span>
             </div>
         
             
@@ -1123,7 +1123,10 @@
 <a name='L1065'></a><a href='#L1065'>1065</a>
 <a name='L1066'></a><a href='#L1066'>1066</a>
 <a name='L1067'></a><a href='#L1067'>1067</a>
-<a name='L1068'></a><a href='#L1068'>1068</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1068'></a><a href='#L1068'>1068</a>
+<a name='L1069'></a><a href='#L1069'>1069</a>
+<a name='L1070'></a><a href='#L1070'>1070</a>
+<a name='L1071'></a><a href='#L1071'>1071</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1146,7 +1149,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2145,21 +2148,24 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -3212,7 +3218,9 @@ export class MappingManagementService {
     let fields: Field[] = <span class="cstat-no" title="statement not covered" >[];</span>
 <span class="cstat-no" title="statement not covered" >    for (const docDef<span class="cstat-no" title="statement not covered" > of <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >c</span>onfigModel.</span>getDocs(isSource))</span> {</span>
 <span class="cstat-no" title="statement not covered" >      fields = fields.concat(docDef.getTerminalFields());</span>
+<span class="cstat-no" title="statement not covered" >      fields = fields.concat(docDef.getComplexFields());</span>
     }
+<span class="cstat-no" title="statement not covered" >    Field.alphabetizeFields(fields);</span>
     let documentName = <span class="cstat-no" title="statement not covered" >'';</span>
     let fieldCount = <span class="cstat-no" title="statement not covered" >-1;</span>
 &nbsp;
@@ -3227,7 +3235,8 @@ export class MappingManagementService {
         displayName.toLowerCase().indexOf(filter.toLowerCase()) !== -1
       ) {
 <span class="cstat-no" title="statement not covered" >        if (</span>
-          !configModel.mappingService.isFieldSelectable(activeMapping, field)
+          !configModel.mappingService.isFieldSelectable(activeMapping, field) &amp;&amp;
+          field.type !== 'COMPLEX'
         ) {
 <span class="cstat-no" title="statement not covered" >          continue;</span>
         }
@@ -3264,7 +3273,7 @@ export class MappingManagementService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Jul 13 2020 15:00:16 GMT+0000 (Coordinated Universal Time)
+                at Thu Jul 16 2020 19:33:09 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
