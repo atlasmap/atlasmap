@@ -18,6 +18,7 @@ import {
   TruncatedString,
   IDragAndDropField,
   NodeRef,
+  TransformationDocument,
 } from "../../../UI";
 import { IAtlasmapField, IAtlasmapMapping } from "../../models";
 import {
@@ -47,6 +48,8 @@ export interface IMappingsColumnData
 export const MappingsColumn: FunctionComponent<
   IMappingsColumnData & IMappingDocumentEvents
 > = ({ mappings, selectedMappingId, ...props }) => {
+  const context = useContext(ViewContext);
+
   return (
     <>
       <ColumnHeader
@@ -63,14 +66,25 @@ export const MappingsColumn: FunctionComponent<
         <ColumnBody>
           <NodeRef id={MAPPINGS_WIDTH_BOUNDARY_ID}>
             <div>
-              {mappings.map((m) => (
-                <MappingDocument
-                  key={m.id}
-                  mapping={m}
-                  isSelected={selectedMappingId === m.id}
-                  {...props}
-                />
-              ))}
+              {mappings.map((m) =>
+                // New approach doesn't use source/target fields in mappings
+                context?.usingTransformationApproach &&
+                m.sourceFields.length === 0 &&
+                m.targetFields.length === 0 ? (
+                  <TransformationDocument
+                    key={m.id}
+                    mapping={m}
+                    isSelected={selectedMappingId === m.id}
+                  />
+                ) : (
+                  <MappingDocument
+                    key={m.id}
+                    mapping={m}
+                    isSelected={selectedMappingId === m.id}
+                    {...props}
+                  />
+                ),
+              )}
             </div>
           </NodeRef>
           <DraggedField>

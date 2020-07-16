@@ -1,20 +1,18 @@
-import React, { FunctionComponent, useEffect, useRef } from "react";
-import { useFilePicker } from "react-sage";
-
 import {
   Button,
+  Dropdown,
+  DropdownItem,
+  DropdownItemIcon,
+  DropdownSeparator,
+  DropdownToggle,
   ToolbarItem,
   Tooltip,
-  Dropdown,
-  DropdownToggle,
-  DropdownItem,
-  DropdownSeparator,
-  DropdownItemIcon,
 } from "@patternfly/react-core";
 import {
   BezierCurveIcon,
   BoltIcon,
   CodeIcon,
+  ColumnsIcon,
   ExportIcon,
   EyeIcon,
   ImportIcon,
@@ -23,11 +21,11 @@ import {
   MapMarkedIcon,
   PficonDragdropIcon,
   TableIcon,
-  ColumnsIcon,
   TrashIcon,
-  CaretDownIcon,
 } from "@patternfly/react-icons";
 import { css, StyleSheet } from "@patternfly/react-styles";
+import React, { FunctionComponent, useEffect, useRef } from "react";
+import { useFilePicker } from "react-sage";
 import { useToggle } from "../UI";
 
 const styles = StyleSheet.create({

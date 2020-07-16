@@ -37,6 +37,7 @@ import {
   IAtlasmapNamespace,
   INotification,
 } from "../../Views";
+import { removeMapping } from "./field";
 
 const api = ky.create({ headers: { "ATLASMAP-XSRF-TOKEN": "awesome" } });
 
