@@ -11,6 +11,7 @@ import {
   ErrorScope,
   ErrorType,
 } from "@atlasmap/core";
+import { IAtlasmapMapping } from "../../Views";
 
 export function createConstant(constValue: string, constType: string): void {
   const cfg = ConfigModel.getConfig();
@@ -290,4 +291,16 @@ export function getFieldByUUID(
     }
   }
   return undefined;
+}
+
+export function selectMapping(mapping: IAtlasmapMapping) {
+  const activeMapping = initializationService.cfg.mappings!.activeMapping;
+  if (activeMapping?.isEmpty()) {
+    removeMapping(activeMapping);
+  }
+  initializationService.cfg.mappingService.selectMapping(mapping.mapping);
+}
+
+export function deselectMapping() {
+  initializationService.cfg.mappingService.deselectMapping();
 }
