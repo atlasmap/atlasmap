@@ -2,7 +2,6 @@ import React, { FunctionComponent, useState } from "react";
 import {
   Dropdown,
   DropdownItem,
-  DropdownItemIcon,
   DropdownSeparator,
   DropdownToggle,
   DropdownToggleAction,
@@ -44,20 +43,14 @@ export const DocumentActions: FunctionComponent<IDocumentActions> = ({
       position={"right"}
       dropdownItems={[
         <DropdownItem
-          variant={"icon"}
+          icon={<FolderCloseIcon />}
           key={"collapse"}
           onClick={onCollapseFields}
         >
-          <DropdownItemIcon>
-            <FolderCloseIcon />
-          </DropdownItemIcon>
           Collapse all
         </DropdownItem>,
         <DropdownSeparator key={"sep-1"} />,
-        <DropdownItem variant={"icon"} key={"delete"} onClick={onDelete}>
-          <DropdownItemIcon>
-            <TrashIcon />
-          </DropdownItemIcon>
+        <DropdownItem icon={<TrashIcon />} key={"delete"} onClick={onDelete}>
           Remove instance or schema file
         </DropdownItem>,
       ]}

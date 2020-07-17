@@ -9,7 +9,6 @@ import {
   DropdownToggle,
   DropdownItem,
   DropdownSeparator,
-  DropdownItemIcon,
 } from "@patternfly/react-core";
 import {
   BezierCurveIcon,
@@ -26,12 +25,9 @@ import {
   TrashIcon,
   CaretDownIcon,
 } from "@patternfly/react-icons";
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
+import styles from "./toolbarItems.css";
 import { useToggle } from "../UI";
-
-const styles = StyleSheet.create({
-  toggled: { color: "var(--pf-global--primary-color--100) !important" },
-});
 
 export interface IAtlasmapToolbarItemProps {
   showImportAtlasFileToolbarItem: boolean;
@@ -99,7 +95,7 @@ export const AtlasmapToolbarItem: FunctionComponent<IAtlasmapToolbarItemProps> =
           <DropdownToggle
             id="atlasmap-toggle"
             onToggle={onToggle}
-            iconComponent={CaretDownIcon}
+            toggleIndicator={CaretDownIcon}
             data-testid="atlasmap-menu-button"
           >
             AtlasMap
@@ -132,10 +128,11 @@ export const ImportAtlasFileToolbarItem: FunctionComponent<{
   }, [files, onFile]);
 
   return (
-    <DropdownItem onClick={onClick} data-testid="import-mappings-button">
-      <DropdownItemIcon>
-        <ImportIcon />
-      </DropdownItemIcon>
+    <DropdownItem
+      icon={<ImportIcon />}
+      onClick={onClick}
+      data-testid="import-mappings-button"
+    >
       Import a catalog (.adm)
       <HiddenFileInput accept=".adm" multiple={false} />
     </DropdownItem>
@@ -161,10 +158,11 @@ export const ImportJarFileToolbarItem: FunctionComponent<{
   }, [files, onFile]);
 
   return (
-    <DropdownItem onClick={onClick} data-testid="import-archive-button">
-      <DropdownItemIcon>
-        <ImportIcon />
-      </DropdownItemIcon>
+    <DropdownItem
+      icon={<ImportIcon />}
+      onClick={onClick}
+      data-testid="import-archive-button"
+    >
       Import a Java archive (.jar)
       <HiddenFileInput accept=".jar" multiple={false} />
     </DropdownItem>
@@ -174,10 +172,11 @@ export const ImportJarFileToolbarItem: FunctionComponent<{
 export const ExportAtlasFileToolbarItem: FunctionComponent<{
   onClick: () => void;
 }> = ({ onClick }) => (
-  <DropdownItem onClick={onClick} data-testid="export-mappings-button">
-    <DropdownItemIcon>
-      <ExportIcon />
-    </DropdownItemIcon>
+  <DropdownItem
+    icon={<ExportIcon />}
+    onClick={onClick}
+    data-testid="export-mappings-button"
+  >
     Export the current mappings and support files into a catalog (.adm)
   </DropdownItem>
 );
@@ -185,10 +184,11 @@ export const ExportAtlasFileToolbarItem: FunctionComponent<{
 export const ResetToolbarItem: FunctionComponent<{
   onClick: () => void;
 }> = ({ onClick }) => (
-  <DropdownItem onClick={onClick} data-testid="reset-all-button">
-    <DropdownItemIcon>
-      <TrashIcon />
-    </DropdownItemIcon>
+  <DropdownItem
+    icon={<TrashIcon />}
+    onClick={onClick}
+    data-testid="reset-all-button"
+  >
     Reset all mappings and clear all imported documents
   </DropdownItem>
 );

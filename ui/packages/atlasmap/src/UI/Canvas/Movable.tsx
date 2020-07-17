@@ -1,18 +1,11 @@
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 import { MutableRefObject, ReactElement, useState } from "react";
 import { useMovable } from "./useMovable";
 import { Coords } from "./models";
 import { useDimensions } from "../useDimensions";
 import { useBoundingCanvasRect } from "./useBoundingCanvasRect";
 
-const styles = StyleSheet.create({
-  movable: {
-    cursor: "grab",
-    "&:active": {
-      cursor: "grabbing",
-    },
-  },
-});
+import styles from "./Movable.css";
 
 export interface IMovableChildren<T> {
   x?: number;

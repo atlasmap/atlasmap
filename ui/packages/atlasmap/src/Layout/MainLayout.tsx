@@ -1,22 +1,11 @@
 import React, { FunctionComponent, ReactElement, ReactNode, memo } from "react";
 
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 import { TopologyView } from "@patternfly/react-topology";
 
 import { Loading } from "../UI";
 import { Sidebar } from "./Sidebar";
-
-const styles = StyleSheet.create({
-  view: {
-    background: "#fff",
-    "& .pf-topology-container": {
-      overflow: "hidden",
-    },
-    "& .pf-topology-content": {
-      overflow: "auto",
-    },
-  },
-});
+import styles from "./MainLayout.css";
 
 export interface IMainLayoutProps {
   loading: boolean;

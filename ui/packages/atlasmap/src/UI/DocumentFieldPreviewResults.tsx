@@ -1,13 +1,8 @@
 import { Form, FormGroup, TextInput } from "@patternfly/react-core";
 import React, { FunctionComponent } from "react";
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 
-const styles = StyleSheet.create({
-  form: {
-    padding: "1rem",
-    marginTop: "0.5rem",
-  },
-});
+import styles from "./DocumentFieldPreviewResults.css";
 
 export interface IDocumentFieldPreviewResultsProps {
   id: string;

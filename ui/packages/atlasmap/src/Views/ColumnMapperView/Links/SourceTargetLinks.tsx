@@ -1,4 +1,4 @@
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 import React, {
   FunctionComponent,
   MouseEvent,
@@ -9,14 +9,7 @@ import { NodesArc, useToggle } from "../../../UI";
 import { IAtlasmapMapping } from "../../../Views";
 import { SOURCES_FIELD_ID_PREFIX, TARGETS_FIELD_ID_PREFIX } from "../Columns";
 
-const styles = StyleSheet.create({
-  arc: {
-    cursor: "pointer",
-  },
-  group: {
-    pointerEvents: "all",
-  },
-});
+import styles from "./SourceTargetLinks.css";
 
 export interface ISourceTargetLinksProps {
   mappings: IAtlasmapMapping[];

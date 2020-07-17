@@ -5,21 +5,9 @@ import {
   SelectOption,
   SelectOptionObject,
 } from "@patternfly/react-core";
-import { StyleSheet, css } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 
-const styles = StyleSheet.create({
-  document: {
-    fontWeight: "bold",
-  },
-  field: {
-    fontSize: "small",
-    marginLeft: 20,
-  },
-  searchMenu: {
-    margin: "var(--pf-global--spacer--form-element) 0",
-    width: "40%",
-  },
-});
+import styles from "./ExpressionFieldSearch.css";
 
 export interface IExpressionFieldSearchProps {
   clearSearchMode: (clearAtSign: boolean) => void;
@@ -163,7 +151,7 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
       data-testid={"expression-field-search"}
     >
       <Select
-        isExpanded={true}
+        isOpen={true}
         value={selectValue}
         id={id}
         onKeyDown={onKeyDown}

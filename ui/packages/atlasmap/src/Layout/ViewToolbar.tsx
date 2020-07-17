@@ -1,11 +1,9 @@
 import React, { FunctionComponent } from "react";
 
 import { Toolbar } from "@patternfly/react-core";
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 
-const styles = StyleSheet.create({
-  toolbar: { borderBottom: "1px solid #ccc" },
-});
+import styles from "./ViewToolbar.css";
 
 export const ViewToolbar: FunctionComponent = ({ children }) => {
   return (

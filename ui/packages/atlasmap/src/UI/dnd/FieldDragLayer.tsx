@@ -1,18 +1,12 @@
 import React, { FunctionComponent, useEffect } from "react";
 
 import { Label } from "@patternfly/react-core";
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 
 import { useDimensions } from "../useDimensions";
 import { DraggedField } from "./DraggedField";
 
-const styles = StyleSheet.create({
-  canvasObject: { pointerEvents: "none" },
-  canvasInner: {
-    display: "inline-block",
-    margin: "auto",
-  },
-});
+import styles from "./FieldDragLayer.css";
 
 export const FieldDragLayer: FunctionComponent = () => {
   const [ref, dimensions, measure] = useDimensions();

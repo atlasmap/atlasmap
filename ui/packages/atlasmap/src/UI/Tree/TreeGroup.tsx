@@ -15,26 +15,11 @@ import {
   AccordionItem,
   AccordionToggle,
 } from "@patternfly/react-core";
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 
 import { useTreeFocus } from "./TreeFocusProvider";
 
-const styles = StyleSheet.create({
-  button: {
-    padding: "0 !important",
-  },
-  content: {
-    fontSize: "inherit !important",
-    "& > div": {
-      boxSizing: "border-box",
-      padding:
-        "var(--pf-c-accordion__expanded-content-body--PaddingTop) 0 var(--pf-c-accordion__expanded-content-body--PaddingBottom) 1.2rem !important",
-    },
-  },
-  hiddenContent: {
-    display: "none",
-  },
-});
+import styles from "./TreeGroup.css";
 
 export interface ITreeGroupProps {
   id: string;

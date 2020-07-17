@@ -1,16 +1,8 @@
 import React, { FunctionComponent } from "react";
 import { HTMLObject, useCanvas } from "../Canvas";
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 
-const styles = StyleSheet.create({
-  wrapper: {
-    width: "100%",
-    height: "100%",
-    display: "flex",
-    flexFlow: "row nowrap",
-    overflow: "auto",
-  },
-});
+import styles from "./Columns.css";
 
 export const Columns: FunctionComponent = ({ children }) => {
   const {

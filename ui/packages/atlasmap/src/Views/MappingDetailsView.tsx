@@ -250,7 +250,7 @@ const NotificationsGroup: FunctionComponent<INotificationsGroupProps> = ({
             variant={n.variant}
             title={n.description}
             isInline={true}
-            action={
+            actionClose={
               <AlertActionCloseButton
                 title={n.title}
                 variantLabel={`${n.variant} alert`}

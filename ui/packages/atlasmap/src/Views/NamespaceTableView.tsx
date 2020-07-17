@@ -12,7 +12,7 @@ import {
   Button,
 } from "@patternfly/react-core";
 import { TableIcon, PlusIcon } from "@patternfly/react-icons";
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 import {
   Table,
   TableBody,
@@ -24,11 +24,8 @@ import {
 
 import { MainContent } from "../Layout";
 import { IAtlasmapDocument } from ".";
+import styles from "./NamespaceTableView.css";
 import { Actions } from "../UI";
-
-const styles = StyleSheet.create({
-  title: { marginTop: "1rem", marginBottom: "1rem" },
-});
 
 export interface INamespaceTableProps {
   sources: IAtlasmapDocument[];
@@ -112,11 +109,7 @@ export const NamespaceTableView: FunctionComponent<INamespaceTableProps> = ({
         ...xmlSources,
         <Level>
           <LevelItem key="title">
-            <Title
-              size={"lg"}
-              headingLevel={"h1"}
-              className={css(styles.title)}
-            >
+            <Title size="lg" headingLevel={"h1"} className={css(styles.title)}>
               Namespaces for {source.name}
             </Title>
           </LevelItem>

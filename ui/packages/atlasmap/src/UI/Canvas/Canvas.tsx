@@ -1,4 +1,4 @@
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 import React, {
   CSSProperties,
   FunctionComponent,
@@ -8,26 +8,9 @@ import React, {
 } from "react";
 import { useCanvas } from "./CanvasContext";
 import { CanvasTransforms } from "./CanvasTransforms";
-import tile from "./canvasBg";
 import { useDimensions } from "../useDimensions";
 
-const styles = StyleSheet.create({
-  canvasWrapper: {
-    flex: "1",
-    height: "100%",
-    overflow: "hidden",
-  },
-  svg: {
-    display: "block",
-    "& *": {
-      transition: "stroke 0.35s, stroke-width 0.15s",
-    },
-  },
-  panning: {
-    backgroundImage: `url(${tile})`,
-    backgroundRepeat: "repeat",
-  },
-});
+import styles from "./Canvas.css";
 
 export interface ICanvasProps extends SVGAttributes<SVGSVGElement> {
   isFilled?: boolean;

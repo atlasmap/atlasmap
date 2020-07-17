@@ -51,7 +51,7 @@ export function commonActions({
         <AutoDropdown
           toggle={({ toggleOpen }) => (
             <DropdownToggle
-              iconComponent={null}
+              toggleIndicator={null}
               aria-label="Show mapping details"
               onToggle={toggleOpen}
             >
@@ -62,16 +62,22 @@ export function commonActions({
           position={"right"}
           dropdownItems={connectedMappings.map((m) => (
             <DropdownItem key={m.id} onClick={() => onShowMappingDetails(m)}>
-              <Title size={"lg"}>{m.name}</Title>
-              <Split gutter="sm">
+              <Title headingLevel="h2" size="lg">
+                {m.name}
+              </Title>
+              <Split hasGutter>
                 <SplitItem>
-                  <Title size={"md"}>Sources</Title>
+                  <Title headingLevel="h2" size="md">
+                    Sources
+                  </Title>
                   {m.sourceFields.map((s) => (
                     <div key={s.id}>{s.name}</div>
                   ))}
                 </SplitItem>
                 <SplitItem>
-                  <Title size={"md"}>Targets</Title>
+                  <Title headingLevel="h2" size="md">
+                    Targets
+                  </Title>
                   {m.targetFields.map((t) => (
                     <div key={t.id}>{t.name}</div>
                   ))}

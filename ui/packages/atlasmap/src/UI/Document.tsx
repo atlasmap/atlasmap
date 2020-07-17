@@ -2,12 +2,12 @@ import {
   Card,
   CardActions,
   CardBody,
-  CardHead,
   CardHeader,
   Title,
   Button,
+  CardTitle,
 } from "@patternfly/react-core";
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 import React, {
   forwardRef,
   HTMLAttributes,
@@ -20,52 +20,9 @@ import React, {
 } from "react";
 import { useToggle } from "./useToggle";
 import { AngleDownIcon, AngleRightIcon } from "@patternfly/react-icons";
-import { TruncatedString } from "./TruncatedString";
 
-const styles = StyleSheet.create({
-  card: {
-    padding: "0 !important",
-  },
-  stacked: {
-    margin: "1rem 0",
-  },
-  head: {
-    padding: "0.5rem 0 !important",
-  },
-  header: {
-    width: "100%",
-    overflow: "hidden",
-  },
-  actions: {
-    alignSelf: "center",
-  },
-  headerButton: {
-    maxWidth: "100%",
-  },
-  bodyNoPadding: {
-    padding: "0 !important",
-  },
-  bodyWithPadding: {
-    padding: "0 1rem 1rem !important",
-  },
-  noCardPadding: {},
-  hidden: {
-    display: "none",
-  },
-  noShadows: {
-    boxShadow: "none !important",
-  },
-  dropTarget: {
-    "&:before": {
-      background: "var(--pf-global--active-color--400) !important",
-    },
-  },
-  dropAccepted: {
-    "&:before": {
-      background: "var(--pf-global--success-color--100) !important",
-    },
-  },
-});
+import { TruncatedString } from "./TruncatedString";
+import styles from "./Document.css";
 
 export interface IDocumentProps
   extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
@@ -165,12 +122,12 @@ export const Document = forwardRef<
         aria-label={title}
       >
         {(title || actions) && (
-          <CardHead className={css(styles.head)}>
+          <CardHeader data-codemods="true" className={css(styles.head)}>
             <CardActions className={css(styles.actions)}>
               {actions?.filter((a) => a)}
             </CardActions>
             {title && (
-              <CardHeader className={css(styles.header)}>
+              <CardTitle className={css(styles.header)}>
                 <Button
                   variant={"plain"}
                   onClick={toggleExpanded}
@@ -178,16 +135,16 @@ export const Document = forwardRef<
                   data-testid={`expand-collapse-${title}-button`}
                   className={css(styles.headerButton)}
                 >
-                  <Title size={"lg"} headingLevel={"h2"} aria-label={title}>
+                  <Title size="lg" headingLevel={"h2"} aria-label={title}>
                     <TruncatedString title={title}>
                       {isExpanded ? <AngleDownIcon /> : <AngleRightIcon />}{" "}
                       {title}
                     </TruncatedString>
                   </Title>
                 </Button>
-              </CardHeader>
+              </CardTitle>
             )}
-          </CardHead>
+          </CardHeader>
         )}
         <CardBody
           className={css(

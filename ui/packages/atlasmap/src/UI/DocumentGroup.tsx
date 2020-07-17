@@ -6,22 +6,10 @@ import React, {
 } from "react";
 
 import { FolderCloseIcon, FolderOpenIcon } from "@patternfly/react-icons";
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 import { Tooltip } from "@patternfly/react-core";
 
-const styles = StyleSheet.create({
-  buttonContent: {
-    display: "flex",
-    alignItems: "center",
-    padding: "0.5rem 1rem 0.5rem 1.2rem",
-  },
-  buttonIcon: {
-    marginRight: "1rem",
-  },
-  icon: {
-    paddingLeft: "1.5rem",
-  },
-});
+import styles from "./DocumentGroup.css";
 
 export interface IDocumentGroupProps {
   name: string;

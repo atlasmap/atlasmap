@@ -1,17 +1,7 @@
 import React, { FunctionComponent, useMemo } from "react";
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 
-const styles = StyleSheet.create({
-  column: {
-    flexFlow: "column nowrap",
-    display: "flex",
-    minWidth: "400px",
-    padding: "1rem",
-  },
-  hidden: {
-    opacity: 0,
-  },
-});
+import styles from "./Column.css";
 
 export interface IColumnProps {
   totalColumns?: number;

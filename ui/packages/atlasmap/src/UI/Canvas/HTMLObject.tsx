@@ -1,9 +1,7 @@
 import React, { forwardRef, SVGProps } from "react";
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 
-const styles = StyleSheet.create({
-  foreignObject: { overflow: "visible" },
-});
+import styles from "./HTMLObject.css";
 
 export interface IHTMLObjectProps extends SVGProps<SVGForeignObjectElement> {
   width: number;

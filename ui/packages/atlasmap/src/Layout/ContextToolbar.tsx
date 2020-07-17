@@ -1,11 +1,8 @@
 import React, { FunctionComponent } from "react";
 
 import { Toolbar } from "@patternfly/react-core";
-import { css, StyleSheet } from "@patternfly/react-styles";
-
-const styles = StyleSheet.create({
-  toolbar: { borderBottom: "1px solid #ccc" },
-});
+import { css } from "@patternfly/react-styles";
+import styles from "./ContextToolbar.css";
 
 export const ContextToolbar: FunctionComponent = ({ children }) => (
   <Toolbar

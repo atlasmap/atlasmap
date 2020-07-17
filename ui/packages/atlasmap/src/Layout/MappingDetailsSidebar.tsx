@@ -2,18 +2,11 @@ import React, { FunctionComponent } from "react";
 
 import { Button, Stack, StackItem, Tooltip } from "@patternfly/react-core";
 import { CloseIcon, TrashIcon } from "@patternfly/react-icons";
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 
+import styles from "./MappingDetailsSidebar.css";
 import { ColumnHeader } from "../UI";
 
-const styles = StyleSheet.create({
-  content: {
-    boxSizing: "border-box",
-    padding: "0 1rem",
-    height: "100%",
-    overflow: "auto",
-  },
-});
 export interface IMappingDetailsSidebarProps {
   onDelete: () => void;
   onClose: () => void;

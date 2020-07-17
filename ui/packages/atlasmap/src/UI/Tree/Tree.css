@@ -1,0 +1,3 @@
+.accordion {
+  padding: 0 1rem 0 0 !important; /* TODO: this padding should be 0 and the right spacing should be given by DocumentGroup */
+}

@@ -1,12 +1,8 @@
 import React, { FunctionComponent } from "react";
 import { Canvas, ICanvasProps } from "../Canvas";
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 
-const styles = StyleSheet.create({
-  canvas: {
-    backgroundColor: "var(--pf-global--BackgroundColor--light-300)",
-  },
-});
+import styles from "./ColumnMapper.css";
 
 export interface IColumnMapperProps extends ICanvasProps {}
 

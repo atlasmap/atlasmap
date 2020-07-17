@@ -1,17 +1,7 @@
 import React, { Children, FunctionComponent } from "react";
 
-import { css, StyleSheet } from "@patternfly/react-styles";
-
-const styles = StyleSheet.create({
-  toolbar: {
-    display: "flex",
-    flexFlow: "row no-wrap",
-  },
-  toolbarItem: {
-    minWidth: "1.5rem",
-    flex: "0 1 auto",
-  },
-});
+import { css } from "@patternfly/react-styles";
+import styles from "./Actions.css";
 
 export const Actions: FunctionComponent = ({ children }) => (
   <div className={css(styles.toolbar)}>

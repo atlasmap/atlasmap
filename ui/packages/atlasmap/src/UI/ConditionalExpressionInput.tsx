@@ -1,14 +1,11 @@
 import React, { FunctionComponent } from "react";
 import { ToolbarGroup, ToolbarItem } from "@patternfly/react-core";
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 import {
   ExpressionContent,
   IExpressionContentProps,
 } from "./ExpressionContent";
-
-const styles = StyleSheet.create({
-  toolbarItem: { flex: 1 },
-});
+import styles from "./ConditionalExpressionInput.css";
 
 export interface IConditionalExpressionInputProps
   extends IExpressionContentProps {}

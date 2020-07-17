@@ -11,15 +11,8 @@ import {
   SelectGroup,
 } from "@patternfly/react-core";
 import { useToggle } from "./useToggle";
-import { css, StyleSheet } from "@patternfly/react-styles";
-
-const styles = StyleSheet.create({
-  select: {
-    "& .pf-c-select__menu": {
-      maxWidth: "100%",
-    },
-  },
-});
+import { css } from "@patternfly/react-styles";
+import styles from "./AddFieldTypeahead.css";
 
 export interface IAddFieldTypeaheadField {
   label: string;
@@ -96,9 +89,9 @@ export const AddFieldTypeahead: FunctionComponent<IAddFieldTypeaheadProps> = ({
     <div {...props}>
       <Select
         variant={"typeahead"}
-        ariaLabelTypeAhead={ariaLabelTypeAhead}
+        typeAheadAriaLabel={ariaLabelTypeAhead}
         onToggle={toggle}
-        isExpanded={state}
+        isOpen={state}
         placeholderText={placeholderText}
         onFilter={filterFields}
         onSelect={onSelect}

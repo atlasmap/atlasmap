@@ -1,15 +1,7 @@
 import React, { FunctionComponent } from "react";
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 
-const styles = StyleSheet.create({
-  fieldName: {
-    display: "inline-block",
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    width: "100%",
-  },
-});
+import styles from "./TruncatedString.css";
 
 export interface ITruncatedStringProps {
   title?: string;

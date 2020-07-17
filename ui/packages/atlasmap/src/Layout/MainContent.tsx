@@ -1,17 +1,7 @@
 import React, { FunctionComponent } from "react";
 
-import { css, StyleSheet } from "@patternfly/react-styles";
-
-const styles = StyleSheet.create({
-  wrapper: {
-    minHeight: "100%",
-    flex: 1,
-    padding: "1rem",
-    boxSizing: "border-box",
-    maxWidth: 1000,
-    alignSelf: "flex-start",
-  },
-});
+import { css } from "@patternfly/react-styles";
+import styles from "./MainContent.css";
 
 export const MainContent: FunctionComponent = ({ children }) => (
   <div className={css(styles.wrapper)} role={"main"}>

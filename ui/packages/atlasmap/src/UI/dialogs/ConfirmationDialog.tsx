@@ -21,7 +21,7 @@ export const ConfirmationDialog: FunctionComponent<IConfirmationDialogProps> = (
 }) => {
   return (
     <Modal
-      isSmall
+      variant="small"
       title={title}
       isOpen={isOpen}
       onClose={onCancel}
@@ -46,7 +46,6 @@ export const ConfirmationDialog: FunctionComponent<IConfirmationDialogProps> = (
           Cancel
         </Button>,
       ]}
-      isFooterLeftAligned={true}
     >
       {children}
     </Modal>

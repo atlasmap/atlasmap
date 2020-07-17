@@ -1,0 +1,8 @@
+.wrapper {
+  min-height: 100%;
+  flex: 1;
+  padding: 1rem;
+  box-sizing: border-box;
+  max-width: 1000;
+  align-self: flex-start;
+}

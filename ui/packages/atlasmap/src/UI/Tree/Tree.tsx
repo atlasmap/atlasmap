@@ -1,15 +1,11 @@
 import React, { FunctionComponent, useRef, useLayoutEffect } from "react";
 
 import { Accordion } from "@patternfly/react-core";
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 
 import { TreeFocusProvider } from "./TreeFocusProvider";
 
-const styles = StyleSheet.create({
-  accordion: {
-    padding: "0 1rem 0 0 !important", // TODO: this padding should be 0 and the right spacing should be given by DocumentGroup
-  },
-});
+import styles from "./Tree.css";
 
 export const Tree: FunctionComponent = ({ children }) => {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -33,7 +29,6 @@ export const Tree: FunctionComponent = ({ children }) => {
         <Accordion
           asDefinitionList={false}
           className={css(styles.accordion)}
-          noBoxShadow={true}
           role={"tree"}
         >
           {children}

@@ -1,0 +1,10 @@
+{
+  "version": "v1",
+  "packages": {
+    "@patternfly/react-topology": {
+      "signature": "be6b8a9171d7b1cac60aac2c9f4400bf",
+      "file": true,
+      "replaced": "^4.4.8"
+    }
+  }
+}

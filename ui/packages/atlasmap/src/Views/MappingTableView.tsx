@@ -8,7 +8,7 @@ import {
   Title,
 } from "@patternfly/react-core";
 import { TableIcon } from "@patternfly/react-icons";
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 import {
   Table,
   TableBody,
@@ -17,6 +17,7 @@ import {
   ICell,
 } from "@patternfly/react-table";
 
+import styles from "./MappingTableView.css";
 import { MainContent } from "../Layout";
 import { IAtlasmapField, IAtlasmapMapping } from "../Views";
 import { DocumentFieldPreview, DocumentFieldPreviewResults } from "../UI";
@@ -41,10 +42,6 @@ const emptyContent = [
     ],
   },
 ];
-
-const styles = StyleSheet.create({
-  title: { marginBottom: "1rem" },
-});
 
 export interface IMappingTableProps {
   mappings: Array<IAtlasmapMapping>;
@@ -123,7 +120,7 @@ export const MappingTableView: FunctionComponent<IMappingTableProps> = ({
 
   return (
     <MainContent>
-      <Title size={"lg"} headingLevel={"h1"} className={css(styles.title)}>
+      <Title size="lg" headingLevel={"h1"} className={css(styles.title)}>
         Mappings
       </Title>
       <Table aria-label="Mappings" cells={columns} rows={rows}>

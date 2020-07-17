@@ -1,0 +1,5 @@
+.select {}
+
+.select .pf-c-select__menu {
+  max-width: 100%;
+}

@@ -1,17 +1,7 @@
 import React, { FunctionComponent, ReactElement } from "react";
 import { TopologySideBar } from "@patternfly/react-topology";
-import { css, StyleSheet } from "@patternfly/react-styles";
-
-const styles = StyleSheet.create({
-  sidebar: {
-    fontSize: "small",
-    height: "100%",
-    overflow: "hidden",
-    "& > .pf-topology-side-bar__body": {
-      height: "100%",
-    },
-  },
-});
+import { css } from "@patternfly/react-styles";
+import styles from "./Sidebar.css";
 
 export interface ISidebarProps {
   show: boolean;

@@ -48,7 +48,7 @@ export const TimedToast: FunctionComponent<ITimedToastProps> = ({
       isLiveRegion
       variant={variant}
       title={title}
-      action={
+      actionClose={
         <AlertActionCloseButton
           title={title}
           variantLabel={`${variant} alert`}

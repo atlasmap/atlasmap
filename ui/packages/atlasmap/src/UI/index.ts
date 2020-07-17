@@ -23,6 +23,5 @@ export * from "./MappingFields";
 export * from "./TimedToast";
 export * from "./Tree";
 export * from "./useDimensions";
-export * from "./useInputTextSelectDialog";
 export * from "./useLatestValue";
 export * from "./useToggle";

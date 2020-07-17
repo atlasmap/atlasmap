@@ -1,16 +1,11 @@
 import { linkHorizontal, linkVertical } from "d3-shape";
 import React, { FunctionComponent, SVGAttributes, useMemo } from "react";
 
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 
-import { Coords } from "./models";
 import { useToggle } from "../useToggle";
-
-const styles = StyleSheet.create({
-  clickable: {
-    cursor: "pointer",
-  },
-});
+import { Coords } from "./models";
+import styles from "./Arc.css";
 
 export interface IArcProps extends Omit<SVGAttributes<SVGPathElement>, "end"> {
   start: Coords;

@@ -1,6 +1,6 @@
 import React, { FunctionComponent, MouseEvent } from "react";
 
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 
 import { NodesArc } from "../../../UI";
 import { IAtlasmapMapping } from "../../../Views";
@@ -11,11 +11,7 @@ import {
   TARGETS_FIELD_ID_PREFIX,
 } from "../Columns";
 
-const styles = StyleSheet.create({
-  arc: {
-    cursor: "pointer",
-  },
-});
+import styles from "./SourceMappingTargetLinks.css";
 
 export interface ISourceMappingTargetLinksEvents {
   onMouseOver: (mapping: IAtlasmapMapping) => void;

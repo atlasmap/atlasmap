@@ -5,62 +5,11 @@ import React, {
   ReactElement,
 } from "react";
 
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 
 import { TruncatedString } from "./TruncatedString";
 import { useToggle } from "./useToggle";
-
-const styles = StyleSheet.create({
-  element: {
-    "--bg-color": "var(--pf-global--BackgroundColor--100)",
-    "--bg-color-fade": "rgba(255, 255, 255, 0.5)",
-    color: "var(--pf-global--Color--100)",
-    border: "3px solid transparent",
-    background: "var(--bg-color)",
-  },
-  row: {
-    // padding: "0 1rem",
-    display: "flex",
-    position: "relative",
-  },
-  nameWrapper: {
-    display: "flex !important",
-    alignItems: "center",
-  },
-  nameIcon: {
-    width: "48px",
-  },
-  statusIcons: {
-    display: "flex",
-    alignItems: "center",
-    padding: "0 1rem",
-    "& > *": {
-      margin: "0 0.5rem",
-    },
-  },
-  isDragging: {
-    color: "var(--pf-global--active-color--400)",
-  },
-  isSelected: {
-    "--bg-color": "var(--pf-global--BackgroundColor--150)",
-    "--bg-color-fade": "rgba(245, 245, 245, 0.5)",
-  },
-  isDisabled: {
-    pointerEvents: "none",
-    color: "var(--pf-global--disabled-color--200)",
-  },
-  actions: {
-    position: "absolute",
-    top: 0,
-    right: 0,
-    height: "100%",
-    textAlign: "right",
-    transition: "all 0.2s",
-    background:
-      "linear-gradient(to left, var(--bg-color) calc(100% - 2rem), var(--bg-color-fade))",
-    paddingLeft: "2rem",
-  },
-});
+import styles from "./DocumentField.css";
 
 export interface IDocumentFieldProps {
   name: ReactChild;

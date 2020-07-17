@@ -1,0 +1,6 @@
+.arc {
+  cursor: pointer;
+}
+.group {
+  pointer-events: all;
+}

@@ -11,42 +11,9 @@ import {
   Tooltip,
 } from "@patternfly/react-core";
 import { BoltIcon, TrashIcon, InfoAltIcon } from "@patternfly/react-icons";
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { css } from "@patternfly/react-styles";
 
-const styles = StyleSheet.create({
-  field: {
-    padding: "1rem",
-    background: "var(--pf-global--BackgroundColor--100)",
-    "& + &": {
-      borderTop:
-        "var(--pf-global--BorderWidth--md) solid var(--pf-global--BorderColor--300)",
-    },
-    "&:last-child": {
-      borderBottom:
-        "var(--pf-global--BorderWidth--sm) solid var(--pf-global--BorderColor--200)",
-    },
-  },
-  title: {
-    display: "flex",
-    alignItems: "center",
-  },
-  fieldIndex: {
-    marginRight: "1rem",
-  },
-  fieldName: {
-    flex: "2 0 calc(100% - 6rem)",
-  },
-  link: {
-    padding: 0,
-    marginRight: 5,
-  },
-  transformationsWrapper: {
-    marginTop: "0.5rem",
-    padding: "0.5rem",
-    background: "var(--pf-global--BackgroundColor--150)",
-  },
-  transformations: {},
-});
+import styles from "./MappingField.css";
 
 export interface IMappingFieldProps {
   name: string;
@@ -73,7 +40,12 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
     <div className={css(styles.field)} aria-labelledby={id} data-testid={id}>
       <Split>
         <SplitItem isFilled>
-          <Title size={"sm"} id={id} className={css(styles.title)}>
+          <Title
+            headingLevel="h2"
+            size="md"
+            id={id}
+            className={css(styles.title)}
+          >
             {canShowIndex && (
               <Tooltip
                 position={"auto"}
@@ -139,7 +111,9 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
         */}
       {children && Children.count(children) > 0 && (
         <div className={css("pf-c-form", styles.transformationsWrapper)}>
-          <Title size={"xs"}>Transformations</Title>
+          <Title headingLevel="h2" size="md">
+            Transformations
+          </Title>
           <div className={css(styles.transformations)}>{children}</div>
         </div>
       )}
