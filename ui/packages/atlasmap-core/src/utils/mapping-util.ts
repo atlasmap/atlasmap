@@ -254,7 +254,7 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
       const zeroBasedIndex = +mappedField.parsedData.parsedIndex!; // TODO: check this non null operator
       mappedFields = mapping.getMappedFields(isSource);
       if (zeroBasedIndex <= mappedFieldIndex) {
-        mappedFields[zeroBasedIndex] = mappedField;
+        mappedFields[mappedFieldIndex] = mappedField;
       } else {
         cfg.mappingService.addPlaceholders(
           zeroBasedIndex - mappedFieldIndex,

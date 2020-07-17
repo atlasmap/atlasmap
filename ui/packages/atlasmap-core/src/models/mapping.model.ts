@@ -81,6 +81,7 @@ export class MappingModel {
 
   sourceFields: MappedField[] = [];
   targetFields: MappedField[] = [];
+  referenceFields: MappedField[] = [];
   transition: TransitionModel = new TransitionModel();
 
   constructor() {
@@ -240,9 +241,64 @@ export class MappingModel {
     );
   }
 
+  getField(fieldPath: string): Field | null {
+    let field: Field | null = null;
+    for (const doc of this.cfg.getDocs(true)) {
+      field = Field.getField(fieldPath, doc.getAllFields());
+      if (field) {
+        break;
+      }
+    }
+    return field;
+  }
+
+  createReferenceField(field: Field): MappedField | null {
+    let mappedField: MappedField | null = null;
+
+    if (!field) {
+      return null;
+    }
+    if (
+      field.type === 'COMPLEX' &&
+      (field.serviceObject?.status === 'SUPPORTED' ||
+        field.serviceObject?.status === 'CACHED')
+    ) {
+      mappedField = new MappedField();
+      mappedField.field = field;
+      this.referenceFields.push(mappedField);
+    }
+    return mappedField;
+  }
+
   /**
-   * Return an array of user mapped fields for the specified panel in this field pair instance.  No
-   * data-mapper generated padding fields will be included.
+   * A reference field is a complex field which is referenced in a
+   * conditional expression but does not exist as an explicit part of
+   * the mapping.  If the field already exists return it otherwise
+   * create it.
+   *
+   * @param fieldPath
+   */
+  getReferenceField(fieldPath: string): MappedField | null {
+    if (!fieldPath) {
+      return null;
+    }
+    const referenceFields = this.getReferenceMappedFields();
+    for (let i = 0; i < referenceFields.length; i++) {
+      if (referenceFields[i].parsedData.parsedPath === fieldPath) {
+        return referenceFields[i];
+      }
+    }
+    const field = this.getField(fieldPath);
+    if (field) {
+      return this.createReferenceField(field);
+    }
+    return null;
+  }
+
+  /**
+   * Return an array of user mapped fields for the specified panel in this
+   * field pair instance.  No data-mapper generated padding fields will be
+   * included.
    *
    * @param isSource - true source panel, false target panel
    */
@@ -257,6 +313,10 @@ export class MappingModel {
     }
     resultFields.shift();
     return resultFields;
+  }
+
+  getReferenceMappedFields(): MappedField[] {
+    return this.referenceFields;
   }
 
   getMappedFields(isSource: boolean): MappedField[] {
