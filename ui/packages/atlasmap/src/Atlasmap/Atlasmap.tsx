@@ -26,7 +26,7 @@ import { useAtlasmap } from "./AtlasmapProvider";
 import { useAtlasmapDialogs } from "./useAtlasmapDialogs";
 import { IUseContextToolbarData, useContextToolbar } from "./useContextToolbar";
 import { useSidebar } from "./useSidebar";
-import { getPropertyValue, getPropertyType, getConstantType } from "./utils";
+import { getConstantType, getPropertyType, getPropertyValue } from "./utils";
 
 export interface IAtlasmapProps {
   allowImport?: boolean;
