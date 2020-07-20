@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import io.atlasmap.api.AtlasSession;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.FieldType;
@@ -98,5 +99,20 @@ public class AtlasTestData {
         runtimeProps.put("key-string", "foobar");
         runtimeProps.put("dupe-string", "uh oh");
         return runtimeProps;
+    }
+
+    public static AtlasSession generateAtlasSession() throws Exception {
+        AtlasMapping mappings = generateAtlasMapping();
+        Map<String, Object> runtimeProperties = generateRuntimeProperties();
+        return new DefaultAtlasSession(new DefaultAtlasContext(null)) {
+            @Override
+            public Map<String, Object> getSourceProperties() {
+                return runtimeProperties;
+            }
+            @Override
+            public AtlasMapping getMapping() {
+                return mappings;
+            }
+        };
     }
 }

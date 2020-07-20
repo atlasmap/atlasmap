@@ -30,6 +30,7 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.spi.AtlasFieldReader;
 import io.atlasmap.spi.AtlasFieldWriter;
 import io.atlasmap.spi.AtlasInternalSession;
+import io.atlasmap.spi.AtlasPropertyStrategy;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
@@ -45,7 +46,9 @@ public class DefaultAtlasSession implements AtlasInternalSession {
     private final AtlasMapping mapping;
     private Audits audits;
     private Validations validations;
-    private Map<String, Object> properties;
+    private Map<String, Object> sourceProperties;
+    private Map<String, Object> targetProperties;
+    private AtlasPropertyStrategy propertyStrategy;
     private Map<String, Object> sourceMap;
     private Map<String, Object> targetMap;
     private Map<String, AtlasFieldReader> fieldReaderMap;
@@ -69,7 +72,8 @@ public class DefaultAtlasSession implements AtlasInternalSession {
     }
 
     protected void initialize() {
-        properties = new ConcurrentHashMap<String, Object>();
+        sourceProperties = new ConcurrentHashMap<String, Object>();
+        targetProperties = new ConcurrentHashMap<String, Object>();
         validations = new Validations();
         audits = new Audits();
         sourceMap = new HashMap<>();
@@ -288,8 +292,28 @@ public class DefaultAtlasSession implements AtlasInternalSession {
     }
 
     @Override
+    @Deprecated
     public Map<String, Object> getProperties() {
-        return this.properties;
+        return getSourceProperties();
+    }
+
+    @Override
+    public Map<String, Object> getSourceProperties() {
+        return this.sourceProperties;
+    }
+
+    @Override
+    public Map<String, Object> getTargetProperties() {
+        return this.targetProperties;
+    }
+
+    @Override
+    public AtlasPropertyStrategy getAtlasPropertyStrategy() {
+        return this.propertyStrategy;
+    }
+    @Override
+    public void setAtlasPropertyStrategy(AtlasPropertyStrategy strategy) {
+        this.propertyStrategy = strategy;
     }
 
     @Override

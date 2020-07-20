@@ -15,56 +15,23 @@
  */
 package io.atlasmap.core;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.spi.AtlasCollectionHelper;
-import io.atlasmap.spi.AtlasConversionService;
-import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasInternalSession;
-import io.atlasmap.spi.AtlasModule;
-import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.spi.AtlasPropertyStrategy;
-import io.atlasmap.v2.DataSourceMetadata;
+import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.PropertyField;
 
-public class PropertyModule implements AtlasModule {
+public class PropertyModule extends BaseAtlasModule {
     private static final Logger LOG = LoggerFactory.getLogger(PropertyModule.class);
 
-    private AtlasPropertyStrategy propertyStrategy;
-    private AtlasConversionService conversionService;
-    private AtlasFieldActionService fieldActionService;
-    private AtlasCollectionHelper collectionHelper;
-    private ClassLoader classLoader;
+    private AtlasPropertyStrategy defaultStrategy;
 
     public PropertyModule(AtlasPropertyStrategy propertyStrategy) {
-        this.propertyStrategy = propertyStrategy;
-    }
-
-    @Override
-    public void init() {
-        // no-op
-    }
-
-    @Override
-    public void destroy() {
-        // no-op
-    }
-
-    @Override
-    public void setClassLoader(ClassLoader classLoader) {
-        this.classLoader = classLoader;
-    }
-
-    @Override
-    public ClassLoader getClassLoader() {
-        return this.classLoader;
+        this.defaultStrategy = propertyStrategy;
     }
 
     @Override
@@ -79,15 +46,17 @@ public class PropertyModule implements AtlasModule {
 
     @Override
     public void readSourceValue(AtlasInternalSession session) throws AtlasException {
+        AtlasPropertyStrategy strategy = session.getAtlasPropertyStrategy() != null
+                ? session.getAtlasPropertyStrategy() : this.defaultStrategy;
         Field sourceField = session.head().getSourceField();
         if (sourceField instanceof PropertyField) {
-            propertyStrategy.processPropertyField(session.getMapping(), (PropertyField) sourceField,
-                    session.getProperties());
-        }
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Processed input propertyField sPath=" + sourceField.getPath() + " sV=" + sourceField.getValue()
-                    + " sT=" + sourceField.getFieldType() + " docId: " + sourceField.getDocId());
+            PropertyField sourcePropertyField = (PropertyField)sourceField;
+            strategy.readProperty(session, sourcePropertyField);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Processed source PropertyField: Name={} Scope={} Value={} Strategy={}",
+                        sourcePropertyField.getName(), sourcePropertyField.getScope(),
+                        sourceField.getValue(), strategy.getClass().getName());
+            }
         }
     }
 
@@ -98,22 +67,28 @@ public class PropertyModule implements AtlasModule {
 
     @Override
     public void processPreTargetExecution(AtlasInternalSession session) throws AtlasException {
-        throw new UnsupportedOperationException("PropertyField cannot be placed as a target field");
-    }
-
-    @Override
-    public void populateTargetField(AtlasInternalSession session) throws AtlasException {
-        throw new UnsupportedOperationException("PropertyField cannot be placed as a target field");
+        // no-op
     }
 
     @Override
     public void writeTargetValue(AtlasInternalSession session) throws AtlasException {
-        throw new UnsupportedOperationException("PropertyField cannot be placed as a target field");
+        AtlasPropertyStrategy strategy = session.getAtlasPropertyStrategy() != null
+                ? session.getAtlasPropertyStrategy() : this.defaultStrategy;
+        Field targetField = session.head().getTargetField();
+        if (targetField instanceof PropertyField) {
+            PropertyField targetPropertyField = (PropertyField)targetField;
+            strategy.writeProperty(session, targetPropertyField);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Processed target PropertyField: Name={} Value={} Strategy={}",
+                        targetPropertyField.getName(), targetPropertyField.getValue(),
+                        strategy.getClass().getName());
+            }
+        }
     }
 
     @Override
     public void processPostTargetExecution(AtlasInternalSession session) throws AtlasException {
-        throw new UnsupportedOperationException("PropertyField cannot be placed as a target field");
+        // no-op
     }
 
     @Override
@@ -122,103 +97,20 @@ public class PropertyModule implements AtlasModule {
     }
 
     @Override
-    public AtlasModuleMode getMode() {
-        return AtlasModuleMode.SOURCE;
-    }
-
-    @Override
-    public void setMode(AtlasModuleMode atlasModuleMode) {
-        // no-op
-    }
-
-    @Override
-    public AtlasConversionService getConversionService() {
-        return this.conversionService;
-    }
-
-    @Override
-    public void setConversionService(AtlasConversionService atlasConversionService) {
-        this.conversionService = atlasConversionService;
-    }
-
-    @Override
-    public List<AtlasModuleMode> listSupportedModes() {
-        return Arrays.asList(new AtlasModuleMode[] { AtlasModuleMode.SOURCE });
-    }
-
-    @Override
-    public String getDocId() {
-        return null;
-    }
-
-    @Override
-    public void setDocId(String docId) {
-        // no-op
-    }
-
-    @Override
-    public String getUri() {
-        return null;
-    }
-
-    @Override
-    public void setUri(String uri) {
-        // no-op
-    }
-
-    @Override
-    public Boolean isStatisticsSupported() {
-        return false;
-    }
-
-    @Override
-    public Boolean isStatisticsEnabled() {
-        return false;
-    }
-
-    @Override
     public Boolean isSupportedField(Field field) {
         return field instanceof PropertyField;
     }
 
     @Override
-    public Field cloneField(Field field) throws AtlasException {
-        return null;
-    }
-
-    @Override
-    public AtlasFieldActionService getFieldActionService() {
-        return this.fieldActionService;
-    }
-
-    @Override
-    public void setFieldActionService(AtlasFieldActionService atlasFieldActionService) {
-        this.fieldActionService = atlasFieldActionService;
-        this.collectionHelper = new DefaultAtlasCollectionHelper(atlasFieldActionService);
-    }
-
-    @Override
-    public AtlasCollectionHelper getCollectionHelper() {
-        return this.collectionHelper;
-    }
-
-    @Override
-    public String getUriDataType() {
-        return null;
-    }
-
-    @Override
-    public Map<String, String> getUriParameters() {
-        return null;
-    }
-
-    @Override
-    public void setDataSourceMetadata(DataSourceMetadata meta) {
-    }
-
-    @Override
-    public DataSourceMetadata getDataSourceMetadata() {
-        return null;
+    public PropertyField cloneField(Field field) throws AtlasException {
+        if (field == null || !(field instanceof PropertyField)) {
+            return null;
+        }
+        PropertyField orig = (PropertyField)field;
+        PropertyField clone = new PropertyField();
+        AtlasModelFactory.copyField(orig, clone, true);
+        clone.setScope(orig.getScope());
+        return clone;
     }
 
 }

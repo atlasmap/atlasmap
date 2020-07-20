@@ -17,13 +17,23 @@ package io.atlasmap.api;
 
 import java.util.Map;
 
+import io.atlasmap.spi.AtlasPropertyStrategy;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.Validations;
 
 public interface AtlasSession {
 
+    @Deprecated
     Map<String, Object> getProperties();
+
+    Map<String, Object> getSourceProperties();
+
+    Map<String, Object> getTargetProperties();
+
+    AtlasPropertyStrategy getAtlasPropertyStrategy();
+
+    void setAtlasPropertyStrategy(AtlasPropertyStrategy strategy);
 
     AtlasContext getAtlasContext();
 

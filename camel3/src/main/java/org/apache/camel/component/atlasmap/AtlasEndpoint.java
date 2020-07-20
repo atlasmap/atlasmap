@@ -16,7 +16,6 @@
  */
 package org.apache.camel.component.atlasmap;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -183,30 +182,6 @@ public class AtlasEndpoint extends ResourceEndpoint {
         return getCamelContext().getEndpoint(newUri, AtlasEndpoint.class);
     }
 
-    /**
-     * Extract the AtlasMap mappings file (JSON) from the specified ADM archive
-     * and return it as a String.
-     *
-     * @param in - Live input stream to the ADM archive file via the resource URI.
-     * @param admPath - used for diagnostics only
-     * @return the extracted mappings JSON content
-     *
-     * @throws Exception
-     */
-    private String extractMappingsFromADM(InputStream in, String admPath) throws Exception {
-        try {
-            ADMArchiveHandler handler = new ADMArchiveHandler(getCamelContext().getApplicationContextClassLoader());
-            handler.setIgnoreLibrary(true);
-            handler.load(in);
-            if (log.isDebugEnabled()) {
-                log.debug("Atlas mapping content extracted from ADM archive: {}", admPath);
-            }
-            return new String(handler.getMappingDefinitionBytes());
-        } catch (Exception e) {
-            throw new IOException("Error extracting mappings file from ADM archive " + admPath, e);
-        }
-    }
-
     @Override
     protected void onExchange(Exchange exchange) throws Exception {
         Message incomingMessage = exchange.getIn();
@@ -325,33 +300,41 @@ public class AtlasEndpoint extends ResourceEndpoint {
         if (session.getMapping().getDataSource() == null) {
             return;
         }
+
+        Message inMessage = exchange.getIn();
+        CamelAtlasPropertyStrategy propertyStrategy = new CamelAtlasPropertyStrategy();
+        propertyStrategy.setCurrentSourceMessage(inMessage);
+        propertyStrategy.setTargetMessage(exchange.getMessage());
+        propertyStrategy.setExchange(exchange);
+        session.setAtlasPropertyStrategy(propertyStrategy);
+
         DataSource[] sourceDataSources = session.getMapping().getDataSource().stream()
                 .filter(ds -> ds.getDataSourceType() == DataSourceType.SOURCE)
                 .toArray(DataSource[]::new);
         if (sourceDataSources.length == 0) {
-            session.setDefaultSourceDocument(exchange.getIn().getBody());
+            session.setDefaultSourceDocument(inMessage.getBody());
             return;
         }
 
         if (sourceDataSources.length == 1) {
             String docId = sourceDataSources[0].getId();
-            Object payload = extractPayload(sourceDataSources[0], exchange.getIn());
+            Object payload = extractPayload(sourceDataSources[0], inMessage);
             if (docId == null || docId.isEmpty()) {
                 session.setDefaultSourceDocument(payload);
             } else {
                 session.setSourceDocument(docId, payload);
+                propertyStrategy.setSourceMessage(docId, inMessage);
             }
             return;
         }
 
-        // TODO handle headers docId - https://github.com/atlasmap/atlasmap/issues/67
         Map<String, Message> sourceMessages = null;
         Map<String, Object> sourceDocuments = null;
         if (sourceMapName != null) {
             sourceMessages = exchange.getProperty(sourceMapName, Map.class);
         }
         if (sourceMessages == null) {
-            Object body = exchange.getIn().getBody();
+            Object body = inMessage.getBody();
             if (body instanceof Map) {
                 sourceDocuments = (Map<String, Object>)body;
             } else {
@@ -367,6 +350,9 @@ public class AtlasEndpoint extends ResourceEndpoint {
                 session.setDefaultSourceDocument(payload);
             } else {
                 session.setSourceDocument(docId, payload);
+                if (sourceMessages != null) {
+                    propertyStrategy.setSourceMessage(docId, sourceMessages.get(docId));
+                }
             }
         }
     }
@@ -421,7 +407,6 @@ public class AtlasEndpoint extends ResourceEndpoint {
             return;
         }
 
-        // TODO handle headers docId - https://github.com/atlasmap/atlasmap/issues/67
         Map<String, Object> targetDocuments = new HashMap<>();
         for (DataSource ds : targetDataSources) {
             String docId = ds.getId();

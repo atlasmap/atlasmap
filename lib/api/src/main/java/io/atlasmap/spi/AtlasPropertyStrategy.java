@@ -15,14 +15,33 @@
  */
 package io.atlasmap.spi;
 
-import java.util.Map;
-
 import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.api.AtlasSession;
 import io.atlasmap.api.AtlasUnsupportedException;
-import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.PropertyField;
 
+/**
+ * A plug-in interface for property strategy which read a source property and write a target property.
+ *
+ */
 public interface AtlasPropertyStrategy {
-    void processPropertyField(AtlasMapping atlasMapping, PropertyField propertyField,
-            Map<String, Object> runtimeProperties) throws AtlasUnsupportedException, AtlasConversionException;
+
+    /**
+     * Read a source property value and set into source Field.
+     * @param session {@code AtlasSession}
+     * @param propertyField source {@code PropertyField} to set a property value
+     * @throws AtlasUnsupportedException if reading property is not supported
+     * @throws AtlasConversionException if type conversion fails
+     */
+    void readProperty(AtlasSession session, PropertyField propertyField) throws AtlasUnsupportedException, AtlasConversionException;
+
+    /**
+     * Write a target property value from target Field.
+     * @param session {@code AtlasSession}
+     * @param propertyField target {@code PropertyField} to read a property value from
+     * @throws AtlasUnsupportedException if reading property is not supported
+     * @throws AtlasConversionException if type conversion fails
+     */
+    void writeProperty(AtlasSession session, PropertyField propertyField) throws AtlasUnsupportedException, AtlasConversionException;
+
 }

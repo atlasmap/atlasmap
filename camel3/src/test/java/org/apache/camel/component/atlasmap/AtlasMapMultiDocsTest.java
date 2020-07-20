@@ -77,12 +77,15 @@ public class AtlasMapMultiDocsTest {
         javaSource.setZipCode("JavaZipCode");
         Message msg = new DefaultMessage(camelContext);
         msg.setBody(javaSource);
+        msg.setHeader("testProp", "java-source-header");
         sourceMap.put("DOCID:JAVA:CONTACT:S", msg);
         msg = new DefaultMessage(camelContext);
         msg.setBody(JSON_SOURCE);
+        msg.setHeader("testProp", "json-source-header");
         sourceMap.put("DOCID:JSON:CONTACT:S", msg);
         msg = new DefaultMessage(camelContext);
         msg.setBody(XML_SOURCE);
+        msg.setHeader("testProp", "xml-source-header");
         sourceMap.put("DOCID:XML:CONTACT:S", msg);
 
         ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
@@ -110,6 +113,10 @@ public class AtlasMapMultiDocsTest {
         assertThat(xmlTarget).withNamespaceContext(ns).valueByXPath("/Contact/@firstName").isEqualTo("XmlFirstName");
         assertThat(xmlTarget).withNamespaceContext(ns).valueByXPath("/Contact/@lastName").isEqualTo("JsonLastName");
         assertThat(xmlTarget).withNamespaceContext(ns).valueByXPath("/Contact/@phoneNumber").isEqualTo("JavaPhoneNumber");
+
+        assertEquals("java-source-header", exchange.getProperty("target-exchange"));
+        assertEquals("json-source-header", exchange.getProperty("testProp"));
+        assertEquals("xml-source-header", exchange.getIn().getHeader("testProp"));
     }
 
     @Test

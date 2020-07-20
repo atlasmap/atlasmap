@@ -36,6 +36,7 @@ public interface AtlasContextFactory {
 
     AtlasContext createContext(URI atlasMappingUri) throws AtlasException;
 
+    @Deprecated
     AtlasCombineStrategy getCombineStrategy() throws AtlasException;
 
     AtlasConversionService getConversionService() throws AtlasException;
@@ -44,6 +45,9 @@ public interface AtlasContextFactory {
 
     AtlasPropertyStrategy getPropertyStrategy() throws AtlasException;
 
+    void setPropertyStrategy(AtlasPropertyStrategy strategy) throws AtlasException;
+
+    @Deprecated
     AtlasSeparateStrategy getSeparateStrategy() throws AtlasException;
 
     AtlasValidationService getValidationService() throws AtlasException;

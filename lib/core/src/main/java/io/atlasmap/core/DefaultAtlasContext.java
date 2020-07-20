@@ -131,12 +131,17 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         constant.setConversionService(factory.getConversionService());
         constant.setFieldActionService(factory.getFieldActionService());
         sourceModules.put(CONSTANTS_DOCUMENT_ID, constant);
-        PropertyModule propSource = new PropertyModule(factory.getPropertyStrategy());
-        propSource.setMode(AtlasModuleMode.SOURCE);
-        propSource.setConversionService(factory.getConversionService());
-        propSource.setFieldActionService(factory.getFieldActionService());
-        sourceModules.put(PROPERTIES_DOCUMENT_ID, propSource);
+        PropertyModule property = new PropertyModule(factory.getPropertyStrategy());
+        property.setConversionService(factory.getConversionService());
+        property.setFieldActionService(factory.getFieldActionService());
+        property.setMode(AtlasModuleMode.SOURCE);
+        sourceModules.put(PROPERTIES_DOCUMENT_ID, property);
         targetModules.clear();
+        property = new PropertyModule(factory.getPropertyStrategy());
+        property.setConversionService(factory.getConversionService());
+        property.setFieldActionService(factory.getFieldActionService());
+        property.setMode(AtlasModuleMode.TARGET);
+        targetModules.put(PROPERTIES_DOCUMENT_ID, property);
 
         lookupTables.clear();
         if (mappingDefinition.getLookupTables() != null
@@ -591,7 +596,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         if (direction == FieldDirection.SOURCE && field instanceof ConstantField) {
             return sourceModules.get(CONSTANTS_DOCUMENT_ID);
         }
-        if (direction == FieldDirection.SOURCE && field instanceof PropertyField) {
+        if (field instanceof PropertyField) {
             return sourceModules.get(PROPERTIES_DOCUMENT_ID);
         }
 

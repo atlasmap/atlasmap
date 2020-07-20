@@ -247,6 +247,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         return atlasPropertyStrategy;
     }
 
+    @Override
     public void setPropertyStrategy(AtlasPropertyStrategy atlasPropertyStrategy) {
         this.atlasPropertyStrategy = atlasPropertyStrategy;
     }

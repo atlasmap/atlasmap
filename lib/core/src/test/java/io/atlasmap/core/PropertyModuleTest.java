@@ -1,5 +1,6 @@
 package io.atlasmap.core;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -7,7 +8,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.mockito.Mockito.verify;
+
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.spi.AtlasInternalSession;
@@ -20,7 +27,7 @@ public class PropertyModuleTest {
     private static PropertyModule module = new PropertyModule(new DefaultAtlasPropertyStrategy());
 
     @Test
-    public void testDestroy() {
+    public void testDestroy() throws Exception {
         module.destroy();
     }
 
@@ -37,19 +44,25 @@ public class PropertyModuleTest {
     @Test
     public void testProcessSourceFieldMapping() throws AtlasException {
         PropertyField field = mock(PropertyField.class);
-        when(field.getValue()).thenReturn("fieldValue");
-
+        when(field.getName()).thenReturn("testProp");
         Head head = mock(Head.class);
         when(head.getSourceField()).thenReturn(field);
 
         AtlasInternalSession session = mock(AtlasInternalSession.class);
         when(session.head()).thenReturn(head);
+        Map<String, Object> sourceProps = new HashMap<>();
+        sourceProps.put("testProp", "testValue");
+        when(session.getSourceProperties()).thenReturn(sourceProps);
 
         DefaultAtlasConversionService atlasConversionService = mock(DefaultAtlasConversionService.class);
         when(atlasConversionService.fieldTypeFromClass(any(String.class))).thenReturn(FieldType.ANY);
 
         module.setConversionService(atlasConversionService);
         module.readSourceValue(session);
+
+        ArgumentCaptor<Object> arg = ArgumentCaptor.forClass(Object.class);
+        verify(field).setValue(arg.capture());
+        assertEquals("testValue", arg.getValue());
     }
 
     @Test
@@ -57,17 +70,34 @@ public class PropertyModuleTest {
         module.processPostSourceExecution(null);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testProcessPreTargetExecution() throws AtlasException {
         module.processPreTargetExecution(null);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void testProcessTargetFieldMapping() throws AtlasException {
-        module.writeTargetValue(null);
+    @Test
+    public void testProcessTargetFieldMapping() throws Exception {
+        PropertyField field = mock(PropertyField.class);
+        when(field.getName()).thenReturn("testProp");
+        when(field.getValue()).thenReturn("testValue");
+        Head head = mock(Head.class);
+        when(head.getTargetField()).thenReturn(field);
+
+        AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.head()).thenReturn(head);
+        Map<String, Object> targetProps = new HashMap<>();
+        when(session.getTargetProperties()).thenReturn(targetProps);
+
+        DefaultAtlasConversionService atlasConversionService = mock(DefaultAtlasConversionService.class);
+        when(atlasConversionService.fieldTypeFromClass(any(String.class))).thenReturn(FieldType.ANY);
+
+        module.setConversionService(atlasConversionService);
+        module.writeTargetValue(session);
+
+        assertEquals("testValue", targetProps.get("testProp"));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testProcessPostTargetExecution() throws AtlasException {
         module.processPostTargetExecution(null);
     }
@@ -128,7 +158,7 @@ public class PropertyModuleTest {
     }
 
     @Test
-    public void testInit() {
+    public void testInit() throws Exception {
         module.init();
     }
 

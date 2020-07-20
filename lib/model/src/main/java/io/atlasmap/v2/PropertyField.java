@@ -9,30 +9,30 @@ public class PropertyField extends Field implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    protected String name;
+    protected String scope;
 
     /**
-     * Gets the value of the name property.
+     * Gets the value of the scope property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getName() {
-        return name;
+    public String getScope() {
+        return scope;
     }
 
     /**
-     * Sets the value of the name property.
+     * Sets the value of the scope property.
      * 
-     * @param value
+     * @param scope
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setName(String value) {
-        this.name = value;
+    public void setScope(String scope) {
+        this.scope = scope;
     }
 
 }
