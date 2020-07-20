@@ -192,6 +192,56 @@
           "fieldType" : "STRING",
           "name" : "phoneNumber"
         } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.v2.PropertyField",
+          "path" : "/testProp",
+          "fieldType" : "STRING",
+          "scope" : "DOCID:JAVA:CONTACT:S",
+          "name" : "testProp"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.v2.PropertyField",
+          "path" : "/target-exchange",
+          "fieldType" : "STRING",
+          "scope" : "camelExchangeProperty",
+          "name" : "target-exchange"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.v2.PropertyField",
+          "path" : "/testProp",
+          "fieldType" : "STRING",
+          "scope" : "DOCID:JSON:CONTACT:S",
+          "name" : "testProp"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.v2.PropertyField",
+          "path" : "/testProp",
+          "fieldType" : "STRING",
+          "scope" : "camelExchangeProperty",
+          "name" : "testProp"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.v2.PropertyField",
+          "path" : "/testProp",
+          "fieldType" : "STRING",
+          "scope" : "DOCID:XML:CONTACT:S",
+          "name" : "testProp"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.v2.PropertyField",
+          "path" : "/testProp",
+          "fieldType" : "STRING",
+          "name" : "testProp"
+        } ]
       } ]
     },
     "lookupTables" : {

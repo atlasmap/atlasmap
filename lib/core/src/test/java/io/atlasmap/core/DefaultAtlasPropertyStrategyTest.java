@@ -23,7 +23,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import org.junit.After;
@@ -55,8 +54,7 @@ public class DefaultAtlasPropertyStrategyTest {
         PropertyField propField = AtlasModelFactory.createPropertyField();
         propField.setName("PATH");
 
-        propStrategy.processPropertyField(AtlasTestData.generateAtlasMapping(), propField,
-                AtlasTestData.generateRuntimeProperties());
+        propStrategy.readProperty(null, propField);
 
         assertNotNull(propField);
         assertNotNull(propField.getValue());
@@ -70,8 +68,7 @@ public class DefaultAtlasPropertyStrategyTest {
         propField.setName("PATH");
 
         propStrategy.setEnvironmentPropertiesEnabled(false);
-        propStrategy.processPropertyField(AtlasTestData.generateAtlasMapping(), propField,
-                AtlasTestData.generateRuntimeProperties());
+        propStrategy.readProperty(null, propField);
 
         assertNotNull(propField);
         assertNull(propField.getValue());
@@ -82,8 +79,7 @@ public class DefaultAtlasPropertyStrategyTest {
         PropertyField propField = AtlasModelFactory.createPropertyField();
         propField.setName("XXXXXXXXXXXXXXXXXXXXX");
 
-        propStrategy.processPropertyField(AtlasTestData.generateAtlasMapping(), propField,
-                AtlasTestData.generateRuntimeProperties());
+        propStrategy.readProperty(null, propField);
 
         assertNotNull(propField);
         assertNull(propField.getValue());
@@ -94,8 +90,7 @@ public class DefaultAtlasPropertyStrategyTest {
         PropertyField propField = AtlasModelFactory.createPropertyField();
         propField.setName("java.specification.version");
 
-        propStrategy.processPropertyField(AtlasTestData.generateAtlasMapping(), propField,
-                AtlasTestData.generateRuntimeProperties());
+        propStrategy.readProperty(null, propField);
 
         assertNotNull(propField);
         assertNotNull(propField.getValue());
@@ -109,8 +104,7 @@ public class DefaultAtlasPropertyStrategyTest {
         propField.setName("java.specification.version");
 
         propStrategy.setSystemPropertiesEnabled(false);
-        propStrategy.processPropertyField(AtlasTestData.generateAtlasMapping(), propField,
-                AtlasTestData.generateRuntimeProperties());
+        propStrategy.readProperty(null, propField);
 
         assertNotNull(propField);
         assertNull(propField.getValue());
@@ -121,8 +115,7 @@ public class DefaultAtlasPropertyStrategyTest {
         PropertyField propField = AtlasModelFactory.createPropertyField();
         propField.setName("dupe-string");
 
-        propStrategy.processPropertyField(AtlasTestData.generateAtlasMapping(), propField,
-                AtlasTestData.generateRuntimeProperties());
+        propStrategy.readProperty(AtlasTestData.generateAtlasSession(), propField);
 
         assertNotNull(propField);
         assertNotNull(propField.getValue());
@@ -137,8 +130,7 @@ public class DefaultAtlasPropertyStrategyTest {
 
         propStrategy.setPropertyOrderValue(Arrays.asList(AtlasPropertyType.MAPPING_DEFINED_PROPERTIES.value(),
                 AtlasPropertyType.RUNTIME_PROPERTIES.value()));
-        propStrategy.processPropertyField(AtlasTestData.generateAtlasMapping(), propField,
-                AtlasTestData.generateRuntimeProperties());
+        propStrategy.readProperty(AtlasTestData.generateAtlasSession(), propField);
 
         assertNotNull(propField);
         assertNotNull(propField.getValue());
@@ -148,23 +140,20 @@ public class DefaultAtlasPropertyStrategyTest {
 
     @Test
     public void testProcessPropertyFieldNull() throws Exception {
-        propStrategy.processPropertyField(AtlasTestData.generateAtlasMapping(), null,
-                AtlasTestData.generateRuntimeProperties());
+        propStrategy.readProperty(null, null);
     }
 
     @Test
     public void testProcessPropertyFieldNullName() throws Exception {
         PropertyField propField = AtlasModelFactory.createPropertyField();
-        propStrategy.processPropertyField(AtlasTestData.generateAtlasMapping(), propField,
-                AtlasTestData.generateRuntimeProperties());
+        propStrategy.readProperty(null, propField);
     }
 
     @Test
     public void testProcessPropertyFieldEmptyName() throws Exception {
         PropertyField propField = AtlasModelFactory.createPropertyField();
         propField.setName("");
-        propStrategy.processPropertyField(AtlasTestData.generateAtlasMapping(), propField,
-                AtlasTestData.generateRuntimeProperties());
+        propStrategy.readProperty(null, propField);
     }
 
     @Test
@@ -172,8 +161,7 @@ public class DefaultAtlasPropertyStrategyTest {
         PropertyField propField = AtlasModelFactory.createPropertyField();
         propField.setName("prop-int");
 
-        propStrategy.processPropertyField(AtlasTestData.generateAtlasMapping(), propField,
-                AtlasTestData.generateRuntimeProperties());
+        propStrategy.readProperty(AtlasTestData.generateAtlasSession(), propField);
 
         assertNotNull(propField);
         assertNotNull(propField.getValue());
@@ -187,8 +175,7 @@ public class DefaultAtlasPropertyStrategyTest {
         propField.setName("prop-int");
 
         propStrategy.setMappingDefinedPropertiesEnabled(false);
-        propStrategy.processPropertyField(AtlasTestData.generateAtlasMapping(), propField,
-                AtlasTestData.generateRuntimeProperties());
+        propStrategy.readProperty(null, propField);
 
         assertNotNull(propField);
         assertNull(propField.getValue());
@@ -201,7 +188,7 @@ public class DefaultAtlasPropertyStrategyTest {
 
         AtlasMapping mapping = AtlasTestData.generateAtlasMapping();
         mapping.setProperties(null);
-        propStrategy.processPropertyField(null, propField, AtlasTestData.generateRuntimeProperties());
+        propStrategy.readProperty(null, propField);
 
         assertNotNull(propField);
         assertNull(propField.getValue());
@@ -214,7 +201,7 @@ public class DefaultAtlasPropertyStrategyTest {
 
         AtlasMapping mapping = AtlasTestData.generateAtlasMapping();
         mapping.setProperties(null);
-        propStrategy.processPropertyField(mapping, propField, AtlasTestData.generateRuntimeProperties());
+        propStrategy.readProperty(null, propField);
 
         assertNotNull(propField);
         assertNull(propField.getValue());
@@ -227,7 +214,7 @@ public class DefaultAtlasPropertyStrategyTest {
 
         AtlasMapping mapping = AtlasTestData.generateAtlasMapping();
         mapping.getProperties().getProperty().clear();
-        propStrategy.processPropertyField(mapping, propField, AtlasTestData.generateRuntimeProperties());
+        propStrategy.readProperty(null, propField);
 
         assertNotNull(propField);
         assertNull(propField.getValue());
@@ -238,7 +225,7 @@ public class DefaultAtlasPropertyStrategyTest {
         PropertyField propField = AtlasModelFactory.createPropertyField();
         propField.setName("prop-int");
 
-        propStrategy.processPropertyField(AtlasTestData.generateAtlasMapping(), propField, null);
+        propStrategy.readProperty(AtlasTestData.generateAtlasSession(), propField);
 
         assertNotNull(propField);
         assertNotNull(propField.getValue());
@@ -251,8 +238,7 @@ public class DefaultAtlasPropertyStrategyTest {
         PropertyField propField = AtlasModelFactory.createPropertyField();
         propField.setName("prop-int");
 
-        propStrategy.processPropertyField(AtlasTestData.generateAtlasMapping(), propField,
-                new HashMap<String, Object>());
+        propStrategy.readProperty(AtlasTestData.generateAtlasSession(), propField);
 
         assertNotNull(propField);
         assertNotNull(propField.getValue());
@@ -266,8 +252,7 @@ public class DefaultAtlasPropertyStrategyTest {
         propField.setName("prop-int");
 
         propStrategy.setAtlasConversionService(null);
-        propStrategy.processPropertyField(AtlasTestData.generateAtlasMapping(), propField,
-                AtlasTestData.generateRuntimeProperties());
+        propStrategy.readProperty(AtlasTestData.generateAtlasSession(), propField);
 
         assertNotNull(propField);
         assertNotNull(propField.getValue());
@@ -280,8 +265,7 @@ public class DefaultAtlasPropertyStrategyTest {
         PropertyField propField = AtlasModelFactory.createPropertyField();
         propField.setName("key-float");
 
-        propStrategy.processPropertyField(AtlasTestData.generateAtlasMapping(), propField,
-                AtlasTestData.generateRuntimeProperties());
+        propStrategy.readProperty(AtlasTestData.generateAtlasSession(), propField);
 
         assertNotNull(propField);
         assertNotNull(propField.getValue());
@@ -295,8 +279,7 @@ public class DefaultAtlasPropertyStrategyTest {
         propField.setName("key-float");
 
         propStrategy.setRuntimePropertiesEnabled(false);
-        propStrategy.processPropertyField(AtlasTestData.generateAtlasMapping(), propField,
-                AtlasTestData.generateRuntimeProperties());
+        propStrategy.readProperty(null, propField);
 
         assertNotNull(propField);
         assertNull(propField.getValue());

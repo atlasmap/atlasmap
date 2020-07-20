@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.api.AtlasSession;
 import io.atlasmap.api.AtlasUnsupportedException;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasPropertyStrategy;
@@ -51,8 +52,8 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
     private AtlasConversionService atlasConversionService = null;
 
     @Override
-    public void processPropertyField(AtlasMapping atlasMapping, PropertyField propertyField,
-            Map<String, Object> runtimeProperties) throws AtlasUnsupportedException, AtlasConversionException {
+    public void readProperty(AtlasSession session, PropertyField propertyField)
+            throws AtlasUnsupportedException, AtlasConversionException {
         if (propertyField == null || propertyField.getName() == null || propertyField.getName().trim().length() == 0) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug(String.format("Null or empty PropertyField specified popertyField=%s",
@@ -64,7 +65,7 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
         for (AtlasPropertyType propType : getPropertyOrder()) {
             switch (propType) {
             case RUNTIME_PROPERTIES:
-                if (processRuntimeProperties(propertyField, runtimeProperties)) {
+                if (session != null && processRuntimeProperties(propertyField, session.getSourceProperties())) {
                     return;
                 }
                 break;
@@ -79,7 +80,7 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
                 }
                 break;
             case MAPPING_DEFINED_PROPERTIES:
-                if (processMappingDefinedProperties(propertyField, atlasMapping)) {
+                if (session != null && processMappingDefinedProperties(propertyField, session.getMapping())) {
                     return;
                 }
                 break;
@@ -229,6 +230,18 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
             }
         }
         return true;
+    }
+
+    @Override
+    public void writeProperty(AtlasSession session, PropertyField propertyField) {
+        if (propertyField == null || propertyField.getName() == null || propertyField.getName().trim().length() == 0) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(String.format("Null or empty PropertyField specified popertyField=%s",
+                        AtlasModelFactory.toString(propertyField)));
+            }
+            return;
+        }
+        session.getTargetProperties().put(propertyField.getName(), propertyField.getValue());
     }
 
     public void setPropertyOrderValue(List<String> propertyValues) {
