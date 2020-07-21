@@ -20,6 +20,7 @@ package org.apache.camel.component.atlasmap;
 import java.util.Map;
 
 import org.apache.camel.Endpoint;
+import org.apache.camel.component.atlasmap.AtlasEndpoint.TargetMapMode;
 import org.apache.camel.spi.Metadata;
 import org.apache.camel.support.DefaultComponent;
 import org.apache.camel.support.ResourceHelper;
@@ -50,6 +51,7 @@ public class AtlasComponent extends DefaultComponent {
         boolean cache = getAndRemoveParameter(parameters, "contentCache", Boolean.class, Boolean.TRUE);
         String sourceMapName = getAndRemoveParameter(parameters, "sourceMapName", String.class);
         String targetMapName = getAndRemoveParameter(parameters, "targetMapName", String.class);
+        TargetMapMode targetMapMode = getAndRemoveParameter(parameters, "targetMapMode", TargetMapMode.class);
 
         AtlasEndpoint endpoint = new AtlasEndpoint(uri, this, remaining);
         setProperties(endpoint, parameters);
@@ -57,6 +59,9 @@ public class AtlasComponent extends DefaultComponent {
         endpoint.setSourceMapName(sourceMapName);
         endpoint.setTargetMapName(targetMapName);
         endpoint.setAtlasContextFactory(getAtlasContextFactory());
+        if (targetMapMode != null) {
+            endpoint.setTargetMapMode(targetMapMode);
+        }
 
         // if its a http resource then append any remaining parameters and update the
         // resource uri

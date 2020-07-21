@@ -10,6 +10,8 @@ public class Audit implements Serializable {
 
     protected String docId;
 
+    protected String docName;
+
     protected String path;
 
     protected String value;
@@ -62,6 +64,30 @@ public class Audit implements Serializable {
      */
     public void setDocId(String value) {
         this.docId = value;
+    }
+
+    /**
+     * Gets the value of the docName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getDocName() {
+        return docName;
+    }
+
+    /**
+     * Sets the value of the docName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setDocName(String value) {
+        this.docName = value;
     }
 
     /**

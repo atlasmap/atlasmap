@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.camel.CamelContext;
+import org.apache.camel.Endpoint;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
@@ -95,24 +96,7 @@ public class AtlasMapMultiDocsTest {
         Exchange exchange = result.getExchanges().get(0);
         Map<?, ?> targetMap = exchange.getProperty("TARGET_MESSAGES_MAP", Map.class);
 
-        TargetContact javaTarget = (TargetContact) targetMap.get("DOCID:JAVA:CONTACT:T");
-        assertEquals("JavaFirstName", javaTarget.getFirstName());
-        assertEquals("XmlLastName", javaTarget.getLastName());
-        assertEquals("JsonPhoneNumber", javaTarget.getPhoneNumber());
-
-        String jsonTarget = (String) targetMap.get("DOCID:JSON:CONTACT:T");
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode jsonTargetNode = mapper.readTree(jsonTarget);
-        assertEquals("JsonFirstName", jsonTargetNode.get("firstName").asText());
-        assertEquals("JavaLastName", jsonTargetNode.get("lastName").asText());
-        assertEquals("XmlPhoneNumber", jsonTargetNode.get("phoneNumber").asText());
-
-        String xmlTarget = (String) targetMap.get("DOCID:XML:CONTACT:T");
-        HashMap<String,String> ns = new HashMap<>();
-        ns.put("ns", "http://atlasmap.io/xml/test/v2");
-        assertThat(xmlTarget).withNamespaceContext(ns).valueByXPath("/Contact/@firstName").isEqualTo("XmlFirstName");
-        assertThat(xmlTarget).withNamespaceContext(ns).valueByXPath("/Contact/@lastName").isEqualTo("JsonLastName");
-        assertThat(xmlTarget).withNamespaceContext(ns).valueByXPath("/Contact/@phoneNumber").isEqualTo("JavaPhoneNumber");
+        verifyTargetDocs(targetMap);
 
         assertEquals("java-source-header", exchange.getProperty("target-exchange"));
         assertEquals("json-source-header", exchange.getProperty("testProp"));
@@ -140,11 +124,57 @@ public class AtlasMapMultiDocsTest {
         Exchange exchange = resultBody.getExchanges().get(0);
         Map<?, ?> targetMap = exchange.getIn().getBody(Map.class);
 
-        TargetContact javaTarget = (TargetContact) targetMap.get("DOCID:JAVA:CONTACT:T");
-        assertEquals("JavaFirstName", javaTarget.getFirstName());
-        assertEquals("XmlLastName", javaTarget.getLastName());
-        assertEquals("JsonPhoneNumber", javaTarget.getPhoneNumber());
+        verifyTargetDocs(targetMap);
+    }
 
+    @Test
+    public void testHeaderDocs() throws Exception {
+        resultBody.setExpectedCount(1);
+
+        Map<String, Object> sourceMap = new HashMap<>();
+        SourceContact javaSource = new SourceContact();
+        javaSource.setFirstName("JavaFirstName");
+        javaSource.setLastName("JavaLastName");
+        javaSource.setPhoneNumber("JavaPhoneNumber");
+        javaSource.setZipCode("JavaZipCode");
+        sourceMap.put("DOCID:JAVA:CONTACT:S", javaSource);
+        sourceMap.put("DOCID:JSON:CONTACT:S", JSON_SOURCE);
+        sourceMap.put("DOCID:XML:CONTACT:S", XML_SOURCE);
+
+        ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
+        producerTemplate.sendBodyAndHeaders("direct:start-header", null, sourceMap);
+
+        MockEndpoint.assertIsSatisfied(camelContext);
+        Exchange exchange = resultBody.getExchanges().get(0);
+        verifyTargetDocs(exchange.getIn().getHeaders());
+    }
+
+    @Test
+    public void testExchangePropertyDocs() throws Exception {
+        resultBody.setExpectedCount(1);
+
+        Map<String, Object> sourceMap = new HashMap<>();
+        SourceContact javaSource = new SourceContact();
+        javaSource.setFirstName("JavaFirstName");
+        javaSource.setLastName("JavaLastName");
+        javaSource.setPhoneNumber("JavaPhoneNumber");
+        javaSource.setZipCode("JavaZipCode");
+        sourceMap.put("DOCID:JAVA:CONTACT:S", javaSource);
+        sourceMap.put("DOCID:JSON:CONTACT:S", JSON_SOURCE);
+        sourceMap.put("DOCID:XML:CONTACT:S", XML_SOURCE);
+
+        Endpoint ep = camelContext.getEndpoint("direct:start-exchange-property");
+        Exchange ex = ep.createExchange();
+        ex.getProperties().putAll(sourceMap);
+        ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
+        producerTemplate.send(ep, ex);
+
+        MockEndpoint.assertIsSatisfied(camelContext);
+        Exchange exchange = resultBody.getExchanges().get(0);
+        verifyTargetDocs(exchange.getProperties());
+    }
+
+    private void verifyTargetDocs(Map<?, ?> targetMap) throws Exception {
         String jsonTarget = (String) targetMap.get("DOCID:JSON:CONTACT:T");
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonTargetNode = mapper.readTree(jsonTarget);
@@ -158,6 +188,7 @@ public class AtlasMapMultiDocsTest {
         assertThat(xmlTarget).withNamespaceContext(ns).valueByXPath("/Contact/@firstName").isEqualTo("XmlFirstName");
         assertThat(xmlTarget).withNamespaceContext(ns).valueByXPath("/Contact/@lastName").isEqualTo("JsonLastName");
         assertThat(xmlTarget).withNamespaceContext(ns).valueByXPath("/Contact/@phoneNumber").isEqualTo("JavaPhoneNumber");
+
     }
 
 }

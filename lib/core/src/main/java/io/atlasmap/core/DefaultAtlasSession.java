@@ -53,7 +53,7 @@ public class DefaultAtlasSession implements AtlasInternalSession {
     private Map<String, Object> targetMap;
     private Map<String, AtlasFieldReader> fieldReaderMap;
     private Map<String, AtlasFieldWriter> fieldWriterMap;
-    private Head head = new HeadImpl();
+    private Head head = new HeadImpl(this);
 
     public DefaultAtlasSession(DefaultAtlasContext context) throws AtlasException {
         this.atlasContext = context;
@@ -359,11 +359,16 @@ public class DefaultAtlasSession implements AtlasInternalSession {
     }
 
     private class HeadImpl implements Head {
+        private DefaultAtlasSession session;
         private Mapping mapping;
         private LookupTable lookupTable;
         private Field sourceField;
         private Field targetField;
         private List<Audit> audits = new LinkedList<Audit>();
+
+        public HeadImpl(DefaultAtlasSession session) {
+            this.session = session;
+        }
 
         @Override
         public Mapping getMapping() {
@@ -430,7 +435,8 @@ public class DefaultAtlasSession implements AtlasInternalSession {
 
         @Override
         public Head addAudit(AuditStatus status, String docId, String path, String message) {
-            Audit audit = AtlasUtil.createAudit(status, docId, path, null, message);
+            String docName = AtlasUtil.getDocumentNameById(session.getMapping(), docId);
+            Audit audit = AtlasUtil.createAudit(status, docId, docName, path, null, message);
             this.audits.add(audit);
             return this;
         }
