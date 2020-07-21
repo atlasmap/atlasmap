@@ -2058,6 +2058,12 @@ endif::internal-generation[]
 | 
 |  
 
+| docName 
+|  
+| String  
+| 
+|  
+
 | path 
 |  
 | String  
@@ -2196,6 +2202,18 @@ endif::internal-generation[]
 | Field Name| Required| Type| Description| Format
 
 | id 
+|  
+| String  
+| 
+|  
+
+| name 
+|  
+| String  
+| 
+|  
+
+| description 
 |  
 | String  
 | 
@@ -2859,6 +2877,18 @@ endif::internal-generation[]
 |  
 
 | id 
+|  
+| String  
+| 
+|  
+
+| docId 
+|  
+| String  
+| 
+|  
+
+| docName 
 |  
 | String  
 | 

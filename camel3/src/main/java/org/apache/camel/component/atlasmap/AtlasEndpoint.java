@@ -74,6 +74,12 @@ public class AtlasEndpoint extends ResourceEndpoint {
     private String sourceMapName;
     @UriParam
     private String targetMapName;
+    @UriParam(defaultValue = "MAP")
+    private TargetMapMode targetMapMode = TargetMapMode.MAP;
+
+    public enum TargetMapMode {
+        MAP, MESSAGE_HEADER, EXCHANGE_PROPERTY;
+    }
 
     public AtlasEndpoint(String uri, AtlasComponent component, String resourceUri) {
         super(uri, component, resourceUri);
@@ -176,6 +182,18 @@ public class AtlasEndpoint extends ResourceEndpoint {
         return this.targetMapName;
     }
 
+    /**
+     * {@link TargetMapMode} enum value to specify how multiple documents are delivered.
+     * @param mode {@link TargetMapMode}
+     */
+    public void setTargetMapMode(TargetMapMode mode) {
+        this.targetMapMode = mode;
+    }
+
+    public TargetMapMode getTargetMapMode() {
+        return this.targetMapMode;
+    }
+
     public AtlasEndpoint findOrCreateEndpoint(String uri, String newResourceUri) {
         String newUri = uri.replace(getResourceUri(), newResourceUri);
         log.debug("Getting endpoint with URI: {}", newUri);
@@ -207,16 +225,19 @@ public class AtlasEndpoint extends ResourceEndpoint {
                 errors.add(audit);
                 break;
             case WARN:
-                LOG.warn("{}: docId='{}', path='{}'", audit.getMessage(), audit.getDocId(), audit.getPath());
+                LOG.warn("{}: Document='{}(ID:{})', path='{}'",
+                        audit.getMessage(), audit.getDocName(), audit.getDocId(), audit.getPath());
                 break;
             default:
-                LOG.info("{}: docId='{}', path='{}'", audit.getMessage(), audit.getDocId(), audit.getPath());
+                LOG.info("{}: Document='{}(ID:{})', path='{}'",
+                        audit.getMessage(), audit.getDocName(), audit.getDocId(), audit.getPath());
             }
         }
         if (!errors.isEmpty()) {
             StringBuilder buf = new StringBuilder("Errors: ");
             errors.stream().forEach(a -> buf.append(
-                    String.format("[%s: docId='%s', path='%s'], ", a.getMessage(), a.getDocId(), a.getPath())));
+                    String.format("[%s: Document='{}(ID:{})', path='%s'], ",
+                            a.getMessage(), a.getDocName(), a.getDocId(), a.getPath())));
             throw new AtlasException(buf.toString());
         }
 
@@ -339,20 +360,28 @@ public class AtlasEndpoint extends ResourceEndpoint {
                 sourceDocuments = (Map<String, Object>)body;
             } else {
                 session.setDefaultSourceDocument(body);
-                return;
             }
         }
         for (DataSource ds : sourceDataSources) {
             String docId = ds.getId();
-            Object payload = sourceMessages != null ? extractPayload(ds, sourceMessages.get(docId))
-                    : sourceDocuments.get(docId);
             if (docId == null || docId.isEmpty()) {
+                Object payload = extractPayload(ds, inMessage);
                 session.setDefaultSourceDocument(payload);
-            } else {
+            } else if (sourceMessages != null) {
+                Object payload = extractPayload(ds, sourceMessages.get(docId));
                 session.setSourceDocument(docId, payload);
-                if (sourceMessages != null) {
-                    propertyStrategy.setSourceMessage(docId, sourceMessages.get(docId));
-                }
+                propertyStrategy.setSourceMessage(docId, sourceMessages.get(docId));
+            } else if (sourceDocuments != null) {
+                Object payload = sourceDocuments.get(docId);
+                session.setSourceDocument(docId, payload);
+            } else if (inMessage.getHeaders().containsKey(docId)) {
+                Object payload = inMessage.getHeader(docId);
+                session.setSourceDocument(docId, payload);
+            } else if (exchange.getProperties().containsKey(docId)) {
+                Object payload = exchange.getProperty(docId);
+                session.setSourceDocument(docId, payload);
+            } else {
+                LOG.warn("Ignoring missing source document: '{}(ID:{})'", ds.getName(), ds.getId());
             }
         }
     }
@@ -420,10 +449,22 @@ public class AtlasEndpoint extends ResourceEndpoint {
                 targetDocuments.put(docId, session.getTargetDocument(docId));
             }
         }
-        if (targetMapName != null) {
-            exchange.setProperty(targetMapName, targetDocuments);
-        } else {
-            message.setBody(targetDocuments);
+        switch (targetMapMode) {
+        case MAP:
+            if (targetMapName != null) {
+                exchange.setProperty(targetMapName, targetDocuments);
+            } else {
+                message.setBody(targetDocuments);
+            }
+            break;
+        case MESSAGE_HEADER:
+            targetDocuments.remove(io.atlasmap.api.AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID);
+            message.getHeaders().putAll(targetDocuments);
+            break;
+        case EXCHANGE_PROPERTY:
+            targetDocuments.remove(io.atlasmap.api.AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID);
+            exchange.getProperties().putAll(targetDocuments);
+            break;
         }
     }
 

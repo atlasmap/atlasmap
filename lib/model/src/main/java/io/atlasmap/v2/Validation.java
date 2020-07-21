@@ -10,7 +10,12 @@ public class Validation implements Serializable {
     private static final long serialVersionUID = 1L;
     protected String message;
 
+    @Deprecated
     protected String id;
+
+    protected String docId;
+
+    protected String docName;
 
     protected ValidationScope scope;
 
@@ -42,26 +47,80 @@ public class Validation implements Serializable {
 
     /**
      * Gets the value of the id property.
+     * @deprecated Use {@link #getDocId()} instead
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
+    @Deprecated
     public String getId() {
-        return id;
+        return docId != null ? docId : id;
     }
 
     /**
      * Sets the value of the id property.
+     * @deprecated Use {@link #setDocId(String)} instead
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
+    @Deprecated
     public void setId(String value) {
         this.id = value;
+        this.docId = value;
+    }
+
+    /**
+     * Gets the value of the docId property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getDocId() {
+        return docId != null ? docId : id;
+    }
+
+    /**
+     * Sets the value of the docId property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setDocId(String value) {
+        this.docId = value;
+        this.id = value;
+    }
+
+    /**
+     * Gets the value of the docName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getDocName() {
+        return docName;
+    }
+
+    /**
+     * Sets the value of the docName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setDocName(String value) {
+        this.docName = value;
     }
 
     /**

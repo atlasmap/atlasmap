@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -42,8 +43,10 @@ import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.spi.AtlasInternalSession;
+import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationStatus;
 
@@ -271,12 +274,14 @@ public class AtlasUtil {
 
     public static void addAudit(AtlasSession session, String docId, String message, String path, AuditStatus status,
             String value) {
-        session.getAudits().getAudit().add(createAudit(status, docId, path, value, message));
+        String docName = session != null ? getDocumentNameById(session.getMapping(), docId) : null;
+        session.getAudits().getAudit().add(createAudit(status, docId, docName, path, value, message));
     }
 
-    public static Audit createAudit(AuditStatus status, String docId, String path, String value, String message) {
+    public static Audit createAudit(AuditStatus status, String docId, String docName, String path, String value, String message) {
         Audit audit = new Audit();
         audit.setDocId(docId);
+        audit.setDocName(docName);
         audit.setMessage(message);
         audit.setPath(path);
         audit.setStatus(status);
@@ -286,7 +291,8 @@ public class AtlasUtil {
 
     public static void addAudit(AtlasSession session, Validation validation) {
         Audit audit = new Audit();
-        audit.setDocId(validation.getId());
+        audit.setDocId(validation.getDocId());
+        audit.setDocName(validation.getDocName());
         audit.setMessage(validation.getMessage());
         audit.setStatus(AtlasUtil.toAuditStatus(validation.getStatus()));
         session.getAudits().getAudit().add(audit);
@@ -295,6 +301,7 @@ public class AtlasUtil {
     public static void addAudits(AtlasInternalSession session, String docId, List<Audit> audits) {
         for (Audit audit: audits) {
             audit.setDocId(docId);
+            audit.setDocName(getDocumentNameById(session.getMapping(), docId));
             session.getAudits().getAudit().add(audit);
         }
     }
@@ -314,6 +321,16 @@ public class AtlasUtil {
         default:
             return null;
         }
+    }
+
+    public static String getDocumentNameById(AtlasMapping mapping, String docId) {
+        if (mapping == null) {
+            return null;
+        }
+        Optional<DataSource> found = mapping.getDataSource().stream().filter(ds -> (
+                docId == null && ds.getId() == null) || (docId != null && docId.equals(ds.getId())))
+        .findFirst();
+        return found.isPresent() ? found.get().getName() : null;
     }
 
     protected static URL getResource(String scannedPath) {

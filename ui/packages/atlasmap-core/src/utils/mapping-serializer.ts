@@ -410,6 +410,8 @@ export class MappingSerializer {
       const serializedDoc: any = {
         jsonType: 'io.atlasmap.v2.DataSource',
         id: doc.id,
+        name: doc.name,
+        description: doc.description,
         uri: doc.uri,
         dataSourceType: docType,
       };
@@ -671,6 +673,8 @@ export class MappingSerializer {
       doc.isSource = docRef.dataSourceType === 'SOURCE';
       doc.uri = docRef.uri;
       doc.id = docRef.id;
+      doc.name = docRef.name;
+      doc.description = docRef.description;
       if (docRef.xmlNamespaces && docRef.xmlNamespaces.xmlNamespace) {
         for (const svcNS of docRef.xmlNamespaces.xmlNamespace) {
           const ns: NamespaceModel = new NamespaceModel();
