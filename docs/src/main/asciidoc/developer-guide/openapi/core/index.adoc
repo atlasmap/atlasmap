@@ -493,6 +493,75 @@ ifdef::internal-generation[]
 endif::internal-generation[]
 
 
+[.listFunctions]
+==== listFunctions
+    
+`GET /functions`
+
+List expression functions
+
+===== Description 
+
+Retrieves a list of available expression functions
+
+
+// markup not found, no include::{specDir}functions/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+
+
+
+
+
+===== Return Type
+
+<<FunctionDetails>>
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return alist of function details
+|  <<FunctionDetails>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}functions/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}functions/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :functions/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}functions/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
 [.listLibraryClasses]
 ==== listLibraryClasses
     
@@ -2410,6 +2479,148 @@ endif::internal-generation[]
 | field 
 |  
 | List  of <<Field>> 
+| 
+|  
+
+|===
+
+
+[#FunctionDetail]
+=== _FunctionDetail_ 
+
+
+
+[.fields-FunctionDetail]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| parameters 
+|  
+| FunctionParameters  
+| 
+|  
+
+| name 
+|  
+| String  
+| 
+|  
+
+| custom 
+|  
+| Boolean  
+| 
+|  
+
+| className 
+|  
+| String  
+| 
+|  
+
+| method 
+|  
+| String  
+| 
+|  
+
+| returnType 
+|  
+| String  
+| 
+|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
+
+| functionSchema 
+|  
+| JsonSchema  
+| 
+|  
+
+| resultType 
+|  
+| String  
+| 
+|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
+
+|===
+
+
+[#FunctionDetails]
+=== _FunctionDetails_ 
+
+
+
+[.fields-FunctionDetails]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| details 
+|  
+| List  of <<FunctionDetail>> 
+| 
+|  
+
+|===
+
+
+[#FunctionParameter]
+=== _FunctionParameter_ 
+
+
+
+[.fields-FunctionParameter]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| values 
+|  
+| List  of <<string>> 
+| 
+|  
+
+| name 
+|  
+| String  
+| 
+|  
+
+| displayName 
+|  
+| String  
+| 
+|  
+
+| description 
+|  
+| String  
+| 
+|  
+
+| fieldType 
+|  
+| String  
+| 
+|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
+
+|===
+
+
+[#FunctionParameters]
+=== _FunctionParameters_ 
+
+
+
+[.fields-FunctionParameters]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| parameters 
+|  
+| List  of <<FunctionParameter>> 
 | 
 |  
 

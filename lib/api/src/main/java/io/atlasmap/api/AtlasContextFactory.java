@@ -23,6 +23,7 @@ import java.util.Properties;
 import io.atlasmap.spi.AtlasCombineStrategy;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasFieldActionService;
+import io.atlasmap.spi.AtlasFunctionService;
 import io.atlasmap.spi.AtlasPropertyStrategy;
 import io.atlasmap.spi.AtlasSeparateStrategy;
 
@@ -41,6 +42,8 @@ public interface AtlasContextFactory {
     AtlasConversionService getConversionService() throws AtlasException;
 
     AtlasFieldActionService getFieldActionService() throws AtlasException;
+
+    AtlasFunctionService getFunctionService() throws AtlasException;
 
     AtlasPropertyStrategy getPropertyStrategy() throws AtlasException;
 

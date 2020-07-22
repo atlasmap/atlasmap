@@ -45,6 +45,7 @@ import io.atlasmap.mxbean.AtlasContextFactoryMXBean;
 import io.atlasmap.spi.AtlasCombineStrategy;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasFieldActionService;
+import io.atlasmap.spi.AtlasFunctionService;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleInfo;
@@ -65,6 +66,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     private AtlasMappingService atlasMappingService = null;
     private DefaultAtlasConversionService atlasConversionService = null;
     private DefaultAtlasFieldActionService atlasFieldActionService = null;
+    private DefaultAtlasFunctionService atlasFunctionService = null;
     private AtlasCombineStrategy atlasCombineStrategy = new DefaultAtlasCombineStrategy();
     private AtlasPropertyStrategy atlasPropertyStrategy = new DefaultAtlasPropertyStrategy();
     private AtlasSeparateStrategy atlasSeparateStrategy = new DefaultAtlasSeparateStrategy();
@@ -234,6 +236,11 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     }
 
     @Override
+    public AtlasFunctionService getFunctionService() {
+        return this.atlasFunctionService;
+    }
+
+    @Override
     public AtlasCombineStrategy getCombineStrategy() {
         return atlasCombineStrategy;
     }
@@ -288,7 +295,8 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
                 URL tmp = urls.nextElement();
                 Properties prop = AtlasUtil.loadPropertiesFromURL(tmp);
                 String serviceClassPropertyValue = (String) prop.get(moduleClassProperty);
-                String[] splitted = serviceClassPropertyValue != null ? serviceClassPropertyValue.split(",") : new String[0];
+                String[] splitted = serviceClassPropertyValue != null ? serviceClassPropertyValue.split(",")
+                        : new String[0];
                 for (String entry : splitted) {
                     if (!AtlasUtil.isEmpty(entry)) {
                         serviceClasses.add((entry));
@@ -306,7 +314,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 
                 if (isClassAtlasModule(moduleClass, moduleInterface)) {
                     @SuppressWarnings("unchecked")
-                    Class<AtlasModule> atlasModuleClass = (Class<AtlasModule>)moduleClass;
+                    Class<AtlasModule> atlasModuleClass = (Class<AtlasModule>) moduleClass;
                     Constructor<AtlasModule> constructor = atlasModuleClass.getDeclaredConstructor();
                     if (constructor != null) {
                         AtlasModuleInfo module = new DefaultAtlasModuleInfo(getModuleName(moduleClass),
@@ -476,7 +484,8 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     }
 
     protected void setObjectName() throws MalformedObjectNameException {
-        this.objectName = new ObjectName(String.format("io.atlasmap:type=AtlasServiceFactory,factoryUuid=%s", getUuid()));
+        this.objectName = new ObjectName(
+                String.format("io.atlasmap:type=AtlasServiceFactory,factoryUuid=%s", getUuid()));
     }
 
 }
