@@ -53,7 +53,7 @@ public class DefaultAtlasSession implements AtlasInternalSession {
     private Map&lt;String, Object&gt; targetMap;
     private Map&lt;String, AtlasFieldReader&gt; fieldReaderMap;
     private Map&lt;String, AtlasFieldWriter&gt; fieldWriterMap;
-<span class="fc" id="L56">    private Head head = new HeadImpl();</span>
+<span class="fc" id="L56">    private Head head = new HeadImpl(this);</span>
 
 <span class="fc" id="L58">    public DefaultAtlasSession(DefaultAtlasContext context) throws AtlasException {</span>
 <span class="fc" id="L59">        this.atlasContext = context;</span>
@@ -358,86 +358,92 @@ public class DefaultAtlasSession implements AtlasInternalSession {
 <span class="fc" id="L358">        return w;</span>
     }
 
-<span class="fc" id="L361">    private class HeadImpl implements Head {</span>
+    private class HeadImpl implements Head {
+        private DefaultAtlasSession session;
         private Mapping mapping;
         private LookupTable lookupTable;
         private Field sourceField;
         private Field targetField;
-<span class="fc" id="L366">        private List&lt;Audit&gt; audits = new LinkedList&lt;Audit&gt;();</span>
+<span class="fc" id="L367">        private List&lt;Audit&gt; audits = new LinkedList&lt;Audit&gt;();</span>
+
+<span class="fc" id="L369">        public HeadImpl(DefaultAtlasSession session) {</span>
+<span class="fc" id="L370">            this.session = session;</span>
+<span class="fc" id="L371">        }</span>
 
         @Override
         public Mapping getMapping() {
-<span class="fc" id="L370">            return this.mapping;</span>
+<span class="fc" id="L375">            return this.mapping;</span>
         }
 
         @Override
         public LookupTable getLookupTable() {
-<span class="fc" id="L375">            return this.lookupTable;</span>
+<span class="fc" id="L380">            return this.lookupTable;</span>
         }
 
         @Override
         public Field getSourceField() {
-<span class="fc" id="L380">            return this.sourceField;</span>
+<span class="fc" id="L385">            return this.sourceField;</span>
         }
 
         @Override
         public Field getTargetField() {
-<span class="fc" id="L385">            return this.targetField;</span>
+<span class="fc" id="L390">            return this.targetField;</span>
         }
 
         @Override
         public Head setMapping(Mapping mapping) {
-<span class="fc" id="L390">            this.mapping = mapping;</span>
-<span class="fc" id="L391">            return this;</span>
+<span class="fc" id="L395">            this.mapping = mapping;</span>
+<span class="fc" id="L396">            return this;</span>
         }
 
         @Override
         public Head setLookupTable(LookupTable table) {
-<span class="fc" id="L396">            this.lookupTable = table;</span>
-<span class="fc" id="L397">            return this;</span>
+<span class="fc" id="L401">            this.lookupTable = table;</span>
+<span class="fc" id="L402">            return this;</span>
         }
 
         @Override
         public Head setSourceField(Field sourceField) {
-<span class="fc" id="L402">            this.sourceField = sourceField;</span>
-<span class="fc" id="L403">            return this;</span>
+<span class="fc" id="L407">            this.sourceField = sourceField;</span>
+<span class="fc" id="L408">            return this;</span>
         }
 
         @Override
         public Head setTargetField(Field targetField) {
-<span class="fc" id="L408">            this.targetField = targetField;</span>
-<span class="fc" id="L409">            return this;</span>
+<span class="fc" id="L413">            this.targetField = targetField;</span>
+<span class="fc" id="L414">            return this;</span>
         }
 
         @Override
         public Head unset() {
-<span class="fc" id="L414">            this.mapping = null;</span>
-<span class="fc" id="L415">            this.lookupTable = null;</span>
-<span class="fc" id="L416">            this.sourceField = null;</span>
-<span class="fc" id="L417">            this.targetField = null;</span>
-<span class="fc" id="L418">            return this;</span>
+<span class="fc" id="L419">            this.mapping = null;</span>
+<span class="fc" id="L420">            this.lookupTable = null;</span>
+<span class="fc" id="L421">            this.sourceField = null;</span>
+<span class="fc" id="L422">            this.targetField = null;</span>
+<span class="fc" id="L423">            return this;</span>
         }
 
         @Override
         public boolean hasError() {
-<span class="pc bpc" id="L423" title="1 of 2 branches missed.">            for(Audit audit : audits) {</span>
-<span class="nc bnc" id="L424" title="All 2 branches missed.">                if (audit.getStatus() == AuditStatus.ERROR) {</span>
-<span class="nc" id="L425">                    return true;</span>
+<span class="pc bpc" id="L428" title="1 of 2 branches missed.">            for(Audit audit : audits) {</span>
+<span class="nc bnc" id="L429" title="All 2 branches missed.">                if (audit.getStatus() == AuditStatus.ERROR) {</span>
+<span class="nc" id="L430">                    return true;</span>
                 }
-<span class="nc" id="L427">            }</span>
-<span class="fc" id="L428">            return false;</span>
+<span class="nc" id="L432">            }</span>
+<span class="fc" id="L433">            return false;</span>
         }
 
         @Override
         public Head addAudit(AuditStatus status, String docId, String path, String message) {
-<span class="nc" id="L433">            Audit audit = AtlasUtil.createAudit(status, docId, path, null, message);</span>
-<span class="nc" id="L434">            this.audits.add(audit);</span>
-<span class="nc" id="L435">            return this;</span>
+<span class="nc" id="L438">            String docName = AtlasUtil.getDocumentNameById(session.getMapping(), docId);</span>
+<span class="nc" id="L439">            Audit audit = AtlasUtil.createAudit(status, docId, docName, path, null, message);</span>
+<span class="nc" id="L440">            this.audits.add(audit);</span>
+<span class="nc" id="L441">            return this;</span>
         }
 
         @Override
         public List&lt;Audit&gt; getAudits() {
-<span class="fc" id="L440">            return this.audits;</span>
+<span class="fc" id="L446">            return this.audits;</span>
         }
 
     }

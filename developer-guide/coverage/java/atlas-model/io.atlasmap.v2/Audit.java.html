@@ -10,6 +10,8 @@ import java.io.Serializable;
 
     protected String docId;
 
+    protected String docName;
+
     protected String path;
 
     protected String value;
@@ -25,7 +27,7 @@ import java.io.Serializable;
      *     
      */
     public String getMessage() {
-<span class="fc" id="L28">        return message;</span>
+<span class="fc" id="L30">        return message;</span>
     }
 
     /**
@@ -37,8 +39,8 @@ import java.io.Serializable;
      *     
      */
     public void setMessage(String value) {
-<span class="fc" id="L40">        this.message = value;</span>
-<span class="fc" id="L41">    }</span>
+<span class="fc" id="L42">        this.message = value;</span>
+<span class="fc" id="L43">    }</span>
 
     /**
      * Gets the value of the docId property.
@@ -49,7 +51,7 @@ import java.io.Serializable;
      *     
      */
     public String getDocId() {
-<span class="fc" id="L52">        return docId;</span>
+<span class="fc" id="L54">        return docId;</span>
     }
 
     /**
@@ -61,8 +63,32 @@ import java.io.Serializable;
      *     
      */
     public void setDocId(String value) {
-<span class="fc" id="L64">        this.docId = value;</span>
-<span class="fc" id="L65">    }</span>
+<span class="fc" id="L66">        this.docId = value;</span>
+<span class="fc" id="L67">    }</span>
+
+    /**
+     * Gets the value of the docName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getDocName() {
+<span class="fc" id="L78">        return docName;</span>
+    }
+
+    /**
+     * Sets the value of the docName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setDocName(String value) {
+<span class="fc" id="L90">        this.docName = value;</span>
+<span class="fc" id="L91">    }</span>
 
     /**
      * Gets the value of the path property.
@@ -73,7 +99,7 @@ import java.io.Serializable;
      *     
      */
     public String getPath() {
-<span class="fc" id="L76">        return path;</span>
+<span class="fc" id="L102">        return path;</span>
     }
 
     /**
@@ -85,8 +111,8 @@ import java.io.Serializable;
      *     
      */
     public void setPath(String value) {
-<span class="fc" id="L88">        this.path = value;</span>
-<span class="fc" id="L89">    }</span>
+<span class="fc" id="L114">        this.path = value;</span>
+<span class="fc" id="L115">    }</span>
 
     /**
      * Gets the value of the value property.
@@ -97,7 +123,7 @@ import java.io.Serializable;
      *     
      */
     public String getValue() {
-<span class="fc" id="L100">        return value;</span>
+<span class="fc" id="L126">        return value;</span>
     }
 
     /**
@@ -109,8 +135,8 @@ import java.io.Serializable;
      *     
      */
     public void setValue(String value) {
-<span class="fc" id="L112">        this.value = value;</span>
-<span class="fc" id="L113">    }</span>
+<span class="fc" id="L138">        this.value = value;</span>
+<span class="fc" id="L139">    }</span>
 
     /**
      * Gets the value of the status property.
@@ -121,7 +147,7 @@ import java.io.Serializable;
      *     
      */
     public AuditStatus getStatus() {
-<span class="fc" id="L124">        return status;</span>
+<span class="fc" id="L150">        return status;</span>
     }
 
     /**
@@ -133,8 +159,8 @@ import java.io.Serializable;
      *     
      */
     public void setStatus(AuditStatus value) {
-<span class="fc" id="L136">        this.status = value;</span>
-<span class="fc" id="L137">    }</span>
+<span class="fc" id="L162">        this.status = value;</span>
+<span class="fc" id="L163">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

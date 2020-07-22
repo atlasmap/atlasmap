@@ -11,6 +11,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
     protected String id;
 
+    protected String name;
+
+    protected String description;
+
     protected String uri;
 
     protected DataSourceType dataSourceType;
@@ -24,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public String getId() {
-<span class="fc" id="L27">        return id;</span>
+<span class="fc" id="L31">        return id;</span>
     }
 
     /**
@@ -36,8 +40,56 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setId(String value) {
-<span class="fc" id="L39">        this.id = value;</span>
-<span class="fc" id="L40">    }</span>
+<span class="fc" id="L43">        this.id = value;</span>
+<span class="fc" id="L44">    }</span>
+
+    /**
+     * Gets the value of the name property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getName() {
+<span class="fc" id="L55">        return name;</span>
+    }
+
+    /**
+     * Sets the value of the name property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setName(String value) {
+<span class="nc" id="L67">        this.name = value;</span>
+<span class="nc" id="L68">    }</span>
+
+    /**
+     * Gets the value of the description property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getDescription() {
+<span class="fc" id="L79">        return description;</span>
+    }
+
+    /**
+     * Sets the value of the description property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setDescription(String value) {
+<span class="nc" id="L91">        this.description = value;</span>
+<span class="nc" id="L92">    }</span>
 
     /**
      * Gets the value of the uri property.
@@ -48,7 +100,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public String getUri() {
-<span class="fc" id="L51">        return uri;</span>
+<span class="fc" id="L103">        return uri;</span>
     }
 
     /**
@@ -60,8 +112,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setUri(String value) {
-<span class="fc" id="L63">        this.uri = value;</span>
-<span class="fc" id="L64">    }</span>
+<span class="fc" id="L115">        this.uri = value;</span>
+<span class="fc" id="L116">    }</span>
 
     /**
      * Gets the value of the dataSourceType property.
@@ -72,7 +124,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public DataSourceType getDataSourceType() {
-<span class="fc" id="L75">        return dataSourceType;</span>
+<span class="fc" id="L127">        return dataSourceType;</span>
     }
 
     /**
@@ -84,8 +136,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setDataSourceType(DataSourceType value) {
-<span class="fc" id="L87">        this.dataSourceType = value;</span>
-<span class="fc" id="L88">    }</span>
+<span class="fc" id="L139">        this.dataSourceType = value;</span>
+<span class="fc" id="L140">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -74,44 +74,50 @@ public class AtlasEndpoint extends ResourceEndpoint {
     private String sourceMapName;
     @UriParam
     private String targetMapName;
+<span class="fc" id="L77">    @UriParam(defaultValue = &quot;MAP&quot;)</span>
+    private TargetMapMode targetMapMode = TargetMapMode.MAP;
+
+<span class="fc" id="L80">    public enum TargetMapMode {</span>
+<span class="fc" id="L81">        MAP, MESSAGE_HEADER, EXCHANGE_PROPERTY;</span>
+    }
 
     public AtlasEndpoint(String uri, AtlasComponent component, String resourceUri) {
-<span class="fc" id="L79">        super(uri, component, resourceUri);</span>
-<span class="fc" id="L80">    }</span>
+<span class="fc" id="L85">        super(uri, component, resourceUri);</span>
+<span class="fc" id="L86">    }</span>
 
     @Override
     public boolean isSingleton() {
-<span class="fc" id="L84">        return true;</span>
+<span class="fc" id="L90">        return true;</span>
     }
 
     @Override
     public ExchangePattern getExchangePattern() {
-<span class="nc" id="L89">        return ExchangePattern.InOut;</span>
+<span class="nc" id="L95">        return ExchangePattern.InOut;</span>
     }
 
     @Override
     protected String createEndpointUri() {
-<span class="nc" id="L94">        return &quot;atlas:&quot; + getResourceUri();</span>
+<span class="nc" id="L100">        return &quot;atlas:&quot; + getResourceUri();</span>
     }
 
     public AtlasContextFactory getAtlasContextFactory() {
-<span class="nc" id="L98">        return this.atlasContextFactory;</span>
+<span class="nc" id="L104">        return this.atlasContextFactory;</span>
     }
 
     public void setAtlasContextFactory(AtlasContextFactory atlasContextFactory) {
-<span class="fc" id="L102">        this.atlasContextFactory = atlasContextFactory;</span>
-<span class="fc" id="L103">    }</span>
+<span class="fc" id="L108">        this.atlasContextFactory = atlasContextFactory;</span>
+<span class="fc" id="L109">    }</span>
 
     public AtlasContext getAtlasContext() {
-<span class="fc" id="L106">        return this.atlasContext;</span>
+<span class="fc" id="L112">        return this.atlasContext;</span>
     }
 
     public void setAtlasContext(AtlasContext atlasContext) {
-<span class="fc" id="L110">        this.atlasContext = atlasContext;</span>
-<span class="fc" id="L111">    }</span>
+<span class="fc" id="L116">        this.atlasContext = atlasContext;</span>
+<span class="fc" id="L117">    }</span>
 
     public boolean isLoaderCache() {
-<span class="nc" id="L114">        return loaderCache;</span>
+<span class="nc" id="L120">        return loaderCache;</span>
     }
 
     /**
@@ -120,19 +126,19 @@ public class AtlasEndpoint extends ResourceEndpoint {
      * @param loaderCache true to enable loader cache
      */
     public void setLoaderCache(boolean loaderCache) {
-<span class="nc" id="L123">        this.loaderCache = loaderCache;</span>
-<span class="nc" id="L124">    }</span>
+<span class="nc" id="L129">        this.loaderCache = loaderCache;</span>
+<span class="nc" id="L130">    }</span>
 
     /**
      * Character encoding of the resource content.
      * @param encoding encoding
      */
     public void setEncoding(String encoding) {
-<span class="nc" id="L131">        this.encoding = encoding;</span>
-<span class="nc" id="L132">    }</span>
+<span class="nc" id="L137">        this.encoding = encoding;</span>
+<span class="nc" id="L138">    }</span>
 
     public String getEncoding() {
-<span class="fc" id="L135">        return encoding;</span>
+<span class="fc" id="L141">        return encoding;</span>
     }
 
     /**
@@ -141,11 +147,11 @@ public class AtlasEndpoint extends ResourceEndpoint {
      * @param file property file path
      */
     public void setPropertiesFile(String file) {
-<span class="nc" id="L144">        propertiesFile = file;</span>
-<span class="nc" id="L145">    }</span>
+<span class="nc" id="L150">        propertiesFile = file;</span>
+<span class="nc" id="L151">    }</span>
 
     public String getPropertiesFile() {
-<span class="fc" id="L148">        return propertiesFile;</span>
+<span class="fc" id="L154">        return propertiesFile;</span>
     }
 
     /**
@@ -155,11 +161,11 @@ public class AtlasEndpoint extends ResourceEndpoint {
      * @param name Exchange property name for source map
      */
     public void setSourceMapName(String name) {
-<span class="fc" id="L158">        this.sourceMapName = name;</span>
-<span class="fc" id="L159">    }</span>
+<span class="fc" id="L164">        this.sourceMapName = name;</span>
+<span class="fc" id="L165">    }</span>
 
     public String getSourceMapName() {
-<span class="nc" id="L162">        return this.sourceMapName;</span>
+<span class="nc" id="L168">        return this.sourceMapName;</span>
     }
 
     /**
@@ -169,273 +175,308 @@ public class AtlasEndpoint extends ResourceEndpoint {
      * @param name Exchange property name for target map
      */
     public void setTargetMapName(String name) {
-<span class="fc" id="L172">        this.targetMapName = name;</span>
-<span class="fc" id="L173">    }</span>
+<span class="fc" id="L178">        this.targetMapName = name;</span>
+<span class="fc" id="L179">    }</span>
 
     public String getTargetMapName() {
-<span class="nc" id="L176">        return this.targetMapName;</span>
+<span class="nc" id="L182">        return this.targetMapName;</span>
+    }
+
+    /**
+     * {@link TargetMapMode} enum value to specify how multiple documents are delivered.
+     * @param mode {@link TargetMapMode}
+     */
+    public void setTargetMapMode(TargetMapMode mode) {
+<span class="fc" id="L190">        this.targetMapMode = mode;</span>
+<span class="fc" id="L191">    }</span>
+
+    public TargetMapMode getTargetMapMode() {
+<span class="nc" id="L194">        return this.targetMapMode;</span>
     }
 
     public AtlasEndpoint findOrCreateEndpoint(String uri, String newResourceUri) {
-<span class="nc" id="L180">        String newUri = uri.replace(getResourceUri(), newResourceUri);</span>
-<span class="nc" id="L181">        log.debug(&quot;Getting endpoint with URI: {}&quot;, newUri);</span>
-<span class="nc" id="L182">        return getCamelContext().getEndpoint(newUri, AtlasEndpoint.class);</span>
+<span class="nc" id="L198">        String newUri = uri.replace(getResourceUri(), newResourceUri);</span>
+<span class="nc" id="L199">        log.debug(&quot;Getting endpoint with URI: {}&quot;, newUri);</span>
+<span class="nc" id="L200">        return getCamelContext().getEndpoint(newUri, AtlasEndpoint.class);</span>
     }
 
     @Override
     protected void onExchange(Exchange exchange) throws Exception {
-<span class="fc" id="L187">        Message incomingMessage = exchange.getIn();</span>
-<span class="fc" id="L188">        String newResourceUri = incomingMessage.getHeader(AtlasConstants.ATLAS_RESOURCE_URI, String.class);</span>
-<span class="pc bpc" id="L189" title="1 of 2 branches missed.">        if (newResourceUri != null) {</span>
-<span class="nc" id="L190">            incomingMessage.removeHeader(AtlasConstants.ATLAS_RESOURCE_URI);</span>
+<span class="fc" id="L205">        Message incomingMessage = exchange.getIn();</span>
+<span class="fc" id="L206">        String newResourceUri = incomingMessage.getHeader(AtlasConstants.ATLAS_RESOURCE_URI, String.class);</span>
+<span class="pc bpc" id="L207" title="1 of 2 branches missed.">        if (newResourceUri != null) {</span>
+<span class="nc" id="L208">            incomingMessage.removeHeader(AtlasConstants.ATLAS_RESOURCE_URI);</span>
 
-<span class="nc" id="L192">            log.debug(&quot;{} set to {} creating new endpoint to handle exchange&quot;, AtlasConstants.ATLAS_RESOURCE_URI,</span>
+<span class="nc" id="L210">            log.debug(&quot;{} set to {} creating new endpoint to handle exchange&quot;, AtlasConstants.ATLAS_RESOURCE_URI,</span>
                     newResourceUri);
-<span class="nc" id="L194">            AtlasEndpoint newEndpoint = findOrCreateEndpoint(getEndpointUri(), newResourceUri);</span>
-<span class="nc" id="L195">            newEndpoint.onExchange(exchange);</span>
-<span class="nc" id="L196">            return;</span>
+<span class="nc" id="L212">            AtlasEndpoint newEndpoint = findOrCreateEndpoint(getEndpointUri(), newResourceUri);</span>
+<span class="nc" id="L213">            newEndpoint.onExchange(exchange);</span>
+<span class="nc" id="L214">            return;</span>
         }
 
-<span class="fc" id="L199">        AtlasSession atlasSession = getOrCreateAtlasContext(incomingMessage).createSession();</span>
-<span class="fc" id="L200">        populateSourceDocuments(exchange, atlasSession);</span>
-<span class="fc" id="L201">        atlasSession.getAtlasContext().process(atlasSession);</span>
+<span class="fc" id="L217">        AtlasSession atlasSession = getOrCreateAtlasContext(incomingMessage).createSession();</span>
+<span class="fc" id="L218">        populateSourceDocuments(exchange, atlasSession);</span>
+<span class="fc" id="L219">        atlasSession.getAtlasContext().process(atlasSession);</span>
 
-<span class="fc" id="L203">        List&lt;Audit&gt; errors = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L204" title="All 2 branches covered.">        for (Audit audit : atlasSession.getAudits().getAudit()) {</span>
-<span class="pc bpc" id="L205" title="2 of 3 branches missed.">            switch (audit.getStatus()) {</span>
+<span class="fc" id="L221">        List&lt;Audit&gt; errors = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L222" title="All 2 branches covered.">        for (Audit audit : atlasSession.getAudits().getAudit()) {</span>
+<span class="pc bpc" id="L223" title="2 of 3 branches missed.">            switch (audit.getStatus()) {</span>
             case ERROR:
-<span class="nc" id="L207">                errors.add(audit);</span>
-<span class="nc" id="L208">                break;</span>
+<span class="nc" id="L225">                errors.add(audit);</span>
+<span class="nc" id="L226">                break;</span>
             case WARN:
-<span class="fc" id="L210">                LOG.warn(&quot;{}: docId='{}', path='{}'&quot;, audit.getMessage(), audit.getDocId(), audit.getPath());</span>
-<span class="fc" id="L211">                break;</span>
+<span class="fc" id="L228">                LOG.warn(&quot;{}: Document='{}(ID:{})', path='{}'&quot;,</span>
+<span class="fc" id="L229">                        audit.getMessage(), audit.getDocName(), audit.getDocId(), audit.getPath());</span>
+<span class="fc" id="L230">                break;</span>
             default:
-<span class="nc" id="L213">                LOG.info(&quot;{}: docId='{}', path='{}'&quot;, audit.getMessage(), audit.getDocId(), audit.getPath());</span>
+<span class="nc" id="L232">                LOG.info(&quot;{}: Document='{}(ID:{})', path='{}'&quot;,</span>
+<span class="nc" id="L233">                        audit.getMessage(), audit.getDocName(), audit.getDocId(), audit.getPath());</span>
             }
-<span class="fc" id="L215">        }</span>
-<span class="pc bpc" id="L216" title="1 of 2 branches missed.">        if (!errors.isEmpty()) {</span>
-<span class="nc" id="L217">            StringBuilder buf = new StringBuilder(&quot;Errors: &quot;);</span>
-<span class="nc" id="L218">            errors.stream().forEach(a -&gt; buf.append(</span>
-<span class="nc" id="L219">                    String.format(&quot;[%s: docId='%s', path='%s'], &quot;, a.getMessage(), a.getDocId(), a.getPath())));</span>
-<span class="nc" id="L220">            throw new AtlasException(buf.toString());</span>
+<span class="fc" id="L235">        }</span>
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">        if (!errors.isEmpty()) {</span>
+<span class="nc" id="L237">            StringBuilder buf = new StringBuilder(&quot;Errors: &quot;);</span>
+<span class="nc" id="L238">            errors.stream().forEach(a -&gt; buf.append(</span>
+<span class="nc" id="L239">                    String.format(&quot;[%s: Document='{}(ID:{})', path='%s'], &quot;,</span>
+<span class="nc" id="L240">                            a.getMessage(), a.getDocName(), a.getDocId(), a.getPath())));</span>
+<span class="nc" id="L241">            throw new AtlasException(buf.toString());</span>
         }
 
-<span class="fc" id="L223">        populateTargetDocuments(atlasSession, exchange);</span>
-<span class="fc" id="L224">    }</span>
+<span class="fc" id="L244">        populateTargetDocuments(atlasSession, exchange);</span>
+<span class="fc" id="L245">    }</span>
 
     private AtlasContext getOrCreateAtlasContext(Message incomingMessage) throws Exception {
-<span class="fc" id="L227">        String path = getResourceUri();</span>
-<span class="fc" id="L228">        ObjectHelper.notNull(path, &quot;mappingUri&quot;);</span>
-<span class="fc" id="L229">        Reader reader = null;</span>
+<span class="fc" id="L248">        String path = getResourceUri();</span>
+<span class="fc" id="L249">        ObjectHelper.notNull(path, &quot;mappingUri&quot;);</span>
+<span class="fc" id="L250">        Reader reader = null;</span>
 
-<span class="fc" id="L231">        String content = incomingMessage.getHeader(AtlasConstants.ATLAS_MAPPING, String.class);</span>
-<span class="pc bpc" id="L232" title="1 of 2 branches missed.">        if (content != null) {</span>
+<span class="fc" id="L252">        String content = incomingMessage.getHeader(AtlasConstants.ATLAS_MAPPING, String.class);</span>
+<span class="pc bpc" id="L253" title="1 of 2 branches missed.">        if (content != null) {</span>
             // use content from header
-<span class="nc" id="L234">            reader = new StringReader(content);</span>
-<span class="nc bnc" id="L235" title="All 2 branches missed.">            if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L236">                log.debug(&quot;Atlas mapping content read from header {} for endpoint {}&quot;, AtlasConstants.ATLAS_MAPPING,</span>
-<span class="nc" id="L237">                        getEndpointUri());</span>
+<span class="nc" id="L255">            reader = new StringReader(content);</span>
+<span class="nc bnc" id="L256" title="All 2 branches missed.">            if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L257">                log.debug(&quot;Atlas mapping content read from header {} for endpoint {}&quot;, AtlasConstants.ATLAS_MAPPING,</span>
+<span class="nc" id="L258">                        getEndpointUri());</span>
             }
             // remove the header to avoid it being propagated in the routing
-<span class="nc" id="L240">            incomingMessage.removeHeader(AtlasConstants.ATLAS_MAPPING);</span>
-<span class="nc" id="L241">            AtlasMapping mapping = ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory())</span>
-<span class="nc" id="L242">                                    .getMappingService()</span>
-<span class="nc" id="L243">                                    .loadMapping(reader);</span>
-<span class="nc" id="L244">            return ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory()).createContext(mapping);</span>
-<span class="fc bfc" id="L245" title="All 2 branches covered.">        } else if (getAtlasContext() != null) {</span>
+<span class="nc" id="L261">            incomingMessage.removeHeader(AtlasConstants.ATLAS_MAPPING);</span>
+<span class="nc" id="L262">            AtlasMapping mapping = ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory())</span>
+<span class="nc" id="L263">                                    .getMappingService()</span>
+<span class="nc" id="L264">                                    .loadMapping(reader);</span>
+<span class="nc" id="L265">            return ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory()).createContext(mapping);</span>
+<span class="fc bfc" id="L266" title="All 2 branches covered.">        } else if (getAtlasContext() != null) {</span>
             // no mapping specified in header, and found an existing context
-<span class="fc" id="L247">            return getAtlasContext();</span>
+<span class="fc" id="L268">            return getAtlasContext();</span>
         }
 
         // No mapping in header, and no existing context. Create new one from resourceUri
-<span class="pc bpc" id="L251" title="1 of 2 branches missed.">        if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L252">            log.debug(&quot;Atlas mapping content read from resourceUri: {} for endpoint {}&quot;,</span>
-<span class="nc" id="L253">                    new Object[] { path, getEndpointUri() });</span>
+<span class="pc bpc" id="L272" title="1 of 2 branches missed.">        if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L273">            log.debug(&quot;Atlas mapping content read from resourceUri: {} for endpoint {}&quot;,</span>
+<span class="nc" id="L274">                    new Object[] { path, getEndpointUri() });</span>
         }
-<span class="fc bfc" id="L255" title="All 2 branches covered.">        if (path.toLowerCase().endsWith(&quot;adm&quot;)) {</span>
-<span class="fc" id="L256">            ADMArchiveHandler handler = new ADMArchiveHandler(getCamelContext().getApplicationContextClassLoader());</span>
-<span class="fc" id="L257">            handler.setIgnoreLibrary(true);</span>
-<span class="fc" id="L258">            handler.load(getResourceAsInputStream());</span>
-<span class="pc bpc" id="L259" title="1 of 2 branches missed.">            if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L260">                log.debug(&quot;AtlasMap mapping definition and data sources extracted from ADM archive: {}&quot;, path);</span>
+<span class="fc bfc" id="L276" title="All 2 branches covered.">        if (path.toLowerCase().endsWith(&quot;adm&quot;)) {</span>
+<span class="fc" id="L277">            ADMArchiveHandler handler = new ADMArchiveHandler(getCamelContext().getApplicationContextClassLoader());</span>
+<span class="fc" id="L278">            handler.setIgnoreLibrary(true);</span>
+<span class="fc" id="L279">            handler.load(getResourceAsInputStream());</span>
+<span class="pc bpc" id="L280" title="1 of 2 branches missed.">            if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L281">                log.debug(&quot;AtlasMap mapping definition and data sources extracted from ADM archive: {}&quot;, path);</span>
             }
-<span class="fc" id="L262">            atlasContext = ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory()).createContext(handler.getMappingDefinition());</span>
-<span class="fc" id="L263">            ((DefaultAtlasContext)atlasContext).setDataSourceMetadata(handler.getDataSourceMetadataMap());</span>
-<span class="fc" id="L264">        } else {</span>
-<span class="pc bpc" id="L265" title="1 of 2 branches missed.">            reader = getEncoding() != null ? new InputStreamReader(getResourceAsInputStream(), getEncoding())</span>
-<span class="fc" id="L266">                : new InputStreamReader(getResourceAsInputStream());</span>
-<span class="fc" id="L267">            AtlasMapping mapping = ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory())</span>
-<span class="fc" id="L268">                .getMappingService()</span>
-<span class="fc" id="L269">                .loadMapping(reader);</span>
-<span class="fc" id="L270">            atlasContext = ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory()).createContext(mapping);</span>
+<span class="fc" id="L283">            atlasContext = ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory()).createContext(handler.getMappingDefinition());</span>
+<span class="fc" id="L284">            ((DefaultAtlasContext)atlasContext).setDataSourceMetadata(handler.getDataSourceMetadataMap());</span>
+<span class="fc" id="L285">        } else {</span>
+<span class="pc bpc" id="L286" title="1 of 2 branches missed.">            reader = getEncoding() != null ? new InputStreamReader(getResourceAsInputStream(), getEncoding())</span>
+<span class="fc" id="L287">                : new InputStreamReader(getResourceAsInputStream());</span>
+<span class="fc" id="L288">            AtlasMapping mapping = ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory())</span>
+<span class="fc" id="L289">                .getMappingService()</span>
+<span class="fc" id="L290">                .loadMapping(reader);</span>
+<span class="fc" id="L291">            atlasContext = ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory()).createContext(mapping);</span>
         }
-<span class="fc" id="L272">        return atlasContext;</span>
+<span class="fc" id="L293">        return atlasContext;</span>
     }
 
     private synchronized AtlasContextFactory getOrCreateAtlasContextFactory() throws Exception {
-<span class="fc bfc" id="L276" title="All 2 branches covered.">        if (atlasContextFactory != null) {</span>
-<span class="fc" id="L277">            return atlasContextFactory;</span>
+<span class="fc bfc" id="L297" title="All 2 branches covered.">        if (atlasContextFactory != null) {</span>
+<span class="fc" id="L298">            return atlasContextFactory;</span>
         }
 
-<span class="fc" id="L280">        atlasContextFactory = DefaultAtlasContextFactory.getInstance();</span>
-<span class="fc" id="L281">        ((DefaultAtlasContextFactory)atlasContextFactory).addClassLoader(getCamelContext().getApplicationContextClassLoader());</span>
+<span class="fc" id="L301">        atlasContextFactory = DefaultAtlasContextFactory.getInstance();</span>
+<span class="fc" id="L302">        ((DefaultAtlasContextFactory)atlasContextFactory).addClassLoader(getCamelContext().getApplicationContextClassLoader());</span>
         // load the properties from property file which may overrides the default ones
-<span class="pc bpc" id="L283" title="1 of 2 branches missed.">        if (ObjectHelper.isNotEmpty(getPropertiesFile())) {</span>
-<span class="nc" id="L284">            Properties properties = new Properties();</span>
-<span class="nc" id="L285">            InputStream reader = ResourceHelper.resolveMandatoryResourceAsInputStream(getCamelContext(),</span>
-<span class="nc" id="L286">                    getPropertiesFile());</span>
+<span class="pc bpc" id="L304" title="1 of 2 branches missed.">        if (ObjectHelper.isNotEmpty(getPropertiesFile())) {</span>
+<span class="nc" id="L305">            Properties properties = new Properties();</span>
+<span class="nc" id="L306">            InputStream reader = ResourceHelper.resolveMandatoryResourceAsInputStream(getCamelContext(),</span>
+<span class="nc" id="L307">                    getPropertiesFile());</span>
             try {
-<span class="nc" id="L288">                properties.load(reader);</span>
-<span class="nc" id="L289">                log.info(&quot;Loaded the Atlas properties file &quot; + getPropertiesFile());</span>
+<span class="nc" id="L309">                properties.load(reader);</span>
+<span class="nc" id="L310">                log.info(&quot;Loaded the Atlas properties file &quot; + getPropertiesFile());</span>
             } finally {
-<span class="nc" id="L291">                IOHelper.close(reader, getPropertiesFile(), log);</span>
+<span class="nc" id="L312">                IOHelper.close(reader, getPropertiesFile(), log);</span>
             }
-<span class="nc" id="L293">            log.debug(&quot;Initializing AtlasContextFactory with properties {}&quot;, properties);</span>
-<span class="nc" id="L294">            atlasContextFactory.setProperties(properties);</span>
+<span class="nc" id="L314">            log.debug(&quot;Initializing AtlasContextFactory with properties {}&quot;, properties);</span>
+<span class="nc" id="L315">            atlasContextFactory.setProperties(properties);</span>
         }
-<span class="fc" id="L296">        return atlasContextFactory;</span>
+<span class="fc" id="L317">        return atlasContextFactory;</span>
     }
 
     private void populateSourceDocuments(Exchange exchange, AtlasSession session) {
-<span class="pc bpc" id="L300" title="1 of 2 branches missed.">        if (session.getMapping().getDataSource() == null) {</span>
-<span class="nc" id="L301">            return;</span>
+<span class="pc bpc" id="L321" title="1 of 2 branches missed.">        if (session.getMapping().getDataSource() == null) {</span>
+<span class="nc" id="L322">            return;</span>
         }
 
-<span class="fc" id="L304">        Message inMessage = exchange.getIn();</span>
-<span class="fc" id="L305">        CamelAtlasPropertyStrategy propertyStrategy = new CamelAtlasPropertyStrategy();</span>
-<span class="fc" id="L306">        propertyStrategy.setCurrentSourceMessage(inMessage);</span>
-<span class="fc" id="L307">        propertyStrategy.setTargetMessage(exchange.getMessage());</span>
-<span class="fc" id="L308">        propertyStrategy.setExchange(exchange);</span>
-<span class="fc" id="L309">        session.setAtlasPropertyStrategy(propertyStrategy);</span>
+<span class="fc" id="L325">        Message inMessage = exchange.getIn();</span>
+<span class="fc" id="L326">        CamelAtlasPropertyStrategy propertyStrategy = new CamelAtlasPropertyStrategy();</span>
+<span class="fc" id="L327">        propertyStrategy.setCurrentSourceMessage(inMessage);</span>
+<span class="fc" id="L328">        propertyStrategy.setTargetMessage(exchange.getMessage());</span>
+<span class="fc" id="L329">        propertyStrategy.setExchange(exchange);</span>
+<span class="fc" id="L330">        session.setAtlasPropertyStrategy(propertyStrategy);</span>
 
-<span class="fc" id="L311">        DataSource[] sourceDataSources = session.getMapping().getDataSource().stream()</span>
-<span class="fc bfc" id="L312" title="All 2 branches covered.">                .filter(ds -&gt; ds.getDataSourceType() == DataSourceType.SOURCE)</span>
-<span class="fc" id="L313">                .toArray(DataSource[]::new);</span>
-<span class="fc bfc" id="L314" title="All 2 branches covered.">        if (sourceDataSources.length == 0) {</span>
-<span class="fc" id="L315">            session.setDefaultSourceDocument(inMessage.getBody());</span>
-<span class="fc" id="L316">            return;</span>
+<span class="fc" id="L332">        DataSource[] sourceDataSources = session.getMapping().getDataSource().stream()</span>
+<span class="fc bfc" id="L333" title="All 2 branches covered.">                .filter(ds -&gt; ds.getDataSourceType() == DataSourceType.SOURCE)</span>
+<span class="fc" id="L334">                .toArray(DataSource[]::new);</span>
+<span class="fc bfc" id="L335" title="All 2 branches covered.">        if (sourceDataSources.length == 0) {</span>
+<span class="fc" id="L336">            session.setDefaultSourceDocument(inMessage.getBody());</span>
+<span class="fc" id="L337">            return;</span>
         }
 
-<span class="fc bfc" id="L319" title="All 2 branches covered.">        if (sourceDataSources.length == 1) {</span>
-<span class="fc" id="L320">            String docId = sourceDataSources[0].getId();</span>
-<span class="fc" id="L321">            Object payload = extractPayload(sourceDataSources[0], inMessage);</span>
-<span class="pc bpc" id="L322" title="1 of 4 branches missed.">            if (docId == null || docId.isEmpty()) {</span>
-<span class="fc" id="L323">                session.setDefaultSourceDocument(payload);</span>
+<span class="fc bfc" id="L340" title="All 2 branches covered.">        if (sourceDataSources.length == 1) {</span>
+<span class="fc" id="L341">            String docId = sourceDataSources[0].getId();</span>
+<span class="fc" id="L342">            Object payload = extractPayload(sourceDataSources[0], inMessage);</span>
+<span class="pc bpc" id="L343" title="1 of 4 branches missed.">            if (docId == null || docId.isEmpty()) {</span>
+<span class="fc" id="L344">                session.setDefaultSourceDocument(payload);</span>
             } else {
-<span class="fc" id="L325">                session.setSourceDocument(docId, payload);</span>
-<span class="fc" id="L326">                propertyStrategy.setSourceMessage(docId, inMessage);</span>
+<span class="fc" id="L346">                session.setSourceDocument(docId, payload);</span>
+<span class="fc" id="L347">                propertyStrategy.setSourceMessage(docId, inMessage);</span>
             }
-<span class="fc" id="L328">            return;</span>
+<span class="fc" id="L349">            return;</span>
         }
 
-<span class="fc" id="L331">        Map&lt;String, Message&gt; sourceMessages = null;</span>
-<span class="fc" id="L332">        Map&lt;String, Object&gt; sourceDocuments = null;</span>
-<span class="fc bfc" id="L333" title="All 2 branches covered.">        if (sourceMapName != null) {</span>
-<span class="fc" id="L334">            sourceMessages = exchange.getProperty(sourceMapName, Map.class);</span>
+<span class="fc" id="L352">        Map&lt;String, Message&gt; sourceMessages = null;</span>
+<span class="fc" id="L353">        Map&lt;String, Object&gt; sourceDocuments = null;</span>
+<span class="fc bfc" id="L354" title="All 2 branches covered.">        if (sourceMapName != null) {</span>
+<span class="fc" id="L355">            sourceMessages = exchange.getProperty(sourceMapName, Map.class);</span>
         }
-<span class="fc bfc" id="L336" title="All 2 branches covered.">        if (sourceMessages == null) {</span>
-<span class="fc" id="L337">            Object body = inMessage.getBody();</span>
-<span class="fc bfc" id="L338" title="All 2 branches covered.">            if (body instanceof Map) {</span>
-<span class="fc" id="L339">                sourceDocuments = (Map&lt;String, Object&gt;)body;</span>
+<span class="fc bfc" id="L357" title="All 2 branches covered.">        if (sourceMessages == null) {</span>
+<span class="fc" id="L358">            Object body = inMessage.getBody();</span>
+<span class="fc bfc" id="L359" title="All 2 branches covered.">            if (body instanceof Map) {</span>
+<span class="fc" id="L360">                sourceDocuments = (Map&lt;String, Object&gt;)body;</span>
             } else {
-<span class="fc" id="L341">                session.setDefaultSourceDocument(body);</span>
-<span class="fc" id="L342">                return;</span>
-            }
-        }
-<span class="fc bfc" id="L345" title="All 2 branches covered.">        for (DataSource ds : sourceDataSources) {</span>
-<span class="fc" id="L346">            String docId = ds.getId();</span>
-<span class="fc bfc" id="L347" title="All 2 branches covered.">            Object payload = sourceMessages != null ? extractPayload(ds, sourceMessages.get(docId))</span>
-<span class="fc" id="L348">                    : sourceDocuments.get(docId);</span>
-<span class="pc bpc" id="L349" title="2 of 4 branches missed.">            if (docId == null || docId.isEmpty()) {</span>
-<span class="nc" id="L350">                session.setDefaultSourceDocument(payload);</span>
-            } else {
-<span class="fc" id="L352">                session.setSourceDocument(docId, payload);</span>
-<span class="fc bfc" id="L353" title="All 2 branches covered.">                if (sourceMessages != null) {</span>
-<span class="fc" id="L354">                    propertyStrategy.setSourceMessage(docId, sourceMessages.get(docId));</span>
-                }
+<span class="fc" id="L362">                session.setDefaultSourceDocument(body);</span>
             }
         }
-<span class="fc" id="L358">    }</span>
+<span class="fc bfc" id="L365" title="All 2 branches covered.">        for (DataSource ds : sourceDataSources) {</span>
+<span class="fc" id="L366">            String docId = ds.getId();</span>
+<span class="pc bpc" id="L367" title="2 of 4 branches missed.">            if (docId == null || docId.isEmpty()) {</span>
+<span class="nc" id="L368">                Object payload = extractPayload(ds, inMessage);</span>
+<span class="nc" id="L369">                session.setDefaultSourceDocument(payload);</span>
+<span class="pc bfc" id="L370" title="All 2 branches covered.">            } else if (sourceMessages != null) {</span>
+<span class="fc" id="L371">                Object payload = extractPayload(ds, sourceMessages.get(docId));</span>
+<span class="fc" id="L372">                session.setSourceDocument(docId, payload);</span>
+<span class="fc" id="L373">                propertyStrategy.setSourceMessage(docId, sourceMessages.get(docId));</span>
+<span class="fc bfc" id="L374" title="All 2 branches covered.">            } else if (sourceDocuments != null) {</span>
+<span class="fc" id="L375">                Object payload = sourceDocuments.get(docId);</span>
+<span class="fc" id="L376">                session.setSourceDocument(docId, payload);</span>
+<span class="fc bfc" id="L377" title="All 2 branches covered.">            } else if (inMessage.getHeaders().containsKey(docId)) {</span>
+<span class="fc" id="L378">                Object payload = inMessage.getHeader(docId);</span>
+<span class="fc" id="L379">                session.setSourceDocument(docId, payload);</span>
+<span class="fc bfc" id="L380" title="All 2 branches covered.">            } else if (exchange.getProperties().containsKey(docId)) {</span>
+<span class="fc" id="L381">                Object payload = exchange.getProperty(docId);</span>
+<span class="fc" id="L382">                session.setSourceDocument(docId, payload);</span>
+<span class="fc" id="L383">            } else {</span>
+<span class="fc" id="L384">                LOG.warn(&quot;Ignoring missing source document: '{}(ID:{})'&quot;, ds.getName(), ds.getId());</span>
+            }
+        }
+<span class="fc" id="L387">    }</span>
 
     private Object extractPayload(final DataSource dataSource, Message message) {
-<span class="pc bpc" id="L361" title="2 of 4 branches missed.">        if (dataSource == null || message == null) {</span>
-<span class="nc" id="L362">            return null;</span>
+<span class="pc bpc" id="L390" title="2 of 4 branches missed.">        if (dataSource == null || message == null) {</span>
+<span class="nc" id="L391">            return null;</span>
         }
-<span class="fc" id="L364">        Object body = null;</span>
+<span class="fc" id="L393">        Object body = null;</span>
 
-<span class="pc bpc" id="L366" title="1 of 4 branches missed.">        if (dataSource != null &amp;&amp; dataSource.getUri() != null</span>
-<span class="pc bpc" id="L367" title="1 of 2 branches missed.">                &amp;&amp; !(dataSource.getUri().startsWith(&quot;atlas:core&quot;)</span>
-<span class="fc bfc" id="L368" title="All 2 branches covered.">                        || dataSource.getUri().startsWith(&quot;atlas:java&quot;))) {</span>
-<span class="fc" id="L369">            body =  message.getBody(String.class);</span>
+<span class="pc bpc" id="L395" title="1 of 4 branches missed.">        if (dataSource != null &amp;&amp; dataSource.getUri() != null</span>
+<span class="pc bpc" id="L396" title="1 of 2 branches missed.">                &amp;&amp; !(dataSource.getUri().startsWith(&quot;atlas:core&quot;)</span>
+<span class="fc bfc" id="L397" title="All 2 branches covered.">                        || dataSource.getUri().startsWith(&quot;atlas:java&quot;))) {</span>
+<span class="fc" id="L398">            body =  message.getBody(String.class);</span>
         } else {
-<span class="fc" id="L371">            body = message.getBody();</span>
+<span class="fc" id="L400">            body = message.getBody();</span>
         }
 
         //Just in case, prepare for future calls
-<span class="fc" id="L375">        MessageHelper.resetStreamCache(message);</span>
+<span class="fc" id="L404">        MessageHelper.resetStreamCache(message);</span>
 
 
-<span class="fc" id="L378">        return body;</span>
+<span class="fc" id="L407">        return body;</span>
     }
 
     private void populateTargetDocuments(AtlasSession session, Exchange exchange) {
-<span class="fc" id="L382">        Message message = exchange.getMessage();</span>
+<span class="fc" id="L411">        Message message = exchange.getMessage();</span>
 
-<span class="pc bpc" id="L384" title="1 of 2 branches missed.">        if (session.getMapping().getDataSource() == null) {</span>
-<span class="nc" id="L385">            return;</span>
+<span class="pc bpc" id="L413" title="1 of 2 branches missed.">        if (session.getMapping().getDataSource() == null) {</span>
+<span class="nc" id="L414">            return;</span>
         }
-<span class="fc" id="L387">        DataSource[] targetDataSources = session.getMapping().getDataSource().stream()</span>
-<span class="fc bfc" id="L388" title="All 2 branches covered.">                .filter(ds -&gt; ds.getDataSourceType() == DataSourceType.TARGET)</span>
-<span class="fc" id="L389">                .toArray(DataSource[]::new);</span>
+<span class="fc" id="L416">        DataSource[] targetDataSources = session.getMapping().getDataSource().stream()</span>
+<span class="fc bfc" id="L417" title="All 2 branches covered.">                .filter(ds -&gt; ds.getDataSourceType() == DataSourceType.TARGET)</span>
+<span class="fc" id="L418">                .toArray(DataSource[]::new);</span>
 
-<span class="fc bfc" id="L391" title="All 2 branches covered.">        if (targetDataSources.length == 0) {</span>
-<span class="fc" id="L392">            Object newBody = session.getDefaultTargetDocument();</span>
-<span class="fc" id="L393">            message.setBody(newBody);</span>
-<span class="fc" id="L394">            return;</span>
+<span class="fc bfc" id="L420" title="All 2 branches covered.">        if (targetDataSources.length == 0) {</span>
+<span class="fc" id="L421">            Object newBody = session.getDefaultTargetDocument();</span>
+<span class="fc" id="L422">            message.setBody(newBody);</span>
+<span class="fc" id="L423">            return;</span>
         }
 
-<span class="fc bfc" id="L397" title="All 2 branches covered.">        if (targetDataSources.length == 1) {</span>
-<span class="fc" id="L398">            String docId = targetDataSources[0].getId();</span>
-<span class="pc bpc" id="L399" title="1 of 4 branches missed.">            if (docId == null || docId.isEmpty()) {</span>
-<span class="fc" id="L400">                Object newBody = session.getDefaultTargetDocument();</span>
-<span class="fc" id="L401">                message.setBody(newBody);</span>
-<span class="fc" id="L402">            } else {</span>
-<span class="fc" id="L403">                Object newBody = session.getTargetDocument(docId);</span>
-<span class="fc" id="L404">                message.setBody(newBody);</span>
+<span class="fc bfc" id="L426" title="All 2 branches covered.">        if (targetDataSources.length == 1) {</span>
+<span class="fc" id="L427">            String docId = targetDataSources[0].getId();</span>
+<span class="pc bpc" id="L428" title="1 of 4 branches missed.">            if (docId == null || docId.isEmpty()) {</span>
+<span class="fc" id="L429">                Object newBody = session.getDefaultTargetDocument();</span>
+<span class="fc" id="L430">                message.setBody(newBody);</span>
+<span class="fc" id="L431">            } else {</span>
+<span class="fc" id="L432">                Object newBody = session.getTargetDocument(docId);</span>
+<span class="fc" id="L433">                message.setBody(newBody);</span>
             }
-<span class="fc" id="L406">            setContentType(targetDataSources[0], message);</span>
-<span class="fc" id="L407">            return;</span>
+<span class="fc" id="L435">            setContentType(targetDataSources[0], message);</span>
+<span class="fc" id="L436">            return;</span>
         }
 
-<span class="fc" id="L410">        Map&lt;String, Object&gt; targetDocuments = new HashMap&lt;&gt;();</span>
-<span class="fc bfc" id="L411" title="All 2 branches covered.">        for (DataSource ds : targetDataSources) {</span>
-<span class="fc" id="L412">            String docId = ds.getId();</span>
-<span class="pc bpc" id="L413" title="2 of 4 branches missed.">            if (docId == null || docId.isEmpty()) {</span>
-<span class="nc" id="L414">                targetDocuments.put(io.atlasmap.api.AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID,</span>
-<span class="nc" id="L415">                        session.getDefaultTargetDocument());</span>
-<span class="nc" id="L416">                Object newBody = session.getDefaultTargetDocument();</span>
-<span class="nc" id="L417">                message.setBody(newBody);</span>
-<span class="nc" id="L418">                setContentType(ds, message);</span>
-<span class="nc" id="L419">            } else {</span>
-<span class="fc" id="L420">                targetDocuments.put(docId, session.getTargetDocument(docId));</span>
+<span class="fc" id="L439">        Map&lt;String, Object&gt; targetDocuments = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L440" title="All 2 branches covered.">        for (DataSource ds : targetDataSources) {</span>
+<span class="fc" id="L441">            String docId = ds.getId();</span>
+<span class="pc bpc" id="L442" title="2 of 4 branches missed.">            if (docId == null || docId.isEmpty()) {</span>
+<span class="nc" id="L443">                targetDocuments.put(io.atlasmap.api.AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID,</span>
+<span class="nc" id="L444">                        session.getDefaultTargetDocument());</span>
+<span class="nc" id="L445">                Object newBody = session.getDefaultTargetDocument();</span>
+<span class="nc" id="L446">                message.setBody(newBody);</span>
+<span class="nc" id="L447">                setContentType(ds, message);</span>
+<span class="nc" id="L448">            } else {</span>
+<span class="fc" id="L449">                targetDocuments.put(docId, session.getTargetDocument(docId));</span>
             }
         }
-<span class="fc bfc" id="L423" title="All 2 branches covered.">        if (targetMapName != null) {</span>
-<span class="fc" id="L424">            exchange.setProperty(targetMapName, targetDocuments);</span>
-        } else {
-<span class="fc" id="L426">            message.setBody(targetDocuments);</span>
+<span class="pc bpc" id="L452" title="1 of 4 branches missed.">        switch (targetMapMode) {</span>
+        case MAP:
+<span class="fc bfc" id="L454" title="All 2 branches covered.">            if (targetMapName != null) {</span>
+<span class="fc" id="L455">                exchange.setProperty(targetMapName, targetDocuments);</span>
+            } else {
+<span class="fc" id="L457">                message.setBody(targetDocuments);</span>
+            }
+<span class="fc" id="L459">            break;</span>
+        case MESSAGE_HEADER:
+<span class="fc" id="L461">            targetDocuments.remove(io.atlasmap.api.AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID);</span>
+<span class="fc" id="L462">            message.getHeaders().putAll(targetDocuments);</span>
+<span class="fc" id="L463">            break;</span>
+        case EXCHANGE_PROPERTY:
+<span class="fc" id="L465">            targetDocuments.remove(io.atlasmap.api.AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID);</span>
+<span class="fc" id="L466">            exchange.getProperties().putAll(targetDocuments);</span>
+            break;
         }
-<span class="fc" id="L428">    }</span>
+<span class="fc" id="L469">    }</span>
 
     private void setContentType(DataSource ds, Message message) {
-<span class="fc bfc" id="L431" title="All 2 branches covered.">        if (ds.getUri() == null) {</span>
-<span class="fc" id="L432">            return;</span>
+<span class="fc bfc" id="L472" title="All 2 branches covered.">        if (ds.getUri() == null) {</span>
+<span class="fc" id="L473">            return;</span>
         }
-<span class="fc bfc" id="L434" title="All 2 branches covered.">        if (ds.getUri().startsWith(&quot;atlas:json&quot;)) {</span>
-<span class="fc" id="L435">            message.setHeader(Exchange.CONTENT_TYPE, CONTENT_TYPE_JSON);</span>
-<span class="fc bfc" id="L436" title="All 2 branches covered.">        } else if (ds.getUri().startsWith(&quot;atlas:xml&quot;)) {</span>
-<span class="fc" id="L437">            message.setHeader(Exchange.CONTENT_TYPE, CONTENT_TYPE_XML);</span>
+<span class="fc bfc" id="L475" title="All 2 branches covered.">        if (ds.getUri().startsWith(&quot;atlas:json&quot;)) {</span>
+<span class="fc" id="L476">            message.setHeader(Exchange.CONTENT_TYPE, CONTENT_TYPE_JSON);</span>
+<span class="fc bfc" id="L477" title="All 2 branches covered.">        } else if (ds.getUri().startsWith(&quot;atlas:xml&quot;)) {</span>
+<span class="fc" id="L478">            message.setHeader(Exchange.CONTENT_TYPE, CONTENT_TYPE_XML);</span>
         }
-<span class="fc" id="L439">    }</span>
+<span class="fc" id="L480">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
