@@ -20,9 +20,7 @@ export function useCustomClassDialog(
     setInitialCustomClass,
   ] = useState<ICustomClass | null>(null);
 
-  const [customClassNames, setCustomClassNames] = useState<string[] | null>(
-    null,
-  );
+  const [customClassNames, setCustomClassNames] = useState<string[] | null>([]);
 
   const { state, toggleOn, toggleOff } = useToggle(false);
   const onConfirm = useCallback(
@@ -35,21 +33,16 @@ export function useCustomClassDialog(
     [onCustomClassCb, toggleOff],
   );
 
-  function getCustomClassNames(): string[] | null {
-    if (!customClassNames) {
-      (async () => {
-        setCustomClassNames(await getCustomClassNameOptions());
-      })();
-    }
-    return customClassNames;
-  }
+  const getCustomClassNames = async () => {
+    setCustomClassNames(await getCustomClassNameOptions());
+  };
 
   const dialog = (
     <CustomClassDialog
       title={title}
       isOpen={state}
-      customClassName={""}
-      customClassNames={getCustomClassNames()}
+      customClassName={customClassNames ? customClassNames[0] : ""}
+      customClassNames={customClassNames}
       collectionTypeOptions={collectionTypes.map(([value, label]) => ({
         value,
         label,
@@ -67,7 +60,7 @@ export function useCustomClassDialog(
       if (constant) {
         setInitialCustomClass(constant);
       }
-      setCustomClassNames(null);
+      getCustomClassNames();
       toggleOn();
     },
     [toggleOn],
