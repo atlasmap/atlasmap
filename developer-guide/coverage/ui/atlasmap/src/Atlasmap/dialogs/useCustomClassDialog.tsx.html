@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
@@ -38,14 +38,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -125,14 +125,7 @@
 <a name='L67'></a><a href='#L67'>67</a>
 <a name='L68'></a><a href='#L68'>68</a>
 <a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a>
-<a name='L77'></a><a href='#L77'>77</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L70'></a><a href='#L70'>70</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -156,8 +149,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -170,11 +161,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -230,9 +216,7 @@ type CustomClassCallback = (constant: ICustomClass) =&gt; void;
 <span class="cstat-no" title="statement not covered" >    setInitialCustomClass,</span>
   ] = useState&lt;ICustomClass | null&gt;(null);
 &nbsp;
-  const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >c</span>ustomClassNames,</span> <span class="cstat-no" title="statement not covered" >setCustomClassNames] = useState&lt;string[] | null&gt;(</span>
-    null,
-  );
+  const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >c</span>ustomClassNames,</span> <span class="cstat-no" title="statement not covered" >setCustomClassNames] = useState&lt;string[] | null&gt;([]);</span>
 &nbsp;
   const <span class="cstat-no" title="statement not covered" >{ <span class="cstat-no" title="statement not covered" >s</span>tate,</span> <span class="cstat-no" title="statement not covered" >toggleOn,</span> <span class="cstat-no" title="statement not covered" >toggleOff } = useToggle(false);</span>
   const onConfirm = <span class="cstat-no" title="statement not covered" >useCallback(</span>
@@ -245,21 +229,16 @@ type CustomClassCallback = (constant: ICustomClass) =&gt; void;
     [onCustomClassCb, toggleOff],
   );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  function <span class="fstat-no" title="function not covered" >g</span>etCustomClassNames(</span>): string[] | null {
-<span class="cstat-no" title="statement not covered" >    if (!customClassNames) {</span>
-<span class="cstat-no" title="statement not covered" >      (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async () =&gt; {</span></span></span>
-<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >        setCustomClassNames(<span class="cstat-no" title="statement not covered" >a</span>wait getCustomClassNameOptions());</span></span>
-      })();
-    }
-<span class="cstat-no" title="statement not covered" >    return customClassNames;</span>
-  }
+  const getCustomClassNames = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async () =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >    setCustomClassNames(<span class="cstat-no" title="statement not covered" >a</span>wait getCustomClassNameOptions());</span></span>
+  };
 &nbsp;
   const dialog = (
 <span class="cstat-no" title="statement not covered" >    &lt;CustomClassDialog</span>
       title={title}
       isOpen={state}
-      customClassName={""}
-      customClassNames={getCustomClassNames()}
+      customClassName={customClassNames ? customClassNames[0] : ""}
+      customClassNames={customClassNames}
       collectionTypeOptions={collectionTypes.map(<span class="fstat-no" title="function not covered" >([<span class="cstat-no" title="statement not covered" ></span>value,</span> <span class="cstat-no" title="statement not covered" >label]</span>) =&gt; <span class="cstat-no" title="statement not covered" >({</span>
         value,
         label,
@@ -277,7 +256,7 @@ type CustomClassCallback = (constant: ICustomClass) =&gt; void;
 <span class="cstat-no" title="statement not covered" >      if (constant) {</span>
 <span class="cstat-no" title="statement not covered" >        setInitialCustomClass(constant);</span>
       }
-<span class="cstat-no" title="statement not covered" >      setCustomClassNames(null);</span>
+<span class="cstat-no" title="statement not covered" >      getCustomClassNames();</span>
 <span class="cstat-no" title="statement not covered" >      toggleOn();</span>
     },
     [toggleOn],
@@ -291,7 +270,7 @@ type CustomClassCallback = (constant: ICustomClass) =&gt; void;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Jul 22 2020 20:59:57 GMT+0000 (Coordinated Universal Time)
+                at Fri Jul 24 2020 17:18:32 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
