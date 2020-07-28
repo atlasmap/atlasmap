@@ -24,7 +24,12 @@ import { useAtlasmap } from "./AtlasmapProvider";
 import { useAtlasmapDialogs } from "./useAtlasmapDialogs";
 import { IUseContextToolbarData, useContextToolbar } from "./useContextToolbar";
 import { useSidebar } from "./useSidebar";
-import { getPropertyValue, getPropertyType, getConstantType } from "./utils";
+import {
+  getPropertyValue,
+  getPropertyType,
+  getPropertyScope,
+  getConstantType,
+} from "./utils";
 
 export interface IAtlasmapProps {
   allowImport?: boolean;
@@ -164,11 +169,13 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         const [leftPart] = property.split(" ");
         const value = getPropertyValue(leftPart);
         const valueType = getPropertyType(leftPart);
+        const scope = getPropertyScope(leftPart);
 
         handlers.onEditProperty({
           name: leftPart,
           value,
           valueType,
+          scope,
         });
       },
       onDeleteProperty: handlers.onDeleteProperty,

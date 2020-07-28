@@ -18,7 +18,7 @@ import {
   IConfirmationDialogProps,
 } from "./ConfirmationDialog";
 
-interface ValueTypeOption {
+interface ValueLabelOption {
   label: string;
   value: string;
 }
@@ -27,6 +27,7 @@ export interface IProperty {
   name: string;
   value: string;
   valueType: string;
+  scope: string;
 }
 
 export interface IPropertyDialogProps {
@@ -34,7 +35,9 @@ export interface IPropertyDialogProps {
   name?: string;
   value?: string;
   valueType?: string;
-  valueTypeOptions: ValueTypeOption[];
+  valueTypeOptions: ValueLabelOption[];
+  scope?: string;
+  scopeOptions: ValueLabelOption[];
   isOpen: IConfirmationDialogProps["isOpen"];
   onCancel: IConfirmationDialogProps["onCancel"];
   onConfirm: (property: IProperty) => void;
@@ -45,6 +48,8 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
   value: initialValue = "",
   valueType: initialValueType = "",
   valueTypeOptions,
+  scope: initialScope = "",
+  scopeOptions,
   isOpen,
   onCancel,
   onConfirm,
@@ -52,17 +57,19 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
   const [name, setName] = useState(initialName);
   const [value, setValue] = useState(initialValue);
   const [valueType, setValueType] = useState(initialValueType);
+  const [scope, setScope] = useState(initialScope);
 
   const reset = useCallback(() => {
     setName(initialName);
     setValue(initialValue);
     setValueType(initialValueType);
-  }, [initialName, initialValue, initialValueType]);
+    setScope(initialScope);
+  }, [initialName, initialValue, initialValueType, initialScope]);
 
   const handleOnConfirm = useCallback(() => {
-    onConfirm({ name, value, valueType });
+    onConfirm({ name, value, valueType, scope });
     reset();
-  }, [name, onConfirm, reset, value, valueType]);
+  }, [name, onConfirm, reset, value, valueType, scope]);
 
   const handleOnCancel = useCallback(() => {
     onCancel();
@@ -95,6 +102,7 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
             value={value}
             onChange={setValue}
             id={"value"}
+            isRequired={true}
             data-testid={"property-value-text-input"}
           />
         </FormGroup>
@@ -107,6 +115,18 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
           >
             {valueTypeOptions.map(({ label, value }, idx) => (
               <FormSelectOption key={idx} value={value} label={label} />
+            ))}
+          </FormSelect>
+        </FormGroup>
+        <FormGroup label={"Scope"} fieldId={"scope"}>
+          <FormSelect
+            value={scope}
+            aria-label={"Select property scope"}
+            onChange={setScope}
+            data-testid={"property-scope-form-select"}
+          >
+            {scopeOptions.map(({ label, value }, idx) => (
+              <FormSelectOption key={idx} label={label} value={value} />
             ))}
           </FormSelect>
         </FormGroup>

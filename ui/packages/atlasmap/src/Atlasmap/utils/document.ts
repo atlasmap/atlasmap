@@ -329,3 +329,30 @@ export function enableCustomClass(
       }
     });
 }
+
+export function getPropertyScopeOptions(): {
+  value: string;
+  label: string;
+}[] {
+  const cfg = ConfigModel.getConfig();
+  let scopeOptions: {
+    value: string;
+    label: string;
+  }[] = [
+    {
+      label: "Current Message Header",
+      value: "current",
+    },
+    {
+      label: "Camel Exchange Property",
+      value: "camelExchangeProperty",
+    },
+  ];
+  for (let i = 0; i < cfg.sourceDocs.length; i++) {
+    scopeOptions.push({
+      value: cfg.sourceDocs[i].id,
+      label: cfg.sourceDocs[i].id,
+    });
+  }
+  return scopeOptions;
+}

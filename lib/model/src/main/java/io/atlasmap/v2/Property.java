@@ -12,6 +12,8 @@ public class Property implements Serializable {
 
     protected FieldType fieldType;
 
+    protected String scope;
+
     /**
      * Gets the value of the name property.
      * 
@@ -82,6 +84,30 @@ public class Property implements Serializable {
      */
     public void setFieldType(FieldType value) {
         this.fieldType = value;
+    }
+
+    /**
+     * Gets the value of the scope property.
+     *
+     * @return
+     *     possible object is
+     *     {@link String }
+     *
+     */
+    public String getScope() {
+        return scope;
+    }
+
+    /**
+     * Sets the value of the scope property.
+     *
+     * @param scope
+     *     allowed object is
+     *     {@link String }
+     *
+     */
+    public void setScope(String scope) {
+        this.scope = scope;
     }
 
 }

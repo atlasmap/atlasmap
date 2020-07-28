@@ -30,6 +30,7 @@ export class Field {
   displayName: string;
   path: string;
   type: string;
+  scope: string;
   value: string;
   column: number;
   serviceObject: any = {};

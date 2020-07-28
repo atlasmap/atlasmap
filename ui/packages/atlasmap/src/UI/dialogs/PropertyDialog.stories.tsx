@@ -17,6 +17,7 @@ const options = [
 ];
 
 const valueTypeOptions = options.map((o) => o.value);
+const scopeOptions = options.map((o) => o.value);
 
 export const propertyDialog = () => (
   <PropertyDialog
@@ -32,5 +33,7 @@ export const propertyDialog = () => (
       valueTypeOptions[0],
     )}
     valueTypeOptions={options}
+    scope={select("Initial scope", scopeOptions, scopeOptions[0])}
+    scopeOptions={options}
   />
 );

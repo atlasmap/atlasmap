@@ -3,6 +3,7 @@ import { propertyTypes } from "@atlasmap/core";
 import React, { useCallback, ReactElement, useState } from "react";
 
 import { useToggle, PropertyDialog, IProperty } from "../../UI";
+import { getPropertyScopeOptions } from "../utils/document";
 
 type PropertyCallback = (property: IProperty) => void;
 
@@ -32,6 +33,7 @@ export function usePropertyDialog(
         value,
         label,
       }))}
+      scopeOptions={getPropertyScopeOptions()}
       isOpen={state}
       onCancel={toggleOff}
       onConfirm={onConfirm}

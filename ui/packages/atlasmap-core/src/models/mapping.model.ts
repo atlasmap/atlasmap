@@ -28,6 +28,7 @@ export class MappedFieldParsingData {
   parsedDocID: string | null = null;
   parsedDocURI: string | null = null;
   parsedIndex: string | null = null;
+  parsedScope: string | null = null;
   fieldIsProperty = false;
   fieldIsConstant = false;
   parsedValueType: string | null = null;
