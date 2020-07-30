@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.04% </span>
+                <span class="strong">85.96% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>450/523</span>
+                <span class='fraction'>453/527</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">72.46% </span>
+                <span class="strong">72.27% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>171/236</span>
+                <span class='fraction'>172/238</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">84.81% </span>
+                <span class="strong">84.72% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>363/428</span>
+                <span class='fraction'>366/432</span>
             </div>
         
             
@@ -1109,7 +1109,14 @@
 <a name='L1051'></a><a href='#L1051'>1051</a>
 <a name='L1052'></a><a href='#L1052'>1052</a>
 <a name='L1053'></a><a href='#L1053'>1053</a>
-<a name='L1054'></a><a href='#L1054'>1054</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1054'></a><a href='#L1054'>1054</a>
+<a name='L1055'></a><a href='#L1055'>1055</a>
+<a name='L1056'></a><a href='#L1056'>1056</a>
+<a name='L1057'></a><a href='#L1057'>1057</a>
+<a name='L1058'></a><a href='#L1058'>1058</a>
+<a name='L1059'></a><a href='#L1059'>1059</a>
+<a name='L1060'></a><a href='#L1060'>1060</a>
+<a name='L1061'></a><a href='#L1061'>1061</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1581,6 +1588,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1678,6 +1686,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">25x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1695,6 +1704,7 @@
 <span class="cline-any cline-yes">25x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">23x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -1951,6 +1961,7 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2056,6 +2067,9 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">30x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2632,6 +2646,7 @@ export class MappingSerializer {
         name: field.name,
         value: field.value,
         fieldType: field.type,
+        scope: field.scope,
       });
     }
     return propertyDescriptions;
@@ -2728,6 +2743,7 @@ export class MappingSerializer {
         name: field.name,
         path: field.path,
         fieldType: field.type,
+        scope: field.scope,
         docId: field.docDef.id,
       };
 &nbsp;
@@ -2749,6 +2765,7 @@ export class MappingSerializer {
         serializedField['jsonType'] =
           ConfigModel.mappingServicesPackagePrefix + '.PropertyField';
         serializedField['name'] = field.path ? field.path : <span class="branch-1 cbranch-no" title="branch not covered" >field.name;</span>
+        serializedField['scope'] = field.scope;
       } else if (field.isConstant()) {
         serializedField['jsonType'] =
           ConfigModel.mappingServicesPackagePrefix + '.ConstantField';
@@ -3002,6 +3019,7 @@ export class MappingSerializer {
       field.name = property.name;
       field.value = property.value;
       field.type = property.fieldType;
+      field.scope = property.scope;
       field.userCreated = true;
       fields.push(field);
     }
@@ -3109,6 +3127,9 @@ export class MappingSerializer {
       mappedField.parsedData.parsedName = field.name;
       mappedField.parsedData.parsedPath = field.name;
       mappedField.parsedData.parsedValue = field.value;
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (field.scope) {
+<span class="cstat-no" title="statement not covered" >        mappedField.parsedData.parsedScope = field.scope;</span>
+      }
       mappedField.parsedData.fieldIsProperty = true;
     } else if (
       field.jsonType ===
@@ -3222,7 +3243,7 @@ export class MappingSerializer {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Jul 30 2020 16:17:27 GMT+0000 (Coordinated Universal Time)
+                at Thu Jul 30 2020 17:05:34 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
