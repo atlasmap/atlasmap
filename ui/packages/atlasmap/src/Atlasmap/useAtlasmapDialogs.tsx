@@ -67,8 +67,8 @@ export function useAtlasmapDialogs({
     "Create Property",
   );
   const onCreateProperty = useCallback(() => {
-    openCreatePropertyDialog(({ name, value, valueType }) => {
-      createProperty(name, value, valueType);
+    openCreatePropertyDialog(({ name, value, valueType, scope }) => {
+      createProperty(name, value, valueType, scope);
     });
   }, [createProperty, openCreatePropertyDialog]);
 
@@ -77,8 +77,8 @@ export function useAtlasmapDialogs({
   );
   const onEditProperty = useCallback(
     (property: IProperty) => {
-      openEditPropertyDialog(({ name, value, valueType }) => {
-        editProperty(property.name, value, valueType, name);
+      openEditPropertyDialog(({ name, value, valueType, scope }) => {
+        editProperty(property.name, value, valueType, scope, name);
       }, property);
     },
     [editProperty, openEditPropertyDialog],

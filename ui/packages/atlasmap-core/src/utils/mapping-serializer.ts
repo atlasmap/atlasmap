@@ -468,6 +468,7 @@ export class MappingSerializer {
         name: field.name,
         value: field.value,
         fieldType: field.type,
+        scope: field.scope,
       });
     }
     return propertyDescriptions;
@@ -564,6 +565,7 @@ export class MappingSerializer {
         name: field.name,
         path: field.path,
         fieldType: field.type,
+        scope: field.scope,
         docId: field.docDef.id,
       };
 
@@ -585,6 +587,7 @@ export class MappingSerializer {
         serializedField['jsonType'] =
           ConfigModel.mappingServicesPackagePrefix + '.PropertyField';
         serializedField['name'] = field.path ? field.path : field.name;
+        serializedField['scope'] = field.scope;
       } else if (field.isConstant()) {
         serializedField['jsonType'] =
           ConfigModel.mappingServicesPackagePrefix + '.ConstantField';
@@ -838,6 +841,7 @@ export class MappingSerializer {
       field.name = property.name;
       field.value = property.value;
       field.type = property.fieldType;
+      field.scope = property.scope;
       field.userCreated = true;
       fields.push(field);
     }
@@ -945,6 +949,9 @@ export class MappingSerializer {
       mappedField.parsedData.parsedName = field.name;
       mappedField.parsedData.parsedPath = field.name;
       mappedField.parsedData.parsedValue = field.value;
+      if (field.scope) {
+        mappedField.parsedData.parsedScope = field.scope;
+      }
       mappedField.parsedData.fieldIsProperty = true;
     } else if (
       field.jsonType ===

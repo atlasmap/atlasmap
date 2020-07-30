@@ -163,6 +163,9 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
               : mappedField.parsedData.parsedName.substring(lastSeparator + 1);
           propertyField.value = mappedField.parsedData.parsedValue;
           propertyField.type = mappedField.parsedData.parsedValueType;
+          if (mappedField.parsedData.parsedScope) {
+            propertyField.scope = mappedField.parsedData.parsedScope;
+          }
           propertyField.displayName = fieldName;
           propertyField.name = fieldName;
           propertyField.path = mappedField.parsedData.parsedPath;

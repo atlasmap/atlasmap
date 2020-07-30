@@ -87,6 +87,7 @@ export function createProperty(
   propName: string,
   propValue: string,
   propType: string,
+  propScope: string,
 ): void {
   const cfg = ConfigModel.getConfig();
   let field = cfg.propertyDoc.getField(propName);
@@ -96,6 +97,7 @@ export function createProperty(
   field.name = propName;
   field.value = propValue;
   field.type = propType;
+  field.scope = propScope;
   field.docDef = cfg.propertyDoc;
   field.userCreated = true;
   cfg.propertyDoc.addField(field);
@@ -119,6 +121,7 @@ export function editProperty(
   propName: string,
   propValue: string,
   propType: string,
+  propScope: string,
   newName: string,
 ): void {
   const cfg = ConfigModel.getConfig();
@@ -133,6 +136,7 @@ export function editProperty(
   }
   field.value = propValue;
   field.type = propType;
+  field.scope = propScope;
   cfg.propertyDoc.updateField(field, "");
   cfg.mappingService.notifyMappingUpdated();
 }
@@ -157,6 +161,17 @@ export function getPropertyType(propName: string): string {
     return "";
   }
   return field.type;
+}
+
+export function getPropertyScope(propName: string): string {
+  const cfg = ConfigModel.getConfig();
+  const field = cfg.propertyDoc.getField(
+    cfg.propertyDoc.pathSeparator + propName,
+  );
+  if (!field) {
+    return "";
+  }
+  return field.scope;
 }
 
 export function getPropertyTypeIndex(propName: string): number {
