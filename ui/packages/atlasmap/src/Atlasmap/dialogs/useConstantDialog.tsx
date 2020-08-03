@@ -12,9 +12,10 @@ export function useConstantDialog(
   const [onConstantCb, setOnConstantCb] = useState<ConstantCallback | null>(
     null,
   );
-  const [initialConstant, setInitialConstant] = useState<IConstant | null>(
-    null,
-  );
+  const [initialConstant, setInitialConstant] = useState<IConstant | null>({
+    value: "",
+    valueType: constantTypes[0][0],
+  });
   const { state, toggleOn, toggleOff } = useToggle(false);
   const onConfirm = useCallback(
     (constant: IConstant) => {
