@@ -13,9 +13,12 @@ export function usePropertyDialog(
   const [onPropertyCb, setOnPropertyCb] = useState<PropertyCallback | null>(
     null,
   );
-  const [initialProperty, setInitialProperty] = useState<IProperty | null>(
-    null,
-  );
+  const [initialProperty, setInitialProperty] = useState<IProperty | null>({
+    value: "",
+    name: "",
+    valueType: propertyTypes[0][0],
+    scope: getPropertyScopeOptions()[0].value,
+  });
   const { state, toggleOn, toggleOff } = useToggle(false);
   const onConfirm = useCallback(
     (property: IProperty) => {
