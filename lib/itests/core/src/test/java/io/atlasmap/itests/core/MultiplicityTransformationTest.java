@@ -32,6 +32,9 @@ import org.hamcrest.FeatureMatcher;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.AtlasMappingService;
@@ -71,10 +74,13 @@ public class MultiplicityTransformationTest {
                 .setSourceStreet("314 Littleton Rd")
                 .setSourceWeight("128.965 kg");
         session.setSourceDocument("io.atlasmap.itests.core.issue.SourceClass", source);
+        String sourceJson = new String(Files.readAllBytes(Paths.get(
+                Thread.currentThread().getContextClassLoader().getResource("data/json-source-collection.json").toURI())));
+        session.setSourceDocument("SourceJson", sourceJson);
         context.process(session);
         assertFalse(TestHelper.printAudit(session), session.hasErrors());
         assertTrue("split(STRING) => INTEGER/DOUBLE mapping should get warnings", session.hasWarns());
-        assertEquals(9, session.getAudits().getAudit().stream().filter(a -> a.getStatus() == AuditStatus.WARN).count());
+        assertEquals(12, session.getAudits().getAudit().stream().filter(a -> a.getStatus() == AuditStatus.WARN).count());
         Object output = session.getTargetDocument("io.atlasmap.itests.core.issue.TargetClass");
         assertEquals(TargetClass.class, output.getClass());
         TargetClass target = TargetClass.class.cast(output);
@@ -110,6 +116,11 @@ public class MultiplicityTransformationTest {
         assertEquals(new Integer(4000), intList.get(3));
         assertEquals(Double.valueOf(128.965), target.getTargetWeightDouble());
         assertEquals("kg", target.getTargetWeightUnit());
+
+        Object obj = session.getTargetDocument("TargetJson");
+        JsonNode targetJson = new ObjectMapper().readTree((String) obj);
+        JsonNode targetJsonString = targetJson.get("targetJsonString");
+        assertEquals("2 2 3", targetJsonString.asText());
 
     }
 
