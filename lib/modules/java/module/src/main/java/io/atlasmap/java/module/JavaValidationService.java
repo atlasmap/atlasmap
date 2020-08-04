@@ -42,7 +42,6 @@ public class JavaValidationService extends BaseModuleValidationService<JavaField
 
     private static final Logger LOG = LoggerFactory.getLogger(JavaValidationService.class);
     private static Map<String, AtlasValidator> validatorMap = new HashMap<>();
-    private static Map<String, Integer> versionMap = new HashMap<>();
     private AtlasModuleDetail moduleDetail = JavaModule.class.getAnnotation(AtlasModuleDetail.class);
 
     public JavaValidationService() {
@@ -70,21 +69,10 @@ public class JavaValidationService extends BaseModuleValidationService<JavaField
         validatorMap.put("java.field.path.not.null", javaFilePathNonNullValidator);
         validatorMap.put("input.field.type.not.null", inputFieldTypeNonNullValidator);
         validatorMap.put("output.field.type.not.null", outputFieldTypeNonNullValidator);
-
-        versionMap.put("1.9", 53);
-        versionMap.put("1.8", 52);
-        versionMap.put("1.7", 51);
-        versionMap.put("1.6", 50);
-        versionMap.put("1.5", 49);
-        versionMap.put("1.4", 48);
-        versionMap.put("1.3", 47);
-        versionMap.put("1.2", 46);
-        versionMap.put("1.1", 45);
     }
 
     public void destroy() {
         validatorMap.clear();
-        versionMap.clear();
     }
 
     @Override
@@ -129,13 +117,13 @@ public class JavaValidationService extends BaseModuleValidationService<JavaField
         if (clazzName != null && !clazzName.isEmpty()) {
             Integer major = detectClassVersion(clazzName);
             if (major != null) {
-                if (major > versionMap.get(System.getProperty("java.vm.specification.version"))) {
+                if (major > new Double(System.getProperty("java.class.version")).intValue()) {
                     Validation validation = new Validation();
                     validation.setScope(ValidationScope.MAPPING);
                     validation.setId(mappingId);
                     validation.setMessage(String.format(
-                            "Class '%s' for field is compiled against unsupported JDK version: %d current JDK: %d",
-                            clazzName, major, versionMap.get(System.getProperty("java.vm.specification.version"))));
+                            "Class '%s' for field is compiled against unsupported JDK version: %d current JDK: %s",
+                            clazzName, major, System.getProperty("java.class.version")));
                     validation.setStatus(ValidationStatus.ERROR);
                     validations.add(validation);
                 }
