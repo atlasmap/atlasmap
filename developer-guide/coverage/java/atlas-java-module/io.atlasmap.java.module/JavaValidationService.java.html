@@ -42,149 +42,137 @@ public class JavaValidationService extends BaseModuleValidationService&lt;JavaFi
 
 <span class="fc" id="L43">    private static final Logger LOG = LoggerFactory.getLogger(JavaValidationService.class);</span>
 <span class="fc" id="L44">    private static Map&lt;String, AtlasValidator&gt; validatorMap = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L45">    private static Map&lt;String, Integer&gt; versionMap = new HashMap&lt;&gt;();</span>
-<span class="pc" id="L46">    private AtlasModuleDetail moduleDetail = JavaModule.class.getAnnotation(AtlasModuleDetail.class);</span>
+<span class="pc" id="L45">    private AtlasModuleDetail moduleDetail = JavaModule.class.getAnnotation(AtlasModuleDetail.class);</span>
 
     public JavaValidationService() {
-<span class="nc" id="L49">        super();</span>
-<span class="nc" id="L50">        init();</span>
-<span class="nc" id="L51">    }</span>
+<span class="nc" id="L48">        super();</span>
+<span class="nc" id="L49">        init();</span>
+<span class="nc" id="L50">    }</span>
 
     public JavaValidationService(AtlasConversionService conversionService, AtlasFieldActionService fieldActionService) {
-<span class="fc" id="L54">        super(conversionService, fieldActionService);</span>
-<span class="fc" id="L55">        init();</span>
-<span class="fc" id="L56">    }</span>
+<span class="fc" id="L53">        super(conversionService, fieldActionService);</span>
+<span class="fc" id="L54">        init();</span>
+<span class="fc" id="L55">    }</span>
 
     public void init() {
-<span class="fc" id="L59">        setMappingFieldPairValidator(new JavaMappingFieldPairValidator(this, getConversionService()));</span>
-<span class="fc" id="L60">        NonNullValidator javaFilePathNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
+<span class="fc" id="L58">        setMappingFieldPairValidator(new JavaMappingFieldPairValidator(this, getConversionService()));</span>
+<span class="fc" id="L59">        NonNullValidator javaFilePathNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
                 &quot;Field path must not be null nor empty&quot;);
-<span class="fc" id="L62">        NonNullValidator inputFieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
+<span class="fc" id="L61">        NonNullValidator inputFieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
                 &quot;FieldType should not be null nor empty&quot;);
-<span class="fc" id="L64">        NonNullValidator outputFieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
+<span class="fc" id="L63">        NonNullValidator outputFieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
                 &quot;FieldType should not be null nor empty&quot;);
-<span class="fc" id="L66">        NonNullValidator fieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
+<span class="fc" id="L65">        NonNullValidator fieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
                 &quot;Filed type should not be null nor empty&quot;);
 
-<span class="fc" id="L69">        validatorMap.put(&quot;java.field.type.not.null&quot;, fieldTypeNonNullValidator);</span>
-<span class="fc" id="L70">        validatorMap.put(&quot;java.field.path.not.null&quot;, javaFilePathNonNullValidator);</span>
-<span class="fc" id="L71">        validatorMap.put(&quot;input.field.type.not.null&quot;, inputFieldTypeNonNullValidator);</span>
-<span class="fc" id="L72">        validatorMap.put(&quot;output.field.type.not.null&quot;, outputFieldTypeNonNullValidator);</span>
-
-<span class="fc" id="L74">        versionMap.put(&quot;1.9&quot;, 53);</span>
-<span class="fc" id="L75">        versionMap.put(&quot;1.8&quot;, 52);</span>
-<span class="fc" id="L76">        versionMap.put(&quot;1.7&quot;, 51);</span>
-<span class="fc" id="L77">        versionMap.put(&quot;1.6&quot;, 50);</span>
-<span class="fc" id="L78">        versionMap.put(&quot;1.5&quot;, 49);</span>
-<span class="fc" id="L79">        versionMap.put(&quot;1.4&quot;, 48);</span>
-<span class="fc" id="L80">        versionMap.put(&quot;1.3&quot;, 47);</span>
-<span class="fc" id="L81">        versionMap.put(&quot;1.2&quot;, 46);</span>
-<span class="fc" id="L82">        versionMap.put(&quot;1.1&quot;, 45);</span>
-<span class="fc" id="L83">    }</span>
+<span class="fc" id="L68">        validatorMap.put(&quot;java.field.type.not.null&quot;, fieldTypeNonNullValidator);</span>
+<span class="fc" id="L69">        validatorMap.put(&quot;java.field.path.not.null&quot;, javaFilePathNonNullValidator);</span>
+<span class="fc" id="L70">        validatorMap.put(&quot;input.field.type.not.null&quot;, inputFieldTypeNonNullValidator);</span>
+<span class="fc" id="L71">        validatorMap.put(&quot;output.field.type.not.null&quot;, outputFieldTypeNonNullValidator);</span>
+<span class="fc" id="L72">    }</span>
 
     public void destroy() {
-<span class="nc" id="L86">        validatorMap.clear();</span>
-<span class="nc" id="L87">        versionMap.clear();</span>
-<span class="nc" id="L88">    }</span>
+<span class="nc" id="L75">        validatorMap.clear();</span>
+<span class="nc" id="L76">    }</span>
 
     @Override
     protected AtlasModuleDetail getModuleDetail() {
-<span class="fc" id="L92">        return moduleDetail;</span>
+<span class="fc" id="L80">        return moduleDetail;</span>
     }
 
     @Override
     protected Class&lt;JavaField&gt; getFieldType() {
-<span class="fc" id="L97">        return JavaField.class;</span>
+<span class="fc" id="L85">        return JavaField.class;</span>
     }
 
     @Override
     protected String getModuleFieldName(JavaField field) {
-<span class="fc bfc" id="L102" title="All 2 branches covered.">        return field.getName() != null ? field.getName() : field.getPath();</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        return field.getName() != null ? field.getName() : field.getPath();</span>
     }
 
     protected void validateSourceAndTargetTypes(String mappingId, Field inputField, Field outField,
             List&lt;Validation&gt; validations) {
-<span class="nc" id="L107">    }</span>
+<span class="nc" id="L95">    }</span>
 
     @Override
     protected void validateModuleField(String mappingId, JavaField field, FieldDirection direction,
             List&lt;Validation&gt; validations) {
-<span class="fc" id="L112">        validatorMap.get(&quot;java.field.type.not.null&quot;).validate(field, validations, mappingId, ValidationStatus.WARN);</span>
-<span class="fc bfc" id="L113" title="All 2 branches covered.">        if (direction == FieldDirection.SOURCE) {</span>
-<span class="fc" id="L114">            validatorMap.get(&quot;input.field.type.not.null&quot;).validate(field.getFieldType(), validations, mappingId,</span>
+<span class="fc" id="L100">        validatorMap.get(&quot;java.field.type.not.null&quot;).validate(field, validations, mappingId, ValidationStatus.WARN);</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        if (direction == FieldDirection.SOURCE) {</span>
+<span class="fc" id="L102">            validatorMap.get(&quot;input.field.type.not.null&quot;).validate(field.getFieldType(), validations, mappingId,</span>
                     ValidationStatus.WARN);
         } else {
-<span class="fc" id="L117">            validatorMap.get(&quot;output.field.type.not.null&quot;).validate(field.getFieldType(), validations, mappingId,</span>
+<span class="fc" id="L105">            validatorMap.get(&quot;output.field.type.not.null&quot;).validate(field.getFieldType(), validations, mappingId,</span>
                     ValidationStatus.WARN);
         }
-<span class="fc bfc" id="L120" title="All 2 branches covered.">        if (field.getPath() == null) {</span>
-<span class="fc" id="L121">            validatorMap.get(&quot;java.field.path.not.null&quot;).validate(field.getPath(), validations, mappingId);</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        if (field.getPath() == null) {</span>
+<span class="fc" id="L109">            validatorMap.get(&quot;java.field.path.not.null&quot;).validate(field.getPath(), validations, mappingId);</span>
         }
 
-<span class="fc" id="L124">        validateClass(mappingId, field, validations);</span>
-<span class="fc" id="L125">    }</span>
+<span class="fc" id="L112">        validateClass(mappingId, field, validations);</span>
+<span class="fc" id="L113">    }</span>
 
     private void validateClass(String mappingId, JavaField field, List&lt;Validation&gt; validations) {
-<span class="fc" id="L128">        String clazzName = field.getClassName();</span>
-<span class="pc bpc" id="L129" title="1 of 4 branches missed.">        if (clazzName != null &amp;&amp; !clazzName.isEmpty()) {</span>
-<span class="fc" id="L130">            Integer major = detectClassVersion(clazzName);</span>
-<span class="fc bfc" id="L131" title="All 2 branches covered.">            if (major != null) {</span>
-<span class="pc bpc" id="L132" title="1 of 2 branches missed.">                if (major &gt; versionMap.get(System.getProperty(&quot;java.vm.specification.version&quot;))) {</span>
-<span class="nc" id="L133">                    Validation validation = new Validation();</span>
-<span class="nc" id="L134">                    validation.setScope(ValidationScope.MAPPING);</span>
-<span class="nc" id="L135">                    validation.setId(mappingId);</span>
-<span class="nc" id="L136">                    validation.setMessage(String.format(</span>
-                            &quot;Class '%s' for field is compiled against unsupported JDK version: %d current JDK: %d&quot;,
-<span class="nc" id="L138">                            clazzName, major, versionMap.get(System.getProperty(&quot;java.vm.specification.version&quot;))));</span>
-<span class="nc" id="L139">                    validation.setStatus(ValidationStatus.ERROR);</span>
-<span class="nc" id="L140">                    validations.add(validation);</span>
-<span class="nc" id="L141">                }</span>
+<span class="fc" id="L116">        String clazzName = field.getClassName();</span>
+<span class="pc bpc" id="L117" title="1 of 4 branches missed.">        if (clazzName != null &amp;&amp; !clazzName.isEmpty()) {</span>
+<span class="fc" id="L118">            Integer major = detectClassVersion(clazzName);</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">            if (major != null) {</span>
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">                if (major &gt; new Double(System.getProperty(&quot;java.class.version&quot;)).intValue()) {</span>
+<span class="nc" id="L121">                    Validation validation = new Validation();</span>
+<span class="nc" id="L122">                    validation.setScope(ValidationScope.MAPPING);</span>
+<span class="nc" id="L123">                    validation.setId(mappingId);</span>
+<span class="nc" id="L124">                    validation.setMessage(String.format(</span>
+                            &quot;Class '%s' for field is compiled against unsupported JDK version: %d current JDK: %s&quot;,
+<span class="nc" id="L126">                            clazzName, major, System.getProperty(&quot;java.class.version&quot;)));</span>
+<span class="nc" id="L127">                    validation.setStatus(ValidationStatus.ERROR);</span>
+<span class="nc" id="L128">                    validations.add(validation);</span>
+<span class="nc" id="L129">                }</span>
             } else {
-<span class="fc" id="L143">                Validation validation = new Validation();</span>
-<span class="fc" id="L144">                validation.setScope(ValidationScope.MAPPING);</span>
-<span class="fc" id="L145">                validation.setId(mappingId);</span>
-<span class="fc" id="L146">                validation.setMessage(String.format(&quot;Class '%s' for field is not found on the classpath&quot;, clazzName));</span>
-<span class="fc" id="L147">                validation.setStatus(ValidationStatus.ERROR);</span>
-<span class="fc" id="L148">                validations.add(validation);</span>
+<span class="fc" id="L131">                Validation validation = new Validation();</span>
+<span class="fc" id="L132">                validation.setScope(ValidationScope.MAPPING);</span>
+<span class="fc" id="L133">                validation.setId(mappingId);</span>
+<span class="fc" id="L134">                validation.setMessage(String.format(&quot;Class '%s' for field is not found on the classpath&quot;, clazzName));</span>
+<span class="fc" id="L135">                validation.setStatus(ValidationStatus.ERROR);</span>
+<span class="fc" id="L136">                validations.add(validation);</span>
             }
         }
-<span class="fc" id="L151">    }</span>
+<span class="fc" id="L139">    }</span>
 
     private Integer detectClassVersion(String className) {
-<span class="fc" id="L154">        Integer major = null;</span>
-<span class="fc" id="L155">        InputStream in = null;</span>
+<span class="fc" id="L142">        Integer major = null;</span>
+<span class="fc" id="L143">        InputStream in = null;</span>
         try {
-<span class="fc" id="L157">            in = getClass().getClassLoader().getResourceAsStream(className.replace('.', '/') + &quot;.class&quot;);</span>
-<span class="fc bfc" id="L158" title="All 2 branches covered.">            if (in == null) {</span>
-<span class="fc" id="L159">                in = ClassLoader.getSystemResourceAsStream(className.replace('.', '/') + &quot;.class&quot;);</span>
-<span class="pc bpc" id="L160" title="1 of 2 branches missed.">                if (in == null) {</span>
-<span class="fc" id="L161">                    return null;</span>
+<span class="fc" id="L145">            in = getClass().getClassLoader().getResourceAsStream(className.replace('.', '/') + &quot;.class&quot;);</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">            if (in == null) {</span>
+<span class="fc" id="L147">                in = ClassLoader.getSystemResourceAsStream(className.replace('.', '/') + &quot;.class&quot;);</span>
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">                if (in == null) {</span>
+<span class="fc" id="L149">                    return null;</span>
                 }
             }
-<span class="fc" id="L164">            DataInputStream data = new DataInputStream(in);</span>
-<span class="fc" id="L165">            int magic = data.readInt();</span>
-<span class="pc bpc" id="L166" title="1 of 2 branches missed.">            if (magic != 0xCAFEBABE) {</span>
-<span class="nc" id="L167">                LOG.error(String.format(&quot;Invalid Java class: %s magic value: %s&quot;, className, magic));</span>
+<span class="fc" id="L152">            DataInputStream data = new DataInputStream(in);</span>
+<span class="fc" id="L153">            int magic = data.readInt();</span>
+<span class="pc bpc" id="L154" title="1 of 2 branches missed.">            if (magic != 0xCAFEBABE) {</span>
+<span class="nc" id="L155">                LOG.error(String.format(&quot;Invalid Java class: %s magic value: %s&quot;, className, magic));</span>
             }
 
-<span class="fc" id="L170">            int minor = 0xFFFF &amp; data.readShort();</span>
-<span class="fc" id="L171">            major = new Integer(0xFFFF &amp; data.readShort());</span>
+<span class="fc" id="L158">            int minor = 0xFFFF &amp; data.readShort();</span>
+<span class="fc" id="L159">            major = new Integer(0xFFFF &amp; data.readShort());</span>
 
-<span class="pc bpc" id="L173" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L174">                LOG.debug(String.format(&quot;Detected class: %s version major: %s minor: %s&quot;, className, magic, minor));</span>
+<span class="pc bpc" id="L161" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L162">                LOG.debug(String.format(&quot;Detected class: %s version major: %s minor: %s&quot;, className, magic, minor));</span>
             }
-<span class="nc" id="L176">        } catch (IOException e) {</span>
-<span class="nc" id="L177">            LOG.error(String.format(&quot;Error detected version for class: %s msg: %s&quot;, className, e.getMessage()), e);</span>
+<span class="nc" id="L164">        } catch (IOException e) {</span>
+<span class="nc" id="L165">            LOG.error(String.format(&quot;Error detected version for class: %s msg: %s&quot;, className, e.getMessage()), e);</span>
         } finally {
-<span class="fc bfc" id="L179" title="All 2 branches covered.">            if (in != null) {</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">            if (in != null) {</span>
                 try {
-<span class="fc" id="L181">                    in.close();</span>
-<span class="nc" id="L182">                } catch (IOException ie) {</span>
-<span class="nc" id="L183">                    LOG.error(String.format(&quot;Error closing input stream msg: %s&quot;, ie.getMessage()), ie);</span>
-<span class="fc" id="L184">                }</span>
+<span class="fc" id="L169">                    in.close();</span>
+<span class="nc" id="L170">                } catch (IOException ie) {</span>
+<span class="nc" id="L171">                    LOG.error(String.format(&quot;Error closing input stream msg: %s&quot;, ie.getMessage()), ie);</span>
+<span class="fc" id="L172">                }</span>
             }
         }
-<span class="fc" id="L187">        return major;</span>
+<span class="fc" id="L175">        return major;</span>
     }
 
 }
