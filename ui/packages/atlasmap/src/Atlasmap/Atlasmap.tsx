@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { AlertGroup } from "@patternfly/react-core";
-import React, { FunctionComponent, useCallback, useMemo } from "react";
+import React, { FunctionComponent, useCallback, useMemo, useRef } from "react";
 import { CanvasControlBar, MainLayout, ViewToolbar } from "../Layout";
 import {
   CanvasProvider,
@@ -24,12 +24,7 @@ import { useAtlasmap } from "./AtlasmapProvider";
 import { useAtlasmapDialogs } from "./useAtlasmapDialogs";
 import { IUseContextToolbarData, useContextToolbar } from "./useContextToolbar";
 import { useSidebar } from "./useSidebar";
-import {
-  getPropertyValue,
-  getPropertyType,
-  getPropertyScope,
-  getConstantType,
-} from "./utils";
+import { getPropertyType, getPropertyScope, getConstantType } from "./utils";
 
 export interface IAtlasmapProps {
   allowImport?: boolean;
@@ -55,7 +50,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     // error,
     notifications,
     markNotificationRead,
-    properties,
+    sourceProperties,
+    targetProperties,
     constants,
     sources,
     targets,
@@ -86,8 +82,10 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     onCreateMapping,
   } = useAtlasmap();
 
+  const isSourceRef = useRef<boolean>(true);
   const { handlers, dialogs } = useAtlasmapDialogs({
     modalContainer: document.getElementById(modalsContainerId)!,
+    isSource: isSourceRef.current,
   });
 
   const {
@@ -146,8 +144,17 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     </ViewToolbar>
   );
 
+  const setIsSource = useCallback(
+    (val: boolean): boolean => {
+      isSourceRef.current = val;
+      return val;
+    },
+    [isSourceRef],
+  );
+
   const sourceEvents = useMemo<ISourceColumnCallbacks>(
     () => ({
+      isSource: setIsSource(true),
       canDrop: () => true,
       onDrop: (s, t) => onCreateMapping(s, t.payload as IAtlasmapField),
       onShowMappingDetails: selectMapping,
@@ -164,18 +171,19 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         handlers.onEditConstant({ value, valueType });
       },
       onDeleteConstant: handlers.onDeleteConstant,
-      onCreateProperty: handlers.onCreateProperty,
-      onEditProperty: (property) => {
+      onCreateProperty: (isSource: boolean) => {
+        handlers.onCreateProperty(isSource);
+      },
+      onEditProperty: (property, isSource) => {
         const [leftPart] = property.split(" ");
-        const value = getPropertyValue(leftPart);
-        const valueType = getPropertyType(leftPart);
-        const scope = getPropertyScope(leftPart);
+        const valueType = getPropertyType(leftPart, isSource);
+        const scope = getPropertyScope(leftPart, isSource);
 
         handlers.onEditProperty({
           name: leftPart,
-          value,
           valueType,
           scope,
+          isSource,
         });
       },
       onDeleteProperty: handlers.onDeleteProperty,
@@ -208,11 +216,13 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onCreateMapping,
       isFieldAddableToSelection,
       isFieldRemovableFromSelection,
+      setIsSource,
     ],
   );
 
   const targetEvents = useMemo<ITargetsColumnCallbacks>(
     () => ({
+      isSource: setIsSource(false),
       canDrop: (f) => !f.isConnected,
       onDrop: (s, t) => onCreateMapping(t.payload as IAtlasmapField, s),
       canAddToSelectedMapping: (f) => isFieldAddableToSelection("target", f),
@@ -221,6 +231,22 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       canRemoveFromSelectedMapping: (f) =>
         isFieldRemovableFromSelection("target", f),
       onRemoveFromSelectedMapping: onRemoveFromMapping,
+      onCreateProperty: (isSource: boolean) => {
+        handlers.onCreateProperty(isSource);
+      },
+      onEditProperty: (property, isSource) => {
+        const [leftPart] = property.split(" ");
+        const valueType = getPropertyType(leftPart, isSource);
+        const scope = getPropertyScope(leftPart, isSource);
+
+        handlers.onEditProperty({
+          name: leftPart,
+          valueType,
+          scope,
+          isSource,
+        });
+      },
+      onDeleteProperty: handlers.onDeleteProperty,
       onDeleteDocument: allowDelete
         ? (id) => handlers.onDeleteDocument(id, false)
         : undefined,
@@ -250,6 +276,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       isFieldAddableToSelection,
       isFieldRemovableFromSelection,
       handlers,
+      setIsSource,
     ],
   );
 
@@ -273,7 +300,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       case "ColumnMapper":
         return showMappingColumn ? (
           <SourceMappingTargetView
-            properties={properties}
+            sourceProperties={sourceProperties}
+            targetProperties={targetProperties}
             constants={constants}
             sources={sources}
             mappings={mappings}
@@ -288,7 +316,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
           />
         ) : (
           <SourceTargetView
-            properties={properties}
+            sourceProperties={sourceProperties}
+            targetProperties={targetProperties}
             constants={constants}
             sources={sources}
             mappings={mappings}
@@ -342,7 +371,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     mappingEvents,
     mappings,
     onFieldPreviewChange,
-    properties,
+    sourceProperties,
+    targetProperties,
     selectMapping,
     selectedMapping,
     shouldShowMappingPreview,

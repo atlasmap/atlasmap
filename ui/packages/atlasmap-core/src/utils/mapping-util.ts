@@ -77,7 +77,7 @@ export class MappingUtil {
       mappedFieldIndex += 1;
 
       if (mappedField.parsedData.fieldIsProperty) {
-        doc = cfg.propertyDoc;
+        doc = isSource ? cfg.sourcePropertyDoc : cfg.targetPropertyDoc;
       } else if (mappedField.parsedData.fieldIsConstant) {
         doc = cfg.constantDoc;
       } else {
@@ -148,9 +148,10 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
           mappedField.parsedData.parsedName &&
           mappedField.parsedData.parsedPath
         ) {
-          let propertyField = cfg.propertyDoc.getField(
-            mappedField.parsedData.parsedName
-          );
+          let propertyField = isSource
+            ? cfg.sourcePropertyDoc.getField(mappedField.parsedData.parsedName)
+            : cfg.targetPropertyDoc.getField(mappedField.parsedData.parsedName);
+
           if (!propertyField) {
             propertyField = new Field();
           }
@@ -161,7 +162,6 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
             lastSeparator === -1
               ? mappedField.parsedData.parsedName
               : mappedField.parsedData.parsedName.substring(lastSeparator + 1);
-          propertyField.value = mappedField.parsedData.parsedValue;
           propertyField.type = mappedField.parsedData.parsedValueType;
           if (mappedField.parsedData.parsedScope) {
             propertyField.scope = mappedField.parsedData.parsedScope;

@@ -9,15 +9,16 @@ type PropertyCallback = (property: IProperty) => void;
 
 export function usePropertyDialog(
   title: string,
+  isSource: boolean,
 ): [ReactElement, (cb: PropertyCallback, property?: IProperty) => void] {
   const [onPropertyCb, setOnPropertyCb] = useState<PropertyCallback | null>(
     null,
   );
   const [initialProperty, setInitialProperty] = useState<IProperty | null>({
-    value: "",
     name: "",
     valueType: propertyTypes[0][0],
     scope: getPropertyScopeOptions()[0].value,
+    isSource: isSource,
   });
   const { state, toggleOn, toggleOff } = useToggle(false);
   const onConfirm = useCallback(
@@ -38,6 +39,7 @@ export function usePropertyDialog(
       }))}
       scopeOptions={getPropertyScopeOptions()}
       isOpen={state}
+      isSource={isSource}
       onCancel={toggleOff}
       onConfirm={onConfirm}
       {...(initialProperty || {})}

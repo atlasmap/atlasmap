@@ -54,8 +54,13 @@ export const sourceTargetView = () =>
             onStartMapping: action("onStartMapping"),
             shouldShowMappingPreviewForField: () => true,
             onFieldPreviewChange: action("onFieldPreviewChange"),
+            isSource: true,
           }}
           targetEvents={{
+            onCreateProperty: action("onCreateProperty"),
+            onEditProperty: action("onEditProperty"),
+            onDeleteProperty: action("onDeleteProperty"),
+            onFieldPreviewChange: action("onFieldPreviewChange"),
             onDeleteDocument: action("onDeleteDocument"),
             onImportDocument: action("onImportDocument"),
             onCustomClassSearch: action("onCustomClassSearch"),
@@ -74,10 +79,12 @@ export const sourceTargetView = () =>
             canStartMapping: () => true,
             onStartMapping: action("onStartMapping"),
             shouldShowMappingPreviewForField: () => true,
+            isSource: false,
           }}
           showTypes={boolean("Show types", false)}
           showMappingPreview={boolean("Show mapping preview", false)}
-          properties={properties}
+          sourceProperties={properties}
+          targetProperties={properties}
           constants={constants}
           sources={sources}
           mappings={mappings}

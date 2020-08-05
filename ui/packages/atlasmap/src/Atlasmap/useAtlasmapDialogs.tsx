@@ -23,9 +23,11 @@ import { enableCustomClass } from "./utils";
 
 export interface IUseAtlasmapDialogsProps {
   modalContainer: HTMLElement;
+  isSource: boolean;
 }
 export function useAtlasmapDialogs({
   modalContainer,
+  isSource,
 }: IUseAtlasmapDialogsProps) {
   const {
     selectedMapping,
@@ -65,23 +67,28 @@ export function useAtlasmapDialogs({
   //#region property dialogs
   const [createPropertyDialog, openCreatePropertyDialog] = usePropertyDialog(
     "Create Property",
+    isSource,
   );
-  const onCreateProperty = useCallback(() => {
-    openCreatePropertyDialog(({ name, value, valueType, scope }) => {
-      createProperty(name, value, valueType, scope);
-    });
-  }, [createProperty, openCreatePropertyDialog]);
+  const onCreateProperty = useCallback(
+    (isSource: boolean) => {
+      openCreatePropertyDialog(({ name, valueType, scope }) => {
+        createProperty(name, valueType, scope, isSource);
+      });
+    },
+    [createProperty, openCreatePropertyDialog],
+  );
 
   const [editPropertyDialog, openEditPropertyDialog] = usePropertyDialog(
     "Edit Property",
+    isSource,
   );
   const onEditProperty = useCallback(
     (property: IProperty) => {
-      openEditPropertyDialog(({ name, value, valueType, scope }) => {
-        editProperty(property.name, value, valueType, scope, name);
+      openEditPropertyDialog(({ name, valueType, scope }) => {
+        editProperty(property.name, valueType, scope, name, isSource);
       }, property);
     },
-    [editProperty, openEditPropertyDialog],
+    [editProperty, openEditPropertyDialog, isSource],
   );
   const [deletePropertyDialog, onDeleteProperty] = useDeletePropertyDialog();
   //#endregion

@@ -659,7 +659,11 @@ ${error.status} ${error.statusText}`,
   private fetchDocuments(): void {
     this.updateLoadingStatus('Loading source/target documents.');
     for (const docDef of this.cfg.getAllDocs()) {
-      if (docDef === this.cfg.propertyDoc || docDef === this.cfg.constantDoc) {
+      if (
+        docDef === this.cfg.sourcePropertyDoc ||
+        docDef === this.cfg.targetPropertyDoc ||
+        docDef === this.cfg.constantDoc
+      ) {
         docDef.initialized = true;
         continue;
       }

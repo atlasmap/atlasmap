@@ -11,12 +11,13 @@ export interface DataActionPayload {
   error?: boolean;
   sources?: IAtlasmapDocument[];
   targets?: IAtlasmapDocument[];
-  properties?: IAtlasmapDocument | null;
   constants?: IAtlasmapDocument | null;
   mappings?: IAtlasmapMapping[];
   selectedMapping?: IAtlasmapMapping | null;
   sourcesFilter?: string;
+  sourceProperties?: IAtlasmapDocument | null;
   targetsFilter?: string;
+  targetProperties?: IAtlasmapDocument | null;
   flatSources?: IAtlasmapField[];
   flatTargets?: IAtlasmapField[];
 }
@@ -26,7 +27,8 @@ export interface IDataState {
   error: boolean;
   sources: IAtlasmapDocument[];
   targets: IAtlasmapDocument[];
-  properties: IAtlasmapDocument | null;
+  sourceProperties: IAtlasmapDocument | null;
+  targetProperties: IAtlasmapDocument | null;
   constants: IAtlasmapDocument | null;
   mappings: IAtlasmapMapping[];
   selectedMapping: IAtlasmapMapping | null;
@@ -38,7 +40,8 @@ export function initDataState(): IDataState {
   return {
     pending: false,
     error: false,
-    properties: null,
+    sourceProperties: null,
+    targetProperties: null,
     constants: null,
     sources: [],
     targets: [],

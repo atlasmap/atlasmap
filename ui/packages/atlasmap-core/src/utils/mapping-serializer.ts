@@ -29,7 +29,7 @@ import {
   NamespaceModel,
 } from '../models/document-definition.model';
 import { LookupTable, LookupTableEntry } from '../models/lookup-table.model';
-import { DocumentType } from '../common/config.types';
+import { DocumentType, DataSourceType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
 import {
   ErrorInfo,
@@ -77,8 +77,11 @@ export class MappingSerializer {
     const constantDescriptions: any[] = MappingSerializer.serializeConstants(
       cfg.constantDoc
     );
-    const propertyDescriptions: any[] = MappingSerializer.serializeProperties(
-      cfg.propertyDoc
+    const sourcePropertyDescriptions: any[] = MappingSerializer.serializeProperties(
+      cfg.sourcePropertyDoc
+    );
+    const targetPropertyDescriptions: any[] = MappingSerializer.serializeProperties(
+      cfg.targetPropertyDoc
     );
     const serializedDataSources: any = MappingSerializer.serializeDocuments(
       cfg.sourceDocs.concat(cfg.targetDocs),
@@ -93,7 +96,11 @@ export class MappingSerializer {
         name: cfg.mappings!.name, // TODO: check this non null operator
         lookupTables: { lookupTable: serializedLookupTables },
         constants: { constant: constantDescriptions },
-        properties: { property: propertyDescriptions },
+        properties: {
+          property: sourcePropertyDescriptions.concat(
+            targetPropertyDescriptions
+          ),
+        },
       },
     };
     return payload;
@@ -214,10 +221,12 @@ export class MappingSerializer {
     for (const field of MappingSerializer.deserializeConstants(json)) {
       cfg.constantDoc.addField(field);
     }
-    for (const field of MappingSerializer.deserializeProperties(json)) {
-      cfg.propertyDoc.addField(field);
+    for (const field of MappingSerializer.deserializeProperties(json, true)) {
+      cfg.sourcePropertyDoc.addField(field);
     }
-
+    for (const field of MappingSerializer.deserializeProperties(json, false)) {
+      cfg.targetPropertyDoc.addField(field);
+    }
     if (!cfg.mappings) {
       cfg.mappings = new MappingDefinition();
     }
@@ -406,14 +415,15 @@ export class MappingSerializer {
   ): any[] {
     const serializedDocs: any[] = [];
     for (const doc of docs) {
-      const docType: string = doc.isSource ? 'SOURCE' : 'TARGET';
       const serializedDoc: any = {
         jsonType: 'io.atlasmap.v2.DataSource',
         id: doc.id,
         name: doc.name,
         description: doc.description,
         uri: doc.uri,
-        dataSourceType: docType,
+        dataSourceType: doc.isSource
+          ? DataSourceType.SOURCE
+          : DataSourceType.TARGET,
       };
       if (doc.characterEncoding != null) {
         serializedDoc['characterEncoding'] = doc.characterEncoding;
@@ -466,9 +476,11 @@ export class MappingSerializer {
     for (const field of docDef.fields) {
       propertyDescriptions.push({
         name: field.name,
-        value: field.value,
         fieldType: field.type,
         scope: field.scope,
+        documentType: docDef.isSource
+          ? DataSourceType.SOURCE
+          : DataSourceType.TARGET,
       });
     }
     return propertyDescriptions;
@@ -826,7 +838,10 @@ export class MappingSerializer {
     return fields;
   }
 
-  private static deserializeProperties(jsonMapping: any): Field[] {
+  private static deserializeProperties(
+    jsonMapping: any,
+    isSource: boolean
+  ): Field[] {
     const fields: Field[] = [];
     if (
       !jsonMapping ||
@@ -836,10 +851,17 @@ export class MappingSerializer {
     ) {
       return fields;
     }
+
+    // Source and target properties are mixed in the 'property' JSON array.
     for (const property of jsonMapping.AtlasMapping.properties.property) {
+      if (
+        (isSource && property.documentType !== DataSourceType.SOURCE) ||
+        (!isSource && property.documentType !== DataSourceType.TARGET)
+      ) {
+        continue;
+      }
       const field: Field = new Field();
       field.name = property.name;
-      field.value = property.value;
       field.type = property.fieldType;
       field.scope = property.scope;
       field.userCreated = true;
@@ -948,7 +970,6 @@ export class MappingSerializer {
     ) {
       mappedField.parsedData.parsedName = field.name;
       mappedField.parsedData.parsedPath = field.name;
-      mappedField.parsedData.parsedValue = field.value;
       if (field.scope) {
         mappedField.parsedData.parsedScope = field.scope;
       }

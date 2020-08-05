@@ -14,6 +14,8 @@ public class Property implements Serializable {
 
     protected String scope;
 
+    protected DataSourceType documentType;
+
     /**
      * Gets the value of the name property.
      * 
@@ -108,6 +110,30 @@ public class Property implements Serializable {
      */
     public void setScope(String scope) {
         this.scope = scope;
+    }
+
+    /**
+     * Gets the value of the documentType property.
+     *
+     * @return
+     *     possible object is
+     *     {@link String }
+     *
+     */
+    public DataSourceType getDocumentType() {
+        return documentType;
+    }
+
+    /**
+     * Sets the value of the documentType property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *
+     */
+    public void setDocumentType(DataSourceType value) {
+        this.documentType = value;
     }
 
 }

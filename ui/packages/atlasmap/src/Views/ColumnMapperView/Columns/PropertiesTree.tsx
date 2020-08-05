@@ -17,10 +17,15 @@ import {
   SOURCES_PROPERTIES_ID,
   SOURCES_WIDTH_BOUNDARY_ID,
   TARGETS_DRAGGABLE_TYPE,
+  TARGETS_FIELD_ID_PREFIX,
+  TARGETS_HEIGHT_BOUNDARY_ID,
+  TARGETS_PROPERTIES_ID,
+  TARGETS_WIDTH_BOUNDARY_ID,
 } from "./constants";
 import { TraverseFields, ITraverseFieldsProps } from "./TraverseFields";
 
 export interface IPropertiesTreeCallbacks {
+  isSource: boolean;
   onDrop: (source: IAtlasmapField, target: IDragAndDropField) => void;
   canDrop: (source: IAtlasmapField, target: IDragAndDropField) => boolean;
   onShowMappingDetails: (mapping: IAtlasmapMapping) => void;
@@ -28,8 +33,8 @@ export interface IPropertiesTreeCallbacks {
   onAddToSelectedMapping: (source: IAtlasmapField) => void;
   canRemoveFromSelectedMapping: (source: IAtlasmapField) => boolean;
   onRemoveFromSelectedMapping: (source: IAtlasmapField) => void;
-  onEditProperty: (name: string) => void;
-  onDeleteProperty: (name: string) => void;
+  onEditProperty: (name: string, isSource: boolean) => void;
+  onDeleteProperty: (name: string, isSource: boolean) => void;
   canStartMapping: (field: IAtlasmapField) => boolean;
   onStartMapping: (field: IAtlasmapField) => void;
 }
@@ -41,6 +46,7 @@ export interface IPropertiesTreeProps extends IPropertiesTreeCallbacks {
 }
 
 export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
+  isSource,
   fields,
   showTypes,
   onDrop,
@@ -60,10 +66,14 @@ export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
     <TraverseFields
       fields={fields}
       showTypes={showTypes}
-      parentId={SOURCES_PROPERTIES_ID}
-      boundaryId={SOURCES_HEIGHT_BOUNDARY_ID}
-      overrideWidth={SOURCES_WIDTH_BOUNDARY_ID}
-      idPrefix={SOURCES_FIELD_ID_PREFIX}
+      parentId={isSource ? SOURCES_PROPERTIES_ID : TARGETS_PROPERTIES_ID}
+      boundaryId={
+        isSource ? SOURCES_HEIGHT_BOUNDARY_ID : TARGETS_HEIGHT_BOUNDARY_ID
+      }
+      overrideWidth={
+        isSource ? SOURCES_WIDTH_BOUNDARY_ID : TARGETS_WIDTH_BOUNDARY_ID
+      }
+      idPrefix={isSource ? SOURCES_FIELD_ID_PREFIX : TARGETS_FIELD_ID_PREFIX}
       acceptDropType={TARGETS_DRAGGABLE_TYPE}
       draggableType={SOURCES_DRAGGABLE_TYPE}
       onDrop={onDrop}
@@ -87,7 +97,7 @@ export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
         >
           <Button
             variant="plain"
-            onClick={() => onEditProperty(field.name)}
+            onClick={() => onEditProperty(field.name, isSource)}
             aria-label={"Edit property"}
             tabIndex={0}
             data-testid={`edit-property-${field.name}-button`}
@@ -103,7 +113,7 @@ export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
         >
           <Button
             variant="plain"
-            onClick={() => onDeleteProperty(field.name)}
+            onClick={() => onDeleteProperty(field.name, isSource)}
             aria-label={"Remove property"}
             tabIndex={0}
             data-testid={`remove-property-${field.name}-button`}

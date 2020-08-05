@@ -20,7 +20,8 @@ export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
     flatSources,
     flatTargets,
     constants,
-    properties,
+    sourceProperties,
+    targetProperties,
     isFieldAddableToSelection,
     addToCurrentMapping,
     notifications,
@@ -107,7 +108,8 @@ export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
 
       const addableSources = [
         constants?.fields,
-        properties?.fields,
+        sourceProperties?.fields,
+        targetProperties?.fields,
         flatSources,
       ]
         .flatMap((fields) => (fields ? (fields as IAtlasmapField[]) : []))
@@ -147,7 +149,8 @@ export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
     selectedMapping,
     fromMappedFieldToIMappingField,
     constants,
-    properties,
+    sourceProperties,
+    targetProperties,
     flatSources,
     flatTargets,
     notifications,

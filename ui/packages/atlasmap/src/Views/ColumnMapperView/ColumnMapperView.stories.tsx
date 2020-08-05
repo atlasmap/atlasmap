@@ -45,9 +45,10 @@ export const sourcesColumn = () => (
         onDrop={action("onDrop")}
         onSearch={action("onSearch")}
         showTypes={boolean("Show types", true)}
-        properties={properties}
+        sourceProperties={properties}
         constants={constants}
         sources={sources}
+        isSource={true}
       />
     </Column>
   </CanvasProvider>
@@ -57,6 +58,10 @@ export const targetsColumn = () => (
   <CanvasProvider>
     <Column data-testid={"column-target-area"} totalColumns={1}>
       <TargetsColumn
+        onCreateProperty={action("onCreateProperty")}
+        onEditProperty={action("onEditProperty")}
+        onDeleteProperty={action("onDeleteProperty")}
+        onFieldPreviewChange={action("onFieldPreviewChange")}
         onDeleteDocument={action("onDeleteDocument")}
         onImportDocument={action("onImportDocument")}
         onSearch={action("onSearch")}
@@ -73,7 +78,9 @@ export const targetsColumn = () => (
         shouldShowMappingPreviewForField={() => true}
         showMappingPreview={boolean("Show mapping preview", false)}
         showTypes={boolean("Show types", true)}
+        targetProperties={properties}
         targets={targets}
+        isSource={false}
       />
     </Column>
   </CanvasProvider>
