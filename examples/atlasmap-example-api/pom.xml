@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>io.atlasmap.examples</groupId>
+    <artifactId>atlasmap-examples</artifactId>
+    <version>2.1.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>atlasmap-example-api</artifactId>
+  <name>AtlasMap runtime API example</name>
+  <description>A small example of running AtlasMap mapping through runtime API directly</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-json-module</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-xml-module</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>io.atlasmap.examples.api.Main</mainClass>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

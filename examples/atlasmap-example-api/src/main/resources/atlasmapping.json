@@ -1,0 +1,218 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "JSONSchemaSource",
+      "uri" : "atlas:json:JSONSchemaSource",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.xml.v2.XmlDataSource",
+      "id" : "XMLInstanceSource",
+      "uri" : "atlas:xml:XMLInstanceSource",
+      "dataSourceType" : "TARGET",
+      "xmlNamespaces" : {
+        "xmlNamespace" : [ {
+          "alias" : "xsi",
+          "uri" : "http://www.w3.org/2001/XMLSchema-instance"
+        }, {
+          "alias" : "ns",
+          "uri" : "http://atlasmap.io/xml/test/v2"
+        } ]
+      }
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONSchemaSource",
+          "path" : "/order/address/street",
+          "fieldType" : "STRING",
+          "name" : "street",
+          "userCreated" : false
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "XMLInstanceSource",
+          "path" : "/ns:XmlOE/ns:Address/ns:addressLine1",
+          "fieldType" : "STRING",
+          "name" : "addressLine1",
+          "userCreated" : false
+        } ],
+        "id" : "mapping.817247"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONSchemaSource",
+          "path" : "/order/address/city",
+          "fieldType" : "STRING",
+          "name" : "city",
+          "userCreated" : false
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "XMLInstanceSource",
+          "path" : "/ns:XmlOE/ns:Address/ns:city",
+          "fieldType" : "STRING",
+          "name" : "city",
+          "userCreated" : false
+        } ],
+        "id" : "mapping.561314"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONSchemaSource",
+          "path" : "/order/address/state",
+          "fieldType" : "STRING",
+          "name" : "state",
+          "userCreated" : false
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "XMLInstanceSource",
+          "path" : "/ns:XmlOE/ns:Address/ns:state",
+          "fieldType" : "STRING",
+          "name" : "state",
+          "userCreated" : false
+        } ],
+        "id" : "mapping.859025"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONSchemaSource",
+          "path" : "/order/address/zip",
+          "fieldType" : "STRING",
+          "name" : "zip",
+          "userCreated" : false
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "XMLInstanceSource",
+          "path" : "/ns:XmlOE/ns:Address/ns:zipCode",
+          "fieldType" : "STRING",
+          "name" : "zipCode",
+          "userCreated" : false
+        } ],
+        "id" : "mapping.923056"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONSchemaSource",
+          "path" : "/order/contact/firstName",
+          "fieldType" : "STRING",
+          "name" : "firstName",
+          "userCreated" : false
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "XMLInstanceSource",
+          "path" : "/ns:XmlOE/ns:Contact/ns:firstName",
+          "fieldType" : "STRING",
+          "name" : "firstName",
+          "userCreated" : false
+        } ],
+        "id" : "mapping.372159"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONSchemaSource",
+          "path" : "/order/contact/lastName",
+          "fieldType" : "STRING",
+          "name" : "lastName",
+          "userCreated" : false
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "XMLInstanceSource",
+          "path" : "/ns:XmlOE/ns:Contact/ns:lastName",
+          "fieldType" : "STRING",
+          "name" : "lastName",
+          "userCreated" : false
+        } ],
+        "id" : "mapping.966519"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONSchemaSource",
+          "path" : "/order/contact/phone",
+          "fieldType" : "STRING",
+          "name" : "phone",
+          "userCreated" : false
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "XMLInstanceSource",
+          "path" : "/ns:XmlOE/ns:Contact/ns:phoneNumber",
+          "fieldType" : "STRING",
+          "name" : "phoneNumber",
+          "userCreated" : false
+        } ],
+        "id" : "mapping.981842"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONSchemaSource",
+          "path" : "/order/address/zip",
+          "fieldType" : "STRING",
+          "name" : "zip",
+          "userCreated" : false
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "XMLInstanceSource",
+          "path" : "/ns:XmlOE/ns:Contact/ns:zipCode",
+          "fieldType" : "STRING",
+          "name" : "zipCode",
+          "userCreated" : false
+        } ],
+        "id" : "mapping.46569"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONSchemaSource",
+          "path" : "/order/orderId",
+          "fieldType" : "STRING",
+          "name" : "orderId",
+          "userCreated" : false
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "XMLInstanceSource",
+          "path" : "/ns:XmlOE/ns:orderId",
+          "fieldType" : "STRING",
+          "name" : "orderId",
+          "userCreated" : false
+        } ],
+        "id" : "mapping.162470"
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "constants" : {
+      "constant" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "UI.454150"
+  }
+}
