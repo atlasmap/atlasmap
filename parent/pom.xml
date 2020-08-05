@@ -40,7 +40,7 @@
     <bcel-bundle-version>5.2_4</bcel-bundle-version>
     <build-helper-maven-plugin.version>3.2.0</build-helper-maven-plugin.version>
     <camel.version>2.23.4</camel.version>
-    <camel3.version>3.1.0</camel3.version>
+    <camel3.version>3.3.0</camel3.version>
     <daffodil.version>2.7.0</daffodil.version>
     <fabric8-maven-plugin.version>4.4.1</fabric8-maven-plugin.version>
     <jackson.version>2.11.1</jackson.version>
