@@ -49,8 +49,8 @@ public class MappingFieldPairValidator {
     public void validateFieldTypes(List&lt;Validation&gt; validations, String mappingId, FieldGroup sourceFieldGroup, Field targetField) {
 <span class="fc" id="L50">        FieldType actionOutputType = getActionOutputFieldType(validations, mappingId, sourceFieldGroup);</span>
 <span class="fc bfc" id="L51" title="All 2 branches covered.">        for (Field sourceField : sourceFieldGroup.getField()) {</span>
-<span class="pc bpc" id="L52" title="1 of 2 branches missed.">            if (!service.matchDocIdOrNull(sourceField.getDocId())) {</span>
-<span class="nc" id="L53">                return;</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">            if (!service.matchDocIdOrNull(sourceField.getDocId())) {</span>
+<span class="fc" id="L53">                return;</span>
             }
 <span class="fc bfc" id="L55" title="All 2 branches covered.">            doValidateFieldTypes(validations, mappingId, sourceField, targetField,</span>
 <span class="fc" id="L56">                    actionOutputType != null ? actionOutputType : sourceField.getFieldType());</span>
@@ -69,8 +69,8 @@ public class MappingFieldPairValidator {
 <span class="nc" id="L69">    }</span>
 
     public void validateFieldTypes(List&lt;Validation&gt; validations, String mappingId, Field sourceField, List&lt;Field&gt; targetFields) {
-<span class="pc bpc" id="L72" title="1 of 2 branches missed.">        if (!service.matchDocIdOrNull(sourceField.getDocId())) {</span>
-<span class="nc" id="L73">            return;</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        if (!service.matchDocIdOrNull(sourceField.getDocId())) {</span>
+<span class="fc" id="L73">            return;</span>
         }
 <span class="fc" id="L75">        FieldType actionOutputType = getActionOutputFieldType(validations, mappingId, sourceField);</span>
 <span class="fc bfc" id="L76" title="All 2 branches covered.">        for (Field targetField : targetFields) {</span>
