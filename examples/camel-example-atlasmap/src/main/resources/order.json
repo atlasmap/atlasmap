@@ -1,0 +1,16 @@
+{
+  "order": {
+    "address": {
+      "city": "Westford",
+      "state": "Massachusetts",
+      "street": "1040 Notexisting St",
+      "zip": "01886"
+    },
+    "contact": {
+      "firstName": "Bob",
+      "lastName": "Totton",
+      "phone": "123-456-7890"
+    },
+    "orderId": "O001"
+  }
+}

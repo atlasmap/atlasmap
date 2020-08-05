@@ -32,6 +32,7 @@
   <description>AtlasMap Examples</description>
 
   <modules>
+    <module>camel-example-atlasmap</module>
     <module>camel-example-atlasmap-blueprint</module>
     <module>atlasmap-example-api</module>
   </modules>
