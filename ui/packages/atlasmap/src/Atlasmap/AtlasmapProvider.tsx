@@ -93,6 +93,7 @@ export interface IExternalDocumentProps {
   documentType: DocumentType;
   inspectionType: InspectionType;
   inspectionSource: string;
+  inspectionParameters: { [key: string]: string };
   inspectionResult: string;
   showFields: boolean;
 }
@@ -174,6 +175,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
           inputDoc.type = d.documentType;
           inputDoc.inspectionType = d.inspectionType;
           inputDoc.inspectionSource = d.inspectionSource;
+          inputDoc.inspectionParameters = d.inspectionParameters;
           inputDoc.inspectionResult = d.inspectionResult;
           inputDoc.id = d.id;
           inputDoc.name = d.name;
@@ -189,6 +191,8 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
           externalDocument.outputDocument.inspectionType;
         outputDoc.inspectionSource =
           externalDocument.outputDocument.inspectionSource;
+        outputDoc.inspectionParameters =
+          externalDocument.outputDocument.inspectionParameters;
         outputDoc.inspectionResult =
           externalDocument.outputDocument.inspectionResult;
         outputDoc.id = externalDocument.outputDocument.id;
