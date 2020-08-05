@@ -432,7 +432,8 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
         metaFragment.name,
         metaFragment.documentType,
         metaFragment.inspectionType,
-        metaFragment.isSource === 'true'
+        metaFragment.isSource === 'true',
+        metaFragment.inspectionParameters
       );
       fragIndex++;
     }
