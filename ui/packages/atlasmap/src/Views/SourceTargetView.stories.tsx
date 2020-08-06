@@ -32,7 +32,7 @@ export const sourceTargetView = () =>
             onCreateConstant: action("onCreateConstant"),
             onEditConstant: action("onEditConstant"),
             onDeleteConstant: action("onDeleteConstant"),
-            onCreateProperty: action("onCreateProperty"),
+            onCreateSourceProperty: action("onCreateProperty"),
             onEditProperty: action("onEditProperty"),
             onDeleteProperty: action("onDeleteProperty"),
             onDeleteDocument: action("onDeleteDocument"),
@@ -57,7 +57,7 @@ export const sourceTargetView = () =>
             isSource: true,
           }}
           targetEvents={{
-            onCreateProperty: action("onCreateProperty"),
+            onCreateTargetProperty: action("onCreateProperty"),
             onEditProperty: action("onEditProperty"),
             onDeleteProperty: action("onDeleteProperty"),
             onFieldPreviewChange: action("onFieldPreviewChange"),

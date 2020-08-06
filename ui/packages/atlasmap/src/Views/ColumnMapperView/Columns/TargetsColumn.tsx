@@ -39,7 +39,7 @@ import { IPropertiesTreeCallbacks, PropertiesTree } from "./PropertiesTree";
 
 export interface ITargetsColumnCallbacks extends IPropertiesTreeCallbacks {
   isSource: boolean;
-  onCreateProperty: (isSource: boolean) => void;
+  onCreateTargetProperty: () => void;
   onDeleteDocument?: (id: GroupId) => void;
   onImportDocument?: (selectedFile: File) => void;
   onCustomClassSearch?: (isSource: boolean) => void;
@@ -72,7 +72,7 @@ export const TargetsColumn: FunctionComponent<
   onImportDocument,
   onDeleteDocument,
   onCustomClassSearch,
-  onCreateProperty,
+  onCreateTargetProperty,
   onEditProperty,
   onDeleteProperty,
   onDrop,
@@ -90,7 +90,6 @@ export const TargetsColumn: FunctionComponent<
   showTypes,
   targetProperties,
 }) => {
-  isSource = false;
   const renderPreview = useCallback(
     (field: IAtlasmapField) =>
       shouldShowMappingPreviewForField(field) && (
@@ -146,7 +145,7 @@ export const TargetsColumn: FunctionComponent<
                     >
                       <Button
                         onClick={() => {
-                          onCreateProperty(isSource);
+                          onCreateTargetProperty();
                         }}
                         variant={"plain"}
                         aria-label="Create a target property for use in mapping"
@@ -160,7 +159,7 @@ export const TargetsColumn: FunctionComponent<
                 >
                   {targetProperties ? (
                     <PropertiesTree
-                      isSource={false}
+                      isSource={isSource}
                       onEditProperty={onEditProperty}
                       onDeleteProperty={onDeleteProperty}
                       canDrop={canDrop}

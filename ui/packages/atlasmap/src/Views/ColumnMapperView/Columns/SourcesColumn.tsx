@@ -44,7 +44,7 @@ export interface ISourceColumnCallbacks
     IPropertiesTreeCallbacks {
   isSource: boolean;
   onCreateConstant: () => void;
-  onCreateProperty: (isSource: boolean) => void;
+  onCreateSourceProperty: () => void;
   onCustomClassSearch?: (isSource: boolean) => void;
   onImportDocument?: (selectedFile: File) => void;
   onDeleteDocument?: (id: GroupId) => void;
@@ -76,7 +76,7 @@ export const SourcesColumn: FunctionComponent<
   onCreateConstant,
   onEditConstant,
   onDeleteConstant,
-  onCreateProperty,
+  onCreateSourceProperty,
   onCustomClassSearch,
   onEditProperty,
   onDeleteProperty,
@@ -99,7 +99,6 @@ export const SourcesColumn: FunctionComponent<
   sources,
   showTypes,
 }) => {
-  isSource = true;
   const renderPreview = useCallback(
     (field: IAtlasmapField) =>
       shouldShowMappingPreviewForField(field) && (
@@ -156,7 +155,7 @@ export const SourcesColumn: FunctionComponent<
                     >
                       <Button
                         onClick={() => {
-                          onCreateProperty(isSource);
+                          onCreateSourceProperty();
                         }}
                         variant={"plain"}
                         aria-label="Create a source property for use in mapping"

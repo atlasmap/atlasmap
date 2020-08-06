@@ -26,7 +26,6 @@ export const sourcePropertyDialog = () => (
     onCancel={action("onCancel")}
     onConfirm={action("onConfirm")}
     name={text("Initial name", "")}
-    isSource={true}
     valueType={select(
       "Initial valueType",
       valueTypeOptions,
@@ -45,7 +44,6 @@ export const targetPropertyDialog = () => (
     onCancel={action("onCancel")}
     onConfirm={action("onConfirm")}
     name={text("Initial name", "")}
-    isSource={false}
     valueType={select(
       "Initial valueType",
       valueTypeOptions,

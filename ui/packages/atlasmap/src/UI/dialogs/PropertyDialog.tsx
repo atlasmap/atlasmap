@@ -27,7 +27,6 @@ export interface IProperty {
   name: string;
   valueType: string;
   scope: string;
-  isSource: boolean;
 }
 
 export interface IPropertyDialogProps {
@@ -37,7 +36,6 @@ export interface IPropertyDialogProps {
   valueTypeOptions: ValueLabelOption[];
   scope?: string;
   scopeOptions: ValueLabelOption[];
-  isSource: boolean;
   isOpen: IConfirmationDialogProps["isOpen"];
   onCancel: IConfirmationDialogProps["onCancel"];
   onConfirm: (property: IProperty) => void;
@@ -49,7 +47,6 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
   valueTypeOptions,
   scope: initialScope = "",
   scopeOptions,
-  isSource,
   isOpen,
   onCancel,
   onConfirm,
@@ -65,9 +62,9 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
   }, [initialName, initialValueType, initialScope]);
 
   const handleOnConfirm = useCallback(() => {
-    onConfirm({ name, valueType, scope, isSource });
+    onConfirm({ name, valueType, scope });
     reset();
-  }, [name, onConfirm, reset, valueType, scope, isSource]);
+  }, [name, onConfirm, reset, valueType, scope]);
 
   const handleOnCancel = useCallback(() => {
     onCancel();

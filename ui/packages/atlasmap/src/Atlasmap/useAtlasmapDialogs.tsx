@@ -23,11 +23,9 @@ import { enableCustomClass } from "./utils";
 
 export interface IUseAtlasmapDialogsProps {
   modalContainer: HTMLElement;
-  isSource: boolean;
 }
 export function useAtlasmapDialogs({
   modalContainer,
-  isSource,
 }: IUseAtlasmapDialogsProps) {
   const {
     selectedMapping,
@@ -67,7 +65,6 @@ export function useAtlasmapDialogs({
   //#region property dialogs
   const [createPropertyDialog, openCreatePropertyDialog] = usePropertyDialog(
     "Create Property",
-    isSource,
   );
   const onCreateProperty = useCallback(
     (isSource: boolean) => {
@@ -77,19 +74,18 @@ export function useAtlasmapDialogs({
     },
     [createProperty, openCreatePropertyDialog],
   );
-
   const [editPropertyDialog, openEditPropertyDialog] = usePropertyDialog(
     "Edit Property",
-    isSource,
   );
   const onEditProperty = useCallback(
-    (property: IProperty) => {
+    (property: IProperty, isSource: boolean) => {
       openEditPropertyDialog(({ name, valueType, scope }) => {
         editProperty(property.name, valueType, scope, name, isSource);
       }, property);
     },
-    [editProperty, openEditPropertyDialog, isSource],
+    [editProperty, openEditPropertyDialog],
   );
+
   const [deletePropertyDialog, onDeleteProperty] = useDeletePropertyDialog();
   //#endregion
 
