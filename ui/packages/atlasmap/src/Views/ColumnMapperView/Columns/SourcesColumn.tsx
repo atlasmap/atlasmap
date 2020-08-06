@@ -154,9 +154,7 @@ export const SourcesColumn: FunctionComponent<
                       key={"create-property"}
                     >
                       <Button
-                        onClick={() => {
-                          onCreateSourceProperty();
-                        }}
+                        onClick={onCreateSourceProperty}
                         variant={"plain"}
                         aria-label="Create a source property for use in mapping"
                         data-testid="create-source-property-button"

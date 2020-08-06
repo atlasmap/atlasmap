@@ -144,9 +144,7 @@ export const TargetsColumn: FunctionComponent<
                       key={"create-target-property"}
                     >
                       <Button
-                        onClick={() => {
-                          onCreateTargetProperty();
-                        }}
+                        onClick={onCreateTargetProperty}
                         variant={"plain"}
                         aria-label="Create a target property for use in mapping"
                         data-testid="create-target-property-button"
