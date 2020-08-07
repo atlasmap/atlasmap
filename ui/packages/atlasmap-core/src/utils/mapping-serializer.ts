@@ -478,7 +478,7 @@ export class MappingSerializer {
         name: field.name,
         fieldType: field.type,
         scope: field.scope,
-        documentType: docDef.isSource
+        dataSourceType: docDef.isSource
           ? DataSourceType.SOURCE
           : DataSourceType.TARGET,
       });
@@ -855,8 +855,8 @@ export class MappingSerializer {
     // Source and target properties are mixed in the 'property' JSON array.
     for (const property of jsonMapping.AtlasMapping.properties.property) {
       if (
-        (isSource && property.documentType !== DataSourceType.SOURCE) ||
-        (!isSource && property.documentType !== DataSourceType.TARGET)
+        (isSource && property.dataSourceType !== DataSourceType.SOURCE) ||
+        (!isSource && property.dataSourceType !== DataSourceType.TARGET)
       ) {
         continue;
       }

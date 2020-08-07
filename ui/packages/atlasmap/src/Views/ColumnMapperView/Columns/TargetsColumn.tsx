@@ -39,7 +39,7 @@ import { IPropertiesTreeCallbacks, PropertiesTree } from "./PropertiesTree";
 
 export interface ITargetsColumnCallbacks extends IPropertiesTreeCallbacks {
   isSource: boolean;
-  onCreateTargetProperty: () => void;
+  onCreateProperty: (isSource: boolean) => void;
   onDeleteDocument?: (id: GroupId) => void;
   onImportDocument?: (selectedFile: File) => void;
   onCustomClassSearch?: (isSource: boolean) => void;
@@ -72,7 +72,7 @@ export const TargetsColumn: FunctionComponent<
   onImportDocument,
   onDeleteDocument,
   onCustomClassSearch,
-  onCreateTargetProperty,
+  onCreateProperty,
   onEditProperty,
   onDeleteProperty,
   onDrop,
@@ -144,7 +144,7 @@ export const TargetsColumn: FunctionComponent<
                       key={"create-target-property"}
                     >
                       <Button
-                        onClick={onCreateTargetProperty}
+                        onClick={() => onCreateProperty(isSource)}
                         variant={"plain"}
                         aria-label="Create a target property for use in mapping"
                         data-testid="create-target-property-button"

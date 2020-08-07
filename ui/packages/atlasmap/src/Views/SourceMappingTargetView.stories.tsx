@@ -32,7 +32,7 @@ export const sourceMappingTargetView = () =>
             onCreateConstant: action("onCreateConstant"),
             onEditConstant: action("onEditConstant"),
             onDeleteConstant: action("onDeleteConstant"),
-            onCreateSourceProperty: action("onCreateProperty"),
+            onCreateProperty: action("onCreateProperty"),
             onEditProperty: action("onEditProperty"),
             onDeleteProperty: action("onDeleteProperty"),
             onDeleteDocument: action("onDeleteDocument"),
@@ -57,7 +57,7 @@ export const sourceMappingTargetView = () =>
             isSource: true,
           }}
           targetEvents={{
-            onCreateTargetProperty: action("onCreateProperty"),
+            onCreateProperty: action("onCreateProperty"),
             onEditProperty: action("onEditProperty"),
             onDeleteProperty: action("onDeleteProperty"),
             onFieldPreviewChange: action("onFieldPreviewChange"),

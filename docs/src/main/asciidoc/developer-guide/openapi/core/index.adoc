@@ -2794,7 +2794,7 @@ endif::internal-generation[]
 | 
 |  
 
-| documentType 
+| dataSourceType 
 |  
 | String  
 | 

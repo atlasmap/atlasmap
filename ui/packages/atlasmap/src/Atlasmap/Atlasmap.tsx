@@ -160,8 +160,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         handlers.onEditConstant({ value, valueType });
       },
       onDeleteConstant: handlers.onDeleteConstant,
-      onCreateSourceProperty: () => {
-        handlers.onCreateProperty(true);
+      onCreateProperty: (isSource: boolean) => {
+        handlers.onCreateProperty(isSource);
       },
       onEditProperty: (property, isSource) => {
         const [leftPart] = property.split(" ");
@@ -221,8 +221,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       canRemoveFromSelectedMapping: (f) =>
         isFieldRemovableFromSelection("target", f),
       onRemoveFromSelectedMapping: onRemoveFromMapping,
-      onCreateTargetProperty: () => {
-        handlers.onCreateProperty(false);
+      onCreateProperty: (isSource: boolean) => {
+        handlers.onCreateProperty(isSource);
       },
       onEditProperty: (property, isSource) => {
         const [leftPart] = property.split(" ");

@@ -44,7 +44,7 @@ export interface ISourceColumnCallbacks
     IPropertiesTreeCallbacks {
   isSource: boolean;
   onCreateConstant: () => void;
-  onCreateSourceProperty: () => void;
+  onCreateProperty: (isSource: boolean) => void;
   onCustomClassSearch?: (isSource: boolean) => void;
   onImportDocument?: (selectedFile: File) => void;
   onDeleteDocument?: (id: GroupId) => void;
@@ -76,7 +76,7 @@ export const SourcesColumn: FunctionComponent<
   onCreateConstant,
   onEditConstant,
   onDeleteConstant,
-  onCreateSourceProperty,
+  onCreateProperty,
   onCustomClassSearch,
   onEditProperty,
   onDeleteProperty,
@@ -154,7 +154,7 @@ export const SourcesColumn: FunctionComponent<
                       key={"create-property"}
                     >
                       <Button
-                        onClick={onCreateSourceProperty}
+                        onClick={() => onCreateProperty(isSource)}
                         variant={"plain"}
                         aria-label="Create a source property for use in mapping"
                         data-testid="create-source-property-button"

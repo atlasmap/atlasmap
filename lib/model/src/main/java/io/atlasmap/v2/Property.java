@@ -14,7 +14,7 @@ public class Property implements Serializable {
 
     protected String scope;
 
-    protected DataSourceType documentType;
+    protected DataSourceType dataSourceType;
 
     /**
      * Gets the value of the name property.
@@ -113,27 +113,27 @@ public class Property implements Serializable {
     }
 
     /**
-     * Gets the value of the documentType property.
+     * Gets the value of the dataSourceType property.
      *
      * @return
      *     possible object is
      *     {@link String }
      *
      */
-    public DataSourceType getDocumentType() {
-        return documentType;
+    public DataSourceType getDataSourceType() {
+        return dataSourceType;
     }
 
     /**
-     * Sets the value of the documentType property.
+     * Sets the value of the dataSourceType property.
      *
      * @param value
      *     allowed object is
      *     {@link String }
      *
      */
-    public void setDocumentType(DataSourceType value) {
-        this.documentType = value;
+    public void setDataSourceType(DataSourceType value) {
+        this.dataSourceType = value;
     }
 
 }
