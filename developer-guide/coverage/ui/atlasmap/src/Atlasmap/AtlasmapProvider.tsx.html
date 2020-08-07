@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/170</span>
+                <span class='fraction'>0/172</span>
             </div>
         
             
@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/161</span>
+                <span class='fraction'>0/163</span>
             </div>
         
             
@@ -641,7 +641,11 @@
 <a name='L583'></a><a href='#L583'>583</a>
 <a name='L584'></a><a href='#L584'>584</a>
 <a name='L585'></a><a href='#L585'>585</a>
-<a name='L586'></a><a href='#L586'>586</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L586'></a><a href='#L586'>586</a>
+<a name='L587'></a><a href='#L587'>587</a>
+<a name='L588'></a><a href='#L588'>588</a>
+<a name='L589'></a><a href='#L589'>589</a>
+<a name='L590'></a><a href='#L590'>590</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -744,7 +748,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -760,7 +766,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -824,10 +829,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1321,6 +1329,7 @@ export interface IExternalDocumentProps {
   documentType: DocumentType;
   inspectionType: InspectionType;
   inspectionSource: string;
+  inspectionParameters: { [key: string]: string };
   inspectionResult: string;
   showFields: boolean;
 }
@@ -1402,6 +1411,7 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
 <span class="cstat-no" title="statement not covered" >          inputDoc.type = d.documentType;</span>
 <span class="cstat-no" title="statement not covered" >          inputDoc.inspectionType = d.inspectionType;</span>
 <span class="cstat-no" title="statement not covered" >          inputDoc.inspectionSource = d.inspectionSource;</span>
+<span class="cstat-no" title="statement not covered" >          inputDoc.inspectionParameters = d.inspectionParameters;</span>
 <span class="cstat-no" title="statement not covered" >          inputDoc.inspectionResult = d.inspectionResult;</span>
 <span class="cstat-no" title="statement not covered" >          inputDoc.id = d.id;</span>
 <span class="cstat-no" title="statement not covered" >          inputDoc.name = d.name;</span>
@@ -1417,6 +1427,8 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
           externalDocument.outputDocument.inspectionType;
 <span class="cstat-no" title="statement not covered" >        outputDoc.inspectionSource =</span>
           externalDocument.outputDocument.inspectionSource;
+<span class="cstat-no" title="statement not covered" >        outputDoc.inspectionParameters =</span>
+          externalDocument.outputDocument.inspectionParameters;
 <span class="cstat-no" title="statement not covered" >        outputDoc.inspectionResult =</span>
           externalDocument.outputDocument.inspectionResult;
 <span class="cstat-no" title="statement not covered" >        outputDoc.id = externalDocument.outputDocument.id;</span>
@@ -1818,7 +1830,7 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Aug 07 2020 12:49:02 GMT+0000 (Coordinated Universal Time)
+                at Fri Aug 07 2020 14:23:07 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
