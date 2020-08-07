@@ -116,11 +116,13 @@ export class DocumentManagementService {
    * @param docDef
    */
   static generateExportMetaStr(docDef: DocumentDefinition): string {
+    const inspectionParameters = JSON.stringify(docDef.inspectionParameters);
     const metaStr = `
        {
           "name": "${docDef.name}",
           "documentType": "${docDef.type}",
           "inspectionType": "${docDef.inspectionType}",
+          "inspectionParameters": ${inspectionParameters},
           "isSource": "${docDef.isSource}"
        }`;
     return metaStr;
