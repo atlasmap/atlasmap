@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useCallback } from "react";
 
 import {
   ColumnBody,
@@ -9,6 +9,7 @@ import {
   SearchableColumnHeader,
   Tree,
   DocumentFieldPreviewResults,
+  DocumentFieldPreview,
 } from "../../../UI";
 import {
   IAtlasmapDocument,
@@ -28,11 +29,17 @@ import {
   TARGETS_DRAGGABLE_TYPE,
   TARGETS_FIELD_ID_PREFIX,
   TARGETS_HEIGHT_BOUNDARY_ID,
+  TARGETS_PROPERTIES_ID,
   TARGETS_WIDTH_BOUNDARY_ID,
 } from "./constants";
 import { TraverseFields } from "./TraverseFields";
+import { Tooltip, Button } from "@patternfly/react-core";
+import { PlusIcon } from "@patternfly/react-icons";
+import { IPropertiesTreeCallbacks, PropertiesTree } from "./PropertiesTree";
 
-export interface ITargetsColumnCallbacks {
+export interface ITargetsColumnCallbacks extends IPropertiesTreeCallbacks {
+  isSource: boolean;
+  onCreateProperty: (isSource: boolean) => void;
   onDeleteDocument?: (id: GroupId) => void;
   onImportDocument?: (selectedFile: File) => void;
   onCustomClassSearch?: (isSource: boolean) => void;
@@ -47,9 +54,11 @@ export interface ITargetsColumnCallbacks {
   canStartMapping: (field: IAtlasmapField) => boolean;
   onStartMapping: (field: IAtlasmapField) => void;
   shouldShowMappingPreviewForField: (field: IAtlasmapField) => boolean;
+  onFieldPreviewChange: (field: IAtlasmapField, value: string) => void;
 }
 
 export interface ITargetsColumnData {
+  targetProperties?: IAtlasmapDocument | null;
   showMappingPreview: boolean;
   showTypes: boolean;
   targets: Array<IAtlasmapDocument>;
@@ -58,10 +67,14 @@ export interface ITargetsColumnData {
 export const TargetsColumn: FunctionComponent<
   ITargetsColumnData & ITargetsColumnCallbacks
 > = ({
+  isSource,
   onSearch,
   onImportDocument,
   onDeleteDocument,
   onCustomClassSearch,
+  onCreateProperty,
+  onEditProperty,
+  onDeleteProperty,
   onDrop,
   canDrop,
   onShowMappingDetails,
@@ -71,10 +84,23 @@ export const TargetsColumn: FunctionComponent<
   onRemoveFromSelectedMapping,
   canStartMapping,
   onStartMapping,
+  onFieldPreviewChange,
   shouldShowMappingPreviewForField,
   targets,
   showTypes,
+  targetProperties,
 }) => {
+  const renderPreview = useCallback(
+    (field: IAtlasmapField) =>
+      shouldShowMappingPreviewForField(field) && (
+        <DocumentFieldPreview
+          id={field.id}
+          value={field.previewValue}
+          onChange={(value) => onFieldPreviewChange(field, value)}
+        />
+      ),
+    [onFieldPreviewChange, shouldShowMappingPreviewForField],
+  );
   return (
     <>
       <SearchableColumnHeader
@@ -101,6 +127,59 @@ export const TargetsColumn: FunctionComponent<
         <ColumnBody>
           <NodeRef id={TARGETS_WIDTH_BOUNDARY_ID}>
             <div>
+              <NodeRef
+                id={TARGETS_PROPERTIES_ID}
+                boundaryId={TARGETS_HEIGHT_BOUNDARY_ID}
+                overrideWidth={TARGETS_WIDTH_BOUNDARY_ID}
+              >
+                <Document
+                  title={"Properties"}
+                  actions={[
+                    <Tooltip
+                      position={"top"}
+                      enableFlip={true}
+                      content={
+                        <div>Create a target property for use in mapping</div>
+                      }
+                      key={"create-target-property"}
+                    >
+                      <Button
+                        onClick={() => onCreateProperty(isSource)}
+                        variant={"plain"}
+                        aria-label="Create a target property for use in mapping"
+                        data-testid="create-target-property-button"
+                      >
+                        <PlusIcon />
+                      </Button>
+                    </Tooltip>,
+                  ]}
+                  noPadding={!!targetProperties}
+                >
+                  {targetProperties ? (
+                    <PropertiesTree
+                      isSource={isSource}
+                      onEditProperty={onEditProperty}
+                      onDeleteProperty={onDeleteProperty}
+                      canDrop={canDrop}
+                      onDrop={onDrop}
+                      onShowMappingDetails={onShowMappingDetails}
+                      canAddToSelectedMapping={canAddToSelectedMapping}
+                      onAddToSelectedMapping={onAddToSelectedMapping}
+                      canRemoveFromSelectedMapping={
+                        canRemoveFromSelectedMapping
+                      }
+                      onRemoveFromSelectedMapping={onRemoveFromSelectedMapping}
+                      canStartMapping={canStartMapping}
+                      onStartMapping={onStartMapping}
+                      fields={targetProperties.fields}
+                      showTypes={showTypes}
+                      renderPreview={renderPreview}
+                    />
+                  ) : (
+                    "No target properties"
+                  )}
+                </Document>
+              </NodeRef>
               {targets.map((t) => {
                 const documentId = `${TARGETS_DOCUMENT_ID_PREFIX}${t.id}`;
                 return (

@@ -14,6 +14,7 @@ export const MAPPINGS_FIELD_ID_PREFIX = "mappings-field-";
 
 export const TARGETS_DRAGGABLE_TYPE = "target";
 export const TARGETS_HEIGHT_BOUNDARY_ID = "targets-height";
+export const TARGETS_PROPERTIES_ID = "targets-properties";
 export const TARGETS_WIDTH_BOUNDARY_ID = "targets-width";
 export const TARGETS_DOCUMENT_ID_PREFIX = "targets-document-";
 export const TARGETS_FIELD_ID_PREFIX = "targets-field-";

@@ -120,7 +120,7 @@ export class DocumentManagementService {
     const metaStr = `
        {
           "name": "${docDef.name}",
-          "documentType": "${docDef.type}",
+          "dataSourceType": "${docDef.type}",
           "inspectionType": "${docDef.inspectionType}",
           "inspectionParameters": ${inspectionParameters},
           "isSource": "${docDef.isSource}"

@@ -14,7 +14,6 @@ export function usePropertyDialog(
     null,
   );
   const [initialProperty, setInitialProperty] = useState<IProperty | null>({
-    value: "",
     name: "",
     valueType: propertyTypes[0][0],
     scope: getPropertyScopeOptions()[0].value,

@@ -113,6 +113,9 @@ export function fromNamespaceModelToINamespace(namespace: NamespaceModel) {
 export function fromDocumentDefinitionToFieldGroup(
   def: DocumentDefinition,
 ): IAtlasmapDocument | null {
+  if (!def) {
+    return null;
+  }
   const fields = def.fields
     .map(fromFieldToIFields)
     .filter((f) => f) as IAtlasmapField[];

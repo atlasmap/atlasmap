@@ -24,12 +24,7 @@ import { useAtlasmap } from "./AtlasmapProvider";
 import { useAtlasmapDialogs } from "./useAtlasmapDialogs";
 import { IUseContextToolbarData, useContextToolbar } from "./useContextToolbar";
 import { useSidebar } from "./useSidebar";
-import {
-  getPropertyValue,
-  getPropertyType,
-  getPropertyScope,
-  getConstantType,
-} from "./utils";
+import { getPropertyType, getPropertyScope, getConstantType } from "./utils";
 
 export interface IAtlasmapProps {
   allowImport?: boolean;
@@ -55,7 +50,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     // error,
     notifications,
     markNotificationRead,
-    properties,
+    sourceProperties,
+    targetProperties,
     constants,
     sources,
     targets,
@@ -89,7 +85,6 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   const { handlers, dialogs } = useAtlasmapDialogs({
     modalContainer: document.getElementById(modalsContainerId)!,
   });
-
   const {
     activeView,
     showMappingColumn,
@@ -148,6 +143,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
 
   const sourceEvents = useMemo<ISourceColumnCallbacks>(
     () => ({
+      isSource: true,
       canDrop: () => true,
       onDrop: (s, t) => onCreateMapping(s, t.payload as IAtlasmapField),
       onShowMappingDetails: selectMapping,
@@ -164,19 +160,22 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         handlers.onEditConstant({ value, valueType });
       },
       onDeleteConstant: handlers.onDeleteConstant,
-      onCreateProperty: handlers.onCreateProperty,
-      onEditProperty: (property) => {
+      onCreateProperty: (isSource: boolean) => {
+        handlers.onCreateProperty(isSource);
+      },
+      onEditProperty: (property, isSource) => {
         const [leftPart] = property.split(" ");
-        const value = getPropertyValue(leftPart);
-        const valueType = getPropertyType(leftPart);
-        const scope = getPropertyScope(leftPart);
+        const valueType = getPropertyType(leftPart, isSource);
+        const scope = getPropertyScope(leftPart, isSource);
 
-        handlers.onEditProperty({
-          name: leftPart,
-          value,
-          valueType,
-          scope,
-        });
+        handlers.onEditProperty(
+          {
+            name: leftPart,
+            valueType,
+            scope,
+          },
+          true,
+        );
       },
       onDeleteProperty: handlers.onDeleteProperty,
       onDeleteDocument: allowDelete
@@ -213,6 +212,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
 
   const targetEvents = useMemo<ITargetsColumnCallbacks>(
     () => ({
+      isSource: false,
       canDrop: (f) => !f.isConnected,
       onDrop: (s, t) => onCreateMapping(t.payload as IAtlasmapField, s),
       canAddToSelectedMapping: (f) => isFieldAddableToSelection("target", f),
@@ -221,6 +221,23 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       canRemoveFromSelectedMapping: (f) =>
         isFieldRemovableFromSelection("target", f),
       onRemoveFromSelectedMapping: onRemoveFromMapping,
+      onCreateProperty: (isSource: boolean) => {
+        handlers.onCreateProperty(isSource);
+      },
+      onEditProperty: (property, isSource) => {
+        const [leftPart] = property.split(" ");
+        const valueType = getPropertyType(leftPart, isSource);
+        const scope = getPropertyScope(leftPart, isSource);
+        handlers.onEditProperty(
+          {
+            name: leftPart,
+            valueType,
+            scope,
+          },
+          false,
+        );
+      },
+      onDeleteProperty: handlers.onDeleteProperty,
       onDeleteDocument: allowDelete
         ? (id) => handlers.onDeleteDocument(id, false)
         : undefined,
@@ -273,7 +290,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       case "ColumnMapper":
         return showMappingColumn ? (
           <SourceMappingTargetView
-            properties={properties}
+            sourceProperties={sourceProperties}
+            targetProperties={targetProperties}
             constants={constants}
             sources={sources}
             mappings={mappings}
@@ -288,7 +306,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
           />
         ) : (
           <SourceTargetView
-            properties={properties}
+            sourceProperties={sourceProperties}
+            targetProperties={targetProperties}
             constants={constants}
             sources={sources}
             mappings={mappings}
@@ -342,7 +361,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     mappingEvents,
     mappings,
     onFieldPreviewChange,
-    properties,
+    sourceProperties,
+    targetProperties,
     selectMapping,
     selectedMapping,
     shouldShowMappingPreview,

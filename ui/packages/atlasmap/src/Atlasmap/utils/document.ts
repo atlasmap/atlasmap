@@ -351,7 +351,7 @@ export function getPropertyScopeOptions(): {
   for (let i = 0; i < cfg.sourceDocs.length; i++) {
     scopeOptions.push({
       value: cfg.sourceDocs[i].id,
-      label: cfg.sourceDocs[i].id,
+      label: cfg.sourceDocs[i].name,
     });
   }
   return scopeOptions;

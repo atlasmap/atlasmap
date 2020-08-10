@@ -42,8 +42,9 @@ import { TraverseFields } from "./TraverseFields";
 export interface ISourceColumnCallbacks
   extends IConstantsTreeCallbacks,
     IPropertiesTreeCallbacks {
+  isSource: boolean;
   onCreateConstant: () => void;
-  onCreateProperty: () => void;
+  onCreateProperty: (isSource: boolean) => void;
   onCustomClassSearch?: (isSource: boolean) => void;
   onImportDocument?: (selectedFile: File) => void;
   onDeleteDocument?: (id: GroupId) => void;
@@ -62,7 +63,7 @@ export interface ISourceColumnCallbacks
 }
 
 export interface ISourcesColumnData {
-  properties?: IAtlasmapDocument | null;
+  sourceProperties?: IAtlasmapDocument | null;
   constants?: IAtlasmapDocument | null;
   sources: Array<IAtlasmapDocument>;
   showTypes: boolean;
@@ -71,6 +72,7 @@ export interface ISourcesColumnData {
 export const SourcesColumn: FunctionComponent<
   ISourcesColumnData & ISourceColumnCallbacks
 > = ({
+  isSource,
   onCreateConstant,
   onEditConstant,
   onDeleteConstant,
@@ -92,7 +94,7 @@ export const SourcesColumn: FunctionComponent<
   onStartMapping,
   shouldShowMappingPreviewForField,
   onFieldPreviewChange,
-  properties,
+  sourceProperties,
   constants,
   sources,
   showTypes,
@@ -146,23 +148,26 @@ export const SourcesColumn: FunctionComponent<
                     <Tooltip
                       position={"top"}
                       enableFlip={true}
-                      content={<div>Create a property for use in mapping</div>}
+                      content={
+                        <div>Create a source property for use in mapping</div>
+                      }
                       key={"create-property"}
                     >
                       <Button
-                        onClick={onCreateProperty}
+                        onClick={() => onCreateProperty(isSource)}
                         variant={"plain"}
-                        aria-label="Create a property for use in mapping"
-                        data-testid="create-property-button"
+                        aria-label="Create a source property for use in mapping"
+                        data-testid="create-source-property-button"
                       >
                         <PlusIcon />
                       </Button>
                     </Tooltip>,
                   ]}
-                  noPadding={!!properties}
+                  noPadding={!!sourceProperties}
                 >
-                  {properties ? (
+                  {sourceProperties ? (
                     <PropertiesTree
+                      isSource={isSource}
                       onEditProperty={onEditProperty}
                       onDeleteProperty={onDeleteProperty}
                       canDrop={canDrop}
@@ -176,12 +181,12 @@ export const SourcesColumn: FunctionComponent<
                       onRemoveFromSelectedMapping={onRemoveFromSelectedMapping}
                       canStartMapping={canStartMapping}
                       onStartMapping={onStartMapping}
-                      fields={properties.fields}
+                      fields={sourceProperties.fields}
                       showTypes={showTypes}
                       renderPreview={renderPreview}
                     />
                   ) : (
-                    "No properties"
+                    "No source properties"
                   )}
                 </Document>
               </NodeRef>

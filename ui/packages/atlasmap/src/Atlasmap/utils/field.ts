@@ -85,100 +85,126 @@ export function getConstantTypeIndex(constVal: string): number {
 
 export function createProperty(
   propName: string,
-  propValue: string,
   propType: string,
   propScope: string,
+  isSource: boolean,
 ): void {
   const cfg = ConfigModel.getConfig();
-  let field = cfg.propertyDoc.getField(propName);
+  let field = isSource
+    ? cfg.sourcePropertyDoc.getField(propName)
+    : cfg.targetPropertyDoc.getField(propName);
   if (!field) {
     field = new Field();
   }
   field.name = propName;
-  field.value = propValue;
   field.type = propType;
   field.scope = propScope;
-  field.docDef = cfg.propertyDoc;
   field.userCreated = true;
-  cfg.propertyDoc.addField(field);
+
+  if (isSource) {
+    field.docDef = cfg.sourcePropertyDoc;
+    cfg.sourcePropertyDoc.addField(field);
+  } else {
+    field.docDef = cfg.targetPropertyDoc;
+    cfg.targetPropertyDoc.addField(field);
+  }
   cfg.mappingService.notifyMappingUpdated();
 }
 
-export function deleteProperty(propName: string): void {
+export function deleteProperty(propName: string, isSource: boolean): void {
   const cfg = ConfigModel.getConfig();
-  const field = cfg.propertyDoc.getField(
-    cfg.propertyDoc.pathSeparator + propName.split(" ")[0],
-  );
+  const field = isSource
+    ? cfg.sourcePropertyDoc.getField(
+        cfg.sourcePropertyDoc.pathSeparator + propName.split(" ")[0],
+      )
+    : cfg.targetPropertyDoc.getField(
+        cfg.sourcePropertyDoc.pathSeparator + propName.split(" ")[0],
+      );
   if (!field) {
     return;
   }
   cfg.mappingService.removeFieldFromAllMappings(field);
-  cfg.propertyDoc.removeField(field);
+  if (isSource) {
+    cfg.sourcePropertyDoc.removeField(field);
+  } else {
+    cfg.targetPropertyDoc.removeField(field);
+  }
   cfg.mappingService.notifyMappingUpdated();
 }
 
 export function editProperty(
   propName: string,
-  propValue: string,
   propType: string,
   propScope: string,
   newName: string,
+  isSource: boolean,
 ): void {
   const cfg = ConfigModel.getConfig();
-  let field = cfg.propertyDoc.getField(
-    cfg.propertyDoc.pathSeparator + propName,
-  );
+  let field = isSource
+    ? cfg.sourcePropertyDoc.getField(
+        cfg.sourcePropertyDoc.pathSeparator + propName,
+      )
+    : cfg.targetPropertyDoc.getField(
+        cfg.targetPropertyDoc.pathSeparator + propName,
+      );
   if (!field) {
     return;
   }
   if (propName !== newName) {
     field.name = newName;
   }
-  field.value = propValue;
   field.type = propType;
   field.scope = propScope;
-  cfg.propertyDoc.updateField(field, "");
+  if (isSource) {
+    cfg.sourcePropertyDoc.updateField(field, "");
+  } else {
+    cfg.targetPropertyDoc.updateField(field, "");
+  }
   cfg.mappingService.notifyMappingUpdated();
 }
 
-export function getPropertyValue(propName: string): string {
+export function getPropertyType(propName: string, isSource: boolean): string {
   const cfg = ConfigModel.getConfig();
-  const field = cfg.propertyDoc.getField(
-    cfg.propertyDoc.pathSeparator + propName.split(" ")[0],
-  );
-  if (!field) {
-    return "";
-  }
-  return field.value;
-}
-
-export function getPropertyType(propName: string): string {
-  const cfg = ConfigModel.getConfig();
-  const field = cfg.propertyDoc.getField(
-    cfg.propertyDoc.pathSeparator + propName,
-  );
+  const field = isSource
+    ? cfg.sourcePropertyDoc.getField(
+        cfg.sourcePropertyDoc.pathSeparator + propName,
+      )
+    : cfg.targetPropertyDoc.getField(
+        cfg.targetPropertyDoc.pathSeparator + propName,
+      );
   if (!field) {
     return "";
   }
   return field.type;
 }
 
-export function getPropertyScope(propName: string): string {
+export function getPropertyScope(propName: string, isSource: boolean): string {
   const cfg = ConfigModel.getConfig();
-  const field = cfg.propertyDoc.getField(
-    cfg.propertyDoc.pathSeparator + propName,
-  );
+  const field = isSource
+    ? cfg.sourcePropertyDoc.getField(
+        cfg.sourcePropertyDoc.pathSeparator + propName,
+      )
+    : cfg.targetPropertyDoc.getField(
+        cfg.targetPropertyDoc.pathSeparator + propName,
+      );
   if (!field) {
     return "";
   }
   return field.scope;
 }
 
-export function getPropertyTypeIndex(propName: string): number {
+export function getPropertyTypeIndex(
+  propName: string,
+  isSource: boolean,
+): number {
   const cfg = ConfigModel.getConfig();
-  const field = cfg.propertyDoc.getField(
-    cfg.propertyDoc.pathSeparator + propName,
-  );
+  const field = isSource
+    ? cfg.sourcePropertyDoc.getField(
+        cfg.sourcePropertyDoc.pathSeparator + propName,
+      )
+    : cfg.targetPropertyDoc.getField(
+        cfg.targetPropertyDoc.pathSeparator + propName,
+      );
   if (!field) {
     return 0;
   }

@@ -5,7 +5,7 @@ import { useConfirmationDialog } from "./useConfirmationDialog";
 
 export function useDeletePropertyDialog(): [
   ReactElement,
-  (propName: string) => void,
+  (propName: string, isSource: boolean) => void,
 ] {
   const { deleteProperty } = useAtlasmap();
   const [
@@ -16,8 +16,8 @@ export function useDeletePropertyDialog(): [
     "Are you sure you want to delete the selected property and remove any associated mapping references?",
   );
   const onDeleteProperty = useCallback(
-    (propName: string) =>
-      openDeletePropertyDialog(() => deleteProperty(propName)),
+    (propName: string, isSource: boolean) =>
+      openDeletePropertyDialog(() => deleteProperty(propName, isSource)),
     [deleteProperty, openDeletePropertyDialog],
   );
   return [deletePropertyDialog, onDeleteProperty];

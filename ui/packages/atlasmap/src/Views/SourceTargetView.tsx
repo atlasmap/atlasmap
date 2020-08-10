@@ -23,7 +23,8 @@ export interface ISourceTargetViewProps
 }
 
 export const SourceTargetView: FunctionComponent<ISourceTargetViewProps> = ({
-  properties,
+  sourceProperties,
+  targetProperties,
   constants,
   sources,
   mappings,
@@ -42,7 +43,7 @@ export const SourceTargetView: FunctionComponent<ISourceTargetViewProps> = ({
           <Columns>
             <Column data-testid={"column-source-area"} totalColumns={2}>
               <SourcesColumn
-                properties={properties}
+                sourceProperties={sourceProperties}
                 constants={constants}
                 sources={sources}
                 showTypes={showTypes}
@@ -52,6 +53,7 @@ export const SourceTargetView: FunctionComponent<ISourceTargetViewProps> = ({
 
             <Column data-testid={"column-target-area"} totalColumns={2}>
               <TargetsColumn
+                targetProperties={targetProperties}
                 showMappingPreview={showMappingPreview}
                 showTypes={showTypes}
                 targets={targets}

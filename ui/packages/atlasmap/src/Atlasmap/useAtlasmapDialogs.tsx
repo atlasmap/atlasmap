@@ -66,23 +66,26 @@ export function useAtlasmapDialogs({
   const [createPropertyDialog, openCreatePropertyDialog] = usePropertyDialog(
     "Create Property",
   );
-  const onCreateProperty = useCallback(() => {
-    openCreatePropertyDialog(({ name, value, valueType, scope }) => {
-      createProperty(name, value, valueType, scope);
-    });
-  }, [createProperty, openCreatePropertyDialog]);
-
+  const onCreateProperty = useCallback(
+    (isSource: boolean) => {
+      openCreatePropertyDialog(({ name, valueType, scope }) => {
+        createProperty(name, valueType, scope, isSource);
+      });
+    },
+    [createProperty, openCreatePropertyDialog],
+  );
   const [editPropertyDialog, openEditPropertyDialog] = usePropertyDialog(
     "Edit Property",
   );
   const onEditProperty = useCallback(
-    (property: IProperty) => {
-      openEditPropertyDialog(({ name, value, valueType, scope }) => {
-        editProperty(property.name, value, valueType, scope, name);
+    (property: IProperty, isSource: boolean) => {
+      openEditPropertyDialog(({ name, valueType, scope }) => {
+        editProperty(property.name, valueType, scope, name, isSource);
       }, property);
     },
     [editProperty, openEditPropertyDialog],
   );
+
   const [deletePropertyDialog, onDeleteProperty] = useDeletePropertyDialog();
   //#endregion
 

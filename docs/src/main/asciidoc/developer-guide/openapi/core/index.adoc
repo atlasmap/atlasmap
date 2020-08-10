@@ -2794,6 +2794,12 @@ endif::internal-generation[]
 | 
 |  
 
+| dataSourceType 
+|  
+| String  
+| 
+|  _Enum:_ SOURCE, TARGET, 
+
 |===
 
 

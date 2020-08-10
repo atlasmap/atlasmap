@@ -25,7 +25,6 @@ interface ValueLabelOption {
 
 export interface IProperty {
   name: string;
-  value: string;
   valueType: string;
   scope: string;
 }
@@ -33,7 +32,6 @@ export interface IProperty {
 export interface IPropertyDialogProps {
   title: string;
   name?: string;
-  value?: string;
   valueType?: string;
   valueTypeOptions: ValueLabelOption[];
   scope?: string;
@@ -45,7 +43,6 @@ export interface IPropertyDialogProps {
 export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
   title,
   name: initialName = "",
-  value: initialValue = "",
   valueType: initialValueType = "",
   valueTypeOptions,
   scope: initialScope = "",
@@ -55,21 +52,19 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
   onConfirm,
 }) => {
   const [name, setName] = useState(initialName);
-  const [value, setValue] = useState(initialValue);
   const [valueType, setValueType] = useState(initialValueType);
   const [scope, setScope] = useState(initialScope);
 
   const reset = useCallback(() => {
     setName(initialName);
-    setValue(initialValue);
     setValueType(initialValueType);
     setScope(initialScope);
-  }, [initialName, initialValue, initialValueType, initialScope]);
+  }, [initialName, initialValueType, initialScope]);
 
   const handleOnConfirm = useCallback(() => {
-    onConfirm({ name, value, valueType, scope });
+    onConfirm({ name, valueType, scope });
     reset();
-  }, [name, onConfirm, reset, value, valueType, scope]);
+  }, [name, onConfirm, reset, valueType, scope]);
 
   const handleOnCancel = useCallback(() => {
     onCancel();
@@ -95,15 +90,6 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
             autoFocus={true}
             isRequired={true}
             data-testid={"property-name-text-input"}
-          />
-        </FormGroup>
-        <FormGroup label={"Value"} fieldId={"value"}>
-          <TextInput
-            value={value}
-            onChange={setValue}
-            id={"value"}
-            isRequired={true}
-            data-testid={"property-value-text-input"}
           />
         </FormGroup>
         <FormGroup label={"Value type"} fieldId={"valueType"}>

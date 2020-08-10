@@ -19,14 +19,31 @@ const options = [
 const valueTypeOptions = options.map((o) => o.value);
 const scopeOptions = options.map((o) => o.value);
 
-export const propertyDialog = () => (
+export const sourcePropertyDialog = () => (
   <PropertyDialog
     title={text("Title", "Property dialog title")}
     isOpen={boolean("Is open", true)}
     onCancel={action("onCancel")}
     onConfirm={action("onConfirm")}
     name={text("Initial name", "")}
-    value={text("Initial value", "")}
+    valueType={select(
+      "Initial valueType",
+      valueTypeOptions,
+      valueTypeOptions[0],
+    )}
+    valueTypeOptions={options}
+    scope={select("Initial scope", scopeOptions, scopeOptions[0])}
+    scopeOptions={options}
+  />
+);
+
+export const targetPropertyDialog = () => (
+  <PropertyDialog
+    title={text("Title", "Property dialog title")}
+    isOpen={boolean("Is open", true)}
+    onCancel={action("onCancel")}
+    onConfirm={action("onConfirm")}
+    name={text("Initial name", "")}
     valueType={select(
       "Initial valueType",
       valueTypeOptions,

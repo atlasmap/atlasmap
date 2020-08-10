@@ -116,7 +116,8 @@ export class ConfigModel {
 
   sourceDocs: DocumentDefinition[] = [];
   targetDocs: DocumentDefinition[] = [];
-  propertyDoc: DocumentDefinition = new DocumentDefinition();
+  sourcePropertyDoc: DocumentDefinition = new DocumentDefinition();
+  targetPropertyDoc: DocumentDefinition = new DocumentDefinition();
   constantDoc: DocumentDefinition = new DocumentDefinition();
   mappingFiles: string[] = [];
   mappingDefinitionId = 0;
@@ -138,13 +139,18 @@ export class ConfigModel {
     ConfigModel.cfg = cfg;
   }
 
+  initializePropertyDoc(propertyDoc: DocumentDefinition, isSource: boolean) {
+    propertyDoc.clearFields();
+    propertyDoc.type = DocumentType.PROPERTY;
+    propertyDoc.name = 'Properties';
+    propertyDoc.isSource = isSource;
+    propertyDoc.showFields = false;
+    propertyDoc.isPropertyOrConstant = true;
+  }
+
   setConstantPropertyDocs(): void {
-    this.propertyDoc.clearFields();
-    this.propertyDoc.type = DocumentType.PROPERTY;
-    this.propertyDoc.name = 'Properties';
-    this.propertyDoc.isSource = true;
-    this.propertyDoc.showFields = false;
-    this.propertyDoc.isPropertyOrConstant = true;
+    this.initializePropertyDoc(this.sourcePropertyDoc, true);
+    this.initializePropertyDoc(this.targetPropertyDoc, false);
     this.constantDoc.clearFields();
     this.constantDoc.type = DocumentType.CONSTANT;
     this.constantDoc.name = 'Constants';
@@ -228,7 +234,9 @@ export class ConfigModel {
 
   getDocs(isSource: boolean): DocumentDefinition[] {
     const docs: DocumentDefinition[] = this.getDocsWithoutPropertyDoc(isSource);
-    return isSource ? [this.propertyDoc, this.constantDoc].concat(docs) : docs;
+    return isSource
+      ? [this.sourcePropertyDoc, this.constantDoc].concat(docs)
+      : [this.targetPropertyDoc, this.constantDoc].concat(docs);
   }
 
   /**
@@ -254,7 +262,8 @@ export class ConfigModel {
   clearDocs(): void {
     this.sourceDocs = [];
     this.targetDocs = [];
-    this.propertyDoc.clearFields();
+    this.sourcePropertyDoc.clearFields();
+    this.targetPropertyDoc.clearFields();
     this.constantDoc.clearFields();
     this.mappingFiles = [];
   }
@@ -295,8 +304,9 @@ export class ConfigModel {
   }
 
   getAllDocs(): DocumentDefinition[] {
-    return [this.propertyDoc, this.constantDoc]
+    return [this.sourcePropertyDoc, this.constantDoc]
       .concat(this.sourceDocs)
+      .concat([this.targetPropertyDoc, this.constantDoc])
       .concat(this.targetDocs);
   }
 

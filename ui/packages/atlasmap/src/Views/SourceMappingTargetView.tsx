@@ -29,7 +29,8 @@ export interface ISourceMappingTargetViewProps
 }
 
 export const SourceMappingTargetView: FunctionComponent<ISourceMappingTargetViewProps> = ({
-  properties,
+  sourceProperties,
+  targetProperties,
   constants,
   sources,
   mappings,
@@ -55,7 +56,7 @@ export const SourceMappingTargetView: FunctionComponent<ISourceMappingTargetView
         <Columns>
           <Column data-testid={"column-source-area"} totalColumns={3}>
             <SourcesColumn
-              properties={properties}
+              sourceProperties={sourceProperties}
               constants={constants}
               sources={sources}
               showTypes={showTypes}
@@ -74,6 +75,7 @@ export const SourceMappingTargetView: FunctionComponent<ISourceMappingTargetView
           </Column>
           <Column data-testid={"column-target-area"} totalColumns={3}>
             <TargetsColumn
+              targetProperties={targetProperties}
               showMappingPreview={showMappingPreview}
               showTypes={showTypes}
               targets={targets}

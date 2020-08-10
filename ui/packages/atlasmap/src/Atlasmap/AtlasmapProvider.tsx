@@ -233,9 +233,15 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
     );
   }, []);
 
-  const convertProperties = useCallback(function convertPropertiesCb() {
+  const convertSourceProperties = useCallback(function convertPropertiesCb() {
     return fromDocumentDefinitionToFieldGroup(
-      initializationService.cfg.propertyDoc,
+      initializationService.cfg.sourcePropertyDoc,
+    );
+  }, []);
+
+  const convertTargetProperties = useCallback(function convertPropertiesCb() {
+    return fromDocumentDefinitionToFieldGroup(
+      initializationService.cfg.targetPropertyDoc,
     );
   }, []);
 
@@ -296,8 +302,9 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
         error: initializationService.cfg.initCfg.initializationErrorOccurred,
         sources: convertSources(),
         constants: convertConstants(),
-        properties: convertProperties(),
+        sourceProperties: convertSourceProperties(),
         targets: convertTargets(),
+        targetProperties: convertTargetProperties(),
         mappings: convertMappings(),
         selectedMapping: convertSelectedMapping(),
         flatSources: convertSourcesToFlatArray(),
@@ -317,11 +324,12 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
     [
       convertConstants,
       convertMappings,
-      convertProperties,
       convertSelectedMapping,
       convertSources,
+      convertSourceProperties,
       convertSourcesToFlatArray,
       convertTargets,
+      convertTargetProperties,
       convertTargetsToFlatArray,
     ],
   );

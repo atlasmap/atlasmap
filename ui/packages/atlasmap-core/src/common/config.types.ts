@@ -33,6 +33,11 @@ export enum InspectionType {
   UNKNOWN = 'UNKNOWN',
 }
 
+export enum DataSourceType {
+  SOURCE = 'SOURCE',
+  TARGET = 'TARGET',
+}
+
 export const enum FieldMode {
   CREATE,
   EDIT,
