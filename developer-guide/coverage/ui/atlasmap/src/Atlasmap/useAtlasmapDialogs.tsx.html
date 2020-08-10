@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/116</span>
+                <span class='fraction'>0/114</span>
             </div>
         
             
@@ -289,7 +289,10 @@
 <a name='L231'></a><a href='#L231'>231</a>
 <a name='L232'></a><a href='#L232'>232</a>
 <a name='L233'></a><a href='#L233'>233</a>
-<a name='L234'></a><a href='#L234'>234</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L234'></a><a href='#L234'>234</a>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -358,18 +361,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -590,23 +596,26 @@ export interface IUseAtlasmapDialogsProps {
   const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >c</span>reatePropertyDialog,</span> <span class="cstat-no" title="statement not covered" >openCreatePropertyDialog] = usePropertyDialog(</span>
     "Create Property",
   );
-  const onCreateProperty = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >    openCreatePropertyDialog(<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >name,</span> <span class="cstat-no" title="statement not covered" >value,</span> <span class="cstat-no" title="statement not covered" >valueType,</span> <span class="cstat-no" title="statement not covered" >scope </span>}) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      createProperty(name, value, valueType, scope);</span>
-    });
-  }, [createProperty, openCreatePropertyDialog]);
-&nbsp;
+  const onCreateProperty = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (i</span>sSource: boolean) =&gt; {
+<span class="cstat-no" title="statement not covered" >      openCreatePropertyDialog(<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >name,</span> <span class="cstat-no" title="statement not covered" >valueType,</span> <span class="cstat-no" title="statement not covered" >scope </span>}) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        createProperty(name, valueType, scope, isSource);</span>
+      });
+    },
+    [createProperty, openCreatePropertyDialog],
+  );
   const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >e</span>ditPropertyDialog,</span> <span class="cstat-no" title="statement not covered" >openEditPropertyDialog] = usePropertyDialog(</span>
     "Edit Property",
   );
   const onEditProperty = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (p</span>roperty: IProperty) =&gt; {
-<span class="cstat-no" title="statement not covered" >      openEditPropertyDialog(<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >name,</span> <span class="cstat-no" title="statement not covered" >value,</span> <span class="cstat-no" title="statement not covered" >valueType,</span> <span class="cstat-no" title="statement not covered" >scope </span>}) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        editProperty(property.name, value, valueType, scope, name);</span>
+<span class="fstat-no" title="function not covered" >    (p</span>roperty: IProperty, isSource: boolean) =&gt; {
+<span class="cstat-no" title="statement not covered" >      openEditPropertyDialog(<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >name,</span> <span class="cstat-no" title="statement not covered" >valueType,</span> <span class="cstat-no" title="statement not covered" >scope </span>}) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        editProperty(property.name, valueType, scope, name, isSource);</span>
       }, property);
     },
     [editProperty, openEditPropertyDialog],
   );
+&nbsp;
   const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >d</span>eletePropertyDialog,</span> <span class="cstat-no" title="statement not covered" >onDeleteProperty] = useDeletePropertyDialog();</span>
   //#endregion
 &nbsp;
@@ -762,7 +771,7 @@ export interface IUseAtlasmapDialogsProps {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Aug 07 2020 14:23:07 GMT+0000 (Coordinated Universal Time)
+                at Mon Aug 10 2020 13:28:59 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

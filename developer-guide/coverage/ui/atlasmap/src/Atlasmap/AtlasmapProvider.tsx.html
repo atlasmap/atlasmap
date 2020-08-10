@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/172</span>
+                <span class='fraction'>0/174</span>
             </div>
         
             
@@ -38,14 +38,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/49</span>
+                <span class='fraction'>0/50</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/163</span>
+                <span class='fraction'>0/165</span>
             </div>
         
             
@@ -645,7 +645,15 @@
 <a name='L587'></a><a href='#L587'>587</a>
 <a name='L588'></a><a href='#L588'>588</a>
 <a name='L589'></a><a href='#L589'>589</a>
-<a name='L590'></a><a href='#L590'>590</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L590'></a><a href='#L590'>590</a>
+<a name='L591'></a><a href='#L591'>591</a>
+<a name='L592'></a><a href='#L592'>592</a>
+<a name='L593'></a><a href='#L593'>593</a>
+<a name='L594'></a><a href='#L594'>594</a>
+<a name='L595'></a><a href='#L595'>595</a>
+<a name='L596'></a><a href='#L596'>596</a>
+<a name='L597'></a><a href='#L597'>597</a>
+<a name='L598'></a><a href='#L598'>598</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -889,8 +897,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -950,6 +964,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -957,6 +972,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1469,9 +1485,15 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
     );
   }, []);
 &nbsp;
-  const convertProperties = <span class="cstat-no" title="statement not covered" >useCallback(function <span class="fstat-no" title="function not covered" >convertPropertiesCb(</span>) {</span>
+  const convertSourceProperties = <span class="cstat-no" title="statement not covered" >useCallback(function <span class="fstat-no" title="function not covered" >convertPropertiesCb(</span>) {</span>
 <span class="cstat-no" title="statement not covered" >    return fromDocumentDefinitionToFieldGroup(</span>
-      initializationService.cfg.propertyDoc,
+      initializationService.cfg.sourcePropertyDoc,
+    );
+  }, []);
+&nbsp;
+  const convertTargetProperties = <span class="cstat-no" title="statement not covered" >useCallback(function <span class="fstat-no" title="function not covered" >convertPropertiesCb(</span>) {</span>
+<span class="cstat-no" title="statement not covered" >    return fromDocumentDefinitionToFieldGroup(</span>
+      initializationService.cfg.targetPropertyDoc,
     );
   }, []);
 &nbsp;
@@ -1532,8 +1554,9 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
         error: initializationService.cfg.initCfg.initializationErrorOccurred,
         sources: convertSources(),
         constants: convertConstants(),
-        properties: convertProperties(),
+        sourceProperties: convertSourceProperties(),
         targets: convertTargets(),
+        targetProperties: convertTargetProperties(),
         mappings: convertMappings(),
         selectedMapping: convertSelectedMapping(),
         flatSources: convertSourcesToFlatArray(),
@@ -1553,11 +1576,12 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
     [
       convertConstants,
       convertMappings,
-      convertProperties,
       convertSelectedMapping,
       convertSources,
+      convertSourceProperties,
       convertSourcesToFlatArray,
       convertTargets,
+      convertTargetProperties,
       convertTargetsToFlatArray,
     ],
   );
@@ -1830,7 +1854,7 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Aug 07 2020 14:23:07 GMT+0000 (Coordinated Universal Time)
+                at Mon Aug 10 2020 13:28:59 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
