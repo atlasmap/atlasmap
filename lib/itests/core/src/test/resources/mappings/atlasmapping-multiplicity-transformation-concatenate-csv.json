@@ -1,0 +1,80 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "io.atlasmap.itests.core.SourceCsv",
+      "uri" : "atlas:csv?firstRecordAsHeader=True",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "io.atlasmap.itests.core.TargetCsv",
+      "uri" : "atlas:csv?firstRecordAsHeader=True",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ {
+            "Expression" : {
+              "expression" : "concatenate(',', ${0})"
+            }
+          } ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.csv.v2.CsvField",
+            "docId" : "io.atlasmap.itests.core.SourceCsv",
+            "index" : 0,
+            "path" : "/<>/givenName",
+            "fieldType" : "STRING",
+            "name" : "givenName"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.csv.v2.CsvField",
+          "docId" : "io.atlasmap.itests.core.TargetCsv",
+          "path" : "/<0>/allGivenNames",
+          "fieldType" : "STRING",
+          "name" : "allGivenNames"
+        } ]
+      },
+      {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ {
+            "Expression" : {
+              "expression" : "concatenate(',', ${0}, ${1})"
+            }
+          } ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.csv.v2.CsvField",
+            "docId" : "io.atlasmap.itests.core.SourceCsv",
+            "index" : 0,
+            "path" : "/<>/givenName",
+            "fieldType" : "STRING",
+            "name" : "givenName"
+          }, {
+            "jsonType" : "io.atlasmap.csv.v2.CsvField",
+            "docId" : "io.atlasmap.itests.core.SourceCsv",
+            "index" : 1,
+            "path" : "/<>/familyName",
+            "fieldType" : "STRING",
+            "name" : "familyName"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.csv.v2.CsvField",
+          "docId" : "io.atlasmap.itests.core.TargetCsv",
+          "path" : "/<>/allNames",
+          "fieldType" : "STRING",
+          "name" : "name"
+        } ]
+      }]
+    },
+    "name" : "core.unit.test"
+  }
+}
