@@ -920,54 +920,52 @@ export class MappingManagementService {
       targetMappedFields[0].field &&
       targetMappedFields[0].field.isInCollection();
 
-    if (mapping.transition.mode !== TransitionMode.COMPLEX_EXPR) {
-      if (sourceMappedCollection && targetMappedCollection) {
-        mapping.transition.mode = TransitionMode.FOR_EACH;
-      } else if (
-        sourceMappedFields.length > 1 ||
-        sourceMappedCollection ||
-        mapping.transition.enableExpression
-      ) {
-        mapping.transition.mode = TransitionMode.MANY_TO_ONE;
-        if (
-          !mapping.transition.enableExpression &&
-          (!mapping.transition.transitionFieldAction ||
-            mapping.transition.transitionFieldAction.definition.multiplicity !==
-              Multiplicity.MANY_TO_ONE)
-        ) {
-          mapping.transition.transitionFieldAction = FieldAction.create(
-            this.cfg.fieldActionService.getActionDefinitionForName(
-              'Concatenate',
-              Multiplicity.MANY_TO_ONE
-            )!
-          ); // TODO: check this non null operator
-          mapping.transition.transitionFieldAction.setArgumentValue(
-            'delimiter',
-            ' '
-          );
-        }
-      } else if (targetMappedFields.length > 1 || targetMappedCollection) {
-        mapping.transition.mode = TransitionMode.ONE_TO_MANY;
-        if (
-          !mapping.transition.transitionFieldAction ||
+    if (sourceMappedCollection && targetMappedCollection) {
+      mapping.transition.mode = TransitionMode.FOR_EACH;
+    } else if (
+      sourceMappedFields.length > 1 ||
+      sourceMappedCollection ||
+      mapping.transition.enableExpression
+    ) {
+      mapping.transition.mode = TransitionMode.MANY_TO_ONE;
+      if (
+        !mapping.transition.enableExpression &&
+        (!mapping.transition.transitionFieldAction ||
           mapping.transition.transitionFieldAction.definition.multiplicity !==
-            Multiplicity.ONE_TO_MANY
-        ) {
-          mapping.transition.transitionFieldAction = FieldAction.create(
-            this.cfg.fieldActionService.getActionDefinitionForName(
-              'Split',
-              Multiplicity.ONE_TO_MANY
-            )!
-          ); // TODO: check this non null operator
-          mapping.transition.transitionFieldAction.setArgumentValue(
-            'delimiter',
-            ' '
-          );
-        }
-      } else {
-        mapping.transition.mode = TransitionMode.ONE_TO_ONE;
-        mapping.transition.transitionFieldAction = null;
+            Multiplicity.MANY_TO_ONE)
+      ) {
+        mapping.transition.transitionFieldAction = FieldAction.create(
+          this.cfg.fieldActionService.getActionDefinitionForName(
+            'Concatenate',
+            Multiplicity.MANY_TO_ONE
+          )!
+        ); // TODO: check this non null operator
+        mapping.transition.transitionFieldAction.setArgumentValue(
+          'delimiter',
+          ' '
+        );
       }
+    } else if (targetMappedFields.length > 1 || targetMappedCollection) {
+      mapping.transition.mode = TransitionMode.ONE_TO_MANY;
+      if (
+        !mapping.transition.transitionFieldAction ||
+        mapping.transition.transitionFieldAction.definition.multiplicity !==
+          Multiplicity.ONE_TO_MANY
+      ) {
+        mapping.transition.transitionFieldAction = FieldAction.create(
+          this.cfg.fieldActionService.getActionDefinitionForName(
+            'Split',
+            Multiplicity.ONE_TO_MANY
+          )!
+        ); // TODO: check this non null operator
+        mapping.transition.transitionFieldAction.setArgumentValue(
+          'delimiter',
+          ' '
+        );
+      }
+    } else {
+      mapping.transition.mode = TransitionMode.ONE_TO_ONE;
+      mapping.transition.transitionFieldAction = null;
     }
 
     // Update conditional expression field references if enabled.

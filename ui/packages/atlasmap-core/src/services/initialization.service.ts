@@ -634,7 +634,7 @@ ${error.status} ${error.statusText}`,
     model.type = DocumentType.JAVA;
     model.inspectionType = InspectionType.JAVA_CLASS;
     model.inspectionSource = className;
-    model.inspectionParameters = { ['']: '' };
+    model.inspectionParameters = { '': '' };
     model.isSource = isSource;
     model.collectionType = collectionType;
     model.collectionClassName = collectionClassName;
@@ -657,7 +657,7 @@ ${error.status} ${error.statusText}`,
     if (inspectionParameters) {
       model.inspectionParameters = inspectionParameters;
     } else {
-      model.inspectionParameters = { ['']: '' };
+      model.inspectionParameters = { '': '' };
     }
     model.isSource = isSource;
     return this.cfg.addDocument(model);
