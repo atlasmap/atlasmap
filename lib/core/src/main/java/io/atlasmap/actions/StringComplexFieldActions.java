@@ -24,17 +24,16 @@ import io.atlasmap.spi.AtlasActionProcessor;
 import io.atlasmap.spi.AtlasFieldAction;
 import io.atlasmap.v2.Append;
 import io.atlasmap.v2.Concatenate;
-import io.atlasmap.v2.RepeatForFieldPathCount;
 import io.atlasmap.v2.EndsWith;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Format;
 import io.atlasmap.v2.GenerateUUID;
 import io.atlasmap.v2.IndexOf;
 import io.atlasmap.v2.LastIndexOf;
-import io.atlasmap.v2.OneToManyAction;
 import io.atlasmap.v2.PadStringLeft;
 import io.atlasmap.v2.PadStringRight;
 import io.atlasmap.v2.Prepend;
+import io.atlasmap.v2.RepeatForFieldPathCount;
 import io.atlasmap.v2.ReplaceAll;
 import io.atlasmap.v2.ReplaceFirst;
 import io.atlasmap.v2.Split;
@@ -44,7 +43,7 @@ import io.atlasmap.v2.SubStringAfter;
 import io.atlasmap.v2.SubStringBefore;
 
 public class StringComplexFieldActions implements AtlasFieldAction {
-
+    
     public static final String STRING_SEPARATOR_REGEX = "^\\s+:_+=";
     public static final Pattern STRING_SEPARATOR_PATTERN = Pattern.compile(STRING_SEPARATOR_REGEX);
 
@@ -82,7 +81,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
             if (entry != null) {
                 builder.append(entry);
             }
-            isFirst =false;
+            isFirst = false;
         }
 
         return builder.toString();
@@ -149,8 +148,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
 
     @AtlasActionProcessor
     public static String padStringLeft(PadStringLeft padStringLeft, String input) {
-        if (padStringLeft == null || padStringLeft.getPadCharacter() == null
-                || padStringLeft.getPadCount() == null) {
+        if (padStringLeft == null || padStringLeft.getPadCharacter() == null || padStringLeft.getPadCount() == null) {
             throw new IllegalArgumentException("PadStringLeft must be specified with padCharacter and padCount");
         }
 
@@ -205,28 +203,27 @@ public class StringComplexFieldActions implements AtlasFieldAction {
 
         return input == null ? null : input.toString().split(split.getDelimiter());
     }
-    
+
     @AtlasActionProcessor(sourceType = FieldType.ANY)
     public static String[] repeat(RepeatForFieldPathCount repeat, String input) {
-    	
-    	if (repeat == null) {
+
+        if (repeat == null) {
             throw new IllegalArgumentException("repeat is not defined");
         }
-    	
-    	String[] returnObj = null;
-    	if(repeat instanceof OneToManyAction) {
-    		OneToManyAction repeatAction = (OneToManyAction)repeat;	
-    		
-    		//Get count of fieldpath field count and create an array with count, copy input to array
-    		int count = repeatAction.getFieldPathCount();
-    		
-    		 returnObj = new String[count];
-    	      for(int i = 0; i < count; i++) {
-    	    	  returnObj[i] = input;
-    	      }
-    	}   
-      return returnObj;
-	 }
+
+        String[] returnObj = null;
+
+            // Get count of fieldpath field count and create an array with count, copy input
+            // to array
+            int count = repeat.getCount();
+
+            returnObj = new String[count];
+            for (int i = 0; i < count; i++) {
+                returnObj[i] = input;
+            }
+            
+        return returnObj;
+    }
 
     @AtlasActionProcessor
     public static Boolean startsWith(StartsWith startsWith, String input) {
@@ -256,9 +253,8 @@ public class StringComplexFieldActions implements AtlasFieldAction {
             return input;
         }
 
-        if (subStringAfter == null || subStringAfter.getStartIndex() == null
-                || subStringAfter.getStartIndex() < 0 || subStringAfter.getMatch() == null
-                || (subStringAfter.getEndIndex() != null
+        if (subStringAfter == null || subStringAfter.getStartIndex() == null || subStringAfter.getStartIndex() < 0
+                || subStringAfter.getMatch() == null || (subStringAfter.getEndIndex() != null
                         && subStringAfter.getEndIndex() < subStringAfter.getStartIndex())) {
             throw new IllegalArgumentException(
                     "SubStringAfter action must be specified with a positive startIndex and a string to match");
@@ -278,9 +274,8 @@ public class StringComplexFieldActions implements AtlasFieldAction {
             return input;
         }
 
-        if (subStringBefore == null || subStringBefore.getStartIndex() == null
-                || subStringBefore.getStartIndex() < 0 || subStringBefore.getMatch() == null
-                || (subStringBefore.getEndIndex() != null
+        if (subStringBefore == null || subStringBefore.getStartIndex() == null || subStringBefore.getStartIndex() < 0
+                || subStringBefore.getMatch() == null || (subStringBefore.getEndIndex() != null
                         && subStringBefore.getEndIndex() < subStringBefore.getStartIndex())) {
             throw new IllegalArgumentException(
                     "SubStringBefore action must be specified with a positive startIndex and a string to match");

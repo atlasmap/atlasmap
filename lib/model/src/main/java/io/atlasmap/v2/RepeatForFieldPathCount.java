@@ -2,7 +2,22 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
-public class RepeatForFieldPathCount extends OneToManyAction implements Serializable {
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-    private final static long serialVersionUID = 1L;
+public class RepeatForFieldPathCount extends Action implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    private Integer count;
+
+    public Integer getCount() {
+        return count;
+    }
+
+    @JsonPropertyDescription("count ")
+    @AtlasActionProperty(title = "count", type = FieldType.INTEGER)
+    public void setCount(Integer count) {
+        this.count = count;
+    }
 }
+

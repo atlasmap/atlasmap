@@ -39,6 +39,7 @@ import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.AtlasMappingService;
 import io.atlasmap.core.DefaultAtlasContextFactory;
+import io.atlasmap.itests.core.BaseClass.SomeNestedClass;
 import io.atlasmap.itests.core.issue.Item;
 import io.atlasmap.itests.core.issue.SourceClass;
 import io.atlasmap.itests.core.issue.TargetClass;
@@ -299,6 +300,28 @@ public class MultiplicityTransformationTest {
         assertEquals(new Double((1+3+5+7)).doubleValue(), target.getDoubleField(), 1e-15);
         assertEquals(1+3+5+7, target.getLongField());
         assertEquals(2+4+6+8, target.getIntField());
+    }
+    
+    @Test
+    public void testActionRepeat() throws Exception {
+    	 URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-action_repeat.json");
+         AtlasMapping mapping = mappingService.loadMapping(url);
+         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+         AtlasSession session = context.createSession();
+         String sourceJson = new String(Files.readAllBytes(Paths.get(
+             Thread.currentThread().getContextClassLoader().getResource("data/json-source-repeat.json").toURI())));
+         session.setSourceDocument("json-source-repeat", sourceJson);
+        
+         context.process(session);
+         assertFalse(TestHelper.printAudit(session), session.hasErrors());
+         Object output = session.getTargetDocument("TargetClass");
+         assertEquals(io.atlasmap.itests.core.TargetClass.class, output.getClass());
+         io.atlasmap.itests.core.TargetClass target = io.atlasmap.itests.core.TargetClass.class.cast(output);
+         SomeNestedClass[] array = target.getSomeArray();
+         assertEquals(2, array.length);
+         assertEquals("ns_1138", array[0].getSomeField());
+         assertEquals("ns_1138", array[1].getSomeField());
+
     }
 
 }
