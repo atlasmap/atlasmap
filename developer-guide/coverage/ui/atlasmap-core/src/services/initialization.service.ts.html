@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">38.99% </span>
+                <span class="strong">38.63% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>124/318</span>
+                <span class='fraction'>124/321</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">28.7% </span>
+                <span class="strong">28.18% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>31/108</span>
+                <span class='fraction'>31/110</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">36.79% </span>
+                <span class="strong">36.42% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>110/299</span>
+                <span class='fraction'>110/302</span>
             </div>
         
             
@@ -917,7 +917,13 @@
 <a name='L859'></a><a href='#L859'>859</a>
 <a name='L860'></a><a href='#L860'>860</a>
 <a name='L861'></a><a href='#L861'>861</a>
-<a name='L862'></a><a href='#L862'>862</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L862'></a><a href='#L862'>862</a>
+<a name='L863'></a><a href='#L863'>863</a>
+<a name='L864'></a><a href='#L864'>864</a>
+<a name='L865'></a><a href='#L865'>865</a>
+<a name='L866'></a><a href='#L866'>866</a>
+<a name='L867'></a><a href='#L867'>867</a>
+<a name='L868'></a><a href='#L868'>868</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1349,6 +1355,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1554,6 +1563,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -1570,6 +1580,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -2207,10 +2219,13 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
     // Reinitialize the model documents.
 <span class="cstat-no" title="statement not covered" >    for (<span class="cstat-no" title="statement not covered" >metaFragment of <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >m</span>Info.</span>exportMeta)</span> {</span>
 <span class="cstat-no" title="statement not covered" >      fragData = mInfo.exportBlockData[fragIndex].value;</span>
+      const docType = <span class="cstat-no" title="statement not covered" >metaFragment.dataSourceType</span>
+        ? metaFragment.dataSourceType
+        : metaFragment.documentType;
 <span class="cstat-no" title="statement not covered" >      this.initializeUserDoc(</span>
         fragData,
         metaFragment.name,
-        metaFragment.documentType,
+        docType,
         metaFragment.inspectionType,
         metaFragment.isSource === 'true',
         metaFragment.inspectionParameters
@@ -2411,6 +2426,7 @@ ${error.status} ${error.statusText}`,
 <span class="cstat-no" title="statement not covered" >    model.type = DocumentType.JAVA;</span>
 <span class="cstat-no" title="statement not covered" >    model.inspectionType = InspectionType.JAVA_CLASS;</span>
 <span class="cstat-no" title="statement not covered" >    model.inspectionSource = className;</span>
+<span class="cstat-no" title="statement not covered" >    model.inspectionParameters = { '': '' };</span>
 <span class="cstat-no" title="statement not covered" >    model.isSource = isSource;</span>
 <span class="cstat-no" title="statement not covered" >    model.collectionType = collectionType;</span>
 <span class="cstat-no" title="statement not covered" >    model.collectionClassName = collectionClassName;</span>
@@ -2432,6 +2448,8 @@ ${error.status} ${error.statusText}`,
 <span class="cstat-no" title="statement not covered" >    model.inspectionSource = inspectionSource;</span>
 <span class="cstat-no" title="statement not covered" >    if (inspectionParameters) {</span>
 <span class="cstat-no" title="statement not covered" >      model.inspectionParameters = inspectionParameters;</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      model.inspectionParameters = { '': '' };</span>
     }
 <span class="cstat-no" title="statement not covered" >    model.isSource = isSource;</span>
 <span class="cstat-no" title="statement not covered" >    return this.cfg.addDocument(model);</span>
@@ -2646,7 +2664,7 @@ ${error.status} ${error.statusText}`,
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Aug 10 2020 14:05:14 GMT+0000 (Coordinated Universal Time)
+                at Tue Aug 11 2020 19:26:13 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

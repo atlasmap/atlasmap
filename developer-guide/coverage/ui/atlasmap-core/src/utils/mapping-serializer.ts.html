@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">84.21% </span>
+                <span class="strong">84.08% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>448/532</span>
+                <span class='fraction'>449/534</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">72.36% </span>
+                <span class="strong">70.59% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>178/246</span>
+                <span class='fraction'>180/255</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">82.95% </span>
+                <span class="strong">82.8% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>360/434</span>
+                <span class='fraction'>361/436</span>
             </div>
         
             
@@ -1137,7 +1137,17 @@
 <a name='L1079'></a><a href='#L1079'>1079</a>
 <a name='L1080'></a><a href='#L1080'>1080</a>
 <a name='L1081'></a><a href='#L1081'>1081</a>
-<a name='L1082'></a><a href='#L1082'>1082</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1082'></a><a href='#L1082'>1082</a>
+<a name='L1083'></a><a href='#L1083'>1083</a>
+<a name='L1084'></a><a href='#L1084'>1084</a>
+<a name='L1085'></a><a href='#L1085'>1085</a>
+<a name='L1086'></a><a href='#L1086'>1086</a>
+<a name='L1087'></a><a href='#L1087'>1087</a>
+<a name='L1088'></a><a href='#L1088'>1088</a>
+<a name='L1089'></a><a href='#L1089'>1089</a>
+<a name='L1090'></a><a href='#L1090'>1090</a>
+<a name='L1091'></a><a href='#L1091'>1091</a>
+<a name='L1092'></a><a href='#L1092'>1092</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1422,6 +1432,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1764,6 +1780,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2503,6 +2523,12 @@ export class MappingSerializer {
 &nbsp;
     let inputField = [];
     if (mappingJson.inputFieldGroup) {
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (
+        mapping.transition.expression &amp;&amp;
+<span class="branch-1 cbranch-no" title="branch not covered" >        mappingJson.inputFieldGroup.fieldType === 'COMPLEX'</span>
+      ) {
+<span class="cstat-no" title="statement not covered" >        mapping.transition.expression.hasComplexField = true;</span>
+      }
       mapping.transition.mode = TransitionMode.MANY_TO_ONE;
       inputField = mappingJson.inputFieldGroup.field;
 &nbsp;
@@ -2844,7 +2870,11 @@ export class MappingSerializer {
       this.serializeActions(cfg, mappedField, serializedField);
 &nbsp;
       // Collection-based fields require an input field group.
-      <span class="missing-if-branch" title="if path not taken" >I</span>if (isSource &amp;&amp; mappedField.field.parentField?.isCollection) {
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (
+        isSource &amp;&amp;
+        mappedField.field.parentField?.isCollection<span class="branch-2 cbranch-no" title="branch not covered" > &amp;&amp;</span>
+        mapping.transition.expression?.hasComplexField
+      ) {
         const parentField = <span class="cstat-no" title="statement not covered" >mappedField.field.parentField;</span>
         const inputFieldGroup = <span class="cstat-no" title="statement not covered" >MappingSerializer.createInputFieldGroup(</span>
           mapping,
@@ -3306,7 +3336,7 @@ export class MappingSerializer {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Aug 10 2020 14:05:14 GMT+0000 (Coordinated Universal Time)
+                at Tue Aug 11 2020 19:26:13 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
