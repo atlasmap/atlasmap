@@ -283,6 +283,12 @@ export class MappingSerializer {
 
     let inputField = [];
     if (mappingJson.inputFieldGroup) {
+      if (
+        mapping.transition.expression &&
+        mappingJson.inputFieldGroup.fieldType === 'COMPLEX'
+      ) {
+        mapping.transition.expression.hasComplexField = true;
+      }
       mapping.transition.mode = TransitionMode.MANY_TO_ONE;
       inputField = mappingJson.inputFieldGroup.field;
 
@@ -624,7 +630,11 @@ export class MappingSerializer {
       this.serializeActions(cfg, mappedField, serializedField);
 
       // Collection-based fields require an input field group.
-      if (isSource && mappedField.field.parentField?.isCollection) {
+      if (
+        isSource &&
+        mappedField.field.parentField?.isCollection &&
+        mapping.transition.expression?.hasComplexField
+      ) {
         const parentField = mappedField.field.parentField;
         const inputFieldGroup = MappingSerializer.createInputFieldGroup(
           mapping,

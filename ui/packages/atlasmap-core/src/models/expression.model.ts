@@ -126,6 +126,7 @@ export class ExpressionModel {
   expressionUpdatedSource = new Subject<ExpressionUpdatedEvent>();
   expressionUpdated$ = this.expressionUpdatedSource.asObservable();
 
+  private _hasComplexField: boolean;
   private _nodes: ExpressionNode[] = [];
   private textCache = '';
 
@@ -135,6 +136,14 @@ export class ExpressionModel {
     this.mapping
       .getUserMappedFields(true)
       .forEach((f) => this.appendFieldNode(f));
+  }
+
+  get hasComplexField(): boolean {
+    return this._hasComplexField;
+  }
+
+  set hasComplexField(value: boolean) {
+    this._hasComplexField = value;
   }
 
   get nodes(): ReadonlyArray<ExpressionNode> {

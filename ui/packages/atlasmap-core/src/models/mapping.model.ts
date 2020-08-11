@@ -283,6 +283,7 @@ export class MappingModel {
     if (!fieldPath) {
       return null;
     }
+    this.transition.expression.hasComplexField = true;
     const referenceFields = this.getReferenceMappedFields();
     for (let i = 0; i < referenceFields.length; i++) {
       if (referenceFields[i].parsedData.parsedPath === fieldPath) {
