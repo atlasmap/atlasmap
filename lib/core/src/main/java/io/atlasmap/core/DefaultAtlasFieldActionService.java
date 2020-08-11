@@ -33,7 +33,6 @@ import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasFieldAction;
 import io.atlasmap.spi.AtlasFieldActionInfo;
 import io.atlasmap.spi.AtlasFieldActionService;
-import io.atlasmap.spi.AtlasFieldReader;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.ActionDetail;
@@ -49,7 +48,6 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Multiplicity;
-import io.atlasmap.v2.OneToManyAction;
 import io.atlasmap.v2.SimpleField;
 
 public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
@@ -864,8 +862,8 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         return lastSubField;
     }
 
-    private Object processAction(Action action, ActionProcessor processor, FieldType sourceType, Object sourceObject, 
-    		AtlasInternalSession session, Field field) throws AtlasException {
+    private Object processAction(Action action, ActionProcessor processor, FieldType sourceType, Object sourceObject,
+            AtlasInternalSession session, Field field) throws AtlasException {
         ActionDetail detail = processor.getActionDetail();
         Multiplicity multiplicity = detail.getMultiplicity()!= null ? detail.getMultiplicity() : Multiplicity.ONE_TO_ONE;
 
@@ -889,25 +887,12 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         
         // one to many mapping support
         if (!(sourceObject instanceof List) && multiplicity == Multiplicity.ONE_TO_MANY) {
-        	if(action instanceof OneToManyAction) {
-        	
-        		OneToManyAction oneToManyAction = ((OneToManyAction)action);
-        		String relativeFieldPath = oneToManyAction.getFieldPath();
-       		 	AtlasFieldReader fieldReader = session.getFieldReader(field.getDocId());
-       		 	Field relativeField = fieldReader.readField(session, relativeFieldPath);
-       		 	int fieldSize = 1;
-       		 	if(relativeField instanceof FieldGroup) {
-       		 		fieldSize = ((FieldGroup) relativeField).getField().size();
-       		 	}
-       			oneToManyAction.setFieldPathCount(fieldSize);
-       		 
-        	}
-        	sourceObject = processor.process(action, sourceObject); 
-        	
+            sourceObject = processor.process(action, sourceObject);
+            
         } else if (!(sourceObject instanceof List) || multiplicity == Multiplicity.MANY_TO_ONE) {
-        	sourceObject = processor.process(action, sourceObject);
+            sourceObject = processor.process(action, sourceObject);
         }
-		
+        
         if (sourceObject != null && sourceObject.getClass().isArray()) {
             sourceObject = Arrays.asList((Object[]) sourceObject);
         } else if ((sourceObject instanceof Collection) && !(sourceObject instanceof List)) {

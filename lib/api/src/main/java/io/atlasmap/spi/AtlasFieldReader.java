@@ -20,7 +20,7 @@ import io.atlasmap.v2.Field;
 
 public interface AtlasFieldReader {
 
-    Field read(AtlasInternalSession session) throws AtlasException;
+Field read(AtlasInternalSession session) throws AtlasException;
 
-	Field readField(AtlasInternalSession session, String fieldPath) throws AtlasException;
+Field readField(AtlasInternalSession session, String fieldPath) throws AtlasException;
 }

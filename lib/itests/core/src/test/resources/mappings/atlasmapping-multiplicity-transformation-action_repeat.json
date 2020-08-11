@@ -1,0 +1,76 @@
+{
+  "AtlasMapping": {
+    "jsonType": "io.atlasmap.v2.AtlasMapping",
+    "dataSource": [
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "json-source-repeat",
+        "uri": "atlas:json:json-source-repeat",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType": "io.atlasmap.v2.DataSource",
+        "id": "TargetClass",
+        "uri": "atlas:java?className=io.atlasmap.itests.core.TargetClass",
+        "dataSourceType": "TARGET"
+      }
+    ],
+    "mappings": {
+      "mapping": [
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "inputFieldGroup": {
+            "jsonType": "io.atlasmap.v2.FieldGroup",
+            "actions": [
+              {
+                "Expression": {
+                  "expression": "RepeatForFieldPathCount(${0}, count(${1}))"
+                }
+              }
+            ],
+            "field": [
+              {
+                "jsonType": "io.atlasmap.json.v2.JsonField",
+                "docId": "json-source-repeat",
+                "index": 0,
+                "path": "/namespace",
+                "fieldType": "STRING",
+                "name": "namespace"
+              },
+              {
+                "jsonType": "io.atlasmap.json.v2.JsonField",
+                "docId": "json-source-repeat",
+                "index": 1,
+                "path": "/data<>/DT",
+                "fieldType": "STRING",
+                "name": "DT"
+              }
+            ]
+          },
+		  "inputField" : [ ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.java.v2.JavaField",
+              "docId": "TargetClass",
+              "index": 0,
+              "path": "/someArray[]/someField",
+              "fieldType": "STRING",
+              "name": "someField"
+            }
+          ],
+          "id": "mapping.88333"
+        }
+      ]
+    },
+    "lookupTables": {
+      "lookupTable": []
+    },
+    "constants": {
+      "constant": []
+    },
+    "properties": {
+      "property": []
+    },
+    "name": "UI.158101"
+  }
+}

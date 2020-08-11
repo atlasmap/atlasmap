@@ -68,10 +68,10 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
     
     @Override
     public Field readField(AtlasInternalSession session, String fieldPath) throws AtlasException {
-    	Field field = new XmlField();
-    	field.setPath(fieldPath);
-    	 
-    	 if (document == null) {
+        Field field = new XmlField();
+        field.setPath(fieldPath);
+         
+        if (document == null) {
              AtlasUtil.addAudit(session, field.getDocId(),
                      String.format("Cannot read field '%s' of document '%s', document is null",
                              field.getPath(), field.getDocId()),

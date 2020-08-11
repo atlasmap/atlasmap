@@ -62,12 +62,11 @@ public class JsonFieldReader implements AtlasFieldReader {
 
     @Override
     public Field readField(AtlasInternalSession session, String fieldPath) throws AtlasException {
-    	
-    	 Field field = new JsonField();
-    	 field.setPath(fieldPath);
-    	 
+         Field field = new JsonField();
+         field.setPath(fieldPath);
+         
          if (rootNode == null) {
-        	 AtlasUtil.addAudit(session, field.getDocId(),
+            AtlasUtil.addAudit(session, field.getDocId(),
                      String.format("Cannot read a field '%s' of JSON document '%s', document is null",
                          field.getPath(), field.getDocId()),
                      field.getPath(), AuditStatus.ERROR, null);

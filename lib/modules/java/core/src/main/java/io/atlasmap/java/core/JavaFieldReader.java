@@ -32,7 +32,7 @@ public class JavaFieldReader implements AtlasFieldReader {
     
     @Override
     public Field readField(AtlasInternalSession session, String fieldPath) throws AtlasException {
-    	 try {
+        try {
              Field field = new JavaField();
              field.setPath(fieldPath);
              
