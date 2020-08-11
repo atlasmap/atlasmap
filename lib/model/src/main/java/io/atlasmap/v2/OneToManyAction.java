@@ -15,7 +15,6 @@ import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 
 @JsonTypeIdResolver(ActionResolver.class)
 public abstract class OneToManyAction extends Action implements Serializable {
-
     private static final long serialVersionUID = 1L;
     
     protected String fieldPath;

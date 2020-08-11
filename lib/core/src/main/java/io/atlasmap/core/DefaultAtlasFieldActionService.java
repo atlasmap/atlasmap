@@ -861,9 +861,8 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         }
         return lastSubField;
     }
-
-    private Object processAction(Action action, ActionProcessor processor, FieldType sourceType, Object sourceObject,
-            AtlasInternalSession session, Field field) throws AtlasException {
+    
+    private Object processAction(Action action, ActionProcessor processor, FieldType sourceType, Object sourceObject) throws AtlasException {
         ActionDetail detail = processor.getActionDetail();
         Multiplicity multiplicity = detail.getMultiplicity()!= null ? detail.getMultiplicity() : Multiplicity.ONE_TO_ONE;
 
@@ -901,7 +900,8 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         return sourceObject;
     }
     
-    private Object processAction(Action action, ActionProcessor processor, FieldType sourceType, Object sourceObject) throws AtlasException {
+    private Object processAction(Action action, ActionProcessor processor, FieldType sourceType, Object sourceObject,
+            AtlasInternalSession session, Field field) throws AtlasException {
         ActionDetail detail = processor.getActionDetail();
         Multiplicity multiplicity = detail.getMultiplicity()!= null ? detail.getMultiplicity() : Multiplicity.ONE_TO_ONE;
 
