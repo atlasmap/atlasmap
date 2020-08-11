@@ -15,7 +15,7 @@
 */
 import { ConfigModel } from './config.model';
 import { Field } from './field.model';
-import { TransitionModel } from './transition.model';
+import { TransitionModel, TransitionMode } from './transition.model';
 
 import { DataMapperUtil } from '../common/data-mapper-util';
 import { FieldAction } from './field-action.model';
@@ -283,6 +283,7 @@ export class MappingModel {
     if (!fieldPath) {
       return null;
     }
+    this.transition.mode = TransitionMode.COMPLEX_EXPR;
     const referenceFields = this.getReferenceMappedFields();
     for (let i = 0; i < referenceFields.length; i++) {
       if (referenceFields[i].parsedData.parsedPath === fieldPath) {

@@ -22,6 +22,7 @@ export enum TransitionMode {
   ENUM = 'ENUM',
   MANY_TO_ONE = 'MANY_TO_ONE',
   FOR_EACH = 'FOR_EACH',
+  COMPLEX_EXPR = 'COMPLEX_EXPR',
 }
 
 export enum TransitionDelimiter {
@@ -249,6 +250,10 @@ export class TransitionModel {
         actionName = 'For Each';
         break;
       }
+      case TransitionMode.COMPLEX_EXPR: {
+        actionName = 'Complex Expression';
+        break;
+      }
       default: {
         actionName = '';
         break;
@@ -292,6 +297,10 @@ export class TransitionModel {
 
   isForEachMode(): boolean {
     return this.mode === TransitionMode.FOR_EACH;
+  }
+
+  isComplexExprMode(): boolean {
+    return this.mode === TransitionMode.COMPLEX_EXPR;
   }
 
   isEnumerationMode(): boolean {

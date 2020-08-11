@@ -427,10 +427,13 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
     // Reinitialize the model documents.
     for (metaFragment of mInfo.exportMeta) {
       fragData = mInfo.exportBlockData[fragIndex].value;
+      const docType = metaFragment.dataSourceType
+        ? metaFragment.dataSourceType
+        : metaFragment.documentType;
       this.initializeUserDoc(
         fragData,
         metaFragment.name,
-        metaFragment.documentType,
+        docType,
         metaFragment.inspectionType,
         metaFragment.isSource === 'true',
         metaFragment.inspectionParameters
@@ -631,6 +634,7 @@ ${error.status} ${error.statusText}`,
     model.type = DocumentType.JAVA;
     model.inspectionType = InspectionType.JAVA_CLASS;
     model.inspectionSource = className;
+    model.inspectionParameters = { ['']: '' };
     model.isSource = isSource;
     model.collectionType = collectionType;
     model.collectionClassName = collectionClassName;
@@ -652,6 +656,8 @@ ${error.status} ${error.statusText}`,
     model.inspectionSource = inspectionSource;
     if (inspectionParameters) {
       model.inspectionParameters = inspectionParameters;
+    } else {
+      model.inspectionParameters = { ['']: '' };
     }
     model.isSource = isSource;
     return this.cfg.addDocument(model);
