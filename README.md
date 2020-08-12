@@ -41,7 +41,7 @@ $ git clone https://github.com/atlasmap/atlasmap ${ATLASMAP}
 2. Build
 ```
 $ cd ${ATLASMAP}
-$ ./mvnw clean install
+$ ./mvnw clean install -DskipTests -Pitests
 ```
 or you can skip tests to get the build little bit faster
 ```
@@ -55,35 +55,44 @@ $ ../mvnw -Pitests spring-boot:run
 
 4. In a separate terminal window, run the standalone UI:
 ```
-$ cd ${ATLASMAP}/ui
-$ yarn standalone
+$ cd ${ATLASMAP}/ui/packages/atlasmap-standalone
+$ yarn start
 ```
 
 ## Live update for UI development
 
 You can also run the AtlasMap Data Mapper UI with live updates by starting yarn in both the core and UI folders:
 
-1. As above, run the AtlasMap standalone jar from the springboot maven plugin:
+1. Build AtlasMap UI and server
+```
+$ cd ${ATLASMAP}
+$ ./mvnw clean install -DskipTests -Pitests
+```
+2. Start the AtlasMap server by running the AtlasMap standalone jar from the springboot maven plugin:
 ```
 $ cd ${ATLASMAP}/standalone
 $ ../mvnw -Pitests spring-boot:run
 ```
 
-2. In a separate terminal window, run yarn start to make live updates to core:
-```
-$ cd ${ATLASMAP}/ui/packages/atlasmap-core
-$ yarn start
-```
-
-3. Again in a separate terminal window, run yarn start to make live updates to the REACT UI:
+3. Again in a separate terminal window, run yarn build to make the REACT UI:
 ```
 $ cd ${ATLASMAP}/ui/packages/atlasmap-ui
-$ yarn start
+$ yarn build
 ```
 
-4. In a final separate terminal window, run the standalone UI from the REACT folder:
+4a.  Run AtlasMap standalone:
 ```
-$ cd ${ATLASMAP}/ui
-$ yarn standalone
+$ cd ${ATLASMAP}/ui/packages/atlasmap-standalone
+$ yarn start
+```
+- or -
+
+4b. Run AtlasMap from your browser with storybook
+```
+$ cd ${ATLASMAP}/ui/packages/atlasmap
+$ yarn build
+$ yarn storybook
+```
+
 ```
 
