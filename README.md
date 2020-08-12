@@ -85,7 +85,6 @@ $ yarn build
 $ cd ${ATLASMAP}/ui/packages/atlasmap-standalone
 $ yarn start
 ```
-- or -
 
 4b. Run AtlasMap from your browser with storybook
 ```
