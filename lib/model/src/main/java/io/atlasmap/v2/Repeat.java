@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class RepeatForFieldPathCount extends Action implements Serializable {
+public class Repeat extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

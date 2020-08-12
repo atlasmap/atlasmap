@@ -33,7 +33,7 @@ import io.atlasmap.v2.LastIndexOf;
 import io.atlasmap.v2.PadStringLeft;
 import io.atlasmap.v2.PadStringRight;
 import io.atlasmap.v2.Prepend;
-import io.atlasmap.v2.RepeatForFieldPathCount;
+import io.atlasmap.v2.Repeat;
 import io.atlasmap.v2.ReplaceAll;
 import io.atlasmap.v2.ReplaceFirst;
 import io.atlasmap.v2.Split;
@@ -205,7 +205,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
     }
 
     @AtlasActionProcessor(sourceType = FieldType.ANY)
-    public static String[] repeat(RepeatForFieldPathCount repeat, String input) {
+    public static String[] repeat(Repeat repeat, String input) {
 
         if (repeat == null) {
             throw new IllegalArgumentException("repeat is not defined");
@@ -213,15 +213,14 @@ public class StringComplexFieldActions implements AtlasFieldAction {
 
         String[] returnObj = null;
 
-            // Get count of fieldpath field count and create an array with count, copy input
-            // to array
-            int count = repeat.getCount();
+        // Repeat the value based on count
+        int count = repeat.getCount();
 
-            returnObj = new String[count];
-            for (int i = 0; i < count; i++) {
-                returnObj[i] = input;
-            }
-            
+        returnObj = new String[count];
+        for (int i = 0; i < count; i++) {
+            returnObj[i] = input;
+        }
+
         return returnObj;
     }
 

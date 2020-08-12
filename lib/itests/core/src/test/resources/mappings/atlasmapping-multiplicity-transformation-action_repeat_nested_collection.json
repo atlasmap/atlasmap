@@ -41,7 +41,7 @@
                 "jsonType": "io.atlasmap.json.v2.JsonField",
                 "docId": "json-source-repeat",
                 "index": 1,
-                "path": "/rootArray<>/arrayField",
+                "path": "/rootArray<>/nestedArray<>/arrayField",
                 "fieldType": "STRING",
                 "name": "DT"
               }

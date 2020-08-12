@@ -243,12 +243,6 @@ public class DefaultAtlasSessionTest {
                 LOG.debug("read method");
                 return session.head().getSourceField();
             }
-
-			@Override
-			public Field readField(AtlasInternalSession session, String fieldPath) throws AtlasException {
-				// TODO Auto-generated method stub
-				return null;
-			}
         };
         session.setFieldReader(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, reader);
         assertNotNull(session.getFieldReader(null));
@@ -265,12 +259,6 @@ public class DefaultAtlasSessionTest {
                 LOG.debug("read method");
                 return session.head().getSourceField();
             }
-
-			@Override
-			public Field readField(AtlasInternalSession session, String fieldPath) throws AtlasException {
-				// TODO Auto-generated method stub
-				return null;
-			}
         };
         session.setFieldReader(null, reader);
         session.setFieldReader("", reader);

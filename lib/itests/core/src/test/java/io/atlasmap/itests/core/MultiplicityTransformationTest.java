@@ -30,6 +30,7 @@ import java.util.List;
 
 import org.hamcrest.FeatureMatcher;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -79,7 +80,7 @@ public class MultiplicityTransformationTest {
                 Thread.currentThread().getContextClassLoader().getResource("data/json-source-collection.json").toURI())));
         session.setSourceDocument("SourceJson", sourceJson);
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(TestHelper.printAudit(session), session.hasErrors());https://github.com/rkorytkowski/atlasmap/commit/0c9b3336c36bd120db72c55446246aaa8415e037
         assertTrue("split(STRING) => INTEGER/DOUBLE mapping should get warnings", session.hasWarns());
         assertEquals(12, session.getAudits().getAudit().stream().filter(a -> a.getStatus() == AuditStatus.WARN).count());
         Object output = session.getTargetDocument("io.atlasmap.itests.core.issue.TargetClass");
@@ -301,9 +302,9 @@ public class MultiplicityTransformationTest {
         assertEquals(1+3+5+7, target.getLongField());
         assertEquals(2+4+6+8, target.getIntField());
     }
-    
+
     @Test
-    public void testActionRepeat() throws Exception {
+    public void testActionRepeat_1() throws Exception {
     	 URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-action_repeat.json");
          AtlasMapping mapping = mappingService.loadMapping(url);
          AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
@@ -311,17 +312,59 @@ public class MultiplicityTransformationTest {
          String sourceJson = new String(Files.readAllBytes(Paths.get(
              Thread.currentThread().getContextClassLoader().getResource("data/json-source-repeat.json").toURI())));
          session.setSourceDocument("json-source-repeat", sourceJson);
-        
+
          context.process(session);
          assertFalse(TestHelper.printAudit(session), session.hasErrors());
-         Object output = session.getTargetDocument("TargetClass");
-         assertEquals(io.atlasmap.itests.core.TargetClass.class, output.getClass());
-         io.atlasmap.itests.core.TargetClass target = io.atlasmap.itests.core.TargetClass.class.cast(output);
-         SomeNestedClass[] array = target.getSomeArray();
-         assertEquals(2, array.length);
-         assertEquals("ns_1138", array[0].getSomeField());
-         assertEquals("ns_1138", array[1].getSomeField());
+         Object output = session.getTargetDocument("json-target");
+         assertEquals("[{\"targetField\":\"simpleFieldValue\"}]", output);
+    }
+    
+    @Test
+    public void testActionRepeatCount3() throws Exception {
+    	 URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-action_repeat.json");
+         AtlasMapping mapping = mappingService.loadMapping(url);
+         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+         AtlasSession session = context.createSession();
+         String sourceJson = new String(Files.readAllBytes(Paths.get(
+             Thread.currentThread().getContextClassLoader().getResource("data/json-source-repeat_count_3.json").toURI())));
+         session.setSourceDocument("json-source-repeat", sourceJson);
 
+         context.process(session);
+         assertFalse(TestHelper.printAudit(session), session.hasErrors());
+         Object output = session.getTargetDocument("json-target");
+         assertEquals("[{\"targetField\":\"simpleFieldValue\"},{\"targetField\":\"simpleFieldValue\"},{\"targetField\":\"simpleFieldValue\"}]", output);
+    }
+    
+    @Test
+    public void testActionRepeatForNoSourceField() throws Exception {
+    	 URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-action_repeat.json");
+         AtlasMapping mapping = mappingService.loadMapping(url);
+         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+         AtlasSession session = context.createSession();
+         String sourceJson = new String(Files.readAllBytes(Paths.get(
+             Thread.currentThread().getContextClassLoader().getResource("data/json-source-repeat_no_field.json").toURI())));
+         session.setSourceDocument("json-source-repeat", sourceJson);
+
+         context.process(session);
+         assertFalse(TestHelper.printAudit(session), session.hasErrors());
+         Object output = session.getTargetDocument("json-target");
+         assertEquals("[]", output);
+    }
+    
+    @Test
+    public void testActionRepeatForNestedCollectionField() throws Exception {
+    	 URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-action_repeat_nested_collection.json");
+         AtlasMapping mapping = mappingService.loadMapping(url);
+         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+         AtlasSession session = context.createSession();
+         String sourceJson = new String(Files.readAllBytes(Paths.get(
+             Thread.currentThread().getContextClassLoader().getResource("data/json-source-repeat_for_nested_collection_field.json").toURI())));
+         session.setSourceDocument("json-source-repeat", sourceJson);
+
+         context.process(session);
+         assertFalse(TestHelper.printAudit(session), session.hasErrors());
+         Object output = session.getTargetDocument("json-target");
+         assertEquals("[{\"targetField\":\"simpleFieldValue\"},{\"targetField\":\"simpleFieldValue\"},{\"targetField\":\"simpleFieldValue\"}]", output);
     }
 
 }
