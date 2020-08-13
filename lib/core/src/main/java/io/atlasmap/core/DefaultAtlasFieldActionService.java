@@ -658,7 +658,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         ArrayList<Action> actions = field.getActions();
         FieldType targetType = field.getFieldType();
 
-        if (actions == null || actions.isEmpty()) {
+        if (actions == null || actions == null || actions.isEmpty()) {
             return field;
         }
 
@@ -848,51 +848,19 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         return lastSubField;
     }
 
-    private Object processAction(Action action, ActionProcessor processor, FieldType sourceType, Object sourceObject,
-            AtlasInternalSession session, Field field) throws AtlasException {
-        ActionDetail detail = processor.getActionDetail();
-        Multiplicity multiplicity = detail.getMultiplicity()!= null ? detail.getMultiplicity() : Multiplicity.ONE_TO_ONE;
-
-        if (sourceObject instanceof List) {
-            List<Object> tmpSourceList = (List<Object>) sourceObject;
-            for (int i = 0; i < tmpSourceList.size(); i++) {
-                Object subValue = tmpSourceList.get(i);
-                FieldType subType = (subValue != null ? getConversionService().fieldTypeFromClass(subValue.getClass()) : FieldType.NONE);
-                if (subValue != null && !isAssignableFieldType(detail.getSourceType(), subType)) {
-                    subValue = getConversionService().convertType(subValue, subType, detail.getSourceType());
-                    tmpSourceList.set(i, subValue);
-                }
-                if (multiplicity != Multiplicity.MANY_TO_ONE) {
-                    subValue = processor.process(action, subValue);
-                    tmpSourceList.set(i, subValue);
-                }
-            }
-        } else if (!isAssignableFieldType(detail.getSourceType(), sourceType)) {
-            sourceObject = getConversionService().convertType(sourceObject, sourceType, detail.getSourceType());
-        }
-        
-        // one to many mapping support
-        if (!(sourceObject instanceof List) && multiplicity == Multiplicity.ONE_TO_MANY) {
-            sourceObject = processor.process(action, sourceObject);
-            
-        } else if (!(sourceObject instanceof List) || multiplicity == Multiplicity.MANY_TO_ONE) {
-            sourceObject = processor.process(action, sourceObject);
-        }
-        
-        if (sourceObject != null && sourceObject.getClass().isArray()) {
-            sourceObject = Arrays.asList((Object[]) sourceObject);
-        } else if ((sourceObject instanceof Collection) && !(sourceObject instanceof List)) {
-            sourceObject = Arrays.asList(((Collection<?>) sourceObject).toArray());
-        }
-        return sourceObject;
-    }
-    
     private Object processAction(Action action, ActionProcessor processor, FieldType sourceType, Object sourceObject) throws AtlasException {
         ActionDetail detail = processor.getActionDetail();
         Multiplicity multiplicity = detail.getMultiplicity()!= null ? detail.getMultiplicity() : Multiplicity.ONE_TO_ONE;
 
         if (sourceObject instanceof List) {
-            convertCollectionValues((List<Object>) sourceObject, detail.getSourceType());
+             List<Object> tmpSourceList = (List<Object>) sourceObject;
+             if (tmpSourceList.size() == 1) {
+                 //only one element, thus get a single value for one to many or one to one transformation
+                 sourceObject = tmpSourceList.get(0);
+             } else {
+                 convertCollectionValues((List<Object>) sourceObject, detail.getSourceType());
+             }
+
         } else if (!isAssignableFieldType(detail.getSourceType(), sourceType)) {
             sourceObject = getConversionService().convertType(sourceObject, sourceType, detail.getSourceType());
         }
