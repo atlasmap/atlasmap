@@ -28,6 +28,10 @@
       "pre-commit": "tsdx lint"
     }
   },
+  "prettier": {
+    "trailingComma": "all",
+    "endOfLine": "auto"
+  },
   "dependencies": {
     "@atlasmap/core": "^2.1.0-SNAPSHOT",
     "react-sage": "^0.0.42",
