@@ -25,33 +25,22 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.AtlasMappingService;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.itests.core.TestHelper;
-import io.atlasmap.v2.AtlasMapping;
 
 /**
  * https://github.com/atlasmap/atlasmap/issues/381 .
  */
 public class Atlasmap381Test {
 
-    private AtlasMappingService mappingService;
-
-    @Before
-    public void before() {
-        mappingService = DefaultAtlasContextFactory.getInstance().getMappingService();
-    }
-
     @Test
     public void test() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/issue/atlasmap-381-mapping.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
-        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
         AtlasSession session = context.createSession();
         SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD-HH-mm-ss.SSS");
         Date sourceDate = dateFormat.parse("2001-01-01-01-01-01.001");

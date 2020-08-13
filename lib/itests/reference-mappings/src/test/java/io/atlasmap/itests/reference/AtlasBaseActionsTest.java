@@ -37,6 +37,7 @@ import io.atlasmap.v2.Capitalize;
 import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.Json;
 import io.atlasmap.v2.Length;
 import io.atlasmap.v2.Lowercase;
 import io.atlasmap.v2.Mapping;
@@ -147,7 +148,7 @@ public abstract class AtlasBaseActionsTest extends AtlasMappingBaseTest {
         atlasMapping.getDataSource().add(tgt);
 
         String tmpFile = "target/fieldactions-" + this.getClass().getSimpleName() + "-tmp.txt";
-        DefaultAtlasContextFactory.getInstance().getMappingService().saveMappingAsFile(atlasMapping, new File(tmpFile));
+        Json.mapper().writeValue(new File(tmpFile), atlasMapping);
 
         AtlasContext context = atlasContextFactory.createContext(new File(tmpFile).toURI());
         AtlasSession session = context.createSession();

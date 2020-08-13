@@ -18,17 +18,17 @@ package io.atlasmap.itests.core;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
-import java.net.URL;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
 import org.hamcrest.CoreMatchers;
-import org.junit.Before;
 import org.junit.Test;
 
 import io.atlasmap.api.AtlasContext;
+import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.AtlasMappingService;
+import io.atlasmap.core.ADMArchiveHandler;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Collection;
@@ -37,12 +37,6 @@ import io.atlasmap.v2.Mapping;
 public class CsvMappingTest {
 
     public static final String MAPPINGS_JSON = "mappings/atlasmapping-csv.json";
-    private AtlasMappingService mappingService;
-
-    @Before
-    public void before() {
-        mappingService = DefaultAtlasContextFactory.getInstance().getMappingService();
-    }
 
     @Test
     public void testMapAllFields() throws Exception {
@@ -81,8 +75,10 @@ public class CsvMappingTest {
     }
 
     public AtlasContext createContext(String file, String... mappingIds) throws Exception {
-        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-csv.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
+        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("mappings/atlasmapping-csv.json");
+        ADMArchiveHandler admHandler = new ADMArchiveHandler(Thread.currentThread().getContextClassLoader());
+        admHandler.load(AtlasContextFactory.Format.JSON, in);
+        AtlasMapping mapping = admHandler.getMappingDefinition();
         List<String> ids = Arrays.asList(mappingIds);
         mapping.getMappings().getMapping().removeIf(m -> {
             if (m instanceof Mapping) {

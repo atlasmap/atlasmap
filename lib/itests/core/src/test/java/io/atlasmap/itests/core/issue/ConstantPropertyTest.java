@@ -21,30 +21,19 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.net.URL;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.AtlasMappingService;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.itests.core.TestHelper;
-import io.atlasmap.v2.AtlasMapping;
 
 public class ConstantPropertyTest {
-
-    private AtlasMappingService mappingService;
-
-    @Before
-    public void before() {
-        mappingService = DefaultAtlasContextFactory.getInstance().getMappingService();
-    }
 
     @Test
     public void test() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/issue/constant-property-mapping.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
-        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
         AtlasSession session = context.createSession();
 
         context.process(session);

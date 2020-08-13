@@ -19,29 +19,22 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 
-import java.net.URL;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import io.atlasmap.api.AtlasContext;
+import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.AtlasMappingService;
+import io.atlasmap.core.ADMArchiveHandler;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Mapping;
 
 public class NestedCollectionJavaTest {
-
-    private AtlasMappingService mappingService;
-
-    @Before
-    public void before() {
-        mappingService = DefaultAtlasContextFactory.getInstance().getMappingService();
-    }
 
     @Test
     public void testSamePaths1stLevelCollection() throws Exception {
@@ -223,8 +216,10 @@ public class NestedCollectionJavaTest {
     }
 
     private TargetClass processNestedJavaCollection(List<String> mappingsToProcess) throws AtlasException {
-        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-nested-collection-java.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
+        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("mappings/atlasmapping-nested-collection-java.json");
+        ADMArchiveHandler admHandler = new ADMArchiveHandler(Thread.currentThread().getContextClassLoader());
+        admHandler.load(AtlasContextFactory.Format.JSON, in);
+        AtlasMapping mapping = admHandler.getMappingDefinition();
         mapping.getMappings().getMapping().removeIf(m -> !mappingsToProcess.contains(((Mapping) m).getId()));
         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
         AtlasSession session = context.createSession();

@@ -5,8 +5,8 @@
     <artifactId>atlasmap-examples</artifactId>
     <version>2.1.0-SNAPSHOT</version>
   </parent>
-  <artifactId>atlasmap-example-api</artifactId>
-  <name>Example :: AtlasMap runtime API</name>
+  <artifactId>atlasmap-example-api-adm</artifactId>
+  <name>Example :: AtlasMap runtime API + ADM</name>
   <description>A small example of running AtlasMap mapping through runtime API directly</description>
 
   <dependencies>

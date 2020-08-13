@@ -20,29 +20,18 @@ import static org.junit.Assert.assertFalse;
 
 import java.net.URL;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.AtlasMappingService;
 import io.atlasmap.core.DefaultAtlasContextFactory;
-import io.atlasmap.v2.AtlasMapping;
 
 public class NestedClassTest {
-
-    private AtlasMappingService mappingService;
-
-    @Before
-    public void before() {
-        mappingService = DefaultAtlasContextFactory.getInstance().getMappingService();
-    }
 
     @Test
     public void test() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-nested-class.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
-        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
         AtlasSession session = context.createSession();
         SourceClass sc = new SourceClass();
         sc.setSomeField("some source class value");

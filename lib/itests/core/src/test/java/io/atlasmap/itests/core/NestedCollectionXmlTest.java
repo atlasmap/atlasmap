@@ -19,35 +19,28 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasContext;
+import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.AtlasMappingService;
+import io.atlasmap.core.ADMArchiveHandler;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Mapping;
 public class NestedCollectionXmlTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(NestedCollectionXmlTest.class);
-
-     private AtlasMappingService mappingService;
-
-    @Before
-    public void before() {
-        mappingService = DefaultAtlasContextFactory.getInstance().getMappingService();
-    }
 
     @Test
     public void testAsymmetricSingleTarget() throws Exception {
@@ -296,8 +289,10 @@ public class NestedCollectionXmlTest {
     }
 
     private String processXmlNestedCollection(List<String> mappingsToProcess, boolean assertNoWarnings) throws AtlasException, IOException, URISyntaxException {
-        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-nested-collection-xml.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
+        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("mappings/atlasmapping-nested-collection-xml.json");
+        ADMArchiveHandler admHandler = new ADMArchiveHandler(Thread.currentThread().getContextClassLoader());
+        admHandler.load(AtlasContextFactory.Format.JSON, in);
+        AtlasMapping mapping = admHandler.getMappingDefinition();
         mapping.getMappings().getMapping().removeIf(m -> !mappingsToProcess.contains(((Mapping) m).getId()));
         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
         AtlasSession session = context.createSession();

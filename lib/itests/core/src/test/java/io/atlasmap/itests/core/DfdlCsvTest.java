@@ -25,31 +25,20 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.LinkedList;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.AtlasMappingService;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.java.test.TargetContact;
 import io.atlasmap.java.test.TargetTestClass;
-import io.atlasmap.v2.AtlasMapping;
 
 public class DfdlCsvTest {
-
-    private AtlasMappingService mappingService;
-
-    @Before
-    public void before() {
-        mappingService = DefaultAtlasContextFactory.getInstance().getMappingService();
-    }
 
     @Test
     public void test() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-dfdl-csv.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
-        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
         AtlasSession session = context.createSession();
         TargetTestClass javaSource = new TargetTestClass();
         javaSource.setContactList(new LinkedList<>());

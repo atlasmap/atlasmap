@@ -26,7 +26,6 @@ import org.junit.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.AtlasMappingService;
 import io.atlasmap.itests.reference.AtlasMappingBaseTest;
 import io.atlasmap.itests.reference.AtlasTestUtil;
 import io.atlasmap.itests.reference.NoAbstractTargetOrderList;
@@ -44,6 +43,7 @@ import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
+import io.atlasmap.v2.Json;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Mappings;
@@ -99,11 +99,9 @@ public class JavaJavaComplexListTest extends AtlasMappingBaseTest {
         a.getDataSource().addAll(Arrays.asList(s, t));
         a.getMappings().getMapping().addAll(Arrays.asList(m1, m2, cm));
 
-        AtlasMappingService atlasMappingService = new AtlasMappingService();
         File path = new File("target/reference-mappings/javaToJava");
         path.mkdirs();
-        atlasMappingService.saveMappingAsFile(a,
-                new File(path, "atlasmapping-complex-list-autodetect-base.xml"));
+        Json.mapper().writeValue(new File(path, "atlasmapping-complex-list-autodetect-base.xml"), a);
     }
 
     @Test

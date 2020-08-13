@@ -16,6 +16,7 @@
 package io.atlasmap.v2;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -32,6 +33,8 @@ public class DataSourceMetadata implements Serializable {
     private boolean isSource;
     @JsonIgnore
     private byte[] specification;
+    private String dataSourceType;
+    private Map<String,String> inspectionParameters;
 
     public static long getSerialversionuid() {
         return serialVersionUID;
@@ -83,6 +86,22 @@ public class DataSourceMetadata implements Serializable {
 
     public void setSpecification(byte[] specification) {
         this.specification = specification;
+    }
+
+    public String getDataSourceType() {
+        return dataSourceType;
+    }
+
+    public void setDataSourceType(String dataSourceType) {
+        this.dataSourceType = dataSourceType;
+    }
+
+    public Map<String,String> getInspectionParameters() {
+        return inspectionParameters;
+    }
+
+    public void setInspectionParameters(Map<String,String> inspectionParameters) {
+        this.inspectionParameters = inspectionParameters;
     }
 
 }
