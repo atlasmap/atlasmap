@@ -25,6 +25,7 @@ import {
   ColumnsIcon,
   TrashIcon,
   CaretDownIcon,
+  PlusIcon,
 } from "@patternfly/react-icons";
 import { css, StyleSheet } from "@patternfly/react-styles";
 import { useToggle } from "../UI";
@@ -413,6 +414,27 @@ export const ToggleUnmappedFieldsToolbarItem: FunctionComponent<{
         data-testid="show-hide-unmapped-fields-button"
       >
         <MapIcon />
+      </Button>
+    </Tooltip>
+  </ToolbarItem>
+);
+
+export const AddMappingToolbarItem: FunctionComponent<{
+  onClick: () => void;
+}> = ({ onClick }) => (
+  <ToolbarItem>
+    <Tooltip
+      position={"auto"}
+      enableFlip={true}
+      content={<div>Add a new mapping</div>}
+    >
+      <Button
+        variant={"plain"}
+        aria-label="Add a new mapping"
+        onClick={onClick}
+        data-testid="add-new-mapping-button"
+      >
+        <PlusIcon />
       </Button>
     </Tooltip>
   </ToolbarItem>
