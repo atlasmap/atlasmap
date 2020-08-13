@@ -493,8 +493,9 @@ export function useAtlasmap() {
         ) {
           return true;
         } else if (
-          !field.isConnected &&
-          !selectedMapping.targetFields.find((f) => f.id === field.id)
+          field.isCollection ||
+          (!field.isConnected &&
+            !selectedMapping.targetFields.find((f) => f.id === field.id))
         ) {
           return true;
         }
@@ -507,10 +508,11 @@ export function useAtlasmap() {
         return true;
       } else if (
         documentType === "target" &&
-        !field.isConnected &&
-        (selectedMapping.sourceFields.length <= 1 ||
-          selectedMapping.targetFields.length === 0) &&
-        !selectedMapping.targetFields.find((f) => f.id === field.id)
+        (field.isCollection ||
+          (!field.isConnected &&
+            (selectedMapping.sourceFields.length <= 1 ||
+              selectedMapping.targetFields.length === 0) &&
+            !selectedMapping.targetFields.find((f) => f.id === field.id)))
       ) {
         return true;
       }
