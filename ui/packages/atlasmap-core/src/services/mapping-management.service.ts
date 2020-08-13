@@ -412,19 +412,13 @@ export class MappingManagementService {
       return null;
     }
 
-    // Target fields may only be mapped once.
+    // Non-collection target fields may only be mapped once.
     const existingMappedField = mapping.getMappedTarget(field);
-    if (existingMappedField != null) {
-      const macPlatform: boolean = /(MacPPC|MacIntel|Mac_PowerPC|Macintosh|Mac OS X)/.test(
-        navigator.userAgent
-      );
+    if (existingMappedField != null && !field.isInCollection) {
       return (
         'it is already the target of another mapping (' +
         existingMappedField +
-        '). ' +
-        'Use ' +
-        (macPlatform ? 'CMD' : 'CTRL') +
-        "-M1 to select multiple elements for 'Combine' or 'Separate' actions."
+        '). '
       );
     }
 
