@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.v2.ADMDigest;
 import io.atlasmap.v2.AtlasMapping;
@@ -104,7 +105,7 @@ public class ADMArchiveHandler {
     }
 
     /**
-     * Load an ADM archive file or an exploded directory.
+     * Load an ADM archive file, an exploded directory or mapping definition JSON file.
      * @param path {@code java.nio.file.Path} of the ADM archive file or an exploded directory
      * @throws AtlasException If it fails to load
      */
@@ -118,8 +119,15 @@ public class ADMArchiveHandler {
 
         if (file.isDirectory()) {
             loadExploded(file);
-        } else {
+        } else if (file.getName().toLowerCase().endsWith(".adm")){
             loadADMFile(file);
+        } else {
+            try (FileInputStream fin = new FileInputStream(file)) {
+                this.mappingDefinitionBytes = readIntoByteArray(fin);
+            } catch (Exception e) {
+                throw new AtlasException(
+                        String.format("Invalid mapping definition file: '%s'", path.toString()), e);
+            }
         }
     }
 
@@ -129,7 +137,25 @@ public class ADMArchiveHandler {
      * @throws AtlasException If it fails to load
      */
     public void load(InputStream in) throws AtlasException {
-        loadADMStream(in);
+        load(AtlasContextFactory.Format.ADM, in);
+    }
+
+    /**
+     * Load an ADM archive or mapping definition from stream.
+     * @param format {@code AtlasContextFactory.Format} to indicate stream format
+     * @param in InputStream to read an ADM Archive
+     * @throws AtlasException If it fails to load
+     */
+    public void load(AtlasContextFactory.Format format, InputStream in) throws AtlasException {
+        if (format == AtlasContextFactory.Format.ADM) {
+            loadADMStream(in);
+        } else {
+            try {
+                this.mappingDefinitionBytes = readIntoByteArray(in);
+            } catch (Exception e) {
+                throw new AtlasException("Invalid mapping definition from stream", e);
+            }
+        }
     }
 
     /**
@@ -221,6 +247,9 @@ public class ADMArchiveHandler {
             } catch (Exception e) {
                 LOG.warn("Invalid serialized mapping definition content detected, discarding");
                 this.mappingDefinitionBytes = null;
+                if (LOG.isDebugEnabled()) {
+                    LOG.warn("", e);
+                }
             }
         }
         return this.mappingDefinition;
@@ -299,6 +328,19 @@ public class ADMArchiveHandler {
             }
         }
         return Collections.unmodifiableMap(this.dataSourceMetadata);
+    }
+
+    public AtlasMapping cloneMappingDefinition() throws AtlasException {
+        AtlasMapping atlasMapping = getMappingDefinition();
+        if (atlasMapping == null) {
+            return null;
+        }
+        try {
+            byte[] bytes = this.jsonMapper.writeValueAsBytes(atlasMapping);
+            return this.jsonMapper.readValue(bytes, AtlasMapping.class);
+        } catch (Exception e) {
+            throw new AtlasException(e);
+        }
     }
 
     public void clear() {

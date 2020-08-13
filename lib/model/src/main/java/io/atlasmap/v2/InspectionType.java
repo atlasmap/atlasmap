@@ -2,7 +2,8 @@ package io.atlasmap.v2;
 
 public enum InspectionType {
     SCHEMA("SCHEMA"),
-    INSTANCE("INSTANCE");
+    INSTANCE("INSTANCE"),
+    JAVA_CLASS("JAVA_CLASS");
 
     private String value;
 

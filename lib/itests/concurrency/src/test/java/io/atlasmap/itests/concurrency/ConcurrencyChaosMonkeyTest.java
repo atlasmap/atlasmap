@@ -24,6 +24,7 @@ import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.FieldType;
+import io.atlasmap.v2.Json;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 import twitter4j.Status;
@@ -220,7 +221,7 @@ public class ConcurrencyChaosMonkeyTest {
         mapping.getMappings().getMapping().add(screenTitleMapping);
 
         File mappingFile = new File("target/junit-atlasmapping.xml");
-        atlasContextFactory.getMappingService().saveMappingAsFile(mapping, mappingFile);
+        Json.mapper().writeValue(mappingFile, mapping);
 
         return mappingFile.toURI();
     }

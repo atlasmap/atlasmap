@@ -27,30 +27,20 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.AtlasMappingService;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.itests.core.BaseClass.SomeNestedClass;
 import io.atlasmap.v2.AtlasMapping;
 
 public class ExpressionTest {
 
-    private AtlasMappingService mappingService;
-
-    @Before
-    public void before() {
-        mappingService = DefaultAtlasContextFactory.getInstance().getMappingService();
-    }
-
     @Test
     public void testFilterSelectJava() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-expression-filter-select-java.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
-        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
         AtlasSession session = context.createSession();
         List<SomeNestedClass>  sourceList = new ArrayList<>();
         for (int i=0; i<5; i++) {
@@ -76,8 +66,7 @@ public class ExpressionTest {
     @Test
     public void testFilterSelectJson() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-expression-filter-select-json.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
-        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
         AtlasSession session = context.createSession();
         String sourceJson = new String(Files.readAllBytes(Paths.get(
             Thread.currentThread().getContextClassLoader().getResource("data/json-source-expression-filter-select.json").toURI())));
@@ -97,8 +86,7 @@ public class ExpressionTest {
     @Test
     public void testFilterSelectXml() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-expression-filter-select-xml.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
-        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
         AtlasSession session = context.createSession();
         String sourceXml = new String(Files.readAllBytes(Paths.get(
             Thread.currentThread().getContextClassLoader().getResource("data/xml-source-expression-filter-select.xml").toURI())));
@@ -118,8 +106,7 @@ public class ExpressionTest {
     @Test
     public void testAction() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-expression2-action.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
-        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
         AtlasSession session = context.createSession();
         SourceClass source = new SourceClass();
         source.setSomeIntArray(new int[]{1, 2, 3, 4, 5});
@@ -138,8 +125,7 @@ public class ExpressionTest {
     @Test
     public void testCompare() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-expression2-compare.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
-        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
         AtlasSession session = context.createSession();
         SourceClass source = new SourceClass();
         source.setSomeBigDecimal(new BigDecimal("1"));
@@ -161,8 +147,7 @@ public class ExpressionTest {
     @Test
     public void testPlus() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-expression2-oper.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
-        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
         AtlasSession session = context.createSession();
         SourceClass source = new SourceClass();
         source.setSomeField("first");

@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.atlasmap.api.AtlasConstants;
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasException;
@@ -62,13 +60,7 @@ public class DefaultAtlasSession implements AtlasInternalSession {
             this.mapping = null;
             return;
         }
-        try {
-            ObjectMapper om = ((DefaultAtlasContextFactory)context.getContextFactory()).getMappingService().getObjectMapper();
-            String serialized = om.writeValueAsString(context.getMapping());
-            this.mapping = om.readValue(serialized, AtlasMapping.class);
-        } catch (Exception e) {
-            throw new AtlasException("Failed to reload mapping definition", e);
-        }
+        this.mapping = context.getADMArchiveHandler().cloneMappingDefinition();
     }
 
     protected void initialize() {

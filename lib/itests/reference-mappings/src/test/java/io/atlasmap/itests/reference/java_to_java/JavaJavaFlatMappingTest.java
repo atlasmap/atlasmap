@@ -28,7 +28,6 @@ import org.junit.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.AtlasMappingService;
 import io.atlasmap.itests.reference.AtlasMappingBaseTest;
 import io.atlasmap.java.test.BaseFlatPrimitiveClass;
 import io.atlasmap.java.test.SourceFlatPrimitiveClass;
@@ -40,6 +39,7 @@ import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
+import io.atlasmap.v2.Json;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Validation;
@@ -194,11 +194,9 @@ public class JavaJavaFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testCreateJavaJavaFlatFieldMapping() throws Exception {
         AtlasMapping atlasMapping = generateJavaJavaFlatMapping();
-        AtlasMappingService atlasMappingService = new AtlasMappingService();
         File path = new File("target/reference-mappings/javaToJava");
         path.mkdirs();
-        atlasMappingService.saveMappingAsFile(atlasMapping,
-                new File(path, "atlasmapping-flatprimitive.json"));
+        Json.mapper().writeValue(new File(path, "atlasmapping-flatprimitive.json"), atlasMapping);
     }
 
     @Test

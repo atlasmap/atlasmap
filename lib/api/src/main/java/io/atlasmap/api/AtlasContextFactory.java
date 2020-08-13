@@ -16,6 +16,7 @@
 package io.atlasmap.api;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.Map;
 import java.util.Properties;
@@ -28,6 +29,8 @@ import io.atlasmap.spi.AtlasSeparateStrategy;
 
 public interface AtlasContextFactory {
 
+    enum Format { ADM, JSON };
+
     void init();
 
     void destroy();
@@ -35,6 +38,8 @@ public interface AtlasContextFactory {
     AtlasContext createContext(File atlasMappingFile) throws AtlasException;
 
     AtlasContext createContext(URI atlasMappingUri) throws AtlasException;
+
+    AtlasContext createContext(Format format, InputStream atlasMappingStream) throws AtlasException;
 
     @Deprecated
     AtlasCombineStrategy getCombineStrategy() throws AtlasException;
@@ -57,5 +62,7 @@ public interface AtlasContextFactory {
     void setProperties(Properties properties);
 
     Map<String, String> getProperties();
+
+    void addClassLoader(ClassLoader cl);
 
 }

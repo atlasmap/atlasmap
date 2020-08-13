@@ -15,8 +15,10 @@
  */
 package io.atlasmap.core;
 
+import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.net.URI;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -81,8 +83,8 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     private ObjectName jmxObjectName;
     private final UUID uuid;
     private DefaultAtlasContextFactory factory;
-    private AtlasMapping mappingDefinition;
     private URI atlasMappingUri;
+    private ADMArchiveHandler admHandler;
     private Map<String, AtlasModule> sourceModules = new HashMap<>();
     private Map<String, AtlasModule> targetModules = new HashMap<>();
     private Map<String, LookupTable> lookupTables = new HashMap<>();
@@ -102,7 +104,19 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     public DefaultAtlasContext(DefaultAtlasContextFactory factory, AtlasMapping mapping) {
         this.factory = factory;
         this.uuid = UUID.randomUUID();
-        this.mappingDefinition = mapping;
+        this.admHandler = new ADMArchiveHandler(factory.getClassLoader());
+        this.admHandler.setIgnoreLibrary(true);
+        this.admHandler.setMappingDefinition(mapping);
+    }
+
+    public DefaultAtlasContext(DefaultAtlasContextFactory factory,
+            AtlasContextFactory.Format format, InputStream stream) throws AtlasException {
+        this.factory = factory;
+        this.uuid = UUID.randomUUID();
+        this.admHandler = new ADMArchiveHandler(factory.getClassLoader());
+        this.admHandler.setIgnoreLibrary(true);
+        this.admHandler.load(format, stream);
+        this.dataSourceMetadataMap = this.admHandler.getDataSourceMetadataMap();
     }
 
     /**
@@ -119,12 +133,15 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         registerJmx(this);
 
         if (this.atlasMappingUri != null) {
-            this.mappingDefinition = factory.getMappingService().loadMapping(this.atlasMappingUri);
+            this.admHandler = new ADMArchiveHandler(factory.getClassLoader());
+            this.admHandler.setIgnoreLibrary(true);
+            this.admHandler.load(Paths.get(this.atlasMappingUri));
+            this.dataSourceMetadataMap = this.admHandler.getDataSourceMetadataMap();
         }
-        if (this.mappingDefinition == null) {
+        if (this.admHandler == null || this.admHandler.getMappingDefinition() == null) {
             LOG.warn("AtlasMap context cannot initialize without mapping definition, ignoring:"
-                    + " Mapping URI={}, Mapping Definition:={}"
-                    , this.atlasMappingUri, this.mappingDefinition);
+                    + " Mapping URI={}"
+                    , this.atlasMappingUri);
             return;
         }
 
@@ -146,15 +163,15 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         targetModules.put(PROPERTIES_DOCUMENT_ID, property);
 
         lookupTables.clear();
-        if (mappingDefinition.getLookupTables() != null
-                && mappingDefinition.getLookupTables().getLookupTable() != null) {
-            for (LookupTable table : mappingDefinition.getLookupTables().getLookupTable()) {
+        if (admHandler.getMappingDefinition().getLookupTables() != null
+                && admHandler.getMappingDefinition().getLookupTables().getLookupTable() != null) {
+            for (LookupTable table : admHandler.getMappingDefinition().getLookupTables().getLookupTable()) {
                 lookupTables.put(table.getName(), table);
             }
         }
 
         AtlasModuleInfoRegistry moduleInfoRegistry = factory.getModuleInfoRegistry();
-        for (DataSource ds : mappingDefinition.getDataSource()) {
+        for (DataSource ds : admHandler.getMappingDefinition().getDataSource()) {
             AtlasModuleInfo moduleInfo = moduleInfoRegistry.lookupByUri(ds.getUri());
             if (moduleInfo == null) {
                 LOG.error("Cannot find module info for the DataSource uri '{}'", ds.getUri());
@@ -966,7 +983,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     }
 
     public AtlasMapping getMapping() {
-        return mappingDefinition;
+        return admHandler != null ? admHandler.getMappingDefinition() : null;
     }
 
     @Override
@@ -977,7 +994,9 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 
     public AtlasSession createSession(AtlasMapping mappingDefinition) throws AtlasException {
         this.atlasMappingUri = null;
-        this.mappingDefinition = mappingDefinition;
+        this.admHandler = new ADMArchiveHandler(this.factory.getClassLoader());
+        this.admHandler.setIgnoreLibrary(true);
+        this.admHandler.setMappingDefinition(mappingDefinition);
         this.initialized = false;
         init();
         return doCreateSession();
@@ -997,11 +1016,6 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
         df.setTimeZone(TimeZone.getDefault());
         session.getProperties().put("Atlas.CreatedDateTimeTZ", df.format(date));
-    }
-
-    public void setDataSourceMetadata(Map<DataSourceKey, DataSourceMetadata> dataSourceMetadataMap) throws AtlasException {
-        this.dataSourceMetadataMap = dataSourceMetadataMap;
-        init();
     }
 
     public Map<String, AtlasModule> getSourceModules() {
@@ -1048,7 +1062,8 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 
     @Override
     public String getMappingName() {
-        return (mappingDefinition != null ? mappingDefinition.getName() : null);
+        return (admHandler.getMappingDefinition() != null
+                ? admHandler.getMappingDefinition().getName() : null);
     }
 
     protected void setMappingUri(URI atlasMappingUri) {
@@ -1075,6 +1090,10 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         return "DefaultAtlasContext [jmxObjectName=" + jmxObjectName + ", uuid=" + uuid + ", factory=" + factory
                 + ", mappingName=" + getMappingName() + ", mappingUri=" + getMappingUri() + ", sourceModules="
                 + sourceModules + ", targetModules=" + targetModules + "]";
+    }
+
+    public ADMArchiveHandler getADMArchiveHandler() {
+        return this.admHandler;
     }
 
 }

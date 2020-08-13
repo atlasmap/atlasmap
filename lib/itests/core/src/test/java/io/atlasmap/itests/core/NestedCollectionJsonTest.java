@@ -24,6 +24,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -46,9 +47,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import io.atlasmap.api.AtlasContext;
+import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.AtlasMappingService;
+import io.atlasmap.core.ADMArchiveHandler;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.AuditStatus;
@@ -58,12 +60,10 @@ public class NestedCollectionJsonTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(NestedCollectionJsonTest.class);
 
-     private AtlasMappingService mappingService;
      private ObjectMapper mapper;
 
     @Before
     public void before() {
-        mappingService = DefaultAtlasContextFactory.getInstance().getMappingService();
         mapper = new ObjectMapper()
                 .enable(SerializationFeature.INDENT_OUTPUT)
                 .configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)
@@ -72,8 +72,10 @@ public class NestedCollectionJsonTest {
 
     @Test
     public void testAsymmetricSingleTarget() throws Exception {
-        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-nested-collection-asymmetric.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
+        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("mappings/atlasmapping-nested-collection-asymmetric.json");
+        ADMArchiveHandler admHandler = new ADMArchiveHandler(Thread.currentThread().getContextClassLoader());
+        admHandler.load(AtlasContextFactory.Format.JSON, in);
+        AtlasMapping mapping = admHandler.getMappingDefinition();
         mapping.getMappings().getMapping().removeIf(m -> !"3-1".equals(((Mapping)m).getId()));
         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
         AtlasSession session = context.createSession();
@@ -247,8 +249,10 @@ public class NestedCollectionJsonTest {
     }
 
     private JsonNode processJsonNestedCollection(List<String> mappingsToProcess, boolean assertNoWarnings) throws AtlasException, IOException, URISyntaxException {
-        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-nested-collection-json.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
+        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("mappings/atlasmapping-nested-collection-json.json");
+        ADMArchiveHandler admHandler = new ADMArchiveHandler(Thread.currentThread().getContextClassLoader());
+        admHandler.load(AtlasContextFactory.Format.JSON, in);
+        AtlasMapping mapping = admHandler.getMappingDefinition();
         mapping.getMappings().getMapping().removeIf(m -> !mappingsToProcess.contains(((Mapping) m).getId()));
         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
         AtlasSession session = context.createSession();
@@ -320,8 +324,7 @@ public class NestedCollectionJsonTest {
     @Test
     public void testAsymmetricFull() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-nested-collection-asymmetric.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
-        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
         AtlasSession session = context.createSession();
         String source = new String(Files.readAllBytes(Paths.get(
             Thread.currentThread().getContextClassLoader().getResource("mappings/document-nested-collection.json").toURI())));

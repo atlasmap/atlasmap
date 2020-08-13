@@ -8,7 +8,6 @@ import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 import java.net.URL;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,30 +17,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.AtlasMappingService;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.itests.core.TestHelper;
-import io.atlasmap.v2.AtlasMapping;
 
 /**
  * https://github.com/atlasmap/atlasmap/issues/846 .
  */
 public class AtlasMap846Test {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Atlasmap759Test.class);
-
-    private AtlasMappingService mappingService;
-
-    @Before
-    public void before() {
-        mappingService = DefaultAtlasContextFactory.getInstance().getMappingService();
-    }
+    private static final Logger LOG = LoggerFactory.getLogger(AtlasMap846Test.class);
 
     @Test
     public void test() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/issue/atlasmap-846-mapping.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
-        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
         AtlasSession session = context.createSession();
         session.setSourceDocument("source", "[]");
         context.process(session);
@@ -71,8 +60,7 @@ public class AtlasMap846Test {
     @Test
     public void testHappyPath() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/issue/atlasmap-846-mapping.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
-        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
         AtlasSession session = context.createSession();
         session.setSourceDocument("source", "[{\"first_name\":\"Tom\",\"last_name\":\"Silva\",\"three\":\"three\"}]");
         context.process(session);

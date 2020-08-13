@@ -29,7 +29,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.hamcrest.FeatureMatcher;
-import org.junit.Before;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -37,7 +36,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.AtlasMappingService;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.itests.core.issue.Item;
 import io.atlasmap.itests.core.issue.SourceClass;
@@ -45,24 +43,15 @@ import io.atlasmap.itests.core.issue.TargetClass;
 import io.atlasmap.java.test.SourceFlatPrimitiveClass;
 import io.atlasmap.java.test.TargetFlatPrimitiveClass;
 import io.atlasmap.java.test.TargetTestClass;
-import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
 
 public class MultiplicityTransformationTest {
 
-    private AtlasMappingService mappingService;
-
-    @Before
-    public void before() {
-        mappingService = DefaultAtlasContextFactory.getInstance().getMappingService();
-    }
-
     @Test
     public void testConcatenateSplit() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-concatenate-split.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
-        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
         AtlasSession session = context.createSession();
         SourceClass source = new SourceClass()
                 .setSourceFirstName("Manjiro")
@@ -127,8 +116,7 @@ public class MultiplicityTransformationTest {
     @Test
     public void testConcatenateTypes() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-concatenate-types.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
-        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
         AtlasSession session = context.createSession();
         TargetTestClass source = new TargetTestClass();
         source.setCreated(new java.util.Date());
@@ -159,8 +147,7 @@ public class MultiplicityTransformationTest {
     @Test
     public void testItemAt() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-itemAt.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
-        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
         AtlasSession session = context.createSession();
         SourceClass source = new SourceClass().setSourceStringList(Arrays.asList(new String[] {"one", "two", "three"}));
         session.setSourceDocument("io.atlasmap.itests.core.issue.SourceClass", source);
@@ -176,8 +163,7 @@ public class MultiplicityTransformationTest {
     @Test
     public void testExpression() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-expression.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
-        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
         AtlasSession session = context.createSession();
         SourceClass source = new SourceClass()
                                 .setSourceString("")
@@ -219,8 +205,7 @@ public class MultiplicityTransformationTest {
     @Test
     public void testCapitalizeExpressionWithCollection() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-capitalize-expression.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
-        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
         AtlasSession session = context.createSession();
         SourceClass source = new SourceClass()
             .setSourceStringList(Arrays.asList("bob", "john", "andrea"));
@@ -237,8 +222,7 @@ public class MultiplicityTransformationTest {
     @Test
     public void testConcatenateExpressionWithCollection() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-concatenate-expression.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
-        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
         AtlasSession session = context.createSession();
         SourceClass source = new SourceClass()
             .setSourceStringList(Arrays.asList("bob", "john", "andrea"));
@@ -256,8 +240,7 @@ public class MultiplicityTransformationTest {
     @Test
     public void testConcatenateExpressionWithTwoCollections() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-concatenate-expression.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
-        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
         AtlasSession session = context.createSession();
         SourceClass source = new SourceClass()
             .setSourceStringList(Arrays.asList("bob", "john", "andrea"));
@@ -277,8 +260,7 @@ public class MultiplicityTransformationTest {
     @Test
     public void testAdd() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-add.json");
-        AtlasMapping mapping = mappingService.loadMapping(url);
-        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
         AtlasSession session = context.createSession();
         String sourceJson = new String(Files.readAllBytes(Paths.get(
             Thread.currentThread().getContextClassLoader().getResource("data/json-source.json").toURI())));

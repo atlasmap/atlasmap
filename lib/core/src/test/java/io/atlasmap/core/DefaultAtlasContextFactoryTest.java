@@ -23,6 +23,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.net.URI;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -33,6 +34,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.spi.AtlasCollectionHelper;
 import io.atlasmap.spi.AtlasCombineStrategy;
@@ -61,7 +63,6 @@ public class DefaultAtlasContextFactoryTest {
         assertEquals("io.atlasmap.core.DefaultAtlasContextFactory", factory.getClassName());
         assertNotNull(factory.getUuid());
         assertNotNull(factory.getJmxObjectName());
-        assertNotNull(factory.getMappingService());
         assertNotNull(factory.getModuleInfoRegistry());
 
         factory.destroy();
@@ -70,7 +71,6 @@ public class DefaultAtlasContextFactoryTest {
         assertEquals("io.atlasmap.core.DefaultAtlasContextFactory", factory.getClassName());
         assertNull(factory.getUuid());
         assertNull(factory.getJmxObjectName());
-        assertNull(factory.getMappingService());
         assertNull(factory.getModuleInfoRegistry());
     }
 
@@ -85,7 +85,6 @@ public class DefaultAtlasContextFactoryTest {
         assertEquals("io.atlasmap.core.DefaultAtlasContextFactory", factory.getClassName());
         assertNotNull(factory.getUuid());
         assertNotNull(factory.getJmxObjectName());
-        assertNotNull(factory.getMappingService());
         assertNotNull(factory.getModuleInfoRegistry());
 
         factory.destroy();
@@ -94,7 +93,6 @@ public class DefaultAtlasContextFactoryTest {
         assertEquals("io.atlasmap.core.DefaultAtlasContextFactory", factory.getClassName());
         assertNull(factory.getUuid());
         assertNull(factory.getJmxObjectName());
-        assertNull(factory.getMappingService());
         assertNull(factory.getModuleInfoRegistry());
 
         factory.init();
@@ -103,7 +101,6 @@ public class DefaultAtlasContextFactoryTest {
         assertEquals("io.atlasmap.core.DefaultAtlasContextFactory", factory.getClassName());
         assertNotNull(factory.getUuid());
         assertNotNull(factory.getJmxObjectName());
-        assertNotNull(factory.getMappingService());
         assertNotNull(factory.getModuleInfoRegistry());
         assertNotEquals(origUuid, factory.getUuid());
 
@@ -113,7 +110,6 @@ public class DefaultAtlasContextFactoryTest {
         assertEquals("io.atlasmap.core.DefaultAtlasContextFactory", factory.getClassName());
         assertNull(factory.getUuid());
         assertNull(factory.getJmxObjectName());
-        assertNull(factory.getMappingService());
         assertNull(factory.getModuleInfoRegistry());
     }
 
@@ -126,7 +122,6 @@ public class DefaultAtlasContextFactoryTest {
         assertEquals("io.atlasmap.core.DefaultAtlasContextFactory", factory.getClassName());
         assertNotNull(factory.getUuid());
         assertNotNull(factory.getJmxObjectName());
-        assertNotNull(factory.getMappingService());
         assertNotNull(factory.getModuleInfoRegistry());
 
         factory.destroy();
@@ -135,7 +130,6 @@ public class DefaultAtlasContextFactoryTest {
         assertEquals("io.atlasmap.core.DefaultAtlasContextFactory", factory.getClassName());
         assertNull(factory.getUuid());
         assertNull(factory.getJmxObjectName());
-        assertNull(factory.getMappingService());
         assertNull(factory.getModuleInfoRegistry());
     }
 
@@ -207,6 +201,47 @@ public class DefaultAtlasContextFactoryTest {
         factory.init();
         URI uri = null;
         assertNotNull(factory.createContext(uri));
+    }
+
+    @Test
+    public void testCreateContextStream() throws Exception {
+        FileInputStream fis = new FileInputStream(Paths.get(
+                "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.json")
+                .toFile());
+        factory = DefaultAtlasContextFactory.getInstance();
+        factory.init();
+        DefaultAtlasContext context = (DefaultAtlasContext)factory.createContext(AtlasContextFactory.Format.JSON, fis);
+        assertNotNull(context);
+        context.init();
+        assertNotNull(context.getADMArchiveHandler());
+        assertNotNull(context.getADMArchiveHandler().getMappingDefinition());
+    }
+
+    @Test
+    public void testCreateContextADM() throws Exception {
+        File file = Paths.get(
+                "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmap-mapping.adm")
+                .toFile();
+        factory = DefaultAtlasContextFactory.getInstance();
+        factory.init();
+        DefaultAtlasContext context = (DefaultAtlasContext)factory.createContext(file);
+        assertNotNull(context);
+        context.init();
+        assertNotNull(context.getADMArchiveHandler());
+        assertNotNull(context.getADMArchiveHandler().getMappingDefinition());
+    }
+
+    @Test
+    public void testCreateContextStreamADM() throws Exception {
+        FileInputStream fis = new FileInputStream(Paths.get(
+                "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmap-mapping.adm")
+                .toFile());
+        factory = DefaultAtlasContextFactory.getInstance();
+        DefaultAtlasContext context = (DefaultAtlasContext)factory.createContext(AtlasContextFactory.Format.ADM, fis);
+        assertNotNull(context);
+        context.init();
+        assertNotNull(context.getADMArchiveHandler());
+        assertNotNull(context.getADMArchiveHandler().getMappingDefinition());
     }
 
     @Test

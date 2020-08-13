@@ -16,6 +16,7 @@
 package io.atlasmap.core;
 
 import java.io.File;
+import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Constructor;
 import java.net.URI;
@@ -62,7 +63,6 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     private String uuid = null;
     private String threadName = null;
     private ObjectName objectName = null;
-    private AtlasMappingService atlasMappingService = null;
     private DefaultAtlasConversionService atlasConversionService = null;
     private DefaultAtlasFieldActionService atlasFieldActionService = null;
     private AtlasCombineStrategy atlasCombineStrategy = new DefaultAtlasCombineStrategy();
@@ -100,7 +100,6 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         registerFactoryJmx(this);
         this.moduleInfoRegistry = new DefaultAtlasModuleInfoRegistry(this);
         loadModules("moduleClass", AtlasModule.class);
-        setMappingService(new AtlasMappingService(this.classLoader));
         this.initialized = true;
     }
 
@@ -142,7 +141,6 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         this.uuid = null;
         this.objectName = null;
         this.properties = null;
-        this.atlasMappingService = null;
         this.atlasFieldActionService = null;
         this.atlasConversionService = null;
         this.atlasPropertyStrategy = null;
@@ -167,15 +165,18 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         if (atlasMappingUri == null) {
             throw new AtlasException("AtlasMappingUri must be specified");
         }
-        if (getMappingService() == null) {
-            throw new AtlasException("AtlasMappingService is not set");
-        }
         DefaultAtlasContext context = new DefaultAtlasContext(this, atlasMappingUri);
         return context;
     }
 
     public AtlasContext createContext(AtlasMapping mapping) throws AtlasException {
         DefaultAtlasContext context = new DefaultAtlasContext(this, mapping);
+        return context;
+    }
+
+    @Override
+    public AtlasContext createContext(Format format, InputStream stream) throws AtlasException {
+        DefaultAtlasContext context = new DefaultAtlasContext(this, format, stream);
         return context;
     }
 
@@ -205,14 +206,6 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 
     public ObjectName getJmxObjectName() {
         return this.objectName;
-    }
-
-    public AtlasMappingService getMappingService() {
-        return this.atlasMappingService;
-    }
-
-    public void setMappingService(AtlasMappingService atlasMappingService) {
-        this.atlasMappingService = atlasMappingService;
     }
 
     public AtlasModuleInfoRegistry getModuleInfoRegistry() {
@@ -274,6 +267,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         return this.classLoader;
     }
 
+    @Override
     public void addClassLoader(ClassLoader cl) {
         this.classLoader.add(cl);
     }
