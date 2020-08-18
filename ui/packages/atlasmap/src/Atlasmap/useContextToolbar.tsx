@@ -189,9 +189,11 @@ export function useContextToolbar({
                 onClick={toggleShowUnmappedFields}
               />
             )}
-          {showAddNewMappingToolbarItem && activeView === "ColumnMapper" && (
-            <AddMappingToolbarItem onClick={newMapping} />
-          )}
+          {showAddNewMappingToolbarItem &&
+            (activeView === "ColumnMapper" ||
+              activeView === "MappingTable") && (
+              <AddMappingToolbarItem onClick={newMapping} />
+            )}
         </ToolbarGroup>
       </ContextToolbar>
     ),
