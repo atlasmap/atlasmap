@@ -604,7 +604,7 @@ export class MappingSerializer {
       if (field.isProperty()) {
         serializedField['jsonType'] =
           ConfigModel.mappingServicesPackagePrefix + '.PropertyField';
-        serializedField['name'] = field.path ? field.path : field.name;
+        serializedField['name'] = field.name;
         serializedField['scope'] = field.scope;
       } else if (field.isConstant()) {
         serializedField['jsonType'] =
