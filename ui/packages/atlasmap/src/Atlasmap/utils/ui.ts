@@ -60,6 +60,7 @@ export function fromFieldToIFieldsGroup(field: Field): IAtlasmapGroup | null {
         name: field.name,
         type: field.type,
         isCollection: field.isCollection,
+        isInCollection: field.isInCollection(),
         fields: fields,
         amField: field,
       }
@@ -89,6 +90,7 @@ export function fromFieldToIFieldsNode(field: Field): IAtlasmapField | null {
             .filter((d) => d) as IAtlasmapMapping[]) || [],
         hasTransformations: field.partOfTransformation,
         isCollection: field.isCollection,
+        isInCollection: field.isInCollection(),
         isConnected: partOfMapping,
         isDisabled: field.type === "COMPLEX" && !field.enumeration,
       }
@@ -150,6 +152,7 @@ export function fromMappedFieldToIMappingField(
     hasTransformations: false,
     mappings: [],
     isCollection: false,
+    isInCollection: false,
     isConnected: false,
     isDisabled: false,
     amField: mappedField.field,
