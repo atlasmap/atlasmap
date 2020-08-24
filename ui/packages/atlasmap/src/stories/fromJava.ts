@@ -94,6 +94,7 @@ export function javaToFieldGroup(
           jf.name.startsWith("b") ||
           jf.name.startsWith("c")),
       isCollection: jf.collectionType === "LIST",
+      isInCollection: false,
       isConnected: false,
       isDisabled: jf.collectionType === "COMPLEX",
       amField: {} as IAtlasmapField["amField"],
@@ -107,6 +108,7 @@ export function javaToFieldGroup(
       f.javaFields ? fromGroup(f as JavaField) : fromElement(f),
     ),
     isCollection: false,
+    isInCollection: false,
     amField: {} as IAtlasmapField["amField"],
   });
 

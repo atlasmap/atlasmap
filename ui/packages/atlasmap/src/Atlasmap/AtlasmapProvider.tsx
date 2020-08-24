@@ -494,6 +494,7 @@ export function useAtlasmap() {
           return true;
         } else if (
           field.isCollection ||
+          field.isInCollection ||
           (!field.isConnected &&
             !selectedMapping.targetFields.find((f) => f.id === field.id))
         ) {
@@ -509,6 +510,7 @@ export function useAtlasmap() {
       } else if (
         documentType === "target" &&
         (field.isCollection ||
+          field.isInCollection ||
           (!field.isConnected &&
             (selectedMapping.sourceFields.length <= 1 ||
               selectedMapping.targetFields.length === 0) &&
