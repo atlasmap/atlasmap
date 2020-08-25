@@ -2,16 +2,17 @@
 
 <span class="fc" id="L3">public enum InspectionType {</span>
 <span class="fc" id="L4">    SCHEMA(&quot;SCHEMA&quot;),</span>
-<span class="fc" id="L5">    INSTANCE(&quot;INSTANCE&quot;);</span>
+<span class="fc" id="L5">    INSTANCE(&quot;INSTANCE&quot;),</span>
+<span class="fc" id="L6">    JAVA_CLASS(&quot;JAVA_CLASS&quot;);</span>
 
     private String value;
 
-<span class="fc" id="L9">    InspectionType(String inspectionType) {</span>
-<span class="fc" id="L10">        value = inspectionType;</span>
-<span class="fc" id="L11">    }</span>
+<span class="fc" id="L10">    InspectionType(String inspectionType) {</span>
+<span class="fc" id="L11">        value = inspectionType;</span>
+<span class="fc" id="L12">    }</span>
 
     public String value(){
-<span class="nc" id="L14">        return this.value;</span>
+<span class="nc" id="L15">        return this.value;</span>
     }
 
 }
