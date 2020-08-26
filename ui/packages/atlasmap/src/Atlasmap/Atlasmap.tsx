@@ -213,7 +213,9 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   const targetEvents = useMemo<ITargetsColumnCallbacks>(
     () => ({
       isSource: false,
-      canDrop: (f) => !f.isConnected,
+      canDrop: (f) => {
+        return f.isCollection || f.isInCollection || !f.isConnected;
+      },
       onDrop: (s, t) => onCreateMapping(t.payload as IAtlasmapField, s),
       canAddToSelectedMapping: (f) => isFieldAddableToSelection("target", f),
       onShowMappingDetails: selectMapping,
