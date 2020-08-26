@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -38,8 +39,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.CompoundClassLoader;
 
-public class AtlasLibraryLoader extends ClassLoader {
+public class AtlasLibraryLoader extends CompoundClassLoader {
     private static final Logger LOG = LoggerFactory.getLogger(AtlasLibraryLoader.class);
 
     private File saveDir;
@@ -48,7 +50,6 @@ public class AtlasLibraryLoader extends ClassLoader {
     private Set<AtlasLibraryLoaderListener> listeners = new HashSet<>();
 
     public AtlasLibraryLoader(String saveDirName) throws AtlasException {
-        super(AtlasLibraryLoader.class.getClassLoader());
         LOG.debug("Using {} as a lib directory", saveDirName);
         this.saveDir = new File(saveDirName);
         if (!saveDir.exists()) {
@@ -150,88 +151,52 @@ public class AtlasLibraryLoader extends ClassLoader {
     @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException {
         LOG.debug("Loading Class:{}", name);
-        if (this.urlClassLoader != null) {
+        for (ClassLoader cl : sortLoaders()) {
             try {
-                return this.urlClassLoader.loadClass(name);
+                return cl.loadClass(name);
             } catch (Throwable t) {
-                LOG.debug("Class not found: [ClassLoader:<uploaded jar>, Class name:{}, message:{}]",
-                    name, t.getMessage());
+                LOG.debug("Class not found: [ClassLoader:{}, Class name:{}, message:{}]",
+                    cl, name, t.getMessage());
+                continue;
             }
-        }
-        if (!this.alternativeLoaders.isEmpty()) {
-            for (ClassLoader cl : this.alternativeLoaders) {
-                try {
-                    return cl.loadClass(name);
-                } catch (Throwable t) {
-                    LOG.debug("Class not found: [ClassLoader:{}, Class name:{}, message:{}]",
-                        cl, name, t.getMessage());
-                    continue;
-                }
-            }
-        }
-        ClassLoader tccl = Thread.currentThread().getContextClassLoader();
-        try {
-            return tccl.loadClass(name);
-        } catch (Throwable t) {
-            LOG.debug("Class not found: [ClassLoader:{}, class name:{}, message:{}]",
-                tccl, name, t.getMessage());
         }
         return super.loadClass(name);
+    }
+
+    private Set<ClassLoader> sortLoaders() {
+        Set<ClassLoader> loaders = new LinkedHashSet<>();
+        if (this.urlClassLoader != null) {
+            loaders.add(this.urlClassLoader);
+        }
+        loaders.addAll(this.alternativeLoaders);
+        ClassLoader tccl = Thread.currentThread().getContextClassLoader();
+        if (this != tccl) {
+            loaders.add(tccl);
+        }
+        return loaders;
     }
 
     @Override
     public URL getResource(String name) {
         URL answer;
-        if (this.urlClassLoader != null) {
-             answer = this.urlClassLoader.getResource(name);
-             if (answer != null) {
-                 LOG.debug("Found resource:[ClassLoader:{}, name:{}]", this.urlClassLoader, name);
-                 return answer;
-             }
-        }
-        if (!this.alternativeLoaders.isEmpty()) {
-            for (ClassLoader cl : this.alternativeLoaders) {
-                answer = cl.getResource(name);
-                if (answer != null) {
-                    LOG.debug("Found resource:[ClassLoader:{}, name:{}]", cl, name);
-                    return answer;
-                }
+        for (ClassLoader cl : sortLoaders()) {
+            answer = cl.getResource(name);
+            if (answer != null) {
+                LOG.debug("Found resource:[ClassLoader:{}, name:{}]", cl, name);
+                return answer;
             }
-        }
-        ClassLoader tccl = Thread.currentThread().getContextClassLoader();
-        answer = tccl.getResource(name);
-        if (answer != null) {
-            LOG.debug("Found resource:[ClassLoader:{}, name:{}]", tccl, name);
-            return answer;
         }
         return super.getResource(name);
     }
 
     @Override
     public Enumeration<URL> getResources(String name) throws IOException {
-        Set<URL> answer = new HashSet<>();
-        if (this.urlClassLoader != null) {
-            for (Enumeration<URL> e = this.urlClassLoader.getResources(name); e.hasMoreElements();) {
-                LOG.debug("Found resource:[ClassLoader:{}, name:{}]", this.urlClassLoader, name);
+        Set<URL> answer = new LinkedHashSet<>();
+        for (ClassLoader cl : sortLoaders()) {
+            for (Enumeration<URL> e = cl.getResources(name); e.hasMoreElements();) {
+                LOG.debug("Found resource:[ClassLoader:{}, name:{}]", cl, name);
                 answer.add(e.nextElement());
             }
-        }
-        if (!this.alternativeLoaders.isEmpty()) {
-            for (ClassLoader cl : this.alternativeLoaders) {
-                for (Enumeration<URL> e = cl.getResources(name); e.hasMoreElements();) {
-                    LOG.debug("Found resource:[ClassLoader:{}, name:{}]", cl, name);
-                    answer.add(e.nextElement());
-                }
-            }
-        }
-        ClassLoader tccl = Thread.currentThread().getContextClassLoader();
-        for (Enumeration<URL> e = tccl.getResources(name); e.hasMoreElements();) {
-            LOG.debug("Found resource:[ClassLoader:{}, name:{}]", tccl, name);
-            answer.add(e.nextElement());
-        }
-        for (Enumeration<URL> e = super.getResources(name); e.hasMoreElements();) {
-            LOG.debug("Found resource:[ClassLoader:parent, name:{}]", this, name);
-            answer.add(e.nextElement());
         }
         return new Enumeration<URL>() {
             Iterator<URL> iterator = answer.iterator();
@@ -250,27 +215,12 @@ public class AtlasLibraryLoader extends ClassLoader {
     @Override
     public InputStream getResourceAsStream(String name) {
         InputStream answer;
-        if (this.urlClassLoader != null) {
-            answer = this.urlClassLoader.getResourceAsStream(name);
+        for (ClassLoader cl : sortLoaders()) {
+            answer = cl.getResourceAsStream(name);
             if (answer != null) {
-                LOG.debug("Found resource:[ClassLoader:{}, name:{}]", this.urlClassLoader, name);
+                LOG.debug("Found resource:[ClassLoader:{}, name:{}]", cl, name);
                 return answer;
             }
-        }
-        if (!this.alternativeLoaders.isEmpty()) {
-            for (ClassLoader cl : this.alternativeLoaders) {
-                answer = cl.getResourceAsStream(name);
-                if (answer != null) {
-                    LOG.debug("Found resource:[ClassLoader:{}, name:{}]", cl, name);
-                    return answer;
-                }
-            }
-        }
-        ClassLoader tccl = Thread.currentThread().getContextClassLoader();
-        answer = tccl.getResourceAsStream(name);
-        if (answer != null) {
-            LOG.debug("Found resource:[ClassLoader:{}, name:{}]", tccl, name);
-            return answer;
         }
         return super.getResourceAsStream(name);
     }
@@ -279,8 +229,11 @@ public class AtlasLibraryLoader extends ClassLoader {
         return this.urlClassLoader == null;
     }
 
+    @Override
     public void addAlternativeLoader(ClassLoader cl) {
-        this.alternativeLoaders.add(cl);
+        if (this != cl) {
+            this.alternativeLoaders.add(cl);
+        }
     }
 
     public void addListener(AtlasLibraryLoaderListener listener) {

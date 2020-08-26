@@ -86,14 +86,19 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 
     @Override
     public synchronized void init() {
+        CompoundClassLoader cl = new DefaultAtlasCompoundClassLoader();
+        cl.addAlternativeLoader(AtlasMapping.class.getClassLoader());
+        init(cl);
+    }
+
+    public synchronized void init(CompoundClassLoader cl) {
         if (this.initialized) {
             return;
         }
 
         this.uuid = UUID.randomUUID().toString();
         this.threadName = Thread.currentThread().getName();
-        this.classLoader = new CompoundClassLoader();
-        this.classLoader.add(AtlasMapping.class.getClassLoader());
+        this.classLoader = cl;
         this.atlasConversionService = DefaultAtlasConversionService.getInstance();
         this.atlasFieldActionService = DefaultAtlasFieldActionService.getInstance();
         this.atlasFieldActionService.init(this.classLoader);
@@ -101,6 +106,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         this.moduleInfoRegistry = new DefaultAtlasModuleInfoRegistry(this);
         loadModules("moduleClass", AtlasModule.class);
         this.initialized = true;
+        
     }
 
     @Override
@@ -269,7 +275,11 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 
     @Override
     public void addClassLoader(ClassLoader cl) {
-        this.classLoader.add(cl);
+        this.classLoader.addAlternativeLoader(cl);
+    }
+
+    public void setClassLoader(CompoundClassLoader cl) {
+        this.classLoader = cl;
     }
 
     protected void loadModules(String moduleClassProperty, Class<?> moduleInterface) {
