@@ -37,6 +37,7 @@ import {
   IAtlasmapNamespace,
   INotification,
 } from "../../Views";
+import { IFunction } from "./expression";
 
 const api = ky.create({ headers: { "ATLASMAP-XSRF-TOKEN": "awesome" } });
 
@@ -421,6 +422,35 @@ export function getMappingActions(isSource: boolean) {
     Multiplicity.ONE_TO_ONE,
   );
 }
+
+export function getMappingFunctions(): IFunction[] {
+  return [
+    {
+      name: "",
+      parameters: [],
+    },
+    {
+      name: "Map",
+      parameters: [
+        { name: "Source", type: "any", canBeFunction: true },
+        { name: "Target", type: "any" },
+      ],
+    },
+    {
+      name: "MapIf",
+      parameters: [
+        { name: "Condition", type: "boolean", canBeFunction: true },
+        { name: "Source", type: "any", canBeFunction: true },
+        { name: "Target", type: "any" },
+      ],
+    },
+    {
+      name: "IsEmpty",
+      parameters: [{ name: "Source", type: "ref", canBeFunction: true }],
+    },
+  ];
+}
+
 export function getMultiplicityActions(mapping: MappingModel) {
   if (mapping.transition.mode === TransitionMode.ONE_TO_MANY) {
     return initializationService.cfg.fieldActionService.getActionsAppliesToField(

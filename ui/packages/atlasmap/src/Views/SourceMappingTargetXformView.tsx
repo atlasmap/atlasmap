@@ -15,6 +15,7 @@ import {
   TargetsColumn,
 } from "./ColumnMapperView";
 import { IAtlasmapMapping } from "./models";
+import { IFunction } from "src/Atlasmap";
 
 export interface ISourceMappingTargetXformViewProps
   extends ISourcesColumnData,
@@ -26,6 +27,7 @@ export interface ISourceMappingTargetXformViewProps
   mappingEvents: IMappingDocumentEvents;
   targetEvents: ITargetsColumnCallbacks;
   showAllLinks: boolean;
+  availableFunctions?: IFunction[];
 }
 
 export const SourceMappingTargetXformView: FunctionComponent<ISourceMappingTargetXformViewProps> = ({
@@ -42,6 +44,7 @@ export const SourceMappingTargetXformView: FunctionComponent<ISourceMappingTarge
   sourceEvents,
   mappingEvents,
   targetEvents,
+  availableFunctions,
 }) => {
   const [highlightedMappingId, setHighlightedMappingId] = useState<
     string | undefined
@@ -71,6 +74,7 @@ export const SourceMappingTargetXformView: FunctionComponent<ISourceMappingTarge
               {...mappingEvents}
               onMouseOver={handleMouseOver}
               onMouseOut={handleMouseOut}
+              availableFunctions={availableFunctions}
             />
           </Column>
           <Column data-testid={"column-target-area"} totalColumns={3}>

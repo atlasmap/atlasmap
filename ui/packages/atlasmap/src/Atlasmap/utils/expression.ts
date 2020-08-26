@@ -112,3 +112,18 @@ export function getMappingExpression(): string {
     ? cfg.mappings!.activeMapping!.transition.expression.toHTML()
     : "";
 }
+
+export interface IFunctionParameter {
+  name: string;
+  type: string;
+  value?: any;
+  canBeFunction?: boolean;
+  canBeReference?: boolean;
+  canBeProperty?: boolean;
+  canBeValue?: boolean;
+}
+
+export interface IFunction {
+  name: string;
+  parameters: IFunctionParameter[];
+}

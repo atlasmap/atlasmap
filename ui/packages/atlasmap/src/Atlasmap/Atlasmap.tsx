@@ -65,6 +65,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     importAtlasFile,
     currentMappingExpression,
     executeFieldSearch,
+    getMappingFunctions,
     mappingExpressionAddField,
     mappingExpressionClearText,
     mappingExpressionInit,
@@ -353,6 +354,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
               sourceEvents={sourceEvents}
               mappingEvents={mappingEvents}
               targetEvents={targetEvents}
+              availableFunctions={getMappingFunctions()}
             />
           </ViewContext.Provider>
         );
@@ -362,6 +364,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   }, [
     activeView,
     constants,
+    getMappingFunctions,
     handlers,
     mappingEvents,
     mappingExpressionInit,
