@@ -108,12 +108,10 @@ public class AtlasService {
         this.libraryLoader.addListener(new AtlasLibraryLoaderListener() {
             @Override
             public void onUpdate(AtlasLibraryLoader loader) {
-                ((DefaultAtlasFieldActionService)atlasContextFactory.getFieldActionService()).init(libraryLoader);
+                ((DefaultAtlasContextFactory)atlasContextFactory).destroy();
+                ((DefaultAtlasContextFactory)atlasContextFactory).init(libraryLoader);
             }
         });
-
-        atlasContextFactory.addClassLoader(libraryLoader);
-        this.defaultContext = atlasContextFactory.createContext(new AtlasMapping());
 
         String atlasmapAdmPath = System.getProperty(ATLASMAP_ADM_PATH);
         if (atlasmapAdmPath != null && atlasmapAdmPath.length() > 0) {
@@ -126,10 +124,11 @@ public class AtlasService {
             admHandler.load(Paths.get(atlasmapAdmPath));
             admHandler.persist();
             this.libraryLoader.reload();
-            return;
         }
 
-        ((DefaultAtlasFieldActionService)atlasContextFactory.getFieldActionService()).init(libraryLoader);
+        ((DefaultAtlasContextFactory)atlasContextFactory).destroy();
+        ((DefaultAtlasContextFactory)atlasContextFactory).init(libraryLoader);
+        this.defaultContext = atlasContextFactory.createContext(new AtlasMapping());
     }
 
     @GET
