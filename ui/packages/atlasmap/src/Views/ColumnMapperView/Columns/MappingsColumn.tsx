@@ -37,6 +37,7 @@ import {
 } from "./constants";
 import { ViewContext } from "../../ViewProvider";
 import { TransformationDocument } from "./TransformationDocument";
+import { IFunction } from "src/Atlasmap";
 
 export interface IMappingsColumnData
   extends Omit<Omit<IMappingDocumentData, "mapping">, "isSelected"> {
@@ -47,8 +48,6 @@ export interface IMappingsColumnData
 export const MappingsColumn: FunctionComponent<
   IMappingsColumnData & IMappingDocumentEvents
 > = ({ mappings, selectedMappingId, ...props }) => {
-  const context = useContext(ViewContext);
-
   return (
     <>
       <ColumnHeader
@@ -65,21 +64,16 @@ export const MappingsColumn: FunctionComponent<
         <ColumnBody>
           <NodeRef id={MAPPINGS_WIDTH_BOUNDARY_ID}>
             <div>
-              {mappings.map((m) =>
-                // New approach doesn't use source/target fields in mappings
-                context?.usingTransformationApproach &&
-                m.sourceFields.length === 0 &&
-                m.targetFields.length === 0 ? (
-                  <TransformationDocument key={m.id} mapping={m} />
-                ) : (
+              {mappings.map((m) => {
+                return (
                   <MappingDocument
                     key={m.id}
                     mapping={m}
                     isSelected={selectedMappingId === m.id}
                     {...props}
                   />
-                ),
-              )}
+                );
+              })}
             </div>
           </NodeRef>
           <DraggedField>
@@ -121,7 +115,7 @@ export interface IMappingDocumentData {
   mapping: IAtlasmapMapping;
   isSelected: boolean;
   showMappingPreview: boolean;
-  usingTransformationApproach?: boolean;
+  availableFunctions?: IFunction[];
 }
 
 export const MappingDocument: FunctionComponent<
@@ -138,6 +132,7 @@ export const MappingDocument: FunctionComponent<
   onMouseOut,
   canDrop,
   onRemoveMapping,
+  availableFunctions,
 }) => {
   const context = useContext(ViewContext);
 
@@ -176,6 +171,10 @@ export const MappingDocument: FunctionComponent<
         />,
       ];
 
+  const isFunctionMapping =
+    context?.usingTransformationApproach &&
+    mapping.sourceFields.length === 0 &&
+    mapping.targetFields.length === 0;
   return (
     <FieldDropTarget
       target={{
@@ -195,7 +194,7 @@ export const MappingDocument: FunctionComponent<
           overrideWidth={MAPPINGS_WIDTH_BOUNDARY_ID}
         >
           <Document
-            title={mapping.name}
+            title={isFunctionMapping ? "Mapping" : mapping.name}
             dropAccepted={isDroppable}
             dropTarget={isTarget}
             actions={actions}
@@ -219,10 +218,11 @@ export const MappingDocument: FunctionComponent<
             }}
           >
             {/* New approach doesn't use source/target fields in mappings */}
-            {context?.usingTransformationApproach &&
-            mapping.sourceFields.length === 0 &&
-            mapping.targetFields.length === 0 ? (
-              <TransformationDocument mapping={mapping} />
+            {isFunctionMapping ? (
+              <TransformationDocument
+                mapping={mapping}
+                availableFunctions={availableFunctions!}
+              />
             ) : (
               <Split>
                 <SplitItem style={{ maxWidth: "50%", padding: "0 0 0 1rem" }}>
