@@ -65,7 +65,7 @@ public class AtlasHandlerInstantiator extends HandlerInstantiator {
     public TypeIdResolver typeIdResolverInstance(MapperConfig&lt;?&gt; config, Annotated annotated,
             Class&lt;?&gt; resolverClass) {
 <span class="fc bfc" id="L67" title="All 2 branches covered.">        if (ActionResolver.class == resolverClass) {</span>
-<span class="fc" id="L68">            return ActionResolver.getInstance(classLoader);</span>
+<span class="fc" id="L68">            return ActionResolver.getInstance();</span>
         }
 <span class="fc" id="L70">        return null;</span>
     }

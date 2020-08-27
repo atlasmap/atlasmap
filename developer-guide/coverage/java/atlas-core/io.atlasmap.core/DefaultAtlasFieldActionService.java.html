@@ -112,7 +112,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         try {
 <span class="fc" id="L113">            writeLock.lock();</span>
 <span class="fc" id="L114">            actionProcessors.clear();</span>
-<span class="fc" id="L115">            this.actionResolver = ActionResolver.getInstance(classLoader);</span>
+<span class="fc" id="L115">            this.actionResolver = ActionResolver.getInstance().init(classLoader);</span>
 <span class="fc" id="L116">            actionProcessors.addAll(loadFieldActions(classLoader));</span>
         } finally {
 <span class="fc" id="L118">            writeLock.unlock();</span>

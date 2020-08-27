@@ -123,7 +123,7 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
 <span class="nc" id="L123">        return classNames;</span>
     }
 
-    public void reload() {
+    public synchronized void reload() {
 <span class="fc" id="L127">        List&lt;URL&gt; urls = new LinkedList&lt;&gt;();</span>
 <span class="fc" id="L128">        File[] files = saveDir.listFiles();</span>
 <span class="pc bpc" id="L129" title="3 of 6 branches missed.">        if (!saveDir.exists() || !saveDir.isDirectory() || files == null) {</span>
@@ -143,71 +143,74 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
         }
         // This won't work on hierarchical class loader like JavaEE or OSGi.
         // We don't have any plan to get design time services working on those though.
-<span class="fc bfc" id="L146" title="All 2 branches covered.">        this.urlClassLoader = urls.size() == 0 ? null</span>
-<span class="fc" id="L147">         : new URLClassLoader(urls.toArray(new URL[0]), AtlasLibraryLoader.class.getClassLoader());</span>
-<span class="fc" id="L148">        listeners.forEach(l -&gt; l.onUpdate(this));</span>
-<span class="fc" id="L149">    }</span>
+<span class="pc bpc" id="L146" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L147">            LOG.debug(&quot;Reloading library jars: {}&quot;, urls);</span>
+        }
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        this.urlClassLoader = urls.size() == 0 ? null</span>
+<span class="fc" id="L150">         : new URLClassLoader(urls.toArray(new URL[0]), AtlasLibraryLoader.class.getClassLoader());</span>
+<span class="fc" id="L151">        listeners.forEach(l -&gt; l.onUpdate(this));</span>
+<span class="fc" id="L152">    }</span>
 
     @Override
     public Class&lt;?&gt; loadClass(String name) throws ClassNotFoundException {
-<span class="fc" id="L153">        LOG.debug(&quot;Loading Class:{}&quot;, name);</span>
-<span class="pc bpc" id="L154" title="1 of 2 branches missed.">        for (ClassLoader cl : sortLoaders()) {</span>
+<span class="fc" id="L156">        LOG.debug(&quot;Loading Class:{}&quot;, name);</span>
+<span class="pc bpc" id="L157" title="1 of 2 branches missed.">        for (ClassLoader cl : sortLoaders()) {</span>
             try {
-<span class="fc" id="L156">                return cl.loadClass(name);</span>
-<span class="nc" id="L157">            } catch (Throwable t) {</span>
-<span class="nc" id="L158">                LOG.debug(&quot;Class not found: [ClassLoader:{}, Class name:{}, message:{}]&quot;,</span>
-<span class="nc" id="L159">                    cl, name, t.getMessage());</span>
-<span class="nc" id="L160">                continue;</span>
+<span class="fc" id="L159">                return cl.loadClass(name);</span>
+<span class="nc" id="L160">            } catch (Throwable t) {</span>
+<span class="nc" id="L161">                LOG.debug(&quot;Class not found: [ClassLoader:{}, Class name:{}, message:{}]&quot;,</span>
+<span class="nc" id="L162">                    cl, name, t.getMessage());</span>
+<span class="nc" id="L163">                continue;</span>
             }
         }
-<span class="nc" id="L163">        return super.loadClass(name);</span>
+<span class="nc" id="L166">        return super.loadClass(name);</span>
     }
 
     private Set&lt;ClassLoader&gt; sortLoaders() {
-<span class="fc" id="L167">        Set&lt;ClassLoader&gt; loaders = new LinkedHashSet&lt;&gt;();</span>
-<span class="fc bfc" id="L168" title="All 2 branches covered.">        if (this.urlClassLoader != null) {</span>
-<span class="fc" id="L169">            loaders.add(this.urlClassLoader);</span>
+<span class="fc" id="L170">        Set&lt;ClassLoader&gt; loaders = new LinkedHashSet&lt;&gt;();</span>
+<span class="fc bfc" id="L171" title="All 2 branches covered.">        if (this.urlClassLoader != null) {</span>
+<span class="fc" id="L172">            loaders.add(this.urlClassLoader);</span>
         }
-<span class="fc" id="L171">        loaders.addAll(this.alternativeLoaders);</span>
-<span class="fc" id="L172">        ClassLoader tccl = Thread.currentThread().getContextClassLoader();</span>
-<span class="pc bpc" id="L173" title="1 of 2 branches missed.">        if (this != tccl) {</span>
-<span class="fc" id="L174">            loaders.add(tccl);</span>
+<span class="fc" id="L174">        loaders.addAll(this.alternativeLoaders);</span>
+<span class="fc" id="L175">        ClassLoader tccl = Thread.currentThread().getContextClassLoader();</span>
+<span class="pc bpc" id="L176" title="1 of 2 branches missed.">        if (this != tccl) {</span>
+<span class="fc" id="L177">            loaders.add(tccl);</span>
         }
-<span class="fc" id="L176">        return loaders;</span>
+<span class="fc" id="L179">        return loaders;</span>
     }
 
     @Override
     public URL getResource(String name) {
         URL answer;
-<span class="nc bnc" id="L182" title="All 2 branches missed.">        for (ClassLoader cl : sortLoaders()) {</span>
-<span class="nc" id="L183">            answer = cl.getResource(name);</span>
-<span class="nc bnc" id="L184" title="All 2 branches missed.">            if (answer != null) {</span>
-<span class="nc" id="L185">                LOG.debug(&quot;Found resource:[ClassLoader:{}, name:{}]&quot;, cl, name);</span>
-<span class="nc" id="L186">                return answer;</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">        for (ClassLoader cl : sortLoaders()) {</span>
+<span class="nc" id="L186">            answer = cl.getResource(name);</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">            if (answer != null) {</span>
+<span class="nc" id="L188">                LOG.debug(&quot;Found resource:[ClassLoader:{}, name:{}]&quot;, cl, name);</span>
+<span class="nc" id="L189">                return answer;</span>
             }
-<span class="nc" id="L188">        }</span>
-<span class="nc" id="L189">        return super.getResource(name);</span>
+<span class="nc" id="L191">        }</span>
+<span class="nc" id="L192">        return super.getResource(name);</span>
     }
 
     @Override
     public Enumeration&lt;URL&gt; getResources(String name) throws IOException {
-<span class="fc" id="L194">        Set&lt;URL&gt; answer = new LinkedHashSet&lt;&gt;();</span>
-<span class="fc bfc" id="L195" title="All 2 branches covered.">        for (ClassLoader cl : sortLoaders()) {</span>
-<span class="fc bfc" id="L196" title="All 2 branches covered.">            for (Enumeration&lt;URL&gt; e = cl.getResources(name); e.hasMoreElements();) {</span>
-<span class="fc" id="L197">                LOG.debug(&quot;Found resource:[ClassLoader:{}, name:{}]&quot;, cl, name);</span>
-<span class="fc" id="L198">                answer.add(e.nextElement());</span>
+<span class="fc" id="L197">        Set&lt;URL&gt; answer = new LinkedHashSet&lt;&gt;();</span>
+<span class="fc bfc" id="L198" title="All 2 branches covered.">        for (ClassLoader cl : sortLoaders()) {</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">            for (Enumeration&lt;URL&gt; e = cl.getResources(name); e.hasMoreElements();) {</span>
+<span class="fc" id="L200">                LOG.debug(&quot;Found resource:[ClassLoader:{}, name:{}]&quot;, cl, name);</span>
+<span class="fc" id="L201">                answer.add(e.nextElement());</span>
             }
-<span class="fc" id="L200">        }</span>
-<span class="fc" id="L201">        return new Enumeration&lt;URL&gt;() {</span>
-<span class="fc" id="L202">            Iterator&lt;URL&gt; iterator = answer.iterator();</span>
+<span class="fc" id="L203">        }</span>
+<span class="fc" id="L204">        return new Enumeration&lt;URL&gt;() {</span>
+<span class="fc" id="L205">            Iterator&lt;URL&gt; iterator = answer.iterator();</span>
             @Override
             public boolean hasMoreElements() {
-<span class="fc" id="L205">                return iterator.hasNext();</span>
+<span class="fc" id="L208">                return iterator.hasNext();</span>
             }
 
             @Override
             public URL nextElement() {
-<span class="fc" id="L210">                return iterator.next();</span>
+<span class="fc" id="L213">                return iterator.next();</span>
             }
         };
     }
@@ -215,30 +218,30 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
     @Override
     public InputStream getResourceAsStream(String name) {
         InputStream answer;
-<span class="nc bnc" id="L218" title="All 2 branches missed.">        for (ClassLoader cl : sortLoaders()) {</span>
-<span class="nc" id="L219">            answer = cl.getResourceAsStream(name);</span>
-<span class="nc bnc" id="L220" title="All 2 branches missed.">            if (answer != null) {</span>
-<span class="nc" id="L221">                LOG.debug(&quot;Found resource:[ClassLoader:{}, name:{}]&quot;, cl, name);</span>
-<span class="nc" id="L222">                return answer;</span>
+<span class="nc bnc" id="L221" title="All 2 branches missed.">        for (ClassLoader cl : sortLoaders()) {</span>
+<span class="nc" id="L222">            answer = cl.getResourceAsStream(name);</span>
+<span class="nc bnc" id="L223" title="All 2 branches missed.">            if (answer != null) {</span>
+<span class="nc" id="L224">                LOG.debug(&quot;Found resource:[ClassLoader:{}, name:{}]&quot;, cl, name);</span>
+<span class="nc" id="L225">                return answer;</span>
             }
-<span class="nc" id="L224">        }</span>
-<span class="nc" id="L225">        return super.getResourceAsStream(name);</span>
+<span class="nc" id="L227">        }</span>
+<span class="nc" id="L228">        return super.getResourceAsStream(name);</span>
     }
 
     public boolean isEmpty() {
-<span class="nc bnc" id="L229" title="All 2 branches missed.">        return this.urlClassLoader == null;</span>
+<span class="nc bnc" id="L232" title="All 2 branches missed.">        return this.urlClassLoader == null;</span>
     }
 
     @Override
     public void addAlternativeLoader(ClassLoader cl) {
-<span class="pc bpc" id="L234" title="1 of 2 branches missed.">        if (this != cl) {</span>
-<span class="fc" id="L235">            this.alternativeLoaders.add(cl);</span>
+<span class="pc bpc" id="L237" title="1 of 2 branches missed.">        if (this != cl) {</span>
+<span class="fc" id="L238">            this.alternativeLoaders.add(cl);</span>
         }
-<span class="fc" id="L237">    }</span>
+<span class="fc" id="L240">    }</span>
 
     public void addListener(AtlasLibraryLoaderListener listener) {
-<span class="fc" id="L240">        this.listeners.add(listener);</span>
-<span class="fc" id="L241">    }</span>
+<span class="fc" id="L243">        this.listeners.add(listener);</span>
+<span class="fc" id="L244">    }</span>
 
     public interface AtlasLibraryLoaderListener {
         public void onUpdate(AtlasLibraryLoader loader);

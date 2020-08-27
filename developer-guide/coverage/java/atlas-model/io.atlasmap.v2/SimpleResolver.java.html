@@ -33,76 +33,85 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
     private JavaType baseType;
     private ClassLoader classLoader;
+    private TypeFactory typeFactory;
 
     @Override
     public void init(JavaType baseType) {
-<span class="fc" id="L39">        this.baseType = baseType;</span>
-<span class="fc" id="L40">        Class&lt;?&gt; baseClass = baseType.getRawClass();</span>
+<span class="fc" id="L40">        this.baseType = baseType;</span>
+<span class="fc" id="L41">        Class&lt;?&gt; baseClass = baseType.getRawClass();</span>
 
-<span class="fc bfc" id="L42" title="All 2 branches covered.">        ServiceLoader&lt;?&gt; implementations = ServiceLoader.load(baseClass, this.classLoader != null ? this.classLoader : baseClass.getClassLoader());</span>
-<span class="fc bfc" id="L43" title="All 2 branches covered.">        for (Object o : implementations) {</span>
-<span class="fc" id="L44">            Class&lt;?&gt; c = o.getClass();</span>
-<span class="pc bpc" id="L45" title="2 of 4 branches missed.">            if (c != baseClass &amp;&amp; baseClass.isAssignableFrom(c)) {</span>
-<span class="fc" id="L46">                JsonTypeName jsonAnnoation = c.getAnnotation(JsonTypeName.class);</span>
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        ServiceLoader&lt;?&gt; implementations = ServiceLoader.load(baseClass, this.classLoader != null ? this.classLoader : baseClass.getClassLoader());</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        for (Object o : implementations) {</span>
+<span class="fc" id="L45">            Class&lt;?&gt; c = o.getClass();</span>
+<span class="pc bpc" id="L46" title="2 of 4 branches missed.">            if (c != baseClass &amp;&amp; baseClass.isAssignableFrom(c)) {</span>
+<span class="fc" id="L47">                JsonTypeName jsonAnnoation = c.getAnnotation(JsonTypeName.class);</span>
 
                 // Use short ids for classes in the same package..
-<span class="fc" id="L49">                String id = null;</span>
-<span class="fc bfc" id="L50" title="All 2 branches covered.">                if ( c.getPackage().getName().equals(baseClass.getPackage().getName()) ) {</span>
-<span class="pc bpc" id="L51" title="3 of 4 branches missed.">                    if (jsonAnnoation != null &amp;&amp; jsonAnnoation.value() != null) {</span>
-<span class="nc" id="L52">                        id = jsonAnnoation.value();</span>
+<span class="fc" id="L50">                String id = null;</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">                if ( c.getPackage().getName().equals(baseClass.getPackage().getName()) ) {</span>
+<span class="pc bpc" id="L52" title="3 of 4 branches missed.">                    if (jsonAnnoation != null &amp;&amp; jsonAnnoation.value() != null) {</span>
+<span class="nc" id="L53">                        id = jsonAnnoation.value();</span>
                     } else {
-<span class="fc" id="L54">                        id = c.getSimpleName();</span>
+<span class="fc" id="L55">                        id = c.getSimpleName();</span>
                     }
                 } else {
                     // All other extensions need fully qualified names.
-<span class="fc" id="L58">                    id = c.getName();</span>
+<span class="fc" id="L59">                    id = c.getName();</span>
                 }
-<span class="fc" id="L60">                typeToId.put(c, id);</span>
-<span class="fc" id="L61">                idToType.put(id, TypeFactory.defaultInstance().constructSpecializedType(baseType, c));</span>
+<span class="fc" id="L61">                typeToId.put(c, id);</span>
+<span class="fc" id="L62">                idToType.put(id, typeFactory.constructSpecializedType(baseType, c));</span>
             }
-<span class="fc" id="L63">        }</span>
-<span class="fc" id="L64">    }</span>
+<span class="fc" id="L64">        }</span>
+<span class="fc" id="L65">    }</span>
 
     @Override
     public JsonTypeInfo.Id getMechanism() {
-<span class="nc" id="L68">        return JsonTypeInfo.Id.CUSTOM;</span>
+<span class="nc" id="L69">        return JsonTypeInfo.Id.CUSTOM;</span>
     }
 
     @Override
     public String idFromValue(Object value) {
-<span class="fc" id="L73">        return idFromValueAndType(value, value.getClass());</span>
+<span class="fc" id="L74">        return idFromValueAndType(value, value.getClass());</span>
     }
 
     @Override
     public String idFromValueAndType(Object value, Class&lt;?&gt; aClass) {
-<span class="fc" id="L78">        String rc = typeToId.get(aClass);</span>
-<span class="pc bpc" id="L79" title="1 of 2 branches missed.">        if (rc == null) {</span>
-<span class="nc" id="L80">            throw new IllegalArgumentException(&quot;Invalid type: &quot; + aClass);</span>
+<span class="fc" id="L79">        String rc = typeToId.get(aClass);</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (rc == null) {</span>
+<span class="nc" id="L81">            throw new IllegalArgumentException(&quot;Invalid type: &quot; + aClass);</span>
         }
-<span class="fc" id="L82">        return rc;</span>
+<span class="fc" id="L83">        return rc;</span>
     }
 
     @Override
     public String idFromBaseType() {
-<span class="nc" id="L87">        return idFromValueAndType(null, baseType.getRawClass());</span>
+<span class="nc" id="L88">        return idFromValueAndType(null, baseType.getRawClass());</span>
     }
 
     @Override
     public JavaType typeFromId(DatabindContext databindContext, String id) throws IOException {
-<span class="fc" id="L92">        JavaType rc = idToType.get(id);</span>
-<span class="pc bpc" id="L93" title="1 of 2 branches missed.">        if (rc == null) {</span>
-<span class="nc" id="L94">            throw new IllegalArgumentException(&quot;Invalid type id: &quot; + id);</span>
+<span class="fc" id="L93">        JavaType rc = idToType.get(id);</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        if (rc == null) {</span>
+<span class="nc" id="L95">            throw new IllegalArgumentException(&quot;Invalid type id: &quot; + id);</span>
         }
-<span class="fc" id="L96">        return rc;</span>
+<span class="fc" id="L97">        return rc;</span>
     }
 
     @Override
     public String getDescForKnownTypeIds() {
-<span class="nc" id="L101">        return &quot;valid values: &quot; + idToType.keySet();</span>
+<span class="nc" id="L102">        return &quot;valid values: &quot; + idToType.keySet();</span>
     }
 
     public void setClassLoader(ClassLoader classLoader) {
-<span class="fc" id="L105">        this.classLoader = classLoader;</span>
-<span class="fc" id="L106">    }</span>
+<span class="fc" id="L106">        this.classLoader = classLoader;</span>
+<span class="fc" id="L107">    }</span>
+
+    public ClassLoader getClassLoader() {
+<span class="nc" id="L110">        return this.classLoader;</span>
+    }
+
+    public void setTypeFactory(TypeFactory tf) {
+<span class="fc" id="L114">        this.typeFactory = tf;</span>
+<span class="fc" id="L115">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
