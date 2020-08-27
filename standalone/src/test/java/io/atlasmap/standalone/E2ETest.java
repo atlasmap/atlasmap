@@ -143,6 +143,7 @@ public class E2ETest {
                 continue;
             }
             ADMArchiveHandler handler = new ADMArchiveHandler(getClass().getClassLoader());
+            handler.setLibraryDirectory(Paths.get(DLDIR + File.separator + "lib"));
             handler.load(Paths.get(DLDIR + File.separator + exportAdmFileName));
             assertEquals("UI.0", handler.getMappingDefinition().getName());
             return;

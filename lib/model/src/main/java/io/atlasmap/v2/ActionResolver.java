@@ -27,20 +27,23 @@ public class ActionResolver extends TypeIdResolverBase {
 
     private static ActionResolver instance;
     private SimpleResolver delegate;
+    private TypeFactory typeFactory;
+    private ClassLoader classLoader;
 
     private ActionResolver() {
-        this(null);
+        init(ActionResolver.class.getClassLoader());
     }
 
-    private ActionResolver(ClassLoader classLoader) {
-        delegate = new SimpleResolver();
+    public ActionResolver init(ClassLoader cl) {
+        this.classLoader = cl;
+        typeFactory = TypeFactory.defaultInstance().withClassLoader(classLoader);
+        if (delegate == null) {
+            delegate = new SimpleResolver();
+        }
         delegate.setClassLoader(classLoader);
-        delegate.init(TypeFactory.defaultInstance().constructType(Action.class));
-    }
-
-    public static ActionResolver getInstance(ClassLoader classLoader) {
-        instance = new ActionResolver(classLoader);
-        return instance;
+        delegate.setTypeFactory(typeFactory);
+        delegate.init(typeFactory.constructType(Action.class));
+        return this;
     }
 
     public static ActionResolver getInstance() {
@@ -91,4 +94,9 @@ public class ActionResolver extends TypeIdResolverBase {
     public String getDescForKnownTypeIds() {
         return delegate.getDescForKnownTypeIds();
     }
+
+    public void setTypeFactory(TypeFactory tf) {
+        this.typeFactory = tf;
+    }
+
 }

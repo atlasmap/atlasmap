@@ -7,7 +7,7 @@ public class MyFieldActions implements AtlasFieldAction {
 
     @AtlasActionProcessor
     public static String myCustomFieldAction(MyFieldActionsModel action, String input) {
-        return "Hello " + input;
+        return String.format("%s %s", action.getParam(), input);
     }
 
 }
