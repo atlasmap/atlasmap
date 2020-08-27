@@ -435,6 +435,7 @@ public class AtlasService {
                 admHandler.setLibraryDirectory(Paths.get(libFolder));
                 admHandler.load(mapping);
                 admHandler.persist();
+                this.libraryLoader.reload();
             } catch (Exception e) {
                 LOG.error("Error importing ADM archive.\n" + e.getMessage(), e);
                 throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);

@@ -33,6 +33,7 @@ public class SimpleResolver extends TypeIdResolverBase {
 
     private JavaType baseType;
     private ClassLoader classLoader;
+    private TypeFactory typeFactory;
 
     @Override
     public void init(JavaType baseType) {
@@ -58,7 +59,7 @@ public class SimpleResolver extends TypeIdResolverBase {
                     id = c.getName();
                 }
                 typeToId.put(c, id);
-                idToType.put(id, TypeFactory.defaultInstance().constructSpecializedType(baseType, c));
+                idToType.put(id, typeFactory.constructSpecializedType(baseType, c));
             }
         }
     }
@@ -103,5 +104,13 @@ public class SimpleResolver extends TypeIdResolverBase {
 
     public void setClassLoader(ClassLoader classLoader) {
         this.classLoader = classLoader;
+    }
+
+    public ClassLoader getClassLoader() {
+        return this.classLoader;
+    }
+
+    public void setTypeFactory(TypeFactory tf) {
+        this.typeFactory = tf;
     }
 }

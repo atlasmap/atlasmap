@@ -123,7 +123,7 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
         return classNames;
     }
 
-    public void reload() {
+    public synchronized void reload() {
         List<URL> urls = new LinkedList<>();
         File[] files = saveDir.listFiles();
         if (!saveDir.exists() || !saveDir.isDirectory() || files == null) {
@@ -143,6 +143,9 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
         }
         // This won't work on hierarchical class loader like JavaEE or OSGi.
         // We don't have any plan to get design time services working on those though.
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Reloading library jars: {}", urls);
+        }
         this.urlClassLoader = urls.size() == 0 ? null
          : new URLClassLoader(urls.toArray(new URL[0]), AtlasLibraryLoader.class.getClassLoader());
         listeners.forEach(l -> l.onUpdate(this));
