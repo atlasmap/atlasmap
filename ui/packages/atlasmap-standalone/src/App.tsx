@@ -1,6 +1,7 @@
 import { Atlasmap } from "@atlasmap/atlasmap";
-import { Page, PageHeader, PageSection } from "@patternfly/react-core";
+import { Brand, Page, PageHeader, PageSection } from "@patternfly/react-core";
 import React  from "react";
+import atlasmapLogo from "./logo-horizontal-darkbg.png";
 
 const App: React.FC = () => {
   return (
@@ -9,7 +10,7 @@ const App: React.FC = () => {
         <PageHeader
           logo={
             <>
-              <strong>AtlasMap</strong>&nbsp;Data Mapper UI
+              <Brand src={atlasmapLogo} alt="AtlasMap Data Mapper UI" height="40" />
             </>
           }
           style={{ minHeight: 40 }}
