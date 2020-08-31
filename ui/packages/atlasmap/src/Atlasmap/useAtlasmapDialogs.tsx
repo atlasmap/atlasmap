@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { IConstant, INamespace, IProperty } from "../UI";
@@ -19,7 +19,7 @@ import {
   useToggleExpressionModeDialog,
   useCustomClassDialog,
 } from "./dialogs";
-import { enableCustomClass } from "./utils";
+import { enableCustomClass, getPropertyScopeOptions } from "./utils";
 
 export interface IUseAtlasmapDialogsProps {
   modalContainer: HTMLElement;
@@ -63,11 +63,16 @@ export function useAtlasmapDialogs({
   //#endregion
 
   //#region property dialogs
+  const [scopeOptions, setScopeOptions] = useState(
+    getPropertyScopeOptions(true),
+  );
   const [createPropertyDialog, openCreatePropertyDialog] = usePropertyDialog(
     "Create Property",
+    scopeOptions,
   );
   const onCreateProperty = useCallback(
     (isSource: boolean) => {
+      setScopeOptions(getPropertyScopeOptions(isSource));
       openCreatePropertyDialog(({ name, valueType, scope }) => {
         createProperty(name, valueType, scope, isSource);
       });
@@ -76,9 +81,11 @@ export function useAtlasmapDialogs({
   );
   const [editPropertyDialog, openEditPropertyDialog] = usePropertyDialog(
     "Edit Property",
+    scopeOptions,
   );
   const onEditProperty = useCallback(
     (property: IProperty, isSource: boolean) => {
+      setScopeOptions(getPropertyScopeOptions(isSource));
       openEditPropertyDialog(({ name, valueType, scope }) => {
         editProperty(property.name, valueType, scope, name, isSource);
       }, property);

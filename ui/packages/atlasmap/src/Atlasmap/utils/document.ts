@@ -330,7 +330,9 @@ export function enableCustomClass(
     });
 }
 
-export function getPropertyScopeOptions(): {
+export function getPropertyScopeOptions(
+  isSource: boolean,
+): {
   value: string;
   label: string;
 }[] {
@@ -348,10 +350,13 @@ export function getPropertyScopeOptions(): {
       value: "camelExchangeProperty",
     },
   ];
-  for (let i = 0; i < cfg.sourceDocs.length; i++) {
+  const propertyDocOptions: DocumentDefinition[] = isSource
+    ? cfg.sourceDocs
+    : cfg.targetDocs;
+  for (let i = 0; i < propertyDocOptions.length; i++) {
     scopeOptions.push({
-      value: cfg.sourceDocs[i].id,
-      label: cfg.sourceDocs[i].name,
+      value: propertyDocOptions[i].id,
+      label: propertyDocOptions[i].name,
     });
   }
   return scopeOptions;
