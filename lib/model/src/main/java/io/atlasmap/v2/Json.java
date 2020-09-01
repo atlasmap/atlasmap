@@ -2,6 +2,7 @@ package io.atlasmap.v2;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.type.TypeFactory;
@@ -10,6 +11,7 @@ public class Json {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
         .registerModule(new AtlasJsonModule())
+        .enable(MapperFeature.BLOCK_UNSAFE_POLYMORPHIC_BASE_TYPES)
         .enable(SerializationFeature.INDENT_OUTPUT)
         .configure(SerializationFeature.WRAP_ROOT_VALUE, true)
         .configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true)
