@@ -25,6 +25,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -51,8 +52,10 @@ public class ActionListUpgradeDeserializer extends JsonDeserializer<ArrayList<Ac
 
     @Override
     public ArrayList<Action> deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-        objectMapper.setTypeFactory(TypeFactory.defaultInstance().withClassLoader(classLoader));
+        ObjectMapper objectMapper = new ObjectMapper()
+            .enable(MapperFeature.BLOCK_UNSAFE_POLYMORPHIC_BASE_TYPES)
+            .enable(SerializationFeature.INDENT_OUTPUT)
+            .setTypeFactory(TypeFactory.defaultInstance().withClassLoader(classLoader));
         objectMapper.setHandlerInstantiator(new AtlasHandlerInstantiator(classLoader));
         JsonNode node = (JsonNode) objectMapper.readTree(jp);
 
