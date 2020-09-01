@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ContainerNode;
@@ -46,8 +47,9 @@ public class JsonFieldWriter implements AtlasFieldWriter {
     private ContainerNode<?> rootNode = null;
 
     public JsonFieldWriter() {
-        this.objectMapper = new ObjectMapper();
-        objectMapper.setDefaultPrettyPrinter(new DefaultPrettyPrinter());
+        this.objectMapper = new ObjectMapper()
+            .enable(MapperFeature.BLOCK_UNSAFE_POLYMORPHIC_BASE_TYPES)
+            .setDefaultPrettyPrinter(new DefaultPrettyPrinter());
     }
 
     public JsonFieldWriter(ObjectMapper objectMapper) {
