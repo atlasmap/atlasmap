@@ -101,6 +101,8 @@ public class E2ETest {
         WebElement confirmBtn = driver.findElement(By.xpath("//button[@data-testid='confirmation-dialog-confirm-button']"));
         confirmBtn.click();
         waitForLoad.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//article[@aria-label='JSONSchemaSource']")));
+
+        // Check custom action param
         WebElement orderBtn = driver.findElement(By.xpath("//button[@id='sources-field-atlas:json:JSONSchemaSource:source:/order-toggle']"));
         orderBtn.click();
         WebElement addrBtn = driver.findElement(By.xpath(
@@ -116,6 +118,20 @@ public class E2ETest {
         WebElement detailsCity = waitForLoad.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
             "//div[@role='dialog']//div[@aria-labelledby='mapping-field-city']")));
         assertNotNull(detailsCity);
+        WebElement customActionParamInput = driver.findElement(By.id(
+            "user-field-action-io.atlasmap.service.my.MyFieldActionsModel-transformation-0"));
+        assertEquals("testparam", customActionParamInput.getAttribute("value"));
+        // Check custom source class mapping
+        WebElement customClassDoc = driver.findElement(By.xpath("//article[@aria-label='io.atlasmap.service.my.MyFieldActionsModel']"));
+        WebElement paramDiv = customClassDoc.findElement(By.xpath(".//button[@data-testid='grip-param-button']/../../../.."));
+        action = new Actions(driver);
+        action.moveToElement(paramDiv).perform();
+        showDetailsBtn = paramDiv.findElement(By.xpath(".//button[@data-testid='show-mapping-details-button']"));
+        showDetailsBtn.click();
+        WebElement detailsPhotoUrl = waitForLoad.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
+            "//div[@data-testid='column-mapping-details-area']//div[@data-testid='mapping-fields-detail-Targets-toggle']"
+            + "//div[@data-testid='mapping-field-photoUrl']")));
+        assertNotNull(detailsPhotoUrl);
 
         atlasmapMenuBtn = driver.findElement(By.xpath("//button[@data-testid='atlasmap-menu-button']"));
         atlasmapMenuBtn.click();
