@@ -286,8 +286,7 @@ public class MultiplicityTransformationTest {
     @Test
     public void testActionRepeat_1() throws Exception {
     	 URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-action_repeat.json");
-         AtlasMapping mapping = mappingService.loadMapping(url);
-         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
          AtlasSession session = context.createSession();
          String sourceJson = new String(Files.readAllBytes(Paths.get(
              Thread.currentThread().getContextClassLoader().getResource("data/json-source-repeat.json").toURI())));
@@ -302,8 +301,7 @@ public class MultiplicityTransformationTest {
     @Test
     public void testActionRepeatCount3() throws Exception {
     	 URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-action_repeat.json");
-         AtlasMapping mapping = mappingService.loadMapping(url);
-         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
          AtlasSession session = context.createSession();
          String sourceJson = new String(Files.readAllBytes(Paths.get(
              Thread.currentThread().getContextClassLoader().getResource("data/json-source-repeat_count_3.json").toURI())));
@@ -318,8 +316,7 @@ public class MultiplicityTransformationTest {
     @Test
     public void testActionRepeatForNoSourceField() throws Exception {
     	 URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-action_repeat.json");
-         AtlasMapping mapping = mappingService.loadMapping(url);
-         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
          AtlasSession session = context.createSession();
          String sourceJson = new String(Files.readAllBytes(Paths.get(
              Thread.currentThread().getContextClassLoader().getResource("data/json-source-repeat_no_field.json").toURI())));
@@ -334,8 +331,7 @@ public class MultiplicityTransformationTest {
     @Test
     public void testActionRepeatForNestedCollectionField() throws Exception {
     	 URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-action_repeat_nested_collection.json");
-         AtlasMapping mapping = mappingService.loadMapping(url);
-         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
          AtlasSession session = context.createSession();
          String sourceJson = new String(Files.readAllBytes(Paths.get(
              Thread.currentThread().getContextClassLoader().getResource("data/json-source-repeat_for_nested_collection_field.json").toURI())));
