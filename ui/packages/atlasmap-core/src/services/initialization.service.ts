@@ -34,6 +34,7 @@ import { ErrorHandlerService } from './error-handler.service';
 import { DocumentManagementService } from './document-management.service';
 import { MappingManagementService } from './mapping-management.service';
 import { FieldActionService } from './field-action.service';
+import { FunctionService } from './function.service';
 import { FileManagementService } from './file-management.service';
 import { LookupTableUtil } from '../utils/lookup-table-util';
 import { MappingSerializer } from '../utils/mapping-serializer';
@@ -44,6 +45,7 @@ import {
   ErrorInfo,
   ErrorLevel,
 } from '../models/error.model';
+
 log.setDefaultLevel(log.levels.WARN);
 
 export class InitializationService {
@@ -64,6 +66,7 @@ export class InitializationService {
     private mappingService: MappingManagementService,
     private errorService: ErrorHandlerService,
     private fieldActionService: FieldActionService,
+    private functionService: FunctionService,
     private fileService: FileManagementService
   ) {
     this.resetConfig();
@@ -80,6 +83,8 @@ export class InitializationService {
     this.cfg.errorService = this.errorService;
     this.cfg.fieldActionService = this.fieldActionService;
     this.cfg.fieldActionService.cfg = this.cfg;
+    this.cfg.functionService = this.functionService;
+    this.cfg.functionService.cfg = this.cfg;
     this.cfg.fileService = this.fileService;
     this.cfg.fileService.cfg = this.cfg;
     this.cfg.initializationService = this;
@@ -171,6 +176,11 @@ export class InitializationService {
                   .catch((error: any) => {
                     this.handleError(error);
                   });
+                await this.cfg.functionService
+                  .fetchFunctions()
+                  .catch((error: any) => {
+                    this.handleError(error);
+                  });
               }
             }
           );
@@ -244,6 +254,7 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
       this.cfg.setConstantPropertyDocs();
       this.cfg.errorService.resetAll();
       this.cfg.fieldActionService.isInitialized = false;
+      this.cfg.functionService.isInitialized = false;
       this.cfg.initCfg.initialized = false;
       this.cfg.initCfg.mappingInitialized = false;
 
@@ -271,6 +282,12 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
 
       if (!this.cfg.fieldActionService) {
         this.handleError('FieldActionService is not configured');
+        reject();
+        return;
+      }
+
+      if (!this.cfg.functionService) {
+        this.handleError('FunctionService is not configured');
         reject();
         return;
       }
@@ -342,6 +359,17 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
                 reject(error);
                 return;
               });
+            // load functions - do this even with no documents so the default functions are loaded.
+            await this.cfg.functionService
+              .fetchFunctions()
+              .catch((error: any) => {
+                this.handleError(
+                  'Failure to load functions on initialization.',
+                  error
+                );
+                reject(error);
+                return;
+              });
             this.updateStatus();
             resolve(true);
             return;
@@ -355,6 +383,18 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
             .catch((error: any) => {
               this.handleError(
                 'Failure to load field actions on initialization.',
+                error
+              );
+              reject(error);
+              return;
+            });
+
+          // load both default and custom functions
+          await this.cfg.functionService
+            .fetchFunctions()
+            .catch((error: any) => {
+              this.handleError(
+                'Failure to load functions on initialization.',
                 error
               );
               reject(error);
@@ -585,6 +625,11 @@ ${error.status} ${error.statusText}`,
                   .catch((error: any) => {
                     this.handleError('Failure to load field actions.', error);
                   });
+                await this.cfg.functionService
+                  .fetchFunctions()
+                  .catch((error: any) => {
+                    this.handleError('Failure to load functions.', error);
+                  });
                 if (catalogMappingsName !== files[0]) {
                   await this.updateMappings(mInfo);
                 }
@@ -804,7 +849,8 @@ ${error.status} ${error.statusText}`,
 
     if (
       documentCount === finishedDocCount &&
-      this.cfg.fieldActionService.isInitialized
+      this.cfg.fieldActionService.isInitialized &&
+      this.cfg.functionService.isInitialized
     ) {
       if (this.cfg.preloadedMappingJson) {
         MappingSerializer.deserializeMappingServiceJSON(

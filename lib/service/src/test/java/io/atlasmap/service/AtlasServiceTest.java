@@ -71,10 +71,16 @@ public class AtlasServiceTest {
     }
 
     @Test
+    public void testListFunctions() throws Exception {
+        System.out.println(service.listFunctions(null));
+    }
+
+    @Test
     public void testListMappings() throws Exception {
         Response resp = service.listMappings(
-                generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/mappings"), null, null);
-        StringMap sMap = Json.mapper().readValue((byte[])resp.getEntity(), StringMap.class);
+                generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/mappings"), null,
+                null);
+        StringMap sMap = Json.mapper().readValue((byte[]) resp.getEntity(), StringMap.class);
         LOG.info("Found " + sMap.getStringMapEntry().size() + " objects");
         for (StringMapEntry s : sMap.getStringMapEntry()) {
             LOG.info("\t n: " + s.getName() + " v: " + s.getValue());
@@ -97,8 +103,7 @@ public class AtlasServiceTest {
             if (MappingType.MAP.equals(baseMapping.getMappingType())) {
                 List<Field> fields = ((Mapping) baseMapping).getOutputField();
                 for (Field f : fields) {
-                    if (f.getActions() != null && f.getActions() != null
-                            && !f.getActions().isEmpty()) {
+                    if (f.getActions() != null && f.getActions() != null && !f.getActions().isEmpty()) {
                         LOG.info("Found actions: " + f.getActions().size());
                     }
                 }
@@ -110,8 +115,7 @@ public class AtlasServiceTest {
     public void testJarUpload() throws Exception {
         new File("target/tmp").mkdirs();
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        int answer = compiler.run(System.in, System.out, System.err,
-                "-d", "target/tmp",
+        int answer = compiler.run(System.in, System.out, System.err, "-d", "target/tmp",
                 "src/test/resources/upload/io/atlasmap/service/my/MyFieldActions.java",
                 "src/test/resources/upload/io/atlasmap/service/my/MyFieldActionsModel.java");
         assertEquals(0, answer);
@@ -127,7 +131,8 @@ public class AtlasServiceTest {
         JarEntry classEntry = new JarEntry("io/atlasmap/service/my/MyFieldActions.class");
         jarOut.putNextEntry(classEntry);
         byte[] buffer = new byte[1024];
-        BufferedInputStream in = new BufferedInputStream(new FileInputStream("target/tmp/io/atlasmap/service/my/MyFieldActions.class"));
+        BufferedInputStream in = new BufferedInputStream(
+                new FileInputStream("target/tmp/io/atlasmap/service/my/MyFieldActions.class"));
         int count = -1;
         while ((count = in.read(buffer)) != -1) {
             jarOut.write(buffer, 0, count);
@@ -136,7 +141,8 @@ public class AtlasServiceTest {
         jarOut.closeEntry();
         classEntry = new JarEntry("io/atlasmap/service/my/MyFieldActionsModel.class");
         jarOut.putNextEntry(classEntry);
-        in = new BufferedInputStream(new FileInputStream("target/tmp/io/atlasmap/service/my/MyFieldActionsModel.class"));
+        in = new BufferedInputStream(
+                new FileInputStream("target/tmp/io/atlasmap/service/my/MyFieldActionsModel.class"));
         count = -1;
         while ((count = in.read(buffer)) != -1) {
             jarOut.write(buffer, 0, count);
@@ -150,7 +156,8 @@ public class AtlasServiceTest {
         jarOut.closeEntry();
         JarEntry svcEntry = new JarEntry("META-INF/services/io.atlasmap.spi.AtlasFieldAction");
         jarOut.putNextEntry(svcEntry);
-        in = new BufferedInputStream(new FileInputStream("src/test/resources/upload/META-INF/services/io.atlasmap.spi.AtlasFieldAction"));
+        in = new BufferedInputStream(
+                new FileInputStream("src/test/resources/upload/META-INF/services/io.atlasmap.spi.AtlasFieldAction"));
         while ((count = in.read(buffer)) != -1) {
             jarOut.write(buffer, 0, count);
         }
@@ -158,7 +165,8 @@ public class AtlasServiceTest {
         jarOut.closeEntry();
         svcEntry = new JarEntry("META-INF/services/io.atlasmap.v2.Action");
         jarOut.putNextEntry(svcEntry);
-        in = new BufferedInputStream(new FileInputStream("src/test/resources/upload/META-INF/services/io.atlasmap.v2.Action"));
+        in = new BufferedInputStream(
+                new FileInputStream("src/test/resources/upload/META-INF/services/io.atlasmap.v2.Action"));
         while ((count = in.read(buffer)) != -1) {
             jarOut.write(buffer, 0, count);
         }
@@ -170,10 +178,11 @@ public class AtlasServiceTest {
         assertEquals(200, resUL.getStatus());
         Response resFA = service.listFieldActions(null);
         assertEquals(200, resFA.getStatus());
-        String responseJson = new String((byte[])resFA.getEntity());
+        String responseJson = new String((byte[]) resFA.getEntity());
         assertTrue(responseJson, responseJson.contains("myCustomFieldAction"));
 
-        in = new BufferedInputStream(new FileInputStream("src/test/resources/mappings/atlasmapping-custom-action.json"));
+        in = new BufferedInputStream(
+                new FileInputStream("src/test/resources/mappings/atlasmapping-custom-action.json"));
         Response resVD = service.validateMappingRequest(in, 0, null);
         assertEquals(200, resVD.getStatus());
     }

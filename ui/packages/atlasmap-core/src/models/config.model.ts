@@ -29,6 +29,7 @@ import {
   CollectionType,
 } from '../common/config.types';
 import { FieldActionService } from '../services/field-action.service';
+import { FunctionService } from '../services/function.service';
 import { FileManagementService } from '../services/file-management.service';
 
 export class DataMapperInitializationModel {
@@ -112,6 +113,7 @@ export class ConfigModel {
   errorService: ErrorHandlerService;
   initializationService: InitializationService;
   fieldActionService: FieldActionService;
+  functionService: FunctionService;
   fileService: FileManagementService;
 
   sourceDocs: DocumentDefinition[] = [];
@@ -124,6 +126,7 @@ export class ConfigModel {
 
   preloadedMappingJson: string | null = null;
   preloadedFieldActionMetadata: any;
+  preloadedFunctionMetadata: any;
   logger?: Logger;
 
   constructor() {

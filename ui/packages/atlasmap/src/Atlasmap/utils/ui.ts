@@ -15,6 +15,7 @@ import {
   FieldAction,
   FieldActionDefinition,
   FieldActionService,
+  FunctionService,
   FileManagementService,
   InitializationService,
   MappedField,
@@ -46,6 +47,7 @@ export const initializationService = new InitializationService(
   new MappingManagementService(api),
   new ErrorHandlerService(),
   new FieldActionService(api),
+  new FunctionService(api),
   new FileManagementService(api),
 );
 

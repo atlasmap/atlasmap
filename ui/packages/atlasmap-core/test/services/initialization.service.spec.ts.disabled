@@ -9,6 +9,7 @@ import { ErrorHandlerService } from '../../src/services/error-handler.service';
 import { InitializationService } from '../../src/services/initialization.service';
 import { MappingManagementService } from '../../src/services/mapping-management.service';
 import { FieldActionService } from '../../src/services/field-action.service';
+import { FunctionService } from '../../src/services/function.service';
 import { FileManagementService } from '../../src/services/file-management.service';
 import { DocumentInitializationModel } from '../../src/models/config.model';
 import { of } from 'rxjs';
@@ -28,12 +29,14 @@ describe('InitializationService', () => {
   const mappingService = new MappingManagementService(api);
   const errorService = new ErrorHandlerService();
   const fieldActionService = new FieldActionService(api);
+  const functionService = new FunctionService(api);
   const fileService = new FileManagementService(api);
   const service = new InitializationService(
     documentService,
     mappingService,
     errorService,
     fieldActionService,
+    functionService,
     fileService
   );
   service.cfg.logger = log.getLogger('config');
