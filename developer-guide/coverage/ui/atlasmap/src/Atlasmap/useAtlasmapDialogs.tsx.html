@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/114</span>
+                <span class='fraction'>0/119</span>
             </div>
         
             
@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/68</span>
+                <span class='fraction'>0/71</span>
             </div>
         
             
@@ -292,7 +292,14 @@
 <a name='L234'></a><a href='#L234'>234</a>
 <a name='L235'></a><a href='#L235'>235</a>
 <a name='L236'></a><a href='#L236'>236</a>
-<a name='L237'></a><a href='#L237'>237</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L237'></a><a href='#L237'>237</a>
+<a name='L238'></a><a href='#L238'>238</a>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -362,6 +369,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -371,8 +383,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -528,7 +542,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import React, { useCallback, useMemo } from "react";</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import React, { useCallback, useMemo, useState } from "react";</span>
 <span class="cstat-no" title="statement not covered" >import { createPortal } from "react-dom";</span>
 &nbsp;
 import { IConstant, INamespace, IProperty } from "../UI";
@@ -549,7 +563,7 @@ import { IConstant, INamespace, IProperty } from "../UI";
   useToggleExpressionModeDialog,
   useCustomClassDialog,
 } from "./dialogs";
-<span class="cstat-no" title="statement not covered" >import { enableCustomClass } from "./utils";</span>
+<span class="cstat-no" title="statement not covered" >import { enableCustomClass, getPropertyScopeOptions } from "./utils";</span>
 &nbsp;
 export interface IUseAtlasmapDialogsProps {
   modalContainer: HTMLElement;
@@ -593,11 +607,16 @@ export interface IUseAtlasmapDialogsProps {
   //#endregion
 &nbsp;
   //#region property dialogs
+  const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >s</span>copeOptions,</span> <span class="cstat-no" title="statement not covered" >setScopeOptions] = useState(</span>
+    getPropertyScopeOptions(true),
+  );
   const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >c</span>reatePropertyDialog,</span> <span class="cstat-no" title="statement not covered" >openCreatePropertyDialog] = usePropertyDialog(</span>
     "Create Property",
+    scopeOptions,
   );
   const onCreateProperty = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (i</span>sSource: boolean) =&gt; {
+<span class="cstat-no" title="statement not covered" >      setScopeOptions(getPropertyScopeOptions(isSource));</span>
 <span class="cstat-no" title="statement not covered" >      openCreatePropertyDialog(<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >name,</span> <span class="cstat-no" title="statement not covered" >valueType,</span> <span class="cstat-no" title="statement not covered" >scope </span>}) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        createProperty(name, valueType, scope, isSource);</span>
       });
@@ -606,9 +625,11 @@ export interface IUseAtlasmapDialogsProps {
   );
   const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >e</span>ditPropertyDialog,</span> <span class="cstat-no" title="statement not covered" >openEditPropertyDialog] = usePropertyDialog(</span>
     "Edit Property",
+    scopeOptions,
   );
   const onEditProperty = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (p</span>roperty: IProperty, isSource: boolean) =&gt; {
+<span class="cstat-no" title="statement not covered" >      setScopeOptions(getPropertyScopeOptions(isSource));</span>
 <span class="cstat-no" title="statement not covered" >      openEditPropertyDialog(<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >name,</span> <span class="cstat-no" title="statement not covered" >valueType,</span> <span class="cstat-no" title="statement not covered" >scope </span>}) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        editProperty(property.name, valueType, scope, name, isSource);</span>
       }, property);
@@ -771,7 +792,7 @@ export interface IUseAtlasmapDialogsProps {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Sep 01 2020 16:02:25 GMT+0000 (Coordinated Universal Time)
+                at Tue Sep 01 2020 17:18:44 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
