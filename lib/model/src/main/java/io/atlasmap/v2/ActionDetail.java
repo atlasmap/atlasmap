@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
@@ -240,7 +241,8 @@ public class ActionDetail implements Serializable {
         }
 
         setClassName(clazz.getName());
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper()
+            .enable(MapperFeature.BLOCK_UNSAFE_POLYMORPHIC_BASE_TYPES);
         JsonSchemaGenerator schemaGen = new JsonSchemaGenerator(mapper);
         AtlasSchemaFactoryWrapper visitor = new AtlasSchemaFactoryWrapper();
         mapper.acceptJsonFormatVisitor(clazz, visitor);

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class AtlasModelFactory {
@@ -215,7 +216,8 @@ public class AtlasModelFactory {
             return null;
         }
         try {
-            ObjectMapper mapper = new ObjectMapper();
+            ObjectMapper mapper = new ObjectMapper()
+                .enable(MapperFeature.BLOCK_UNSAFE_POLYMORPHIC_BASE_TYPES);
             String s = mapper.writeValueAsString(action);
             System.out.println(s);
             return mapper.readerFor(Action.class).readValue(s);
