@@ -25,6 +25,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -41,54 +42,56 @@ public class ActionListUpgradeDeserializer extends JsonDeserializer&lt;ArrayList
 
     private ClassLoader classLoader;
 
-<span class="fc" id="L44">    public ActionListUpgradeDeserializer() {</span>
-<span class="fc" id="L45">        this.classLoader = getClass().getClassLoader();</span>
-<span class="fc" id="L46">    }</span>
+<span class="fc" id="L45">    public ActionListUpgradeDeserializer() {</span>
+<span class="fc" id="L46">        this.classLoader = getClass().getClassLoader();</span>
+<span class="fc" id="L47">    }</span>
 
-<span class="fc" id="L48">    public ActionListUpgradeDeserializer(ClassLoader classLoader) {</span>
-<span class="fc" id="L49">        this.classLoader = classLoader;</span>
-<span class="fc" id="L50">    }</span>
+<span class="fc" id="L49">    public ActionListUpgradeDeserializer(ClassLoader classLoader) {</span>
+<span class="fc" id="L50">        this.classLoader = classLoader;</span>
+<span class="fc" id="L51">    }</span>
 
     @Override
     public ArrayList&lt;Action&gt; deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-<span class="fc" id="L54">        ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);</span>
-<span class="fc" id="L55">        objectMapper.setTypeFactory(TypeFactory.defaultInstance().withClassLoader(classLoader));</span>
-<span class="fc" id="L56">        objectMapper.setHandlerInstantiator(new AtlasHandlerInstantiator(classLoader));</span>
-<span class="fc" id="L57">        JsonNode node = (JsonNode) objectMapper.readTree(jp);</span>
+<span class="fc" id="L55">        ObjectMapper objectMapper = new ObjectMapper()</span>
+<span class="fc" id="L56">            .enable(MapperFeature.BLOCK_UNSAFE_POLYMORPHIC_BASE_TYPES)</span>
+<span class="fc" id="L57">            .enable(SerializationFeature.INDENT_OUTPUT)</span>
+<span class="fc" id="L58">            .setTypeFactory(TypeFactory.defaultInstance().withClassLoader(classLoader));</span>
+<span class="fc" id="L59">        objectMapper.setHandlerInstantiator(new AtlasHandlerInstantiator(classLoader));</span>
+<span class="fc" id="L60">        JsonNode node = (JsonNode) objectMapper.readTree(jp);</span>
 
-<span class="fc" id="L59">        ArrayList&lt;Action&gt; result = new ArrayList&lt;Action&gt;();</span>
-<span class="pc bpc" id="L60" title="2 of 4 branches missed.">        if (node != null &amp;&amp; node instanceof ArrayNode) {</span>
-<span class="fc" id="L61">            ArrayNode arrayNode = (ArrayNode) node;</span>
-<span class="fc" id="L62">            Iterator nodeIterator = arrayNode.iterator();</span>
-<span class="fc bfc" id="L63" title="All 2 branches covered.">            while (nodeIterator.hasNext()) {</span>
+<span class="fc" id="L62">        ArrayList&lt;Action&gt; result = new ArrayList&lt;Action&gt;();</span>
+<span class="pc bpc" id="L63" title="2 of 4 branches missed.">        if (node != null &amp;&amp; node instanceof ArrayNode) {</span>
+<span class="fc" id="L64">            ArrayNode arrayNode = (ArrayNode) node;</span>
+<span class="fc" id="L65">            Iterator nodeIterator = arrayNode.iterator();</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">            while (nodeIterator.hasNext()) {</span>
 
-<span class="fc" id="L65">                JsonNode elementNode = (JsonNode) nodeIterator.next();</span>
-<span class="pc bpc" id="L66" title="1 of 2 branches missed.">                if (elementNode.isObject()) {</span>
+<span class="fc" id="L68">                JsonNode elementNode = (JsonNode) nodeIterator.next();</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">                if (elementNode.isObject()) {</span>
 
-<span class="fc" id="L68">                    ObjectNode objNode = (ObjectNode) elementNode;</span>
-<span class="fc" id="L69">                    JsonNode type = objNode.get(&quot;@type&quot;);</span>
-<span class="fc bfc" id="L70" title="All 2 branches covered.">                    if (type == null) {</span>
+<span class="fc" id="L71">                    ObjectNode objNode = (ObjectNode) elementNode;</span>
+<span class="fc" id="L72">                    JsonNode type = objNode.get(&quot;@type&quot;);</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">                    if (type == null) {</span>
 
                         // Lets convert to the new format..
-<span class="fc" id="L73">                        Map.Entry&lt;String, JsonNode&gt; next = objNode.fields().next();</span>
-<span class="fc" id="L74">                        JsonNode original = next.getValue();</span>
+<span class="fc" id="L76">                        Map.Entry&lt;String, JsonNode&gt; next = objNode.fields().next();</span>
+<span class="fc" id="L77">                        JsonNode original = next.getValue();</span>
 
-<span class="fc" id="L76">                        objNode = JsonNodeFactory.instance.objectNode();</span>
-<span class="fc" id="L77">                        objNode.set(&quot;@type&quot;, JsonNodeFactory.instance.textNode(next.getKey()));</span>
-<span class="fc bfc" id="L78" title="All 2 branches covered.">                        if (original.isObject()) {</span>
-<span class="fc" id="L79">                            Iterator&lt;Map.Entry&lt;String, JsonNode&gt;&gt; f = original.fields();</span>
-<span class="fc bfc" id="L80" title="All 2 branches covered.">                            while (f.hasNext()) {</span>
-<span class="fc" id="L81">                                Map.Entry&lt;String, JsonNode&gt; o = f.next();</span>
-<span class="fc" id="L82">                                objNode.set(o.getKey(), o.getValue());</span>
-<span class="fc" id="L83">                            }</span>
+<span class="fc" id="L79">                        objNode = JsonNodeFactory.instance.objectNode();</span>
+<span class="fc" id="L80">                        objNode.set(&quot;@type&quot;, JsonNodeFactory.instance.textNode(next.getKey()));</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">                        if (original.isObject()) {</span>
+<span class="fc" id="L82">                            Iterator&lt;Map.Entry&lt;String, JsonNode&gt;&gt; f = original.fields();</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">                            while (f.hasNext()) {</span>
+<span class="fc" id="L84">                                Map.Entry&lt;String, JsonNode&gt; o = f.next();</span>
+<span class="fc" id="L85">                                objNode.set(o.getKey(), o.getValue());</span>
+<span class="fc" id="L86">                            }</span>
                         }
                     }
 
-<span class="fc" id="L87">                    result.add(objectMapper.readerFor(Action.class).readValue(objNode));</span>
+<span class="fc" id="L90">                    result.add(objectMapper.readerFor(Action.class).readValue(objNode));</span>
                 }
-<span class="fc" id="L89">            }</span>
+<span class="fc" id="L92">            }</span>
         }
-<span class="fc" id="L91">        return result;</span>
+<span class="fc" id="L94">        return result;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
