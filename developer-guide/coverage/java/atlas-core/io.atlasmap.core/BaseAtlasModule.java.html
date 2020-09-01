@@ -92,7 +92,7 @@ import io.atlasmap.v2.SimpleField;
 <span class="fc" id="L92">        Field sourceField = session.head().getSourceField();</span>
 <span class="fc" id="L93">        Field targetField = session.head().getTargetField();</span>
 <span class="fc" id="L94">        Object targetValue = null;</span>
-<span class="pc bpc" id="L95" title="1 of 4 branches missed.">        if (sourceField.getFieldType() != null &amp;&amp; sourceField.getFieldType().equals(targetField.getFieldType())) {</span>
+<span class="fc bfc" id="L95" title="All 4 branches covered.">        if (sourceField.getFieldType() != null &amp;&amp; sourceField.getFieldType().equals(targetField.getFieldType())) {</span>
 <span class="fc" id="L96">            targetValue = sourceField.getValue();</span>
 <span class="pc bpc" id="L97" title="1 of 2 branches missed.">        } else if (sourceField.getValue() != null) {</span>
             try {
