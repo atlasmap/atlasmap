@@ -3,12 +3,15 @@ import { propertyTypes } from "@atlasmap/core";
 import React, { useCallback, ReactElement, useState } from "react";
 
 import { useToggle, PropertyDialog, IProperty } from "../../UI";
-import { getPropertyScopeOptions } from "../utils/document";
 
 type PropertyCallback = (property: IProperty) => void;
 
 export function usePropertyDialog(
   title: string,
+  scopeOptions: {
+    value: string;
+    label: string;
+  }[],
 ): [ReactElement, (cb: PropertyCallback, property?: IProperty) => void] {
   const [onPropertyCb, setOnPropertyCb] = useState<PropertyCallback | null>(
     null,
@@ -16,7 +19,7 @@ export function usePropertyDialog(
   const [initialProperty, setInitialProperty] = useState<IProperty | null>({
     name: "",
     valueType: propertyTypes[0][0],
-    scope: getPropertyScopeOptions()[0].value,
+    scope: scopeOptions[0].value,
   });
   const { state, toggleOn, toggleOff } = useToggle(false);
   const onConfirm = useCallback(
@@ -35,7 +38,7 @@ export function usePropertyDialog(
         value,
         label,
       }))}
-      scopeOptions={getPropertyScopeOptions()}
+      scopeOptions={scopeOptions}
       isOpen={state}
       onCancel={toggleOff}
       onConfirm={onConfirm}
