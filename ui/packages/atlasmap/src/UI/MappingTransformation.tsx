@@ -76,6 +76,7 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
           <FormGroup fieldId={argId} label={a.label} key={idx}>
             {a.options ? (
               <FormSelect
+                label={a.label}
                 value={a.value}
                 id={argId}
                 isDisabled={disableTransformation}
