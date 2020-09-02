@@ -13,24 +13,30 @@ in the list of transformations that are available for any field.
 +
 The following custom transformation is applicable to `String` arguments.  
 It takes the argument specified in the source panel
-transformation and prints it on the target side.  
+transformation and prints it on the target side with the string 'concur-'
+and the user-specified concur parameter.
 Implement the `AtlasFieldAction` class as follows:
 +
 [source,java]
 ----
 package io.atlasmap.service.my;
 
-import io.atlasmap.v2.*;
-import io.atlasmap.api.AtlasFieldAction;
-import io.atlasmap.spi.AtlasFieldActionInfo;
+import java.io.Serializable;
+import io.atlasmap.v2.*
+import io.atlasmap.spi.AtlasFieldAction;
+import io.atlasmap.spi.AtlasActionProcessor;
 
 public class PaulsFieldActions implements AtlasFieldAction {
 
-    @AtlasFieldActionInfo(name = "MyCustomFieldActionPaul", sourceType = FieldType.STRING,
-        targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE,
-        targetCollectionType = CollectionType.NONE)
-    public static String myCustomFieldAction(String input) {
-        return "Paul's custom field action: " + input;
+    public static class Concur extends Action implements Serializable {
+        @AtlasActionProperty(title = "Pauls Concur Param", type = FieldType.STRING)
+        public String concurarg = "-paul-";
+
+    }
+
+    @AtlasActionProcessor
+    public static String concur(Concur action, String userInput) {
+        return "concur-" + action.concurarg + userInput;
     }
 
 }
@@ -43,46 +49,32 @@ dependencies are most easily resolved
 through the use of a maven `pom.xml` file.  Use the same version number as 
 the AtlasMap standalone JAR file that you previously downloaded.
 
-. At the top of the AtlasMap main tool bar, click 
-image:Import-Data-Shape.png[Import] to import your Java archive file. 
+. At the top of the AtlasMap main tool bar, click `AtlasMap > Import a Java archive (.jar)`
+to import your Java archive file. 
 +
-image:Trans3.png[Import custom field action JAR]
+image:../images/Trans3.png[Import a Java archive]
 
 . Navigate to the JAR file that contains your custom transformation 
 and select it.
 +
-image:Trans4.png[Import custom field action JAR]
-
-. To enable the class that defines the custom transformation, 
-for this example, at the top of the *Target* panel, 
-select the plus icon (+).
-+
-image:Trans5.png[Import custom field action JAR]
-
-. In the *Class package name:* field, enter the class package name of 
-the Java class that defines the custom transformation.
-In the `MyFieldAction.jar` example, the class package 
-name is `io.atlasmap.service.my.PaulsFieldActions`.
-+
-image:Trans6.png[Import custom field action JAR]
+image:../images/Trans4.png[Import custom field action JAR]
 +
 . In the *Mapping Details* panel, in the *Targets* section, 
 select the transformation pull-down menu to see that your
 custom transformation now appears as a selectable 
 transformation. Select it.
 +
-image:Trans7.png[Import custom field action JAR]
-+
+
+image:../images/Trans7.png[Import custom field action JAR]
 . To test your custom transformation:
-.. In the AtlasMap main tool bar, click
-image:EditorSettings.png[Panel settings].
-.. Click *Show Mapping Preview*.
+.. In the *Mapping Details* panel transformation you just added, type the string `ball` in the `Pauls Concur Param` input text box.
 +
-image:Trans8.png[Import custom field action JAR]
+.. In the AtlasMap main tool bar, click the mapping preview icon.
++
 
 .. In the *Source* panel input field,  
-type a string, for example, `test`.  
+type a string, for example, `bat`.  
 .. Notice the same string in the 
-*Preview Results* field in the target panel. 
+*Preview Results* field in the target panel with `concur-ball` prepended. 
 +
-image:Trans9.png[Import custom field action JAR]
+image:../images/Trans9.png[Import custom field action JAR]
