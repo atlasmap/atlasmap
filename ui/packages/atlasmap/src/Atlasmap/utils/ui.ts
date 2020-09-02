@@ -166,7 +166,10 @@ export function fromMappedFieldToIMappingField(
       ),
       arguments: a.definition.arguments.map(
         (av, idx): ITransformationArgument => ({
-          label: DataMapperUtil.toDisplayable(av.name),
+          label:
+            av.serviceObject?.title?.length > 0
+              ? av.serviceObject.title
+              : DataMapperUtil.toDisplayable(av.name),
           name: av.name,
           value: a.argumentValues[idx].value,
           options: av.values
