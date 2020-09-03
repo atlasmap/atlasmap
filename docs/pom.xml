@@ -302,6 +302,7 @@
                   <preserveDirectories>true</preserveDirectories>
                   <sourceHighlighter>coderay</sourceHighlighter>
                   <attributes>
+                    <imagesdir>images</imagesdir>
                     <toc>left</toc>
                     <linkcss>false</linkcss>
                   </attributes>
@@ -321,6 +322,7 @@
                   <preserveDirectories>true</preserveDirectories>
                   <sourceHighlighter>coderay</sourceHighlighter>
                   <attributes>
+                    <imagesdir>images</imagesdir>
                     <toc>left</toc>
                     <linkcss>false</linkcss>
                   </attributes>
