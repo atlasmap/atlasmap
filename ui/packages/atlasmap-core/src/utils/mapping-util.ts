@@ -143,7 +143,6 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
           doc.addField(constantField);
         } else if (
           mappedField.parsedData.fieldIsProperty &&
-          mappedField.parsedData.parsedValue &&
           mappedField.parsedData.parsedValueType &&
           mappedField.parsedData.parsedName &&
           mappedField.parsedData.parsedPath

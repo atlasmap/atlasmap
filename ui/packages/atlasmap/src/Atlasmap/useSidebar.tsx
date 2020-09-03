@@ -109,14 +109,14 @@ export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
       const addableSources = [
         constants?.fields,
         sourceProperties?.fields,
-        targetProperties?.fields,
         flatSources,
       ]
         .flatMap((fields) => (fields ? (fields as IAtlasmapField[]) : []))
         .filter((f) => isFieldAddableToSelection("source", f));
-      const addableTargets = flatTargets.filter((f) =>
-        isFieldAddableToSelection("target", f),
-      );
+
+      const addableTargets = [targetProperties?.fields, flatTargets]
+        .flatMap((fields) => (fields ? (fields as IAtlasmapField[]) : []))
+        .filter((f) => isFieldAddableToSelection("target", f));
 
       return (
         <MappingDetailsView
