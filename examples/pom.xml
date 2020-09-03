@@ -33,6 +33,8 @@
 
   <modules>
     <module>camel-example-atlasmap</module>
+    <module>camel-example-atlasmap-multidoc</module>
+    <module>camel-example-atlasmap-msgmap</module>
     <module>camel-example-atlasmap-blueprint</module>
     <module>atlasmap-example-api</module>
     <module>atlasmap-example-api-adm</module>
