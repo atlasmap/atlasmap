@@ -59,7 +59,7 @@ public class CsvFieldWriter implements AtlasFieldWriter {
     public void write(AtlasInternalSession session) throws AtlasException {
 <span class="fc" id="L60">        Field targetField = session.head().getTargetField();</span>
 <span class="fc" id="L61">        Field sourceField = session.head().getSourceField();</span>
-<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        if (sourceField instanceof FieldGroup) {</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        if (sourceField instanceof FieldGroup) {</span>
 <span class="fc" id="L63">            FieldGroup targetFieldGroup = AtlasModelFactory.createFieldGroupFrom(targetField, true);</span>
 
 <span class="fc bfc" id="L65" title="All 2 branches covered.">            for (Field sourceSubField: ((FieldGroup) sourceField).getField()) {</span>
@@ -75,7 +75,7 @@ public class CsvFieldWriter implements AtlasFieldWriter {
 <span class="fc" id="L75">            targetField = targetFieldGroup;</span>
 <span class="fc" id="L76">            session.head().setTargetField(targetFieldGroup);</span>
 <span class="fc" id="L77">        } else {</span>
-<span class="nc" id="L78">            targetField.setValue(sourceField.getValue());</span>
+<span class="fc" id="L78">            targetField.setValue(sourceField.getValue());</span>
         }
 
 <span class="fc" id="L81">        document.getFields().getField().add(targetField);</span>
@@ -98,30 +98,42 @@ public class CsvFieldWriter implements AtlasFieldWriter {
 <span class="fc" id="L98">                printer.printRecord(headers);</span>
             }
 
-<span class="fc" id="L101">            int recordsCount = ((FieldGroup) fields.get(0)).getField().size();</span>
-<span class="fc bfc" id="L102" title="All 2 branches covered.">            for (int i = 0; i &lt; recordsCount; i++) {</span>
-<span class="fc" id="L103">                List&lt;String&gt; values = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L104" title="All 2 branches covered.">                for (Field field: fields) {</span>
-<span class="fc" id="L105">                    FieldGroup fieldGroup = (FieldGroup) field;</span>
-<span class="fc" id="L106">                    CsvField csvField = (CsvField) fieldGroup.getField().get(i);</span>
-<span class="fc bfc" id="L107" title="All 2 branches covered.">                    if (csvField.getColumn() != null) {</span>
-                        //Add missing values
-<span class="fc bfc" id="L109" title="All 2 branches covered.">                        for (int j = values.size(); j &lt; csvField.getColumn() + 1; j++) {</span>
-<span class="fc" id="L110">                            values.add(null);</span>
-                        }
-<span class="fc" id="L112">                        values.set(csvField.getColumn(), csvField.getValue().toString());</span>
-                    } else {
-<span class="fc" id="L114">                        values.add(csvField.getValue().toString());</span>
-                    }
-<span class="fc" id="L116">                }</span>
-<span class="fc" id="L117">                printer.printRecord(values);</span>
+            int recordsCount;
+<span class="fc bfc" id="L102" title="All 2 branches covered.">            if (fields.get(0) instanceof FieldGroup) {</span>
+<span class="fc" id="L103">                recordsCount = ((FieldGroup) fields.get(0)).getField().size();</span>
+            } else {
+<span class="fc" id="L105">                recordsCount = 1;</span>
             }
 
-<span class="fc" id="L120">            writer.flush();</span>
-<span class="fc" id="L121">            String csv = out.toString();</span>
-<span class="fc" id="L122">            return csv;</span>
-<span class="nc" id="L123">        } catch (IOException e) {</span>
-<span class="nc" id="L124">            throw new AtlasException(e);</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">            for (int i = 0; i &lt; recordsCount; i++) {</span>
+<span class="fc" id="L109">                List&lt;String&gt; values = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">                for (Field field: fields) {</span>
+                    CsvField csvField;
+<span class="fc bfc" id="L112" title="All 2 branches covered.">                    if (field instanceof FieldGroup) {</span>
+<span class="fc" id="L113">                        FieldGroup fieldGroup = (FieldGroup) field;</span>
+<span class="fc" id="L114">                        csvField = (CsvField) fieldGroup.getField().get(i);</span>
+<span class="fc" id="L115">                    } else {</span>
+<span class="fc" id="L116">                        csvField = (CsvField) field;</span>
+                    }
+
+<span class="fc bfc" id="L119" title="All 2 branches covered.">                    if (csvField.getColumn() != null) {</span>
+                        //Add missing values
+<span class="fc bfc" id="L121" title="All 2 branches covered.">                        for (int j = values.size(); j &lt; csvField.getColumn() + 1; j++) {</span>
+<span class="fc" id="L122">                            values.add(null);</span>
+                        }
+<span class="fc" id="L124">                        values.set(csvField.getColumn(), csvField.getValue().toString());</span>
+                    } else {
+<span class="fc" id="L126">                        values.add(csvField.getValue().toString());</span>
+                    }
+<span class="fc" id="L128">                }</span>
+<span class="fc" id="L129">                printer.printRecord(values);</span>
+            }
+
+<span class="fc" id="L132">            writer.flush();</span>
+<span class="fc" id="L133">            String csv = out.toString();</span>
+<span class="fc" id="L134">            return csv;</span>
+<span class="nc" id="L135">        } catch (IOException e) {</span>
+<span class="nc" id="L136">            throw new AtlasException(e);</span>
         }
     }
 }

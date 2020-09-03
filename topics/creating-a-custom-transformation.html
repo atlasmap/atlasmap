@@ -459,24 +459,30 @@ in the list of transformations that are available for any field.</p>
 <div class="paragraph">
 <p>The following custom transformation is applicable to <code>String</code> arguments.
 It takes the argument specified in the source panel
-transformation and prints it on the target side.
+transformation and prints it on the target side with the string 'concur-'
+and the user-specified concur parameter.
 Implement the <code>AtlasFieldAction</code> class as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">package io.atlasmap.service.my;
 
-import io.atlasmap.v2.*;
-import io.atlasmap.api.AtlasFieldAction;
-import io.atlasmap.spi.AtlasFieldActionInfo;
+import java.io.Serializable;
+import io.atlasmap.v2.*
+import io.atlasmap.spi.AtlasFieldAction;
+import io.atlasmap.spi.AtlasActionProcessor;
 
 public class PaulsFieldActions implements AtlasFieldAction {
 
-    @AtlasFieldActionInfo(name = "MyCustomFieldActionPaul", sourceType = FieldType.STRING,
-        targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE,
-        targetCollectionType = CollectionType.NONE)
-    public static String myCustomFieldAction(String input) {
-        return "Paul's custom field action: " + input;
+    public static class Concur extends Action implements Serializable {
+        @AtlasActionProperty(title = "Pauls Concur Param", type = FieldType.STRING)
+        public String concurarg = "-paul-";
+
+    }
+
+    @AtlasActionProcessor
+    public static String concur(Concur action, String userInput) {
+        return "concur-" + action.concurarg + userInput;
     }
 
 }</code></pre>
@@ -493,34 +499,17 @@ the AtlasMap standalone JAR file that you previously downloaded.</p>
 </div>
 </li>
 <li>
-<p>At the top of the AtlasMap main tool bar, click
-<span class="image"><img src="Import-Data-Shape.png" alt="Import"></span> to import your Java archive file.</p>
+<p>At the top of the AtlasMap main tool bar, click <code>AtlasMap &gt; Import a Java archive (.jar)</code>
+to import your Java archive file.</p>
 <div class="paragraph">
-<p><span class="image"><img src="Trans3.png" alt="Import custom field action JAR"></span></p>
+<p><span class="image"><img src="../images/Trans3.png" alt="Import a Java archive"></span></p>
 </div>
 </li>
 <li>
 <p>Navigate to the JAR file that contains your custom transformation
 and select it.</p>
 <div class="paragraph">
-<p><span class="image"><img src="Trans4.png" alt="Import custom field action JAR"></span></p>
-</div>
-</li>
-<li>
-<p>To enable the class that defines the custom transformation,
-for this example, at the top of the <strong>Target</strong> panel,
-select the plus icon (+).</p>
-<div class="paragraph">
-<p><span class="image"><img src="Trans5.png" alt="Import custom field action JAR"></span></p>
-</div>
-</li>
-<li>
-<p>In the <strong>Class package name:</strong> field, enter the class package name of
-the Java class that defines the custom transformation.
-In the <code>MyFieldAction.jar</code> example, the class package
-name is <code>io.atlasmap.service.my.PaulsFieldActions</code>.</p>
-<div class="paragraph">
-<p><span class="image"><img src="Trans6.png" alt="Import custom field action JAR"></span></p>
+<p><span class="image"><img src="../images/Trans4.png" alt="Import custom field action JAR"></span></p>
 </div>
 </li>
 <li>
@@ -529,7 +518,7 @@ select the transformation pull-down menu to see that your
 custom transformation now appears as a selectable
 transformation. Select it.</p>
 <div class="paragraph">
-<p><span class="image"><img src="Trans7.png" alt="Import custom field action JAR"></span></p>
+<p><span class="image"><img src="../images/Trans7.png" alt="Import custom field action JAR"></span></p>
 </div>
 </li>
 <li>
@@ -537,24 +526,20 @@ transformation. Select it.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>In the AtlasMap main tool bar, click
-<span class="image"><img src="EditorSettings.png" alt="Panel settings"></span>.</p>
+<p>In the <strong>Mapping Details</strong> panel transformation you just added, type the string <code>ball</code> in the <code>Pauls Concur Param</code> input text box.</p>
 </li>
 <li>
-<p>Click <strong>Show Mapping Preview</strong>.</p>
-<div class="paragraph">
-<p><span class="image"><img src="Trans8.png" alt="Import custom field action JAR"></span></p>
-</div>
+<p>In the AtlasMap main tool bar, click the mapping preview icon.</p>
 </li>
 <li>
 <p>In the <strong>Source</strong> panel input field,
-type a string, for example, <code>test</code>.</p>
+type a string, for example, <code>bat</code>.</p>
 </li>
 <li>
 <p>Notice the same string in the
-<strong>Preview Results</strong> field in the target panel.</p>
+<strong>Preview Results</strong> field in the target panel with <code>concur-ball</code> prepended.</p>
 <div class="paragraph">
-<p><span class="image"><img src="Trans9.png" alt="Import custom field action JAR"></span></p>
+<p><span class="image"><img src="../images/Trans9.png" alt="Import custom field action JAR"></span></p>
 </div>
 </li>
 </ol>
@@ -567,7 +552,7 @@ type a string, for example, <code>test</code>.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-09-02 20:24:11 UTC
+Last updated 2020-09-03 13:51:01 UTC
 </div>
 </div>
 </body>
