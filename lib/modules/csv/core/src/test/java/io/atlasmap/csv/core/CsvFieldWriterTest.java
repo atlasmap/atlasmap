@@ -57,7 +57,7 @@ public class CsvFieldWriterTest {
         sourceField.getField().add(sourceSubField0);
         CsvField sourceSubField1 = new CsvField();
         sourceSubField1.setName("name");
-        sourceSubField1.setPath("/<0>/name");
+        sourceSubField1.setPath("/<1>/name");
         sourceSubField1.setValue("Andrew");
         sourceField.getField().add(sourceSubField1);
 
@@ -84,7 +84,7 @@ public class CsvFieldWriterTest {
         sourceField.getField().add(sourceSubField0);
         CsvField sourceSubField1 = new CsvField();
         sourceSubField1.setName("name");
-        sourceSubField1.setPath("/<0>/name");
+        sourceSubField1.setPath("/<1>/name");
         sourceSubField1.setValue("Andrew");
         sourceField.getField().add(sourceSubField1);
 
@@ -112,7 +112,7 @@ public class CsvFieldWriterTest {
         sourceField.getField().add(sourceSubField0);
         CsvField sourceSubField1 = new CsvField();
         sourceSubField1.setName("name");
-        sourceSubField1.setPath("/<0>/name");
+        sourceSubField1.setPath("/<1>/name");
         sourceSubField1.setValue("Andrew");
         sourceField.getField().add(sourceSubField1);
 
@@ -173,5 +173,53 @@ public class CsvFieldWriterTest {
 
         String csv = writer.toCsv();
         assertThat(csv, is("givenName;familyName\r\nBob;Smith\r\nAndrew;Johnson\r\n"));
+    }
+
+    @Test
+    public void testWithSimpleDocumentWithTargetColumnsDefined() throws Exception {
+        CsvConfig csvConfig = new CsvConfig();
+        CsvFieldWriter writer = new CsvFieldWriter(csvConfig);
+        FieldGroup sourceField = new FieldGroup();
+        sourceField.setName("name");
+        sourceField.setPath("/<>/name");
+        CsvField sourceSubField0 = new CsvField();
+        sourceSubField0.setName("name");
+        sourceSubField0.setPath("/<0>/name");
+        sourceSubField0.setValue("Bob");
+        sourceField.getField().add(sourceSubField0);
+        CsvField sourceSubField1 = new CsvField();
+        sourceSubField1.setName("name");
+        sourceSubField1.setPath("/<1>/name");
+        sourceSubField1.setValue("Andrew");
+        sourceField.getField().add(sourceSubField1);
+
+        CsvField targetField = new CsvField();
+        targetField.setName("givenName");
+        targetField.setPath("/<>/givenName");
+        targetField.setColumn(1);
+
+        write(writer, sourceField, targetField);
+
+        FieldGroup secondSourceField = new FieldGroup();
+        CsvField secondSourceSubField = new CsvField();
+        secondSourceSubField.setName("familyName");
+        secondSourceSubField.setPath("/<0>/familyName");
+        secondSourceSubField.setValue("Smith");
+        secondSourceField.getField().add(secondSourceSubField);
+        CsvField secondSourceSubField1 = new CsvField();
+        secondSourceSubField1.setName("familyName");
+        secondSourceSubField1.setPath("/<1>/familyName");
+        secondSourceSubField1.setValue("Johnson");
+        secondSourceField.getField().add(secondSourceSubField1);
+
+        CsvField secondTargetField = new CsvField();
+        secondTargetField.setName("familyName");
+        secondTargetField.setPath("/<>/familyName");
+        secondTargetField.setColumn(0);
+
+        write(writer, secondSourceField, secondTargetField);
+
+        String csv = writer.toCsv();
+        assertThat(csv, is("Smith,Bob\r\nJohnson,Andrew\r\n"));
     }
 }
