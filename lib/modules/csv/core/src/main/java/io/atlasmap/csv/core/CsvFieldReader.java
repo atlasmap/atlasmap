@@ -128,6 +128,7 @@ public class CsvFieldReader implements AtlasFieldReader {
                 for (CSVRecord record: parser) {
                     if (i == fieldIndex) {
                         CsvField newField = CsvField.cloneOf(csvField);
+                        newField.setIndex(null); //do not copy over index if set
                         String value;
                         if (csvField.getColumn() != null) {
                             value = record.get(csvField.getColumn());
@@ -143,6 +144,7 @@ public class CsvFieldReader implements AtlasFieldReader {
             } else {
                 for (CSVRecord record: parser) {
                     CsvField collectionField = CsvField.cloneOf(csvField);
+                    collectionField.setIndex(null); //do not copy over index if set
                     String value;
                     if (csvField.getColumn() != null) {
                         value = record.get(csvField.getColumn());

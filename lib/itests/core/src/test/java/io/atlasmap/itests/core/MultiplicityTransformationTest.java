@@ -262,6 +262,21 @@ public class MultiplicityTransformationTest {
         assertEquals("bob,john,andrea,thomas,arnold", target.getTargetFirstName());
     }
 
+    @Test
+    public void testConcatenateExpressionWithCsv() throws Exception {
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-concatenate-csv.json");
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(url.toURI());
+        AtlasSession session = context.createSession();
+        session.setSourceDocument("io.atlasmap.itests.core.SourceCsv", "givenName,familyName\n" +
+            "Bob,Smith\nAnthony,Hopkins\nTimothy,Anders");
+        context.process(session);
+        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        Object output = session.getTargetDocument("io.atlasmap.itests.core.TargetCsv");
+        assertEquals("allGivenNames,name\r\n" +
+            "\"Bob,Anthony,Timothy\",\"Bob,Anthony,Timothy,Smith,Hopkins,Anders\"\r\n", output);
+    }
+
 
     @Test
     public void testAdd() throws Exception {

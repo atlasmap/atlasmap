@@ -97,12 +97,24 @@ public class CsvFieldWriter implements AtlasFieldWriter {
                 printer.printRecord(headers);
             }
 
-            int recordsCount = ((FieldGroup) fields.get(0)).getField().size();
+            int recordsCount;
+            if (fields.get(0) instanceof FieldGroup) {
+                recordsCount = ((FieldGroup) fields.get(0)).getField().size();
+            } else {
+                recordsCount = 1;
+            }
+
             for (int i = 0; i < recordsCount; i++) {
                 List<String> values = new ArrayList<>();
                 for (Field field: fields) {
-                    FieldGroup fieldGroup = (FieldGroup) field;
-                    CsvField csvField = (CsvField) fieldGroup.getField().get(i);
+                    CsvField csvField;
+                    if (field instanceof FieldGroup) {
+                        FieldGroup fieldGroup = (FieldGroup) field;
+                        csvField = (CsvField) fieldGroup.getField().get(i);
+                    } else {
+                        csvField = (CsvField) field;
+                    }
+
                     if (csvField.getColumn() != null) {
                         //Add missing values
                         for (int j = values.size(); j < csvField.getColumn() + 1; j++) {
