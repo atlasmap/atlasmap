@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Contact xmlns="http://atlasmap.io/example/camel/multidoc">
+  <firstName>Tommy</firstName>
+  <lastName>Silva</lastName>
+  <phoneNumber>123-456-7890</phoneNumber>
+  <zipCode>01234</zipCode>
+</Contact>
