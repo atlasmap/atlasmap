@@ -25,7 +25,6 @@ import { useAtlasmapDialogs } from "./useAtlasmapDialogs";
 import { IUseContextToolbarData, useContextToolbar } from "./useContextToolbar";
 import { useSidebar } from "./useSidebar";
 import { getPropertyType, getPropertyScope, getConstantType } from "./utils";
-
 export interface IAtlasmapProps {
   allowImport?: boolean;
   allowExport?: boolean;
@@ -144,6 +143,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   const sourceEvents = useMemo<ISourceColumnCallbacks>(
     () => ({
       isSource: true,
+      acceptDropType: "target",
+      draggableType: "source",
       canDrop: () => true,
       onDrop: (s, t) => onCreateMapping(s, t.payload as IAtlasmapField),
       onShowMappingDetails: selectMapping,
@@ -213,6 +214,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   const targetEvents = useMemo<ITargetsColumnCallbacks>(
     () => ({
       isSource: false,
+      acceptDropType: "source",
+      draggableType: "target",
       canDrop: (f) => {
         return f.isCollection || f.isInCollection || !f.isConnected;
       },

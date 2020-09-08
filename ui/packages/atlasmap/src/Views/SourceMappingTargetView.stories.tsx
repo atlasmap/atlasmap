@@ -55,6 +55,8 @@ export const sourceMappingTargetView = () =>
             shouldShowMappingPreviewForField: () => true,
             onFieldPreviewChange: action("onFieldPreviewChange"),
             isSource: true,
+            acceptDropType: "target",
+            draggableType: "source",
           }}
           targetEvents={{
             onCreateProperty: action("onCreateProperty"),
@@ -80,6 +82,8 @@ export const sourceMappingTargetView = () =>
             onStartMapping: action("onStartMapping"),
             shouldShowMappingPreviewForField: () => true,
             isSource: false,
+            acceptDropType: "source",
+            draggableType: "target",
           }}
           mappingEvents={{
             canDrop: () => true,

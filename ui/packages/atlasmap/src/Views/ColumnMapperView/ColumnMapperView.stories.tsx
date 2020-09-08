@@ -49,6 +49,8 @@ export const sourcesColumn = () => (
         constants={constants}
         sources={sources}
         isSource={true}
+        acceptDropType={"target"}
+        draggableType={"source"}
       />
     </Column>
   </CanvasProvider>
@@ -81,6 +83,8 @@ export const targetsColumn = () => (
         targetProperties={properties}
         targets={targets}
         isSource={false}
+        acceptDropType={"source"}
+        draggableType={"target"}
       />
     </Column>
   </CanvasProvider>

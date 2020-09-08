@@ -16,6 +16,7 @@ import {
   IAtlasmapField,
   IAtlasmapMapping,
   GroupId,
+  AtlasmapDocumentType,
 } from "../../models";
 import {
   DeleteDocumentAction,
@@ -24,9 +25,7 @@ import {
 } from "../Actions";
 import { commonActions } from "./commonActions";
 import {
-  SOURCES_DRAGGABLE_TYPE,
   TARGETS_DOCUMENT_ID_PREFIX,
-  TARGETS_DRAGGABLE_TYPE,
   TARGETS_FIELD_ID_PREFIX,
   TARGETS_HEIGHT_BOUNDARY_ID,
   TARGETS_PROPERTIES_ID,
@@ -38,6 +37,8 @@ import { PlusIcon } from "@patternfly/react-icons";
 import { IPropertiesTreeCallbacks, PropertiesTree } from "./PropertiesTree";
 
 export interface ITargetsColumnCallbacks extends IPropertiesTreeCallbacks {
+  acceptDropType: AtlasmapDocumentType;
+  draggableType: AtlasmapDocumentType;
   isSource: boolean;
   onCreateProperty: (isSource: boolean) => void;
   onDeleteDocument?: (id: GroupId) => void;
@@ -67,6 +68,8 @@ export interface ITargetsColumnData {
 export const TargetsColumn: FunctionComponent<
   ITargetsColumnData & ITargetsColumnCallbacks
 > = ({
+  acceptDropType,
+  draggableType,
   isSource,
   onSearch,
   onImportDocument,
@@ -157,6 +160,8 @@ export const TargetsColumn: FunctionComponent<
                 >
                   {targetProperties ? (
                     <PropertiesTree
+                      acceptDropType={acceptDropType}
+                      draggableType={draggableType}
                       isSource={isSource}
                       onEditProperty={onEditProperty}
                       onDeleteProperty={onDeleteProperty}
@@ -215,8 +220,8 @@ export const TargetsColumn: FunctionComponent<
                           overrideWidth={TARGETS_WIDTH_BOUNDARY_ID}
                           parentId={documentId}
                           idPrefix={TARGETS_FIELD_ID_PREFIX}
-                          acceptDropType={SOURCES_DRAGGABLE_TYPE}
-                          draggableType={TARGETS_DRAGGABLE_TYPE}
+                          acceptDropType={acceptDropType}
+                          draggableType={draggableType}
                           onDrop={onDrop}
                           canDrop={canDrop}
                           renderActions={(field) =>
