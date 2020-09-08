@@ -8,15 +8,14 @@ import {
   IAtlasmapDocument,
   IAtlasmapField,
   IAtlasmapMapping,
+  AtlasmapDocumentType,
 } from "../../models";
 import { commonActions } from "./commonActions";
 import {
-  SOURCES_DRAGGABLE_TYPE,
   SOURCES_FIELD_ID_PREFIX,
   SOURCES_HEIGHT_BOUNDARY_ID,
   SOURCES_PROPERTIES_ID,
   SOURCES_WIDTH_BOUNDARY_ID,
-  TARGETS_DRAGGABLE_TYPE,
   TARGETS_FIELD_ID_PREFIX,
   TARGETS_HEIGHT_BOUNDARY_ID,
   TARGETS_PROPERTIES_ID,
@@ -25,6 +24,8 @@ import {
 import { TraverseFields, ITraverseFieldsProps } from "./TraverseFields";
 
 export interface IPropertiesTreeCallbacks {
+  acceptDropType: AtlasmapDocumentType;
+  draggableType: AtlasmapDocumentType;
   isSource: boolean;
   onDrop: (source: IAtlasmapField, target: IDragAndDropField) => void;
   canDrop: (source: IAtlasmapField, target: IDragAndDropField) => boolean;
@@ -46,6 +47,8 @@ export interface IPropertiesTreeProps extends IPropertiesTreeCallbacks {
 }
 
 export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
+  acceptDropType,
+  draggableType,
   isSource,
   fields,
   showTypes,
@@ -74,8 +77,8 @@ export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
         isSource ? SOURCES_WIDTH_BOUNDARY_ID : TARGETS_WIDTH_BOUNDARY_ID
       }
       idPrefix={isSource ? SOURCES_FIELD_ID_PREFIX : TARGETS_FIELD_ID_PREFIX}
-      acceptDropType={TARGETS_DRAGGABLE_TYPE}
-      draggableType={SOURCES_DRAGGABLE_TYPE}
+      acceptDropType={acceptDropType}
+      draggableType={draggableType}
       onDrop={onDrop}
       canDrop={canDrop}
       renderActions={(field) => [

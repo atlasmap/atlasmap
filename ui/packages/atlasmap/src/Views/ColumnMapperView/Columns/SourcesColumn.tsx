@@ -18,6 +18,7 @@ import {
   IAtlasmapDocument,
   IAtlasmapField,
   IAtlasmapMapping,
+  AtlasmapDocumentType,
 } from "../../models";
 import {
   DeleteDocumentAction,
@@ -28,12 +29,10 @@ import { commonActions } from "./commonActions";
 import {
   SOURCES_CONSTANTS_ID,
   SOURCES_DOCUMENT_ID_PREFIX,
-  SOURCES_DRAGGABLE_TYPE,
   SOURCES_FIELD_ID_PREFIX,
   SOURCES_HEIGHT_BOUNDARY_ID,
   SOURCES_PROPERTIES_ID,
   SOURCES_WIDTH_BOUNDARY_ID,
-  TARGETS_DRAGGABLE_TYPE,
 } from "./constants";
 import { ConstantsTree, IConstantsTreeCallbacks } from "./ConstantsTree";
 import { IPropertiesTreeCallbacks, PropertiesTree } from "./PropertiesTree";
@@ -42,6 +41,8 @@ import { TraverseFields } from "./TraverseFields";
 export interface ISourceColumnCallbacks
   extends IConstantsTreeCallbacks,
     IPropertiesTreeCallbacks {
+  acceptDropType: AtlasmapDocumentType;
+  draggableType: AtlasmapDocumentType;
   isSource: boolean;
   onCreateConstant: () => void;
   onCreateProperty: (isSource: boolean) => void;
@@ -72,6 +73,8 @@ export interface ISourcesColumnData {
 export const SourcesColumn: FunctionComponent<
   ISourcesColumnData & ISourceColumnCallbacks
 > = ({
+  acceptDropType,
+  draggableType,
   isSource,
   onCreateConstant,
   onEditConstant,
@@ -167,6 +170,8 @@ export const SourcesColumn: FunctionComponent<
                 >
                   {sourceProperties ? (
                     <PropertiesTree
+                      acceptDropType={acceptDropType}
+                      draggableType={draggableType}
                       isSource={isSource}
                       onEditProperty={onEditProperty}
                       onDeleteProperty={onDeleteProperty}
@@ -274,8 +279,8 @@ export const SourcesColumn: FunctionComponent<
                           overrideWidth={SOURCES_WIDTH_BOUNDARY_ID}
                           parentId={documentId}
                           idPrefix={SOURCES_FIELD_ID_PREFIX}
-                          acceptDropType={TARGETS_DRAGGABLE_TYPE}
-                          draggableType={SOURCES_DRAGGABLE_TYPE}
+                          acceptDropType={acceptDropType}
+                          draggableType={draggableType}
                           onDrop={onDrop}
                           canDrop={canDrop}
                           renderActions={(field) =>
