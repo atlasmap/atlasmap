@@ -76,6 +76,7 @@ export function xmlToFieldGroup(
       type: jf.fieldType,
       previewValue: "",
       path: jf.path,
+      scope: undefined,
       mappings,
       hasTransformations:
         mappings.length > 0 &&

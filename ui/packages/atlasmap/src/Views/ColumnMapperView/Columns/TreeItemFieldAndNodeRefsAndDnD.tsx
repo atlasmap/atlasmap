@@ -117,6 +117,7 @@ export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent<ITreeItemFiel
                         )
                       }
                       type={field.type}
+                      scope={field.scope}
                       showType={showTypes}
                       isDragging={isDragging}
                       isFocused={focused}

@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
 export interface IDocumentFieldProps {
   name: ReactChild;
   type: string;
+  scope?: string;
   icon?: ReactElement;
   statusIcons?: (ReactElement | null)[];
   actions?: (ReactElement | null)[];
@@ -82,6 +83,7 @@ export const DocumentField = forwardRef<
   {
     name,
     type,
+    scope,
     icon,
     statusIcons,
     actions,
@@ -118,6 +120,9 @@ export const DocumentField = forwardRef<
           data-testid={`document-${name}-field`}
         >
           <TruncatedString>{name}</TruncatedString>
+          <strong>
+            <small>{scope && ` <${scope}>`}</small>
+          </strong>
           <span>{showType && ` (${type})`}</span>
           <span className={styles.statusIcons}>
             {statusIcons && statusIcons?.filter((a) => a)}

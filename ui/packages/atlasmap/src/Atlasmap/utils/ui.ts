@@ -81,6 +81,7 @@ export function fromFieldToIFieldsNode(field: Field): IAtlasmapField | null {
         name: field.getFieldLabel(false, false),
         type: field.type,
         path: field.path,
+        scope: field.scope ? field.scope : undefined,
         amField: field,
         previewValue: field.value,
         mappings:
@@ -148,6 +149,7 @@ export function fromMappedFieldToIMappingField(
     name: mappedField.field!.getFieldLabel(false, false),
     type: mappedField.field!.type,
     path: mappedField.field!.path,
+    scope: mappedField.field!.scope,
     previewValue: mappedField.field!.value,
     hasTransformations: false,
     mappings: [],

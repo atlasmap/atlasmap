@@ -102,7 +102,11 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
       <MappingField
         key={f.id}
         name={f.name}
-        info={`${f.path} (${f.type})`}
+        info={
+          f.scope
+            ? `${f.path} <${f.scope}> (${f.type})`
+            : `${f.path} (${f.type})`
+        }
         onDelete={() => onRemoveMappedField(isSource, index)}
         onIndexChange={(value: string) =>
           onIndexChange(isSource, index, parseInt(value, 10))
