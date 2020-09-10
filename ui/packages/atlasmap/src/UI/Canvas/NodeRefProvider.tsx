@@ -71,7 +71,7 @@ export const NodeRefProvider: FunctionComponent = ({ children }) => {
     const ids = Array.isArray(id) ? id : [id];
     for (let index = 0; index < ids.length; index++) {
       const curId = ids[index];
-      if (curId && nodes.current[curId].key === key) {
+      if (curId && nodes.current[curId]?.key === key) {
         delete nodes.current[curId];
       }
     }
