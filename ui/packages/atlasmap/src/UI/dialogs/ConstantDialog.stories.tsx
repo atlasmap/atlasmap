@@ -31,5 +31,6 @@ export const propertyDialog = () => (
       valueTypeOptions[0],
     )}
     valueTypeOptions={options}
+    onValidation={() => true}
   />
 );

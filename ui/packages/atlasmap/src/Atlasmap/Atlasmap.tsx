@@ -153,22 +153,21 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       canRemoveFromSelectedMapping: (f) =>
         isFieldRemovableFromSelection("source", f),
       onRemoveFromSelectedMapping: onRemoveFromMapping,
-      onCreateConstant: handlers.onCreateConstant,
+      onCreateConstant: () => handlers.onCreateConstant(constants),
       onEditConstant: (constant) => {
         const [value] = constant.split(" ");
         const valueType = getConstantType(value);
 
-        handlers.onEditConstant({ value, valueType });
+        handlers.onEditConstant({ value, valueType }, constants);
       },
       onDeleteConstant: handlers.onDeleteConstant,
       onCreateProperty: (isSource: boolean) => {
-        handlers.onCreateProperty(isSource);
+        handlers.onCreateProperty(isSource, sourceProperties);
       },
       onEditProperty: (property, isSource) => {
         const [leftPart] = property.split(" ");
         const valueType = getPropertyType(leftPart, isSource);
         const scope = getPropertyScope(leftPart, isSource);
-
         handlers.onEditProperty(
           {
             name: leftPart,
@@ -176,6 +175,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
             scope,
           },
           true,
+          sourceProperties,
         );
       },
       onDeleteProperty: handlers.onDeleteProperty,
@@ -199,6 +199,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onAddToMapping,
       onRemoveFromMapping,
       handlers,
+      constants,
       allowDelete,
       allowCustomJavaClasses,
       allowImport,
@@ -208,6 +209,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onCreateMapping,
       isFieldAddableToSelection,
       isFieldRemovableFromSelection,
+      sourceProperties,
     ],
   );
 
@@ -227,7 +229,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         isFieldRemovableFromSelection("target", f),
       onRemoveFromSelectedMapping: onRemoveFromMapping,
       onCreateProperty: (isSource: boolean) => {
-        handlers.onCreateProperty(isSource);
+        handlers.onCreateProperty(isSource, targetProperties);
       },
       onEditProperty: (property, isSource) => {
         const [leftPart] = property.split(" ");
@@ -240,6 +242,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
             scope,
           },
           false,
+          targetProperties,
         );
       },
       onDeleteProperty: handlers.onDeleteProperty,
@@ -262,6 +265,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       selectMapping,
       onAddToMapping,
       onRemoveFromMapping,
+      handlers,
       allowDelete,
       allowCustomJavaClasses,
       allowImport,
@@ -271,7 +275,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onCreateMapping,
       isFieldAddableToSelection,
       isFieldRemovableFromSelection,
-      handlers,
+      targetProperties,
     ],
   );
 
