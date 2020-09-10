@@ -5,6 +5,7 @@ import { ToolbarGroup } from "@patternfly/react-core";
 import { ContextToolbar } from "../Layout";
 import { useToggle } from "../UI";
 import {
+  AddMappingToolbarItem,
   ToggleColumnMapperViewToolbarItem,
   ToggleFreeViewToolbarItem,
   ToggleMappedFieldsToolbarItem,
@@ -47,6 +48,7 @@ export interface IUseContextToolbarData {
   showToggleTypesToolbarItem?: boolean;
   showToggleMappedFieldsToolbarItem?: boolean;
   showToggleUnmappedFieldsToolbarItem?: boolean;
+  showAddNewMappingToolbarItem?: boolean;
 }
 
 export function useContextToolbar({
@@ -65,6 +67,7 @@ export function useContextToolbar({
   showToggleTypesToolbarItem = true,
   showToggleMappedFieldsToolbarItem = true,
   showToggleUnmappedFieldsToolbarItem = true,
+  showAddNewMappingToolbarItem = true,
 
   onImportAtlasFile,
   onImportJarFile,
@@ -75,6 +78,7 @@ export function useContextToolbar({
     toggleMappingPreview: amToggleMappingPreview,
     toggleShowMappedFields: amToggleShowMappedFields,
     toggleShowUnmappedFields: amToggleShowUnmappedFields,
+    newMapping,
   } = useAtlasmap();
 
   const [activeView, setActiveView] = useState<Views>("ColumnMapper");
@@ -185,6 +189,11 @@ export function useContextToolbar({
                 onClick={toggleShowUnmappedFields}
               />
             )}
+          {showAddNewMappingToolbarItem &&
+            (activeView === "ColumnMapper" ||
+              activeView === "MappingTable") && (
+              <AddMappingToolbarItem onClick={newMapping} />
+            )}
         </ToolbarGroup>
       </ContextToolbar>
     ),
@@ -217,6 +226,8 @@ export function useContextToolbar({
       showToggleUnmappedFieldsToolbarItem,
       showUnmappedFields,
       toggleShowUnmappedFields,
+      showAddNewMappingToolbarItem,
+      newMapping,
     ],
   );
 
