@@ -11,6 +11,7 @@ import {
   TextInput,
   FormSelect,
   FormSelectOption,
+  Tooltip,
 } from "@patternfly/react-core";
 
 import {
@@ -39,6 +40,7 @@ export interface IPropertyDialogProps {
   isOpen: IConfirmationDialogProps["isOpen"];
   onCancel: IConfirmationDialogProps["onCancel"];
   onConfirm: (property: IProperty) => void;
+  onValidation: (name: string, scope: string) => boolean;
 }
 export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
   title,
@@ -50,15 +52,20 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
   isOpen,
   onCancel,
   onConfirm,
+  onValidation,
 }) => {
   const [name, setName] = useState(initialName);
   const [valueType, setValueType] = useState(initialValueType);
   const [scope, setScope] = useState(initialScope);
+  const [isPropertyValid, setPropertyValid] = useState(true);
+  const [isNameAndScopeUnique, setNameAndScopeUnique] = useState(true);
 
   const reset = useCallback(() => {
     setName(initialName);
     setValueType(initialValueType);
     setScope(initialScope);
+    setPropertyValid(true);
+    setNameAndScopeUnique(true);
   }, [initialName, initialValueType, initialScope]);
 
   const handleOnConfirm = useCallback(() => {
@@ -71,6 +78,22 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
     reset();
   }, [onCancel, reset]);
 
+  function handleOnNameChange(name: string) {
+    validateProperty(name, scope);
+    setName(name);
+  }
+
+  function handleOnScopeChange(scope: string) {
+    validateProperty(name, scope);
+    setScope(scope);
+  }
+
+  function validateProperty(name: string, scope: string) {
+    const isValid = onValidation(name, scope);
+    setNameAndScopeUnique(isValid);
+    setPropertyValid(name.length > 0 && isValid);
+  }
+
   // make sure to resync the internal state to the values passed in as props
   useEffect(reset, [reset]);
 
@@ -78,19 +101,37 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
     <ConfirmationDialog
       title={title}
       onCancel={handleOnCancel}
-      onConfirm={name.length > 0 ? handleOnConfirm : undefined}
+      onConfirm={isPropertyValid ? handleOnConfirm : undefined}
       isOpen={isOpen}
     >
       <Form>
         <FormGroup label={"Name"} fieldId={"name"} isRequired={true}>
-          <TextInput
-            value={name}
-            onChange={setName}
-            id={"name"}
-            autoFocus={true}
-            isRequired={true}
-            data-testid={"property-name-text-input"}
-          />
+          {!isNameAndScopeUnique ? (
+            <Tooltip
+              content={
+                <div>A property with this name and scope already exists</div>
+              }
+            >
+              <TextInput
+                value={name}
+                onChange={handleOnNameChange}
+                id={"name"}
+                autoFocus={true}
+                isRequired={true}
+                data-testid={"property-name-text-input"}
+                style={{ color: "red" }}
+              />
+            </Tooltip>
+          ) : (
+            <TextInput
+              value={name}
+              onChange={handleOnNameChange}
+              id={"name"}
+              autoFocus={true}
+              isRequired={true}
+              data-testid={"property-name-text-input"}
+            />
+          )}
         </FormGroup>
         <FormGroup label={"Value type"} fieldId={"valueType"}>
           <FormSelect
@@ -105,16 +146,36 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
           </FormSelect>
         </FormGroup>
         <FormGroup label={"Scope"} fieldId={"scope"}>
-          <FormSelect
-            value={scope}
-            aria-label={"Select property scope"}
-            onChange={setScope}
-            data-testid={"property-scope-form-select"}
-          >
-            {scopeOptions.map(({ label, value }, idx) => (
-              <FormSelectOption key={idx} label={label} value={value} />
-            ))}
-          </FormSelect>
+          {!isNameAndScopeUnique ? (
+            <Tooltip
+              content={
+                <div>A property with this name and scope already exists</div>
+              }
+            >
+              <FormSelect
+                value={scope}
+                aria-label={"Select property scope"}
+                onChange={handleOnScopeChange}
+                data-testid={"property-scope-form-select"}
+                style={{ color: "red" }}
+              >
+                {scopeOptions.map(({ label, value }, idx) => (
+                  <FormSelectOption key={idx} label={label} value={value} />
+                ))}
+              </FormSelect>
+            </Tooltip>
+          ) : (
+            <FormSelect
+              value={scope}
+              aria-label={"Select property scope"}
+              onChange={handleOnScopeChange}
+              data-testid={"property-scope-form-select"}
+            >
+              {scopeOptions.map(({ label, value }, idx) => (
+                <FormSelectOption key={idx} label={label} value={value} />
+              ))}
+            </FormSelect>
+          )}
         </FormGroup>
       </Form>
     </ConfirmationDialog>

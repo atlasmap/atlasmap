@@ -34,6 +34,7 @@ export const sourcePropertyDialog = () => (
     valueTypeOptions={options}
     scope={select("Initial scope", scopeOptions, scopeOptions[0])}
     scopeOptions={options}
+    onValidation={() => true}
   />
 );
 
@@ -52,5 +53,6 @@ export const targetPropertyDialog = () => (
     valueTypeOptions={options}
     scope={select("Initial scope", scopeOptions, scopeOptions[0])}
     scopeOptions={options}
+    onValidation={() => true}
   />
 );

@@ -20,6 +20,7 @@ import {
   useCustomClassDialog,
 } from "./dialogs";
 import { enableCustomClass, getPropertyScopeOptions } from "./utils";
+import { IAtlasmapDocument } from "../Views";
 
 export interface IUseAtlasmapDialogsProps {
   modalContainer: HTMLElement;
@@ -42,20 +43,27 @@ export function useAtlasmapDialogs({
   const [createConstantDialog, openCreateConstantDialog] = useConstantDialog(
     "Create Constant",
   );
-  const onCreateConstant = useCallback(() => {
-    openCreateConstantDialog(({ value, valueType }) => {
-      createConstant(value, valueType);
-    });
-  }, [createConstant, openCreateConstantDialog]);
+  const onCreateConstant = useCallback(
+    (constants: IAtlasmapDocument | null) => {
+      openCreateConstantDialog(({ value, valueType }) => {
+        createConstant(value, valueType);
+      }, constants);
+    },
+    [createConstant, openCreateConstantDialog],
+  );
 
   const [editConstantDialog, openEditConstantDialog] = useConstantDialog(
     "Edit Constant",
   );
   const onEditConstant = useCallback(
-    (constant: IConstant) => {
-      openEditConstantDialog(({ value, valueType }) => {
-        editConstant(constant.value, value, valueType);
-      }, constant);
+    (constant: IConstant, constants: IAtlasmapDocument | null) => {
+      openEditConstantDialog(
+        ({ value, valueType }) => {
+          editConstant(constant.value, value, valueType);
+        },
+        constants,
+        constant,
+      );
     },
     [editConstant, openEditConstantDialog],
   );
@@ -71,11 +79,11 @@ export function useAtlasmapDialogs({
     scopeOptions,
   );
   const onCreateProperty = useCallback(
-    (isSource: boolean) => {
+    (isSource: boolean, properties: IAtlasmapDocument | null) => {
       setScopeOptions(getPropertyScopeOptions(isSource));
       openCreatePropertyDialog(({ name, valueType, scope }) => {
         createProperty(name, valueType, scope, isSource);
-      });
+      }, properties);
     },
     [createProperty, openCreatePropertyDialog],
   );
@@ -84,11 +92,19 @@ export function useAtlasmapDialogs({
     scopeOptions,
   );
   const onEditProperty = useCallback(
-    (property: IProperty, isSource: boolean) => {
+    (
+      property: IProperty,
+      isSource: boolean,
+      properties: IAtlasmapDocument | null,
+    ) => {
       setScopeOptions(getPropertyScopeOptions(isSource));
-      openEditPropertyDialog(({ name, valueType, scope }) => {
-        editProperty(property.name, valueType, scope, name, isSource);
-      }, property);
+      openEditPropertyDialog(
+        ({ name, valueType, scope }) => {
+          editProperty(property.name, valueType, scope, name, isSource);
+        },
+        properties,
+        property,
+      );
     },
     [editProperty, openEditPropertyDialog],
   );
