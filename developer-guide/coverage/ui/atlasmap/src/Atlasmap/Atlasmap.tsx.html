@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/127</span>
+                <span class='fraction'>0/128</span>
             </div>
         
             
@@ -38,14 +38,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/45</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/120</span>
+                <span class='fraction'>0/121</span>
             </div>
         
             
@@ -477,7 +477,11 @@
 <a name='L419'></a><a href='#L419'>419</a>
 <a name='L420'></a><a href='#L420'>420</a>
 <a name='L421'></a><a href='#L421'>421</a>
-<a name='L422'></a><a href='#L422'>422</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L422'></a><a href='#L422'>422</a>
+<a name='L423'></a><a href='#L423'>423</a>
+<a name='L424'></a><a href='#L424'>424</a>
+<a name='L425'></a><a href='#L425'>425</a>
+<a name='L426'></a><a href='#L426'>426</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -632,7 +636,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -647,8 +651,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -690,6 +694,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -723,6 +729,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -736,6 +743,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1053,22 +1061,21 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
       canRemoveFromSelectedMapping: <span class="fstat-no" title="function not covered" >(f</span>) =&gt;
 <span class="cstat-no" title="statement not covered" >        isFieldRemovableFromSelection("source", f),</span>
       onRemoveFromSelectedMapping: onRemoveFromMapping,
-      onCreateConstant: handlers.onCreateConstant,
+      onCreateConstant: <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >h</span>andlers.onCreateConstant(constants),</span>
       onEditConstant: <span class="fstat-no" title="function not covered" >(c</span>onstant) =&gt; {
         const [<span class="cstat-no" title="statement not covered" >value]</span> = constant.split(" ");
         const valueType = <span class="cstat-no" title="statement not covered" >getConstantType(value);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        handlers.onEditConstant({ value, valueType });</span>
+<span class="cstat-no" title="statement not covered" >        handlers.onEditConstant({ value, valueType }, constants);</span>
       },
       onDeleteConstant: handlers.onDeleteConstant,
       onCreateProperty: <span class="fstat-no" title="function not covered" >(i</span>sSource: boolean) =&gt; {
-<span class="cstat-no" title="statement not covered" >        handlers.onCreateProperty(isSource);</span>
+<span class="cstat-no" title="statement not covered" >        handlers.onCreateProperty(isSource, sourceProperties);</span>
       },
       onEditProperty: <span class="fstat-no" title="function not covered" >(p</span>roperty, isSource) =&gt; {
         const [<span class="cstat-no" title="statement not covered" >leftPart]</span> = property.split(" ");
         const valueType = <span class="cstat-no" title="statement not covered" >getPropertyType(leftPart, isSource);</span>
         const scope = <span class="cstat-no" title="statement not covered" >getPropertyScope(leftPart, isSource);</span>
-&nbsp;
 <span class="cstat-no" title="statement not covered" >        handlers.onEditProperty(</span>
           {
             name: leftPart,
@@ -1076,6 +1083,7 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
             scope,
           },
           true,
+          sourceProperties,
         );
       },
       onDeleteProperty: handlers.onDeleteProperty,
@@ -1099,6 +1107,7 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
       onAddToMapping,
       onRemoveFromMapping,
       handlers,
+      constants,
       allowDelete,
       allowCustomJavaClasses,
       allowImport,
@@ -1108,6 +1117,7 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
       onCreateMapping,
       isFieldAddableToSelection,
       isFieldRemovableFromSelection,
+      sourceProperties,
     ],
   );
 &nbsp;
@@ -1127,7 +1137,7 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
 <span class="cstat-no" title="statement not covered" >        isFieldRemovableFromSelection("target", f),</span>
       onRemoveFromSelectedMapping: onRemoveFromMapping,
       onCreateProperty: <span class="fstat-no" title="function not covered" >(i</span>sSource: boolean) =&gt; {
-<span class="cstat-no" title="statement not covered" >        handlers.onCreateProperty(isSource);</span>
+<span class="cstat-no" title="statement not covered" >        handlers.onCreateProperty(isSource, targetProperties);</span>
       },
       onEditProperty: <span class="fstat-no" title="function not covered" >(p</span>roperty, isSource) =&gt; {
         const [<span class="cstat-no" title="statement not covered" >leftPart]</span> = property.split(" ");
@@ -1140,6 +1150,7 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
             scope,
           },
           false,
+          targetProperties,
         );
       },
       onDeleteProperty: handlers.onDeleteProperty,
@@ -1162,6 +1173,7 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
       selectMapping,
       onAddToMapping,
       onRemoveFromMapping,
+      handlers,
       allowDelete,
       allowCustomJavaClasses,
       allowImport,
@@ -1171,7 +1183,7 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
       onCreateMapping,
       isFieldAddableToSelection,
       isFieldRemovableFromSelection,
-      handlers,
+      targetProperties,
     ],
   );
 &nbsp;
@@ -1326,7 +1338,7 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Sep 10 2020 17:08:36 GMT+0000 (Coordinated Universal Time)
+                at Fri Sep 11 2020 14:20:52 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
