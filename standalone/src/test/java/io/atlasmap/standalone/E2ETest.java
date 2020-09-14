@@ -148,7 +148,7 @@ public class E2ETest {
         Path dirPath = Paths.get(DLDIR);
         dirPath.register(watcher, StandardWatchEventKinds.ENTRY_CREATE);
         confirmBtn.click();
-        WatchKey key = watcher.poll(60, TimeUnit.SECONDS);
+        WatchKey key = watcher.poll(300, TimeUnit.SECONDS);
         assertNotNull("exported.adm was not created before timeout", key);
         for (WatchEvent<?> event : key.pollEvents()) {
             if (!StandardWatchEventKinds.ENTRY_CREATE.name().equals(event.kind().name())) {
