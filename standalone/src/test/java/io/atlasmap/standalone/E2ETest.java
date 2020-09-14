@@ -44,8 +44,10 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -58,6 +60,7 @@ import io.atlasmap.core.ADMArchiveHandler;
 @ContextConfiguration(classes = { Application.class, CorsConfiguration.class, SecurityConfiguration.class })
 public class E2ETest {
 
+    private static final Logger LOG = LoggerFactory.getLogger(E2ETest.class);
     private static final String DLDIR = System.getProperty("user.dir") + File.separator + "target";
 
     @LocalServerPort
@@ -132,21 +135,25 @@ public class E2ETest {
         Path dirPath = Paths.get(DLDIR);
         dirPath.register(watcher, StandardWatchEventKinds.ENTRY_CREATE);
         confirmBtn.click();
-        WatchKey key = watcher.poll(300, TimeUnit.SECONDS);
-        assertNotNull("exported.adm was not created before timeout", key);
-        for (WatchEvent<?> event : key.pollEvents()) {
-            if (!StandardWatchEventKinds.ENTRY_CREATE.name().equals(event.kind().name())) {
-                continue;
+        long start = System.currentTimeMillis();
+        while ((System.currentTimeMillis() - start) < 60000) {
+            WatchKey key = watcher.poll(5, TimeUnit.SECONDS);
+            for (WatchEvent<?> event : key.pollEvents()) {
+                if (!StandardWatchEventKinds.ENTRY_CREATE.name().equals(event.kind().name())) {
+                    continue;
+                };
+                Path eventPath = (Path)event.context();
+                LOG.info("File '{}' is created", eventPath.getFileName().toString());
+                if (!exportAdmFileName.equals(eventPath.getFileName().toString())) {
+                    continue;
+                }
+                ADMArchiveHandler handler = new ADMArchiveHandler(getClass().getClassLoader());
+                handler.setLibraryDirectory(Paths.get(DLDIR + File.separator + "lib"));
+                handler.load(Paths.get(DLDIR + File.separator + exportAdmFileName));
+                assertEquals("UI.0", handler.getMappingDefinition().getName());
+                return;
             };
-            Path eventPath = (Path)event.context();
-            if (!exportAdmFileName.equals(eventPath.getFileName().toString())) {
-                continue;
-            }
-            ADMArchiveHandler handler = new ADMArchiveHandler(getClass().getClassLoader());
-            handler.load(Paths.get(DLDIR + File.separator + exportAdmFileName));
-            assertEquals("UI.0", handler.getMappingDefinition().getName());
-            return;
-        };
+        }
         fail("exported.adm was not created");
     }
 
