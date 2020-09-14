@@ -154,7 +154,6 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         this.classLoader = null;
         this.threadName = null;
         this.initialized = false;
-        factory = null;
     }
 
     @Override

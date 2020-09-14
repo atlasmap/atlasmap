@@ -108,8 +108,10 @@ public class AtlasService {
         this.libraryLoader.addListener(new AtlasLibraryLoaderListener() {
             @Override
             public void onUpdate(AtlasLibraryLoader loader) {
-                ((DefaultAtlasContextFactory)atlasContextFactory).destroy();
-                ((DefaultAtlasContextFactory)atlasContextFactory).init(libraryLoader);
+                synchronized (atlasContextFactory) {
+                    ((DefaultAtlasContextFactory)atlasContextFactory).destroy();
+                    ((DefaultAtlasContextFactory)atlasContextFactory).init(libraryLoader);
+                }
             }
         });
 
@@ -126,8 +128,10 @@ public class AtlasService {
             this.libraryLoader.reload();
         }
 
-        ((DefaultAtlasContextFactory)atlasContextFactory).destroy();
-        ((DefaultAtlasContextFactory)atlasContextFactory).init(libraryLoader);
+        synchronized (atlasContextFactory) {
+            ((DefaultAtlasContextFactory)atlasContextFactory).destroy();
+            ((DefaultAtlasContextFactory)atlasContextFactory).init(libraryLoader);
+        }
         this.defaultContext = atlasContextFactory.createContext(new AtlasMapping());
     }
 
@@ -622,11 +626,14 @@ public class AtlasService {
     }
 
     protected Response validateMapping(Integer mappingDefinitionId, AtlasMapping mapping, UriInfo uriInfo) throws IOException, AtlasException {
-        AtlasContext context = atlasContextFactory.createContext(mapping);
-        AtlasSession session = context.createSession();
-        context.processValidation(session);
-        Validations validations = session.getValidations();
+        AtlasSession session;
+        synchronized (atlasContextFactory) {
+            AtlasContext context = atlasContextFactory.createContext(mapping);
+            session = context.createSession();
+            context.processValidation(session);
+        }
 
+        Validations validations = session.getValidations();
         if (session.getValidations() == null) {
             validations = new Validations();
         }
