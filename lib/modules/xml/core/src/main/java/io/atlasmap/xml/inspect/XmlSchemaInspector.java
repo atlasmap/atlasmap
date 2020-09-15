@@ -300,6 +300,7 @@ public class XmlSchemaInspector {
             XmlField xmlField = AtlasXmlModelFactory.createXmlField();
             XSAttributeDecl attributeDecl = aC.getDecl();
             xmlField.setName(getNameNS(attributeDecl));
+            xmlField.setAttribute(true);
             if (attributeDecl.getDefaultValue() != null) {
                 xmlField.setValue(attributeDecl.getDefaultValue().value);
             } else if (attributeDecl.getFixedValue() != null) {
