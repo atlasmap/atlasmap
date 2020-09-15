@@ -24,7 +24,7 @@ public class XmlField extends Field implements Serializable {
 
     protected Boolean userCreated;
 
-    protected Boolean attribute;
+    protected Boolean attribute = false;
 
     /**
      * Gets the value of the annotations property.
