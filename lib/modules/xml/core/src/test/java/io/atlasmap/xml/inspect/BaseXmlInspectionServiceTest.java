@@ -34,6 +34,7 @@ public class BaseXmlInspectionServiceTest {
     protected void printXmlField(XmlField xmlField) {
         System.out.println("Name --> " + xmlField.getName());
         System.out.println("Path --> " + xmlField.getPath());
+        System.out.println("Attribute? --> " + xmlField.isAttribute());
         System.out.println("Value --> " + xmlField.getValue());
         if (xmlField.getFieldType() != null) {
             System.out.println("Type --> " + xmlField.getFieldType().name());
