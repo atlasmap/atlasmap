@@ -698,7 +698,11 @@ export class MappingSerializer {
       doc.isSource = docRef.dataSourceType === 'SOURCE';
       doc.uri = docRef.uri;
       doc.id = docRef.id;
-      doc.name = docRef.name;
+      if (docRef.name) {
+        doc.name = docRef.name;
+      } else {
+        doc.name = docRef.id;
+      }
       doc.description = docRef.description;
       if (docRef.xmlNamespaces && docRef.xmlNamespaces.xmlNamespace) {
         for (const svcNS of docRef.xmlNamespaces.xmlNamespace) {

@@ -7,28 +7,33 @@ import {
   InspectionType,
 } from "@atlasmap/core";
 
-import { getDocDef, importInstanceSchema, removeDocumentRef } from "./document";
+import {
+  getDocDef,
+  getDocDefByName,
+  importInstanceSchema,
+  removeDocumentRef,
+} from "./document";
 
 /**
- * Return true if the specified file object file name exists as a source or target document,
+ * Return true if the specified file object exists as a source or target document,
  * false otherwise.
  *
  * @param file - file object
  * @param isSource - source or target panel
  */
 export function documentExists(file: File, isSource: boolean): boolean {
-  return getDocDef(file.name, ConfigModel.getConfig(), isSource) !== null;
+  return getDocDefByName(file.name, ConfigModel.getConfig(), isSource) !== null;
 }
 
 /**
  * Delete the specified source or target document.
  *
- * @param fileName - document name to delete
+ * @param fileId - document ID to delete
  * @param isSource - source or target panel
  */
-export async function deleteAtlasFile(fileName: string, isSource: boolean) {
+export async function deleteAtlasFile(fileId: string, isSource: boolean) {
   const cfg = ConfigModel.getConfig();
-  const docDef = getDocDef(fileName, cfg, isSource);
+  const docDef = getDocDef(fileId, cfg, isSource);
   await removeDocumentRef(docDef, cfg);
   cfg.initializationService.updateInitComplete();
 }

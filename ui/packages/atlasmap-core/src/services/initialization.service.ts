@@ -638,6 +638,13 @@ ${error.status} ${error.statusText}`,
     model.isSource = isSource;
     model.collectionType = collectionType;
     model.collectionClassName = collectionClassName;
+    model.description = 'Java document class ' + className;
+    if (collectionType) {
+      model.description += ' collection type: ' + collectionType;
+    }
+    if (collectionClassName) {
+      model.description += ' collection class name: ' + collectionClassName;
+    }
     return this.cfg.addDocument(model);
   }
 
@@ -650,7 +657,11 @@ ${error.status} ${error.statusText}`,
     inspectionParameters?: { [key: string]: string }
   ): DocumentDefinition {
     const model: DocumentInitializationModel = new DocumentInitializationModel();
-    model.id = name;
+    model.name = name;
+    model.id =
+      documentType === DocumentType.JSON || documentType === DocumentType.XML
+        ? name + '-' + documentType
+        : name;
     model.type = documentType;
     model.inspectionType = inspectionType;
     model.inspectionSource = inspectionSource;
@@ -660,6 +671,8 @@ ${error.status} ${error.statusText}`,
       model.inspectionParameters = { '': '' };
     }
     model.isSource = isSource;
+    model.description = isSource ? 'Source document ' : 'Target document ';
+    model.description += name + ' type: ' + documentType;
     return this.cfg.addDocument(model);
   }
 

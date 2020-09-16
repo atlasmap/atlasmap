@@ -106,13 +106,13 @@ public class E2ETest {
         waitForLoad.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//article[@aria-label='JSONSchemaSource']")));
 
         // Check custom action param
-        WebElement orderBtn = driver.findElement(By.xpath("//button[@id='sources-field-atlas:json:JSONSchemaSource:source:/order-toggle']"));
+        WebElement orderBtn = driver.findElement(By.xpath("//button[@id='sources-field-atlas:json:JSONSchemaSource-JSON:source:/order-toggle']"));
         orderBtn.click();
         WebElement addrBtn = driver.findElement(By.xpath(
-            "//button[@id='sources-field-atlas:json:JSONSchemaSource:source:/order/address-toggle']"));
+            "//button[@id='sources-field-atlas:json:JSONSchemaSource-JSON:source:/order/address-toggle']"));
         addrBtn.click();
         WebElement addrDiv = driver.findElement(By.xpath(
-            "//button[@id='sources-field-atlas:json:JSONSchemaSource:source:/order/address-toggle']/../.."));
+            "//button[@id='sources-field-atlas:json:JSONSchemaSource-JSON:source:/order/address-toggle']/../.."));
         WebElement cityDiv = addrDiv.findElement(By.xpath(".//button[@data-testid='grip-city-button']/../../../.."));
         Actions action = new Actions(driver);
         action.moveToElement(cityDiv).perform();

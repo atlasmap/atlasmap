@@ -63,6 +63,66 @@ export class MappingUtil {
     }
   }
 
+  /**
+   * Retrieve a document object from the specified document map based
+   * on the specified mapped field.
+   *
+   * @param cfg
+   * @param docMap
+   * @param mappedField
+   */
+  private static getDoc(
+    cfg: ConfigModel,
+    docMap: any,
+    mappedField: MappedField
+  ): DocumentDefinition | null {
+    let doc: DocumentDefinition | null = null;
+    if (!docMap || docMap.length === 0) {
+      return null;
+    }
+    doc = docMap[mappedField.parsedData.parsedDocURI!] as DocumentDefinition;
+
+    // Handle pre-doc-id decorated mapping file document references.
+    if (!doc) {
+      doc = docMap[
+        mappedField.parsedData.parsedDocURI! + '-JSON'
+      ] as DocumentDefinition;
+      if (!doc) {
+        doc = docMap[
+          mappedField.parsedData.parsedDocURI! + '-XML'
+        ] as DocumentDefinition;
+      }
+    }
+    if (doc == null) {
+      if (mappedField.parsedData.parsedName != null) {
+        cfg.errorService.addError(
+          new ErrorInfo({
+            message: `Could not find document for mapped field '${mappedField.parsedData.parsedName}' \
+at URI ${mappedField.parsedData.parsedDocURI}`,
+            level: ErrorLevel.ERROR,
+            scope: ErrorScope.APPLICATION,
+            type: ErrorType.INTERNAL,
+          })
+        );
+      }
+      return doc;
+    }
+
+    if (mappedField.parsedData.parsedDocID == null) {
+      cfg.errorService.addError(
+        new ErrorInfo({
+          message: `Could not find doc ID for mapped field ${mappedField.parsedData.parsedName}`,
+          level: ErrorLevel.ERROR,
+          scope: ErrorScope.APPLICATION,
+          type: ErrorType.INTERNAL,
+        })
+      );
+      return doc;
+    }
+    doc.id = mappedField.parsedData.parsedDocID;
+    return doc;
+  }
+
   static updateMappedFieldsFromDocuments(
     mapping: MappingModel,
     cfg: ConfigModel,
@@ -81,40 +141,13 @@ export class MappingUtil {
       } else if (mappedField.parsedData.fieldIsConstant) {
         doc = cfg.constantDoc;
       } else {
-        if (docMap === null) {
+        if (!docMap) {
           docMap = cfg.getDocUriMap(cfg, isSource);
         }
-        // TODO: check this non null operator
-        doc = docMap[
-          mappedField.parsedData.parsedDocURI!
-        ] as DocumentDefinition;
-        if (doc == null) {
-          if (mappedField.parsedData.parsedName != null) {
-            cfg.errorService.addError(
-              new ErrorInfo({
-                message: `Could not find document for mapped field '${mappedField.parsedData.parsedName}' \
-at URI ${mappedField.parsedData.parsedDocURI}`,
-                level: ErrorLevel.ERROR,
-                scope: ErrorScope.APPLICATION,
-                type: ErrorType.INTERNAL,
-              })
-            );
-          }
+        doc = this.getDoc(cfg, docMap, mappedField);
+        if (!doc) {
           continue;
         }
-
-        if (mappedField.parsedData.parsedDocID == null) {
-          cfg.errorService.addError(
-            new ErrorInfo({
-              message: `Could not find doc ID for mapped field ${mappedField.parsedData.parsedName}`,
-              level: ErrorLevel.ERROR,
-              scope: ErrorScope.APPLICATION,
-              type: ErrorType.INTERNAL,
-            })
-          );
-          continue;
-        }
-        doc.id = mappedField.parsedData.parsedDocID;
       }
       mappedField.field = null;
       if (!mappedField.parsedData.userCreated) {
@@ -343,37 +376,52 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
         continue;
       }
 
-      const doc = this.getDocById(parsedDoc.id, docs);
+      let doc = this.getDocBySpec(parsedDoc.id, docs);
       if (doc == null) {
-        cfg.errorService.addError(
-          new ErrorInfo({
-            message: `Could not find document with identifier '${parsedDoc.id}' for namespace override.`,
-            level: ErrorLevel.ERROR,
-            scope: ErrorScope.APPLICATION,
-            type: ErrorType.INTERNAL,
-            object: {
-              identifier: parsedDoc.id,
-              parsedDoc: parsedDoc,
-              docs: docs,
-            },
-          })
-        );
-        continue;
+        doc = this.getDocBySpec(parsedDoc.name, docs);
+        if (doc == null) {
+          cfg.errorService.addError(
+            new ErrorInfo({
+              message: `Could not find document with identifier '${parsedDoc.id}' for namespace override.`,
+              level: ErrorLevel.ERROR,
+              scope: ErrorScope.APPLICATION,
+              type: ErrorType.INTERNAL,
+              object: {
+                identifier: parsedDoc.id,
+                parsedDoc: parsedDoc,
+                docs: docs,
+              },
+            })
+          );
+          continue;
+        }
       }
 
       doc.namespaces = [...parsedDoc.namespaces];
     }
   }
 
-  private static getDocById(
-    documentId: string,
+  /**
+   * Return a document if it matches ID or name.  Check the entire docs
+   * array for ID first, then if not found rewalk it checking for name.
+   *
+   * @param document
+   * @param docs
+   */
+  private static getDocBySpec(
+    documentSpecifier: string,
     docs: DocumentDefinition[]
   ): DocumentDefinition | null {
-    if (documentId == null || docs == null || !docs.length) {
+    if (document == null || docs == null || !docs.length) {
       return null;
     }
     for (const doc of docs) {
-      if (doc.id === documentId) {
+      if (doc.id === documentSpecifier) {
+        return doc;
+      }
+    }
+    for (const doc of docs) {
+      if (doc.name === documentSpecifier) {
         return doc;
       }
     }
