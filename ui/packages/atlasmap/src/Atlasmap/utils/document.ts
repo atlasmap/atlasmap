@@ -27,7 +27,7 @@ export function createNamespace(
   isTarget: boolean,
 ) {
   const cfg = ConfigModel.getConfig();
-  const docDef = getDocDef(docName, cfg, true);
+  const docDef = getDocDefByName(docName, cfg, true);
   const namespace: NamespaceModel = {
     alias: alias,
     uri: uri,
@@ -51,7 +51,7 @@ export function editNamespace(
   isTarget: boolean,
 ) {
   const cfg = ConfigModel.getConfig();
-  const docDef = getDocDef(docName, cfg, true);
+  const docDef = getDocDefByName(docName, cfg, true);
   const namespace = docDef.getNamespaceForAlias(initAlias);
   namespace.alias = alias;
   namespace.uri = uri;
@@ -62,7 +62,7 @@ export function editNamespace(
 
 export function deleteNamespace(docName: string, alias: string) {
   const cfg = ConfigModel.getConfig();
-  const docDef = getDocDef(docName, cfg, true);
+  const docDef = getDocDefByName(docName, cfg, true);
   docDef.namespaces = docDef.namespaces.filter(
     (namespace: { alias: string }) => namespace.alias !== alias,
   );
@@ -125,13 +125,33 @@ export async function removeDocumentRef(
 }
 
 /**
- * Return the document definition associated with the specified document name.
+ * Return the document definition associated with the specified document ID.
  *
- * @param docName
+ * @param docId - document ID
  * @param cfg
  * @param isSource
  */
 export function getDocDef(
+  docId: string,
+  cfg: ConfigModel,
+  isSource: boolean,
+): DocumentDefinition {
+  for (const docDef of cfg.getDocs(isSource)) {
+    if (docDef.id.match(docId)) {
+      return docDef;
+    }
+  }
+  return (null as unknown) as DocumentDefinition;
+}
+
+/**
+ * Return the document definition associated with the specified document name.
+ *
+ * @param docName - document name
+ * @param cfg
+ * @param isSource
+ */
+export function getDocDefByName(
   docName: string,
   cfg: ConfigModel,
   isSource: boolean,
@@ -199,10 +219,6 @@ export async function importInstanceSchema(
   isSource: boolean,
   inspectionParameters?: { [key: string]: string },
 ) {
-  const docDef = getDocDef(selectedFile.name, cfg, isSource);
-  if (docDef) {
-    await removeDocumentRef(docDef, cfg);
-  }
   await importDoc(selectedFile, cfg, isSource, inspectionParameters);
 }
 
