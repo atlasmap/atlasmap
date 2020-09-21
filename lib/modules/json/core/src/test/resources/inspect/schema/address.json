@@ -16,7 +16,8 @@
       "type": "string"
     },
     "region": {
-      "type": "string"
+      "enum": ["NA", "EMEA", "LATAM", "APAC"]
+      
     },
     "postal-code": {
       "type": "string"

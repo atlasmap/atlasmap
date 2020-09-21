@@ -1,3 +1,18 @@
+/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.atlasmap.json.v2;
 
 import java.io.Serializable;
@@ -10,7 +25,8 @@ public class JsonComplexType extends JsonField implements Serializable {
     private static final long serialVersionUID = 1L;
 
     protected JsonFields jsonFields;
-
+    protected JsonEnumFields jsonEnumFields;
+    protected Boolean enumeration;
     protected String uri;
 
     /**
@@ -35,6 +51,54 @@ public class JsonComplexType extends JsonField implements Serializable {
      */
     public void setJsonFields(JsonFields value) {
         this.jsonFields = value;
+    }
+
+    /**
+     * Gets the value of the jsonEnumFields property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link JsonEnumFields }
+     *     
+     */
+    public JsonEnumFields getJsonEnumFields() {
+        return jsonEnumFields;
+    }
+
+    /**
+     * Sets the value of the jsonEnumFields property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link JsonEnumFields }
+     *     
+     */
+    public void setJsonEnumFields(JsonEnumFields value) {
+        this.jsonEnumFields = value;
+    }
+
+    /**
+     * Gets the value of the enumeration property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isEnumeration() {
+        return enumeration;
+    }
+
+    /**
+     * Sets the value of the enumeration property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setEnumeration(Boolean value) {
+        this.enumeration = value;
     }
 
     /**
