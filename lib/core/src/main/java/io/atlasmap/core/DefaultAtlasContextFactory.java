@@ -65,10 +65,10 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     private ObjectName objectName = null;
     private DefaultAtlasConversionService atlasConversionService = null;
     private DefaultAtlasFieldActionService atlasFieldActionService = null;
-    private AtlasCombineStrategy atlasCombineStrategy = new DefaultAtlasCombineStrategy();
-    private AtlasPropertyStrategy atlasPropertyStrategy = new DefaultAtlasPropertyStrategy();
-    private AtlasSeparateStrategy atlasSeparateStrategy = new DefaultAtlasSeparateStrategy();
-    private AtlasValidationService atlasValidationService = new DefaultAtlasValidationService();
+    private AtlasCombineStrategy atlasCombineStrategy = null;
+    private AtlasPropertyStrategy atlasPropertyStrategy = null;
+    private AtlasSeparateStrategy atlasSeparateStrategy = null;
+    private AtlasValidationService atlasValidationService = null;
     private AtlasModuleInfoRegistry moduleInfoRegistry;
     private Map<String, String> properties = null;
     private CompoundClassLoader classLoader = null;
@@ -102,6 +102,10 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         this.atlasConversionService = DefaultAtlasConversionService.getInstance();
         this.atlasFieldActionService = DefaultAtlasFieldActionService.getInstance();
         this.atlasFieldActionService.init(this.classLoader);
+        this.atlasCombineStrategy = new DefaultAtlasCombineStrategy();
+        this.atlasPropertyStrategy = new DefaultAtlasPropertyStrategy();
+        this.atlasSeparateStrategy = new DefaultAtlasSeparateStrategy();
+        this.atlasValidationService = new DefaultAtlasValidationService();
         registerFactoryJmx(this);
         this.moduleInfoRegistry = new DefaultAtlasModuleInfoRegistry(this);
         loadModules("moduleClass", AtlasModule.class);
@@ -150,6 +154,9 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         this.atlasFieldActionService = null;
         this.atlasConversionService = null;
         this.atlasPropertyStrategy = null;
+        this.atlasCombineStrategy = null;
+        this.atlasSeparateStrategy = null;
+        this.atlasValidationService = null;
         this.moduleInfoRegistry = null;
         this.classLoader = null;
         this.threadName = null;
