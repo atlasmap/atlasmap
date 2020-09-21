@@ -65,10 +65,10 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 <span class="fc" id="L65">    private ObjectName objectName = null;</span>
 <span class="fc" id="L66">    private DefaultAtlasConversionService atlasConversionService = null;</span>
 <span class="fc" id="L67">    private DefaultAtlasFieldActionService atlasFieldActionService = null;</span>
-<span class="fc" id="L68">    private AtlasCombineStrategy atlasCombineStrategy = new DefaultAtlasCombineStrategy();</span>
-<span class="fc" id="L69">    private AtlasPropertyStrategy atlasPropertyStrategy = new DefaultAtlasPropertyStrategy();</span>
-<span class="fc" id="L70">    private AtlasSeparateStrategy atlasSeparateStrategy = new DefaultAtlasSeparateStrategy();</span>
-<span class="fc" id="L71">    private AtlasValidationService atlasValidationService = new DefaultAtlasValidationService();</span>
+<span class="fc" id="L68">    private AtlasCombineStrategy atlasCombineStrategy = null;</span>
+<span class="fc" id="L69">    private AtlasPropertyStrategy atlasPropertyStrategy = null;</span>
+<span class="fc" id="L70">    private AtlasSeparateStrategy atlasSeparateStrategy = null;</span>
+<span class="fc" id="L71">    private AtlasValidationService atlasValidationService = null;</span>
     private AtlasModuleInfoRegistry moduleInfoRegistry;
 <span class="fc" id="L73">    private Map&lt;String, String&gt; properties = null;</span>
 <span class="fc" id="L74">    private CompoundClassLoader classLoader = null;</span>
@@ -102,386 +102,393 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 <span class="fc" id="L102">        this.atlasConversionService = DefaultAtlasConversionService.getInstance();</span>
 <span class="fc" id="L103">        this.atlasFieldActionService = DefaultAtlasFieldActionService.getInstance();</span>
 <span class="fc" id="L104">        this.atlasFieldActionService.init(this.classLoader);</span>
-<span class="fc" id="L105">        registerFactoryJmx(this);</span>
-<span class="fc" id="L106">        this.moduleInfoRegistry = new DefaultAtlasModuleInfoRegistry(this);</span>
-<span class="fc" id="L107">        loadModules(&quot;moduleClass&quot;, AtlasModule.class);</span>
-<span class="fc" id="L108">        this.initialized = true;</span>
+<span class="fc" id="L105">        this.atlasCombineStrategy = new DefaultAtlasCombineStrategy();</span>
+<span class="fc" id="L106">        this.atlasPropertyStrategy = new DefaultAtlasPropertyStrategy();</span>
+<span class="fc" id="L107">        this.atlasSeparateStrategy = new DefaultAtlasSeparateStrategy();</span>
+<span class="fc" id="L108">        this.atlasValidationService = new DefaultAtlasValidationService();</span>
+<span class="fc" id="L109">        registerFactoryJmx(this);</span>
+<span class="fc" id="L110">        this.moduleInfoRegistry = new DefaultAtlasModuleInfoRegistry(this);</span>
+<span class="fc" id="L111">        loadModules(&quot;moduleClass&quot;, AtlasModule.class);</span>
+<span class="fc" id="L112">        this.initialized = true;</span>
         
-<span class="fc" id="L110">    }</span>
+<span class="fc" id="L114">    }</span>
 
     @Override
     public void setProperties(Map&lt;String, String&gt; properties) {
-<span class="fc" id="L114">        this.properties = properties;</span>
-<span class="fc" id="L115">    }</span>
+<span class="fc" id="L118">        this.properties = properties;</span>
+<span class="fc" id="L119">    }</span>
 
     @Override
     public void setProperties(Properties properties) {
-<span class="nc" id="L119">        this.properties = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L120">        properties.forEach((key, value) -&gt; this.properties.put(key.toString(), value.toString()));</span>
-<span class="nc" id="L121">    }</span>
+<span class="nc" id="L123">        this.properties = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L124">        properties.forEach((key, value) -&gt; this.properties.put(key.toString(), value.toString()));</span>
+<span class="nc" id="L125">    }</span>
 
     @Override
     public Map&lt;String, String&gt; getProperties() {
-<span class="fc" id="L125">        return this.properties;</span>
+<span class="fc" id="L129">        return this.properties;</span>
     }
 
     @Override
     public synchronized void destroy() {
-<span class="pc bpc" id="L130" title="1 of 2 branches missed.">        if (!this.initialized) {</span>
-<span class="nc" id="L131">            return;</span>
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        if (!this.initialized) {</span>
+<span class="nc" id="L135">            return;</span>
         }
 
-<span class="fc" id="L134">        unloadModules();</span>
+<span class="fc" id="L138">        unloadModules();</span>
 
         try {
-<span class="pc bpc" id="L137" title="1 of 2 branches missed.">            if (ManagementFactory.getPlatformMBeanServer().isRegistered(getJmxObjectName())) {</span>
-<span class="fc" id="L138">                ManagementFactory.getPlatformMBeanServer().unregisterMBean(getJmxObjectName());</span>
-<span class="pc bpc" id="L139" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L140">                    LOG.debug(&quot;Unregistered AtlasContextFactory with JMX&quot;);</span>
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">            if (ManagementFactory.getPlatformMBeanServer().isRegistered(getJmxObjectName())) {</span>
+<span class="fc" id="L142">                ManagementFactory.getPlatformMBeanServer().unregisterMBean(getJmxObjectName());</span>
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L144">                    LOG.debug(&quot;Unregistered AtlasContextFactory with JMX&quot;);</span>
                 }
             }
-<span class="nc" id="L143">        } catch (Exception e) {</span>
-<span class="nc" id="L144">            LOG.warn(&quot;Unable to unregister with JMX&quot;, e);</span>
-<span class="fc" id="L145">        }</span>
+<span class="nc" id="L147">        } catch (Exception e) {</span>
+<span class="nc" id="L148">            LOG.warn(&quot;Unable to unregister with JMX&quot;, e);</span>
+<span class="fc" id="L149">        }</span>
 
-<span class="fc" id="L147">        this.uuid = null;</span>
-<span class="fc" id="L148">        this.objectName = null;</span>
-<span class="fc" id="L149">        this.properties = null;</span>
-<span class="fc" id="L150">        this.atlasFieldActionService = null;</span>
-<span class="fc" id="L151">        this.atlasConversionService = null;</span>
-<span class="fc" id="L152">        this.atlasPropertyStrategy = null;</span>
-<span class="fc" id="L153">        this.moduleInfoRegistry = null;</span>
-<span class="fc" id="L154">        this.classLoader = null;</span>
-<span class="fc" id="L155">        this.threadName = null;</span>
-<span class="fc" id="L156">        this.initialized = false;</span>
-<span class="fc" id="L157">    }</span>
+<span class="fc" id="L151">        this.uuid = null;</span>
+<span class="fc" id="L152">        this.objectName = null;</span>
+<span class="fc" id="L153">        this.properties = null;</span>
+<span class="fc" id="L154">        this.atlasFieldActionService = null;</span>
+<span class="fc" id="L155">        this.atlasConversionService = null;</span>
+<span class="fc" id="L156">        this.atlasPropertyStrategy = null;</span>
+<span class="fc" id="L157">        this.atlasCombineStrategy = null;</span>
+<span class="fc" id="L158">        this.atlasSeparateStrategy = null;</span>
+<span class="fc" id="L159">        this.atlasValidationService = null;</span>
+<span class="fc" id="L160">        this.moduleInfoRegistry = null;</span>
+<span class="fc" id="L161">        this.classLoader = null;</span>
+<span class="fc" id="L162">        this.threadName = null;</span>
+<span class="fc" id="L163">        this.initialized = false;</span>
+<span class="fc" id="L164">    }</span>
 
     @Override
     public AtlasContext createContext(File atlasMappingFile) throws AtlasException {
-<span class="fc bfc" id="L161" title="All 2 branches covered.">        if (atlasMappingFile == null) {</span>
-<span class="fc" id="L162">            throw new AtlasException(&quot;AtlasMappingFile must be specified&quot;);</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">        if (atlasMappingFile == null) {</span>
+<span class="fc" id="L169">            throw new AtlasException(&quot;AtlasMappingFile must be specified&quot;);</span>
         }
 
-<span class="fc" id="L165">        return createContext(atlasMappingFile.toURI());</span>
+<span class="fc" id="L172">        return createContext(atlasMappingFile.toURI());</span>
     }
 
     @Override
     public AtlasContext createContext(URI atlasMappingUri) throws AtlasException {
-<span class="fc bfc" id="L170" title="All 2 branches covered.">        if (atlasMappingUri == null) {</span>
-<span class="fc" id="L171">            throw new AtlasException(&quot;AtlasMappingUri must be specified&quot;);</span>
+<span class="fc bfc" id="L177" title="All 2 branches covered.">        if (atlasMappingUri == null) {</span>
+<span class="fc" id="L178">            throw new AtlasException(&quot;AtlasMappingUri must be specified&quot;);</span>
         }
-<span class="fc" id="L173">        DefaultAtlasContext context = new DefaultAtlasContext(this, atlasMappingUri);</span>
-<span class="fc" id="L174">        return context;</span>
+<span class="fc" id="L180">        DefaultAtlasContext context = new DefaultAtlasContext(this, atlasMappingUri);</span>
+<span class="fc" id="L181">        return context;</span>
     }
 
     public AtlasContext createContext(AtlasMapping mapping) throws AtlasException {
-<span class="fc" id="L178">        DefaultAtlasContext context = new DefaultAtlasContext(this, mapping);</span>
-<span class="fc" id="L179">        return context;</span>
+<span class="fc" id="L185">        DefaultAtlasContext context = new DefaultAtlasContext(this, mapping);</span>
+<span class="fc" id="L186">        return context;</span>
     }
 
     @Override
     public AtlasContext createContext(Format format, InputStream stream) throws AtlasException {
-<span class="fc" id="L184">        DefaultAtlasContext context = new DefaultAtlasContext(this, format, stream);</span>
-<span class="fc" id="L185">        return context;</span>
+<span class="fc" id="L191">        DefaultAtlasContext context = new DefaultAtlasContext(this, format, stream);</span>
+<span class="fc" id="L192">        return context;</span>
     }
 
     @Override
     public String getClassName() {
-<span class="fc" id="L190">        return this.getClass().getName();</span>
+<span class="fc" id="L197">        return this.getClass().getName();</span>
     }
 
     @Override
     public String getThreadName() {
-<span class="fc" id="L195">        return this.threadName;</span>
+<span class="fc" id="L202">        return this.threadName;</span>
     }
 
     public void setThreadName(String threadName) {
-<span class="fc" id="L199">        this.threadName = threadName;</span>
-<span class="fc" id="L200">    }</span>
+<span class="fc" id="L206">        this.threadName = threadName;</span>
+<span class="fc" id="L207">    }</span>
 
     @Override
     public String getVersion() {
-<span class="fc" id="L204">        return this.getClass().getPackage().getImplementationVersion();</span>
+<span class="fc" id="L211">        return this.getClass().getPackage().getImplementationVersion();</span>
     }
 
     @Override
     public String getUuid() {
-<span class="fc" id="L209">        return this.uuid;</span>
+<span class="fc" id="L216">        return this.uuid;</span>
     }
 
     public ObjectName getJmxObjectName() {
-<span class="fc" id="L213">        return this.objectName;</span>
+<span class="fc" id="L220">        return this.objectName;</span>
     }
 
     public AtlasModuleInfoRegistry getModuleInfoRegistry() {
-<span class="fc" id="L217">        return this.moduleInfoRegistry;</span>
+<span class="fc" id="L224">        return this.moduleInfoRegistry;</span>
     }
 
     public void setModuleInfoRegistry(AtlasModuleInfoRegistry registry) {
-<span class="fc" id="L221">        this.moduleInfoRegistry = registry;</span>
-<span class="fc" id="L222">    }</span>
+<span class="fc" id="L228">        this.moduleInfoRegistry = registry;</span>
+<span class="fc" id="L229">    }</span>
 
     @Override
     public AtlasConversionService getConversionService() {
-<span class="fc" id="L226">        return this.atlasConversionService;</span>
+<span class="fc" id="L233">        return this.atlasConversionService;</span>
     }
 
     @Override
     public AtlasFieldActionService getFieldActionService() {
-<span class="fc" id="L231">        return this.atlasFieldActionService;</span>
+<span class="fc" id="L238">        return this.atlasFieldActionService;</span>
     }
 
     @Override
     public AtlasCombineStrategy getCombineStrategy() {
-<span class="fc" id="L236">        return atlasCombineStrategy;</span>
+<span class="fc" id="L243">        return atlasCombineStrategy;</span>
     }
 
     public void setCombineStrategy(AtlasCombineStrategy atlasCombineStrategy) {
-<span class="fc" id="L240">        this.atlasCombineStrategy = atlasCombineStrategy;</span>
-<span class="fc" id="L241">    }</span>
+<span class="fc" id="L247">        this.atlasCombineStrategy = atlasCombineStrategy;</span>
+<span class="fc" id="L248">    }</span>
 
     @Override
     public AtlasPropertyStrategy getPropertyStrategy() {
-<span class="fc" id="L245">        return atlasPropertyStrategy;</span>
+<span class="fc" id="L252">        return atlasPropertyStrategy;</span>
     }
 
     @Override
     public void setPropertyStrategy(AtlasPropertyStrategy atlasPropertyStrategy) {
-<span class="fc" id="L250">        this.atlasPropertyStrategy = atlasPropertyStrategy;</span>
-<span class="fc" id="L251">    }</span>
+<span class="fc" id="L257">        this.atlasPropertyStrategy = atlasPropertyStrategy;</span>
+<span class="fc" id="L258">    }</span>
 
     @Override
     public AtlasSeparateStrategy getSeparateStrategy() {
-<span class="fc" id="L255">        return atlasSeparateStrategy;</span>
+<span class="fc" id="L262">        return atlasSeparateStrategy;</span>
     }
 
     public void setSeparateStrategy(AtlasSeparateStrategy atlasSeparateStrategy) {
-<span class="fc" id="L259">        this.atlasSeparateStrategy = atlasSeparateStrategy;</span>
-<span class="fc" id="L260">    }</span>
+<span class="fc" id="L266">        this.atlasSeparateStrategy = atlasSeparateStrategy;</span>
+<span class="fc" id="L267">    }</span>
 
     @Override
     public AtlasValidationService getValidationService() {
-<span class="fc" id="L264">        return atlasValidationService;</span>
+<span class="fc" id="L271">        return atlasValidationService;</span>
     }
 
     public void setValidationService(AtlasValidationService atlasValidationService) {
-<span class="fc" id="L268">        this.atlasValidationService = atlasValidationService;</span>
-<span class="fc" id="L269">    }</span>
+<span class="fc" id="L275">        this.atlasValidationService = atlasValidationService;</span>
+<span class="fc" id="L276">    }</span>
 
     public CompoundClassLoader getClassLoader() {
-<span class="fc" id="L272">        return this.classLoader;</span>
+<span class="fc" id="L279">        return this.classLoader;</span>
     }
 
     @Override
     public void addClassLoader(ClassLoader cl) {
-<span class="fc" id="L277">        this.classLoader.addAlternativeLoader(cl);</span>
-<span class="fc" id="L278">    }</span>
+<span class="fc" id="L284">        this.classLoader.addAlternativeLoader(cl);</span>
+<span class="fc" id="L285">    }</span>
 
     public void setClassLoader(CompoundClassLoader cl) {
-<span class="nc" id="L281">        this.classLoader = cl;</span>
-<span class="nc" id="L282">    }</span>
+<span class="nc" id="L288">        this.classLoader = cl;</span>
+<span class="nc" id="L289">    }</span>
 
     protected void loadModules(String moduleClassProperty, Class&lt;?&gt; moduleInterface) {
-<span class="fc" id="L285">        Class&lt;?&gt; moduleClass = null;</span>
-<span class="fc" id="L286">        String moduleClassName = null;</span>
-<span class="fc" id="L287">        Set&lt;String&gt; serviceClasses = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L292">        Class&lt;?&gt; moduleClass = null;</span>
+<span class="fc" id="L293">        String moduleClassName = null;</span>
+<span class="fc" id="L294">        Set&lt;String&gt; serviceClasses = new HashSet&lt;&gt;();</span>
 
         try {
-<span class="fc" id="L290">            Enumeration&lt;URL&gt; urls = classLoader.getResources(&quot;META-INF/services/atlas/module/atlas.module&quot;);</span>
-<span class="fc bfc" id="L291" title="All 2 branches covered.">            while (urls.hasMoreElements()) {</span>
-<span class="fc" id="L292">                URL tmp = urls.nextElement();</span>
-<span class="fc" id="L293">                Properties prop = AtlasUtil.loadPropertiesFromURL(tmp);</span>
-<span class="fc" id="L294">                String serviceClassPropertyValue = (String) prop.get(moduleClassProperty);</span>
-<span class="pc bpc" id="L295" title="1 of 2 branches missed.">                String[] splitted = serviceClassPropertyValue != null ? serviceClassPropertyValue.split(&quot;,&quot;) : new String[0];</span>
-<span class="fc bfc" id="L296" title="All 2 branches covered.">                for (String entry : splitted) {</span>
-<span class="pc bpc" id="L297" title="1 of 2 branches missed.">                    if (!AtlasUtil.isEmpty(entry)) {</span>
-<span class="fc" id="L298">                        serviceClasses.add((entry));</span>
+<span class="fc" id="L297">            Enumeration&lt;URL&gt; urls = classLoader.getResources(&quot;META-INF/services/atlas/module/atlas.module&quot;);</span>
+<span class="fc bfc" id="L298" title="All 2 branches covered.">            while (urls.hasMoreElements()) {</span>
+<span class="fc" id="L299">                URL tmp = urls.nextElement();</span>
+<span class="fc" id="L300">                Properties prop = AtlasUtil.loadPropertiesFromURL(tmp);</span>
+<span class="fc" id="L301">                String serviceClassPropertyValue = (String) prop.get(moduleClassProperty);</span>
+<span class="pc bpc" id="L302" title="1 of 2 branches missed.">                String[] splitted = serviceClassPropertyValue != null ? serviceClassPropertyValue.split(&quot;,&quot;) : new String[0];</span>
+<span class="fc bfc" id="L303" title="All 2 branches covered.">                for (String entry : splitted) {</span>
+<span class="pc bpc" id="L304" title="1 of 2 branches missed.">                    if (!AtlasUtil.isEmpty(entry)) {</span>
+<span class="fc" id="L305">                        serviceClasses.add((entry));</span>
                     }
                 }
-<span class="fc" id="L301">            }</span>
-<span class="nc" id="L302">        } catch (Exception e) {</span>
-<span class="nc" id="L303">            LOG.warn(&quot;Error loading module resources&quot;, e);</span>
-<span class="fc" id="L304">        }</span>
+<span class="fc" id="L308">            }</span>
+<span class="nc" id="L309">        } catch (Exception e) {</span>
+<span class="nc" id="L310">            LOG.warn(&quot;Error loading module resources&quot;, e);</span>
+<span class="fc" id="L311">        }</span>
 
-<span class="fc bfc" id="L306" title="All 2 branches covered.">        for (String clazz : serviceClasses) {</span>
+<span class="fc bfc" id="L313" title="All 2 branches covered.">        for (String clazz : serviceClasses) {</span>
             try {
-<span class="fc" id="L308">                moduleClass = classLoader.loadClass(clazz);</span>
-<span class="fc" id="L309">                moduleClassName = moduleClass.getName();</span>
+<span class="fc" id="L315">                moduleClass = classLoader.loadClass(clazz);</span>
+<span class="fc" id="L316">                moduleClassName = moduleClass.getName();</span>
 
-<span class="pc bpc" id="L311" title="1 of 2 branches missed.">                if (isClassAtlasModule(moduleClass, moduleInterface)) {</span>
+<span class="pc bpc" id="L318" title="1 of 2 branches missed.">                if (isClassAtlasModule(moduleClass, moduleInterface)) {</span>
                     @SuppressWarnings(&quot;unchecked&quot;)
-<span class="fc" id="L313">                    Class&lt;AtlasModule&gt; atlasModuleClass = (Class&lt;AtlasModule&gt;)moduleClass;</span>
-<span class="fc" id="L314">                    Constructor&lt;AtlasModule&gt; constructor = atlasModuleClass.getDeclaredConstructor();</span>
-<span class="pc bpc" id="L315" title="1 of 2 branches missed.">                    if (constructor != null) {</span>
-<span class="fc" id="L316">                        AtlasModuleInfo module = new DefaultAtlasModuleInfo(getModuleName(moduleClass),</span>
-<span class="fc" id="L317">                                getModuleUri(moduleClass), atlasModuleClass, constructor,</span>
-<span class="fc" id="L318">                                getSupportedDataFormats(moduleClass), getConfigPackages(moduleClass));</span>
-<span class="fc" id="L319">                        getModuleInfoRegistry().register(module);</span>
-<span class="fc" id="L320">                    } else {</span>
-<span class="nc" id="L321">                        LOG.warn(&quot;Invalid module class {}: constructor is not present&quot;, moduleClassName);</span>
+<span class="fc" id="L320">                    Class&lt;AtlasModule&gt; atlasModuleClass = (Class&lt;AtlasModule&gt;)moduleClass;</span>
+<span class="fc" id="L321">                    Constructor&lt;AtlasModule&gt; constructor = atlasModuleClass.getDeclaredConstructor();</span>
+<span class="pc bpc" id="L322" title="1 of 2 branches missed.">                    if (constructor != null) {</span>
+<span class="fc" id="L323">                        AtlasModuleInfo module = new DefaultAtlasModuleInfo(getModuleName(moduleClass),</span>
+<span class="fc" id="L324">                                getModuleUri(moduleClass), atlasModuleClass, constructor,</span>
+<span class="fc" id="L325">                                getSupportedDataFormats(moduleClass), getConfigPackages(moduleClass));</span>
+<span class="fc" id="L326">                        getModuleInfoRegistry().register(module);</span>
+<span class="fc" id="L327">                    } else {</span>
+<span class="nc" id="L328">                        LOG.warn(&quot;Invalid module class {}: constructor is not present&quot;, moduleClassName);</span>
                     }
-<span class="fc" id="L323">                } else {</span>
-<span class="nc" id="L324">                    LOG.warn(&quot;Invalid module class {}: unsupported AtlasModule&quot;, moduleClassName);</span>
+<span class="fc" id="L330">                } else {</span>
+<span class="nc" id="L331">                    LOG.warn(&quot;Invalid module class {}: unsupported AtlasModule&quot;, moduleClassName);</span>
                 }
-<span class="nc" id="L326">            } catch (NoSuchMethodException e) {</span>
-<span class="nc" id="L327">                LOG.warn(String.format(&quot;Invalid module class %s: constructor is not present.&quot;, moduleClassName), e);</span>
-<span class="nc" id="L328">            } catch (ClassNotFoundException e) {</span>
-<span class="nc" id="L329">                LOG.warn(String.format(&quot;Invalid module class %s: not found in classLoader.&quot;, moduleClassName), e);</span>
-<span class="nc" id="L330">            } catch (Exception e) {</span>
-<span class="nc" id="L331">                LOG.warn(String.format(&quot;Invalid module class %s: unknown error.&quot;, moduleClassName), e);</span>
-<span class="pc" id="L332">            }</span>
-<span class="fc" id="L333">        }</span>
+<span class="nc" id="L333">            } catch (NoSuchMethodException e) {</span>
+<span class="nc" id="L334">                LOG.warn(String.format(&quot;Invalid module class %s: constructor is not present.&quot;, moduleClassName), e);</span>
+<span class="nc" id="L335">            } catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L336">                LOG.warn(String.format(&quot;Invalid module class %s: not found in classLoader.&quot;, moduleClassName), e);</span>
+<span class="nc" id="L337">            } catch (Exception e) {</span>
+<span class="nc" id="L338">                LOG.warn(String.format(&quot;Invalid module class %s: unknown error.&quot;, moduleClassName), e);</span>
+<span class="pc" id="L339">            }</span>
+<span class="fc" id="L340">        }</span>
 
-<span class="pc bpc" id="L335" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L336">            LOG.debug(&quot;Loaded: {} of {} detected modules&quot;, getModuleInfoRegistry().size(), serviceClasses.size());</span>
+<span class="pc bpc" id="L342" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L343">            LOG.debug(&quot;Loaded: {} of {} detected modules&quot;, getModuleInfoRegistry().size(), serviceClasses.size());</span>
         }
-<span class="fc" id="L338">    }</span>
+<span class="fc" id="L345">    }</span>
 
     protected void unloadModules() {
-<span class="fc bfc" id="L341" title="All 2 branches covered.">        if (getModuleInfoRegistry() == null) {</span>
-<span class="fc" id="L342">            return;</span>
+<span class="fc bfc" id="L348" title="All 2 branches covered.">        if (getModuleInfoRegistry() == null) {</span>
+<span class="fc" id="L349">            return;</span>
         }
-<span class="fc" id="L344">        int moduleCount = getModuleInfoRegistry().size();</span>
-<span class="fc" id="L345">        getModuleInfoRegistry().unregisterAll();</span>
+<span class="fc" id="L351">        int moduleCount = getModuleInfoRegistry().size();</span>
+<span class="fc" id="L352">        getModuleInfoRegistry().unregisterAll();</span>
 
-<span class="pc bpc" id="L347" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L348">            LOG.debug(&quot;Unloaded: {} modules&quot;, moduleCount);</span>
+<span class="pc bpc" id="L354" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L355">            LOG.debug(&quot;Unloaded: {} modules&quot;, moduleCount);</span>
         }
-<span class="fc" id="L350">    }</span>
+<span class="fc" id="L357">    }</span>
 
     protected boolean isClassAtlasModule(Class&lt;?&gt; clazz, Class&lt;?&gt; moduleInterface) {
-<span class="fc bfc" id="L353" title="All 2 branches covered.">        if (clazz == null) {</span>
-<span class="fc" id="L354">            return false;</span>
+<span class="fc bfc" id="L360" title="All 2 branches covered.">        if (clazz == null) {</span>
+<span class="fc" id="L361">            return false;</span>
         }
 
-<span class="pc bpc" id="L357" title="1 of 4 branches missed.">        if (isAtlasModuleInterface(clazz, moduleInterface) &amp;&amp; clazz.isAnnotationPresent(AtlasModuleDetail.class)) {</span>
-<span class="pc bpc" id="L358" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L359">                LOG.debug(&quot;{} is a '{}' implementation&quot;, clazz.getCanonicalName(), moduleInterface.getSimpleName());</span>
+<span class="pc bpc" id="L364" title="1 of 4 branches missed.">        if (isAtlasModuleInterface(clazz, moduleInterface) &amp;&amp; clazz.isAnnotationPresent(AtlasModuleDetail.class)) {</span>
+<span class="pc bpc" id="L365" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L366">                LOG.debug(&quot;{} is a '{}' implementation&quot;, clazz.getCanonicalName(), moduleInterface.getSimpleName());</span>
             }
-<span class="fc" id="L361">            return true;</span>
+<span class="fc" id="L368">            return true;</span>
         }
 
-<span class="pc bpc" id="L364" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L365">            LOG.debug(&quot;{} is NOT a '{}' implementation&quot;, clazz.getCanonicalName(), moduleInterface.getSimpleName());</span>
+<span class="pc bpc" id="L371" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L372">            LOG.debug(&quot;{} is NOT a '{}' implementation&quot;, clazz.getCanonicalName(), moduleInterface.getSimpleName());</span>
         }
-<span class="fc" id="L367">        return false;</span>
+<span class="fc" id="L374">        return false;</span>
     }
 
     protected boolean isAtlasModuleInterface(Class&lt;?&gt; clazz, Class&lt;?&gt; moduleInterface) {
-<span class="fc bfc" id="L371" title="All 2 branches covered.">        if (clazz == null) {</span>
-<span class="fc" id="L372">            return false;</span>
+<span class="fc bfc" id="L378" title="All 2 branches covered.">        if (clazz == null) {</span>
+<span class="fc" id="L379">            return false;</span>
         }
 
-<span class="fc" id="L375">        boolean isIface = false;</span>
-<span class="fc" id="L376">        Class&lt;?&gt; superClazz = clazz.getSuperclass();</span>
-<span class="fc bfc" id="L377" title="All 2 branches covered.">        if (superClazz != null) {</span>
-<span class="fc" id="L378">            isIface = isAtlasModuleInterface(superClazz, moduleInterface);</span>
+<span class="fc" id="L382">        boolean isIface = false;</span>
+<span class="fc" id="L383">        Class&lt;?&gt; superClazz = clazz.getSuperclass();</span>
+<span class="fc bfc" id="L384" title="All 2 branches covered.">        if (superClazz != null) {</span>
+<span class="fc" id="L385">            isIface = isAtlasModuleInterface(superClazz, moduleInterface);</span>
         }
 
-<span class="fc" id="L381">        Class&lt;?&gt;[] interfaces = clazz.getInterfaces();</span>
-<span class="fc bfc" id="L382" title="All 2 branches covered.">        for (Class&lt;?&gt; iface : interfaces) {</span>
-<span class="fc bfc" id="L383" title="All 2 branches covered.">            if (iface.equals(moduleInterface)) {</span>
-<span class="fc" id="L384">                isIface = true;</span>
+<span class="fc" id="L388">        Class&lt;?&gt;[] interfaces = clazz.getInterfaces();</span>
+<span class="fc bfc" id="L389" title="All 2 branches covered.">        for (Class&lt;?&gt; iface : interfaces) {</span>
+<span class="fc bfc" id="L390" title="All 2 branches covered.">            if (iface.equals(moduleInterface)) {</span>
+<span class="fc" id="L391">                isIface = true;</span>
             }
         }
 
-<span class="fc" id="L388">        return isIface;</span>
+<span class="fc" id="L395">        return isIface;</span>
     }
 
     protected String getModuleUri(Class&lt;?&gt; clazz) {
 
-<span class="fc" id="L393">        AtlasModuleDetail detail = clazz.getAnnotation(AtlasModuleDetail.class);</span>
+<span class="fc" id="L400">        AtlasModuleDetail detail = clazz.getAnnotation(AtlasModuleDetail.class);</span>
 
-<span class="fc bfc" id="L395" title="All 2 branches covered.">        if (detail != null) {</span>
-<span class="fc" id="L396">            return detail.uri();</span>
+<span class="fc bfc" id="L402" title="All 2 branches covered.">        if (detail != null) {</span>
+<span class="fc" id="L403">            return detail.uri();</span>
         }
 
-<span class="fc" id="L399">        return &quot;UNDEFINED&quot;;</span>
+<span class="fc" id="L406">        return &quot;UNDEFINED&quot;;</span>
     }
 
     protected String getModuleName(Class&lt;?&gt; clazz) {
 
-<span class="fc" id="L404">        AtlasModuleDetail detail = clazz.getAnnotation(AtlasModuleDetail.class);</span>
+<span class="fc" id="L411">        AtlasModuleDetail detail = clazz.getAnnotation(AtlasModuleDetail.class);</span>
 
-<span class="fc bfc" id="L406" title="All 2 branches covered.">        if (detail != null) {</span>
-<span class="fc" id="L407">            return detail.name();</span>
+<span class="fc bfc" id="L413" title="All 2 branches covered.">        if (detail != null) {</span>
+<span class="fc" id="L414">            return detail.name();</span>
         }
 
-<span class="fc" id="L410">        return &quot;UNDEFINED-&quot; + UUID.randomUUID().toString();</span>
+<span class="fc" id="L417">        return &quot;UNDEFINED-&quot; + UUID.randomUUID().toString();</span>
     }
 
     protected List&lt;String&gt; getSupportedDataFormats(Class&lt;?&gt; clazz) {
 
-<span class="fc" id="L415">        List&lt;String&gt; dataFormats = null;</span>
-<span class="fc" id="L416">        AtlasModuleDetail detail = clazz.getAnnotation(AtlasModuleDetail.class);</span>
+<span class="fc" id="L422">        List&lt;String&gt; dataFormats = null;</span>
+<span class="fc" id="L423">        AtlasModuleDetail detail = clazz.getAnnotation(AtlasModuleDetail.class);</span>
 
-<span class="pc bpc" id="L418" title="1 of 2 branches missed.">        if (detail != null) {</span>
-<span class="fc" id="L419">            dataFormats = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L425" title="1 of 2 branches missed.">        if (detail != null) {</span>
+<span class="fc" id="L426">            dataFormats = new ArrayList&lt;&gt;();</span>
 
-<span class="fc" id="L421">            String[] formats = detail.dataFormats();</span>
+<span class="fc" id="L428">            String[] formats = detail.dataFormats();</span>
 
-<span class="fc bfc" id="L423" title="All 2 branches covered.">            for (String format : formats) {</span>
-<span class="fc" id="L424">                dataFormats.add(format.trim());</span>
+<span class="fc bfc" id="L430" title="All 2 branches covered.">            for (String format : formats) {</span>
+<span class="fc" id="L431">                dataFormats.add(format.trim());</span>
             }
         }
 
-<span class="pc bpc" id="L428" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L429">            LOG.debug(&quot;Module: {} supports data formats: {}&quot;, clazz.getCanonicalName(), dataFormats);</span>
+<span class="pc bpc" id="L435" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L436">            LOG.debug(&quot;Module: {} supports data formats: {}&quot;, clazz.getCanonicalName(), dataFormats);</span>
         }
 
-<span class="fc" id="L432">        return dataFormats;</span>
+<span class="fc" id="L439">        return dataFormats;</span>
     }
 
     protected List&lt;String&gt; getConfigPackages(Class&lt;?&gt; clazz) {
 
-<span class="fc" id="L437">        List&lt;String&gt; configPackages = null;</span>
-<span class="fc" id="L438">        AtlasModuleDetail detail = clazz.getAnnotation(AtlasModuleDetail.class);</span>
+<span class="fc" id="L444">        List&lt;String&gt; configPackages = null;</span>
+<span class="fc" id="L445">        AtlasModuleDetail detail = clazz.getAnnotation(AtlasModuleDetail.class);</span>
 
-<span class="pc bpc" id="L440" title="1 of 2 branches missed.">        if (detail != null) {</span>
-<span class="fc" id="L441">            configPackages = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L447" title="1 of 2 branches missed.">        if (detail != null) {</span>
+<span class="fc" id="L448">            configPackages = new ArrayList&lt;&gt;();</span>
 
-<span class="fc" id="L443">            String[] packages = detail.configPackages();</span>
+<span class="fc" id="L450">            String[] packages = detail.configPackages();</span>
 
-<span class="fc bfc" id="L445" title="All 2 branches covered.">            for (String pkg : packages) {</span>
-<span class="fc" id="L446">                configPackages.add(pkg.trim());</span>
+<span class="fc bfc" id="L452" title="All 2 branches covered.">            for (String pkg : packages) {</span>
+<span class="fc" id="L453">                configPackages.add(pkg.trim());</span>
             }
         }
 
-<span class="pc bpc" id="L450" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L451">            LOG.debug(&quot;Module: {} config packages: {}&quot;, clazz.getCanonicalName(), configPackages);</span>
+<span class="pc bpc" id="L457" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L458">            LOG.debug(&quot;Module: {} config packages: {}&quot;, clazz.getCanonicalName(), configPackages);</span>
         }
 
-<span class="fc" id="L454">        return configPackages;</span>
+<span class="fc" id="L461">        return configPackages;</span>
     }
 
     protected List&lt;String&gt; getAllModuleConfigPackages(AtlasModuleInfoRegistry registry) {
-<span class="nc" id="L458">        List&lt;String&gt; pkgs = new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L459" title="All 2 branches missed.">        for (AtlasModuleInfo moduleInfo : registry.getAll()) {</span>
-<span class="nc" id="L460">            pkgs.addAll(Arrays.asList(moduleInfo.getPackageNames()));</span>
-<span class="nc" id="L461">        }</span>
-<span class="nc" id="L462">        return pkgs;</span>
+<span class="nc" id="L465">        List&lt;String&gt; pkgs = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L466" title="All 2 branches missed.">        for (AtlasModuleInfo moduleInfo : registry.getAll()) {</span>
+<span class="nc" id="L467">            pkgs.addAll(Arrays.asList(moduleInfo.getPackageNames()));</span>
+<span class="nc" id="L468">        }</span>
+<span class="nc" id="L469">        return pkgs;</span>
     }
 
     protected void registerFactoryJmx(DefaultAtlasContextFactory factory) {
-<span class="fc bfc" id="L466" title="All 2 branches covered.">        if (factory == null) {</span>
-<span class="fc" id="L467">            return;</span>
+<span class="fc bfc" id="L473" title="All 2 branches covered.">        if (factory == null) {</span>
+<span class="fc" id="L474">            return;</span>
         }
         try {
-<span class="fc" id="L470">            factory.setObjectName();</span>
-<span class="pc bpc" id="L471" title="1 of 2 branches missed.">            if (!ManagementFactory.getPlatformMBeanServer().isRegistered(factory.getJmxObjectName())) {</span>
-<span class="fc" id="L472">                ManagementFactory.getPlatformMBeanServer().registerMBean(factory, factory.getJmxObjectName());</span>
-<span class="pc bpc" id="L473" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L474">                    LOG.debug(&quot;Registered AtlasContextFactory with JMX&quot;);</span>
+<span class="fc" id="L477">            factory.setObjectName();</span>
+<span class="pc bpc" id="L478" title="1 of 2 branches missed.">            if (!ManagementFactory.getPlatformMBeanServer().isRegistered(factory.getJmxObjectName())) {</span>
+<span class="fc" id="L479">                ManagementFactory.getPlatformMBeanServer().registerMBean(factory, factory.getJmxObjectName());</span>
+<span class="pc bpc" id="L480" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L481">                    LOG.debug(&quot;Registered AtlasContextFactory with JMX&quot;);</span>
                 }
             }
-<span class="nc" id="L477">        } catch (Exception e) {</span>
-<span class="nc" id="L478">            LOG.warn(&quot;Unable to resgister DefaultAtlasContextFactory with JMX&quot;, e);</span>
-<span class="fc" id="L479">        }</span>
-<span class="fc" id="L480">    }</span>
+<span class="nc" id="L484">        } catch (Exception e) {</span>
+<span class="nc" id="L485">            LOG.warn(&quot;Unable to resgister DefaultAtlasContextFactory with JMX&quot;, e);</span>
+<span class="fc" id="L486">        }</span>
+<span class="fc" id="L487">    }</span>
 
     protected void setObjectName() throws MalformedObjectNameException {
-<span class="fc" id="L483">        this.objectName = new ObjectName(String.format(&quot;io.atlasmap:type=AtlasServiceFactory,factoryUuid=%s&quot;, getUuid()));</span>
-<span class="fc" id="L484">    }</span>
+<span class="fc" id="L490">        this.objectName = new ObjectName(String.format(&quot;io.atlasmap:type=AtlasServiceFactory,factoryUuid=%s&quot;, getUuid()));</span>
+<span class="fc" id="L491">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
