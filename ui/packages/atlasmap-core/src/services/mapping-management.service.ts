@@ -648,10 +648,15 @@ export class MappingManagementService {
           mappedField.docDef.id === docId
         ) {
           this.removeFieldFromAllMappings(mappedField);
-          this.cfg.mappings!.removeMapping(mapping); // TODO: check this non null operator
-          if (mapping === this.cfg.mappings!.activeMapping) {
-            // TODO: check this non null operator
-            this.cfg.mappingService.deselectMapping();
+          if (
+            mapping.sourceFields.length === 0 ||
+            mapping.targetFields.length === 0
+          ) {
+            this.cfg.mappings!.removeMapping(mapping); // TODO: check this non null operator
+            if (mapping === this.cfg.mappings!.activeMapping) {
+              // TODO: check this non null operator
+              this.cfg.mappingService.deselectMapping();
+            }
           }
         }
       }

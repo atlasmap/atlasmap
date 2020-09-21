@@ -91,13 +91,16 @@ export class InitializationService {
    * Initialize a user-import schema or schema-instance document.
    *
    * @param docBody
+   * @param docId
    * @param docName
    * @param docType
    * @param inspectionType
    * @param isSource
+   * @param parameters
    */
   async initializeUserDoc(
     docBody: any,
+    docId: string,
     docName: string,
     docType: DocumentType,
     inspectionType: InspectionType,
@@ -142,6 +145,7 @@ export class InitializationService {
         docdef = this.addJavaDocument(docName, isSource);
       } else {
         docdef = this.addNonJavaDocument(
+          docId,
           docName,
           docType,
           inspectionType,
@@ -427,11 +431,13 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
     // Reinitialize the model documents.
     for (metaFragment of mInfo.exportMeta) {
       fragData = mInfo.exportBlockData[fragIndex].value;
+      const docID = metaFragment.id ? metaFragment.id : metaFragment.name;
       const docType = metaFragment.dataSourceType
         ? metaFragment.dataSourceType
         : metaFragment.documentType;
       this.initializeUserDoc(
         fragData,
+        docID,
         metaFragment.name,
         docType,
         metaFragment.inspectionType,
@@ -638,10 +644,18 @@ ${error.status} ${error.statusText}`,
     model.isSource = isSource;
     model.collectionType = collectionType;
     model.collectionClassName = collectionClassName;
+    model.description = 'Java document class ' + className;
+    if (collectionType) {
+      model.description += ' collection type: ' + collectionType;
+    }
+    if (collectionClassName) {
+      model.description += ' collection class name: ' + collectionClassName;
+    }
     return this.cfg.addDocument(model);
   }
 
   private addNonJavaDocument(
+    id: string,
     name: string,
     documentType: DocumentType,
     inspectionType: InspectionType,
@@ -650,7 +664,8 @@ ${error.status} ${error.statusText}`,
     inspectionParameters?: { [key: string]: string }
   ): DocumentDefinition {
     const model: DocumentInitializationModel = new DocumentInitializationModel();
-    model.id = name;
+    model.name = name;
+    model.id = id;
     model.type = documentType;
     model.inspectionType = inspectionType;
     model.inspectionSource = inspectionSource;
@@ -660,6 +675,8 @@ ${error.status} ${error.statusText}`,
       model.inspectionParameters = { '': '' };
     }
     model.isSource = isSource;
+    model.description = isSource ? 'Source document ' : 'Target document ';
+    model.description += name + ' type: ' + documentType;
     return this.cfg.addDocument(model);
   }
 

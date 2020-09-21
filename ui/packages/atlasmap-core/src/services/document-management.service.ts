@@ -37,6 +37,7 @@ import {
   ErrorType,
 } from '../models/error.model';
 import { timeout } from 'rxjs/operators';
+import { Guid } from '../utils';
 
 export class DocumentManagementService {
   cfg!: ConfigModel;
@@ -112,7 +113,9 @@ export class DocumentManagementService {
   }
 
   /**
-   * Capture the specified user document definition meta data into a general catalog JSON buffer.
+   * Capture the specified user document definition meta data into a general
+   * catalog JSON buffer.
+   *
    * @param docDef
    */
   static generateExportMetaStr(docDef: DocumentDefinition): string {
@@ -121,6 +124,7 @@ export class DocumentManagementService {
        {
           "name": "${docDef.name}",
           "dataSourceType": "${docDef.type}",
+          "id": "${docDef.id}",
           "inspectionType": "${docDef.inspectionType}",
           "inspectionParameters": ${inspectionParameters},
           "isSource": "${docDef.isSource}"
@@ -383,6 +387,7 @@ export class DocumentManagementService {
         case DocumentType.JSON:
           await this.cfg.initializationService.initializeUserDoc(
             fileText,
+            userFile + '-' + Guid.newGuid(),
             userFile,
             DocumentType.JSON,
             inspectionType,
@@ -393,6 +398,7 @@ export class DocumentManagementService {
         case DocumentType.JAVA_ARCHIVE:
           await this.cfg.initializationService.initializeUserDoc(
             fileBin,
+            userFile,
             userFile,
             DocumentType.JAVA_ARCHIVE,
             inspectionType,
@@ -413,6 +419,7 @@ export class DocumentManagementService {
           await this.cfg.initializationService.initializeUserDoc(
             fileText,
             userFile,
+            userFile,
             DocumentType.JAVA,
             inspectionType,
             isSource
@@ -422,6 +429,7 @@ export class DocumentManagementService {
         case DocumentType.CSV:
           await this.cfg.initializationService.initializeUserDoc(
             fileText,
+            userFile,
             userFile,
             DocumentType.CSV,
             inspectionType,
@@ -434,6 +442,7 @@ export class DocumentManagementService {
         case DocumentType.XSD:
           await this.cfg.initializationService.initializeUserDoc(
             fileText,
+            userFile + '-' + Guid.newGuid(),
             userFile,
             userFileSuffix,
             inspectionType,
@@ -623,7 +632,7 @@ export class DocumentManagementService {
       docDef.description = docDef.id;
     }
     if (!docDef.name) {
-      docDef.name = docDef.description;
+      docDef.name = docDef.id;
     }
 
     docDef.characterEncoding = csvDocument.characterEncoding;
@@ -666,7 +675,7 @@ export class DocumentManagementService {
       docDef.description = docDef.id;
     }
     if (!docDef.name) {
-      docDef.name = docDef.description;
+      docDef.name = docDef.id;
     }
 
     docDef.characterEncoding = jsonDocument.characterEncoding;
@@ -706,7 +715,7 @@ export class DocumentManagementService {
       docDef.description = docDef.id;
     }
     if (!docDef.name) {
-      docDef.name = docDef.description;
+      docDef.name = docDef.id;
     }
 
     docDef.characterEncoding = xmlDocument.characterEncoding;
