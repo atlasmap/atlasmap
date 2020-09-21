@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/101</span>
+                <span class='fraction'>0/106</span>
             </div>
         
             
@@ -38,14 +38,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/29</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/94</span>
+                <span class='fraction'>0/96</span>
             </div>
         
             
@@ -419,7 +419,23 @@
 <a name='L361'></a><a href='#L361'>361</a>
 <a name='L362'></a><a href='#L362'>362</a>
 <a name='L363'></a><a href='#L363'>363</a>
-<a name='L364'></a><a href='#L364'>364</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L364'></a><a href='#L364'>364</a>
+<a name='L365'></a><a href='#L365'>365</a>
+<a name='L366'></a><a href='#L366'>366</a>
+<a name='L367'></a><a href='#L367'>367</a>
+<a name='L368'></a><a href='#L368'>368</a>
+<a name='L369'></a><a href='#L369'>369</a>
+<a name='L370'></a><a href='#L370'>370</a>
+<a name='L371'></a><a href='#L371'>371</a>
+<a name='L372'></a><a href='#L372'>372</a>
+<a name='L373'></a><a href='#L373'>373</a>
+<a name='L374'></a><a href='#L374'>374</a>
+<a name='L375'></a><a href='#L375'>375</a>
+<a name='L376'></a><a href='#L376'>376</a>
+<a name='L377'></a><a href='#L377'>377</a>
+<a name='L378'></a><a href='#L378'>378</a>
+<a name='L379'></a><a href='#L379'>379</a>
+<a name='L380'></a><a href='#L380'>380</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -558,6 +574,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -619,10 +655,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -811,7 +843,7 @@
   isTarget: boolean,
 ) {
   const cfg = <span class="cstat-no" title="statement not covered" >ConfigModel.getConfig();</span>
-  const docDef = <span class="cstat-no" title="statement not covered" >getDocDef(docName, cfg, true);</span>
+  const docDef = <span class="cstat-no" title="statement not covered" >getDocDefByName(docName, cfg, true);</span>
   const namespace: NamespaceModel = <span class="cstat-no" title="statement not covered" >{</span>
     alias: alias,
     uri: uri,
@@ -835,7 +867,7 @@
   isTarget: boolean,
 ) {
   const cfg = <span class="cstat-no" title="statement not covered" >ConfigModel.getConfig();</span>
-  const docDef = <span class="cstat-no" title="statement not covered" >getDocDef(docName, cfg, true);</span>
+  const docDef = <span class="cstat-no" title="statement not covered" >getDocDefByName(docName, cfg, true);</span>
   const namespace = <span class="cstat-no" title="statement not covered" >docDef.getNamespaceForAlias(initAlias);</span>
 <span class="cstat-no" title="statement not covered" >  namespace.alias = alias;</span>
 <span class="cstat-no" title="statement not covered" >  namespace.uri = uri;</span>
@@ -846,7 +878,7 @@
 &nbsp;
 <span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >d</span>eleteNamespace(</span>docName: string, alias: string) {
   const cfg = <span class="cstat-no" title="statement not covered" >ConfigModel.getConfig();</span>
-  const docDef = <span class="cstat-no" title="statement not covered" >getDocDef(docName, cfg, true);</span>
+  const docDef = <span class="cstat-no" title="statement not covered" >getDocDefByName(docName, cfg, true);</span>
 <span class="cstat-no" title="statement not covered" >  docDef.namespaces = docDef.namespaces.filter(</span>
 <span class="fstat-no" title="function not covered" >    (n</span>amespace: { alias: string }) =&gt; <span class="cstat-no" title="statement not covered" >namespace.alias !== alias,</span>
   );
@@ -909,13 +941,33 @@ async function <span class="fstat-no" title="function not covered" >importDoc(</
 }
 &nbsp;
 /**
- * Return the document definition associated with the specified document name.
+ * Return the document definition associated with the specified document ID.
  *
- * @param docName
+ * @param docId - document ID
  * @param cfg
  * @param isSource
  */
 <span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >g</span>etDocDef(</span>
+  docId: string,
+  cfg: ConfigModel,
+  isSource: boolean,
+): DocumentDefinition {
+<span class="cstat-no" title="statement not covered" >  for (const docDef<span class="cstat-no" title="statement not covered" > of <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >c</span>fg.</span>getDocs(isSource))</span> {</span>
+<span class="cstat-no" title="statement not covered" >    if (docDef.id.match(docId)) {</span>
+<span class="cstat-no" title="statement not covered" >      return docDef;</span>
+    }
+  }
+<span class="cstat-no" title="statement not covered" >  return (null as unknown) as DocumentDefinition;</span>
+}
+&nbsp;
+/**
+ * Return the document definition associated with the specified document name.
+ *
+ * @param docName - document name
+ * @param cfg
+ * @param isSource
+ */
+<span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >g</span>etDocDefByName(</span>
   docName: string,
   cfg: ConfigModel,
   isSource: boolean,
@@ -983,10 +1035,6 @@ async function <span class="fstat-no" title="function not covered" >importDoc(</
   isSource: boolean,
   inspectionParameters?: { [key: string]: string },
 ) {
-  const <span class="cstat-no" title="statement not covered" >docDef = getDocDef(selectedFile.name, cfg, isSource);</span>
-  if (<span class="cstat-no" title="statement not covered" >docDef)</span> {
-<span class="cstat-no" title="statement not covered" >    await removeDocumentRef(docDef, cfg);</span>
-  }
 <span class="cstat-no" title="statement not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >  await importDoc(selectedFile, cfg, isSource, inspectionParameters);</span></span>
 }
 &nbsp;
@@ -1152,7 +1200,7 @@ async function <span class="fstat-no" title="function not covered" >importDoc(</
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Sep 21 2020 19:56:51 GMT+0000 (Coordinated Universal Time)
+                at Mon Sep 21 2020 20:49:50 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

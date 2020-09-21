@@ -24,14 +24,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/66</span>
+                <span class='fraction'>0/67</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/66</span>
+                <span class='fraction'>0/67</span>
             </div>
         
             
@@ -280,7 +280,18 @@
 <a name='L222'></a><a href='#L222'>222</a>
 <a name='L223'></a><a href='#L223'>223</a>
 <a name='L224'></a><a href='#L224'>224</a>
-<a name='L225'></a><a href='#L225'>225</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L225'></a><a href='#L225'>225</a>
+<a name='L226'></a><a href='#L226'>226</a>
+<a name='L227'></a><a href='#L227'>227</a>
+<a name='L228'></a><a href='#L228'>228</a>
+<a name='L229'></a><a href='#L229'>229</a>
+<a name='L230'></a><a href='#L230'>230</a>
+<a name='L231'></a><a href='#L231'>231</a>
+<a name='L232'></a><a href='#L232'>232</a>
+<a name='L233'></a><a href='#L233'>233</a>
+<a name='L234'></a><a href='#L234'>234</a>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -298,8 +309,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -513,28 +535,39 @@
   InspectionType,
 } from "@atlasmap/core";
 &nbsp;
-<span class="cstat-no" title="statement not covered" >import { getDocDef, importInstanceSchema, removeDocumentRef } from "./document";</span>
+<span class="cstat-no" title="statement not covered" >import {</span>
+  getDocDef,
+  getDocDefByName,
+  importInstanceSchema,
+  removeDocumentRef,
+} from "./document";
 &nbsp;
 /**
- * Return true if the specified file object file name exists as a source or target document,
- * false otherwise.
+ * Return true if the specified non JSON or XML file object exists as a source
+ * or target document, false otherwise.
  *
  * @param file - file object
  * @param isSource - source or target panel
  */
 <span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >d</span>ocumentExists(</span>file: File, isSource: boolean): boolean {
-<span class="cstat-no" title="statement not covered" >  return getDocDef(file.name, ConfigModel.getConfig(), isSource) !== null;</span>
+  const docDef = <span class="cstat-no" title="statement not covered" >getDocDefByName(file.name, ConfigModel.getConfig(), isSource);</span>
+<span class="cstat-no" title="statement not covered" >  return docDef &amp;&amp;</span>
+    docDef.type !== "JSON" &amp;&amp;
+    docDef.type !== "XML" &amp;&amp;
+    docDef.type !== "XSD"
+    ? true
+    : false;
 }
 &nbsp;
 /**
  * Delete the specified source or target document.
  *
- * @param fileName - document name to delete
+ * @param fileId - document ID to delete
  * @param isSource - source or target panel
  */
-<span class="cstat-no" title="statement not covered" >export async function <span class="fstat-no" title="function not covered" >d</span>eleteAtlasFile(</span>fileName: string, isSource: boolean) {
+<span class="cstat-no" title="statement not covered" >export async function <span class="fstat-no" title="function not covered" >d</span>eleteAtlasFile(</span>fileId: string, isSource: boolean) {
   const <span class="cstat-no" title="statement not covered" >cfg = ConfigModel.getConfig();</span>
-  const <span class="cstat-no" title="statement not covered" >docDef = getDocDef(fileName, cfg, isSource);</span>
+  const <span class="cstat-no" title="statement not covered" >docDef = getDocDef(fileId, cfg, isSource);</span>
 <span class="cstat-no" title="statement not covered" >  await removeDocumentRef(docDef, cfg);</span>
 <span class="cstat-no" title="statement not covered" >  cfg.initializationService.updateInitComplete();</span>
 }
@@ -735,7 +768,7 @@ async function <span class="fstat-no" title="function not covered" >processMappi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Sep 21 2020 19:56:51 GMT+0000 (Coordinated Universal Time)
+                at Mon Sep 21 2020 20:49:50 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
