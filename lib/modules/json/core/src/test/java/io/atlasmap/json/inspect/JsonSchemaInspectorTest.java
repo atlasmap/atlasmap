@@ -1,11 +1,29 @@
+/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.atlasmap.json.inspect;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Ignore;
@@ -13,6 +31,7 @@ import org.junit.Test;
 
 import io.atlasmap.json.v2.JsonComplexType;
 import io.atlasmap.json.v2.JsonDocument;
+import io.atlasmap.json.v2.JsonEnumField;
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
@@ -608,7 +627,18 @@ public class JsonSchemaInspectorTest {
         f = (JsonField) fields.get(4);
         assertEquals("region", f.getName());
         assertEquals("/region", f.getPath());
-        assertEquals(FieldType.STRING, f.getFieldType());
+        assertEquals(FieldType.COMPLEX, f.getFieldType());
+        JsonComplexType c = (JsonComplexType)f;
+        assertEquals(true, c.isEnumeration());
+        List<String> regions = new ArrayList<>(Arrays.asList("NA", "EMEA", "LATAM", "APAC"));
+        for (JsonEnumField e : c.getJsonEnumFields().getJsonEnumField()) {
+            if (!regions.remove(e.getName())) {
+                fail("Unknown enum value: " + e.getName());
+            };
+        }
+        if (!regions.isEmpty()) {
+            fail("Not found: " + regions);
+        }
         f = (JsonField) fields.get(5);
         assertEquals("postal-code", f.getName());
         assertEquals("/postal-code", f.getPath());

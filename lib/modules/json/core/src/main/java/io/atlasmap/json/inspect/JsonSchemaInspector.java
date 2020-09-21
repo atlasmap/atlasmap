@@ -1,3 +1,18 @@
+/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.atlasmap.json.inspect;
 
 import java.net.URI;
@@ -14,16 +29,20 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import io.atlasmap.json.core.JsonComplexTypeFactory;
 import io.atlasmap.json.v2.AtlasJsonModelFactory;
 import io.atlasmap.json.v2.JsonComplexType;
 import io.atlasmap.json.v2.JsonDocument;
+import io.atlasmap.json.v2.JsonEnumField;
+import io.atlasmap.json.v2.JsonEnumFields;
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.json.v2.JsonFields;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldStatus;
 import io.atlasmap.v2.FieldType;
+import io.atlasmap.v2.Json;
 
 /**
  */
@@ -133,6 +152,24 @@ public class JsonSchemaInspector implements JsonInspector {
         populateDefinitions(nodeValue, definitionMap);
         nodeValue = resolveReference(nodeValue, definitionMap);
 
+        JsonNode fieldEnum = nodeValue.get("enum");
+        if (fieldEnum != null) {
+            builder.type = FieldType.COMPLEX;
+            if (fieldEnum.isArray()) {
+                final JsonFieldBuilder finalBuilder = builder;
+                ((ArrayNode)fieldEnum).forEach(item -> {
+                    JsonEnumField itemField = new JsonEnumField();
+                    itemField.setName(item.isNull() ? null : item.asText());
+                    finalBuilder.enumFields.getJsonEnumField().add(itemField);
+                });
+            } else if (!fieldEnum.isEmpty()) {
+                JsonEnumField itemField = new JsonEnumField();
+                itemField.setName(fieldEnum.isNull() ? null : fieldEnum.asText());
+                builder.enumFields.getJsonEnumField().add(itemField);
+            }
+            return builder;
+        }
+
         JsonNode fieldType = nodeValue.get("type");
         if (fieldType == null || fieldType.asText() == null) {
             LOG.warn("'type' is not defined for node '{}', assuming as an object", name);
@@ -174,12 +211,17 @@ public class JsonSchemaInspector implements JsonInspector {
         private CollectionType collectionType;
         private FieldStatus status;
         private JsonFields subFields = new JsonFields();
+        private JsonEnumFields enumFields = new JsonEnumFields();
 
         public JsonField build() {
             JsonField answer;
             if (type == FieldType.COMPLEX) {
                 JsonComplexType complex = JsonComplexTypeFactory.createJsonComlexField();
                 complex.setJsonFields(subFields);
+                complex.setJsonEnumFields(enumFields);
+                if (!enumFields.getJsonEnumField().isEmpty()) {
+                    complex.setEnumeration(true);
+                }
                 answer = complex;
             } else {
                 answer = new JsonField();
@@ -211,7 +253,7 @@ public class JsonSchemaInspector implements JsonInspector {
 
         // then try external resource
         try {
-            JsonNode external = new ObjectMapper().readTree(new URI(uri).toURL().openStream());
+            JsonNode external = Json.mapper().readTree(new URI(uri).toURL().openStream());
             LOG.trace("Successfully fetched external JSON schema '{}'    ", uri);
             return external;
         } catch (Exception e) {
