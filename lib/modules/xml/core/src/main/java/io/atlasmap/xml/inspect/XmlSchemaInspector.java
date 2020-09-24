@@ -149,6 +149,9 @@ public class XmlSchemaInspector {
     }
 
     private String getNameNS(XSDeclaration decl) {
+        if (decl.getName() == null) {
+            return null;
+        }
         String targetNamespace = decl.getTargetNamespace();
         if (targetNamespace == null || targetNamespace.isEmpty()) {
             targetNamespace = decl.getOwnerSchema().getTargetNamespace();
@@ -195,6 +198,7 @@ public class XmlSchemaInspector {
         Iterator<XSElementDecl> jtr = schema.iterateElementDecls();
         while (jtr.hasNext()) {
             Set<String> cachedComplexType = new HashSet<>();
+            Set<String> cachedComplexElement = new HashSet<>();
             XSElementDecl e = jtr.next();
             String rootName = getNameNS(e);
 
@@ -204,7 +208,8 @@ public class XmlSchemaInspector {
                 rootComplexType.setPath("/" + rootName);
                 rootComplexType.setFieldType(FieldType.COMPLEX);
                 xmlDocument.getFields().getField().add(rootComplexType);
-                printComplexType(e.getType().asComplexType(), "/" + rootName, rootComplexType, cachedComplexType);
+                printComplexType(e.getType().asComplexType(), "/" + rootName, rootComplexType,
+                        cachedComplexType, cachedComplexElement);
             } else if (e.getType().isSimpleType()) {
                 XmlField xmlField = AtlasXmlModelFactory.createXmlField();
                 xmlField.setName(rootName);
@@ -216,81 +221,87 @@ public class XmlSchemaInspector {
     }
 
     private void printComplexType(XSComplexType complexType, String rootName, XmlComplexType xmlComplexType,
-            Set<String> cachedComplexType) throws Exception {
+            Set<String> cachedComplexType, Set<String> cachedComplexElement) throws Exception {
         printAttributes(complexType, rootName, xmlComplexType);
         XSParticle particle = complexType.getContentType().asParticle();
         if (particle != null) {
-            printParticle(particle, rootName, xmlComplexType, cachedComplexType);
+            printParticle(particle, rootName, xmlComplexType, cachedComplexType, cachedComplexElement);
         }
     }
 
     private void printParticle(XSParticle particle, String rootName, XmlComplexType xmlComplexType,
-            Set<String> cachedComplexType) throws Exception {
+            Set<String> cachedComplexType, Set<String> cachedComplexElement) throws Exception {
         XSTerm term = particle.getTerm();
         if (term.isModelGroup()) {
             XSModelGroup group = term.asModelGroup();
-            printGroup(group, rootName, xmlComplexType, cachedComplexType);
+            printGroup(group, rootName, xmlComplexType, cachedComplexType, cachedComplexElement);
         } else if (term.isModelGroupDecl()) {
-            printGroupDecl(term.asModelGroupDecl(), rootName, xmlComplexType, cachedComplexType);
+            printGroupDecl(term.asModelGroupDecl(), rootName, xmlComplexType, cachedComplexType, cachedComplexElement);
         } else if (term.isElementDecl()) {
             CollectionType collectionType = getCollectionType(particle);
-            printElement(term.asElementDecl(), rootName, xmlComplexType, collectionType, cachedComplexType);
+            printElement(term.asElementDecl(), rootName, xmlComplexType, collectionType,
+                    cachedComplexType, cachedComplexElement);
         }
     }
 
     private void printGroup(XSModelGroup modelGroup, String rootName, XmlComplexType xmlComplexType,
-            Set<String> cachedComplexType) throws Exception {
+            Set<String> cachedComplexType, Set<String> cachedComplexElement) throws Exception {
         // this is the parent of the group
         for (XSParticle particle : modelGroup.getChildren()) {
-            // Don't cache siblings to avoid https://github.com/atlasmap/atlasmap/issues/255
-            Set<String> cachedTypeCopy = new HashSet<>(cachedComplexType);
-            printParticle(particle, rootName, xmlComplexType, cachedTypeCopy);
+            printParticle(particle, rootName, xmlComplexType, cachedComplexType, cachedComplexElement);
         }
     }
 
     private void printGroupDecl(XSModelGroupDecl modelGroupDecl, String rootName, XmlComplexType parentXmlComplexType,
-            Set<String> cachedComplexType) throws Exception {
-        printGroup(modelGroupDecl.getModelGroup(), rootName, parentXmlComplexType, cachedComplexType);
+            Set<String> cachedComplexType, Set<String> cachedComplexElement) throws Exception {
+        printGroup(modelGroupDecl.getModelGroup(), rootName, parentXmlComplexType, cachedComplexType, cachedComplexElement);
     }
 
     private void printElement(XSElementDecl element, String root, XmlComplexType xmlComplexType,
-            CollectionType collectionType, Set<String> cachedComplexType) throws Exception {
+            CollectionType collectionType, Set<String> cachedComplexType, Set<String> cachedComplexElement) throws Exception {
         if (LOG.isTraceEnabled()) {
             LOG.trace("Element: {}/{}", root, getNameNS(element));
         }
         String rootName = root;
+        String elementName = getNameNS(element);
+        String typeName = getNameNS(element.getType());
         if (element.getType().isComplexType()) {
             XmlComplexType complexType = getXmlComplexType();
-            rootName = rootName + "/" + getNameNS(element);
-            complexType.setName(getNameNS(element));
+            rootName = rootName + "/" + elementName;
+            complexType.setName(elementName);
             complexType.setPath(rootName);
             complexType.setCollectionType(collectionType);
             xmlComplexType.getXmlFields().getXmlField().add(complexType);
-            String typeName = getNameNS(element.getType());
+            if (elementName != null && !elementName.isEmpty() && cachedComplexElement.contains(elementName)) {
+                complexType.setStatus(FieldStatus.CACHED);
+            } else if (elementName != null) {
+                cachedComplexElement.add(elementName);
+            }
             if (typeName != null && !typeName.isEmpty() && cachedComplexType.contains(typeName)) {
                 complexType.setStatus(FieldStatus.CACHED);
-            } else {
+            } else if (typeName != null) {
                 cachedComplexType.add(typeName);
-                printComplexType(element.getType().asComplexType(), rootName, complexType, cachedComplexType);
             }
-        } else {
-            if (element.getType() != null && element.getType().asSimpleType() != null) {
-                XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-                xmlField.setName(getNameNS(element));
-                xmlField.setPath(rootName + "/" + getNameNS(element));
-                xmlComplexType.getXmlFields().getXmlField().add(xmlField);
-                if (element.getDefaultValue() != null) {
-                    xmlField.setValue(element.getDefaultValue());
-                } else if (element.getFixedValue() != null) {
-                    xmlField.setValue(element.getFixedValue());
-                }
-                XSRestrictionSimpleType typeRestriction = element.getType().asSimpleType().asRestriction();
-                if (typeRestriction != null) {
-                    xmlField.setFieldType(XS_TYPE_TO_FIELD_TYPE_MAP.get(typeRestriction.getBaseType().getName()));
-                    mapRestrictions(xmlField, typeRestriction);
-                }
-                printSimpleType(element.getType().asSimpleType(), xmlField);
+            if (complexType.getStatus() != FieldStatus.CACHED) {
+                printComplexType(element.getType().asComplexType(), rootName, complexType,
+                        cachedComplexType, cachedComplexElement);
             }
+        } else if (element.getType() != null && element.getType().asSimpleType() != null) {
+            XmlField xmlField = AtlasXmlModelFactory.createXmlField();
+            xmlField.setName(elementName);
+            xmlField.setPath(rootName + "/" + elementName);
+            xmlComplexType.getXmlFields().getXmlField().add(xmlField);
+            if (element.getDefaultValue() != null) {
+                xmlField.setValue(element.getDefaultValue());
+            } else if (element.getFixedValue() != null) {
+                xmlField.setValue(element.getFixedValue());
+            }
+            XSRestrictionSimpleType typeRestriction = element.getType().asSimpleType().asRestriction();
+            if (typeRestriction != null) {
+                xmlField.setFieldType(XS_TYPE_TO_FIELD_TYPE_MAP.get(typeRestriction.getBaseType().getName()));
+                mapRestrictions(xmlField, typeRestriction);
+            }
+            printSimpleType(element.getType().asSimpleType(), xmlField);
         }
     }
 

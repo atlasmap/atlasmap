@@ -15,32 +15,36 @@
  */
 package io.atlasmap.xml.inspect;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.io.File;
 import java.nio.file.Paths;
 
 import org.hamcrest.core.Is;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
+import io.atlasmap.v2.FieldStatus;
 import io.atlasmap.xml.v2.XmlComplexType;
 import io.atlasmap.xml.v2.XmlDocument;
 
 public class XmlSchemaInspectionFhirTest extends BaseXmlInspectionServiceTest {
 
-    @Ignore("https://github.com/atlasmap/atlasmap/issues/577")
     @Test
     public void test() throws Exception {
         File schemaFile = Paths.get("src/test/resources/inspect/fhir-single.xsd").toFile();
         XmlInspectionService service = new XmlInspectionService();
         XmlDocument xmlDocument = service.inspectSchema(schemaFile);
-        Assert.assertNotNull(xmlDocument);
-        Assert.assertNotNull(xmlDocument.getFields());
-        Assert.assertThat(xmlDocument.getFields().getField().size(), Is.is(1));
+        assertNotNull(xmlDocument);
+        assertNotNull(xmlDocument.getFields());
+        assertEquals(1, xmlDocument.getFields().getField().size());
         XmlComplexType root = (XmlComplexType) xmlDocument.getFields().getField().get(0);
-        Assert.assertNotNull(root);
-        Assert.assertThat(root.getXmlFields().getXmlField().size(), Is.is(8));
-        debugFields(xmlDocument.getFields());
+        assertNotNull(root);
+        assertEquals(26, root.getXmlFields().getXmlField().size());
+        XmlComplexType meta = (XmlComplexType) root.getXmlFields().getXmlField().get(1);
+        assertEquals("tns:meta", meta.getName());
+        assertEquals(FieldStatus.CACHED, meta.getStatus());
     }
 
 }
