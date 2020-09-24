@@ -40,12 +40,12 @@ public class AtlasXmlNamespaceContext implements NamespaceContext {
 <span class="fc" id="L40">    }</span>
 
     public String addWithIndex(String uri) {
-<span class="nc" id="L43">        String prefix = &quot;ns&quot; + nsIndex++;</span>
-<span class="nc bnc" id="L44" title="All 2 branches missed.">        while (nsMap.containsKey(prefix)) {</span>
+<span class="fc" id="L43">        String prefix = &quot;ns&quot; + nsIndex++;</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        while (nsMap.containsKey(prefix)) {</span>
 <span class="nc" id="L45">            prefix = &quot;ns&quot; + nsIndex++;</span>
         }
-<span class="nc" id="L47">        add(prefix, uri);</span>
-<span class="nc" id="L48">        return prefix;</span>
+<span class="fc" id="L47">        add(prefix, uri);</span>
+<span class="fc" id="L48">        return prefix;</span>
     }
 
     public Map&lt;String, String&gt; getNamespaceMap() {
@@ -65,7 +65,7 @@ public class AtlasXmlNamespaceContext implements NamespaceContext {
 
 <span class="fc" id="L66">        Optional&lt;Entry&lt;String, String&gt;&gt; entry = nsMap.entrySet().stream()</span>
 <span class="fc" id="L67">                .filter(e -&gt; namespaceURI.equals(e.getValue())).findFirst();</span>
-<span class="pc bpc" id="L68" title="1 of 2 branches missed.">        return entry.isPresent() ? entry.get().getKey() : null;</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        return entry.isPresent() ? entry.get().getKey() : null;</span>
     }
 
     @Override

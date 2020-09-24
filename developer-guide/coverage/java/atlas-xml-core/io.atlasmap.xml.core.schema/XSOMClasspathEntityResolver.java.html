@@ -33,8 +33,8 @@ class XSOMClasspathEntityResolver implements EntityResolver {
 
     @Override
     public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
-<span class="pc bpc" id="L36" title="2 of 4 branches missed.">        if (publicId != null || systemId == null) {</span>
-<span class="nc" id="L37">            return null;</span>
+<span class="pc bpc" id="L36" title="1 of 4 branches missed.">        if (publicId != null || systemId == null) {</span>
+<span class="fc" id="L37">            return null;</span>
         }
         URI uri;
         try {

@@ -38,8 +38,8 @@ import com.sun.xml.xsom.XSRestrictionSimpleType;
 <span class="pc bpc" id="L38" title="1 of 2 branches missed.">        if (restriction != null) {</span>
 <span class="fc" id="L39">            Vector&lt;String&gt; enumeration = new Vector&lt;&gt;();</span>
 <span class="fc bfc" id="L40" title="All 2 branches covered.">            for (XSFacet facet : restriction.getDeclaredFacets()) {</span>
-<span class="pc bpc" id="L41" title="1 of 2 branches missed.">                if (facet.getName().equals(XSFacet.FACET_ENUMERATION)) {</span>
-<span class="nc" id="L42">                    enumeration.add(facet.getValue().value);</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">                if (facet.getName().equals(XSFacet.FACET_ENUMERATION)) {</span>
+<span class="fc" id="L42">                    enumeration.add(facet.getValue().value);</span>
                 }
 <span class="fc bfc" id="L44" title="All 2 branches covered.">                if (facet.getName().equals(XSFacet.FACET_MAXINCLUSIVE)) {</span>
 <span class="fc" id="L45">                    this.maxValue = facet.getValue().value;</span>
@@ -56,11 +56,11 @@ import com.sun.xml.xsom.XSRestrictionSimpleType;
 <span class="pc bpc" id="L56" title="1 of 2 branches missed.">                if (facet.getName().equals(XSFacet.FACET_LENGTH)) {</span>
 <span class="nc" id="L57">                    this.length = facet.getValue().value;</span>
                 }
-<span class="pc bpc" id="L59" title="1 of 2 branches missed.">                if (facet.getName().equals(XSFacet.FACET_MAXLENGTH)) {</span>
-<span class="nc" id="L60">                    this.maxLength = facet.getValue().value;</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">                if (facet.getName().equals(XSFacet.FACET_MAXLENGTH)) {</span>
+<span class="fc" id="L60">                    this.maxLength = facet.getValue().value;</span>
                 }
-<span class="pc bpc" id="L62" title="1 of 2 branches missed.">                if (facet.getName().equals(XSFacet.FACET_MINLENGTH)) {</span>
-<span class="nc" id="L63">                    this.minLength = facet.getValue().value;</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">                if (facet.getName().equals(XSFacet.FACET_MINLENGTH)) {</span>
+<span class="fc" id="L63">                    this.minLength = facet.getValue().value;</span>
                 }
 <span class="fc bfc" id="L65" title="All 2 branches covered.">                if (facet.getName().equals(XSFacet.FACET_PATTERN)) {</span>
 <span class="fc" id="L66">                    this.pattern = facet.getValue().value;</span>
@@ -69,8 +69,8 @@ import com.sun.xml.xsom.XSRestrictionSimpleType;
 <span class="nc" id="L69">                    this.totalDigits = facet.getValue().value;</span>
                 }
 <span class="fc" id="L71">            }</span>
-<span class="pc bpc" id="L72" title="1 of 2 branches missed.">            if (enumeration.size() &gt; 0) {</span>
-<span class="nc" id="L73">                this.enumeration = enumeration.toArray(new String[] {});</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">            if (enumeration.size() &gt; 0) {</span>
+<span class="fc" id="L73">                this.enumeration = enumeration.toArray(new String[] {});</span>
             }
         }
 <span class="fc" id="L76">    }</span>
