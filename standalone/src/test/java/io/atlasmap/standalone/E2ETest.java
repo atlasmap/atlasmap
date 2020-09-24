@@ -138,6 +138,9 @@ public class E2ETest {
         long start = System.currentTimeMillis();
         while ((System.currentTimeMillis() - start) < 60000) {
             WatchKey key = watcher.poll(5, TimeUnit.SECONDS);
+            if (key == null) {
+                continue;
+            }
             for (WatchEvent<?> event : key.pollEvents()) {
                 if (!StandardWatchEventKinds.ENTRY_CREATE.name().equals(event.kind().name())) {
                     continue;
