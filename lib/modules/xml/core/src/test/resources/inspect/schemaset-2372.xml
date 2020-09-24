@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<d:SchemaSet xmlns:d="http://atlasmap.io/xml/schemaset/v2">
+   <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns0="http://soap.spring.example.bpm.camunda.com/v1" xmlns:tns="http://schemas.xmlsoap.org/soap/envelope/" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://schemas.xmlsoap.org/soap/envelope/">
+      <import namespace="http://soap.spring.example.bpm.camunda.com/v1" />
+      <element name="Envelope">
+         <complexType>
+            <sequence>
+               <element name="Body">
+                  <complexType>
+                     <sequence>
+                        <sequence minOccurs="0">
+                           <element ref="ns0:getAccountsResponse" />
+                        </sequence>
+                        <element minOccurs="0" name="Fault">
+                           <complexType>
+                              <sequence>
+                                 <element form="unqualified" name="faultcode" type="QName" />
+                                 <element form="unqualified" name="faultstring" type="string" />
+                                 <element form="unqualified" minOccurs="0" name="faultactor" type="anyURI" />
+                                 <element form="unqualified" minOccurs="0" name="detail">
+                                    <complexType>
+                                       <sequence>
+                                          <element ref="ns0:bankException" />
+                                       </sequence>
+                                    </complexType>
+                                 </element>
+                              </sequence>
+                           </complexType>
+                        </element>
+                     </sequence>
+                  </complexType>
+               </element>
+            </sequence>
+         </complexType>
+      </element>
+   </schema>
+   <d:AdditionalSchemas>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://soap.spring.example.bpm.camunda.com/v1" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://soap.spring.example.bpm.camunda.com/v1">
+         <element name="getAccountsResponse">
+            <complexType>
+               <sequence>
+                  <element form="qualified" maxOccurs="unbounded" minOccurs="0" name="account" type="string">
+                     <annotation>
+                        <documentation>+                             Bank accounts number for customer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              +</documentation>
+                     </annotation>
+                  </element>
+               </sequence>
+            </complexType>
+         </element>
+         <element name="bankException">
+            <complexType>
+               <sequence>
+                  <element form="qualified" name="code" type="string" />
+                  <element form="qualified" name="message" type="string" />
+               </sequence>
+            </complexType>
+         </element>
+      </schema>
+   </d:AdditionalSchemas>
+</d:SchemaSet>
