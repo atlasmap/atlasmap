@@ -24,28 +24,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/149</span>
+                <span class='fraction'>0/152</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/80</span>
+                <span class='fraction'>0/82</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/144</span>
+                <span class='fraction'>0/147</span>
             </div>
         
             
@@ -390,7 +390,13 @@
 <a name='L332'></a><a href='#L332'>332</a>
 <a name='L333'></a><a href='#L333'>333</a>
 <a name='L334'></a><a href='#L334'>334</a>
-<a name='L335'></a><a href='#L335'>335</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L335'></a><a href='#L335'>335</a>
+<a name='L336'></a><a href='#L336'>336</a>
+<a name='L337'></a><a href='#L337'>337</a>
+<a name='L338'></a><a href='#L338'>338</a>
+<a name='L339'></a><a href='#L339'>339</a>
+<a name='L340'></a><a href='#L340'>340</a>
+<a name='L341'></a><a href='#L341'>341</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -404,6 +410,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -542,6 +552,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -738,6 +750,10 @@
   ErrorType,
 } from "@atlasmap/core";
 &nbsp;
+function <span class="fstat-no" title="function not covered" >decorateProperty(</span>name: string, scope: string): string {
+<span class="cstat-no" title="statement not covered" >  return name + "&lt;" + scope + "&gt;";</span>
+}
+&nbsp;
 <span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >c</span>reateConstant(</span>constValue: string, constType: string): void {
   const cfg = <span class="cstat-no" title="statement not covered" >ConfigModel.getConfig();</span>
   let field = <span class="cstat-no" title="statement not covered" >cfg.constantDoc.getField(constValue);</span>
@@ -822,7 +838,7 @@
 <span class="cstat-no" title="statement not covered" >  if (!field) {</span>
 <span class="cstat-no" title="statement not covered" >    field = new Field();</span>
   }
-<span class="cstat-no" title="statement not covered" >  field.name = propName;</span>
+<span class="cstat-no" title="statement not covered" >  field.name = decorateProperty(propName, propScope);</span>
 <span class="cstat-no" title="statement not covered" >  field.type = propType;</span>
 <span class="cstat-no" title="statement not covered" >  field.scope = propScope;</span>
 <span class="cstat-no" title="statement not covered" >  field.userCreated = true;</span>
@@ -877,7 +893,9 @@
 <span class="cstat-no" title="statement not covered" >    return;</span>
   }
 <span class="cstat-no" title="statement not covered" >  if (propName !== newName) {</span>
-<span class="cstat-no" title="statement not covered" >    field.name = newName;</span>
+<span class="cstat-no" title="statement not covered" >    field.name = decorateProperty(propName, propScope);</span>
+  } else <span class="cstat-no" title="statement not covered" >if (field.scope !== propScope) {</span>
+<span class="cstat-no" title="statement not covered" >    field.name = decorateProperty(field.name.split("&lt;")[0], propScope);</span>
   }
 <span class="cstat-no" title="statement not covered" >  field.type = propType;</span>
 <span class="cstat-no" title="statement not covered" >  field.scope = propScope;</span>
@@ -1065,7 +1083,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Sep 24 2020 17:07:40 GMT+0000 (Coordinated Universal Time)
+                at Fri Sep 25 2020 14:21:28 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
