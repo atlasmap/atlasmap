@@ -12,6 +12,10 @@ import {
   ErrorType,
 } from "@atlasmap/core";
 
+function decorateProperty(name: string, scope: string): string {
+  return name + "<" + scope + ">";
+}
+
 export function createConstant(constValue: string, constType: string): void {
   const cfg = ConfigModel.getConfig();
   let field = cfg.constantDoc.getField(constValue);
@@ -96,7 +100,7 @@ export function createProperty(
   if (!field) {
     field = new Field();
   }
-  field.name = propName;
+  field.name = decorateProperty(propName, propScope);
   field.type = propType;
   field.scope = propScope;
   field.userCreated = true;
@@ -151,7 +155,9 @@ export function editProperty(
     return;
   }
   if (propName !== newName) {
-    field.name = newName;
+    field.name = decorateProperty(propName, propScope);
+  } else if (field.scope !== propScope) {
+    field.name = decorateProperty(field.name.split("<")[0], propScope);
   }
   field.type = propType;
   field.scope = propScope;
