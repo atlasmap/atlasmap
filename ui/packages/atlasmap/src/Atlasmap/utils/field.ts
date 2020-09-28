@@ -13,7 +13,7 @@ import {
 } from "@atlasmap/core";
 
 function decorateProperty(name: string, scope: string): string {
-  return name + "<" + scope + ">";
+  return name.includes("<") ? name : name + "<" + scope + ">";
 }
 
 export function createConstant(constValue: string, constType: string): void {
@@ -155,7 +155,7 @@ export function editProperty(
     return;
   }
   if (propName !== newName) {
-    field.name = decorateProperty(propName, propScope);
+    field.name = decorateProperty(newName, propScope);
   } else if (field.scope !== propScope) {
     field.name = decorateProperty(field.name.split("<")[0], propScope);
   }
