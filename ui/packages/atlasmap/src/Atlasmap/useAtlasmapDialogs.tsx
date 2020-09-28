@@ -82,7 +82,7 @@ export function useAtlasmapDialogs({
     (isSource: boolean, properties: IAtlasmapDocument | null) => {
       setScopeOptions(getPropertyScopeOptions(isSource));
       openCreatePropertyDialog(({ name, valueType, scope }) => {
-        createProperty(name, valueType, scope, isSource);
+        createProperty(name.split("<")[0], valueType, scope, isSource);
       }, properties);
     },
     [createProperty, openCreatePropertyDialog],
