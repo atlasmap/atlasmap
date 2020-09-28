@@ -152,7 +152,7 @@ public class E2ETest {
         dirPath.register(watcher, StandardWatchEventKinds.ENTRY_CREATE);
         confirmBtn.click();
         long start = System.currentTimeMillis();
-        while ((System.currentTimeMillis() - start) < 60000) {
+        while ((System.currentTimeMillis() - start) < 300000) {
             WatchKey key = watcher.poll(5, TimeUnit.SECONDS);
             if (key == null) {
                 continue;
