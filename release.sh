@@ -94,6 +94,19 @@ echo "=========================================================="
                -DreleaseVersion=${RELEASE_VERSION} \
                -DdevelopmentVersion=${DEVELOPMENT_VERSION} \
                release:perform
+"${MAVEN_CMD}" $MAVEN_PARAMETERS \
+               -f atlasmap-maven-plugin/atlasmap-maven-plugin-example.pom \
+               -DgenerateBackupPoms=false \
+               -DnewVersion=${DEVELOPMENT_VERSION} \
+               org.codehaus.mojo:versions-maven-plugin:2.8.1:set
+"${MAVEN_CMD}" $MAVEN_PARAMETERS \
+               -f docs/pom-javadoc.xml \
+               -DgenerateBackupPoms=false \
+               -DnewVersion=${DEVELOPMENT_VERSION} \
+               org.codehaus.mojo:versions-maven-plugin:2.8.1:set
+"${MAVEN_CMD}" $MAVEN_PARAMETERS -pl docs package
+git add atlasmap-maven-plugin docs
+git commit -m "chore: cleanup after release ${RELEASE_VERSION}"
 
 # tag the major/minor version and docker push it
 echo "=========================================================="
@@ -129,8 +142,9 @@ git branch -D temp-${RELEASE_VERSION}
 ./node_modules/.bin/lerna version --no-git-tag-version -y ${DEVELOPMENT_VERSION}
 git add .
 git commit --amend --no-edit
-git push origin ${CURRENT_BRANCH}
 popd
+
+git push origin ${CURRENT_BRANCH}
 
 
 # For some reason following no longer works... instead run manually ./node_modules/.bin/gren release --tags atlasmap-${RELEASE_VERSION}..${PREVIOUS_VERSION} --override 
