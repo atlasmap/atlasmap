@@ -89,6 +89,10 @@ public class CsvFieldWriter implements AtlasFieldWriter {
 
             List<Field> fields = document.getFields().getField();
 
+            if (fields.isEmpty()) {
+                return "";
+            }
+
             if (csvConfig.isFirstRecordAsHeader()) {
                 List<String> headers = new ArrayList<>();
                 for (Field field: fields) {
