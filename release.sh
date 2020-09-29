@@ -61,7 +61,7 @@ function init_options() {
 
   # Internal variable default values
   OC_OPTS=""
-  MAVEN_PARAMETERS="--batch-mode -Dfabric8.mode=kubernetes -Pfabric8,release,community-release"
+  MAVEN_PARAMETERS="--batch-mode -Prelease,community-release"
   MAVEN_CMD="${MAVEN_CMD:-${BASEDIR}/mvnw}"
 }
 
@@ -99,17 +99,16 @@ echo "=========================================================="
 echo "=========================================================="
 echo "Pushing docker images to Docker Hub...."
 echo "=========================================================="
+pushd standalone
 ATLASMAP_IMAGE="atlasmap/atlasmap"
 MAJOR_MINOR_VERSION=$(echo $RELEASE_VERSION | cut -f1,2 -d'.')
 
-if [ -n "$DOCKER_USER" ] && [ -n "$DOCKER_PASSWORD" ]; then
-    echo "==== Login to Docker Hub"
-    docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
-fi
-
-docker tag "${ATLASMAP_IMAGE}:${RELEASE_VERSION}" "${ATLASMAP_IMAGE}:${MAJOR_MINOR_VERSION}"
-  docker push "${ATLASMAP_IMAGE}:${RELEASE_VERSION}"
-  docker push "${ATLASMAP_IMAGE}:${MAJOR_MINOR_VERSION}"
+"${MAVEN_CMD}" $MAVEN_PARAMETERS -Pdocker \
+               -Djkube.docker.username=${DOCKER_USER} \
+               -Djkube.docker.password=${DOCKER_PASSWORD} \
+               -Dimage.tag.secondary=${MAJOR_MINOR_VERSION} \
+               k8s:build k8s:push
+popd
 
 echo "=========================================================="
 echo "Publishing NPM package of AtlasMap UI...."
