@@ -17,6 +17,7 @@ package io.atlasmap.itests.core;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertThrows;
 
 import java.io.InputStream;
 import java.util.Arrays;
@@ -74,8 +75,23 @@ public class CsvMappingTest {
         assertThat(csv, CoreMatchers.is("first\r\nBob\r\nAndrew\r\n"));
     }
 
+    @Test
+    public void testCsvSourceAndTargetNotUsed() throws Exception {
+        AtlasContext context = createContext("mappings/atlasmapping-csv-not-used.json", "1");
+        AtlasSession session = context.createSession();
+        session.setSourceDocument("csvSource", "first_name,last_name\r\nbob,johnson\r\nandrew,smith\r\n");
+        session.setSourceDocument("jsonSource", "{\"first_name\":\"Tom\",\"last_name\":\"Silva\"}");
+        context.process(session);
+
+        assertFalse(session.hasErrors());
+        Object json = session.getTargetDocument("jsonTarget");
+        Object csv = session.getTargetDocument("csvTarget");
+        assertThat(csv, CoreMatchers.is(""));
+        assertThat(json, CoreMatchers.is("{\"first_name\":\"Tom\"}"));
+    }
+
     public AtlasContext createContext(String file, String... mappingIds) throws Exception {
-        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("mappings/atlasmapping-csv.json");
+        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(file);
         ADMArchiveHandler admHandler = new ADMArchiveHandler(Thread.currentThread().getContextClassLoader());
         admHandler.load(AtlasContextFactory.Format.JSON, in);
         AtlasMapping mapping = admHandler.getMappingDefinition();
