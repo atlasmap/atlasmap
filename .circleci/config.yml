@@ -63,6 +63,7 @@ push_images: &push_images
 
       cd standalone
       ../mvnw --batch-mode -Pdocker \
+      -Dimage.tag.primary=latest \
       -Djkube.docker.username=${DOCKER_USERNAME} \
       -Djkube.docker.password=${DOCKER_PASSWORD} \
       k8s:build k8s:push

@@ -106,6 +106,7 @@ MAJOR_MINOR_VERSION=$(echo $RELEASE_VERSION | cut -f1,2 -d'.')
 "${MAVEN_CMD}" $MAVEN_PARAMETERS -Pdocker \
                -Djkube.docker.username=${DOCKER_USER} \
                -Djkube.docker.password=${DOCKER_PASSWORD} \
+               -Dimage.tag.primary=${RELEASE_VERSION} \
                -Dimage.tag.secondary=${MAJOR_MINOR_VERSION} \
                k8s:build k8s:push
 popd

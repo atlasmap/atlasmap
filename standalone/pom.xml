@@ -35,7 +35,7 @@
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     <!-- Controls Docker Image Generation -->
     <from.image>fabric8/java-jboss-openjdk8-jdk</from.image>
-    <docker.image>atlasmap/atlasmap:%l</docker.image>
+    <docker.image>atlasmap/atlasmap</docker.image>
     <from.image.version>1.3</from.image.version>
     <license.dir>${project.basedir}/src/main/resources/license</license.dir>
     <license.output.dir>${project.build.directory}/classes/licenses</license.output.dir>
@@ -255,7 +255,7 @@
               <buildStrategy>jib</buildStrategy>
               <images>
                 <image>
-                  <name>${docker.image}</name>
+                  <name>${docker.image}:${image.tag.primary}</name>
                   <build>
                     <from>${from.image}:${from.image.version}</from>
                     <tags>
