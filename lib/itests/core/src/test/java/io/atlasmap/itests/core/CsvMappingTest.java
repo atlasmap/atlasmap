@@ -15,6 +15,15 @@
  */
 package io.atlasmap.itests.core;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.hamcrest.CoreMatchers;
+import org.junit.Test;
+
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.AtlasMappingService;
@@ -22,16 +31,9 @@ import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Collection;
 import io.atlasmap.v2.Mapping;
-import org.hamcrest.CoreMatchers;
 import org.junit.Before;
-import org.junit.Test;
 
 import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 
 public class CsvMappingTest {
 
@@ -79,9 +81,25 @@ public class CsvMappingTest {
         assertThat(csv, CoreMatchers.is("first\r\nBob\r\nAndrew\r\n"));
     }
 
+    @Test
+    public void testCsvSourceAndTargetNotUsed() throws Exception {
+        AtlasContext context = createContext("mappings/atlasmapping-csv-not-used.json", "1");
+        AtlasSession session = context.createSession();
+        session.setSourceDocument("csvSource", "first_name,last_name\r\nbob,johnson\r\nandrew,smith\r\n");
+        session.setSourceDocument("jsonSource", "{\"first_name\":\"Tom\",\"last_name\":\"Silva\"}");
+        context.process(session);
+
+        assertFalse(session.hasErrors());
+        Object json = session.getTargetDocument("jsonTarget");
+        Object csv = session.getTargetDocument("csvTarget");
+        assertThat(csv, CoreMatchers.is(""));
+        assertThat(json, CoreMatchers.is("{\"first_name\":\"Tom\"}"));
+    }
+
     public AtlasContext createContext(String file, String... mappingIds) throws Exception {
-        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-csv.json");
+        URL url = Thread.currentThread().getContextClassLoader().getResource(file);
         AtlasMapping mapping = mappingService.loadMapping(url);
+
         List<String> ids = Arrays.asList(mappingIds);
         mapping.getMappings().getMapping().removeIf(m -> {
             if (m instanceof Mapping) {

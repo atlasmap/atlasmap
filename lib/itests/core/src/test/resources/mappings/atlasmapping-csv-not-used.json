@@ -1,0 +1,50 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+      "id": "jsonSource",
+      "uri": "atlas:json:source",
+      "dataSourceType": "SOURCE"
+    }, {
+      "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+      "id": "jsonTarget",
+      "uri": "atlas:json:target-json",
+      "dataSourceType": "TARGET"
+    }, {
+      "jsonType": "io.atlasmap.csv.v2.CsvDataSource",
+      "id": "csvSource",
+      "uri": "atlas:csv:source?firstRecordAsHeader=true",
+      "dataSourceType": "SOURCE"
+    }, {
+      "jsonType": "io.atlasmap.csv.v2.CsvDataSource",
+      "id": "csvTarget",
+      "uri": "atlas:csv:target-csv?firstRecordAsHeader=true",
+      "dataSourceType": "TARGET"
+    }],
+    "mappings" : {
+      "mapping" : [ {
+        "id": "1",
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "docId" : "jsonSource",
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "path" : "/first_name"
+        } ],
+        "outputField" : [ {
+          "docId" : "jsonTarget",
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "path" : "/first_name"
+        } ]
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "core.unit.test"
+  }
+}
