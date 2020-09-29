@@ -119,7 +119,9 @@ JKUBE_OPTION="${JKUBE_OPTION} -Djkube.docker.password=${DOCKER_PASSWORD}"
 JKUBE_OPTION="${JKUBE_OPTION} -Dimage.tag.primary=${RELEASE_VERSION}"
 if [ $RELEASE_VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]; then
   MAJOR_MINOR_VERSION=$(echo $RELEASE_VERSION | cut -f1,2 -d'.')
-  JKUBE_OPTION="${JKUBE_OPTION} -Dimage.tag.secondary=${MAJOR_MINOR_VERSION}"
+  MAJOR_VERSION=$(echo $RELEASE_VERSION | cut -f1 -d'.')
+  JKUBE_OPTION="${JKUBE_OPTION} -Dimage.tag.tertiary=${MAJOR_MINOR_VERSION}"
+  JKUBE_OPTION="${JKUBE_OPTION} -Dimage.tag.secondary=${MAJOR_VERSION}"
 fi
 JKUBE_OPTION="${JKUBE_OPTION} k8s:build k8s:push"
 "${MAVEN_CMD}" $MAVEN_PARAMETERS $JKUBE_OPTION
