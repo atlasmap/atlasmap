@@ -94,16 +94,19 @@ echo "=========================================================="
                -DreleaseVersion=${RELEASE_VERSION} \
                -DdevelopmentVersion=${DEVELOPMENT_VERSION} \
                release:perform
-"${MAVEN_CMD}" $MAVEN_PARAMETERS \
-               -f atlasmap-maven-plugin/atlasmap-maven-plugin-example.pom \
-               -DgenerateBackupPoms=false \
-               -DnewVersion=${DEVELOPMENT_VERSION} \
-               org.codehaus.mojo:versions-maven-plugin:2.8.1:set
-"${MAVEN_CMD}" $MAVEN_PARAMETERS \
-               -f docs/pom-javadoc.xml \
-               -DgenerateBackupPoms=false \
-               -DnewVersion=${DEVELOPMENT_VERSION} \
-               org.codehaus.mojo:versions-maven-plugin:2.8.1:set
+
+xmllint --shell atlasmap-maven-plugin/atlasmap-maven-plugin-example.pom << EOF
+cd /*[local-name() = 'project']/*[local-name() = 'version']
+set ${DEVELOPMENT_VERSION}
+save
+EOF
+
+xmllint --shell docs/pom-javadoc.xml << EOF
+cd /*[local-name() = 'project']/*[local-name() = 'parent']/*[local-name() = 'version']
+set ${DEVELOPMENT_VERSION}
+save
+EOF
+
 "${MAVEN_CMD}" $MAVEN_PARAMETERS -pl docs package
 git add atlasmap-maven-plugin docs
 git commit -m "chore: cleanup after release ${RELEASE_VERSION}"
