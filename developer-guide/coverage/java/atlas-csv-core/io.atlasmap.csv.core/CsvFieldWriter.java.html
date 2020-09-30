@@ -90,50 +90,54 @@ public class CsvFieldWriter implements AtlasFieldWriter {
 
 <span class="fc" id="L91">            List&lt;Field&gt; fields = document.getFields().getField();</span>
 
-<span class="fc bfc" id="L93" title="All 2 branches covered.">            if (csvConfig.isFirstRecordAsHeader()) {</span>
-<span class="fc" id="L94">                List&lt;String&gt; headers = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L95" title="All 2 branches covered.">                for (Field field: fields) {</span>
-<span class="fc" id="L96">                    headers.add(field.getName());</span>
-<span class="fc" id="L97">                }</span>
-<span class="fc" id="L98">                printer.printRecord(headers);</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">            if (fields.isEmpty()) {</span>
+<span class="fc" id="L94">                return &quot;&quot;;</span>
+            }
+
+<span class="fc bfc" id="L97" title="All 2 branches covered.">            if (csvConfig.isFirstRecordAsHeader()) {</span>
+<span class="fc" id="L98">                List&lt;String&gt; headers = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">                for (Field field: fields) {</span>
+<span class="fc" id="L100">                    headers.add(field.getName());</span>
+<span class="fc" id="L101">                }</span>
+<span class="fc" id="L102">                printer.printRecord(headers);</span>
             }
 
             int recordsCount;
-<span class="fc bfc" id="L102" title="All 2 branches covered.">            if (fields.get(0) instanceof FieldGroup) {</span>
-<span class="fc" id="L103">                recordsCount = ((FieldGroup) fields.get(0)).getField().size();</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">            if (fields.get(0) instanceof FieldGroup) {</span>
+<span class="fc" id="L107">                recordsCount = ((FieldGroup) fields.get(0)).getField().size();</span>
             } else {
-<span class="fc" id="L105">                recordsCount = 1;</span>
+<span class="fc" id="L109">                recordsCount = 1;</span>
             }
 
-<span class="fc bfc" id="L108" title="All 2 branches covered.">            for (int i = 0; i &lt; recordsCount; i++) {</span>
-<span class="fc" id="L109">                List&lt;String&gt; values = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L110" title="All 2 branches covered.">                for (Field field: fields) {</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">            for (int i = 0; i &lt; recordsCount; i++) {</span>
+<span class="fc" id="L113">                List&lt;String&gt; values = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">                for (Field field: fields) {</span>
                     CsvField csvField;
-<span class="fc bfc" id="L112" title="All 2 branches covered.">                    if (field instanceof FieldGroup) {</span>
-<span class="fc" id="L113">                        FieldGroup fieldGroup = (FieldGroup) field;</span>
-<span class="fc" id="L114">                        csvField = (CsvField) fieldGroup.getField().get(i);</span>
-<span class="fc" id="L115">                    } else {</span>
-<span class="fc" id="L116">                        csvField = (CsvField) field;</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">                    if (field instanceof FieldGroup) {</span>
+<span class="fc" id="L117">                        FieldGroup fieldGroup = (FieldGroup) field;</span>
+<span class="fc" id="L118">                        csvField = (CsvField) fieldGroup.getField().get(i);</span>
+<span class="fc" id="L119">                    } else {</span>
+<span class="fc" id="L120">                        csvField = (CsvField) field;</span>
                     }
 
-<span class="fc bfc" id="L119" title="All 2 branches covered.">                    if (csvField.getColumn() != null) {</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">                    if (csvField.getColumn() != null) {</span>
                         //Add missing values
-<span class="fc bfc" id="L121" title="All 2 branches covered.">                        for (int j = values.size(); j &lt; csvField.getColumn() + 1; j++) {</span>
-<span class="fc" id="L122">                            values.add(null);</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">                        for (int j = values.size(); j &lt; csvField.getColumn() + 1; j++) {</span>
+<span class="fc" id="L126">                            values.add(null);</span>
                         }
-<span class="fc" id="L124">                        values.set(csvField.getColumn(), csvField.getValue().toString());</span>
+<span class="fc" id="L128">                        values.set(csvField.getColumn(), csvField.getValue().toString());</span>
                     } else {
-<span class="fc" id="L126">                        values.add(csvField.getValue().toString());</span>
+<span class="fc" id="L130">                        values.add(csvField.getValue().toString());</span>
                     }
-<span class="fc" id="L128">                }</span>
-<span class="fc" id="L129">                printer.printRecord(values);</span>
+<span class="fc" id="L132">                }</span>
+<span class="fc" id="L133">                printer.printRecord(values);</span>
             }
 
-<span class="fc" id="L132">            writer.flush();</span>
-<span class="fc" id="L133">            String csv = out.toString();</span>
-<span class="fc" id="L134">            return csv;</span>
-<span class="nc" id="L135">        } catch (IOException e) {</span>
-<span class="nc" id="L136">            throw new AtlasException(e);</span>
+<span class="fc" id="L136">            writer.flush();</span>
+<span class="fc" id="L137">            String csv = out.toString();</span>
+<span class="fc" id="L138">            return csv;</span>
+<span class="nc" id="L139">        } catch (IOException e) {</span>
+<span class="nc" id="L140">            throw new AtlasException(e);</span>
         }
     }
 }

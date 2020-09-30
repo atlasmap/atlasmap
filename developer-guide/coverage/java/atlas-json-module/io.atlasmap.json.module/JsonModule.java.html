@@ -128,8 +128,8 @@ import io.atlasmap.v2.Validations;
         }
 
         // Attempt to Auto-detect field type based on input value
-<span class="pc bpc" id="L131" title="3 of 4 branches missed.">        if (targetField.getFieldType() == null &amp;&amp; sourceField.getValue() != null) {</span>
-<span class="nc" id="L132">            targetField.setFieldType(getConversionService().fieldTypeFromClass(sourceField.getValue().getClass()));</span>
+<span class="pc bpc" id="L131" title="1 of 4 branches missed.">        if (targetField.getFieldType() == null &amp;&amp; sourceField.getValue() != null) {</span>
+<span class="fc" id="L132">            targetField.setFieldType(getConversionService().fieldTypeFromClass(sourceField.getValue().getClass()));</span>
         }
 
 <span class="fc bfc" id="L135" title="All 2 branches covered.">        if (targetFieldGroup == null) {</span>
