@@ -29,11 +29,10 @@ import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -168,17 +167,14 @@ public class E2ETest {
         dirPath.register(watcher, StandardWatchEventKinds.ENTRY_CREATE);
         confirmBtn.click();
 
-        WatchKey key = null;
-        while (true) {
-            try {
-                key = watcher.take();
-            } catch (InterruptedException e) {
-                fail("exported.adm was not created");
-            }
-            if (key == null) {
+        WatchKey key = watcher.take();
+        while (key.isValid()) {
+            List<WatchEvent<?>> events = key.pollEvents();
+            if (events.isEmpty()) {
+                Thread.sleep(1000);
                 continue;
             }
-            for (WatchEvent<?> event : key.pollEvents()) {
+            for (WatchEvent<?> event : events) {
                 if (!StandardWatchEventKinds.ENTRY_CREATE.name().equals(event.kind().name())) {
                     continue;
                 };
@@ -194,6 +190,7 @@ public class E2ETest {
                 return;
             };
         }
+        fail("exported.adm was not created");
     }
 
 }
