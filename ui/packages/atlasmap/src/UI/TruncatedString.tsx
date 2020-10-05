@@ -21,7 +21,7 @@ export const TruncatedString: FunctionComponent<ITruncatedStringProps> = ({
 }) => (
   <span
     className={css(styles.fieldName)}
-    title={title || (typeof children === "string" ? children : undefined)}
+    data-title={title || (typeof children === "string" ? children : undefined)}
   >
     {children}
   </span>

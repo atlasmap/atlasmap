@@ -191,11 +191,15 @@ export class DocumentDefinition {
     return this.namespaces.find((ns) => alias === ns.alias)!;
   }
 
-  getField(fieldPath: string): Field | null {
+  getField(fieldPath: string, scope?: string): Field | null {
     if (!fieldPath) {
       return null;
     }
-    let field: Field = this.fieldsByPath[fieldPath];
+    let fieldKey = fieldPath;
+    if (scope) {
+      fieldKey += '-' + scope;
+    }
+    let field: Field = this.fieldsByPath[fieldKey];
     // if we can't find the field we're looking for, find parent fields and populate their children
     const pathSeparator: string = this.pathSeparator;
     let originalPath: string = fieldPath;
@@ -255,6 +259,7 @@ export class DocumentDefinition {
     for (const field of this.fields) {
       this.populateFieldParentPaths(field, null, 0);
       this.populateFieldData(field);
+      this.allFields.push(field);
       this.populateChildren(field);
     }
 
@@ -280,8 +285,10 @@ export class DocumentDefinition {
       this.fieldsByPath[oldPath] != null
     ) {
       delete this.fieldsByPath[oldPath];
+      DataMapperUtil.removeItemFromArray(oldPath, this.fieldPaths);
+    } else {
+      DataMapperUtil.removeItemFromArray(field.path, this.fieldPaths);
     }
-    DataMapperUtil.removeItemFromArray(field.path, this.fieldPaths);
     this.populateFieldData(field);
     this.fieldPaths.sort();
   }
@@ -303,6 +310,7 @@ export class DocumentDefinition {
       );
     }
     this.populateFieldData(field);
+    this.allFields.push(field);
     this.fieldPaths.sort();
   }
 
@@ -361,7 +369,7 @@ export class DocumentDefinition {
 
   getFieldIndex(field: Field, fields: Field[]): number {
     for (let i = 0; i < fields.length; i++) {
-      if (fields[i].name === field.name) {
+      if (fields[i].name === field.name && fields[i].scope === field.scope) {
         return i;
       }
     }
@@ -389,8 +397,12 @@ export class DocumentDefinition {
     if (targetIndex > -1) {
       this.terminalFields.splice(targetIndex, 1);
     }
-    DataMapperUtil.removeItemFromArray(field.path, this.fieldPaths);
-    delete this.fieldsByPath[field.path];
+    let oldFieldPath = field.path;
+    if (field.scope) {
+      oldFieldPath = field.path + '-' + field.scope;
+    }
+    DataMapperUtil.removeItemFromArray(oldFieldPath, this.fieldPaths);
+    delete this.fieldsByPath[oldFieldPath];
     if (field.parentField != null) {
       DataMapperUtil.removeItemFromArray(field, field.parentField.children);
     }
@@ -461,9 +473,13 @@ export class DocumentDefinition {
 
   private populateFieldData(field: Field): void {
     field.docDef = this;
-    this.fieldPaths.push(field.path);
-    this.allFields.push(field);
-    this.fieldsByPath[field.path] = field;
+    let newFieldKey = field.path;
+    if (field.scope) {
+      newFieldKey += '-' + field.scope;
+    }
+    this.fieldPaths.push(newFieldKey);
+    this.fieldsByPath[newFieldKey] = field;
+
     if (field.enumeration) {
       this.enumFieldsByClassIdentifier[field.classIdentifier] = field;
     }
@@ -472,6 +488,7 @@ export class DocumentDefinition {
     } else {
       for (const childField of field.children) {
         this.populateFieldData(childField);
+        this.allFields.push(childField);
       }
     }
   }

@@ -81,9 +81,8 @@ export function usePropertyDialog(
       if (property) {
         setInitialProperty(property);
       }
-      if (properties) {
-        setProperties(properties);
-      }
+      // Set properties even if null to reset values when switching panels.
+      setProperties(properties);
       toggleOn();
     },
     [toggleOn],

@@ -96,12 +96,16 @@ export class Field {
     const fieldsByPath: { [key: string]: Field } = {};
     const fieldPaths: string[] = [];
     for (const field of fields) {
-      // if field is a dupe, discard it
-      if (fieldsByPath[field.path] != null) {
+      let fieldKey = field.path;
+      if (field.scope) {
+        fieldKey += '-' + field.scope;
+      }
+      // Discard duplicate field keys, field names are repeatable.
+      if (fieldsByPath[fieldKey] != null) {
         continue;
       }
-      fieldsByPath[field.path] = field;
-      fieldPaths.push(field.path);
+      fieldsByPath[fieldKey] = field;
+      fieldPaths.push(fieldKey);
     }
     fieldPaths.sort();
     fields.length = 0;

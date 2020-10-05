@@ -13,7 +13,7 @@ export interface IAtlasmapField {
   id: ElementId;
   name: string;
   type: string;
-  scope: string | undefined;
+  scope: string;
   path: string;
   previewValue: string;
   mappings: IAtlasmapMapping[];

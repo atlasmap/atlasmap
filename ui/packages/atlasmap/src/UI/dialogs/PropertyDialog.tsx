@@ -79,7 +79,6 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
   }, [onCancel, reset]);
 
   function handleOnNameChange(name: string) {
-    name = name + "<" + scope + ">";
     validateProperty(name, scope);
     setName(name);
   }
@@ -114,7 +113,7 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
               }
             >
               <TextInput
-                value={name.split("<")[0]}
+                value={name}
                 onChange={handleOnNameChange}
                 id={"name"}
                 autoFocus={true}
@@ -125,7 +124,7 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
             </Tooltip>
           ) : (
             <TextInput
-              value={name.split("<")[0]}
+              value={name}
               onChange={handleOnNameChange}
               id={"name"}
               autoFocus={true}
