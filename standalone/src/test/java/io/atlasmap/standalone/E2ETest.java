@@ -31,8 +31,7 @@ import java.nio.file.WatchService;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-
+import java.util.concurrent.Executors;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -132,12 +131,32 @@ public class E2ETest {
         exportInput.sendKeys(exportAdmFileName);
         confirmBtn = dialogDiv.findElement(By.xpath(".//button[@data-testid='confirmation-dialog-confirm-button']"));
         WatchService watcher = FileSystems.getDefault().newWatchService();
+        Executors.newSingleThreadExecutor().execute(() -> {
+            long start = System.currentTimeMillis();
+            while ((System.currentTimeMillis() - start) < 300000) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
+            try {
+                watcher.close();
+            } catch (Exception e) {
+                fail("Failed to close file watcher");
+            }
+        });
         Path dirPath = Paths.get(DLDIR);
         dirPath.register(watcher, StandardWatchEventKinds.ENTRY_CREATE);
         confirmBtn.click();
-        long start = System.currentTimeMillis();
-        while ((System.currentTimeMillis() - start) < 60000) {
-            WatchKey key = watcher.poll(5, TimeUnit.SECONDS);
+
+        WatchKey key = null;
+        while (true) {
+            try {
+                key = watcher.take();
+            } catch (InterruptedException e) {
+                fail("exported.adm was not created");
+            }
             if (key == null) {
                 continue;
             }
@@ -157,7 +176,6 @@ public class E2ETest {
                 return;
             };
         }
-        fail("exported.adm was not created");
     }
 
 }
