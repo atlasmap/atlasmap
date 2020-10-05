@@ -24,7 +24,7 @@ import { useAtlasmap } from "./AtlasmapProvider";
 import { useAtlasmapDialogs } from "./useAtlasmapDialogs";
 import { IUseContextToolbarData, useContextToolbar } from "./useContextToolbar";
 import { useSidebar } from "./useSidebar";
-import { getPropertyType, getPropertyScope, getConstantType } from "./utils";
+import { getPropertyType, getConstantType } from "./utils";
 export interface IAtlasmapProps {
   allowImport?: boolean;
   allowExport?: boolean;
@@ -164,10 +164,9 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onCreateProperty: (isSource: boolean) => {
         handlers.onCreateProperty(isSource, sourceProperties);
       },
-      onEditProperty: (property, isSource) => {
+      onEditProperty: (property, scope, isSource) => {
         const [leftPart] = property.split(" ");
-        const valueType = getPropertyType(leftPart, isSource);
-        const scope = getPropertyScope(leftPart, isSource);
+        const valueType = getPropertyType(leftPart, scope, isSource);
         handlers.onEditProperty(
           {
             name: leftPart,
@@ -231,10 +230,9 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onCreateProperty: (isSource: boolean) => {
         handlers.onCreateProperty(isSource, targetProperties);
       },
-      onEditProperty: (property, isSource) => {
+      onEditProperty: (property, scope, isSource) => {
         const [leftPart] = property.split(" ");
-        const valueType = getPropertyType(leftPart, isSource);
-        const scope = getPropertyScope(leftPart, isSource);
+        const valueType = getPropertyType(leftPart, scope, isSource);
         handlers.onEditProperty(
           {
             name: leftPart,

@@ -9,6 +9,7 @@ import { css, StyleSheet } from "@patternfly/react-styles";
 
 import { TruncatedString } from "./TruncatedString";
 import { useToggle } from "./useToggle";
+import { Tooltip } from "@patternfly/react-core";
 
 const styles = StyleSheet.create({
   element: {
@@ -115,19 +116,25 @@ export const DocumentField = forwardRef<
     >
       <div className={css(styles.row)}>
         {icon && <div className={css(styles.nameIcon)}>{icon}</div>}
-        <div
-          className={css(styles.nameWrapper)}
-          data-testid={`document-${name}-field`}
+        <Tooltip
+          key={`${name}`}
+          position={"auto"}
+          enableFlip={true}
+          content={scope ? `${name} <${scope}>` : `${name}`}
+          entryDelay={750}
+          exitDelay={100}
         >
-          <TruncatedString>{name}</TruncatedString>
-          <strong>
-            <small>{scope && ` <${scope}>`}</small>
-          </strong>
-          <span>{showType && ` (${type})`}</span>
-          <span className={styles.statusIcons}>
-            {statusIcons && statusIcons?.filter((a) => a)}
-          </span>
-        </div>
+          <div
+            className={css(styles.nameWrapper)}
+            data-testid={`document-${name}-field`}
+          >
+            <TruncatedString>{name}</TruncatedString>
+            <span>{showType && ` (${type})`}</span>
+            <span className={styles.statusIcons}>
+              {statusIcons && statusIcons?.filter((a) => a)}
+            </span>
+          </div>
+        </Tooltip>
         {(isHovering || isFocused) && actions && !isDisabled && (
           <div className={css(styles.actions)}>{actions?.filter((a) => a)}</div>
         )}

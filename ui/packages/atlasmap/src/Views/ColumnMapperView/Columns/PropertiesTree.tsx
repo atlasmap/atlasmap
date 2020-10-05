@@ -34,8 +34,8 @@ export interface IPropertiesTreeCallbacks {
   onAddToSelectedMapping: (source: IAtlasmapField) => void;
   canRemoveFromSelectedMapping: (source: IAtlasmapField) => boolean;
   onRemoveFromSelectedMapping: (source: IAtlasmapField) => void;
-  onEditProperty: (name: string, isSource: boolean) => void;
-  onDeleteProperty: (name: string, isSource: boolean) => void;
+  onEditProperty: (name: string, scope: string, isSource: boolean) => void;
+  onDeleteProperty: (name: string, scope: string, isSource: boolean) => void;
   canStartMapping: (field: IAtlasmapField) => boolean;
   onStartMapping: (field: IAtlasmapField) => void;
 }
@@ -100,7 +100,7 @@ export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
         >
           <Button
             variant="plain"
-            onClick={() => onEditProperty(field.name, isSource)}
+            onClick={() => onEditProperty(field.name, field.scope, isSource)}
             aria-label={"Edit property"}
             tabIndex={0}
             data-testid={`edit-property-${field.name}-button`}
@@ -116,7 +116,7 @@ export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
         >
           <Button
             variant="plain"
-            onClick={() => onDeleteProperty(field.name, isSource)}
+            onClick={() => onDeleteProperty(field.name, field.scope, isSource)}
             aria-label={"Remove property"}
             tabIndex={0}
             data-testid={`remove-property-${field.name}-button`}

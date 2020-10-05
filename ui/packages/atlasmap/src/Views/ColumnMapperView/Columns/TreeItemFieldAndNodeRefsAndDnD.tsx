@@ -93,7 +93,7 @@ export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent<ITreeItemFiel
                 {({ focused }) => (
                   <>
                     <DocumentField
-                      name={field.name.split("<")[0]}
+                      name={field.name}
                       icon={
                         isDroppable || isTarget ? (
                           <Button

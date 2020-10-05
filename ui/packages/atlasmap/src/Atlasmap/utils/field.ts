@@ -12,10 +12,6 @@ import {
   ErrorType,
 } from "@atlasmap/core";
 
-function decorateProperty(name: string, scope: string): string {
-  return name.includes("<") ? name : name + "<" + scope + ">";
-}
-
 export function createConstant(constValue: string, constType: string): void {
   const cfg = ConfigModel.getConfig();
   let field = cfg.constantDoc.getField(constValue);
@@ -95,12 +91,18 @@ export function createProperty(
 ): void {
   const cfg = ConfigModel.getConfig();
   let field = isSource
-    ? cfg.sourcePropertyDoc.getField(propName)
-    : cfg.targetPropertyDoc.getField(propName);
+    ? cfg.sourcePropertyDoc.getField(
+        cfg.sourcePropertyDoc.pathSeparator + propName,
+        propScope,
+      )
+    : cfg.targetPropertyDoc.getField(
+        cfg.sourcePropertyDoc.pathSeparator + propName,
+        propScope,
+      );
   if (!field) {
     field = new Field();
   }
-  field.name = decorateProperty(propName, propScope);
+  field.name = propName;
   field.type = propType;
   field.scope = propScope;
   field.userCreated = true;
@@ -115,14 +117,20 @@ export function createProperty(
   cfg.mappingService.notifyMappingUpdated();
 }
 
-export function deleteProperty(propName: string, isSource: boolean): void {
+export function deleteProperty(
+  propName: string,
+  propScope: string,
+  isSource: boolean,
+): void {
   const cfg = ConfigModel.getConfig();
   const field = isSource
     ? cfg.sourcePropertyDoc.getField(
-        cfg.sourcePropertyDoc.pathSeparator + propName.split(" ")[0],
+        cfg.sourcePropertyDoc.pathSeparator + propName,
+        propScope,
       )
     : cfg.targetPropertyDoc.getField(
-        cfg.sourcePropertyDoc.pathSeparator + propName.split(" ")[0],
+        cfg.sourcePropertyDoc.pathSeparator + propName,
+        propScope,
       );
   if (!field) {
     return;
@@ -136,47 +144,73 @@ export function deleteProperty(propName: string, isSource: boolean): void {
   cfg.mappingService.notifyMappingUpdated();
 }
 
+/**
+ * When editing a property, the propName/propScope is needed to fetch the
+ * existing field.  The newName and newScope may or may not be specified.
+ *
+ * @param propName
+ * @param propType
+ * @param propScope
+ * @param isSource
+ * @param newName
+ * @param newScope
+ */
 export function editProperty(
   propName: string,
   propType: string,
   propScope: string,
-  newName: string,
   isSource: boolean,
+  newName?: string,
+  newScope?: string,
 ): void {
   const cfg = ConfigModel.getConfig();
   let field = isSource
     ? cfg.sourcePropertyDoc.getField(
         cfg.sourcePropertyDoc.pathSeparator + propName,
+        propScope,
       )
     : cfg.targetPropertyDoc.getField(
         cfg.targetPropertyDoc.pathSeparator + propName,
+        propScope,
       );
   if (!field) {
     return;
   }
-  if (propName !== newName) {
-    field.name = decorateProperty(newName, propScope);
-  } else if (field.scope !== propScope) {
-    field.name = decorateProperty(field.name.split("<")[0], propScope);
+  if (newName) {
+    field.name = newName;
+  }
+  if (newScope) {
+    field.scope = newScope;
   }
   field.type = propType;
-  field.scope = propScope;
+  let originalKey = "";
+  if (propScope.length > 0) {
+    originalKey =
+      cfg.targetPropertyDoc.pathSeparator + propName + "-" + propScope;
+  }
+
   if (isSource) {
-    cfg.sourcePropertyDoc.updateField(field, "");
+    cfg.sourcePropertyDoc.updateField(field, originalKey);
   } else {
-    cfg.targetPropertyDoc.updateField(field, "");
+    cfg.targetPropertyDoc.updateField(field, originalKey);
   }
   cfg.mappingService.notifyMappingUpdated();
 }
 
-export function getPropertyType(propName: string, isSource: boolean): string {
+export function getPropertyType(
+  propName: string,
+  propScope: string,
+  isSource: boolean,
+): string {
   const cfg = ConfigModel.getConfig();
   const field = isSource
     ? cfg.sourcePropertyDoc.getField(
         cfg.sourcePropertyDoc.pathSeparator + propName,
+        propScope,
       )
     : cfg.targetPropertyDoc.getField(
         cfg.targetPropertyDoc.pathSeparator + propName,
+        propScope,
       );
   if (!field) {
     return "";
@@ -184,32 +218,20 @@ export function getPropertyType(propName: string, isSource: boolean): string {
   return field.type;
 }
 
-export function getPropertyScope(propName: string, isSource: boolean): string {
-  const cfg = ConfigModel.getConfig();
-  const field = isSource
-    ? cfg.sourcePropertyDoc.getField(
-        cfg.sourcePropertyDoc.pathSeparator + propName,
-      )
-    : cfg.targetPropertyDoc.getField(
-        cfg.targetPropertyDoc.pathSeparator + propName,
-      );
-  if (!field) {
-    return "";
-  }
-  return field.scope;
-}
-
 export function getPropertyTypeIndex(
   propName: string,
+  propScope: string,
   isSource: boolean,
 ): number {
   const cfg = ConfigModel.getConfig();
   const field = isSource
     ? cfg.sourcePropertyDoc.getField(
         cfg.sourcePropertyDoc.pathSeparator + propName,
+        propScope,
       )
     : cfg.targetPropertyDoc.getField(
         cfg.targetPropertyDoc.pathSeparator + propName,
+        propScope,
       );
   if (!field) {
     return 0;
@@ -283,7 +305,7 @@ export function addToCurrentMapping(field: Field): void {
 }
 
 /**
- * Add the specified field to the current mapping.
+ * Remove the specified field from the current mapping.
  *
  * @param field
  */

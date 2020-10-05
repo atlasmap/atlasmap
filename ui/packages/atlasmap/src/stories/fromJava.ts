@@ -86,7 +86,7 @@ export function javaToFieldGroup(
       name: jf.name,
       type: jf.fieldType,
       path: jf.path,
-      scope: undefined,
+      scope: "current",
       previewValue: "",
       mappings,
       hasTransformations:

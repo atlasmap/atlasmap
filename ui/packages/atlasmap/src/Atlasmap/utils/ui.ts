@@ -54,7 +54,7 @@ export function fromFieldToIFieldsGroup(field: Field): IAtlasmapGroup | null {
     .filter((f) => f) as IAtlasmapField[];
   return fields.length > 0 && field.visibleInCurrentDocumentSearch
     ? {
-        id: `${field.docDef.uri || field.docDef.type}:${
+        id: `${field.docDef.uri || field.docDef.type + "-" + field.scope}:${
           field.docDef.isSource ? "source" : "target"
         }:${field.path}`,
         name: field.name,
@@ -75,13 +75,13 @@ export function fromFieldToIFieldsNode(field: Field): IAtlasmapField | null {
     : cfg.showUnmappedFields && field.visibleInCurrentDocumentSearch;
   return shouldBeVisible
     ? {
-        id: `${field.docDef.uri || field.docDef.type}:${
+        id: `${field.docDef.uri || field.docDef.type + "-" + field.scope}:${
           field.docDef.isSource ? "source" : "target"
         }:${field.path}`,
         name: field.getFieldLabel(false, false),
         type: field.type,
         path: field.path,
-        scope: field.scope ? field.scope : undefined,
+        scope: field.scope,
         amField: field,
         previewValue: field.value,
         mappings:
@@ -143,9 +143,12 @@ export function fromMappedFieldToIMappingField(
     return null;
   }
   return {
-    id: `${mappedField.field!.docDef.uri || mappedField.field!.docDef.type}:${
-      mappedField.field!.docDef.isSource ? "source" : "target"
-    }:${mappedField.field!.path}`,
+    id: `${
+      mappedField.field!.docDef.uri ||
+      mappedField.field!.docDef.type + "-" + mappedField.field!.scope
+    }:${mappedField.field!.docDef.isSource ? "source" : "target"}:${
+      mappedField.field!.path
+    }`,
     name: mappedField.field!.getFieldLabel(false, false),
     type: mappedField.field!.type,
     path: mappedField.field!.path,
