@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/128</span>
+                <span class='fraction'>0/126</span>
             </div>
         
             
@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/121</span>
+                <span class='fraction'>0/119</span>
             </div>
         
             
@@ -479,9 +479,7 @@
 <a name='L421'></a><a href='#L421'>421</a>
 <a name='L422'></a><a href='#L422'>422</a>
 <a name='L423'></a><a href='#L423'>423</a>
-<a name='L424'></a><a href='#L424'>424</a>
-<a name='L425'></a><a href='#L425'>425</a>
-<a name='L426'></a><a href='#L426'>426</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L424'></a><a href='#L424'>424</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -651,7 +649,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -715,7 +712,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -932,7 +928,7 @@
 <span class="cstat-no" title="statement not covered" >import { useAtlasmapDialogs } from "./useAtlasmapDialogs";</span>
 <span class="cstat-no" title="statement not covered" >import { IUseContextToolbarData, useContextToolbar } from "./useContextToolbar";</span>
 <span class="cstat-no" title="statement not covered" >import { useSidebar } from "./useSidebar";</span>
-<span class="cstat-no" title="statement not covered" >import { getPropertyType, getPropertyScope, getConstantType } from "./utils";</span>
+<span class="cstat-no" title="statement not covered" >import { getPropertyType, getConstantType } from "./utils";</span>
 export interface IAtlasmapProps {
   allowImport?: boolean;
   allowExport?: boolean;
@@ -1072,10 +1068,9 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
       onCreateProperty: <span class="fstat-no" title="function not covered" >(i</span>sSource: boolean) =&gt; {
 <span class="cstat-no" title="statement not covered" >        handlers.onCreateProperty(isSource, sourceProperties);</span>
       },
-      onEditProperty: <span class="fstat-no" title="function not covered" >(p</span>roperty, isSource) =&gt; {
+      onEditProperty: <span class="fstat-no" title="function not covered" >(p</span>roperty, scope, isSource) =&gt; {
         const [<span class="cstat-no" title="statement not covered" >leftPart]</span> = property.split(" ");
-        const valueType = <span class="cstat-no" title="statement not covered" >getPropertyType(leftPart, isSource);</span>
-        const scope = <span class="cstat-no" title="statement not covered" >getPropertyScope(leftPart, isSource);</span>
+        const valueType = <span class="cstat-no" title="statement not covered" >getPropertyType(leftPart, scope, isSource);</span>
 <span class="cstat-no" title="statement not covered" >        handlers.onEditProperty(</span>
           {
             name: leftPart,
@@ -1139,10 +1134,9 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
       onCreateProperty: <span class="fstat-no" title="function not covered" >(i</span>sSource: boolean) =&gt; {
 <span class="cstat-no" title="statement not covered" >        handlers.onCreateProperty(isSource, targetProperties);</span>
       },
-      onEditProperty: <span class="fstat-no" title="function not covered" >(p</span>roperty, isSource) =&gt; {
+      onEditProperty: <span class="fstat-no" title="function not covered" >(p</span>roperty, scope, isSource) =&gt; {
         const [<span class="cstat-no" title="statement not covered" >leftPart]</span> = property.split(" ");
-        const valueType = <span class="cstat-no" title="statement not covered" >getPropertyType(leftPart, isSource);</span>
-        const scope = <span class="cstat-no" title="statement not covered" >getPropertyScope(leftPart, isSource);</span>
+        const valueType = <span class="cstat-no" title="statement not covered" >getPropertyType(leftPart, scope, isSource);</span>
 <span class="cstat-no" title="statement not covered" >        handlers.onEditProperty(</span>
           {
             name: leftPart,
@@ -1338,7 +1332,7 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Oct 05 2020 13:36:38 GMT+0000 (Coordinated Universal Time)
+                at Mon Oct 05 2020 15:37:14 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

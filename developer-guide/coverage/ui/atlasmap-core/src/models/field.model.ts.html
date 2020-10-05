@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">68.75% </span>
+                <span class="strong">68.71% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>110/160</span>
+                <span class='fraction'>112/163</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">38.81% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>26/65</span>
+                <span class='fraction'>26/67</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">68.12% </span>
+                <span class="strong">68.09% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>94/138</span>
+                <span class='fraction'>96/141</span>
             </div>
         
             
@@ -321,7 +321,11 @@
 <a name='L263'></a><a href='#L263'>263</a>
 <a name='L264'></a><a href='#L264'>264</a>
 <a name='L265'></a><a href='#L265'>265</a>
-<a name='L266'></a><a href='#L266'>266</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L266'></a><a href='#L266'>266</a>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -377,11 +381,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
 <span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
@@ -419,6 +423,10 @@
 <span class="cline-any cline-yes">178x</span>
 <span class="cline-any cline-yes">178x</span>
 <span class="cline-any cline-yes">569x</span>
+<span class="cline-any cline-yes">569x</span>
+<span class="cline-any cline-yes">569x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">569x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -479,13 +487,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">561x</span>
+<span class="cline-any cline-yes">558x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">561x</span>
+<span class="cline-any cline-yes">558x</span>
 <span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">545x</span>
+<span class="cline-any cline-yes">542x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">10x</span>
@@ -651,7 +659,7 @@ export class Field {
     for (const childField of field.children) {
       <span class="missing-if-branch" title="else path not taken" >E</span>if (
         childField.hasUnmappedChildren ||
-        Field.fieldHasUnmappedChild(childField)
+<span class="branch-1 cbranch-no" title="branch not covered" >        Field.fieldHasUnmappedChild(childField)</span>
       ) {
         return true;
       }
@@ -684,12 +692,16 @@ export class Field {
     const fieldsByPath: { [key: string]: Field } = {};
     const fieldPaths: string[] = [];
     for (const field of fields) {
-      // if field is a dupe, discard it
-      if (fieldsByPath[field.path] != null) {
+      let fieldKey = field.path;
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (field.scope) {
+<span class="cstat-no" title="statement not covered" >        fieldKey += '-' + field.scope;</span>
+      }
+      // Discard duplicate field keys, field names are repeatable.
+      if (fieldsByPath[fieldKey] != null) {
         continue;
       }
-      fieldsByPath[field.path] = field;
-      fieldPaths.push(field.path);
+      fieldsByPath[fieldKey] = field;
+      fieldPaths.push(fieldKey);
     }
     fieldPaths.sort();
     fields.length = 0;
@@ -858,7 +870,7 @@ export class Field {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Oct 05 2020 13:36:07 GMT+0000 (Coordinated Universal Time)
+                at Mon Oct 05 2020 15:36:40 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
