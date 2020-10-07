@@ -110,7 +110,7 @@ set ${DEVELOPMENT_VERSION}
 save
 EOF
 
-"${MAVEN_CMD}" $MAVEN_PARAMETERS -pl docs package
+"${MAVEN_CMD}" $MAVEN_PARAMETERS -DskipTests install
 git add atlasmap-maven-plugin docs
 git diff-index --quiet HEAD || git commit -m "chore: cleanup after release ${RELEASE_VERSION}"
 
