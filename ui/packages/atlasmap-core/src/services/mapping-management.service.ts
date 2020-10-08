@@ -526,6 +526,14 @@ export class MappingManagementService {
           }
         }
         if (!hasValue) {
+          for (const targetField of inputFieldMapping.getFields(false)) {
+            if (targetField.value) {
+              hasValue = true;
+              break;
+            }
+          }
+        }
+        if (!hasValue) {
           return;
         }
 
