@@ -197,8 +197,6 @@ public class XmlSchemaInspector {
         // we only care about declared elements...
         Iterator<XSElementDecl> jtr = schema.iterateElementDecls();
         while (jtr.hasNext()) {
-            Set<String> cachedComplexType = new HashSet<>();
-            Set<String> cachedComplexElement = new HashSet<>();
             XSElementDecl e = jtr.next();
             String rootName = getNameNS(e);
 
@@ -209,7 +207,7 @@ public class XmlSchemaInspector {
                 rootComplexType.setFieldType(FieldType.COMPLEX);
                 xmlDocument.getFields().getField().add(rootComplexType);
                 printComplexType(e.getType().asComplexType(), "/" + rootName, rootComplexType,
-                        cachedComplexType, cachedComplexElement);
+                        new HashSet<>(), new HashSet<>());
             } else if (e.getType().isSimpleType()) {
                 XmlField xmlField = AtlasXmlModelFactory.createXmlField();
                 xmlField.setName(rootName);
@@ -248,7 +246,10 @@ public class XmlSchemaInspector {
             Set<String> cachedComplexType, Set<String> cachedComplexElement) throws Exception {
         // this is the parent of the group
         for (XSParticle particle : modelGroup.getChildren()) {
-            printParticle(particle, rootName, xmlComplexType, cachedComplexType, cachedComplexElement);
+            // cache applies only vertically to avoid recursion
+            Set<String> cachedTypeCopy = new HashSet<>(cachedComplexType);
+            Set<String> cachedElementCopy = new HashSet<>(cachedComplexElement);
+            printParticle(particle, rootName, xmlComplexType, cachedTypeCopy, cachedElementCopy);
         }
     }
 
@@ -259,9 +260,6 @@ public class XmlSchemaInspector {
 
     private void printElement(XSElementDecl element, String root, XmlComplexType xmlComplexType,
             CollectionType collectionType, Set<String> cachedComplexType, Set<String> cachedComplexElement) throws Exception {
-        if (LOG.isTraceEnabled()) {
-            LOG.trace("Element: {}/{}", root, getNameNS(element));
-        }
         String rootName = root;
         String elementName = getNameNS(element);
         String typeName = getNameNS(element.getType());
@@ -277,16 +275,24 @@ public class XmlSchemaInspector {
             } else if (elementName != null) {
                 cachedComplexElement.add(elementName);
             }
+
             if (typeName != null && !typeName.isEmpty() && cachedComplexType.contains(typeName)) {
                 complexType.setStatus(FieldStatus.CACHED);
             } else if (typeName != null) {
                 cachedComplexType.add(typeName);
             }
+
             if (complexType.getStatus() != FieldStatus.CACHED) {
                 printComplexType(element.getType().asComplexType(), rootName, complexType,
                         cachedComplexType, cachedComplexElement);
+                if (LOG.isTraceEnabled()) {
+                    LOG.trace("Element: {}/{}", root, getNameNS(element));
+                }
             }
         } else if (element.getType() != null && element.getType().asSimpleType() != null) {
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Element: {}/{}", root, getNameNS(element));
+            }
             XmlField xmlField = AtlasXmlModelFactory.createXmlField();
             xmlField.setName(elementName);
             xmlField.setPath(rootName + "/" + elementName);
