@@ -197,226 +197,232 @@ import io.atlasmap.xml.v2.XmlNamespaces;
         // we only care about declared elements...
 <span class="fc" id="L198">        Iterator&lt;XSElementDecl&gt; jtr = schema.iterateElementDecls();</span>
 <span class="fc bfc" id="L199" title="All 2 branches covered.">        while (jtr.hasNext()) {</span>
-<span class="fc" id="L200">            Set&lt;String&gt; cachedComplexType = new HashSet&lt;&gt;();</span>
-<span class="fc" id="L201">            Set&lt;String&gt; cachedComplexElement = new HashSet&lt;&gt;();</span>
-<span class="fc" id="L202">            XSElementDecl e = jtr.next();</span>
-<span class="fc" id="L203">            String rootName = getNameNS(e);</span>
+<span class="fc" id="L200">            XSElementDecl e = jtr.next();</span>
+<span class="fc" id="L201">            String rootName = getNameNS(e);</span>
 
-<span class="fc bfc" id="L205" title="All 2 branches covered.">            if (e.getType().isComplexType()) {</span>
-<span class="fc" id="L206">                XmlComplexType rootComplexType = getXmlComplexType();</span>
-<span class="fc" id="L207">                rootComplexType.setName(rootName);</span>
-<span class="fc" id="L208">                rootComplexType.setPath(&quot;/&quot; + rootName);</span>
-<span class="fc" id="L209">                rootComplexType.setFieldType(FieldType.COMPLEX);</span>
-<span class="fc" id="L210">                xmlDocument.getFields().getField().add(rootComplexType);</span>
-<span class="fc" id="L211">                printComplexType(e.getType().asComplexType(), &quot;/&quot; + rootName, rootComplexType,</span>
-                        cachedComplexType, cachedComplexElement);
-<span class="pc bpc" id="L213" title="1 of 2 branches missed.">            } else if (e.getType().isSimpleType()) {</span>
-<span class="fc" id="L214">                XmlField xmlField = AtlasXmlModelFactory.createXmlField();</span>
-<span class="fc" id="L215">                xmlField.setName(rootName);</span>
-<span class="fc" id="L216">                xmlField.setPath(&quot;/&quot; + rootName);</span>
-<span class="fc" id="L217">                xmlDocument.getFields().getField().add(xmlField);</span>
-<span class="fc" id="L218">                printSimpleType(e.getType().asSimpleType(), xmlField);</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">            if (e.getType().isComplexType()) {</span>
+<span class="fc" id="L204">                XmlComplexType rootComplexType = getXmlComplexType();</span>
+<span class="fc" id="L205">                rootComplexType.setName(rootName);</span>
+<span class="fc" id="L206">                rootComplexType.setPath(&quot;/&quot; + rootName);</span>
+<span class="fc" id="L207">                rootComplexType.setFieldType(FieldType.COMPLEX);</span>
+<span class="fc" id="L208">                xmlDocument.getFields().getField().add(rootComplexType);</span>
+<span class="fc" id="L209">                printComplexType(e.getType().asComplexType(), &quot;/&quot; + rootName, rootComplexType,</span>
+                        new HashSet&lt;&gt;(), new HashSet&lt;&gt;());
+<span class="pc bpc" id="L211" title="1 of 2 branches missed.">            } else if (e.getType().isSimpleType()) {</span>
+<span class="fc" id="L212">                XmlField xmlField = AtlasXmlModelFactory.createXmlField();</span>
+<span class="fc" id="L213">                xmlField.setName(rootName);</span>
+<span class="fc" id="L214">                xmlField.setPath(&quot;/&quot; + rootName);</span>
+<span class="fc" id="L215">                xmlDocument.getFields().getField().add(xmlField);</span>
+<span class="fc" id="L216">                printSimpleType(e.getType().asSimpleType(), xmlField);</span>
             }
-<span class="fc" id="L220">        }</span>
-<span class="fc" id="L221">    }</span>
+<span class="fc" id="L218">        }</span>
+<span class="fc" id="L219">    }</span>
 
     private void printComplexType(XSComplexType complexType, String rootName, XmlComplexType xmlComplexType,
             Set&lt;String&gt; cachedComplexType, Set&lt;String&gt; cachedComplexElement) throws Exception {
-<span class="fc" id="L225">        printAttributes(complexType, rootName, xmlComplexType);</span>
-<span class="fc" id="L226">        XSParticle particle = complexType.getContentType().asParticle();</span>
-<span class="pc bpc" id="L227" title="1 of 2 branches missed.">        if (particle != null) {</span>
-<span class="fc" id="L228">            printParticle(particle, rootName, xmlComplexType, cachedComplexType, cachedComplexElement);</span>
+<span class="fc" id="L223">        printAttributes(complexType, rootName, xmlComplexType);</span>
+<span class="fc" id="L224">        XSParticle particle = complexType.getContentType().asParticle();</span>
+<span class="pc bpc" id="L225" title="1 of 2 branches missed.">        if (particle != null) {</span>
+<span class="fc" id="L226">            printParticle(particle, rootName, xmlComplexType, cachedComplexType, cachedComplexElement);</span>
         }
-<span class="fc" id="L230">    }</span>
+<span class="fc" id="L228">    }</span>
 
     private void printParticle(XSParticle particle, String rootName, XmlComplexType xmlComplexType,
             Set&lt;String&gt; cachedComplexType, Set&lt;String&gt; cachedComplexElement) throws Exception {
-<span class="fc" id="L234">        XSTerm term = particle.getTerm();</span>
-<span class="fc bfc" id="L235" title="All 2 branches covered.">        if (term.isModelGroup()) {</span>
-<span class="fc" id="L236">            XSModelGroup group = term.asModelGroup();</span>
-<span class="fc" id="L237">            printGroup(group, rootName, xmlComplexType, cachedComplexType, cachedComplexElement);</span>
-<span class="pc bpc" id="L238" title="1 of 2 branches missed.">        } else if (term.isModelGroupDecl()) {</span>
-<span class="nc" id="L239">            printGroupDecl(term.asModelGroupDecl(), rootName, xmlComplexType, cachedComplexType, cachedComplexElement);</span>
-<span class="pc bpc" id="L240" title="1 of 2 branches missed.">        } else if (term.isElementDecl()) {</span>
-<span class="fc" id="L241">            CollectionType collectionType = getCollectionType(particle);</span>
-<span class="fc" id="L242">            printElement(term.asElementDecl(), rootName, xmlComplexType, collectionType,</span>
+<span class="fc" id="L232">        XSTerm term = particle.getTerm();</span>
+<span class="fc bfc" id="L233" title="All 2 branches covered.">        if (term.isModelGroup()) {</span>
+<span class="fc" id="L234">            XSModelGroup group = term.asModelGroup();</span>
+<span class="fc" id="L235">            printGroup(group, rootName, xmlComplexType, cachedComplexType, cachedComplexElement);</span>
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">        } else if (term.isModelGroupDecl()) {</span>
+<span class="nc" id="L237">            printGroupDecl(term.asModelGroupDecl(), rootName, xmlComplexType, cachedComplexType, cachedComplexElement);</span>
+<span class="pc bpc" id="L238" title="1 of 2 branches missed.">        } else if (term.isElementDecl()) {</span>
+<span class="fc" id="L239">            CollectionType collectionType = getCollectionType(particle);</span>
+<span class="fc" id="L240">            printElement(term.asElementDecl(), rootName, xmlComplexType, collectionType,</span>
                     cachedComplexType, cachedComplexElement);
         }
-<span class="fc" id="L245">    }</span>
+<span class="fc" id="L243">    }</span>
 
     private void printGroup(XSModelGroup modelGroup, String rootName, XmlComplexType xmlComplexType,
             Set&lt;String&gt; cachedComplexType, Set&lt;String&gt; cachedComplexElement) throws Exception {
         // this is the parent of the group
-<span class="fc bfc" id="L250" title="All 2 branches covered.">        for (XSParticle particle : modelGroup.getChildren()) {</span>
-<span class="fc" id="L251">            printParticle(particle, rootName, xmlComplexType, cachedComplexType, cachedComplexElement);</span>
+<span class="fc bfc" id="L248" title="All 2 branches covered.">        for (XSParticle particle : modelGroup.getChildren()) {</span>
+            // cache applies only vertically to avoid recursion
+<span class="fc" id="L250">            Set&lt;String&gt; cachedTypeCopy = new HashSet&lt;&gt;(cachedComplexType);</span>
+<span class="fc" id="L251">            Set&lt;String&gt; cachedElementCopy = new HashSet&lt;&gt;(cachedComplexElement);</span>
+<span class="fc" id="L252">            printParticle(particle, rootName, xmlComplexType, cachedTypeCopy, cachedElementCopy);</span>
         }
-<span class="fc" id="L253">    }</span>
+<span class="fc" id="L254">    }</span>
 
     private void printGroupDecl(XSModelGroupDecl modelGroupDecl, String rootName, XmlComplexType parentXmlComplexType,
             Set&lt;String&gt; cachedComplexType, Set&lt;String&gt; cachedComplexElement) throws Exception {
-<span class="nc" id="L257">        printGroup(modelGroupDecl.getModelGroup(), rootName, parentXmlComplexType, cachedComplexType, cachedComplexElement);</span>
-<span class="nc" id="L258">    }</span>
+<span class="nc" id="L258">        printGroup(modelGroupDecl.getModelGroup(), rootName, parentXmlComplexType, cachedComplexType, cachedComplexElement);</span>
+<span class="nc" id="L259">    }</span>
 
     private void printElement(XSElementDecl element, String root, XmlComplexType xmlComplexType,
             CollectionType collectionType, Set&lt;String&gt; cachedComplexType, Set&lt;String&gt; cachedComplexElement) throws Exception {
-<span class="fc bfc" id="L262" title="All 2 branches covered.">        if (LOG.isTraceEnabled()) {</span>
-<span class="fc" id="L263">            LOG.trace(&quot;Element: {}/{}&quot;, root, getNameNS(element));</span>
-        }
-<span class="fc" id="L265">        String rootName = root;</span>
-<span class="fc" id="L266">        String elementName = getNameNS(element);</span>
-<span class="fc" id="L267">        String typeName = getNameNS(element.getType());</span>
-<span class="fc bfc" id="L268" title="All 2 branches covered.">        if (element.getType().isComplexType()) {</span>
-<span class="fc" id="L269">            XmlComplexType complexType = getXmlComplexType();</span>
-<span class="fc" id="L270">            rootName = rootName + &quot;/&quot; + elementName;</span>
-<span class="fc" id="L271">            complexType.setName(elementName);</span>
-<span class="fc" id="L272">            complexType.setPath(rootName);</span>
-<span class="fc" id="L273">            complexType.setCollectionType(collectionType);</span>
-<span class="fc" id="L274">            xmlComplexType.getXmlFields().getXmlField().add(complexType);</span>
-<span class="pc bpc" id="L275" title="2 of 6 branches missed.">            if (elementName != null &amp;&amp; !elementName.isEmpty() &amp;&amp; cachedComplexElement.contains(elementName)) {</span>
-<span class="fc" id="L276">                complexType.setStatus(FieldStatus.CACHED);</span>
-<span class="pc bpc" id="L277" title="1 of 2 branches missed.">            } else if (elementName != null) {</span>
-<span class="fc" id="L278">                cachedComplexElement.add(elementName);</span>
+<span class="fc" id="L263">        String rootName = root;</span>
+<span class="fc" id="L264">        String elementName = getNameNS(element);</span>
+<span class="fc" id="L265">        String typeName = getNameNS(element.getType());</span>
+<span class="fc bfc" id="L266" title="All 2 branches covered.">        if (element.getType().isComplexType()) {</span>
+<span class="fc" id="L267">            XmlComplexType complexType = getXmlComplexType();</span>
+<span class="fc" id="L268">            rootName = rootName + &quot;/&quot; + elementName;</span>
+<span class="fc" id="L269">            complexType.setName(elementName);</span>
+<span class="fc" id="L270">            complexType.setPath(rootName);</span>
+<span class="fc" id="L271">            complexType.setCollectionType(collectionType);</span>
+<span class="fc" id="L272">            xmlComplexType.getXmlFields().getXmlField().add(complexType);</span>
+<span class="pc bpc" id="L273" title="2 of 6 branches missed.">            if (elementName != null &amp;&amp; !elementName.isEmpty() &amp;&amp; cachedComplexElement.contains(elementName)) {</span>
+<span class="fc" id="L274">                complexType.setStatus(FieldStatus.CACHED);</span>
+<span class="pc bpc" id="L275" title="1 of 2 branches missed.">            } else if (elementName != null) {</span>
+<span class="fc" id="L276">                cachedComplexElement.add(elementName);</span>
             }
-<span class="pc bpc" id="L280" title="1 of 6 branches missed.">            if (typeName != null &amp;&amp; !typeName.isEmpty() &amp;&amp; cachedComplexType.contains(typeName)) {</span>
-<span class="fc" id="L281">                complexType.setStatus(FieldStatus.CACHED);</span>
-<span class="fc bfc" id="L282" title="All 2 branches covered.">            } else if (typeName != null) {</span>
-<span class="fc" id="L283">                cachedComplexType.add(typeName);</span>
+
+<span class="pc bpc" id="L279" title="1 of 6 branches missed.">            if (typeName != null &amp;&amp; !typeName.isEmpty() &amp;&amp; cachedComplexType.contains(typeName)) {</span>
+<span class="fc" id="L280">                complexType.setStatus(FieldStatus.CACHED);</span>
+<span class="fc bfc" id="L281" title="All 2 branches covered.">            } else if (typeName != null) {</span>
+<span class="fc" id="L282">                cachedComplexType.add(typeName);</span>
             }
+
 <span class="fc bfc" id="L285" title="All 2 branches covered.">            if (complexType.getStatus() != FieldStatus.CACHED) {</span>
 <span class="fc" id="L286">                printComplexType(element.getType().asComplexType(), rootName, complexType,</span>
                         cachedComplexType, cachedComplexElement);
-            }
-<span class="pc bpc" id="L289" title="2 of 4 branches missed.">        } else if (element.getType() != null &amp;&amp; element.getType().asSimpleType() != null) {</span>
-<span class="fc" id="L290">            XmlField xmlField = AtlasXmlModelFactory.createXmlField();</span>
-<span class="fc" id="L291">            xmlField.setName(elementName);</span>
-<span class="fc" id="L292">            xmlField.setPath(rootName + &quot;/&quot; + elementName);</span>
-<span class="fc" id="L293">            xmlComplexType.getXmlFields().getXmlField().add(xmlField);</span>
-<span class="pc bpc" id="L294" title="1 of 2 branches missed.">            if (element.getDefaultValue() != null) {</span>
-<span class="nc" id="L295">                xmlField.setValue(element.getDefaultValue());</span>
-<span class="pc bpc" id="L296" title="1 of 2 branches missed.">            } else if (element.getFixedValue() != null) {</span>
-<span class="nc" id="L297">                xmlField.setValue(element.getFixedValue());</span>
-            }
-<span class="fc" id="L299">            XSRestrictionSimpleType typeRestriction = element.getType().asSimpleType().asRestriction();</span>
-<span class="pc bpc" id="L300" title="1 of 2 branches missed.">            if (typeRestriction != null) {</span>
-<span class="fc" id="L301">                xmlField.setFieldType(XS_TYPE_TO_FIELD_TYPE_MAP.get(typeRestriction.getBaseType().getName()));</span>
-<span class="fc" id="L302">                mapRestrictions(xmlField, typeRestriction);</span>
-            }
-<span class="fc" id="L304">            printSimpleType(element.getType().asSimpleType(), xmlField);</span>
-        }
-<span class="fc" id="L306">    }</span>
-
-    private void printAttributes(XSComplexType xsComplexType, String rootName, XmlComplexType xmlComplexType) {
-<span class="fc" id="L309">        Collection&lt;? extends XSAttributeUse&gt; c = xsComplexType.getDeclaredAttributeUses();</span>
-<span class="fc bfc" id="L310" title="All 2 branches covered.">        for (XSAttributeUse aC : c) {</span>
-<span class="fc" id="L311">            XmlField xmlField = AtlasXmlModelFactory.createXmlField();</span>
-<span class="fc" id="L312">            XSAttributeDecl attributeDecl = aC.getDecl();</span>
-<span class="fc" id="L313">            xmlField.setName(getNameNS(attributeDecl));</span>
-<span class="fc" id="L314">            xmlField.setAttribute(true);</span>
-<span class="fc bfc" id="L315" title="All 2 branches covered.">            if (attributeDecl.getDefaultValue() != null) {</span>
-<span class="fc" id="L316">                xmlField.setValue(attributeDecl.getDefaultValue().value);</span>
-<span class="fc bfc" id="L317" title="All 2 branches covered.">            } else if (attributeDecl.getFixedValue() != null) {</span>
-<span class="fc" id="L318">                xmlField.setValue(attributeDecl.getFixedValue().value);</span>
-            }
-<span class="fc" id="L320">            xmlField.setPath(rootName + &quot;/&quot; + &quot;@&quot; + getNameNS(attributeDecl));</span>
-<span class="fc" id="L321">            FieldType attrType = getFieldType(attributeDecl.getType().getName());</span>
-<span class="fc" id="L322">            xmlField.setFieldType(attrType);</span>
-<span class="fc bfc" id="L323" title="All 2 branches covered.">            if (xmlField.getFieldType() == null) {</span>
-                // check the simple types in the schema....
-<span class="fc" id="L325">                XSSimpleType simpleType = xsComplexType.getRoot().getSimpleType(xsComplexType.getTargetNamespace(),</span>
-<span class="fc" id="L326">                        attributeDecl.getType().getName());</span>
-<span class="pc bpc" id="L327" title="1 of 2 branches missed.">                if (simpleType != null) {</span>
-<span class="fc" id="L328">                    FieldType fieldType = getFieldType(simpleType.getBaseType().getName());</span>
-<span class="fc" id="L329">                    xmlField.setFieldType(fieldType);</span>
-<span class="fc" id="L330">                    xmlField.setTypeName(attributeDecl.getType().getName());</span>
-<span class="pc bpc" id="L331" title="1 of 2 branches missed.">                    if (simpleType.asRestriction() != null) {</span>
-<span class="fc" id="L332">                        mapRestrictions(xmlField, simpleType.asRestriction());</span>
-                    }
-<span class="fc" id="L334">                } else {</span>
-                    // cannot figure it out....
-<span class="nc" id="L336">                    xmlField.setFieldType(FieldType.UNSUPPORTED);</span>
+<span class="fc bfc" id="L288" title="All 2 branches covered.">                if (LOG.isTraceEnabled()) {</span>
+<span class="fc" id="L289">                    LOG.trace(&quot;Element: {}/{}&quot;, root, getNameNS(element));</span>
                 }
             }
-<span class="fc" id="L339">            xmlComplexType.getXmlFields().getXmlField().add(xmlField);</span>
-<span class="fc" id="L340">        }</span>
-<span class="fc" id="L341">    }</span>
+<span class="pc bpc" id="L292" title="2 of 4 branches missed.">        } else if (element.getType() != null &amp;&amp; element.getType().asSimpleType() != null) {</span>
+<span class="fc bfc" id="L293" title="All 2 branches covered.">            if (LOG.isTraceEnabled()) {</span>
+<span class="fc" id="L294">                LOG.trace(&quot;Element: {}/{}&quot;, root, getNameNS(element));</span>
+            }
+<span class="fc" id="L296">            XmlField xmlField = AtlasXmlModelFactory.createXmlField();</span>
+<span class="fc" id="L297">            xmlField.setName(elementName);</span>
+<span class="fc" id="L298">            xmlField.setPath(rootName + &quot;/&quot; + elementName);</span>
+<span class="fc" id="L299">            xmlComplexType.getXmlFields().getXmlField().add(xmlField);</span>
+<span class="pc bpc" id="L300" title="1 of 2 branches missed.">            if (element.getDefaultValue() != null) {</span>
+<span class="nc" id="L301">                xmlField.setValue(element.getDefaultValue());</span>
+<span class="pc bpc" id="L302" title="1 of 2 branches missed.">            } else if (element.getFixedValue() != null) {</span>
+<span class="nc" id="L303">                xmlField.setValue(element.getFixedValue());</span>
+            }
+<span class="fc" id="L305">            XSRestrictionSimpleType typeRestriction = element.getType().asSimpleType().asRestriction();</span>
+<span class="pc bpc" id="L306" title="1 of 2 branches missed.">            if (typeRestriction != null) {</span>
+<span class="fc" id="L307">                xmlField.setFieldType(XS_TYPE_TO_FIELD_TYPE_MAP.get(typeRestriction.getBaseType().getName()));</span>
+<span class="fc" id="L308">                mapRestrictions(xmlField, typeRestriction);</span>
+            }
+<span class="fc" id="L310">            printSimpleType(element.getType().asSimpleType(), xmlField);</span>
+        }
+<span class="fc" id="L312">    }</span>
+
+    private void printAttributes(XSComplexType xsComplexType, String rootName, XmlComplexType xmlComplexType) {
+<span class="fc" id="L315">        Collection&lt;? extends XSAttributeUse&gt; c = xsComplexType.getDeclaredAttributeUses();</span>
+<span class="fc bfc" id="L316" title="All 2 branches covered.">        for (XSAttributeUse aC : c) {</span>
+<span class="fc" id="L317">            XmlField xmlField = AtlasXmlModelFactory.createXmlField();</span>
+<span class="fc" id="L318">            XSAttributeDecl attributeDecl = aC.getDecl();</span>
+<span class="fc" id="L319">            xmlField.setName(getNameNS(attributeDecl));</span>
+<span class="fc" id="L320">            xmlField.setAttribute(true);</span>
+<span class="fc bfc" id="L321" title="All 2 branches covered.">            if (attributeDecl.getDefaultValue() != null) {</span>
+<span class="fc" id="L322">                xmlField.setValue(attributeDecl.getDefaultValue().value);</span>
+<span class="fc bfc" id="L323" title="All 2 branches covered.">            } else if (attributeDecl.getFixedValue() != null) {</span>
+<span class="fc" id="L324">                xmlField.setValue(attributeDecl.getFixedValue().value);</span>
+            }
+<span class="fc" id="L326">            xmlField.setPath(rootName + &quot;/&quot; + &quot;@&quot; + getNameNS(attributeDecl));</span>
+<span class="fc" id="L327">            FieldType attrType = getFieldType(attributeDecl.getType().getName());</span>
+<span class="fc" id="L328">            xmlField.setFieldType(attrType);</span>
+<span class="fc bfc" id="L329" title="All 2 branches covered.">            if (xmlField.getFieldType() == null) {</span>
+                // check the simple types in the schema....
+<span class="fc" id="L331">                XSSimpleType simpleType = xsComplexType.getRoot().getSimpleType(xsComplexType.getTargetNamespace(),</span>
+<span class="fc" id="L332">                        attributeDecl.getType().getName());</span>
+<span class="pc bpc" id="L333" title="1 of 2 branches missed.">                if (simpleType != null) {</span>
+<span class="fc" id="L334">                    FieldType fieldType = getFieldType(simpleType.getBaseType().getName());</span>
+<span class="fc" id="L335">                    xmlField.setFieldType(fieldType);</span>
+<span class="fc" id="L336">                    xmlField.setTypeName(attributeDecl.getType().getName());</span>
+<span class="pc bpc" id="L337" title="1 of 2 branches missed.">                    if (simpleType.asRestriction() != null) {</span>
+<span class="fc" id="L338">                        mapRestrictions(xmlField, simpleType.asRestriction());</span>
+                    }
+<span class="fc" id="L340">                } else {</span>
+                    // cannot figure it out....
+<span class="nc" id="L342">                    xmlField.setFieldType(FieldType.UNSUPPORTED);</span>
+                }
+            }
+<span class="fc" id="L345">            xmlComplexType.getXmlFields().getXmlField().add(xmlField);</span>
+<span class="fc" id="L346">        }</span>
+<span class="fc" id="L347">    }</span>
 
     private void printSimpleType(XSSimpleType simpleType, XmlField xmlField) {
-<span class="fc bfc" id="L344" title="All 2 branches covered.">        if (xmlField.getFieldType() == null) {</span>
-<span class="fc" id="L345">            FieldType attrType = getFieldType(simpleType.getName());</span>
-<span class="fc" id="L346">            xmlField.setFieldType(attrType);</span>
+<span class="fc bfc" id="L350" title="All 2 branches covered.">        if (xmlField.getFieldType() == null) {</span>
+<span class="fc" id="L351">            FieldType attrType = getFieldType(simpleType.getName());</span>
+<span class="fc" id="L352">            xmlField.setFieldType(attrType);</span>
         }
-<span class="fc" id="L348">    }</span>
+<span class="fc" id="L354">    }</span>
 
     private void mapRestrictions(XmlField xmlField, XSRestrictionSimpleType restrictionSimpleType) {
-<span class="fc" id="L351">        SimpleTypeRestriction simpleTypeRestriction = new SimpleTypeRestriction();</span>
-<span class="fc" id="L352">        simpleTypeRestriction.initRestrictions(restrictionSimpleType);</span>
-<span class="fc" id="L353">        Restrictions restrictions = new Restrictions();</span>
-<span class="fc" id="L354">        xmlField.setRestrictions(restrictions);</span>
-<span class="fc" id="L355">        mapSimpleRestrictionToRestriction(simpleTypeRestriction, xmlField);</span>
-<span class="fc" id="L356">    }</span>
+<span class="fc" id="L357">        SimpleTypeRestriction simpleTypeRestriction = new SimpleTypeRestriction();</span>
+<span class="fc" id="L358">        simpleTypeRestriction.initRestrictions(restrictionSimpleType);</span>
+<span class="fc" id="L359">        Restrictions restrictions = new Restrictions();</span>
+<span class="fc" id="L360">        xmlField.setRestrictions(restrictions);</span>
+<span class="fc" id="L361">        mapSimpleRestrictionToRestriction(simpleTypeRestriction, xmlField);</span>
+<span class="fc" id="L362">    }</span>
 
     private XmlComplexType getXmlComplexType() {
-<span class="fc" id="L359">        XmlComplexType rootComplexType = XmlComplexTypeFactory.createXmlComlexField();</span>
-<span class="fc" id="L360">        rootComplexType.setFieldType(FieldType.COMPLEX);</span>
-<span class="fc" id="L361">        rootComplexType.setXmlFields(new XmlFields());</span>
-<span class="fc" id="L362">        return rootComplexType;</span>
+<span class="fc" id="L365">        XmlComplexType rootComplexType = XmlComplexTypeFactory.createXmlComlexField();</span>
+<span class="fc" id="L366">        rootComplexType.setFieldType(FieldType.COMPLEX);</span>
+<span class="fc" id="L367">        rootComplexType.setXmlFields(new XmlFields());</span>
+<span class="fc" id="L368">        return rootComplexType;</span>
     }
 
     private FieldType getFieldType(String name) {
         // check the blacklist
-<span class="fc" id="L367">        FieldType attrType = BLACKLISTED_TYPES.get(name);</span>
-<span class="fc bfc" id="L368" title="All 2 branches covered.">        if (attrType == null) {</span>
-<span class="fc" id="L369">            attrType = XS_TYPE_TO_FIELD_TYPE_MAP.get(name);</span>
+<span class="fc" id="L373">        FieldType attrType = BLACKLISTED_TYPES.get(name);</span>
+<span class="fc bfc" id="L374" title="All 2 branches covered.">        if (attrType == null) {</span>
+<span class="fc" id="L375">            attrType = XS_TYPE_TO_FIELD_TYPE_MAP.get(name);</span>
         }
-<span class="fc" id="L371">        return attrType;</span>
+<span class="fc" id="L377">        return attrType;</span>
     }
 
     private CollectionType getCollectionType(XSParticle particle) {
-<span class="fc bfc" id="L375" title="All 2 branches covered.">        if (!particle.isRepeated()) {</span>
-<span class="fc" id="L376">            return null;</span>
-<span class="pc bpc" id="L377" title="1 of 4 branches missed.">        } else if (particle.isRepeated() &amp;&amp; particle.getMaxOccurs().intValue() == -1) {</span>
-<span class="fc" id="L378">            return CollectionType.LIST;</span>
-<span class="pc bpc" id="L379" title="2 of 4 branches missed.">        } else if (particle.isRepeated() &amp;&amp; particle.getMaxOccurs().intValue() &gt; 1) {</span>
-<span class="fc" id="L380">            return CollectionType.ARRAY;</span>
+<span class="fc bfc" id="L381" title="All 2 branches covered.">        if (!particle.isRepeated()) {</span>
+<span class="fc" id="L382">            return null;</span>
+<span class="pc bpc" id="L383" title="1 of 4 branches missed.">        } else if (particle.isRepeated() &amp;&amp; particle.getMaxOccurs().intValue() == -1) {</span>
+<span class="fc" id="L384">            return CollectionType.LIST;</span>
+<span class="pc bpc" id="L385" title="2 of 4 branches missed.">        } else if (particle.isRepeated() &amp;&amp; particle.getMaxOccurs().intValue() &gt; 1) {</span>
+<span class="fc" id="L386">            return CollectionType.ARRAY;</span>
         }
-<span class="nc" id="L382">        return null;</span>
+<span class="nc" id="L388">        return null;</span>
     }
 
     private void mapSimpleRestrictionToRestriction(SimpleTypeRestriction simpleTypeRestriction, XmlField xmlField) {
-<span class="fc bfc" id="L386" title="All 2 branches covered.">        for (Field field : SimpleTypeRestriction.class.getDeclaredFields()) {</span>
-<span class="fc" id="L387">            field.setAccessible(true);</span>
+<span class="fc bfc" id="L392" title="All 2 branches covered.">        for (Field field : SimpleTypeRestriction.class.getDeclaredFields()) {</span>
+<span class="fc" id="L393">            field.setAccessible(true);</span>
             try {
                 // do we even care about this restriction?
-<span class="fc bfc" id="L390" title="All 2 branches covered.">                if (typeRestrictionExists(field.getName())) {</span>
-<span class="fc" id="L391">                    Object value = field.get(simpleTypeRestriction);</span>
-<span class="fc bfc" id="L392" title="All 2 branches covered.">                    if (value instanceof String[]) {</span>
-<span class="fc" id="L393">                        String[] values = (String[]) value;</span>
-<span class="fc bfc" id="L394" title="All 2 branches covered.">                        for (String v : values) {</span>
-<span class="fc" id="L395">                            Restriction restriction = new Restriction();</span>
-<span class="fc" id="L396">                            restriction.setValue(v.toString());</span>
-<span class="fc" id="L397">                            restriction.setType(RestrictionType.fromValue(field.getName()));</span>
-<span class="fc" id="L398">                            xmlField.getRestrictions().getRestriction().add(restriction);</span>
+<span class="fc bfc" id="L396" title="All 2 branches covered.">                if (typeRestrictionExists(field.getName())) {</span>
+<span class="fc" id="L397">                    Object value = field.get(simpleTypeRestriction);</span>
+<span class="fc bfc" id="L398" title="All 2 branches covered.">                    if (value instanceof String[]) {</span>
+<span class="fc" id="L399">                        String[] values = (String[]) value;</span>
+<span class="fc bfc" id="L400" title="All 2 branches covered.">                        for (String v : values) {</span>
+<span class="fc" id="L401">                            Restriction restriction = new Restriction();</span>
+<span class="fc" id="L402">                            restriction.setValue(v.toString());</span>
+<span class="fc" id="L403">                            restriction.setType(RestrictionType.fromValue(field.getName()));</span>
+<span class="fc" id="L404">                            xmlField.getRestrictions().getRestriction().add(restriction);</span>
                         }
-<span class="fc bfc" id="L400" title="All 2 branches covered.">                    } else if (value != null) {</span>
-<span class="fc" id="L401">                        Restriction restriction = new Restriction();</span>
-<span class="fc" id="L402">                        restriction.setValue(value.toString());</span>
-<span class="fc" id="L403">                        restriction.setType(RestrictionType.fromValue(field.getName()));</span>
-<span class="fc" id="L404">                        xmlField.getRestrictions().getRestriction().add(restriction);</span>
+<span class="fc bfc" id="L406" title="All 2 branches covered.">                    } else if (value != null) {</span>
+<span class="fc" id="L407">                        Restriction restriction = new Restriction();</span>
+<span class="fc" id="L408">                        restriction.setValue(value.toString());</span>
+<span class="fc" id="L409">                        restriction.setType(RestrictionType.fromValue(field.getName()));</span>
+<span class="fc" id="L410">                        xmlField.getRestrictions().getRestriction().add(restriction);</span>
                     }
                 }
-<span class="nc" id="L407">            } catch (IllegalAccessException e) {</span>
+<span class="nc" id="L413">            } catch (IllegalAccessException e) {</span>
                 // eat it...
-<span class="fc" id="L409">            }</span>
+<span class="fc" id="L415">            }</span>
         }
-<span class="fc" id="L411">    }</span>
+<span class="fc" id="L417">    }</span>
 
     private boolean typeRestrictionExists(String name) {
-<span class="fc bfc" id="L414" title="All 2 branches covered.">        for (RestrictionType restrictionType : RestrictionType.values()) {</span>
-<span class="fc bfc" id="L415" title="All 2 branches covered.">            if (name.equals(restrictionType.value())) {</span>
-<span class="fc" id="L416">                return true;</span>
+<span class="fc bfc" id="L420" title="All 2 branches covered.">        for (RestrictionType restrictionType : RestrictionType.values()) {</span>
+<span class="fc bfc" id="L421" title="All 2 branches covered.">            if (name.equals(restrictionType.value())) {</span>
+<span class="fc" id="L422">                return true;</span>
             }
         }
-<span class="fc" id="L419">        return false;</span>
+<span class="fc" id="L425">        return false;</span>
     }
 
 }
