@@ -429,7 +429,7 @@ export class DocumentManagementService {
         case DocumentType.CSV:
           await this.cfg.initializationService.initializeUserDoc(
             fileText,
-            userFile,
+            userFile + '-' + Guid.newGuid(),
             userFile,
             DocumentType.CSV,
             inspectionType,

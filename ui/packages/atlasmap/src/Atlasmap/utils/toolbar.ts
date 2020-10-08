@@ -15,7 +15,7 @@ import {
 } from "./document";
 
 /**
- * Return true if the specified non JSON or XML file object exists as a source
+ * Return true if the specified non JSON, XML or CSV file object exists as a source
  * or target document, false otherwise.
  *
  * @param file - file object
@@ -26,7 +26,8 @@ export function documentExists(file: File, isSource: boolean): boolean {
   return docDef &&
     docDef.type !== "JSON" &&
     docDef.type !== "XML" &&
-    docDef.type !== "XSD"
+    docDef.type !== "XSD" &&
+    docDef.type !== "CSV"
     ? true
     : false;
 }
