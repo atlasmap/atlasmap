@@ -97,6 +97,8 @@ export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
           position={"top"}
           enableFlip={true}
           content={<div>Edit property</div>}
+          entryDelay={750}
+          exitDelay={100}
         >
           <Button
             variant="plain"
@@ -113,6 +115,8 @@ export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
           position={"top"}
           enableFlip={true}
           content={<div>Remove property</div>}
+          entryDelay={750}
+          exitDelay={100}
         >
           <Button
             variant="plain"

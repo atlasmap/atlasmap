@@ -181,6 +181,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onDeleteDocument: allowDelete
         ? (id) => handlers.onDeleteDocument(id, true)
         : undefined,
+      onCaptureDocumentName: (id) => handlers.onCaptureDocumentName(id),
       onCustomClassSearch: allowCustomJavaClasses
         ? (isSource: boolean) => handlers.onEnableCustomClass(isSource)
         : undefined,
@@ -247,6 +248,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onDeleteDocument: allowDelete
         ? (id) => handlers.onDeleteDocument(id, false)
         : undefined,
+      onCaptureDocumentName: (id) => handlers.onCaptureDocumentName(id),
       onCustomClassSearch: allowCustomJavaClasses
         ? (isSource: boolean) => handlers.onEnableCustomClass(isSource)
         : undefined,

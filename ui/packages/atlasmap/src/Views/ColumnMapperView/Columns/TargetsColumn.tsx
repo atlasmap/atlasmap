@@ -19,6 +19,7 @@ import {
   AtlasmapDocumentType,
 } from "../../models";
 import {
+  CaptureDocumentNameAction,
   DeleteDocumentAction,
   EnableJavaClassAction,
   ImportAction,
@@ -41,6 +42,7 @@ export interface ITargetsColumnCallbacks extends IPropertiesTreeCallbacks {
   draggableType: AtlasmapDocumentType;
   isSource: boolean;
   onCreateProperty: (isSource: boolean) => void;
+  onCaptureDocumentName?: (id: string) => void;
   onDeleteDocument?: (id: GroupId) => void;
   onImportDocument?: (selectedFile: File) => void;
   onCustomClassSearch?: (isSource: boolean) => void;
@@ -74,6 +76,7 @@ export const TargetsColumn: FunctionComponent<
   onSearch,
   onImportDocument,
   onDeleteDocument,
+  onCaptureDocumentName,
   onCustomClassSearch,
   onCreateProperty,
   onEditProperty,
@@ -145,6 +148,8 @@ export const TargetsColumn: FunctionComponent<
                         <div>Create a target property for use in mapping</div>
                       }
                       key={"create-target-property"}
+                      entryDelay={750}
+                      exitDelay={100}
                     >
                       <Button
                         onClick={() => onCreateProperty(isSource)}
@@ -202,6 +207,13 @@ export const TargetsColumn: FunctionComponent<
                         ) : undefined
                       }
                       actions={[
+                        onCaptureDocumentName && (
+                          <CaptureDocumentNameAction
+                            id={documentId}
+                            onClick={() => onCaptureDocumentName(t.id)}
+                            key={"capture-document-name"}
+                          />
+                        ),
                         onDeleteDocument && (
                           <DeleteDocumentAction
                             id={documentId}

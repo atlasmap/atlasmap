@@ -9,6 +9,7 @@ import {
   ErrorHandlerService,
   ErrorInfo,
   ErrorLevel,
+  ErrorScope,
   ErrorType,
   ExpressionModel,
   Field,
@@ -39,6 +40,27 @@ import {
 } from "../../Views";
 
 const api = ky.create({ headers: { "ATLASMAP-XSRF-TOKEN": "awesome" } });
+
+export function copyToClipboard(text: string) {
+  const textArea = document.createElement("textarea");
+  textArea.value = text;
+  document.body.appendChild(textArea);
+  textArea.select();
+  try {
+    document.execCommand("copy");
+  } catch (err) {
+    ConfigModel.getConfig().errorService.addError(
+      new ErrorInfo({
+        message: "Error copying " + text + " to clipboard",
+        level: ErrorLevel.ERROR,
+        scope: ErrorScope.APPLICATION,
+        type: ErrorType.INTERNAL,
+      }),
+    );
+  }
+  document.body.removeChild(textArea);
+  return;
+}
 
 export const initializationService = new InitializationService(
   new DocumentManagementService(api),
