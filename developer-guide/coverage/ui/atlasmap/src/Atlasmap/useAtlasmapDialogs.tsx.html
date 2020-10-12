@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/119</span>
+                <span class='fraction'>0/122</span>
             </div>
         
             
@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/73</span>
+                <span class='fraction'>0/76</span>
             </div>
         
             
@@ -322,7 +322,15 @@
 <a name='L264'></a><a href='#L264'>264</a>
 <a name='L265'></a><a href='#L265'>265</a>
 <a name='L266'></a><a href='#L266'>266</a>
-<a name='L267'></a><a href='#L267'>267</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a>
+<a name='L271'></a><a href='#L271'>271</a>
+<a name='L272'></a><a href='#L272'>272</a>
+<a name='L273'></a><a href='#L273'>273</a>
+<a name='L274'></a><a href='#L274'>274</a>
+<a name='L275'></a><a href='#L275'>275</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -343,6 +351,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -454,8 +463,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -520,6 +533,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -563,7 +577,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -597,6 +613,7 @@ import { IConstant, INamespace, IProperty } from "../UI";
   useConstantDialog,
   useDeleteConstantDialog,
   useDeleteDocumentDialog,
+  useCaptureDocumentNameToast,
   useDeleteMappingDialog,
   useDeletePropertyDialog,
   useExportCatalogDialog,
@@ -719,9 +736,13 @@ export interface IUseAtlasmapDialogsProps {
   ] = useToggleExpressionModeDialog();
   //#endregion
 &nbsp;
-  //#region editor dialogs
+  //#region document dialogs
   const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >i</span>mportDocumentDialog,</span> <span class="cstat-no" title="statement not covered" >onImportDocument] = useImportDocumentDialog();</span>
   const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >d</span>eleteDocumentDialog,</span> <span class="cstat-no" title="statement not covered" >onDeleteDocument] = useDeleteDocumentDialog();</span>
+  const <span class="cstat-no" title="statement not covered" >[</span>
+<span class="cstat-no" title="statement not covered" >    captureDocumentNameToast,</span>
+<span class="cstat-no" title="statement not covered" >    onCaptureDocumentName,</span>
+  ] = useCaptureDocumentNameToast();
   const <span class="cstat-no" title="statement not covered" >[</span>
 <span class="cstat-no" title="statement not covered" >    removeMappedFieldDialog,</span>
 <span class="cstat-no" title="statement not covered" >    onRemoveMappedField,</span>
@@ -791,6 +812,7 @@ export interface IUseAtlasmapDialogsProps {
           {exportCatalogDialog}
           {importDocumentDialog}
           {deleteDocumentDialog}
+          {captureDocumentNameToast}
           {createConstantDialog}
           {deleteConstantDialog}
           {editConstantDialog}
@@ -814,6 +836,7 @@ export interface IUseAtlasmapDialogsProps {
       createPropertyDialog,
       deleteConstantDialog,
       deleteDocumentDialog,
+      captureDocumentNameToast,
       deleteMappingDialog,
       deletePropertyDialog,
       editConstantDialog,
@@ -842,6 +865,7 @@ export interface IUseAtlasmapDialogsProps {
       onResetAtlasmap,
       onImportDocument,
       onDeleteDocument,
+      onCaptureDocumentName,
       onRemoveMappedField,
       onDeleteMapping,
       onDeleteSelectedMapping,
@@ -861,7 +885,7 @@ export interface IUseAtlasmapDialogsProps {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Oct 12 2020 13:58:19 GMT+0000 (Coordinated Universal Time)
+                at Mon Oct 12 2020 15:03:49 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
