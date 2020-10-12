@@ -7,6 +7,7 @@ import {
   useConstantDialog,
   useDeleteConstantDialog,
   useDeleteDocumentDialog,
+  useCaptureDocumentNameToast,
   useDeleteMappingDialog,
   useDeletePropertyDialog,
   useExportCatalogDialog,
@@ -129,9 +130,13 @@ export function useAtlasmapDialogs({
   ] = useToggleExpressionModeDialog();
   //#endregion
 
-  //#region editor dialogs
+  //#region document dialogs
   const [importDocumentDialog, onImportDocument] = useImportDocumentDialog();
   const [deleteDocumentDialog, onDeleteDocument] = useDeleteDocumentDialog();
+  const [
+    captureDocumentNameToast,
+    onCaptureDocumentName,
+  ] = useCaptureDocumentNameToast();
   const [
     removeMappedFieldDialog,
     onRemoveMappedField,
@@ -201,6 +206,7 @@ export function useAtlasmapDialogs({
           {exportCatalogDialog}
           {importDocumentDialog}
           {deleteDocumentDialog}
+          {captureDocumentNameToast}
           {createConstantDialog}
           {deleteConstantDialog}
           {editConstantDialog}
@@ -224,6 +230,7 @@ export function useAtlasmapDialogs({
       createPropertyDialog,
       deleteConstantDialog,
       deleteDocumentDialog,
+      captureDocumentNameToast,
       deleteMappingDialog,
       deletePropertyDialog,
       editConstantDialog,
@@ -252,6 +259,7 @@ export function useAtlasmapDialogs({
       onResetAtlasmap,
       onImportDocument,
       onDeleteDocument,
+      onCaptureDocumentName,
       onRemoveMappedField,
       onDeleteMapping,
       onDeleteSelectedMapping,

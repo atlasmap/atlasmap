@@ -1,3 +1,4 @@
+export * from "./CaptureDocumentNameAction";
 export * from "./DeleteDocumentAction";
 export * from "./DeleteMappingAction";
 export * from "./EditMappingAction";

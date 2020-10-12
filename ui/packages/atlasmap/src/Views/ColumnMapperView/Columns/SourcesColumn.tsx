@@ -21,6 +21,7 @@ import {
   AtlasmapDocumentType,
 } from "../../models";
 import {
+  CaptureDocumentNameAction,
   DeleteDocumentAction,
   EnableJavaClassAction,
   ImportAction,
@@ -47,6 +48,7 @@ export interface ISourceColumnCallbacks
   onCreateConstant: () => void;
   onCreateProperty: (isSource: boolean) => void;
   onCustomClassSearch?: (isSource: boolean) => void;
+  onCaptureDocumentName?: (id: string) => void;
   onImportDocument?: (selectedFile: File) => void;
   onDeleteDocument?: (id: GroupId) => void;
   onSearch: (content: string) => void;
@@ -85,6 +87,7 @@ export const SourcesColumn: FunctionComponent<
   onDeleteProperty,
   onImportDocument,
   onDeleteDocument,
+  onCaptureDocumentName,
   onSearch,
   canDrop,
   onDrop,
@@ -155,6 +158,8 @@ export const SourcesColumn: FunctionComponent<
                         <div>Create a source property for use in mapping</div>
                       }
                       key={"create-property"}
+                      entryDelay={750}
+                      exitDelay={100}
                     >
                       <Button
                         onClick={() => onCreateProperty(isSource)}
@@ -208,6 +213,8 @@ export const SourcesColumn: FunctionComponent<
                       enableFlip={true}
                       content={<div>Create a constant for use in mapping</div>}
                       key={"create-constant"}
+                      entryDelay={750}
+                      exitDelay={100}
                     >
                       <Button
                         onClick={onCreateConstant}
@@ -261,6 +268,13 @@ export const SourcesColumn: FunctionComponent<
                         ) : undefined
                       }
                       actions={[
+                        onCaptureDocumentName && (
+                          <CaptureDocumentNameAction
+                            id={documentId}
+                            onClick={() => onCaptureDocumentName(s.id)}
+                            key={"capture-document-name"}
+                          />
+                        ),
                         onDeleteDocument && (
                           <DeleteDocumentAction
                             id={documentId}

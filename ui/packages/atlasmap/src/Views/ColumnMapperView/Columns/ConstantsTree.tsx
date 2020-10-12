@@ -82,6 +82,8 @@ export const ConstantsTree: FunctionComponent<IConstantsTreeProps> = ({
           position={"top"}
           enableFlip={true}
           content={<div>Edit constant</div>}
+          entryDelay={750}
+          exitDelay={100}
         >
           <Button
             variant="plain"
@@ -98,6 +100,8 @@ export const ConstantsTree: FunctionComponent<IConstantsTreeProps> = ({
           position={"top"}
           enableFlip={true}
           content={<div>Remove constant</div>}
+          entryDelay={750}
+          exitDelay={100}
         >
           <Button
             variant="plain"
