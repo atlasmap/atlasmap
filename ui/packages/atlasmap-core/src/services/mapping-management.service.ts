@@ -932,7 +932,7 @@ export class MappingManagementService {
     } else if (
       sourceMappedFields.length > 1 ||
       sourceMappedCollection ||
-      mapping.transition.enableExpression
+      (mapping.transition.enableExpression && sourceMappedFields.length > 1)
     ) {
       mapping.transition.mode = TransitionMode.MANY_TO_ONE;
       if (
@@ -975,9 +975,12 @@ export class MappingManagementService {
       mapping.transition.transitionFieldAction = null;
     }
 
-    // Update conditional expression field references if enabled.
-    if (mapping.transition.enableExpression && mapping.transition.expression) {
-      mapping.transition.expression.updateFieldReference(
+    // Disable multiplicity field actions if expression box is enabled.
+    if (mapping.transition.enableExpression) {
+      mapping.transition.transitionFieldAction = null;
+
+      // Update conditional expression field references.
+      mapping.transition.expression?.updateFieldReference(
         mapping,
         position,
         offset
