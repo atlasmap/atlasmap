@@ -53,6 +53,8 @@ export interface IMappingFieldProps {
   info: string;
   index: number;
   canShowIndex: boolean;
+  mappingExpressionEnabled: boolean;
+  hasTransformations: boolean;
   onDelete: () => void;
   onIndexChange?: (value: string) => void;
   onNewTransformation?: () => void;
@@ -63,6 +65,8 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
   info,
   index,
   canShowIndex,
+  mappingExpressionEnabled,
+  hasTransformations,
   onDelete,
   onIndexChange,
   onNewTransformation,
@@ -110,7 +114,7 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
             </Tooltip>
           </Title>
         </SplitItem>
-        {onNewTransformation && (
+        {!mappingExpressionEnabled && onNewTransformation && (
           <SplitItem>
             <Button
               variant={"plain"}
@@ -137,12 +141,15 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
         Show established field action transformations associated with this
         field.
         */}
-      {children && Children.count(children) > 0 && (
-        <div className={css("pf-c-form", styles.transformationsWrapper)}>
-          <Title size={"xs"}>Transformations</Title>
-          <div className={css(styles.transformations)}>{children}</div>
-        </div>
-      )}
+      {!mappingExpressionEnabled &&
+        hasTransformations &&
+        children &&
+        Children.count(children) > 0 && (
+          <div className={css("pf-c-form", styles.transformationsWrapper)}>
+            <Title size={"xs"}>Transformations</Title>
+            <div className={css(styles.transformations)}>{children}</div>
+          </div>
+        )}
     </div>
   );
 };

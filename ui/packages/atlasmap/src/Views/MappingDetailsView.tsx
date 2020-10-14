@@ -107,6 +107,8 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
             ? `${f.path} <${f.scope}> (${f.type})`
             : `${f.path} (${f.type})`
         }
+        mappingExpressionEnabled={mappingExpressionEnabled}
+        hasTransformations={f.transformations.length > 0}
         onDelete={() => onRemoveMappedField(isSource, index)}
         onIndexChange={(value: string) =>
           onIndexChange(isSource, index, parseInt(value, 10))
@@ -147,6 +149,8 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
         key={index}
         name={"Padding field"}
         info={"This padding field has been automatically added"}
+        mappingExpressionEnabled={mappingExpressionEnabled}
+        hasTransformations={false}
         onDelete={() => onRemoveMappedField(isSource, index)}
         index={index + 1}
         canShowIndex={showSourcesIndex}
