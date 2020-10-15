@@ -253,8 +253,9 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
      */
     @Override
     public Audits processPreview(Mapping mapping) throws AtlasException {
-        DefaultAtlasSession session = new DefaultAtlasSession(this);
+        DefaultAtlasSession session = new DefaultAtlasPreviewSession(this, mapping);
         MappingType mappingType = mapping.getMappingType();
+        String expression = mapping.getExpression();
         FieldGroup sourceFieldGroup = mapping.getInputFieldGroup();
         List<Field> sourceFields = mapping.getInputField();
         List<Field> targetFields = mapping.getOutputField();
@@ -281,7 +282,15 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         Field sourceField;
         Field targetField;
         if (mappingType == null || mappingType == MappingType.MAP) {
-            if (sourceFieldGroup != null) {
+            if (expression != null && !expression.isEmpty()) {
+                if (sourceFieldGroup == null) {
+                    sourceFieldGroup = new FieldGroup();
+                    sourceFieldGroup.getField().addAll(mapping.getInputField());
+                }
+                session.head().setSourceField(sourceFieldGroup);
+                DefaultAtlasExpressionProcessor.processExpression(session, mapping.getExpression());
+                sourceField = session.head().getSourceField();
+            } else if (sourceFieldGroup != null) {
                 List<Field> processed = new LinkedList<>();
                 for (Field f : sourceFieldGroup.getField()) {
                     processed.add(applyFieldActions(session, f));
@@ -336,7 +345,10 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                 if (!convertSourceToTarget(session, session.head().getSourceField(), targetField)) {
                     return session.getAudits();
                 }
-                Field processed = applyFieldActions(session, targetField);
+                Field processed = targetField;
+                if (expression == null || expression.isEmpty()) {
+                    processed = applyFieldActions(session, targetField);
+                }
                 // TODO handle collection values - https://github.com/atlasmap/atlasmap/issues/531
                 targetField.setValue(processed.getValue());
             }

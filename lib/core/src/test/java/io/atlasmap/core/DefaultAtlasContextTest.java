@@ -632,4 +632,29 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         assertEquals(printAudit(audits), 0, audits.getAudit().size());
         assertEquals("one", target.getValue());
     }
+
+    @Test
+    public void testProcessPreviewExpression() throws AtlasException {
+        Mapping m = new Mapping();
+        Field source = new SimpleField();
+        source.setDocId("source");
+        source.setFieldType(FieldType.DOUBLE);
+        source.setPath("/sourceDouble");
+        source.setValue(99.0);
+        m.getInputField().add(source);
+        Field source2 = new SimpleField();
+        source2.setDocId("source2");
+        source2.setFieldType(FieldType.DOUBLE);
+        source2.setPath("/sourceDouble");
+        source2.setValue(1.0);
+        m.setExpression("${source:/sourceDouble} + ${source2:/sourceDouble}");
+        m.getInputField().add(source2);
+        Field target = new SimpleField();
+        target.setFieldType(FieldType.STRING);
+        m.getOutputField().add(target);
+        Audits audits = context.processPreview(m);
+        assertEquals(printAudit(audits), 0, audits.getAudit().size());
+        assertEquals("100.0", target.getValue());
+    }
+
 }
