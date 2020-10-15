@@ -578,7 +578,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         target.setFieldType(FieldType.STRING);
         m.getOutputField().add(target);
         context.processPreview(m);
-        assertEquals("-one--two--six", target.getValue());
+        assertEquals("one-two-six", target.getValue());
     }
 
     @Test
