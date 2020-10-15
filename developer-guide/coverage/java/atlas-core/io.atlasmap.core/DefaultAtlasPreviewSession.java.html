@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DefaultAtlasPreviewSession.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.core</a> &gt; <span class="el_source">DefaultAtlasPreviewSession.java</span></div><h1>DefaultAtlasPreviewSession.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.core;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.spi.AtlasFieldReader;
+import io.atlasmap.spi.AtlasInternalSession;
+import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
+import io.atlasmap.v2.Mapping;
+
+/**
+ * Limited version of AtlasMap session dedicated for preview processing.
+ * Since preview exchanges field values via {@code Field} object, {@code PreviewFieldReader}
+ * just have to look into the values of source fields no matter what the Document ID is.
+ */
+class DefaultAtlasPreviewSession extends DefaultAtlasSession {
+
+    private Mapping mapping;
+    private Map&lt;String, PreviewFieldReader&gt; readers;
+
+    DefaultAtlasPreviewSession(DefaultAtlasContext context, Mapping mapping) throws AtlasException {
+<span class="fc" id="L39">        super(context);</span>
+<span class="fc" id="L40">        this.mapping = mapping;</span>
+<span class="fc" id="L41">        this.readers = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L42">    }</span>
+
+    private class PreviewFieldReader implements AtlasFieldReader {
+        private Mapping mapping;
+        private String docId;
+
+<span class="fc" id="L48">        PreviewFieldReader(Mapping mapping, String docId) {</span>
+<span class="fc" id="L49">            this.mapping = mapping;</span>
+<span class="fc" id="L50">            this.docId = docId;</span>
+<span class="fc" id="L51">        }</span>
+
+        @Override
+        public Field read(AtlasInternalSession session) throws AtlasException {
+<span class="fc" id="L55">            String path = session.head().getSourceField().getPath();</span>
+<span class="fc" id="L56">            FieldGroup sourceFieldGroup = mapping.getInputFieldGroup();</span>
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">            if (sourceFieldGroup != null) {</span>
+<span class="nc" id="L58">                 return readFromGroup(sourceFieldGroup, path);</span>
+            }
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">            for (Field f : mapping.getInputField()) {</span>
+<span class="pc bpc" id="L61" title="4 of 6 branches missed.">                if ((docId == null &amp;&amp; f.getDocId() != null)</span>
+<span class="pc bpc" id="L62" title="2 of 4 branches missed.">                        || (docId != null &amp;&amp; f.getDocId() == null)</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">                        || (docId != null &amp;&amp; !docId.equals(f.getDocId()))) {</span>
+<span class="fc" id="L64">                    continue;</span>
+                }
+<span class="pc bpc" id="L66" title="2 of 4 branches missed.">                if (f.getPath() != null &amp;&amp; f.getPath().equals(path)) {</span>
+<span class="fc" id="L67">                    return f;</span>
+                }
+<span class="nc" id="L69">            }</span>
+<span class="nc" id="L70">            return null;</span>
+        }
+
+        private Field readFromGroup(FieldGroup group, String path) {
+<span class="nc bnc" id="L74" title="All 2 branches missed.">            if (group.getField() == null) {</span>
+<span class="nc" id="L75">                return null;</span>
+            }
+<span class="nc bnc" id="L77" title="All 2 branches missed.">            for (Field f : group.getField()) {</span>
+<span class="nc bnc" id="L78" title="All 6 branches missed.">                if ((docId == null &amp;&amp; f.getDocId() != null)</span>
+<span class="nc bnc" id="L79" title="All 4 branches missed.">                        || (docId != null &amp;&amp; f.getDocId() == null)</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">                        || (docId != null &amp;&amp; !docId.equals(f.getDocId()))) {</span>
+<span class="nc" id="L81">                    continue;</span>
+                }
+<span class="nc bnc" id="L83" title="All 4 branches missed.">                if (f.getPath() != null &amp;&amp; f.getPath().equals(path)) {</span>
+<span class="nc" id="L84">                    return f;</span>
+                }
+<span class="nc bnc" id="L86" title="All 2 branches missed.">                if (f instanceof FieldGroup) {</span>
+<span class="nc" id="L87">                    Field deeper = readFromGroup((FieldGroup)f, path);</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">                    if (deeper != null) {</span>
+<span class="nc" id="L89">                        return deeper;</span>
+                    }
+                }
+<span class="nc" id="L92">            }</span>
+<span class="nc" id="L93">            return null;</span>
+        }
+
+    }
+
+    @Override
+    public AtlasFieldReader getFieldReader(String docId) {
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        if (!readers.containsKey(docId)) {</span>
+<span class="fc" id="L101">            readers.put(docId, new PreviewFieldReader(this.mapping, docId));</span>
+        }
+<span class="fc" id="L103">        return readers.get(docId);</span>
+    }
+
+    @Override
+    public &lt;T extends AtlasFieldReader&gt; T getFieldReader(String docId, Class&lt;T&gt; clazz) {
+<span class="nc" id="L108">        AtlasFieldReader reader = getFieldReader(docId);</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">        if (clazz.isInstance(reader)) {</span>
+<span class="nc" id="L110">            return clazz.cast(reader);</span>
+        }
+<span class="nc" id="L112">        throw new IllegalArgumentException(clazz.getName() + &quot; is not available for preview&quot;);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
