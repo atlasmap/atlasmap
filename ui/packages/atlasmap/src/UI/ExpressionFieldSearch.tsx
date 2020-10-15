@@ -133,6 +133,7 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
   }
 
   function createSelectOption(selectField: string[], idx: number): any {
+    // Use the display name for documents and field path for fields.
     if (selectField[1].length === 0) {
       return (
         <SelectOption
@@ -146,8 +147,8 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
     } else {
       return (
         <SelectOption
-          label={selectField[0]}
-          value={selectField[0]}
+          label={selectField[1]}
+          value={selectField[1]}
           key={idx}
           keyHandler={onKeyHandler}
           className={css(styles.field)}

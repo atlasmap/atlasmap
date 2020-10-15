@@ -472,7 +472,8 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
             <Tooltip
               content={"Enable/ Disable conditional mapping expression."}
               enableFlip={true}
-              entryDelay={1000}
+              entryDelay={750}
+              exitDelay={100}
               position={"left"}
             >
               <Button
@@ -497,7 +498,8 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
               <Tooltip
                 content={"Enter text or '@' for source fields menu."}
                 enableFlip={true}
-                entryDelay={2000}
+                entryDelay={750}
+                exitDelay={100}
                 position={"left"}
               >
                 <div
