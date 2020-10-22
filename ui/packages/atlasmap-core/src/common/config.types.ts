@@ -14,6 +14,11 @@
     limitations under the License.
 */
 
+export enum DocumentDefaultName {
+  CONSTANTS = 'Constants',
+  PROPERTIES = 'Properties',
+}
+
 export enum DocumentType {
   JAVA = 'JAVA',
   JAVA_ARCHIVE = 'JAR',

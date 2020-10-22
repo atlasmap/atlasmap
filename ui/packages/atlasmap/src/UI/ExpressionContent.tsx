@@ -47,6 +47,7 @@ export interface IExpressionContentProps {
   executeFieldSearch: (searchFilter: string, isSource: boolean) => string[][];
   mappingExpressionAddField: (
     selectedField: string,
+    selectFieldScope: string,
     newTextNode: ITextNode,
     atIndex: number,
     isTrailer: boolean,
@@ -168,6 +169,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
 
   let addFieldToExpression: (
     selectedField: string,
+    selectedScope: string,
     newTextNode: ITextNode,
     atIndex: number,
     isTrailer: boolean,
@@ -267,7 +269,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
 
   function fieldCandidateIndex(fieldStr: string): number {
     for (let i = 0; i < mappedFieldCandidates.length; i++) {
-      if (mappedFieldCandidates[i][0] === fieldStr) {
+      if (mappedFieldCandidates[i][1] === fieldStr) {
         return i;
       }
     }
@@ -352,9 +354,10 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   }
 
   /**
-   * The user has selected a field from the search select menu.
+   * The user has selected a field from the search select menu.  Extract
+   * the field name and the scope if it is present.
    *
-   * @param value
+   * @param index - mapped field candidate array index
    */
   function insertSelectedField(index: number): void {
     if (index >= mappedFieldCandidates.length) {
@@ -369,7 +372,24 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
       return;
     }
     const isTrailer = getCaretPositionNodeId(atContainer) === trailerID;
-    addFieldToExpression(selectedField, newTextNode, atIndex, isTrailer);
+    const selectedFieldComps = selectedField.split(" ");
+    selectedField = selectedFieldComps[0];
+    let selectedFieldScope = "";
+
+    // Extract the scope if it exists.
+    if (selectedFieldComps[1]) {
+      selectedFieldScope = selectedFieldComps[1].substring(
+        1,
+        selectedFieldComps[1].length - 1,
+      );
+    }
+    addFieldToExpression(
+      selectedField,
+      selectedFieldScope,
+      newTextNode,
+      atIndex,
+      isTrailer,
+    );
     clearSearchMode(false);
     markup!.focus();
   }

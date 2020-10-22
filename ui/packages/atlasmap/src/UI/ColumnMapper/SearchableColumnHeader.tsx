@@ -30,7 +30,7 @@ export const SearchableColumnHeader: FunctionComponent<ISearchableColumnHeaderPr
           <InputGroup>
             <TextInput
               name={"search"}
-              id={"search"}
+              id={`search-${title}`}
               type="search"
               aria-label="Search fields"
               onChange={onSearch}

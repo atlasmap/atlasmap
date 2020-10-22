@@ -14,6 +14,7 @@
     limitations under the License.
 */
 import { ConfigModel } from './config.model';
+import { DocumentDefaultName } from '../common/config.types';
 import { MappedField, MappingModel } from './mapping.model';
 import { Subject } from 'rxjs';
 import { ErrorScope, ErrorType, ErrorInfo, ErrorLevel } from './error.model';
@@ -59,54 +60,93 @@ export class FieldNode extends ExpressionNode {
 
   constructor(
     private mapping: MappingModel,
-    public field?: MappedField | null,
+    public mappedField?: MappedField | null,
     public metaStr?: string,
     index: number = 0
   ) {
     super(FieldNode.PREFIX);
-    if (!field) {
+    if (!mappedField) {
       if (metaStr) {
         const fieldParts = metaStr.split(':');
-        this.field = mapping.getMappedFieldByName(fieldParts[1], true)!;
-        if (!this.field) {
-          this.field = mapping.getReferenceField(fieldParts[1]);
+
+        // Factor scope from property meta data.
+        if (fieldParts[0].startsWith('DOC.' + DocumentDefaultName.PROPERTIES)) {
+          const pathSeparator = ConfigModel.getConfig().sourcePropertyDoc
+            .pathSeparator;
+          const propParts = fieldParts[1].split(pathSeparator);
+          if (propParts.length === 3) {
+            this.mappedField = mapping.getMappedFieldByName(
+              pathSeparator + propParts[2], // field path
+              true,
+              propParts[1] // scope
+            )!;
+          } else {
+            this.mappedField = mapping.getMappedFieldByName(
+              fieldParts[1],
+              true
+            )!;
+          }
+        } else {
+          this.mappedField = mapping.getMappedFieldByName(fieldParts[1], true)!;
+        }
+        if (!this.mappedField) {
+          this.mappedField = mapping.getReferenceField(fieldParts[1]);
         }
       } else {
-        // TODO: check this non null operator
-        this.field = mapping.getMappedFieldForIndex(
-          (index + 1).toString(),
+        this.mappedField = mapping.getMappedFieldForIndex(
+          (index + 1)?.toString(),
           true
         )!;
       }
-      field = this.field;
+      mappedField = this.mappedField;
     }
-    if (field && !field.parsedData.parsedPath && field.field) {
-      field.parsedData.parsedPath = field.field.path;
+    if (
+      mappedField &&
+      !mappedField.parsedData.parsedPath &&
+      mappedField.field
+    ) {
+      mappedField.parsedData.parsedPath = mappedField.field.path;
     }
   }
 
   toText(): string {
-    if (!this.field || !this.field.field) {
+    if (!this.mappedField || !this.mappedField.field) {
       return '';
     }
-    return (
-      '${' +
-      this.field.field.docDef.id +
-      ':' +
-      this.field.parsedData.parsedPath +
-      '}'
-    );
+    if (this.mappedField.field.scope) {
+      return (
+        '${' +
+        this.mappedField.field.docDef.id +
+        ':/' +
+        this.mappedField.field.scope +
+        this.mappedField.parsedData.parsedPath +
+        '}'
+      );
+    } else {
+      return (
+        '${' +
+        this.mappedField.field.docDef.id +
+        ':' +
+        this.mappedField.parsedData.parsedPath +
+        '}'
+      );
+    }
   }
 
   toHTML(): string {
-    if (this.field && this.field.field) {
-      return `<span style="font-weight:bold" contenteditable="false" id="${this.uuid}" title="${this.field.field.docDef.name}:${this.field.field.path}"
-        class="expressionFieldLabel label label-default">${this.field.field.name}</span>`;
+    if (this.mappedField && this.mappedField.field) {
+      if (this.mappedField.field.scope) {
+        return `<span style="font-weight:bold" contenteditable="false" id="${this.uuid}" title="${this.mappedField.field.docDef.name}:${this.mappedField.field.path} <${this.mappedField.field.scope}>"
+          class="expressionFieldLabel label label-default">${this.mappedField.field.name}</span>`;
+      } else {
+        return `<span style="font-weight:bold" contenteditable="false" id="${this.uuid}" title="${this.mappedField.field.docDef.name}:${this.mappedField.field.path}"
+          class="expressionFieldLabel label label-default">${this.mappedField.field.name}</span>`;
+      }
     } else {
       // TODO: check this non null operator
       return `<span contenteditable="false" id="${this.uuid}"
         title="Field index '${
-          this.mapping.getIndexForMappedField(this.field!)! - 1
+          this.mapping.getIndexForMappedField(this.mappedField!)! - 1
         }' is not available"
         class="expressionFieldLabel label label-danger">N/A</span>`;
     }
@@ -114,9 +154,9 @@ export class FieldNode extends ExpressionNode {
 
   hasComplexField(): boolean {
     return (
-      this.field?.field?.serviceObject.fieldType === 'COMPLEX' &&
-      (this.field?.field?.serviceObject.status === 'SUPPORTED' ||
-        this.field?.field?.serviceObject.status === 'CACHED')
+      this.mappedField?.field?.serviceObject.fieldType === 'COMPLEX' &&
+      (this.mappedField?.field?.serviceObject.status === 'SUPPORTED' ||
+        this.mappedField?.field?.serviceObject.status === 'CACHED')
     );
   }
 }
@@ -397,11 +437,12 @@ export class ExpressionModel {
         const removed = this._nodes.pop() as FieldNode;
         if (
           !this._nodes.find(
-            (n) => n instanceof FieldNode && n.field === removed.field
+            (n) =>
+              n instanceof FieldNode && n.mappedField === removed.mappedField
           )
         ) {
           // TODO: check this non null operator
-          this.mapping.removeMappedField(removed.field!);
+          this.mapping.removeMappedField(removed.mappedField!);
           this.cfg.mappingService.updateMappedField(this.mapping);
         }
       } else if (last instanceof TextNode) {
@@ -443,11 +484,13 @@ export class ExpressionModel {
       const targetFieldNode: FieldNode = removed[0] as FieldNode;
       if (
         !this._nodes.find(
-          (n) => n instanceof FieldNode && n.field === targetFieldNode.field
+          (n) =>
+            n instanceof FieldNode &&
+            n.mappedField === targetFieldNode.mappedField
         )
       ) {
         // TODO: check this non null operator
-        this.mapping.removeMappedField(targetFieldNode.field!);
+        this.mapping.removeMappedField(targetFieldNode.mappedField!);
         this.cfg.mappingService.updateMappedField(this.mapping);
       }
       if (this._nodes.length > targetNodeIndex) {
@@ -547,7 +590,7 @@ export class ExpressionModel {
     // Remove the field from the expression if unmapped.
     for (const node of fieldNodes) {
       // TODO: check this non null operator
-      if (mappedFields.includes(node.field!) || node.hasComplexField()) {
+      if (mappedFields.includes(node.mappedField!) || node.hasComplexField()) {
         continue;
       }
       const index = this._nodes.indexOf(node);
@@ -569,7 +612,7 @@ export class ExpressionModel {
       (n) => n instanceof FieldNode
     ) as FieldNode[];
     for (const mfield of mappedFields) {
-      if (!fieldNodes.find((n) => n.field === mfield)) {
+      if (!fieldNodes.find((n) => n.mappedField === mfield)) {
         if (insertPosition) {
           this.insertNodes(
             [new FieldNode(this.mapping, mfield)],
@@ -644,7 +687,7 @@ export class ExpressionModel {
         fn = new FieldNode(this.mapping, undefined, undefined, index);
       }
 
-      if (!fn || !fn.field) {
+      if (!fn || !fn.mappedField) {
         this.cfg.errorService.addError(
           new ErrorInfo({
             message: `Unable to map expression element to field node.`,

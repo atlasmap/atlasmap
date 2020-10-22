@@ -87,9 +87,19 @@ export class Field {
     return paths;
   }
 
-  static getField(fieldPath: string, fields: Field[]): Field {
+  static getField(
+    fieldPath: string,
+    fields: Field[],
+    fieldScope?: string
+  ): Field {
     // TODO: check this non null operator
-    return fields.find((field) => fieldPath === field.path)!;
+    return fields.find(
+      (field) =>
+        fieldPath === field.path &&
+        (fieldScope
+          ? fieldScope.length > 0 && fieldScope === field.scope
+          : true)
+    )!;
   }
 
   static alphabetizeFields(fields: Field[]): void {

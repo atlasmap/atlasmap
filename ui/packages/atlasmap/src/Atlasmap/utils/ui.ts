@@ -321,6 +321,7 @@ export function getField(fieldPath: string, isSource: boolean): Field | null {
 
 export function mappingExpressionAddField(
   selectedField: string,
+  selectedFieldScope: string,
   newTextNode: any,
   atIndex: number,
   isTrailer: boolean,
@@ -329,7 +330,11 @@ export function mappingExpressionAddField(
   if (!mapping || !selectedField) {
     return;
   }
-  let mappedField = mapping.getMappedFieldByName(selectedField, true);
+  let mappedField = mapping.getMappedFieldByName(
+    selectedField,
+    true,
+    selectedFieldScope,
+  );
 
   if (!mappedField) {
     // If the selected field was not part of the original mapping
@@ -346,7 +351,11 @@ export function mappingExpressionAddField(
       // Try adding the selected field to the active mapping.
       let field: Field | null = null;
       for (const doc of initializationService.cfg.getDocs(true)) {
-        field = Field.getField(selectedField, doc.getAllFields());
+        field = Field.getField(
+          selectedField,
+          doc.getAllFields(),
+          selectedFieldScope,
+        );
         if (field) {
           break;
         }

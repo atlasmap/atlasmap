@@ -147,9 +147,18 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
           mappedField.parsedData.parsedName &&
           mappedField.parsedData.parsedPath
         ) {
+          const parsedScope = mappedField.parsedData.parsedScope
+            ? mappedField.parsedData.parsedScope
+            : undefined;
           let propertyField = isSource
-            ? cfg.sourcePropertyDoc.getField(mappedField.parsedData.parsedName)
-            : cfg.targetPropertyDoc.getField(mappedField.parsedData.parsedName);
+            ? cfg.sourcePropertyDoc.getField(
+                mappedField.parsedData.parsedPath,
+                parsedScope
+              )
+            : cfg.targetPropertyDoc.getField(
+                mappedField.parsedData.parsedPath,
+                parsedScope
+              );
 
           if (!propertyField) {
             propertyField = new Field();
