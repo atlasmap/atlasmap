@@ -37,6 +37,11 @@ export function deleteConstant(constValue: string): void {
   }
   cfg.mappingService.removeFieldFromAllMappings(field);
   cfg.constantDoc.removeField(field);
+  const activeMapping = cfg.mappings?.activeMapping;
+  const expression = activeMapping?.transition?.expression;
+  if (activeMapping && expression) {
+    expression.updateFieldReference(activeMapping);
+  }
   cfg.mappingService.notifyMappingUpdated();
 }
 
@@ -140,6 +145,11 @@ export function deleteProperty(
     cfg.sourcePropertyDoc.removeField(field);
   } else {
     cfg.targetPropertyDoc.removeField(field);
+  }
+  const activeMapping = cfg.mappings?.activeMapping;
+  const expression = activeMapping?.transition?.expression;
+  if (activeMapping && expression) {
+    expression.updateFieldReference(activeMapping);
   }
   cfg.mappingService.notifyMappingUpdated();
 }

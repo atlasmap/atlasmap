@@ -979,7 +979,7 @@ export class MappingSerializer {
       ConfigModel.mappingServicesPackagePrefix + '.PropertyField'
     ) {
       mappedField.parsedData.parsedName = field.name;
-      mappedField.parsedData.parsedPath = '/' + field.name;
+      mappedField.parsedData.parsedPath = field.path;
       if (field.scope) {
         mappedField.parsedData.parsedScope = field.scope;
       }

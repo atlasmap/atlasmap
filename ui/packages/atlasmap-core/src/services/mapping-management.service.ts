@@ -1067,7 +1067,7 @@ export class MappingManagementService {
         }
         displayName = DataMapperUtil.extractDisplayPath(field.path, 100);
         formattedField[0] = displayName;
-        if (field.isProperty()) {
+        if (field.isProperty() && field.scope) {
           formattedField[1] = field.path + ' <' + field.scope + '>';
         } else {
           formattedField[1] = field.path;

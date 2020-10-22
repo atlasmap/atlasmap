@@ -207,7 +207,8 @@ export class MappingModel {
 
   getMappedFieldByName(
     fieldPath: string,
-    isSource: boolean
+    isSource: boolean,
+    fieldScope?: string
   ): MappedField | null {
     if (!fieldPath) {
       return null;
@@ -215,7 +216,12 @@ export class MappingModel {
     const mappedFields = this.getMappedFields(isSource);
     for (let i = 0; i < mappedFields.length; i++) {
       if (mappedFields[i].parsedData.parsedPath === fieldPath) {
-        return mappedFields[i];
+        if (
+          !fieldScope ||
+          (fieldScope && mappedFields[i].field?.scope === fieldScope)
+        ) {
+          return mappedFields[i];
+        }
       }
     }
     return null;

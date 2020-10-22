@@ -24,6 +24,7 @@ import { MappingManagementService } from '../services/mapping-management.service
 import { InitializationService } from '../services/initialization.service';
 
 import {
+  DocumentDefaultName,
   DocumentType,
   InspectionType,
   CollectionType,
@@ -142,7 +143,7 @@ export class ConfigModel {
   initializePropertyDoc(propertyDoc: DocumentDefinition, isSource: boolean) {
     propertyDoc.clearFields();
     propertyDoc.type = DocumentType.PROPERTY;
-    propertyDoc.name = 'Properties';
+    propertyDoc.name = DocumentDefaultName.PROPERTIES;
     propertyDoc.isSource = isSource;
     propertyDoc.showFields = false;
     propertyDoc.isPropertyOrConstant = true;
@@ -153,7 +154,7 @@ export class ConfigModel {
     this.initializePropertyDoc(this.targetPropertyDoc, false);
     this.constantDoc.clearFields();
     this.constantDoc.type = DocumentType.CONSTANT;
-    this.constantDoc.name = 'Constants';
+    this.constantDoc.name = DocumentDefaultName.CONSTANTS;
     this.constantDoc.isSource = true;
     this.constantDoc.showFields = false;
     this.constantDoc.isPropertyOrConstant = true;
