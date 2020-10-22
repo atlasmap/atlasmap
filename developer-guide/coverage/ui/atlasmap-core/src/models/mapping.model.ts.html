@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">42.75% </span>
+                <span class="strong">42.59% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>112/262</span>
+                <span class='fraction'>112/263</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">22.94% </span>
+                <span class="strong">21.19% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>25/109</span>
+                <span class='fraction'>25/118</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">45.45% </span>
+                <span class="strong">45.25% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>100/220</span>
+                <span class='fraction'>100/221</span>
             </div>
         
             
@@ -485,7 +485,13 @@
 <a name='L427'></a><a href='#L427'>427</a>
 <a name='L428'></a><a href='#L428'>428</a>
 <a name='L429'></a><a href='#L429'>429</a>
-<a name='L430'></a><a href='#L430'>430</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L430'></a><a href='#L430'>430</a>
+<a name='L431'></a><a href='#L431'>431</a>
+<a name='L432'></a><a href='#L432'>432</a>
+<a name='L433'></a><a href='#L433'>433</a>
+<a name='L434'></a><a href='#L434'>434</a>
+<a name='L435'></a><a href='#L435'>435</a>
+<a name='L436'></a><a href='#L436'>436</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -551,7 +557,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-yes">24x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
@@ -696,6 +702,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -703,6 +710,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -809,7 +821,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">303x</span>
+<span class="cline-any cline-yes">301x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
@@ -1123,7 +1135,8 @@ export class MappingModel {
 &nbsp;
 <span class="fstat-no" title="function not covered" >  getMappedFieldByName(</span>
     fieldPath: string,
-    isSource: boolean
+    isSource: boolean,
+    fieldScope?: string
   ): MappedField | null {
 <span class="cstat-no" title="statement not covered" >    if (!fieldPath) {</span>
 <span class="cstat-no" title="statement not covered" >      return null;</span>
@@ -1131,7 +1144,12 @@ export class MappingModel {
     const mappedFields = <span class="cstat-no" title="statement not covered" >this.getMappedFields(isSource);</span>
 <span class="cstat-no" title="statement not covered" >    for (let i = <span class="cstat-no" title="statement not covered" >0;</span> i &lt; mappedFields.length; i++) {</span>
 <span class="cstat-no" title="statement not covered" >      if (mappedFields[i].parsedData.parsedPath === fieldPath) {</span>
-<span class="cstat-no" title="statement not covered" >        return mappedFields[i];</span>
+<span class="cstat-no" title="statement not covered" >        if (</span>
+          !fieldScope ||
+          (fieldScope &amp;&amp; mappedFields[i].field?.scope === fieldScope)
+        ) {
+<span class="cstat-no" title="statement not covered" >          return mappedFields[i];</span>
+        }
       }
     }
 <span class="cstat-no" title="statement not covered" >    return null;</span>
@@ -1350,7 +1368,7 @@ export class MappingModel {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Oct 15 2020 22:15:02 GMT+0000 (Coordinated Universal Time)
+                at Thu Oct 22 2020 15:50:09 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
