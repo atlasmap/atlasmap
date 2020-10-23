@@ -15,21 +15,15 @@ import {
 } from "./document";
 
 /**
- * Return true if the specified non JSON, XML or CSV file object exists as a source
- * or target document, false otherwise.
+ * Return true if the specified file object exists as a source or target
+ * document, false otherwise.
  *
  * @param file - file object
  * @param isSource - source or target panel
  */
 export function documentExists(file: File, isSource: boolean): boolean {
   const docDef = getDocDefByName(file.name, ConfigModel.getConfig(), isSource);
-  return docDef &&
-    docDef.type !== "JSON" &&
-    docDef.type !== "XML" &&
-    docDef.type !== "XSD" &&
-    docDef.type !== "CSV"
-    ? true
-    : false;
+  return docDef ? true : false;
 }
 
 /**
