@@ -11,8 +11,8 @@ export function useImportDocumentDialog(): [
 ] {
   const { documentExists, importAtlasFile } = useAtlasmap();
   const [importDialog, openImportDialog] = useConfirmationDialog(
-    "Overwrite selected document?",
-    "Are you sure you want to overwrite the selected document and remove any associated mappings?",
+    "Confirm document import",
+    "A document with the selected name has already been imported into the specified panel. It will appear in addition to the pre-existing document.",
   );
   const [parametersDialog, openParametersDialog] = useParametersDialog(
     "CSV processing parameters",
