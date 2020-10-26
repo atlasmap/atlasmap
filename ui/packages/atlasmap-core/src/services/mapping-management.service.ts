@@ -770,19 +770,21 @@ export class MappingManagementService {
       );
       this.api
         .put(url, { json: payload })
-        .json()
         .then((body: any) => {
           this.cfg.logger!.debug(
             `Mapping Update Service Response: ${JSON.stringify(body)}\n`
           );
-          if (this.cfg.mappings === null) {
-            resolve(false);
-            return;
-          }
           resolve(true);
         })
-        .catch(() => {
-          this.cfg.logger!.warn('Unable to update mappings file.');
+        .catch((error: any) => {
+          this.cfg.errorService.addError(
+            new ErrorInfo({
+              message: 'Unable to update mappings file. ' + error,
+              level: ErrorLevel.ERROR,
+              scope: ErrorScope.MAPPING,
+              type: ErrorType.INTERNAL,
+            })
+          );
           resolve(false);
         });
     });
