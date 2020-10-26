@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">18.97% </span>
+                <span class="strong">19.09% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>96/506</span>
+                <span class='fraction'>96/503</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">14.83% </span>
+                <span class="strong">14.93% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>43/290</span>
+                <span class='fraction'>43/288</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20.22% </span>
+                <span class="strong">20.35% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>92/455</span>
+                <span class='fraction'>92/452</span>
             </div>
         
             
@@ -1140,7 +1140,9 @@
 <a name='L1082'></a><a href='#L1082'>1082</a>
 <a name='L1083'></a><a href='#L1083'>1083</a>
 <a name='L1084'></a><a href='#L1084'>1084</a>
-<a name='L1085'></a><a href='#L1085'>1085</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1085'></a><a href='#L1085'>1085</a>
+<a name='L1086'></a><a href='#L1086'>1086</a>
+<a name='L1087'></a><a href='#L1087'>1087</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1913,18 +1915,20 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2996,19 +3000,21 @@ export class MappingManagementService {
       );
 <span class="cstat-no" title="statement not covered" >      this.api</span>
         .put(url, { json: payload })
-        .json()
         .then(<span class="fstat-no" title="function not covered" >(b</span>ody: any) =&gt; {
 <span class="cstat-no" title="statement not covered" >          this.cfg.logger!.debug(</span>
             `Mapping Update Service Response: ${JSON.stringify(body)}\n`
           );
-<span class="cstat-no" title="statement not covered" >          if (this.cfg.mappings === null) {</span>
-<span class="cstat-no" title="statement not covered" >            resolve(false);</span>
-<span class="cstat-no" title="statement not covered" >            return;</span>
-          }
 <span class="cstat-no" title="statement not covered" >          resolve(true);</span>
         })
-        .catch(<span class="fstat-no" title="function not covered" >() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >          this.cfg.logger!.warn('Unable to update mappings file.');</span>
+        .catch(<span class="fstat-no" title="function not covered" >(e</span>rror: any) =&gt; {
+<span class="cstat-no" title="statement not covered" >          this.cfg.errorService.addError(</span>
+            new ErrorInfo({
+              message: 'Unable to update mappings file. ' + error,
+              level: ErrorLevel.ERROR,
+              scope: ErrorScope.MAPPING,
+              type: ErrorType.INTERNAL,
+            })
+          );
 <span class="cstat-no" title="statement not covered" >          resolve(false);</span>
         });
     });
@@ -3315,7 +3321,7 @@ export class MappingManagementService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Oct 26 2020 13:24:31 GMT+0000 (Coordinated Universal Time)
+                at Mon Oct 26 2020 15:06:35 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
