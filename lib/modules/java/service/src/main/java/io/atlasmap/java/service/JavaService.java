@@ -95,9 +95,15 @@ public class JavaService {
     public Response getClass(@Parameter(description = "The fully qualified class name to inspect") @QueryParam("className") String className) {
         ClassInspectionService classInspectionService = new ClassInspectionService();
         classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
-        JavaClass c = classInspectionService.inspectClass(className, CollectionType.NONE, null);
-        classInspectionService = null;
-        return Response.ok().entity(toJson(c)).build();
+        try {
+            JavaClass c = classInspectionService.inspectClass(className, CollectionType.NONE, null);
+            return Response.ok().entity(toJson(c)).build();
+        } catch (Exception e) {
+            String msg = String.format("Error inspecting class %s - %s: %s",
+                    className, e.getClass().getName(), e.getMessage());
+            LOG.error(msg, e);
+            return Response.serverError().entity(msg).build();
+        }
     }
 
     @POST
@@ -166,9 +172,11 @@ public class JavaService {
                 c = classInspectionService.inspectClass(request.getClassName(), request.getCollectionType(), request.getClasspath());
             }
             response.setJavaClass(c);
-        } catch (Exception e) {
-            LOG.error("Error inspecting class with classpath: " + e.getMessage(), e);
-            response.setErrorMessage(e.getMessage());
+        } catch (Throwable e) {
+            String msg = String.format("Error inspecting class %s - %s: %s",
+                    request.getClassName(), e.getClass().getName(), e.getMessage());
+            LOG.error(msg, e);
+            response.setErrorMessage(msg);
         } finally {
             response.setExecutionTime(System.currentTimeMillis() - startTime);
         }

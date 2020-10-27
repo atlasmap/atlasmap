@@ -157,9 +157,11 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
         for (ClassLoader cl : sortLoaders()) {
             try {
                 return cl.loadClass(name);
+            } catch (NoClassDefFoundError ncdfe) {
+                throw ncdfe;
             } catch (Throwable t) {
                 LOG.debug("Class not found: [ClassLoader:{}, Class name:{}, message:{}]",
-                    cl, name, t.getMessage());
+                    cl, name, t.getMessage(), t);
                 continue;
             }
         }

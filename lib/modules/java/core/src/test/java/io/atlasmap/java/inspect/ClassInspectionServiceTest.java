@@ -380,4 +380,14 @@ public class ClassInspectionServiceTest {
         assertEquals(0, javaClass.getJavaEnumFields().getJavaEnumField().size());
     }
 
+    @Test
+    public void testInnerClass() {
+        JavaClass javaClass = classInspectionService.inspectClass(InnerClass.TheInnerClass.class, CollectionType.NONE, null);
+        assertEquals("io.atlasmap.java.inspect.InnerClass$TheInnerClass", javaClass.getClassName());
+        assertEquals(FieldType.COMPLEX, javaClass.getFieldType());
+        assertEquals(1, javaClass.getJavaFields().getJavaField().size());
+        JavaField f = javaClass.getJavaFields().getJavaField().get(0);
+        assertEquals(FieldType.STRING, f.getFieldType());
+        assertEquals("/someInnerString", f.getPath());
+    }
 }
