@@ -214,7 +214,7 @@ export class TransitionModel {
           TransitionDelimiter.USER_DEFINED,
           'User defined',
           'User defined',
-          ''
+          '\0'
         )
       );
       TransitionModel.delimiterModels = models;
