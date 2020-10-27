@@ -7,6 +7,8 @@ import {
   InputGroup,
   TextInput,
   FormGroup,
+  Split,
+  SplitItem,
 } from "@patternfly/react-core";
 import { TrashIcon } from "@patternfly/react-icons";
 
@@ -72,27 +74,60 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
       </FormGroup>
       {transformationsArguments.map((a, idx) => {
         const argId = `${id}-transformation-${idx}`;
+        const udOption = a.options?.find(
+          (option) => option.name === "User defined",
+        );
+        // If user-defined option, replace user-defined option value with arg
+        // value, since arg options are always reset with static values
+        if (
+          a.options &&
+          udOption &&
+          !a.options.find((option) => option.value === a.value)
+        ) {
+          udOption.value = a.value;
+        }
         return (
           <FormGroup fieldId={argId} label={a.label} key={idx}>
             {a.options ? (
-              <FormSelect
-                label={a.label}
-                value={a.value}
-                id={argId}
-                isDisabled={disableTransformation}
-                onChange={(value) =>
-                  onTransformationArgumentChange(a.name, value)
-                }
-                data-testid={a.name}
-              >
-                {a.options.map((option, optIndx) => (
-                  <FormSelectOption
-                    label={option.name}
-                    value={option.value}
-                    key={optIndx}
-                  />
-                ))}
-              </FormSelect>
+              <Split>
+                <SplitItem>
+                  <FormSelect
+                    label={a.label}
+                    value={a.value}
+                    id={argId}
+                    isDisabled={disableTransformation}
+                    onChange={(value) =>
+                      onTransformationArgumentChange(a.name, value)
+                    }
+                    data-testid={a.name}
+                  >
+                    {a.options.map((option, optIndx) => {
+                      return (
+                        <FormSelectOption
+                          label={option.name}
+                          value={option.value}
+                          key={optIndx}
+                        />
+                      );
+                    })}
+                  </FormSelect>
+                </SplitItem>
+                {a.value === udOption?.value && (
+                  <SplitItem>
+                    <TextInput
+                      id="userDefined"
+                      type="text"
+                      name="userDefined"
+                      defaultValue={a.value}
+                      onChange={(value) =>
+                        onTransformationArgumentChange(a.name, value)
+                      }
+                      data-testid={`userDefined`}
+                      autoFocus
+                    />
+                  </SplitItem>
+                )}
+              </Split>
             ) : (
               <TextInput
                 id={argId}
