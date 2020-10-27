@@ -84,10 +84,20 @@ export class MappingUtil {
         if (docMap === null) {
           docMap = cfg.getDocUriMap(cfg, isSource);
         }
-        // TODO: check this non null operator
         doc = docMap[
           mappedField.parsedData.parsedDocURI!
         ] as DocumentDefinition;
+
+        // Handle legacy mapped fields document URIs.
+        if (doc == null && mappedField.parsedData.parsedDocURI) {
+          const docIndex = mappedField.parsedData.parsedDocURI?.replace(
+            'java?',
+            'java:' + mappedField.parsedData.parsedDocID + '?'
+          );
+          if (docIndex) {
+            doc = docMap[docIndex] as DocumentDefinition;
+          }
+        }
         if (doc == null) {
           if (mappedField.parsedData.parsedName != null) {
             cfg.errorService.addError(

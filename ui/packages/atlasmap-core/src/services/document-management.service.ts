@@ -799,7 +799,7 @@ export class DocumentManagementService {
         docDef.name = docDef.name.substr(docDef.name.lastIndexOf('.') + 1);
       }
     }
-    if (javaClass.uri) {
+    if (javaClass.uri && (!docDef.uri || docDef.uri.length === 0)) {
       docDef.uri = javaClass.uri;
     }
 
