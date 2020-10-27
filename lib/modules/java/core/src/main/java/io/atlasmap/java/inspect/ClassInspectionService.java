@@ -129,24 +129,16 @@ public class ClassInspectionService {
         this.disablePublicGetterSetterFields = disablePublicGetterSetterFields;
     }
 
-    public JavaClass inspectClass(String className, CollectionType collectionType, String collectionClassName) {
+    public JavaClass inspectClass(String className, CollectionType collectionType, String collectionClassName) throws ClassNotFoundException {
         // Use a loader for this class for now
         ClassLoader classLoader = getClass().getClassLoader();
         return inspectClass(classLoader, className, collectionType, collectionClassName);
     }
 
-    public JavaClass inspectClass(ClassLoader classLoader, String className, CollectionType collectionType, String collectionClassName) {
-        JavaClass d = null;
-        Class<?> clazz = null;
-        try {
-            clazz = classLoader.loadClass(className);
-            d = inspectClass(classLoader, clazz, collectionType, collectionClassName);
-        } catch (ClassNotFoundException cnfe) {
-            d = AtlasJavaModelFactory.createJavaClass();
-            d.setClassName(className);
-            d.setStatus(FieldStatus.NOT_FOUND);
-        }
-        return d;
+    public JavaClass inspectClass(ClassLoader classLoader, String className, CollectionType collectionType, String collectionClassName)
+        throws ClassNotFoundException {
+        Class<?> clazz = classLoader.loadClass(className);
+        return inspectClass(classLoader, clazz, collectionType, collectionClassName);
     }
 
     public JavaClass inspectClass(String className, CollectionType collectionType, String collectionClassName, String classpath) throws InspectionException {
