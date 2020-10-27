@@ -79,15 +79,15 @@ public class AtlasMapMultiDocsTest {
         Message msg = new DefaultMessage(camelContext);
         msg.setBody(javaSource);
         msg.setHeader("testProp", "java-source-header");
-        sourceMap.put("DOCID:JAVA:CONTACT:S", msg);
+        sourceMap.put("DOCID-JAVA-CONTACT-S", msg);
         msg = new DefaultMessage(camelContext);
         msg.setBody(JSON_SOURCE);
         msg.setHeader("testProp", "json-source-header");
-        sourceMap.put("DOCID:JSON:CONTACT:S", msg);
+        sourceMap.put("DOCID-JSON-CONTACT-S", msg);
         msg = new DefaultMessage(camelContext);
         msg.setBody(XML_SOURCE);
         msg.setHeader("testProp", "xml-source-header");
-        sourceMap.put("DOCID:XML:CONTACT:S", msg);
+        sourceMap.put("DOCID-XML-CONTACT-S", msg);
 
         ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
         producerTemplate.sendBodyAndProperty("direct:start", null, "CAPTURED_OUT_MESSAGES_MAP", sourceMap);
@@ -101,6 +101,8 @@ public class AtlasMapMultiDocsTest {
         assertEquals("java-source-header", exchange.getProperty("target-exchange"));
         assertEquals("json-source-header", exchange.getProperty("testProp"));
         assertEquals("xml-source-header", exchange.getIn().getHeader("testProp"));
+        assertEquals("java-source-headerjson-source-headerxml-source-header"
+                , exchange.getIn().getHeader("testPropExpression"));
     }
 
     @Test
@@ -113,9 +115,9 @@ public class AtlasMapMultiDocsTest {
         javaSource.setLastName("JavaLastName");
         javaSource.setPhoneNumber("JavaPhoneNumber");
         javaSource.setZipCode("JavaZipCode");
-        sourceMap.put("DOCID:JAVA:CONTACT:S", javaSource);
-        sourceMap.put("DOCID:JSON:CONTACT:S", JSON_SOURCE);
-        sourceMap.put("DOCID:XML:CONTACT:S", XML_SOURCE);
+        sourceMap.put("DOCID-JAVA-CONTACT-S", javaSource);
+        sourceMap.put("DOCID-JSON-CONTACT-S", JSON_SOURCE);
+        sourceMap.put("DOCID-XML-CONTACT-S", XML_SOURCE);
 
         ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
         producerTemplate.sendBody("direct:start-body", sourceMap);
@@ -137,9 +139,9 @@ public class AtlasMapMultiDocsTest {
         javaSource.setLastName("JavaLastName");
         javaSource.setPhoneNumber("JavaPhoneNumber");
         javaSource.setZipCode("JavaZipCode");
-        sourceMap.put("DOCID:JAVA:CONTACT:S", javaSource);
-        sourceMap.put("DOCID:JSON:CONTACT:S", JSON_SOURCE);
-        sourceMap.put("DOCID:XML:CONTACT:S", XML_SOURCE);
+        sourceMap.put("DOCID-JAVA-CONTACT-S", javaSource);
+        sourceMap.put("DOCID-JSON-CONTACT-S", JSON_SOURCE);
+        sourceMap.put("DOCID-XML-CONTACT-S", XML_SOURCE);
 
         ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
         producerTemplate.sendBodyAndHeaders("direct:start-header", null, sourceMap);
@@ -159,9 +161,9 @@ public class AtlasMapMultiDocsTest {
         javaSource.setLastName("JavaLastName");
         javaSource.setPhoneNumber("JavaPhoneNumber");
         javaSource.setZipCode("JavaZipCode");
-        sourceMap.put("DOCID:JAVA:CONTACT:S", javaSource);
-        sourceMap.put("DOCID:JSON:CONTACT:S", JSON_SOURCE);
-        sourceMap.put("DOCID:XML:CONTACT:S", XML_SOURCE);
+        sourceMap.put("DOCID-JAVA-CONTACT-S", javaSource);
+        sourceMap.put("DOCID-JSON-CONTACT-S", JSON_SOURCE);
+        sourceMap.put("DOCID-XML-CONTACT-S", XML_SOURCE);
 
         Endpoint ep = camelContext.getEndpoint("direct:start-exchange-property");
         Exchange ex = ep.createExchange();
@@ -175,14 +177,14 @@ public class AtlasMapMultiDocsTest {
     }
 
     private void verifyTargetDocs(Map<?, ?> targetMap) throws Exception {
-        String jsonTarget = (String) targetMap.get("DOCID:JSON:CONTACT:T");
+        String jsonTarget = (String) targetMap.get("DOCID-JSON-CONTACT-T");
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonTargetNode = mapper.readTree(jsonTarget);
         assertEquals("JsonFirstName", jsonTargetNode.get("firstName").asText());
         assertEquals("JavaLastName", jsonTargetNode.get("lastName").asText());
         assertEquals("XmlPhoneNumber", jsonTargetNode.get("phoneNumber").asText());
 
-        String xmlTarget = (String) targetMap.get("DOCID:XML:CONTACT:T");
+        String xmlTarget = (String) targetMap.get("DOCID-XML-CONTACT-T");
         HashMap<String,String> ns = new HashMap<>();
         ns.put("ns", "http://atlasmap.io/xml/test/v2");
         assertThat(xmlTarget).withNamespaceContext(ns).valueByXPath("/Contact/@firstName").isEqualTo("XmlFirstName");

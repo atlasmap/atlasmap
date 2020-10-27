@@ -193,6 +193,12 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     }
 
     @Override
+    public DefaultAtlasPreviewContext createPreviewContext() {
+        DefaultAtlasPreviewContext context = new DefaultAtlasPreviewContext(this);
+        return context;
+    }
+
+    @Override
     public String getClassName() {
         return this.getClass().getName();
     }

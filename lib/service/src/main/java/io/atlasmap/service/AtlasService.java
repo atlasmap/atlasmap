@@ -48,6 +48,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.api.AtlasPreviewContext;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.ADMArchiveHandler;
 import io.atlasmap.core.AtlasUtil;
@@ -82,7 +83,7 @@ public class AtlasService {
     private static final Logger LOG = LoggerFactory.getLogger(AtlasService.class);
 
     private final DefaultAtlasContextFactory atlasContextFactory = DefaultAtlasContextFactory.getInstance();
-    private final AtlasContext defaultContext;
+    private final AtlasPreviewContext previewContext;
 
     private String baseFolder = "";
     private String mappingFolder = "";
@@ -132,7 +133,7 @@ public class AtlasService {
             ((DefaultAtlasContextFactory)atlasContextFactory).destroy();
             ((DefaultAtlasContextFactory)atlasContextFactory).init(libraryLoader);
         }
-        this.defaultContext = atlasContextFactory.createContext(new AtlasMapping());
+        this.previewContext = atlasContextFactory.createPreviewContext();
     }
 
     @GET
@@ -549,7 +550,7 @@ public class AtlasService {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Preview request: {}", new String(toJson(mapping)));
             }
-            audits = defaultContext.processPreview(mapping);
+            audits = previewContext.processPreview(mapping);
         } catch (AtlasException e) {
             throw new WebApplicationException("Unable to process mapping preview", e);
         }

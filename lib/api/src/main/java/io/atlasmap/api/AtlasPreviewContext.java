@@ -18,28 +18,8 @@ package io.atlasmap.api;
 import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.Mapping;
 
-public interface AtlasContext {
+public interface AtlasPreviewContext {
 
-    AtlasContextFactory getContextFactory();
-
-    AtlasSession createSession() throws AtlasException;
-
-    /*
-     * https://github.com/atlasmap/atlasmap/issues/872
-     * Consider moving following 3 methods into AtlasSession in V2
-     */
-
-    void process(AtlasSession session) throws AtlasException;
-
-    void processValidation(AtlasSession session) throws AtlasException;
-
-    /**
-     * @deprecated Use {@code AtlasPreviewContext#processPreview(Mapping)}
-     * 
-     * @param mapping A mapping item to process preview
-     * @return A list of audit log
-     */
-    @Deprecated
     Audits processPreview(Mapping mapping) throws AtlasException;
 
 }

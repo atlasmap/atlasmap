@@ -25,6 +25,8 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
+import io.atlasmap.v2.PropertyField;
+import io.atlasmap.v2.SimpleField;
 
 public class DefaultAtlasExpressionProcessorTest extends BaseDefaultAtlasContextTest {
 
@@ -151,5 +153,42 @@ public class DefaultAtlasExpressionProcessorTest extends BaseDefaultAtlasContext
         assertEquals("/testPathfoo<1>/value", child.getPath());
         assertEquals("foo2", child.getValue());
     }
+
+    @Test
+    public void testScopedProperty() throws Exception {
+        FieldGroup source = new FieldGroup();
+        PropertyField doc1Prop = new PropertyField();
+        doc1Prop.setDocId("DOC.Properties.85731");
+        doc1Prop.setScope("Doc1");
+        doc1Prop.setPath("/Doc1/testprop");
+        doc1Prop.setName("testprop");
+        doc1Prop.setValue("doc1prop");
+        source.getField().add(doc1Prop);
+        PropertyField doc2Prop = new PropertyField();
+        doc2Prop.setDocId("DOC.Properties.85731");
+        doc2Prop.setScope("Doc2");
+        doc2Prop.setPath("/Doc2/testprop");
+        doc2Prop.setName("testprop");
+        doc2Prop.setValue("doc2prop");
+        source.getField().add(doc2Prop);
+        PropertyField currentProp = new PropertyField();
+        currentProp.setDocId("DOC.Properties.85731");
+        currentProp.setPath("/testprop");
+        currentProp.setName("testprop");
+        currentProp.setValue("currentprop");
+        source.getField().add(currentProp);
+        String expression = "${DOC.Properties.85731:/Doc1/testprop} + ${DOC.Properties.85731:/Doc2/testprop}"
+                + " + ${DOC.Properties.85731:/testprop}";
+        recreateSession();
+        context.getSourceModules().put(DefaultAtlasContext.PROPERTIES_DOCUMENT_ID, new PropertyModule(new DefaultAtlasPropertyStrategy()));
+        session.head().setSourceField(source);
+        DefaultAtlasExpressionProcessor.processExpression(session, expression);
+        assertFalse(printAudit(session), session.hasErrors());
+        assertEquals(SimpleField.class, session.head().getSourceField().getClass());
+        SimpleField field = (SimpleField) session.head().getSourceField();
+        assertEquals("$ATLASMAP", field.getPath());
+        assertEquals("doc1propdoc2propcurrentprop", field.getValue());
+    }
+
 }
 

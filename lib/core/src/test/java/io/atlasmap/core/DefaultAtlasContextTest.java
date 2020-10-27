@@ -441,7 +441,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         target.setFieldType(FieldType.INTEGER);
         m.getInputField().add(source);
         m.getOutputField().add(target);
-        context.processPreview(m);
+        previewContext.processPreview(m);
         assertEquals(Integer.class, target.getValue().getClass());
         assertEquals(404, target.getValue());
     }
@@ -460,7 +460,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         target.setFieldType(FieldType.STRING);
         m.getInputField().add(source);
         m.getOutputField().add(target);
-        context.processPreview(m);
+        previewContext.processPreview(m);
         assertEquals("ABC", target.getValue());
     }
 
@@ -478,7 +478,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         target.setActions(actions);
         m.getInputField().add(source);
         m.getOutputField().add(target);
-        context.processPreview(m);
+        previewContext.processPreview(m);
         assertEquals("ABC", target.getValue());
     }
 
@@ -499,7 +499,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         m.getInputField().add(source1);
         m.getInputField().add(source2);
         m.getOutputField().add(target);
-        context.processPreview(m);
+        previewContext.processPreview(m);
         assertEquals("1 2", target.getValue());
     }
 
@@ -519,7 +519,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         m.getInputField().add(source);
         m.getOutputField().add(target1);
         m.getOutputField().add(target2);
-        context.processPreview(m);
+        previewContext.processPreview(m);
         assertEquals("1", target1.getValue());
         assertEquals("2", target2.getValue());
     }
@@ -529,10 +529,12 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         Mapping m = new Mapping();
         Field source1 = new SimpleField();
         source1.setFieldType(FieldType.STRING);
+        source1.setPath("/one");
         source1.setIndex(0);
         source1.setValue("one");
         Field source2 = new SimpleField();
         source2.setFieldType(FieldType.STRING);
+        source2.setPath("/two");
         source2.setIndex(1);
         source2.setValue("two");
         FieldGroup group = new FieldGroup();
@@ -546,7 +548,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         Field target = new SimpleField();
         target.setFieldType(FieldType.STRING);
         m.getOutputField().add(target);
-        context.processPreview(m);
+        previewContext.processPreview(m);
         assertEquals("one and two", target.getValue());
     }
 
@@ -555,14 +557,17 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         Mapping m = new Mapping();
         Field source1 = new SimpleField();
         source1.setFieldType(FieldType.STRING);
+        source1.setPath("/one");
         source1.setIndex(1);
         source1.setValue("one");
         Field source2 = new SimpleField();
         source2.setFieldType(FieldType.STRING);
+        source2.setPath("/two");
         source2.setIndex(3);
         source2.setValue("two");
         Field source3 = new SimpleField();
         source3.setFieldType(FieldType.STRING);
+        source3.setPath("/six");
         source3.setIndex(5);
         source3.setValue("six");
         FieldGroup group = new FieldGroup();
@@ -578,7 +583,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         Field target = new SimpleField();
         target.setFieldType(FieldType.STRING);
         m.getOutputField().add(target);
-        context.processPreview(m);
+        previewContext.processPreview(m);
         assertEquals("-one--two--six", target.getValue());
     }
 
@@ -605,7 +610,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         target3.setIndex(3);
         target3.setFieldType(FieldType.STRING);
         m.getOutputField().add(target3);
-        Audits audits = context.processPreview(m);
+        Audits audits = previewContext.processPreview(m);
         assertEquals(printAudit(audits), 0, audits.getAudit().size());
         assertEquals("one", target1.getValue());
         assertEquals("two", target2.getValue());
@@ -629,7 +634,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         target.setIndex(0);
         target.setFieldType(FieldType.STRING);
         m.getOutputField().add(target);
-        Audits audits = context.processPreview(m);
+        Audits audits = previewContext.processPreview(m);
         assertEquals(printAudit(audits), 0, audits.getAudit().size());
         assertEquals("one", target.getValue());
     }
@@ -653,7 +658,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         Field target = new SimpleField();
         target.setFieldType(FieldType.STRING);
         m.getOutputField().add(target);
-        Audits audits = context.processPreview(m);
+        Audits audits = previewContext.processPreview(m);
         assertEquals(printAudit(audits), 0, audits.getAudit().size());
         assertEquals("100.0", target.getValue());
     }

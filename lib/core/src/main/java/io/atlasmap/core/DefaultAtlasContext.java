@@ -248,208 +248,17 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     /**
      * Process single mapping entry in preview mode. Since modules don't participate
      * in preview mode, any document format specific function won't be applied.
+     * @deprecated Use {@code AtlasPreviewContext#processPreview(Mapping)}
      *
      * @param mapping A @link{Mapping} entry to process
      */
     @Override
+    @Deprecated
     public Audits processPreview(Mapping mapping) throws AtlasException {
-        DefaultAtlasSession session = new DefaultAtlasPreviewSession(this, mapping);
-        MappingType mappingType = mapping.getMappingType();
-        String expression = mapping.getExpression();
-        FieldGroup sourceFieldGroup = mapping.getInputFieldGroup();
-        List<Field> sourceFields = mapping.getInputField();
-        List<Field> targetFields = mapping.getOutputField();
-
-        targetFields.forEach(tf -> tf.setValue(null));
-        if ((sourceFieldGroup == null && sourceFields.isEmpty()) || targetFields.isEmpty()) {
-            return session.getAudits();
-        }
-        if (sourceFieldGroup != null) {
-            sourceFields = sourceFieldGroup.getField();
-        }
-        for (Field sf : sourceFields) {
-            if (sf.getFieldType() == null || sf.getValue() == null) {
-                continue;
-            }
-            if (sf.getValue() instanceof String && ((String)sf.getValue()).isEmpty()) {
-                continue;
-            }
-            if (!restoreSourceFieldType(session, sf)) {
-                return session.getAudits();
-            }
-        }
-
-        Field sourceField;
-        Field targetField;
-        if (mappingType == null || mappingType == MappingType.MAP) {
-            if (expression != null && !expression.isEmpty()) {
-                if (sourceFieldGroup == null) {
-                    sourceFieldGroup = new FieldGroup();
-                    sourceFieldGroup.getField().addAll(mapping.getInputField());
-                }
-                session.head().setSourceField(sourceFieldGroup);
-                DefaultAtlasExpressionProcessor.processExpression(session, mapping.getExpression());
-                sourceField = session.head().getSourceField();
-            } else if (sourceFieldGroup != null) {
-                List<Field> processed = new LinkedList<>();
-                for (Field f : sourceFieldGroup.getField()) {
-                    processed.add(applyFieldActions(session, f));
-                }
-                sourceFieldGroup.getField().clear();
-                sourceFieldGroup.getField().addAll(processed);
-                sourceField = applyFieldActions(session, sourceFieldGroup);
-            } else {
-                sourceField = sourceFields.get(0);
-                sourceField = applyFieldActions(session, sourceField);
-            }
-            session.head().setSourceField(sourceField);
-            sourceFieldGroup = sourceField instanceof FieldGroup ? (FieldGroup) sourceField : null;
-            for (Field f : targetFields) {
-                targetField = f;
-                session.head().setTargetField(targetField);
-                if (sourceFieldGroup != null) {
-                    if (sourceFieldGroup.getField().size() == 0) {
-                        AtlasUtil.addAudit(session, targetField.getDocId(), String.format(
-                                "The group field '%s:%s' Empty group field is detected, skipping",
-                                sourceField.getDocId(), sourceField.getPath()),
-                                targetField.getPath(), AuditStatus.WARN, null);
-                        continue;
-                    }
-                    Integer index = targetField.getIndex();
-                    AtlasPath targetPath = new AtlasPath(targetField.getPath());
-                    if (targetPath.hasCollection() && !targetPath.isIndexedCollection()) {
-                        if (targetFields.size() > 1) {
-                            AtlasUtil.addAudit(session, targetField.getDocId(),
-                                    "It's not yet supported to have a collection field as a part of multiple target fields in a same mapping",
-                                    targetField.getPath(), AuditStatus.ERROR, null);
-                            return session.getAudits();
-                        }
-                        session.head().setSourceField(sourceFieldGroup);
-                    } else if (index == null) {
-                        session.head().setSourceField(sourceFieldGroup.getField().get(sourceFieldGroup.getField().size()-1));
-                    } else {
-                        if (sourceFieldGroup.getField().size() > index) {
-                            session.head().setSourceField(sourceFieldGroup.getField().get(index));
-                        } else {
-                            AtlasUtil.addAudit(session, targetField.getDocId(), String.format(
-                                    "The number of source fields '%s' is fewer than expected via target field index '%s'",
-                                    sourceFieldGroup.getField().size(), targetField.getIndex()),
-                                    targetField.getPath(), AuditStatus.WARN, null);
-                            continue;
-                        }
-                    }
-                }
-                if (session.hasErrors()) {
-                    return session.getAudits();
-                }
-                if (!convertSourceToTarget(session, session.head().getSourceField(), targetField)) {
-                    return session.getAudits();
-                }
-                Field processed = targetField;
-                if (expression == null || expression.isEmpty()) {
-                    processed = applyFieldActions(session, targetField);
-                }
-                // TODO handle collection values - https://github.com/atlasmap/atlasmap/issues/531
-                targetField.setValue(processed.getValue());
-            }
-
-        } else if (mappingType == MappingType.COMBINE) {
-            targetField = targetFields.get(0);
-            sourceFields.forEach(sf -> applyFieldActions(session, sf));
-            Field combined = processCombineField(session, mapping, sourceFields, targetField);
-            if (!convertSourceToTarget(session, combined, targetField)) {
-                return session.getAudits();
-            }
-            applyFieldActions(session, targetField);
-
-        } else if (mappingType == MappingType.SEPARATE) {
-            sourceField = sourceFields.get(0);
-            applyFieldActions(session, sourceField);
-            List<Field> separatedFields;
-            try {
-                separatedFields = processSeparateField(session, mapping, sourceField);
-            } catch (AtlasException e) {
-                AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(
-                        "Failed to separate field: %s", AtlasUtil.getChainedMessage(e)),
-                        sourceField.getPath(), AuditStatus.ERROR, null);
-                if (LOG.isDebugEnabled()) {
-                    LOG.error("", e);
-                }
-                return session.getAudits();
-            }
-            if (separatedFields == null) {
-                return session.getAudits();
-            }
-            for (Field f : targetFields) {
-                targetField = f;
-                if (targetField.getIndex() == null || targetField.getIndex() < 0) {
-                    AtlasUtil.addAudit(session, targetField.getDocId(), String.format(
-                            "Separate requires zero or positive Index value to be set on targetField targetField.path=%s",
-                            targetField.getPath()), targetField.getPath(), AuditStatus.WARN, null);
-                    continue;
-                }
-                if (separatedFields.size() <= targetField.getIndex()) {
-                    String errorMessage = String.format(
-                            "Separate returned fewer segments count=%s when targetField.path=%s requested index=%s",
-                            separatedFields.size(), targetField.getPath(), targetField.getIndex());
-                    AtlasUtil.addAudit(session, targetField.getDocId(), errorMessage, targetField.getPath(),
-                            AuditStatus.WARN, null);
-                    break;
-                }
-                if (!convertSourceToTarget(session, separatedFields.get(targetField.getIndex()), targetField)) {
-                    break;
-                }
-                applyFieldActions(session, targetField);
-            }
-
-        } else {
-            AtlasUtil.addAudit(session, null, String.format(
-                    "Unsupported mappingType=%s detected", mapping.getMappingType()),
-                    null, AuditStatus.ERROR, null);
-        }
-        return session.getAudits();
+        return this.factory.createPreviewContext().processPreview(mapping);
     }
 
-    private boolean restoreSourceFieldType(DefaultAtlasSession session, Field sourceField) {
-        try {
-            Object sourceValue = factory.getConversionService().convertType(
-                    sourceField.getValue(), null, sourceField.getFieldType(), null);
-            sourceField.setValue(sourceValue);
-        } catch (AtlasConversionException e) {
-            AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(
-                    "Wrong format for source value : %s", AtlasUtil.getChainedMessage(e)),
-                    sourceField.getPath(), AuditStatus.ERROR, null);
-            if (LOG.isDebugEnabled()) {
-                LOG.error("", e);
-            }
-            return false;
-        }
-        return true;
-    }
-
-    private boolean convertSourceToTarget(DefaultAtlasSession session, Field sourceField, Field targetField) {
-        Object targetValue = null;
-        if (sourceField.getFieldType() != null && sourceField.getFieldType().equals(targetField.getFieldType())) {
-            targetValue = sourceField.getValue();
-        } else if (sourceField.getValue() != null) {
-            try {
-                targetValue = factory.getConversionService().convertType(sourceField.getValue(), sourceField.getFormat(),
-                        targetField.getFieldType(), targetField.getFormat());
-            } catch (AtlasConversionException e) {
-                AtlasUtil.addAudit(session, targetField.getDocId(), String.format(
-                        "Failed to convert source value to target type: %s", AtlasUtil.getChainedMessage(e)),
-                        targetField.getPath(), AuditStatus.ERROR, null);
-                if (LOG.isDebugEnabled()) {
-                    LOG.error("", e);
-                }
-                return false;
-            }
-        }
-        targetField.setValue(targetValue);
-        return true;
-    }
-
-    private Field applyFieldActions(DefaultAtlasSession session, Field field) {
+    protected Field applyFieldActions(DefaultAtlasSession session, Field field) {
         if (field.getActions() == null) {
             return field;
         }
@@ -536,53 +345,9 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                     continue;
                 }
 
-                try {
-                    if (mapping.getInputFieldGroup() != null) {
-                        if (mapping.getExpression() != null) {
-                            session.head().setSourceField(mapping.getInputFieldGroup());
-                            DefaultAtlasExpressionProcessor.processExpression(session, mapping.getExpression());
-                        } else {
-                            processSourceFieldGroup(session, mapping.getInputFieldGroup());
-                        }
-                    } else if (mapping.getInputField() != null && !mapping.getInputField().isEmpty()) {
-                        if (mapping.getExpression() != null) {
-                            FieldGroup group = new FieldGroup();
-                            group.getField().addAll(mapping.getInputField());
-                            session.head().setSourceField(group);
-                            DefaultAtlasExpressionProcessor.processExpression(session, mapping.getExpression());
-                        } else {
-                            applyCopyToActions(mapping.getInputField(), mapping);
-                            processSourceFieldMappings(session, mapping.getInputField());
-                        }
-                    } else {
-                        session.head().addAudit(AuditStatus.WARN, null, null, String.format(
-                            "Mapping does not contain expression or at least one source field: alias=%s desc=%s",
-                            mapping.getAlias(), mapping.getDescription()));
-                    }
-                } catch (Exception t) {
-                    Field sourceField = session.head().getSourceField();
-                    String docId = sourceField != null ? sourceField.getDocId() : null;
-                    String path =  sourceField != null ? sourceField.getPath() : null;
-                    session.head().addAudit(AuditStatus.ERROR, docId, path, String.format(
-                            "Unexpected exception is thrown while reading source field: %s", t.getMessage()));
-                    if (LOG.isDebugEnabled()) {
-                        LOG.error("", t);
-                    }
-                }
-
+                processSourceFieldMapping(session);
                 if (!session.head().hasError()) {
-                    try {
-                        processTargetFieldMappings(session, mapping);
-                    } catch (Exception t) {
-                        Field targetField = session.head().getTargetField();
-                        String docId = targetField != null ? targetField.getDocId() : null;
-                        String path = targetField != null ? targetField.getPath() : null;
-                        session.head().addAudit(AuditStatus.ERROR, docId, path, String.format(
-                                "Unexpected exception is thrown while populating target field: %s", t.getMessage()));
-                        if (LOG.isDebugEnabled()) {
-                            LOG.error("", t);
-                        }
-                    }
+                    processTargetFieldMapping(session, mapping);
                 }
                 session.getAudits().getAudit().addAll(session.head().getAudits());
                 session.head().unset();
@@ -624,36 +389,58 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         return mappings;
     }
 
-    private AtlasModule resolveModule(FieldDirection direction, Field field) {
-        if (direction == FieldDirection.SOURCE && field instanceof ConstantField) {
-            return sourceModules.get(CONSTANTS_DOCUMENT_ID);
+    protected void processSourceFieldMapping(DefaultAtlasSession session) {
+        try {
+            Mapping mapping = session.head().getMapping();
+            if (mapping.getInputFieldGroup() != null) {
+                if (mapping.getExpression() != null) {
+                    session.head().setSourceField(mapping.getInputFieldGroup());
+                    DefaultAtlasExpressionProcessor.processExpression(session, mapping.getExpression());
+                } else {
+                    processSourceFieldGroup(session, mapping.getInputFieldGroup());
+                }
+            } else if (mapping.getInputField() != null && !mapping.getInputField().isEmpty()) {
+                if (mapping.getExpression() != null) {
+                    FieldGroup sourceFieldGroup = new FieldGroup();
+                    sourceFieldGroup.getField().addAll(mapping.getInputField());
+                    session.head().setSourceField(sourceFieldGroup);
+                    DefaultAtlasExpressionProcessor.processExpression(session, mapping.getExpression());
+                } else {
+                    List<Field> sourceFields = mapping.getInputField();
+                    applyCopyToActions(sourceFields, mapping);
+                    processSourceFields(session, sourceFields);
+                }
+            } else {
+                session.head().addAudit(AuditStatus.WARN, null, null, String.format(
+                    "Mapping does not contain expression or at least one source field: alias=%s desc=%s",
+                    mapping.getAlias(), mapping.getDescription()));
+            }
+        } catch (Exception t) {
+            Field sourceField = session.head().getSourceField();
+            String docId = sourceField != null ? sourceField.getDocId() : null;
+            String path =  sourceField != null ? sourceField.getPath() : null;
+            session.head().addAudit(AuditStatus.ERROR, docId, path, String.format(
+                    "Unexpected exception is thrown while reading source field: %s", t.getMessage()));
+            if (LOG.isDebugEnabled()) {
+                LOG.error("", t);
+            }
         }
-        if (field instanceof PropertyField) {
-            return sourceModules.get(PROPERTIES_DOCUMENT_ID);
-        }
-
-        String docId = field.getDocId();
-        if (docId == null || docId.isEmpty()) {
-            docId = direction == FieldDirection.SOURCE ? AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID
-                    : AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID;
-        }
-        return direction == FieldDirection.SOURCE ? sourceModules.get(docId) : targetModules.get(docId);
     }
 
     private void processSourceFieldGroup(DefaultAtlasSession session, FieldGroup sourceFieldGroup) throws AtlasException {
-        processSourceFieldMappings(session, sourceFieldGroup.getField());
+        processSourceFields(session, sourceFieldGroup.getField());
         session.head().setSourceField(sourceFieldGroup);
         Field processed = applyFieldActions(session, session.head().getSourceField());
         session.head().setSourceField(processed);
     }
 
-    private void processSourceFieldMappings(DefaultAtlasSession session, List<Field> sourceFields)
+    private void processSourceFields(DefaultAtlasSession session, List<Field> sourceFields)
             throws AtlasException {
         for (int i = 0; i < sourceFields.size(); i++) {
             Field sourceField = sourceFields.get(i);
             session.head().setSourceField(sourceField);
             if (sourceField instanceof FieldGroup) {
-                processSourceFieldMappings(session, ((FieldGroup)sourceField).getField());
+                processSourceFields(session, ((FieldGroup)sourceField).getField());
                 continue;
             }
 
@@ -677,6 +464,22 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
             session.head().setSourceField(processed);
             sourceFields.set(i, processed);
         }
+    }
+
+    protected AtlasModule resolveModule(FieldDirection direction, Field field) {
+        if (direction == FieldDirection.SOURCE && field instanceof ConstantField) {
+            return sourceModules.get(CONSTANTS_DOCUMENT_ID);
+        }
+        if (field instanceof PropertyField) {
+            return sourceModules.get(PROPERTIES_DOCUMENT_ID);
+        }
+
+        String docId = field.getDocId();
+        if (docId == null || docId.isEmpty()) {
+            docId = direction == FieldDirection.SOURCE ? AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID
+                    : AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID;
+        }
+        return direction == FieldDirection.SOURCE ? sourceModules.get(docId) : targetModules.get(docId);
     }
 
     /**
@@ -724,7 +527,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         }
     }
 
-    private void processTargetFieldMappings(DefaultAtlasSession session, Mapping mapping) throws AtlasException {
+    private void processTargetFieldMapping(DefaultAtlasSession session, Mapping mapping) {
         MappingType mappingType = mapping.getMappingType();
         List<Field> sourceFields = mapping.getInputField();
         List<Field> targetFields = mapping.getOutputField();
@@ -771,10 +574,24 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                         }
                     }
                 }
-                module.populateTargetField(session);
+                try {
+                    module.populateTargetField(session);
+                } catch (Exception e) {
+                    AtlasUtil.addAudit(session, targetField.getDocId(),
+                            "Failed to populate target field: " + e.getMessage(),
+                            targetField.getPath(), AuditStatus.ERROR, null);
+                    return;
+                }
                 Field processed = applyFieldActions(session, session.head().getTargetField());
                 session.head().setTargetField(processed);
-                module.writeTargetValue(session);
+                try {
+                    module.writeTargetValue(session);
+                } catch (Exception e) {
+                    AtlasUtil.addAudit(session, targetField.getDocId(),
+                            "Failed to write field value into target document: " + e.getMessage(),
+                            targetField.getPath(), AuditStatus.ERROR, null);
+                    return;
+                }
             }
             return;
 
@@ -786,13 +603,35 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
             }
             Field sourceField = processCombineField(session, mapping, sourceFields, targetField);
             session.head().setSourceField(sourceField).setTargetField(targetField);
-            module.populateTargetField(session);
+            try {
+                module.populateTargetField(session);
+            } catch (Exception e) {
+                AtlasUtil.addAudit(session, targetField.getDocId(),
+                        "Failed to populate target field: " + e.getMessage(),
+                        targetField.getPath(), AuditStatus.ERROR, null);
+                return;
+            }
             applyFieldActions(session, session.head().getTargetField());
-            module.writeTargetValue(session);
+            try {
+                module.writeTargetValue(session);
+            } catch (Exception e) {
+                AtlasUtil.addAudit(session, targetField.getDocId(),
+                        "Failed to write field value into target document: " + e.getMessage(),
+                        targetField.getPath(), AuditStatus.ERROR, null);
+                return;
+            }
             return;
 
         } else if (mappingType == MappingType.SEPARATE) {
-            List<Field> separatedFields = processSeparateField(session, mapping, sourceFields.get(0));
+            List<Field> separatedFields = null;
+            try {
+                separatedFields = processSeparateField(session, mapping, sourceFields.get(0));
+            } catch (Exception e) {
+                AtlasUtil.addAudit(session, targetField.getDocId(),
+                        "Failed to process separate mode: " + e.getMessage(),
+                        targetField.getPath(), AuditStatus.ERROR, null);
+                return;
+            }
             if (separatedFields == null) {
                 return;
             }
@@ -818,10 +657,24 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                     break;
                 }
                 session.head().setSourceField(separatedFields.get(targetField.getIndex())).setTargetField(targetField);
-                module.populateTargetField(session);
+                try {
+                    module.populateTargetField(session);
+                } catch (Exception e) {
+                    AtlasUtil.addAudit(session, targetField.getDocId(),
+                            "Failed to populate target field: " + e.getMessage(),
+                            targetField.getPath(), AuditStatus.ERROR, null);
+                    return;
+                }
                 Field processed = applyFieldActions(session, session.head().getTargetField());
                 session.head().setTargetField(processed);
-                module.writeTargetValue(session);
+                try {
+                    module.writeTargetValue(session);
+                } catch (Exception e) {
+                    AtlasUtil.addAudit(session, targetField.getDocId(),
+                            "Failed to write field value into target document: " + e.getMessage(),
+                            targetField.getPath(), AuditStatus.ERROR, null);
+                    return;
+                }
             }
             return;
         }
@@ -849,7 +702,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         return true;
     }
 
-    private Field processCombineField(DefaultAtlasSession session, Mapping mapping, List<Field> sourceFields,
+    protected Field processCombineField(DefaultAtlasSession session, Mapping mapping, List<Field> sourceFields,
             Field targetField) {
         Map<Integer, String> combineValues = null;
         for (Field sourceField : sourceFields) {
@@ -902,7 +755,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         return answer;
     }
 
-    private List<Field> processSeparateField(DefaultAtlasSession session, Mapping mapping, Field sourceField)
+    protected List<Field> processSeparateField(DefaultAtlasSession session, Mapping mapping, Field sourceField)
             throws AtlasException {
         if (sourceField.getValue() == null) {
             AtlasUtil.addAudit(session, sourceField.getDocId(),

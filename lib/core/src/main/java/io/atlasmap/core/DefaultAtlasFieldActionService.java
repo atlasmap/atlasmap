@@ -666,6 +666,8 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                 List<Object> values = new ArrayList<>();
                 extractNestedListValuesFromFieldGroup(fieldGroup, values); //preserve top level list of parameters and arguments
                 flattenedValues.addAll(values);
+            } else if (item == null) {
+                throw new IllegalArgumentException("Unexpected null Field was passed in");
             } else {
                 flattenedValues.add(item.getValue());
             }
