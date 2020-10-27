@@ -35,6 +35,7 @@ import io.atlasmap.v2.SimpleField;
 
 public abstract class BaseDefaultAtlasContextTest {
     protected DefaultAtlasContext context = null;
+    protected DefaultAtlasPreviewContext previewContext = null;
     protected BaseAtlasModule sourceModule = null;
     protected BaseAtlasModule targetModule = null;
     protected AtlasMapping mapping = null;
@@ -50,6 +51,7 @@ public abstract class BaseDefaultAtlasContextTest {
                 // hijack initialization
             }
         };
+        previewContext = new DefaultAtlasPreviewContext(DefaultAtlasContextFactory.getInstance());
         sourceModule = mockAtlasModule();
         sourceModule.setMode(AtlasModuleMode.SOURCE);
         targetModule = mockAtlasModule();
@@ -80,7 +82,7 @@ public abstract class BaseDefaultAtlasContextTest {
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 AtlasInternalSession session = (AtlasInternalSession) invocation.getArguments()[0];
                 Field field = session.head().getSourceField();
-                field.setValue(reader.sources.get(field.getPath()));
+                reader.read(session);
                 return null;
             }
         }).when(module).readSourceValue(any());

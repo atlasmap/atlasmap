@@ -41,6 +41,8 @@ public interface AtlasContextFactory {
 
     AtlasContext createContext(Format format, InputStream atlasMappingStream) throws AtlasException;
 
+    AtlasPreviewContext createPreviewContext() throws AtlasException;
+
     @Deprecated
     AtlasCombineStrategy getCombineStrategy() throws AtlasException;
 

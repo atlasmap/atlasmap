@@ -23,11 +23,13 @@ import org.slf4j.LoggerFactory;
 
 import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.ExpressionException;
-import io.atlasmap.spi.AtlasFieldReader;
+import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
+import io.atlasmap.v2.PropertyField;
 import io.atlasmap.v2.SimpleField;
 
 public class DefaultAtlasExpressionProcessor {
@@ -60,14 +62,26 @@ public class DefaultAtlasExpressionProcessor {
                     return null;
                 }
                 try {
-                    String[] splitted = path.split(":", 2);
-                    AtlasFieldReader reader = session.getFieldReader(splitted[0]);
                     Field f = sourceFieldMap.get(path);
                     if (f == null) {
                         return null;
                     }
+                    AtlasModule sourceModule;
+                    Map<String, AtlasModule> sourceModules = session.getAtlasContext().getSourceModules();
+                    if (f instanceof ConstantField) {
+                        sourceModule = sourceModules.get(DefaultAtlasContext.CONSTANTS_DOCUMENT_ID);
+                    } else if (f instanceof PropertyField) {
+                        sourceModule = sourceModules.get(DefaultAtlasContext.PROPERTIES_DOCUMENT_ID);
+                    } else {
+                        String[] splitted = path.split(":", 2);
+                        sourceModule = sourceModules.get(splitted[0]);
+                    }
+                    if (sourceModule == null) {
+                        throw new ExpressionException(String.format("Module for the path '%s' is not found", path));
+                    }
                     session.head().setSourceField(f);
-                    return reader.read(session);
+                    sourceModule.readSourceValue(session);
+                    return session.head().getSourceField();
                 } catch (Exception e) {
                     throw new ExpressionException(e);
                 }
