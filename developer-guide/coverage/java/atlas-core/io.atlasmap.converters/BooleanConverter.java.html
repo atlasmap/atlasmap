@@ -17,89 +17,110 @@ package io.atlasmap.converters;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.CharBuffer;
 
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
-<span class="fc" id="L26">public class BooleanConverter implements AtlasConverter&lt;Boolean&gt; {</span>
+<span class="fc" id="L27">public class BooleanConverter implements AtlasConverter&lt;Boolean&gt; {</span>
 
     private static final String STRING_VALUES = &quot;true|false&quot;;
 
     @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.DECIMAL)
     public BigDecimal toBigDecimal(Boolean value) {
-<span class="pc bpc" id="L32" title="2 of 4 branches missed.">        return value != null ? BigDecimal.valueOf(value ? 1 : 0) : null;</span>
+<span class="pc bpc" id="L33" title="2 of 4 branches missed.">        return value != null ? BigDecimal.valueOf(value ? 1 : 0) : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.BIG_INTEGER)
     public BigInteger toBigInteger(Boolean value) {
-<span class="pc bpc" id="L37" title="2 of 4 branches missed.">        return value != null ? BigInteger.valueOf(value ? 1 : 0) : null;</span>
+<span class="pc bpc" id="L38" title="2 of 4 branches missed.">        return value != null ? BigInteger.valueOf(value ? 1 : 0) : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.BOOLEAN)
     public Boolean toBoolean(Boolean value, String sourceFormat, String targetFormat) {
-<span class="fc bfc" id="L42" title="All 2 branches covered.">        return value != null ? Boolean.valueOf(value) : null;</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        return value != null ? Boolean.valueOf(value) : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.BYTE)
     public Byte toByte(Boolean value) {
-<span class="fc bfc" id="L47" title="All 4 branches covered.">        return value != null ? (byte) (value ? 1 : 0) : null;</span>
+<span class="fc bfc" id="L48" title="All 4 branches covered.">        return value != null ? (byte) (value ? 1 : 0) : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.CHAR)
     public Character toCharacter(Boolean value) {
-<span class="fc bfc" id="L52" title="All 4 branches covered.">        return value != null ? (char) (value ? 1 : 0) : null;</span>
+<span class="fc bfc" id="L53" title="All 4 branches covered.">        return value != null ? (char) (value ? 1 : 0) : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.DOUBLE)
     public Double toDouble(Boolean value) {
-<span class="fc bfc" id="L57" title="All 4 branches covered.">        return value != null ? value ? 1.0d : 0.0d : null;</span>
+<span class="fc bfc" id="L58" title="All 4 branches covered.">        return value != null ? value ? 1.0d : 0.0d : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.FLOAT)
     public Float toFloat(Boolean value) {
-<span class="fc bfc" id="L62" title="All 4 branches covered.">        return value != null ? (value ? 1.0f : 0.0f) : null;</span>
+<span class="fc bfc" id="L63" title="All 4 branches covered.">        return value != null ? (value ? 1.0f : 0.0f) : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.INTEGER)
     public Integer toInteger(Boolean value) {
-<span class="fc bfc" id="L67" title="All 4 branches covered.">        return value != null ? (value ? 1 : 0) : null;</span>
+<span class="fc bfc" id="L68" title="All 4 branches covered.">        return value != null ? (value ? 1 : 0) : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.LONG)
     public Long toLong(Boolean value) {
-<span class="fc bfc" id="L72" title="All 4 branches covered.">        return value != null ? (value ? 1L : 0L) : null;</span>
+<span class="fc bfc" id="L73" title="All 4 branches covered.">        return value != null ? (value ? 1L : 0L) : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.NUMBER)
     public Number toNumber(Boolean value) {
-<span class="fc" id="L77">        return toShort(value);</span>
+<span class="fc" id="L78">        return toShort(value);</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.SHORT)
     public Short toShort(Boolean value) {
-<span class="fc bfc" id="L82" title="All 4 branches covered.">        return value != null ? (short) (value ? 1 : 0) : null;</span>
+<span class="fc bfc" id="L83" title="All 4 branches covered.">        return value != null ? (short) (value ? 1 : 0) : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.STRING, concerns = {
             AtlasConversionConcern.CONVENTION })
     public String toString(Boolean value, String sourceFormat, String targetFormat) {
-<span class="fc bfc" id="L88" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L89">            return null;</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L90">            return null;</span>
         }
         // TODO optimize/save defaults
-<span class="pc bpc" id="L92" title="3 of 4 branches missed.">        String format = targetFormat != null &amp;&amp; !&quot;&quot;.equals(targetFormat) ? targetFormat : STRING_VALUES;</span>
-<span class="fc" id="L93">        String[] values = format.split(&quot;\\|&quot;);</span>
-<span class="fc" id="L94">        String trueValue = &quot;&quot;;</span>
-<span class="fc" id="L95">        String falseValue = &quot;&quot;;</span>
-<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        if (values.length == 2) {</span>
-<span class="fc" id="L97">            trueValue = values[0];</span>
-<span class="fc" id="L98">            falseValue = values[1];</span>
-<span class="nc bnc" id="L99" title="All 2 branches missed.">        } else if (values.length == 1) {</span>
-<span class="nc" id="L100">            trueValue = values[0];</span>
+<span class="pc bpc" id="L93" title="3 of 4 branches missed.">        String format = targetFormat != null &amp;&amp; !&quot;&quot;.equals(targetFormat) ? targetFormat : STRING_VALUES;</span>
+<span class="fc" id="L94">        String[] values = format.split(&quot;\\|&quot;);</span>
+<span class="fc" id="L95">        String trueValue = &quot;&quot;;</span>
+<span class="fc" id="L96">        String falseValue = &quot;&quot;;</span>
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">        if (values.length == 2) {</span>
+<span class="fc" id="L98">            trueValue = values[0];</span>
+<span class="fc" id="L99">            falseValue = values[1];</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">        } else if (values.length == 1) {</span>
+<span class="nc" id="L101">            trueValue = values[0];</span>
         }
-<span class="fc bfc" id="L102" title="All 2 branches covered.">        return String.valueOf((value ? trueValue : falseValue));</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        return String.valueOf((value ? trueValue : falseValue));</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.STRING)
+    public CharBuffer toCharBuffer(Boolean value, String sourceFormat, String targetFormat) {
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        return value != null ? CharBuffer.wrap(toString(value, sourceFormat, targetFormat)) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.STRING)
+    public CharSequence toCharSequence(Boolean value, String sourceFormat, String targetFormat) {
+<span class="nc bnc" id="L113" title="All 2 branches missed.">        return value != null ? toString(value, sourceFormat, targetFormat) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.STRING)
+    public StringBuffer toStringBuffer(Boolean value, String sourceFormat, String targetFormat) {
+<span class="nc bnc" id="L118" title="All 2 branches missed.">        return value != null ? new StringBuffer(toString(value, sourceFormat, targetFormat)) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.STRING)
+    public StringBuilder toStringBuilder(Boolean value, String sourceFormat, String targetFormat) {
+<span class="nc bnc" id="L123" title="All 2 branches missed.">        return value != null ? new StringBuilder(toString(value, sourceFormat, targetFormat)) : null;</span>
     }
 
 }

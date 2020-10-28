@@ -490,105 +490,109 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         case &quot;short&quot;:
         case &quot;java.lang.Short&quot;:
 <span class="fc" id="L492">            return FieldType.SHORT;</span>
+        case &quot;java.nio.CharBuffer&quot;:
+        case &quot;java.lang.CharSequence&quot;:
         case &quot;java.lang.String&quot;:
-<span class="fc" id="L494">            return FieldType.STRING;</span>
+        case &quot;java.lang.StringBuffer&quot;:
+        case &quot;java.lang.StringBuilder&quot;:
+<span class="fc" id="L498">            return FieldType.STRING;</span>
         case &quot;java.sql.Date&quot;:
         case &quot;java.time.LocalDate&quot;:
         case &quot;java.time.Month&quot;:
         case &quot;java.time.MonthDay&quot;:
         case &quot;java.time.Year&quot;:
         case &quot;java.time.YearMonth&quot;:
-<span class="fc" id="L501">            return FieldType.DATE;</span>
+<span class="fc" id="L505">            return FieldType.DATE;</span>
         case &quot;java.sql.Time&quot;:
         case &quot;java.time.LocalTime&quot;:
-<span class="fc" id="L504">            return FieldType.TIME;</span>
+<span class="fc" id="L508">            return FieldType.TIME;</span>
         case &quot;java.sql.Timestamp&quot;:
         case &quot;java.time.LocalDateTime&quot;:
         case &quot;java.util.Date&quot;:
-<span class="fc" id="L508">            return FieldType.DATE_TIME;</span>
+<span class="fc" id="L512">            return FieldType.DATE_TIME;</span>
         case &quot;java.time.ZonedDateTime&quot;:
         case &quot;java.util.Calendar&quot;:
         case &quot;java.util.GregorianCalendar&quot;:
-<span class="fc" id="L512">            return FieldType.DATE_TIME_TZ;</span>
+<span class="fc" id="L516">            return FieldType.DATE_TIME_TZ;</span>
         default:
-<span class="fc" id="L514">            return FieldType.COMPLEX;</span>
+<span class="fc" id="L518">            return FieldType.COMPLEX;</span>
         }
     }
 
     @Override
     public Class&lt;?&gt; classFromFieldType(FieldType fieldType) {
-<span class="fc bfc" id="L520" title="All 2 branches covered.">        if (fieldType == null) {</span>
-<span class="fc" id="L521">            return null;</span>
+<span class="fc bfc" id="L524" title="All 2 branches covered.">        if (fieldType == null) {</span>
+<span class="fc" id="L525">            return null;</span>
         }
 
-<span class="pc bpc" id="L524" title="2 of 21 branches missed.">        switch (fieldType) {</span>
+<span class="pc bpc" id="L528" title="2 of 21 branches missed.">        switch (fieldType) {</span>
         case ANY:
-<span class="fc" id="L526">            return Object.class;</span>
+<span class="fc" id="L530">            return Object.class;</span>
         case BIG_INTEGER:
-<span class="fc" id="L528">            return BigInteger.class;</span>
+<span class="fc" id="L532">            return BigInteger.class;</span>
         case BOOLEAN:
-<span class="fc" id="L530">            return Boolean.class;</span>
+<span class="fc" id="L534">            return Boolean.class;</span>
         case BYTE:
-<span class="fc" id="L532">            return Byte.class;</span>
+<span class="fc" id="L536">            return Byte.class;</span>
         case BYTE_ARRAY:
-<span class="nc" id="L534">            return Byte[].class;</span>
+<span class="nc" id="L538">            return Byte[].class;</span>
         case CHAR:
-<span class="fc" id="L536">            return java.lang.Character.class;</span>
+<span class="fc" id="L540">            return java.lang.Character.class;</span>
         case COMPLEX:
             // COMPLEX doesn't have representative class
-<span class="fc" id="L539">            return null;</span>
+<span class="fc" id="L543">            return null;</span>
         case DATE:
-<span class="fc" id="L541">            return java.time.LocalDate.class;</span>
+<span class="fc" id="L545">            return java.time.LocalDate.class;</span>
         case DATE_TIME:
-<span class="fc" id="L543">            return Date.class;</span>
+<span class="fc" id="L547">            return Date.class;</span>
         case DATE_TZ:
         case TIME_TZ:
         case DATE_TIME_TZ:
-<span class="fc" id="L547">            return java.time.ZonedDateTime.class;</span>
+<span class="fc" id="L551">            return java.time.ZonedDateTime.class;</span>
         case DECIMAL:
-<span class="fc" id="L549">            return java.math.BigDecimal.class;</span>
+<span class="fc" id="L553">            return java.math.BigDecimal.class;</span>
         case DOUBLE:
-<span class="fc" id="L551">            return java.lang.Double.class;</span>
+<span class="fc" id="L555">            return java.lang.Double.class;</span>
         case FLOAT:
-<span class="fc" id="L553">            return java.lang.Float.class;</span>
+<span class="fc" id="L557">            return java.lang.Float.class;</span>
         case INTEGER:
-<span class="fc" id="L555">            return java.lang.Integer.class;</span>
+<span class="fc" id="L559">            return java.lang.Integer.class;</span>
         case LONG:
-<span class="fc" id="L557">            return java.lang.Long.class;</span>
+<span class="fc" id="L561">            return java.lang.Long.class;</span>
         case NONE:
-<span class="fc" id="L559">            return null;</span>
+<span class="fc" id="L563">            return null;</span>
         case NUMBER:
-<span class="fc" id="L561">            return java.lang.Number.class;</span>
+<span class="fc" id="L565">            return java.lang.Number.class;</span>
         case SHORT:
-<span class="fc" id="L563">            return java.lang.Short.class;</span>
+<span class="fc" id="L567">            return java.lang.Short.class;</span>
         case STRING:
-<span class="fc" id="L565">            return java.lang.String.class;</span>
+<span class="fc" id="L569">            return java.lang.String.class;</span>
         case TIME:
-<span class="fc" id="L567">            return java.time.LocalTime.class;</span>
+<span class="fc" id="L571">            return java.time.LocalTime.class;</span>
         default:
-<span class="nc" id="L569">            throw new IllegalArgumentException(</span>
-<span class="nc" id="L570">                    String.format(&quot;Unsupported field type '%s': corresponding Java class needs to be added in DefaultAtlasConversionService&quot;,</span>
+<span class="nc" id="L573">            throw new IllegalArgumentException(</span>
+<span class="nc" id="L574">                    String.format(&quot;Unsupported field type '%s': corresponding Java class needs to be added in DefaultAtlasConversionService&quot;,</span>
                             fieldType));
         }
     }
 
     @Override
     public Boolean isAssignableFieldType(FieldType source, FieldType target) {
-<span class="pc bpc" id="L577" title="2 of 4 branches missed.">        if (source == null || target == null) {</span>
-<span class="nc" id="L578">            return Boolean.FALSE;</span>
+<span class="pc bpc" id="L581" title="2 of 4 branches missed.">        if (source == null || target == null) {</span>
+<span class="nc" id="L582">            return Boolean.FALSE;</span>
         }
-<span class="fc bfc" id="L580" title="All 4 branches covered.">        if (source.equals(target) || target == FieldType.ANY) {</span>
-<span class="fc" id="L581">            return Boolean.TRUE;</span>
+<span class="fc bfc" id="L584" title="All 4 branches covered.">        if (source.equals(target) || target == FieldType.ANY) {</span>
+<span class="fc" id="L585">            return Boolean.TRUE;</span>
         }
 
         // Check umbrella field types
-<span class="fc bfc" id="L585" title="All 2 branches covered.">        if (target == FieldType.NUMBER) {</span>
-<span class="fc bfc" id="L586" title="All 16 branches covered.">            return source == FieldType.BIG_INTEGER || source == FieldType.BYTE || source == FieldType.DECIMAL</span>
+<span class="fc bfc" id="L589" title="All 2 branches covered.">        if (target == FieldType.NUMBER) {</span>
+<span class="fc bfc" id="L590" title="All 16 branches covered.">            return source == FieldType.BIG_INTEGER || source == FieldType.BYTE || source == FieldType.DECIMAL</span>
                     || source == FieldType.DOUBLE || source == FieldType.FLOAT || source == FieldType.INTEGER
                     || source == FieldType.LONG || source == FieldType.SHORT;
         }
 
-<span class="fc" id="L591">        return Boolean.FALSE;</span>
+<span class="fc" id="L595">        return Boolean.FALSE;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

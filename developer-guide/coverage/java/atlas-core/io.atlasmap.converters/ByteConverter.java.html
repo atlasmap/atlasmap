@@ -17,6 +17,7 @@ package io.atlasmap.converters;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.CharBuffer;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -30,102 +31,122 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
-<span class="fc" id="L33">public class ByteConverter implements AtlasConverter&lt;Byte&gt; {</span>
+<span class="fc" id="L34">public class ByteConverter implements AtlasConverter&lt;Byte&gt; {</span>
 
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.DECIMAL)
     public BigDecimal toBigDecimal(Byte value) {
-<span class="nc bnc" id="L37" title="All 2 branches missed.">        return value != null ? BigDecimal.valueOf(value) : null;</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        return value != null ? BigDecimal.valueOf(value) : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.BIG_INTEGER)
     public BigInteger toBigInteger(Byte value) {
-<span class="nc bnc" id="L42" title="All 2 branches missed.">        return value != null ? BigInteger.valueOf(value) : null;</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        return value != null ? BigInteger.valueOf(value) : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.BOOLEAN,
             concerns = {AtlasConversionConcern.CONVENTION})
     public Boolean toBoolean(Byte value) {
-<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L49">            return null;</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L50">            return null;</span>
         }
-<span class="fc bfc" id="L51" title="All 2 branches covered.">        return value.byteValue() != 0;</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        return value.byteValue() != 0;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.BYTE)
     public Byte toByte(Byte value) {
-<span class="fc bfc" id="L56" title="All 2 branches covered.">        return value != null ? new Byte(value) : null;</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        return value != null ? new Byte(value) : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.CHAR)
     public Character toCharacter(Byte value) {
-<span class="fc bfc" id="L61" title="All 2 branches covered.">        return value != null ? (char) value.byteValue() : null;</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        return value != null ? (char) value.byteValue() : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.DATE_TIME)
     public Date toDate(Byte value) {
-<span class="nc bnc" id="L66" title="All 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L67">            return null;</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L68">            return null;</span>
         }
-<span class="nc bnc" id="L69" title="All 2 branches missed.">        if (value &gt;= Instant.MIN.getEpochSecond()) {</span>
-<span class="nc" id="L70">            return Date.from(Instant.ofEpochMilli(value));</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        if (value &gt;= Instant.MIN.getEpochSecond()) {</span>
+<span class="nc" id="L71">            return Date.from(Instant.ofEpochMilli(value));</span>
         }
-<span class="nc" id="L72">        return new Date(value);</span>
+<span class="nc" id="L73">        return new Date(value);</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.DOUBLE)
     public Double toDouble(Byte value) {
-<span class="fc bfc" id="L77" title="All 2 branches covered.">        return value != null ? (double) value : null;</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        return value != null ? (double) value : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.FLOAT)
     public Float toFloat(Byte value) {
-<span class="fc bfc" id="L82" title="All 2 branches covered.">        return value != null ? (float) value : null;</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        return value != null ? (float) value : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.INTEGER)
     public Integer toInteger(Byte value) {
-<span class="fc bfc" id="L87" title="All 2 branches covered.">        return value != null ? (int) value : null;</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">        return value != null ? (int) value : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.DATE)
     public LocalDate toLocalDate(Byte value) {
-<span class="nc bnc" id="L92" title="All 2 branches missed.">        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDate() : null;</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDate() : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.TIME)
     public LocalTime toLocalTime(Byte value) {
-<span class="nc bnc" id="L97" title="All 2 branches missed.">        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalTime() : null;</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalTime() : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.DATE_TIME)
     public LocalDateTime toLocalDateTime(Byte value) {
-<span class="nc bnc" id="L102" title="All 2 branches missed.">        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDateTime() : null;</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDateTime() : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.LONG)
     public Long toLong(Byte value) {
-<span class="fc bfc" id="L107" title="All 2 branches covered.">        return value != null ? (long) value : null;</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        return value != null ? (long) value : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.NUMBER)
     public Number toNumber(Byte value) {
-<span class="nc" id="L112">        return toShort(value);</span>
+<span class="nc" id="L113">        return toShort(value);</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.SHORT)
     public Short toShort(Byte value) {
-<span class="fc bfc" id="L117" title="All 2 branches covered.">        return value != null ? (short) value : null;</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        return value != null ? (short) value : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.STRING,
             concerns = {AtlasConversionConcern.CONVENTION})
     public String toString(Byte value) {
-<span class="fc bfc" id="L123" title="All 2 branches covered.">        return value != null ? String.valueOf(value) : null;</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">        return value != null ? String.valueOf(value) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.STRING)
+    public CharBuffer toCharBuffer(Byte value) {
+<span class="nc bnc" id="L129" title="All 2 branches missed.">        return value != null ? CharBuffer.wrap(toString(value)) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.STRING)
+    public CharSequence toCharSequence(Byte value) {
+<span class="nc bnc" id="L134" title="All 2 branches missed.">        return value != null ? toString(value) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.STRING)
+    public StringBuffer toStringBuffer(Byte value) {
+<span class="nc bnc" id="L139" title="All 2 branches missed.">        return value != null ? new StringBuffer(toString(value)) : null;</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.STRING)
+    public StringBuilder toStringBuilder(Byte value) {
+<span class="nc bnc" id="L144" title="All 2 branches missed.">        return value != null ? new StringBuilder(toString(value)) : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.DATE_TIME_TZ)
     public ZonedDateTime toZonedDateTime(Byte value) {
-<span class="nc" id="L128">        return Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault());</span>
+<span class="nc" id="L149">        return Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault());</span>
     }
 
 }

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>StringBuilderConverter.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.converters</a> &gt; <span class="el_source">StringBuilderConverter.java</span></div><h1>StringBuilderConverter.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ * &lt;p&gt;
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * &lt;p&gt;
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * &lt;p&gt;
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.converters;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.nio.CharBuffer;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
+import java.util.Date;
+
+import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.spi.AtlasConversionConcern;
+import io.atlasmap.spi.AtlasConversionInfo;
+import io.atlasmap.spi.AtlasConverter;
+import io.atlasmap.v2.FieldType;
+
+<span class="fc" id="L33">public class StringBuilderConverter implements AtlasConverter&lt;StringBuilder&gt; {</span>
+
+<span class="fc" id="L35">    private CharSequenceConverter delegate = new CharSequenceConverter();</span>
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DECIMAL,
+            concerns = AtlasConversionConcern.FORMAT)
+    public BigDecimal toBigDecimal(StringBuilder value) throws AtlasConversionException {
+<span class="nc" id="L40">        return delegate.toBigDecimal(value);</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BIG_INTEGER,
+            concerns = AtlasConversionConcern.FORMAT)
+    public BigInteger toBigInteger(StringBuilder value) throws AtlasConversionException {
+<span class="nc" id="L46">        return delegate.toBigInteger(value);</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.CONVENTION)
+    public Boolean toBoolean(StringBuilder value, String sourceFormat, String targetFormat) {
+<span class="nc" id="L51">        return delegate.toBoolean(value, sourceFormat, targetFormat);</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BYTE, concerns = {
+            AtlasConversionConcern.RANGE, AtlasConversionConcern.FORMAT, AtlasConversionConcern.FRACTIONAL_PART})
+    public Byte toByte(StringBuilder value) throws AtlasConversionException {
+<span class="nc" id="L57">        return delegate.toByte(value);</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
+    public Character toCharacter(StringBuilder value) throws AtlasConversionException {
+<span class="nc" id="L62">        return delegate.toCharacter(value);</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE_TIME)
+    public Date toDate(StringBuilder date, String sourceFormat, String targetFormat) {
+<span class="nc" id="L67">        return delegate.toDate(date, sourceFormat, targetFormat);</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DOUBLE, concerns = {
+            AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE })
+    public Double toDouble(StringBuilder value) throws AtlasConversionException {
+<span class="nc" id="L73">        return delegate.toDouble(value);</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.FLOAT, concerns = {
+            AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE })
+    public Float toFloat(StringBuilder value) throws AtlasConversionException {
+<span class="nc" id="L79">        return delegate.toFloat(value);</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.INTEGER, concerns = {
+            AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART })
+    public Integer toInteger(StringBuilder value) throws AtlasConversionException {
+<span class="nc" id="L85">        return delegate.toInteger(value);</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE)
+    public LocalDate toLocalDate(StringBuilder value) {
+<span class="nc" id="L90">        return delegate.toLocalDate(value);</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.TIME)
+    public LocalTime toLocalTime(StringBuilder value) {
+<span class="nc" id="L95">        return delegate.toLocalTime(value);</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE_TIME)
+    public LocalDateTime toLocalDateTime(StringBuilder value) {
+<span class="nc" id="L100">        return delegate.toLocalDateTime(value);</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.LONG, concerns = {
+            AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART })
+    public Long toLong(StringBuilder value) throws AtlasConversionException {
+<span class="nc" id="L106">        return delegate.toLong(value);</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.SHORT, concerns = {
+            AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART })
+    public Short toShort(StringBuilder value) throws AtlasConversionException {
+<span class="nc" id="L112">        return delegate.toShort(value);</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
+    public CharBuffer toCharBuffer(StringBuilder value, String sourceFormat, String targetFormat) {
+<span class="fc" id="L117">        return delegate.toCharBuffer(value, sourceFormat, targetFormat);</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
+    public CharSequence toCharSequence(StringBuilder value, String sourceFormat, String targetFormat) {
+<span class="nc" id="L122">        return delegate.toCharSequence(value, sourceFormat, targetFormat);</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
+    public String toString(StringBuilder value, String sourceFormat, String targetFormat) {
+<span class="nc" id="L127">        return delegate.toString(value, sourceFormat, targetFormat);</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
+    public StringBuffer toStringBuffer(StringBuilder value, String sourceFormat, String targetFormat) {
+<span class="nc" id="L132">        return delegate.toStringBuffer(value, sourceFormat, targetFormat);</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
+    public StringBuilder toStringBuilder(StringBuilder value, String sourceFormat, String targetFormat) {
+<span class="nc" id="L137">        return delegate.toStringBuilder(value, sourceFormat, targetFormat);</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.NUMBER, concerns = {
+            AtlasConversionConcern.FORMAT })
+    public Number toNumber(StringBuilder value) throws AtlasConversionException {
+<span class="nc" id="L143">        return delegate.toNumber(value);</span>
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE_TIME_TZ)
+    public ZonedDateTime toZonedDateTime(StringBuilder value) {
+<span class="nc" id="L148">        return delegate.toZonedDateTime(value);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
