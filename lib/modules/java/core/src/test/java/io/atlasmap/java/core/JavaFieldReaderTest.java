@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import io.atlasmap.java.test.StringTestClass;
 import io.atlasmap.java.test.TargetAddress;
 import io.atlasmap.java.test.TargetContact;
 import io.atlasmap.java.test.TargetOrder;
@@ -58,6 +60,27 @@ public class JavaFieldReaderTest extends BaseJavaFieldReaderTest {
         Audit audit = audits.get(0);
         assertEquals(AuditStatus.WARN, audit.getStatus());
         assertEquals("/address/addressLine1", audit.getPath());
+    }
+
+    @Test
+    public void testReadStringTypes() throws Exception {
+        StringTestClass source = new StringTestClass();
+        source.setTestCharBuffer(CharBuffer.wrap("testCharBuffer"));
+        source.setTestCharSequence("testCharSequence");
+        source.setTestString("testString");
+        source.setTestStringBuffer(new StringBuffer("testStringBuffer"));
+        source.setTestStringBuilder(new StringBuilder("testStringBuilder"));
+        reader.setDocument(source);
+        read("/testCharBuffer", FieldType.STRING, "java.nio.CharBuffer");
+        assertEquals("testCharBuffer", field.getValue().toString());
+        read("/testCharSequence", FieldType.STRING, "java.lang.CharSequence");
+        assertEquals("testCharSequence", field.getValue().toString());
+        read("/testString", FieldType.STRING);
+        assertEquals("testString", field.getValue().toString());
+        read("/testStringBuffer", FieldType.STRING, "java.lang.StringBuffer");
+        assertEquals("testStringBuffer", field.getValue().toString());
+        read("/testStringBuilder", FieldType.STRING, "java.lang.StringBuilder");
+        assertEquals("testStringBuilder", field.getValue().toString());
     }
 
     @Test

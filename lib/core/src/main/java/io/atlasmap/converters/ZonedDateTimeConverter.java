@@ -17,6 +17,7 @@ package io.atlasmap.converters;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.CharBuffer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -139,6 +140,26 @@ public class ZonedDateTimeConverter implements AtlasConverter<ZonedDateTime> {
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.STRING)
     public String toString(ZonedDateTime value) {
         return value != null ? value.toString() : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.STRING)
+    public CharBuffer toCharBuffer(ZonedDateTime value) {
+        return value != null ? CharBuffer.wrap(toString(value)) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.STRING)
+    public CharSequence toCharSequence(ZonedDateTime value) {
+        return value != null ? toString(value) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.STRING)
+    public StringBuffer toStringBuffer(ZonedDateTime value) {
+        return value != null ? new StringBuffer(toString(value)) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.STRING)
+    public StringBuilder toStringBuilder(ZonedDateTime value) {
+        return value != null ? new StringBuilder(toString(value)) : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.NUMBER,

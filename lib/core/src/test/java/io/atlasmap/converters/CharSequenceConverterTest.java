@@ -24,6 +24,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.nio.CharBuffer;
 import java.time.Instant;
 import java.util.Date;
 
@@ -34,8 +35,8 @@ import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.v2.FieldType;
 
-public class StringConverterTest {
-    private StringConverter converter = new StringConverter();
+public class CharSequenceConverterTest {
+    private CharSequenceConverter converter = new CharSequenceConverter();
 
     @Test
     public void convertToBoolean() {
@@ -417,23 +418,47 @@ public class StringConverterTest {
     }
 
     @Test
-    public void convertToString() {
-        String zero = "0";
-        String converted = converter.toString(zero, null, null);
+    public void convertToCharSequence() {
+        CharSequence zero = "0";
+        CharSequence converted = converter.toCharSequence(zero, null, null);
         assertNotNull(converted);
         assertNotSame(converted, zero);
         assertTrue("0".equals(converted));
     }
 
     @Test
-    public void convertToStringNull() {
-        String s = converter.toString(null, null, null);
+    public void convertToCharSequenceNull() {
+        CharSequence s = converter.toCharSequence(null, null, null);
         assertNull(s);
     }
 
     @Test
+    public void convertToCharBuffer() {
+        CharBuffer cb = converter.toCharBuffer("test", null, null);
+        assertNotNull(cb);
+    }
+
+    @Test
+    public void convertToString() {
+        String s = converter.toString("test", null, null);
+        assertNotNull(s);
+    }
+
+    @Test
+    public void convertToStringBuffer() {
+        StringBuffer sb = converter.toStringBuffer("test", null, null);
+        assertNotNull(sb);
+    }
+
+    @Test
+    public void convertToStringBuilder() {
+        StringBuilder sb = converter.toStringBuilder("test", null, null);
+        assertNotNull(sb);
+    }
+
+    @Test
     public void checkAnnotations() throws Exception {
-        Class<?> aClass = StringConverter.class;
+        Class<?> aClass = CharSequenceConverter.class;
         Method[] methods = aClass.getMethods();
         for (Method method : methods) {
             if (method.isSynthetic()) {
@@ -461,7 +486,7 @@ public class StringConverterTest {
 
     @Test
     public void testConvertToNumber() throws AtlasConversionException {
-        StringConverter converter = new StringConverter();
+        CharSequenceConverter converter = new CharSequenceConverter();
         assertNull(converter.toNumber(null));
         assertNull(converter.toNumber(" "));
         assertNotNull(converter.toNumber("1"));
@@ -470,7 +495,7 @@ public class StringConverterTest {
 
     @Test(expected = AtlasConversionException.class)
     public void testConvertToNumberAtlasConversionException() throws AtlasConversionException {
-        StringConverter converter = new StringConverter();
+        CharSequenceConverter converter = new CharSequenceConverter();
         assertNull(converter.toNumber("abc"));
     }
 }

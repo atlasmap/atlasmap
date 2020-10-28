@@ -490,7 +490,11 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         case "short":
         case "java.lang.Short":
             return FieldType.SHORT;
+        case "java.nio.CharBuffer":
+        case "java.lang.CharSequence":
         case "java.lang.String":
+        case "java.lang.StringBuffer":
+        case "java.lang.StringBuilder":
             return FieldType.STRING;
         case "java.sql.Date":
         case "java.time.LocalDate":

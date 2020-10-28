@@ -17,6 +17,7 @@ package io.atlasmap.converters;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.CharBuffer;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -121,6 +122,26 @@ public class ByteConverter implements AtlasConverter<Byte> {
             concerns = {AtlasConversionConcern.CONVENTION})
     public String toString(Byte value) {
         return value != null ? String.valueOf(value) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.STRING)
+    public CharBuffer toCharBuffer(Byte value) {
+        return value != null ? CharBuffer.wrap(toString(value)) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.STRING)
+    public CharSequence toCharSequence(Byte value) {
+        return value != null ? toString(value) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.STRING)
+    public StringBuffer toStringBuffer(Byte value) {
+        return value != null ? new StringBuffer(toString(value)) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.STRING)
+    public StringBuilder toStringBuilder(Byte value) {
+        return value != null ? new StringBuilder(toString(value)) : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.DATE_TIME_TZ)

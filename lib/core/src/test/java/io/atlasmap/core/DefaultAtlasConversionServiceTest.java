@@ -45,6 +45,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.converters.CharSequenceConverter;
 import io.atlasmap.converters.StringConverter;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasConverter;

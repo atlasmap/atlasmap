@@ -17,6 +17,7 @@ package io.atlasmap.converters;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.CharBuffer;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -221,6 +222,26 @@ public class BigIntegerConverter implements AtlasConverter<BigInteger> {
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.STRING)
     public String toString(BigInteger value) {
         return value != null ? value.toString() : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.STRING)
+    public CharBuffer toCharBuffer(BigInteger value) {
+        return value != null ? CharBuffer.wrap(toString(value)) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.STRING)
+    public CharSequence toCharSequence(BigInteger value) {
+        return value != null ? toString(value) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.STRING)
+    public StringBuffer toStringBuffer(BigInteger value) {
+        return value != null ? new StringBuffer(toString(value)) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.STRING)
+    public StringBuilder toStringBuilder(BigInteger value) {
+        return value != null ? new StringBuilder(toString(value)) : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.DATE_TIME_TZ,

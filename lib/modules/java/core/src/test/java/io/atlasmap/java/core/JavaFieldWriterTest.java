@@ -16,6 +16,7 @@ import org.junit.runners.MethodSorters;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.java.test.BaseOrder;
 import io.atlasmap.java.test.StateEnumClassLong;
+import io.atlasmap.java.test.StringTestClass;
 import io.atlasmap.java.test.TargetAddress;
 import io.atlasmap.java.test.TargetCollectionsClass;
 import io.atlasmap.java.test.TargetContact;
@@ -139,6 +140,22 @@ public class JavaFieldWriterTest extends BaseJavaFieldWriterTest {
         assertEquals("Round Rock", o.getCity());
         assertEquals("VA", o.getState());
         assertEquals("12345-6789", o.getZipCode());
+    }
+
+    @Test
+    public void testWriteStringTypes() throws Exception {
+        writer.setRootObject(new StringTestClass());
+        write(createField("/testCharBuffer", "testCharBuffer", FieldType.STRING, "java.nio.CharBuffer"));
+        write(createField("/testCharSequence", "testCharSequence", FieldType.STRING, "java.lang.CharSequence"));
+        write(createField("/testString", "testString"));
+        write(createField("/testStringBuffer", "testStringBuffer", FieldType.STRING, "java.lang.StringBuffer"));
+        write(createField("/testStringBuilder", "testStringBuilder", FieldType.STRING, "java.lang.StringBuilder"));
+        StringTestClass o = (StringTestClass) writer.getRootObject();
+        assertEquals("testCharBuffer", o.getTestCharBuffer().toString());
+        assertEquals("testCharSequence", o.getTestCharSequence().toString());
+        assertEquals("testString", o.getTestString());
+        assertEquals("testStringBuffer", o.getTestStringBuffer().toString());
+        assertEquals("testStringBuilder", o.getTestStringBuilder().toString());
     }
 
     @Test

@@ -17,6 +17,7 @@ package io.atlasmap.converters;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.CharBuffer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -134,6 +135,26 @@ public class LocalDateConverter implements AtlasConverter<LocalDate> {
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.STRING)
     public String toString(LocalDate value) {
         return value != null ? value.toString() : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.STRING)
+    public CharBuffer toCharBuffer(LocalDate value) {
+        return value != null ? CharBuffer.wrap(toString(value)) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.STRING)
+    public CharSequence toCharSequence(LocalDate value) {
+        return value != null ? toString(value) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.STRING)
+    public StringBuffer toStringBuffer(LocalDate value) {
+        return value != null ? new StringBuffer(toString(value)) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.STRING)
+    public StringBuilder toStringBuilder(LocalDate value) {
+        return value != null ? new StringBuilder(toString(value)) : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.NUMBER)

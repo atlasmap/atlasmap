@@ -17,6 +17,7 @@ package io.atlasmap.converters;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.CharBuffer;
 
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
@@ -100,6 +101,26 @@ public class BooleanConverter implements AtlasConverter<Boolean> {
             trueValue = values[0];
         }
         return String.valueOf((value ? trueValue : falseValue));
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.STRING)
+    public CharBuffer toCharBuffer(Boolean value, String sourceFormat, String targetFormat) {
+        return value != null ? CharBuffer.wrap(toString(value, sourceFormat, targetFormat)) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.STRING)
+    public CharSequence toCharSequence(Boolean value, String sourceFormat, String targetFormat) {
+        return value != null ? toString(value, sourceFormat, targetFormat) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.STRING)
+    public StringBuffer toStringBuffer(Boolean value, String sourceFormat, String targetFormat) {
+        return value != null ? new StringBuffer(toString(value, sourceFormat, targetFormat)) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.STRING)
+    public StringBuilder toStringBuilder(Boolean value, String sourceFormat, String targetFormat) {
+        return value != null ? new StringBuilder(toString(value, sourceFormat, targetFormat)) : null;
     }
 
 }
