@@ -17,6 +17,7 @@ package io.atlasmap.converters;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.CharBuffer;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -197,6 +198,26 @@ public class DoubleConverter implements AtlasConverter<Double> {
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.STRING)
     public String toString(Double value) {
         return value != null ? String.valueOf(value) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.STRING)
+    public CharBuffer toCharBuffer(Double value) {
+        return value != null ? CharBuffer.wrap(toString(value)) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.STRING)
+    public CharSequence toCharSequence(Double value) {
+        return value != null ? toString(value) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.STRING)
+    public StringBuffer toStringBuffer(Double value) {
+        return value != null ? new StringBuffer(toString(value)) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.STRING)
+    public StringBuilder toStringBuilder(Double value) {
+        return value != null ? new StringBuilder(toString(value)) : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.DATE_TIME_TZ,

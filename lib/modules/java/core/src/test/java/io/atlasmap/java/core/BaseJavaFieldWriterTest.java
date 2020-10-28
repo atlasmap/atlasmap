@@ -79,12 +79,17 @@ public abstract class BaseJavaFieldWriterTest {
         this.field = createField(fieldPath, DEFAULT_VALUE);
     }
 
-    public JavaField createField(String path, Object value, FieldType fieldType) {
+    public JavaField createField(String path, Object value, FieldType fieldType, String className) {
         JavaField field = new JavaField();
         field.setFieldType(fieldType);
+        field.setClassName(className);
         field.setValue(value);
         field.setPath(path);
         return field;
+    }
+
+    public JavaField createField(String path, Object value, FieldType fieldType) {
+        return createField(path, value, fieldType, null);
     }
 
     public JavaField createField(String path, String value) {

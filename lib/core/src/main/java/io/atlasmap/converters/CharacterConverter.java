@@ -17,6 +17,7 @@ package io.atlasmap.converters;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.CharBuffer;
 
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.spi.AtlasConversionConcern;
@@ -134,4 +135,25 @@ public class CharacterConverter implements AtlasConverter<Character> {
         }
         return String.valueOf(value);
     }
+
+    @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.STRING)
+    public CharBuffer toCharBuffer(Character value, String sourceFormat, String targetFormat) {
+        return value != null ? CharBuffer.wrap(toString(value, sourceFormat, targetFormat)) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.STRING)
+    public CharSequence toCharSequence(Character value, String sourceFormat, String targetFormat) {
+        return value != null ? toString(value, sourceFormat, targetFormat) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.STRING)
+    public StringBuffer toStringBuffer(Character value, String sourceFormat, String targetFormat) {
+        return value != null ? new StringBuffer(toString(value, sourceFormat, targetFormat)) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.STRING)
+    public StringBuilder toStringBuilder(Character value, String sourceFormat, String targetFormat) {
+        return value != null ? new StringBuilder(toString(value, sourceFormat, targetFormat)) : null;
+    }
+
 }

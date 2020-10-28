@@ -1,0 +1,96 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.StringTestClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.StringTestClass",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "fieldType" : "STRING",
+          "className" : "java.nio.CharBuffer",
+          "path" : "/testCharBuffer"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "fieldType" : "STRING",
+          "className" : "java.lang.CharSequence",
+          "path" : "/testCharSequence"
+        } ]
+      },
+      {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "fieldType" : "STRING",
+          "className" : "java.lang.CharSequence",
+          "path" : "/testCharSequence"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "fieldType" : "STRING",
+          "path" : "/testString"
+        } ]
+      },
+      {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "fieldType" : "STRING",
+          "path" : "/testString"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "fieldType" : "STRING",
+          "className" : "java.lang.StringBuffer",
+          "path" : "/testStringBuffer"
+        } ]
+      },
+      {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "fieldType" : "STRING",
+          "className" : "java.lang.StringBuffer",
+          "path" : "/testStringBuffer"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "fieldType" : "STRING",
+          "className" : "java.lang.StringBuilder",
+          "path" : "/testStringBuilder"
+        } ]
+      },
+      {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "fieldType" : "STRING",
+          "className" : "java.lang.StringBuilder",
+          "path" : "/testStringBuilder"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "fieldType" : "STRING",
+          "className" : "java.nio.CharBuffer",
+          "path" : "/testCharBuffer"
+        } ]
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "core.unit.test"
+  }
+}

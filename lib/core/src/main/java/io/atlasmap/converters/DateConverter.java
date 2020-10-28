@@ -17,6 +17,7 @@ package io.atlasmap.converters;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.CharBuffer;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -149,6 +150,26 @@ public class DateConverter implements AtlasConverter<Date> {
         // by default Instant.toString returns an ISO-8601 representation of the instant
         return date.toInstant().toString();
 
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.STRING)
+    public CharBuffer toCharBuffer(Date value) {
+        return value != null ? CharBuffer.wrap(toString(value)) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.STRING)
+    public CharSequence toCharSequence(Date value) {
+        return value != null ? toString(value) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.STRING)
+    public StringBuffer toStringBuffer(Date value) {
+        return value != null ? new StringBuffer(toString(value)) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.STRING)
+    public StringBuilder toStringBuilder(Date value) {
+        return value != null ? new StringBuilder(toString(value)) : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME)

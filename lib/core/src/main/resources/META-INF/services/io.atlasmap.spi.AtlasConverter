@@ -4,6 +4,8 @@ io.atlasmap.converters.BooleanConverter
 io.atlasmap.converters.ByteConverter
 io.atlasmap.converters.CalendarConverter
 io.atlasmap.converters.CharacterConverter
+io.atlasmap.converters.CharBufferConverter
+io.atlasmap.converters.CharSequenceConverter
 io.atlasmap.converters.DateConverter
 io.atlasmap.converters.DoubleConverter
 io.atlasmap.converters.FloatConverter
@@ -19,4 +21,6 @@ io.atlasmap.converters.SqlDateConverter
 io.atlasmap.converters.SqlTimeConverter
 io.atlasmap.converters.SqlTimestampConverter
 io.atlasmap.converters.StringConverter
+io.atlasmap.converters.StringBufferConverter
+io.atlasmap.converters.StringBuilderConverter
 io.atlasmap.converters.ZonedDateTimeConverter

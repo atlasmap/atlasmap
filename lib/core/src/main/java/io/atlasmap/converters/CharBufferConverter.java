@@ -30,121 +30,121 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
-public class StringConverter implements AtlasConverter<String> {
+public class CharBufferConverter implements AtlasConverter<CharBuffer> {
 
     private CharSequenceConverter delegate = new CharSequenceConverter();
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DECIMAL,
             concerns = AtlasConversionConcern.FORMAT)
-    public BigDecimal toBigDecimal(String value) throws AtlasConversionException {
+    public BigDecimal toBigDecimal(CharBuffer value) throws AtlasConversionException {
         return delegate.toBigDecimal(value);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BIG_INTEGER,
             concerns = AtlasConversionConcern.FORMAT)
-    public BigInteger toBigInteger(String value) throws AtlasConversionException {
+    public BigInteger toBigInteger(CharBuffer value) throws AtlasConversionException {
         return delegate.toBigInteger(value);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.CONVENTION)
-    public Boolean toBoolean(String value, String sourceFormat, String targetFormat) {
+    public Boolean toBoolean(CharBuffer value, String sourceFormat, String targetFormat) {
         return delegate.toBoolean(value, sourceFormat, targetFormat);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BYTE, concerns = {
             AtlasConversionConcern.RANGE, AtlasConversionConcern.FORMAT, AtlasConversionConcern.FRACTIONAL_PART})
-    public Byte toByte(String value) throws AtlasConversionException {
+    public Byte toByte(CharBuffer value) throws AtlasConversionException {
         return delegate.toByte(value);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
-    public Character toCharacter(String value) throws AtlasConversionException {
+    public Character toCharacter(CharBuffer value) throws AtlasConversionException {
         return delegate.toCharacter(value);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE_TIME)
-    public Date toDate(String date, String sourceFormat, String targetFormat) {
+    public Date toDate(CharBuffer date, String sourceFormat, String targetFormat) {
         return delegate.toDate(date, sourceFormat, targetFormat);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DOUBLE, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE })
-    public Double toDouble(String value) throws AtlasConversionException {
+    public Double toDouble(CharBuffer value) throws AtlasConversionException {
         return delegate.toDouble(value);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.FLOAT, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE })
-    public Float toFloat(String value) throws AtlasConversionException {
+    public Float toFloat(CharBuffer value) throws AtlasConversionException {
         return delegate.toFloat(value);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.INTEGER, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART })
-    public Integer toInteger(String value) throws AtlasConversionException {
+    public Integer toInteger(CharBuffer value) throws AtlasConversionException {
         return delegate.toInteger(value);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE)
-    public LocalDate toLocalDate(String value) {
+    public LocalDate toLocalDate(CharBuffer value) {
         return delegate.toLocalDate(value);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.TIME)
-    public LocalTime toLocalTime(String value) {
+    public LocalTime toLocalTime(CharBuffer value) {
         return delegate.toLocalTime(value);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE_TIME)
-    public LocalDateTime toLocalDateTime(String value) {
+    public LocalDateTime toLocalDateTime(CharBuffer value) {
         return delegate.toLocalDateTime(value);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.LONG, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART })
-    public Long toLong(String value) throws AtlasConversionException {
+    public Long toLong(CharBuffer value) throws AtlasConversionException {
         return delegate.toLong(value);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.SHORT, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART })
-    public Short toShort(String value) throws AtlasConversionException {
+    public Short toShort(CharBuffer value) throws AtlasConversionException {
         return delegate.toShort(value);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
-    public CharBuffer toCharBuffer(String value, String sourceFormat, String targetFormat) {
+    public CharBuffer toCharBuffer(CharBuffer value, String sourceFormat, String targetFormat) {
         return delegate.toCharBuffer(value, sourceFormat, targetFormat);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
-    public CharSequence toCharSequence(String value, String sourceFormat, String targetFormat) {
+    public CharSequence toCharSequence(CharBuffer value, String sourceFormat, String targetFormat) {
         return delegate.toCharSequence(value, sourceFormat, targetFormat);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
-    public String toString(String value, String sourceFormat, String targetFormat) {
+    public String toString(CharBuffer value, String sourceFormat, String targetFormat) {
         return delegate.toString(value, sourceFormat, targetFormat);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
-    public StringBuffer toStringBuffer(String value, String sourceFormat, String targetFormat) {
+    public StringBuffer toStringBuffer(CharBuffer value, String sourceFormat, String targetFormat) {
         return delegate.toStringBuffer(value, sourceFormat, targetFormat);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
-    public StringBuilder toStringBuilder(String value, String sourceFormat, String targetFormat) {
+    public StringBuilder toStringBuilder(CharBuffer value, String sourceFormat, String targetFormat) {
         return delegate.toStringBuilder(value, sourceFormat, targetFormat);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.NUMBER, concerns = {
             AtlasConversionConcern.FORMAT })
-    public Number toNumber(String value) throws AtlasConversionException {
+    public Number toNumber(CharBuffer value) throws AtlasConversionException {
         return delegate.toNumber(value);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE_TIME_TZ)
-    public ZonedDateTime toZonedDateTime(String value) {
+    public ZonedDateTime toZonedDateTime(CharBuffer value) {
         return delegate.toZonedDateTime(value);
     }
 

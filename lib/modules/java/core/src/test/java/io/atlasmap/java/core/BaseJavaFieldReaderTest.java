@@ -69,6 +69,13 @@ public abstract class BaseJavaFieldReaderTest {
         return field.getValue();
     }
 
+    protected Object read(String path, FieldType fieldType, String className) throws AtlasException {
+        this.field = createJavaField(path, null, fieldType);
+        this.field.setClassName(className);
+        this.field = (JavaField) read(field);
+        return field.getValue();
+    }
+
     protected void readGroup(String path, FieldType fieldType) throws AtlasException {
         if (fieldType == FieldType.COMPLEX) {
             this.fieldGroup = createFieldGroup(path, fieldType);
