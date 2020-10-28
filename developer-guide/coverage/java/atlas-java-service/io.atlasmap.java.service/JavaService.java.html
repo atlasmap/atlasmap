@@ -95,9 +95,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
     public Response getClass(@Parameter(description = &quot;The fully qualified class name to inspect&quot;) @QueryParam(&quot;className&quot;) String className) {
 <span class="fc" id="L96">        ClassInspectionService classInspectionService = new ClassInspectionService();</span>
 <span class="fc" id="L97">        classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());</span>
-<span class="fc" id="L98">        JavaClass c = classInspectionService.inspectClass(className, CollectionType.NONE, null);</span>
-<span class="fc" id="L99">        classInspectionService = null;</span>
-<span class="fc" id="L100">        return Response.ok().entity(toJson(c)).build();</span>
+        try {
+<span class="fc" id="L99">            JavaClass c = classInspectionService.inspectClass(className, CollectionType.NONE, null);</span>
+<span class="fc" id="L100">            return Response.ok().entity(toJson(c)).build();</span>
+<span class="nc" id="L101">        } catch (Exception e) {</span>
+<span class="nc" id="L102">            String msg = String.format(&quot;Error inspecting class %s - %s: %s&quot;,</span>
+<span class="nc" id="L103">                    className, e.getClass().getName(), e.getMessage());</span>
+<span class="nc" id="L104">            LOG.error(msg, e);</span>
+<span class="nc" id="L105">            return Response.serverError().entity(msg).build();</span>
+        }
     }
 
     @POST
@@ -110,26 +116,26 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
             responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = MavenClasspathResponse.class)),
             description = &quot;Return a MavenClasspathResponse object which contains classpath string&quot;))
     public Response generateClasspath(InputStream requestIn) {
-<span class="nc" id="L113">        MavenClasspathRequest request = fromJson(requestIn, MavenClasspathRequest.class);</span>
-<span class="nc" id="L114">        MavenClasspathResponse response = new MavenClasspathResponse();</span>
-<span class="nc" id="L115">        MavenClasspathHelper mavenClasspathHelper = null;</span>
+<span class="nc" id="L119">        MavenClasspathRequest request = fromJson(requestIn, MavenClasspathRequest.class);</span>
+<span class="nc" id="L120">        MavenClasspathResponse response = new MavenClasspathResponse();</span>
+<span class="nc" id="L121">        MavenClasspathHelper mavenClasspathHelper = null;</span>
         try {
-<span class="nc" id="L117">            mavenClasspathHelper = new MavenClasspathHelper();</span>
-<span class="nc bnc" id="L118" title="All 2 branches missed.">            if (request.getExecuteTimeout() != null) {</span>
-<span class="nc" id="L119">                mavenClasspathHelper.setProcessMaxExecutionTime(request.getExecuteTimeout());</span>
+<span class="nc" id="L123">            mavenClasspathHelper = new MavenClasspathHelper();</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">            if (request.getExecuteTimeout() != null) {</span>
+<span class="nc" id="L125">                mavenClasspathHelper.setProcessMaxExecutionTime(request.getExecuteTimeout());</span>
             }
 
-<span class="nc" id="L122">            long startTime = System.currentTimeMillis();</span>
-<span class="nc" id="L123">            String mavenResponse = mavenClasspathHelper.generateClasspathFromPom(request.getPomXmlData());</span>
-<span class="nc" id="L124">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
-<span class="nc" id="L125">            response.setClasspath(mavenResponse);</span>
+<span class="nc" id="L128">            long startTime = System.currentTimeMillis();</span>
+<span class="nc" id="L129">            String mavenResponse = mavenClasspathHelper.generateClasspathFromPom(request.getPomXmlData());</span>
+<span class="nc" id="L130">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
+<span class="nc" id="L131">            response.setClasspath(mavenResponse);</span>
 
-<span class="nc" id="L127">        } catch (Exception e) {</span>
-<span class="nc" id="L128">            LOG.error(&quot;Error generating classpath from maven: &quot; + e.getMessage(), e);</span>
-<span class="nc" id="L129">            response.setErrorMessage(e.getMessage());</span>
-<span class="nc" id="L130">        }</span>
+<span class="nc" id="L133">        } catch (Exception e) {</span>
+<span class="nc" id="L134">            LOG.error(&quot;Error generating classpath from maven: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L135">            response.setErrorMessage(e.getMessage());</span>
+<span class="nc" id="L136">        }</span>
 
-<span class="nc" id="L132">        return Response.ok().entity(toJson(response)).build();</span>
+<span class="nc" id="L138">        return Response.ok().entity(toJson(response)).build();</span>
     }
 
     @POST
@@ -141,67 +147,69 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
     @ApiResponses(@ApiResponse(
             responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = JavaClass.class)), description = &quot;Return a Document object represented by JavaClass&quot;))
     public Response inspectClass(InputStream requestIn) {
-<span class="nc" id="L144">        ClassInspectionRequest request = fromJson(requestIn, ClassInspectionRequest.class);</span>
-<span class="nc" id="L145">        ClassInspectionResponse response = new ClassInspectionResponse();</span>
-<span class="nc" id="L146">        ClassInspectionService classInspectionService = new ClassInspectionService();</span>
-<span class="nc" id="L147">        classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());</span>
+<span class="nc" id="L150">        ClassInspectionRequest request = fromJson(requestIn, ClassInspectionRequest.class);</span>
+<span class="nc" id="L151">        ClassInspectionResponse response = new ClassInspectionResponse();</span>
+<span class="nc" id="L152">        ClassInspectionService classInspectionService = new ClassInspectionService();</span>
+<span class="nc" id="L153">        classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());</span>
 
-<span class="nc" id="L149">        configureInspectionService(classInspectionService, request);</span>
+<span class="nc" id="L155">        configureInspectionService(classInspectionService, request);</span>
 
-<span class="nc bnc" id="L151" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L152">            LOG.debug(&quot;Class inspection request: {}&quot;, new String(toJson(request)));</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L158">            LOG.debug(&quot;Class inspection request: {}&quot;, new String(toJson(request)));</span>
         }
 
-<span class="nc" id="L155">        long startTime = System.currentTimeMillis();</span>
+<span class="nc" id="L161">        long startTime = System.currentTimeMillis();</span>
         try {
-<span class="nc" id="L157">            JavaClass c = null;</span>
-<span class="nc bnc" id="L158" title="All 4 branches missed.">            if (request.getClasspath() == null || request.getClasspath().isEmpty()) {</span>
-<span class="nc" id="L159">                AtlasService atlasService = resourceContext.getResource(AtlasService.class);</span>
-<span class="nc" id="L160">                c = classInspectionService.inspectClass(</span>
-<span class="nc" id="L161">                        atlasService.getLibraryLoader(),</span>
-<span class="nc" id="L162">                        request.getClassName(),</span>
-<span class="nc" id="L163">                        request.getCollectionType(),</span>
-<span class="nc" id="L164">                        request.getCollectionClassName());</span>
-<span class="nc" id="L165">            } else {</span>
-<span class="nc" id="L166">                c = classInspectionService.inspectClass(request.getClassName(), request.getCollectionType(), request.getClasspath());</span>
+<span class="nc" id="L163">            JavaClass c = null;</span>
+<span class="nc bnc" id="L164" title="All 4 branches missed.">            if (request.getClasspath() == null || request.getClasspath().isEmpty()) {</span>
+<span class="nc" id="L165">                AtlasService atlasService = resourceContext.getResource(AtlasService.class);</span>
+<span class="nc" id="L166">                c = classInspectionService.inspectClass(</span>
+<span class="nc" id="L167">                        atlasService.getLibraryLoader(),</span>
+<span class="nc" id="L168">                        request.getClassName(),</span>
+<span class="nc" id="L169">                        request.getCollectionType(),</span>
+<span class="nc" id="L170">                        request.getCollectionClassName());</span>
+<span class="nc" id="L171">            } else {</span>
+<span class="nc" id="L172">                c = classInspectionService.inspectClass(request.getClassName(), request.getCollectionType(), request.getClasspath());</span>
             }
-<span class="nc" id="L168">            response.setJavaClass(c);</span>
-<span class="nc" id="L169">        } catch (Exception e) {</span>
-<span class="nc" id="L170">            LOG.error(&quot;Error inspecting class with classpath: &quot; + e.getMessage(), e);</span>
-<span class="nc" id="L171">            response.setErrorMessage(e.getMessage());</span>
+<span class="nc" id="L174">            response.setJavaClass(c);</span>
+<span class="nc" id="L175">        } catch (Throwable e) {</span>
+<span class="nc" id="L176">            String msg = String.format(&quot;Error inspecting class %s - %s: %s&quot;,</span>
+<span class="nc" id="L177">                    request.getClassName(), e.getClass().getName(), e.getMessage());</span>
+<span class="nc" id="L178">            LOG.error(msg, e);</span>
+<span class="nc" id="L179">            response.setErrorMessage(msg);</span>
         } finally {
-<span class="nc" id="L173">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
+<span class="nc" id="L181">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
         }
 
-<span class="nc bnc" id="L176" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L177">            LOG.debug(&quot;Class inspection response: {}&quot;, new String(toJson(response)));</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L185">            LOG.debug(&quot;Class inspection response: {}&quot;, new String(toJson(response)));</span>
         }
-<span class="nc" id="L179">        return Response.ok().entity(toJson(response)).build();</span>
+<span class="nc" id="L187">        return Response.ok().entity(toJson(response)).build();</span>
     }
 
     protected void configureInspectionService(ClassInspectionService classInspectionService,
             ClassInspectionRequest request) {
-<span class="nc bnc" id="L184" title="All 4 branches missed.">        if (request.getFieldNameBlacklist() != null &amp;&amp; request.getFieldNameBlacklist().getString() != null</span>
-<span class="nc bnc" id="L185" title="All 2 branches missed.">                &amp;&amp; !request.getFieldNameBlacklist().getString().isEmpty()) {</span>
-<span class="nc" id="L186">            classInspectionService.getFieldBlacklist().addAll(request.getFieldNameBlacklist().getString());</span>
+<span class="nc bnc" id="L192" title="All 4 branches missed.">        if (request.getFieldNameBlacklist() != null &amp;&amp; request.getFieldNameBlacklist().getString() != null</span>
+<span class="nc bnc" id="L193" title="All 2 branches missed.">                &amp;&amp; !request.getFieldNameBlacklist().getString().isEmpty()) {</span>
+<span class="nc" id="L194">            classInspectionService.getFieldBlacklist().addAll(request.getFieldNameBlacklist().getString());</span>
         }
 
-<span class="nc bnc" id="L189" title="All 2 branches missed.">        if (request.isDisablePrivateOnlyFields() != null) {</span>
-<span class="nc" id="L190">            classInspectionService.setDisablePrivateOnlyFields(request.isDisablePrivateOnlyFields());</span>
+<span class="nc bnc" id="L197" title="All 2 branches missed.">        if (request.isDisablePrivateOnlyFields() != null) {</span>
+<span class="nc" id="L198">            classInspectionService.setDisablePrivateOnlyFields(request.isDisablePrivateOnlyFields());</span>
         }
 
-<span class="nc bnc" id="L193" title="All 2 branches missed.">        if (request.isDisableProtectedOnlyFields() != null) {</span>
-<span class="nc" id="L194">            classInspectionService.setDisableProtectedOnlyFields(request.isDisableProtectedOnlyFields());</span>
+<span class="nc bnc" id="L201" title="All 2 branches missed.">        if (request.isDisableProtectedOnlyFields() != null) {</span>
+<span class="nc" id="L202">            classInspectionService.setDisableProtectedOnlyFields(request.isDisableProtectedOnlyFields());</span>
         }
 
-<span class="nc bnc" id="L197" title="All 2 branches missed.">        if (request.isDisablePublicOnlyFields() != null) {</span>
-<span class="nc" id="L198">            classInspectionService.setDisablePublicOnlyFields(request.isDisablePublicOnlyFields());</span>
+<span class="nc bnc" id="L205" title="All 2 branches missed.">        if (request.isDisablePublicOnlyFields() != null) {</span>
+<span class="nc" id="L206">            classInspectionService.setDisablePublicOnlyFields(request.isDisablePublicOnlyFields());</span>
         }
 
-<span class="nc bnc" id="L201" title="All 2 branches missed.">        if (request.isDisablePublicGetterSetterFields() != null) {</span>
-<span class="nc" id="L202">            classInspectionService.setDisablePublicGetterSetterFields(request.isDisablePublicGetterSetterFields());</span>
+<span class="nc bnc" id="L209" title="All 2 branches missed.">        if (request.isDisablePublicGetterSetterFields() != null) {</span>
+<span class="nc" id="L210">            classInspectionService.setDisablePublicGetterSetterFields(request.isDisablePublicGetterSetterFields());</span>
         }
 
-<span class="nc" id="L205">    }</span>
+<span class="nc" id="L213">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
