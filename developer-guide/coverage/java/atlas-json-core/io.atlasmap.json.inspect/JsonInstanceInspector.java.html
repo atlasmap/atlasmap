@@ -182,7 +182,7 @@ public class JsonInstanceInspector implements JsonInspector {
 <span class="fc" id="L182">                field.setStatus(FieldStatus.SUPPORTED);</span>
 <span class="fc" id="L183">                field.setValue(valueNode.intValue());</span>
 <span class="pc bpc" id="L184" title="1 of 2 branches missed.">            } else if (valueNode.isBigInteger()) {</span>
-<span class="nc" id="L185">                field.setFieldType(FieldType.INTEGER);</span>
+<span class="nc" id="L185">                field.setFieldType(FieldType.BIG_INTEGER);</span>
 <span class="nc" id="L186">                field.setStatus(FieldStatus.SUPPORTED);</span>
 <span class="nc" id="L187">                field.setValue(valueNode.bigIntegerValue());</span>
 <span class="pc bpc" id="L188" title="1 of 2 branches missed.">            } else if (valueNode.isFloat()) {</span>

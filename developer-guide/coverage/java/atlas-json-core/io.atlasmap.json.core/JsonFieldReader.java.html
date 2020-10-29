@@ -287,24 +287,24 @@ public class JsonFieldReader implements AtlasFieldReader {
 <span class="fc bfc" id="L287" title="All 2 branches covered.">        if (valueNode.isInt()) {</span>
 <span class="fc" id="L288">            jsonField.setFieldType(FieldType.INTEGER);</span>
 <span class="fc" id="L289">            return valueNode.intValue();</span>
-<span class="pc bpc" id="L290" title="1 of 2 branches missed.">        } else if (valueNode.isDouble()) {</span>
+<span class="fc bfc" id="L290" title="All 2 branches covered.">        } else if (valueNode.isDouble()) {</span>
 <span class="fc" id="L291">            jsonField.setFieldType(FieldType.DOUBLE);</span>
 <span class="fc" id="L292">            return valueNode.doubleValue();</span>
-<span class="nc bnc" id="L293" title="All 2 branches missed.">        } else if (valueNode.isBigDecimal()) {</span>
+<span class="pc bpc" id="L293" title="1 of 2 branches missed.">        } else if (valueNode.isBigDecimal()) {</span>
 <span class="nc" id="L294">            jsonField.setFieldType(FieldType.DECIMAL);</span>
 <span class="nc" id="L295">            return valueNode.decimalValue();</span>
-<span class="nc bnc" id="L296" title="All 2 branches missed.">        } else if (valueNode.isFloat()) {</span>
+<span class="pc bpc" id="L296" title="1 of 2 branches missed.">        } else if (valueNode.isFloat()) {</span>
 <span class="nc" id="L297">            jsonField.setFieldType(FieldType.DOUBLE);</span>
 <span class="nc" id="L298">            return valueNode.floatValue();</span>
-<span class="nc bnc" id="L299" title="All 2 branches missed.">        } else if (valueNode.isLong()) {</span>
+<span class="pc bpc" id="L299" title="1 of 2 branches missed.">        } else if (valueNode.isLong()) {</span>
 <span class="nc" id="L300">            jsonField.setFieldType(FieldType.LONG);</span>
 <span class="nc" id="L301">            return valueNode.longValue();</span>
-<span class="nc bnc" id="L302" title="All 2 branches missed.">        } else if (valueNode.isShort()) {</span>
+<span class="pc bpc" id="L302" title="1 of 2 branches missed.">        } else if (valueNode.isShort()) {</span>
 <span class="nc" id="L303">            jsonField.setFieldType(FieldType.SHORT);</span>
 <span class="nc" id="L304">            return valueNode.shortValue();</span>
-<span class="nc bnc" id="L305" title="All 2 branches missed.">        } else if (valueNode.isBigInteger()) {</span>
-<span class="nc" id="L306">            jsonField.setFieldType(FieldType.BIG_INTEGER);</span>
-<span class="nc" id="L307">            return valueNode.bigIntegerValue();</span>
+<span class="pc bpc" id="L305" title="1 of 2 branches missed.">        } else if (valueNode.isBigInteger()) {</span>
+<span class="fc" id="L306">            jsonField.setFieldType(FieldType.BIG_INTEGER);</span>
+<span class="fc" id="L307">            return valueNode.bigIntegerValue();</span>
         } else {
 <span class="nc" id="L309">            jsonField.setFieldType(FieldType.NUMBER);</span>
 <span class="nc" id="L310">            return valueNode.numberValue();</span>
