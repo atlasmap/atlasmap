@@ -25,7 +25,7 @@ public class DataSourceMetadata implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String documentId;
+    private String id;
     private String name;
     private String documentType;
     private InspectionType inspectionType;
@@ -40,12 +40,12 @@ public class DataSourceMetadata implements Serializable {
         return serialVersionUID;
     }
 
-    public String getDocumentId() {
-        return documentId;
+    public String getId() {
+        return id;
     }
 
-    public void setDocumentId(String documentId) {
-        this.documentId = documentId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

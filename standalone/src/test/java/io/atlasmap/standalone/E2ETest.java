@@ -15,10 +15,10 @@
  */
 package io.atlasmap.standalone;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.File;
 import java.nio.file.FileSystems;
@@ -33,10 +33,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Executors;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -50,11 +51,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import io.atlasmap.core.ADMArchiveHandler;
+import io.atlasmap.v2.DataSourceMetadata;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ContextConfiguration(classes = { Application.class, CorsConfiguration.class, SecurityConfiguration.class })
@@ -68,7 +70,7 @@ public class E2ETest {
 
     ChromeDriver driver;
 
-    @Before
+    @BeforeEach
     public void before() {
         String driverPath = System.getProperty("webdriver.chrome.driver");
         assumeTrue(driverPath != null && !driverPath.isEmpty());
@@ -81,7 +83,7 @@ public class E2ETest {
         driver = new ChromeDriver(options);
     }
 
-    @After
+    @AfterEach
     public void after() {
         if (driver != null) {
             driver.quit();
@@ -187,6 +189,14 @@ public class E2ETest {
                 handler.setLibraryDirectory(Paths.get(DLDIR + File.separator + "lib"));
                 handler.load(Paths.get(DLDIR + File.separator + exportAdmFileName));
                 assertEquals("UI.0", handler.getMappingDefinition().getName());
+                DataSourceMetadata sourceMeta = handler.getDataSourceMetadata(true, "JSONSchemaSource");
+                assertEquals(true, sourceMeta.isSource());
+                assertEquals("JSONSchemaSource", sourceMeta.getName());
+                assertEquals("JSON", sourceMeta.getDataSourceType());
+                DataSourceMetadata targetMeta = handler.getDataSourceMetadata(false, "XMLSchemaSource");
+                assertEquals(false, targetMeta.isSource());
+                assertEquals("XMLSchemaSource", targetMeta.getName());
+                assertEquals("XML", targetMeta.getDataSourceType());
                 return;
             };
         }

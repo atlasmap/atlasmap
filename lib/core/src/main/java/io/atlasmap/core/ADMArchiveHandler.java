@@ -317,11 +317,11 @@ public class ADMArchiveHandler {
                 for (int i=0; i<digest.getExportMeta().length; i++) {
                     DataSourceMetadata meta = digest.getExportMeta()[i];
                     String spec = digest.getExportBlockData()[i].getValue();
-                    if (meta.getDocumentId() == null) {
-                        meta.setDocumentId(meta.getName());
+                    if (meta.getId() == null) {
+                        meta.setId(meta.getName());
                     }
                     meta.setSpecification(spec != null ? spec.getBytes() : null);
-                    this.dataSourceMetadata.put(new DataSourceKey(meta.isSource(), meta.getDocumentId()), meta);
+                    this.dataSourceMetadata.put(new DataSourceKey(meta.isSource(), meta.getId()), meta);
                 }
             } catch (Exception e) {
                 throw new AtlasException(e);
