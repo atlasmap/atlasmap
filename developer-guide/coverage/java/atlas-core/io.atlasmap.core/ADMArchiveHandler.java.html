@@ -317,11 +317,11 @@ public class ADMArchiveHandler {
 <span class="fc bfc" id="L317" title="All 2 branches covered.">                for (int i=0; i&lt;digest.getExportMeta().length; i++) {</span>
 <span class="fc" id="L318">                    DataSourceMetadata meta = digest.getExportMeta()[i];</span>
 <span class="fc" id="L319">                    String spec = digest.getExportBlockData()[i].getValue();</span>
-<span class="pc bpc" id="L320" title="1 of 2 branches missed.">                    if (meta.getDocumentId() == null) {</span>
-<span class="fc" id="L321">                        meta.setDocumentId(meta.getName());</span>
+<span class="pc bpc" id="L320" title="1 of 2 branches missed.">                    if (meta.getId() == null) {</span>
+<span class="fc" id="L321">                        meta.setId(meta.getName());</span>
                     }
 <span class="pc bpc" id="L323" title="1 of 2 branches missed.">                    meta.setSpecification(spec != null ? spec.getBytes() : null);</span>
-<span class="fc" id="L324">                    this.dataSourceMetadata.put(new DataSourceKey(meta.isSource(), meta.getDocumentId()), meta);</span>
+<span class="fc" id="L324">                    this.dataSourceMetadata.put(new DataSourceKey(meta.isSource(), meta.getId()), meta);</span>
                 }
 <span class="nc" id="L326">            } catch (Exception e) {</span>
 <span class="nc" id="L327">                throw new AtlasException(e);</span>

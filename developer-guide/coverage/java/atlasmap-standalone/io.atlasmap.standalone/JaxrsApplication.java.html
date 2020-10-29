@@ -40,39 +40,39 @@ import io.atlasmap.xml.service.XmlService;
 
 @Component
 @ApplicationPath(&quot;/v2/atlas/&quot;)
-<span class="nc" id="L43">public class JaxrsApplication extends Application {</span>
+<span class="fc" id="L43">public class JaxrsApplication extends Application {</span>
 
     @Bean
     public JavaService javaService() {
-<span class="nc" id="L47">        return new JavaServiceEmptyClasspath();</span>
+<span class="fc" id="L47">        return new JavaServiceEmptyClasspath();</span>
     }
 
     @Bean
     public JsonService jsonService() {
-<span class="nc" id="L52">        return new JsonService();</span>
+<span class="fc" id="L52">        return new JsonService();</span>
     }
 
     @Bean
     public XmlService xmlService() {
-<span class="nc" id="L57">        return new XmlService();</span>
+<span class="fc" id="L57">        return new XmlService();</span>
     }
 
     @Bean
     public DfdlService dfdlService() {
-<span class="nc" id="L62">        return new DfdlService();</span>
+<span class="fc" id="L62">        return new DfdlService();</span>
     }
 
     @Bean
-<span class="nc" id="L66">    public CsvService csvService() { return new CsvService(); }</span>
+<span class="fc" id="L66">    public CsvService csvService() { return new CsvService(); }</span>
 
     @Bean
     public AtlasService atlasService() throws AtlasException {
-<span class="nc" id="L70">        return new AtlasService();</span>
+<span class="fc" id="L70">        return new AtlasService();</span>
     }
 
     // =====================================================================
 
-<span class="nc" id="L75">    public static class JavaServiceEmptyClasspath extends JavaService {</span>
+<span class="fc" id="L75">    public static class JavaServiceEmptyClasspath extends JavaService {</span>
 
         /**
          * Stub out mavenclasspath processing for now.

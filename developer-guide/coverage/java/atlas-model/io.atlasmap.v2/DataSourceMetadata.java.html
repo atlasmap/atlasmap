@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
     private static final long serialVersionUID = 1L;
 
-    private String documentId;
+    private String id;
     private String name;
     private String documentType;
     private InspectionType inspectionType;
@@ -40,12 +40,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 <span class="nc" id="L40">        return serialVersionUID;</span>
     }
 
-    public String getDocumentId() {
-<span class="fc" id="L44">        return documentId;</span>
+    public String getId() {
+<span class="fc" id="L44">        return id;</span>
     }
 
-    public void setDocumentId(String documentId) {
-<span class="fc" id="L48">        this.documentId = documentId;</span>
+    public void setId(String id) {
+<span class="fc" id="L48">        this.id = id;</span>
 <span class="fc" id="L49">    }</span>
 
     public String getName() {
