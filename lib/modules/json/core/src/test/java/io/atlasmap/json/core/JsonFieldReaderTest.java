@@ -23,6 +23,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -715,7 +716,7 @@ public class JsonFieldReaderTest {
         field.setPath("/items/item[5]/fillings/filling[3]/addcost");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is(0));
+        assertThat(field.getValue(), Is.is(new BigInteger("100000000000000000000000000000000000")));
         resetField(field);
     }
 

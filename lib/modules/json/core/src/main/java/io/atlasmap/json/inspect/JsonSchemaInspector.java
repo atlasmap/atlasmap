@@ -186,7 +186,7 @@ public class JsonSchemaInspector implements JsonInspector {
         } else if ("boolean".equals(fieldType.asText())) {
             builder.type = FieldType.BOOLEAN;
         } else if ("integer".equals(fieldType.asText())) {
-            builder.type = FieldType.INTEGER;
+            builder.type = FieldType.BIG_INTEGER;
         } else if ("null".equals(fieldType.asText())) {
             builder.type = FieldType.NONE;
         } else if ("number".equals(fieldType.asText())) {

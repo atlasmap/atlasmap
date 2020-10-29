@@ -16,6 +16,7 @@
 package io.atlasmap.json.core;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import org.slf4j.LoggerFactory;
 
@@ -315,6 +316,8 @@ public class JsonFieldWriter implements AtlasFieldWriter {
             valueNode = rootNode.numberNode(Long.valueOf(String.valueOf(value)));
         } else if (FieldType.BYTE.equals(type)) {
             valueNode = rootNode.numberNode(Byte.valueOf(String.valueOf(value)));
+        } else if (FieldType.BIG_INTEGER.equals(type)) {
+            valueNode = rootNode.numberNode(new BigInteger(String.valueOf(value)));
         } else {
             valueNode = rootNode.nullNode();
         }

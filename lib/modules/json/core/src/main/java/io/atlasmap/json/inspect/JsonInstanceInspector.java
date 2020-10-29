@@ -182,7 +182,7 @@ public class JsonInstanceInspector implements JsonInspector {
                 field.setStatus(FieldStatus.SUPPORTED);
                 field.setValue(valueNode.intValue());
             } else if (valueNode.isBigInteger()) {
-                field.setFieldType(FieldType.INTEGER);
+                field.setFieldType(FieldType.BIG_INTEGER);
                 field.setStatus(FieldStatus.SUPPORTED);
                 field.setValue(valueNode.bigIntegerValue());
             } else if (valueNode.isFloat()) {
