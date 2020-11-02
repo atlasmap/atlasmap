@@ -4,6 +4,7 @@ export * from "./useCustomClassDialog";
 export * from "./useDeleteConstantDialog";
 export * from "./useDeleteDocumentDialog";
 export * from "./useCaptureDocumentNameToast";
+export * from "./useChangeDocumentNameDialog";
 export * from "./useDeleteMappingDialog";
 export * from "./useDeletePropertyDialog";
 export * from "./useImportCatalogDialog";

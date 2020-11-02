@@ -12,6 +12,25 @@ import {
 import { ClassNameComponent } from "./custom-classname";
 
 /**
+ * Modify the document name of the document specified by the document ID.
+ *
+ * @param docId
+ * @param newDocName
+ * @param isSource
+ */
+export async function changeDocumentName(
+  docId: string,
+  newDocName: string,
+  isSource: boolean,
+) {
+  const cfg = ConfigModel.getConfig();
+  const docDef = getDocDef(docId, cfg, isSource);
+  docDef.name = newDocName;
+  await cfg.mappingService.notifyMappingUpdated();
+  await cfg.fileService.exportMappingsCatalog("");
+}
+
+/**
  * Create a new namespace for the supplied XML document.
  *
  * @param docName

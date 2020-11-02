@@ -20,6 +20,7 @@ import {
 import { IAtlasmapDocument, IAtlasmapField } from "../Views";
 import {
   addToCurrentMapping,
+  changeDocumentName,
   createConstant,
   createMapping,
   createProperty,
@@ -597,5 +598,6 @@ export function useAtlasmap() {
     onAddToMapping,
     onRemoveFromMapping,
     onCreateMapping,
+    changeDocumentName,
   };
 }
