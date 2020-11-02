@@ -22,6 +22,7 @@ import {
 } from "../../models";
 import {
   CaptureDocumentNameAction,
+  ChangeDocumentNameAction,
   DeleteDocumentAction,
   EnableJavaClassAction,
   ImportAction,
@@ -49,6 +50,7 @@ export interface ISourceColumnCallbacks
   onCreateProperty: (isSource: boolean) => void;
   onCustomClassSearch?: (isSource: boolean) => void;
   onCaptureDocumentName?: (id: string) => void;
+  onChangeDocumentName?: (id: string, name: string) => void;
   onImportDocument?: (selectedFile: File) => void;
   onDeleteDocument?: (id: GroupId) => void;
   onSearch: (content: string) => void;
@@ -88,6 +90,7 @@ export const SourcesColumn: FunctionComponent<
   onImportDocument,
   onDeleteDocument,
   onCaptureDocumentName,
+  onChangeDocumentName,
   onSearch,
   canDrop,
   onDrop,
@@ -264,7 +267,9 @@ export const SourcesColumn: FunctionComponent<
                       title={s.name}
                       footer={
                         showTypes ? (
-                          <DocumentFooter>Source type: {s.type}</DocumentFooter>
+                          <DocumentFooter>
+                            Source document type: {s.type}
+                          </DocumentFooter>
                         ) : undefined
                       }
                       actions={[
@@ -273,6 +278,13 @@ export const SourcesColumn: FunctionComponent<
                             id={documentId}
                             onClick={() => onCaptureDocumentName(s.id)}
                             key={"capture-document-name"}
+                          />
+                        ),
+                        onChangeDocumentName && (
+                          <ChangeDocumentNameAction
+                            id={documentId}
+                            onClick={() => onChangeDocumentName(s.id, s.name)}
+                            key={"change-document-name"}
                           />
                         ),
                         onDeleteDocument && (

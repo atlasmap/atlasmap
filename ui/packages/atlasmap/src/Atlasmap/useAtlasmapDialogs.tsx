@@ -1,13 +1,14 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 
-import { IConstant, INamespace, IProperty } from "../UI";
+import { IConstant, IDocumentName, INamespace, IProperty } from "../UI";
 import { useAtlasmap } from "./AtlasmapProvider";
 import {
   useConstantDialog,
   useDeleteConstantDialog,
   useDeleteDocumentDialog,
   useCaptureDocumentNameToast,
+  useChangeDocumentNameDialog,
   useDeleteMappingDialog,
   useDeletePropertyDialog,
   useExportCatalogDialog,
@@ -38,6 +39,7 @@ export function useAtlasmapDialogs({
     createNamespace,
     editNamespace,
     deleteNamespace,
+    changeDocumentName,
   } = useAtlasmap();
 
   //#region constant dialogs
@@ -137,6 +139,20 @@ export function useAtlasmapDialogs({
     captureDocumentNameToast,
     onCaptureDocumentName,
   ] = useCaptureDocumentNameToast();
+
+  const [
+    changeDocumentNameDialog,
+    openChangeDocumentNameDialog,
+  ] = useChangeDocumentNameDialog();
+  const onChangeDocumentName = useCallback(
+    (docNameInfo: IDocumentName) => {
+      openChangeDocumentNameDialog(({ id, name, isSource }) => {
+        changeDocumentName(id, name, isSource);
+      }, docNameInfo);
+    },
+    [changeDocumentName, openChangeDocumentNameDialog],
+  );
+
   const [
     removeMappedFieldDialog,
     onRemoveMappedField,
@@ -207,6 +223,7 @@ export function useAtlasmapDialogs({
           {importDocumentDialog}
           {deleteDocumentDialog}
           {captureDocumentNameToast}
+          {changeDocumentNameDialog}
           {createConstantDialog}
           {deleteConstantDialog}
           {editConstantDialog}
@@ -231,6 +248,7 @@ export function useAtlasmapDialogs({
       deleteConstantDialog,
       deleteDocumentDialog,
       captureDocumentNameToast,
+      changeDocumentNameDialog,
       deleteMappingDialog,
       deletePropertyDialog,
       editConstantDialog,
@@ -260,6 +278,7 @@ export function useAtlasmapDialogs({
       onImportDocument,
       onDeleteDocument,
       onCaptureDocumentName,
+      onChangeDocumentName,
       onRemoveMappedField,
       onDeleteMapping,
       onDeleteSelectedMapping,

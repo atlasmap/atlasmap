@@ -20,6 +20,7 @@ import {
 } from "../../models";
 import {
   CaptureDocumentNameAction,
+  ChangeDocumentNameAction,
   DeleteDocumentAction,
   EnableJavaClassAction,
   ImportAction,
@@ -43,6 +44,7 @@ export interface ITargetsColumnCallbacks extends IPropertiesTreeCallbacks {
   isSource: boolean;
   onCreateProperty: (isSource: boolean) => void;
   onCaptureDocumentName?: (id: string) => void;
+  onChangeDocumentName?: (id: string, name: string) => void;
   onDeleteDocument?: (id: GroupId) => void;
   onImportDocument?: (selectedFile: File) => void;
   onCustomClassSearch?: (isSource: boolean) => void;
@@ -77,6 +79,7 @@ export const TargetsColumn: FunctionComponent<
   onImportDocument,
   onDeleteDocument,
   onCaptureDocumentName,
+  onChangeDocumentName,
   onCustomClassSearch,
   onCreateProperty,
   onEditProperty,
@@ -203,7 +206,9 @@ export const TargetsColumn: FunctionComponent<
                       title={t.name}
                       footer={
                         showTypes ? (
-                          <DocumentFooter>Target type: {t.type}</DocumentFooter>
+                          <DocumentFooter>
+                            Target document type: {t.type}
+                          </DocumentFooter>
                         ) : undefined
                       }
                       actions={[
@@ -212,6 +217,13 @@ export const TargetsColumn: FunctionComponent<
                             id={documentId}
                             onClick={() => onCaptureDocumentName(t.id)}
                             key={"capture-document-name"}
+                          />
+                        ),
+                        onChangeDocumentName && (
+                          <ChangeDocumentNameAction
+                            id={documentId}
+                            onClick={() => onChangeDocumentName(t.id, t.name)}
+                            key={"change-document-name"}
                           />
                         ),
                         onDeleteDocument && (
