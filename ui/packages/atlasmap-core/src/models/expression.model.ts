@@ -62,7 +62,8 @@ export class FieldNode extends ExpressionNode {
     private mapping: MappingModel,
     public mappedField?: MappedField | null,
     public metaStr?: string,
-    index: number = 0
+    index: number = 0,
+    public collectionContextPath?: string
   ) {
     super(FieldNode.PREFIX);
     if (!mappedField) {
@@ -87,7 +88,25 @@ export class FieldNode extends ExpressionNode {
             )!;
           }
         } else {
-          this.mappedField = mapping.getMappedFieldByName(fieldParts[1], true)!;
+          // Relative paths will not have the full field path in the meta data.
+          if (fieldParts.length === 1) {
+            if (collectionContextPath) {
+              this.mappedField = mapping.getMappedFieldByName(
+                collectionContextPath + fieldParts[0],
+                true
+              )!;
+            } else {
+              this.mappedField = mapping.getMappedFieldByName(
+                fieldParts[0],
+                true
+              )!;
+            }
+          } else {
+            this.mappedField = mapping.getMappedFieldByName(
+              fieldParts[1],
+              true
+            )!;
+          }
         }
         if (!this.mappedField) {
           this.mappedField = mapping.getReferenceField(fieldParts[1]);
@@ -123,13 +142,23 @@ export class FieldNode extends ExpressionNode {
         '}'
       );
     } else {
-      return (
-        '${' +
-        this.mappedField.field.docDef.id +
-        ':' +
-        this.mappedField.parsedData.parsedPath +
-        '}'
-      );
+      let textStr = '${';
+
+      // If the mapped field's parent is a complex reference field then only use the leaf.
+      if (
+        this.mappedField.field.parentField &&
+        this.mappedField.field.parentField ===
+          this.mapping.referenceFields[0]?.field
+      ) {
+        textStr += '/' + this.mappedField.field.name + '}';
+      } else {
+        textStr +=
+          this.mappedField.field.docDef.id +
+          ':' +
+          this.mappedField.parsedData.parsedPath +
+          '}';
+      }
+      return textStr;
     }
   }
 
@@ -669,9 +698,16 @@ export class ExpressionModel {
     this.expressionHTML = answer; // trigger expr box render
   }
 
+  /**
+   * Translate an expression string into an array of text nodes and field nodes.  Handle
+   * relative paths for collection-based field references.
+   *
+   * @param text
+   */
   private createNodesFromText(text: string): ExpressionNode[] {
     const answer = [];
     let position = -1;
+    let collectionContextFieldNode = null;
 
     while (text.search(/\$\{[a-zA-Z0-9.:/<>[\]_]+\}/) !== -1) {
       position = text.search(/\$/);
@@ -681,7 +717,15 @@ export class ExpressionModel {
       const nodeMetaVal = text.substring(position + 2, text.indexOf('}'));
       let fn = null;
       if (isNaN(Number(nodeMetaVal))) {
-        fn = new FieldNode(this.mapping, undefined, nodeMetaVal, undefined);
+        fn = collectionContextFieldNode
+          ? new FieldNode(
+              this.mapping,
+              undefined,
+              nodeMetaVal,
+              undefined,
+              collectionContextFieldNode.mappedField?.parsedData.parsedPath!
+            )
+          : new FieldNode(this.mapping, undefined, nodeMetaVal);
       } else {
         const index = parseInt(nodeMetaVal, 10);
         fn = new FieldNode(this.mapping, undefined, undefined, index);
@@ -690,7 +734,7 @@ export class ExpressionModel {
       if (!fn || !fn.mappedField) {
         this.cfg.errorService.addError(
           new ErrorInfo({
-            message: `Unable to map expression element to field node.`,
+            message: `Unable to map expression element '${nodeMetaVal}' to a field node.`,
             level: ErrorLevel.ERROR,
             scope: ErrorScope.MAPPING,
             type: ErrorType.INTERNAL,
@@ -698,6 +742,9 @@ export class ExpressionModel {
           })
         );
       } else {
+        if (fn.mappedField?.field?.isCollection) {
+          collectionContextFieldNode = fn;
+        }
         answer.push(fn);
       }
       text = text.substring(text.indexOf('}') + 1);

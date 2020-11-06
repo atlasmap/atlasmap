@@ -255,9 +255,36 @@ export class MappingSerializer {
     }
   }
 
+  static addInputFieldGroupFields(
+    inputField: any,
+    mapping: MappingModel,
+    docRefs: string[],
+    cfg: ConfigModel
+  ) {
+    for (const field of inputField) {
+      if (field.fieldType === 'COMPLEX') {
+        MappingSerializer.addInputFieldGroupFields(
+          field.field,
+          mapping,
+          docRefs,
+          cfg
+        );
+      } else {
+        MappingSerializer.addFieldIfDoesntExist(
+          mapping,
+          field,
+          true,
+          docRefs,
+          cfg,
+          true
+        );
+      }
+    }
+  }
+
   static deserializeFieldMapping(
     mappingJson: any,
-    docRefs: any,
+    docRefs: string[],
     cfg: ConfigModel,
     ignoreValue: boolean = true
   ): MappingModel {
@@ -281,7 +308,6 @@ export class MappingSerializer {
       return mapping;
     }
 
-    let inputField = [];
     if (mappingJson.inputFieldGroup) {
       if (
         mapping.transition.expression &&
@@ -290,18 +316,13 @@ export class MappingSerializer {
         mapping.transition.expression.hasComplexField = true;
       }
       mapping.transition.mode = TransitionMode.MANY_TO_ONE;
-      inputField = mappingJson.inputFieldGroup.field;
+      MappingSerializer.addInputFieldGroupFields(
+        mappingJson.inputFieldGroup.field,
+        mapping,
+        docRefs,
+        cfg
+      );
 
-      for (const field of inputField) {
-        MappingSerializer.addFieldIfDoesntExist(
-          mapping,
-          field,
-          true,
-          docRefs,
-          cfg,
-          ignoreValue
-        );
-      }
       MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, null, true);
 
       // Check for an InputFieldGroup containing a many-to-one action
@@ -327,7 +348,7 @@ export class MappingSerializer {
         }
       }
     } else {
-      inputField = mappingJson.inputField;
+      const inputField = mappingJson.inputField;
 
       for (const field of inputField) {
         MappingSerializer.addFieldIfDoesntExist(
@@ -769,7 +790,7 @@ export class MappingSerializer {
   private static deserializeFieldMappingFromType(
     mapping: MappingModel,
     fieldMapping: any,
-    docRefs: any,
+    docRefs: string[],
     cfg: ConfigModel,
     ignoreValue: boolean
   ): void {
@@ -963,7 +984,7 @@ export class MappingSerializer {
     mapping: MappingModel,
     field: any,
     isSource: boolean,
-    docRefs: any,
+    docRefs: string[],
     cfg: ConfigModel,
     ignoreValue: boolean = true
   ): MappedField | null {
