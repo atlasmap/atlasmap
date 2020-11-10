@@ -13,6 +13,7 @@ export default {
 const parameters = [
   {
     name: "format",
+    label: "Format",
     value: "Default",
     options: [
       { label: "Default", value: "Default" },
@@ -32,65 +33,62 @@ const parameters = [
   },
   {
     name: "allowDuplicateHeaderNames",
+    label: "Allow Duplicate Header Names",
     value: "true",
-    options: [
-      { label: "true", value: "true" },
-      { label: "false", value: "false" },
-    ],
+    boolean: true,
     required: false,
   },
   {
     name: "allowMissingColumnNames",
+    label: "Allow Missing Column Names",
     value: "true",
-    options: [
-      { label: "true", value: "true" },
-      { label: "false", value: "false" },
-    ],
+    boolean: true,
     required: false,
   },
-  { name: "commentMarker", value: "", required: false },
-  { name: "delimiter", value: "", required: false },
-  { name: "escape", value: "", required: false },
-  { name: "escape", value: "", required: false },
+  {
+    name: "commentMarker",
+    label: "Comment Marker",
+    value: "",
+    required: false,
+  },
+  { name: "delimiter", label: "Delimiter", value: "", required: false },
+  { name: "escape", label: "Escape", value: "", required: false },
   {
     name: "firstRecordAsHeader",
+    label: "First Record As Header",
     value: "true",
-    options: [
-      { label: "true", value: "true" },
-      { label: "false", value: "false" },
-    ],
+    boolean: true,
     required: false,
   },
-  { name: "headers", value: "", required: false },
+  { name: "headers", label: "Headers", value: "", required: false },
   {
     name: "ignoreEmptyLines",
+    label: "Ignore Empty Lines",
     value: "true",
-    options: [
-      { label: "true", value: "true" },
-      { label: "false", value: "false" },
-    ],
+    boolean: true,
     required: false,
   },
   {
     name: "ignoreHeaderCase",
+    label: "Ignore Header Case",
     value: "true",
-    options: [
-      { label: "true", value: "true" },
-      { label: "false", value: "false" },
-    ],
+    boolean: true,
     required: false,
   },
   {
     name: "ignoreSurroundingSpaces",
+    label: "Ignore Surrounding Spaces",
     value: "true",
-    options: [
-      { label: "true", value: "true" },
-      { label: "false", value: "false" },
-    ],
+    boolean: true,
     required: false,
   },
-  { name: "nullString", value: "", required: false },
-  { name: "quote", value: "", required: false },
+  {
+    name: "nullString",
+    label: "Null String",
+    value: "",
+    required: false,
+  },
+  { name: "quote", label: "Quote", value: "", required: false },
 ];
 
 export const parametersDialog = () => (

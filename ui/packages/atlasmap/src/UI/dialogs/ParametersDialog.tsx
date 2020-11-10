@@ -11,8 +11,8 @@ import {
   FormGroup,
   FormSelect,
   FormSelectOption,
-  Split,
-  SplitItem,
+  InputGroup,
+  Switch,
   TextInput,
 } from "@patternfly/react-core";
 
@@ -20,11 +20,13 @@ import {
   ConfirmationDialog,
   IConfirmationDialogProps,
 } from "./ConfirmationDialog";
-import { PlusIcon, TimesIcon } from "@patternfly/react-icons";
+import { PlusIcon, TrashIcon } from "@patternfly/react-icons";
 
 export interface IParameter {
   name: string;
+  label: string;
   value: string;
+  boolean?: boolean;
   options?: IParameterOption[];
   hidden?: boolean;
   required?: boolean;
@@ -34,69 +36,6 @@ export interface IParameterOption {
   label: string;
   value: string;
 }
-
-interface AddParameterProps {
-  parameters: IParameter[];
-  onSelect: (parameter: IParameter) => void;
-}
-
-const SelectParameter: FunctionComponent<AddParameterProps> = ({
-  parameters = [],
-  onSelect,
-}) => {
-  const [selectedParameter, setSelectedParameter] = useState("");
-  const initialSelectedParameter = "Select...";
-  const handleAddParameter = useCallback(() => {
-    if (selectedParameter != null) {
-      onSelect(parameters[parseInt(selectedParameter)]);
-      setSelectedParameter("");
-    }
-  }, [parameters, selectedParameter, onSelect]);
-
-  return (
-    <>
-      {parameters.length > 0 && (
-        <FormGroup
-          fieldId="select-parameter"
-          label="Customize additional parameters"
-        >
-          <Split>
-            <SplitItem>
-              <FormSelect
-                id="selected-paramater"
-                value={selectedParameter}
-                onChange={setSelectedParameter}
-              >
-                <FormSelectOption
-                  key="initValue"
-                  value=""
-                  label={initialSelectedParameter}
-                />
-                {parameters.map((parameter, index) => (
-                  <FormSelectOption
-                    key={index}
-                    value={index}
-                    label={parameter.name}
-                  />
-                ))}
-              </FormSelect>
-            </SplitItem>
-            <SplitItem>
-              <Button
-                isDisabled={selectedParameter === ""}
-                onClick={handleAddParameter}
-                variant="link"
-                icon={<PlusIcon />}
-              >
-                Add parameter
-              </Button>
-            </SplitItem>
-          </Split>
-        </FormGroup>
-      )}
-    </>
-  );
-};
 
 export interface IParametersDialogProps {
   title: string;
@@ -114,8 +53,9 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
   onConfirm,
 }) => {
   const [definedParameters, setDefinedParameters] = useState<IParameter[]>([]);
+
   const availableParameters: IParameter[] = initialParameters.filter(
-    (p) => !definedParameters.includes(p),
+    (param) => !definedParameters.map((p) => p.name).includes(param.name),
   );
 
   const reset = useCallback(() => {
@@ -131,12 +71,11 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
     reset();
   }, [onCancel, reset]);
 
-  const handleAddParameter = useCallback(
-    (parameter: IParameter) => {
-      setDefinedParameters(definedParameters.concat(parameter));
-    },
-    [definedParameters],
-  );
+  const handleAddParameter = useCallback(() => {
+    setDefinedParameters(
+      definedParameters.concat({ ...availableParameters[0] }),
+    );
+  }, [definedParameters, availableParameters]);
 
   const handleRemoveParameter = useCallback(
     (parameter: IParameter) => {
@@ -145,7 +84,7 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
     [definedParameters],
   );
 
-  const handleOnChangeParameter = useCallback(
+  const handleChangeParameterValue = useCallback(
     (index, value) => {
       const parameters = [...definedParameters];
       const parameter = { ...parameters[index], value: value };
@@ -154,6 +93,26 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
     },
     [definedParameters],
   );
+
+  const handleChangeParameter = useCallback(
+    (index, availableParameterIndex) => {
+      if (availableParameterIndex === 0) {
+        return; //nothing changed
+      }
+      const parameters = [...definedParameters];
+      const parameter = { ...availableParameters[availableParameterIndex - 1] };
+      parameters[index] = parameter;
+      setDefinedParameters(parameters);
+    },
+    [definedParameters, availableParameters],
+  );
+
+  const formLabelColumnWidth = {
+    "--pf-c-form--m-horizontal--md__group--GridTemplateColumns": "260px 1fr",
+  } as React.CSSProperties;
+  const formLabelTopPadding = {
+    "--pf-c-form__label--PaddingTop": "0",
+  } as React.CSSProperties;
 
   useEffect(reset, [reset]);
 
@@ -164,56 +123,90 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
       onConfirm={definedParameters.length > 0 ? handleOnConfirm : undefined}
       isOpen={isOpen}
     >
-      <Form>
+      <Form isHorizontal style={formLabelColumnWidth}>
         {definedParameters.map((parameter, index) => (
           <FormGroup
+            fieldId={`${index}-parameter`}
             key={index}
-            label={parameter.name}
-            fieldId={parameter.name}
-          >
-            <Split>
-              <SplitItem>
-                {parameter.options && parameter.options.length > 0 ? (
-                  <FormSelect
-                    value={parameter.value}
-                    onChange={(value) => handleOnChangeParameter(index, value)}
-                    id={parameter.name}
-                    name={parameter.name}
-                    data-testid={parameter.name + "-parameter-form-select"}
-                  >
-                    {parameter.options.map(({ label, value }, idx) => (
-                      <FormSelectOption key={idx} value={value} label={label} />
+            style={!parameter.required ? formLabelTopPadding : {}}
+            label={
+              parameter.required ? (
+                <b>{parameter.name}</b>
+              ) : (
+                <FormSelect
+                  id="selected-paramater"
+                  value="0"
+                  label={parameter.name}
+                  onChange={(availableParameterIndex) =>
+                    handleChangeParameter(index, availableParameterIndex)
+                  }
+                >
+                  {[parameter]
+                    .concat(availableParameters)
+                    .map((parameter, index) => (
+                      <FormSelectOption
+                        key={index}
+                        value={index}
+                        label={parameter.label}
+                      />
                     ))}
-                  </FormSelect>
-                ) : (
-                  <TextInput
-                    value={parameter.value}
-                    onChange={(value) => handleOnChangeParameter(index, value)}
+                </FormSelect>
+              )
+            }
+          >
+            <InputGroup>
+              {parameter.boolean ? (
+                <span style={{ paddingTop: 5 }}>
+                  <Switch
                     id={parameter.name}
                     name={parameter.name}
-                    data-testid={parameter.name + "-parameter-text-input"}
+                    isChecked={parameter.value === "true"}
+                    onChange={(checked) => {
+                      handleChangeParameterValue(index, String(checked));
+                    }}
                   />
-                )}
-              </SplitItem>
-              {!parameter.required && (
-                <SplitItem>
-                  <Button
-                    variant="plain"
-                    aria-label="Action"
-                    onClick={(_event) => handleRemoveParameter(parameter)}
-                  >
-                    <TimesIcon />
-                  </Button>
-                </SplitItem>
+                </span>
+              ) : parameter.options && parameter.options.length > 0 ? (
+                <FormSelect
+                  value={parameter.value}
+                  onChange={(value) => handleChangeParameterValue(index, value)}
+                  id={parameter.name}
+                  name={parameter.name}
+                  data-testid={parameter.name + "-parameter-form-select"}
+                >
+                  {parameter.options.map(({ label, value }, idx) => (
+                    <FormSelectOption key={idx} value={value} label={label} />
+                  ))}
+                </FormSelect>
+              ) : (
+                <TextInput
+                  value={parameter.value}
+                  onChange={(value) => handleChangeParameterValue(index, value)}
+                  id={parameter.name}
+                  name={parameter.name}
+                  data-testid={parameter.name + "-parameter-text-input"}
+                />
               )}
-            </Split>
+              {!parameter.required && (
+                <Button
+                  variant="plain"
+                  aria-label="Action"
+                  onClick={(_event) => handleRemoveParameter(parameter)}
+                >
+                  <TrashIcon />
+                </Button>
+              )}
+            </InputGroup>
           </FormGroup>
         ))}
-
-        <SelectParameter
-          parameters={availableParameters}
-          onSelect={handleAddParameter}
-        />
+        <Button
+          isDisabled={availableParameters.length === 0}
+          onClick={handleAddParameter}
+          variant="link"
+          icon={<PlusIcon />}
+        >
+          Add parameter
+        </Button>
       </Form>
     </ConfirmationDialog>
   );
