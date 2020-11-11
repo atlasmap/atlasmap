@@ -524,7 +524,9 @@ export class DocumentDefinition {
         complexFields.push(field.copy());
       }
       if (field.children) {
-        complexFields.concat(this.discoverAllComplexFields(field.children));
+        complexFields = complexFields.concat(
+          this.discoverAllComplexFields(field.children)
+        );
       }
     }
     return complexFields;
