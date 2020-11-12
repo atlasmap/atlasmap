@@ -571,6 +571,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         group.getField().add(source3);
         Concatenate action = new Concatenate();
         action.setDelimiter("-");
+        action.setDelimitingEmptyValues(true);
         group.setActions(new ArrayList<>());
         group.getActions().add(action);
         m.setInputFieldGroup(group);

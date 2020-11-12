@@ -192,16 +192,16 @@ public class ExpressionFieldActionTest {
     @Test
     public void testConcatenateActionWithDelimiter() throws Exception {
         Expression action = new Expression();
-        action.setExpression("CONCATENATE(${0}, ${1}, ${2}, ${3})");
-        assertEquals("a,b,c", ExpressionFieldAction.process(action, Arrays.asList(",", "a", "b", "c")));
+        action.setExpression("CONCATENATE(${0}, ${1}, ${2}, ${3}, ${4})");
+        assertEquals("a,b,c", ExpressionFieldAction.process(action, Arrays.asList(",", true, "a", "b", "c")));
     }
 
     @Test
     public void testConcatenateActionWithMissingArguments() throws Exception {
         Expression action = new Expression();
-        action.setExpression("CONCATENATE(${0})");
+        action.setExpression("CONCATENATE(${0}, ${1})");
         try {
-            ExpressionFieldAction.process(action, Arrays.asList(","));
+            ExpressionFieldAction.process(action, Arrays.asList(",", true));
             fail();
         } catch (IllegalArgumentException e) {
             assertEquals(IllegalArgumentException.class, e.getClass());
