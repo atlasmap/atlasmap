@@ -10,31 +10,52 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
     protected String delimiter;
 
+<span class="fc" id="L13">    protected Boolean delimitingEmptyValues = true;</span>
+
     /**
      * Gets the value of the delimiter property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getDelimiter() {
-<span class="fc" id="L22">        return delimiter;</span>
+<span class="fc" id="L24">        return delimiter;</span>
     }
 
     /**
+     * @return
+     *     &lt;code&gt;true&lt;/code&gt; if delimiting empty values
+     */
+    public Boolean getDelimitingEmptyValues() {
+<span class="fc" id="L32">        return delimitingEmptyValues;</span>
+    }
+
+    // !!!! Warning !!!! these setters must be kept in alphabetical order
+
+    /**
      * Sets the value of the delimiter property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     @JsonPropertyDescription(&quot;The delimiter string to concatenate input strings with&quot;)
     @AtlasActionProperty(title = &quot;Delimiter&quot;, type = FieldType.STRING)
     public void setDelimiter(String value) {
-<span class="fc" id="L36">        this.delimiter = value;</span>
-<span class="fc" id="L37">    }</span>
+<span class="fc" id="L48">        this.delimiter = value;</span>
+<span class="fc" id="L49">    }</span>
 
+    /**
+     * @param delimitingEmptyValues
+     *     &lt;code&gt;true&lt;/code&gt; if delimiting empty values
+     */
+    @JsonPropertyDescription(&quot;Determines if delimiters are added around empty values&quot;)
+    @AtlasActionProperty(title = &quot;Delimit empty values&quot;, type = FieldType.BOOLEAN)
+    public void setDelimitingEmptyValues(Boolean delimitingEmptyValues) {
+<span class="fc" id="L58">        this.delimitingEmptyValues = delimitingEmptyValues;</span>
+<span class="fc" id="L59">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
