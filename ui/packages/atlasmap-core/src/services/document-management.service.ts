@@ -326,7 +326,7 @@ export class DocumentManagementService {
       this.cfg.errorService.clearValidationErrors();
 
       const userFileComps = selectedFile.name.split('.');
-      const userFile = userFileComps[0];
+      const userFile = userFileComps.slice(0, -1).join('.');
       const userFileSuffix: string = userFileComps[
         userFileComps.length - 1
       ].toUpperCase();
