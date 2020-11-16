@@ -9,6 +9,7 @@ import {
   FormGroup,
   Split,
   SplitItem,
+  Checkbox,
 } from "@patternfly/react-core";
 import { TrashIcon } from "@patternfly/react-icons";
 
@@ -77,8 +78,9 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
         const udOption = a.options?.find(
           (option) => option.name === "User defined",
         );
-        // If user-defined option, replace user-defined option value with arg
-        // value, since arg options are always reset with static values
+        // If user-defined option, then this must be a delimiter argument.
+        // Replace user-defined option value with arg value, since arg options
+        // are always reset with static values
         if (
           a.options &&
           udOption &&
@@ -86,7 +88,7 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
         ) {
           udOption.value = a.value;
         }
-        return (
+        return a.name !== "delimitingEmptyValues" ? (
           <FormGroup fieldId={argId} label={a.label} key={idx}>
             {a.options ? (
               <Split>
@@ -144,6 +146,16 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
               />
             )}
           </FormGroup>
+        ) : (
+          <Checkbox
+            id={argId}
+            label="Delimit empty values"
+            aria-label="Delimit empty values"
+            isChecked={a.value === "true"}
+            onChange={(value) =>
+              onTransformationArgumentChange(a.name, value.toString())
+            }
+          />
         );
       })}
     </>

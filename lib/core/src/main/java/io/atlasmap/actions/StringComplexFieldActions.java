@@ -72,10 +72,13 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         }
 
         String delim = concat.getDelimiter() == null ? "" : concat.getDelimiter();
-        StringBuilder builder = new StringBuilder();
+        boolean delimitingEmptyValues = concat.getDelimitingEmptyValues() == null
+            ? false
+            : concat.getDelimitingEmptyValues();
         boolean isFirst = true;
+        StringBuilder builder = new StringBuilder();
         for (String entry : inputs) {
-            if (!isFirst) {
+            if (!isFirst && ((entry != null && !entry.isEmpty()) || delimitingEmptyValues)) {
                 builder.append(delim);
             }
             if (entry != null) {

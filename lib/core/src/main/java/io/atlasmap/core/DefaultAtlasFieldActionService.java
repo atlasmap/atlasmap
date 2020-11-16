@@ -23,6 +23,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -474,7 +475,23 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
     private ActionParameters detectFieldActionParameters(Class<?> actionClazz) throws ClassNotFoundException {
         ActionParameters params = null;
-        for (Method method : actionClazz.getMethods()) {
+        // Java does not return methods in any consistent order, so sort
+        // methods by name to ensure parameter types and values get
+        // assigned to the correct method. This means that field actions with
+        // multiple parameters must define their setter methods in alphabetical
+        // order to be processed correctly. Not an ideal situation, but the only
+        // other option would be to force the specification of an order in the
+        // AtlasActionProperty annotation via a new parameter, which is also
+        // clunky.
+        Method[] methods = actionClazz.getMethods();
+        Arrays.sort(methods, new Comparator<Method>() {
+
+            @Override
+            public int compare(Method method1, Method method2) {
+                return method1.getName().compareToIgnoreCase(method2.getName());
+            }
+        });
+        for (Method method : methods) {
             // Find setters to avoid the get / is confusion
             if (method.getParameterCount() == 1 && method.getName().startsWith("set")) {
                 // We have a parameter

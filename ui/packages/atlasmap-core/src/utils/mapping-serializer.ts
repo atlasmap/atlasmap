@@ -821,6 +821,10 @@ export class MappingSerializer {
         'delimiter',
         fieldMapping.delimiter
       );
+      mapping.transition.transitionFieldAction.setArgumentValue(
+        'delimitingEmptyValues',
+        fieldMapping.delimitingEmptyValues
+      );
     } else {
       mapping.transition.mode = TransitionMode.ONE_TO_ONE;
     }

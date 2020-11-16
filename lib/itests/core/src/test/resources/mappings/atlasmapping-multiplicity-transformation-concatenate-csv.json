@@ -19,7 +19,7 @@
           "jsonType" : "io.atlasmap.v2.FieldGroup",
           "actions" : [ {
             "Expression" : {
-              "expression" : "concatenate(',', ${0})"
+              "expression" : "concatenate(',', true, ${0})"
             }
           } ],
           "field" : [ {
@@ -46,7 +46,7 @@
           "jsonType" : "io.atlasmap.v2.FieldGroup",
           "actions" : [ {
             "Expression" : {
-              "expression" : "concatenate(',', ${0}, ${1})"
+              "expression" : "concatenate(',', true, ${0}, ${1})"
             }
           } ],
           "field" : [ {

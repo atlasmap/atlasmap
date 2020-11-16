@@ -953,6 +953,10 @@ export class MappingManagementService {
           'delimiter',
           ' '
         );
+        mapping.transition.transitionFieldAction.setArgumentValue(
+          'delimitingEmptyValues',
+          'true'
+        );
       }
     } else if (targetMappedFields.length > 1 || targetMappedCollection) {
       mapping.transition.mode = TransitionMode.ONE_TO_MANY;
