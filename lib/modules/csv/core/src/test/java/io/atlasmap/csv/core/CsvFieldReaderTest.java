@@ -23,6 +23,8 @@ import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
 
+import io.atlasmap.csv.v2.CsvComplexType;
+import io.atlasmap.v2.Document;
 import org.junit.Test;
 
 import io.atlasmap.csv.v2.CsvField;
@@ -128,5 +130,33 @@ public class CsvFieldReaderTest {
         assertThat(field.getField().get(0).getPath(), is("/<0>/familyName"));
         assertThat(field.getField().get(1).getValue(), is("Johnson"));
         assertThat(field.getField().get(1).getPath(), is("/<1>/familyName"));
+    }
+
+    @Test
+    public void testReadSchemaWithHeaderSpecified() throws Exception {
+        CsvConfig csvConfig = new CsvConfig();
+        csvConfig.setHeaders("givenName,familyName");
+        CsvFieldReader csvFieldReader = new CsvFieldReader(csvConfig);
+        csvFieldReader.setDocument(new ByteArrayInputStream("Bob,Smith\nAndrew,Johnson".getBytes()));
+        AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.head()).thenReturn(mock(AtlasInternalSession.Head.class));
+        Document document = csvFieldReader.readSchema();
+        CsvComplexType list = (CsvComplexType) document.getFields().getField().get(0);
+        assertThat(list.getCsvFields().getCsvField().get(0).getName(), is("givenName"));
+        assertThat(list.getCsvFields().getCsvField().get(1).getName(), is("familyName"));
+    }
+
+    @Test
+    public void testReadSchemaWithFirstRecordAsHeader() throws Exception {
+        CsvConfig csvConfig = new CsvConfig();
+        csvConfig.setFirstRecordAsHeader(true);
+        CsvFieldReader csvFieldReader = new CsvFieldReader(csvConfig);
+        csvFieldReader.setDocument(new ByteArrayInputStream("givenName,familyName\nBob,Smith\nAndrew,Johnson".getBytes()));
+        AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.head()).thenReturn(mock(AtlasInternalSession.Head.class));
+        Document document = csvFieldReader.readSchema();
+        CsvComplexType list = (CsvComplexType) document.getFields().getField().get(0);
+        assertThat(list.getCsvFields().getCsvField().get(0).getName(), is("givenName"));
+        assertThat(list.getCsvFields().getCsvField().get(1).getName(), is("familyName"));
     }
 }
