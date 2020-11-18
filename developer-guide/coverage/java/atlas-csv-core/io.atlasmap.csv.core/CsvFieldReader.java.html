@@ -25,6 +25,7 @@ import java.util.List;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang3.StringUtils;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
@@ -53,124 +54,124 @@ public class CsvFieldReader implements AtlasFieldReader {
     private final CsvConfig csvConfig;
     private InputStream document;
 
-<span class="fc" id="L56">    public CsvFieldReader(CsvConfig csvConfig) {</span>
-<span class="fc" id="L57">        this.csvConfig = csvConfig;</span>
-<span class="fc" id="L58">    }</span>
+<span class="fc" id="L57">    public CsvFieldReader(CsvConfig csvConfig) {</span>
+<span class="fc" id="L58">        this.csvConfig = csvConfig;</span>
+<span class="fc" id="L59">    }</span>
 
     public void setDocument(InputStream inputStream) {
-<span class="pc bpc" id="L61" title="1 of 4 branches missed.">        if (inputStream != null &amp;&amp; !inputStream.markSupported()) {</span>
-<span class="nc" id="L62">            this.document = new BufferedInputStream(inputStream);</span>
+<span class="pc bpc" id="L62" title="1 of 4 branches missed.">        if (inputStream != null &amp;&amp; !inputStream.markSupported()) {</span>
+<span class="nc" id="L63">            this.document = new BufferedInputStream(inputStream);</span>
         } else {
-<span class="fc" id="L64">            this.document = inputStream;</span>
+<span class="fc" id="L65">            this.document = inputStream;</span>
         }
-<span class="fc" id="L66">    }</span>
+<span class="fc" id="L67">    }</span>
 
     @Override
     public Field read(AtlasInternalSession session) throws AtlasException {
-<span class="fc" id="L70">        Field field = session.head().getSourceField();</span>
+<span class="fc" id="L71">        Field field = session.head().getSourceField();</span>
 
-<span class="fc bfc" id="L72" title="All 2 branches covered.">        if (document == null) {</span>
-<span class="fc" id="L73">            AtlasUtil.addAudit(session, field.getDocId(),</span>
-<span class="fc" id="L74">                String.format(&quot;Cannot read field '%s' of document '%s', document is null&quot;,</span>
-<span class="fc" id="L75">                    field.getPath(), field.getDocId()),</span>
-<span class="fc" id="L76">                field.getPath(), AuditStatus.ERROR, null);</span>
-<span class="fc" id="L77">            return field;</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        if (document == null) {</span>
+<span class="fc" id="L74">            AtlasUtil.addAudit(session, field.getDocId(),</span>
+<span class="fc" id="L75">                String.format(&quot;Cannot read field '%s' of document '%s', document is null&quot;,</span>
+<span class="fc" id="L76">                    field.getPath(), field.getDocId()),</span>
+<span class="fc" id="L77">                field.getPath(), AuditStatus.ERROR, null);</span>
+<span class="fc" id="L78">            return field;</span>
         }
-<span class="pc bpc" id="L79" title="1 of 2 branches missed.">        if (field == null) {</span>
-<span class="nc" id="L80">            throw new AtlasException(new IllegalArgumentException(&quot;Argument 'field' cannot be null&quot;));</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (field == null) {</span>
+<span class="nc" id="L81">            throw new AtlasException(new IllegalArgumentException(&quot;Argument 'field' cannot be null&quot;));</span>
         }
-<span class="pc bpc" id="L82" title="3 of 4 branches missed.">        if (!(field instanceof CsvField) &amp;&amp; !(field instanceof FieldGroup)) {</span>
-<span class="nc" id="L83">            throw new AtlasException(String.format(&quot;Unsupported field type '%s'&quot;, field.getClass()));</span>
+<span class="pc bpc" id="L83" title="3 of 4 branches missed.">        if (!(field instanceof CsvField) &amp;&amp; !(field instanceof FieldGroup)) {</span>
+<span class="nc" id="L84">            throw new AtlasException(String.format(&quot;Unsupported field type '%s'&quot;, field.getClass()));</span>
         }
 
-<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        if (field instanceof FieldGroup) {</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">        if (field instanceof FieldGroup) {</span>
             //complex field
-<span class="nc" id="L88">            FieldGroup fieldGroup = (FieldGroup) field;</span>
-<span class="nc" id="L89">            List&lt;Field&gt; fields = fieldGroup.getField();</span>
+<span class="nc" id="L89">            FieldGroup fieldGroup = (FieldGroup) field;</span>
+<span class="nc" id="L90">            List&lt;Field&gt; fields = fieldGroup.getField();</span>
 
-<span class="nc" id="L91">            FieldGroup readFieldGroup = AtlasModelFactory.copyFieldGroup(fieldGroup);</span>
+<span class="nc" id="L92">            FieldGroup readFieldGroup = AtlasModelFactory.copyFieldGroup(fieldGroup);</span>
 
-<span class="nc bnc" id="L93" title="All 2 branches missed.">            for (Field subField: fields) {</span>
-<span class="nc bnc" id="L94" title="All 2 branches missed.">                if (subField instanceof FieldGroup) {</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">            for (Field subField: fields) {</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">                if (subField instanceof FieldGroup) {</span>
                     //support only one level grouping
-<span class="nc" id="L96">                    subField = ((FieldGroup) subField).getField().get(0);</span>
+<span class="nc" id="L97">                    subField = ((FieldGroup) subField).getField().get(0);</span>
                 }
 
-<span class="nc bnc" id="L99" title="All 2 branches missed.">                if (subField instanceof CsvField) {</span>
-<span class="nc" id="L100">                    Field readSubField = readFields((CsvField) subField);</span>
-<span class="nc" id="L101">                    readFieldGroup.getField().add(readSubField);</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">                if (subField instanceof CsvField) {</span>
+<span class="nc" id="L101">                    Field readSubField = readFields((CsvField) subField);</span>
+<span class="nc" id="L102">                    readFieldGroup.getField().add(readSubField);</span>
                 }
-<span class="nc" id="L103">            }</span>
+<span class="nc" id="L104">            }</span>
 
-<span class="nc" id="L105">            session.head().setSourceField(readFieldGroup);</span>
-<span class="nc" id="L106">            return readFieldGroup;</span>
+<span class="nc" id="L106">            session.head().setSourceField(readFieldGroup);</span>
+<span class="nc" id="L107">            return readFieldGroup;</span>
         } else {
-<span class="fc" id="L108">            Field readField = readFields((CsvField) field);</span>
+<span class="fc" id="L109">            Field readField = readFields((CsvField) field);</span>
 
-<span class="fc" id="L110">            session.head().setSourceField(readField);</span>
-<span class="fc" id="L111">            return readField;</span>
+<span class="fc" id="L111">            session.head().setSourceField(readField);</span>
+<span class="fc" id="L112">            return readField;</span>
         }
     }
 
     private Field readFields(CsvField field) throws AtlasException {
-<span class="fc" id="L116">        List&lt;Field&gt; fields = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L117">        CsvField csvField = field;</span>
-<span class="fc" id="L118">        CSVFormat csvFormat = csvConfig.newCsvFormat();</span>
+<span class="fc" id="L117">        List&lt;Field&gt; fields = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L118">        CsvField csvField = field;</span>
+<span class="fc" id="L119">        CSVFormat csvFormat = csvConfig.newCsvFormat();</span>
         try {
-<span class="fc" id="L120">            document.mark(Integer.MAX_VALUE);</span>
+<span class="fc" id="L121">            document.mark(Integer.MAX_VALUE);</span>
 
-<span class="fc" id="L122">            CSVParser parser = csvFormat.parse(new InputStreamReader(document));</span>
+<span class="fc" id="L123">            CSVParser parser = csvFormat.parse(new InputStreamReader(document));</span>
 
-<span class="fc" id="L124">            AtlasPath atlasPath = new AtlasPath(csvField.getPath());</span>
-<span class="fc" id="L125">            int i = 0;</span>
-<span class="fc" id="L126">            Integer fieldIndex = atlasPath.getRootSegment().getCollectionIndex();</span>
-<span class="pc bpc" id="L127" title="1 of 2 branches missed.">            if (fieldIndex != null) {</span>
-<span class="nc bnc" id="L128" title="All 2 branches missed.">                for (CSVRecord record: parser) {</span>
-<span class="nc bnc" id="L129" title="All 2 branches missed.">                    if (i == fieldIndex) {</span>
-<span class="nc" id="L130">                        CsvField newField = CsvField.cloneOf(csvField);</span>
-<span class="nc" id="L131">                        newField.setIndex(null); //do not copy over index if set</span>
+<span class="fc" id="L125">            AtlasPath atlasPath = new AtlasPath(csvField.getPath());</span>
+<span class="fc" id="L126">            int i = 0;</span>
+<span class="fc" id="L127">            Integer fieldIndex = atlasPath.getRootSegment().getCollectionIndex();</span>
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">            if (fieldIndex != null) {</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">                for (CSVRecord record: parser) {</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">                    if (i == fieldIndex) {</span>
+<span class="nc" id="L131">                        CsvField newField = CsvField.cloneOf(csvField);</span>
+<span class="nc" id="L132">                        newField.setIndex(null); //do not copy over index if set</span>
                         String value;
-<span class="nc bnc" id="L133" title="All 2 branches missed.">                        if (csvField.getColumn() != null) {</span>
-<span class="nc" id="L134">                            value = record.get(csvField.getColumn());</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">                        if (csvField.getColumn() != null) {</span>
+<span class="nc" id="L135">                            value = record.get(csvField.getColumn());</span>
                         } else {
-<span class="nc" id="L136">                            value = record.get(csvField.getName());</span>
+<span class="nc" id="L137">                            value = record.get(csvField.getName());</span>
                         }
-<span class="nc" id="L138">                        newField.setValue(value);</span>
-<span class="nc" id="L139">                        fields.add(newField);</span>
-<span class="nc" id="L140">                        break;</span>
+<span class="nc" id="L139">                        newField.setValue(value);</span>
+<span class="nc" id="L140">                        fields.add(newField);</span>
+<span class="nc" id="L141">                        break;</span>
                     }
-<span class="nc" id="L142">                    i++;</span>
-<span class="nc" id="L143">                }</span>
+<span class="nc" id="L143">                    i++;</span>
+<span class="nc" id="L144">                }</span>
             } else {
-<span class="fc bfc" id="L145" title="All 2 branches covered.">                for (CSVRecord record: parser) {</span>
-<span class="fc" id="L146">                    CsvField collectionField = CsvField.cloneOf(csvField);</span>
-<span class="fc" id="L147">                    collectionField.setIndex(null); //do not copy over index if set</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">                for (CSVRecord record: parser) {</span>
+<span class="fc" id="L147">                    CsvField collectionField = CsvField.cloneOf(csvField);</span>
+<span class="fc" id="L148">                    collectionField.setIndex(null); //do not copy over index if set</span>
                     String value;
-<span class="fc bfc" id="L149" title="All 2 branches covered.">                    if (csvField.getColumn() != null) {</span>
-<span class="fc" id="L150">                        value = record.get(csvField.getColumn());</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">                    if (csvField.getColumn() != null) {</span>
+<span class="fc" id="L151">                        value = record.get(csvField.getColumn());</span>
                     } else {
-<span class="fc" id="L152">                        value = record.get(csvField.getName());</span>
+<span class="fc" id="L153">                        value = record.get(csvField.getName());</span>
                     }
-<span class="fc" id="L154">                    collectionField.setValue(value);</span>
-<span class="fc" id="L155">                    AtlasPath collectionFieldPath = new AtlasPath(collectionField.getPath());</span>
-<span class="fc" id="L156">                    collectionFieldPath.setCollectionIndex(0, i);</span>
-<span class="fc" id="L157">                    collectionField.setPath(collectionFieldPath.toString());</span>
-<span class="fc" id="L158">                    fields.add(collectionField);</span>
-<span class="fc" id="L159">                    i++;</span>
-<span class="fc" id="L160">                }</span>
+<span class="fc" id="L155">                    collectionField.setValue(value);</span>
+<span class="fc" id="L156">                    AtlasPath collectionFieldPath = new AtlasPath(collectionField.getPath());</span>
+<span class="fc" id="L157">                    collectionFieldPath.setCollectionIndex(0, i);</span>
+<span class="fc" id="L158">                    collectionField.setPath(collectionFieldPath.toString());</span>
+<span class="fc" id="L159">                    fields.add(collectionField);</span>
+<span class="fc" id="L160">                    i++;</span>
+<span class="fc" id="L161">                }</span>
             }
 
-<span class="fc" id="L163">            document.reset();</span>
-<span class="nc" id="L164">        } catch (IOException e) {</span>
-<span class="nc" id="L165">            throw new AtlasException(e);</span>
-<span class="fc" id="L166">        }</span>
+<span class="fc" id="L164">            document.reset();</span>
+<span class="nc" id="L165">        } catch (IOException e) {</span>
+<span class="nc" id="L166">            throw new AtlasException(e);</span>
+<span class="fc" id="L167">        }</span>
 
-<span class="pc bpc" id="L168" title="1 of 2 branches missed.">        if (fields.size() == 1) {</span>
-<span class="nc" id="L169">            return fields.get(0);</span>
+<span class="pc bpc" id="L169" title="1 of 2 branches missed.">        if (fields.size() == 1) {</span>
+<span class="nc" id="L170">            return fields.get(0);</span>
         } else {
-<span class="fc" id="L171">            FieldGroup fieldGroup = AtlasModelFactory.createFieldGroupFrom(field, true);</span>
-<span class="fc" id="L172">            fieldGroup.getField().addAll(fields);</span>
-<span class="fc" id="L173">            return fieldGroup;</span>
+<span class="fc" id="L172">            FieldGroup fieldGroup = AtlasModelFactory.createFieldGroupFrom(field, true);</span>
+<span class="fc" id="L173">            fieldGroup.getField().addAll(fields);</span>
+<span class="fc" id="L174">            return fieldGroup;</span>
         }
 
     }
@@ -185,63 +186,76 @@ public class CsvFieldReader implements AtlasFieldReader {
      * @throws AtlasException if it fails
      */
     public Document readSchema() throws AtlasException {
-<span class="fc" id="L188">        CSVFormat csvFormat = csvConfig.newCsvFormat();</span>
+<span class="fc" id="L189">        CSVFormat csvFormat = csvConfig.newCsvFormat();</span>
         CSVParser parser;
         try {
-<span class="fc" id="L191">            document.mark(Integer.MAX_VALUE);</span>
-<span class="fc" id="L192">            parser = csvFormat.parse(new InputStreamReader(document));</span>
+<span class="fc" id="L192">            document.mark(Integer.MAX_VALUE);</span>
+<span class="fc" id="L193">            parser = csvFormat.parse(new InputStreamReader(document));</span>
 
-<span class="nc" id="L194">        } catch (IOException e) {</span>
-<span class="nc" id="L195">            throw new AtlasException(e);</span>
-<span class="fc" id="L196">        }</span>
+<span class="nc" id="L195">        } catch (IOException e) {</span>
+<span class="nc" id="L196">            throw new AtlasException(e);</span>
+<span class="fc" id="L197">        }</span>
 
-<span class="fc" id="L198">        List&lt;CsvField&gt; fields = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L199">        List&lt;CsvField&gt; fields = new ArrayList&lt;&gt;();</span>
 
-<span class="pc bpc" id="L200" title="1 of 2 branches missed.">        if (csvConfig.isFirstRecordAsHeader()) {</span>
-<span class="fc" id="L201">            int i = 0;</span>
-<span class="fc bfc" id="L202" title="All 2 branches covered.">            for (String headerName : parser.getHeaderNames()) {</span>
-<span class="fc" id="L203">                CsvField field = new CsvField();</span>
-<span class="fc" id="L204">                field.setColumn(i);</span>
-<span class="fc" id="L205">                field.setName(headerName);</span>
-<span class="fc" id="L206">                field.setPath(&quot;/&lt;&gt;/&quot; + headerName);</span>
-<span class="fc" id="L207">                field.setFieldType(FieldType.STRING);</span>
-<span class="fc" id="L208">                fields.add(field);</span>
-<span class="fc" id="L209">                i++;</span>
-<span class="fc" id="L210">            }</span>
-<span class="fc" id="L211">        } else {</span>
-<span class="nc" id="L212">            CSVRecord record = parser.iterator().next();</span>
-<span class="nc bnc" id="L213" title="All 2 branches missed.">            for (int i = 0; i &lt; record.size(); i++) {</span>
-<span class="nc" id="L214">                CsvField field = new CsvField();</span>
-<span class="nc" id="L215">                field.setColumn(i);</span>
-<span class="nc" id="L216">                field.setName(String.valueOf(i));</span>
-<span class="nc" id="L217">                field.setPath(&quot;/&lt;&gt;/&quot; + field.getName());</span>
-<span class="nc" id="L218">                field.setFieldType(FieldType.STRING);</span>
-<span class="nc" id="L219">                fields.add(field);</span>
+<span class="fc" id="L201">        String[] headers = null;</span>
+<span class="fc bfc" id="L202" title="All 2 branches covered.">        if (StringUtils.isNotBlank(csvConfig.getHeaders())) {</span>
+<span class="fc" id="L203">            headers = csvConfig.getHeaders().split(String.valueOf(csvConfig.getDelimiter()));</span>
+        }
+
+<span class="fc bfc" id="L206" title="All 2 branches covered.">        if (csvConfig.isFirstRecordAsHeader()) {</span>
+<span class="fc" id="L207">            int i = 0;</span>
+<span class="fc bfc" id="L208" title="All 2 branches covered.">            for (String headerName : parser.getHeaderNames()) {</span>
+<span class="fc" id="L209">                CsvField field = new CsvField();</span>
+<span class="fc" id="L210">                field.setColumn(i);</span>
+<span class="pc bpc" id="L211" title="3 of 4 branches missed.">                if (headers != null &amp;&amp; headers.length &gt; i) {</span>
+<span class="nc" id="L212">                    field.setName(headers[i]);</span>
+                } else {
+<span class="fc" id="L214">                    field.setName(headerName);</span>
+                }
+<span class="fc" id="L216">                field.setPath(&quot;/&lt;&gt;/&quot; + headerName);</span>
+<span class="fc" id="L217">                field.setFieldType(FieldType.STRING);</span>
+<span class="fc" id="L218">                fields.add(field);</span>
+<span class="fc" id="L219">                i++;</span>
+<span class="fc" id="L220">            }</span>
+<span class="fc" id="L221">        } else {</span>
+<span class="fc" id="L222">            CSVRecord record = parser.iterator().next();</span>
+<span class="fc bfc" id="L223" title="All 2 branches covered.">            for (int i = 0; i &lt; record.size(); i++) {</span>
+<span class="fc" id="L224">                CsvField field = new CsvField();</span>
+<span class="fc" id="L225">                field.setColumn(i);</span>
+<span class="pc bpc" id="L226" title="2 of 4 branches missed.">                if (headers != null &amp;&amp; headers.length &gt; i) {</span>
+<span class="fc" id="L227">                    field.setName(headers[i]);</span>
+                } else {
+<span class="nc" id="L229">                    field.setName(String.valueOf(i));</span>
+                }
+<span class="fc" id="L231">                field.setPath(&quot;/&lt;&gt;/&quot; + field.getName());</span>
+<span class="fc" id="L232">                field.setFieldType(FieldType.STRING);</span>
+<span class="fc" id="L233">                fields.add(field);</span>
             }
         }
 
         try {
-<span class="fc" id="L224">            document.reset();</span>
-<span class="nc" id="L225">        } catch (IOException e) {</span>
-<span class="nc" id="L226">            throw new AtlasException(e);</span>
-<span class="fc" id="L227">        }</span>
+<span class="fc" id="L238">            document.reset();</span>
+<span class="nc" id="L239">        } catch (IOException e) {</span>
+<span class="nc" id="L240">            throw new AtlasException(e);</span>
+<span class="fc" id="L241">        }</span>
 
-<span class="fc" id="L229">        CsvFields csvFields = new CsvFields();</span>
-<span class="fc" id="L230">        csvFields.getCsvField().addAll(fields);</span>
+<span class="fc" id="L243">        CsvFields csvFields = new CsvFields();</span>
+<span class="fc" id="L244">        csvFields.getCsvField().addAll(fields);</span>
 
-<span class="fc" id="L232">        CsvComplexType csvComplexType = new CsvComplexType();</span>
-<span class="fc" id="L233">        csvComplexType.setFieldType(FieldType.COMPLEX);</span>
-<span class="fc" id="L234">        csvComplexType.setCollectionType(CollectionType.LIST);</span>
-<span class="fc" id="L235">        csvComplexType.setPath(&quot;/&lt;&gt;&quot;);</span>
-<span class="fc" id="L236">        csvComplexType.setName(&quot;&quot;);</span>
-<span class="fc" id="L237">        csvComplexType.setCsvFields(csvFields);</span>
+<span class="fc" id="L246">        CsvComplexType csvComplexType = new CsvComplexType();</span>
+<span class="fc" id="L247">        csvComplexType.setFieldType(FieldType.COMPLEX);</span>
+<span class="fc" id="L248">        csvComplexType.setCollectionType(CollectionType.LIST);</span>
+<span class="fc" id="L249">        csvComplexType.setPath(&quot;/&lt;&gt;&quot;);</span>
+<span class="fc" id="L250">        csvComplexType.setName(&quot;&quot;);</span>
+<span class="fc" id="L251">        csvComplexType.setCsvFields(csvFields);</span>
 
-<span class="fc" id="L239">        Fields documentFields = new Fields();</span>
-<span class="fc" id="L240">        documentFields.getField().add(csvComplexType);</span>
+<span class="fc" id="L253">        Fields documentFields = new Fields();</span>
+<span class="fc" id="L254">        documentFields.getField().add(csvComplexType);</span>
 
-<span class="fc" id="L242">        Document document = new Document();</span>
-<span class="fc" id="L243">        document.setFields(documentFields);</span>
-<span class="fc" id="L244">        return document;</span>
+<span class="fc" id="L256">        Document document = new Document();</span>
+<span class="fc" id="L257">        document.setFields(documentFields);</span>
+<span class="fc" id="L258">        return document;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
