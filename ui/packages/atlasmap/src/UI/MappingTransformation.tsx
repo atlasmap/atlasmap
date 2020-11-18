@@ -149,6 +149,7 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
         ) : (
           <Checkbox
             id={argId}
+            key={argId}
             label="Delimit empty values"
             aria-label="Delimit empty values"
             isChecked={a.value === "true"}
