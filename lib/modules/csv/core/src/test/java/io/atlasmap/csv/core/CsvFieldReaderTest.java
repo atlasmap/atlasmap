@@ -133,6 +133,29 @@ public class CsvFieldReaderTest {
     }
 
     @Test
+    public void testIgnoreHeaderCase() throws Exception {
+        CsvConfig csvConfig = new CsvConfig();
+        csvConfig.setIgnoreHeaderCase(true);
+        csvConfig.setHeaders("givenName,familyName");
+        CsvFieldReader csvFieldReader = new CsvFieldReader(csvConfig);
+        csvFieldReader.setDocument(new ByteArrayInputStream("Bob,Smith\nAndrew,Johnson".getBytes()));
+        AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.head()).thenReturn(mock(AtlasInternalSession.Head.class));
+        CsvField csvField = new CsvField();
+        csvField.setName("FAMILYNAME");
+        csvField.setPath("/<>/FAMILYNAME");
+        when(session.head().getSourceField()).thenReturn(csvField);
+        Audits audits = new Audits();
+        when(session.getAudits()).thenReturn(audits);
+        FieldGroup field = (FieldGroup) csvFieldReader.read(session);
+        assertEquals(0, audits.getAudit().size());
+        assertThat(field.getField().get(0).getValue(), is("Smith"));
+        assertThat(field.getField().get(0).getPath(), is("/<0>/FAMILYNAME"));
+        assertThat(field.getField().get(1).getValue(), is("Johnson"));
+        assertThat(field.getField().get(1).getPath(), is("/<1>/FAMILYNAME"));
+    }
+
+    @Test
     public void testReadSchemaWithHeaderSpecified() throws Exception {
         CsvConfig csvConfig = new CsvConfig();
         csvConfig.setHeaders("givenName,familyName");

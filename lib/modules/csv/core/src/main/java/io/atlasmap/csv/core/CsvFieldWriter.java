@@ -67,7 +67,6 @@ public class CsvFieldWriter implements AtlasFieldWriter {
                 CsvField targetCsvSubField = new CsvField();
                 AtlasModelFactory.copyField(targetField, targetCsvSubField, false);
                 targetCsvSubField.setColumn(targetCsvField.getColumn());
-
                 targetCsvSubField.setValue(sourceSubField.getValue());
                 targetFieldGroup.getField().add(targetCsvSubField);
             }
@@ -83,6 +82,15 @@ public class CsvFieldWriter implements AtlasFieldWriter {
 
     public String toCsv() throws AtlasException {
         CSVFormat csvFormat = csvConfig.newCsvFormat();
+
+        String[] headers = csvConfig.getParsedHeaders();
+        boolean ignoreHeaderCase = Boolean.TRUE.equals(csvConfig.getIgnoreHeaderCase());
+        if (headers != null && ignoreHeaderCase) {
+            for (int j = 0; j < headers.length; j++) {
+                headers[j] = headers[j].toLowerCase();
+            }
+        }
+
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             OutputStreamWriter writer = new OutputStreamWriter(out, "UTF-8");
@@ -94,12 +102,29 @@ public class CsvFieldWriter implements AtlasFieldWriter {
                 return "";
             }
 
-            if (csvConfig.isFirstRecordAsHeader()) {
-                List<String> headers = new ArrayList<>();
-                for (Field field: fields) {
-                    headers.add(field.getName());
+            if (!Boolean.TRUE.equals(csvConfig.getSkipHeaderRecord())) {
+                if (csvConfig.getHeaders() == null) {
+                    String[] headerRecords = new String[fields.size()];
+
+                    int i = 0;
+                    for (Field field : fields) {
+                        CsvField csvField;
+                        if (field instanceof FieldGroup) {
+                            FieldGroup fieldGroup = (FieldGroup) field;
+                            csvField = (CsvField) fieldGroup.getField().get(i);
+                        } else {
+                            csvField = (CsvField) field;
+                        }
+
+                        if (csvField.getColumn() != null) {
+                            headerRecords[csvField.getColumn()] = csvField.getName();
+                        } else {
+                            headerRecords[i] = csvField.getName();
+                        }
+                        i++;
+                    }
+                    printer.printRecord(headerRecords);
                 }
-                printer.printRecord(headers);
             }
 
             int recordsCount;
@@ -126,6 +151,15 @@ public class CsvFieldWriter implements AtlasFieldWriter {
                             values.add(null);
                         }
                         values.set(csvField.getColumn(), csvField.getValue().toString());
+                    } else if (headers != null) {
+                        for (int j = values.size(); j < headers.length; j++) {
+                            values.add(null);
+                        }
+
+                        int column = findColumn(headers, ignoreHeaderCase, csvField);
+                        if (column != -1) {
+                            values.set(column, csvField.getValue().toString());
+                        }
                     } else {
                         values.add(csvField.getValue().toString());
                     }
@@ -139,5 +173,19 @@ public class CsvFieldWriter implements AtlasFieldWriter {
         } catch (IOException e) {
             throw new AtlasException(e);
         }
+    }
+
+    private int findColumn(String[] headers, boolean ignoreHeaderCase, CsvField csvField) {
+        String columnName = csvField.getName();
+        if (ignoreHeaderCase) {
+            columnName = csvField.getName().toLowerCase();
+        }
+        int column = 0;
+        for (column = 0; column < headers.length; column++) {
+            if (headers[column].equals(columnName)) {
+                return column;
+            }
+        }
+        return -1;
     }
 }

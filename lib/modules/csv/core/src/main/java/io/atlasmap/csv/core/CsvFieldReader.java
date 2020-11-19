@@ -25,7 +25,6 @@ import java.util.List;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.lang3.StringUtils;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
@@ -197,35 +196,22 @@ public class CsvFieldReader implements AtlasFieldReader {
         }
 
         List<CsvField> fields = new ArrayList<>();
-
-        String[] headers = null;
-        if (StringUtils.isNotBlank(csvConfig.getHeaders())) {
-            headers = csvConfig.getHeaders().split(String.valueOf(csvConfig.getDelimiter()));
-        }
-
         if (csvConfig.isFirstRecordAsHeader()) {
-            int i = 0;
             for (String headerName : parser.getHeaderNames()) {
                 CsvField field = new CsvField();
-                field.setColumn(i);
-                if (headers != null && headers.length > i) {
-                    field.setName(headers[i]);
-                } else {
-                    field.setName(headerName);
-                }
+                field.setName(headerName);
                 field.setPath("/<>/" + headerName);
                 field.setFieldType(FieldType.STRING);
                 fields.add(field);
-                i++;
             }
         } else {
             CSVRecord record = parser.iterator().next();
             for (int i = 0; i < record.size(); i++) {
                 CsvField field = new CsvField();
-                field.setColumn(i);
-                if (headers != null && headers.length > i) {
-                    field.setName(headers[i]);
+                if (parser.getHeaderNames() != null) {
+                    field.setName(parser.getHeaderNames().get(i));
                 } else {
+                    field.setColumn(i);
                     field.setName(String.valueOf(i));
                 }
                 field.setPath("/<>/" + field.getName());

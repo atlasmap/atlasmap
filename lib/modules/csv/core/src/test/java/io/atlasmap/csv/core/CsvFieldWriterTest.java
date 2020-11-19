@@ -40,7 +40,6 @@ public class CsvFieldWriterTest {
     @Test
     public void testWithSimpleDocumentWithHeader() throws Exception {
         CsvConfig csvConfig = new CsvConfig();
-        csvConfig.setFirstRecordAsHeader(true);
         CsvFieldWriter writer = new CsvFieldWriter(csvConfig);
         FieldGroup sourceField = new FieldGroup();
         sourceField.setName("name");
@@ -68,6 +67,7 @@ public class CsvFieldWriterTest {
     @Test
     public void testWithSimpleDocumentWithoutHeader() throws Exception {
         CsvConfig csvConfig = new CsvConfig();
+        csvConfig.setSkipHeaderRecord(true);
         CsvFieldWriter writer = new CsvFieldWriter(csvConfig);
         FieldGroup sourceField = new FieldGroup();
         sourceField.setName("name");
@@ -121,10 +121,69 @@ public class CsvFieldWriterTest {
     }
 
     @Test
+    public void testWithNoMatchingHeader() throws Exception {
+        CsvConfig csvConfig = new CsvConfig();
+        csvConfig.setHeaders("FAMILYNAME,GIVENNAME");
+        CsvFieldWriter writer = new CsvFieldWriter(csvConfig);
+        FieldGroup sourceField = new FieldGroup();
+        sourceField.setName("name");
+        sourceField.setPath("/<>/name");
+        CsvField sourceSubField0 = new CsvField();
+        sourceSubField0.setName("name");
+        sourceSubField0.setPath("/<0>/name");
+        sourceSubField0.setValue("Bob");
+        sourceField.getField().add(sourceSubField0);
+        CsvField sourceSubField1 = new CsvField();
+        sourceSubField1.setName("name");
+        sourceSubField1.setPath("/<1>/name");
+        sourceSubField1.setValue("Andrew");
+        sourceField.getField().add(sourceSubField1);
+
+        CsvField targetField = new CsvField();
+        targetField.setName("givenName");
+        targetField.setPath("/<>/givenName");
+
+        write(writer, sourceField, targetField);
+
+        String csv = writer.toCsv();
+        assertThat(csv, is("FAMILYNAME,GIVENNAME\r\n,\r\n,\r\n"));
+    }
+
+    @Test
+    public void testWithHeaderAndIgnoreHeaderCase() throws Exception {
+        CsvConfig csvConfig = new CsvConfig();
+        csvConfig.setHeaders("FAMILYNAME,GIVENNAME");
+        csvConfig.setIgnoreHeaderCase(true);
+        CsvFieldWriter writer = new CsvFieldWriter(csvConfig);
+        FieldGroup sourceField = new FieldGroup();
+        sourceField.setName("name");
+        sourceField.setPath("/<>/name");
+        CsvField sourceSubField0 = new CsvField();
+        sourceSubField0.setName("name");
+        sourceSubField0.setPath("/<0>/name");
+        sourceSubField0.setValue("Bob");
+        sourceField.getField().add(sourceSubField0);
+        CsvField sourceSubField1 = new CsvField();
+        sourceSubField1.setName("name");
+        sourceSubField1.setPath("/<1>/name");
+        sourceSubField1.setValue("Andrew");
+        sourceField.getField().add(sourceSubField1);
+
+        CsvField targetField = new CsvField();
+        targetField.setName("givenName");
+        targetField.setPath("/<>/givenName");
+
+        write(writer, sourceField, targetField);
+
+        String csv = writer.toCsv();
+        assertThat(csv, is("FAMILYNAME,GIVENNAME\r\n,Bob\r\n,Andrew\r\n"));
+    }
+
+    @Test
     public void testWithSimpleDocumentWithHeaderAndDelimiterSpecified() throws Exception {
         CsvConfig csvConfig = new CsvConfig();
         csvConfig.setDelimiter(';');
-        csvConfig.setHeaders("givenName;familyName");
+        csvConfig.setHeaders("familyName;givenName");
         CsvFieldWriter writer = new CsvFieldWriter(csvConfig);
         FieldGroup sourceField = new FieldGroup();
         sourceField.setName("name");
@@ -167,7 +226,7 @@ public class CsvFieldWriterTest {
         write(writer, sourceField, targetField);
 
         String csv = writer.toCsv();
-        assertThat(csv, is("givenName;familyName\r\nBob;Smith\r\nAndrew;Johnson\r\n"));
+        assertThat(csv, is("familyName;givenName\r\nSmith;Bob\r\nJohnson;Andrew\r\n"));
     }
 
     @Test
@@ -215,6 +274,6 @@ public class CsvFieldWriterTest {
         write(writer, secondSourceField, secondTargetField);
 
         String csv = writer.toCsv();
-        assertThat(csv, is("Smith,Bob\r\nJohnson,Andrew\r\n"));
+        assertThat(csv, is("familyName,givenName\r\nSmith,Bob\r\nJohnson,Andrew\r\n"));
     }
 }

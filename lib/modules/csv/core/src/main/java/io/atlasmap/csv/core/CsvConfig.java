@@ -27,7 +27,8 @@ public class CsvConfig {
 
     private String format;
     private Character delimiter;
-    private boolean firstRecordAsHeader;
+    private Boolean firstRecordAsHeader;
+    private Boolean skipHeaderRecord;
     private String headers;
     private Character commentMarker;
     private Character escape;
@@ -63,6 +64,9 @@ public class CsvConfig {
                     break;
                 case "firstRecordAsHeader":
                     csvConfig.firstRecordAsHeader = entry.getValue() == null || Boolean.valueOf(entry.getValue());
+                    break;
+                case "skipHeaderRecord":
+                    csvConfig.skipHeaderRecord = entry.getValue() == null || Boolean.valueOf(entry.getValue());
                     break;
                 case "commentMarker":
                     csvConfig.commentMarker = entry.getValue().charAt(0);
@@ -103,7 +107,8 @@ public class CsvConfig {
         CSVFormat csvFormat;
         csvFormat = (format != null) ? CSVFormat.valueOf(format) : CSVFormat.DEFAULT;
         csvFormat = (delimiter != null) ? csvFormat.withDelimiter(delimiter) : csvFormat;
-        csvFormat = firstRecordAsHeader ? csvFormat.withFirstRecordAsHeader() : csvFormat;
+        csvFormat = (Boolean.TRUE.equals(firstRecordAsHeader)) ? csvFormat.withFirstRecordAsHeader() : csvFormat;
+        csvFormat = (skipHeaderRecord != null) ? csvFormat.withSkipHeaderRecord(skipHeaderRecord) : csvFormat;
         csvFormat = (headers != null) ? csvFormat.withHeader(getParsedHeaders()) : csvFormat;
         csvFormat = (commentMarker != null) ? csvFormat.withCommentMarker(commentMarker): csvFormat;
         csvFormat = (escape != null) ? csvFormat.withEscape(escape): csvFormat;
@@ -129,12 +134,24 @@ public class CsvConfig {
         return delimiter;
     }
 
-    public void setFirstRecordAsHeader(boolean firstRecordAsHeader) {
+    public void setFirstRecordAsHeader(Boolean firstRecordAsHeader) {
         this.firstRecordAsHeader = firstRecordAsHeader;
     }
 
     public boolean isFirstRecordAsHeader() {
+        return Boolean.TRUE.equals(firstRecordAsHeader);
+    }
+
+    public Boolean getFirstRecordAsHeader() {
         return firstRecordAsHeader;
+    }
+
+    public void setSkipHeaderRecord(Boolean skipHeaderRecord) {
+        this.skipHeaderRecord = skipHeaderRecord;
+    }
+
+    public Boolean getSkipHeaderRecord() {
+        return skipHeaderRecord;
     }
 
     public void setHeaders(String headers) {
@@ -146,7 +163,7 @@ public class CsvConfig {
     }
 
     public String[] getParsedHeaders() {
-        return headers.split(delimiter.toString());
+        return headers != null ? headers.split(delimiter.toString()) : null;
     }
 
     public void setCommentMarker(Character commentMarker) {
