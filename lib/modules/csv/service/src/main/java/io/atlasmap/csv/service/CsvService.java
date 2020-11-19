@@ -81,7 +81,9 @@ public class CsvService {
     @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = CsvInspectionResponse.class)),
         description = "Return a Document object"))
     public Response inspect(InputStream request, @QueryParam("format") String format, @QueryParam("delimiter") String delimiter,
-                            @QueryParam("firstRecordAsHeader") Boolean firstRecordAsHeader, @QueryParam("headers") String headers,
+                            @QueryParam("firstRecordAsHeader") Boolean firstRecordAsHeader,
+                            @QueryParam("skipRecordHeader") Boolean skipHeaderRecord,
+                            @QueryParam("headers") String headers,
                             @QueryParam("commentMarker") String commentMarker,
                             @QueryParam("escape") String escape,
                             @QueryParam("ignoreEmptyLines") Boolean ignoreEmptyLines,
@@ -99,9 +101,8 @@ public class CsvService {
             if (delimiter != null) {
                 csvConfig.setDelimiter(delimiter.charAt(0));
             }
-            if (firstRecordAsHeader != null) {
-                csvConfig.setFirstRecordAsHeader(firstRecordAsHeader);
-            }
+            csvConfig.setFirstRecordAsHeader(firstRecordAsHeader);
+            csvConfig.setSkipHeaderRecord(skipHeaderRecord);
             csvConfig.setHeaders(headers);
             if (commentMarker != null) {
                 csvConfig.setCommentMarker(commentMarker.charAt(0));

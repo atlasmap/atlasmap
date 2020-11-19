@@ -118,6 +118,15 @@ export function useImportDocumentDialog(): [
               },
               { name: "nullString", value: "", required: false },
               { name: "quote", value: "", required: false },
+              {
+                name: "skipHeaderRecord",
+                value: "true",
+                options: [
+                  { label: "true", value: "true" },
+                  { label: "false", value: "false" },
+                ],
+                required: false,
+              },
             ],
           );
           return;

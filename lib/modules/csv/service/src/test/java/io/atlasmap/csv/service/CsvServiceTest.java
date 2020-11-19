@@ -58,7 +58,7 @@ public class CsvServiceTest {
 
         InputStream inputStream = new ByteArrayInputStream(source.getBytes());
 
-        Response res = csvService.inspect(inputStream, null, ",", true, null,
+        Response res = csvService.inspect(inputStream, null, ",", true, null, null,
             null, null, null, null, null, null,
             null, null, null);
         Object entity = res.getEntity();
