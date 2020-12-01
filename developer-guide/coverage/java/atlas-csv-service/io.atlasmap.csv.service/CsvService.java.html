@@ -81,9 +81,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
     @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = CsvInspectionResponse.class)),
         description = &quot;Return a Document object&quot;))
     public Response inspect(InputStream request, @QueryParam(&quot;format&quot;) String format, @QueryParam(&quot;delimiter&quot;) String delimiter,
-                            @QueryParam(&quot;firstRecordAsHeader&quot;) Boolean firstRecordAsHeader,
-                            @QueryParam(&quot;skipRecordHeader&quot;) Boolean skipHeaderRecord,
-                            @QueryParam(&quot;headers&quot;) String headers,
+                            @QueryParam(&quot;firstRecordAsHeader&quot;) Boolean firstRecordAsHeader, @QueryParam(&quot;headers&quot;) String headers,
                             @QueryParam(&quot;commentMarker&quot;) String commentMarker,
                             @QueryParam(&quot;escape&quot;) String escape,
                             @QueryParam(&quot;ignoreEmptyLines&quot;) Boolean ignoreEmptyLines,
@@ -93,48 +91,49 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
                             @QueryParam(&quot;quote&quot;) String quote,
                             @QueryParam(&quot;allowDuplicateHeaderNames&quot;) Boolean allowDuplicateHeaderNames,
                             @QueryParam(&quot;allowMissingColumnNames&quot;) Boolean allowMissingColumnNames) throws IOException  {
-<span class="fc" id="L96">        long startTime = System.currentTimeMillis();</span>
+<span class="fc" id="L94">        long startTime = System.currentTimeMillis();</span>
 
-<span class="fc" id="L98">        CsvInspectionResponse response = new CsvInspectionResponse();</span>
+<span class="fc" id="L96">        CsvInspectionResponse response = new CsvInspectionResponse();</span>
         try {
-<span class="fc" id="L100">            CsvConfig csvConfig = new CsvConfig(format);</span>
-<span class="pc bpc" id="L101" title="1 of 2 branches missed.">            if (delimiter != null) {</span>
-<span class="fc" id="L102">                csvConfig.setDelimiter(delimiter.charAt(0));</span>
+<span class="fc" id="L98">            CsvConfig csvConfig = new CsvConfig(format);</span>
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">            if (delimiter != null) {</span>
+<span class="fc" id="L100">                csvConfig.setDelimiter(delimiter.charAt(0));</span>
             }
-<span class="fc" id="L104">            csvConfig.setFirstRecordAsHeader(firstRecordAsHeader);</span>
-<span class="fc" id="L105">            csvConfig.setSkipHeaderRecord(skipHeaderRecord);</span>
-<span class="fc" id="L106">            csvConfig.setHeaders(headers);</span>
-<span class="pc bpc" id="L107" title="1 of 2 branches missed.">            if (commentMarker != null) {</span>
-<span class="nc" id="L108">                csvConfig.setCommentMarker(commentMarker.charAt(0));</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">            if (firstRecordAsHeader != null) {</span>
+<span class="fc" id="L103">                csvConfig.setFirstRecordAsHeader(firstRecordAsHeader);</span>
             }
-<span class="pc bpc" id="L110" title="1 of 2 branches missed.">            if (escape != null) {</span>
-<span class="nc" id="L111">                csvConfig.setEscape(escape.charAt(0));</span>
+<span class="fc" id="L105">            csvConfig.setHeaders(headers);</span>
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">            if (commentMarker != null) {</span>
+<span class="nc" id="L107">                csvConfig.setCommentMarker(commentMarker.charAt(0));</span>
             }
-<span class="fc" id="L113">            csvConfig.setIgnoreEmptyLines(ignoreEmptyLines);</span>
-<span class="fc" id="L114">            csvConfig.setIgnoreHeaderCase(ignoreHeaderCase);</span>
-<span class="fc" id="L115">            csvConfig.setIgnoreSurroundingSpaces(ignoreSurroundingSpaces);</span>
-<span class="fc" id="L116">            csvConfig.setNullString(nullString);</span>
-<span class="pc bpc" id="L117" title="1 of 2 branches missed.">            if (quote != null) {</span>
-<span class="nc" id="L118">                csvConfig.setQuote(quote.charAt(0));</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">            if (escape != null) {</span>
+<span class="nc" id="L110">                csvConfig.setEscape(escape.charAt(0));</span>
             }
-<span class="fc" id="L120">            csvConfig.setAllowDuplicateHeaderNames(allowDuplicateHeaderNames);</span>
-<span class="fc" id="L121">            csvConfig.setAllowMissingColumnNames(allowMissingColumnNames);</span>
+<span class="fc" id="L112">            csvConfig.setIgnoreEmptyLines(ignoreEmptyLines);</span>
+<span class="fc" id="L113">            csvConfig.setIgnoreHeaderCase(ignoreHeaderCase);</span>
+<span class="fc" id="L114">            csvConfig.setIgnoreSurroundingSpaces(ignoreSurroundingSpaces);</span>
+<span class="fc" id="L115">            csvConfig.setNullString(nullString);</span>
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">            if (quote != null) {</span>
+<span class="nc" id="L117">                csvConfig.setQuote(quote.charAt(0));</span>
+            }
+<span class="fc" id="L119">            csvConfig.setAllowDuplicateHeaderNames(allowDuplicateHeaderNames);</span>
+<span class="fc" id="L120">            csvConfig.setAllowMissingColumnNames(allowMissingColumnNames);</span>
 
-<span class="fc" id="L123">            CsvFieldReader csvFieldReader = new CsvFieldReader(csvConfig);</span>
-<span class="fc" id="L124">            csvFieldReader.setDocument(request);</span>
+<span class="fc" id="L122">            CsvFieldReader csvFieldReader = new CsvFieldReader(csvConfig);</span>
+<span class="fc" id="L123">            csvFieldReader.setDocument(request);</span>
 
-<span class="fc" id="L126">            Document document = csvFieldReader.readSchema();</span>
-<span class="fc" id="L127">            response.setCsvDocument(document);</span>
-<span class="fc" id="L128">            request.close();</span>
-<span class="nc" id="L129">        } catch (Exception e) {</span>
-<span class="nc" id="L130">            LOG.error(&quot;Error inspecting CSV: &quot; + e.getMessage(), e);</span>
-<span class="nc" id="L131">            response.setErrorMessage(e.getMessage());</span>
+<span class="fc" id="L125">            Document document = csvFieldReader.readSchema();</span>
+<span class="fc" id="L126">            response.setCsvDocument(document);</span>
+<span class="fc" id="L127">            request.close();</span>
+<span class="nc" id="L128">        } catch (Exception e) {</span>
+<span class="nc" id="L129">            LOG.error(&quot;Error inspecting CSV: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L130">            response.setErrorMessage(e.getMessage());</span>
         } finally {
-<span class="fc" id="L133">            request.close();;</span>
-<span class="fc" id="L134">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
+<span class="fc" id="L132">            request.close();;</span>
+<span class="fc" id="L133">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
         }
 
-<span class="fc" id="L137">        return Response.ok().entity(toJson(response)).build();</span>
+<span class="fc" id="L136">        return Response.ok().entity(toJson(response)).build();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
