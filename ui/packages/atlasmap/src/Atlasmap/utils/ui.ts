@@ -330,11 +330,9 @@ export function mappingExpressionAddField(
   if (!mapping || !selectedField) {
     return;
   }
-  let mappedField = mapping.getMappedFieldByName(
-    selectedField,
-    true,
-    selectedFieldScope,
-  );
+  let mappedField = mapping.getMappedFieldByName(selectedField, true, {
+    fieldScope: selectedFieldScope,
+  });
 
   if (!mappedField) {
     // If the selected field was not part of the original mapping

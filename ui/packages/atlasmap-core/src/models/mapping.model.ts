@@ -205,10 +205,22 @@ export class MappingModel {
     return null;
   }
 
+  /**
+   * Return the MappedField associated with the specified field path and panel.  The
+   * document ID and field scope are optional identifier parameters used to distinguish
+   * duplicate field paths.
+   *
+   * @param fieldPath
+   * @param isSource
+   * @param identifier
+   */
   getMappedFieldByName(
     fieldPath: string,
     isSource: boolean,
-    fieldScope?: string
+    identifier: {
+      docId?: string;
+      fieldScope?: string;
+    }
   ): MappedField | null {
     if (!fieldPath) {
       return null;
@@ -216,9 +228,18 @@ export class MappingModel {
     const mappedFields = this.getMappedFields(isSource);
     for (let i = 0; i < mappedFields.length; i++) {
       if (mappedFields[i].parsedData.parsedPath === fieldPath) {
+        if (!identifier.docId && !identifier.fieldScope) {
+          return mappedFields[i];
+        }
         if (
-          !fieldScope ||
-          (fieldScope && mappedFields[i].field?.scope === fieldScope)
+          identifier.docId &&
+          mappedFields[i].parsedData.parsedDocID === identifier.docId
+        ) {
+          return mappedFields[i];
+        }
+        if (
+          identifier.fieldScope &&
+          mappedFields[i].field?.scope === identifier.fieldScope
         ) {
           return mappedFields[i];
         }

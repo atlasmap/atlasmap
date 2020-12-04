@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { TransitionMode } from '../models/transition.model';
+import { TransitionMode, TransitionModel } from '../models/transition.model';
 import {
   FieldActionArgument,
   FieldAction,
@@ -110,7 +110,8 @@ export class MappingSerializer {
     cfg: ConfigModel,
     mapping: MappingModel,
     id: string,
-    ignoreValue: boolean = true
+    ignoreValue: boolean = true,
+    ignoreExpression: boolean = false
   ): any {
     let inputFieldGroup = {};
     const jsonMappingType =
@@ -128,10 +129,9 @@ export class MappingSerializer {
       ignoreValue
     );
     let jsonMapping: { [key: string]: any } = {};
-    const mappingExpression = MappingUtil.getMappingExpressionStr(
-      false,
-      mapping
-    );
+    const mappingExpression = ignoreExpression
+      ? ''
+      : MappingUtil.getMappingExpressionStr(false, mapping);
 
     if (mapping.transition.isManyToOneMode()) {
       inputFieldGroup = MappingSerializer.createInputFieldGroup(
@@ -316,6 +316,9 @@ export class MappingSerializer {
         mapping.transition.expression.hasComplexField = true;
       }
       mapping.transition.mode = TransitionMode.MANY_TO_ONE;
+      mapping.transition.delimiter = TransitionModel.delimiterToModel(
+        mappingJson.inputFieldGroup.actions[0]?.delimiter
+      )?.delimiter;
       MappingSerializer.addInputFieldGroupFields(
         mappingJson.inputFieldGroup.field,
         mapping,
@@ -1005,6 +1008,7 @@ export class MappingSerializer {
     ) {
       mappedField.parsedData.parsedName = field.name;
       mappedField.parsedData.parsedPath = field.path;
+      mappedField.parsedData.parsedDocID = field.docId;
       if (field.scope) {
         mappedField.parsedData.parsedScope = field.scope;
       }
@@ -1016,6 +1020,7 @@ export class MappingSerializer {
       mappedField.parsedData.fieldIsConstant = true;
       mappedField.parsedData.parsedValue = field.value;
       mappedField.parsedData.parsedPath = field.path;
+      mappedField.parsedData.parsedDocID = field.docId;
     } else {
       if (field.docId == null) {
         cfg.errorService.addError(
