@@ -79,12 +79,13 @@ export class FieldNode extends ExpressionNode {
             this.mappedField = mapping.getMappedFieldByName(
               pathSeparator + propParts[2], // field path
               true,
-              propParts[1] // scope
+              { fieldScope: propParts[1] } // scope
             )!;
           } else {
             this.mappedField = mapping.getMappedFieldByName(
               fieldParts[1],
-              true
+              true,
+              {}
             )!;
           }
         } else {
@@ -93,18 +94,21 @@ export class FieldNode extends ExpressionNode {
             if (collectionContextPath) {
               this.mappedField = mapping.getMappedFieldByName(
                 collectionContextPath + fieldParts[0],
-                true
+                true,
+                {}
               )!;
             } else {
               this.mappedField = mapping.getMappedFieldByName(
                 fieldParts[0],
-                true
+                true,
+                {}
               )!;
             }
           } else {
             this.mappedField = mapping.getMappedFieldByName(
               fieldParts[1],
-              true
+              true,
+              { docId: fieldParts[0] }
             )!;
           }
         }

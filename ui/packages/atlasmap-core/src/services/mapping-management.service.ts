@@ -23,7 +23,7 @@ import { DocumentType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
 import { MappingModel, MappedField } from '../models/mapping.model';
-import { TransitionMode } from '../models/transition.model';
+import { TransitionMode, TransitionModel } from '../models/transition.model';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import {
   ErrorInfo,
@@ -31,12 +31,17 @@ import {
   ErrorType,
   ErrorScope,
 } from '../models/error.model';
-import { FieldAction, Multiplicity } from '../models/field-action.model';
+import {
+  FieldAction,
+  FieldActionArgumentValue,
+  Multiplicity,
+} from '../models/field-action.model';
 
 import { MappingSerializer } from '../utils/mapping-serializer';
 import { DataMapperUtil } from '../common/data-mapper-util';
 import { PaddingField } from '../models/document-definition.model';
 import { LookupTableUtil } from '../utils/lookup-table-util';
+import { ExpressionModel } from '../models/expression.model';
 
 /**
  * Handles mapping updates. It restores mapping status from backend and reflect in UI,
@@ -898,6 +903,18 @@ export class MappingManagementService {
     });
   }
 
+  private isMappedCollection(
+    mapping: MappingModel,
+    isSource: boolean
+  ): boolean | null {
+    const mappedFields = mapping.getMappedFields(isSource);
+    return (
+      mapping.isFullyMapped() &&
+      mappedFields[0].field &&
+      mappedFields[0].field.isInCollection()
+    );
+  }
+
   /**
    * Update mode transition from a single mapping to multiple-mappings and back.
    *
@@ -919,15 +936,9 @@ export class MappingManagementService {
     }
 
     const sourceMappedFields = mapping.getMappedFields(true);
-    const sourceMappedCollection =
-      mapping.isFullyMapped() &&
-      sourceMappedFields[0].field &&
-      sourceMappedFields[0].field.isInCollection();
+    const sourceMappedCollection = this.isMappedCollection(mapping, true);
     const targetMappedFields = mapping.getMappedFields(false);
-    const targetMappedCollection =
-      mapping.isFullyMapped() &&
-      targetMappedFields[0].field &&
-      targetMappedFields[0].field.isInCollection();
+    const targetMappedCollection = this.isMappedCollection(mapping, false);
 
     if (sourceMappedCollection && targetMappedCollection) {
       mapping.transition.mode = TransitionMode.FOR_EACH;
@@ -1086,5 +1097,147 @@ export class MappingManagementService {
       }
     }
     return formattedFields;
+  }
+
+  private qualifiedExpressionRef(mappedField: MappedField): string {
+    if (mappedField.parsedData.parsedPath !== null) {
+      return (
+        '${' +
+        mappedField.parsedData.parsedDocID +
+        ':' +
+        mappedField.parsedData.parsedPath +
+        '}'
+      );
+    } else {
+      return 'null';
+    }
+  }
+
+  /**
+   * Create a conditional expression fragment based on the specified field action
+   * argument and type.
+   *
+   * @param actionArgument
+   * @param actionArgType
+   */
+  private fieldActionArgumentToExpression(
+    actionArgument: FieldActionArgumentValue,
+    actionArgType: string
+  ): string {
+    if (actionArgType === 'string') {
+      return "'" + actionArgument.value + "'";
+    } else {
+      return actionArgument.value;
+    }
+  }
+
+  /**
+   * Create a conditional expression fragment based on a single field action
+   * and its arguments if any.
+   *
+   * @param mappedField
+   * @param mfActionIndex
+   */
+  private fieldActionToExpression(
+    mappedField: MappedField,
+    mfActionIndex: number
+  ): string {
+    let action = mappedField.actions[mfActionIndex];
+    let expression = action.name + ' (';
+    if (mfActionIndex < mappedField.actions.length - 1) {
+      mfActionIndex++;
+      expression += this.fieldActionToExpression(mappedField, mfActionIndex);
+    } else {
+      expression += this.qualifiedExpressionRef(mappedField);
+    }
+    if (action.argumentValues.length > 0) {
+      for (
+        let actionArgIndex = 0;
+        actionArgIndex < action.argumentValues.length;
+        actionArgIndex++
+      ) {
+        expression +=
+          ', ' +
+          this.fieldActionArgumentToExpression(
+            action.argumentValues[actionArgIndex],
+            action.definition.arguments[actionArgIndex].type
+          );
+      }
+    }
+    expression += ')';
+    return expression;
+  }
+
+  /**
+   * Create a conditional expression fragment based on the field actions of the specified
+   * mapping model and the root field reference.
+   *
+   * @param mapping
+   */
+  private fieldActionsToExpression(mapping: MappingModel): string {
+    let expression = '';
+    let mappedField: MappedField;
+
+    for (
+      let mappedFieldIndex = 0;
+      mappedFieldIndex < mapping.sourceFields.length;
+      mappedFieldIndex++
+    ) {
+      mappedField = mapping.sourceFields[mappedFieldIndex];
+      if (mappedField.actions.length > 0) {
+        let mfActionIndex = 0;
+        expression += this.fieldActionToExpression(mappedField, mfActionIndex);
+      } else {
+        expression += this.qualifiedExpressionRef(mappedField);
+      }
+      if (mappedFieldIndex !== mapping.sourceFields.length - 1) {
+        expression += ', ';
+      }
+    }
+    return expression;
+  }
+
+  /**
+   * Create a conditional mapping expression from the specified mapping model.  Start
+   * with a multiplicity action if applicable, then any field-specific field actions.
+   *
+   * @param mapping
+   */
+  createMappingExpression(mapping: MappingModel): string {
+    let expr = '';
+    const sourceMappedFields = mapping.getMappedFields(true);
+    const sourceMappedCollection = this.isMappedCollection(mapping, true);
+    const targetMappedFields = mapping.getMappedFields(false);
+    const targetMappedCollection = this.isMappedCollection(mapping, false);
+
+    if (
+      sourceMappedFields.length > 1 ||
+      (sourceMappedCollection &&
+        mapping.transition.transitionFieldAction &&
+        mapping.transition.transitionFieldAction.definition.multiplicity ===
+          Multiplicity.MANY_TO_ONE)
+    ) {
+      expr = 'Concatenate (';
+      expr += this.fieldActionsToExpression(mapping);
+      expr +=
+        ", '" +
+        TransitionModel.delimiterModels[mapping.transition.delimiter]
+          .actualDelimiter +
+        "')";
+    } else if (
+      (targetMappedFields.length > 1 || targetMappedCollection) &&
+      mapping.transition.transitionFieldAction &&
+      mapping.transition.transitionFieldAction.definition.multiplicity ===
+        Multiplicity.ONE_TO_MANY
+    ) {
+      expr = 'Split (';
+      expr += this.fieldActionsToExpression(mapping);
+      expr += ')';
+    } else {
+      expr += this.fieldActionsToExpression(mapping);
+    }
+    mapping.transition.expression = new ExpressionModel(mapping, this.cfg);
+    mapping.transition.expression.insertText(expr);
+    return expr;
   }
 }

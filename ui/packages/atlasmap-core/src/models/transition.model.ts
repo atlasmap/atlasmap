@@ -221,6 +221,12 @@ export class TransitionModel {
     }
   }
 
+  static delimiterToModel(delimiter: string): TransitionDelimiterModel {
+    return TransitionModel.delimiterModels.filter(
+      (model) => model.actualDelimiter === delimiter
+    )[0];
+  }
+
   /**
    * Translate a mapping mode number into a string.
    * @param mode

@@ -405,6 +405,21 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
   }
 
   /**
+   * Return true if the specified mapped field array has any established field actions,
+   * false otherwise.
+   *
+   * @param fields
+   */
+  static hasFieldAction(fields: MappedField[]): boolean {
+    for (let i = 0; i < fields.length; i++) {
+      if (fields[i].actions.length > 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
    * Return a string, in either text or HTML form, representing the
    * expression mapping of either the optionally specified mapping or
    * the active mapping if it exists, empty string otherwise.
@@ -421,7 +436,14 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
       mapping = cfg.mappings?.activeMapping;
     }
     if (!mapping.transition.expression) {
-      return '';
+      if (
+        mapping.transition.enableExpression &&
+        MappingUtil.hasFieldAction(mapping.sourceFields)
+      ) {
+        cfg.mappingService.createMappingExpression(mapping);
+      } else {
+        return '';
+      }
     }
 
     if (mapping.transition.expression && mapping.transition.enableExpression) {
