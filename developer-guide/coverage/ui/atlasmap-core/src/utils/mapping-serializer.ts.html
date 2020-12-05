@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.99% </span>
+                <span class="strong">84.1% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>451/537</span>
+                <span class='fraction'>455/541</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">70.59% </span>
+                <span class="strong">70.79% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>180/255</span>
+                <span class='fraction'>189/267</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">82.69% </span>
+                <span class="strong">82.84% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>363/439</span>
+                <span class='fraction'>367/443</span>
             </div>
         
             
@@ -1172,7 +1172,12 @@
 <a name='L1114'></a><a href='#L1114'>1114</a>
 <a name='L1115'></a><a href='#L1115'>1115</a>
 <a name='L1116'></a><a href='#L1116'>1116</a>
-<a name='L1117'></a><a href='#L1117'>1117</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1117'></a><a href='#L1117'>1117</a>
+<a name='L1118'></a><a href='#L1118'>1118</a>
+<a name='L1119'></a><a href='#L1119'>1119</a>
+<a name='L1120'></a><a href='#L1120'>1120</a>
+<a name='L1121'></a><a href='#L1121'>1121</a>
+<a name='L1122'></a><a href='#L1122'>1122</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1285,6 +1290,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-yes">30x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1303,7 +1309,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1490,6 +1495,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2180,6 +2188,7 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -2187,6 +2196,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -2304,7 +2314,7 @@
     limitations under the License.
 */
 &nbsp;
-import { TransitionMode } from '../models/transition.model';
+import { TransitionMode, TransitionModel } from '../models/transition.model';
 import {
   FieldActionArgument,
   FieldAction,
@@ -2400,7 +2410,8 @@ export class MappingSerializer {
     cfg: ConfigModel,
     mapping: MappingModel,
     id: string,
-    ignoreValue: boolean = true
+    ignoreValue: boolean = true,
+    <span class="missing-if-branch" title="else path not taken" >E</span>ignoreExpression: boolean = false
   ): any {
     let inputFieldGroup = {};
     const jsonMappingType =
@@ -2418,10 +2429,9 @@ export class MappingSerializer {
       ignoreValue
     );
     let jsonMapping: { [key: string]: any } = {};
-    const mappingExpression = MappingUtil.getMappingExpressionStr(
-      false,
-      mapping
-    );
+    const mappingExpression = ignoreExpression
+      ? <span class="branch-0 cbranch-no" title="branch not covered" >''</span>
+      : MappingUtil.getMappingExpressionStr(false, mapping);
 &nbsp;
     if (mapping.transition.isManyToOneMode()) {
       inputFieldGroup = MappingSerializer.createInputFieldGroup(
@@ -2606,6 +2616,9 @@ export class MappingSerializer {
 <span class="cstat-no" title="statement not covered" >        mapping.transition.expression.hasComplexField = true;</span>
       }
       mapping.transition.mode = TransitionMode.MANY_TO_ONE;
+      mapping.transition.delimiter = TransitionModel.delimiterToModel(
+        mappingJson.inputFieldGroup.actions[0]<span class="branch-0 cbranch-no" title="branch not covered" >?.d</span>elimiter
+      )?.delimiter;
       MappingSerializer.addInputFieldGroupFields(
         mappingJson.inputFieldGroup.field,
         mapping,
@@ -3295,6 +3308,7 @@ export class MappingSerializer {
     ) {
       mappedField.parsedData.parsedName = field.name;
       mappedField.parsedData.parsedPath = field.path;
+      mappedField.parsedData.parsedDocID = field.docId;
       <span class="missing-if-branch" title="if path not taken" >I</span>if (field.scope) {
 <span class="cstat-no" title="statement not covered" >        mappedField.parsedData.parsedScope = field.scope;</span>
       }
@@ -3306,6 +3320,7 @@ export class MappingSerializer {
       mappedField.parsedData.fieldIsConstant = true;
       mappedField.parsedData.parsedValue = field.value;
       mappedField.parsedData.parsedPath = field.path;
+      mappedField.parsedData.parsedDocID = field.docId;
     } else {
       <span class="missing-if-branch" title="if path not taken" >I</span>if (field.docId == null) {
 <span class="cstat-no" title="statement not covered" >        cfg.errorService.addError(</span>
@@ -3411,7 +3426,7 @@ export class MappingSerializer {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Dec 01 2020 01:07:50 GMT+0000 (Coordinated Universal Time)
+                at Sat Dec 05 2020 14:47:16 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">69.85% </span>
+                <span class="strong">68.12% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>139/199</span>
+                <span class='fraction'>141/207</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">53.23% </span>
+                <span class="strong">52.31% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>66/124</span>
+                <span class='fraction'>68/130</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">77.78% </span>
+                <span class="strong">70% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>7/9</span>
+                <span class='fraction'>7/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">65.88% </span>
+                <span class="strong">64.41% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>112/170</span>
+                <span class='fraction'>114/177</span>
             </div>
         
             
@@ -490,7 +490,29 @@
 <a name='L432'></a><a href='#L432'>432</a>
 <a name='L433'></a><a href='#L433'>433</a>
 <a name='L434'></a><a href='#L434'>434</a>
-<a name='L435'></a><a href='#L435'>435</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L435'></a><a href='#L435'>435</a>
+<a name='L436'></a><a href='#L436'>436</a>
+<a name='L437'></a><a href='#L437'>437</a>
+<a name='L438'></a><a href='#L438'>438</a>
+<a name='L439'></a><a href='#L439'>439</a>
+<a name='L440'></a><a href='#L440'>440</a>
+<a name='L441'></a><a href='#L441'>441</a>
+<a name='L442'></a><a href='#L442'>442</a>
+<a name='L443'></a><a href='#L443'>443</a>
+<a name='L444'></a><a href='#L444'>444</a>
+<a name='L445'></a><a href='#L445'>445</a>
+<a name='L446'></a><a href='#L446'>446</a>
+<a name='L447'></a><a href='#L447'>447</a>
+<a name='L448'></a><a href='#L448'>448</a>
+<a name='L449'></a><a href='#L449'>449</a>
+<a name='L450'></a><a href='#L450'>450</a>
+<a name='L451'></a><a href='#L451'>451</a>
+<a name='L452'></a><a href='#L452'>452</a>
+<a name='L453'></a><a href='#L453'>453</a>
+<a name='L454'></a><a href='#L454'>454</a>
+<a name='L455'></a><a href='#L455'>455</a>
+<a name='L456'></a><a href='#L456'>456</a>
+<a name='L457'></a><a href='#L457'>457</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -902,6 +924,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
@@ -914,6 +951,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
@@ -1331,6 +1375,21 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
   }
 &nbsp;
   /**
+   * Return true if the specified mapped field array has any established field actions,
+   * false otherwise.
+   *
+   * @param fields
+   */
+<span class="fstat-no" title="function not covered" >  static h</span>asFieldAction(fields: MappedField[]): boolean {
+<span class="cstat-no" title="statement not covered" >    for (let i = <span class="cstat-no" title="statement not covered" >0;</span> i &lt; fields.length; i++) {</span>
+<span class="cstat-no" title="statement not covered" >      if (fields[i].actions.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >        return true;</span>
+      }
+    }
+<span class="cstat-no" title="statement not covered" >    return false;</span>
+  }
+&nbsp;
+  /**
    * Return a string, in either text or HTML form, representing the
    * expression mapping of either the optionally specified mapping or
    * the active mapping if it exists, empty string otherwise.
@@ -1347,7 +1406,14 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
 <span class="cstat-no" title="statement not covered" >      mapping = cfg.mappings?.activeMapping;</span>
     }
     if (!mapping.transition.expression) {
-      return '';
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (
+        mapping.transition.enableExpression &amp;&amp;
+<span class="branch-1 cbranch-no" title="branch not covered" >        MappingUtil.hasFieldAction(mapping.sourceFields)</span>
+      ) {
+<span class="cstat-no" title="statement not covered" >        cfg.mappingService.createMappingExpression(mapping);</span>
+      } else {
+        return '';
+      }
     }
 &nbsp;
     <span class="missing-if-branch" title="else path not taken" >E</span>if (mapping.transition.expression &amp;&amp; mapping.transition.enableExpression) {
@@ -1365,7 +1431,7 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Dec 01 2020 01:07:50 GMT+0000 (Coordinated Universal Time)
+                at Sat Dec 05 2020 14:47:16 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
