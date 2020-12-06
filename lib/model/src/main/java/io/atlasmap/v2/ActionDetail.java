@@ -2,6 +2,7 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.MapperFeature;
@@ -233,6 +234,7 @@ public class ActionDetail implements Serializable {
         this.actionSchema = actionSchema;
     }
 
+    @JsonProperty("actionSchema")
     public void setActionSchema(Class<? extends Action> clazz) throws JsonMappingException {
 
         if (clazz == null) {
