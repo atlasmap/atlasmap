@@ -64,8 +64,8 @@ public class AtlasPathTest {
         assertEquals("foo}", new SegmentContext("foo}").getName());
 
         assertEquals("bar", new SegmentContext("foo:bar").getName());
-        assertEquals("bar", new SegmentContext("foo:@bar").getName());
-        assertEquals("bar", new SegmentContext("@bar").getName());
+        assertEquals("@bar", new SegmentContext("foo:@bar").getName());
+        assertEquals("@bar", new SegmentContext("@bar").getName());
     }
 
     @Test

@@ -437,7 +437,7 @@ public class AtlasPath {
                     name, expression, collectionType, collectionIndex);
         }
 
-        private String cleanPathSegment(String expression) {
+        protected String cleanPathSegment(String expression) {
             String answer = expression;
             if (answer == null) {
                 return null;
@@ -446,11 +446,6 @@ public class AtlasPath {
             // strip namespace if there is one
             if (answer.contains(PATH_NAMESPACE_SEPARATOR)) {
                 answer = answer.substring(answer.indexOf(PATH_NAMESPACE_SEPARATOR) + 1);
-            }
-
-            // strip leading @ symbol if there is one
-            if (answer.startsWith(PATH_ATTRIBUTE_PREFIX)) {
-                answer = answer.substring(1);
             }
 
             if (answer.contains(PATH_ARRAY_START) && answer.endsWith(PATH_ARRAY_END)) {

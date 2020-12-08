@@ -140,6 +140,19 @@ public class XmlPath extends AtlasPath {
             return qname;
         }
 
+        @Override
+        protected String cleanPathSegment(String expression) {
+
+            String answer = super.cleanPathSegment(expression);
+
+            // strip leading @ symbol if there is one
+            if (answer != null && answer.startsWith(PATH_ATTRIBUTE_PREFIX)) {
+                answer = answer.substring(1);
+            }
+
+            return answer;
+        }
+
         protected XmlSegmentContext rebuild() {
             StringBuilder buf = new StringBuilder();
             if (isAttribute()) {
