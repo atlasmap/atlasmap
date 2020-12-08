@@ -453,7 +453,7 @@ export class DocumentDefinition {
         ? this.LEFT_BRACKET + this.RIGHT_BRACKET
         : '<>';
     }
-    if (field.isAttribute) {
+    if (field.isAttribute && field.name[0] !== '@') {
       field.path = parentPath += '@' + field.name;
     }
     if (field.serviceObject) {
