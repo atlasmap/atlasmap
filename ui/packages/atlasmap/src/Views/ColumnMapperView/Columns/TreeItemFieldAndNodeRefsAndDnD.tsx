@@ -129,6 +129,8 @@ export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent<ITreeItemFiel
                             key="connected"
                             position={"auto"}
                             enableFlip={true}
+                            entryDelay={750}
+                            exitDelay={100}
                             content={<div>This field is connected</div>}
                           >
                             <CircleIcon
@@ -143,6 +145,8 @@ export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent<ITreeItemFiel
                             key={"collection"}
                             position={"auto"}
                             enableFlip={true}
+                            entryDelay={750}
+                            exitDelay={100}
                             content={<div>This field is a collection</div>}
                           >
                             <LayerGroupIcon
@@ -157,6 +161,8 @@ export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent<ITreeItemFiel
                             key={"transformations"}
                             position={"auto"}
                             enableFlip={true}
+                            entryDelay={750}
+                            exitDelay={100}
                             content={<div>This field has transformations</div>}
                           >
                             <BoltIcon
