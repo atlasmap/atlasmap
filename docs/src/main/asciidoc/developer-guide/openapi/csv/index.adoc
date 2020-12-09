@@ -87,6 +87,12 @@ Inspect a CSV instance and return a Document object
 | null 
 |  
 
+| skipRecordHeader 
+|   
+| - 
+| null 
+|  
+
 | headers 
 |   
 | - 
