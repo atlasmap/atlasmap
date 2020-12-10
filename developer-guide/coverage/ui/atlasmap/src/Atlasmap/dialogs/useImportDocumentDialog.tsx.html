@@ -210,10 +210,7 @@
 <a name='L152'></a><a href='#L152'>152</a>
 <a name='L153'></a><a href='#L153'>153</a>
 <a name='L154'></a><a href='#L154'>154</a>
-<a name='L155'></a><a href='#L155'>155</a>
-<a name='L156'></a><a href='#L156'>156</a>
-<a name='L157'></a><a href='#L157'>157</a>
-<a name='L158'></a><a href='#L158'>158</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L155'></a><a href='#L155'>155</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -248,9 +245,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -409,6 +403,7 @@
             [
               {
                 name: "format",
+                label: "Format",
                 value: "Default",
                 options: [
                   { label: "Default", value: "Default" },
@@ -428,75 +423,71 @@
               },
               {
                 name: "allowDuplicateHeaderNames",
+                label: "Allow Duplicate Header Names",
                 value: "true",
-                options: [
-                  { label: "true", value: "true" },
-                  { label: "false", value: "false" },
-                ],
+                boolean: true,
                 required: false,
               },
               {
                 name: "allowMissingColumnNames",
+                label: "Allow Missing Column Names",
                 value: "true",
-                options: [
-                  { label: "true", value: "true" },
-                  { label: "false", value: "false" },
-                ],
+                boolean: true,
                 required: false,
               },
               {
                 name: "commentMarker",
+                label: "Comment Marker",
                 value: "",
                 required: false,
               },
-              { name: "delimiter", value: "", required: false },
-              { name: "escape", value: "", required: false },
               {
-                name: "firstRecordAsHeader",
-                value: "true",
-                options: [
-                  { label: "true", value: "true" },
-                  { label: "false", value: "false" },
-                ],
+                name: "delimiter",
+                label: "Delimiter",
+                value: "",
                 required: false,
               },
-              { name: "headers", value: "", required: false },
+              { name: "escape", label: "Escape", value: "", required: false },
+              {
+                name: "firstRecordAsHeader",
+                label: "First Record As Header",
+                value: "true",
+                boolean: true,
+                required: false,
+              },
+              { name: "headers", label: "Headers", value: "", required: false },
               {
                 name: "ignoreEmptyLines",
+                label: "Ignore Empty Lines",
                 value: "true",
-                options: [
-                  { label: "true", value: "true" },
-                  { label: "false", value: "false" },
-                ],
+                boolean: true,
                 required: false,
               },
               {
                 name: "ignoreHeaderCase",
+                label: "Ignore Header Case",
                 value: "true",
-                options: [
-                  { label: "true", value: "true" },
-                  { label: "false", value: "false" },
-                ],
+                boolean: true,
                 required: false,
               },
               {
                 name: "ignoreSurroundingSpaces",
+                label: "Ignore Surrounding Spaces",
                 value: "true",
-                options: [
-                  { label: "true", value: "true" },
-                  { label: "false", value: "false" },
-                ],
+                boolean: true,
                 required: false,
               },
-              { name: "nullString", value: "", required: false },
-              { name: "quote", value: "", required: false },
+              {
+                name: "nullString",
+                label: "Null String",
+                value: "",
+                required: false,
+              },
               {
                 name: "skipHeaderRecord",
+                label: "Skip Header Record",
                 value: "true",
-                options: [
-                  { label: "true", value: "true" },
-                  { label: "false", value: "false" },
-                ],
+                boolean: true,
                 required: false,
               },
             ],
@@ -534,7 +525,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Dec 10 2020 03:38:20 GMT+0000 (Coordinated Universal Time)
+                at Thu Dec 10 2020 15:34:53 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
