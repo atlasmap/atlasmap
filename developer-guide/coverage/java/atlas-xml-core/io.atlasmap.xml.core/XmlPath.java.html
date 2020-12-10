@@ -140,31 +140,44 @@ public class XmlPath extends AtlasPath {
 <span class="fc" id="L140">            return qname;</span>
         }
 
+        @Override
+        protected String cleanPathSegment(String expression) {
+
+<span class="fc" id="L146">            String answer = super.cleanPathSegment(expression);</span>
+
+            // strip leading @ symbol if there is one
+<span class="pc bpc" id="L149" title="1 of 4 branches missed.">            if (answer != null &amp;&amp; answer.startsWith(PATH_ATTRIBUTE_PREFIX)) {</span>
+<span class="fc" id="L150">                answer = answer.substring(1);</span>
+            }
+
+<span class="fc" id="L153">            return answer;</span>
+        }
+
         protected XmlSegmentContext rebuild() {
-<span class="nc" id="L144">            StringBuilder buf = new StringBuilder();</span>
-<span class="nc bnc" id="L145" title="All 2 branches missed.">            if (isAttribute()) {</span>
-<span class="nc" id="L146">                buf.append(PATH_ATTRIBUTE_PREFIX);</span>
+<span class="nc" id="L157">            StringBuilder buf = new StringBuilder();</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">            if (isAttribute()) {</span>
+<span class="nc" id="L159">                buf.append(PATH_ATTRIBUTE_PREFIX);</span>
             }
-<span class="nc" id="L148">            buf.append(qname);</span>
-<span class="nc bnc" id="L149" title="All 2 branches missed.">            String index = getCollectionIndex() != null ? getCollectionIndex().toString() : &quot;&quot;;</span>
-<span class="nc bnc" id="L150" title="All 2 branches missed.">            if (getCollectionType() == CollectionType.ARRAY) {</span>
-<span class="nc" id="L151">                buf.append(PATH_ARRAY_START).append(index).append(PATH_ARRAY_END);</span>
-<span class="nc bnc" id="L152" title="All 2 branches missed.">            } else if (getCollectionType() == CollectionType.LIST) {</span>
-<span class="nc" id="L153">                buf.append(PATH_LIST_START).append(index).append(PATH_LIST_END);</span>
-<span class="nc bnc" id="L154" title="All 2 branches missed.">            } else if (getCollectionType() == CollectionType.MAP) {</span>
-<span class="nc" id="L155">                buf.append(PATH_LIST_START).append(getMapKey()).append(PATH_LIST_END);</span>
+<span class="nc" id="L161">            buf.append(qname);</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">            String index = getCollectionIndex() != null ? getCollectionIndex().toString() : &quot;&quot;;</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">            if (getCollectionType() == CollectionType.ARRAY) {</span>
+<span class="nc" id="L164">                buf.append(PATH_ARRAY_START).append(index).append(PATH_ARRAY_END);</span>
+<span class="nc bnc" id="L165" title="All 2 branches missed.">            } else if (getCollectionType() == CollectionType.LIST) {</span>
+<span class="nc" id="L166">                buf.append(PATH_LIST_START).append(index).append(PATH_LIST_END);</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">            } else if (getCollectionType() == CollectionType.MAP) {</span>
+<span class="nc" id="L168">                buf.append(PATH_LIST_START).append(getMapKey()).append(PATH_LIST_END);</span>
             }
-<span class="nc" id="L157">            return new XmlSegmentContext(buf.toString());</span>
+<span class="nc" id="L170">            return new XmlSegmentContext(buf.toString());</span>
         }
 
         @Override
         public String toString() {
-<span class="nc bnc" id="L162" title="All 2 branches missed.">            return getCollectionType() == CollectionType.MAP</span>
-<span class="nc" id="L163">                ? String.format(&quot;XmlSegmentContext [namespace=%s, name=%s, expression=%s, collectionType=%s, mapKey=%s]&quot;,</span>
-<span class="nc" id="L164">                    namespace, getName(), getExpression(), getCollectionType(), getMapKey())</span>
-<span class="nc" id="L165">                : String.format(</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">            return getCollectionType() == CollectionType.MAP</span>
+<span class="nc" id="L176">                ? String.format(&quot;XmlSegmentContext [namespace=%s, name=%s, expression=%s, collectionType=%s, mapKey=%s]&quot;,</span>
+<span class="nc" id="L177">                    namespace, getName(), getExpression(), getCollectionType(), getMapKey())</span>
+<span class="nc" id="L178">                : String.format(</span>
                     &quot;XmlSegmentContext [namespace=%s, name=%s, expression=%s, collectionType=%s, collectionIndex=%s]&quot;,
-<span class="nc" id="L167">                    namespace, getName(), getExpression(), getCollectionType(), getCollectionIndex());</span>
+<span class="nc" id="L180">                    namespace, getName(), getExpression(), getCollectionType(), getCollectionIndex());</span>
         }
 
     }

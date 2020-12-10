@@ -437,7 +437,7 @@ public class AtlasPath {
                     name, expression, collectionType, collectionIndex);
         }
 
-        private String cleanPathSegment(String expression) {
+        protected String cleanPathSegment(String expression) {
 <span class="fc" id="L441">            String answer = expression;</span>
 <span class="pc bpc" id="L442" title="1 of 2 branches missed.">            if (answer == null) {</span>
 <span class="nc" id="L443">                return null;</span>
@@ -448,59 +448,54 @@ public class AtlasPath {
 <span class="fc" id="L448">                answer = answer.substring(answer.indexOf(PATH_NAMESPACE_SEPARATOR) + 1);</span>
             }
 
-            // strip leading @ symbol if there is one
-<span class="fc bfc" id="L452" title="All 2 branches covered.">            if (answer.startsWith(PATH_ATTRIBUTE_PREFIX)) {</span>
-<span class="fc" id="L453">                answer = answer.substring(1);</span>
+<span class="fc bfc" id="L451" title="All 4 branches covered.">            if (answer.contains(PATH_ARRAY_START) &amp;&amp; answer.endsWith(PATH_ARRAY_END)) {</span>
+<span class="fc" id="L452">                return answer.substring(0, answer.indexOf(PATH_ARRAY_START, 0));</span>
             }
 
-<span class="fc bfc" id="L456" title="All 4 branches covered.">            if (answer.contains(PATH_ARRAY_START) &amp;&amp; answer.endsWith(PATH_ARRAY_END)) {</span>
-<span class="fc" id="L457">                return answer.substring(0, answer.indexOf(PATH_ARRAY_START, 0));</span>
+<span class="pc bpc" id="L455" title="1 of 4 branches missed.">            if (answer.contains(PATH_LIST_START) &amp;&amp; answer.endsWith(PATH_LIST_END)) {</span>
+<span class="fc" id="L456">                return answer.substring(0, answer.indexOf(PATH_LIST_START, 0));</span>
             }
 
-<span class="pc bpc" id="L460" title="1 of 4 branches missed.">            if (answer.contains(PATH_LIST_START) &amp;&amp; answer.endsWith(PATH_LIST_END)) {</span>
-<span class="fc" id="L461">                return answer.substring(0, answer.indexOf(PATH_LIST_START, 0));</span>
+<span class="pc bpc" id="L459" title="1 of 4 branches missed.">            if (answer.contains(PATH_MAP_START) &amp;&amp; answer.endsWith(PATH_MAP_END)) {</span>
+<span class="fc" id="L460">                return answer.substring(0, answer.indexOf(PATH_MAP_START, 0));</span>
             }
 
-<span class="pc bpc" id="L464" title="1 of 4 branches missed.">            if (answer.contains(PATH_MAP_START) &amp;&amp; answer.endsWith(PATH_MAP_END)) {</span>
-<span class="fc" id="L465">                return answer.substring(0, answer.indexOf(PATH_MAP_START, 0));</span>
-            }
-
-<span class="fc" id="L468">            return answer;</span>
+<span class="fc" id="L463">            return answer;</span>
         }
 
         private Integer getCollectionIndex(String expression) {
-<span class="pc bpc" id="L472" title="1 of 2 branches missed.">            if (expression == null) {</span>
-<span class="nc" id="L473">                return null;</span>
+<span class="pc bpc" id="L467" title="1 of 2 branches missed.">            if (expression == null) {</span>
+<span class="nc" id="L468">                return null;</span>
             }
 
-<span class="fc bfc" id="L476" title="All 4 branches covered.">            if (expression.contains(PATH_ARRAY_START) &amp;&amp; expression.endsWith(PATH_ARRAY_END)) {</span>
-<span class="fc" id="L477">                int start = expression.indexOf(PATH_ARRAY_START, 0) + 1;</span>
-<span class="fc" id="L478">                String index = expression.substring(start, expression.indexOf(PATH_ARRAY_END, start));</span>
-<span class="pc bpc" id="L479" title="1 of 4 branches missed.">                if (index != null &amp;&amp; index.length() &gt; 0) {</span>
-<span class="fc" id="L480">                    return Integer.valueOf(index);</span>
+<span class="fc bfc" id="L471" title="All 4 branches covered.">            if (expression.contains(PATH_ARRAY_START) &amp;&amp; expression.endsWith(PATH_ARRAY_END)) {</span>
+<span class="fc" id="L472">                int start = expression.indexOf(PATH_ARRAY_START, 0) + 1;</span>
+<span class="fc" id="L473">                String index = expression.substring(start, expression.indexOf(PATH_ARRAY_END, start));</span>
+<span class="pc bpc" id="L474" title="1 of 4 branches missed.">                if (index != null &amp;&amp; index.length() &gt; 0) {</span>
+<span class="fc" id="L475">                    return Integer.valueOf(index);</span>
                 }
-<span class="fc" id="L482">                return null;</span>
+<span class="fc" id="L477">                return null;</span>
             }
 
-<span class="pc bpc" id="L485" title="1 of 4 branches missed.">            if (expression.contains(PATH_LIST_START) &amp;&amp; expression.endsWith(PATH_LIST_END)) {</span>
-<span class="fc" id="L486">                int start = expression.indexOf(PATH_LIST_START, 0) + 1;</span>
-<span class="fc" id="L487">                String index = expression.substring(start, expression.indexOf(PATH_LIST_END, start));</span>
-<span class="pc bpc" id="L488" title="1 of 4 branches missed.">                if (index != null &amp;&amp; index.length() &gt; 0) {</span>
-<span class="fc" id="L489">                    return Integer.valueOf(index);</span>
+<span class="pc bpc" id="L480" title="1 of 4 branches missed.">            if (expression.contains(PATH_LIST_START) &amp;&amp; expression.endsWith(PATH_LIST_END)) {</span>
+<span class="fc" id="L481">                int start = expression.indexOf(PATH_LIST_START, 0) + 1;</span>
+<span class="fc" id="L482">                String index = expression.substring(start, expression.indexOf(PATH_LIST_END, start));</span>
+<span class="pc bpc" id="L483" title="1 of 4 branches missed.">                if (index != null &amp;&amp; index.length() &gt; 0) {</span>
+<span class="fc" id="L484">                    return Integer.valueOf(index);</span>
                 }
-<span class="fc" id="L491">                return null;</span>
+<span class="fc" id="L486">                return null;</span>
             }
 
-<span class="fc" id="L494">            return null;</span>
+<span class="fc" id="L489">            return null;</span>
         }
 
         private String getMapKey(String expression) {
-<span class="fc" id="L498">            int start = expression.indexOf(PATH_MAP_START, 0) + 1;</span>
-<span class="fc" id="L499">            String key = expression.substring(start, expression.indexOf(PATH_MAP_END, start));</span>
-<span class="pc bpc" id="L500" title="1 of 4 branches missed.">            if (key != null &amp;&amp; key.length() &gt; 0) {</span>
-<span class="fc" id="L501">                return key;</span>
+<span class="fc" id="L493">            int start = expression.indexOf(PATH_MAP_START, 0) + 1;</span>
+<span class="fc" id="L494">            String key = expression.substring(start, expression.indexOf(PATH_MAP_END, start));</span>
+<span class="pc bpc" id="L495" title="1 of 4 branches missed.">            if (key != null &amp;&amp; key.length() &gt; 0) {</span>
+<span class="fc" id="L496">                return key;</span>
             }
-<span class="fc" id="L503">            return null;</span>
+<span class="fc" id="L498">            return null;</span>
         }
     }
 
