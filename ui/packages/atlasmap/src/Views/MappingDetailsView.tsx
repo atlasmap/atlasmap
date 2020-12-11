@@ -41,20 +41,20 @@ export interface IMappingDetailsViewProps {
   onTransformationChange: (
     isSource: boolean,
     index: number,
-    currentTransformationName: string,
+    currentTransformationIndex: number,
     newTransformationName: string,
   ) => void;
   onTransformationArgumentChange: (
     isSource: boolean,
     index: number,
-    transformationName: string,
+    transformationIndex: number,
     argumentName: string,
     argumentValue: string,
   ) => void;
   onRemoveTransformation: (
     isSource: boolean,
     index: number,
-    currentTransformationName: string,
+    currentTransformationIndex: number,
   ) => void;
   onAddFieldToMapping: (isSource: boolean, field: IAtlasmapField) => void;
   onNotificationRead: (id: string) => void;
@@ -126,20 +126,25 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
               transformationsArguments={t.arguments}
               disableTransformation={mappingExpressionEnabled}
               onTransformationChange={(value) =>
-                onTransformationChange(isSource, index, t.name, value)
+                onTransformationChange(
+                  isSource,
+                  index,
+                  transformationIndex,
+                  value,
+                )
               }
               onTransformationArgumentChange={(name, value) =>
                 onTransformationArgumentChange(
                   isSource,
                   index,
-                  t.name,
+                  transformationIndex,
                   name,
                   value,
                 )
               }
-              onRemoveTransformation={() =>
-                onRemoveTransformation(isSource, index, t.name)
-              }
+              onRemoveTransformation={() => {
+                onRemoveTransformation(isSource, index, transformationIndex);
+              }}
             />
           ))}
         </div>

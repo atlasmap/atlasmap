@@ -121,6 +121,7 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
                       type="text"
                       name="userDefined"
                       defaultValue={a.value}
+                      value={a.value}
                       onChange={(value) =>
                         onTransformationArgumentChange(a.name, value)
                       }
@@ -139,6 +140,7 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
                 defaultValue={
                   a.value
                 } /* uncontrolled component because the state will be updated slowly after some API call */
+                value={a.value}
                 onChange={(value) =>
                   onTransformationArgumentChange(a.name, value)
                 }
