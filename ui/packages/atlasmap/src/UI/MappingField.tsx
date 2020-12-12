@@ -82,6 +82,8 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
               <Tooltip
                 position={"auto"}
                 enableFlip={true}
+                entryDelay={750}
+                exitDelay={100}
                 content={
                   <div>
                     Edit the index for this element by selecting the arrows.
@@ -106,6 +108,8 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
             <Tooltip
               position={"auto"}
               enableFlip={true}
+              entryDelay={750}
+              exitDelay={100}
               content={<div>{info}</div>}
             >
               <div className={css(styles.fieldName)}>
@@ -116,25 +120,41 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
         </SplitItem>
         {!mappingExpressionEnabled && onNewTransformation && (
           <SplitItem>
-            <Button
-              variant={"plain"}
-              onClick={onNewTransformation}
-              className={css(styles.link)}
-              data-testid={`add-transformation-to-${name}-field-button`}
+            <Tooltip
+              position={"auto"}
+              enableFlip={true}
+              entryDelay={750}
+              exitDelay={100}
+              content={"Add a new transformation."}
             >
-              <BoltIcon />
-            </Button>
+              <Button
+                variant={"plain"}
+                onClick={onNewTransformation}
+                className={css(styles.link)}
+                data-testid={`add-transformation-to-${name}-field-button`}
+              >
+                <BoltIcon />
+              </Button>
+            </Tooltip>
           </SplitItem>
         )}
         <SplitItem>
-          <Button
-            variant={"plain"}
-            onClick={onDelete}
-            className={css(styles.link)}
-            data-testid={`remove-${name}-from-mapping-button`}
+          <Tooltip
+            position={"auto"}
+            enableFlip={true}
+            entryDelay={750}
+            exitDelay={100}
+            content={"Delete this field from the mapping."}
           >
-            <TrashIcon />
-          </Button>
+            <Button
+              variant={"plain"}
+              onClick={onDelete}
+              className={css(styles.link)}
+              data-testid={`remove-${name}-from-mapping-button`}
+            >
+              <TrashIcon />
+            </Button>
+          </Tooltip>
         </SplitItem>
       </Split>
       {/*

@@ -563,7 +563,7 @@ export function handleNewTransformation(isSource: boolean, index: number) {
 export function handleTransformationChange(
   isSource: boolean,
   index: number,
-  currentTransformationName: string,
+  currentTransformationIndex: number,
   newTransformationName: string,
 ) {
   const cfg = ConfigModel.getConfig();
@@ -578,9 +578,7 @@ export function handleTransformationChange(
   if (!field) {
     return;
   }
-  const action = field.actions.find(
-    (a) => a.name === currentTransformationName,
-  );
+  const action = field.actions[currentTransformationIndex];
   const newAction = getMappingActions(isSource).find(
     (a) => a.name === newTransformationName,
   );
@@ -602,14 +600,14 @@ export function handleTransformationChange(
         action.argumentValues[i].value = newAction.arguments[i].values![i];
       }
     }
-    initializationService.cfg.mappingService.notifyMappingUpdated();
+    cfg.mappingService.notifyMappingUpdated();
   }
 }
 
 export function handleTransformationArgumentChange(
   isSource: boolean,
   index: number,
-  transformationName: string,
+  transformationIndex: number,
   argumentName: string,
   argumentValue: string,
 ) {
@@ -625,7 +623,7 @@ export function handleTransformationArgumentChange(
   if (!field) {
     return;
   }
-  const action = field.actions.find((a) => a.name === transformationName);
+  const action = field.actions[transformationIndex];
   if (action) {
     action.setArgumentValue(argumentName, argumentValue);
     cfg.mappingService.notifyMappingUpdated();
@@ -635,7 +633,7 @@ export function handleTransformationArgumentChange(
 export function handleRemoveTransformation(
   isSource: boolean,
   index: number,
-  transformationName: string,
+  transformationIndex: number,
 ) {
   const cfg = ConfigModel.getConfig();
   const activeMapping = cfg.mappings?.activeMapping;
@@ -649,7 +647,7 @@ export function handleRemoveTransformation(
   if (!field) {
     return;
   }
-  const action = field.actions.find((a) => a.name === transformationName);
+  const action = field.actions[transformationIndex];
   if (action) {
     DataMapperUtil.removeItemFromArray(action, field.actions);
     cfg.mappingService.notifyMappingUpdated();
