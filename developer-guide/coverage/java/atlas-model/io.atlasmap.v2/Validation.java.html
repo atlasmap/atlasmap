@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>Validation.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.v2</a> &gt; <span class="el_source">Validation.java</span></div><h1>Validation.java</h1><pre class="source lang-java linenums">package io.atlasmap.v2;
+
+import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonRootName;
+
+@JsonRootName(&quot;Validation&quot;)
+<span class="fc" id="L8">public class Validation implements Serializable {</span>
+
+    private static final long serialVersionUID = 1L;
+    protected String message;
+
+    @Deprecated
+    protected String id;
+
+    protected String docId;
+
+    protected String docName;
+
+    protected ValidationScope scope;
+
+    protected ValidationStatus status;
+
+    /**
+     * Gets the value of the message property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getMessage() {
+<span class="fc" id="L33">        return message;</span>
+    }
+
+    /**
+     * Sets the value of the message property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setMessage(String value) {
+<span class="fc" id="L45">        this.message = value;</span>
+<span class="fc" id="L46">    }</span>
+
+    /**
+     * Gets the value of the id property.
+     * @deprecated Use {@link #getDocId()} instead
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    @Deprecated
+    public String getId() {
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        return docId != null ? docId : id;</span>
+    }
+
+    /**
+     * Sets the value of the id property.
+     * @deprecated Use {@link #setDocId(String)} instead
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    @Deprecated
+    public void setId(String value) {
+<span class="fc" id="L73">        this.id = value;</span>
+<span class="fc" id="L74">        this.docId = value;</span>
+<span class="fc" id="L75">    }</span>
+
+    /**
+     * Gets the value of the docId property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getDocId() {
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        return docId != null ? docId : id;</span>
+    }
+
+    /**
+     * Sets the value of the docId property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setDocId(String value) {
+<span class="nc" id="L98">        this.docId = value;</span>
+<span class="nc" id="L99">        this.id = value;</span>
+<span class="nc" id="L100">    }</span>
+
+    /**
+     * Gets the value of the docName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getDocName() {
+<span class="fc" id="L111">        return docName;</span>
+    }
+
+    /**
+     * Sets the value of the docName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setDocName(String value) {
+<span class="nc" id="L123">        this.docName = value;</span>
+<span class="nc" id="L124">    }</span>
+
+    /**
+     * Gets the value of the scope property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ValidationScope }
+     *     
+     */
+    public ValidationScope getScope() {
+<span class="fc" id="L135">        return scope;</span>
+    }
+
+    /**
+     * Sets the value of the scope property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ValidationScope }
+     *     
+     */
+    public void setScope(ValidationScope value) {
+<span class="fc" id="L147">        this.scope = value;</span>
+<span class="fc" id="L148">    }</span>
+
+    /**
+     * Gets the value of the status property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ValidationStatus }
+     *     
+     */
+    public ValidationStatus getStatus() {
+<span class="fc" id="L159">        return status;</span>
+    }
+
+    /**
+     * Sets the value of the status property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ValidationStatus }
+     *     
+     */
+    public void setStatus(ValidationStatus value) {
+<span class="fc" id="L171">        this.status = value;</span>
+<span class="fc" id="L172">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

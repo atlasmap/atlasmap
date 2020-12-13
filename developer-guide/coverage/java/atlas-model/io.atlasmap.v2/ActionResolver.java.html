@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ActionResolver.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.v2</a> &gt; <span class="el_source">ActionResolver.java</span></div><h1>ActionResolver.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.v2;
+
+import java.io.IOException;
+
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.DatabindContext;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+
+public class ActionResolver extends TypeIdResolverBase {
+
+    private static ActionResolver instance;
+    private SimpleResolver delegate;
+    private TypeFactory typeFactory;
+    private ClassLoader classLoader;
+
+<span class="fc" id="L33">    private ActionResolver() {</span>
+<span class="fc" id="L34">        init(ActionResolver.class.getClassLoader());</span>
+<span class="fc" id="L35">    }</span>
+
+    public ActionResolver init(ClassLoader cl) {
+<span class="fc" id="L38">        this.classLoader = cl;</span>
+<span class="fc" id="L39">        typeFactory = TypeFactory.defaultInstance().withClassLoader(classLoader);</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        if (delegate == null) {</span>
+<span class="fc" id="L41">            delegate = new SimpleResolver();</span>
+        }
+<span class="fc" id="L43">        delegate.setClassLoader(classLoader);</span>
+<span class="fc" id="L44">        delegate.setTypeFactory(typeFactory);</span>
+<span class="fc" id="L45">        delegate.init(typeFactory.constructType(Action.class));</span>
+<span class="fc" id="L46">        return this;</span>
+    }
+
+    public static ActionResolver getInstance() {
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (instance == null) {</span>
+<span class="fc" id="L51">            instance = new ActionResolver();</span>
+        }
+<span class="fc" id="L53">        return instance;</span>
+    }
+
+    public String toId(Class&lt;?&gt; aClass) {
+<span class="fc" id="L57">        return delegate.idFromValueAndType(null, aClass);</span>
+    }
+
+    public Class&lt;? extends Action&gt; fromId(String id) throws IOException {
+<span class="nc" id="L61">        return (Class&lt;? extends Action&gt;) delegate.typeFromId(null, id).getRawClass();</span>
+    }
+
+    @Override
+    public void init(JavaType baseType) {
+<span class="fc" id="L66">    }</span>
+
+    @Override
+    public JsonTypeInfo.Id getMechanism() {
+<span class="nc" id="L70">        return delegate.getMechanism();</span>
+    }
+
+    @Override
+    public String idFromValue(Object value) {
+<span class="fc" id="L75">        return delegate.idFromValue(value);</span>
+    }
+
+    @Override
+    public String idFromValueAndType(Object value, Class&lt;?&gt; aClass) {
+<span class="nc" id="L80">        return delegate.idFromValueAndType(value, aClass);</span>
+    }
+
+    @Override
+    public String idFromBaseType() {
+<span class="nc" id="L85">        return delegate.idFromBaseType();</span>
+    }
+
+    @Override
+    public JavaType typeFromId(DatabindContext databindContext, String id) throws IOException {
+<span class="fc" id="L90">        return delegate.typeFromId(databindContext, id);</span>
+    }
+
+    @Override
+    public String getDescForKnownTypeIds() {
+<span class="nc" id="L95">        return delegate.getDescForKnownTypeIds();</span>
+    }
+
+    public void setTypeFactory(TypeFactory tf) {
+<span class="nc" id="L99">        this.typeFactory = tf;</span>
+<span class="nc" id="L100">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
