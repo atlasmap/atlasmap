@@ -126,11 +126,9 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
         }
         doc.id = mappedField.parsedData.parsedDocID;
       }
-      mappedField.field = null;
-      if (!mappedField.parsedData.userCreated) {
-        // TODO: check this non null operator
-        mappedField.field = doc.getField(mappedField.parsedData.parsedPath!);
-      }
+
+      mappedField.field = doc.getField(mappedField.parsedData.parsedPath!);
+
       if (mappedField.field == null) {
         if (
           mappedField.parsedData.fieldIsConstant &&
@@ -190,46 +188,10 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
           propertyField.userCreated = true;
           mappedField.field = propertyField;
           doc.addField(propertyField);
-        } else if (
-          mappedField.parsedData.userCreated ||
-          mappedField.parsedData.parsedPath
-        ) {
-          const path: string = mappedField.parsedData.parsedPath!; // TODO: check this non null operator
-
-          mappedField.field = new Field();
-          mappedField.field.serviceObject.jsonType =
-            'io.atlasmap.xml.v2.XmlField';
-          mappedField.field.path = path;
-          mappedField.field.type = mappedField.parsedData.parsedValueType!; // TODO: check this non null operator
-          mappedField.field.userCreated = true;
-
-          const lastSeparator: number = path.lastIndexOf('/');
-
-          const parentPath =
-            lastSeparator > 0 ? path.substring(0, lastSeparator) : null;
-          let fieldName =
-            lastSeparator === -1 ? path : path.substring(lastSeparator + 1);
-          let namespaceAlias: string | null = null;
-          if (fieldName.indexOf(':') !== -1) {
-            namespaceAlias = fieldName.split(':')[0];
-            fieldName = fieldName.split(':')[1];
-          }
-
-          mappedField.field.name = fieldName;
-          mappedField.field.displayName = fieldName;
-          mappedField.field.isAttribute = fieldName.indexOf('@') !== -1;
-          mappedField.field.namespaceAlias = namespaceAlias;
-
-          if (parentPath != null) {
-            // TODO: check this non null operator
-            mappedField.field.parentField = doc.getField(parentPath)!;
-          }
-
-          doc.addField(mappedField.field);
         } else {
           cfg.errorService.addError(
             new ErrorInfo({
-              message: `Could not find field from document for mapped field '${mappedField.parsedData.parsedName}'`,
+              message: `Could not find field from document '${doc.name}' for mapped field '${mappedField.parsedData.parsedName}'`,
               level: ErrorLevel.ERROR,
               scope: ErrorScope.APPLICATION,
               type: ErrorType.INTERNAL,

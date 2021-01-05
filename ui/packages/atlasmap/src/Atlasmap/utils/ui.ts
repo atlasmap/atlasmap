@@ -138,7 +138,7 @@ export function fromNamespaceModelToINamespace(namespace: NamespaceModel) {
 export function fromDocumentDefinitionToFieldGroup(
   def: DocumentDefinition,
 ): IAtlasmapDocument | null {
-  if (!def) {
+  if (!def || !def.fields || def.fields.length === 0) {
     return null;
   }
   const fields = def.fields

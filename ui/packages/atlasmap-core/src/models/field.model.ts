@@ -246,7 +246,16 @@ export class Field {
   }
 
   getFieldLabel(showTypes: boolean, includePath: boolean): string {
-    let fieldPath = includePath ? this.path : this.getNameWithNamespace();
+    let fieldPath = '';
+    if (includePath) {
+      fieldPath = this.path;
+    } else {
+      if (this.path.indexOf('@') !== -1) {
+        fieldPath = this.path.split('@')[1];
+      } else {
+        fieldPath = this.getNameWithNamespace();
+      }
+    }
     if (showTypes && this.type && !this.isPropertyOrConstant()) {
       fieldPath += ' (' + this.type + ')';
     } else if (this.isProperty() && this.value != null) {

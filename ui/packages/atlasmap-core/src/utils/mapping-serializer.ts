@@ -609,6 +609,7 @@ export class MappingSerializer {
         fieldType: field.type,
         scope: field.scope,
         docId: field.docDef.id,
+        attribute: field.isAttribute,
       };
 
       if (!ignoreValue || field.isPropertyOrConstant()) {
@@ -871,6 +872,7 @@ export class MappingSerializer {
       field.value = constant.value;
       field.type = constant.fieldType;
       field.userCreated = true;
+      field.isAttribute = false;
       fields.push(field);
     }
     return fields;
@@ -903,6 +905,7 @@ export class MappingSerializer {
       field.type = property.fieldType;
       field.scope = property.scope;
       field.userCreated = true;
+      field.isAttribute = false;
       fields.push(field);
     }
     return fields;
@@ -1040,6 +1043,7 @@ export class MappingSerializer {
       }
       mappedField.parsedData.parsedName = field.name;
       mappedField.parsedData.parsedPath = field.path;
+      mappedField.parsedData.parsedIsAttribute = field.attribute;
       mappedField.parsedData.parsedDocID = field.docId;
       mappedField.parsedData.parsedDocURI = docRefs[field.docId];
       if (field.userCreated) {
