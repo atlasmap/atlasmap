@@ -112,6 +112,7 @@ export function fromFieldToIFieldsNode(field: Field): IAtlasmapField | null {
             .map(fromMappingModelToImapping)
             .filter((d) => d) as IAtlasmapMapping[]) || [],
         hasTransformations: field.partOfTransformation,
+        isAttribute: field.isAttribute,
         isCollection: field.isCollection,
         isInCollection: field.isInCollection(),
         isConnected: partOfMapping,
@@ -178,6 +179,7 @@ export function fromMappedFieldToIMappingField(
     previewValue: mappedField.field!.value,
     hasTransformations: false,
     mappings: [],
+    isAttribute: false,
     isCollection: false,
     isInCollection: false,
     isConnected: false,

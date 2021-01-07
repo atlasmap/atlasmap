@@ -47,7 +47,7 @@ Inspect JSON via URI
 ===== Parameters
 
 
-===== Body Parameter
+====== Body Parameter
 
 [cols="2,3,1,1,1"]
 |===         
@@ -148,7 +148,7 @@ Inspect a JSON schema or instance and return a Document object
 ===== Parameters
 
 
-===== Body Parameter
+====== Body Parameter
 
 [cols="2,3,1,1,1"]
 |===         

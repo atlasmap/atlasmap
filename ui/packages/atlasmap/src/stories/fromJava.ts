@@ -95,6 +95,7 @@ export function javaToFieldGroup(
           jf.name.startsWith("b") ||
           jf.name.startsWith("c")),
       isCollection: jf.collectionType === "LIST",
+      isAttribute: false,
       isInCollection: false,
       isConnected: false,
       isDisabled: jf.collectionType === "COMPLEX",

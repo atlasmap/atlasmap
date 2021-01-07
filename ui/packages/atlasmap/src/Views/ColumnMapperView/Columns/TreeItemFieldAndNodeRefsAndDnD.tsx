@@ -2,6 +2,7 @@ import React, { FunctionComponent, ReactNode } from "react";
 
 import { Button, Tooltip } from "@patternfly/react-core";
 import {
+  AtIcon,
   BoltIcon,
   BullseyeIcon,
   CircleIcon,
@@ -167,6 +168,22 @@ export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent<ITreeItemFiel
                           >
                             <BoltIcon
                               label={"This field has transformations"}
+                              size="sm"
+                              tabIndex={-1}
+                            />
+                          </Tooltip>
+                        ) : null,
+                        field.isAttribute ? (
+                          <Tooltip
+                            key={"attribute"}
+                            position={"auto"}
+                            enableFlip={true}
+                            entryDelay={750}
+                            exitDelay={100}
+                            content={<div>This field is an attribute</div>}
+                          >
+                            <AtIcon
+                              label={"This field is an attribute"}
                               size="sm"
                               tabIndex={-1}
                             />

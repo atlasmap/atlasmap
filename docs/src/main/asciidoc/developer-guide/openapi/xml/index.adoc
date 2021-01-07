@@ -47,7 +47,7 @@ Inspect a XML schema or instance located at specified URI and return a Document 
 ===== Parameters
 
 
-===== Body Parameter
+====== Body Parameter
 
 [cols="2,3,1,1,1"]
 |===         
@@ -148,7 +148,7 @@ Inspect a XML schema or instance and return a Document object
 ===== Parameters
 
 
-===== Body Parameter
+====== Body Parameter
 
 [cols="2,3,1,1,1"]
 |===         

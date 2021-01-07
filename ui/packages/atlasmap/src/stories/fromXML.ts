@@ -83,6 +83,7 @@ export function xmlToFieldGroup(
         (jf.name.startsWith("a") ||
           jf.name.startsWith("b") ||
           jf.name.startsWith("c")),
+      isAttribute: false,
       isCollection: jf.collectionType === "LIST",
       isInCollection: false,
       isConnected: false,

@@ -18,6 +18,7 @@ export interface IAtlasmapField {
   previewValue: string;
   mappings: IAtlasmapMapping[];
   hasTransformations: boolean;
+  isAttribute: boolean;
   isCollection: boolean;
   isConnected: boolean;
   isInCollection: boolean;
