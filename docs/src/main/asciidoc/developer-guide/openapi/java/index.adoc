@@ -47,7 +47,7 @@ Retrieve a maven classpath string
 ===== Parameters
 
 
-===== Body Parameter
+====== Body Parameter
 
 [cols="2,3,1,1,1"]
 |===         
@@ -211,7 +211,7 @@ Inspect a Java Class with specified fully qualified class name and return a Docu
 ===== Parameters
 
 
-===== Body Parameter
+====== Body Parameter
 
 [cols="2,3,1,1,1"]
 |===         
