@@ -61,7 +61,7 @@ function init_options() {
 
   # Internal variable default values
   OC_OPTS=""
-  MAVEN_PARAMETERS="--batch-mode -Prelease,community-release"
+  MAVEN_PARAMETERS="$MAVEN_PARAMETERS --batch-mode -Prelease,community-release"
   MAVEN_CMD="${MAVEN_CMD:-${BASEDIR}/mvnw}"
 }
 
