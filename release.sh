@@ -94,9 +94,10 @@ echo "=========================================================="
                -DreleaseVersion=${RELEASE_VERSION} \
                -DdevelopmentVersion=${DEVELOPMENT_VERSION} \
                release:perform
-pushd target/checkout
-"${MAVEN_CMD}" $MAVEN_PARAMETERS nexus-staging:release
-popd
+# above fails to close staging repo, thus skip the release as well
+# pushd target/checkout
+# "${MAVEN_CMD}" $MAVEN_PARAMETERS nexus-staging:release
+# popd
 
 xmllint --shell atlasmap-maven-plugin/atlasmap-maven-plugin-example.pom << EOF
 cd /*[local-name() = 'project']/*[local-name() = 'version']
