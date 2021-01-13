@@ -479,10 +479,17 @@ export function useAtlasmap() {
   }, []);
 
   const isFieldAddableToSelection = useCallback(
-    (documentType: "source" | "target", field: IAtlasmapField) => {
+    (
+      documentType: "source" | "target",
+      field: IAtlasmapField,
+      dropTarget?: IAtlasmapField,
+    ) => {
       const { selectedMapping } = context;
-      if (!selectedMapping || !field.amField.isTerminal()) {
+      if (!field.amField.isTerminal()) {
         return false;
+      }
+      if (!selectedMapping || !dropTarget?.isConnected) {
+        return true;
       }
       if (
         selectedMapping.sourceFields.length <= 1 &&
