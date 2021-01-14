@@ -94,16 +94,14 @@ public class XmlSchemaInspector {
         XS_TYPE_TO_FIELD_TYPE_MAP.put("unsignedInt", FieldType.UNSIGNED_INTEGER);
         XS_TYPE_TO_FIELD_TYPE_MAP.put("unsignedLong", FieldType.UNSIGNED_LONG);
         XS_TYPE_TO_FIELD_TYPE_MAP.put("unsignedShort", FieldType.UNSIGNED_SHORT);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("NMTOKEN", FieldType.STRING);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("anyURI", FieldType.STRING);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("base64Binary", FieldType.STRING);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("hexBinary", FieldType.STRING);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("QName", FieldType.STRING);
 
         BLACKLISTED_TYPES = new HashMap<>();
-        BLACKLISTED_TYPES.put("NMTOKEN", FieldType.UNSUPPORTED);
-        BLACKLISTED_TYPES.put("anyURI", FieldType.UNSUPPORTED);
-        BLACKLISTED_TYPES.put("base64Binary", FieldType.UNSUPPORTED);
-        BLACKLISTED_TYPES.put("byte", FieldType.UNSUPPORTED);
-        BLACKLISTED_TYPES.put("unsignedByte", FieldType.UNSUPPORTED);
-        BLACKLISTED_TYPES.put("hexBinary", FieldType.UNSUPPORTED);
         BLACKLISTED_TYPES.put("NOTATION", FieldType.UNSUPPORTED);
-        BLACKLISTED_TYPES.put("QName", FieldType.UNSUPPORTED);
     }
 
     private XmlDocument xmlDocument;

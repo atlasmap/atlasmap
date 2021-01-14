@@ -72,7 +72,29 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         assertEquals(1, xmlDocument.getFields().getField().size());
         XmlComplexType root = (XmlComplexType) xmlDocument.getFields().getField().get(0);
         assertNotNull(root);
-        assertEquals(8, root.getXmlFields().getXmlField().size());
+        assertEquals(15, root.getXmlFields().getXmlField().size());
+
+        XmlField nmtokenField = root.getXmlFields().getXmlField().get(8);
+        assertEquals("nmtokenField", nmtokenField.getName());
+        assertEquals(FieldType.STRING, nmtokenField.getFieldType());
+        XmlField anyuriField = root.getXmlFields().getXmlField().get(9);
+        assertEquals("anyuriField", anyuriField.getName());
+        assertEquals(FieldType.STRING, anyuriField.getFieldType());
+        XmlField base64BinaryField = root.getXmlFields().getXmlField().get(10);
+        assertEquals("base64binaryField", base64BinaryField.getName());
+        assertEquals(FieldType.STRING, base64BinaryField.getFieldType());
+        XmlField byteField = root.getXmlFields().getXmlField().get(11);
+        assertEquals("byteField", byteField.getName());
+        assertEquals(FieldType.SHORT, byteField.getFieldType());
+        XmlField unsignedByteField = root.getXmlFields().getXmlField().get(12);
+        assertEquals("unsignedByteField", unsignedByteField.getName());
+        assertEquals(FieldType.UNSIGNED_SHORT, unsignedByteField.getFieldType());
+        XmlField hexBinaryField = root.getXmlFields().getXmlField().get(13);
+        assertEquals("hexBinaryField", hexBinaryField.getName());
+        assertEquals(FieldType.STRING, hexBinaryField.getFieldType());
+        XmlField qnameField = root.getXmlFields().getXmlField().get(14);
+        assertEquals("qnameField", qnameField.getName());
+        assertEquals(FieldType.STRING, qnameField.getFieldType());
         // debugFields(xmlDocument.getFields());
     }
 
@@ -195,7 +217,7 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         assertEquals("tns:country", shipToCountry.getName());
         assertEquals("US", shipToCountry.getValue());
         assertEquals("/tns:purchaseOrder/tns:shipTo/@tns:country", shipToCountry.getPath());
-        assertEquals(FieldType.UNSUPPORTED, shipToCountry.getFieldType());
+        assertEquals(FieldType.STRING, shipToCountry.getFieldType());
         assertEquals(true, shipToCountry.isAttribute());
 
         XmlField shipToName = ((XmlComplexType) shipTo).getXmlFields().getXmlField().get(1);

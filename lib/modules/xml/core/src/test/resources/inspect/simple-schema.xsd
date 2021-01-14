@@ -13,6 +13,14 @@
         <xs:element type="xs:short" name="shortField" />
         <xs:element type="xs:float" name="floatField" />
         <xs:element type="xs:string" name="charField" />
+
+        <xs:element type="xs:NMTOKEN" name="nmtokenField" />
+        <xs:element type="xs:anyURI" name="anyuriField" />
+        <xs:element type="xs:base64Binary" name="base64binaryField" />
+        <xs:element type="xs:byte" name="byteField" />
+        <xs:element type="xs:unsignedByte" name="unsignedByteField" />
+        <xs:element type="xs:hexBinary" name="hexBinaryField" />
+        <xs:element type="xs:QName" name="qnameField" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
