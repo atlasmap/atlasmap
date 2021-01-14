@@ -145,7 +145,13 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       isSource: true,
       acceptDropType: "target",
       draggableType: "source",
-      canDrop: () => true,
+      canDrop: (dt, i) => {
+        return isFieldAddableToSelection(
+          "target",
+          i.payload as IAtlasmapField,
+          dt,
+        );
+      },
       onDrop: (s, t) => onCreateMapping(s, t.payload as IAtlasmapField),
       onShowMappingDetails: selectMapping,
       canAddToSelectedMapping: (f) => isFieldAddableToSelection("source", f),
@@ -224,8 +230,12 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       isSource: false,
       acceptDropType: "source",
       draggableType: "target",
-      canDrop: (f) => {
-        return f.isCollection || f.isInCollection || !f.isConnected;
+      canDrop: (dt, i) => {
+        return isFieldAddableToSelection(
+          "source",
+          i.payload as IAtlasmapField,
+          dt,
+        );
       },
       onDrop: (s, t) => onCreateMapping(t.payload as IAtlasmapField, s),
       canAddToSelectedMapping: (f) => isFieldAddableToSelection("target", f),

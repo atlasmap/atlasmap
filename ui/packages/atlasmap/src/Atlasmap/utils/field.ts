@@ -255,7 +255,7 @@ export function getPropertyTypeIndex(
 }
 
 /**
- * Create a new mapping using the specified source and target IDs.
+ * Create a new mapping or modify the existing active mapping using the specified source and target IDs.
  *
  * @param source
  * @param target
@@ -263,29 +263,66 @@ export function getPropertyTypeIndex(
 export function createMapping(source: Field | undefined, target?: Field): void {
   const cfg = ConfigModel.getConfig();
   const ms = initializationService.cfg.mappingService;
+
+  if (target) {
+    if (
+      !cfg.mappings?.activeMapping &&
+      (source!.partOfMapping || target.partOfMapping)
+    ) {
+      cfg.errorService.addError(
+        new ErrorInfo({
+          message: `Unable to map '${source!.name}/${
+            target.name
+          }'.  Please select a mapping before adding to it.`,
+          level: ErrorLevel.INFO,
+          scope: ErrorScope.MAPPING,
+          type: ErrorType.USER,
+        }),
+      );
+      return;
+    }
+    if (cfg.mappings?.activeMapping) {
+      const exclusionReason = ms.getFieldSelectionExclusionReason(
+        cfg.mappings?.activeMapping!,
+        target,
+      );
+      if (exclusionReason !== null) {
+        cfg.errorService.addError(
+          new ErrorInfo({
+            message: `The field '${target.name}' cannot be selected, ${exclusionReason}.`,
+            level: ErrorLevel.ERROR,
+            mapping: cfg.mappings?.activeMapping!,
+            scope: ErrorScope.MAPPING,
+            type: ErrorType.USER,
+          }),
+        );
+        return;
+      }
+      if (
+        source &&
+        target.partOfMapping &&
+        cfg.mappings.activeMapping.targetFields[0]!.field!.path === target!.path
+      ) {
+        addToCurrentMapping(source);
+        return;
+      }
+      if (
+        source &&
+        source.partOfMapping &&
+        cfg.mappings.activeMapping.sourceFields[0]!.field!.path === source!.path
+      ) {
+        addToCurrentMapping(target);
+        return;
+      }
+    }
+  }
   if (source) {
     cfg.mappingService.addNewMapping(source, false);
   } else {
     cfg.mappingService.newMapping();
   }
   if (target) {
-    const exclusionReason = ms.getFieldSelectionExclusionReason(
-      cfg.mappings?.activeMapping!,
-      target,
-    );
-    if (exclusionReason !== null) {
-      cfg.errorService.addError(
-        new ErrorInfo({
-          message: `The field '${target.name}' cannot be selected, ${exclusionReason}.`,
-          level: ErrorLevel.ERROR,
-          mapping: cfg.mappings?.activeMapping!,
-          scope: ErrorScope.MAPPING,
-          type: ErrorType.USER,
-        }),
-      );
-    } else {
-      addToCurrentMapping(target);
-    }
+    addToCurrentMapping(target);
   }
 }
 
