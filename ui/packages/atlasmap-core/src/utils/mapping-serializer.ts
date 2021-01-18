@@ -609,9 +609,15 @@ export class MappingSerializer {
         fieldType: field.type,
         scope: field.scope,
         docId: field.docDef.id,
-        attribute: field.isAttribute,
       };
-
+      // The 'attribute' field only applies to XML.
+      if (
+        field.serviceObject.jsonType?.includes(
+          ConfigModel.xmlServicesPackagePrefix
+        )
+      ) {
+        serializedField.attribute = field.isAttribute;
+      }
       if (!ignoreValue || field.isPropertyOrConstant()) {
         serializedField['value'] = field.value;
       }
