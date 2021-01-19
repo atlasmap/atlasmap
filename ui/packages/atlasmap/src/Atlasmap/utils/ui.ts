@@ -510,36 +510,62 @@ export function handleActionChange(
   initializationService.cfg.mappingService.notifyMappingUpdated();
 }
 
+/**
+ * Process a mapped field index change.  The source field is represented by
+ * currentIndex.  The target index is represented either by a number or by a
+ * mapped field (depending on whether the index was physically modified or
+ * d&d modified).
+ *
+ * @param isSource
+ * @param currentIndex
+ * @param target
+ */
 export function handleIndexChange(
   isSource: boolean,
   currentIndex: number,
-  newIndex: number,
+  target: number | Field,
 ) {
   const cfg = ConfigModel.getConfig();
   const activeMapping = cfg.mappings?.activeMapping;
-  if (newIndex <= 0 || !activeMapping) {
+  if (!activeMapping) {
     return;
   }
-  const field = activeMapping.getMappedFieldForIndex(
+  const sourceField = activeMapping.getMappedFieldForIndex(
     "" + (currentIndex + 1),
     isSource,
   );
-  if (!field) {
+  if (!sourceField) {
     return;
   }
-  const mappedFields = activeMapping.getMappedFields(isSource);
-  const targetIndex = mappedFields.length;
-  if (newIndex > targetIndex) {
-    // Add place-holders for each index value between the previous max index
-    // and the insertion index.
-    cfg.mappingService.addPlaceholders(
-      newIndex - mappedFields.length,
-      activeMapping,
-      targetIndex,
-      isSource,
-    );
+  let newIndex: number | null = 0;
+
+  // If the target is an actual index value then check for the need to add padding.
+  if (typeof target === "number") {
+    newIndex = target;
+    if (target <= 0 || !activeMapping) {
+      return;
+    }
+    const mappedFields = activeMapping.getMappedFields(isSource);
+    const maxIndex = mappedFields.length;
+    if (target > maxIndex) {
+      // Add place-holders for each index value between the previous max index
+      // and the insertion index.
+      cfg.mappingService.addPlaceholders(
+        target - mappedFields.length,
+        activeMapping,
+        maxIndex,
+        isSource,
+      );
+    }
+    // If the target is a dropped field then extract the mapped field to determine the index.
+  } else {
+    const field = activeMapping.getMappedFieldForField(target!);
+    if (!field) {
+      return;
+    }
+    newIndex = activeMapping.getIndexForMappedField(field);
   }
-  cfg.mappingService.moveMappedFieldTo(activeMapping, field, newIndex);
+  cfg.mappingService.moveMappedFieldTo(activeMapping, sourceField, newIndex!);
 }
 
 export function handleNewTransformation(isSource: boolean, index: number) {

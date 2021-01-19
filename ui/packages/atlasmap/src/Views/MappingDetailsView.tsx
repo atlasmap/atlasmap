@@ -12,6 +12,7 @@ import {
   Document,
 } from "../UI";
 import { IAtlasmapField, IAtlasmapMappedField, INotification } from "./models";
+import { Field } from "@atlasmap/core/dist/models/field.model";
 
 export interface IMappingDetailsViewProps {
   notifications: INotification[];
@@ -35,7 +36,7 @@ export interface IMappingDetailsViewProps {
   onIndexChange: (
     isSource: boolean,
     currentIndex: number,
-    newIndex: number,
+    newIndex: number | Field,
   ) => void;
   onNewTransformation: (isSource: boolean, index: number) => void;
   onTransformationChange: (
@@ -92,6 +93,23 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
     />
   );
 
+  const genericPaddingField: IAtlasmapField = {
+    id: "",
+    name: "Padding field",
+    type: "",
+    scope: "current",
+    path: "",
+    previewValue: "",
+    mappings: [],
+    hasTransformations: false,
+    isAttribute: false,
+    isCollection: false,
+    isConnected: false,
+    isInCollection: false,
+    isDisabled: false,
+    amField: {} as IAtlasmapField["amField"],
+  };
+
   const renderMappingField = (
     isSource: boolean,
     canShowIndex: boolean,
@@ -101,6 +119,7 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
     return f ? (
       <MappingField
         key={f.id}
+        field={f}
         name={f.name}
         info={
           f.scope
@@ -110,8 +129,10 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
         mappingExpressionEnabled={mappingExpressionEnabled}
         hasTransformations={f.transformations.length > 0}
         onDelete={() => onRemoveMappedField(isSource, index)}
-        onIndexChange={(value: string) =>
-          onIndexChange(isSource, index, parseInt(value, 10))
+        onIndexChange={(value: string | IAtlasmapField) =>
+          typeof value === "string"
+            ? onIndexChange(isSource, index, parseInt(value, 10))
+            : onIndexChange(isSource, index, value.amField)
         }
         onNewTransformation={() => onNewTransformation(isSource, index)}
         index={index + 1}
@@ -151,6 +172,7 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
       </MappingField>
     ) : (
       <MappingField
+        field={genericPaddingField}
         key={index}
         name={"Padding field"}
         info={"This padding field has been automatically added"}
@@ -211,7 +233,7 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
               placeholderText={"Select source to add to the mapping"}
               fields={addableSources.map((s) => ({
                 label: s.path,
-                group: s.amField.docDef.name,
+                group: s.amField!.docDef.name,
                 onAdd: () => onAddFieldToMapping(true, s),
               }))}
               data-testid={"add-source-to-mapping"}
@@ -226,7 +248,7 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
               placeholderText={"Select target to add to the mapping"}
               fields={addableTargets.map((s) => ({
                 label: s.path,
-                group: s.amField.docDef.name,
+                group: s.amField!.docDef.name,
                 onAdd: () => onAddFieldToMapping(false, s),
               }))}
               data-testid={"add-target-to-mapping"}
