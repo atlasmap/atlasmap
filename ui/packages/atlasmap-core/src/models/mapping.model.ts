@@ -194,7 +194,7 @@ export class MappingModel {
   }
 
   getMappedFieldForField(field: Field): MappedField | null {
-    if (!field) {
+    if (!field || !field.isSource) {
       return null;
     }
 
