@@ -483,9 +483,13 @@ export function useAtlasmap() {
       documentType: "source" | "target",
       field: IAtlasmapField,
       dropTarget?: IAtlasmapField,
-    ) => {
+    ): boolean => {
       const { selectedMapping } = context;
-      if (!field.amField.isTerminal()) {
+      if (
+        !field ||
+        !field.amField.isTerminal() ||
+        dropTarget?.type === "UNSUPPORTED"
+      ) {
         return false;
       }
       if (!selectedMapping || !dropTarget?.isConnected) {
