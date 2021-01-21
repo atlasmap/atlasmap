@@ -9,9 +9,9 @@ To run AtlasMap standalone:
 version, for example:
 image:latest-maven-central-version-number.png[maven central 1.42.3].
 
-. Download the AtlasMap standalone `.jar` file by invoking the 
+. Download the AtlasMap standalone `.jar` file by invoking the
 `wget` command with the following format. Replace `${VERSION}`
-with an actual version number. 
+with an actual version number.
 +
 ----
 wget https://repo1.maven.org/maven2/io/atlasmap/atlasmap-standalone/${VERSION}/atlasmap-standalone-${VERSION}.jar
@@ -24,7 +24,7 @@ following format:
 $ java -jar atlasmap-standalone-${VERSION}.jar
 ----
 +
-For example: 
+For example:
 +
 ----
 $ java -jar atlasmap-standalone-1.42.3.jar
@@ -32,11 +32,11 @@ $ java -jar atlasmap-standalone-1.42.3.jar
 +
 [NOTE]
 ====
-Although it is not a common situation, you can start AtlasMap and also 
-load mapping definitions if you have an AtlasMap `.adm` file. 
+Although it is not a common situation, you can start AtlasMap and also
+load mapping definitions if you have an AtlasMap `.adm` file.
 An AtlasMap `.adm` file contains mapping definitions that were exported from AtlasMap.
-For example, suppose you want to start AtlasMap and 
-import the `/home/aslan/Downloads/atlas-mapping.adm` file. 
+For example, suppose you want to start AtlasMap and
+import the `/home/aslan/Downloads/atlas-mapping.adm` file.
 Invoke a command such as the following:
 
 ----
@@ -44,25 +44,32 @@ $ java -Datlasmap.adm.path=/home/aslan/Downloads/atlas-mapping.adm -jar atlasmap
 ----
 ====
 
-. In a browser, visit 
+. In a browser, visit
 link:http://127.0.0.1:8585/[]
 to see the AtlasMap data mapper canvas.
 
-. Experiment with the data mapper: 
-.. At the top of the *Source* panel, click 
-image:Import-Data-Shape.png[Import] 
-to import a JSON or XML file that you can map fields from. 
-.. At the top of the *Target* panel, click 
-image:Import-Data-Shape.png[Import] 
-to import a different JSON or XML file that you can map fields to. 
-
-.. To map fields, click a source field and then click the target field 
-that you want to map it to.  
-.. With a data mapping selected, explore the optional transformations. 
-.. To preview a data mapping result, click 
-image:EditorSettings.png[Editor Settings] 
-and select *Show Mapping Preview*. Enter sample data in source input fields. 
-.. To save your work, click 
-image:ExportIcon.png[Export icon] in the menu bar. This 
-creates an AtlasMap `.adm` file in the `Downloads` directory. 
-This file contains the mapping definitions. 
+. Experiment with the data mapper:
+.. At the top of the *Source* panel, click
+image:Import-Data-Shape.png[Import]
+to import a JSON or XML file that you can map fields from.
+.. At the top of the *Target* panel, click
+image:Import-Data-Shape.png[Import]
+to import a different JSON or XML file that you can map fields to.
+.. To map fields:
+... Navigate to a source field and click image:CreateNewMapping.png[Create new napping].
++
+The *Mapping Details* panel will slide in from the right.
++
+image:MappingDetails.png[Mapping Details]
+... Either:
+.... Navigate to a target field and click image:ConnectToSelectedMapping.png[Connect to the selected mapping] to add it to the
+selected mapping, or
+.... Drag and drop a target field on the source field to add the target field to the mapping.
+.. With a data mapping selected, explore the optional transformations.
+.. To preview a data mapping result, click
+image:ShowMappingPreview.png[Show Mapping Preview] and enter sample data in source *Mapping preview* fields.
+.. To save your work, click the *AtlasMap* menu and select *Export the current mappings and support files into a catalog (.adm)*
++
+image:AtlasMapMenu.png[AtlasMap menu].
++
+Then choose a folder in which to save an AtlasMap `.adm` file. This file contains the mapping definitions.

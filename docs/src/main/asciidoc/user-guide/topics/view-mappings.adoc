@@ -9,9 +9,7 @@ correct mappings are in place.
 The data mapper canvas is visible.
 
 .Procedure
-. In the upper right, click
-image:grid.png[title="Grid"] to display a list of the
-defined mappings.
+. In the upper right, click image:GridIcon.png[Grid icon] to display a list of the defined mappings.
 
 . To dismiss the list of mappings and redisplay the source and
-target fields, click image:grid.png[title="Grid"] again.
+target fields, click image:ColumnIcon.png[Column icon] again.

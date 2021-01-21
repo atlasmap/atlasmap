@@ -8,7 +8,7 @@ you have some background about how to use the data mapper.
 
 The data mapper displays two columns of data fields:
 
-* *Sources* is a list of the data fields that you can map to target fields.
+* *Source* is a list of the data fields that you can map to target fields.
 * *Target* is a list of the data fields that you can map source fields to.
 
 To quickly find the data field that you
@@ -16,19 +16,16 @@ want to map, you can do any of the following:
 
 * Search for it.
 +
-The *Sources* panel and the *Target* panel each have
-a search field at the top. If the search field is not visible, click
-image:magnifying-glass.png[Magnifying Glass] at the top
-right of the *Sources* or *Target* panel.
+The *Source* panel and the *Target* panel each have
+a search field at the top. Enter the name of the field you want to map.
 
-* Enter the names of the fields that you want to map.
+* Enter the names of the fields that you want to map in the *Mapping Details* panel.
 +
-To do this,
-in the upper right of the *Configure Mapper* page, click the plus sign
-to display the *Mapping Details* panel. In the *Sources* section, enter
-the name of the source field. In the *Action* section, accept the
-default *Map*, which maps one field to one other field. Or, select
-*Combine* or *Separate*. In the *Target* section, enter the name of the
+Click image:AddIcon.png[Add icon] in the toolbar to add a new empty mapping. The *Mapping Details* panel will slide in from the
+right. In the *Sources* section, enter
+the name of the source field. In the *Targets* section, enter the name of the
 field that you want to map to.
 
 * Expand and collapse folders to limit the visible fields.
++
+Once the appropriate field is visible, you can drag it to a currently mapped field in the opposite panel to add it to that mapping.

@@ -1,20 +1,19 @@
 [id='resetting-data-files-in-atlasmap']
-= Resetting data files in AtlasMap 
+= Resetting data files in AtlasMap
 
-Initially, AtlasMap displays a blank canvas. You must import at least 
-one data file into the *Source* panel and at least one data file into 
-the *Target* panel. You can then map fields. 
+Initially, AtlasMap displays a blank canvas. You must import at least
+one data file into the *Source* panel and at least one data file into
+the *Target* panel. You can then map fields.
 
-After you import a data file, you can remove it from the data mapper 
-canvas by clicking the trash icon, as in the following image: 
+After you import a data file, you can remove it from the data mapper
+canvas by clicking the trash icon, as in the following image:
 
 image:Reset1.png[Remove the specified file]
 
 To remove all imported files, as well as all data mappings:
 
-. In the AtlasMap top menu bar, click 
-image:EditorSettings.png[Settings].
-. In the popup menu, click *Reset All*. 
-. In the confirmation dialog, click *Reset*. 
+. Click the *AtlasMap* menu.
+. In the pop-up menu, select *Reset all mappings and clear all imported documents*.
+. In the confirmation dialog, click *Confirm*.
 
-AtlasMap displays a blank canvas. 
+AtlasMap displays a blank canvas.
