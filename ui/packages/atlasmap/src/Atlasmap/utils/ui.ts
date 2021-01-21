@@ -116,7 +116,9 @@ export function fromFieldToIFieldsNode(field: Field): IAtlasmapField | null {
         isCollection: field.isCollection,
         isInCollection: field.isInCollection(),
         isConnected: partOfMapping,
-        isDisabled: field.type === "COMPLEX" && !field.enumeration,
+        isDisabled:
+          field.type === "UNSUPPORTED" ||
+          (field.type === "COMPLEX" && !field.enumeration),
       }
     : null;
 }
