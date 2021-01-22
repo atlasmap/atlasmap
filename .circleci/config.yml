@@ -48,7 +48,15 @@ save_checkstyle: &save_checkstyle
     name: Collect checkstyle reports
     command: |
       mkdir -p /workspace/checkstyle/
-      find . -type f -regex "./[runtime|camel].*/target/checkstyle-result.xml" -exec bash -c "cp {} /workspace/checkstyle/\`echo {} | sed -e 's#^\./##' | sed -e 's#/#-#g'\`" \;
+      find . -type f -regex ".*target/checkstyle-result.xml" -exec bash -c "cp {} /workspace/checkstyle/\`echo {} | sed -e 's#^\./##' | sed -e 's#/#-#g'\`" \;
+
+save_docs: &save_docs
+  run:
+    when: always
+    name: Collect docs
+    command: |
+      mkdir -p /workspace/docs/
+      cp -a docs/target/generated-docs/* /workspace/docs/
 
 push_images: &push_images
   deploy:
@@ -133,6 +141,9 @@ jobs:
           path: /workspace/junit
       - store_artifacts:
           path: /workspace/junit
+      - <<: *save_docs:
+      - store_artifacts:
+          path: /workspace/docs
       - run:
           when: always
           name: Collect Coverage reports
