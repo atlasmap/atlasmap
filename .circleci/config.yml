@@ -141,7 +141,7 @@ jobs:
           path: /workspace/junit
       - store_artifacts:
           path: /workspace/junit
-      - <<: *save_docs:
+      - <<: *save_docs
       - store_artifacts:
           path: /workspace/docs
       - run:
