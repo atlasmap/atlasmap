@@ -55,8 +55,7 @@ save_docs: &save_docs
     when: always
     name: Collect docs
     command: |
-      mkdir -p /workspace/docs/
-      cp -a docs/target/generated-docs/* /workspace/docs/
+      cp -a docs/target/generated-docs /workspace/docs
 
 push_images: &push_images
   deploy:
