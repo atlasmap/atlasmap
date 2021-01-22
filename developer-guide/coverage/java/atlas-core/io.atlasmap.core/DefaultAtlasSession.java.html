@@ -40,7 +40,7 @@ import io.atlasmap.v2.Validations;
 
 public class DefaultAtlasSession implements AtlasInternalSession {
 
-    private AtlasContext atlasContext;
+    private DefaultAtlasContext atlasContext;
     private final AtlasMapping mapping;
     private Audits audits;
     private Validations validations;
@@ -76,13 +76,13 @@ public class DefaultAtlasSession implements AtlasInternalSession {
 <span class="fc" id="L76">    }</span>
 
     @Override
-    public AtlasContext getAtlasContext() {
+    public DefaultAtlasContext getAtlasContext() {
 <span class="fc" id="L80">        return atlasContext;</span>
     }
 
     @Override
     public void setAtlasContext(AtlasContext atlasContext) {
-<span class="fc" id="L85">        this.atlasContext = atlasContext;</span>
+<span class="fc" id="L85">        this.atlasContext = (DefaultAtlasContext) atlasContext;</span>
 <span class="fc" id="L86">        head.unset();</span>
 <span class="fc" id="L87">    }</span>
 
