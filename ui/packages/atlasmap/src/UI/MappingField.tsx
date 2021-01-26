@@ -1,4 +1,4 @@
-import React, { Children, FunctionComponent } from "react";
+import React, { Children, FunctionComponent, KeyboardEvent } from "react";
 
 import {
   Button,
@@ -61,6 +61,10 @@ export interface IMappingFieldProps {
   onDelete: () => void;
   onIndexChange?: (value: string | IAtlasmapField) => void;
   onNewTransformation?: () => void;
+}
+
+function onKeyDown(event: KeyboardEvent<HTMLDivElement>): void {
+  event.preventDefault();
 }
 
 export const MappingField: FunctionComponent<IMappingFieldProps> = ({
@@ -144,6 +148,7 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
                               type={"number"}
                               value={index}
                               id={"index"}
+                              onKeyDown={onKeyDown}
                               onChange={onIndexChange}
                               data-testid={`change-${name}-input-index`}
                               isDisabled={!onIndexChange}
