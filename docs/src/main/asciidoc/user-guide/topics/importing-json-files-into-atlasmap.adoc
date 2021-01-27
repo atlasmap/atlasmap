@@ -1,10 +1,10 @@
 [id='importing-json-files-into-atlasmap']
-= Importing JSON files into AtlasMap 
+= Importing JSON files into AtlasMap
 
-You can import a JSON schema file or a JSON instance file into 
-AtlasMap. The procedure for importing each kind of file is the same. 
-For example, the following JSON schema file, `JSONSchema.json`, 
-defines properties for an `Order` object: 
+You can import a JSON schema file or a JSON instance file into
+AtlasMap. The procedure for importing each kind of file is the same.
+For example, the following JSON schema file, `JSONSchema.json`,
+defines properties for an `Order` object:
 
 [source,json]
 ----
@@ -79,12 +79,12 @@ defines properties for an `Order` object:
 
 To import this file into the AtlasMap Source panel:
 
-. At the top of the *Source* panel, click 
-image:Import-Data-Shape.png[Import]. 
+. At the top of the *Source* panel, click
+image:Import-Data-Shape.png[Import].
 
 . In the *Open File* dialog, navigate to the `JSONSchema.json` file and select it.
-. Click *Open*. 
+. Click *Open*.
 
-AtlasMap displays the fields in the *Source* panel: 
+AtlasMap displays the fields in the *Source* panel:
 
-image:ImportJSON3.png[Order document].
+image:ImportJSON.png[Order document].

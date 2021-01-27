@@ -1,11 +1,11 @@
 [id='importing-xml-files-into-atlasmap']
-= Importing XML files into AtlasMap 
+= Importing XML files into AtlasMap
 
-You can import an XML schema file or an XML instance file into 
-AtlasMap. The procedure for importing each kind of file is the same. 
-For example, 
-the following XML schema file, `XMLSchema.xml`, defines a schema for 
-transactions related to pets: 
+You can import an XML schema file or an XML instance file into
+AtlasMap. The procedure for importing each kind of file is the same.
+For example,
+the following XML schema file, `XMLSchema.xml`, defines a schema for
+transactions related to pets:
 
 [source,xml]
 ----
@@ -72,13 +72,13 @@ transactions related to pets:
 
 To import this file into the AtlasMap *Target* panel:
 
-. At the top of the *Target* panel, click 
-image:Import-Data-Shape.png[Import]. 
+. At the top of the *Target* panel, click
+image:Import-Data-Shape.png[Import].
 
 . In the *Open File* dialog, navigate to the `XMLSchema.xml` file and select it.
-. Click *Open*. 
+. Click *Open*.
 
-AtlasMap displays the fields in the *Target* panel.  In the following image, 
+AtlasMap displays the fields in the *Target* panel.  In the following image,
 the fields are expanded to show more detail.
 
-image:ImportXML2.png[Imported schema for pet transactions]
+image:ImportXML.png[Imported schema for pet transactions]
