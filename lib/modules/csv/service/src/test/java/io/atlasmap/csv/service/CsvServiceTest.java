@@ -71,4 +71,26 @@ public class CsvServiceTest {
         assertThat(fields.get(2).getName(), is("header3"));
     }
 
+    @Test
+    public void testSchemaNoParametersSpecified() throws Exception {
+        final String source =
+            "l1r1,l1r2,l1r3\n"
+                + "l2r1,l2r2,l2r3\n"
+                + "l3r1,l3r2,l3r3\n";
+
+        InputStream inputStream = new ByteArrayInputStream(source.getBytes());
+
+        Response res = csvService.inspect(inputStream, null, null, null, null, null,
+            null, null, null, null, null, null,
+            null, null, null);
+        Object entity = res.getEntity();
+        assertEquals(byte[].class, entity.getClass());
+        CsvInspectionResponse csvInspectionResponse = Json.mapper().readValue((byte[])entity, CsvInspectionResponse.class);
+        CsvComplexType complexType = (CsvComplexType) csvInspectionResponse.getCsvDocument().getFields().getField().get(0);
+        List<CsvField> fields = complexType.getCsvFields().getCsvField();
+        assertThat(fields.get(0).getName(), is("0"));
+        assertThat(fields.get(1).getName(), is("1"));
+        assertThat(fields.get(2).getName(), is("2"));
+    }
+
 }
