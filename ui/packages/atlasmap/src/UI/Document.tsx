@@ -102,7 +102,7 @@ export const Document = forwardRef<
     scrollIntoView = false,
     noPadding = false,
     noShadows = false,
-    startExpanded = true,
+    startExpanded,
     onSelect,
     onDeselect,
     children,
@@ -111,7 +111,7 @@ export const Document = forwardRef<
   ref,
 ) {
   const { state: isExpanded, toggle: toggleExpanded } = useToggle(
-    startExpanded,
+    startExpanded!,
   );
   const handleClick = useCallback(
     (event: MouseEvent) => {
