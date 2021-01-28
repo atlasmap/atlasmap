@@ -208,7 +208,7 @@ public class CsvFieldReader implements AtlasFieldReader {
             CSVRecord record = parser.iterator().next();
             for (int i = 0; i < record.size(); i++) {
                 CsvField field = new CsvField();
-                if (parser.getHeaderNames() != null) {
+                if (parser.getHeaderNames() != null && parser.getHeaderNames().size() > i) {
                     field.setName(parser.getHeaderNames().get(i));
                 } else {
                     field.setColumn(i);
