@@ -143,6 +143,7 @@ export const TargetsColumn: FunctionComponent<
               >
                 <Document
                   title={"Properties"}
+                  startExpanded={targetProperties ? true : false}
                   actions={[
                     <Tooltip
                       position={"top"}
@@ -204,6 +205,7 @@ export const TargetsColumn: FunctionComponent<
                   >
                     <Document
                       title={t.name}
+                      startExpanded={true}
                       footer={
                         showTypes ? (
                           <DocumentFooter>

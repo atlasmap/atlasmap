@@ -153,6 +153,7 @@ export const SourcesColumn: FunctionComponent<
               >
                 <Document
                   title={"Properties"}
+                  startExpanded={sourceProperties ? true : false}
                   actions={[
                     <Tooltip
                       position={"top"}
@@ -210,6 +211,7 @@ export const SourcesColumn: FunctionComponent<
               >
                 <Document
                   title={"Constants"}
+                  startExpanded={constants ? true : false}
                   actions={[
                     <Tooltip
                       position={"top"}
@@ -265,6 +267,7 @@ export const SourcesColumn: FunctionComponent<
                   >
                     <Document
                       title={s.name}
+                      startExpanded={true}
                       footer={
                         showTypes ? (
                           <DocumentFooter>
