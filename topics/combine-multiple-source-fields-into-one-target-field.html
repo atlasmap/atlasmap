@@ -462,55 +462,32 @@ and the separator between parts, such as a space or comma. See
 <div class="title">Procedure</div>
 <ol class="arabic">
 <li>
-<p>In the <strong>Target</strong> panel, click the field into which you want to map more
-than one source field.</p>
+<p>In the <strong>Source</strong> panel, navigate to the first field that
+you want to combine into the target field and click <span class="image"><img src="images/CreateNewMapping.png" alt="Create new mapping"></span>. For each of the other
+fields that you want to combine into the target field, click <span class="image"><img src="images/ConnectToSelectedMapping.png" alt="Connect to selected mapping"></span> next
+to each field.</p>
+<div class="paragraph">
+<p>The data mapper automatically changes the type of mapping to <strong>Concatenate</strong>.</p>
+</div>
 </li>
 <li>
-<p>In the <strong>Sources</strong> panel, if there is a field that contains the fields
-that you want to map to the target field, then click that container field
-to map all contained fields to the target field.</p>
-<div class="paragraph">
-<p>To individually select each source field, click the first field that
-you want to combine into the target field. For each of the other fields
-that you want to combine into the target field, hover over that field, and press
-<strong>CTRL-Mouse1</strong> (<strong>CMD-Mouse1</strong> on MacOS).</p>
-</div>
-<div class="paragraph">
-<p>The data mapper automatically changes the field action from <strong>Map</strong> to <strong>Combine</strong>.</p>
-</div>
+<p>In the <strong>Target</strong> panel, click <span class="image"><img src="images/ConnectToSelectedMapping.png" alt="Connect to selected mapping"></span> next to the field into which you want
+to map all of the source fields.</p>
 <div class="paragraph">
 <p>When you are done you should see a line from each of the source fields to
 the target field.</p>
 </div>
 </li>
 <li>
-<p>In the <strong>Mapping Details</strong> panel, in the <strong>Separator</strong> field, accept or select the
+<p>In the <strong>Mapping Details</strong> panel, in the <strong>Delimiter</strong> field, select the
 character that the data mapper inserts in the target field between the content
 from different source fields. The default is a space.</p>
 </li>
 <li>
 <p>In the <strong>Mapping Details</strong> panel, under <strong>Sources</strong>, ensure that the source
-fields are in the same order as the corresponding content in the
-compound target field.</p>
+fields are in the order in which they are expected to appear in the target field.</p>
 <div class="paragraph">
-<p>If necessary, drag and drop source fields to achieve the same order.
-The data mapper automatically updates the index numbers to reflect the
-new order.</p>
-</div>
-</li>
-<li>
-<p>If you mapped a source field to each part of the compound target field,
-then skip to the next step.</p>
-<div class="paragraph">
-<p>If the target field expects data that is not available to be mapped, then in the
-<strong>Mapping Details</strong> panel, edit the index of each
-source field so that it is the same as the index of the corresponding data
-in the compound target field. The data mapper automatically adds
-padding fields as needed to indicate missing data.</p>
-</div>
-<div class="paragraph">
-<p>If you accidentally create too many padding fields, click the trash
-icon on each extra padding field to delete it.</p>
+<p>If necessary, increase or decrease the index number of a source field to achieve the desired order.</p>
 </div>
 </li>
 <li>
@@ -518,8 +495,8 @@ icon on each extra padding field to delete it.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>In the upper right of the data mapper, click
-<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> and select
+<p>In the toolbar, click
+<span class="image"><img src="images/ShowMappingPreview.png" alt="Show mapping preview"></span> and select
 <strong>Show Mapping Preview</strong> to display a text input field on each source
 field for the currently selected mapping and a read-only result field
 on the target field of the currently selected mapping.</p>
@@ -536,8 +513,7 @@ detects any errors, it displays informative messages at the top of the
 </li>
 <li>
 <p>Hide the preview fields by clicking
-<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> again and selecting
-<strong>Show Mapping Preview</strong>.</p>
+<span class="image"><img src="images/ShowMappingPreview.png" alt="Show mapping preview"></span> again.</p>
 <div class="paragraph">
 <p>If you redisplay the preview fields, any data
 that you entered in them is still there and it
@@ -549,14 +525,13 @@ remains there until you exit the data mapper.</p>
 </li>
 <li>
 <p>To confirm that the mapping is correctly defined, in the upper right, click
-<span class="image"><img src="images/grid.png" alt="Grid"></span> to display the defined mappings.
+<span class="image"><img src="images/GridIcon.png" alt="Grid icon"></span> to display the defined mappings.
 A mapping that combines the values of more than one source field
 into one target field looks like this:
-<span class="image"><img src="images/CombineMapping.png" alt="Combine Fields Mapping"></span>.</p>
+<span class="image"><img src="images/CombineMapping.png" alt="Combine mapping"></span>.</p>
 <div class="paragraph">
 <p>You can also preview mapping results in this view. Click
-<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span>, select
-<strong>Show Mapping Preview</strong>, and enter text as described in the previous step.
+<span class="image"><img src="images/ShowMappingPreview.png" alt="Show mapping preview"></span> and enter text as described in the previous step.
 Preview fields appear for only the selected mapping. Click another
 mapping in the table to view preview fields for it.</p>
 </div>
@@ -568,7 +543,7 @@ mapping in the table to view preview fields for it.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-01-27 13:49:42 UTC
+Last updated 2021-01-29 12:58:26 UTC
 </div>
 </div>
 </body>

@@ -462,18 +462,14 @@ and the separator between parts, such as a space or comma. See
 <div class="title">Procedure</div>
 <ol class="arabic">
 <li>
-<p>In the <strong>Sources</strong> panel, click the field whose content you want to separate.</p>
+<p>In the <strong>Source</strong> panel, navigate to the field that contains the content you want to separate and click
+<span class="image"><img src="images/CreateNewMapping.png" alt="Create new mapping"></span>.</p>
 </li>
 <li>
-<p>In the <strong>Target</strong> panel, click the first field that you want to separate the
-source field data into.</p>
-</li>
-<li>
-<p>In the <strong>Target</strong> panel, for each additional target field that you want
-to contain some of the data from the source field, hover over the field and
-press <strong>CTRL-Mouse1</strong> (<strong>CMD-Mouse1</strong> on MacOS) to select it.</p>
+<p>In the <strong>Target</strong> panel, for each field into which you want to map part of the source field&#8217;s content, navigate to the field and
+click <span class="image"><img src="images/ConnectToSelectedMapping.png" alt="Connect to selected mapping"></span>.</p>
 <div class="paragraph">
-<p>The data mapper automatically changes the field action to <strong>Separate</strong>.</p>
+<p>The data mapper automatically changes the mapping type to <strong>Split</strong>.</p>
 </div>
 <div class="paragraph">
 <p>When you are done selecting target fields, you should see lines from the
@@ -481,8 +477,8 @@ source field to each of the target fields.</p>
 </div>
 </li>
 <li>
-<p>In the <strong>Mapping Details</strong> panel, in the <strong>Separator</strong> field,
-accept or select the character in the source field that indicates
+<p>In the <strong>Mapping Details</strong> panel, in the <strong>Delimiter</strong> field,
+select the character in the source field that indicates
 where to separate the source field values. The default is a space.</p>
 </li>
 <li>
@@ -490,20 +486,7 @@ where to separate the source field values. The default is a space.</p>
 fields are in the same order as the corresponding content in the
 compound source field.</p>
 <div class="paragraph">
-<p>If necessary, drag and drop target fields to achieve the same order.
-The data mapper automatically updates the index numbers to reflect the
-new order.</p>
-</div>
-</li>
-<li>
-<p>If you mapped each part of the compound source field to a target
-field, then skip to the next step.</p>
-<div class="paragraph">
-<p>If the source field contains data that you do not need, then in the
-<strong>Mapping Details</strong> panel, edit the index of each
-target field so that it is the same as the index of the corresponding data
-in the compound source field. The data mapper automatically adds
-padding fields as needed to indicate unwanted data.</p>
+<p>If necessary, increase or decrease the indexes next to a target field to achieve the desired order.</p>
 </div>
 </li>
 <li>
@@ -511,9 +494,8 @@ padding fields as needed to indicate unwanted data.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>In the upper right of the data mapper, click
-<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> and select
-<strong>Show Mapping Preview</strong> to display a text input field on the source
+<p>In the toolbar, click
+<span class="image"><img src="images/ShowMappingPreview.png" alt="Show mapping preview"></span> to display a text input field on the source
 field and read-only result fields on each target field.</p>
 </li>
 <li>
@@ -529,9 +511,7 @@ detects any errors, it displays informative messages at the top of the
 </div>
 </li>
 <li>
-<p>Hide the preview fields by clicking
-<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> again and selecting
-<strong>Show Mapping Preview</strong>.</p>
+<p>Hide the preview fields by clicking <span class="image"><img src="images/ShowMappingPreview.png" alt="Show mapping preview"></span> again.</p>
 <div class="paragraph">
 <p>If you redisplay the preview fields, any data that you entered in them is
 still there and it remains there until you exit the data mapper.</p>
@@ -542,14 +522,13 @@ still there and it remains there until you exit the data mapper.</p>
 </li>
 <li>
 <p>To confirm that the mapping is correctly defined, click
-<span class="image"><img src="images/grid.png" alt="Grid"></span> to display defined mappings.
+<span class="image"><img src="images/GridIcon.png" alt="Grid icon"></span> to display defined mappings.
 A mapping that separates the value of a source field into
 multiple target fields looks like this:
-<span class="image"><img src="images/SeparateMapping.png" alt="Separate Fields Mapping"></span>.</p>
+<span class="image"><img src="images/SeparateMapping.png" alt="Separate mapping"></span>.</p>
 <div class="paragraph">
 <p>You can also preview mapping results in this view. Click
-<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span>, select
-<strong>Show Mapping Preview</strong>, and enter text as described in the previous step.
+<span class="image"><img src="images/ShowMappingPreview.png" alt="Show mapping preview"></span> and enter text as described in the previous step.
 Preview fields appear for only the selected mapping. Click another
 mapping in the table to view preview fields for it.</p>
 </div>
@@ -561,7 +540,7 @@ mapping in the table to view preview fields for it.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-01-27 13:49:42 UTC
+Last updated 2021-01-29 12:58:26 UTC
 </div>
 </div>
 </body>

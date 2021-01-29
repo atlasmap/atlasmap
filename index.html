@@ -446,7 +446,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">The AtlasMap Team</span><br>
 <span id="revnumber">version 2.2.0-SNAPSHOT,</span>
-<span id="revdate">2021-01-27</span>
+<span id="revdate">2021-01-29</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">AtlasMap User Guide</div>
@@ -669,22 +669,50 @@ to import a JSON or XML file that you can map fields from.</p>
 to import a different JSON or XML file that you can map fields to.</p>
 </li>
 <li>
-<p>To map fields, click a source field and then click the target field
-that you want to map it to.</p>
+<p>To map fields:</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>Navigate to a source field and click <span class="image"><img src="images/CreateNewMapping.png" alt="Create new napping"></span>.</p>
+<div class="paragraph">
+<p>The <strong>Mapping Details</strong> panel will slide in from the right.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/MappingDetails.png" alt="Mapping Details"></span></p>
+</div>
+</li>
+<li>
+<p>Either:</p>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>Navigate to a target field and click <span class="image"><img src="images/ConnectToSelectedMapping.png" alt="Connect to the selected mapping"></span> to add it to the
+selected mapping, or</p>
+</li>
+<li>
+<p>Drag and drop a target field on the source field to add the target field to the mapping.</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
 </li>
 <li>
 <p>With a data mapping selected, explore the optional transformations.</p>
 </li>
 <li>
 <p>To preview a data mapping result, click
-<span class="image"><img src="images/EditorSettings.png" alt="Editor Settings"></span>
-and select <strong>Show Mapping Preview</strong>. Enter sample data in source input fields.</p>
+<span class="image"><img src="images/ShowMappingPreview.png" alt="Show Mapping Preview"></span> and enter sample data in source <strong>Mapping preview</strong> fields.</p>
 </li>
 <li>
-<p>To save your work, click
-<span class="image"><img src="images/ExportIcon.png" alt="Export icon"></span> in the menu bar. This
-creates an AtlasMap <code>.adm</code> file in the <code>Downloads</code> directory.
-This file contains the mapping definitions.</p>
+<p>To save your work, click the <strong>AtlasMap</strong> menu and select <strong>Export the current mappings and support files into a catalog (.adm)</strong></p>
+<div class="paragraph">
+<p><span class="image"><img src="images/AtlasMapMenu.png" alt="AtlasMap menu"></span>.</p>
+</div>
+<div class="paragraph">
+<p>Then choose a folder in which to save an AtlasMap <code>.adm</code> file. This file contains the mapping definitions.</p>
+</div>
 </li>
 </ol>
 </div>
@@ -1002,11 +1030,7 @@ After you save the new constant, you can map it to the <strong>Layout</strong> t
 <div class="sect2">
 <h3 id="descriptions-of-atlasmap-icons">2.7. Descriptions of AtlasMap icons</h3>
 <div class="paragraph">
-<p>The following table describes some of the AtlasMap icons. When you are
-familiar with the icons, you can hide mapping lines or data types
-to create a less busy display. To toggle what AtlasMap displays, click
-<span class="image"><img src="images/EditorSettings.png" alt="Editor Settings"></span>
-and select what you want to show or hide.</p>
+<p>The following table describes some of the AtlasMap icons:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1021,27 +1045,27 @@ and select what you want to show or hide.</p>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="images/Solid-Blue-Circle.png" alt="Filled Circle"></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="images/CircleIcon.png" alt="Circle icon"></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Completely mapped field</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="images/Half-Blue-Circle.png" alt="Half Filled Circle"></span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Partially mapped field</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="images/Collection-Icon.png" alt="Collection Icon"></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="images/CollectionIcon.png" alt="Collection icon"></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Collection field</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="images/Solid-Folder-Complex-Type.png" alt="Solid Folder"></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="images/FolderIcon.png" alt="Folder icon"></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Complex type that you can expand</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="images/Lightning-Icon.png" alt="Lightning Bolt"></span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="images/LightningBoltIcon.png" alt="Lightning bolt iicon"></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">There is a transformation that is being applied to this field.</p></td>
 </tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p>There are also several toolbar buttons that allow you to choose what should be displayed, such as data types, sample data previews,
+and mapped or unmapped fields.</p>
+</div>
 </div>
 </div>
 </div>
@@ -1177,7 +1201,7 @@ defines properties for an <code>Order</code> object:</p>
 <p>AtlasMap displays the fields in the <strong>Source</strong> panel:</p>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="images/ImportJSON3.png" alt="Order document"></span>.</p>
+<p><span class="image"><img src="images/ImportJSON.png" alt="Order document"></span>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1274,7 +1298,7 @@ transactions related to pets:</p>
 the fields are expanded to show more detail.</p>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="images/ImportXML2.png" alt="Imported schema for pet transactions"></span></p>
+<p><span class="image"><img src="images/ImportXML.png" alt="Imported schema for pet transactions"></span></p>
 </div>
 </div>
 <div class="sect2">
@@ -1335,25 +1359,25 @@ jar cvf ../Bicycle.jar *</pre>
 </div>
 </li>
 <li>
-<p>In the main tool bar, click
-<span class="image"><img src="images/Import-Data-Shape.png" alt="Import"></span>.</p>
+<p>In the main toolbar, click the <strong>AtlasMap</strong> menu and select <strong>Import a catalog (.adm)</strong>.
+<span class="image"><img src="images/AtlasMapMenu.png" alt="Import"></span>.</p>
 </li>
 <li>
 <p>In the <strong>Open</strong> dialog, navigate to the <code>Bicycle.jar</code> file and click <strong>Open</strong>.</p>
 </li>
 <li>
 <p>At the top of the <strong>Source</strong> panel, click
-<span class="image"><img src="images/PlusBlackBackground.png" alt="+"></span>
+<span class="image"><img src="images/AddJavaClass.png" alt="+"></span>
 to import the fields into the source panel.</p>
 <div class="paragraph">
 <p>To display imported fields in the <strong>Target</strong> panel, you would click
-<span class="image"><img src="images/PlusBlackBackground.png" alt="+"></span>
+<span class="image"><img src="images/AddJavaClass.png" alt="+"></span>
 at the top of the <strong>Target</strong> panel.</p>
 </div>
 </li>
 <li>
-<p>In the <strong>Establish your class…</strong> dialog, in the <strong>Class package name</strong> field,
-enter the class package name of the Java class. For example, in
+<p>In the <strong>Load Java Document From Custom Class</strong> dialog, in the <strong>Custom class name</strong> field,
+select the class package name of the Java class. For example, in
 <code>Bicycle.jar</code> file, the class package name is <code>io.paul.Bicycle</code>.</p>
 </li>
 <li>
@@ -1365,7 +1389,7 @@ panel into which they were imported.</p>
 </ol>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="images/ImportJavaClass5.png" alt="Bicycle jar file"></span></p>
+<p><span class="image"><img src="images/ImportJavaClass.png" alt="Bicycle jar file"></span></p>
 </div>
 </div>
 </div>
@@ -1427,7 +1451,7 @@ you have some background about how to use the data mapper.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Sources</strong> is a list of the data fields that you can map to target fields.</p>
+<p><strong>Source</strong> is a list of the data fields that you can map to target fields.</p>
 </li>
 <li>
 <p><strong>Target</strong> is a list of the data fields that you can map source fields to.</p>
@@ -1443,26 +1467,24 @@ want to map, you can do any of the following:</p>
 <li>
 <p>Search for it.</p>
 <div class="paragraph">
-<p>The <strong>Sources</strong> panel and the <strong>Target</strong> panel each have
-a search field at the top. If the search field is not visible, click
-<span class="image"><img src="images/magnifying-glass.png" alt="Magnifying Glass"></span> at the top
-right of the <strong>Sources</strong> or <strong>Target</strong> panel.</p>
+<p>The <strong>Source</strong> panel and the <strong>Target</strong> panel each have
+a search field at the top. Enter the name of the field you want to map.</p>
 </div>
 </li>
 <li>
-<p>Enter the names of the fields that you want to map.</p>
+<p>Enter the names of the fields that you want to map in the <strong>Mapping Details</strong> panel.</p>
 <div class="paragraph">
-<p>To do this,
-in the upper right of the <strong>Configure Mapper</strong> page, click the plus sign
-to display the <strong>Mapping Details</strong> panel. In the <strong>Sources</strong> section, enter
-the name of the source field. In the <strong>Action</strong> section, accept the
-default <strong>Map</strong>, which maps one field to one other field. Or, select
-<strong>Combine</strong> or <strong>Separate</strong>. In the <strong>Target</strong> section, enter the name of the
+<p>Click <span class="image"><img src="images/AddIcon.png" alt="Add icon"></span> in the toolbar to add a new empty mapping. The <strong>Mapping Details</strong> panel will slide in from the
+right. In the <strong>Sources</strong> section, enter
+the name of the source field. In the <strong>Targets</strong> section, enter the name of the
 field that you want to map to.</p>
 </div>
 </li>
 <li>
 <p>Expand and collapse folders to limit the visible fields.</p>
+<div class="paragraph">
+<p>Once the appropriate field is visible, you can drag it to a currently mapped field in the opposite panel to add it to that mapping.</p>
+</div>
 </li>
 </ul>
 </div>
@@ -1477,24 +1499,24 @@ For example, map the <code>Name</code> field to the <code>CustomerName</code> fi
 <div class="title">Procedure</div>
 <ol class="arabic">
 <li>
-<p>In the <strong>Sources</strong> panel, click the data field that you want to map from.</p>
+<p>In the <strong>Source</strong> panel, navigate to the data field that you want to map from.</p>
 <div class="paragraph">
 <p>You might need to expand a folder to see the data fields that it
 provides.</p>
 </div>
 <div class="paragraph">
 <p>When there are many source fields, you can search for the
-field of interest by clicking the
-<span class="image"><img src="images/magnifying-glass.png" alt="Magnifying Glass"></span> and entering
-the name of the data field in the search field.</p>
+field of interest by entering the field&#8217;s name in the search field at the top of the <strong>Source</strong> panel.</p>
 </div>
 </li>
 <li>
-<p>In the <strong>Target</strong> panel, click the data field that you want to map to.</p>
-<div class="paragraph">
-<p>The data mapper displays a line that connects the two fields that you just
-selected.</p>
-</div>
+<p>Click <span class="image"><img src="images/CreateNewMapping.png" alt="Create new mapping"></span> to add the field as a source of a new mapping.</p>
+</li>
+<li>
+<p>In the <strong>Target</strong> panel, navigate to the data field that you want to map to.</p>
+</li>
+<li>
+<p>Click <span class="image"><img src="images/ConnectToSelectedMapping.png" alt="Connect to selected mapping"></span> to add the field as a target in the selected mapping.</p>
 </li>
 <li>
 <p>Optionally, preview the data mapping result. This is useful when
@@ -1503,9 +1525,7 @@ a type conversion.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>In the upper right of the data mapper, click
-<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> and select
-<strong>Show Mapping Preview</strong> to display a text input field on the source
+<p>In the toolbar, click <span class="image"><img src="images/ShowMappingPreview.png" alt="Show mapping preview"></span> to display a text input field on the source
 field and a read-only result field on the target field.</p>
 </li>
 <li>
@@ -1518,57 +1538,26 @@ the mapping result in the read-only field on the target field.</p>
 in the <strong>Mapping Details</strong> panel.</p>
 </li>
 <li>
-<p>Hide the preview fields by clicking
-<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> again and selecting
-<strong>Show Mapping Preview</strong>.</p>
+<p>Hide the preview fields by again clicking <span class="image"><img src="images/ShowMappingPreview.png" alt="Show mapping preview"></span>.</p>
 </li>
 </ol>
 </div>
 </li>
 <li>
-<p>Optionally, to confirm that the mapping is defined, in the upper right, click
-<span class="image"><img src="images/grid.png" alt="Grid"></span> to display the defined mappings.</p>
+<p>Optionally, to confirm that the mapping is defined, in the upper right, click <span class="image"><img src="images/GridIcon.png" alt="Grid"></span> to display the defined
+mappings in a table.</p>
 <div class="paragraph">
 <p>You can also preview data mapping results in this view.
 If preview fields are not visible,
-click EditorSettings.png[Editor settings] and select
-<strong>Show Mapping Preview</strong>. Enter data as described in the previous step.
+click <span class="image"><img src="images/ShowMappingPreview.png" alt="Show mapping preview"></span> and enter data as described in the previous step.
 In the table of defined mappings, preview fields
 appear for only the selected mapping. To see preview fields for another
 mapping, select it.</p>
 </div>
 <div class="paragraph">
-<p>Click <span class="image"><img src="images/grid.png" alt="Grid"></span> again to display the data field
-panels.</p>
+<p>Click <span class="image"><img src="images/ColumnIcon.png" alt="Column icon"></span> to display the data field
+panels again.</p>
 </div>
-</li>
-<li>
-<p>In the upper right, click <strong>Done</strong> to save the mapping.</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<div class="title">Alternative procedure</div>
-<p>Here is another way to map a single source field to a single target
-field:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>In the <strong>Configure Mapper</strong> page, in the upper right, click the plus sign
-to display the <strong>Mapping Details</strong> panel.</p>
-</li>
-<li>
-<p>In the <strong>Sources</strong> section, enter
-the name of the source field.</p>
-</li>
-<li>
-<p>In the <strong>Action</strong> section, accept the
-default <strong>Map</strong> action.</p>
-</li>
-<li>
-<p>In the <strong>Target</strong> section, enter the name of the
-field that you want to map to and click <strong>Enter</strong>.</p>
 </li>
 </ol>
 </div>
@@ -1669,55 +1658,32 @@ and the separator between parts, such as a space or comma. See
 <div class="title">Procedure</div>
 <ol class="arabic">
 <li>
-<p>In the <strong>Target</strong> panel, click the field into which you want to map more
-than one source field.</p>
+<p>In the <strong>Source</strong> panel, navigate to the first field that
+you want to combine into the target field and click <span class="image"><img src="images/CreateNewMapping.png" alt="Create new mapping"></span>. For each of the other
+fields that you want to combine into the target field, click <span class="image"><img src="images/ConnectToSelectedMapping.png" alt="Connect to selected mapping"></span> next
+to each field.</p>
+<div class="paragraph">
+<p>The data mapper automatically changes the type of mapping to <strong>Concatenate</strong>.</p>
+</div>
 </li>
 <li>
-<p>In the <strong>Sources</strong> panel, if there is a field that contains the fields
-that you want to map to the target field, then click that container field
-to map all contained fields to the target field.</p>
-<div class="paragraph">
-<p>To individually select each source field, click the first field that
-you want to combine into the target field. For each of the other fields
-that you want to combine into the target field, hover over that field, and press
-<strong>CTRL-Mouse1</strong> (<strong>CMD-Mouse1</strong> on MacOS).</p>
-</div>
-<div class="paragraph">
-<p>The data mapper automatically changes the field action from <strong>Map</strong> to <strong>Combine</strong>.</p>
-</div>
+<p>In the <strong>Target</strong> panel, click <span class="image"><img src="images/ConnectToSelectedMapping.png" alt="Connect to selected mapping"></span> next to the field into which you want
+to map all of the source fields.</p>
 <div class="paragraph">
 <p>When you are done you should see a line from each of the source fields to
 the target field.</p>
 </div>
 </li>
 <li>
-<p>In the <strong>Mapping Details</strong> panel, in the <strong>Separator</strong> field, accept or select the
+<p>In the <strong>Mapping Details</strong> panel, in the <strong>Delimiter</strong> field, select the
 character that the data mapper inserts in the target field between the content
 from different source fields. The default is a space.</p>
 </li>
 <li>
 <p>In the <strong>Mapping Details</strong> panel, under <strong>Sources</strong>, ensure that the source
-fields are in the same order as the corresponding content in the
-compound target field.</p>
+fields are in the order in which they are expected to appear in the target field.</p>
 <div class="paragraph">
-<p>If necessary, drag and drop source fields to achieve the same order.
-The data mapper automatically updates the index numbers to reflect the
-new order.</p>
-</div>
-</li>
-<li>
-<p>If you mapped a source field to each part of the compound target field,
-then skip to the next step.</p>
-<div class="paragraph">
-<p>If the target field expects data that is not available to be mapped, then in the
-<strong>Mapping Details</strong> panel, edit the index of each
-source field so that it is the same as the index of the corresponding data
-in the compound target field. The data mapper automatically adds
-padding fields as needed to indicate missing data.</p>
-</div>
-<div class="paragraph">
-<p>If you accidentally create too many padding fields, click the trash
-icon on each extra padding field to delete it.</p>
+<p>If necessary, increase or decrease the index number of a source field to achieve the desired order.</p>
 </div>
 </li>
 <li>
@@ -1725,8 +1691,8 @@ icon on each extra padding field to delete it.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>In the upper right of the data mapper, click
-<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> and select
+<p>In the toolbar, click
+<span class="image"><img src="images/ShowMappingPreview.png" alt="Show mapping preview"></span> and select
 <strong>Show Mapping Preview</strong> to display a text input field on each source
 field for the currently selected mapping and a read-only result field
 on the target field of the currently selected mapping.</p>
@@ -1743,8 +1709,7 @@ detects any errors, it displays informative messages at the top of the
 </li>
 <li>
 <p>Hide the preview fields by clicking
-<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> again and selecting
-<strong>Show Mapping Preview</strong>.</p>
+<span class="image"><img src="images/ShowMappingPreview.png" alt="Show mapping preview"></span> again.</p>
 <div class="paragraph">
 <p>If you redisplay the preview fields, any data
 that you entered in them is still there and it
@@ -1756,14 +1721,13 @@ remains there until you exit the data mapper.</p>
 </li>
 <li>
 <p>To confirm that the mapping is correctly defined, in the upper right, click
-<span class="image"><img src="images/grid.png" alt="Grid"></span> to display the defined mappings.
+<span class="image"><img src="images/GridIcon.png" alt="Grid icon"></span> to display the defined mappings.
 A mapping that combines the values of more than one source field
 into one target field looks like this:
-<span class="image"><img src="images/CombineMapping.png" alt="Combine Fields Mapping"></span>.</p>
+<span class="image"><img src="images/CombineMapping.png" alt="Combine mapping"></span>.</p>
 <div class="paragraph">
 <p>You can also preview mapping results in this view. Click
-<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span>, select
-<strong>Show Mapping Preview</strong>, and enter text as described in the previous step.
+<span class="image"><img src="images/ShowMappingPreview.png" alt="Show mapping preview"></span> and enter text as described in the previous step.
 Preview fields appear for only the selected mapping. Click another
 mapping in the table to view preview fields for it.</p>
 </div>
@@ -1789,18 +1753,14 @@ and the separator between parts, such as a space or comma. See
 <div class="title">Procedure</div>
 <ol class="arabic">
 <li>
-<p>In the <strong>Sources</strong> panel, click the field whose content you want to separate.</p>
+<p>In the <strong>Source</strong> panel, navigate to the field that contains the content you want to separate and click
+<span class="image"><img src="images/CreateNewMapping.png" alt="Create new mapping"></span>.</p>
 </li>
 <li>
-<p>In the <strong>Target</strong> panel, click the first field that you want to separate the
-source field data into.</p>
-</li>
-<li>
-<p>In the <strong>Target</strong> panel, for each additional target field that you want
-to contain some of the data from the source field, hover over the field and
-press <strong>CTRL-Mouse1</strong> (<strong>CMD-Mouse1</strong> on MacOS) to select it.</p>
+<p>In the <strong>Target</strong> panel, for each field into which you want to map part of the source field&#8217;s content, navigate to the field and
+click <span class="image"><img src="images/ConnectToSelectedMapping.png" alt="Connect to selected mapping"></span>.</p>
 <div class="paragraph">
-<p>The data mapper automatically changes the field action to <strong>Separate</strong>.</p>
+<p>The data mapper automatically changes the mapping type to <strong>Split</strong>.</p>
 </div>
 <div class="paragraph">
 <p>When you are done selecting target fields, you should see lines from the
@@ -1808,8 +1768,8 @@ source field to each of the target fields.</p>
 </div>
 </li>
 <li>
-<p>In the <strong>Mapping Details</strong> panel, in the <strong>Separator</strong> field,
-accept or select the character in the source field that indicates
+<p>In the <strong>Mapping Details</strong> panel, in the <strong>Delimiter</strong> field,
+select the character in the source field that indicates
 where to separate the source field values. The default is a space.</p>
 </li>
 <li>
@@ -1817,20 +1777,7 @@ where to separate the source field values. The default is a space.</p>
 fields are in the same order as the corresponding content in the
 compound source field.</p>
 <div class="paragraph">
-<p>If necessary, drag and drop target fields to achieve the same order.
-The data mapper automatically updates the index numbers to reflect the
-new order.</p>
-</div>
-</li>
-<li>
-<p>If you mapped each part of the compound source field to a target
-field, then skip to the next step.</p>
-<div class="paragraph">
-<p>If the source field contains data that you do not need, then in the
-<strong>Mapping Details</strong> panel, edit the index of each
-target field so that it is the same as the index of the corresponding data
-in the compound source field. The data mapper automatically adds
-padding fields as needed to indicate unwanted data.</p>
+<p>If necessary, increase or decrease the indexes next to a target field to achieve the desired order.</p>
 </div>
 </li>
 <li>
@@ -1838,9 +1785,8 @@ padding fields as needed to indicate unwanted data.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>In the upper right of the data mapper, click
-<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> and select
-<strong>Show Mapping Preview</strong> to display a text input field on the source
+<p>In the toolbar, click
+<span class="image"><img src="images/ShowMappingPreview.png" alt="Show mapping preview"></span> to display a text input field on the source
 field and read-only result fields on each target field.</p>
 </li>
 <li>
@@ -1856,9 +1802,7 @@ detects any errors, it displays informative messages at the top of the
 </div>
 </li>
 <li>
-<p>Hide the preview fields by clicking
-<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> again and selecting
-<strong>Show Mapping Preview</strong>.</p>
+<p>Hide the preview fields by clicking <span class="image"><img src="images/ShowMappingPreview.png" alt="Show mapping preview"></span> again.</p>
 <div class="paragraph">
 <p>If you redisplay the preview fields, any data that you entered in them is
 still there and it remains there until you exit the data mapper.</p>
@@ -1869,14 +1813,13 @@ still there and it remains there until you exit the data mapper.</p>
 </li>
 <li>
 <p>To confirm that the mapping is correctly defined, click
-<span class="image"><img src="images/grid.png" alt="Grid"></span> to display defined mappings.
+<span class="image"><img src="images/GridIcon.png" alt="Grid icon"></span> to display defined mappings.
 A mapping that separates the value of a source field into
 multiple target fields looks like this:
-<span class="image"><img src="images/SeparateMapping.png" alt="Separate Fields Mapping"></span>.</p>
+<span class="image"><img src="images/SeparateMapping.png" alt="Separate mapping"></span>.</p>
 <div class="paragraph">
 <p>You can also preview mapping results in this view. Click
-<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span>, select
-<strong>Show Mapping Preview</strong>, and enter text as described in the previous step.
+<span class="image"><img src="images/ShowMappingPreview.png" alt="Show mapping preview"></span> and enter text as described in the previous step.
 Preview fields appear for only the selected mapping. Click another
 mapping in the table to view preview fields for it.</p>
 </div>
@@ -1892,7 +1835,7 @@ mapping in the table to view preview fields for it.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><span class="image"><img src="images/Collection-Icon.png" alt="Collection icon"></span>
+<p><span class="image"><img src="images/CollectionIcon.png" alt="Collection icon"></span>
 indicates a collection. If the collection contains one primitive type,
 you can map directly from or to that collection. If the collection
 contains two or more different types, the data mapper
@@ -1900,7 +1843,7 @@ displays the collection’s child fields and you can map to or from the
 collection’s fields.</p>
 </li>
 <li>
-<p><span class="image"><img src="images/Solid-Folder-Complex-Type.png" alt="Folder icon"></span> indicates an
+<p><span class="image"><img src="images/FolderIcon.png" alt="Folder icon"></span> indicates an
 expandable container that is a complex type. A complex type contains
 multiple fields of different types. A field in a complex type can be a
 type that is a collection, such as an array. You cannot map a complex
@@ -1910,9 +1853,7 @@ type container itself. You can map only the fields that are in the complex type.
 </div>
 <div class="paragraph">
 <p>To toggle the display of data types, such as <code><strong>(COMPLEX)</strong></code>,
-<code><strong>STRING</strong></code>, <code><strong>INTEGER</strong></code>, in the upper right of the data mapper, click
-<span class="image"><img src="images/EditorSettings.png" alt="settings"></span> and click
-<strong>Show Types</strong>.</p>
+<code><strong>STRING</strong></code>, <code><strong>INTEGER</strong></code>, click <span class="image"><img src="images/ShowTypesIcon.png" alt="Show types icon"></span> in the toolbar.</p>
 </div>
 <div class="paragraph">
 <p>The following table shows the default behavior when mapping
@@ -2044,7 +1985,7 @@ or a separation mapping.</p>
 </li>
 <li>
 <p>In the <strong>Mapping Details</strong> panel, under <strong>Sources</strong> or under <strong>Targets</strong>,
-in the box for the field that you want to transform, click the arrow to the left of the
+in the box for the field that you want to transform, click <span class="image"><img src="images/LightningBoltIcon.png" alt="Lightning bolt icon"></span> to the left of the
 trash can icon.</p>
 <div class="paragraph">
 <p><span class="image"><img src="images/Trans1.png" alt="Mapping details transformation button"></span></p>
@@ -2120,8 +2061,7 @@ to a mapping.</p>
 <ol class="arabic">
 <li>
 <p>If data types are not already visible, display them by clicking
-<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> and then
-<strong>Show Types</strong>.</p>
+<span class="image"><img src="images/ShowTypesIcon.png" alt="Show types icon"></span>.</p>
 <div class="paragraph">
 <p>While this is not a requirement for specifying a condition, it is
 helpful to see the data types.</p>
@@ -2161,18 +2101,11 @@ expression that you want the data mapper to apply to the
 mapping. Details about supported conditional expressions follow
 this procedure.</p>
 <div class="paragraph">
-<p>As you specify the expression, you can:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Enter <code>@</code> and start to enter the name of a field.
+<p>As you specify the expression, you can enter <code>@</code> and start to enter the name of a field.
 The data mapper displays a list of the fields that match
 what you entered. Select the field that you want to
 specify in the expression.</p>
-</li>
-<li>
-<p>Drag a field from the mapping canvas into the expression input field.</p>
+</div>
 <div class="paragraph">
 <p>When you add a field name to the expression, the data mapper adds
 that field to the mapping. For example, consider this conditional
@@ -2180,6 +2113,9 @@ expression:</p>
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="images/second-conditional-mapping-expression.png" alt="if(ISEMPTY(lastName)" width="firstName" height="orderId + phone)"></span></p>
+</div>
+</li>
+</ol>
 </div>
 <div class="paragraph">
 <p>During execution, if the data mapper determines that the <code>lastName</code>
@@ -2194,26 +2130,26 @@ you most likely want the data mapper to simply perform the
 mapping and not map some other value into the target.)</p>
 </div>
 <div class="paragraph">
-<p>For this example, after you complete entering the expression,
+<p>+
+For this example, after you complete entering the expression,
 the data mapping is:</p>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="images/second-conditional-mapping.png" alt="lastName" width="firstName" height="orderId"></span></p>
-</div>
-</li>
-</ul>
+<p>+
+<span class="image"><img src="images/second-conditional-mapping.png" alt="lastName firstName orderId phone are mapped to customerName"></span></p>
 </div>
 <div class="paragraph">
-<p>In the conditional expression, if you remove a field name that is in
+<p>+
+In the conditional expression, if you remove a field name that is in
 the mapping that the expression applies to, the data mapper removes that
 field from the mapping. In other words, every field name in the mapping
 must be in the conditional expression.</p>
 </div>
-</li>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
 <p>If mapping preview fields are not already visible, display them
-by clicking <span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> and then
-<strong>Show Mapping Preview</strong>.</p>
+by clicking <span class="image"><img src="images/ShowMappingPreview.png" alt="Show mapping preview"></span>.</p>
 </li>
 <li>
 <p>Enter sample data in the source preview input field(s)
@@ -2222,24 +2158,8 @@ get(s) the correct value.</p>
 </li>
 <li>
 <p>Optionally, apply transformations to one or more source or target fields
-that are in the mapping:</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>In the <strong>Mapping Details</strong> panel, find the field that you want to apply
-a transformation to.</p>
-</li>
-<li>
-<p>Just below it, click <strong>Add Transformation</strong>.</p>
-</li>
-<li>
-<p>Click the transformation that you want the data mapper to perform.</p>
-</li>
-<li>
-<p>If needed, specify input parameters.</p>
-</li>
-</ol>
-</div>
+in the selected mapping by clicking <span class="image"><img src="images/LightningBoltIcon.png" alt="Lightning bolt icon"></span> next to each field to which you want to apply a
+transformation and then selecting the desired transformation from the pull-down menu.</p>
 <div class="paragraph">
 <p>For example, in the same mapping presented in this procedure, in the
 <strong>Mapping Details</strong> panel, you could apply the <code>Uppercase</code>
@@ -2409,13 +2329,11 @@ correct mappings are in place.</p>
 <div class="title">Procedure</div>
 <ol class="arabic">
 <li>
-<p>In the upper right, click
-<span class="image"><img src="images/grid.png" alt="grid" title="Grid"></span> to display a list of the
-defined mappings.</p>
+<p>In the upper right, click <span class="image"><img src="images/GridIcon.png" alt="Grid icon"></span> to display a list of the defined mappings.</p>
 </li>
 <li>
 <p>To dismiss the list of mappings and redisplay the source and
-target fields, click <span class="image"><img src="images/grid.png" alt="grid" title="Grid"></span> again.</p>
+target fields, click <span class="image"><img src="images/ColumnIcon.png" alt="Column icon"></span> again.</p>
 </li>
 </ol>
 </div>
@@ -2944,10 +2862,9 @@ them to an AtlasMap <code>.adm</code> catalog file:</p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>In the AtlasMap top tool bar, click
-<span class="image"><img src="images/ExportIcon.png" alt="Export"></span>.</p>
+<p>Click the <strong>AtlasMap</strong> menu and select <strong>Export the current mappings and support files into a catalog (.adm)</strong></p>
 <div class="paragraph">
-<p>This captures your workspace in a <code>.adm</code> catalog file.</p>
+<p><span class="image"><img src="images/AtlasMapMenu.png" alt="AtlasMap menu"></span>.</p>
 </div>
 </li>
 <li>
@@ -2956,27 +2873,14 @@ a name for the exported <code>.adm</code> file. The default name is <code>atlasm
 </li>
 <li>
 <p>Click <strong>OK</strong>.</p>
+<div class="paragraph">
+<p>The catalog will be saved in your <strong>Downloads</strong> folder.</p>
+</div>
+</li>
+<li>
+<p>Note, you can later import the .adm file by using the <strong>AtlasMap</strong> menu.</p>
 </li>
 </ol>
-</div>
-<div class="paragraph">
-<p>AtlasMap places the exported file in the <code>Downloads</code> directory.</p>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-To set AtlasMap to the state at which you exported data mappings,
-import a <code>.adm</code> catalog file by clicking
-<span class="image"><img src="images/Import-Data-Shape.png" alt="Import"></span>
-in the AtlasMap top tool bar. Navigate to the <code>.adm</code> file
-and click <strong>Open</strong>.
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
@@ -3001,14 +2905,13 @@ canvas by clicking the trash icon, as in the following image:</p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>In the AtlasMap top menu bar, click
-<span class="image"><img src="images/EditorSettings.png" alt="Settings"></span>.</p>
+<p>Click the <strong>AtlasMap</strong> menu.</p>
 </li>
 <li>
-<p>In the popup menu, click <strong>Reset All</strong>.</p>
+<p>In the pop-up menu, select <strong>Reset all mappings and clear all imported documents</strong>.</p>
 </li>
 <li>
-<p>In the confirmation dialog, click <strong>Reset</strong>.</p>
+<p>In the confirmation dialog, click <strong>Confirm</strong>.</p>
 </li>
 </ol>
 </div>
@@ -3060,7 +2963,7 @@ document payload.</p>
 <div id="footer">
 <div id="footer-text">
 Version 2.2.0-SNAPSHOT<br>
-Last updated 2021-01-27 13:49:42 UTC
+Last updated 2021-01-29 12:58:26 UTC
 </div>
 </div>
 </body>

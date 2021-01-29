@@ -488,8 +488,7 @@ to a mapping.</p>
 <ol class="arabic">
 <li>
 <p>If data types are not already visible, display them by clicking
-<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> and then
-<strong>Show Types</strong>.</p>
+<span class="image"><img src="images/ShowTypesIcon.png" alt="Show types icon"></span>.</p>
 <div class="paragraph">
 <p>While this is not a requirement for specifying a condition, it is
 helpful to see the data types.</p>
@@ -529,18 +528,11 @@ expression that you want the data mapper to apply to the
 mapping. Details about supported conditional expressions follow
 this procedure.</p>
 <div class="paragraph">
-<p>As you specify the expression, you can:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Enter <code>@</code> and start to enter the name of a field.
+<p>As you specify the expression, you can enter <code>@</code> and start to enter the name of a field.
 The data mapper displays a list of the fields that match
 what you entered. Select the field that you want to
 specify in the expression.</p>
-</li>
-<li>
-<p>Drag a field from the mapping canvas into the expression input field.</p>
+</div>
 <div class="paragraph">
 <p>When you add a field name to the expression, the data mapper adds
 that field to the mapping. For example, consider this conditional
@@ -548,6 +540,9 @@ expression:</p>
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="images/second-conditional-mapping-expression.png" alt="if(ISEMPTY(lastName)" width="firstName" height="orderId + phone)"></span></p>
+</div>
+</li>
+</ol>
 </div>
 <div class="paragraph">
 <p>During execution, if the data mapper determines that the <code>lastName</code>
@@ -562,26 +557,26 @@ you most likely want the data mapper to simply perform the
 mapping and not map some other value into the target.)</p>
 </div>
 <div class="paragraph">
-<p>For this example, after you complete entering the expression,
+<p>+
+For this example, after you complete entering the expression,
 the data mapping is:</p>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="images/second-conditional-mapping.png" alt="lastName" width="firstName" height="orderId"></span></p>
-</div>
-</li>
-</ul>
+<p>+
+<span class="image"><img src="images/second-conditional-mapping.png" alt="lastName firstName orderId phone are mapped to customerName"></span></p>
 </div>
 <div class="paragraph">
-<p>In the conditional expression, if you remove a field name that is in
+<p>+
+In the conditional expression, if you remove a field name that is in
 the mapping that the expression applies to, the data mapper removes that
 field from the mapping. In other words, every field name in the mapping
 must be in the conditional expression.</p>
 </div>
-</li>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
 <p>If mapping preview fields are not already visible, display them
-by clicking <span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> and then
-<strong>Show Mapping Preview</strong>.</p>
+by clicking <span class="image"><img src="images/ShowMappingPreview.png" alt="Show mapping preview"></span>.</p>
 </li>
 <li>
 <p>Enter sample data in the source preview input field(s)
@@ -590,24 +585,8 @@ get(s) the correct value.</p>
 </li>
 <li>
 <p>Optionally, apply transformations to one or more source or target fields
-that are in the mapping:</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>In the <strong>Mapping Details</strong> panel, find the field that you want to apply
-a transformation to.</p>
-</li>
-<li>
-<p>Just below it, click <strong>Add Transformation</strong>.</p>
-</li>
-<li>
-<p>Click the transformation that you want the data mapper to perform.</p>
-</li>
-<li>
-<p>If needed, specify input parameters.</p>
-</li>
-</ol>
-</div>
+in the selected mapping by clicking <span class="image"><img src="images/LightningBoltIcon.png" alt="Lightning bolt icon"></span> next to each field to which you want to apply a
+transformation and then selecting the desired transformation from the pull-down menu.</p>
 <div class="paragraph">
 <p>For example, in the same mapping presented in this procedure, in the
 <strong>Mapping Details</strong> panel, you could apply the <code>Uppercase</code>
@@ -766,7 +745,7 @@ Equal</p></td>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-01-27 13:49:42 UTC
+Last updated 2021-01-29 12:58:26 UTC
 </div>
 </div>
 </body>
