@@ -98,7 +98,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 <span class="fc" id="L98">        CsvInspectionResponse response = new CsvInspectionResponse();</span>
         try {
 <span class="fc" id="L100">            CsvConfig csvConfig = new CsvConfig(format);</span>
-<span class="pc bpc" id="L101" title="1 of 2 branches missed.">            if (delimiter != null) {</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">            if (delimiter != null) {</span>
 <span class="fc" id="L102">                csvConfig.setDelimiter(delimiter.charAt(0));</span>
             }
 <span class="fc" id="L104">            csvConfig.setFirstRecordAsHeader(firstRecordAsHeader);</span>
