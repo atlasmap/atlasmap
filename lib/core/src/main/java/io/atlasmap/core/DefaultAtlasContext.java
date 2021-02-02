@@ -580,6 +580,10 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                     AtlasUtil.addAudit(session, targetField.getDocId(),
                             "Failed to populate target field: " + e.getMessage(),
                             targetField.getPath(), AuditStatus.ERROR, null);
+                    if (LOG.isDebugEnabled()) {
+                        LOG.error(String.format("populateTargetField() failed for %s:%s",
+                                targetField.getDocId(), targetField.getPath()), e);
+                    }
                     return;
                 }
                 Field processed = applyFieldActions(session, session.head().getTargetField());
@@ -590,6 +594,10 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                     AtlasUtil.addAudit(session, targetField.getDocId(),
                             "Failed to write field value into target document: " + e.getMessage(),
                             targetField.getPath(), AuditStatus.ERROR, null);
+                    if (LOG.isDebugEnabled()) {
+                        LOG.error(String.format("writeTargetValue()() failed for %s:%s",
+                                targetField.getDocId(), targetField.getPath()), e);
+                    }
                     return;
                 }
             }
