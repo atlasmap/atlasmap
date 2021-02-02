@@ -296,12 +296,10 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         FieldType type = jsonField.getFieldType();
         Object value = jsonField.getValue();
         JsonNode valueNode = null;
-        if (FieldType.STRING.equals(type)) {
-            if (value != null) {
-                valueNode = rootNode.textNode(String.valueOf(value));
-            } else {
-                valueNode = rootNode.nullNode();
-            }
+        if (value == null) {
+            valueNode = rootNode.nullNode();
+        } else if (FieldType.STRING.equals(type)) {
+            valueNode = rootNode.textNode(String.valueOf(value));
         } else if (FieldType.CHAR.equals(type)) {
             valueNode = rootNode.textNode(Character.toString((char) value));
         } else if (FieldType.BOOLEAN.equals(type)) {
