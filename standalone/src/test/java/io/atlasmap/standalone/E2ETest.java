@@ -106,6 +106,9 @@ public class E2ETest {
         WebElement confirmBtn = driver.findElement(By.xpath("//button[@data-testid='confirmation-dialog-confirm-button']"));
         confirmBtn.click();
         waitForLoad.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//article[@aria-label='JSONSchemaSource']")));
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e1) { }
 
         // Check custom action param
         WebElement orderBtn = driver.findElement(By.xpath("//button[@id='sources-field-atlas:json:JSONSchemaSource:source:/order-toggle']"));
