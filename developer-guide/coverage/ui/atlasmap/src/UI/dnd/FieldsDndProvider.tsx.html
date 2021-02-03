@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">38.46% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>12/30</span>
+                <span class='fraction'>10/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.67% </span>
+                <span class="strong">12.5% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/12</span>
+                <span class='fraction'>1/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">54.55% </span>
+                <span class="strong">47.62% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>12/22</span>
+                <span class='fraction'>10/21</span>
             </div>
         
             
@@ -117,16 +117,7 @@
 <a name='L59'></a><a href='#L59'>59</a>
 <a name='L60'></a><a href='#L60'>60</a>
 <a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L62'></a><a href='#L62'>62</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -142,15 +133,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -173,10 +159,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -209,22 +191,17 @@ import { IDragAndDropField } from "./models";
 &nbsp;
 const probablyTouch =
   window.matchMedia &amp;&amp;
-<span class="branch-1 cbranch-no" title="branch not covered" >  window.matchMedia("(pointer: none)").matches </span>&amp;&amp;
-<span class="branch-2 cbranch-no" title="branch not covered" >  window.matchMedia("(hover: none)").matches;</span>
-const maybeTouch =
-  window.matchMedia &amp;&amp;
-  (<span class="branch-1 cbranch-no" title="branch not covered" >window.matchMedia("(pointer: coarse)").matches </span>||
-<span class="branch-2 cbranch-no" title="branch not covered" >    window.matchMedia("(hover: none)").matches)</span>; // iOS is triggering this check, probably because it supports the Apple Pencil
+  (<span class="branch-1 cbranch-no" title="branch not covered" >window.matchMedia("(pointer: none)").matches </span>||
+<span class="branch-2 cbranch-no" title="branch not covered" >    window.matchMedia("(pointer: coarse)").matches)</span> &amp;&amp;
+<span class="branch-3 cbranch-no" title="branch not covered" >  window.matchMedia("(hover: none)").matches;</span>
 &nbsp;
-const TouchOnlyProvider: FunctionComponent = <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >children </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
-  &lt;DndProvider backend={TouchBackend}&gt;{children}&lt;/DndProvider&gt;
-);
-&nbsp;
-const TouchAndPointerProvider: FunctionComponent = <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >children </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
-  &lt;DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}&gt;
-    {children}
-  &lt;/DndProvider&gt;
-);
+const TouchAndPointerProvider: FunctionComponent = <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >children </span>}) =&gt; {
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    &lt;DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}&gt;
+      {children}
+    &lt;/DndProvider&gt;
+  );
+};
 &nbsp;
 const MouseOnlyProvider: FunctionComponent = <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >children </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;DndProvider backend={Html5Backend}&gt;{children}&lt;/DndProvider&gt;
@@ -242,11 +219,7 @@ export const FieldsDndProvider: FunctionComponent = <span class="fstat-no" title
   const getHoveredTarget = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >h</span>overedTarget.</span>current;</span>
   const setHoveredTarget = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(t</span>arget: IDragAndDropField | null) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >    (hoveredTarget.current = target);</span>
-  const Provider = <span class="cstat-no" title="statement not covered" >probablyTouch</span>
-    ? TouchOnlyProvider
-    : maybeTouch
-    ? TouchAndPointerProvider
-    : MouseOnlyProvider;
+  const Provider = <span class="cstat-no" title="statement not covered" >probablyTouch ? TouchAndPointerProvider : MouseOnlyProvider;</span>
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Provider&gt;
       &lt;FieldsDndContext.Provider value={{ getHoveredTarget, setHoveredTarget }}&gt;
@@ -273,7 +246,7 @@ export function <span class="fstat-no" title="function not covered" >useFieldsDn
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Feb 03 2021 06:36:05 GMT+0000 (Coordinated Universal Time)
+                at Wed Feb 03 2021 11:36:21 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
