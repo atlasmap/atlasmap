@@ -267,7 +267,7 @@ export function createMapping(source: Field | undefined, target?: Field): void {
   if (target) {
     if (
       !cfg.mappings?.activeMapping &&
-      (source!.partOfMapping || target.partOfMapping)
+      (source?.partOfMapping || target.partOfMapping)
     ) {
       cfg.errorService.addError(
         new ErrorInfo({
