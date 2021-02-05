@@ -6,6 +6,7 @@ import {
   SelectOptionObject,
 } from "@patternfly/react-core";
 import { StyleSheet, css } from "@patternfly/react-styles";
+import { useToggle } from "./useToggle";
 
 const styles = StyleSheet.create({
   document: {
@@ -27,7 +28,6 @@ export interface IExpressionFieldSearchProps {
   insertSelectedField: (index: number) => void;
   mappedFieldCandidates: string[][];
 }
-let mouseOverTimeOut: NodeJS.Timeout | null = null;
 let selectValue = "";
 
 export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProps> = ({
@@ -36,9 +36,19 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
   insertSelectedField,
   mappedFieldCandidates,
 }) => {
+  function onToggleFieldSearch(toggled: boolean): any {
+    if (!toggled) {
+      mappedFieldCandidates = [];
+      clearSearchMode(true);
+      candidateSrcElement = null;
+      candidateIndex = 0;
+    }
+  }
+
   const id = `expr-field-search-${selectValue}`;
   let candidateIndex = 0;
   let candidateSrcElement: any;
+  const { state, toggle, toggleOff } = useToggle(true, onToggleFieldSearch);
 
   /**
    * Track a candidate selection from either a mouse hover or arrow
@@ -106,20 +116,6 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
     }
   }
 
-  function onMouseEnter(_event: any): void {
-    if (mouseOverTimeOut) {
-      clearTimeout(mouseOverTimeOut);
-    }
-  }
-
-  function onMouseLeave(_event: any): void {
-    // mouseOverTimeOut = setTimeout(() => {
-    clearSearchMode(true);
-    candidateSrcElement = null;
-    candidateIndex = 0;
-    // }, 750);
-  }
-
   function selectionChanged(
     _event: any,
     value: string | SelectOptionObject,
@@ -130,6 +126,8 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
     if (fieldIndex >= 0) {
       insertSelectedField(fieldIndex);
     }
+    onToggleFieldSearch(false);
+    toggleOff();
   }
 
   function createSelectOption(selectField: string[], idx: number): any {
@@ -164,14 +162,12 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
       data-testid={"expression-field-search"}
     >
       <Select
-        isExpanded={true}
+        onToggle={toggle}
+        isExpanded={state}
         value={selectValue}
         id={id}
         onKeyDown={onKeyDown}
         onSelect={selectionChanged}
-        onToggle={() => void 0}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
         data-testid={id}
       >
         {mappedFieldCandidates.map((s, idx: number) =>
