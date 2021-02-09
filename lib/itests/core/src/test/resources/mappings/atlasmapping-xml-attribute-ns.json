@@ -1,0 +1,83 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.xml.v2.XmlDataSource",
+      "id" : "po-example-schema-f81424a0-8871-4483-abaf-059cc432ea78",
+      "name" : "po-example-schema",
+      "description" : "Source document po-example-schema type: XSD",
+      "uri" : "atlas:xml:po-example-schema-f81424a0-8871-4483-abaf-059cc432ea78",
+      "dataSourceType" : "SOURCE",
+      "xmlNamespaces" : {
+        "xmlNamespace" : [ {
+          "alias" : "tns",
+          "uri" : "http://tempuri.org/po.xsd"
+        } ]
+      }
+    }, {
+      "jsonType" : "io.atlasmap.xml.v2.XmlDataSource",
+      "id" : "po-example-schema-b12bc688-7bf3-4626-97a2-d8c3981ecd3a",
+      "name" : "po-example-schema",
+      "description" : "Target document po-example-schema type: XSD",
+      "uri" : "atlas:xml:po-example-schema-b12bc688-7bf3-4626-97a2-d8c3981ecd3a",
+      "dataSourceType" : "TARGET",
+      "xmlNamespaces" : {
+        "xmlNamespace" : [ {
+          "alias" : "tns",
+          "uri" : "http://tempuri.org/po.xsd"
+        } ]
+      }
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "po-example-schema-f81424a0-8871-4483-abaf-059cc432ea78",
+          "path" : "/tns:purchaseOrder/@tns:orderDate",
+          "fieldType" : "STRING",
+          "name" : "orderDate",
+          "attribute" : true
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "po-example-schema-b12bc688-7bf3-4626-97a2-d8c3981ecd3a",
+          "path" : "/tns:purchaseOrder/tns:comment",
+          "fieldType" : "STRING",
+          "name" : "comment",
+          "attribute" : false
+        } ],
+        "id" : "mapping.598407"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "po-example-schema-f81424a0-8871-4483-abaf-059cc432ea78",
+          "path" : "/tns:purchaseOrder/tns:comment",
+          "fieldType" : "STRING",
+          "name" : "comment",
+          "attribute" : false
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "po-example-schema-b12bc688-7bf3-4626-97a2-d8c3981ecd3a",
+          "path" : "/tns:purchaseOrder/@tns:orderDate",
+          "fieldType" : "STRING",
+          "name" : "orderDate",
+          "attribute" : true
+        } ],
+        "id" : "mapping.598408"
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "constants" : {
+      "constant" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "UI.0"
+  }
+}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ns1:purchaseOrder xmlns:ns1="http://tempuri.org/po.xsd" ns1:orderDate="1985-05-02">
+  <ns1:comment>1985-05-02</ns1:comment>
+</ns1:purchaseOrder>

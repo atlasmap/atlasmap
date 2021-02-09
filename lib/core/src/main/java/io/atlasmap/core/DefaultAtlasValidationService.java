@@ -144,6 +144,9 @@ public class DefaultAtlasValidationService implements AtlasValidationService {
 
     @Override
     public List<Validation> validateMapping(AtlasMapping mapping) {
+        if (mapping == null) {
+            throw new IllegalArgumentException("Mapping definition must not be null");
+        }
         List<Validation> validations = new ArrayList<>();
         Validators.MAPPING_NAME.get().validate(mapping.getName(), validations, null);
 
