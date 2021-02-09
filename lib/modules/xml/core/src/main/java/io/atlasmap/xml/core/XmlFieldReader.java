@@ -119,7 +119,7 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
                 fields.add(group);
             } else {
                 XmlField xmlField = AtlasXmlModelFactory.cloneField((XmlField)field, true);
-                copyValue(session, segments.get(depth - 1), node, xmlField);
+                copyValue(session, xmlNamespaces, segments.get(depth - 1), node, xmlField);
                 xmlField.setIndex(null); //reset index for subfields
                 fields.add(xmlField);
             }
@@ -223,7 +223,7 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
                 if (child instanceof FieldGroup) {
                     populateChildFields(session, xmlNamespaces, children.get(0), (FieldGroup)child, childPath);
                 } else {
-                    copyValue(session, childPath.getLastSegment(), children.get(0), (XmlField)child);
+                    copyValue(session, xmlNamespaces, childPath.getLastSegment(), children.get(0), (XmlField)child);
                 }
                 newChildren.add(child);
             }
@@ -248,22 +248,32 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
             } else {
                 XmlField itemField = (XmlField) AtlasXmlModelFactory.cloneField((XmlField)field, false);
                 itemField.setPath(itemPath.toString());
-                copyValue(session, itemPath.getLastSegment(), elements.get(i), itemField);
+                copyValue(session, xmlNamespaces, itemPath.getLastSegment(), elements.get(i), itemField);
                 group.getField().add(itemField);
             }
         }
         return group;
     }
 
-    private void copyValue(AtlasInternalSession session, XmlSegmentContext sc, Element node, XmlField xmlField) {
+    private void copyValue(AtlasInternalSession session, Optional<XmlNamespaces> xmlNamespaces,
+            XmlSegmentContext sc, Element node, XmlField xmlField) {
         if (xmlField.getFieldType() == null) {
             xmlField.setFieldType(FieldType.STRING);
         }
 
         String value;
         if (sc.isAttribute()) {
-            String attributeName = sc.getQName();
-            value = node.getAttribute(attributeName);
+            if (sc.getNamespace() != null && !sc.getNamespace().isEmpty()) {
+                if (getNamespace(xmlNamespaces, sc.getNamespace()).isPresent()) {
+                    value = node.getAttributeNS(
+                        getNamespace(xmlNamespaces, sc.getNamespace()).get(), sc.getName());
+                } else {
+                    String attributeName = sc.getQName();
+                    value = node.getAttribute(attributeName);
+                }
+            } else {
+                value = node.getAttribute(sc.getName());
+            }
         } else {
             value = node.getTextContent();
         }

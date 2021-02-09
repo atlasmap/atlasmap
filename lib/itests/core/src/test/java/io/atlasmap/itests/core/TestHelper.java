@@ -15,6 +15,10 @@
  */
 package io.atlasmap.itests.core;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.v2.Audit;
 
@@ -28,6 +32,17 @@ public class TestHelper {
             buf.append(", message=");
             buf.append(a.getMessage());
             buf.append("], ");
+        }
+        return buf.toString();
+    }
+
+    public static String readStringFromFile(String name) throws Exception {
+        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(name);
+        BufferedReader r = new BufferedReader(new InputStreamReader(in));
+        StringBuilder buf = new StringBuilder();
+        String line;
+        while((line = r.readLine()) != null) {
+            buf.append(line).append('\n');
         }
         return buf.toString();
     }
