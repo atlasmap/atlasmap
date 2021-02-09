@@ -58,7 +58,7 @@ public class DfdlCsvTest {
         tc.setPhoneNumber("333-333-3333");
         javaSource.getContactList().add(tc);
         session.setSourceDocument("java-source", javaSource);
-        String csvSource = readStringFromFile("atlas-dfdl-csv-simple.csv");
+        String csvSource = TestHelper.readStringFromFile("atlas-dfdl-csv-simple.csv");
         session.setSourceDocument("dfdl-csv-source", csvSource);
 
         context.process(session);
@@ -72,17 +72,7 @@ public class DfdlCsvTest {
         assertEquals("l3r3", javaTarget.getContactList().get(2).getPhoneNumber());
         Object dct = session.getTargetDocument("dfdl-csv-target");
         String dfdlCsvTarget = String.class.cast(dct);
-        assertEquals(readStringFromFile("data/dfdl-csv-target.csv"), dfdlCsvTarget);
+        assertEquals(TestHelper.readStringFromFile("data/dfdl-csv-target.csv"), dfdlCsvTarget);
     }
 
-    private String readStringFromFile(String name) throws Exception {
-        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(name);
-        BufferedReader r = new BufferedReader(new InputStreamReader(in));
-        StringBuilder buf = new StringBuilder();
-        String line;
-        while((line = r.readLine()) != null) {
-            buf.append(line).append('\n');
-        }
-        return buf.toString();
-    }
 }
