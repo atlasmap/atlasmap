@@ -13,7 +13,6 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-
 import { DocumentType } from '../common/config.types';
 import { DocumentDefinition } from './document-definition.model';
 
@@ -250,7 +249,13 @@ export class Field {
     if (includePath) {
       fieldPath = this.path;
     } else {
-      if (this.path.indexOf('@') !== -1) {
+      const pathComps = this.path.split(this.docDef.pathSeparator);
+      // Check for a leaf path attribute field starting with '@'
+      if (
+        this.isAttribute &&
+        pathComps.length > 0 &&
+        pathComps[pathComps.length - 1].startsWith('@')
+      ) {
         fieldPath = this.path.split('@')[1];
       } else {
         fieldPath = this.getNameWithNamespace();
