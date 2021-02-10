@@ -36,6 +36,8 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasValidationException;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.core.BaseAtlasModule;
+import io.atlasmap.spi.AtlasCollectionHelper;
+import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.v2.AtlasModelFactory;
@@ -46,6 +48,7 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.InspectionType;
 import io.atlasmap.v2.Validation;
+import io.atlasmap.xml.core.XmlCollectionHelper;
 import io.atlasmap.xml.core.XmlFieldReader;
 import io.atlasmap.xml.core.XmlFieldWriter;
 import io.atlasmap.xml.core.XmlIOHelper;
@@ -271,6 +274,11 @@ public class XmlModule extends BaseAtlasModule {
                     sourceField.getValue(), targetField.getDocId(), targetField.getPath(), targetField.getFieldType(),
                     targetField.getValue());
         }
+    }
+
+    @Override
+    protected AtlasCollectionHelper createCollectionHelper(AtlasFieldActionService fieldActionService) {
+        return new XmlCollectionHelper(fieldActionService);
     }
 
     @Override
