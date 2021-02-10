@@ -19,12 +19,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 
 public class AtlasPath {
+
     public static final String PATH_SEPARATOR = "/";
     public static final char PATH_SEPARATOR_CHAR = '/';
     public static final String PATH_SEPARATOR_ESCAPED = "/";
@@ -36,6 +40,8 @@ public class AtlasPath {
     public static final String PATH_MAP_END = "}";
     public static final String PATH_ATTRIBUTE_PREFIX = "@";
     public static final String PATH_NAMESPACE_SEPARATOR = ":";
+
+    private static final Logger LOG = LoggerFactory.getLogger(AtlasPath.class);
 
     protected List<SegmentContext> segmentContexts;
     private String originalPath = null;
@@ -323,6 +329,7 @@ public class AtlasPath {
     }
 
     protected List<SegmentContext> parse(String path) {
+        path = sanitize(path);
         List<SegmentContext> segmentContexts = new ArrayList<>();
         if (path != null && !"".equals(path)) {
             if (path.startsWith(PATH_SEPARATOR)) {
@@ -342,6 +349,23 @@ public class AtlasPath {
             segmentContexts.add(0, createSegmentContext(""));
         }
         return segmentContexts;
+    }
+
+    protected String sanitize(String path) {
+        String answer = path;
+        if (answer == null || answer.isEmpty()) {
+            return answer;
+        }
+        if (answer.indexOf("//") != -1) {
+            LOG.warn("Sanitizing double slash (//) in the path '{}'", answer);
+            answer = answer.replaceAll("//", "/");
+        }
+        if (answer.endsWith("/")) {
+            LOG.warn("Sanitizing trailing slash (/) in the path '{}'", answer);
+            answer = answer.substring(0, answer.length()-1);
+
+        }
+        return answer;
     }
 
     protected SegmentContext createSegmentContext(String expression) {
