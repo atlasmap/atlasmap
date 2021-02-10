@@ -239,4 +239,15 @@ public class AtlasPathTest {
         assertEquals(segments.get(3), path.getParentSegmentOf(segments.get(4)));
     }
 
+    @Test
+    public void testSanitize() throws Exception {
+        AtlasPath path = new AtlasPath("//orders//order//product//name//");
+        List<SegmentContext> segments = path.getSegments(true);
+        assertEquals(5, segments.size());
+        assertEquals("", segments.get(0).getName());
+        assertEquals("orders", segments.get(1).getName());
+        assertEquals("order", segments.get(2).getName());
+        assertEquals("product", segments.get(3).getName());
+        assertEquals("name", segments.get(4).getName());
+    }
 }

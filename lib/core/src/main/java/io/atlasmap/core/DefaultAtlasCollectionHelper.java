@@ -39,8 +39,12 @@ public class DefaultAtlasCollectionHelper implements AtlasCollectionHelper {
         this.fieldActionService = fieldActionService;
     }
 
+    protected AtlasPath createTargetAtlasPath(String path) {
+        return new AtlasPath(path);
+    }
+
     public int determineTargetCollectionCount(Field targetField) {
-        AtlasPath targetPath = new AtlasPath(targetField.getPath());
+        AtlasPath targetPath = createTargetAtlasPath(targetField.getPath());
         int targetCollectionCount = targetPath.getCollectionSegmentCount();
         if (targetField.getIndex() != null) {
             targetCollectionCount++; //adjust based on index
@@ -84,7 +88,7 @@ public class DefaultAtlasCollectionHelper implements AtlasCollectionHelper {
 
     public void copyCollectionIndexes(Field sourceParentField, Field sourceField, Field targetField, Field previousTargetField) {
         AtlasPath sourcePath = new AtlasPath(sourceField.getPath());
-        AtlasPath targetPath = new AtlasPath(targetField.getPath());
+        AtlasPath targetPath = createTargetAtlasPath(targetField.getPath());
         int targetCollectionCount = determineTargetCollectionCount(targetField);
         int sourceCollectionCount = determineSourceCollectionCount(sourceParentField, sourceField);
         int targetIndex = 0;
@@ -103,7 +107,7 @@ public class DefaultAtlasCollectionHelper implements AtlasCollectionHelper {
             }
         }
 
-        AtlasPath previousTargetPath = previousTargetField != null ? new AtlasPath(previousTargetField.getPath()) : null;
+        AtlasPath previousTargetPath = previousTargetField != null ? createTargetAtlasPath(previousTargetField.getPath()) : null;
         List<AtlasPath.SegmentContext> sourceCollectionSegments = sourcePath.getCollectionSegments(true);
         AtlasPath.SegmentContext lastSourceSegment = sourcePath.getLastSegment();
         AtlasPath.SegmentContext lastTargetCollectionSegment = targetPath.getLastCollectionSegment();

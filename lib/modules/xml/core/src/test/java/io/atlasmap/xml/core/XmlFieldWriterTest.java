@@ -265,6 +265,17 @@ public class XmlFieldWriterTest {
         checkResultFromFile("complex_example_multiple_ns.xml");
     }
 
+    @Test
+    public void testWriteCollectionWithNamespace() throws Exception {
+        namespaces.put("tns", "http://www.example.com/tns");
+
+        writeValue("/tns:orders/tns:order[1]/tns:id", "1111");
+
+        String expected = "<tns:orders xmlns:tns=\"http://www.example.com/tns\">"
+                + "<tns:order/><tns:order><tns:id>1111</tns:id></tns:order></tns:orders>";
+        checkResult(expected);
+    }
+
     @Test(expected = AtlasException.class)
     public void testThrowExceptionOnNullXmlField() throws Exception {
         createWriter();

@@ -237,7 +237,11 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
     @Override
     public void setFieldActionService(AtlasFieldActionService atlasFieldActionService) {
         this.atlasFieldActionService = atlasFieldActionService;
-        this.collectionHelper = new DefaultAtlasCollectionHelper(atlasFieldActionService);
+        this.collectionHelper = createCollectionHelper(atlasFieldActionService);
+    }
+
+    protected AtlasCollectionHelper createCollectionHelper(AtlasFieldActionService fieldActionService) {
+        return new DefaultAtlasCollectionHelper(fieldActionService);
     }
 
     public boolean isAutomaticallyProcessOutputFieldActions() {
