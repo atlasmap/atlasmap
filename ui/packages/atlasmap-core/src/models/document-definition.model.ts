@@ -447,17 +447,15 @@ export class DocumentDefinition {
     if (parentPath == null) {
       parentPath = this.pathSeparator;
     }
-    if (!field.path || field.path.length === 0) {
-      const nsFieldName = field.getNameWithNamespace();
-      field.path = parentPath + nsFieldName;
-      if (field.isCollection) {
-        field.path += field.isArray
-          ? this.LEFT_BRACKET + this.RIGHT_BRACKET
-          : '<>';
-      }
-      if (field.isAttribute && !field.path.includes('@')) {
-        field.path = parentPath += '@' + nsFieldName;
-      }
+    const nsFieldName = field.getNameWithNamespace();
+    field.path = parentPath + nsFieldName;
+    if (field.isCollection) {
+      field.path += field.isArray
+        ? this.LEFT_BRACKET + this.RIGHT_BRACKET
+        : '<>';
+    }
+    if (field.isAttribute && !field.path.includes('@')) {
+      field.path = parentPath += '@' + nsFieldName;
     }
     if (field.serviceObject) {
       field.serviceObject.path = field.path;
