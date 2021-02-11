@@ -461,7 +461,7 @@ export class MappingSerializer {
       if (doc.locale != null) {
         serializedDoc['locale'] = doc.locale;
       }
-      if (doc.type === DocumentType.XML) {
+      if (doc.type === DocumentType.XML || doc.type === DocumentType.XSD) {
         serializedDoc['jsonType'] = 'io.atlasmap.xml.v2.XmlDataSource';
         const namespaces: any[] = [];
         for (const ns of doc.namespaces) {
