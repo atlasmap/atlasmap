@@ -252,7 +252,7 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
             String path = sourceField.getPath();
             FieldGroup sourceFieldGroup = mapping.getInputFieldGroup();
             if (sourceFieldGroup != null) {
-                 Field f = readFromGroup(sourceFieldGroup, path);
+                 Field f = readFromGroup(sourceFieldGroup, docId, path);
                  session.head().setSourceField(f);
                  return;
             }
@@ -269,11 +269,10 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
             }
         }
 
-        private Field readFromGroup(FieldGroup group, String path) {
+        private Field readFromGroup(FieldGroup group, String docId, String path) {
             if (group.getField() == null) {
                 return null;
             }
-            String docId = group.getDocId();
             for (Field f : group.getField()) {
                 if ((docId == null && f.getDocId() != null)
                         || (docId != null && f.getDocId() == null)
@@ -284,7 +283,7 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
                     return f;
                 }
                 if (f instanceof FieldGroup) {
-                    Field deeper = readFromGroup((FieldGroup)f, path);
+                    Field deeper = readFromGroup((FieldGroup)f, docId, path);
                     if (deeper != null) {
                         return deeper;
                     }
