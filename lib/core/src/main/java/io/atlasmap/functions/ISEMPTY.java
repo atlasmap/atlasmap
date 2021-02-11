@@ -37,7 +37,8 @@ public class ISEMPTY extends BaseFunctionFactory {
         final Expression arg = args.get(0);
         return new BooleanExpression() {
             public Field evaluate(ExpressionContext ctx) throws ExpressionException {
-                Object value = arg.evaluate(ctx).getValue();
+                Field f = arg.evaluate(ctx);
+                Object value = f == null ? null : f.getValue();
                 if (value == null || value.toString().isEmpty()) {
                     return wrapWithField(Boolean.TRUE);
                 }
