@@ -237,16 +237,20 @@ import io.atlasmap.v2.SimpleField;
     @Override
     public void setFieldActionService(AtlasFieldActionService atlasFieldActionService) {
 <span class="fc" id="L239">        this.atlasFieldActionService = atlasFieldActionService;</span>
-<span class="fc" id="L240">        this.collectionHelper = new DefaultAtlasCollectionHelper(atlasFieldActionService);</span>
+<span class="fc" id="L240">        this.collectionHelper = createCollectionHelper(atlasFieldActionService);</span>
 <span class="fc" id="L241">    }</span>
 
+    protected AtlasCollectionHelper createCollectionHelper(AtlasFieldActionService fieldActionService) {
+<span class="fc" id="L244">        return new DefaultAtlasCollectionHelper(fieldActionService);</span>
+    }
+
     public boolean isAutomaticallyProcessOutputFieldActions() {
-<span class="nc" id="L244">        return automaticallyProcessOutputFieldActions;</span>
+<span class="nc" id="L248">        return automaticallyProcessOutputFieldActions;</span>
     }
 
     public void setAutomaticallyProcessOutputFieldActions(boolean automaticallyProcessOutputFieldActions) {
-<span class="fc" id="L248">        this.automaticallyProcessOutputFieldActions = automaticallyProcessOutputFieldActions;</span>
-<span class="fc" id="L249">    }</span>
+<span class="fc" id="L252">        this.automaticallyProcessOutputFieldActions = automaticallyProcessOutputFieldActions;</span>
+<span class="fc" id="L253">    }</span>
 
     //-----------------------------------------
     // JMX MBean methods
@@ -254,132 +258,132 @@ import io.atlasmap.v2.SimpleField;
 
     @Override
     public boolean isSourceSupported() {
-<span class="nc" id="L257">        return Arrays.asList(this.getClass().getAnnotation(AtlasModuleDetail.class).modes()).contains(&quot;SOURCE&quot;);</span>
+<span class="nc" id="L261">        return Arrays.asList(this.getClass().getAnnotation(AtlasModuleDetail.class).modes()).contains(&quot;SOURCE&quot;);</span>
     }
 
     @Override
     public boolean isTargetSupported() {
-<span class="nc" id="L262">        return Arrays.asList(this.getClass().getAnnotation(AtlasModuleDetail.class).modes()).contains(&quot;TARGET&quot;);</span>
+<span class="nc" id="L266">        return Arrays.asList(this.getClass().getAnnotation(AtlasModuleDetail.class).modes()).contains(&quot;TARGET&quot;);</span>
     }
 
     @Override
     public String getClassName() {
-<span class="nc" id="L267">        return this.getClass().getName();</span>
+<span class="nc" id="L271">        return this.getClass().getName();</span>
     }
 
     @Override
     public String[] getDataFormats() {
-<span class="nc" id="L272">        return this.getClass().getAnnotation(AtlasModuleDetail.class).dataFormats();</span>
+<span class="nc" id="L276">        return this.getClass().getAnnotation(AtlasModuleDetail.class).dataFormats();</span>
     }
 
     @Override
     public String getModeName() {
-<span class="nc" id="L277">        return this.atlasModuleMode.name();</span>
+<span class="nc" id="L281">        return this.atlasModuleMode.name();</span>
     }
 
     @Override
     public String getName() {
-<span class="nc" id="L282">        return this.getClass().getAnnotation(AtlasModuleDetail.class).name();</span>
+<span class="nc" id="L286">        return this.getClass().getAnnotation(AtlasModuleDetail.class).name();</span>
     }
 
     @Override
     public String[] getPackageNames() {
-<span class="nc" id="L287">        return null;</span>
+<span class="nc" id="L291">        return null;</span>
     }
 
     @Override
     public long getSourceErrorCount() {
-<span class="nc" id="L292">        return 0L;</span>
+<span class="nc" id="L296">        return 0L;</span>
     }
 
     @Override
     public long getSourceCount() {
-<span class="nc" id="L297">        return 0L;</span>
+<span class="nc" id="L301">        return 0L;</span>
     }
 
     @Override
     public long getSourceMaxExecutionTime() {
-<span class="nc" id="L302">        return 0L;</span>
+<span class="nc" id="L306">        return 0L;</span>
     }
 
     @Override
     public long getSourceMinExecutionTime() {
-<span class="nc" id="L307">        return 0L;</span>
+<span class="nc" id="L311">        return 0L;</span>
     }
 
     @Override
     public long getSourceSuccessCount() {
-<span class="nc" id="L312">        return 0L;</span>
+<span class="nc" id="L316">        return 0L;</span>
     }
 
     @Override
     public long getSourceTotalExecutionTime() {
-<span class="nc" id="L317">        return 0L;</span>
+<span class="nc" id="L321">        return 0L;</span>
     }
 
     @Override
     public long getTargetCount() {
-<span class="nc" id="L322">        return 0L;</span>
+<span class="nc" id="L326">        return 0L;</span>
     }
 
     @Override
     public long getTargetErrorCount() {
-<span class="nc" id="L327">        return 0L;</span>
+<span class="nc" id="L331">        return 0L;</span>
     }
 
     @Override
     public long getTargetMaxExecutionTime() {
-<span class="nc" id="L332">        return 0L;</span>
+<span class="nc" id="L336">        return 0L;</span>
     }
 
     @Override
     public long getTargetMinExecutionTime() {
-<span class="nc" id="L337">        return 0L;</span>
+<span class="nc" id="L341">        return 0L;</span>
     }
 
     @Override
     public long getTargetSuccessCount() {
-<span class="nc" id="L342">        return 0L;</span>
+<span class="nc" id="L346">        return 0L;</span>
     }
 
     @Override
     public long getTargetTotalExecutionTime() {
-<span class="nc" id="L347">        return 0L;</span>
+<span class="nc" id="L351">        return 0L;</span>
     }
 
     @Override
     public String getUuid() {
-<span class="nc" id="L352">        return null;</span>
+<span class="nc" id="L356">        return null;</span>
     }
 
     @Override
     public String getVersion() {
-<span class="nc" id="L357">        return null;</span>
+<span class="nc" id="L361">        return null;</span>
     }
 
     @Override
     public TabularData readAndResetStatistics() {
-<span class="nc" id="L362">        return null;</span>
+<span class="nc" id="L366">        return null;</span>
     }
 
     @Override
     public void setStatisticsEnabled(boolean enabled) {
-<span class="nc" id="L367">        LOG.warn(&quot;Statistics is not yet implemented&quot;);</span>
-<span class="nc" id="L368">    }</span>
+<span class="nc" id="L371">        LOG.warn(&quot;Statistics is not yet implemented&quot;);</span>
+<span class="nc" id="L372">    }</span>
 
     @Override
     public Boolean isSupportedField(Field field) {
-<span class="pc bpc" id="L372" title="1 of 4 branches missed.">        return field instanceof SimpleField || field instanceof FieldGroup;</span>
+<span class="pc bpc" id="L376" title="1 of 4 branches missed.">        return field instanceof SimpleField || field instanceof FieldGroup;</span>
     }
 
     @Override
     public void setDataSourceMetadata(DataSourceMetadata meta) {
-<span class="fc" id="L377">        this.dataSourceMetadata = meta;</span>
-<span class="fc" id="L378">    }</span>
+<span class="fc" id="L381">        this.dataSourceMetadata = meta;</span>
+<span class="fc" id="L382">    }</span>
 
     @Override
     public DataSourceMetadata getDataSourceMetadata() {
-<span class="fc" id="L382">        return this.dataSourceMetadata;</span>
+<span class="fc" id="L386">        return this.dataSourceMetadata;</span>
     }
 
 }

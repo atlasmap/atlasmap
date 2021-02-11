@@ -154,20 +154,20 @@ public class XmlPath extends AtlasPath {
         }
 
         protected XmlSegmentContext rebuild() {
-<span class="nc" id="L157">            StringBuilder buf = new StringBuilder();</span>
-<span class="nc bnc" id="L158" title="All 2 branches missed.">            if (isAttribute()) {</span>
+<span class="fc" id="L157">            StringBuilder buf = new StringBuilder();</span>
+<span class="pc bpc" id="L158" title="1 of 2 branches missed.">            if (isAttribute()) {</span>
 <span class="nc" id="L159">                buf.append(PATH_ATTRIBUTE_PREFIX);</span>
             }
-<span class="nc" id="L161">            buf.append(qname);</span>
-<span class="nc bnc" id="L162" title="All 2 branches missed.">            String index = getCollectionIndex() != null ? getCollectionIndex().toString() : &quot;&quot;;</span>
-<span class="nc bnc" id="L163" title="All 2 branches missed.">            if (getCollectionType() == CollectionType.ARRAY) {</span>
+<span class="fc" id="L161">            buf.append(qname);</span>
+<span class="pc bpc" id="L162" title="1 of 2 branches missed.">            String index = getCollectionIndex() != null ? getCollectionIndex().toString() : &quot;&quot;;</span>
+<span class="pc bpc" id="L163" title="1 of 2 branches missed.">            if (getCollectionType() == CollectionType.ARRAY) {</span>
 <span class="nc" id="L164">                buf.append(PATH_ARRAY_START).append(index).append(PATH_ARRAY_END);</span>
-<span class="nc bnc" id="L165" title="All 2 branches missed.">            } else if (getCollectionType() == CollectionType.LIST) {</span>
-<span class="nc" id="L166">                buf.append(PATH_LIST_START).append(index).append(PATH_LIST_END);</span>
+<span class="pc bpc" id="L165" title="1 of 2 branches missed.">            } else if (getCollectionType() == CollectionType.LIST) {</span>
+<span class="fc" id="L166">                buf.append(PATH_LIST_START).append(index).append(PATH_LIST_END);</span>
 <span class="nc bnc" id="L167" title="All 2 branches missed.">            } else if (getCollectionType() == CollectionType.MAP) {</span>
 <span class="nc" id="L168">                buf.append(PATH_LIST_START).append(getMapKey()).append(PATH_LIST_END);</span>
             }
-<span class="nc" id="L170">            return new XmlSegmentContext(buf.toString());</span>
+<span class="fc" id="L170">            return new XmlSegmentContext(buf.toString());</span>
         }
 
         @Override
