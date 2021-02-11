@@ -37,15 +37,16 @@ import io.atlasmap.v2.Field;
 <span class="fc" id="L37">        final Expression arg = args.get(0);</span>
 <span class="fc" id="L38">        return new BooleanExpression() {</span>
             public Field evaluate(ExpressionContext ctx) throws ExpressionException {
-<span class="fc" id="L40">                Object value = arg.evaluate(ctx).getValue();</span>
-<span class="fc bfc" id="L41" title="All 4 branches covered.">                if (value == null || value.toString().isEmpty()) {</span>
-<span class="fc" id="L42">                    return wrapWithField(Boolean.TRUE);</span>
+<span class="fc" id="L40">                Field f = arg.evaluate(ctx);</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">                Object value = f == null ? null : f.getValue();</span>
+<span class="fc bfc" id="L42" title="All 4 branches covered.">                if (value == null || value.toString().isEmpty()) {</span>
+<span class="fc" id="L43">                    return wrapWithField(Boolean.TRUE);</span>
                 }
-<span class="fc" id="L44">                return wrapWithField(Boolean.FALSE);</span>
+<span class="fc" id="L45">                return wrapWithField(Boolean.FALSE);</span>
             };
             public boolean matches(ExpressionContext ctx) throws ExpressionException {
-<span class="fc" id="L47">                Object answer = evaluate(ctx).getValue();</span>
-<span class="pc bpc" id="L48" title="1 of 4 branches missed.">                return answer != null &amp;&amp; answer == Boolean.TRUE;</span>
+<span class="fc" id="L48">                Object answer = evaluate(ctx).getValue();</span>
+<span class="pc bpc" id="L49" title="1 of 4 branches missed.">                return answer != null &amp;&amp; answer == Boolean.TRUE;</span>
             }
         };
     }
