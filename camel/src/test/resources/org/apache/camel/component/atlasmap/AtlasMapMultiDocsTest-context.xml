@@ -16,6 +16,16 @@
             <to uri="atlas:atlasmapping-multidocs.json" />
             <to uri="mock:result-body" />
         </route>
+        <route>
+            <from uri="direct:start-header" />
+            <to uri="atlas:atlasmapping-multidocs.json?targetMapMode=MESSAGE_HEADER" />
+            <to uri="mock:result-body" />
+        </route>
+        <route>
+            <from uri="direct:start-exchange-property" />
+            <to uri="atlas:atlasmapping-multidocs.json?targetMapMode=EXCHANGE_PROPERTY" />
+            <to uri="mock:result-body" />
+        </route>
     </camelContext>
 
 </beans>

@@ -20,7 +20,6 @@ import static io.atlasmap.api.AtlasContextFactory.Format.ADM;
 import static io.atlasmap.api.AtlasContextFactory.Format.JSON;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +34,7 @@ import org.apache.camel.component.ResourceEndpoint;
 import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.util.IOHelper;
+import org.apache.camel.util.MessageHelper;
 import org.apache.camel.util.ObjectHelper;
 import org.apache.camel.util.ResourceHelper;
 import org.slf4j.Logger;
@@ -44,7 +44,6 @@ import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.ADMArchiveHandler;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.DataSource;
@@ -73,6 +72,12 @@ public class AtlasEndpoint extends ResourceEndpoint {
     private String sourceMapName;
     @UriParam
     private String targetMapName;
+    @UriParam(defaultValue = "MAP")
+    private TargetMapMode targetMapMode = TargetMapMode.MAP;
+
+    public enum TargetMapMode {
+        MAP, MESSAGE_HEADER, EXCHANGE_PROPERTY;
+    }
 
     public AtlasEndpoint(String uri, AtlasComponent component, String resourceUri) {
         super(uri, component, resourceUri);
@@ -175,34 +180,22 @@ public class AtlasEndpoint extends ResourceEndpoint {
         return this.targetMapName;
     }
 
+    /**
+     * {@link TargetMapMode} enum value to specify how multiple documents are delivered.
+     * @param mode {@link TargetMapMode}
+     */
+    public void setTargetMapMode(TargetMapMode mode) {
+        this.targetMapMode = mode;
+    }
+
+    public TargetMapMode getTargetMapMode() {
+        return this.targetMapMode;
+    }
+
     public AtlasEndpoint findOrCreateEndpoint(String uri, String newResourceUri) {
         String newUri = uri.replace(getResourceUri(), newResourceUri);
         log.debug("Getting endpoint with URI: {}", newUri);
         return getCamelContext().getEndpoint(newUri, AtlasEndpoint.class);
-    }
-
-    /**
-     * Extract the AtlasMap mappings file (JSON) from the specified ADM archive
-     * and return it as a String.
-     *
-     * @param in - Live input stream to the ADM archive file via the resource URI.
-     * @param admPath - used for diagnostics only
-     * @return the extracted mappings JSON content
-     *
-     * @throws Exception
-     */
-    private String extractMappingsFromADM(InputStream in, String admPath) throws Exception {
-        try {
-            ADMArchiveHandler handler = new ADMArchiveHandler(getCamelContext().getApplicationContextClassLoader());
-            handler.setIgnoreLibrary(true);
-            handler.load(in);
-            if (log.isDebugEnabled()) {
-                log.debug("Atlas mapping content extracted from ADM archive: {}", admPath);
-            }
-            return new String(handler.getMappingDefinitionBytes());
-        } catch (Exception e) {
-            throw new IOException("Error extracting mappings file from ADM archive " + admPath, e);
-        }
     }
 
     @Override
@@ -230,16 +223,19 @@ public class AtlasEndpoint extends ResourceEndpoint {
                 errors.add(audit);
                 break;
             case WARN:
-                LOG.warn("{}: docId='{}', path='{}'", audit.getMessage(), audit.getDocId(), audit.getPath());
+                LOG.warn("{}: Document='{}(ID:{})', path='{}'",
+                        audit.getMessage(), audit.getDocName(), audit.getDocId(), audit.getPath());
                 break;
             default:
-                LOG.info("{}: docId='{}', path='{}'", audit.getMessage(), audit.getDocId(), audit.getPath());
+                LOG.info("{}: Document='{}(ID:{})', path='{}'",
+                        audit.getMessage(), audit.getDocName(), audit.getDocId(), audit.getPath());
             }
         }
         if (!errors.isEmpty()) {
             StringBuilder buf = new StringBuilder("Errors: ");
             errors.stream().forEach(a -> buf.append(
-                    String.format("[%s: docId='%s', path='%s'], ", a.getMessage(), a.getDocId(), a.getPath())));
+                    String.format("[%s: Document='%s(ID:%s)', path='%s'], ",
+                            a.getMessage(), a.getDocName(), a.getDocId(), a.getPath())));
             throw new AtlasException(buf.toString());
         }
 
@@ -260,7 +256,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
             }
             // remove the header to avoid it being propagated in the routing
             incomingMessage.removeHeader(AtlasConstants.ATLAS_MAPPING);
-            return getOrCreateAtlasContextFactory().createContext(AtlasContextFactory.Format.JSON, is);
+            return getOrCreateAtlasContextFactory().createContext(JSON, is);
         } else if (getAtlasContext() != null) {
             // no mapping specified in header, and found an existing context
             return getAtlasContext();
@@ -273,7 +269,6 @@ public class AtlasEndpoint extends ResourceEndpoint {
         }
         atlasContext = getOrCreateAtlasContextFactory().createContext(
                 path.toLowerCase().endsWith("adm") ? ADM : JSON, getResourceAsInputStream());
-
         return atlasContext;
     }
 
@@ -283,7 +278,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
         }
 
         atlasContextFactory = DefaultAtlasContextFactory.getInstance();
-        ((DefaultAtlasContextFactory)atlasContextFactory).addClassLoader(getCamelContext().getApplicationContextClassLoader());
+        atlasContextFactory.addClassLoader(getCamelContext().getApplicationContextClassLoader());
         // load the properties from property file which may overrides the default ones
         if (ObjectHelper.isNotEmpty(getPropertiesFile())) {
             Properties properties = new Properties();
@@ -305,6 +300,14 @@ public class AtlasEndpoint extends ResourceEndpoint {
         if (session.getMapping().getDataSource() == null) {
             return;
         }
+
+        Message inMessage = exchange.getIn();
+        CamelAtlasPropertyStrategy propertyStrategy = new CamelAtlasPropertyStrategy();
+        propertyStrategy.setCurrentSourceMessage(inMessage);
+        propertyStrategy.setTargetMessage(exchange.getMessage());
+        propertyStrategy.setExchange(exchange);
+        session.setAtlasPropertyStrategy(propertyStrategy);
+
         DataSource[] sourceDataSources = session.getMapping().getDataSource().stream()
                 .filter(ds -> ds.getDataSourceType() == DataSourceType.SOURCE)
                 .toArray(DataSource[]::new);
@@ -315,16 +318,16 @@ public class AtlasEndpoint extends ResourceEndpoint {
 
         if (sourceDataSources.length == 1) {
             String docId = sourceDataSources[0].getId();
-            Object payload = extractPayload(sourceDataSources[0], exchange.getIn());
+            Object payload = extractPayload(sourceDataSources[0], inMessage);
             if (docId == null || docId.isEmpty()) {
                 session.setDefaultSourceDocument(payload);
             } else {
                 session.setSourceDocument(docId, payload);
+                propertyStrategy.setSourceMessage(docId, inMessage);
             }
             return;
         }
 
-        // TODO handle headers docId - https://github.com/atlasmap/atlasmap/issues/67
         Map<String, Message> sourceMessages = null;
         Map<String, Object> sourceDocuments = null;
         if (sourceMapName != null) {
@@ -336,17 +339,28 @@ public class AtlasEndpoint extends ResourceEndpoint {
                 sourceDocuments = (Map<String, Object>)body;
             } else {
                 session.setDefaultSourceDocument(body);
-                return;
             }
         }
         for (DataSource ds : sourceDataSources) {
             String docId = ds.getId();
-            Object payload = sourceMessages != null ? extractPayload(ds, sourceMessages.get(docId))
-                    : sourceDocuments.get(docId);
             if (docId == null || docId.isEmpty()) {
+                Object payload = extractPayload(ds, inMessage);
                 session.setDefaultSourceDocument(payload);
-            } else {
+            } else if (sourceMessages != null) {
+                Object payload = extractPayload(ds, sourceMessages.get(docId));
                 session.setSourceDocument(docId, payload);
+                propertyStrategy.setSourceMessage(docId, sourceMessages.get(docId));
+            } else if (sourceDocuments != null) {
+                Object payload = sourceDocuments.get(docId);
+                session.setSourceDocument(docId, payload);
+            } else if (inMessage.getHeaders().containsKey(docId)) {
+                Object payload = inMessage.getHeader(docId);
+                session.setSourceDocument(docId, payload);
+            } else if (exchange.getProperties().containsKey(docId)) {
+                Object payload = exchange.getProperty(docId);
+                session.setSourceDocument(docId, payload);
+            } else {
+                LOG.warn("Ignoring missing source document: '{}(ID:{})'", ds.getName(), ds.getId());
             }
         }
     }
@@ -355,12 +369,21 @@ public class AtlasEndpoint extends ResourceEndpoint {
         if (dataSource == null || message == null) {
             return null;
         }
+        Object body = null;
+
         if (dataSource != null && dataSource.getUri() != null
                 && !(dataSource.getUri().startsWith("atlas:core")
                         || dataSource.getUri().startsWith("atlas:java"))) {
-            return message.getBody(String.class);
+            body = message.getBody(String.class);
+        } else {
+            body = message.getBody();
         }
-        return message.getBody();
+
+        //Just in case, prepare for future calls
+        MessageHelper.resetStreamCache(message);
+
+
+        return body;
     }
 
     private void populateTargetDocuments(AtlasSession session, Exchange exchange) {
@@ -375,38 +398,54 @@ public class AtlasEndpoint extends ResourceEndpoint {
                 .filter(ds -> ds.getDataSourceType() == DataSourceType.TARGET)
                 .toArray(DataSource[]::new);
         if (targetDataSources.length == 0) {
-            outMessage.setBody(session.getDefaultTargetDocument());
+            Object newBody = session.getDefaultTargetDocument();
+            outMessage.setBody(newBody);
             return;
         }
 
         if (targetDataSources.length == 1) {
             String docId = targetDataSources[0].getId();
             if (docId == null || docId.isEmpty()) {
-                outMessage.setBody(session.getDefaultTargetDocument());
+                Object newBody = session.getDefaultTargetDocument();
+                outMessage.setBody(newBody);
             } else {
-                outMessage.setBody(session.getTargetDocument(docId));
+                Object newBody = session.getTargetDocument(docId);
+                outMessage.setBody(newBody);
             }
             setContentType(targetDataSources[0], outMessage);
             return;
         }
 
-        // TODO handle headers docId - https://github.com/atlasmap/atlasmap/issues/67
         Map<String, Object> targetDocuments = new HashMap<>();
         for (DataSource ds : targetDataSources) {
             String docId = ds.getId();
             if (docId == null || docId.isEmpty()) {
                 targetDocuments.put(io.atlasmap.api.AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID,
                         session.getDefaultTargetDocument());
-                outMessage.setBody(session.getDefaultTargetDocument());
+                Object newBody = session.getDefaultTargetDocument();
+                outMessage.setBody(newBody);
                 setContentType(ds, outMessage);
             } else {
                 targetDocuments.put(docId, session.getTargetDocument(docId));
             }
         }
-        if (targetMapName != null) {
-            exchange.setProperty(targetMapName, targetDocuments);
-        } else {
-            outMessage.setBody(targetDocuments);
+        
+        switch (targetMapMode) {
+        case MAP:
+            if (targetMapName != null) {
+                exchange.setProperty(targetMapName, targetDocuments);
+            } else {
+                outMessage.setBody(targetDocuments);
+            }
+            break;
+        case MESSAGE_HEADER:
+            targetDocuments.remove(io.atlasmap.api.AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID);
+            outMessage.getHeaders().putAll(targetDocuments);
+            break;
+        case EXCHANGE_PROPERTY:
+            targetDocuments.remove(io.atlasmap.api.AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID);
+            exchange.getProperties().putAll(targetDocuments);
+            break;
         }
     }
 

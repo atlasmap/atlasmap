@@ -234,7 +234,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
         if (!errors.isEmpty()) {
             StringBuilder buf = new StringBuilder("Errors: ");
             errors.stream().forEach(a -> buf.append(
-                    String.format("[%s: Document='{}(ID:{})', path='%s'], ",
+                    String.format("[%s: Document='%s(ID:%s)', path='%s'], ",
                             a.getMessage(), a.getDocName(), a.getDocId(), a.getPath())));
             throw new AtlasException(buf.toString());
         }
