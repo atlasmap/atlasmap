@@ -234,7 +234,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
 <span class="pc bpc" id="L234" title="1 of 2 branches missed.">        if (!errors.isEmpty()) {</span>
 <span class="nc" id="L235">            StringBuilder buf = new StringBuilder(&quot;Errors: &quot;);</span>
 <span class="nc" id="L236">            errors.stream().forEach(a -&gt; buf.append(</span>
-<span class="nc" id="L237">                    String.format(&quot;[%s: Document='{}(ID:{})', path='%s'], &quot;,</span>
+<span class="nc" id="L237">                    String.format(&quot;[%s: Document='%s(ID:%s)', path='%s'], &quot;,</span>
 <span class="nc" id="L238">                            a.getMessage(), a.getDocName(), a.getDocId(), a.getPath())));</span>
 <span class="nc" id="L239">            throw new AtlasException(buf.toString());</span>
         }
