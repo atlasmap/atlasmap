@@ -12,6 +12,7 @@ import {
   FormSelect,
   FormSelectOption,
   Tooltip,
+  ValidatedOptions,
 } from "@patternfly/react-core";
 
 import {
@@ -58,6 +59,9 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
   const [valueType, setValueType] = useState(initialValueType);
   const [scope, setScope] = useState(initialScope);
   const [isPropertyValid, setPropertyValid] = useState(true);
+  const [isPropertyNameValid, setPropertyNameValid] = useState(
+    ValidatedOptions.default,
+  );
   const [isNameAndScopeUnique, setNameAndScopeUnique] = useState(true);
 
   const reset = useCallback(() => {
@@ -65,6 +69,7 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
     setValueType(initialValueType);
     setScope(initialScope);
     setPropertyValid(true);
+    setPropertyNameValid(ValidatedOptions.default);
     setNameAndScopeUnique(true);
   }, [initialName, initialValueType, initialScope]);
 
@@ -84,14 +89,26 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
   }
 
   function handleOnScopeChange(scope: string) {
-    validateProperty(name, scope);
-    setScope(scope);
+    if (validateProperty(name, scope)) {
+      setScope(scope);
+    }
   }
 
-  function validateProperty(name: string, scope: string) {
+  function validateProperty(name: string, scope: string): boolean {
+    if (!name || name.length === 0) {
+      setPropertyNameValid(ValidatedOptions.default);
+      return false;
+    }
+    const nameRegex = /^[a-zA-Z0-9_@]+$/;
+    if (!nameRegex.test(name)) {
+      setPropertyNameValid(ValidatedOptions.error);
+      return false;
+    }
+    setPropertyNameValid(ValidatedOptions.success);
     const isValid = onValidation(name, scope);
     setNameAndScopeUnique(isValid);
     setPropertyValid(name.length > 0 && isValid);
+    return isValid;
   }
 
   // make sure to resync the internal state to the values passed in as props
@@ -111,6 +128,8 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
               content={
                 <div>A property with this name and scope already exists</div>
               }
+              entryDelay={750}
+              exitDelay={100}
             >
               <TextInput
                 value={name}
@@ -130,6 +149,7 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
               autoFocus={true}
               isRequired={true}
               data-testid={"property-name-text-input"}
+              validated={isPropertyNameValid}
             />
           )}
         </FormGroup>
@@ -151,6 +171,8 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
               content={
                 <div>A property with this name and scope already exists</div>
               }
+              entryDelay={750}
+              exitDelay={100}
             >
               <FormSelect
                 value={scope}

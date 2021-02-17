@@ -93,18 +93,20 @@ export const ConstantDialog: FunctionComponent<IConstantDialogProps> = ({
       isOpen={isOpen}
     >
       <Form>
-        <FormGroup label={"Name"} fieldId={"name"} isRequired={true}>
+        <FormGroup label={"Value"} fieldId={"constvalue"} isRequired={true}>
           {!isValueUnique ? (
             <Tooltip
               content={<div>A constant with this value already exists</div>}
+              entryDelay={750}
+              exitDelay={100}
             >
               <TextInput
                 value={value}
                 onChange={handleOnValueChange}
-                id={"name"}
+                id={"constvalue"}
                 autoFocus={true}
                 isRequired={true}
-                data-testid={"constant-name-text-input"}
+                data-testid={"constant-value-text-input"}
                 style={{ color: "red" }}
               />
             </Tooltip>
@@ -112,10 +114,10 @@ export const ConstantDialog: FunctionComponent<IConstantDialogProps> = ({
             <TextInput
               value={value}
               onChange={handleOnValueChange}
-              id={"name"}
+              id={"constvalue"}
               autoFocus={true}
               isRequired={true}
-              data-testid={"constant-name-text-input"}
+              data-testid={"constant-value-text-input"}
             />
           )}
         </FormGroup>
