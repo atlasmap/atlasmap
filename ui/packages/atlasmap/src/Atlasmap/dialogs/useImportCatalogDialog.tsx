@@ -10,7 +10,8 @@ export function useImportCatalogDialog(): [ReactElement, (file: File) => void] {
     "Importing a new catalog will discard all unsaved changes. To save the current catalog, use the Export feature.",
   );
   const onImportCatalog = useCallback(
-    (file: File) => openImportCatalogDialog(() => importAtlasFile(file, false)),
+    (file: File) =>
+      openImportCatalogDialog(() => importAtlasFile(file, false, false)),
     [importAtlasFile, openImportCatalogDialog],
   );
   return [ImportCatalogDialog, onImportCatalog];

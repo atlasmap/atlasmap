@@ -91,14 +91,17 @@ export function deleteNamespace(docName: string, alias: string) {
 /**
  * Import the specified user-defined document.
  *
- * @param selectedFile
+ * @param selectedFile - user selected file
  * @param cfg
- * @param isSource
+ * @param isSource - true is source panel, false is target
+ * @param isSchema - user-specified instance/ schema (true === schema)
+ * @param parameters - CSV parameters
  */
 async function importDoc(
   selectedFile: any,
   cfg: ConfigModel,
   isSource: boolean,
+  isSchema: boolean,
   inspectionParameters?: { [key: string]: string },
 ): Promise<boolean> {
   return new Promise<boolean>(async (resolve) => {
@@ -111,6 +114,7 @@ async function importDoc(
         selectedFile,
         InspectionType.UNKNOWN,
         isSource,
+        isSchema,
         inspectionParameters,
       )
       .then(() => {
@@ -231,14 +235,17 @@ export async function getCustomClassNameOptions(): Promise<string[]> {
  * @param selectedFile
  * @param cfg
  * @param isSource
+ * @param isSchema - user-specified instance/ schema (true === schema)
+ * @param inspectionParameters - CSV parameters
  */
 export async function importInstanceSchema(
   selectedFile: File,
   cfg: ConfigModel,
   isSource: boolean,
+  isSchema: boolean,
   inspectionParameters?: { [key: string]: string },
 ) {
-  await importDoc(selectedFile, cfg, isSource, inspectionParameters);
+  await importDoc(selectedFile, cfg, isSource, isSchema, inspectionParameters);
 }
 
 /**

@@ -97,7 +97,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     showResetToolbarItem: allowReset,
     ...toolbarOptions,
     onImportAtlasFile: handlers.onImportAtlasCatalog,
-    onImportJarFile: (file) => importAtlasFile(file, false),
+    onImportJarFile: (file) => importAtlasFile(file, false, false),
     onExportAtlasFile: handlers.onExportAtlasCatalog,
     onResetAtlasmap: handlers.onResetAtlasmap,
   });

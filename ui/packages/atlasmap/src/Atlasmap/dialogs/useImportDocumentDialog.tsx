@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useCallback, ReactElement } from "react";
 
 import { useAtlasmap } from "../AtlasmapProvider";
 import { useConfirmationDialog } from "./useConfirmationDialog";
 import { useParametersDialog } from "./useParametersDialog";
+import { useSpecifyInstanceSchemaDialog } from "./useSpecifyInstanceSchemaDialog";
 
 export function useImportDocumentDialog(): [
   ReactElement,
@@ -17,6 +18,11 @@ export function useImportDocumentDialog(): [
   const [parametersDialog, openParametersDialog] = useParametersDialog(
     "CSV processing parameters",
   );
+  const [defaultSchema, setDefaultSchema] = useState(false);
+  const [
+    specifyInstanceSchemaDialog,
+    openSpecifyInstanceSchema,
+  ] = useSpecifyInstanceSchemaDialog(defaultSchema);
 
   const importFile = useCallback(
     (selectedFile: File, isSource: boolean) => {
@@ -32,7 +38,12 @@ export function useImportDocumentDialog(): [
               for (let parameter of parameters) {
                 inspectionParameters[parameter.name] = parameter.value;
               }
-              importAtlasFile(selectedFile, isSource, inspectionParameters);
+              importAtlasFile(
+                selectedFile,
+                isSource,
+                false,
+                inspectionParameters,
+              );
             },
             [
               {
@@ -128,10 +139,14 @@ export function useImportDocumentDialog(): [
           );
           return;
         }
+
+        setDefaultSchema(userFileSuffix === "XSD" ? true : false);
+        openSpecifyInstanceSchema((isSchema: boolean) => {
+          importAtlasFile(selectedFile, isSource, isSchema);
+        });
       }
-      importAtlasFile(selectedFile, isSource);
     },
-    [importAtlasFile, openParametersDialog],
+    [importAtlasFile, openParametersDialog, openSpecifyInstanceSchema],
   );
 
   const onImportDocument = useCallback(
@@ -148,6 +163,7 @@ export function useImportDocumentDialog(): [
     <>
       {importDialog}
       {parametersDialog}
+      {specifyInstanceSchemaDialog}
     </>,
     onImportDocument,
   ];
