@@ -123,21 +123,24 @@ function importAtlasGlobalFile(
       selectedFile,
       InspectionType.JAVA_CLASS,
       false,
+      false,
     );
   }
 }
 
 /**
  * The user has imported a file (mapping catalog, Java archive or source/target
- * level specific instance or schema).
+ * level specific instance or schema document).
  *
- * @param selectedFile - File object representing the file the user selected.
- * @param isSource - true if selected file is associated with the Source panel,
- *                   false otherwise
+ * @param selectedFile - user selected file
+ * @param isSource - true is source panel, false is target
+ * @param isSchema - user-specified instance/ schema (true === schema)
+ * @param parameters - CSV parameters
  */
 export function importAtlasFile(
   selectedFile: File,
   isSource: boolean,
+  isSchema: boolean,
   parameters?: { [key: string]: string },
 ) {
   const cfg = ConfigModel.getConfig();
@@ -149,7 +152,7 @@ export function importAtlasFile(
   if (userFileSuffix === "ADM" || userFileSuffix === "JAR") {
     importAtlasGlobalFile(selectedFile, userFileSuffix, cfg);
   } else {
-    importInstanceSchema(selectedFile, cfg, isSource, parameters);
+    importInstanceSchema(selectedFile, cfg, isSource, isSchema, parameters);
   }
 }
 

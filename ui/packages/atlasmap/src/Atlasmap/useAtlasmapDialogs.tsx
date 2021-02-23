@@ -18,6 +18,7 @@ import {
   usePropertyDialog,
   useRemoveMappedFieldDialog,
   useResetAtlasmapDialog,
+  useSpecifyInstanceSchemaDialog,
   useToggleExpressionModeDialog,
   useCustomClassDialog,
 } from "./dialogs";
@@ -163,6 +164,11 @@ export function useAtlasmapDialogs({
       onDeleteMapping(selectedMapping);
     }
   }, [onDeleteMapping, selectedMapping]);
+
+  const [
+    specifyInstanceSchemaDialog,
+    onSpecifyInstanceSchema,
+  ] = useSpecifyInstanceSchemaDialog(false);
   //#endregion
 
   //#region namespace table dialogs
@@ -222,6 +228,7 @@ export function useAtlasmapDialogs({
           {exportCatalogDialog}
           {importDocumentDialog}
           {deleteDocumentDialog}
+          {specifyInstanceSchemaDialog}
           {captureDocumentNameToast}
           {changeDocumentNameDialog}
           {createConstantDialog}
@@ -257,6 +264,7 @@ export function useAtlasmapDialogs({
       exportCatalogDialog,
       importCatalogDialog,
       importDocumentDialog,
+      specifyInstanceSchemaDialog,
       modalContainer,
       removeMappedFieldDialog,
       resetDialog,
@@ -277,6 +285,7 @@ export function useAtlasmapDialogs({
       onResetAtlasmap,
       onImportDocument,
       onDeleteDocument,
+      onSpecifyInstanceSchema,
       onCaptureDocumentName,
       onChangeDocumentName,
       onRemoveMappedField,

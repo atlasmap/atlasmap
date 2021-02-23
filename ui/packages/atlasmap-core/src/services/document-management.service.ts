@@ -308,14 +308,18 @@ export class DocumentManagementService {
    * initialization service to update the sources/ targets in both the runtime and the UI.  The runtime will
    * parse/ validate the file.
    *
-   * @param selectedFile
-   * @param inspectionType
-   * @param isSource
+   * @param selectedFile - user selected file
+   * @param inspectionType - document format
+   * @param isSource - true is source panel, false is target
+   * @param isSchema- user specified instance/ schema (true === schema)
+   * @param inspectionParameters - CSV parameters
+
    */
   async processDocument(
     selectedFile: any,
     inspectionType: InspectionType,
     isSource: boolean,
+    isSchema: boolean,
     inspectionParameters?: { [key: string]: string }
   ): Promise<boolean> {
     return new Promise<boolean>(async (resolve) => {
@@ -331,27 +335,7 @@ export class DocumentManagementService {
         userFileComps.length - 1
       ].toUpperCase();
 
-      if (userFileSuffix === DocumentType.JAVA_ARCHIVE) {
-        // Wait for the async read of the selected binary document to be completed.
-        try {
-          fileBin = await DataMapperUtil.readBinaryFile(selectedFile, reader);
-        } catch (error) {
-          this.cfg.errorService.addError(
-            new ErrorInfo({
-              message: 'Unable to import the specified schema document.',
-              level: ErrorLevel.ERROR,
-              scope: ErrorScope.APPLICATION,
-              type: ErrorType.USER,
-              object: error,
-            })
-          );
-          resolve(false);
-          return;
-        }
-        if (inspectionType === InspectionType.UNKNOWN) {
-          inspectionType = InspectionType.JAVA_CLASS;
-        }
-      } else {
+      if (userFileSuffix !== DocumentType.JAVA_ARCHIVE) {
         // Wait for the async read of the selected ascii document to be completed.
         try {
           fileText = await DataMapperUtil.readFile(selectedFile, reader);
@@ -368,23 +352,13 @@ export class DocumentManagementService {
           resolve(false);
           return;
         }
-
-        // Derive the format if not already defined.
-        if (inspectionType === InspectionType.UNKNOWN) {
-          if (
-            userFileSuffix === DocumentType.XSD ||
-            fileText.search('SchemaSet') > -1 ||
-            fileText.search('\\$schema') > -1
-          ) {
-            inspectionType = InspectionType.SCHEMA;
-          } else {
-            inspectionType = InspectionType.INSTANCE;
-          }
-        }
       }
 
       switch (userFileSuffix) {
         case DocumentType.JSON:
+          inspectionType = isSchema
+            ? InspectionType.SCHEMA
+            : InspectionType.INSTANCE;
           await this.cfg.initializationService.initializeUserDoc(
             fileText,
             userFile + '-' + Guid.newGuid(),
@@ -396,6 +370,25 @@ export class DocumentManagementService {
           break;
 
         case DocumentType.JAVA_ARCHIVE:
+          // Wait for the async read of the selected binary document to be completed.
+          try {
+            fileBin = await DataMapperUtil.readBinaryFile(selectedFile, reader);
+          } catch (error) {
+            this.cfg.errorService.addError(
+              new ErrorInfo({
+                message: 'Unable to import the specified schema document.',
+                level: ErrorLevel.ERROR,
+                scope: ErrorScope.APPLICATION,
+                type: ErrorType.USER,
+                object: error,
+              })
+            );
+            resolve(false);
+            return;
+          }
+          if (inspectionType === InspectionType.UNKNOWN) {
+            inspectionType = InspectionType.JAVA_CLASS;
+          }
           await this.cfg.initializationService.initializeUserDoc(
             fileBin,
             userFile,
@@ -406,7 +399,7 @@ export class DocumentManagementService {
           );
           this.cfg.errorService.addError(
             new ErrorInfo({
-              message: `${selectedFile.name} import complete.  Select the plus icon on the Sources/Targets panel to enable specific classes.`,
+              message: `${selectedFile.name} import complete.  Select the circle-plus icon on the Source/Target panel to enable specific classes.`,
               level: ErrorLevel.INFO,
               scope: ErrorScope.APPLICATION,
               type: ErrorType.USER,
@@ -440,6 +433,9 @@ export class DocumentManagementService {
 
         case DocumentType.XML:
         case DocumentType.XSD:
+          inspectionType = isSchema
+            ? InspectionType.SCHEMA
+            : InspectionType.INSTANCE;
           await this.cfg.initializationService.initializeUserDoc(
             fileText,
             userFile + '-' + Guid.newGuid(),
