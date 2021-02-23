@@ -454,7 +454,14 @@
 <a name='L396'></a><a href='#L396'>396</a>
 <a name='L397'></a><a href='#L397'>397</a>
 <a name='L398'></a><a href='#L398'>398</a>
-<a name='L399'></a><a href='#L399'>399</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L399'></a><a href='#L399'>399</a>
+<a name='L400'></a><a href='#L400'>400</a>
+<a name='L401'></a><a href='#L401'>401</a>
+<a name='L402'></a><a href='#L402'>402</a>
+<a name='L403'></a><a href='#L403'>403</a>
+<a name='L404'></a><a href='#L404'>404</a>
+<a name='L405'></a><a href='#L405'>405</a>
+<a name='L406'></a><a href='#L406'>406</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -557,6 +564,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -570,6 +580,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -676,6 +687,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -688,7 +700,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -945,14 +959,17 @@
 /**
  * Import the specified user-defined document.
  *
- * @param selectedFile
+ * @param selectedFile - user selected file
  * @param cfg
- * @param isSource
+ * @param isSource - true is source panel, false is target
+ * @param isSchema - user-specified instance/ schema (true === schema)
+ * @param parameters - CSV parameters
  */
 async function <span class="fstat-no" title="function not covered" >importDoc(</span>
   selectedFile: any,
   cfg: ConfigModel,
   isSource: boolean,
+  isSchema: boolean,
   inspectionParameters?: { [key: string]: string },
 ): Promise&lt;boolean&gt; {
 <span class="cstat-no" title="statement not covered" >  return new Promise&lt;boolean&gt;(<span class="fstat-no" title="function not covered" >async (r</span>esolve<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >) =&gt; {</span></span></span>
@@ -965,6 +982,7 @@ async function <span class="fstat-no" title="function not covered" >importDoc(</
         selectedFile,
         InspectionType.UNKNOWN,
         isSource,
+        isSchema,
         inspectionParameters,
       )
       .then(<span class="fstat-no" title="function not covered" >() =&gt; {</span>
@@ -1085,14 +1103,17 @@ async function <span class="fstat-no" title="function not covered" >importDoc(</
  * @param selectedFile
  * @param cfg
  * @param isSource
+ * @param isSchema - user-specified instance/ schema (true === schema)
+ * @param inspectionParameters - CSV parameters
  */
 <span class="cstat-no" title="statement not covered" >export async function <span class="fstat-no" title="function not covered" >i</span>mportInstanceSchema(</span>
   selectedFile: File,
   cfg: ConfigModel,
   isSource: boolean,
+  isSchema: boolean,
   inspectionParameters?: { [key: string]: string },
 ) {
-<span class="cstat-no" title="statement not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >  await importDoc(selectedFile, cfg, isSource, inspectionParameters);</span></span>
+<span class="cstat-no" title="statement not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >  await importDoc(selectedFile, cfg, isSource, isSchema, inspectionParameters);</span></span>
 }
 &nbsp;
 /**
@@ -1257,7 +1278,7 @@ async function <span class="fstat-no" title="function not covered" >importDoc(</
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Feb 22 2021 12:14:39 GMT+0000 (Coordinated Universal Time)
+                at Tue Feb 23 2021 17:10:44 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
