@@ -252,139 +252,139 @@ import io.atlasmap.v2.SimpleField;
 <span class="fc" id="L252">        this.automaticallyProcessOutputFieldActions = automaticallyProcessOutputFieldActions;</span>
 <span class="fc" id="L253">    }</span>
 
+    @Override
+    public Boolean isSupportedField(Field field) {
+<span class="pc bpc" id="L257" title="1 of 4 branches missed.">        return field instanceof SimpleField || field instanceof FieldGroup;</span>
+    }
+
+    @Override
+    public void setDataSourceMetadata(DataSourceMetadata meta) {
+<span class="fc" id="L262">        this.dataSourceMetadata = meta;</span>
+<span class="fc" id="L263">    }</span>
+
+    @Override
+    public DataSourceMetadata getDataSourceMetadata() {
+<span class="fc" id="L267">        return this.dataSourceMetadata;</span>
+    }
+
     //-----------------------------------------
     // JMX MBean methods
     //-----------------------------------------
 
     @Override
     public boolean isSourceSupported() {
-<span class="nc" id="L261">        return Arrays.asList(this.getClass().getAnnotation(AtlasModuleDetail.class).modes()).contains(&quot;SOURCE&quot;);</span>
+<span class="nc" id="L276">        return Arrays.asList(this.getClass().getAnnotation(AtlasModuleDetail.class).modes()).contains(&quot;SOURCE&quot;);</span>
     }
 
     @Override
     public boolean isTargetSupported() {
-<span class="nc" id="L266">        return Arrays.asList(this.getClass().getAnnotation(AtlasModuleDetail.class).modes()).contains(&quot;TARGET&quot;);</span>
+<span class="nc" id="L281">        return Arrays.asList(this.getClass().getAnnotation(AtlasModuleDetail.class).modes()).contains(&quot;TARGET&quot;);</span>
     }
 
     @Override
     public String getClassName() {
-<span class="nc" id="L271">        return this.getClass().getName();</span>
+<span class="nc" id="L286">        return this.getClass().getName();</span>
     }
 
     @Override
     public String[] getDataFormats() {
-<span class="nc" id="L276">        return this.getClass().getAnnotation(AtlasModuleDetail.class).dataFormats();</span>
+<span class="nc" id="L291">        return this.getClass().getAnnotation(AtlasModuleDetail.class).dataFormats();</span>
     }
 
     @Override
     public String getModeName() {
-<span class="nc" id="L281">        return this.atlasModuleMode.name();</span>
+<span class="nc" id="L296">        return this.atlasModuleMode.name();</span>
     }
 
     @Override
     public String getName() {
-<span class="nc" id="L286">        return this.getClass().getAnnotation(AtlasModuleDetail.class).name();</span>
+<span class="nc" id="L301">        return this.getClass().getAnnotation(AtlasModuleDetail.class).name();</span>
     }
 
     @Override
     public String[] getPackageNames() {
-<span class="nc" id="L291">        return null;</span>
+<span class="nc" id="L306">        return null;</span>
     }
 
     @Override
     public long getSourceErrorCount() {
-<span class="nc" id="L296">        return 0L;</span>
-    }
-
-    @Override
-    public long getSourceCount() {
-<span class="nc" id="L301">        return 0L;</span>
-    }
-
-    @Override
-    public long getSourceMaxExecutionTime() {
-<span class="nc" id="L306">        return 0L;</span>
-    }
-
-    @Override
-    public long getSourceMinExecutionTime() {
 <span class="nc" id="L311">        return 0L;</span>
     }
 
     @Override
-    public long getSourceSuccessCount() {
+    public long getSourceCount() {
 <span class="nc" id="L316">        return 0L;</span>
     }
 
     @Override
-    public long getSourceTotalExecutionTime() {
+    public long getSourceMaxExecutionTime() {
 <span class="nc" id="L321">        return 0L;</span>
     }
 
     @Override
-    public long getTargetCount() {
+    public long getSourceMinExecutionTime() {
 <span class="nc" id="L326">        return 0L;</span>
     }
 
     @Override
-    public long getTargetErrorCount() {
+    public long getSourceSuccessCount() {
 <span class="nc" id="L331">        return 0L;</span>
     }
 
     @Override
-    public long getTargetMaxExecutionTime() {
+    public long getSourceTotalExecutionTime() {
 <span class="nc" id="L336">        return 0L;</span>
     }
 
     @Override
-    public long getTargetMinExecutionTime() {
+    public long getTargetCount() {
 <span class="nc" id="L341">        return 0L;</span>
     }
 
     @Override
-    public long getTargetSuccessCount() {
+    public long getTargetErrorCount() {
 <span class="nc" id="L346">        return 0L;</span>
     }
 
     @Override
-    public long getTargetTotalExecutionTime() {
+    public long getTargetMaxExecutionTime() {
 <span class="nc" id="L351">        return 0L;</span>
     }
 
     @Override
+    public long getTargetMinExecutionTime() {
+<span class="nc" id="L356">        return 0L;</span>
+    }
+
+    @Override
+    public long getTargetSuccessCount() {
+<span class="nc" id="L361">        return 0L;</span>
+    }
+
+    @Override
+    public long getTargetTotalExecutionTime() {
+<span class="nc" id="L366">        return 0L;</span>
+    }
+
+    @Override
     public String getUuid() {
-<span class="nc" id="L356">        return null;</span>
+<span class="nc" id="L371">        return null;</span>
     }
 
     @Override
     public String getVersion() {
-<span class="nc" id="L361">        return null;</span>
+<span class="nc" id="L376">        return null;</span>
     }
 
     @Override
     public TabularData readAndResetStatistics() {
-<span class="nc" id="L366">        return null;</span>
+<span class="nc" id="L381">        return null;</span>
     }
 
     @Override
     public void setStatisticsEnabled(boolean enabled) {
-<span class="nc" id="L371">        LOG.warn(&quot;Statistics is not yet implemented&quot;);</span>
-<span class="nc" id="L372">    }</span>
-
-    @Override
-    public Boolean isSupportedField(Field field) {
-<span class="pc bpc" id="L376" title="1 of 4 branches missed.">        return field instanceof SimpleField || field instanceof FieldGroup;</span>
-    }
-
-    @Override
-    public void setDataSourceMetadata(DataSourceMetadata meta) {
-<span class="fc" id="L381">        this.dataSourceMetadata = meta;</span>
-<span class="fc" id="L382">    }</span>
-
-    @Override
-    public DataSourceMetadata getDataSourceMetadata() {
-<span class="fc" id="L386">        return this.dataSourceMetadata;</span>
-    }
+<span class="nc" id="L386">        LOG.warn(&quot;Statistics is not yet implemented&quot;);</span>
+<span class="nc" id="L387">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

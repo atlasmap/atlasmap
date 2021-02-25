@@ -293,51 +293,57 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
         }
 
         @Override
+        public Boolean isSupportedField(Field field) {
+            // The field type doesn't matter for preview
+<span class="fc" id="L298">            return true;</span>
+        }
+
+        @Override
         public void processPreValidation(AtlasInternalSession session) throws AtlasException {
-<span class="nc" id="L297">        }</span>
+<span class="nc" id="L303">        }</span>
 
         @Override
         public void processPreSourceExecution(AtlasInternalSession session) throws AtlasException {
-<span class="nc" id="L301">        }</span>
+<span class="nc" id="L307">        }</span>
 
         @Override
         public void processPreTargetExecution(AtlasInternalSession session) throws AtlasException {
-<span class="nc" id="L305">        }</span>
+<span class="nc" id="L311">        }</span>
 
         @Override
         public void writeTargetValue(AtlasInternalSession session) throws AtlasException {
-<span class="nc" id="L309">        }</span>
+<span class="nc" id="L315">        }</span>
 
         @Override
         public void processPostSourceExecution(AtlasInternalSession session) throws AtlasException {
-<span class="nc" id="L313">        }</span>
+<span class="nc" id="L319">        }</span>
 
         @Override
         public void processPostTargetExecution(AtlasInternalSession session) throws AtlasException {
-<span class="nc" id="L317">        }</span>
+<span class="nc" id="L323">        }</span>
 
         @Override
         public Field cloneField(Field field) throws AtlasException {
-<span class="nc" id="L321">            return null;</span>
+<span class="nc" id="L327">            return null;</span>
         }
 
     };
 
     @Override
     public Map&lt;String, AtlasModule&gt; getSourceModules() {
-<span class="fc" id="L328">        return new HashMap&lt;String, AtlasModule&gt;() {</span>
+<span class="fc" id="L334">        return new HashMap&lt;String, AtlasModule&gt;() {</span>
             private static final long serialVersionUID = 1L;
 
             @Override
             public AtlasModule get(Object key) {
-<span class="fc" id="L333">                return previewModule;</span>
+<span class="fc" id="L339">                return previewModule;</span>
             }
         };
     }
 
     @Override
     protected AtlasModule resolveModule(FieldDirection direction, Field field) {
-<span class="fc" id="L340">        return previewModule;</span>
+<span class="fc" id="L346">        return previewModule;</span>
     }
 
 }
