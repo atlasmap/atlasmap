@@ -293,6 +293,12 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
         }
 
         @Override
+        public Boolean isSupportedField(Field field) {
+            // The field type doesn't matter for preview
+            return true;
+        }
+
+        @Override
         public void processPreValidation(AtlasInternalSession session) throws AtlasException {
         }
 

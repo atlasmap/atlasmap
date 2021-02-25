@@ -279,4 +279,20 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         assertEquals(printAudit(audits), 0, audits.getAudit().size());
         assertEquals("1.0", target.getValue());
     }
+
+    @Test
+    public void testProcessPreviewFieldTypes() throws AtlasException {
+        Mapping m = new Mapping();
+        Field source = new Field() {private static final long serialVersionUID = 1L;};
+        source.setFieldType(FieldType.STRING);
+        source.setValue("foo");
+        Field target = new Field() {private static final long serialVersionUID = 1L;};
+        target.setFieldType(FieldType.STRING);
+        m.getInputField().add(source);
+        m.getOutputField().add(target);
+        Audits audits = previewContext.processPreview(m);
+        assertEquals(printAudit(audits), 0, audits.getAudit().size());
+        assertEquals("foo", target.getValue());
+    }
+
 }

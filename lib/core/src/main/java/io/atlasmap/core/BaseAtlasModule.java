@@ -252,6 +252,21 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
         this.automaticallyProcessOutputFieldActions = automaticallyProcessOutputFieldActions;
     }
 
+    @Override
+    public Boolean isSupportedField(Field field) {
+        return field instanceof SimpleField || field instanceof FieldGroup;
+    }
+
+    @Override
+    public void setDataSourceMetadata(DataSourceMetadata meta) {
+        this.dataSourceMetadata = meta;
+    }
+
+    @Override
+    public DataSourceMetadata getDataSourceMetadata() {
+        return this.dataSourceMetadata;
+    }
+
     //-----------------------------------------
     // JMX MBean methods
     //-----------------------------------------
@@ -369,21 +384,6 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
     @Override
     public void setStatisticsEnabled(boolean enabled) {
         LOG.warn("Statistics is not yet implemented");
-    }
-
-    @Override
-    public Boolean isSupportedField(Field field) {
-        return field instanceof SimpleField || field instanceof FieldGroup;
-    }
-
-    @Override
-    public void setDataSourceMetadata(DataSourceMetadata meta) {
-        this.dataSourceMetadata = meta;
-    }
-
-    @Override
-    public DataSourceMetadata getDataSourceMetadata() {
-        return this.dataSourceMetadata;
     }
 
 }
