@@ -22,6 +22,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import io.atlasmap.api.AtlasContextFactory;
+import io.atlasmap.core.DefaultAtlasContextFactory;
+
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
     private static final Logger LOG = LoggerFactory.getLogger(Application.class);
@@ -29,7 +32,10 @@ public class Application extends SpringBootServletInitializer {
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(Application.class);
         ConfigurableApplicationContext context = app.run(args);
-        LOG.info("### AtlasMap Data Mapper UI started at port: {} ###", context.getEnvironment().getProperty("server.port"));
+        String version = DefaultAtlasContextFactory.getInstance().getProperties().get(AtlasContextFactory.PROPERTY_ATLASMAP_CORE_VERSION);
+        LOG.info("### AtlasMap Data Mapper UI {} started at port: {} ###",
+                version,
+                context.getEnvironment().getProperty("server.port"));
     }
 
 }

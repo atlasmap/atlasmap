@@ -14,6 +14,7 @@ export * from "./useNamespaceDialog";
 export * from "./usePropertyDialog";
 export * from "./useRemoveMappedFieldDialog";
 export * from "./useResetAtlasmapDialog";
+export * from "./useAboutDialog";
 export * from "./useSpecifyInstanceSchemaDialog";
 export * from "./useToggleExpressionModeDialog";
 export * from "./useEditMappingEnumerationDialog";

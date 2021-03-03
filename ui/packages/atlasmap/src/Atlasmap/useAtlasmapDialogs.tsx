@@ -18,6 +18,7 @@ import {
   usePropertyDialog,
   useRemoveMappedFieldDialog,
   useResetAtlasmapDialog,
+  useAboutDialog,
   useSpecifyInstanceSchemaDialog,
   useToggleExpressionModeDialog,
   useCustomClassDialog,
@@ -128,6 +129,7 @@ export function useAtlasmapDialogs({
   const [importCatalogDialog, onImportAtlasCatalog] = useImportCatalogDialog();
   const [exportCatalogDialog, onExportAtlasCatalog] = useExportCatalogDialog();
   const [resetDialog, onResetAtlasmap] = useResetAtlasmapDialog();
+  const [aboutDialog, onAbout] = useAboutDialog();
   const [
     toggleExpressionModeDialog,
     onToggleExpressionMode,
@@ -244,6 +246,7 @@ export function useAtlasmapDialogs({
           {deletePropertyDialog}
           {editPropertyDialog}
           {resetDialog}
+          {aboutDialog}
           {removeMappedFieldDialog}
           {deleteMappingDialog}
           {createEnableCustomClassDialog}
@@ -275,6 +278,7 @@ export function useAtlasmapDialogs({
       modalContainer,
       removeMappedFieldDialog,
       resetDialog,
+      aboutDialog,
       toggleExpressionModeDialog,
       editMappingEnumerationDialog,
     ],
@@ -291,6 +295,7 @@ export function useAtlasmapDialogs({
       onDeleteProperty,
       onEditProperty,
       onResetAtlasmap,
+      onAbout,
       onImportDocument,
       onDeleteDocument,
       onSpecifyInstanceSchema,

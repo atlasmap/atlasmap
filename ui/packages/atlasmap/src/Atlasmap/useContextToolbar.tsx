@@ -30,6 +30,7 @@ export interface IUseContextToolbarHandlers {
   onImportJarFile: (file: File) => void;
   onExportAtlasFile: () => void;
   onResetAtlasmap: () => void;
+  onAbout: () => void;
 }
 
 export interface IUseContextToolbarData {
@@ -73,6 +74,7 @@ export function useContextToolbar({
   onImportJarFile,
   onExportAtlasFile,
   onResetAtlasmap,
+  onAbout,
 }: IUseContextToolbarData & IUseContextToolbarHandlers) {
   const {
     toggleMappingPreview: amToggleMappingPreview,
@@ -117,6 +119,7 @@ export function useContextToolbar({
               onImportJarFile={onImportJarFile}
               onExportAtlasFile={onExportAtlasFile}
               onResetAtlasmap={onResetAtlasmap}
+              onAbout={onAbout}
             />
           </ToolbarGroup>
         )}
@@ -206,6 +209,7 @@ export function useContextToolbar({
       onImportJarFile,
       onExportAtlasFile,
       onResetAtlasmap,
+      onAbout,
       showColumnMapperViewToolbarItem,
       showMappingTableViewToolbarItem,
       showFreeViewToolbarItem,

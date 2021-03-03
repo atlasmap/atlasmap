@@ -29,6 +29,8 @@ import io.atlasmap.spi.AtlasSeparateStrategy;
 
 public interface AtlasContextFactory {
 
+    static final String PROPERTY_ATLASMAP_CORE_VERSION = "atlasmap.core.version";
+
     enum Format { ADM, JSON };
 
     void init();

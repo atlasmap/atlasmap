@@ -16,6 +16,7 @@ import {
   CodeIcon,
   ExportIcon,
   EyeIcon,
+  HelpIcon,
   ImportIcon,
   InfoIcon,
   MapIcon,
@@ -43,6 +44,7 @@ export interface IAtlasmapToolbarItemProps {
   onImportJarFile: (file: File) => void;
   onExportAtlasFile: () => void;
   onResetAtlasmap: () => void;
+  onAbout: () => void;
 }
 export const AtlasmapToolbarItem: FunctionComponent<IAtlasmapToolbarItemProps> = ({
   showImportAtlasFileToolbarItem,
@@ -53,6 +55,7 @@ export const AtlasmapToolbarItem: FunctionComponent<IAtlasmapToolbarItemProps> =
   onImportJarFile,
   onExportAtlasFile,
   onResetAtlasmap,
+  onAbout,
 }) => {
   const { state: isOpen, toggle: onToggle, toggleOff } = useToggle(false);
   const runAndClose = (cb: (...args: any[]) => any) => {
@@ -92,6 +95,8 @@ export const AtlasmapToolbarItem: FunctionComponent<IAtlasmapToolbarItemProps> =
         key="reset-catalog"
       />
     ),
+    <DropdownSeparator key="about-separator" />,
+    <AboutToolbarItem key="about" onClick={runAndClose(onAbout)} />,
   ].filter((f) => f);
   return (
     <ToolbarItem>
@@ -438,4 +443,15 @@ export const AddMappingToolbarItem: FunctionComponent<{
       </Button>
     </Tooltip>
   </ToolbarItem>
+);
+
+export const AboutToolbarItem: FunctionComponent<{
+  onClick: () => void;
+}> = ({ onClick }) => (
+  <DropdownItem onClick={onClick} data-testid="about-button">
+    <DropdownItemIcon>
+      <HelpIcon />
+    </DropdownItemIcon>
+    About AtlasMap
+  </DropdownItem>
 );

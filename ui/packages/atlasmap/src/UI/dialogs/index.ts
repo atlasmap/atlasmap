@@ -1,3 +1,4 @@
+export * from "./AboutDialog";
 export * from "./ConfirmationDialog";
 export * from "./ConstantDialog";
 export * from "./CustomClassDialog";

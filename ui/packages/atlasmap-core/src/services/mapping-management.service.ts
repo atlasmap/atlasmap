@@ -1280,4 +1280,19 @@ export class MappingManagementService {
   isEnumerationMapping(mapping: MappingModel): boolean {
     return mapping.transition.mode === TransitionMode.ENUM;
   }
+
+  getRuntimeVersion(): Promise<string> {
+    const url = this.cfg.initCfg.baseMappingServiceUrl + 'version';
+    return new Promise<string>((resolve) => {
+      this.api
+        .get(url)
+        .json()
+        .then((body: any) => {
+          this.cfg.logger!.debug(
+            `Runtime Service Version Response: ${JSON.stringify(body)}`
+          );
+          resolve(body.String);
+        });
+    });
+  }
 }

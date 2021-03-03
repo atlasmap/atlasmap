@@ -99,6 +99,16 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         this.uuid = UUID.randomUUID().toString();
         this.threadName = Thread.currentThread().getName();
         this.classLoader = cl;
+        try {
+            this.properties = new HashMap<>();
+            Properties props = new Properties();
+            props.load(this.getClass().getClassLoader().getResourceAsStream("atlasmap.properties"));
+            String version = props.getProperty(PROPERTY_ATLASMAP_CORE_VERSION);
+            this.properties.put(PROPERTY_ATLASMAP_CORE_VERSION, version);
+        } catch (Exception e) {
+            LOG.debug("Failed to read atlasmap.properties", e);
+        }
+
         this.atlasConversionService = DefaultAtlasConversionService.getInstance();
         this.atlasFieldActionService = DefaultAtlasFieldActionService.getInstance();
         this.atlasFieldActionService.init(this.classLoader);

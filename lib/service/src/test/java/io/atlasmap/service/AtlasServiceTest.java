@@ -17,6 +17,7 @@ package io.atlasmap.service;
 
 import static io.atlasmap.v2.MappingFileType.JSON;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedInputStream;
@@ -68,6 +69,13 @@ public class AtlasServiceTest {
     public void tearDown() {
         service = null;
         mapper = null;
+    }
+
+    @Test
+    public void testVersion() throws Exception {
+        Response resp = service.version();
+        String body = resp.getEntity().toString();
+        assertNotNull(body, body);
     }
 
     @Test

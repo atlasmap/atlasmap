@@ -1785,6 +1785,76 @@ ifdef::internal-generation[]
 endif::internal-generation[]
 
 
+[.version]
+==== version
+    
+`GET /version`
+
+Version
+
+===== Description 
+
+Retrieves AtlasMap core library version.
+
+
+// markup not found, no include::{specDir}version/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+
+
+
+
+
+===== Return Type
+
+
+<<String>>
+
+
+===== Content Type
+
+* */*
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return &#39;pong&#39;
+|  <<String>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}version/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}version/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :version/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}version/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
 [#models]
 == Models
 
