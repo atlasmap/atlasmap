@@ -47,6 +47,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.atlasmap.api.AtlasContext;
+import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasPreviewContext;
 import io.atlasmap.api.AtlasSession;
@@ -573,6 +574,16 @@ public class AtlasService {
     public Response ping() {
         LOG.debug("Ping...  responding with 'pong'.");
         return Response.ok().entity(toJson("pong")).build();
+    }
+
+    @GET
+    @Path("/version")
+    @Operation(summary = "Version", description = "Retrieves AtlasMap core library version.")
+    @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(type = "string")), description = "Return 'pong'"))
+    public Response version() {
+        String version = this.atlasContextFactory.getProperties().get(AtlasContextFactory.PROPERTY_ATLASMAP_CORE_VERSION);
+        LOG.debug("Answering AtlasMap version: {}", version);
+        return Response.ok().entity(toJson(version)).build();
     }
 
     @GET

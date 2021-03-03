@@ -62,6 +62,8 @@ public class DefaultAtlasContextFactoryTest {
         assertNotNull(factory.getThreadName());
         assertEquals("io.atlasmap.core.DefaultAtlasContextFactory", factory.getClassName());
         assertNotNull(factory.getUuid());
+        String version = factory.getProperties().get(AtlasContextFactory.PROPERTY_ATLASMAP_CORE_VERSION);
+        assertNotNull(version, version);
         assertNotNull(factory.getJmxObjectName());
         assertNotNull(factory.getModuleInfoRegistry());
 

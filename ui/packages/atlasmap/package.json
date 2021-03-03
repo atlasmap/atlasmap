@@ -14,7 +14,9 @@
   ],
   "scripts": {
     "start": "tsdx watch",
-    "build:module": "tsdx build",
+    "prebuild": "node ./atlasmap.prebuild.js",
+    "build:tsdx": "tsdx build",
+    "build:module": "npm-run-all prebuild build:tsdx",
     "build:storybook": "build-storybook --quiet",
     "build": "npm-run-all lint test build:module",
     "test": "tsdx test --runInBand",

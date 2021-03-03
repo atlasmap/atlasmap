@@ -8,3 +8,4 @@ build
 storybook-static
 # Local Netlify folder
 .netlify
+src/atlasmap.json

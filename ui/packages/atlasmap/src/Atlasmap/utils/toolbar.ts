@@ -14,6 +14,8 @@ import {
   removeDocumentRef,
 } from "./document";
 
+import * as constants from "../../atlasmap.json";
+
 /**
  * Return true if the specified file object exists as a source or target
  * document, false otherwise.
@@ -200,6 +202,15 @@ export function resetAtlasmap() {
         );
       }
     });
+}
+
+export function getRuntimeVersion(): Promise<string> {
+  const cfg = ConfigModel.getConfig();
+  return cfg.mappingService.getRuntimeVersion();
+}
+
+export function getUIVersion(): string {
+  return constants.version;
 }
 
 export function toggleMappingPreview(enabled: boolean) {

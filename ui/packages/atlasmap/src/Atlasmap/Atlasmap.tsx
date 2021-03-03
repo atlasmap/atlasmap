@@ -101,6 +101,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     onImportJarFile: (file) => importAtlasFile(file, false, false),
     onExportAtlasFile: handlers.onExportAtlasCatalog,
     onResetAtlasmap: handlers.onResetAtlasmap,
+    onAbout: handlers.onAbout,
   });
 
   const shouldShowMappingPreviewForField = useCallback(
