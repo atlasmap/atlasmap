@@ -40,7 +40,7 @@ import {
 import { MappingSerializer } from '../utils/mapping-serializer';
 import { DataMapperUtil } from '../common/data-mapper-util';
 import { PaddingField } from '../models/document-definition.model';
-import { LookupTableUtil } from '../utils/lookup-table-util';
+import { LookupTableData, LookupTableUtil } from '../utils/lookup-table-util';
 import { ExpressionModel } from '../models/expression.model';
 
 /**
@@ -1239,5 +1239,45 @@ export class MappingManagementService {
     mapping.transition.expression = new ExpressionModel(mapping, this.cfg);
     mapping.transition.expression.insertText(expr);
     return expr;
+  }
+
+  /**
+   * Get the enumeration values for the specified mapping and return it in
+   * the form of a lookup table.
+   *
+   * @param cfg
+   * @param mapping
+   */
+  getEnumerationValues(
+    cfg: ConfigModel,
+    mapping: MappingModel
+  ): LookupTableData[] {
+    return LookupTableUtil.getEnumerationValues(cfg, mapping);
+  }
+
+  /**
+   * Update the enumeration values for the specified mapping with the specified
+   * enumeration values.
+   *
+   * @param cfg
+   * @param mapping
+   * @param enumerationValues
+   */
+  updateEnumerationValues(
+    cfg: ConfigModel,
+    mapping: MappingModel,
+    enumerationValues: LookupTableData[]
+  ): void {
+    LookupTableUtil.updateEnumerationValues(cfg, mapping, enumerationValues);
+    this.notifyMappingUpdated();
+  }
+
+  /**
+   * Return true if the specified mapping is an enumeration mapping, false otherwise.
+   *
+   * @param mapping
+   */
+  isEnumerationMapping(mapping: MappingModel): boolean {
+    return mapping.transition.mode === TransitionMode.ENUM;
   }
 }

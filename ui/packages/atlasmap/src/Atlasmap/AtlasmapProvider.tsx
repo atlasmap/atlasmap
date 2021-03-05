@@ -37,6 +37,8 @@ import {
   fromDocumentDefinitionToFieldGroup,
   fromMappingDefinitionToIMappings,
   fromMappingModelToImapping,
+  getEnumerationValues,
+  isEnumerationMapping,
   getMappingActions,
   getMappingExpression,
   getMultiplicityActionDelimiters,
@@ -615,5 +617,7 @@ export function useAtlasmap() {
     onRemoveFromMapping,
     onCreateMapping,
     changeDocumentName,
+    getEnumerationValues,
+    isEnumerationMapping,
   };
 }

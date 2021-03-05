@@ -11,6 +11,7 @@ import {
   ErrorScope,
   ErrorType,
 } from "@atlasmap/core";
+import { LookupTableData } from "src/UI";
 
 export function createConstant(constValue: string, constType: string): void {
   const cfg = ConfigModel.getConfig();
@@ -406,4 +407,38 @@ export function getFieldByUUID(
     }
   }
   return undefined;
+}
+
+export function getEnumerationValues(): LookupTableData[] {
+  const cfg = ConfigModel.getConfig();
+  const activeMapping = cfg.mappings?.activeMapping;
+  if (!activeMapping) {
+    return [];
+  }
+  return initializationService.cfg.mappingService.getEnumerationValues(
+    cfg,
+    activeMapping,
+  );
+}
+
+export function updateEnumerationValues(
+  enumerationValues: LookupTableData[],
+): void {
+  const cfg = ConfigModel.getConfig();
+  const activeMapping = cfg.mappings?.activeMapping;
+  if (!activeMapping) {
+    return;
+  }
+  initializationService.cfg.mappingService.updateEnumerationValues(
+    cfg,
+    activeMapping,
+    enumerationValues,
+  );
+}
+
+export function isEnumerationMapping(): boolean {
+  const cfg = ConfigModel.getConfig();
+  return initializationService.cfg.mappingService.isEnumerationMapping(
+    cfg.mappings?.activeMapping!,
+  );
 }

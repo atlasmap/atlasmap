@@ -79,6 +79,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     onAddToMapping,
     onRemoveFromMapping,
     onCreateMapping,
+    isEnumerationMapping,
   } = useAtlasmap();
 
   const { handlers, dialogs } = useAtlasmapDialogs({
@@ -408,6 +409,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
 
   const renderSidebar = useSidebar({
     onRemoveMapping: handlers.onDeleteSelectedMapping,
+    onEditEnum: handlers.onEditMappingEnumeration,
+    isEnumMapping: isEnumerationMapping,
   });
 
   return (

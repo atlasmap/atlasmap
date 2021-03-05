@@ -7,6 +7,7 @@ export type CancelCallback = () => void;
 
 export interface IConfirmationDialogProps {
   title: string;
+  description?: string;
   onConfirm?: ConfirmCallback;
   onCancel: CancelCallback;
   isOpen: boolean;
@@ -14,6 +15,7 @@ export interface IConfirmationDialogProps {
 
 export const ConfirmationDialog: FunctionComponent<IConfirmationDialogProps> = ({
   title,
+  description,
   onCancel,
   onConfirm,
   isOpen,
@@ -23,6 +25,7 @@ export const ConfirmationDialog: FunctionComponent<IConfirmationDialogProps> = (
     <Modal
       isSmall
       title={title}
+      description={description}
       isOpen={isOpen}
       onClose={onCancel}
       actions={[

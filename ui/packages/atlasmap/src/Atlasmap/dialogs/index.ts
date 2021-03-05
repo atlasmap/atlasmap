@@ -16,3 +16,4 @@ export * from "./useRemoveMappedFieldDialog";
 export * from "./useResetAtlasmapDialog";
 export * from "./useSpecifyInstanceSchemaDialog";
 export * from "./useToggleExpressionModeDialog";
+export * from "./useEditMappingEnumerationDialog";
