@@ -76,7 +76,7 @@ $ ../mvnw -Pitests spring-boot:run
 
 3. Again in a separate terminal window, run yarn build to make the REACT UI:
 ```
-$ cd ${ATLASMAP}/ui/packages/atlasmap-ui
+$ cd ${ATLASMAP}/ui/packages/atlasmap/ui
 $ yarn build
 ```
 

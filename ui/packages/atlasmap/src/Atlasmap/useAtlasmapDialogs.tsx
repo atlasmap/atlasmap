@@ -21,6 +21,7 @@ import {
   useSpecifyInstanceSchemaDialog,
   useToggleExpressionModeDialog,
   useCustomClassDialog,
+  useEditMappingEnumerationDialog,
 } from "./dialogs";
 import { enableCustomClass, getPropertyScopeOptions } from "./utils";
 import { IAtlasmapDocument } from "../Views";
@@ -166,6 +167,11 @@ export function useAtlasmapDialogs({
   }, [onDeleteMapping, selectedMapping]);
 
   const [
+    editMappingEnumerationDialog,
+    onEditMappingEnumeration,
+  ] = useEditMappingEnumerationDialog();
+
+  const [
     specifyInstanceSchemaDialog,
     onSpecifyInstanceSchema,
   ] = useSpecifyInstanceSchemaDialog(false);
@@ -244,6 +250,7 @@ export function useAtlasmapDialogs({
           {createNamespaceDialog}
           {editNamespaceDialog}
           {toggleExpressionModeDialog}
+          {editMappingEnumerationDialog}
         </>,
         modalContainer,
       ),
@@ -269,6 +276,7 @@ export function useAtlasmapDialogs({
       removeMappedFieldDialog,
       resetDialog,
       toggleExpressionModeDialog,
+      editMappingEnumerationDialog,
     ],
   );
 
@@ -296,6 +304,7 @@ export function useAtlasmapDialogs({
       onEditNamespace,
       deleteNamespace,
       onToggleExpressionMode,
+      onEditMappingEnumeration,
     },
     dialogs: portal,
   };

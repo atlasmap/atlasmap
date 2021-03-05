@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 
 import { Button, Stack, StackItem, Tooltip } from "@patternfly/react-core";
-import { CloseIcon, TrashIcon } from "@patternfly/react-icons";
+import { CloseIcon, EditIcon, TrashIcon } from "@patternfly/react-icons";
 import { css, StyleSheet } from "@patternfly/react-styles";
 
 import { ColumnHeader } from "../UI";
@@ -17,11 +17,15 @@ const styles = StyleSheet.create({
 export interface IMappingDetailsSidebarProps {
   onDelete: () => void;
   onClose: () => void;
+  onEditEnum: (cb: any) => void;
+  isEnumMapping: () => boolean;
 }
 
 export const MappingDetailsSidebar: FunctionComponent<IMappingDetailsSidebarProps> = ({
   onDelete,
   onClose,
+  onEditEnum,
+  isEnumMapping,
   children,
 }) => {
   return (
@@ -41,10 +45,30 @@ export const MappingDetailsSidebar: FunctionComponent<IMappingDetailsSidebarProp
               <CloseIcon />
             </Button>,
             <Tooltip
+              key={"edit-enum"}
+              position={"auto"}
+              enableFlip={true}
+              content={<div>Edit the enumeration mappings</div>}
+              entryDelay={750}
+              exitDelay={100}
+            >
+              <Button
+                variant={"plain"}
+                onClick={onEditEnum}
+                aria-label="Edit the enumeration mappings"
+                data-testid={"edit-enum-mapping-button"}
+                isDisabled={!isEnumMapping()}
+              >
+                <EditIcon />
+              </Button>
+            </Tooltip>,
+            <Tooltip
               key={"remove"}
               position={"auto"}
               enableFlip={true}
               content={<div>Remove the current mapping</div>}
+              entryDelay={750}
+              exitDelay={100}
             >
               <Button
                 variant={"plain"}

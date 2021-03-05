@@ -59,6 +59,8 @@ export interface IMappingDetailsViewProps {
   ) => void;
   onAddFieldToMapping: (isSource: boolean, field: IAtlasmapField) => void;
   onNotificationRead: (id: string) => void;
+  onEditEnum: (cb: any) => void;
+  isEnumMapping: () => boolean;
 }
 
 export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = ({
@@ -80,6 +82,8 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
   onRemoveTransformation,
   onAddFieldToMapping,
   onNotificationRead,
+  onEditEnum,
+  isEnumMapping,
   multiplicity,
 }) => {
   const mappingAction = multiplicity && (
@@ -201,7 +205,12 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
   );
 
   return (
-    <MappingDetailsSidebar onDelete={onRemoveMapping} onClose={onClose}>
+    <MappingDetailsSidebar
+      onClose={onClose}
+      onDelete={onRemoveMapping}
+      onEditEnum={onEditEnum}
+      isEnumMapping={isEnumMapping}
+    >
       {errors.length > 0 && (
         <NotificationsGroup
           notifications={errors}

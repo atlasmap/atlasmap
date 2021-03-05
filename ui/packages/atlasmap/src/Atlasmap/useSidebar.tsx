@@ -9,9 +9,15 @@ import { DataMapperUtil } from "@atlasmap/core";
 
 export interface IUseSidebarProps {
   onRemoveMapping: () => void;
+  onEditEnum: (cb: any) => void;
+  isEnumMapping: () => boolean;
 }
 
-export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
+export function useSidebar({
+  onRemoveMapping,
+  onEditEnum,
+  isEnumMapping,
+}: IUseSidebarProps) {
   const {
     selectedMapping,
     deselectMapping,
@@ -141,6 +147,8 @@ export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
           onTransformationArgumentChange={handleTransformationArgumentChange}
           onAddFieldToMapping={(_isSource, f) => addToCurrentMapping(f.amField)}
           onNotificationRead={markNotificationRead}
+          onEditEnum={onEditEnum}
+          isEnumMapping={isEnumMapping}
         />
       );
     }
@@ -156,6 +164,8 @@ export function useSidebar({ onRemoveMapping }: IUseSidebarProps) {
     notifications,
     deselectMapping,
     onRemoveMapping,
+    onEditEnum,
+    isEnumMapping,
     handleIndexChange,
     handleNewTransformation,
     handleRemoveTransformation,
