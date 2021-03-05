@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/64</span>
+                <span class='fraction'>0/66</span>
             </div>
         
             
@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/61</span>
+                <span class='fraction'>0/64</span>
             </div>
         
             
@@ -230,7 +230,17 @@
 <a name='L172'></a><a href='#L172'>172</a>
 <a name='L173'></a><a href='#L173'>173</a>
 <a name='L174'></a><a href='#L174'>174</a>
-<a name='L175'></a><a href='#L175'>175</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a>
+<a name='L183'></a><a href='#L183'>183</a>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -243,6 +253,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -258,7 +275,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -376,7 +392,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -415,9 +435,15 @@
 &nbsp;
 export interface IUseSidebarProps {
   onRemoveMapping: () =&gt; void;
+  onEditEnum: (cb: any) =&gt; void;
+  isEnumMapping: () =&gt; boolean;
 }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >u</span>seSidebar(</span>{ <span class="cstat-no" title="statement not covered" >onRemoveMapping </span>}: IUseSidebarProps) {
+<span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >u</span>seSidebar(</span>{
+<span class="cstat-no" title="statement not covered" >  onRemoveMapping,</span>
+<span class="cstat-no" title="statement not covered" >  onEditEnum,</span>
+<span class="cstat-no" title="statement not covered" >  isEnumMapping,</span>
+}: IUseSidebarProps) {
   const <span class="cstat-no" title="statement not covered" >{</span>
 <span class="cstat-no" title="statement not covered" >    selectedMapping,</span>
 <span class="cstat-no" title="statement not covered" >    deselectMapping,</span>
@@ -547,6 +573,8 @@ export interface IUseSidebarProps {
           onTransformationArgumentChange={handleTransformationArgumentChange}
           onAddFieldToMapping={<span class="fstat-no" title="function not covered" >(_</span>isSource, f) =&gt; <span class="cstat-no" title="statement not covered" >addToCurrentMapping(f.amField)}</span>
           onNotificationRead={markNotificationRead}
+          onEditEnum={onEditEnum}
+          isEnumMapping={isEnumMapping}
         /&gt;
       );
     }
@@ -562,6 +590,8 @@ export interface IUseSidebarProps {
     notifications,
     deselectMapping,
     onRemoveMapping,
+    onEditEnum,
+    isEnumMapping,
     handleIndexChange,
     handleNewTransformation,
     handleRemoveTransformation,
@@ -585,7 +615,7 @@ export interface IUseSidebarProps {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Mar 01 2021 12:35:44 GMT+0000 (Coordinated Universal Time)
+                at Fri Mar 05 2021 18:38:46 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
