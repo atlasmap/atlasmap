@@ -15,6 +15,7 @@ import {
   InspectionType,
   DocumentType,
   DocumentInitializationModel,
+  TransitionMode,
 } from "@atlasmap/core";
 
 import { IAtlasmapDocument, IAtlasmapField } from "../Views";
@@ -495,7 +496,11 @@ export function useAtlasmap() {
       if (
         !field ||
         !field.amField.isTerminal() ||
-        dropTarget?.type === "UNSUPPORTED"
+        dropTarget?.type === "UNSUPPORTED" ||
+        (selectedMapping &&
+          selectedMapping.mapping.transition.mode === TransitionMode.ENUM &&
+          selectedMapping.sourceFields.length > 0 &&
+          selectedMapping.targetFields.length > 0)
       ) {
         return false;
       }

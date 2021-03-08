@@ -282,7 +282,7 @@ export function createMapping(source: Field | undefined, target?: Field): void {
       );
       return;
     }
-    if (cfg.mappings?.activeMapping) {
+    if (source && cfg.mappings?.activeMapping) {
       const exclusionReason = ms.getFieldSelectionExclusionReason(
         cfg.mappings?.activeMapping!,
         target,
@@ -300,7 +300,6 @@ export function createMapping(source: Field | undefined, target?: Field): void {
         return;
       }
       if (
-        source &&
         target.partOfMapping &&
         cfg.mappings.activeMapping.targetFields[0]!.field!.path === target!.path
       ) {
@@ -308,7 +307,6 @@ export function createMapping(source: Field | undefined, target?: Field): void {
         return;
       }
       if (
-        source &&
         source.partOfMapping &&
         cfg.mappings.activeMapping.sourceFields[0]!.field!.path === source!.path
       ) {
