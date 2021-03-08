@@ -14,6 +14,7 @@
     limitations under the License.
 */
 
+import { TransitionMode } from './transition.model';
 import { DataMapperUtil } from '../common/data-mapper-util';
 import { DocumentDefinition } from './document-definition.model';
 import { Field } from './field.model';
@@ -110,6 +111,9 @@ export class MappingDefinition {
   }
 
   removeMapping(m: MappingModel): boolean {
+    if (m.transition.mode === TransitionMode.ENUM) {
+      this.removeTableByName(m.transition.lookupTableName!);
+    }
     return DataMapperUtil.removeItemFromArray(m, this.mappings);
   }
 }
