@@ -845,7 +845,20 @@ export class DocumentManagementService {
     if (parsedField == null) {
       return;
     }
+    parsedField.enumeration = field.enumeration;
 
+    if (
+      parsedField.enumeration &&
+      field.jsonEnumFields &&
+      field.jsonEnumFields.jsonEnumField
+    ) {
+      for (const enumValue of field.jsonEnumFields.jsonEnumField) {
+        const parsedEnumValue: EnumValue = new EnumValue();
+        parsedEnumValue.name = enumValue.name;
+        parsedEnumValue.ordinal = enumValue.ordinal;
+        parsedField.enumValues.push(parsedEnumValue);
+      }
+    }
     if (
       field.jsonFields &&
       field.jsonFields.jsonField &&
@@ -916,7 +929,20 @@ export class DocumentManagementService {
     }
 
     parsedField.isAttribute = parsedField.path.indexOf('@') !== -1;
+    parsedField.enumeration = field.enumeration;
 
+    if (
+      parsedField.enumeration &&
+      field.xmlEnumFields &&
+      field.xmlEnumFields.xmlEnumField
+    ) {
+      for (const enumValue of field.xmlEnumFields.xmlEnumField) {
+        const parsedEnumValue: EnumValue = new EnumValue();
+        parsedEnumValue.name = enumValue.name;
+        parsedEnumValue.ordinal = enumValue.ordinal;
+        parsedField.enumValues.push(parsedEnumValue);
+      }
+    }
     if (
       field.xmlFields &&
       field.xmlFields.xmlField &&

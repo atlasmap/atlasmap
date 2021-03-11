@@ -610,6 +610,7 @@ export class MappingSerializer {
         scope: field.scope,
         docId: field.docDef.id,
       };
+
       // The 'attribute' field only applies to XML.
       if (
         field.serviceObject.jsonType?.includes(
@@ -621,9 +622,10 @@ export class MappingSerializer {
       if (!ignoreValue || field.isPropertyOrConstant()) {
         serializedField['value'] = field.value;
       }
+
       if (
         field.docDef.type === DocumentType.XML ||
-        field.docDef.type === DocumentType.JSON
+        field.docDef.type === DocumentType.XSD
       ) {
         serializedField['userCreated'] = field.userCreated;
       } else if (
@@ -632,6 +634,7 @@ export class MappingSerializer {
       ) {
         serializedField['className'] = field.classIdentifier;
       }
+
       if (field.isProperty()) {
         serializedField['jsonType'] =
           ConfigModel.mappingServicesPackagePrefix + '.PropertyField';
@@ -642,7 +645,16 @@ export class MappingSerializer {
           ConfigModel.mappingServicesPackagePrefix + '.ConstantField';
         delete serializedField['name'];
       } else if (field.enumeration) {
-        serializedField['jsonType'] = 'io.atlasmap.java.v2.JavaEnumField';
+        if (field.docDef.type === DocumentType.JSON) {
+          serializedField['jsonType'] = 'io.atlasmap.json.v2.JsonEnumField';
+        } else if (
+          field.docDef.type === DocumentType.XML ||
+          field.docDef.type === DocumentType.XSD
+        ) {
+          serializedField['jsonType'] = 'io.atlasmap.xml.v2.XmlEnumField';
+        } else {
+          serializedField['jsonType'] = 'io.atlasmap.java.v2.JavaEnumField';
+        }
       }
 
       let includeIndexes: boolean =
