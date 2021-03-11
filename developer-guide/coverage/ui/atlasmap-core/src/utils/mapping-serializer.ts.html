@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.88% </span>
+                <span class="strong">83.27% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>458/546</span>
+                <span class='fraction'>458/550</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">70.91% </span>
+                <span class="strong">69.4% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>195/275</span>
+                <span class='fraction'>195/281</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">82.59% </span>
+                <span class="strong">81.86% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>370/448</span>
+                <span class='fraction'>370/452</span>
             </div>
         
             
@@ -1187,7 +1187,19 @@
 <a name='L1129'></a><a href='#L1129'>1129</a>
 <a name='L1130'></a><a href='#L1130'>1130</a>
 <a name='L1131'></a><a href='#L1131'>1131</a>
-<a name='L1132'></a><a href='#L1132'>1132</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1132'></a><a href='#L1132'>1132</a>
+<a name='L1133'></a><a href='#L1133'>1133</a>
+<a name='L1134'></a><a href='#L1134'>1134</a>
+<a name='L1135'></a><a href='#L1135'>1135</a>
+<a name='L1136'></a><a href='#L1136'>1136</a>
+<a name='L1137'></a><a href='#L1137'>1137</a>
+<a name='L1138'></a><a href='#L1138'>1138</a>
+<a name='L1139'></a><a href='#L1139'>1139</a>
+<a name='L1140'></a><a href='#L1140'>1140</a>
+<a name='L1141'></a><a href='#L1141'>1141</a>
+<a name='L1142'></a><a href='#L1142'>1142</a>
+<a name='L1143'></a><a href='#L1143'>1143</a>
+<a name='L1144'></a><a href='#L1144'>1144</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1800,6 +1812,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">24x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1810,16 +1823,18 @@
 <span class="cline-any cline-yes">24x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">24x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">24x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -1832,6 +1847,15 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2930,6 +2954,7 @@ export class MappingSerializer {
         scope: field.scope,
         docId: field.docDef.id,
       };
+&nbsp;
       // The 'attribute' field only applies to XML.
       <span class="missing-if-branch" title="if path not taken" >I</span>if (
         field.serviceObject.jsonType<span class="branch-1 cbranch-no" title="branch not covered" >?.includes(</span>
@@ -2941,9 +2966,10 @@ export class MappingSerializer {
       if (!ignoreValue || field.isPropertyOrConstant()) {
         serializedField['value'] = field.value;
       }
+&nbsp;
       if (
         field.docDef.type === DocumentType.XML ||
-        field.docDef.type === DocumentType.JSON
+        field.docDef.type === DocumentType.XSD
       ) {
         serializedField['userCreated'] = field.userCreated;
       } else if (
@@ -2952,6 +2978,7 @@ export class MappingSerializer {
       ) {
         serializedField['className'] = field.classIdentifier;
       }
+&nbsp;
       if (field.isProperty()) {
         serializedField['jsonType'] =
           ConfigModel.mappingServicesPackagePrefix + '.PropertyField';
@@ -2962,7 +2989,16 @@ export class MappingSerializer {
           ConfigModel.mappingServicesPackagePrefix + '.ConstantField';
         delete serializedField['name'];
       } else <span class="missing-if-branch" title="if path not taken" >I</span>if (field.enumeration) {
-<span class="cstat-no" title="statement not covered" >        serializedField['jsonType'] = 'io.atlasmap.java.v2.JavaEnumField';</span>
+<span class="cstat-no" title="statement not covered" >        if (field.docDef.type === DocumentType.JSON) {</span>
+<span class="cstat-no" title="statement not covered" >          serializedField['jsonType'] = 'io.atlasmap.json.v2.JsonEnumField';</span>
+        } else <span class="cstat-no" title="statement not covered" >if (</span>
+          field.docDef.type === DocumentType.XML ||
+          field.docDef.type === DocumentType.XSD
+        ) {
+<span class="cstat-no" title="statement not covered" >          serializedField['jsonType'] = 'io.atlasmap.xml.v2.XmlEnumField';</span>
+        } else {
+<span class="cstat-no" title="statement not covered" >          serializedField['jsonType'] = 'io.atlasmap.java.v2.JavaEnumField';</span>
+        }
       }
 &nbsp;
       let includeIndexes: boolean =
@@ -3456,7 +3492,7 @@ export class MappingSerializer {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Mar 08 2021 20:29:09 GMT+0000 (Coordinated Universal Time)
+                at Thu Mar 11 2021 17:45:19 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

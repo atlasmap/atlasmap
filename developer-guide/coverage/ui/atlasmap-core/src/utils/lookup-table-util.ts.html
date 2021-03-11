@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">26.6% </span>
+                <span class="strong">26% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>25/94</span>
+                <span class='fraction'>26/100</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">3.33% </span>
+                <span class="strong">3.23% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/60</span>
+                <span class='fraction'>2/62</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">44.44% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/8</span>
+                <span class='fraction'>4/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">23.08% </span>
+                <span class="strong">22.62% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>18/78</span>
+                <span class='fraction'>19/84</span>
             </div>
         
             
@@ -247,7 +247,16 @@
 <a name='L189'></a><a href='#L189'>189</a>
 <a name='L190'></a><a href='#L190'>190</a>
 <a name='L191'></a><a href='#L191'>191</a>
-<a name='L192'></a><a href='#L192'>192</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -368,6 +377,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -386,16 +409,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -425,6 +439,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -484,33 +502,33 @@ export class LookupTableUtil {
     <span class="missing-if-branch" title="else path not taken" >E</span>if (
       !(
         m.transition.mode === TransitionMode.ENUM &amp;&amp;
-<span class="branch-1 cbranch-no" title="branch not covered" >        m.transition.lookupTableName == null </span>&amp;&amp;
+<span class="branch-1 cbranch-no" title="branch not covered" >        !m.transition.lookupTableName </span>&amp;&amp;
 <span class="branch-2 cbranch-no" title="branch not covered" >        m.getFields(true).length === 1 </span>&amp;&amp;
 <span class="branch-3 cbranch-no" title="branch not covered" >        m.getFields(false).length === 1</span>
       )
     ) {
       return;
     }
-    let inputClassIdentifier: string | undefined;
-    let outputClassIdentifier: string | undefined;
+    let inputIdentifier: string | undefined;
+    let outputIdentifier: string | undefined;
 &nbsp;
     const inputField: Field = <span class="cstat-no" title="statement not covered" >m.getFields(true)[0];</span>
 <span class="cstat-no" title="statement not covered" >    if (inputField) {</span>
-<span class="cstat-no" title="statement not covered" >      inputClassIdentifier = inputField.classIdentifier;</span>
+<span class="cstat-no" title="statement not covered" >      inputIdentifier = inputField.name + '-' + inputField.docDef.id;</span>
     }
     const outputField: Field = <span class="cstat-no" title="statement not covered" >m.getFields(true)[0];</span>
 <span class="cstat-no" title="statement not covered" >    if (outputField) {</span>
-<span class="cstat-no" title="statement not covered" >      outputClassIdentifier = outputField.classIdentifier;</span>
+<span class="cstat-no" title="statement not covered" >      outputIdentifier = outputField.name + '-' + outputField.docDef.id;</span>
     }
-<span class="cstat-no" title="statement not covered" >    if (inputClassIdentifier &amp;&amp; outputClassIdentifier) {</span>
+<span class="cstat-no" title="statement not covered" >    if (inputIdentifier &amp;&amp; outputIdentifier) {</span>
       let table: LookupTable = <span class="cstat-no" title="statement not covered" >mappingDefinition.getTableBySourceTarget(</span>
-        inputClassIdentifier,
-        outputClassIdentifier
+        inputIdentifier,
+        outputIdentifier
       );
-<span class="cstat-no" title="statement not covered" >      if (table == null) {</span>
+<span class="cstat-no" title="statement not covered" >      if (!table) {</span>
 <span class="cstat-no" title="statement not covered" >        table = new LookupTable();</span>
-<span class="cstat-no" title="statement not covered" >        table.sourceIdentifier = inputClassIdentifier;</span>
-<span class="cstat-no" title="statement not covered" >        table.targetIdentifier = outputClassIdentifier;</span>
+<span class="cstat-no" title="statement not covered" >        table.sourceIdentifier = inputIdentifier;</span>
+<span class="cstat-no" title="statement not covered" >        table.targetIdentifier = outputIdentifier;</span>
 <span class="cstat-no" title="statement not covered" >        mappingDefinition.addTable(table);</span>
 <span class="cstat-no" title="statement not covered" >        m.transition.lookupTableName = table.name;</span>
       } else {
@@ -528,7 +546,7 @@ export class LookupTableUtil {
         mappingDefinition,
         t.name
       );
-<span class="cstat-no" title="statement not covered" >      if (m != null &amp;&amp; m.transition.lookupTableName != null) {</span>
+<span class="cstat-no" title="statement not covered" >      if (m &amp;&amp; m.transition.lookupTableName) {</span>
 <span class="cstat-no" title="statement not covered" >        if (!t.sourceIdentifier) {</span>
           const inputField: Field = <span class="cstat-no" title="statement not covered" >m.getFields(true)[0];</span>
 <span class="cstat-no" title="statement not covered" >          if (inputField) {</span>
@@ -558,6 +576,20 @@ export class LookupTableUtil {
     )!;
   }
 &nbsp;
+<span class="fstat-no" title="function not covered" >  private static e</span>rrorNoTable(cfg: ConfigModel, mapping: MappingModel) {
+<span class="cstat-no" title="statement not covered" >    cfg.errorService.addError(</span>
+      new ErrorInfo({
+        message:
+          'Could not find enumeration lookup table ' +
+          mapping.transition?.lookupTableName +
+          ' for mapping.',
+        scope: ErrorScope.MAPPING,
+        type: ErrorType.INTERNAL,
+        mapping: mapping,
+      })
+    );
+  }
+&nbsp;
 <span class="fstat-no" title="function not covered" >  static g</span>etEnumerationValues(
     cfg: ConfigModel,
     mapping: MappingModel
@@ -575,18 +607,9 @@ export class LookupTableUtil {
     const table = <span class="cstat-no" title="statement not covered" >cfg.mappings.getTableByName(</span>
       mapping.transition?.lookupTableName!
     );
-<span class="cstat-no" title="statement not covered" >    if (table === null) {</span>
-<span class="cstat-no" title="statement not covered" >      cfg.errorService.addError(</span>
-        new ErrorInfo({
-          message:
-            'Could not find enumeration lookup table ' +
-            mapping.transition?.lookupTableName +
-            ' for mapping.',
-          scope: ErrorScope.MAPPING,
-          type: ErrorType.INTERNAL,
-          mapping: mapping,
-        })
-      );
+<span class="cstat-no" title="statement not covered" >    if (!table) {</span>
+<span class="cstat-no" title="statement not covered" >      LookupTableUtil.errorNoTable(cfg, mapping);</span>
+<span class="cstat-no" title="statement not covered" >      return [];</span>
     }
 &nbsp;
     const enumVals: LookupTableData[] = <span class="cstat-no" title="statement not covered" >[];</span>
@@ -617,6 +640,10 @@ export class LookupTableUtil {
     const table = <span class="cstat-no" title="statement not covered" >cfg.mappings.getTableByName(</span>
       mapping.transition?.lookupTableName!
     );
+<span class="cstat-no" title="statement not covered" >    if (!table) {</span>
+<span class="cstat-no" title="statement not covered" >      LookupTableUtil.errorNoTable(cfg, mapping);</span>
+<span class="cstat-no" title="statement not covered" >      return;</span>
+    }
 <span class="cstat-no" title="statement not covered" >    table.entries = [];</span>
 <span class="cstat-no" title="statement not covered" >    for (const enumValue<span class="cstat-no" title="statement not covered" > of <span class="cstat-no" title="statement not covered" >e</span>numerationValues)</span> {</span>
 <span class="cstat-no" title="statement not covered" >      if (enumValue.selectedTargetEnumValue === EnumerationUnspecified) {</span>
@@ -636,7 +663,7 @@ export class LookupTableUtil {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Mar 08 2021 20:29:09 GMT+0000 (Coordinated Universal Time)
+                at Thu Mar 11 2021 17:45:19 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
