@@ -44,33 +44,33 @@ export class LookupTableUtil {
     if (
       !(
         m.transition.mode === TransitionMode.ENUM &&
-        m.transition.lookupTableName == null &&
+        !m.transition.lookupTableName &&
         m.getFields(true).length === 1 &&
         m.getFields(false).length === 1
       )
     ) {
       return;
     }
-    let inputClassIdentifier: string | undefined;
-    let outputClassIdentifier: string | undefined;
+    let inputIdentifier: string | undefined;
+    let outputIdentifier: string | undefined;
 
     const inputField: Field = m.getFields(true)[0];
     if (inputField) {
-      inputClassIdentifier = inputField.classIdentifier;
+      inputIdentifier = inputField.name + '-' + inputField.docDef.id;
     }
     const outputField: Field = m.getFields(true)[0];
     if (outputField) {
-      outputClassIdentifier = outputField.classIdentifier;
+      outputIdentifier = outputField.name + '-' + outputField.docDef.id;
     }
-    if (inputClassIdentifier && outputClassIdentifier) {
+    if (inputIdentifier && outputIdentifier) {
       let table: LookupTable = mappingDefinition.getTableBySourceTarget(
-        inputClassIdentifier,
-        outputClassIdentifier
+        inputIdentifier,
+        outputIdentifier
       );
-      if (table == null) {
+      if (!table) {
         table = new LookupTable();
-        table.sourceIdentifier = inputClassIdentifier;
-        table.targetIdentifier = outputClassIdentifier;
+        table.sourceIdentifier = inputIdentifier;
+        table.targetIdentifier = outputIdentifier;
         mappingDefinition.addTable(table);
         m.transition.lookupTableName = table.name;
       } else {
@@ -88,7 +88,7 @@ export class LookupTableUtil {
         mappingDefinition,
         t.name
       );
-      if (m != null && m.transition.lookupTableName != null) {
+      if (m && m.transition.lookupTableName) {
         if (!t.sourceIdentifier) {
           const inputField: Field = m.getFields(true)[0];
           if (inputField) {
@@ -118,6 +118,20 @@ export class LookupTableUtil {
     )!;
   }
 
+  private static errorNoTable(cfg: ConfigModel, mapping: MappingModel) {
+    cfg.errorService.addError(
+      new ErrorInfo({
+        message:
+          'Could not find enumeration lookup table ' +
+          mapping.transition?.lookupTableName +
+          ' for mapping.',
+        scope: ErrorScope.MAPPING,
+        type: ErrorType.INTERNAL,
+        mapping: mapping,
+      })
+    );
+  }
+
   static getEnumerationValues(
     cfg: ConfigModel,
     mapping: MappingModel
@@ -135,18 +149,9 @@ export class LookupTableUtil {
     const table = cfg.mappings.getTableByName(
       mapping.transition?.lookupTableName!
     );
-    if (table === null) {
-      cfg.errorService.addError(
-        new ErrorInfo({
-          message:
-            'Could not find enumeration lookup table ' +
-            mapping.transition?.lookupTableName +
-            ' for mapping.',
-          scope: ErrorScope.MAPPING,
-          type: ErrorType.INTERNAL,
-          mapping: mapping,
-        })
-      );
+    if (!table) {
+      LookupTableUtil.errorNoTable(cfg, mapping);
+      return [];
     }
 
     const enumVals: LookupTableData[] = [];
@@ -177,6 +182,10 @@ export class LookupTableUtil {
     const table = cfg.mappings.getTableByName(
       mapping.transition?.lookupTableName!
     );
+    if (!table) {
+      LookupTableUtil.errorNoTable(cfg, mapping);
+      return;
+    }
     table.entries = [];
     for (const enumValue of enumerationValues) {
       if (enumValue.selectedTargetEnumValue === EnumerationUnspecified) {
