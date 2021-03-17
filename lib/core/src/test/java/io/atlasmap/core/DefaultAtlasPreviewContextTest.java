@@ -295,4 +295,35 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         assertEquals("foo", target.getValue());
     }
 
+    @Test
+    public void testProcessPreviewFilterSelect() throws Exception {
+        Mapping m = new Mapping();
+        FieldGroup fg = new FieldGroup();
+        fg.setDocId("source");
+        fg.setPath("/addressList<>");
+        m.setInputFieldGroup(fg);
+        FieldGroup fgc = new FieldGroup();
+        fgc.setDocId("source");
+        fgc.setPath("/addressList<0>");
+        fg.getField().add(fgc);
+        Field source = new SimpleField();
+        source.setDocId("source");
+        source.setFieldType(FieldType.STRING);
+        source.setPath("/addressList<0>/city");
+        source.setValue("Bolton");
+        fgc.getField().add(source);
+        Field source2 = new SimpleField();
+        source2.setDocId("source");
+        source2.setFieldType(FieldType.STRING);
+        source2.setPath("/addressList<0>/state");
+        source2.setValue("MA");
+        fgc.getField().add(source2);
+        m.setExpression("SELECT(FILTER(${source:/addressList<>}, ${/city} != 'Boston'), ${state})");
+        Field target = new SimpleField();
+        target.setFieldType(FieldType.STRING);
+        m.getOutputField().add(target);
+        Audits audits = previewContext.processPreview(m);
+        assertEquals(printAudit(audits), 0, audits.getAudit().size());
+        assertEquals("MA", target.getValue());
+    }
 }
