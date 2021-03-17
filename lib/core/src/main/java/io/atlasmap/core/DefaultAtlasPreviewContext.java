@@ -248,42 +248,46 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
         @Override
         public void readSourceValue(AtlasInternalSession session) throws AtlasException {
             Field sourceField = session.head().getSourceField();
-            String docId = sourceField.getDocId();
-            String path = sourceField.getPath();
             FieldGroup sourceFieldGroup = mapping.getInputFieldGroup();
             if (sourceFieldGroup != null) {
-                 Field f = readFromGroup(sourceFieldGroup, docId, path);
+                if (matches(sourceField, sourceFieldGroup)) {
+                    session.head().setSourceField(sourceFieldGroup);
+                    return;
+                }
+                 Field f = readFromGroup(sourceFieldGroup, sourceField);
                  session.head().setSourceField(f);
                  return;
             }
             for (Field f : mapping.getInputField()) {
-                if ((docId == null && f.getDocId() != null)
-                        || (docId != null && f.getDocId() == null)
-                        || (docId != null && !docId.equals(f.getDocId()))) {
-                    continue;
-                }
-                if (f.getPath() != null && f.getPath().equals(path)) {
+                if (matches(sourceField, f)) {
                     session.head().setSourceField(f);
                     return;
                 }
             }
         }
 
-        private Field readFromGroup(FieldGroup group, String docId, String path) {
+        private boolean matches(Field f1, Field f2) {
+            if ((f1.getDocId() == null && f2.getDocId() != null)
+                    || (f1.getDocId() != null && f2.getDocId() == null)
+                    || (f1.getDocId() != null && !f1.getDocId().equals(f2.getDocId()))) {
+                return false;
+            }
+            if (f2.getPath() != null && f2.getPath().equals(f1.getPath())) {
+                return true;
+            }
+            return false;
+        }
+
+        private Field readFromGroup(FieldGroup group, Field field) {
             if (group.getField() == null) {
                 return null;
             }
             for (Field f : group.getField()) {
-                if ((docId == null && f.getDocId() != null)
-                        || (docId != null && f.getDocId() == null)
-                        || (docId != null && !docId.equals(f.getDocId()))) {
-                    continue;
-                }
-                if (f.getPath() != null && f.getPath().equals(path)) {
+                if (matches(field, f)) {
                     return f;
                 }
                 if (f instanceof FieldGroup) {
-                    Field deeper = readFromGroup((FieldGroup)f, docId, path);
+                    Field deeper = readFromGroup((FieldGroup)f, field);
                     if (deeper != null) {
                         return deeper;
                     }
