@@ -46,14 +46,14 @@ import io.atlasmap.v2.FieldGroup;
 <span class="fc" id="L46">                Field fs = (Field) selectExpression.evaluate((subCtx) -&gt; {</span>
 <span class="pc bpc" id="L47" title="1 of 4 branches missed.">                    if (subCtx != null &amp;&amp; AtlasModelFactory.GENERATED_PATH.equals(answer.getPath())) {</span>
 <span class="fc" id="L48">                        answer.setPath(parent.getPath() +</span>
-<span class="pc bpc" id="L49" title="1 of 2 branches missed.">                            (subCtx.startsWith(AtlasPath.PATH_SEPARATOR) ? subCtx : (AtlasPath.PATH_SEPARATOR + subCtx)));</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">                            (subCtx.startsWith(AtlasPath.PATH_SEPARATOR) ? subCtx : (AtlasPath.PATH_SEPARATOR + subCtx)));</span>
                     }
 <span class="fc" id="L51">                    return AtlasPath.extractChildren(f, subCtx);</span>
                 });
 <span class="fc" id="L53">                selected.add(fs);</span>
 <span class="fc" id="L54">            }</span>
-<span class="pc bpc" id="L55" title="1 of 2 branches missed.">            if (selected.size() == 1) {</span>
-<span class="nc" id="L56">                return selected.get(0);</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">            if (selected.size() == 1) {</span>
+<span class="fc" id="L56">                return selected.get(0);</span>
             }
 <span class="fc" id="L58">            answer.getField().addAll(selected);</span>
 <span class="fc" id="L59">            return answer;</span>

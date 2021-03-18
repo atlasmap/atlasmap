@@ -79,7 +79,7 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
 <span class="fc" id="L79">            sourceFields = sourceFieldGroup.getField();</span>
         }
 <span class="fc bfc" id="L81" title="All 2 branches covered.">        for (Field sf : sourceFields) {</span>
-<span class="pc bpc" id="L82" title="1 of 4 branches missed.">            if (sf.getFieldType() == null || sf.getValue() == null) {</span>
+<span class="fc bfc" id="L82" title="All 4 branches covered.">            if (sf.getFieldType() == null || sf.getValue() == null) {</span>
 <span class="fc" id="L83">                continue;</span>
             }
 <span class="pc bpc" id="L85" title="1 of 4 branches missed.">            if (sf.getValue() instanceof String &amp;&amp; ((String)sf.getValue()).isEmpty()) {</span>
@@ -248,102 +248,106 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
         @Override
         public void readSourceValue(AtlasInternalSession session) throws AtlasException {
 <span class="fc" id="L250">            Field sourceField = session.head().getSourceField();</span>
-<span class="fc" id="L251">            String docId = sourceField.getDocId();</span>
-<span class="fc" id="L252">            String path = sourceField.getPath();</span>
-<span class="fc" id="L253">            FieldGroup sourceFieldGroup = mapping.getInputFieldGroup();</span>
-<span class="fc bfc" id="L254" title="All 2 branches covered.">            if (sourceFieldGroup != null) {</span>
-<span class="fc" id="L255">                 Field f = readFromGroup(sourceFieldGroup, docId, path);</span>
-<span class="fc" id="L256">                 session.head().setSourceField(f);</span>
-<span class="fc" id="L257">                 return;</span>
+<span class="fc" id="L251">            FieldGroup sourceFieldGroup = mapping.getInputFieldGroup();</span>
+<span class="fc bfc" id="L252" title="All 2 branches covered.">            if (sourceFieldGroup != null) {</span>
+<span class="fc bfc" id="L253" title="All 2 branches covered.">                if (matches(sourceField, sourceFieldGroup)) {</span>
+<span class="fc" id="L254">                    session.head().setSourceField(sourceFieldGroup);</span>
+<span class="fc" id="L255">                    return;</span>
+                }
+<span class="fc" id="L257">                 Field f = readFromGroup(sourceFieldGroup, sourceField);</span>
+<span class="fc" id="L258">                 session.head().setSourceField(f);</span>
+<span class="fc" id="L259">                 return;</span>
             }
-<span class="fc bfc" id="L259" title="All 2 branches covered.">            for (Field f : mapping.getInputField()) {</span>
-<span class="pc bpc" id="L260" title="1 of 6 branches missed.">                if ((docId == null &amp;&amp; f.getDocId() != null)</span>
-<span class="pc bpc" id="L261" title="1 of 4 branches missed.">                        || (docId != null &amp;&amp; f.getDocId() == null)</span>
-<span class="fc bfc" id="L262" title="All 2 branches covered.">                        || (docId != null &amp;&amp; !docId.equals(f.getDocId()))) {</span>
-<span class="fc" id="L263">                    continue;</span>
+<span class="fc bfc" id="L261" title="All 2 branches covered.">            for (Field f : mapping.getInputField()) {</span>
+<span class="fc bfc" id="L262" title="All 2 branches covered.">                if (matches(sourceField, f)) {</span>
+<span class="fc" id="L263">                    session.head().setSourceField(f);</span>
+<span class="fc" id="L264">                    return;</span>
                 }
-<span class="pc bpc" id="L265" title="1 of 4 branches missed.">                if (f.getPath() != null &amp;&amp; f.getPath().equals(path)) {</span>
-<span class="fc" id="L266">                    session.head().setSourceField(f);</span>
-<span class="fc" id="L267">                    return;</span>
-                }
-<span class="fc" id="L269">            }</span>
-<span class="fc" id="L270">        }</span>
+<span class="fc" id="L266">            }</span>
+<span class="fc" id="L267">        }</span>
 
-        private Field readFromGroup(FieldGroup group, String docId, String path) {
-<span class="pc bpc" id="L273" title="1 of 2 branches missed.">            if (group.getField() == null) {</span>
-<span class="nc" id="L274">                return null;</span>
+        private boolean matches(Field f1, Field f2) {
+<span class="pc bpc" id="L270" title="1 of 4 branches missed.">            if ((f1.getDocId() == null &amp;&amp; f2.getDocId() != null)</span>
+<span class="fc bfc" id="L271" title="All 4 branches covered.">                    || (f1.getDocId() != null &amp;&amp; f2.getDocId() == null)</span>
+<span class="fc bfc" id="L272" title="All 4 branches covered.">                    || (f1.getDocId() != null &amp;&amp; !f1.getDocId().equals(f2.getDocId()))) {</span>
+<span class="fc" id="L273">                return false;</span>
             }
-<span class="pc bpc" id="L276" title="1 of 2 branches missed.">            for (Field f : group.getField()) {</span>
-<span class="pc bpc" id="L277" title="1 of 6 branches missed.">                if ((docId == null &amp;&amp; f.getDocId() != null)</span>
-<span class="pc bpc" id="L278" title="1 of 4 branches missed.">                        || (docId != null &amp;&amp; f.getDocId() == null)</span>
-<span class="fc bfc" id="L279" title="All 2 branches covered.">                        || (docId != null &amp;&amp; !docId.equals(f.getDocId()))) {</span>
-<span class="fc" id="L280">                    continue;</span>
+<span class="fc bfc" id="L275" title="All 4 branches covered.">            if (f2.getPath() != null &amp;&amp; f2.getPath().equals(f1.getPath())) {</span>
+<span class="fc" id="L276">                return true;</span>
+            }
+<span class="fc" id="L278">            return false;</span>
+        }
+
+        private Field readFromGroup(FieldGroup group, Field field) {
+<span class="pc bpc" id="L282" title="1 of 2 branches missed.">            if (group.getField() == null) {</span>
+<span class="nc" id="L283">                return null;</span>
+            }
+<span class="pc bpc" id="L285" title="1 of 2 branches missed.">            for (Field f : group.getField()) {</span>
+<span class="fc bfc" id="L286" title="All 2 branches covered.">                if (matches(field, f)) {</span>
+<span class="fc" id="L287">                    return f;</span>
                 }
-<span class="pc bpc" id="L282" title="1 of 4 branches missed.">                if (f.getPath() != null &amp;&amp; f.getPath().equals(path)) {</span>
-<span class="fc" id="L283">                    return f;</span>
-                }
-<span class="pc bpc" id="L285" title="1 of 2 branches missed.">                if (f instanceof FieldGroup) {</span>
-<span class="nc" id="L286">                    Field deeper = readFromGroup((FieldGroup)f, docId, path);</span>
-<span class="nc bnc" id="L287" title="All 2 branches missed.">                    if (deeper != null) {</span>
-<span class="nc" id="L288">                        return deeper;</span>
+<span class="pc bpc" id="L289" title="1 of 2 branches missed.">                if (f instanceof FieldGroup) {</span>
+<span class="nc" id="L290">                    Field deeper = readFromGroup((FieldGroup)f, field);</span>
+<span class="nc bnc" id="L291" title="All 2 branches missed.">                    if (deeper != null) {</span>
+<span class="nc" id="L292">                        return deeper;</span>
                     }
                 }
-<span class="fc" id="L291">            }</span>
-<span class="nc" id="L292">            return null;</span>
+<span class="fc" id="L295">            }</span>
+<span class="nc" id="L296">            return null;</span>
         }
 
         @Override
         public Boolean isSupportedField(Field field) {
             // The field type doesn't matter for preview
-<span class="fc" id="L298">            return true;</span>
+<span class="fc" id="L302">            return true;</span>
         }
 
         @Override
         public void processPreValidation(AtlasInternalSession session) throws AtlasException {
-<span class="nc" id="L303">        }</span>
-
-        @Override
-        public void processPreSourceExecution(AtlasInternalSession session) throws AtlasException {
 <span class="nc" id="L307">        }</span>
 
         @Override
-        public void processPreTargetExecution(AtlasInternalSession session) throws AtlasException {
+        public void processPreSourceExecution(AtlasInternalSession session) throws AtlasException {
 <span class="nc" id="L311">        }</span>
 
         @Override
-        public void writeTargetValue(AtlasInternalSession session) throws AtlasException {
+        public void processPreTargetExecution(AtlasInternalSession session) throws AtlasException {
 <span class="nc" id="L315">        }</span>
 
         @Override
-        public void processPostSourceExecution(AtlasInternalSession session) throws AtlasException {
+        public void writeTargetValue(AtlasInternalSession session) throws AtlasException {
 <span class="nc" id="L319">        }</span>
 
         @Override
-        public void processPostTargetExecution(AtlasInternalSession session) throws AtlasException {
+        public void processPostSourceExecution(AtlasInternalSession session) throws AtlasException {
 <span class="nc" id="L323">        }</span>
 
         @Override
+        public void processPostTargetExecution(AtlasInternalSession session) throws AtlasException {
+<span class="nc" id="L327">        }</span>
+
+        @Override
         public Field cloneField(Field field) throws AtlasException {
-<span class="nc" id="L327">            return null;</span>
+<span class="nc" id="L331">            return null;</span>
         }
 
     };
 
     @Override
     public Map&lt;String, AtlasModule&gt; getSourceModules() {
-<span class="fc" id="L334">        return new HashMap&lt;String, AtlasModule&gt;() {</span>
+<span class="fc" id="L338">        return new HashMap&lt;String, AtlasModule&gt;() {</span>
             private static final long serialVersionUID = 1L;
 
             @Override
             public AtlasModule get(Object key) {
-<span class="fc" id="L339">                return previewModule;</span>
+<span class="fc" id="L343">                return previewModule;</span>
             }
         };
     }
 
     @Override
     protected AtlasModule resolveModule(FieldDirection direction, Field field) {
-<span class="fc" id="L346">        return previewModule;</span>
+<span class="fc" id="L350">        return previewModule;</span>
     }
 
 }

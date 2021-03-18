@@ -24,7 +24,7 @@ Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasFieldActionSer
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasFieldActionService.new Comparator() {...},0,12,0,0,0,2,0,2,0,2
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasFunctionResolver,31,181,4,18,3,41,4,12,0,5
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasContextFactory,159,672,20,56,33,195,23,62,4,43
-Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasPreviewContext.PreviewModule,23,131,11,33,12,30,17,16,7,4
+Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasPreviewContext.PreviewModule,22,129,6,28,12,30,12,17,7,5
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,PropertyModule,64,81,6,10,11,29,6,14,0,12
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,AtlasUtil,310,879,55,115,70,194,44,74,5,26
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,ValidationConstants,0,3,0,0,0,1,0,1,0,1
@@ -47,13 +47,13 @@ Unit Test Coverage Report/atlas-core,io.atlasmap.core,CompoundClassLoader,0,3,0,
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasFieldActionService,514,1627,93,198,91,349,73,116,4,38
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasSession.HeadImpl,32,72,3,1,7,24,3,12,1,12
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,ConstantModule,53,114,5,7,16,34,17,24,12,23
-Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasPreviewContext,256,351,31,51,53,79,26,23,0,8
+Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasPreviewContext,256,351,30,52,53,79,25,24,0,8
 Unit Test Coverage Report/atlas-core,io.atlasmap.functions,ISEMPTY.new BooleanExpression() {...},2,45,2,8,0,8,2,6,0,3
 Unit Test Coverage Report/atlas-core,io.atlasmap.functions,LT,5,17,1,1,1,3,1,2,0,2
 Unit Test Coverage Report/atlas-core,io.atlasmap.functions,FILTER,27,113,6,10,4,28,6,7,0,5
 Unit Test Coverage Report/atlas-core,io.atlasmap.functions,ISEMPTY,5,18,1,1,1,4,1,2,0,2
 Unit Test Coverage Report/atlas-core,io.atlasmap.functions,TOLOWER,7,27,2,2,1,6,2,3,0,3
-Unit Test Coverage Report/atlas-core,io.atlasmap.functions,SELECT,25,104,5,9,2,21,5,6,0,4
+Unit Test Coverage Report/atlas-core,io.atlasmap.functions,SELECT,12,117,3,11,1,22,3,8,0,4
 Unit Test Coverage Report/atlas-core,io.atlasmap.functions,IF,5,40,1,3,1,9,1,4,0,3
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,ShortConverter,65,183,18,32,7,35,19,28,6,16
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,CharBufferConverter,119,8,0,0,21,2,21,1,21,1
