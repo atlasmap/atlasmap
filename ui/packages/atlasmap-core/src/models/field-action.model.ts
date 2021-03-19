@@ -63,7 +63,7 @@ export class FieldActionDefinition {
             'BYTE',
             'DECIMAL',
             'NUMBER',
-          ].indexOf(arg.type) !== -1
+          ].indexOf(arg.type.toUpperCase()) !== -1
         ) {
           action.setArgumentValue(arg.name!, '0'); // TODO: check this non null operator
         } else {
