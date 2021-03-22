@@ -410,6 +410,15 @@ public class DefaultAtlasContextFactoryTest {
         }
 
         @Override
+        public String getDocName() {
+            return null;
+        }
+
+        @Override
+        public void setDocName(String docName) {
+            LOG.debug("setDocName method");
+        }
+        @Override
         public String getUri() {
             return null;
         }

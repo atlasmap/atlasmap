@@ -93,6 +93,10 @@ public interface AtlasModule {
 
     void setDocId(String docId);
 
+    String getDocName();
+
+    void setDocName(String docName);
+
     String getUri();
 
     void setUri(String uri);

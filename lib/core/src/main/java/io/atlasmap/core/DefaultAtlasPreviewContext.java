@@ -105,19 +105,19 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
                 session.head().setTargetField(targetField);
                 if (sourceFieldGroup != null) {
                     if (sourceFieldGroup.getField().size() == 0) {
-                        AtlasUtil.addAudit(session, targetField.getDocId(), String.format(
+                        AtlasUtil.addAudit(session, targetField, String.format(
                                 "The group field '%s:%s' Empty group field is detected, skipping",
                                 sourceField.getDocId(), sourceField.getPath()),
-                                targetField.getPath(), AuditStatus.WARN, null);
+                                AuditStatus.WARN, null);
                         continue;
                     }
                     Integer index = targetField.getIndex();
                     AtlasPath targetPath = new AtlasPath(targetField.getPath());
                     if (targetPath.hasCollection() && !targetPath.isIndexedCollection()) {
                         if (targetFields.size() > 1) {
-                            AtlasUtil.addAudit(session, targetField.getDocId(),
+                            AtlasUtil.addAudit(session, targetField,
                                     "It's not yet supported to have a collection field as a part of multiple target fields in a same mapping",
-                                    targetField.getPath(), AuditStatus.ERROR, null);
+                                    AuditStatus.ERROR, null);
                             return session.getAudits();
                         }
                         session.head().setSourceField(sourceFieldGroup);
@@ -127,10 +127,10 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
                         if (sourceFieldGroup.getField().size() > index) {
                             session.head().setSourceField(sourceFieldGroup.getField().get(index));
                         } else {
-                            AtlasUtil.addAudit(session, targetField.getDocId(), String.format(
+                            AtlasUtil.addAudit(session, targetField, String.format(
                                     "The number of source fields '%s' is fewer than expected via target field index '%s'",
                                     sourceFieldGroup.getField().size(), targetField.getIndex()),
-                                    targetField.getPath(), AuditStatus.WARN, null);
+                                    AuditStatus.WARN, null);
                             continue;
                         }
                     }
@@ -162,9 +162,9 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
             try {
                 separatedFields = processSeparateField(session, mapping, sourceField);
             } catch (AtlasException e) {
-                AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(
+                AtlasUtil.addAudit(session, sourceField, String.format(
                         "Failed to separate field: %s", AtlasUtil.getChainedMessage(e)),
-                        sourceField.getPath(), AuditStatus.ERROR, null);
+                        AuditStatus.ERROR, null);
                 if (LOG.isDebugEnabled()) {
                     LOG.error("", e);
                 }
@@ -176,17 +176,16 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
             for (Field f : targetFields) {
                 targetField = f;
                 if (targetField.getIndex() == null || targetField.getIndex() < 0) {
-                    AtlasUtil.addAudit(session, targetField.getDocId(), String.format(
+                    AtlasUtil.addAudit(session, targetField, String.format(
                             "Separate requires zero or positive Index value to be set on targetField targetField.path=%s",
-                            targetField.getPath()), targetField.getPath(), AuditStatus.WARN, null);
+                            targetField.getPath()), AuditStatus.WARN, null);
                     continue;
                 }
                 if (separatedFields.size() <= targetField.getIndex()) {
                     String errorMessage = String.format(
                             "Separate returned fewer segments count=%s when targetField.path=%s requested index=%s",
                             separatedFields.size(), targetField.getPath(), targetField.getIndex());
-                    AtlasUtil.addAudit(session, targetField.getDocId(), errorMessage, targetField.getPath(),
-                            AuditStatus.WARN, null);
+                    AtlasUtil.addAudit(session, targetField, errorMessage, AuditStatus.WARN, null);
                     break;
                 }
                 if (!convertSourceToTarget(session, separatedFields.get(targetField.getIndex()), targetField)) {
@@ -196,9 +195,9 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
             }
 
         } else {
-            AtlasUtil.addAudit(session, null, String.format(
+            AtlasUtil.addAudit(session, (String)null, String.format(
                     "Unsupported mappingType=%s detected", mapping.getMappingType()),
-                    null, AuditStatus.ERROR, null);
+                    AuditStatus.ERROR, null);
         }
         return session.getAudits();
     }
@@ -209,9 +208,9 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
                     sourceField.getValue(), null, sourceField.getFieldType(), null);
             sourceField.setValue(sourceValue);
         } catch (AtlasConversionException e) {
-            AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(
+            AtlasUtil.addAudit(session, sourceField, String.format(
                     "Wrong format for source value : %s", AtlasUtil.getChainedMessage(e)),
-                    sourceField.getPath(), AuditStatus.ERROR, null);
+                    AuditStatus.ERROR, null);
             if (LOG.isDebugEnabled()) {
                 LOG.error("", e);
             }
@@ -230,9 +229,9 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
                 targetValue = getContextFactory().getConversionService().convertType(sourceField.getValue(), sourceField.getFormat(),
                         targetField.getFieldType(), targetField.getFormat());
             } catch (AtlasConversionException e) {
-                AtlasUtil.addAudit(session, targetField.getDocId(), String.format(
+                AtlasUtil.addAudit(session, targetField, String.format(
                         "Failed to convert source value to target type: %s", AtlasUtil.getChainedMessage(e)),
-                        targetField.getPath(), AuditStatus.ERROR, null);
+                        AuditStatus.ERROR, null);
                 if (LOG.isDebugEnabled()) {
                     LOG.error("", e);
                 }
@@ -329,6 +328,16 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
         @Override
         public Field cloneField(Field field) throws AtlasException {
             return null;
+        }
+
+        @Override
+        public String getDocName() {
+            return "Preview";
+        }
+
+        @Override
+        public String getDocId() {
+            return "Preview";
         }
 
     };

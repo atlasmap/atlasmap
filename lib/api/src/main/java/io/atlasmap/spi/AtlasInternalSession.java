@@ -42,6 +42,8 @@ public interface AtlasInternalSession extends AtlasSession {
 
     AtlasFieldWriter removeFieldWriter(String docId);
 
+    AtlasModule resolveModule(String docId);
+
     Head head();
 
     public interface Head {
@@ -66,7 +68,7 @@ public interface AtlasInternalSession extends AtlasSession {
 
         boolean hasError();
 
-        Head addAudit(AuditStatus status, String docId, String path, String format);
+        Head addAudit(AuditStatus status, Field field, String message);
 
         List<Audit> getAudits();
 

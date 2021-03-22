@@ -28,6 +28,7 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.spi.AtlasFieldReader;
 import io.atlasmap.spi.AtlasFieldWriter;
 import io.atlasmap.spi.AtlasInternalSession;
+import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasPropertyStrategy;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Audit;
@@ -124,13 +125,13 @@ public class DefaultAtlasSession implements AtlasInternalSession {
         if (sourceMap.containsKey(docId)) {
             return sourceMap.get(docId);
         } else if (sourceMap.size() == 1 && sourceMap.containsKey(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID)) {
-            AtlasUtil.addAudit(this, null, String.format(
+            AtlasUtil.addAudit(this, docId, String.format(
                     "There's no source document with docId='%s', returning default", docId),
-                    null, AuditStatus.WARN, null);
+                    AuditStatus.WARN, null);
             return getDefaultSourceDocument();
         }
-        AtlasUtil.addAudit(this, null, String.format(
-                "There's no source document with docId='%s'", docId), null, AuditStatus.WARN, null);
+        AtlasUtil.addAudit(this, docId, String.format(
+                "There's no source document with docId='%s'", docId), AuditStatus.WARN, null);
         return null;
     }
 
@@ -160,13 +161,13 @@ public class DefaultAtlasSession implements AtlasInternalSession {
         if (targetMap.containsKey(docId)) {
             return targetMap.get(docId);
         } else if (targetMap.size() == 1 && targetMap.containsKey(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID)) {
-            AtlasUtil.addAudit(this, null, String.format(
+            AtlasUtil.addAudit(this, docId, String.format(
                     "There's no target document with docId='%s', returning default", docId),
-                    null, AuditStatus.WARN, null);
+                    AuditStatus.WARN, null);
             return getDefaultTargetDocument();
         }
-        AtlasUtil.addAudit(this, null, String.format(
-                "There's no target document with docId='%s'", docId), null, AuditStatus.WARN, null);
+        AtlasUtil.addAudit(this, docId, String.format(
+                "There's no target document with docId='%s'", docId), AuditStatus.WARN, null);
         return null;
     }
 
@@ -350,6 +351,16 @@ public class DefaultAtlasSession implements AtlasInternalSession {
         return w;
     }
 
+    @Override
+    public AtlasModule resolveModule(String docId) {
+        // Assuming Document ID is unique across source and target
+        AtlasModule answer = this.getAtlasContext().getSourceModules().get(docId);
+        if (answer == null) {
+            answer = this.getAtlasContext().getTargetModules().get(docId);
+        }
+        return answer;
+    }
+
     private class HeadImpl implements Head {
         private DefaultAtlasSession session;
         private Mapping mapping;
@@ -426,8 +437,10 @@ public class DefaultAtlasSession implements AtlasInternalSession {
         }
 
         @Override
-        public Head addAudit(AuditStatus status, String docId, String path, String message) {
-            String docName = AtlasUtil.getDocumentNameById(session.getMapping(), docId);
+        public Head addAudit(AuditStatus status, Field field, String message) {
+            String docId = field != null ? field.getDocId() : null;
+            String docName = AtlasUtil.getDocumentNameById(session, docId);
+            String path = field != null ? field.getPath() : null;
             Audit audit = AtlasUtil.createAudit(status, docId, docName, path, null, message);
             this.audits.add(audit);
             return this;

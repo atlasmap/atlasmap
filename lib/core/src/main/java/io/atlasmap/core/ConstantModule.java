@@ -221,4 +221,13 @@ public class ConstantModule implements AtlasModule {
         return null;
     }
 
+    @Override
+    public void setDocName(String docName) {
+    }
+
+    @Override
+    public String getDocName() {
+        return "Constants";
+    }
+
 }

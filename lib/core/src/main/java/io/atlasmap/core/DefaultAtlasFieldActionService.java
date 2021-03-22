@@ -43,7 +43,6 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.api.AtlasSession;
 import io.atlasmap.spi.AtlasActionProcessor;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasFieldAction;
@@ -729,9 +728,9 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
             ActionProcessor processor = findActionProcessor(action, currentType);
             ActionDetail detail = processor.getActionDetail();
             if (detail == null) {
-                AtlasUtil.addAudit(session, field.getDocId(), String.format(
+                AtlasUtil.addAudit(session, field, String.format(
                     "Couldn't find metadata for a FieldAction '%s', ignoring...", action.getDisplayName()),
-                    field.getPath(), AuditStatus.WARN, null);
+                    AuditStatus.WARN, null);
                 continue;
             }
 
@@ -801,7 +800,8 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         return FieldType.NONE;
     }
 
-    private void extractFlatListValuesFromFieldGroup(AtlasSession session, FieldGroup fieldGroup, List<Object> values) {
+    private void extractFlatListValuesFromFieldGroup(AtlasInternalSession session,
+            FieldGroup fieldGroup, List<Object> values) {
         if (fieldGroup == null || fieldGroup.getField() == null || fieldGroup.getField().isEmpty()) {
             return;
         }
@@ -819,9 +819,9 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                         }
                         break;
                     } else {
-                        AtlasUtil.addAudit(session, subField.getDocId(), "Using only the first element of " +
+                        AtlasUtil.addAudit(session, subField, "Using only the first element of " +
                                 "the collection since a single value is expected in a multi-field selection.",
-                            subField.getPath(), AuditStatus.WARN, null);
+                            AuditStatus.WARN, null);
                         value = fields.get(0).getValue(); //get only the first value
                     }
                 }
