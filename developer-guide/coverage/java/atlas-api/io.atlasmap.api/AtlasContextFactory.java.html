@@ -29,7 +29,9 @@ import io.atlasmap.spi.AtlasSeparateStrategy;
 
 public interface AtlasContextFactory {
 
-<span class="fc" id="L32">    enum Format { ADM, JSON };</span>
+    static final String PROPERTY_ATLASMAP_CORE_VERSION = &quot;atlasmap.core.version&quot;;
+
+<span class="fc" id="L34">    enum Format { ADM, JSON };</span>
 
     void init();
 

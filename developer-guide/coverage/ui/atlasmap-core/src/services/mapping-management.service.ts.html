@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">19.08% </span>
+                <span class="strong">19.02% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>108/566</span>
+                <span class='fraction'>109/573</span>
             </div>
         
             
@@ -36,16 +36,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">12.68% </span>
+                <span class="strong">12.16% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>9/71</span>
+                <span class='fraction'>9/74</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20.19% </span>
+                <span class="strong">20.15% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>104/515</span>
+                <span class='fraction'>105/521</span>
             </div>
         
             
@@ -1339,7 +1339,22 @@
 <a name='L1281'></a><a href='#L1281'>1281</a>
 <a name='L1282'></a><a href='#L1282'>1282</a>
 <a name='L1283'></a><a href='#L1283'>1283</a>
-<a name='L1284'></a><a href='#L1284'>1284</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1284'></a><a href='#L1284'>1284</a>
+<a name='L1285'></a><a href='#L1285'>1285</a>
+<a name='L1286'></a><a href='#L1286'>1286</a>
+<a name='L1287'></a><a href='#L1287'>1287</a>
+<a name='L1288'></a><a href='#L1288'>1288</a>
+<a name='L1289'></a><a href='#L1289'>1289</a>
+<a name='L1290'></a><a href='#L1290'>1290</a>
+<a name='L1291'></a><a href='#L1291'>1291</a>
+<a name='L1292'></a><a href='#L1292'>1292</a>
+<a name='L1293'></a><a href='#L1293'>1293</a>
+<a name='L1294'></a><a href='#L1294'>1294</a>
+<a name='L1295'></a><a href='#L1295'>1295</a>
+<a name='L1296'></a><a href='#L1296'>1296</a>
+<a name='L1297'></a><a href='#L1297'>1297</a>
+<a name='L1298'></a><a href='#L1298'>1298</a>
+<a name='L1299'></a><a href='#L1299'>1299</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2620,6 +2635,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*
@@ -3904,6 +3934,21 @@ export class MappingManagementService {
 <span class="fstat-no" title="function not covered" >  isEnumerationMapping(</span>mapping: MappingModel): boolean {
 <span class="cstat-no" title="statement not covered" >    return mapping.transition.mode === TransitionMode.ENUM;</span>
   }
+&nbsp;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  getRuntimeVersion(</span></span>): Promise&lt;string&gt; {
+    const url = <span class="cstat-no" title="statement not covered" >this.cfg.initCfg.baseMappingServiceUrl + 'version';</span>
+<span class="cstat-no" title="statement not covered" >    return new Promise&lt;string&gt;(<span class="fstat-no" title="function not covered" >(r</span>esolve) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      this.api</span>
+        .get(url)
+        .json()
+        .then(<span class="fstat-no" title="function not covered" >(b</span>ody: any) =&gt; {
+<span class="cstat-no" title="statement not covered" >          this.cfg.logger!.debug(</span>
+            `Runtime Service Version Response: ${JSON.stringify(body)}`
+          );
+<span class="cstat-no" title="statement not covered" >          resolve(body.String);</span>
+        });
+    });
+  }
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -3912,7 +3957,7 @@ export class MappingManagementService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Mar 22 2021 13:56:38 GMT+0000 (Coordinated Universal Time)
+                at Mon Mar 22 2021 15:05:41 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

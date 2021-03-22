@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/138</span>
+                <span class='fraction'>0/141</span>
             </div>
         
             
@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/89</span>
+                <span class='fraction'>0/90</span>
             </div>
         
             
@@ -367,7 +367,12 @@
 <a name='L309'></a><a href='#L309'>309</a>
 <a name='L310'></a><a href='#L310'>310</a>
 <a name='L311'></a><a href='#L311'>311</a>
-<a name='L312'></a><a href='#L312'>312</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a>
+<a name='L316'></a><a href='#L316'>316</a>
+<a name='L317'></a><a href='#L317'>317</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -392,6 +397,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -494,6 +500,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -649,7 +656,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -698,6 +708,7 @@ import { IConstant, IDocumentName, INamespace, IProperty } from "../UI";
   usePropertyDialog,
   useRemoveMappedFieldDialog,
   useResetAtlasmapDialog,
+  useAboutDialog,
   useSpecifyInstanceSchemaDialog,
   useToggleExpressionModeDialog,
   useCustomClassDialog,
@@ -808,6 +819,7 @@ export interface IUseAtlasmapDialogsProps {
   const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >i</span>mportCatalogDialog,</span> <span class="cstat-no" title="statement not covered" >onImportAtlasCatalog] = useImportCatalogDialog();</span>
   const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >e</span>xportCatalogDialog,</span> <span class="cstat-no" title="statement not covered" >onExportAtlasCatalog] = useExportCatalogDialog();</span>
   const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >r</span>esetDialog,</span> <span class="cstat-no" title="statement not covered" >onResetAtlasmap] = useResetAtlasmapDialog();</span>
+  const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >a</span>boutDialog,</span> <span class="cstat-no" title="statement not covered" >onAbout] = useAboutDialog();</span>
   const <span class="cstat-no" title="statement not covered" >[</span>
 <span class="cstat-no" title="statement not covered" >    toggleExpressionModeDialog,</span>
 <span class="cstat-no" title="statement not covered" >    onToggleExpressionMode,</span>
@@ -924,6 +936,7 @@ export interface IUseAtlasmapDialogsProps {
           {deletePropertyDialog}
           {editPropertyDialog}
           {resetDialog}
+          {aboutDialog}
           {removeMappedFieldDialog}
           {deleteMappingDialog}
           {createEnableCustomClassDialog}
@@ -955,6 +968,7 @@ export interface IUseAtlasmapDialogsProps {
       modalContainer,
       removeMappedFieldDialog,
       resetDialog,
+      aboutDialog,
       toggleExpressionModeDialog,
       editMappingEnumerationDialog,
     ],
@@ -971,6 +985,7 @@ export interface IUseAtlasmapDialogsProps {
       onDeleteProperty,
       onEditProperty,
       onResetAtlasmap,
+      onAbout,
       onImportDocument,
       onDeleteDocument,
       onSpecifyInstanceSchema,
@@ -996,7 +1011,7 @@ export interface IUseAtlasmapDialogsProps {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Mar 22 2021 13:57:12 GMT+0000 (Coordinated Universal Time)
+                at Mon Mar 22 2021 15:06:23 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
