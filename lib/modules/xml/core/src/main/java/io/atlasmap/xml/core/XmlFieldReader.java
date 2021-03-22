@@ -69,10 +69,10 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
     public Field read(AtlasInternalSession session) throws AtlasException {
         Field field = session.head().getSourceField();
         if (document == null) {
-            AtlasUtil.addAudit(session, field.getDocId(),
+            AtlasUtil.addAudit(session, field,
                     String.format("Cannot read field '%s' of document '%s', document is null",
                             field.getPath(), field.getDocId()),
-                    field.getPath(), AuditStatus.ERROR, null);
+                    AuditStatus.ERROR, null);
             return field;
         }
         if (field == null) {
@@ -291,10 +291,10 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
                     xmlField.getFieldType(), null);
                 xmlField.setValue(convertedValue);
             } catch (AtlasConversionException e) {
-                AtlasUtil.addAudit(session, xmlField.getDocId(),
+                AtlasUtil.addAudit(session, xmlField,
                         String.format("Failed to convert field value '%s' into type '%s'", value,
                             xmlField.getFieldType()),
-                    xmlField.getPath(), AuditStatus.ERROR, value);
+                    AuditStatus.ERROR, value);
             }
         }
     }

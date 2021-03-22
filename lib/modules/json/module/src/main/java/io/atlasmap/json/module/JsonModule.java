@@ -74,7 +74,7 @@ public class JsonModule extends BaseAtlasModule {
         if (sourceDocument == null || !(sourceDocument instanceof String)) {
             AtlasUtil.addAudit(session, getDocId(), String.format(
                     "Null or non-String source document: docId='%s'", getDocId()),
-                    null, AuditStatus.WARN, null);
+                    AuditStatus.WARN, null);
         } else {
             sourceDocumentString = String.class.cast(sourceDocument);
         }
@@ -102,9 +102,9 @@ public class JsonModule extends BaseAtlasModule {
         Field sourceField = session.head().getSourceField();
         JsonFieldReader reader = session.getFieldReader(getDocId(), JsonFieldReader.class);
         if (reader == null) {
-            AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(
+            AtlasUtil.addAudit(session, sourceField, String.format(
                     "Source document '%s' doesn't exist", getDocId()),
-                    sourceField.getPath(), AuditStatus.ERROR, null);
+                    AuditStatus.ERROR, null);
             return;
         }
         reader.read(session);
@@ -144,7 +144,7 @@ public class JsonModule extends BaseAtlasModule {
                             AtlasUtil.addAudit(session, getDocId(), String.format(
                                     "The number of source fields (%s) is smaller than target index (%s) - ignoring",
                                     subFields.size(), index),
-                                    null, AuditStatus.WARN, null);
+                                    AuditStatus.WARN, null);
                             return;
                         }
                     } else {
@@ -227,7 +227,7 @@ public class JsonModule extends BaseAtlasModule {
         } else {
             AtlasUtil.addAudit(session, getDocId(), String
                     .format("No target document created for DataSource:[id=%s, uri=%s]", getDocId(), this.getUri()),
-                    null, AuditStatus.WARN, null);
+                    AuditStatus.WARN, null);
         }
         session.removeFieldWriter(getDocId());
 

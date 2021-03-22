@@ -64,10 +64,10 @@ public class JsonFieldReader implements AtlasFieldReader {
     public Field read(AtlasInternalSession session) throws AtlasException {
         Field field = session.head().getSourceField();
         if (rootNode == null) {
-            AtlasUtil.addAudit(session, field.getDocId(),
+            AtlasUtil.addAudit(session, field,
                 String.format("Cannot read a field '%s' of JSON document '%s', document is null",
                     field.getPath(), field.getDocId()),
-                field.getPath(), AuditStatus.ERROR, null);
+                AuditStatus.ERROR, null);
             return field;
         }
 
@@ -232,9 +232,9 @@ public class JsonFieldReader implements AtlasFieldReader {
             return null;
         }
         if (valueNode.isArray()) {
-            AtlasUtil.addAudit(session, jsonField.getDocId(),
+            AtlasUtil.addAudit(session, jsonField,
                     String.format("Unexpected array node is detected: '%s'", valueNode.asText()),
-                    jsonField.getPath(), AuditStatus.ERROR, valueNode.asText());
+                    AuditStatus.ERROR, valueNode.asText());
             return null;
         }
 
@@ -243,10 +243,10 @@ public class JsonFieldReader implements AtlasFieldReader {
                 return conversionService.convertType(valueNode.asText(), jsonField.getFormat(),
                         jsonField.getFieldType(), null);
             } catch (AtlasConversionException e) {
-                AtlasUtil.addAudit(session, jsonField.getDocId(),
+                AtlasUtil.addAudit(session, jsonField,
                         String.format("Failed to convert field value '%s' into type '%s'", valueNode.asText(),
                                 jsonField.getFieldType()),
-                        jsonField.getPath(), AuditStatus.ERROR, valueNode.asText());
+                        AuditStatus.ERROR, valueNode.asText());
                 return null;
             }
         }

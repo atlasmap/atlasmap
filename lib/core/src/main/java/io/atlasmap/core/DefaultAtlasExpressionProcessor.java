@@ -96,9 +96,10 @@ public class DefaultAtlasExpressionProcessor {
                 session.head().setSourceField(to);
             }
         } catch (Exception e) {
-            AtlasUtil.addAudit(session, null,
-                    String.format("Expression processing error: %s", e.getMessage()),
-                    expression, AuditStatus.ERROR, null);
+            AtlasUtil.addAudit(session, expression,
+                    String.format("Expression processing error [%s]: %s",
+                            expression, e.getMessage()),
+                    AuditStatus.ERROR, null);
             if (LOG.isDebugEnabled()) {
                 LOG.debug("", e);
             }

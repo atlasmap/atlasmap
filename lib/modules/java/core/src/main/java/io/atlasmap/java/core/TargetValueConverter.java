@@ -39,11 +39,11 @@ public class TargetValueConverter {
     public void populateTargetField(AtlasInternalSession session, LookupTable lookupTable, Field sourceField,
             Object parentObject, Field targetField) throws AtlasException {
         if (sourceField == null) {
-            AtlasUtil.addAudit(session, null, "Source field cannot be null", null, AuditStatus.ERROR, null);
+            AtlasUtil.addAudit(session, (String)null, "Source field cannot be null", AuditStatus.ERROR, null);
             return;
         }
         if (targetField == null) {
-            AtlasUtil.addAudit(session, null, "Target field cannot be null",null, AuditStatus.ERROR, null);
+            AtlasUtil.addAudit(session, (String)null, "Target field cannot be null", AuditStatus.ERROR, null);
             return;
         }
         Object sourceValue = sourceField.getValue();
@@ -77,10 +77,10 @@ public class TargetValueConverter {
 
         if (sourceField instanceof JavaEnumField || targetField instanceof JavaEnumField) {
             if (!(sourceField instanceof JavaEnumField) || !(targetField instanceof JavaEnumField)) {
-                AtlasUtil.addAudit(session, targetField.getDocId(), String.format(
+                AtlasUtil.addAudit(session, targetField, String.format(
                         "Value conversion between enum fields and non-enum fields is not yet supported: sourceType=%s targetType=%s targetPath=%s msg=%s",
                         sourceField.getFieldType(), targetField.getFieldType(), targetField.getPath()),
-                        targetField.getPath(), AuditStatus.ERROR, sourceValue != null ? sourceValue.toString() : null);
+                        AuditStatus.ERROR, sourceValue != null ? sourceValue.toString() : null);
             }
             populateEnumValue(session, lookupTable, (JavaEnumField) sourceField, (JavaEnumField) targetField);
             return;
@@ -89,9 +89,9 @@ public class TargetValueConverter {
         JavaField javaTargetField = (JavaField) targetField;
         if (sourceValue == null) {
             if (targetField.getFieldType() != FieldType.COMPLEX) {
-                AtlasUtil.addAudit(session, targetField.getDocId(), String.format(
+                AtlasUtil.addAudit(session, targetField, String.format(
                         "Null sourceValue for targetDocId=%s, targetPath=%s", targetField.getDocId(), targetField.getPath()),
-                        targetField.getPath(), AuditStatus.WARN, sourceValue != null ? sourceValue.toString() : null);
+                        AuditStatus.WARN, sourceValue != null ? sourceValue.toString() : null);
                 targetField.setValue(null);
                 return;
             }
@@ -132,10 +132,10 @@ public class TargetValueConverter {
             if (targetType != null) {
                 targetClazz = conversionService.classFromFieldType(targetType);
             } else {
-                AtlasUtil.addAudit(session, targetField.getDocId(), String.format(
+                AtlasUtil.addAudit(session, targetField, String.format(
                                 "Target field doesn't have fieldType nor className: automatic conversion won't work: targetPath=%s",
                                 targetField.getPath()),
-                        targetField.getPath(), AuditStatus.WARN, sourceValue != null ? sourceValue.toString() : null);
+                        AuditStatus.WARN, sourceValue != null ? sourceValue.toString() : null);
             }
         } else if (conversionService.isPrimitive(targetClassName)) {
             targetClazz = conversionService.boxOrUnboxPrimitive(targetClassName);
@@ -143,10 +143,10 @@ public class TargetValueConverter {
             try {
                 targetClazz = classLoader.loadClass(targetClassName);
             } catch (ClassNotFoundException e) {
-                AtlasUtil.addAudit(session, targetField.getDocId(),
+                AtlasUtil.addAudit(session, targetField,
                         String.format("Target field class '%s' was not found: sourceType=%s targetType=%s targetPath=%s msg=%s",
                                 ((JavaField)targetField).getClassName(), sourceType, targetType, targetField.getPath(), e.getMessage()),
-                        targetField.getPath(), AuditStatus.ERROR, null);
+                        AuditStatus.ERROR, null);
                 return null;
             }
         }
@@ -198,9 +198,9 @@ public class TargetValueConverter {
         try {
             enumClass = this.classLoader.loadClass(targetField.getClassName());
         } catch (Exception e) {
-            AtlasUtil.addAudit(session, targetField.getDocId(),
+            AtlasUtil.addAudit(session, targetField,
                     String.format("Could not find class for output field class '%s': %s", targetField.getClassName(), e.getMessage()),
-                    targetField.getPath(), AuditStatus.ERROR, targetValue);
+                    AuditStatus.ERROR, targetValue);
             return null;
         }
 
@@ -209,9 +209,9 @@ public class TargetValueConverter {
             targetField.setValue(enumValue);
             return enumValue;
         } catch (IllegalArgumentException e) {
-            AtlasUtil.addAudit(session, targetField.getDocId(),
+            AtlasUtil.addAudit(session, targetField,
                     String.format("No enum entry found for value '%s': %s", targetValue, e.getMessage()),
-                    targetField.getPath(), AuditStatus.ERROR, targetValue);
+                    AuditStatus.ERROR, targetValue);
             return null;
         }
     }

@@ -35,10 +35,10 @@ public class JavaFieldReader implements AtlasFieldReader {
         try {
             Field field = session.head().getSourceField();
             if (sourceDocument == null) {
-                AtlasUtil.addAudit(session, field.getDocId(), String.format(
+                AtlasUtil.addAudit(session, field, String.format(
                     "Unable to read sourceField (path=%s),  document (docId=%s) is null",
                     field.getPath(), field.getDocId()),
-                    field.getPath(), AuditStatus.ERROR, null);
+                    AuditStatus.ERROR, null);
             }
 
             AtlasPath path = new AtlasPath(field.getPath());
@@ -102,9 +102,9 @@ public class JavaFieldReader implements AtlasFieldReader {
         if (childAccessor == null || childAccessor.getRawValue() == null) {
             if (path.getLastSegment() != segmentContext) {
                 //add audit only if not the last segment on the path
-                AtlasUtil.addAudit(session, field.getDocId(), String.format(
+                AtlasUtil.addAudit(session, field, String.format(
                     "Assigning null value for path path=%s docId=%s due to null parent", field.getPath(), field.getDocId()),
-                    field.getPath(), AuditStatus.WARN, null);
+                    AuditStatus.WARN, null);
                 Field newField = AtlasJavaModelFactory.cloneJavaField(field, false);
                 fields.add(newField);
             }
@@ -152,18 +152,18 @@ public class JavaFieldReader implements AtlasFieldReader {
             accessor = ClassHelper.lookupAccessor(source, segmentContext.getName());
         }
         if (accessor == null) {
-            AtlasUtil.addAudit(session, field.getDocId(), String.format(
+            AtlasUtil.addAudit(session, field, String.format(
                 "Field '%s' not found on object '%s'", segmentContext.getName(), source),
-                field.getPath(), AuditStatus.ERROR, null);
+                AuditStatus.ERROR, null);
             return null;
         }
 
         try {
             accessor.getValue();
         } catch (Exception e) {
-            AtlasUtil.addAudit(session, field.getDocId(), String.format(
+            AtlasUtil.addAudit(session, field, String.format(
                 "Cannot access field '%s' on object '%s': %s", segmentContext.getName(), source, e.getMessage()),
-                field.getPath(), AuditStatus.ERROR, null);
+                AuditStatus.ERROR, null);
             if (LOG.isDebugEnabled()) {
                 LOG.error("", e);
             }
@@ -182,10 +182,10 @@ public class JavaFieldReader implements AtlasFieldReader {
         try {
             returnType = accessor.getRawClass();
         } catch (Exception e) {
-            AtlasUtil.addAudit(session, field.getDocId(), String.format(
+            AtlasUtil.addAudit(session, field, String.format(
                 "Cannot access the type of field '%s' on object '%s': %s",
                     accessor.getName(), accessor.getRawValue(), e.getMessage()),
-                field.getPath(), AuditStatus.ERROR, null);
+                AuditStatus.ERROR, null);
             if (LOG.isDebugEnabled()) {
                 LOG.error("", e);
             }
@@ -198,10 +198,10 @@ public class JavaFieldReader implements AtlasFieldReader {
                     + field.getFieldType());
             }
         } else {
-            AtlasUtil.addAudit(session, field.getDocId(), String.format(
+            AtlasUtil.addAudit(session, field, String.format(
                 "Unable to auto-detect sourceField type path=%s docId=%s",
                 field.getPath(), field.getDocId()),
-                field.getPath(), AuditStatus.WARN, null);
+                AuditStatus.WARN, null);
         }
     }
 

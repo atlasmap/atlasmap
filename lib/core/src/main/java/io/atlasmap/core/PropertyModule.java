@@ -113,4 +113,13 @@ public class PropertyModule extends BaseAtlasModule {
         return clone;
     }
 
+    @Override
+    public void setDocName(String docName) {
+    }
+
+    @Override
+    public String getDocName() {
+        return "Properties";
+    }
+
 }

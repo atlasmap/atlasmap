@@ -100,7 +100,7 @@ public class JavaModule extends BaseAtlasModule {
         if (sourceDocument == null) {
             AtlasUtil.addAudit(atlasSession, getDocId(), String.format(
                     "Null source document: docId='%s'", getDocId()),
-                    null, AuditStatus.WARN, null);
+                    AuditStatus.WARN, null);
         } else {
             JavaFieldReader reader = new JavaFieldReader();
             reader.setConversionService(getConversionService());
@@ -154,9 +154,9 @@ public class JavaModule extends BaseAtlasModule {
         Field sourceField = session.head().getSourceField();
         JavaFieldReader reader = session.getFieldReader(getDocId(), JavaFieldReader.class);
         if (reader == null) {
-            AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(
+            AtlasUtil.addAudit(session, sourceField, String.format(
                     "Source document '%s' doesn't exist", getDocId()),
-                    sourceField.getPath(), AuditStatus.ERROR, null);
+                    AuditStatus.ERROR, null);
             return;
         }
         reader.read(session);
@@ -193,7 +193,7 @@ public class JavaModule extends BaseAtlasModule {
                         AtlasUtil.addAudit(session, getDocId(), String.format(
                                 "The number of source fields (%s) is smaller than target index (%s) - ignoring",
                                 subFields.size(), index),
-                                null, AuditStatus.WARN, null);
+                                AuditStatus.WARN, null);
                         return;
                     }
                 } else {
@@ -278,7 +278,7 @@ public class JavaModule extends BaseAtlasModule {
         } else {
             AtlasUtil.addAudit(session, getDocId(),
                     String.format("No target document created for DataSource '%s'", getDocId()),
-                    null, AuditStatus.WARN, null);
+                    AuditStatus.WARN, null);
         }
         session.removeFieldWriter(getDocId());
 

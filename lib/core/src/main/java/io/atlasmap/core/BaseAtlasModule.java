@@ -54,6 +54,7 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
     private AtlasCollectionHelper collectionHelper = null;
     private AtlasModuleMode atlasModuleMode = AtlasModuleMode.UNSET;
     private String docId;
+    private String docName;
     private String uri;
     private String uriDataType;
     private Map<String,String> uriParameters = new HashMap<>();
@@ -99,10 +100,10 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
                 targetValue = getConversionService().convertType(sourceField.getValue(), sourceField.getFormat(),
                         targetField.getFieldType(), targetField.getFormat());
             } catch (AtlasConversionException e) {
-                AtlasUtil.addAudit(session, targetField.getDocId(),
+                AtlasUtil.addAudit(session, targetField,
                         String.format("Unable to auto-convert for sT=%s tT=%s tF=%s msg=%s", sourceField.getFieldType(),
                                 targetField.getFieldType(), targetField.getPath(), e.getMessage()),
-                        targetField.getPath(), AuditStatus.ERROR, null);
+                        AuditStatus.ERROR, null);
                 return;
             }
         }
@@ -265,6 +266,16 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
     @Override
     public DataSourceMetadata getDataSourceMetadata() {
         return this.dataSourceMetadata;
+    }
+
+    @Override
+    public void setDocName(String docName) {
+        this.docName = docName;
+    }
+
+    @Override
+    public String getDocName() {
+        return this.docName;
     }
 
     //-----------------------------------------

@@ -52,7 +52,7 @@ public class CsvModule extends BaseAtlasModule {
         if (sourceDocument == null || !((sourceDocument instanceof String) || (sourceDocument instanceof InputStream))) {
             AtlasUtil.addAudit(session, getDocId(), String.format(
                 "Null, non-String or non-Stream source document: docId='%s'", getDocId()),
-                null, AuditStatus.WARN, null);
+                AuditStatus.WARN, null);
         } else if (sourceDocument instanceof String){
             String sourceDocumentString = String.class.cast(sourceDocument);
             sourceInputStream = new ByteArrayInputStream(sourceDocumentString.getBytes());
@@ -86,9 +86,9 @@ public class CsvModule extends BaseAtlasModule {
         Field sourceField = session.head().getSourceField();
         CsvFieldReader reader = session.getFieldReader(getDocId(), CsvFieldReader.class);
         if (reader == null) {
-            AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(
+            AtlasUtil.addAudit(session, sourceField, String.format(
                 "Source document '%s' doesn't exist", getDocId()),
-                sourceField.getPath(), AuditStatus.ERROR, null);
+                AuditStatus.ERROR, null);
             return;
         }
 
@@ -125,7 +125,7 @@ public class CsvModule extends BaseAtlasModule {
         } else {
             AtlasUtil.addAudit(session, getDocId(), String
                     .format("No target document created for DataSource:[id=%s, uri=%s]", getDocId(), this.getUri()),
-                null, AuditStatus.WARN, null);
+                AuditStatus.WARN, null);
         }
         session.removeFieldWriter(getDocId());
 
