@@ -1,0 +1,19 @@
+{
+  "addressList": [
+    {
+      "street": "1 Main St",
+      "city": "Boston",
+      "state": "MA"
+    },
+    {
+      "street": "1 Main St",
+      "city": "Boston",
+      "state": "MA"
+    },
+    {
+      "street": "1 Main St",
+      "city": "Boston",
+      "state": "MA"
+    }
+  ]
+}
