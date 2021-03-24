@@ -1,0 +1,87 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "JSONSchemaSource-9c57df5a-9511-411a-a8a9-ce232fc8f3f6",
+      "name" : "JSONSchemaSource",
+      "description" : "Source document JSONSchemaSource type: JSON",
+      "uri" : "atlas:json:JSONSchemaSource-9c57df5a-9511-411a-a8a9-ce232fc8f3f6",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "JSONSchemaSource-3ddde8cd-f588-4fd4-a996-75c048c648ea",
+      "name" : "JSONSchemaSource",
+      "description" : "Target document JSONSchemaSource type: JSON",
+      "uri" : "atlas:json:JSONSchemaSource-3ddde8cd-f588-4fd4-a996-75c048c648ea",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.v2.ConstantField",
+          "actions" : [ {
+            "count" : 5,
+            "@type" : "Repeat"
+          } ],
+          "value" : "constant-test",
+          "docId" : "DOC.Constants.251280",
+          "path" : "/constant-test",
+          "fieldType" : "STRING"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONSchemaSource-3ddde8cd-f588-4fd4-a996-75c048c648ea",
+          "index" : 0,
+          "path" : "/addressList<>/city",
+          "fieldType" : "STRING",
+          "name" : "city"
+        } ],
+        "id" : "mapping.258414"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "expression" : "repeat(count(${JSONSchemaSource-9c57df5a-9511-411a-a8a9-ce232fc8f3f6:/addressList<>/state}), ${DOC.Constants.251280:/constant-test})",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "field" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "JSONSchemaSource-9c57df5a-9511-411a-a8a9-ce232fc8f3f6",
+            "path" : "/addressList<>/state",
+            "fieldType" : "STRING",
+            "name" : "state"
+          }, {
+            "jsonType" : "io.atlasmap.v2.ConstantField",
+            "value" : "constant-test",
+            "docId" : "DOC.Constants.251280",
+            "path" : "/constant-test",
+            "fieldType" : "STRING"
+          }]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONSchemaSource-3ddde8cd-f588-4fd4-a996-75c048c648ea",
+          "path" : "/addressList<>/state",
+          "fieldType" : "STRING",
+          "name" : "state"
+        } ],
+        "id" : "mapping.774942"
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "constants" : {
+      "constant" : [ {
+        "name" : "constant-test",
+        "value" : "constant-test",
+        "fieldType" : "STRING"
+      } ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "UI.0"
+  }
+}
