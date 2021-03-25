@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.88% </span>
+                <span class="strong">34.14% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>123/363</span>
+                <span class='fraction'>127/372</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">17.36% </span>
+                <span class="strong">17.6% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>42/242</span>
+                <span class='fraction'>44/250</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.14% </span>
+                <span class="strong">33.43% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>113/341</span>
+                <span class='fraction'>117/350</span>
             </div>
         
             
@@ -831,7 +831,23 @@
 <a name='L773'></a><a href='#L773'>773</a>
 <a name='L774'></a><a href='#L774'>774</a>
 <a name='L775'></a><a href='#L775'>775</a>
-<a name='L776'></a><a href='#L776'>776</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L776'></a><a href='#L776'>776</a>
+<a name='L777'></a><a href='#L777'>777</a>
+<a name='L778'></a><a href='#L778'>778</a>
+<a name='L779'></a><a href='#L779'>779</a>
+<a name='L780'></a><a href='#L780'>780</a>
+<a name='L781'></a><a href='#L781'>781</a>
+<a name='L782'></a><a href='#L782'>782</a>
+<a name='L783'></a><a href='#L783'>783</a>
+<a name='L784'></a><a href='#L784'>784</a>
+<a name='L785'></a><a href='#L785'>785</a>
+<a name='L786'></a><a href='#L786'>786</a>
+<a name='L787'></a><a href='#L787'>787</a>
+<a name='L788'></a><a href='#L788'>788</a>
+<a name='L789'></a><a href='#L789'>789</a>
+<a name='L790'></a><a href='#L790'>790</a>
+<a name='L791'></a><a href='#L791'>791</a>
+<a name='L792'></a><a href='#L792'>792</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -978,6 +994,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1001,6 +1023,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1753,6 +1785,12 @@ export class FieldNode extends ExpressionNode {
         this.mappedField.parsedData.parsedPath +
         '}'
       );
+    } else <span class="missing-if-branch" title="if path not taken" >I</span>if (this.mappedField.field.enumeration) {
+      // Convert enumeration field/index pairs into a string literal.
+      const enumIdxVal = <span class="cstat-no" title="statement not covered" >this.mappedField.field.enumIndexValue</span>
+        ? this.mappedField.field.enumIndexValue
+        : 0;
+<span class="cstat-no" title="statement not covered" >      return '"' + this.mappedField.field.enumValues[enumIdxVal].name + '"';</span>
     } else {
       let textStr = '${';
 &nbsp;
@@ -1776,12 +1814,22 @@ export class FieldNode extends ExpressionNode {
 &nbsp;
   toHTML(): string {
     if (this.mappedField &amp;&amp; this.mappedField.field) {
+      let titleAddendum = '';
+      let mappedFieldName = this.mappedField.field.name;
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (this.mappedField.field.enumeration) {
+        const enumIdxVal = <span class="cstat-no" title="statement not covered" >this.mappedField.field.enumIndexValue</span>
+          ? this.mappedField.field.enumIndexValue
+          : 0;
+<span class="cstat-no" title="statement not covered" >        mappedFieldName +=</span>
+          '.' + this.mappedField.field.enumValues[enumIdxVal].name;
+<span class="cstat-no" title="statement not covered" >        titleAddendum = ':  Click to select an enumeration value.';</span>
+      }
       <span class="missing-if-branch" title="if path not taken" >I</span>if (this.mappedField.field.scope) {
-<span class="cstat-no" title="statement not covered" >        return `&lt;span style="font-weight:bold" contenteditable="false" id="${this.uuid}" title="${this.mappedField.field.docDef.name}:${this.mappedField.field.path} &lt;${this.mappedField.field.scope}&gt;"</span>
-          class="expressionFieldLabel label label-default"&gt;${this.mappedField.field.name}&lt;/span&gt;`;
+<span class="cstat-no" title="statement not covered" >        return `&lt;span style="font-weight:bold" contenteditable="false" id="${this.uuid}" title="${this.mappedField.field.docDef.name}:${this.mappedField.field.path} &lt;${this.mappedField.field.scope}&gt; &lt;${this.mappedField.field.scope}&gt;${titleAddendum}"</span>
+          class="expressionFieldLabel label label-default"&gt;${mappedFieldName}&lt;/span&gt;`;
       } else {
-        return `&lt;span style="font-weight:bold" contenteditable="false" id="${this.uuid}" title="${this.mappedField.field.docDef.name}:${this.mappedField.field.path}"
-          class="expressionFieldLabel label label-default"&gt;${this.mappedField.field.name}&lt;/span&gt;`;
+        return `&lt;span style="font-weight:bold" contenteditable="false" id="${this.uuid}" title="${this.mappedField.field.docDef.name}:${this.mappedField.field.path}${titleAddendum}"
+          class="expressionFieldLabel label label-default"&gt;${mappedFieldName}&lt;/span&gt;`;
       }
     } else {
       // TODO: check this non null operator
@@ -2388,7 +2436,7 @@ export class ExpressionModel {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Mar 22 2021 21:06:46 GMT+0000 (Coordinated Universal Time)
+                at Thu Mar 25 2021 19:25:26 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
