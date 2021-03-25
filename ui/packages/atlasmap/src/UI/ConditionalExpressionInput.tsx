@@ -15,6 +15,7 @@ export interface IConditionalExpressionInputProps
 
 export const ConditionalExpressionInput: FunctionComponent<IConditionalExpressionInputProps> = ({
   executeFieldSearch,
+  getFieldEnums,
   mappingExpressionAddField,
   mappingExpressionClearText,
   isMappingExpressionEmpty,
@@ -26,6 +27,7 @@ export const ConditionalExpressionInput: FunctionComponent<IConditionalExpressio
   trailerId,
   disabled,
   onToggle,
+  setSelectedEnumValue,
 }) => {
   return (
     <ToolbarGroup className={css(styles.toolbarItem)} role={"form"}>
@@ -33,6 +35,7 @@ export const ConditionalExpressionInput: FunctionComponent<IConditionalExpressio
         <ExpressionContent
           disabled={disabled}
           executeFieldSearch={executeFieldSearch}
+          getFieldEnums={getFieldEnums}
           mappingExpressionAddField={mappingExpressionAddField}
           mappingExpressionClearText={mappingExpressionClearText}
           isMappingExpressionEmpty={isMappingExpressionEmpty}
@@ -43,6 +46,7 @@ export const ConditionalExpressionInput: FunctionComponent<IConditionalExpressio
           mappingExpression={mappingExpression}
           trailerId={trailerId}
           onToggle={onToggle}
+          setSelectedEnumValue={setSelectedEnumValue}
         />
       </ToolbarItem>
     </ToolbarGroup>

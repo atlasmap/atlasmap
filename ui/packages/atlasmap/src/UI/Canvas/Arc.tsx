@@ -4,7 +4,7 @@ import React, { FunctionComponent, SVGAttributes, useMemo } from "react";
 import { css, StyleSheet } from "@patternfly/react-styles";
 
 import { Coords } from "./models";
-import { useToggle } from "../useToggle";
+import { useToggle } from "../../Atlasmap/utils";
 
 const styles = StyleSheet.create({
   clickable: {

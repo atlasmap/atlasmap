@@ -112,6 +112,7 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
     isInCollection: false,
     isDisabled: false,
     amField: {} as IAtlasmapField["amField"],
+    enumeration: false,
   };
 
   const renderMappingField = (

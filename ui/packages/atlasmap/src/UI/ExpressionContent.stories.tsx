@@ -4,6 +4,7 @@ import { boolean, text } from "@storybook/addon-knobs";
 import { action } from "@storybook/addon-actions";
 
 import { ExpressionContent } from "./ExpressionContent";
+import { EnumValue } from "../../src/Atlasmap/utils";
 
 export default {
   title: "UI|Mapping expression",
@@ -17,9 +18,21 @@ const executeFieldSearch = (): string[][] => {
   ];
 };
 
+const getFieldEnums = (): EnumValue[] => {
+  return [
+    { name: "[ None ]", ordinal: 0 },
+    { name: "rat", ordinal: 1 },
+    { name: "cat", ordinal: 2 },
+    { name: "bat", ordinal: 3 },
+  ];
+};
+
+const setSelectedEnumValue = (): void => {};
+
 export const disabled = () => (
   <ExpressionContent
     executeFieldSearch={executeFieldSearch}
+    getFieldEnums={getFieldEnums}
     mappingExpressionAddField={action("mappingExpressionAddField")}
     mappingExpressionClearText={() => ({ str: "", uuid: "123" })}
     isMappingExpressionEmpty={boolean("isMappingExpressionEmpty", true)}
@@ -31,12 +44,14 @@ export const disabled = () => (
     trailerId={text("Trailer id", "expression-trailer")}
     disabled={boolean("Disabled", true)}
     onToggle={action("onToggle")}
+    setSelectedEnumValue={setSelectedEnumValue}
   />
 );
 
 export const enabledWithExpression = () => (
   <ExpressionContent
     executeFieldSearch={executeFieldSearch}
+    getFieldEnums={getFieldEnums}
     mappingExpressionAddField={action("mappingExpressionAddField")}
     mappingExpressionClearText={() => ({ str: "", uuid: "123" })}
     isMappingExpressionEmpty={boolean("isMappingExpressionEmpty", true)}
@@ -51,12 +66,14 @@ export const enabledWithExpression = () => (
     trailerId={text("Trailer id", "expression-trailer")}
     disabled={boolean("Disabled", false)}
     onToggle={action("onToggle")}
+    setSelectedEnumValue={setSelectedEnumValue}
   />
 );
 
 export const enabledWithoutExpression = () => (
   <ExpressionContent
     executeFieldSearch={executeFieldSearch}
+    getFieldEnums={getFieldEnums}
     mappingExpressionAddField={action("mappingExpressionAddField")}
     mappingExpressionClearText={() => ({ str: "", uuid: "123" })}
     isMappingExpressionEmpty={boolean("isMappingExpressionEmpty", true)}
@@ -68,5 +85,6 @@ export const enabledWithoutExpression = () => (
     trailerId={text("Trailer id", "expression-trailer")}
     disabled={boolean("Disabled", false)}
     onToggle={action("onToggle")}
+    setSelectedEnumValue={setSelectedEnumValue}
   />
 );

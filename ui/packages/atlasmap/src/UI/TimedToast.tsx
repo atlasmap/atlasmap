@@ -5,7 +5,7 @@ import {
   AlertProps,
   // Progress,
 } from "@patternfly/react-core";
-import { useToggle } from "./useToggle";
+import { useToggle } from "../Atlasmap/utils";
 
 export interface ITimedToastProps {
   variant: AlertProps["variant"];

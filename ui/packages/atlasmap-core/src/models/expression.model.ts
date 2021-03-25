@@ -145,6 +145,12 @@ export class FieldNode extends ExpressionNode {
         this.mappedField.parsedData.parsedPath +
         '}'
       );
+    } else if (this.mappedField.field.enumeration) {
+      // Convert enumeration field/index pairs into a string literal.
+      const enumIdxVal = this.mappedField.field.enumIndexValue
+        ? this.mappedField.field.enumIndexValue
+        : 0;
+      return '"' + this.mappedField.field.enumValues[enumIdxVal].name + '"';
     } else {
       let textStr = '${';
 
@@ -168,12 +174,22 @@ export class FieldNode extends ExpressionNode {
 
   toHTML(): string {
     if (this.mappedField && this.mappedField.field) {
+      let titleAddendum = '';
+      let mappedFieldName = this.mappedField.field.name;
+      if (this.mappedField.field.enumeration) {
+        const enumIdxVal = this.mappedField.field.enumIndexValue
+          ? this.mappedField.field.enumIndexValue
+          : 0;
+        mappedFieldName +=
+          '.' + this.mappedField.field.enumValues[enumIdxVal].name;
+        titleAddendum = ':  Click to select an enumeration value.';
+      }
       if (this.mappedField.field.scope) {
-        return `<span style="font-weight:bold" contenteditable="false" id="${this.uuid}" title="${this.mappedField.field.docDef.name}:${this.mappedField.field.path} <${this.mappedField.field.scope}>"
-          class="expressionFieldLabel label label-default">${this.mappedField.field.name}</span>`;
+        return `<span style="font-weight:bold" contenteditable="false" id="${this.uuid}" title="${this.mappedField.field.docDef.name}:${this.mappedField.field.path} <${this.mappedField.field.scope}> <${this.mappedField.field.scope}>${titleAddendum}"
+          class="expressionFieldLabel label label-default">${mappedFieldName}</span>`;
       } else {
-        return `<span style="font-weight:bold" contenteditable="false" id="${this.uuid}" title="${this.mappedField.field.docDef.name}:${this.mappedField.field.path}"
-          class="expressionFieldLabel label label-default">${this.mappedField.field.name}</span>`;
+        return `<span style="font-weight:bold" contenteditable="false" id="${this.uuid}" title="${this.mappedField.field.docDef.name}:${this.mappedField.field.path}${titleAddendum}"
+          class="expressionFieldLabel label label-default">${mappedFieldName}</span>`;
       }
     } else {
       // TODO: check this non null operator

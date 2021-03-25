@@ -38,6 +38,7 @@ export class Field {
   partOfTransformation = false;
   visibleInCurrentDocumentSearch = true;
   enumeration = false;
+  enumIndexValue: number;
   enumValues: EnumValue[] = [];
   children: Field[] = [];
   fieldDepth = 0;

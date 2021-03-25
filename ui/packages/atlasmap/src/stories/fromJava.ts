@@ -100,6 +100,7 @@ export function javaToFieldGroup(
       isConnected: false,
       isDisabled: jf.collectionType === "COMPLEX",
       amField: {} as IAtlasmapField["amField"],
+      enumeration: false,
     };
   };
   const fromGroup = (f: JavaField): IAtlasmapGroup => ({

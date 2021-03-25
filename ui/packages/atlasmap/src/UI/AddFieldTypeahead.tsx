@@ -10,7 +10,7 @@ import {
   SelectProps,
   SelectGroup,
 } from "@patternfly/react-core";
-import { useToggle } from "./useToggle";
+import { useToggle } from "../Atlasmap/utils";
 import { css, StyleSheet } from "@patternfly/react-styles";
 
 const styles = StyleSheet.create({

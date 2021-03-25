@@ -1,6 +1,7 @@
 import React, {
   FunctionComponent,
   KeyboardEvent,
+  MouseEvent,
   useCallback,
   useEffect,
 } from "react";
@@ -17,16 +18,20 @@ import {
 import { css } from "@patternfly/react-styles";
 import styles from "@patternfly/react-styles/css/components/FormControl/form-control";
 
+import { ExpressionEnumSelect } from "./ExpressionEnumSelect";
 import { ExpressionFieldSearch } from "./ExpressionFieldSearch";
+import { EnumValue, useToggle } from "../Atlasmap/utils";
 
 let atIndex = -1;
 let atContainer: Node | undefined;
+let enumCandidates: EnumValue[] = [];
 let expressionUpdatedSubscription: Subscription | null;
 let lastUpdatedEvent: IExpressionUpdatedEvent | null = null;
 let mappedFieldCandidates: string[][] = [];
 let markup: HTMLDivElement | null = null;
 let searchFilter = "";
 let searchMode = false;
+let selectedNodeId: string = "";
 let trailerHTML = "";
 let trailerID = "";
 let getMappingExpression: () => string;
@@ -45,6 +50,7 @@ interface IExpressionUpdatedEvent {
 
 export interface IExpressionContentProps {
   executeFieldSearch: (searchFilter: string, isSource: boolean) => string[][];
+  getFieldEnums: (nodeId: string) => EnumValue[];
   mappingExpressionAddField: (
     selectedField: string,
     selectFieldScope: string,
@@ -74,6 +80,10 @@ export interface IExpressionContentProps {
   trailerId: string;
   disabled: boolean;
   onToggle: () => void;
+  setSelectedEnumValue: (
+    selectedEnum: string,
+    selectedEnumValueIndex: number,
+  ) => void;
 }
 
 function updateExpressionMarkup(reset?: boolean) {
@@ -153,6 +163,7 @@ export function initializeMappingExpression() {
 
 export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   executeFieldSearch,
+  getFieldEnums,
   mappingExpressionAddField,
   mappingExpressionClearText,
   isMappingExpressionEmpty,
@@ -164,6 +175,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   trailerId,
   disabled,
   onToggle,
+  setSelectedEnumValue,
 }) => {
   let selectedField: string;
 
@@ -180,6 +192,31 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     endOffset?: number,
   ) => ITextNode;
   let fieldSearch: (searchFilter: string, isSource: boolean) => string[][];
+  let getEnums: (enumFieldName: string) => EnumValue[];
+  let setSelEnumValue: (
+    selectedEnumNodeId: string,
+    selectedEnumValueIndex: number,
+  ) => void;
+
+  const {
+    state: showEnumSelect,
+    toggleOn: toggleEnumSelOn,
+    toggleOff: toggleEnumSelOff,
+  } = useToggle(false);
+
+  /**
+   * An enumeration value has been selected for the specified selected field node ID.
+   *
+   * @param selectedEnumNodeId - selected field node ID
+   * @param selectedEnumValueIndex - selected enumeration index
+   */
+  function onEnumSelect(
+    selectedEnumNodeId: string,
+    selectedEnumValueIndex: number,
+  ) {
+    setSelEnumValue(selectedEnumNodeId, selectedEnumValueIndex);
+    clearEnumSelect();
+  }
 
   function insertTextAtCaretPosition(key: string) {
     const range = window.getSelection()!.getRangeAt(0);
@@ -295,6 +332,22 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
       if (searchMode) {
         updateSearchMode();
       }
+    }
+  }
+
+  /**
+   * A mouse click has occurred within the expression box.
+   *
+   * @param event - mouse event
+   */
+  function onExprClick(event: MouseEvent<HTMLElement>) {
+    selectedNodeId = getCaretPositionNodeId();
+
+    // Check for clicking on an enumeration field node.
+    enumCandidates = getEnums(selectedNodeId);
+    if (enumCandidates.length > 0) {
+      event.preventDefault();
+      toggleEnumSelOn();
     }
   }
 
@@ -457,6 +510,12 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     }
   }
 
+  function clearEnumSelect() {
+    selectedNodeId = "";
+    enumCandidates = [];
+    toggleEnumSelOff();
+  }
+
   const initMappingExpression = useCallback(() => {
     initializeMappingExpression();
   }, []);
@@ -464,6 +523,9 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   addFieldToExpression = mappingExpressionAddField;
   clearText = mappingExpressionClearText;
   fieldSearch = executeFieldSearch;
+  getEnums = getFieldEnums;
+  setSelEnumValue = setSelectedEnumValue;
+
   getMappingExpression = () => mappingExpression || "";
   mappingExprInit = mappingExpressionInit;
   mappingExprObservable = mappingExpressionObservable;
@@ -533,6 +595,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
                   onKeyDown={onKeyDown}
                   onKeyPress={onKeyPress}
                   onPaste={onPaste}
+                  onClick={onExprClick}
                   ref={(el) => (markup = el)}
                   tabIndex={-1}
                   style={{ paddingLeft: 8 }}
@@ -555,6 +618,16 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
               fieldCandidateIndex={fieldCandidateIndex}
               insertSelectedField={insertSelectedField}
               mappedFieldCandidates={mappedFieldCandidates}
+            />
+          </span>
+        )}
+        {showEnumSelect && (
+          <span>
+            <ExpressionEnumSelect
+              selectedNodeId={selectedNodeId}
+              enumCandidates={enumCandidates!}
+              clearEnumSelect={clearEnumSelect}
+              onEnumSelect={onEnumSelect}
             />
           </span>
         )}

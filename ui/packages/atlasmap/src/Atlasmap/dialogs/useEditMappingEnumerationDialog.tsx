@@ -3,8 +3,8 @@ import {
   ConfirmationDialog,
   LookupTableDialog,
   LookupTableData,
-  useToggle,
 } from "../../UI";
+import { useToggle } from "../../Atlasmap/utils";
 import { getEnumerationValues, updateEnumerationValues } from "../utils";
 
 type LookupTableCallback = () => void;

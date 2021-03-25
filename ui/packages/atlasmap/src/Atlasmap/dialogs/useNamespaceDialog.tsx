@@ -1,6 +1,7 @@
 import React, { useCallback, ReactElement, useState } from "react";
 
-import { useToggle, NamespaceDialog, INamespace } from "../../UI";
+import { NamespaceDialog, INamespace } from "../../UI";
+import { useToggle } from "../../Atlasmap/utils";
 
 type NamespaceCallback = (namespace: INamespace) => void;
 

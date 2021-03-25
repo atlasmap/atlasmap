@@ -1,7 +1,7 @@
 import React, { useRef, ReactElement } from "react";
 import { Button, Modal, Radio } from "@patternfly/react-core";
 
-import { useToggle } from "../../UI";
+import { useToggle } from "../../Atlasmap/utils";
 
 export function useSpecifyInstanceSchemaDialog(
   defaultSchema: boolean,

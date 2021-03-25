@@ -6,7 +6,7 @@ import {
   SelectOptionObject,
 } from "@patternfly/react-core";
 import { StyleSheet, css } from "@patternfly/react-styles";
-import { useToggle } from "./useToggle";
+import { useToggle } from "../Atlasmap/utils";
 
 const styles = StyleSheet.create({
   document: {

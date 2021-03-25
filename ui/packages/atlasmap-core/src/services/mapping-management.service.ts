@@ -1256,6 +1256,16 @@ export class MappingManagementService {
   }
 
   /**
+   * Set the enumeration field value based on the specified enumeration value index.
+   *
+   * @param enumerationField
+   * @param enumerationValue
+   */
+  setEnumFieldValue(enumerationField: Field, enumerationValue: number) {
+    enumerationField.enumIndexValue = enumerationValue;
+  }
+
+  /**
    * Update the enumeration values for the specified mapping with the specified
    * enumeration values.
    *

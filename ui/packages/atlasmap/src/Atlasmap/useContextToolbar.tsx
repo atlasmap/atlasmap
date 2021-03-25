@@ -3,7 +3,7 @@ import React, { useMemo, useState } from "react";
 import { ToolbarGroup } from "@patternfly/react-core";
 
 import { ContextToolbar } from "../Layout";
-import { useToggle } from "../UI";
+import { useToggle } from "../Atlasmap/utils";
 import {
   AddMappingToolbarItem,
   ToggleColumnMapperViewToolbarItem,

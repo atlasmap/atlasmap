@@ -5,7 +5,8 @@ import React, {
   ReactElement,
   useMemo,
 } from "react";
-import { NodesArc, useToggle } from "../../../UI";
+import { NodesArc } from "../../../UI";
+import { useToggle } from "../../../Atlasmap/utils";
 import { IAtlasmapMapping } from "../../../Views";
 import { SOURCES_FIELD_ID_PREFIX, TARGETS_FIELD_ID_PREFIX } from "../Columns";
 

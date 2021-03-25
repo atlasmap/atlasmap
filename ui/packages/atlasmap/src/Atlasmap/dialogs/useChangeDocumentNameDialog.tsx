@@ -1,5 +1,6 @@
 import React, { useCallback, ReactElement, useState } from "react";
-import { useToggle, IDocumentName, ChangeDocumentNameDialog } from "../../UI";
+import { IDocumentName, ChangeDocumentNameDialog } from "../../UI";
+import { useToggle } from "../../Atlasmap/utils";
 
 type ChangeDocumentNameCallback = (documentNameInfo: IDocumentName) => void;
 

@@ -8,7 +8,7 @@ import React, {
 import { css, StyleSheet } from "@patternfly/react-styles";
 
 import { TruncatedString } from "./TruncatedString";
-import { useToggle } from "./useToggle";
+import { useToggle } from "../Atlasmap/utils";
 import { Tooltip } from "@patternfly/react-core";
 
 const styles = StyleSheet.create({
