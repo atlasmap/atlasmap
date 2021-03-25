@@ -846,6 +846,9 @@ export class DocumentManagementService {
       return;
     }
     parsedField.enumeration = field.enumeration;
+    parsedField.enumIndexValue = field.enumIndexValue
+      ? field.enumIndexValue
+      : 0;
 
     if (
       parsedField.enumeration &&

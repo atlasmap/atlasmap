@@ -1,6 +1,7 @@
 import { ReactElement, useCallback, useRef } from "react";
 
-import { useToggle, TimedToast } from "../../UI";
+import { TimedToast } from "../../UI";
+import { useToggle } from "../../Atlasmap/utils";
 import React from "react";
 import { copyToClipboard } from "../utils/ui";
 let docId = "";

@@ -75,6 +75,7 @@ export function jsonToFieldGroup(
       isConnected: false,
       isDisabled: jf.collectionType === "COMPLEX",
       amField: {} as IAtlasmapField["amField"],
+      enumeration: false,
     };
   };
   const fromGroup = (f: Field): IAtlasmapGroup => ({

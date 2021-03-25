@@ -65,6 +65,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     // expression
     currentMappingExpression,
     executeFieldSearch,
+    getFieldEnums,
+    setSelectedEnumValue,
     mappingExpressionAddField,
     mappingExpressionClearText,
     mappingExpressionInit,
@@ -128,6 +130,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
           mappingExpressionEnabled ? currentMappingExpression : undefined
         }
         executeFieldSearch={executeFieldSearch}
+        getFieldEnums={getFieldEnums}
         mappingExpressionAddField={mappingExpressionAddField}
         mappingExpressionClearText={mappingExpressionClearText}
         isMappingExpressionEmpty={isMappingExpressionEmpty}
@@ -138,6 +141,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         trailerId={trailerId}
         disabled={!selectedMapping}
         onToggle={handlers.onToggleExpressionMode}
+        setSelectedEnumValue={setSelectedEnumValue}
       />
     </ViewToolbar>
   );

@@ -11,7 +11,12 @@ import {
   ErrorScope,
   ErrorType,
 } from "@atlasmap/core";
-import { LookupTableData } from "src/UI";
+import { LookupTableData } from "../../UI";
+
+export type EnumValue = {
+  name: string;
+  ordinal: number;
+};
 
 export function createConstant(constValue: string, constType: string): void {
   const cfg = ConfigModel.getConfig();
@@ -407,6 +412,10 @@ export function getFieldByUUID(
   return undefined;
 }
 
+/**
+ * Return the enumeration mapping lookup table associated with the active mapping.
+ *
+ */
 export function getEnumerationValues(): LookupTableData[] {
   const cfg = ConfigModel.getConfig();
   const activeMapping = cfg.mappings?.activeMapping;
@@ -417,6 +426,44 @@ export function getEnumerationValues(): LookupTableData[] {
     cfg,
     activeMapping,
   );
+}
+
+/**
+ * Retrieve the enumeration values for the specified field node ID.
+ *
+ * @param nodeId - enumeration field node ID
+ */
+export function getFieldEnums(nodeId: string): EnumValue[] {
+  const uuidNode = initializationService.cfg.mappings!.activeMapping!.transition.expression!.getNode(
+    nodeId,
+  );
+  if (uuidNode && uuidNode.mappedField?.field.enumeration) {
+    return uuidNode.mappedField.field.enumValues;
+  }
+  return [];
+}
+
+/**
+ * Set the value for a enumeration reference field.  This way the enumeration field may be
+ * used in conditional expressions.  Not used for enumeration mappings.
+ *
+ * @param selectedEnumNodeId - enumeration field node ID
+ * @param selectedEnumValueIndex - enumeration index value
+ */
+export function setSelectedEnumValue(
+  selectedEnumNodeId: string,
+  selectedEnumValueIndex: number,
+) {
+  const mapping = initializationService.cfg.mappings!.activeMapping!;
+  const uuidNode = mapping.transition.expression!.getNode(selectedEnumNodeId);
+  if (uuidNode && uuidNode.mappedField?.field.enumeration) {
+    initializationService.cfg.mappingService.setEnumFieldValue(
+      uuidNode.mappedField.field,
+      selectedEnumValueIndex,
+    );
+    mapping.transition.expression.updateFieldReference(mapping);
+    initializationService.cfg.mappingService.notifyMappingUpdated();
+  }
 }
 
 export function updateEnumerationValues(

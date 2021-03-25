@@ -2,7 +2,8 @@ import { propertyTypes } from "@atlasmap/core";
 
 import React, { useCallback, ReactElement, useState } from "react";
 
-import { useToggle, PropertyDialog, IProperty } from "../../UI";
+import { PropertyDialog, IProperty } from "../../UI";
+import { useToggle } from "../../Atlasmap/utils";
 import { IAtlasmapDocument } from "../../Views";
 
 type PropertyCallback = (property: IProperty) => void;

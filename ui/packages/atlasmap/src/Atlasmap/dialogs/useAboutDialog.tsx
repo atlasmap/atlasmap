@@ -1,7 +1,8 @@
 import React, { useCallback, useState, ReactElement } from "react";
 
 import { useAtlasmap } from "../AtlasmapProvider";
-import { useToggle, AboutDialog } from "../../UI";
+import { AboutDialog } from "../../UI";
+import { useToggle } from "../../Atlasmap/utils";
 
 export function useAboutDialog(): [ReactElement, () => void] {
   const { getRuntimeVersion, getUIVersion } = useAtlasmap();

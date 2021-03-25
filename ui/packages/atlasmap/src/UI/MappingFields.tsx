@@ -3,7 +3,7 @@ import React, { FunctionComponent } from "react";
 import { Expandable } from "@patternfly/react-core";
 import { css, StyleSheet } from "@patternfly/react-styles";
 
-import { useToggle } from "./useToggle";
+import { useToggle } from "../Atlasmap/utils";
 
 export interface IMappingFieldsProps {
   title: string;

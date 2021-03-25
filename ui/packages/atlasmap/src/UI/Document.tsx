@@ -18,7 +18,8 @@ import React, {
   ReactNode,
   useCallback,
 } from "react";
-import { useToggle } from "./useToggle";
+import { useToggle } from "../Atlasmap/utils";
+
 import { AngleDownIcon, AngleRightIcon } from "@patternfly/react-icons";
 import { TruncatedString } from "./TruncatedString";
 

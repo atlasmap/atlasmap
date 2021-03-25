@@ -29,7 +29,7 @@ import {
   PlusIcon,
 } from "@patternfly/react-icons";
 import { css, StyleSheet } from "@patternfly/react-styles";
-import { useToggle } from "../UI";
+import { useToggle } from "../Atlasmap/utils";
 
 const styles = StyleSheet.create({
   toggled: { color: "var(--pf-global--primary-color--100) !important" },

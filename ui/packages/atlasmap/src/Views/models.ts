@@ -23,6 +23,7 @@ export interface IAtlasmapField {
   isConnected: boolean;
   isInCollection: boolean;
   isDisabled: boolean;
+  enumeration: boolean;
 
   // TODO: find a way to remove this maybe?
   amField: Field;

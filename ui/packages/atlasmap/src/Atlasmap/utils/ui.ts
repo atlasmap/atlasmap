@@ -119,6 +119,7 @@ export function fromFieldToIFieldsNode(field: Field): IAtlasmapField | null {
         isDisabled:
           field.type === "UNSUPPORTED" ||
           (field.type === "COMPLEX" && !field.enumeration),
+        enumeration: field.enumeration,
       }
     : null;
 }
@@ -186,6 +187,7 @@ export function fromMappedFieldToIMappingField(
     isInCollection: false,
     isConnected: false,
     isDisabled: false,
+    enumeration: false,
     amField: mappedField.field,
     transformations: mappedField.actions.map((a) => ({
       name: a.name,

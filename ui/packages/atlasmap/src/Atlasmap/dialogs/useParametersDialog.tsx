@@ -1,6 +1,7 @@
 import React, { useCallback, ReactElement, useState } from "react";
 
-import { useToggle, ParametersDialog, IParameter } from "../../UI";
+import { ParametersDialog, IParameter } from "../../UI";
+import { useToggle } from "../../Atlasmap/utils";
 
 type ParametersCallback = (parameters: IParameter[]) => void;
 
