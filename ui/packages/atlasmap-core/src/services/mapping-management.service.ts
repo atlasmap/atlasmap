@@ -159,9 +159,7 @@ export class MappingManagementService {
             this.cfg.mappings = mappingDefinition;
             MappingSerializer.deserializeMappingServiceJSON(d, this.cfg);
           }
-          this.cfg
-            .mappings!.getAllMappings(true)
-            .forEach((m) => this.updateTransition(m)); // TODO: check this non null operator
+          this.updateMappingsTransition();
           observer.next(true);
           observer.complete();
         })
@@ -170,6 +168,12 @@ export class MappingManagementService {
           observer.complete();
         });
     }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
+  }
+
+  updateMappingsTransition() {
+    this.cfg
+      .mappings!.getAllMappings(true)
+      .forEach((m) => this.updateTransition(m)); // TODO: check this non null operator
   }
 
   /**
@@ -951,6 +955,7 @@ export class MappingManagementService {
       if (
         !mapping.transition.enableExpression &&
         (!mapping.transition.transitionFieldAction ||
+          !mapping.transition.transitionFieldAction.definition ||
           mapping.transition.transitionFieldAction.definition.multiplicity !==
             Multiplicity.MANY_TO_ONE)
       ) {
