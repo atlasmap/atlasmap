@@ -68,8 +68,8 @@ import io.atlasmap.v2.SimpleField;
                     }
                     AtlasModule sourceModule;
 <span class="fc" id="L70">                    Map&lt;String, AtlasModule&gt; sourceModules = session.getAtlasContext().getSourceModules();</span>
-<span class="pc bpc" id="L71" title="1 of 2 branches missed.">                    if (f instanceof ConstantField) {</span>
-<span class="nc" id="L72">                        sourceModule = sourceModules.get(DefaultAtlasContext.CONSTANTS_DOCUMENT_ID);</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">                    if (f instanceof ConstantField) {</span>
+<span class="fc" id="L72">                        sourceModule = sourceModules.get(DefaultAtlasContext.CONSTANTS_DOCUMENT_ID);</span>
 <span class="fc bfc" id="L73" title="All 2 branches covered.">                    } else if (f instanceof PropertyField) {</span>
 <span class="fc" id="L74">                        sourceModule = sourceModules.get(DefaultAtlasContext.PROPERTIES_DOCUMENT_ID);</span>
                     } else {
