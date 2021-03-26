@@ -869,6 +869,7 @@ ${error.status} ${error.statusText}`,
           d.updateFromMappings(this.cfg.mappings);
         }
         MappingUtil.removeStaleMappings(this.cfg);
+        this.cfg.mappingService.updateMappingsTransition();
       }
       this.updateInitComplete();
     }

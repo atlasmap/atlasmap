@@ -87,7 +87,7 @@ export class FieldAction {
   static create(definition: FieldActionDefinition): FieldAction {
     const instance = new FieldAction();
     instance.definition = definition;
-    instance.name = definition.name;
+    instance.name = definition?.name;
     return instance;
   }
 
