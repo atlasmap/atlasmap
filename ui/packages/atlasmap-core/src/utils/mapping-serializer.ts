@@ -133,7 +133,10 @@ export class MappingSerializer {
       ? ''
       : MappingUtil.getMappingExpressionStr(false, mapping);
 
-    if (mapping.transition.isManyToOneMode()) {
+    if (
+      mapping.transition.isManyToOneMode() ||
+      mapping.transition.isForEachMode()
+    ) {
       inputFieldGroup = MappingSerializer.createInputFieldGroup(
         mapping,
         serializedInputFields,
