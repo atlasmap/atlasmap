@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/114</span>
+                <span class='fraction'>0/113</span>
             </div>
         
             
@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/73</span>
+                <span class='fraction'>0/72</span>
             </div>
         
             
@@ -513,7 +513,13 @@
 <a name='L455'></a><a href='#L455'>455</a>
 <a name='L456'></a><a href='#L456'>456</a>
 <a name='L457'></a><a href='#L457'>457</a>
-<a name='L458'></a><a href='#L458'>458</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L458'></a><a href='#L458'>458</a>
+<a name='L459'></a><a href='#L459'>459</a>
+<a name='L460'></a><a href='#L460'>460</a>
+<a name='L461'></a><a href='#L461'>461</a>
+<a name='L462'></a><a href='#L462'>462</a>
+<a name='L463'></a><a href='#L463'>463</a>
+<a name='L464'></a><a href='#L464'>464</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -560,7 +566,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -570,7 +575,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -580,7 +584,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -611,7 +614,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -963,6 +965,16 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1016,7 +1028,6 @@ export interface IAtlasmapToolbarItemProps {
   onImportJarFile: (file: File) =&gt; void;
   onExportAtlasFile: () =&gt; void;
   onResetAtlasmap: () =&gt; void;
-  onAbout: () =&gt; void;
 }
 export const <span class="cstat-no" title="statement not covered" >AtlasmapToolbarItem: FunctionComponent&lt;IAtlasmapToolbarItemProps&gt; = <span class="fstat-no" title="function not covered" >({</span></span>
 <span class="cstat-no" title="statement not covered" >  showImportAtlasFileToolbarItem,</span>
@@ -1027,7 +1038,6 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapToolb
 <span class="cstat-no" title="statement not covered" >  onImportJarFile,</span>
 <span class="cstat-no" title="statement not covered" >  onExportAtlasFile,</span>
 <span class="cstat-no" title="statement not covered" >  onResetAtlasmap,</span>
-<span class="cstat-no" title="statement not covered" >  onAbout,</span>
 }) =&gt; {
   const <span class="cstat-no" title="statement not covered" >{ <span class="cstat-no" title="statement not covered" >s</span>tate: isOpen,</span> <span class="cstat-no" title="statement not covered" >toggle: onToggle,</span> <span class="cstat-no" title="statement not covered" >toggleOff } = useToggle(false);</span>
   const runAndClose = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(c</span>b: (...args: any[]) =&gt; any) =&gt; {</span>
@@ -1067,8 +1077,6 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapToolb
         key="reset-catalog"
       /&gt;
     ),
-    &lt;DropdownSeparator key="about-separator" /&gt;,
-    &lt;AboutToolbarItem key="about" onClick={runAndClose(onAbout)} /&gt;,
   ].filter(<span class="fstat-no" title="function not covered" >(f</span>) =&gt; <span class="cstat-no" title="statement not covered" >f);</span>
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;ToolbarItem&gt;
@@ -1420,12 +1428,22 @@ export const <span class="cstat-no" title="statement not covered" >AddMappingToo
 export const <span class="cstat-no" title="statement not covered" >AboutToolbarItem: FunctionComponent&lt;{</span>
   onClick: () =&gt; void;
 }&gt; = <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >onClick </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
-  &lt;DropdownItem onClick={onClick} data-testid="about-button"&gt;
-    &lt;DropdownItemIcon&gt;
-      &lt;HelpIcon /&gt;
-    &lt;/DropdownItemIcon&gt;
-    About AtlasMap
-  &lt;/DropdownItem&gt;
+  &lt;ToolbarItem&gt;
+    &lt;Tooltip
+      position={"auto"}
+      enableFlip={true}
+      content={&lt;div&gt;About AtlasMap&lt;/div&gt;}
+    &gt;
+      &lt;Button
+        variant={"plain"}
+        aria-label="About AtlasMap"
+        onClick={onClick}
+        data-testid="about-button"
+      &gt;
+        &lt;HelpIcon /&gt;
+      &lt;/Button&gt;
+    &lt;/Tooltip&gt;
+  &lt;/ToolbarItem&gt;
 );
 &nbsp;</pre></td></tr></table></pre>
 
@@ -1434,7 +1452,7 @@ export const <span class="cstat-no" title="statement not covered" >AboutToolbarI
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Mar 29 2021 11:49:46 GMT+0000 (Coordinated Universal Time)
+                at Mon Mar 29 2021 17:40:24 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
