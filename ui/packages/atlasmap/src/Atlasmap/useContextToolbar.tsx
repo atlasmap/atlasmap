@@ -16,6 +16,7 @@ import {
   ToggleTypesToolbarItem,
   ToggleUnmappedFieldsToolbarItem,
   AtlasmapToolbarItem,
+  AboutToolbarItem,
 } from "./toolbarItems";
 import { useAtlasmap } from "./AtlasmapProvider";
 
@@ -119,7 +120,6 @@ export function useContextToolbar({
               onImportJarFile={onImportJarFile}
               onExportAtlasFile={onExportAtlasFile}
               onResetAtlasmap={onResetAtlasmap}
-              onAbout={onAbout}
             />
           </ToolbarGroup>
         )}
@@ -196,6 +196,11 @@ export function useContextToolbar({
             (activeView === "ColumnMapper" ||
               activeView === "MappingTable") && (
               <AddMappingToolbarItem onClick={newMapping} />
+            )}
+          {showAddNewMappingToolbarItem &&
+            (activeView === "ColumnMapper" ||
+              activeView === "MappingTable") && (
+              <AboutToolbarItem onClick={onAbout} />
             )}
         </ToolbarGroup>
       </ContextToolbar>
