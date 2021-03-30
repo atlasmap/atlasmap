@@ -74,7 +74,7 @@ import io.atlasmap.v2.Validations;
 <span class="pc bpc" id="L74" title="1 of 4 branches missed.">        if (sourceDocument == null || !(sourceDocument instanceof String)) {</span>
 <span class="fc" id="L75">            AtlasUtil.addAudit(session, getDocId(), String.format(</span>
 <span class="fc" id="L76">                    &quot;Null or non-String source document: docId='%s'&quot;, getDocId()),</span>
-                    null, AuditStatus.WARN, null);
+                    AuditStatus.WARN, null);
         } else {
 <span class="fc" id="L79">            sourceDocumentString = String.class.cast(sourceDocument);</span>
         }
@@ -102,9 +102,9 @@ import io.atlasmap.v2.Validations;
 <span class="fc" id="L102">        Field sourceField = session.head().getSourceField();</span>
 <span class="fc" id="L103">        JsonFieldReader reader = session.getFieldReader(getDocId(), JsonFieldReader.class);</span>
 <span class="pc bpc" id="L104" title="1 of 2 branches missed.">        if (reader == null) {</span>
-<span class="nc" id="L105">            AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(</span>
+<span class="nc" id="L105">            AtlasUtil.addAudit(session, sourceField, String.format(</span>
 <span class="nc" id="L106">                    &quot;Source document '%s' doesn't exist&quot;, getDocId()),</span>
-<span class="nc" id="L107">                    sourceField.getPath(), AuditStatus.ERROR, null);</span>
+                    AuditStatus.ERROR, null);
 <span class="nc" id="L108">            return;</span>
         }
 <span class="fc" id="L110">        reader.read(session);</span>
@@ -144,7 +144,7 @@ import io.atlasmap.v2.Validations;
 <span class="nc" id="L144">                            AtlasUtil.addAudit(session, getDocId(), String.format(</span>
                                     &quot;The number of source fields (%s) is smaller than target index (%s) - ignoring&quot;,
 <span class="nc" id="L146">                                    subFields.size(), index),</span>
-                                    null, AuditStatus.WARN, null);
+                                    AuditStatus.WARN, null);
 <span class="nc" id="L148">                            return;</span>
                         }
                     } else {
@@ -227,7 +227,7 @@ import io.atlasmap.v2.Validations;
 <span class="fc" id="L227">        } else {</span>
 <span class="fc" id="L228">            AtlasUtil.addAudit(session, getDocId(), String</span>
 <span class="fc" id="L229">                    .format(&quot;No target document created for DataSource:[id=%s, uri=%s]&quot;, getDocId(), this.getUri()),</span>
-                    null, AuditStatus.WARN, null);
+                    AuditStatus.WARN, null);
         }
 <span class="fc" id="L232">        session.removeFieldWriter(getDocId());</span>
 

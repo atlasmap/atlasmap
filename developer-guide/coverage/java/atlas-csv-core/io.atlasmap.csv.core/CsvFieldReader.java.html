@@ -70,10 +70,10 @@ public class CsvFieldReader implements AtlasFieldReader {
 <span class="fc" id="L70">        Field field = session.head().getSourceField();</span>
 
 <span class="fc bfc" id="L72" title="All 2 branches covered.">        if (document == null) {</span>
-<span class="fc" id="L73">            AtlasUtil.addAudit(session, field.getDocId(),</span>
+<span class="fc" id="L73">            AtlasUtil.addAudit(session, field,</span>
 <span class="fc" id="L74">                String.format(&quot;Cannot read field '%s' of document '%s', document is null&quot;,</span>
 <span class="fc" id="L75">                    field.getPath(), field.getDocId()),</span>
-<span class="fc" id="L76">                field.getPath(), AuditStatus.ERROR, null);</span>
+                AuditStatus.ERROR, null);
 <span class="fc" id="L77">            return field;</span>
         }
 <span class="pc bpc" id="L79" title="1 of 2 branches missed.">        if (field == null) {</span>

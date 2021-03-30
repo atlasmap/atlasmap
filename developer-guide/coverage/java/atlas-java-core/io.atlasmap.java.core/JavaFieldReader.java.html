@@ -35,10 +35,10 @@ import io.atlasmap.v2.FieldType;
         try {
 <span class="fc" id="L36">            Field field = session.head().getSourceField();</span>
 <span class="pc bpc" id="L37" title="1 of 2 branches missed.">            if (sourceDocument == null) {</span>
-<span class="nc" id="L38">                AtlasUtil.addAudit(session, field.getDocId(), String.format(</span>
+<span class="nc" id="L38">                AtlasUtil.addAudit(session, field, String.format(</span>
                     &quot;Unable to read sourceField (path=%s),  document (docId=%s) is null&quot;,
 <span class="nc" id="L40">                    field.getPath(), field.getDocId()),</span>
-<span class="nc" id="L41">                    field.getPath(), AuditStatus.ERROR, null);</span>
+                    AuditStatus.ERROR, null);
             }
 
 <span class="fc" id="L44">            AtlasPath path = new AtlasPath(field.getPath());</span>
@@ -102,9 +102,9 @@ import io.atlasmap.v2.FieldType;
 <span class="pc bpc" id="L102" title="1 of 4 branches missed.">        if (childAccessor == null || childAccessor.getRawValue() == null) {</span>
 <span class="fc bfc" id="L103" title="All 2 branches covered.">            if (path.getLastSegment() != segmentContext) {</span>
                 //add audit only if not the last segment on the path
-<span class="fc" id="L105">                AtlasUtil.addAudit(session, field.getDocId(), String.format(</span>
+<span class="fc" id="L105">                AtlasUtil.addAudit(session, field, String.format(</span>
 <span class="fc" id="L106">                    &quot;Assigning null value for path path=%s docId=%s due to null parent&quot;, field.getPath(), field.getDocId()),</span>
-<span class="fc" id="L107">                    field.getPath(), AuditStatus.WARN, null);</span>
+                    AuditStatus.WARN, null);
 <span class="fc" id="L108">                Field newField = AtlasJavaModelFactory.cloneJavaField(field, false);</span>
 <span class="fc" id="L109">                fields.add(newField);</span>
             }
@@ -152,18 +152,18 @@ import io.atlasmap.v2.FieldType;
 <span class="fc" id="L152">            accessor = ClassHelper.lookupAccessor(source, segmentContext.getName());</span>
         }
 <span class="pc bpc" id="L154" title="1 of 2 branches missed.">        if (accessor == null) {</span>
-<span class="nc" id="L155">            AtlasUtil.addAudit(session, field.getDocId(), String.format(</span>
+<span class="nc" id="L155">            AtlasUtil.addAudit(session, field, String.format(</span>
 <span class="nc" id="L156">                &quot;Field '%s' not found on object '%s'&quot;, segmentContext.getName(), source),</span>
-<span class="nc" id="L157">                field.getPath(), AuditStatus.ERROR, null);</span>
+                AuditStatus.ERROR, null);
 <span class="nc" id="L158">            return null;</span>
         }
 
         try {
 <span class="fc" id="L162">            accessor.getValue();</span>
 <span class="nc" id="L163">        } catch (Exception e) {</span>
-<span class="nc" id="L164">            AtlasUtil.addAudit(session, field.getDocId(), String.format(</span>
+<span class="nc" id="L164">            AtlasUtil.addAudit(session, field, String.format(</span>
 <span class="nc" id="L165">                &quot;Cannot access field '%s' on object '%s': %s&quot;, segmentContext.getName(), source, e.getMessage()),</span>
-<span class="nc" id="L166">                field.getPath(), AuditStatus.ERROR, null);</span>
+                AuditStatus.ERROR, null);
 <span class="nc bnc" id="L167" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
 <span class="nc" id="L168">                LOG.error(&quot;&quot;, e);</span>
             }
@@ -182,10 +182,10 @@ import io.atlasmap.v2.FieldType;
         try {
 <span class="fc" id="L183">            returnType = accessor.getRawClass();</span>
 <span class="nc" id="L184">        } catch (Exception e) {</span>
-<span class="nc" id="L185">            AtlasUtil.addAudit(session, field.getDocId(), String.format(</span>
+<span class="nc" id="L185">            AtlasUtil.addAudit(session, field, String.format(</span>
                 &quot;Cannot access the type of field '%s' on object '%s': %s&quot;,
 <span class="nc" id="L187">                    accessor.getName(), accessor.getRawValue(), e.getMessage()),</span>
-<span class="nc" id="L188">                field.getPath(), AuditStatus.ERROR, null);</span>
+                AuditStatus.ERROR, null);
 <span class="nc bnc" id="L189" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
 <span class="nc" id="L190">                LOG.error(&quot;&quot;, e);</span>
             }
@@ -198,10 +198,10 @@ import io.atlasmap.v2.FieldType;
 <span class="nc" id="L198">                    + field.getFieldType());</span>
             }
         } else {
-<span class="nc" id="L201">            AtlasUtil.addAudit(session, field.getDocId(), String.format(</span>
+<span class="nc" id="L201">            AtlasUtil.addAudit(session, field, String.format(</span>
                 &quot;Unable to auto-detect sourceField type path=%s docId=%s&quot;,
 <span class="nc" id="L203">                field.getPath(), field.getDocId()),</span>
-<span class="nc" id="L204">                field.getPath(), AuditStatus.WARN, null);</span>
+                AuditStatus.WARN, null);
         }
 <span class="fc" id="L206">    }</span>
 

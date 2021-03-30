@@ -96,14 +96,15 @@ import io.atlasmap.v2.SimpleField;
 <span class="nc" id="L96">                session.head().setSourceField(to);</span>
             }
 <span class="nc" id="L98">        } catch (Exception e) {</span>
-<span class="nc" id="L99">            AtlasUtil.addAudit(session, null,</span>
-<span class="nc" id="L100">                    String.format(&quot;Expression processing error: %s&quot;, e.getMessage()),</span>
-                    expression, AuditStatus.ERROR, null);
-<span class="nc bnc" id="L102" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L103">                LOG.debug(&quot;&quot;, e);</span>
+<span class="nc" id="L99">            AtlasUtil.addAudit(session, expression,</span>
+<span class="nc" id="L100">                    String.format(&quot;Expression processing error [%s]: %s&quot;,</span>
+<span class="nc" id="L101">                            expression, e.getMessage()),</span>
+                    AuditStatus.ERROR, null);
+<span class="nc bnc" id="L103" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L104">                LOG.debug(&quot;&quot;, e);</span>
             }
-<span class="fc" id="L105">        }</span>
-<span class="fc" id="L106">    }</span>
+<span class="fc" id="L106">        }</span>
+<span class="fc" id="L107">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

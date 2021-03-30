@@ -100,7 +100,7 @@ public class JavaModule extends BaseAtlasModule {
 <span class="fc bfc" id="L100" title="All 2 branches covered.">        if (sourceDocument == null) {</span>
 <span class="fc" id="L101">            AtlasUtil.addAudit(atlasSession, getDocId(), String.format(</span>
 <span class="fc" id="L102">                    &quot;Null source document: docId='%s'&quot;, getDocId()),</span>
-                    null, AuditStatus.WARN, null);
+                    AuditStatus.WARN, null);
         } else {
 <span class="fc" id="L105">            JavaFieldReader reader = new JavaFieldReader();</span>
 <span class="fc" id="L106">            reader.setConversionService(getConversionService());</span>
@@ -154,9 +154,9 @@ public class JavaModule extends BaseAtlasModule {
 <span class="fc" id="L154">        Field sourceField = session.head().getSourceField();</span>
 <span class="fc" id="L155">        JavaFieldReader reader = session.getFieldReader(getDocId(), JavaFieldReader.class);</span>
 <span class="pc bpc" id="L156" title="1 of 2 branches missed.">        if (reader == null) {</span>
-<span class="nc" id="L157">            AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(</span>
+<span class="nc" id="L157">            AtlasUtil.addAudit(session, sourceField, String.format(</span>
 <span class="nc" id="L158">                    &quot;Source document '%s' doesn't exist&quot;, getDocId()),</span>
-<span class="nc" id="L159">                    sourceField.getPath(), AuditStatus.ERROR, null);</span>
+                    AuditStatus.ERROR, null);
 <span class="nc" id="L160">            return;</span>
         }
 <span class="fc" id="L162">        reader.read(session);</span>
@@ -193,7 +193,7 @@ public class JavaModule extends BaseAtlasModule {
 <span class="nc" id="L193">                        AtlasUtil.addAudit(session, getDocId(), String.format(</span>
                                 &quot;The number of source fields (%s) is smaller than target index (%s) - ignoring&quot;,
 <span class="nc" id="L195">                                subFields.size(), index),</span>
-                                null, AuditStatus.WARN, null);
+                                AuditStatus.WARN, null);
 <span class="nc" id="L197">                        return;</span>
                     }
                 } else {
@@ -278,7 +278,7 @@ public class JavaModule extends BaseAtlasModule {
         } else {
 <span class="nc" id="L279">            AtlasUtil.addAudit(session, getDocId(),</span>
 <span class="nc" id="L280">                    String.format(&quot;No target document created for DataSource '%s'&quot;, getDocId()),</span>
-                    null, AuditStatus.WARN, null);
+                    AuditStatus.WARN, null);
         }
 <span class="fc" id="L283">        session.removeFieldWriter(getDocId());</span>
 

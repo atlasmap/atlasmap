@@ -64,10 +64,10 @@ public class JsonFieldReader implements AtlasFieldReader {
     public Field read(AtlasInternalSession session) throws AtlasException {
 <span class="fc" id="L65">        Field field = session.head().getSourceField();</span>
 <span class="fc bfc" id="L66" title="All 2 branches covered.">        if (rootNode == null) {</span>
-<span class="fc" id="L67">            AtlasUtil.addAudit(session, field.getDocId(),</span>
+<span class="fc" id="L67">            AtlasUtil.addAudit(session, field,</span>
 <span class="fc" id="L68">                String.format(&quot;Cannot read a field '%s' of JSON document '%s', document is null&quot;,</span>
 <span class="fc" id="L69">                    field.getPath(), field.getDocId()),</span>
-<span class="fc" id="L70">                field.getPath(), AuditStatus.ERROR, null);</span>
+                AuditStatus.ERROR, null);
 <span class="fc" id="L71">            return field;</span>
         }
 
@@ -232,9 +232,9 @@ public class JsonFieldReader implements AtlasFieldReader {
 <span class="nc" id="L232">            return null;</span>
         }
 <span class="pc bpc" id="L234" title="1 of 2 branches missed.">        if (valueNode.isArray()) {</span>
-<span class="nc" id="L235">            AtlasUtil.addAudit(session, jsonField.getDocId(),</span>
+<span class="nc" id="L235">            AtlasUtil.addAudit(session, jsonField,</span>
 <span class="nc" id="L236">                    String.format(&quot;Unexpected array node is detected: '%s'&quot;, valueNode.asText()),</span>
-<span class="nc" id="L237">                    jsonField.getPath(), AuditStatus.ERROR, valueNode.asText());</span>
+<span class="nc" id="L237">                    AuditStatus.ERROR, valueNode.asText());</span>
 <span class="nc" id="L238">            return null;</span>
         }
 
@@ -243,10 +243,10 @@ public class JsonFieldReader implements AtlasFieldReader {
 <span class="fc" id="L243">                return conversionService.convertType(valueNode.asText(), jsonField.getFormat(),</span>
 <span class="fc" id="L244">                        jsonField.getFieldType(), null);</span>
 <span class="fc" id="L245">            } catch (AtlasConversionException e) {</span>
-<span class="fc" id="L246">                AtlasUtil.addAudit(session, jsonField.getDocId(),</span>
+<span class="fc" id="L246">                AtlasUtil.addAudit(session, jsonField,</span>
 <span class="fc" id="L247">                        String.format(&quot;Failed to convert field value '%s' into type '%s'&quot;, valueNode.asText(),</span>
 <span class="fc" id="L248">                                jsonField.getFieldType()),</span>
-<span class="fc" id="L249">                        jsonField.getPath(), AuditStatus.ERROR, valueNode.asText());</span>
+<span class="fc" id="L249">                        AuditStatus.ERROR, valueNode.asText());</span>
 <span class="fc" id="L250">                return null;</span>
             }
         }

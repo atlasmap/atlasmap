@@ -52,7 +52,7 @@ import io.atlasmap.v2.FieldGroup;
 <span class="pc bpc" id="L52" title="4 of 6 branches missed.">        if (sourceDocument == null || !((sourceDocument instanceof String) || (sourceDocument instanceof InputStream))) {</span>
 <span class="nc" id="L53">            AtlasUtil.addAudit(session, getDocId(), String.format(</span>
 <span class="nc" id="L54">                &quot;Null, non-String or non-Stream source document: docId='%s'&quot;, getDocId()),</span>
-                null, AuditStatus.WARN, null);
+                AuditStatus.WARN, null);
 <span class="pc bpc" id="L56" title="1 of 2 branches missed.">        } else if (sourceDocument instanceof String){</span>
 <span class="fc" id="L57">            String sourceDocumentString = String.class.cast(sourceDocument);</span>
 <span class="fc" id="L58">            sourceInputStream = new ByteArrayInputStream(sourceDocumentString.getBytes());</span>
@@ -86,9 +86,9 @@ import io.atlasmap.v2.FieldGroup;
 <span class="fc" id="L86">        Field sourceField = session.head().getSourceField();</span>
 <span class="fc" id="L87">        CsvFieldReader reader = session.getFieldReader(getDocId(), CsvFieldReader.class);</span>
 <span class="pc bpc" id="L88" title="1 of 2 branches missed.">        if (reader == null) {</span>
-<span class="nc" id="L89">            AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(</span>
+<span class="nc" id="L89">            AtlasUtil.addAudit(session, sourceField, String.format(</span>
 <span class="nc" id="L90">                &quot;Source document '%s' doesn't exist&quot;, getDocId()),</span>
-<span class="nc" id="L91">                sourceField.getPath(), AuditStatus.ERROR, null);</span>
+                AuditStatus.ERROR, null);
 <span class="nc" id="L92">            return;</span>
         }
 
@@ -125,7 +125,7 @@ import io.atlasmap.v2.FieldGroup;
 <span class="fc" id="L125">        } else {</span>
 <span class="nc" id="L126">            AtlasUtil.addAudit(session, getDocId(), String</span>
 <span class="nc" id="L127">                    .format(&quot;No target document created for DataSource:[id=%s, uri=%s]&quot;, getDocId(), this.getUri()),</span>
-                null, AuditStatus.WARN, null);
+                AuditStatus.WARN, null);
         }
 <span class="fc" id="L130">        session.removeFieldWriter(getDocId());</span>
 

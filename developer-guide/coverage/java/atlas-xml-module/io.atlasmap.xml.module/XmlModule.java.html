@@ -108,7 +108,7 @@ import io.atlasmap.xml.v2.XmlNamespaces;
 <span class="pc bpc" id="L108" title="1 of 4 branches missed.">        if (sourceDocument == null || !(sourceDocument instanceof String)) {</span>
 <span class="fc" id="L109">            AtlasUtil.addAudit(session, getDocId(), String.format(</span>
 <span class="fc" id="L110">                    &quot;Null or non-String source document: docId='%s'&quot;, getDocId()),</span>
-                    null, AuditStatus.WARN, null);
+                    AuditStatus.WARN, null);
         } else {
 <span class="fc" id="L113">            enableNamespaces = true;</span>
 <span class="fc" id="L114">            String param = this.getUriParameters().get(&quot;disableNamespaces&quot;);</span>
@@ -184,9 +184,9 @@ import io.atlasmap.xml.v2.XmlNamespaces;
 <span class="fc" id="L184">        Field sourceField = session.head().getSourceField();</span>
 <span class="fc" id="L185">        XmlFieldReader reader = session.getFieldReader(getDocId(), XmlFieldReader.class);</span>
 <span class="pc bpc" id="L186" title="1 of 2 branches missed.">        if (reader == null) {</span>
-<span class="nc" id="L187">            AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(</span>
+<span class="nc" id="L187">            AtlasUtil.addAudit(session, sourceField, String.format(</span>
 <span class="nc" id="L188">                    &quot;Source document '%s' doesn't exist&quot;, getDocId()),</span>
-<span class="nc" id="L189">                    sourceField.getPath(), AuditStatus.ERROR, null);</span>
+                    AuditStatus.ERROR, null);
 <span class="nc" id="L190">            return;</span>
         }
 <span class="fc" id="L192">        reader.read(session);</span>
@@ -226,7 +226,7 @@ import io.atlasmap.xml.v2.XmlNamespaces;
 <span class="nc" id="L226">                            AtlasUtil.addAudit(session, getDocId(), String.format(</span>
                                     &quot;The number of source fields (%s) is smaller than target index (%s) - ignoring&quot;,
 <span class="nc" id="L228">                                    subFields.size(), index),</span>
-                                    null, AuditStatus.WARN, null);
+                                    AuditStatus.WARN, null);
 <span class="nc" id="L230">                            return;</span>
                         }
                     } else {
@@ -316,7 +316,7 @@ import io.atlasmap.xml.v2.XmlNamespaces;
 <span class="fc" id="L316">        } else {</span>
 <span class="nc" id="L317">            AtlasUtil.addAudit(session, getDocId(), String</span>
 <span class="nc" id="L318">                    .format(&quot;No target document created for DataSource:[id=%s, uri=%s]&quot;, getDocId(), this.getUri()),</span>
-                    null, AuditStatus.WARN, null);
+                    AuditStatus.WARN, null);
         }
 <span class="fc" id="L321">        session.removeFieldWriter(getDocId());</span>
 

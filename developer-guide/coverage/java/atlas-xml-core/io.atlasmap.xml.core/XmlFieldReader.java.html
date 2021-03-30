@@ -69,10 +69,10 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
     public Field read(AtlasInternalSession session) throws AtlasException {
 <span class="fc" id="L70">        Field field = session.head().getSourceField();</span>
 <span class="fc bfc" id="L71" title="All 2 branches covered.">        if (document == null) {</span>
-<span class="fc" id="L72">            AtlasUtil.addAudit(session, field.getDocId(),</span>
+<span class="fc" id="L72">            AtlasUtil.addAudit(session, field,</span>
 <span class="fc" id="L73">                    String.format(&quot;Cannot read field '%s' of document '%s', document is null&quot;,</span>
 <span class="fc" id="L74">                            field.getPath(), field.getDocId()),</span>
-<span class="fc" id="L75">                    field.getPath(), AuditStatus.ERROR, null);</span>
+                    AuditStatus.ERROR, null);
 <span class="fc" id="L76">            return field;</span>
         }
 <span class="fc bfc" id="L78" title="All 2 branches covered.">        if (field == null) {</span>
@@ -291,10 +291,10 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
 <span class="fc" id="L291">                    xmlField.getFieldType(), null);</span>
 <span class="fc" id="L292">                xmlField.setValue(convertedValue);</span>
 <span class="fc" id="L293">            } catch (AtlasConversionException e) {</span>
-<span class="fc" id="L294">                AtlasUtil.addAudit(session, xmlField.getDocId(),</span>
+<span class="fc" id="L294">                AtlasUtil.addAudit(session, xmlField,</span>
 <span class="fc" id="L295">                        String.format(&quot;Failed to convert field value '%s' into type '%s'&quot;, value,</span>
 <span class="fc" id="L296">                            xmlField.getFieldType()),</span>
-<span class="fc" id="L297">                    xmlField.getPath(), AuditStatus.ERROR, value);</span>
+                    AuditStatus.ERROR, value);
 <span class="fc" id="L298">            }</span>
         }
 <span class="fc" id="L300">    }</span>
