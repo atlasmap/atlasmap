@@ -447,7 +447,7 @@ export class MappingModel {
           mappedOutputField.field!.path === field.path
         ) {
           if (m.isFieldMapped(field)) {
-            return m.sourceFields[0].field!.name;
+            return m.sourceFields[0]?.field!.name;
           }
         }
       }

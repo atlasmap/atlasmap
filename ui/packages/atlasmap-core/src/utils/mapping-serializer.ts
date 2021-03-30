@@ -50,7 +50,13 @@ export class MappingSerializer {
     )) {
       try {
         jsonMappings = jsonMappings.concat(
-          MappingSerializer.serializeFieldMapping(cfg, mapping, mapping.uuid)
+          MappingSerializer.serializeFieldMapping(
+            cfg,
+            mapping,
+            mapping.uuid,
+            false,
+            false
+          )
         );
       } catch (e) {
         const input: any = {
@@ -421,7 +427,9 @@ export class MappingSerializer {
   private static createInputFieldGroup(
     mapping: MappingModel,
     field: any[],
-    cfg: ConfigModel
+    cfg: ConfigModel,
+    docId?: string,
+    path?: string
   ): any {
     const actions = [];
 
@@ -437,6 +445,8 @@ export class MappingSerializer {
     const inputFieldGroup: any = {
       jsonType: ConfigModel.mappingServicesPackagePrefix + '.FieldGroup',
       actions,
+      docId: docId,
+      path: path,
       field,
     };
     return inputFieldGroup;
@@ -597,6 +607,8 @@ export class MappingSerializer {
     cfg: ConfigModel,
     ignoreValue: boolean = false
   ): any[] {
+    let collectionInputFieldGroup = null;
+    let collectionInstanceInputFieldGroup = null;
     const fields: MappedField[] = mapping.getMappedFields(isSource);
     const fieldsJson: any[] = [];
     for (const mappedField of fields) {
@@ -676,23 +688,68 @@ export class MappingSerializer {
       this.serializeActions(cfg, mappedField, serializedField);
 
       // Collection-based fields require an input field group.
-      if (
-        isSource &&
-        mappedField.field.parentField?.isCollection &&
-        mapping.transition.expression?.hasComplexField
-      ) {
-        const parentField = mappedField.field.parentField;
-        const inputFieldGroup = MappingSerializer.createInputFieldGroup(
-          mapping,
-          [serializedField],
-          cfg
-        );
-        inputFieldGroup['docId'] = parentField.docDef.id;
-        inputFieldGroup['fieldType'] = parentField.serviceObject.fieldType;
-        inputFieldGroup['path'] = parentField.path;
-        fieldsJson.push(inputFieldGroup);
+      if (isSource && mappedField.field.isInCollection()) {
+        const collectionParentField = field.getCollectionParentField();
+
+        // Check for preview-mode collection field references.
+        if (field.value?.length > 0) {
+          // Establish/add to the inner instance input field group.
+          if (collectionInputFieldGroup === null) {
+            collectionInstanceInputFieldGroup = MappingSerializer.createInputFieldGroup(
+              mapping,
+              [serializedField],
+              cfg,
+              collectionParentField.docDef.id,
+              collectionParentField.path
+            );
+          } else {
+            collectionInstanceInputFieldGroup!.field.push(serializedField);
+            continue;
+          }
+          collectionInstanceInputFieldGroup['fieldType'] =
+            collectionParentField.serviceObject.fieldType;
+
+          // Preview-mode uses element/ item instance <0>.
+          collectionInstanceInputFieldGroup[
+            'path'
+          ] = collectionParentField.path.replace('<>', '<0>');
+
+          // Establish one outer input field group for the collection.
+          if (collectionInputFieldGroup === null) {
+            collectionInputFieldGroup = MappingSerializer.createInputFieldGroup(
+              mapping,
+              [collectionInstanceInputFieldGroup],
+              cfg,
+              collectionParentField.docDef.id,
+              collectionParentField.path
+            );
+            collectionInstanceInputFieldGroup['fieldType'] =
+              collectionParentField.serviceObject.fieldType;
+            fieldsJson.push(collectionInputFieldGroup);
+          }
+
+          // Standard expression-based collection field references.
+        } else {
+          if (mapping.transition.expression?.hasComplexField) {
+            const inputFieldGroup = MappingSerializer.createInputFieldGroup(
+              mapping,
+              [serializedField],
+              cfg,
+              field.docDef.id,
+              field.docDef.name
+            );
+            inputFieldGroup['docId'] = collectionParentField.docDef.id;
+            inputFieldGroup['fieldType'] =
+              collectionParentField.serviceObject.fieldType;
+            inputFieldGroup['path'] = collectionParentField.path;
+            fieldsJson.push(inputFieldGroup);
+          }
+        }
+
+        // Non-aggregate field reference.
       } else {
         fieldsJson.push(serializedField);
+        collectionInputFieldGroup = null;
       }
     }
     return fieldsJson;
