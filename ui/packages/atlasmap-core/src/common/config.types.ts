@@ -63,6 +63,7 @@ export const collectionTypes = [
 ];
 
 export const constantTypes = [
+  ['STRING', 'String'], // default type
   ['BOOLEAN', 'Boolean'],
   ['BIG_INTEGER', 'Big Integer'],
   ['BYTE', 'Byte'],
@@ -75,7 +76,6 @@ export const constantTypes = [
   ['INTEGER', 'Integer'],
   ['LONG', 'Long'],
   ['SHORT', 'Short'],
-  ['STRING', 'String'],
   ['TIME', 'Time'],
   ['DATE', 'Date'],
   ['DATE_TIME', 'DateTime'],
@@ -89,6 +89,7 @@ export const constantTypes = [
 ];
 
 export const propertyTypes = [
+  ['STRING', 'String'], // default type
   ['ANY', 'Any'],
   ['BOOLEAN', 'Boolean'],
   ['BIG_INTEGER', 'Big Integer'],
@@ -102,7 +103,6 @@ export const propertyTypes = [
   ['INTEGER', 'Integer'],
   ['LONG', 'Long'],
   ['SHORT', 'Short'],
-  ['STRING', 'String'],
   ['TIME', 'Time'],
   ['DATE', 'Date'],
   ['DATE_TIME', 'DateTime'],
