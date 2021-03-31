@@ -28,6 +28,7 @@ import io.atlasmap.core.BaseAtlasModule;
 import io.atlasmap.json.core.JsonFieldReader;
 import io.atlasmap.json.core.JsonFieldWriter;
 import io.atlasmap.json.v2.AtlasJsonModelFactory;
+import io.atlasmap.json.v2.JsonEnumField;
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasModuleDetail;
@@ -241,7 +242,7 @@ public class JsonModule extends BaseAtlasModule {
         if (super.isSupportedField(field)) {
             return true;
         }
-        return field instanceof JsonField;
+        return field instanceof JsonField || field instanceof JsonEnumField;
     }
 
     @Override

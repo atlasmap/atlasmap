@@ -11,6 +11,18 @@
         <xs:element type="xs:short" name="shortField" />
         <xs:element type="xs:string" name="floatField" />
         <xs:element type="xs:string" name="charField" />
+        <xs:element name="enumField">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="aaa"/>
+              <xs:enumeration value="bbb"/>
+              <xs:enumeration value="ccc"/>
+              <xs:enumeration value="ddd"/>
+              <xs:enumeration value="eee"/>
+              <xs:enumeration value="fff"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
       </xs:sequence>
       <xs:attribute name="intAttr" type="xs:int" use="optional"
         default="1" />

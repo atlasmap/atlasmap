@@ -50,7 +50,15 @@
                   </xsd:sequence>
                 </xsd:complexType>
               </xsd:element>
-              <xsd:element name="status" type="xsd:string" />
+              <xsd:element name="status">
+                <xsd:simpleType name="status">
+                  <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="Available" />
+                    <xsd:enumeration value="Pending" />
+                    <xsd:enumeration value="Sold" />
+                  </xsd:restriction>
+                </xsd:simpleType>
+              </xsd:element>
             </xsd:sequence>
           </xsd:complexType>
         </xsd:element>

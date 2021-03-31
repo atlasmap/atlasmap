@@ -45,6 +45,7 @@ import io.atlasmap.v2.FieldType;
 import io.atlasmap.xml.core.XmlPath.XmlSegmentContext;
 import io.atlasmap.xml.v2.AtlasXmlModelFactory;
 import io.atlasmap.xml.v2.XmlDataSource;
+import io.atlasmap.xml.v2.XmlEnumField;
 import io.atlasmap.xml.v2.XmlField;
 import io.atlasmap.xml.v2.XmlNamespace;
 import io.atlasmap.xml.v2.XmlNamespaces;
@@ -78,7 +79,8 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
         if (field == null) {
             throw new AtlasException(new IllegalArgumentException("Argument 'field' cannot be null"));
         }
-        if (!(field instanceof XmlField) && !(field instanceof FieldGroup)) {
+        if (!(field instanceof XmlField) && !(field instanceof FieldGroup)
+                && !(field instanceof XmlEnumField)) {
             throw new AtlasException(String.format("Unsupported field type '%s'", field.getClass()));
         }
 
@@ -113,12 +115,16 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
         }
 
         if (segments.size() == depth) {
-            if (field.getFieldType() == FieldType.COMPLEX) {
+            if (!(field instanceof XmlEnumField) && field.getFieldType() == FieldType.COMPLEX) {
                 FieldGroup group = (FieldGroup) field;
                 populateChildFields(session, xmlNamespaces, node, group, path);
                 fields.add(group);
             } else {
-                XmlField xmlField = AtlasXmlModelFactory.cloneField((XmlField)field, true);
+                XmlField xmlField = new XmlField();
+                AtlasXmlModelFactory.copyField(field, xmlField, true);
+                if (field instanceof XmlEnumField && xmlField.getFieldType() == FieldType.COMPLEX) {
+                    xmlField.setFieldType(FieldType.STRING); // enum has COMPLEX by default
+                }
                 copyValue(session, xmlNamespaces, segments.get(depth - 1), node, xmlField);
                 xmlField.setIndex(null); //reset index for subfields
                 fields.add(xmlField);

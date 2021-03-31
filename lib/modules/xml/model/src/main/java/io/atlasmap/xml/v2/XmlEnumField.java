@@ -17,6 +17,10 @@ public class XmlEnumField extends Field implements Serializable {
 
     protected String typeName;
 
+    protected Boolean attribute = false;
+
+    protected Boolean userCreated;
+
     /**
      * Gets the value of the name property.
      * 
@@ -87,6 +91,54 @@ public class XmlEnumField extends Field implements Serializable {
      */
     public void setTypeName(String value) {
         this.typeName = value;
+    }
+
+    /**
+     * Gets the value of the attribute property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isAttribute() {
+        return attribute;
+    }
+
+    /**
+     * Sets the value of the attribute property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setAttribute(Boolean value) {
+        this.attribute = value;
+    }
+
+    /**
+     * Gets the value of the userCreated property.
+     *
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *
+     */
+    public Boolean isUserCreated() {
+        return userCreated;
+    }
+
+    /**
+     * Sets the value of the userCreated property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *
+     */
+    public void setUserCreated(Boolean value) {
+        this.userCreated = value;
     }
 
     public boolean equals(Object object) {

@@ -34,6 +34,7 @@ import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.AtlasPath.SegmentContext;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.json.v2.AtlasJsonModelFactory;
+import io.atlasmap.json.v2.JsonEnumField;
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasFieldReader;
@@ -102,6 +103,9 @@ public class JsonFieldReader implements AtlasFieldReader {
             } else {
                 JsonField jsonField = new JsonField();
                 AtlasModelFactory.copyField(field, jsonField, true);
+                if (field instanceof JsonEnumField && field.getFieldType() == FieldType.COMPLEX) {
+                    jsonField.setFieldType(FieldType.STRING); // enum has COMPLEX by default
+                }
                 Object value = handleValueNode(session, node, jsonField);
                 jsonField.setValue(value);
                 jsonField.setIndex(null); //reset index for subfields

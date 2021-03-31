@@ -22,6 +22,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,6 +33,7 @@ import io.atlasmap.xml.v2.Restriction;
 import io.atlasmap.xml.v2.RestrictionType;
 import io.atlasmap.xml.v2.XmlComplexType;
 import io.atlasmap.xml.v2.XmlDocument;
+import io.atlasmap.xml.v2.XmlEnumField;
 import io.atlasmap.xml.v2.XmlField;
 import io.atlasmap.xml.v2.XmlNamespace;
 
@@ -110,7 +112,16 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         assertEquals(1, xmlDocument.getFields().getField().size());
         XmlComplexType root = (XmlComplexType) xmlDocument.getFields().getField().get(0);
         assertNotNull(root);
-        assertEquals(9, root.getXmlFields().getXmlField().size());
+        assertEquals(10, root.getXmlFields().getXmlField().size());
+        XmlField enumField = root.getXmlFields().getXmlField().get(9);
+        assertEquals("enumField", enumField.getName());
+        assertEquals(FieldType.COMPLEX, enumField.getFieldType());
+        XmlComplexType enumComplex = (XmlComplexType) enumField;
+        assertTrue(enumComplex.isEnumeration());
+        List<XmlEnumField> enumFields = enumComplex.getXmlEnumFields().getXmlEnumField();
+        assertEquals(6, enumFields.size());
+        assertEquals("aaa", enumFields.get(0).getName());
+        assertEquals("fff", enumFields.get(5).getName());
         // debugFields(xmlDocument.getFields());
     }
 
