@@ -12,8 +12,9 @@ import {
 } from "@patternfly/react-core";
 import { BoltIcon, TrashIcon, InfoAltIcon } from "@patternfly/react-icons";
 import { css, StyleSheet } from "@patternfly/react-styles";
-import { DraggableField, FieldDropTarget, NodeRef } from ".";
-import { IAtlasmapField } from "src/Views";
+import { IAtlasmapField } from "../../src/Views/models";
+import { DraggableField, FieldDropTarget } from "./dnd";
+import { NodeRef } from "./Canvas/NodeRef";
 
 const styles = StyleSheet.create({
   field: {
