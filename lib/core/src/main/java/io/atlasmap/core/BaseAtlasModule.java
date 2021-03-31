@@ -134,7 +134,12 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
             targetValue = atlasConversionService.convertType(lookupValue, FieldType.STRING, lookupType);
         }
 
-        if (targetField.getFieldType() != null && !targetField.getFieldType().equals(lookupType)) {
+        FieldType targetFieldType = targetField.getFieldType();
+        if (targetFieldType == null || targetFieldType == FieldType.COMPLEX) {
+            targetField.setFieldType(lookupType != null ? lookupType : FieldType.STRING);
+            targetFieldType = targetField.getFieldType();
+        }
+        if (targetFieldType != null && !targetFieldType.equals(lookupType)) {
             targetValue = atlasConversionService.convertType(targetValue, lookupType, targetField.getFieldType());
         }
 

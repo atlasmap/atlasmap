@@ -57,6 +57,7 @@ import io.atlasmap.xml.core.schema.AtlasRewritingXSVisitor;
 import io.atlasmap.xml.core.schema.AtlasXmlSchemaSetParser;
 import io.atlasmap.xml.v2.AtlasXmlModelFactory;
 import io.atlasmap.xml.v2.XmlDataSource;
+import io.atlasmap.xml.v2.XmlEnumField;
 import io.atlasmap.xml.v2.XmlField;
 import io.atlasmap.xml.v2.XmlNamespace;
 import io.atlasmap.xml.v2.XmlNamespaces;
@@ -340,7 +341,7 @@ public class XmlModule extends BaseAtlasModule {
         if (super.isSupportedField(field)) {
             return true;
         }
-        return field instanceof XmlField;
+        return field instanceof XmlField || field instanceof XmlEnumField;
     }
 
     @Override

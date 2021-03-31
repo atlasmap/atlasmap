@@ -24,6 +24,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -38,6 +40,7 @@ import com.sun.xml.xsom.XSAttributeUse;
 import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSDeclaration;
 import com.sun.xml.xsom.XSElementDecl;
+import com.sun.xml.xsom.XSFacet;
 import com.sun.xml.xsom.XSModelGroup;
 import com.sun.xml.xsom.XSModelGroupDecl;
 import com.sun.xml.xsom.XSParticle;
@@ -46,6 +49,7 @@ import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.XSSimpleType;
 import com.sun.xml.xsom.XSTerm;
+import com.sun.xml.xsom.XSType;
 
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldStatus;
@@ -61,6 +65,8 @@ import io.atlasmap.xml.v2.RestrictionType;
 import io.atlasmap.xml.v2.Restrictions;
 import io.atlasmap.xml.v2.XmlComplexType;
 import io.atlasmap.xml.v2.XmlDocument;
+import io.atlasmap.xml.v2.XmlEnumField;
+import io.atlasmap.xml.v2.XmlEnumFields;
 import io.atlasmap.xml.v2.XmlField;
 import io.atlasmap.xml.v2.XmlFields;
 import io.atlasmap.xml.v2.XmlNamespace;
@@ -261,7 +267,11 @@ public class XmlSchemaInspector {
         String rootName = root;
         String elementName = getNameNS(element);
         String typeName = getNameNS(element.getType());
-        if (element.getType().isComplexType()) {
+        XSType elementType = element.getType();
+        if (elementType == null) {
+            return;
+        }
+        if (elementType.isComplexType()) {
             XmlComplexType complexType = getXmlComplexType();
             rootName = rootName + "/" + elementName;
             complexType.setName(elementName);
@@ -287,10 +297,31 @@ public class XmlSchemaInspector {
                     LOG.trace("Element: {}/{}", root, getNameNS(element));
                 }
             }
-        } else if (element.getType() != null && element.getType().asSimpleType() != null) {
+        } else if (elementType.asSimpleType() != null) {
             if (LOG.isTraceEnabled()) {
                 LOG.trace("Element: {}/{}", root, getNameNS(element));
             }
+
+            XSRestrictionSimpleType restrictionType = elementType.asSimpleType().asRestriction();
+            List<XSFacet> enumerations = restrictionType != null ? restrictionType.getFacets("enumeration") : null;
+            if (enumerations != null && !enumerations.isEmpty()) {
+                XmlComplexType complexType = getXmlComplexType();
+                rootName = rootName + "/" + elementName;
+                complexType.setName(elementName);
+                complexType.setPath(rootName);
+                complexType.setCollectionType(collectionType);
+                complexType.setEnumeration(true);
+                xmlComplexType.getXmlFields().getXmlField().add(complexType);
+                XmlEnumFields enums = new XmlEnumFields();
+                complexType.setXmlEnumFields(enums);
+                for (XSFacet enumFacet : enumerations) {
+                    XmlEnumField f = new XmlEnumField();
+                    f.setName(enumFacet.getValue().toString());
+                    enums.getXmlEnumField().add(f);
+                }
+                return;
+            }
+
             XmlField xmlField = AtlasXmlModelFactory.createXmlField();
             xmlField.setName(elementName);
             xmlField.setPath(rootName + "/" + elementName);
@@ -307,6 +338,13 @@ public class XmlSchemaInspector {
             }
             printSimpleType(element.getType().asSimpleType(), xmlField);
         }
+    }
+
+    private List<XSFacet> getEnumerations(XSRestrictionSimpleType restrictionType) {
+        if (restrictionType == null) {
+            return new LinkedList<>();
+        }
+        return restrictionType.getFacets("enumeration");
     }
 
     private void printAttributes(XSComplexType xsComplexType, String rootName, XmlComplexType xmlComplexType) {

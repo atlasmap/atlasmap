@@ -1,0 +1,142 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.xml.v2.XmlDataSource",
+      "id" : "XMLSchemaSource-2c88ee00-7ddc-4137-b906-52d56e9b7f9e",
+      "name" : "XMLSchemaSource",
+      "description" : "Source document XMLSchemaSource type: XML",
+      "uri" : "atlas:xml:XMLSchemaSource-2c88ee00-7ddc-4137-b906-52d56e9b7f9e",
+      "dataSourceType" : "SOURCE",
+      "xmlNamespaces" : {
+        "xmlNamespace" : [ {
+          "alias" : "tns",
+          "uri" : "http://syndesis.io/v1/swagger-connector-template/request"
+        } ]
+      }
+    }, {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "address-enum-schema-19eabdd2-fec0-439a-824f-47f514a06177",
+      "name" : "address-enum-schema",
+      "description" : "Source document address-enum-schema type: JSON",
+      "uri" : "atlas:json:address-enum-schema-19eabdd2-fec0-439a-824f-47f514a06177",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.xml.v2.XmlDataSource",
+      "id" : "XMLSchemaSource-c1b7b86e-959a-4cd8-b1fd-0bf52ddf0f43",
+      "name" : "XMLSchemaSource",
+      "description" : "Target document XMLSchemaSource type: XML",
+      "uri" : "atlas:xml:XMLSchemaSource-c1b7b86e-959a-4cd8-b1fd-0bf52ddf0f43",
+      "dataSourceType" : "TARGET",
+      "xmlNamespaces" : {
+        "xmlNamespace" : [ {
+          "alias" : "tns",
+          "uri" : "http://syndesis.io/v1/swagger-connector-template/request"
+        } ]
+      }
+    }, {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "address-enum-schema-afdf5b0b-416a-4b7a-a4ba-f6219af64f43",
+      "name" : "address-enum-schema",
+      "description" : "Target document address-enum-schema type: JSON",
+      "uri" : "atlas:json:address-enum-schema-afdf5b0b-416a-4b7a-a4ba-f6219af64f43",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "LOOKUP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlEnumField",
+          "docId" : "XMLSchemaSource-2c88ee00-7ddc-4137-b906-52d56e9b7f9e",
+          "path" : "/tns:request/tns:body/Pet/status",
+          "fieldType" : "COMPLEX",
+          "name" : "status",
+          "attribute" : false,
+          "userCreated" : false
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonEnumField",
+          "docId" : "address-enum-schema-afdf5b0b-416a-4b7a-a4ba-f6219af64f43",
+          "path" : "/region",
+          "fieldType" : "COMPLEX",
+          "name" : "region"
+        } ],
+        "id" : "mapping.37424",
+        "lookupTableName" : "1617211732100-112589"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "LOOKUP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonEnumField",
+          "docId" : "address-enum-schema-19eabdd2-fec0-439a-824f-47f514a06177",
+          "path" : "/region",
+          "fieldType" : "COMPLEX",
+          "name" : "region"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlEnumField",
+          "docId" : "XMLSchemaSource-c1b7b86e-959a-4cd8-b1fd-0bf52ddf0f43",
+          "path" : "/tns:request/tns:body/Pet/status",
+          "fieldType" : "COMPLEX",
+          "name" : "status",
+          "attribute" : false,
+          "userCreated" : false
+        } ],
+        "id" : "mapping.683325",
+        "lookupTableName" : "1617211753386-262024"
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ {
+        "lookupEntry" : [ {
+          "sourceValue" : "Available",
+          "sourceType" : "STRING",
+          "targetValue" : "NA",
+          "targetType" : "STRING"
+        }, {
+          "sourceValue" : "Pending",
+          "sourceType" : "STRING",
+          "targetValue" : "EMEA",
+          "targetType" : "STRING"
+        }, {
+          "sourceValue" : "Sold",
+          "sourceType" : "STRING",
+          "targetValue" : "LATAM",
+          "targetType" : "STRING"
+        } ],
+        "name" : "1617211732100-112589"
+      }, {
+        "lookupEntry" : [ {
+          "sourceValue" : "NA",
+          "sourceType" : "STRING",
+          "targetValue" : "Available",
+          "targetType" : "STRING"
+        }, {
+          "sourceValue" : "EMEA",
+          "sourceType" : "STRING",
+          "targetValue" : "Pending",
+          "targetType" : "STRING"
+        }, {
+          "sourceValue" : "LATAM",
+          "sourceType" : "STRING",
+          "targetValue" : "Sold",
+          "targetType" : "STRING"
+        }, {
+          "sourceValue" : "APAC",
+          "sourceType" : "STRING",
+          "targetValue" : "Available",
+          "targetType" : "STRING"
+        } ],
+        "name" : "1617211753386-262024"
+      } ]
+    },
+    "constants" : {
+      "constant" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "UI.0"
+  }
+}
