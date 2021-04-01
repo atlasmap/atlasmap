@@ -57,8 +57,8 @@ export class DataMapperInitializationModel {
   classPath?: string;
 
   /* inspection service filtering flags */
-  fieldNameBlacklist: string[] = [];
-  classNameBlacklist: string[] = [];
+  fieldNameExclusions: string[] = [];
+  classNameExclusions: string[] = [];
   disablePrivateOnlyFields = false;
   disableProtectedOnlyFields = false;
   disablePublicOnlyFields = false;

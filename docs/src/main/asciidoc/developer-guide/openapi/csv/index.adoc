@@ -437,7 +437,7 @@ endif::internal-generation[]
 |  
 | String  
 | 
-|  _Enum:_ SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, BLACK_LIST, 
+|  _Enum:_ SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, EXCLUDED, 
 
 | fieldType 
 |  

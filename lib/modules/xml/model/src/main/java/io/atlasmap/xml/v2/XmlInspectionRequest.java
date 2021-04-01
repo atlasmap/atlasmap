@@ -13,11 +13,11 @@ public class XmlInspectionRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    protected StringList fieldNameBlacklist;
+    protected StringList fieldNameExclusions;
 
-    protected StringList typeNameBlacklist;
+    protected StringList typeNameExclusions;
 
-    protected StringList namespaceBlacklist;
+    protected StringList namespaceExclusions;
 
     protected String xmlData;
 
@@ -26,75 +26,75 @@ public class XmlInspectionRequest implements Serializable {
     protected InspectionType type;
 
     /**
-     * Gets the value of the fieldNameBlacklist property.
+     * Gets the value of the fieldNameExclusions property.
      * 
      * @return
      *     possible object is
      *     {@link StringList }
      *     
      */
-    public StringList getFieldNameBlacklist() {
-        return fieldNameBlacklist;
+    public StringList getFieldNameExclusions() {
+        return fieldNameExclusions;
     }
 
     /**
-     * Sets the value of the fieldNameBlacklist property.
+     * Sets the value of the fieldNameExclusions property.
      * 
      * @param value
      *     allowed object is
      *     {@link StringList }
      *     
      */
-    public void setFieldNameBlacklist(StringList value) {
-        this.fieldNameBlacklist = value;
+    public void setFieldNameExclusions(StringList value) {
+        this.fieldNameExclusions = value;
     }
 
     /**
-     * Gets the value of the typeNameBlacklist property.
+     * Gets the value of the typeNameExclusions property.
      * 
      * @return
      *     possible object is
      *     {@link StringList }
      *     
      */
-    public StringList getTypeNameBlacklist() {
-        return typeNameBlacklist;
+    public StringList getTypeNameExclusions() {
+        return typeNameExclusions;
     }
 
     /**
-     * Sets the value of the typeNameBlacklist property.
+     * Sets the value of the typeNameExclusions property.
      * 
      * @param value
      *     allowed object is
      *     {@link StringList }
      *     
      */
-    public void setTypeNameBlacklist(StringList value) {
-        this.typeNameBlacklist = value;
+    public void setTypeNameExclusions(StringList value) {
+        this.typeNameExclusions = value;
     }
 
     /**
-     * Gets the value of the namespaceBlacklist property.
+     * Gets the value of the namespaceExclusions property.
      * 
      * @return
      *     possible object is
      *     {@link StringList }
      *     
      */
-    public StringList getNamespaceBlacklist() {
-        return namespaceBlacklist;
+    public StringList getNamespaceExclusions() {
+        return namespaceExclusions;
     }
 
     /**
-     * Sets the value of the namespaceBlacklist property.
+     * Sets the value of the namespaceExclusions property.
      * 
      * @param value
      *     allowed object is
      *     {@link StringList }
      *     
      */
-    public void setNamespaceBlacklist(StringList value) {
-        this.namespaceBlacklist = value;
+    public void setNamespaceExclusions(StringList value) {
+        this.namespaceExclusions = value;
     }
 
     /**
@@ -178,58 +178,58 @@ public class XmlInspectionRequest implements Serializable {
         }
         final XmlInspectionRequest that = ((XmlInspectionRequest) object);
         {
-            StringList leftFieldNameBlacklist;
-            leftFieldNameBlacklist = this.getFieldNameBlacklist();
-            StringList rightFieldNameBlacklist;
-            rightFieldNameBlacklist = that.getFieldNameBlacklist();
-            if (this.fieldNameBlacklist!= null) {
-                if (that.fieldNameBlacklist!= null) {
-                    if (!leftFieldNameBlacklist.equals(rightFieldNameBlacklist)) {
+            StringList leftFieldNameExclusions;
+            leftFieldNameExclusions = this.getFieldNameExclusions();
+            StringList rightFieldNameExclusions;
+            rightFieldNameExclusions = that.getFieldNameExclusions();
+            if (this.fieldNameExclusions!= null) {
+                if (that.fieldNameExclusions!= null) {
+                    if (!leftFieldNameExclusions.equals(rightFieldNameExclusions)) {
                         return false;
                     }
                 } else {
                     return false;
                 }
             } else {
-                if (that.fieldNameBlacklist!= null) {
+                if (that.fieldNameExclusions!= null) {
                     return false;
                 }
             }
         }
         {
-            StringList leftTypeNameBlacklist;
-            leftTypeNameBlacklist = this.getTypeNameBlacklist();
-            StringList rightTypeNameBlacklist;
-            rightTypeNameBlacklist = that.getTypeNameBlacklist();
-            if (this.typeNameBlacklist!= null) {
-                if (that.typeNameBlacklist!= null) {
-                    if (!leftTypeNameBlacklist.equals(rightTypeNameBlacklist)) {
+            StringList leftTypeNameExclusions;
+            leftTypeNameExclusions = this.getTypeNameExclusions();
+            StringList rightTypeNameExclusions;
+            rightTypeNameExclusions = that.getTypeNameExclusions();
+            if (this.typeNameExclusions!= null) {
+                if (that.typeNameExclusions!= null) {
+                    if (!leftTypeNameExclusions.equals(rightTypeNameExclusions)) {
                         return false;
                     }
                 } else {
                     return false;
                 }
             } else {
-                if (that.typeNameBlacklist!= null) {
+                if (that.typeNameExclusions!= null) {
                     return false;
                 }
             }
         }
         {
-            StringList leftNamespaceBlacklist;
-            leftNamespaceBlacklist = this.getNamespaceBlacklist();
-            StringList rightNamespaceBlacklist;
-            rightNamespaceBlacklist = that.getNamespaceBlacklist();
-            if (this.namespaceBlacklist!= null) {
-                if (that.namespaceBlacklist!= null) {
-                    if (!leftNamespaceBlacklist.equals(rightNamespaceBlacklist)) {
+            StringList leftNamespaceExclusions;
+            leftNamespaceExclusions = this.getNamespaceExclusions();
+            StringList rightNamespaceExclusions;
+            rightNamespaceExclusions = that.getNamespaceExclusions();
+            if (this.namespaceExclusions!= null) {
+                if (that.namespaceExclusions!= null) {
+                    if (!leftNamespaceExclusions.equals(rightNamespaceExclusions)) {
                         return false;
                     }
                 } else {
                     return false;
                 }
             } else {
-                if (that.namespaceBlacklist!= null) {
+                if (that.namespaceExclusions!= null) {
                     return false;
                 }
             }
@@ -298,26 +298,26 @@ public class XmlInspectionRequest implements Serializable {
         int currentHashCode = 1;
         {
             currentHashCode = (currentHashCode* 31);
-            StringList theFieldNameBlacklist;
-            theFieldNameBlacklist = this.getFieldNameBlacklist();
-            if (this.fieldNameBlacklist!= null) {
-                currentHashCode += theFieldNameBlacklist.hashCode();
+            StringList theFieldNameExclusions;
+            theFieldNameExclusions = this.getFieldNameExclusions();
+            if (this.fieldNameExclusions!= null) {
+                currentHashCode += theFieldNameExclusions.hashCode();
             }
         }
         {
             currentHashCode = (currentHashCode* 31);
-            StringList theTypeNameBlacklist;
-            theTypeNameBlacklist = this.getTypeNameBlacklist();
-            if (this.typeNameBlacklist!= null) {
-                currentHashCode += theTypeNameBlacklist.hashCode();
+            StringList theTypeNameExclusions;
+            theTypeNameExclusions = this.getTypeNameExclusions();
+            if (this.typeNameExclusions!= null) {
+                currentHashCode += theTypeNameExclusions.hashCode();
             }
         }
         {
             currentHashCode = (currentHashCode* 31);
-            StringList theNamespaceBlacklist;
-            theNamespaceBlacklist = this.getNamespaceBlacklist();
-            if (this.namespaceBlacklist!= null) {
-                currentHashCode += theNamespaceBlacklist.hashCode();
+            StringList theNamespaceExclusions;
+            theNamespaceExclusions = this.getNamespaceExclusions();
+            if (this.namespaceExclusions!= null) {
+                currentHashCode += theNamespaceExclusions.hashCode();
             }
         }
         {

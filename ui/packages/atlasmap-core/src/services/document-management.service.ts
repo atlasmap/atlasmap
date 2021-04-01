@@ -517,19 +517,19 @@ export class DocumentManagementService {
       }
     }
     if (
-      this.cfg.initCfg.fieldNameBlacklist &&
-      this.cfg.initCfg.fieldNameBlacklist.length
+      this.cfg.initCfg.fieldNameExclusions &&
+      this.cfg.initCfg.fieldNameExclusions.length
     ) {
-      payload['ClassInspectionRequest']['fieldNameBlacklist'] = {
-        string: this.cfg.initCfg.fieldNameBlacklist,
+      payload['ClassInspectionRequest']['fieldNameExclusions'] = {
+        string: this.cfg.initCfg.fieldNameExclusions,
       };
     }
     if (
-      this.cfg.initCfg.classNameBlacklist &&
-      this.cfg.initCfg.classNameBlacklist.length
+      this.cfg.initCfg.classNameExclusions &&
+      this.cfg.initCfg.classNameExclusions.length
     ) {
-      payload['ClassInspectionRequest']['classNameBlacklist'] = {
-        string: this.cfg.initCfg.classNameBlacklist,
+      payload['ClassInspectionRequest']['classNameExclusions'] = {
+        string: this.cfg.initCfg.classNameExclusions,
       };
     }
     return payload;
@@ -888,7 +888,7 @@ export class DocumentManagementService {
         })
       );
       return null;
-    } else if (field != null && field.status === 'BLACK_LIST') {
+    } else if (field != null && field.status === 'EXCLUDED') {
       return null;
     }
 

@@ -440,8 +440,8 @@ public abstract class BaseMarshallerTest {
         classInspectionRequest.setClasspath(
                 "/Users/mattrpav/.m2/repository/org/twitter4j/twitter4j-core/4.0.5/twitter4j-core-4.0.5.jar");
         classInspectionRequest.setClassName("twitter4j.StatusJSONImpl");
-        classInspectionRequest.setFieldNameBlacklist(new StringList());
-        classInspectionRequest.getFieldNameBlacklist().getString().add("createdAt");
+        classInspectionRequest.setFieldNameExclusions(new StringList());
+        classInspectionRequest.getFieldNameExclusions().getString().add("createdAt");
         return classInspectionRequest;
     }
 
