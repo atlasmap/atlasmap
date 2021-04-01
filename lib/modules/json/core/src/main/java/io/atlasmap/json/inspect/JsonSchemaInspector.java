@@ -19,6 +19,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -134,7 +135,8 @@ public class JsonSchemaInspector implements JsonInspector {
         return answer;
     }
 
-    private JsonFieldBuilder getJsonFieldBuilder(String name, JsonNode value, String parentPath, Map<String, JsonNode> definitionMap, boolean isArray) throws JsonInspectionException {
+    private JsonFieldBuilder getJsonFieldBuilder(String name, JsonNode value, String parentPath,
+            Map<String, JsonNode> definitionMap, boolean isArray) throws JsonInspectionException {
         LOG.trace("--> Field:[name=[{}], value=[{}], parentPath=[{}]", name, value, parentPath);
         JsonFieldBuilder builder = new JsonFieldBuilder();
         if (name != null) {
@@ -175,6 +177,7 @@ public class JsonSchemaInspector implements JsonInspector {
             LOG.warn("'type' is not defined for node '{}', assuming as an object", name);
             builder.type = FieldType.COMPLEX;
             builder.subFields.getJsonField().addAll(loadProperties(nodeValue, builder.path, definitionMap));
+            return builder;
         } else if ("array".equals(fieldType.asText())) {
             JsonNode arrayItems = nodeValue.get("items");
             if (arrayItems == null || !arrayItems.fields().hasNext()) {
@@ -183,25 +186,54 @@ public class JsonSchemaInspector implements JsonInspector {
             } else {
                 builder = getJsonFieldBuilder(name, arrayItems, parentPath, definitionMap, true);
             }
-        } else if ("boolean".equals(fieldType.asText())) {
+            return builder;
+        }
+        List<String> jsonTypes = new LinkedList<>();
+        if (fieldType instanceof ArrayNode) {
+            ((ArrayNode)fieldType).spliterator().forEachRemaining(node -> jsonTypes.add(node.asText()));
+        } else {
+            jsonTypes.add(fieldType.asText());
+        }
+        processFieldType(builder, jsonTypes, nodeValue, definitionMap);
+        
+        return builder;
+    }
+
+    private void processFieldType(JsonFieldBuilder builder, List<String> jsonTypes,
+            JsonNode nodeValue, Map<String, JsonNode> definitionMap) throws JsonInspectionException {
+        String jsonType = jsonTypes.get(0);
+        if (jsonTypes.size() > 1) {
+            if (jsonTypes.contains("object")) {
+                jsonType = "object";
+            } else if (jsonTypes.contains("string")) {
+                jsonType = "string";
+            } else if (jsonTypes.contains("number")) {
+                jsonType = "number";
+            } else if (jsonTypes.contains("integer")) {
+                jsonType = "integer";
+            } else if (jsonTypes.contains("boolean")) {
+                jsonType = "boolean";
+            } else {
+                jsonType = "null";
+            }
+        }
+        if ("boolean".equals(jsonType)) {
             builder.type = FieldType.BOOLEAN;
-        } else if ("integer".equals(fieldType.asText())) {
+        } else if ("integer".equals(jsonType)) {
             builder.type = FieldType.BIG_INTEGER;
-        } else if ("null".equals(fieldType.asText())) {
+        } else if ("null".equals(jsonType)) {
             builder.type = FieldType.NONE;
-        } else if ("number".equals(fieldType.asText())) {
+        } else if ("number".equals(jsonType)) {
             builder.type = FieldType.NUMBER;
-        } else if ("string".equals(fieldType.asText())) {
+        } else if ("string".equals(jsonType)) {
             builder.type = FieldType.STRING;
         } else {
-            if (!"object".equals(fieldType.asText())) {
-                LOG.warn("Unsupported field type '{}' found, assuming as an object", fieldType.asText());
+            if (!"object".equals(jsonType)) {
+                LOG.warn("Unsupported field type '{}' found, assuming as an object", jsonType);
             }
             builder.type = FieldType.COMPLEX;
             builder.subFields.getJsonField().addAll(loadProperties(nodeValue, builder.path, definitionMap));
         }
-
-        return builder;
     }
 
     private class JsonFieldBuilder {
