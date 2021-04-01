@@ -117,7 +117,7 @@ export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent<ITreeItemFiel
                           </Button>
                         )
                       }
-                      type={field.type}
+                      type={field.enumeration ? "ENUM" : field.type}
                       scope={field.scope}
                       showType={showTypes}
                       isDragging={isDragging}
