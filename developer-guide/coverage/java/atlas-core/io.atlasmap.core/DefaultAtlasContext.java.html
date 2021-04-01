@@ -165,9 +165,9 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 <span class="fc" id="L165">        lookupTables.clear();</span>
 <span class="fc bfc" id="L166" title="All 2 branches covered.">        if (admHandler.getMappingDefinition().getLookupTables() != null</span>
 <span class="pc bpc" id="L167" title="1 of 2 branches missed.">                &amp;&amp; admHandler.getMappingDefinition().getLookupTables().getLookupTable() != null) {</span>
-<span class="pc bpc" id="L168" title="1 of 2 branches missed.">            for (LookupTable table : admHandler.getMappingDefinition().getLookupTables().getLookupTable()) {</span>
-<span class="nc" id="L169">                lookupTables.put(table.getName(), table);</span>
-<span class="nc" id="L170">            }</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">            for (LookupTable table : admHandler.getMappingDefinition().getLookupTables().getLookupTable()) {</span>
+<span class="fc" id="L169">                lookupTables.put(table.getName(), table);</span>
+<span class="fc" id="L170">            }</span>
         }
 
 <span class="fc" id="L173">        AtlasModuleInfoRegistry moduleInfoRegistry = factory.getModuleInfoRegistry();</span>
