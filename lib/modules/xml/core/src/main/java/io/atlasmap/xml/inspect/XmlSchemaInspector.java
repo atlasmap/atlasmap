@@ -76,7 +76,7 @@ public class XmlSchemaInspector {
 
     static final Logger LOG = LoggerFactory.getLogger(XmlSchemaInspector.class);
     private static final Map<String, FieldType> XS_TYPE_TO_FIELD_TYPE_MAP;
-    private static final Map<String, FieldType> BLACKLISTED_TYPES;
+    private static final Map<String, FieldType> EXCLUDED_TYPES;
 
     static {
         XS_TYPE_TO_FIELD_TYPE_MAP = new HashMap<>();
@@ -106,8 +106,8 @@ public class XmlSchemaInspector {
         XS_TYPE_TO_FIELD_TYPE_MAP.put("hexBinary", FieldType.STRING);
         XS_TYPE_TO_FIELD_TYPE_MAP.put("QName", FieldType.STRING);
 
-        BLACKLISTED_TYPES = new HashMap<>();
-        BLACKLISTED_TYPES.put("NOTATION", FieldType.UNSUPPORTED);
+        EXCLUDED_TYPES = new HashMap<>();
+        EXCLUDED_TYPES.put("NOTATION", FieldType.UNSUPPORTED);
     }
 
     private XmlDocument xmlDocument;
@@ -405,8 +405,8 @@ public class XmlSchemaInspector {
     }
 
     private FieldType getFieldType(String name) {
-        // check the blacklist
-        FieldType attrType = BLACKLISTED_TYPES.get(name);
+        // check the exclusions
+        FieldType attrType = EXCLUDED_TYPES.get(name);
         if (attrType == null) {
             attrType = XS_TYPE_TO_FIELD_TYPE_MAP.get(name);
         }

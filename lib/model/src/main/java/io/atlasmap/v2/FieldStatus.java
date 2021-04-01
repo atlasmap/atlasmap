@@ -7,7 +7,7 @@ public enum FieldStatus {
     CACHED("Cached"),
     ERROR("Error"),
     NOT_FOUND("NotFound"),
-    BLACK_LIST("BlackList");
+    EXCLUDED("Excluded");
     private final String value;
 
     FieldStatus(String v) {

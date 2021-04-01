@@ -65,8 +65,8 @@ public class ClassInspectionService {
             "java.util.LinkedHashMap", "java.util.SortedMap", "java.util.WeakHashMap", "java.util.Properties",
             "java.util.concurrent.ConcurrentHashMap", "java.util.concurrent.ConcurrentMap"));
     private AtlasConversionService atlasConversionService = null;
-    private List<String> fieldBlacklist = new ArrayList<>(Arrays.asList("serialVersionUID"));
-    private List<String> classNameBlacklist = new ArrayList<>();
+    private List<String> fieldExclusions = new ArrayList<>(Arrays.asList("serialVersionUID"));
+    private List<String> classNameExclusions = new ArrayList<>();
     private Boolean disablePackagePrivateOnlyFields = false;
     private Boolean disableProtectedOnlyFields = false;
     private Boolean disablePrivateOnlyFields = false;
@@ -81,12 +81,12 @@ public class ClassInspectionService {
         return this.listClasses;
     }
 
-    public List<String> getClassNameBlacklist() {
-        return this.classNameBlacklist;
+    public List<String> getClassNameExclusions() {
+        return this.classNameExclusions;
     }
 
-    public List<String> getFieldBlacklist() {
-        return this.fieldBlacklist;
+    public List<String> getFieldExclusions() {
+        return this.fieldExclusions;
     }
 
     public Boolean getDisableProtectedOnlyFields() {
@@ -591,8 +591,8 @@ public class ClassInspectionService {
             for (Field f : fields) {
                 JavaField s = inspectField(classLoader, f, cachedClasses, pathPrefix);
 
-                if (getFieldBlacklist().contains(f.getName())) {
-                    s.setStatus(FieldStatus.BLACK_LIST);
+                if (getFieldExclusions().contains(f.getName())) {
+                    s.setStatus(FieldStatus.EXCLUDED);
                 }
 
                 // skip synthetic members

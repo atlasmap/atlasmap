@@ -226,19 +226,19 @@ endif::internal-generation[]
 |===         
 | Field Name| Required| Type| Description| Format
 
-| fieldNameBlacklist 
+| fieldNameExclusions 
 |  
 | StringList  
 | 
 |  
 
-| typeNameBlacklist 
+| typeNameExclusions 
 |  
 | StringList  
 | 
 |  
 
-| namespaceBlacklist 
+| namespaceExclusions 
 |  
 | StringList  
 | 
@@ -388,7 +388,7 @@ endif::internal-generation[]
 |  
 | String  
 | 
-|  _Enum:_ SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, BLACK_LIST, 
+|  _Enum:_ SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, EXCLUDED, 
 
 | fieldType 
 |  

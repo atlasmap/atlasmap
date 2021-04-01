@@ -14,9 +14,9 @@ public class ClassInspectionRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    protected StringList fieldNameBlacklist;
+    protected StringList fieldNameExclusions;
 
-    protected StringList classNameBlacklist;
+    protected StringList classNameExclusions;
     protected String classpath;
 
     protected String className;
@@ -34,51 +34,51 @@ public class ClassInspectionRequest implements Serializable {
     protected Boolean disablePublicGetterSetterFields;
 
     /**
-     * Gets the value of the fieldNameBlacklist property.
+     * Gets the value of the fieldNameExclusions property.
      * 
      * @return
      *     possible object is
      *     {@link StringList }
      *     
      */
-    public StringList getFieldNameBlacklist() {
-        return fieldNameBlacklist;
+    public StringList getFieldNameExclusions() {
+        return fieldNameExclusions;
     }
 
     /**
-     * Sets the value of the fieldNameBlacklist property.
+     * Sets the value of the fieldNameExclusions property.
      * 
      * @param value
      *     allowed object is
      *     {@link StringList }
      *     
      */
-    public void setFieldNameBlacklist(StringList value) {
-        this.fieldNameBlacklist = value;
+    public void setFieldNameExclusions(StringList value) {
+        this.fieldNameExclusions = value;
     }
 
     /**
-     * Gets the value of the classNameBlacklist property.
+     * Gets the value of the classNameExclusions property.
      * 
      * @return
      *     possible object is
      *     {@link StringList }
      *     
      */
-    public StringList getClassNameBlacklist() {
-        return classNameBlacklist;
+    public StringList getClassNameExclusions() {
+        return classNameExclusions;
     }
 
     /**
-     * Sets the value of the classNameBlacklist property.
+     * Sets the value of the classNameExclusions property.
      * 
      * @param value
      *     allowed object is
      *     {@link StringList }
      *     
      */
-    public void setClassNameBlacklist(StringList value) {
-        this.classNameBlacklist = value;
+    public void setClassNameExclusions(StringList value) {
+        this.classNameExclusions = value;
     }
 
     /**
@@ -282,39 +282,39 @@ public class ClassInspectionRequest implements Serializable {
         }
         final ClassInspectionRequest that = ((ClassInspectionRequest) object);
         {
-            StringList leftFieldNameBlacklist;
-            leftFieldNameBlacklist = this.getFieldNameBlacklist();
-            StringList rightFieldNameBlacklist;
-            rightFieldNameBlacklist = that.getFieldNameBlacklist();
-            if (this.fieldNameBlacklist!= null) {
-                if (that.fieldNameBlacklist!= null) {
-                    if (!leftFieldNameBlacklist.equals(rightFieldNameBlacklist)) {
+            StringList leftFieldNameExclusions;
+            leftFieldNameExclusions = this.getFieldNameExclusions();
+            StringList rightFieldNameExclusions;
+            rightFieldNameExclusions = that.getFieldNameExclusions();
+            if (this.fieldNameExclusions!= null) {
+                if (that.fieldNameExclusions!= null) {
+                    if (!leftFieldNameExclusions.equals(rightFieldNameExclusions)) {
                         return false;
                     }
                 } else {
                     return false;
                 }
             } else {
-                if (that.fieldNameBlacklist!= null) {
+                if (that.fieldNameExclusions!= null) {
                     return false;
                 }
             }
         }
         {
-            StringList leftClassNameBlacklist;
-            leftClassNameBlacklist = this.getClassNameBlacklist();
-            StringList rightClassNameBlacklist;
-            rightClassNameBlacklist = that.getClassNameBlacklist();
-            if (this.classNameBlacklist!= null) {
-                if (that.classNameBlacklist!= null) {
-                    if (!leftClassNameBlacklist.equals(rightClassNameBlacklist)) {
+            StringList leftClassNameExclusions;
+            leftClassNameExclusions = this.getClassNameExclusions();
+            StringList rightClassNameExclusions;
+            rightClassNameExclusions = that.getClassNameExclusions();
+            if (this.classNameExclusions!= null) {
+                if (that.classNameExclusions!= null) {
+                    if (!leftClassNameExclusions.equals(rightClassNameExclusions)) {
                         return false;
                     }
                 } else {
                     return false;
                 }
             } else {
-                if (that.classNameBlacklist!= null) {
+                if (that.classNameExclusions!= null) {
                     return false;
                 }
             }
@@ -478,18 +478,18 @@ public class ClassInspectionRequest implements Serializable {
         int currentHashCode = 1;
         {
             currentHashCode = (currentHashCode* 31);
-            StringList theFieldNameBlacklist;
-            theFieldNameBlacklist = this.getFieldNameBlacklist();
-            if (this.fieldNameBlacklist!= null) {
-                currentHashCode += theFieldNameBlacklist.hashCode();
+            StringList theFieldNameExclusions;
+            theFieldNameExclusions = this.getFieldNameExclusions();
+            if (this.fieldNameExclusions!= null) {
+                currentHashCode += theFieldNameExclusions.hashCode();
             }
         }
         {
             currentHashCode = (currentHashCode* 31);
-            StringList theClassNameBlacklist;
-            theClassNameBlacklist = this.getClassNameBlacklist();
-            if (this.classNameBlacklist!= null) {
-                currentHashCode += theClassNameBlacklist.hashCode();
+            StringList theClassNameExclusions;
+            theClassNameExclusions = this.getClassNameExclusions();
+            if (this.classNameExclusions!= null) {
+                currentHashCode += theClassNameExclusions.hashCode();
             }
         }
         {

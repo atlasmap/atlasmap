@@ -189,9 +189,9 @@ public class JavaService {
 
     protected void configureInspectionService(ClassInspectionService classInspectionService,
             ClassInspectionRequest request) {
-        if (request.getFieldNameBlacklist() != null && request.getFieldNameBlacklist().getString() != null
-                && !request.getFieldNameBlacklist().getString().isEmpty()) {
-            classInspectionService.getFieldBlacklist().addAll(request.getFieldNameBlacklist().getString());
+        if (request.getFieldNameExclusions() != null && request.getFieldNameExclusions().getString() != null
+                && !request.getFieldNameExclusions().getString().isEmpty()) {
+            classInspectionService.getFieldExclusions().addAll(request.getFieldNameExclusions().getString());
         }
 
         if (request.isDisablePrivateOnlyFields() != null) {
