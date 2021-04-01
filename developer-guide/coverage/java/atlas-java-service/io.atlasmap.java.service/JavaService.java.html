@@ -189,9 +189,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
     protected void configureInspectionService(ClassInspectionService classInspectionService,
             ClassInspectionRequest request) {
-<span class="nc bnc" id="L192" title="All 4 branches missed.">        if (request.getFieldNameBlacklist() != null &amp;&amp; request.getFieldNameBlacklist().getString() != null</span>
-<span class="nc bnc" id="L193" title="All 2 branches missed.">                &amp;&amp; !request.getFieldNameBlacklist().getString().isEmpty()) {</span>
-<span class="nc" id="L194">            classInspectionService.getFieldBlacklist().addAll(request.getFieldNameBlacklist().getString());</span>
+<span class="nc bnc" id="L192" title="All 4 branches missed.">        if (request.getFieldNameExclusions() != null &amp;&amp; request.getFieldNameExclusions().getString() != null</span>
+<span class="nc bnc" id="L193" title="All 2 branches missed.">                &amp;&amp; !request.getFieldNameExclusions().getString().isEmpty()) {</span>
+<span class="nc" id="L194">            classInspectionService.getFieldExclusions().addAll(request.getFieldNameExclusions().getString());</span>
         }
 
 <span class="nc bnc" id="L197" title="All 2 branches missed.">        if (request.isDisablePrivateOnlyFields() != null) {</span>

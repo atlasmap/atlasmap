@@ -76,7 +76,7 @@ import io.atlasmap.xml.v2.XmlNamespaces;
 
 <span class="fc" id="L77">    static final Logger LOG = LoggerFactory.getLogger(XmlSchemaInspector.class);</span>
     private static final Map&lt;String, FieldType&gt; XS_TYPE_TO_FIELD_TYPE_MAP;
-    private static final Map&lt;String, FieldType&gt; BLACKLISTED_TYPES;
+    private static final Map&lt;String, FieldType&gt; EXCLUDED_TYPES;
 
     static {
 <span class="fc" id="L82">        XS_TYPE_TO_FIELD_TYPE_MAP = new HashMap&lt;&gt;();</span>
@@ -106,8 +106,8 @@ import io.atlasmap.xml.v2.XmlNamespaces;
 <span class="fc" id="L106">        XS_TYPE_TO_FIELD_TYPE_MAP.put(&quot;hexBinary&quot;, FieldType.STRING);</span>
 <span class="fc" id="L107">        XS_TYPE_TO_FIELD_TYPE_MAP.put(&quot;QName&quot;, FieldType.STRING);</span>
 
-<span class="fc" id="L109">        BLACKLISTED_TYPES = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L110">        BLACKLISTED_TYPES.put(&quot;NOTATION&quot;, FieldType.UNSUPPORTED);</span>
+<span class="fc" id="L109">        EXCLUDED_TYPES = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L110">        EXCLUDED_TYPES.put(&quot;NOTATION&quot;, FieldType.UNSUPPORTED);</span>
 <span class="fc" id="L111">    }</span>
 
     private XmlDocument xmlDocument;
@@ -405,8 +405,8 @@ import io.atlasmap.xml.v2.XmlNamespaces;
     }
 
     private FieldType getFieldType(String name) {
-        // check the blacklist
-<span class="fc" id="L409">        FieldType attrType = BLACKLISTED_TYPES.get(name);</span>
+        // check the exclusions
+<span class="fc" id="L409">        FieldType attrType = EXCLUDED_TYPES.get(name);</span>
 <span class="pc bpc" id="L410" title="1 of 2 branches missed.">        if (attrType == null) {</span>
 <span class="fc" id="L411">            attrType = XS_TYPE_TO_FIELD_TYPE_MAP.get(name);</span>
         }

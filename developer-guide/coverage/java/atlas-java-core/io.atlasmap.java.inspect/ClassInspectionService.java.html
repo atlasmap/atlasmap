@@ -65,8 +65,8 @@ import io.atlasmap.v2.StringList;
             &quot;java.util.LinkedHashMap&quot;, &quot;java.util.SortedMap&quot;, &quot;java.util.WeakHashMap&quot;, &quot;java.util.Properties&quot;,
             &quot;java.util.concurrent.ConcurrentHashMap&quot;, &quot;java.util.concurrent.ConcurrentMap&quot;));
 <span class="fc" id="L67">    private AtlasConversionService atlasConversionService = null;</span>
-<span class="fc" id="L68">    private List&lt;String&gt; fieldBlacklist = new ArrayList&lt;&gt;(Arrays.asList(&quot;serialVersionUID&quot;));</span>
-<span class="fc" id="L69">    private List&lt;String&gt; classNameBlacklist = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L68">    private List&lt;String&gt; fieldExclusions = new ArrayList&lt;&gt;(Arrays.asList(&quot;serialVersionUID&quot;));</span>
+<span class="fc" id="L69">    private List&lt;String&gt; classNameExclusions = new ArrayList&lt;&gt;();</span>
 <span class="fc" id="L70">    private Boolean disablePackagePrivateOnlyFields = false;</span>
 <span class="fc" id="L71">    private Boolean disableProtectedOnlyFields = false;</span>
 <span class="fc" id="L72">    private Boolean disablePrivateOnlyFields = false;</span>
@@ -81,12 +81,12 @@ import io.atlasmap.v2.StringList;
 <span class="nc" id="L81">        return this.listClasses;</span>
     }
 
-    public List&lt;String&gt; getClassNameBlacklist() {
-<span class="nc" id="L85">        return this.classNameBlacklist;</span>
+    public List&lt;String&gt; getClassNameExclusions() {
+<span class="nc" id="L85">        return this.classNameExclusions;</span>
     }
 
-    public List&lt;String&gt; getFieldBlacklist() {
-<span class="fc" id="L89">        return this.fieldBlacklist;</span>
+    public List&lt;String&gt; getFieldExclusions() {
+<span class="fc" id="L89">        return this.fieldExclusions;</span>
     }
 
     public Boolean getDisableProtectedOnlyFields() {
@@ -591,8 +591,8 @@ import io.atlasmap.v2.StringList;
 <span class="fc bfc" id="L591" title="All 2 branches covered.">            for (Field f : fields) {</span>
 <span class="fc" id="L592">                JavaField s = inspectField(classLoader, f, cachedClasses, pathPrefix);</span>
 
-<span class="fc bfc" id="L594" title="All 2 branches covered.">                if (getFieldBlacklist().contains(f.getName())) {</span>
-<span class="fc" id="L595">                    s.setStatus(FieldStatus.BLACK_LIST);</span>
+<span class="fc bfc" id="L594" title="All 2 branches covered.">                if (getFieldExclusions().contains(f.getName())) {</span>
+<span class="fc" id="L595">                    s.setStatus(FieldStatus.EXCLUDED);</span>
                 }
 
                 // skip synthetic members

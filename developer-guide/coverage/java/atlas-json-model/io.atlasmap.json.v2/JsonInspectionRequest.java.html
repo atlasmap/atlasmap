@@ -13,11 +13,11 @@ import io.atlasmap.v2.StringList;
 
     private static final long serialVersionUID = 1L;
 
-    protected StringList fieldNameBlacklist;
+    protected StringList fieldNameExclusions;
 
-    protected StringList typeNameBlacklist;
+    protected StringList typeNameExclusions;
 
-    protected StringList namespaceBlacklist;
+    protected StringList namespaceExclusions;
 
     protected String jsonData;
 
@@ -26,75 +26,75 @@ import io.atlasmap.v2.StringList;
     protected InspectionType type;
 
     /**
-     * Gets the value of the fieldNameBlacklist property.
+     * Gets the value of the fieldNameExclusions property.
      * 
      * @return
      *     possible object is
      *     {@link StringList }
      *     
      */
-    public StringList getFieldNameBlacklist() {
-<span class="fc" id="L37">        return fieldNameBlacklist;</span>
+    public StringList getFieldNameExclusions() {
+<span class="fc" id="L37">        return fieldNameExclusions;</span>
     }
 
     /**
-     * Sets the value of the fieldNameBlacklist property.
+     * Sets the value of the fieldNameExclusions property.
      * 
      * @param value
      *     allowed object is
      *     {@link StringList }
      *     
      */
-    public void setFieldNameBlacklist(StringList value) {
-<span class="nc" id="L49">        this.fieldNameBlacklist = value;</span>
+    public void setFieldNameExclusions(StringList value) {
+<span class="nc" id="L49">        this.fieldNameExclusions = value;</span>
 <span class="nc" id="L50">    }</span>
 
     /**
-     * Gets the value of the typeNameBlacklist property.
+     * Gets the value of the typeNameExclusions property.
      * 
      * @return
      *     possible object is
      *     {@link StringList }
      *     
      */
-    public StringList getTypeNameBlacklist() {
-<span class="fc" id="L61">        return typeNameBlacklist;</span>
+    public StringList getTypeNameExclusions() {
+<span class="fc" id="L61">        return typeNameExclusions;</span>
     }
 
     /**
-     * Sets the value of the typeNameBlacklist property.
+     * Sets the value of the typeNameExclusions property.
      * 
      * @param value
      *     allowed object is
      *     {@link StringList }
      *     
      */
-    public void setTypeNameBlacklist(StringList value) {
-<span class="nc" id="L73">        this.typeNameBlacklist = value;</span>
+    public void setTypeNameExclusions(StringList value) {
+<span class="nc" id="L73">        this.typeNameExclusions = value;</span>
 <span class="nc" id="L74">    }</span>
 
     /**
-     * Gets the value of the namespaceBlacklist property.
+     * Gets the value of the namespaceExclusions property.
      * 
      * @return
      *     possible object is
      *     {@link StringList }
      *     
      */
-    public StringList getNamespaceBlacklist() {
-<span class="fc" id="L85">        return namespaceBlacklist;</span>
+    public StringList getNamespaceExclusions() {
+<span class="fc" id="L85">        return namespaceExclusions;</span>
     }
 
     /**
-     * Sets the value of the namespaceBlacklist property.
+     * Sets the value of the namespaceExclusions property.
      * 
      * @param value
      *     allowed object is
      *     {@link StringList }
      *     
      */
-    public void setNamespaceBlacklist(StringList value) {
-<span class="nc" id="L97">        this.namespaceBlacklist = value;</span>
+    public void setNamespaceExclusions(StringList value) {
+<span class="nc" id="L97">        this.namespaceExclusions = value;</span>
 <span class="nc" id="L98">    }</span>
 
     /**
@@ -178,58 +178,58 @@ import io.atlasmap.v2.StringList;
         }
 <span class="nc" id="L179">        final JsonInspectionRequest that = ((JsonInspectionRequest) object);</span>
         {
-            StringList leftFieldNameBlacklist;
-<span class="nc" id="L182">            leftFieldNameBlacklist = this.getFieldNameBlacklist();</span>
-            StringList rightFieldNameBlacklist;
-<span class="nc" id="L184">            rightFieldNameBlacklist = that.getFieldNameBlacklist();</span>
-<span class="nc bnc" id="L185" title="All 2 branches missed.">            if (this.fieldNameBlacklist!= null) {</span>
-<span class="nc bnc" id="L186" title="All 2 branches missed.">                if (that.fieldNameBlacklist!= null) {</span>
-<span class="nc bnc" id="L187" title="All 2 branches missed.">                    if (!leftFieldNameBlacklist.equals(rightFieldNameBlacklist)) {</span>
+            StringList leftFieldNameExclusions;
+<span class="nc" id="L182">            leftFieldNameExclusions = this.getFieldNameExclusions();</span>
+            StringList rightFieldNameExclusions;
+<span class="nc" id="L184">            rightFieldNameExclusions = that.getFieldNameExclusions();</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">            if (this.fieldNameExclusions!= null) {</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">                if (that.fieldNameExclusions!= null) {</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">                    if (!leftFieldNameExclusions.equals(rightFieldNameExclusions)) {</span>
 <span class="nc" id="L188">                        return false;</span>
                     }
                 } else {
 <span class="nc" id="L191">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L194" title="All 2 branches missed.">                if (that.fieldNameBlacklist!= null) {</span>
+<span class="nc bnc" id="L194" title="All 2 branches missed.">                if (that.fieldNameExclusions!= null) {</span>
 <span class="nc" id="L195">                    return false;</span>
                 }
             }
         }
         {
-            StringList leftTypeNameBlacklist;
-<span class="nc" id="L201">            leftTypeNameBlacklist = this.getTypeNameBlacklist();</span>
-            StringList rightTypeNameBlacklist;
-<span class="nc" id="L203">            rightTypeNameBlacklist = that.getTypeNameBlacklist();</span>
-<span class="nc bnc" id="L204" title="All 2 branches missed.">            if (this.typeNameBlacklist!= null) {</span>
-<span class="nc bnc" id="L205" title="All 2 branches missed.">                if (that.typeNameBlacklist!= null) {</span>
-<span class="nc bnc" id="L206" title="All 2 branches missed.">                    if (!leftTypeNameBlacklist.equals(rightTypeNameBlacklist)) {</span>
+            StringList leftTypeNameExclusions;
+<span class="nc" id="L201">            leftTypeNameExclusions = this.getTypeNameExclusions();</span>
+            StringList rightTypeNameExclusions;
+<span class="nc" id="L203">            rightTypeNameExclusions = that.getTypeNameExclusions();</span>
+<span class="nc bnc" id="L204" title="All 2 branches missed.">            if (this.typeNameExclusions!= null) {</span>
+<span class="nc bnc" id="L205" title="All 2 branches missed.">                if (that.typeNameExclusions!= null) {</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">                    if (!leftTypeNameExclusions.equals(rightTypeNameExclusions)) {</span>
 <span class="nc" id="L207">                        return false;</span>
                     }
                 } else {
 <span class="nc" id="L210">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L213" title="All 2 branches missed.">                if (that.typeNameBlacklist!= null) {</span>
+<span class="nc bnc" id="L213" title="All 2 branches missed.">                if (that.typeNameExclusions!= null) {</span>
 <span class="nc" id="L214">                    return false;</span>
                 }
             }
         }
         {
-            StringList leftNamespaceBlacklist;
-<span class="nc" id="L220">            leftNamespaceBlacklist = this.getNamespaceBlacklist();</span>
-            StringList rightNamespaceBlacklist;
-<span class="nc" id="L222">            rightNamespaceBlacklist = that.getNamespaceBlacklist();</span>
-<span class="nc bnc" id="L223" title="All 2 branches missed.">            if (this.namespaceBlacklist!= null) {</span>
-<span class="nc bnc" id="L224" title="All 2 branches missed.">                if (that.namespaceBlacklist!= null) {</span>
-<span class="nc bnc" id="L225" title="All 2 branches missed.">                    if (!leftNamespaceBlacklist.equals(rightNamespaceBlacklist)) {</span>
+            StringList leftNamespaceExclusions;
+<span class="nc" id="L220">            leftNamespaceExclusions = this.getNamespaceExclusions();</span>
+            StringList rightNamespaceExclusions;
+<span class="nc" id="L222">            rightNamespaceExclusions = that.getNamespaceExclusions();</span>
+<span class="nc bnc" id="L223" title="All 2 branches missed.">            if (this.namespaceExclusions!= null) {</span>
+<span class="nc bnc" id="L224" title="All 2 branches missed.">                if (that.namespaceExclusions!= null) {</span>
+<span class="nc bnc" id="L225" title="All 2 branches missed.">                    if (!leftNamespaceExclusions.equals(rightNamespaceExclusions)) {</span>
 <span class="nc" id="L226">                        return false;</span>
                     }
                 } else {
 <span class="nc" id="L229">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L232" title="All 2 branches missed.">                if (that.namespaceBlacklist!= null) {</span>
+<span class="nc bnc" id="L232" title="All 2 branches missed.">                if (that.namespaceExclusions!= null) {</span>
 <span class="nc" id="L233">                    return false;</span>
                 }
             }
@@ -298,26 +298,26 @@ import io.atlasmap.v2.StringList;
 <span class="nc" id="L298">        int currentHashCode = 1;</span>
         {
 <span class="nc" id="L300">            currentHashCode = (currentHashCode* 31);</span>
-            StringList theFieldNameBlacklist;
-<span class="nc" id="L302">            theFieldNameBlacklist = this.getFieldNameBlacklist();</span>
-<span class="nc bnc" id="L303" title="All 2 branches missed.">            if (this.fieldNameBlacklist!= null) {</span>
-<span class="nc" id="L304">                currentHashCode += theFieldNameBlacklist.hashCode();</span>
+            StringList theFieldNameExclusions;
+<span class="nc" id="L302">            theFieldNameExclusions = this.getFieldNameExclusions();</span>
+<span class="nc bnc" id="L303" title="All 2 branches missed.">            if (this.fieldNameExclusions!= null) {</span>
+<span class="nc" id="L304">                currentHashCode += theFieldNameExclusions.hashCode();</span>
             }
         }
         {
 <span class="nc" id="L308">            currentHashCode = (currentHashCode* 31);</span>
-            StringList theTypeNameBlacklist;
-<span class="nc" id="L310">            theTypeNameBlacklist = this.getTypeNameBlacklist();</span>
-<span class="nc bnc" id="L311" title="All 2 branches missed.">            if (this.typeNameBlacklist!= null) {</span>
-<span class="nc" id="L312">                currentHashCode += theTypeNameBlacklist.hashCode();</span>
+            StringList theTypeNameExclusions;
+<span class="nc" id="L310">            theTypeNameExclusions = this.getTypeNameExclusions();</span>
+<span class="nc bnc" id="L311" title="All 2 branches missed.">            if (this.typeNameExclusions!= null) {</span>
+<span class="nc" id="L312">                currentHashCode += theTypeNameExclusions.hashCode();</span>
             }
         }
         {
 <span class="nc" id="L316">            currentHashCode = (currentHashCode* 31);</span>
-            StringList theNamespaceBlacklist;
-<span class="nc" id="L318">            theNamespaceBlacklist = this.getNamespaceBlacklist();</span>
-<span class="nc bnc" id="L319" title="All 2 branches missed.">            if (this.namespaceBlacklist!= null) {</span>
-<span class="nc" id="L320">                currentHashCode += theNamespaceBlacklist.hashCode();</span>
+            StringList theNamespaceExclusions;
+<span class="nc" id="L318">            theNamespaceExclusions = this.getNamespaceExclusions();</span>
+<span class="nc bnc" id="L319" title="All 2 branches missed.">            if (this.namespaceExclusions!= null) {</span>
+<span class="nc" id="L320">                currentHashCode += theNamespaceExclusions.hashCode();</span>
             }
         }
         {
