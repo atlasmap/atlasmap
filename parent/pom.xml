@@ -54,7 +54,7 @@
     <jsonschema2pojo-maven-plugin.version>1.1.0</jsonschema2pojo-maven-plugin.version>
     <junit.version>4.13.1</junit.version>
     <keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
-    <license-maven-plugin.version>3.0</license-maven-plugin.version>
+    <license-maven-plugin.version>4.0</license-maven-plugin.version>
     <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
     <log4j2.version>2.14.1</log4j2.version>
     <osgi.include.resource>{maven-resources}</osgi.include.resource>
