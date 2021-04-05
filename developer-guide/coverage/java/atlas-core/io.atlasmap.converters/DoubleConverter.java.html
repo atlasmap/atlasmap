@@ -107,130 +107,131 @@ import io.atlasmap.v2.FieldType;
 <span class="fc bfc" id="L107" title="All 2 branches covered.">        if (value == null) {</span>
 <span class="fc" id="L108">            return null;</span>
         }
-<span class="fc bfc" id="L110" title="All 6 branches covered.">        if (value &gt; Float.MAX_VALUE || (value &lt; Float.MIN_VALUE &amp;&amp; value != 0)) {</span>
-<span class="fc" id="L111">            throw new AtlasConversionException(</span>
-<span class="fc" id="L112">                    String.format(&quot;Double %s is greater than Float.MAX_VALUE or less than Float.MIN_VALUE&quot;, value));</span>
+<span class="fc" id="L110">        double absValue = Math.abs(value);</span>
+<span class="fc bfc" id="L111" title="All 6 branches covered.">        if (absValue &gt; Float.MAX_VALUE || (absValue &lt; Float.MIN_VALUE &amp;&amp; value != 0)) {</span>
+<span class="fc" id="L112">            throw new AtlasConversionException(</span>
+<span class="fc" id="L113">                    String.format(&quot;Double %s is greater than Float.MAX_VALUE or less than Float.MIN_VALUE&quot;, value));</span>
         }
-<span class="fc" id="L114">        return value.floatValue();</span>
+<span class="fc" id="L115">        return value.floatValue();</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.INTEGER,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
     public Integer toInteger(Double value) throws AtlasConversionException {
-<span class="fc bfc" id="L120" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L121">            return null;</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L122">            return null;</span>
         }
-<span class="pc bpc" id="L123" title="1 of 4 branches missed.">        if (value &lt; Integer.MIN_VALUE || value &gt; Integer.MAX_VALUE) {</span>
-<span class="fc" id="L124">            throw new AtlasConversionException(String.format(</span>
+<span class="pc bpc" id="L124" title="1 of 4 branches missed.">        if (value &lt; Integer.MIN_VALUE || value &gt; Integer.MAX_VALUE) {</span>
+<span class="fc" id="L125">            throw new AtlasConversionException(String.format(</span>
                     &quot;Double %s is greater than Integer.MAX_VALUE or less than Integer.MIN_VALUE&quot;, value));
         }
-<span class="fc" id="L127">        return value.intValue();</span>
+<span class="fc" id="L128">        return value.intValue();</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.DATE,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
     public LocalDate toLocalDate(Double value) throws AtlasConversionException {
-<span class="pc bpc" id="L133" title="1 of 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L134">            return null;</span>
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L135">            return null;</span>
         }
-<span class="pc bpc" id="L136" title="2 of 4 branches missed.">        if (value &lt; Long.MIN_VALUE || value &gt; Long.MAX_VALUE) {</span>
-<span class="nc" id="L137">            throw new AtlasConversionException(String.format(</span>
+<span class="pc bpc" id="L137" title="2 of 4 branches missed.">        if (value &lt; Long.MIN_VALUE || value &gt; Long.MAX_VALUE) {</span>
+<span class="nc" id="L138">            throw new AtlasConversionException(String.format(</span>
                     &quot;Double %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));
         }
-<span class="fc" id="L140">        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault()).toLocalDate();</span>
+<span class="fc" id="L141">        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault()).toLocalDate();</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.TIME,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
     public LocalTime toLocalTime(Double value) throws AtlasConversionException {
-<span class="pc bpc" id="L146" title="1 of 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L147">            return null;</span>
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L148">            return null;</span>
         }
-<span class="pc bpc" id="L149" title="2 of 4 branches missed.">        if (value &lt; Long.MIN_VALUE || value &gt; Long.MAX_VALUE) {</span>
-<span class="nc" id="L150">            throw new AtlasConversionException(String.format(</span>
+<span class="pc bpc" id="L150" title="2 of 4 branches missed.">        if (value &lt; Long.MIN_VALUE || value &gt; Long.MAX_VALUE) {</span>
+<span class="nc" id="L151">            throw new AtlasConversionException(String.format(</span>
                     &quot;Double %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));
         }
-<span class="fc" id="L153">        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault()).toLocalTime();</span>
+<span class="fc" id="L154">        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault()).toLocalTime();</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.DATE_TIME,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
     public LocalDateTime toLocalDateTime(Double value) throws AtlasConversionException {
-<span class="nc bnc" id="L159" title="All 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L160">            return null;</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L161">            return null;</span>
         }
-<span class="nc bnc" id="L162" title="All 4 branches missed.">        if (value &lt; Long.MIN_VALUE || value &gt; Long.MAX_VALUE) {</span>
-<span class="nc" id="L163">            throw new AtlasConversionException(String.format(</span>
+<span class="nc bnc" id="L163" title="All 4 branches missed.">        if (value &lt; Long.MIN_VALUE || value &gt; Long.MAX_VALUE) {</span>
+<span class="nc" id="L164">            throw new AtlasConversionException(String.format(</span>
                     &quot;Double %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));
         }
-<span class="nc" id="L166">        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault()).toLocalDateTime();</span>
+<span class="nc" id="L167">        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault()).toLocalDateTime();</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.LONG, concerns = AtlasConversionConcern.RANGE)
     public Long toLong(Double value) throws AtlasConversionException {
-<span class="fc bfc" id="L171" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L172">            return null;</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L173">            return null;</span>
         }
-<span class="pc bpc" id="L174" title="1 of 4 branches missed.">        if (value &lt; Long.MIN_VALUE || value &gt; Long.MAX_VALUE) {</span>
-<span class="fc" id="L175">            throw new AtlasConversionException(String.format(</span>
+<span class="pc bpc" id="L175" title="1 of 4 branches missed.">        if (value &lt; Long.MIN_VALUE || value &gt; Long.MAX_VALUE) {</span>
+<span class="fc" id="L176">            throw new AtlasConversionException(String.format(</span>
                     &quot;Double %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));
         }
-<span class="fc" id="L178">        return value.longValue();</span>
+<span class="fc" id="L179">        return value.longValue();</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.NUMBER)
     public Number toNumber(Double value) {
-<span class="nc" id="L183">        return value;</span>
+<span class="nc" id="L184">        return value;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.SHORT, concerns = AtlasConversionConcern.RANGE)
     public Short toShort(Double value) throws AtlasConversionException {
-<span class="fc bfc" id="L188" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L189">            return null;</span>
+<span class="fc bfc" id="L189" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L190">            return null;</span>
         }
-<span class="pc bpc" id="L191" title="1 of 4 branches missed.">        if (value &gt; Short.MAX_VALUE || value &lt; Short.MIN_VALUE) {</span>
-<span class="fc" id="L192">            throw new AtlasConversionException(</span>
-<span class="fc" id="L193">                    String.format(&quot;Double %s is greater than Short.MAX_VALUE or less than Short.MIN_VALUE&quot;, value));</span>
+<span class="pc bpc" id="L192" title="1 of 4 branches missed.">        if (value &gt; Short.MAX_VALUE || value &lt; Short.MIN_VALUE) {</span>
+<span class="fc" id="L193">            throw new AtlasConversionException(</span>
+<span class="fc" id="L194">                    String.format(&quot;Double %s is greater than Short.MAX_VALUE or less than Short.MIN_VALUE&quot;, value));</span>
         }
-<span class="fc" id="L195">        return value.shortValue();</span>
+<span class="fc" id="L196">        return value.shortValue();</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.STRING)
     public String toString(Double value) {
-<span class="fc bfc" id="L200" title="All 2 branches covered.">        return value != null ? String.valueOf(value) : null;</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">        return value != null ? String.valueOf(value) : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.STRING)
     public CharBuffer toCharBuffer(Double value) {
-<span class="nc bnc" id="L205" title="All 2 branches missed.">        return value != null ? CharBuffer.wrap(toString(value)) : null;</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">        return value != null ? CharBuffer.wrap(toString(value)) : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.STRING)
     public CharSequence toCharSequence(Double value) {
-<span class="nc bnc" id="L210" title="All 2 branches missed.">        return value != null ? toString(value) : null;</span>
+<span class="nc bnc" id="L211" title="All 2 branches missed.">        return value != null ? toString(value) : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.STRING)
     public StringBuffer toStringBuffer(Double value) {
-<span class="nc bnc" id="L215" title="All 2 branches missed.">        return value != null ? new StringBuffer(toString(value)) : null;</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">        return value != null ? new StringBuffer(toString(value)) : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.STRING)
     public StringBuilder toStringBuilder(Double value) {
-<span class="nc bnc" id="L220" title="All 2 branches missed.">        return value != null ? new StringBuilder(toString(value)) : null;</span>
+<span class="nc bnc" id="L221" title="All 2 branches missed.">        return value != null ? new StringBuilder(toString(value)) : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.DATE_TIME_TZ,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
     public ZonedDateTime toZonedDateTime(Double value) throws AtlasConversionException {
-<span class="pc bpc" id="L226" title="1 of 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L227">            return null;</span>
+<span class="pc bpc" id="L227" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L228">            return null;</span>
         }
-<span class="pc bpc" id="L229" title="2 of 4 branches missed.">        if (value &gt; Long.MAX_VALUE || value &lt; Long.MIN_VALUE) {</span>
-<span class="nc" id="L230">            throw new AtlasConversionException(String.format(</span>
+<span class="pc bpc" id="L230" title="2 of 4 branches missed.">        if (value &gt; Long.MAX_VALUE || value &lt; Long.MIN_VALUE) {</span>
+<span class="nc" id="L231">            throw new AtlasConversionException(String.format(</span>
                     &quot;Double %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));
         }
-<span class="fc" id="L233">        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault());</span>
+<span class="fc" id="L234">        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault());</span>
     }
 
 }

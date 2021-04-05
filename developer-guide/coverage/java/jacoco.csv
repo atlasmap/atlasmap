@@ -66,10 +66,10 @@ Unit Test Coverage Report/atlas-core,io.atlasmap.converters,GregorianCalendarCon
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,ZonedDateTimeConverter,198,83,48,10,32,12,43,12,14,12
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,DateTimeHelper,19,87,0,2,4,13,4,14,4,13
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,BooleanConverter,65,159,18,40,6,22,16,30,4,13
-Unit Test Coverage Report/atlas-core,io.atlasmap.converters,CharSequenceConverter,69,550,21,73,14,139,20,50,1,22
+Unit Test Coverage Report/atlas-core,io.atlasmap.converters,CharSequenceConverter,69,534,19,71,14,142,18,50,1,22
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,SqlDateConverter,65,3,14,0,7,1,14,1,7,1
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,NumberConverter,479,43,28,0,70,9,36,1,22,1
-Unit Test Coverage Report/atlas-core,io.atlasmap.converters,DoubleConverter,132,316,33,57,19,53,32,35,6,16
+Unit Test Coverage Report/atlas-core,io.atlasmap.converters,DoubleConverter,132,318,33,57,19,54,32,35,6,16
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,CharacterConverter,57,137,14,28,5,40,13,25,4,13
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,CalendarConverter,3,14,2,2,0,3,2,3,0,3
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,LongConverter,57,233,17,41,6,44,18,33,6,16
@@ -78,7 +78,7 @@ Unit Test Coverage Report/atlas-core,io.atlasmap.converters,LocalDateTimeConvert
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,DateConverter,95,129,19,11,16,28,22,17,7,17
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,IntegerConverter,65,201,17,37,7,34,18,31,6,16
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,SqlTimestampConverter,71,10,17,1,8,2,17,2,8,2
-Unit Test Coverage Report/atlas-core,io.atlasmap.converters,BigDecimalConverter,244,148,30,20,46,38,32,15,7,15
+Unit Test Coverage Report/atlas-core,io.atlasmap.converters,BigDecimalConverter,244,147,30,20,46,38,32,15,7,15
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,ByteConverter,128,85,22,20,16,12,23,20,12,10
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,BigIntegerConverter,243,143,30,20,46,38,32,15,7,15
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,SqlTimeConverter,68,3,14,0,7,1,14,1,7,1
