@@ -287,11 +287,25 @@ export function createMapping(source: Field | undefined, target?: Field): void {
       );
       return;
     }
-    if (source && cfg.mappings?.activeMapping) {
-      const exclusionReason = ms.getFieldSelectionExclusionReason(
-        cfg.mappings?.activeMapping!,
-        target,
-      );
+    if (
+      source &&
+      cfg.mappings?.activeMapping &&
+      (source.partOfMapping || target.partOfMapping)
+    ) {
+      let exclusionReason = null;
+
+      if (!source.partOfMapping) {
+        exclusionReason = ms.getFieldSelectionExclusionReason(
+          cfg.mappings?.activeMapping!,
+          source,
+        );
+      } else {
+        exclusionReason = ms.getFieldSelectionExclusionReason(
+          cfg.mappings?.activeMapping!,
+          target,
+        );
+      }
+
       if (exclusionReason !== null) {
         cfg.errorService.addError(
           new ErrorInfo({
