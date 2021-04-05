@@ -93,7 +93,7 @@ export function useContextToolbar({
     state: showMappingPreview,
     toggle: toggleShowMappingPreview,
   } = useToggle(false, amToggleMappingPreview);
-  const { state: showTypes, toggle: toggleShowTypes } = useToggle(false);
+  const { state: showTypes, toggle: toggleShowTypes } = useToggle(true);
   const { state: showMappedFields, toggle: toggleShowMappedFields } = useToggle(
     true,
     amToggleShowMappedFields,
