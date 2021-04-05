@@ -100,12 +100,12 @@ public class BigDecimalConverter implements AtlasConverter<BigInteger> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.DOUBLE,
-            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+            concerns = {AtlasConversionConcern.RANGE})
     public Double toDouble(BigDecimal value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        Double answer = value.toBigInteger().doubleValue();
+        Double answer = value.doubleValue();
         if (answer == Double.NEGATIVE_INFINITY || answer == Double.POSITIVE_INFINITY) {
             throw new AtlasConversionException(String.format(
                     "BigDecimal %s is greater than Double.MAX_VALUE or less than Double.MIN_VALUE", value));

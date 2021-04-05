@@ -107,7 +107,8 @@ public class DoubleConverter implements AtlasConverter<Double> {
         if (value == null) {
             return null;
         }
-        if (value > Float.MAX_VALUE || (value < Float.MIN_VALUE && value != 0)) {
+        double absValue = Math.abs(value);
+        if (absValue > Float.MAX_VALUE || (absValue < Float.MIN_VALUE && value != 0)) {
             throw new AtlasConversionException(
                     String.format("Double %s is greater than Float.MAX_VALUE or less than Float.MIN_VALUE", value));
         }

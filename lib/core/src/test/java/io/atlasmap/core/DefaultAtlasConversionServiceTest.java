@@ -457,6 +457,10 @@ public class DefaultAtlasConversionServiceTest {
         assertEquals((short)1, service.convertType(BigDecimal.valueOf(1), FieldType.DECIMAL, FieldType.SHORT));
         assertEquals("1", service.convertType(BigDecimal.valueOf(1), FieldType.DECIMAL, FieldType.STRING));
         assertEquals(LocalTime.class, service.convertType(BigDecimal.valueOf(1), FieldType.DECIMAL, FieldType.TIME).getClass());
+        assertEquals(-1.68d, service.convertType(BigDecimal.valueOf(-1.68d), null, FieldType.DOUBLE, null));
+        assertEquals(-1.68f, service.convertType(BigDecimal.valueOf(-1.68f), null, FieldType.FLOAT, null));
+        assertEquals(new Float(-1.68f).doubleValue(), service.convertType(BigDecimal.valueOf(-1.68f), null, FieldType.DOUBLE, null));
+        assertEquals(-1.68f, service.convertType(BigDecimal.valueOf(-1.68d), null, FieldType.FLOAT, null));
     }
 
     @Test
@@ -479,6 +483,8 @@ public class DefaultAtlasConversionServiceTest {
         assertEquals((short)1, service.convertType(BigInteger.valueOf(1), FieldType.BIG_INTEGER, FieldType.SHORT));
         assertEquals("1", service.convertType(BigInteger.valueOf(1), FieldType.BIG_INTEGER, FieldType.STRING));
         assertEquals(LocalTime.class, service.convertType(BigInteger.valueOf(1), FieldType.BIG_INTEGER, FieldType.TIME).getClass());
+        assertEquals(-2.0d, service.convertType(BigInteger.valueOf(-2), null, FieldType.DOUBLE, null));
+        assertEquals(-2.0f, service.convertType(BigInteger.valueOf(-2), null, FieldType.FLOAT, null));
     }
 
     @Test
@@ -576,6 +582,7 @@ public class DefaultAtlasConversionServiceTest {
         assertEquals((short)1, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.SHORT));
         assertEquals("1.0", service.convertType(new Double(1), FieldType.DOUBLE, FieldType.STRING));
         assertEquals(LocalTime.class, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.TIME).getClass());
+        assertEquals(-1.68f, service.convertType(-1.68d, null, FieldType.FLOAT, null));
     }
 
     @Test
@@ -598,6 +605,7 @@ public class DefaultAtlasConversionServiceTest {
         assertEquals((short)1, service.convertType(new Float(1), FieldType.FLOAT, FieldType.SHORT));
         assertEquals("1.0", service.convertType(new Float(1), FieldType.FLOAT, FieldType.STRING));
         assertEquals(LocalTime.class, service.convertType(new Float(1), FieldType.FLOAT, FieldType.TIME).getClass());
+        assertEquals(new Float(-1.68f).doubleValue(), service.convertType(-1.68f, null, FieldType.DOUBLE, null));
     }
 
     @Test
@@ -742,6 +750,8 @@ public class DefaultAtlasConversionServiceTest {
         assertEquals((short)1, service.convertType("1", FieldType.STRING, FieldType.SHORT));
         assertEquals("1", service.convertType("1", FieldType.STRING, FieldType.STRING));
         assertEquals(LocalTime.class, service.convertType("00:00:00.000", FieldType.STRING, FieldType.TIME).getClass());
+        assertEquals(-1.68d, service.convertType("-1.68", null, FieldType.DOUBLE, null));
+        assertEquals(-1.68f, service.convertType("-1.68", null, FieldType.FLOAT, null));
     }
 
     @Test

@@ -148,21 +148,25 @@ public class CharSequenceConverter implements AtlasConverter<CharSequence> {
         }
 
         String str = value.toString();
+        double parsedDouble = 0.0d;
         try {
-            Double.parseDouble(str);
+            parsedDouble = Double.parseDouble(str);
         } catch (NumberFormatException nfe) {
             throw new AtlasConversionException(nfe);
         }
 
-        if (Double.valueOf(str) == 0.0d || Double.valueOf(str) == -0.0d) {
-            return Double.valueOf(str);
+        double absParsedDouble = Math.abs(parsedDouble);
+        if (absParsedDouble == 0.0d) {
+            return parsedDouble;
         }
-        if (Double.valueOf(str) < Double.MIN_VALUE || Double.valueOf(str) > Double.MAX_VALUE) {
+        if (absParsedDouble < Double.MIN_VALUE || absParsedDouble > Double.MAX_VALUE) {
             throw new AtlasConversionException(
-                    String.format("String %s is greater than Double.MAX_VALUE  or less than Double.MIN_VALUE", value));
+                    String.format(
+                            "String %s is greater than Double.MAX_VALUE  or less than Double.MIN_VALUE",
+                            str));
         }
 
-        return Double.valueOf(str);
+        return parsedDouble;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.FLOAT, concerns = {
@@ -171,24 +175,25 @@ public class CharSequenceConverter implements AtlasConverter<CharSequence> {
         if (value == null) {
             return null;
         }
-        // check we can make a float of the String
+
         String str = value.toString();
+        float parsedFloat = 0.0f;
         try {
-            Float.parseFloat(str);
+            parsedFloat = Float.parseFloat(str);
         } catch (NumberFormatException nfe) {
             throw new AtlasConversionException(nfe);
         }
 
-        BigDecimal bd = new BigDecimal(str);
-
-        // handle 0.0f && -0.0 (floats suck)
-        if (bd.floatValue() == 0.0f || bd.floatValue() == -0.0) {
-            return Float.valueOf(str);
+        float absParsedFloat = Math.abs(parsedFloat);
+        if (absParsedFloat == 0.0f) {
+            return parsedFloat;
         }
 
-        if (bd.floatValue() < Float.MIN_VALUE || bd.floatValue() > Float.MAX_VALUE) {
+        if (absParsedFloat < Float.MIN_VALUE || absParsedFloat > Float.MAX_VALUE) {
             throw new AtlasConversionException(
-                    String.format("String %s is greater than Float.MAX_VALUE  or less than Float.MIN_VALUE", str));
+                    String.format(
+                            "String %s is greater than Float.MAX_VALUE  or less than Float.MIN_VALUE",
+                            str));
         }
 
         return Float.valueOf(str);
