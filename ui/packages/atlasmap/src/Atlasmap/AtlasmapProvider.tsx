@@ -508,7 +508,7 @@ export function useAtlasmap() {
       ) {
         return false;
       }
-      if (!selectedMapping || !dropTarget?.isConnected) {
+      if (!selectedMapping || (dropTarget && !dropTarget.isConnected)) {
         return true;
       }
       if (
