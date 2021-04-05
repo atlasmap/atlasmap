@@ -42,7 +42,7 @@
     <camel.version>2.23.4</camel.version>
     <camel3.version>3.3.0</camel3.version>
     <daffodil.version>3.0.0</daffodil.version>
-    <kubernetes-maven-plugin.version>1.1.1</kubernetes-maven-plugin.version>
+    <kubernetes-maven-plugin.version>1.2.0</kubernetes-maven-plugin.version>
     <jackson.version>2.12.2</jackson.version>
     <jackson.databind.version>2.11.2</jackson.databind.version>
     <jackson.version.range>[2.6,3)</jackson.version.range>
