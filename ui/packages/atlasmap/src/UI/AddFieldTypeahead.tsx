@@ -19,6 +19,9 @@ const styles = StyleSheet.create({
       maxWidth: "100%",
     },
   },
+  field: {
+    marginLeft: 20,
+  },
 });
 
 export interface IAddFieldTypeaheadField {
@@ -56,6 +59,7 @@ export const AddFieldTypeahead: FunctionComponent<IAddFieldTypeaheadProps> = ({
                 0,
             }}
             data-testid={`add-field-option-${f.label}`}
+            className={css(styles.field)}
           >
             {f.label}
           </SelectOption>,

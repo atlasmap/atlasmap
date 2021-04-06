@@ -242,7 +242,7 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
               ariaLabelTypeAhead={"Select source to add to the mapping"}
               placeholderText={"Select source to add to the mapping"}
               fields={addableSources.map((s) => ({
-                label: s.path,
+                label: s.amField.isPropertyOrConstant() ? s.name : s.path,
                 group: s.amField!.docDef.name,
                 onAdd: () => onAddFieldToMapping(true, s),
               }))}
@@ -256,10 +256,10 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
             <AddFieldTypeahead
               ariaLabelTypeAhead={"Select target to add to the mapping"}
               placeholderText={"Select target to add to the mapping"}
-              fields={addableTargets.map((s) => ({
-                label: s.path,
-                group: s.amField!.docDef.name,
-                onAdd: () => onAddFieldToMapping(false, s),
+              fields={addableTargets.map((t) => ({
+                label: t.amField.isProperty() ? t.name : t.path,
+                group: t.amField!.docDef.name,
+                onAdd: () => onAddFieldToMapping(false, t),
               }))}
               data-testid={"add-target-to-mapping"}
             />
