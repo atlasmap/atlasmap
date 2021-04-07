@@ -93,7 +93,8 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
         Field sourceField = session.head().getSourceField();
         Field targetField = session.head().getTargetField();
         Object targetValue = null;
-        if (sourceField.getFieldType() != null && sourceField.getFieldType().equals(targetField.getFieldType())) {
+        if (targetField.getFieldType() == null
+                || (sourceField.getFieldType() != null && sourceField.getFieldType().equals(targetField.getFieldType()))) {
             targetValue = sourceField.getValue();
         } else if (sourceField.getValue() != null) {
             try {

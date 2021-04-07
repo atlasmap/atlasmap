@@ -300,4 +300,9 @@ public class JavaModule extends BaseAtlasModule {
         return AtlasJavaModelFactory.cloneJavaField(field, true);
     }
 
+    @Override
+    public JavaField createField() {
+        return AtlasJavaModelFactory.createJavaField();
+    }
+
 }

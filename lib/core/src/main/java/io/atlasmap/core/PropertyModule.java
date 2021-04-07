@@ -122,4 +122,9 @@ public class PropertyModule extends BaseAtlasModule {
         return "Properties";
     }
 
+    @Override
+    public PropertyField createField() {
+        return new PropertyField();
+    }
+
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2017 Red Hat, Inc.
+ * Copyright (C) 2021 Red Hat, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,23 @@
  */
 package io.atlasmap.api;
 
-public class AtlasConstants {
-    public static final String DEFAULT_SOURCE_DOCUMENT_ID = "ATLAS_DEFAULT_SOURCE_DOC";
-    public static final String DEFAULT_TARGET_DOCUMENT_ID = "ATLAS_DEFAULT_TARGET_DOC";
-    public static final String CONSTANTS_DOCUMENT_ID = "ATLAS_CONSTANTS_DOC";
-    public static final String PROPERTIES_SOURCE_DOCUMENT_ID = "ATLAS_SOURCE_PROPERTIES_DOC";
-    public static final String PROPERTIES_TARGET_DOCUMENT_ID = "ATLAS_TARGET_PROPERTIES_DOC";
+/**
+ * An interface to define a custom mapping logic. User can implement this class and
+ * define custom mapping logic in {@code #processMapping()}.
+ *
+ */
+public interface AtlasMappingBuilder {
 
-    private AtlasConstants() {
-    }
+    /**
+     * Define custom mapping logic. User can extend this class and implement
+     * custom mapping logic in this method.
+     */
+    void processMapping();
+
+    /**
+     * Set {@code AtlasSession}.
+     * @param session {@code AtlasSession}
+     */
+    void setAtlasSession(AtlasSession session);
+
 }

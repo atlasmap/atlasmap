@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.spi.ActionProcessor;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.v2.AbsoluteValue;
 import io.atlasmap.v2.Action;
@@ -158,7 +159,7 @@ public class DefaultAtlasFieldActionsServiceTest {
 
     @Test
     public void testProcessActionWithActionActionDetailObject() throws AtlasException {
-        DefaultAtlasFieldActionService.ActionProcessor processor = null;
+        ActionProcessor processor = null;
         Object sourceObject = "String";
         Action action = new Trim();
         processor = fieldActionsService.findActionProcessor(action, FieldType.STRING);
@@ -173,7 +174,7 @@ public class DefaultAtlasFieldActionsServiceTest {
     public void testProcessActionWithActionActionDetailObjectAssignableType() throws AtlasException {
         Action action = new AbsoluteValue();
         Object sourceObject = new Integer("1");
-        DefaultAtlasFieldActionService.ActionProcessor processor = fieldActionsService.findActionProcessor(action, FieldType.STRING);
+        ActionProcessor processor = fieldActionsService.findActionProcessor(action, FieldType.STRING);
         assertEquals(1L, processor.process(action, sourceObject));
     }
 

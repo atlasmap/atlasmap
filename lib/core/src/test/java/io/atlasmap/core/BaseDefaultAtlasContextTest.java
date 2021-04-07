@@ -25,12 +25,14 @@ import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.Audits;
+import io.atlasmap.v2.Constant;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.LookupEntry;
 import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.Mapping;
+import io.atlasmap.v2.Property;
 import io.atlasmap.v2.SimpleField;
 
 public abstract class BaseDefaultAtlasContextTest {
@@ -58,6 +60,17 @@ public abstract class BaseDefaultAtlasContextTest {
         targetModule.setMode(AtlasModuleMode.TARGET);
         context.getSourceModules().put(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, sourceModule);
         context.getTargetModules().put(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID, targetModule);
+        ConstantModule constantModule = new ConstantModule();
+        constantModule.setConversionService(DefaultAtlasConversionService.getInstance());
+        context.getSourceModules().put(AtlasConstants.CONSTANTS_DOCUMENT_ID, constantModule);
+        PropertyModule sourcePropertyModule = new PropertyModule(new DefaultAtlasPropertyStrategy());
+        sourcePropertyModule.setConversionService(DefaultAtlasConversionService.getInstance());
+        context.getSourceModules().put(AtlasConstants.PROPERTIES_SOURCE_DOCUMENT_ID,
+                sourcePropertyModule);
+        PropertyModule targetPropertyModule = new PropertyModule(new DefaultAtlasPropertyStrategy());
+        targetPropertyModule.setConversionService(DefaultAtlasConversionService.getInstance());
+        context.getTargetModules().put(AtlasConstants.PROPERTIES_TARGET_DOCUMENT_ID,
+                targetPropertyModule);
         recreateSession();
     }
 
@@ -75,13 +88,13 @@ public abstract class BaseDefaultAtlasContextTest {
 
     private BaseAtlasModule mockAtlasModule() throws AtlasException {
         BaseAtlasModule module = spy(BaseAtlasModule.class);
-        module.setConversionService(DefaultAtlasConversionService.getInstance());
+        when(module.getConversionService()).thenReturn(DefaultAtlasConversionService.getInstance());
+        when(module.createField()).thenReturn(new SimpleField());
         when(module.isSupportedField(any(Field.class))).thenReturn(true);
         doAnswer(new Answer<Void>() {
             @Override
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 AtlasInternalSession session = (AtlasInternalSession) invocation.getArguments()[0];
-                Field field = session.head().getSourceField();
                 reader.read(session);
                 return null;
             }
@@ -143,6 +156,16 @@ public abstract class BaseDefaultAtlasContextTest {
     protected Field populateSourceField(Mapping mapping, String docId, FieldType type, Object value) {
         Field field = populateSourceField(mapping, type, value);
         field.setDocId(docId);
+        return field;
+    }
+
+    protected Field populateSourceField(String docId, FieldType type, String name, Object value) {
+        Field field = new SimpleField();
+        field.setFieldType(type);
+        field.setDocId(docId);
+        field.setName(name);
+        field.setPath("/" + name);
+        reader.sources.put(field.getPath(), value);
         return field;
     }
 
@@ -218,6 +241,20 @@ public abstract class BaseDefaultAtlasContextTest {
         return populateUnsupportedSourceField(mapping, null, value, index);
     }
 
+    protected void populateConstant(String name, String value) {
+        Constant c = new Constant();
+        c.setName(name);
+        c.setValue(value);
+        session.getMapping().getConstants().getConstant().add(c);
+    }
+
+    protected void populateProperty(String scope, String name, String value) {
+        Property p = new Property();
+        p.setScope(scope);
+        p.setName(name);
+        p.setValue(value);
+        session.getMapping().getProperties().getProperty().add(p);
+    }
     protected Field prepareTargetField(Mapping mapping, String path) {
         Field field = new SimpleField();
         field.setPath(path);
@@ -237,6 +274,10 @@ public abstract class BaseDefaultAtlasContextTest {
         field.setPath(path);
         field.setIndex(index);
         return field;
+    }
+
+    protected Object getTargetFieldValue(String path) {
+        return writer.targets.get(path);
     }
 
     protected class MockFieldReader implements AtlasFieldReader {

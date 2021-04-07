@@ -28,5 +28,6 @@ public interface AtlasFieldActionService {
     List<ActionDetail> listActionDetails();
     ActionDetail findActionDetail(Action action, FieldType type) throws AtlasException;
     Field processActions(AtlasInternalSession session, Field field) throws AtlasException;
+    ActionProcessor findActionProcessor(Action action, FieldType sourceType) throws AtlasException;
 
 }

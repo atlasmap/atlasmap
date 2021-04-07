@@ -37,6 +37,7 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
+import io.atlasmap.v2.SimpleField;
 
 /**
  * Limited version of AtlasMap context dedicated for preview processing.
@@ -360,6 +361,11 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
         @Override
         public String getDocId() {
             return "Preview";
+        }
+
+        @Override
+        public SimpleField createField() {
+            return new SimpleField();
         }
 
     };

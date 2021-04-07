@@ -361,6 +361,18 @@ public class DefaultAtlasSession implements AtlasInternalSession {
         return answer;
     }
 
+    public ConstantModule getConstantModule() {
+        return (ConstantModule) this.getAtlasContext().getSourceModules().get(AtlasConstants.CONSTANTS_DOCUMENT_ID);
+    }
+
+    public PropertyModule getSourcePropertyModule() {
+        return (PropertyModule) this.getAtlasContext().getSourceModules().get(AtlasConstants.PROPERTIES_SOURCE_DOCUMENT_ID);
+    }
+
+    public PropertyModule getTargetPropertyModule() {
+        return (PropertyModule) this.getAtlasContext().getTargetModules().get(AtlasConstants.PROPERTIES_TARGET_DOCUMENT_ID);
+    }
+
     private class HeadImpl implements Head {
         private DefaultAtlasSession session;
         private Mapping mapping;

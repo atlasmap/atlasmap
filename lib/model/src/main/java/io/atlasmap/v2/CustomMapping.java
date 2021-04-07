@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2017 Red Hat, Inc.
+ * Copyright (C) 2021 Red Hat, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.atlasmap.api;
+package io.atlasmap.v2;
 
-public class AtlasConstants {
-    public static final String DEFAULT_SOURCE_DOCUMENT_ID = "ATLAS_DEFAULT_SOURCE_DOC";
-    public static final String DEFAULT_TARGET_DOCUMENT_ID = "ATLAS_DEFAULT_TARGET_DOC";
-    public static final String CONSTANTS_DOCUMENT_ID = "ATLAS_CONSTANTS_DOC";
-    public static final String PROPERTIES_SOURCE_DOCUMENT_ID = "ATLAS_SOURCE_PROPERTIES_DOC";
-    public static final String PROPERTIES_TARGET_DOCUMENT_ID = "ATLAS_TARGET_PROPERTIES_DOC";
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-    private AtlasConstants() {
+@JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
+public class CustomMapping extends BaseMapping {
+
+    private static final long serialVersionUID = 1L;
+
+    private String className;
+
+    public String getClassName() {
+        return className;
     }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
 }

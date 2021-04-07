@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import io.atlasmap.api.AtlasConstants;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.Audits;
@@ -349,7 +350,7 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         fgc.getField().add(source);
         fg.getField().add(fgc);
         Field source2 = new ConstantField();
-        source2.setDocId(DefaultAtlasContext.CONSTANTS_DOCUMENT_ID);
+        source2.setDocId(AtlasConstants.CONSTANTS_DOCUMENT_ID);
         source2.setFieldType(FieldType.STRING);
         source2.setPath("/test");
         source2.setName("test");
@@ -357,7 +358,7 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         fg.getField().add(source2);
         m.setExpression(String.format(
                 "REPEAT(COUNT(${source:/addressList<>/city}), ${%s:/test})",
-                DefaultAtlasContext.CONSTANTS_DOCUMENT_ID));
+                AtlasConstants.CONSTANTS_DOCUMENT_ID));
         Field target = new SimpleField();
         target.setFieldType(FieldType.STRING);
         target.setDocId("target");

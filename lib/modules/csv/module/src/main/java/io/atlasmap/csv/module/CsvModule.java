@@ -143,4 +143,10 @@ public class CsvModule extends BaseAtlasModule {
     public Boolean isSupportedField(Field field) {
         return field instanceof CsvField || field instanceof FieldGroup;
     }
+
+    @Override
+    public CsvField createField() {
+        return new CsvField();
+    }
+
 }

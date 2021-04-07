@@ -117,4 +117,6 @@ public interface AtlasModule {
 
     DataSourceMetadata getDataSourceMetadata();
 
+    Field createField();
+
 }

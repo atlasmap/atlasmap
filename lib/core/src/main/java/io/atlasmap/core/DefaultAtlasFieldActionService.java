@@ -43,6 +43,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.spi.ActionProcessor;
 import io.atlasmap.spi.AtlasActionProcessor;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasFieldAction;
@@ -121,12 +122,6 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
     public List<ActionProcessor> loadFieldActions() {
         return loadFieldActions(this.getClass().getClassLoader());
-    }
-
-    interface ActionProcessor {
-        ActionDetail getActionDetail();
-        Class<? extends Action> getActionClass();
-        Object process(Action action, Object sourceObject) throws AtlasException;
     }
 
     public List<ActionProcessor> loadFieldActions(ClassLoader classLoader) {
@@ -573,6 +568,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         return processor.getActionDetail();
     }
 
+    @Override
     public ActionProcessor findActionProcessor(Action action, FieldType sourceType) throws AtlasException {
         CustomAction customAction = null;
         if (action instanceof CustomAction) {

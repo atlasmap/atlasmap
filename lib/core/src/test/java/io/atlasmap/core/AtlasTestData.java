@@ -9,6 +9,7 @@ import java.util.UUID;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.AtlasModelFactory;
+import io.atlasmap.v2.Constants;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Property;
 
@@ -83,6 +84,7 @@ public class AtlasTestData {
         AtlasMapping mapping = AtlasModelFactory.createAtlasMapping();
         mapping.setName("generated.mapping." + UUID.randomUUID().toString().replace('-', '.'));
         mapping.getProperties().getProperty().addAll(generateAtlasProperties());
+        mapping.setConstants(new Constants());
         return mapping;
     }
 

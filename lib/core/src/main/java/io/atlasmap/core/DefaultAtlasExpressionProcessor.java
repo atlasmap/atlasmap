@@ -21,6 +21,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.atlasmap.api.AtlasConstants;
 import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.ExpressionException;
 import io.atlasmap.spi.AtlasModule;
@@ -69,9 +70,9 @@ public class DefaultAtlasExpressionProcessor {
                     AtlasModule sourceModule;
                     Map<String, AtlasModule> sourceModules = session.getAtlasContext().getSourceModules();
                     if (f instanceof ConstantField) {
-                        sourceModule = sourceModules.get(DefaultAtlasContext.CONSTANTS_DOCUMENT_ID);
+                        sourceModule = sourceModules.get(AtlasConstants.CONSTANTS_DOCUMENT_ID);
                     } else if (f instanceof PropertyField) {
-                        sourceModule = sourceModules.get(DefaultAtlasContext.PROPERTIES_DOCUMENT_ID);
+                        sourceModule = sourceModules.get(AtlasConstants.PROPERTIES_SOURCE_DOCUMENT_ID);
                     } else {
                         String[] splitted = path.split(":", 2);
                         sourceModule = sourceModules.get(splitted[0]);
