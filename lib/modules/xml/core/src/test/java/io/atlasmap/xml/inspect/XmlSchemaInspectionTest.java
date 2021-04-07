@@ -208,66 +208,66 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         // orderDate
         XmlField orderDateAttr = purchaseOrder.getXmlFields().getXmlField().get(0);
         assertNotNull(orderDateAttr);
-        assertEquals("tns:orderDate", orderDateAttr.getName());
+        assertEquals("orderDate", orderDateAttr.getName());
         assertNull(orderDateAttr.getValue());
-        assertEquals("/tns:purchaseOrder/@tns:orderDate", orderDateAttr.getPath());
+        assertEquals("/tns:purchaseOrder/@orderDate", orderDateAttr.getPath());
         assertEquals(FieldType.DATE, orderDateAttr.getFieldType());
         assertEquals(true, orderDateAttr.isAttribute());
 
         // shipTo
         XmlField shipTo = purchaseOrder.getXmlFields().getXmlField().get(1);
         assertNotNull(shipTo);
-        assertEquals("tns:shipTo", shipTo.getName());
+        assertEquals("shipTo", shipTo.getName());
         assertNull(shipTo.getValue());
-        assertEquals("/tns:purchaseOrder/tns:shipTo", shipTo.getPath());
+        assertEquals("/tns:purchaseOrder/shipTo", shipTo.getPath());
         assertEquals(FieldType.COMPLEX, shipTo.getFieldType());
         assertEquals(6, ((XmlComplexType) shipTo).getXmlFields().getXmlField().size());
         // shipTo/@country
         XmlField shipToCountry = ((XmlComplexType) shipTo).getXmlFields().getXmlField().get(0);
         assertNotNull(shipTo);
-        assertEquals("tns:country", shipToCountry.getName());
+        assertEquals("country", shipToCountry.getName());
         assertEquals("US", shipToCountry.getValue());
-        assertEquals("/tns:purchaseOrder/tns:shipTo/@tns:country", shipToCountry.getPath());
+        assertEquals("/tns:purchaseOrder/shipTo/@country", shipToCountry.getPath());
         assertEquals(FieldType.STRING, shipToCountry.getFieldType());
         assertEquals(true, shipToCountry.isAttribute());
 
         XmlField shipToName = ((XmlComplexType) shipTo).getXmlFields().getXmlField().get(1);
         assertNotNull(shipToName);
-        assertEquals("tns:name", shipToName.getName());
+        assertEquals("name", shipToName.getName());
         assertNull(shipToName.getValue());
-        assertEquals("/tns:purchaseOrder/tns:shipTo/tns:name", shipToName.getPath());
+        assertEquals("/tns:purchaseOrder/shipTo/name", shipToName.getPath());
         assertEquals(FieldType.STRING, shipToName.getFieldType());
         assertEquals(false, shipToName.isAttribute());
 
         XmlField shipToStreet = ((XmlComplexType) shipTo).getXmlFields().getXmlField().get(2);
         assertNotNull(shipToStreet);
-        assertEquals("tns:street", shipToStreet.getName());
+        assertEquals("street", shipToStreet.getName());
         assertNull(shipToStreet.getValue());
-        assertEquals("/tns:purchaseOrder/tns:shipTo/tns:street", shipToStreet.getPath());
+        assertEquals("/tns:purchaseOrder/shipTo/street", shipToStreet.getPath());
         assertEquals(FieldType.STRING, shipToStreet.getFieldType());
         assertEquals(false, shipToStreet.isAttribute());
 
         XmlField shipToCity = ((XmlComplexType) shipTo).getXmlFields().getXmlField().get(3);
         assertNotNull(shipToCity);
-        assertEquals("tns:city", shipToCity.getName());
+        assertEquals("city", shipToCity.getName());
         assertNull(shipToCity.getValue());
-        assertEquals("/tns:purchaseOrder/tns:shipTo/tns:city", shipToCity.getPath());
+        assertEquals("/tns:purchaseOrder/shipTo/city", shipToCity.getPath());
         assertEquals(FieldType.STRING, shipToCity.getFieldType());
         assertEquals(false, shipToCity.isAttribute());
 
         XmlField shipToState = ((XmlComplexType) shipTo).getXmlFields().getXmlField().get(4);
         assertNotNull(shipToState);
-        assertEquals("tns:state", shipToState.getName());
+        assertEquals("state", shipToState.getName());
         assertNull(shipToState.getValue());
-        assertEquals("/tns:purchaseOrder/tns:shipTo/tns:state", shipToState.getPath());
+        assertEquals("/tns:purchaseOrder/shipTo/state", shipToState.getPath());
         assertEquals(FieldType.STRING, shipToState.getFieldType());
         assertEquals(false, shipToState.isAttribute());
 
         XmlField shipToZip = ((XmlComplexType) shipTo).getXmlFields().getXmlField().get(5);
         assertNotNull(shipToZip);
-        assertEquals("tns:zip", shipToZip.getName());
+        assertEquals("zip", shipToZip.getName());
         assertNull(shipToZip.getValue());
-        assertEquals("/tns:purchaseOrder/tns:shipTo/tns:zip", shipToZip.getPath());
+        assertEquals("/tns:purchaseOrder/shipTo/zip", shipToZip.getPath());
         assertEquals(FieldType.DECIMAL, shipToZip.getFieldType());
         assertEquals(false, shipToZip.isAttribute());
 
@@ -283,9 +283,9 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         // items
         XmlField items = purchaseOrder.getXmlFields().getXmlField().get(4);
         assertNotNull(items);
-        assertEquals("tns:items", items.getName());
+        assertEquals("items", items.getName());
         assertNull(items.getValue());
-        assertEquals("/tns:purchaseOrder/tns:items", items.getPath());
+        assertEquals("/tns:purchaseOrder/items", items.getPath());
         assertEquals(FieldType.COMPLEX, items.getFieldType());
         assertEquals(false, items.isAttribute());
 
@@ -294,9 +294,9 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         // items/item
         XmlComplexType item = (XmlComplexType) ((XmlComplexType) items).getXmlFields().getXmlField().get(0);
         assertNotNull(item);
-        assertEquals("tns:item", item.getName());
+        assertEquals("item", item.getName());
         assertNull(item.getValue());
-        assertEquals("/tns:purchaseOrder/tns:items/tns:item", item.getPath());
+        assertEquals("/tns:purchaseOrder/items/item", item.getPath());
         assertEquals(FieldType.COMPLEX, item.getFieldType());
         assertEquals(false, item.isAttribute());
         assertEquals(CollectionType.LIST, item.getCollectionType());
@@ -305,9 +305,9 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         // partNum
         XmlField partNum = item.getXmlFields().getXmlField().get(0);
         assertNotNull(partNum);
-        assertEquals("tns:partNum", partNum.getName());
+        assertEquals("partNum", partNum.getName());
         assertNull(partNum.getValue());
-        assertEquals("/tns:purchaseOrder/tns:items/tns:item/@tns:partNum", partNum.getPath());
+        assertEquals("/tns:purchaseOrder/items/item/@partNum", partNum.getPath());
         assertEquals(FieldType.STRING, partNum.getFieldType());
         assertEquals("SKU", partNum.getTypeName());
         assertEquals(true, partNum.isAttribute());
@@ -315,18 +315,18 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         // productName
         XmlField productName = item.getXmlFields().getXmlField().get(1);
         assertNotNull(productName);
-        assertEquals("tns:productName", productName.getName());
+        assertEquals("productName", productName.getName());
         assertNull(productName.getValue());
-        assertEquals("/tns:purchaseOrder/tns:items/tns:item/tns:productName", productName.getPath());
+        assertEquals("/tns:purchaseOrder/items/item/productName", productName.getPath());
         assertEquals(FieldType.STRING, productName.getFieldType());
         assertEquals(false, productName.isAttribute());
 
         // quantity
         XmlField quantity = item.getXmlFields().getXmlField().get(2);
         assertNotNull(quantity);
-        assertEquals("tns:quantity", quantity.getName());
+        assertEquals("quantity", quantity.getName());
         assertNull(quantity.getValue());
-        assertEquals("/tns:purchaseOrder/tns:items/tns:item/tns:quantity", quantity.getPath());
+        assertEquals("/tns:purchaseOrder/items/item/quantity", quantity.getPath());
         assertEquals(FieldType.BIG_INTEGER, quantity.getFieldType());
         assertEquals(false, quantity.isAttribute());
         assertNotNull(quantity.getRestrictions().getRestriction());
@@ -341,9 +341,9 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         // USPrice
         XmlField usPrice = item.getXmlFields().getXmlField().get(3);
         assertNotNull(usPrice);
-        assertEquals("tns:USPrice", usPrice.getName());
+        assertEquals("USPrice", usPrice.getName());
         assertNull(usPrice.getValue());
-        assertEquals("/tns:purchaseOrder/tns:items/tns:item/tns:USPrice", usPrice.getPath());
+        assertEquals("/tns:purchaseOrder/items/item/USPrice", usPrice.getPath());
         assertEquals(FieldType.DECIMAL, usPrice.getFieldType());
         assertEquals(false, usPrice.isAttribute());
 
@@ -352,16 +352,16 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         Assert.assertNotNull(itemComment);
         assertEquals("tns:comment", itemComment.getName());
         assertNull(itemComment.getValue());
-        assertEquals("/tns:purchaseOrder/tns:items/tns:item/tns:comment", itemComment.getPath());
+        assertEquals("/tns:purchaseOrder/items/item/tns:comment", itemComment.getPath());
         assertEquals(FieldType.STRING, itemComment.getFieldType());
         assertEquals(false, itemComment.isAttribute());
 
         // shipDate
         XmlField shipDate = item.getXmlFields().getXmlField().get(5);
         assertNotNull(shipDate);
-        assertEquals("tns:shipDate", shipDate.getName());
+        assertEquals("shipDate", shipDate.getName());
         assertNull(shipDate.getValue());
-        assertEquals("/tns:purchaseOrder/tns:items/tns:item/tns:shipDate", shipDate.getPath());
+        assertEquals("/tns:purchaseOrder/items/item/shipDate", shipDate.getPath());
         assertEquals(FieldType.DATE, shipDate.getFieldType());
         assertEquals(false, shipDate.isAttribute());
 

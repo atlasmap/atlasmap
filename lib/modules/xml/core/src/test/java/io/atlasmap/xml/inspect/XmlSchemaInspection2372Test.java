@@ -40,9 +40,9 @@ public class XmlSchemaInspection2372Test extends BaseXmlInspectionServiceTest {
         XmlComplexType fault = (XmlComplexType) body.getXmlFields().getXmlField().get(1);
         assertEquals("tns:Fault", fault.getName());
         XmlField faultstring = fault.getXmlFields().getXmlField().get(1);
-        assertEquals("tns:faultstring", faultstring.getName());
+        assertEquals("faultstring", faultstring.getName());
         XmlComplexType detail = (XmlComplexType) fault.getXmlFields().getXmlField().get(3);
-        assertEquals("tns:detail", detail.getName());
+        assertEquals("detail", detail.getName());
         XmlComplexType bankException = (XmlComplexType) detail.getXmlFields().getXmlField().get(0);
         assertEquals("ns1:bankException", bankException.getName());
         XmlField code = (XmlField) bankException.getXmlFields().getXmlField().get(0);

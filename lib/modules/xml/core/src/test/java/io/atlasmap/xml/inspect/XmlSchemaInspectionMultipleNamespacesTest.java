@@ -64,13 +64,13 @@ public class XmlSchemaInspectionMultipleNamespacesTest extends BaseXmlInspection
         Assert.assertEquals(4, rootFields.size());
         for (XmlField xmlField : rootFields) {
             switch (xmlField.getName()) {
-            case "tns:Name":
+            case "Name":
                 Assert.assertEquals(FieldType.STRING, xmlField.getFieldType());
-                Assert.assertEquals("/tns:RootDocument/tns:Name", xmlField.getPath());
+                Assert.assertEquals("/tns:RootDocument/Name", xmlField.getPath());
                 break;
-            case "tns:Value":
+            case "Value":
                 Assert.assertEquals(FieldType.STRING, xmlField.getFieldType());
-                Assert.assertEquals("/tns:RootDocument/tns:Value", xmlField.getPath());
+                Assert.assertEquals("/tns:RootDocument/Value", xmlField.getPath());
                 break;
             case "first:FirstElement":
                 Assert.assertEquals(FieldType.COMPLEX, xmlField.getFieldType());
@@ -79,13 +79,13 @@ public class XmlSchemaInspectionMultipleNamespacesTest extends BaseXmlInspection
                 Assert.assertEquals(2, firstFields.size());
                 for (XmlField firstField : firstFields) {
                     switch (firstField.getName()) {
-                    case "first:Name":
+                    case "Name":
                         Assert.assertEquals(FieldType.STRING, firstField.getFieldType());
-                        Assert.assertEquals("/tns:RootDocument/first:FirstElement/first:Name", firstField.getPath());
+                        Assert.assertEquals("/tns:RootDocument/first:FirstElement/Name", firstField.getPath());
                         break;
-                    case "first:Value":
+                    case "Value":
                         Assert.assertEquals(FieldType.STRING, firstField.getFieldType());
-                        Assert.assertEquals("/tns:RootDocument/first:FirstElement/first:Value", firstField.getPath());
+                        Assert.assertEquals("/tns:RootDocument/first:FirstElement/Value", firstField.getPath());
                         break;
                     default:
                         Assert.fail(String.format("Unknown field '%s'", firstField.getPath()));
@@ -99,13 +99,13 @@ public class XmlSchemaInspectionMultipleNamespacesTest extends BaseXmlInspection
                 Assert.assertEquals(2, secondFields.size());
                 for (XmlField secondField : secondFields) {
                     switch (secondField.getName()) {
-                    case "second:Name":
+                    case "Name":
                         Assert.assertEquals(FieldType.STRING, secondField.getFieldType());
-                        Assert.assertEquals("/tns:RootDocument/second:SecondElement/second:Name", secondField.getPath());
+                        Assert.assertEquals("/tns:RootDocument/second:SecondElement/Name", secondField.getPath());
                         break;
-                    case "second:Value":
+                    case "Value":
                         Assert.assertEquals(FieldType.STRING, secondField.getFieldType());
-                        Assert.assertEquals("/tns:RootDocument/second:SecondElement/second:Value", secondField.getPath());
+                        Assert.assertEquals("/tns:RootDocument/second:SecondElement/Value", secondField.getPath());
                         break;
                     default:
                         Assert.fail(String.format("Unknown field '%s'", secondField.getPath()));
@@ -195,9 +195,9 @@ public class XmlSchemaInspectionMultipleNamespacesTest extends BaseXmlInspection
                 List<XmlField> secondFields = XmlComplexType.class.cast(field).getXmlFields().getXmlField();
                 Assert.assertEquals(1, secondFields.size());
                 XmlField secondField = secondFields.get(0);
-                Assert.assertEquals("second:SecondValue", secondField.getName());
+                Assert.assertEquals("SecondValue", secondField.getName());
                 Assert.assertEquals(FieldType.STRING, secondField.getFieldType());
-                Assert.assertEquals("/RootDocument/second:SecondElement/second:SecondValue", secondField.getPath());
+                Assert.assertEquals("/RootDocument/second:SecondElement/SecondValue", secondField.getPath());
                 break;
             default:
                 Assert.fail(String.format("Unknown field '%s'", field.getPath()));

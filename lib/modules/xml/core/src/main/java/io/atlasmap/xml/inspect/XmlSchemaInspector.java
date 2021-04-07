@@ -157,9 +157,6 @@ public class XmlSchemaInspector {
             return null;
         }
         String targetNamespace = decl.getTargetNamespace();
-        if (targetNamespace == null || targetNamespace.isEmpty()) {
-            targetNamespace = decl.getOwnerSchema().getTargetNamespace();
-        }
         if (targetNamespace != null && !targetNamespace.isEmpty()) {
             String prefix = namespaceContext.getPrefix(targetNamespace);
             if (prefix == null || prefix.isEmpty()) {
