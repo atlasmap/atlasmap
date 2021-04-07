@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.atlasmap.api;
+package io.atlasmap.spi;
 
-public class AtlasConstants {
-    public static final String DEFAULT_SOURCE_DOCUMENT_ID = "ATLAS_DEFAULT_SOURCE_DOC";
-    public static final String DEFAULT_TARGET_DOCUMENT_ID = "ATLAS_DEFAULT_TARGET_DOC";
-    public static final String CONSTANTS_DOCUMENT_ID = "ATLAS_CONSTANTS_DOC";
-    public static final String PROPERTIES_SOURCE_DOCUMENT_ID = "ATLAS_SOURCE_PROPERTIES_DOC";
-    public static final String PROPERTIES_TARGET_DOCUMENT_ID = "ATLAS_TARGET_PROPERTIES_DOC";
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.v2.Action;
+import io.atlasmap.v2.ActionDetail;
 
-    private AtlasConstants() {
-    }
+public interface ActionProcessor {
+
+    ActionDetail getActionDetail();
+    Class<? extends Action> getActionClass();
+    Object process(Action action, Object sourceObject) throws AtlasException;
+
 }

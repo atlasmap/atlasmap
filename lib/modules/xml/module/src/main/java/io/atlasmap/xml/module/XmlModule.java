@@ -349,6 +349,11 @@ public class XmlModule extends BaseAtlasModule {
         return AtlasXmlModelFactory.cloneField((XmlField)field, true);
     }
 
+    @Override
+    public XmlField createField() {
+        return AtlasXmlModelFactory.createXmlField();
+    }
+
     protected XmlIOHelper getXmlIOHelper() {
         return this.ioHelper;
     }

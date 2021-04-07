@@ -29,6 +29,7 @@ import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.spi.FieldDirection;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.BaseMapping;
+import io.atlasmap.v2.CustomMapping;
 import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
@@ -120,7 +121,9 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
 
     protected void validateMappingEntries(List<BaseMapping> mappings, List<Validation> validations) {
         for (BaseMapping fieldMapping : mappings) {
-            if (fieldMapping.getClass().isAssignableFrom(Mapping.class)
+            if (fieldMapping.getClass().isAssignableFrom(CustomMapping.class)) {
+                validateCustomMapping((CustomMapping)fieldMapping, validations);
+            } else if (fieldMapping.getClass().isAssignableFrom(Mapping.class)
                     && MappingType.SEPARATE.equals(((Mapping) fieldMapping).getMappingType())) {
                 validateSeparateMapping((Mapping) fieldMapping, validations);
             } else if (fieldMapping.getClass().isAssignableFrom(Mapping.class)
@@ -175,6 +178,16 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
 
         if (getMode() == AtlasModuleMode.SOURCE) {
             validateFieldCombinations(mapping, validations);
+        }
+    }
+
+    protected void validateCustomMapping(CustomMapping mapping, List<Validation> validations) {
+        if (mapping.getClassName() == null || mapping.getClassName().isEmpty()) {
+            Validation v = new Validation();
+            v.setScope(ValidationScope.MAPPING);
+            v.setMessage("Class name must be specified for custom mapping");
+            v.setStatus(ValidationStatus.ERROR);
+            validations.add(v);
         }
     }
 

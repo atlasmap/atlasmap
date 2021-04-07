@@ -24,6 +24,7 @@ import java.util.ServiceLoader;
 import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.FunctionResolver;
 import io.atlasmap.expression.parser.ParseException;
+import io.atlasmap.spi.ActionProcessor;
 import io.atlasmap.spi.FunctionFactory;
 import io.atlasmap.v2.ActionParameter;
 import io.atlasmap.v2.ActionParameters;
@@ -77,7 +78,7 @@ public class DefaultAtlasFunctionResolver implements FunctionResolver {
                     valueForTypeEvaluation = arguments.get(arguments.size() - 1);
                 }
 
-                DefaultAtlasFieldActionService.ActionProcessor actionProcessor = fieldActionService.findActionProcessor(name, valueForTypeEvaluation);
+                ActionProcessor actionProcessor = fieldActionService.findActionProcessor(name, valueForTypeEvaluation);
                 if (actionProcessor != null) {
                     Map<String, Object> actionParameters = new HashMap<>();
                     ActionParameters actionDetailParameters = actionProcessor.getActionDetail().getParameters();

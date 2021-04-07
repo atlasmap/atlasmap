@@ -58,6 +58,7 @@ import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.Collection;
 import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.CopyTo;
+import io.atlasmap.v2.CustomMapping;
 import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceKey;
 import io.atlasmap.v2.DataSourceMetadata;
@@ -75,9 +76,6 @@ import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.Validations;
 
 public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
-
-    public static final String CONSTANTS_DOCUMENT_ID = "io.atlasmap.core.DefaultAtlasContext.constants.docId";
-    public static final String PROPERTIES_DOCUMENT_ID = "io.atlasmap.core.DefaultAtlasContext.properties.docId";
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasContext.class);
     private ObjectName jmxObjectName;
@@ -149,18 +147,18 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         ConstantModule constant = new ConstantModule();
         constant.setConversionService(factory.getConversionService());
         constant.setFieldActionService(factory.getFieldActionService());
-        sourceModules.put(CONSTANTS_DOCUMENT_ID, constant);
+        sourceModules.put(AtlasConstants.CONSTANTS_DOCUMENT_ID, constant);
         PropertyModule property = new PropertyModule(factory.getPropertyStrategy());
         property.setConversionService(factory.getConversionService());
         property.setFieldActionService(factory.getFieldActionService());
         property.setMode(AtlasModuleMode.SOURCE);
-        sourceModules.put(PROPERTIES_DOCUMENT_ID, property);
+        sourceModules.put(AtlasConstants.PROPERTIES_SOURCE_DOCUMENT_ID, property);
         targetModules.clear();
         property = new PropertyModule(factory.getPropertyStrategy());
         property.setConversionService(factory.getConversionService());
         property.setFieldActionService(factory.getFieldActionService());
         property.setMode(AtlasModuleMode.TARGET);
-        targetModules.put(PROPERTIES_DOCUMENT_ID, property);
+        targetModules.put(AtlasConstants.PROPERTIES_TARGET_DOCUMENT_ID, property);
 
         lookupTables.clear();
         if (admHandler.getMappingDefinition().getLookupTables() != null
@@ -233,7 +231,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     protected void registerJmx(DefaultAtlasContext context) {
         try {
             setJmxObjectName(new ObjectName(
-                    getDefaultAtlasContextFactory().getJmxObjectName() + ",context=Contexts,uuid=" + uuid.toString()));
+                    getContextFactory().getJmxObjectName() + ",context=Contexts,uuid=" + uuid.toString()));
             if (ManagementFactory.getPlatformMBeanServer().isRegistered(getJmxObjectName())) {
                 ManagementFactory.getPlatformMBeanServer().registerMBean(this, getJmxObjectName());
                 if (LOG.isDebugEnabled()) {
@@ -335,7 +333,14 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         }
 
         for (BaseMapping baseMapping : session.getMapping().getMappings().getMapping()) {
-            for (Mapping mapping : unwrapCollectionMappings(session, baseMapping)) {
+            for (BaseMapping innerMapping : unwrapCollectionMappings(session, baseMapping)) {
+                if (innerMapping instanceof CustomMapping) {
+                    DefaultAtlasCustomMappingProcessor.getInstance().process(
+                            session, (CustomMapping)innerMapping);
+                    continue;
+                }
+
+                Mapping mapping = (Mapping) innerMapping;
                 session.head().setMapping(mapping).setLookupTable(lookupTables.get(mapping.getLookupTableName()));
 
                 if (mapping.getOutputField() == null || mapping.getOutputField().isEmpty()) {
@@ -375,17 +380,17 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     }
 
     // just unwrap collection mappings to be compatible with older UI
-    private List<Mapping> unwrapCollectionMappings(DefaultAtlasSession session, BaseMapping baseMapping) {
+    private List<BaseMapping> unwrapCollectionMappings(DefaultAtlasSession session, BaseMapping baseMapping) {
         if (baseMapping.getMappingType() == null || !baseMapping.getMappingType().equals(MappingType.COLLECTION)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Mapping is not a collection mapping, not cloning: {}", baseMapping);
             }
-            return Arrays.asList((Mapping) baseMapping);
+            return Arrays.asList((BaseMapping) baseMapping);
         }
 
-        List<Mapping> mappings = new LinkedList<>();
+        List<BaseMapping> mappings = new LinkedList<>();
         for(BaseMapping m : ((Collection) baseMapping).getMappings().getMapping()) {
-            mappings.add((Mapping) m);
+            mappings.add(m);
         }
         return mappings;
     }
@@ -476,14 +481,15 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         Map<String, AtlasModule> modules =
                 direction == FieldDirection.SOURCE ? sourceModules : targetModules;
         if (direction == FieldDirection.SOURCE && field instanceof ConstantField) {
-            AtlasModule answer = sourceModules.get(CONSTANTS_DOCUMENT_ID);
+            AtlasModule answer = sourceModules.get(AtlasConstants.CONSTANTS_DOCUMENT_ID);
             if (!modules.containsKey(docId)) {
                 modules.put(docId, answer);
             }
             return answer;
         }
         if (field instanceof PropertyField) {
-            AtlasModule answer = modules.get(PROPERTIES_DOCUMENT_ID);
+            AtlasModule answer = modules.get(
+                    direction == FieldDirection.SOURCE ? AtlasConstants.PROPERTIES_SOURCE_DOCUMENT_ID : AtlasConstants.PROPERTIES_TARGET_DOCUMENT_ID);
             if (!modules.containsKey(docId)) {
                 modules.put(docId, answer);
             }
@@ -855,12 +861,8 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         }
     }
 
-    protected DefaultAtlasContextFactory getDefaultAtlasContextFactory() {
-        return this.factory;
-    }
-
     @Override
-    public AtlasContextFactory getContextFactory() {
+    public DefaultAtlasContextFactory getContextFactory() {
         return this.factory;
     }
 

@@ -44,8 +44,6 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasValidationService;
 import io.atlasmap.mxbean.AtlasContextFactoryMXBean;
 import io.atlasmap.spi.AtlasCombineStrategy;
-import io.atlasmap.spi.AtlasConversionService;
-import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleInfo;
@@ -245,12 +243,12 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     }
 
     @Override
-    public AtlasConversionService getConversionService() {
+    public DefaultAtlasConversionService getConversionService() {
         return this.atlasConversionService;
     }
 
     @Override
-    public AtlasFieldActionService getFieldActionService() {
+    public DefaultAtlasFieldActionService getFieldActionService() {
         return this.atlasFieldActionService;
     }
 

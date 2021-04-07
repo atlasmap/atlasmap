@@ -1,0 +1,42 @@
+{
+  "AtlasMapping" : {
+    "jsonType": "io.atlasmap.v2.AtlasMapping",
+    "dataSource": [
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "SourceJson",
+        "uri": "atlas:json:SourceJson",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType" : "io.atlasmap.xml.v2.XmlDataSource",
+        "id" : "TargetXml",
+        "name" : "TargetXml",
+        "description" : "Target XML document",
+        "uri" : "atlas:xml:TargetXml",
+        "dataSourceType" : "TARGET",
+        "xmlNamespaces" : {
+          "xmlNamespace" : [ {
+            "alias" : "tns",
+             "uri" : "http://atlasmap.io/itests/builder"
+          }]
+        }
+      } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.CustomMapping",
+        "className" : "io.atlasmap.itests.core.MappingBuilderTest$JsonXmlBuilder"
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "constants" : {
+      "constant" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "core.unit.test"
+  }
+}

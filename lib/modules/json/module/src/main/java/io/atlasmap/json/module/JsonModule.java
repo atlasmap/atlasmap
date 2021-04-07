@@ -249,4 +249,10 @@ public class JsonModule extends BaseAtlasModule {
     public Field cloneField(Field field) throws AtlasException {
         return AtlasJsonModelFactory.cloneField((JsonField)field, true);
     }
+
+    @Override
+    public JsonField createField() {
+        return AtlasJsonModelFactory.createJsonField();
+    }
+
 }

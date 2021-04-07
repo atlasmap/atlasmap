@@ -230,4 +230,9 @@ public class ConstantModule implements AtlasModule {
         return "Constants";
     }
 
+    @Override
+    public ConstantField createField() {
+        return new ConstantField();
+    }
+
 }

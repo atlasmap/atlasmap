@@ -418,7 +418,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         when(mockOutputField.getPath()).thenReturn("output[1]");
         when(mappingElement2.getOutputField()).thenReturn(mockOutputFieldList);
 
-        context.getSourceModules().put(DefaultAtlasContext.CONSTANTS_DOCUMENT_ID, mockConstantModule);
+        context.getSourceModules().put(AtlasConstants.CONSTANTS_DOCUMENT_ID, mockConstantModule);
         context.getTargetModules().put(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID, mockConstantModule);
         context.process(session);
     }

@@ -180,7 +180,7 @@ public class DefaultAtlasExpressionProcessorTest extends BaseDefaultAtlasContext
         String expression = "${DOC.Properties.85731:/Doc1/testprop} + ${DOC.Properties.85731:/Doc2/testprop}"
                 + " + ${DOC.Properties.85731:/testprop}";
         recreateSession();
-        context.getSourceModules().put(DefaultAtlasContext.PROPERTIES_DOCUMENT_ID, new PropertyModule(new DefaultAtlasPropertyStrategy()));
+        context.getSourceModules().put(AtlasConstants.PROPERTIES_SOURCE_DOCUMENT_ID, new PropertyModule(new DefaultAtlasPropertyStrategy()));
         session.head().setSourceField(source);
         DefaultAtlasExpressionProcessor.processExpression(session, expression);
         assertFalse(printAudit(session), session.hasErrors());
