@@ -108,10 +108,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 <span class="fc" id="L108">                    : DfdlService.class.getClassLoader();</span>
 <span class="fc" id="L109">                DfdlInspectionService s = new DfdlInspectionService(loader);</span>
 
-<span class="pc bpc" id="L111" title="2 of 3 branches missed.">                switch (request.getType()) {</span>
+<span class="pc bpc" id="L111" title="1 of 3 branches missed.">                switch (request.getType()) {</span>
                 case INSTANCE:
-<span class="nc" id="L113">                    d = s.inspectDfdlInstance(request.getDfdlSchemaName(), request.getOptions());</span>
-<span class="nc" id="L114">                    break;</span>
+<span class="fc" id="L113">                    d = s.inspectDfdlInstance(request.getDfdlSchemaName(), request.getOptions());</span>
+<span class="fc" id="L114">                    break;</span>
                 case SCHEMA:
 <span class="fc" id="L116">                    d = s.inspectDfdlSchema(request.getDfdlSchemaName(), request.getOptions());</span>
 <span class="fc" id="L117">                    break;</span>

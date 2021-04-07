@@ -89,11 +89,11 @@ import io.atlasmap.xml.core.XmlIOHelper;
 <span class="fc" id="L89">        String header = (String) options.get(Options.HEADER.value());</span>
 <span class="fc" id="L90">        String example = (String) options.get(Options.EXAMPLE.value());</span>
 <span class="fc" id="L91">        String delimiter = (String) options.get(Options.DELIMITER.value());</span>
-<span class="pc bpc" id="L92" title="6 of 8 branches missed.">        if ((header == null || header.isEmpty()) &amp;&amp; (example == null || example.isEmpty())) {</span>
+<span class="pc bpc" id="L92" title="3 of 8 branches missed.">        if ((header == null || header.isEmpty()) &amp;&amp; (example == null || example.isEmpty())) {</span>
 <span class="nc" id="L93">            throw new AtlasException(String.format(&quot;'%s' or '%s' must be specified to generate CSV DFDL schema&quot;,</span>
 <span class="nc" id="L94">                Options.HEADER.value(), Options.EXAMPLE.value()));</span>
         }
-<span class="pc bpc" id="L96" title="2 of 4 branches missed.">        header = header!= null &amp;&amp; !header.isEmpty() ? header.split(&quot;\\R&quot;)[0] : example.split(&quot;\\R&quot;)[0];</span>
+<span class="pc bpc" id="L96" title="1 of 4 branches missed.">        header = header!= null &amp;&amp; !header.isEmpty() ? header.split(&quot;\\R&quot;)[0] : example.split(&quot;\\R&quot;)[0];</span>
 <span class="pc bpc" id="L97" title="1 of 2 branches missed.">        if (delimiter == null) {</span>
 <span class="nc" id="L98">            delimiter = DEFAULT_DELIMITER;</span>
         }
