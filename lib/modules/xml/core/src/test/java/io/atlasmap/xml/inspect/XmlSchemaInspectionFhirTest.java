@@ -47,7 +47,7 @@ public class XmlSchemaInspectionFhirTest extends BaseXmlInspectionServiceTest {
         assertEquals("tns:id", id.getName());
         assertEquals(2, id.getXmlFields().getXmlField().size());
         XmlField value = (XmlField) id.getXmlFields().getXmlField().get(0);
-        assertEquals("tns:value", value.getName());
+        assertEquals("value", value.getName());
         assertTrue(value.isAttribute());
         XmlComplexType extension = (XmlComplexType) id.getXmlFields().getXmlField().get(1);
         assertEquals("tns:extension", extension.getName());

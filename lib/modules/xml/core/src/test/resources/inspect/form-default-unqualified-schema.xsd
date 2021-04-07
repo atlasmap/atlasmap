@@ -1,0 +1,42 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://atlasmap.io/xml/test/" elementFormDefault="unqualified" attributeFormDefault="unqualified" >
+  <xs:element name="a">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="aa">
+          <xs:complexType>
+            <xs:sequence>
+                <xs:element name="aaa" type="xs:string" />
+                <xs:element name="aab" type="xs:string" form="qualified" />
+                <xs:element name="aac" type="xs:string" form="unqualified" />
+            </xs:sequence>
+            <xs:attribute name="aad" type="xs:string" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="ab" form="qualified">
+          <xs:complexType>
+            <xs:sequence>
+                <xs:element name="aba" type="xs:string" />
+                <xs:element name="abb" type="xs:string" form="qualified" />
+                <xs:element name="abc" type="xs:string" form="unqualified" />
+            </xs:sequence>
+            <xs:attribute name="abd" type="xs:string" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="ac" form="unqualified">
+          <xs:complexType>
+            <xs:sequence>
+                <xs:element name="aca" type="xs:string" />
+                <xs:element name="acb" type="xs:string" form="qualified" />
+                <xs:element name="acc" type="xs:string" form="unqualified" />
+            </xs:sequence>
+            <xs:attribute name="acd" type="xs:string" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="ad" type="xs:string" />
+      <xs:attribute name="ae" type="xs:string" form="qualified" />
+      <xs:attribute name="af" type="xs:string" form="unqualified" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

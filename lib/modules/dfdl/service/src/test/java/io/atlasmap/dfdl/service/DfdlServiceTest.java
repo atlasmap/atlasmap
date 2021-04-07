@@ -57,20 +57,19 @@ public class DfdlServiceTest {
         assertEquals("tns:file", file.getName());
         assertEquals(2, file.getXmlFields().getXmlField().size());
         XmlComplexType record = (XmlComplexType) file.getXmlFields().getXmlField().get(1);
-        assertEquals("tns:record", record.getName());
+        assertEquals("record", record.getName());
         assertEquals(3, record.getXmlFields().getXmlField().size());
         XmlField header1 = (XmlField) record.getXmlFields().getXmlField().get(0);
-        assertEquals("tns:header1", header1.getName());
+        assertEquals("header1", header1.getName());
         assertEquals(FieldType.STRING, header1.getFieldType());
         XmlField header2 = (XmlField) record.getXmlFields().getXmlField().get(1);
-        assertEquals("tns:header2", header2.getName());
+        assertEquals("header2", header2.getName());
         assertEquals(FieldType.STRING, header2.getFieldType());
         XmlField header3 = (XmlField) record.getXmlFields().getXmlField().get(2);
-        assertEquals("tns:header3", header3.getName());
+        assertEquals("header3", header3.getName());
         assertEquals(FieldType.STRING, header3.getFieldType());
     }
 
-    @Ignore("https://github.com/atlasmap/atlasmap/issues/1470")
     @Test
     public void testInstance() throws Exception {
         final String source =
@@ -94,19 +93,19 @@ public class DfdlServiceTest {
         assertNotNull(root);
         assertEquals(1, xmlDoc.getFields().getField().size());
         XmlComplexType file = (XmlComplexType) xmlDoc.getFields().getField().get(0);
-        assertEquals("tns:file", file.getName());
+        assertEquals("atlas:file", file.getName());
         assertEquals(2, file.getXmlFields().getXmlField().size());
         XmlComplexType record = (XmlComplexType) file.getXmlFields().getXmlField().get(1);
-        assertEquals("tns:record", record.getName());
+        assertEquals("record", record.getName());
         assertEquals(3, record.getXmlFields().getXmlField().size());
         XmlField header1 = (XmlField) record.getXmlFields().getXmlField().get(0);
-        assertEquals("tns:header1", header1.getName());
+        assertEquals("header1", header1.getName());
         assertEquals(FieldType.STRING, header1.getFieldType());
         XmlField header2 = (XmlField) record.getXmlFields().getXmlField().get(1);
-        assertEquals("tns:header2", header2.getName());
+        assertEquals("header2", header2.getName());
         assertEquals(FieldType.STRING, header2.getFieldType());
         XmlField header3 = (XmlField) record.getXmlFields().getXmlField().get(2);
-        assertEquals("tns:header3", header3.getName());
+        assertEquals("header3", header3.getName());
         assertEquals(FieldType.STRING, header3.getFieldType());
     }
 
