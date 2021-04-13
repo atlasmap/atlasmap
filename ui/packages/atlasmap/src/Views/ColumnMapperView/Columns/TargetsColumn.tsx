@@ -52,7 +52,7 @@ export interface ITargetsColumnCallbacks extends IPropertiesTreeCallbacks {
   onDrop: (source: IAtlasmapField, target: IDragAndDropField) => void;
   canDrop: (source: IAtlasmapField, target: IDragAndDropField) => boolean;
   onShowMappingDetails: (mapping: IAtlasmapMapping) => void;
-  canAddToSelectedMapping: (field: IAtlasmapField) => boolean;
+  canAddFieldToSelectedMapping: (field: IAtlasmapField) => boolean;
   onAddToSelectedMapping: (field: IAtlasmapField) => void;
   canRemoveFromSelectedMapping: (field: IAtlasmapField) => boolean;
   onRemoveFromSelectedMapping: (field: IAtlasmapField) => void;
@@ -60,6 +60,7 @@ export interface ITargetsColumnCallbacks extends IPropertiesTreeCallbacks {
   onStartMapping: (field: IAtlasmapField) => void;
   shouldShowMappingPreviewForField: (field: IAtlasmapField) => boolean;
   onFieldPreviewChange: (field: IAtlasmapField, value: string) => void;
+  canAddToSelectedMapping: (isSource: boolean) => boolean;
 }
 
 export interface ITargetsColumnData {
@@ -87,7 +88,7 @@ export const TargetsColumn: FunctionComponent<
   onDrop,
   canDrop,
   onShowMappingDetails,
-  canAddToSelectedMapping,
+  canAddFieldToSelectedMapping,
   onAddToSelectedMapping,
   canRemoveFromSelectedMapping,
   onRemoveFromSelectedMapping,
@@ -177,7 +178,9 @@ export const TargetsColumn: FunctionComponent<
                       canDrop={canDrop}
                       onDrop={onDrop}
                       onShowMappingDetails={onShowMappingDetails}
-                      canAddToSelectedMapping={canAddToSelectedMapping}
+                      canAddFieldToSelectedMapping={
+                        canAddFieldToSelectedMapping
+                      }
                       onAddToSelectedMapping={onAddToSelectedMapping}
                       canRemoveFromSelectedMapping={
                         canRemoveFromSelectedMapping
@@ -254,7 +257,7 @@ export const TargetsColumn: FunctionComponent<
                             commonActions({
                               connectedMappings: field.mappings,
                               onShowMappingDetails,
-                              canAddToSelectedMapping: canAddToSelectedMapping(
+                              canAddFieldToSelectedMapping: canAddFieldToSelectedMapping(
                                 field,
                               ),
                               onAddToSelectedMapping: () =>

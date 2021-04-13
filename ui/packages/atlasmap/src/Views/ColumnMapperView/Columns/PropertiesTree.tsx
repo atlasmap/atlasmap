@@ -30,7 +30,7 @@ export interface IPropertiesTreeCallbacks {
   onDrop: (source: IAtlasmapField, target: IDragAndDropField) => void;
   canDrop: (source: IAtlasmapField, target: IDragAndDropField) => boolean;
   onShowMappingDetails: (mapping: IAtlasmapMapping) => void;
-  canAddToSelectedMapping: (source: IAtlasmapField) => boolean;
+  canAddFieldToSelectedMapping: (source: IAtlasmapField) => boolean;
   onAddToSelectedMapping: (source: IAtlasmapField) => void;
   canRemoveFromSelectedMapping: (source: IAtlasmapField) => boolean;
   onRemoveFromSelectedMapping: (source: IAtlasmapField) => void;
@@ -55,7 +55,7 @@ export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
   onDrop,
   canDrop,
   onShowMappingDetails,
-  canAddToSelectedMapping,
+  canAddFieldToSelectedMapping,
   onAddToSelectedMapping,
   canRemoveFromSelectedMapping,
   onRemoveFromSelectedMapping,
@@ -85,7 +85,7 @@ export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
         ...commonActions({
           connectedMappings: field.mappings,
           onShowMappingDetails: onShowMappingDetails,
-          canAddToSelectedMapping: canAddToSelectedMapping(field),
+          canAddFieldToSelectedMapping: canAddFieldToSelectedMapping(field),
           onAddToSelectedMapping: () => onAddToSelectedMapping(field),
           canRemoveFromSelectedMapping: canRemoveFromSelectedMapping(field),
           onRemoveFromSelectedMapping: () => onRemoveFromSelectedMapping(field),

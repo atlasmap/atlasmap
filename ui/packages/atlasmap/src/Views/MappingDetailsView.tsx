@@ -61,6 +61,16 @@ export interface IMappingDetailsViewProps {
   onNotificationRead: (id: string) => void;
   onEditEnum: (cb: any) => void;
   isEnumMapping: () => boolean;
+  onCreateConstant: (
+    constants: any | null,
+    addToActiveMapping?: boolean,
+  ) => void;
+  onCreateProperty: (
+    isSource: boolean,
+    props: any | null,
+    addToActiveMapping?: boolean,
+  ) => void;
+  canAddToSelectedMapping: (isSource: boolean) => boolean;
 }
 
 export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = ({
@@ -84,6 +94,9 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
   onNotificationRead,
   onEditEnum,
   isEnumMapping,
+  onCreateConstant,
+  onCreateProperty,
+  canAddToSelectedMapping,
   multiplicity,
 }) => {
   const mappingAction = multiplicity && (
@@ -235,7 +248,13 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
       )}
       <div className={"pf-c-form"}>
         {mappingAction}
-        <MappingFields title={"Sources"}>
+        <MappingFields
+          isSource={true}
+          title={"Sources"}
+          onCreateConstant={onCreateConstant}
+          onCreateProperty={onCreateProperty}
+          canAddToSelectedMapping={canAddToSelectedMapping}
+        >
           {sources.map(renderSourceMappingField)}
           {addableSources.length > 0 && (
             <AddFieldTypeahead
@@ -250,7 +269,13 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> = (
             />
           )}
         </MappingFields>
-        <MappingFields title={"Targets"}>
+        <MappingFields
+          isSource={false}
+          title={"Targets"}
+          onCreateConstant={onCreateConstant}
+          onCreateProperty={onCreateProperty}
+          canAddToSelectedMapping={canAddToSelectedMapping}
+        >
           {targets.map(renderTargetMappingField)}
           {addableTargets.length > 0 && (
             <AddFieldTypeahead

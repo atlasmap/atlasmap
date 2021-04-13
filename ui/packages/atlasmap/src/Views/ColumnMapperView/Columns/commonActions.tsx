@@ -22,7 +22,7 @@ import { IAtlasmapMapping } from "../../../Views";
 export interface ICommonActionsProps {
   connectedMappings: IAtlasmapMapping[];
   onShowMappingDetails: (mapping: IAtlasmapMapping) => void;
-  canAddToSelectedMapping: boolean;
+  canAddFieldToSelectedMapping: boolean;
   onAddToSelectedMapping: () => void;
   canRemoveFromSelectedMapping: boolean;
   onRemoveFromSelectedMapping: () => void;
@@ -33,7 +33,7 @@ export interface ICommonActionsProps {
 export function commonActions({
   connectedMappings,
   onShowMappingDetails,
-  canAddToSelectedMapping,
+  canAddFieldToSelectedMapping,
   onAddToSelectedMapping,
   canRemoveFromSelectedMapping,
   onRemoveFromSelectedMapping,
@@ -123,7 +123,7 @@ export function commonActions({
           onClick={onAddToSelectedMapping}
           aria-label={"Connect to the selected mapping"}
           tabIndex={0}
-          isDisabled={!canAddToSelectedMapping}
+          isDisabled={!canAddFieldToSelectedMapping}
           data-testid={"connect-to-the-selected-mapping-button"}
         >
           <LinkIcon />

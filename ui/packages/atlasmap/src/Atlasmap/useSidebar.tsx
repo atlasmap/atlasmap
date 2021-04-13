@@ -8,12 +8,23 @@ import {
 import { DataMapperUtil } from "@atlasmap/core";
 
 export interface IUseSidebarProps {
+  onCreateConstant: (
+    constants: any | null,
+    addToActiveMapping?: boolean,
+  ) => void;
+  onCreateProperty: (
+    isSource: boolean,
+    props: any | null,
+    addToActiveMapping?: boolean,
+  ) => void;
   onRemoveMapping: () => void;
   onEditEnum: (cb: any) => void;
   isEnumMapping: () => boolean;
 }
 
 export function useSidebar({
+  onCreateConstant,
+  onCreateProperty,
   onRemoveMapping,
   onEditEnum,
   isEnumMapping,
@@ -28,6 +39,7 @@ export function useSidebar({
     constants,
     sourceProperties,
     targetProperties,
+    canAddToSelectedMapping,
     isFieldAddableToSelection,
     addToCurrentMapping,
     notifications,
@@ -149,6 +161,15 @@ export function useSidebar({
           onNotificationRead={markNotificationRead}
           onEditEnum={onEditEnum}
           isEnumMapping={isEnumMapping}
+          onCreateConstant={onCreateConstant}
+          onCreateProperty={(isSource) => {
+            if (isSource) {
+              onCreateProperty(isSource, sourceProperties, true);
+            } else {
+              onCreateProperty(isSource, targetProperties, true);
+            }
+          }}
+          canAddToSelectedMapping={canAddToSelectedMapping}
         />
       );
     }
@@ -180,5 +201,8 @@ export function useSidebar({
     isFieldAddableToSelection,
     addToCurrentMapping,
     mappingExpressionEnabled,
+    onCreateConstant,
+    onCreateProperty,
+    canAddToSelectedMapping,
   ]);
 }

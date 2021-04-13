@@ -76,6 +76,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     mappingExpressionEnabled,
     isMappingExpressionEmpty,
     trailerId,
+    canAddToSelectedMapping,
     isFieldAddableToSelection,
     isFieldRemovableFromSelection,
     onAddToMapping,
@@ -160,8 +161,11 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       },
       onDrop: (s, t) => onCreateMapping(s, t.payload as IAtlasmapField),
       onShowMappingDetails: selectMapping,
-      canAddToSelectedMapping: (f) => isFieldAddableToSelection("source", f),
       onAddToSelectedMapping: onAddToMapping,
+      canAddToSelectedMapping: canAddToSelectedMapping,
+      canAddFieldToSelectedMapping: (f) =>
+        isFieldAddableToSelection("source", f),
+      onAddFieldToSelectedMapping: onAddToMapping,
       canRemoveFromSelectedMapping: (f) =>
         isFieldRemovableFromSelection("source", f),
       onRemoveFromSelectedMapping: onRemoveFromMapping,
@@ -225,6 +229,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       shouldShowMappingPreviewForField,
       onFieldPreviewChange,
       onCreateMapping,
+      canAddToSelectedMapping,
       isFieldAddableToSelection,
       isFieldRemovableFromSelection,
       sourceProperties,
@@ -244,7 +249,9 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         );
       },
       onDrop: (s, t) => onCreateMapping(t.payload as IAtlasmapField, s),
-      canAddToSelectedMapping: (f) => isFieldAddableToSelection("target", f),
+      canAddToSelectedMapping: canAddToSelectedMapping,
+      canAddFieldToSelectedMapping: (f) =>
+        isFieldAddableToSelection("target", f),
       onShowMappingDetails: selectMapping,
       onAddToSelectedMapping: onAddToMapping,
       canRemoveFromSelectedMapping: (f) =>
@@ -301,6 +308,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       shouldShowMappingPreviewForField,
       onFieldPreviewChange,
       onCreateMapping,
+      canAddToSelectedMapping,
       isFieldAddableToSelection,
       isFieldRemovableFromSelection,
       targetProperties,
@@ -413,6 +421,16 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   ]);
 
   const renderSidebar = useSidebar({
+    onCreateConstant: () => {
+      handlers.onCreateConstant(constants, true);
+    },
+    onCreateProperty: (isSource: boolean) => {
+      if (isSource) {
+        handlers.onCreateProperty(isSource, sourceProperties, true);
+      } else {
+        handlers.onCreateProperty(isSource, targetProperties, true);
+      }
+    },
     onRemoveMapping: handlers.onDeleteSelectedMapping,
     onEditEnum: handlers.onEditMappingEnumeration,
     isEnumMapping: isEnumerationMapping,

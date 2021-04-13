@@ -57,7 +57,7 @@ export interface ISourceColumnCallbacks
   canDrop: (source: IAtlasmapField, target: IDragAndDropField) => boolean;
   onDrop: (source: IAtlasmapField, target: IDragAndDropField) => void;
   onShowMappingDetails: (mapping: IAtlasmapMapping) => void;
-  canAddToSelectedMapping: (source: IAtlasmapField) => boolean;
+  canAddFieldToSelectedMapping: (source: IAtlasmapField) => boolean;
   onAddToSelectedMapping: (source: IAtlasmapField) => void;
   canRemoveFromSelectedMapping: (source: IAtlasmapField) => boolean;
   canStartMapping: (field: IAtlasmapField) => boolean;
@@ -65,6 +65,7 @@ export interface ISourceColumnCallbacks
   onRemoveFromSelectedMapping: (source: IAtlasmapField) => void;
   shouldShowMappingPreviewForField: (field: IAtlasmapField) => boolean;
   onFieldPreviewChange: (field: IAtlasmapField, value: string) => void;
+  canAddToSelectedMapping: (isSource: boolean) => boolean;
 }
 
 export interface ISourcesColumnData {
@@ -95,7 +96,7 @@ export const SourcesColumn: FunctionComponent<
   canDrop,
   onDrop,
   onShowMappingDetails,
-  canAddToSelectedMapping,
+  canAddFieldToSelectedMapping,
   onAddToSelectedMapping,
   canRemoveFromSelectedMapping,
   onRemoveFromSelectedMapping,
@@ -187,7 +188,9 @@ export const SourcesColumn: FunctionComponent<
                       canDrop={canDrop}
                       onDrop={onDrop}
                       onShowMappingDetails={onShowMappingDetails}
-                      canAddToSelectedMapping={canAddToSelectedMapping}
+                      canAddFieldToSelectedMapping={
+                        canAddFieldToSelectedMapping
+                      }
                       onAddToSelectedMapping={onAddToSelectedMapping}
                       canRemoveFromSelectedMapping={
                         canRemoveFromSelectedMapping
@@ -240,7 +243,9 @@ export const SourcesColumn: FunctionComponent<
                       canDrop={canDrop}
                       onDrop={onDrop}
                       onShowMappingDetails={onShowMappingDetails}
-                      canAddToSelectedMapping={canAddToSelectedMapping}
+                      canAddFieldToSelectedMapping={
+                        canAddFieldToSelectedMapping
+                      }
                       onAddToSelectedMapping={onAddToSelectedMapping}
                       canRemoveFromSelectedMapping={
                         canRemoveFromSelectedMapping
@@ -316,7 +321,7 @@ export const SourcesColumn: FunctionComponent<
                             commonActions({
                               connectedMappings: field.mappings,
                               onShowMappingDetails,
-                              canAddToSelectedMapping: canAddToSelectedMapping(
+                              canAddFieldToSelectedMapping: canAddFieldToSelectedMapping(
                                 field,
                               ),
                               onAddToSelectedMapping: () =>

@@ -43,7 +43,8 @@ export const sourceTargetView = () =>
             canDrop: () => true,
             onAddToSelectedMapping: action("onAddToSelectedMapping"),
             onShowMappingDetails: action("onShowMappingDetails"),
-            canAddToSelectedMapping: (item) =>
+            canAddToSelectedMapping: () => true,
+            canAddFieldToSelectedMapping: (item) =>
               !!selectedMappingId &&
               !item.mappings.find((m) => m.id === selectedMappingId),
             onRemoveFromSelectedMapping: action("onRemoveFromSelectedMapping"),
@@ -71,7 +72,8 @@ export const sourceTargetView = () =>
             canDrop: () => true,
             onAddToSelectedMapping: action("onAddToSelectedMapping"),
             onShowMappingDetails: action("onShowMappingDetails"),
-            canAddToSelectedMapping: (item) =>
+            canAddToSelectedMapping: () => true,
+            canAddFieldToSelectedMapping: (item) =>
               !!selectedMappingId &&
               !item.mappings.find((m) => m.id === selectedMappingId),
             onRemoveFromSelectedMapping: action("onRemoveFromSelectedMapping"),
