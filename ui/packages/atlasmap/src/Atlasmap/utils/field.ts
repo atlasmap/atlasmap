@@ -18,7 +18,11 @@ export type EnumValue = {
   ordinal: number;
 };
 
-export function createConstant(constValue: string, constType: string): void {
+export function createConstant(
+  constValue: string,
+  constType: string,
+  addToActiveMapping?: boolean,
+): void {
   const cfg = ConfigModel.getConfig();
   let field = cfg.constantDoc.getField(constValue);
   if (!field) {
@@ -30,6 +34,9 @@ export function createConstant(constValue: string, constType: string): void {
   field.docDef = cfg.constantDoc;
   field.userCreated = true;
   cfg.constantDoc.addField(field);
+  if (addToActiveMapping) {
+    addToCurrentMapping(field);
+  }
   cfg.mappingService.notifyMappingUpdated();
 }
 
@@ -99,6 +106,7 @@ export function createProperty(
   propType: string,
   propScope: string,
   isSource: boolean,
+  addToActiveMapping?: boolean,
 ): void {
   const cfg = ConfigModel.getConfig();
   let field = isSource
@@ -124,6 +132,9 @@ export function createProperty(
   } else {
     field.docDef = cfg.targetPropertyDoc;
     cfg.targetPropertyDoc.addField(field);
+  }
+  if (addToActiveMapping) {
+    addToCurrentMapping(field);
   }
   cfg.mappingService.notifyMappingUpdated();
 }

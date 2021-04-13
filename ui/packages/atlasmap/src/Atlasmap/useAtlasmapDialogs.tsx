@@ -50,9 +50,9 @@ export function useAtlasmapDialogs({
     "Create Constant",
   );
   const onCreateConstant = useCallback(
-    (constants: IAtlasmapDocument | null) => {
+    (constants: IAtlasmapDocument | null, addToActiveMapping?: boolean) => {
       openCreateConstantDialog(({ value, valueType }) => {
-        createConstant(value, valueType);
+        createConstant(value, valueType, addToActiveMapping);
       }, constants);
     },
     [createConstant, openCreateConstantDialog],
@@ -85,10 +85,14 @@ export function useAtlasmapDialogs({
     scopeOptions,
   );
   const onCreateProperty = useCallback(
-    (isSource: boolean, properties: IAtlasmapDocument | null) => {
+    (
+      isSource: boolean,
+      properties: IAtlasmapDocument | null,
+      addToActiveMapping?: boolean,
+    ) => {
       setScopeOptions(getPropertyScopeOptions(isSource));
       openCreatePropertyDialog(({ name, valueType, scope }) => {
-        createProperty(name, valueType, scope, isSource);
+        createProperty(name, valueType, scope, isSource, addToActiveMapping);
       }, properties);
     },
     [createProperty, openCreatePropertyDialog],

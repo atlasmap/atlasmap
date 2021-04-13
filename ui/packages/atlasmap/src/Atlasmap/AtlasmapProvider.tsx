@@ -490,6 +490,48 @@ export function useAtlasmap() {
     return initializationService.cfg.mappingService.willClearOutSourceFieldsOnTogglingExpression();
   }, []);
 
+  /**
+   * Return true if it's possible to add a source or target field to the current
+   * mapping from the specified panel, false otherwise.
+   */
+  const canAddToSelectedMapping = useCallback(
+    (isSource: boolean): boolean => {
+      const { selectedMapping } = context;
+      if (
+        !selectedMapping ||
+        (selectedMapping.mapping.transition.mode === TransitionMode.ENUM &&
+          selectedMapping.sourceFields.length > 0 &&
+          selectedMapping.targetFields.length > 0)
+      ) {
+        return false;
+      }
+      if (
+        selectedMapping.sourceFields.length <= 1 &&
+        selectedMapping.targetFields.length <= 1
+      ) {
+        return true;
+      } else if (
+        isSource &&
+        (selectedMapping.targetFields.length <= 1 ||
+          selectedMapping.sourceFields.length === 0)
+      ) {
+        return true;
+      } else if (
+        !isSource &&
+        (selectedMapping.sourceFields.length <= 1 ||
+          selectedMapping.targetFields.length === 0)
+      ) {
+        return true;
+      }
+      return false;
+    },
+    [context],
+  );
+
+  /**
+   * Return true if it's possible to add the specified source field to the current mapping
+   * from the specified panel, false otherwise.
+   */
   const isFieldAddableToSelection = useCallback(
     (
       documentType: "source" | "target",
@@ -497,6 +539,7 @@ export function useAtlasmap() {
       dropTarget?: IAtlasmapField,
     ): boolean => {
       const { selectedMapping } = context;
+      const isSource = documentType === "source";
       if (
         !field ||
         !field.amField.isTerminal() ||
@@ -516,7 +559,7 @@ export function useAtlasmap() {
         selectedMapping.targetFields.length <= 1
       ) {
         if (
-          documentType === "source" &&
+          isSource &&
           !selectedMapping.sourceFields.find((f) => f.id === field.id)
         ) {
           return true;
@@ -529,14 +572,14 @@ export function useAtlasmap() {
           return true;
         }
       } else if (
-        documentType === "source" &&
+        isSource &&
         (selectedMapping.targetFields.length <= 1 ||
           selectedMapping.sourceFields.length === 0) &&
         !selectedMapping.sourceFields.find((f) => f.id === field.id)
       ) {
         return true;
       } else if (
-        documentType === "target" &&
+        !isSource &&
         (field.isCollection ||
           field.isInCollection ||
           (!field.isConnected &&
@@ -618,6 +661,7 @@ export function useAtlasmap() {
     deleteProperty,
     editProperty,
     trailerId,
+    canAddToSelectedMapping,
     isFieldAddableToSelection,
     isFieldRemovableFromSelection,
     searchSources,

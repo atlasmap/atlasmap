@@ -34,6 +34,7 @@ export const sourcesColumn = () => (
         onCustomClassSearch={action("onCustomClassSearch")}
         onShowMappingDetails={action("onShowMappingDetails")}
         canAddToSelectedMapping={() => true}
+        canAddFieldToSelectedMapping={() => true}
         onAddToSelectedMapping={action("onAddToSelectedMapping")}
         canRemoveFromSelectedMapping={() => true}
         onRemoveFromSelectedMapping={action("onRemoveFromSelectedMapping")}
@@ -72,6 +73,7 @@ export const targetsColumn = () => (
         canDrop={() => true}
         onShowMappingDetails={action("onShowMappingDetails")}
         canAddToSelectedMapping={() => true}
+        canAddFieldToSelectedMapping={() => true}
         onAddToSelectedMapping={action("onAddToSelectedMapping")}
         canRemoveFromSelectedMapping={() => true}
         onRemoveFromSelectedMapping={action("onRemoveFromSelectedMapping")}
