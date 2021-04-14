@@ -79,7 +79,9 @@ echo "=========================================================="
 echo "Building artifacts ...."
 echo "=========================================================="
 pushd ui
-./node_modules/.bin/lerna version --no-push --force-publish --no-git-tag-version -y -m "chore: Set UI version to ${RELEASE_VERSION}" ${RELEASE_VERSION}
+./node_modules/.bin/lerna version --no-push --force-publish --no-git-tag-version -y ${RELEASE_VERSION}
+git add .
+git commit -m "chore: Set UI version to ${RELEASE_VERSION}"
 popd
 
 "${MAVEN_CMD}" $MAVEN_PARAMETERS clean install
