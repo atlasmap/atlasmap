@@ -78,6 +78,10 @@ fi
 echo "=========================================================="
 echo "Building artifacts ...."
 echo "=========================================================="
+pushd ui
+./node_modules/.bin/lerna version --no-push --force-publish --no-git-tag-version -y -m "chore: Set UI version to ${RELEASE_VERSION}" ${RELEASE_VERSION}
+popd
+
 "${MAVEN_CMD}" $MAVEN_PARAMETERS clean install
 pushd docs
 "${MAVEN_CMD}" $MAVEN_PARAMETERS -f pom-javadoc.xml -pl \!io.atlasmap:atlasmap-lib-all javadoc:aggregate
@@ -141,7 +145,6 @@ git checkout .
 pushd ui
 CURRENT_BRANCH=$(git branch --show-current)
 git checkout tags/atlasmap-${RELEASE_VERSION} -b temp-${RELEASE_VERSION}
-./node_modules/.bin/lerna version --no-push --force-publish --amend -y ${RELEASE_VERSION}
 ./node_modules/.bin/lerna publish from-package -y
 git tag -f atlasmap-${RELEASE_VERSION}
 git push origin atlasmap-${RELEASE_VERSION}
