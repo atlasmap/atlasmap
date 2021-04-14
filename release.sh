@@ -152,7 +152,7 @@ git tag -f atlasmap-${RELEASE_VERSION}
 git push origin atlasmap-${RELEASE_VERSION}
 git checkout ${CURRENT_BRANCH}
 git branch -D temp-${RELEASE_VERSION}
-./node_modules/.bin/lerna version --no-git-tag-version -y ${DEVELOPMENT_VERSION}
+./node_modules/.bin/lerna version --force-publish --no-git-tag-version -y ${DEVELOPMENT_VERSION}
 git add .
 git commit --amend --no-edit
 popd
