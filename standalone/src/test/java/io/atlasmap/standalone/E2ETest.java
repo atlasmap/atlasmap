@@ -137,7 +137,7 @@ public class E2ETest {
         showDetailsBtn = paramDiv.findElement(By.xpath(".//button[@data-testid='show-mapping-details-button']"));
         showDetailsBtn.click();
         WebElement detailsPhotoUrl = waitForLoad.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
-            "//div[@data-testid='column-mapping-details-area']" + "//div[@data-testid='mapping-field-city']")));
+            "//div[@data-testid='column-mapping-details-area']" + "//div[@data-testid='mapping-field-photoUrl']")));
         assertNotNull(detailsPhotoUrl);
 
         atlasmapMenuBtn = driver.findElement(By.xpath("//button[@data-testid='atlasmap-menu-button']"));
