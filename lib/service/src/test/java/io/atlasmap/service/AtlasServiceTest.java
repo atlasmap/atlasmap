@@ -45,10 +45,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.Json;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Mappings;
+import io.atlasmap.v2.ProcessMappingResponse;
 import io.atlasmap.v2.StringMap;
 import io.atlasmap.v2.StringMapEntry;
 
@@ -184,6 +186,18 @@ public class AtlasServiceTest {
         in = new BufferedInputStream(new FileInputStream("src/test/resources/mappings/atlasmapping-custom-action.json"));
         Response resVD = service.validateMappingRequest(in, 0, null);
         assertEquals(200, resVD.getStatus());
+    }
+
+    @Test
+    public void testProcessMapping() throws Exception {
+        Response res = service.processMappingRequest(this.getClass().getClassLoader().getResourceAsStream("mappings/process-mapping-request.json"),
+                generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/mapping/process"));
+        ProcessMappingResponse resp = Json.mapper().readValue((byte[])res.getEntity(), ProcessMappingResponse.class);
+        FieldGroup group = (FieldGroup) resp.getMapping().getOutputField().get(0);
+        assertEquals("/addressList<>/city", group.getPath());
+        Field f = group.getField().get(0);
+        assertEquals("/addressList<0>/city", f.getPath());
+        assertEquals("testZzz", f.getValue());
     }
 
     protected UriInfo generateTestUriInfo(String baseUri, String absoluteUri) throws Exception {
