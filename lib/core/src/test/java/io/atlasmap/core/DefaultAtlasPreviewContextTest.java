@@ -9,7 +9,9 @@ import org.junit.Test;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.Audits;
+import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Concatenate;
+import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.Expression;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
@@ -325,5 +327,48 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         Audits audits = previewContext.processPreview(m);
         assertEquals(printAudit(audits), 0, audits.getAudit().size());
         assertEquals("MA", target.getValue());
+    }
+
+    @Test
+    public void testProcessPreviewRepeatCount() throws Exception {
+        Mapping m = new Mapping();
+        FieldGroup fg = new FieldGroup();
+        m.setInputFieldGroup(fg);
+        FieldGroup fgc = new FieldGroup();
+        fgc.setDocId("source");
+        fgc.setFieldType(FieldType.STRING);
+        fgc.setCollectionType(CollectionType.LIST);
+        fgc.setName("city");
+        fgc.setPath("/addressList<>/city");
+        Field source = new SimpleField();
+        source.setDocId("source");
+        source.setFieldType(FieldType.STRING);
+        source.setPath("/addressList<0>/city");
+        source.setName("city");
+        source.setValue("Bolton");
+        fgc.getField().add(source);
+        fg.getField().add(fgc);
+        Field source2 = new ConstantField();
+        source2.setDocId(DefaultAtlasContext.CONSTANTS_DOCUMENT_ID);
+        source2.setFieldType(FieldType.STRING);
+        source2.setPath("/test");
+        source2.setName("test");
+        source2.setValue("testVal");
+        fg.getField().add(source2);
+        m.setExpression(String.format(
+                "REPEAT(COUNT(${source:/addressList<>/city}), ${%s:/test})",
+                DefaultAtlasContext.CONSTANTS_DOCUMENT_ID));
+        Field target = new SimpleField();
+        target.setFieldType(FieldType.STRING);
+        target.setDocId("target");
+        target.setPath("/addressList<>/city");
+        m.getOutputField().add(target);
+        Audits audits = previewContext.processPreview(m);
+        assertEquals(printAudit(audits), 0, audits.getAudit().size());
+        FieldGroup targetGroup = (FieldGroup) m.getOutputField().get(0);
+        assertEquals("/addressList<>/city", targetGroup.getPath());
+        assertEquals(1, targetGroup.getField().size());
+        assertEquals("testVal", targetGroup.getField().get(0).getValue());
+        
     }
 }

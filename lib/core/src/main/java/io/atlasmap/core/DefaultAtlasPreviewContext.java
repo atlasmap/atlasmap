@@ -25,10 +25,12 @@ import org.slf4j.LoggerFactory;
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasPreviewContext;
+import io.atlasmap.spi.AtlasCollectionHelper;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.FieldDirection;
 import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.Field;
@@ -48,10 +50,12 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
 
     private Mapping mapping;
     private PreviewModule previewModule = new PreviewModule();
+    private AtlasCollectionHelper collectionHelper;
 
 
     DefaultAtlasPreviewContext(DefaultAtlasContextFactory factory) {
         super(factory, new AtlasMapping());
+        this.collectionHelper = new DefaultAtlasCollectionHelper(factory.getFieldActionService());
     }
 
     /**
@@ -97,11 +101,11 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
 
         Field sourceField = session.head().getSourceField();
         Field targetField;
-        
+
         if (mappingType == null || mappingType == MappingType.MAP) {
             sourceFieldGroup = sourceField instanceof FieldGroup ? (FieldGroup) sourceField : null;
-            for (Field f : targetFields) {
-                targetField = f;
+            for (int i=0; i<targetFields.size(); i++) {
+                targetField = targetFields.get(i);
                 session.head().setTargetField(targetField);
                 if (sourceFieldGroup != null) {
                     if (sourceFieldGroup.getField().size() == 0) {
@@ -120,7 +124,26 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
                                     AuditStatus.ERROR, null);
                             return session.getAudits();
                         }
-                        session.head().setSourceField(sourceFieldGroup);
+                        FieldGroup targetFieldGroup = targetField instanceof FieldGroup
+                                ? (FieldGroup)targetField
+                                : AtlasModelFactory.createFieldGroupFrom(targetField, true);
+                        targetFields.set(i, targetFieldGroup);
+                        Field previousTargetField = null;
+                        for (Field subSourceField : sourceFieldGroup.getField()) {
+                            Field subTargetField = AtlasModelFactory.cloneFieldToSimpleField(targetFieldGroup);
+                            targetFieldGroup.getField().add(subTargetField);
+                            collectionHelper.copyCollectionIndexes(sourceFieldGroup, subSourceField, subTargetField, previousTargetField);
+                            previousTargetField = subTargetField;
+                            if (!convertSourceToTarget(session, subSourceField, subTargetField)) {
+                                return session.getAudits();
+                            };
+                            Field processed = subTargetField;
+                            if (expression == null || expression.isEmpty()) {
+                                processed = applyFieldActions(session, subTargetField);
+                            }
+                            subTargetField.setValue(processed.getValue());
+                        }
+                        continue;
                     } else if (index == null) {
                         session.head().setSourceField(sourceFieldGroup.getField().get(sourceFieldGroup.getField().size()-1));
                     } else {
@@ -145,7 +168,6 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
                 if (expression == null || expression.isEmpty()) {
                     processed = applyFieldActions(session, targetField);
                 }
-                // TODO handle collection values - https://github.com/atlasmap/atlasmap/issues/531
                 targetField.setValue(processed.getValue());
             }
 
