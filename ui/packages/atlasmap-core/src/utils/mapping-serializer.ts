@@ -694,7 +694,7 @@ export class MappingSerializer {
         // Check for preview-mode collection field references.
         if (field.value?.length > 0) {
           // Establish/add to the inner instance input field group.
-          if (collectionInputFieldGroup === null) {
+          if (collectionInstanceInputFieldGroup === null) {
             collectionInstanceInputFieldGroup = MappingSerializer.createInputFieldGroup(
               mapping,
               [serializedField],
@@ -743,6 +743,9 @@ export class MappingSerializer {
               collectionParentField.serviceObject.fieldType;
             inputFieldGroup['path'] = collectionParentField.path;
             fieldsJson.push(inputFieldGroup);
+          } else {
+            fieldsJson.push(serializedField);
+            collectionInputFieldGroup = null;
           }
         }
 
