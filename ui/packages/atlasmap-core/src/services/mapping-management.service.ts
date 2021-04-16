@@ -640,7 +640,27 @@ export class MappingManagementService {
     });
   }
 
+  /**
+   * On mapping preview disable, clear any preview values and unsubscribe from
+   * both the mapping-updated and mappimng-preview subscriptions.
+   */
   disableMappingPreview(): void {
+    let previewValueCleared = false;
+
+    // Clear any preview values on mapping preview disable.
+    if (this.cfg.mappings?.activeMapping?.isFullyMapped()) {
+      for (const mapping of this.cfg.mappings!.getAllMappings(true)) {
+        for (const mappedField of mapping.getAllFields()) {
+          if (mappedField.value?.length > 0) {
+            mappedField.value = '';
+            previewValueCleared = true;
+          }
+        }
+      }
+    }
+    if (previewValueCleared) {
+      this.notifyMappingUpdated();
+    }
     if (this.mappingUpdatedSubscription) {
       this.mappingUpdatedSubscription.unsubscribe();
       this.mappingUpdatedSubscription = undefined;
