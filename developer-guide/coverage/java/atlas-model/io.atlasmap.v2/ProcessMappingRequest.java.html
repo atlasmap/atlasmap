@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonRootName(&quot;ProcessMappingRequest&quot;)
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="nc" id="L10">public class ProcessMappingRequest implements Serializable {</span>
+<span class="fc" id="L10">public class ProcessMappingRequest implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Mapping getMapping() {
-<span class="nc" id="L27">        return mapping;</span>
+<span class="fc" id="L27">        return mapping;</span>
     }
 
     /**
@@ -36,8 +36,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setMapping(Mapping value) {
-<span class="nc" id="L39">        this.mapping = value;</span>
-<span class="nc" id="L40">    }</span>
+<span class="fc" id="L39">        this.mapping = value;</span>
+<span class="fc" id="L40">    }</span>
 
     /**
      * Gets the value of the atlasMapping property.
@@ -48,7 +48,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public AtlasMapping getAtlasMapping() {
-<span class="nc" id="L51">        return atlasMapping;</span>
+<span class="fc" id="L51">        return atlasMapping;</span>
     }
 
     /**

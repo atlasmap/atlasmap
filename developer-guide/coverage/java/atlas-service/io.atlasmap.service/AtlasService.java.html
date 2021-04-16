@@ -538,33 +538,33 @@ public class AtlasService {
         @ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = ProcessMappingResponse.class)), description = &quot;Return a mapping result&quot;),
         @ApiResponse(responseCode = &quot;204&quot;, description = &quot;Skipped empty mapping execution&quot;) })
     public Response processMappingRequest(InputStream request, @Context UriInfo uriInfo) {
-<span class="nc" id="L541">        ProcessMappingRequest pmr = fromJson(request, ProcessMappingRequest.class);</span>
-<span class="nc bnc" id="L542" title="All 2 branches missed.">        if (pmr.getAtlasMapping() != null) {</span>
+<span class="fc" id="L541">        ProcessMappingRequest pmr = fromJson(request, ProcessMappingRequest.class);</span>
+<span class="pc bpc" id="L542" title="1 of 2 branches missed.">        if (pmr.getAtlasMapping() != null) {</span>
 <span class="nc" id="L543">            throw new WebApplicationException(&quot;Whole mapping execution is not yet supported&quot;);</span>
         }
-<span class="nc" id="L545">        Mapping mapping = pmr.getMapping();</span>
-<span class="nc bnc" id="L546" title="All 2 branches missed.">        if (mapping == null) {</span>
+<span class="fc" id="L545">        Mapping mapping = pmr.getMapping();</span>
+<span class="pc bpc" id="L546" title="1 of 2 branches missed.">        if (mapping == null) {</span>
 <span class="nc" id="L547">            return Response.noContent().build();</span>
         }
-<span class="nc" id="L549">        Audits audits = null;</span>
+<span class="fc" id="L549">        Audits audits = null;</span>
         try {
-<span class="nc bnc" id="L551" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="pc bpc" id="L551" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
 <span class="nc" id="L552">                LOG.debug(&quot;Preview request: {}&quot;, new String(toJson(mapping)));</span>
             }
-<span class="nc" id="L554">            audits = previewContext.processPreview(mapping);</span>
+<span class="fc" id="L554">            audits = previewContext.processPreview(mapping);</span>
 <span class="nc" id="L555">        } catch (AtlasException e) {</span>
 <span class="nc" id="L556">            throw new WebApplicationException(&quot;Unable to process mapping preview&quot;, e);</span>
-<span class="nc" id="L557">        }</span>
-<span class="nc" id="L558">        ProcessMappingResponse response = new ProcessMappingResponse();</span>
-<span class="nc" id="L559">        response.setMapping(mapping);</span>
-<span class="nc bnc" id="L560" title="All 2 branches missed.">        if (audits != null) {</span>
-<span class="nc" id="L561">            response.setAudits(audits);</span>
+<span class="fc" id="L557">        }</span>
+<span class="fc" id="L558">        ProcessMappingResponse response = new ProcessMappingResponse();</span>
+<span class="fc" id="L559">        response.setMapping(mapping);</span>
+<span class="pc bpc" id="L560" title="1 of 2 branches missed.">        if (audits != null) {</span>
+<span class="fc" id="L561">            response.setAudits(audits);</span>
         }
-<span class="nc" id="L563">        byte[] serialized = toJson(response);</span>
-<span class="nc bnc" id="L564" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L563">        byte[] serialized = toJson(response);</span>
+<span class="pc bpc" id="L564" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
 <span class="nc" id="L565">            LOG.debug(&quot;Preview outcome: {}&quot;, new String(serialized));</span>
         }
-<span class="nc" id="L567">        return Response.ok().entity(serialized).build();</span>
+<span class="fc" id="L567">        return Response.ok().entity(serialized).build();</span>
     }
 
     @GET
