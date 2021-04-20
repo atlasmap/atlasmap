@@ -110,9 +110,9 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
                 if (sourceFieldGroup != null) {
                     if (sourceFieldGroup.getField().size() == 0) {
                         AtlasUtil.addAudit(session, targetField, String.format(
-                                "The group field '%s:%s' Empty group field is detected, skipping",
+                                "Skipping empty source group field '%s:%s'",
                                 sourceField.getDocId(), sourceField.getPath()),
-                                AuditStatus.WARN, null);
+                                AuditStatus.INFO, null);
                         continue;
                     }
                     Integer index = targetField.getIndex();
