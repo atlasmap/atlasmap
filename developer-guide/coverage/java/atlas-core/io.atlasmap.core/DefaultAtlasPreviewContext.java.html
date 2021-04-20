@@ -110,9 +110,9 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
 <span class="fc bfc" id="L110" title="All 2 branches covered.">                if (sourceFieldGroup != null) {</span>
 <span class="pc bpc" id="L111" title="1 of 2 branches missed.">                    if (sourceFieldGroup.getField().size() == 0) {</span>
 <span class="nc" id="L112">                        AtlasUtil.addAudit(session, targetField, String.format(</span>
-                                &quot;The group field '%s:%s' Empty group field is detected, skipping&quot;,
+                                &quot;Skipping empty source group field '%s:%s'&quot;,
 <span class="nc" id="L114">                                sourceField.getDocId(), sourceField.getPath()),</span>
-                                AuditStatus.WARN, null);
+                                AuditStatus.INFO, null);
 <span class="nc" id="L116">                        continue;</span>
                     }
 <span class="fc" id="L118">                    Integer index = targetField.getIndex();</span>
