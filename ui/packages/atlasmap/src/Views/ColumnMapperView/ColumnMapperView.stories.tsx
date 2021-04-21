@@ -71,6 +71,7 @@ export const sourcesColumn = () => (
           acceptDropType={'target'}
           draggableType={'source'}
           onEditCSVParams={action('onEditCSVParams')}
+          onToggleExpandGroup={async () => {}}
         />
       </Column>
     </CanvasProvider>
@@ -111,6 +112,7 @@ export const targetsColumn = () => (
           acceptDropType={'source'}
           draggableType={'target'}
           onEditCSVParams={action('onEditCSVParams')}
+          onToggleExpandGroup={async () => {}}
         />
       </Column>
     </CanvasProvider>

@@ -114,12 +114,18 @@ public class E2ETest {
         // Check custom action param
         WebElement orderBtn = driver.findElement(By.xpath("//button[@id='sources-field-atlas:json:JSONSchemaSource:source:/order-toggle']"));
         orderBtn.click();
-        WebElement addrBtn = driver.findElement(By.xpath(
-            "//button[@id='sources-field-atlas:json:JSONSchemaSource:source:/order/address-toggle']"));
+        By addressToggle = By.xpath(
+                "//button[@id='sources-field-atlas:json:JSONSchemaSource:source:/order/address-toggle']");
+        waitForLoad.until(ExpectedConditions.visibilityOfElementLocated(addressToggle));
+        WebElement addrBtn = driver.findElement(addressToggle);
         addrBtn.click();
-        WebElement addrDiv = driver.findElement(By.xpath(
-            "//button[@id='sources-field-atlas:json:JSONSchemaSource:source:/order/address-toggle']/../.."));
-        WebElement cityDiv = addrDiv.findElement(By.xpath(".//button[@data-testid='grip-city-button']/../../../.."));
+        By addrDivPath = By.xpath(
+                "//button[@id='sources-field-atlas:json:JSONSchemaSource:source:/order/address-toggle']/../..");
+        waitForLoad.until(ExpectedConditions.visibilityOfElementLocated(addrDivPath));
+        WebElement addrDiv = driver.findElement(addrDivPath);
+        By cityDivPath = By.xpath(".//button[@data-testid='grip-city-button']/../../../..");
+        waitForLoad.until(ExpectedConditions.visibilityOfElementLocated(cityDivPath));
+        WebElement cityDiv = addrDiv.findElement(cityDivPath);
         Actions action = new Actions(driver);
         action.moveToElement(cityDiv).perform();
         waitForLoad.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
@@ -137,7 +143,7 @@ public class E2ETest {
         WebElement paramDiv = customClassDoc.findElement(By.xpath(".//button[@data-testid='grip-param-button']/../../../.."));
         action = new Actions(driver);
         action.moveToElement(paramDiv).perform();
-        waitForLoad.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
+        waitForLoad.until(ExpectedConditions.elementToBeClickable(By.xpath(
                 "//button[@data-testid='show-mapping-details-button']")));
         showDetailsBtn = paramDiv.findElement(By.xpath(".//button[@data-testid='show-mapping-details-button']"));
         showDetailsBtn.click();

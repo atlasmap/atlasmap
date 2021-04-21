@@ -128,6 +128,7 @@ export function javaToFieldGroup(
     isCollection: false,
     isInCollection: false,
     amField: {} as IAtlasmapField['amField'],
+    expanded: true,
   });
 
   return java.ClassInspectionResponse.javaClass.javaFields!.javaField.map((f) =>

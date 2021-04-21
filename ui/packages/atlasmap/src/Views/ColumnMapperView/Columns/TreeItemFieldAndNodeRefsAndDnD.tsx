@@ -21,7 +21,11 @@ import {
   GripVerticalIcon,
   LayerGroupIcon,
 } from '@patternfly/react-icons';
-import { AtlasmapDocumentType, IAtlasmapField } from '../../../Views';
+import {
+  AtlasmapDocumentType,
+  IAtlasmapField,
+  IAtlasmapGroup,
+} from '../../../Views';
 import { Button, Tooltip } from '@patternfly/react-core';
 import {
   DocumentField,
@@ -50,6 +54,10 @@ export interface ITreeItemFieldAndNodeRefsAndDnDProps {
   renderPreview?: (field: IAtlasmapField) => ReactNode;
   canDrop: (source: IAtlasmapField, target: IDragAndDropField) => boolean;
   onDrop: (source: IAtlasmapField, target: IDragAndDropField | null) => void;
+  onToggleExpandGroup: (
+    group: IAtlasmapGroup,
+    expand?: boolean,
+  ) => Promise<void>;
 }
 
 export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent<

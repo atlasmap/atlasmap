@@ -28,13 +28,13 @@ import {
 import React, { FunctionComponent, useState } from 'react';
 
 export interface IDocumentActions {
-  onExpandFields: () => void;
+  onExpandGroupFields: () => void;
   onCollapseFields: () => void;
   onDelete: () => void;
 }
 
 export const DocumentActions: FunctionComponent<IDocumentActions> = ({
-  onExpandFields,
+  onExpandGroupFields,
   onCollapseFields,
   onDelete,
 }) => {
@@ -46,7 +46,7 @@ export const DocumentActions: FunctionComponent<IDocumentActions> = ({
       toggle={
         <DropdownToggle
           splitButtonItems={[
-            <DropdownToggleAction key="action" onClick={onExpandFields}>
+            <DropdownToggleAction key="action" onClick={onExpandGroupFields}>
               <FolderOpenIcon />
             </DropdownToggleAction>,
           ]}

@@ -16,11 +16,16 @@
 package io.atlasmap.json.v2;
 
 import java.io.Serializable;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import io.atlasmap.v2.ComplexType;
+import io.atlasmap.v2.Field;
+
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
-public class JsonComplexType extends JsonField implements Serializable {
+public class JsonComplexType extends JsonField implements Serializable, ComplexType {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,11 +36,11 @@ public class JsonComplexType extends JsonField implements Serializable {
 
     /**
      * Gets the value of the jsonFields property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link JsonFields }
-     *     
+     *
      */
     public JsonFields getJsonFields() {
         return jsonFields;
@@ -43,11 +48,11 @@ public class JsonComplexType extends JsonField implements Serializable {
 
     /**
      * Sets the value of the jsonFields property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link JsonFields }
-     *     
+     *
      */
     public void setJsonFields(JsonFields value) {
         this.jsonFields = value;
@@ -55,11 +60,11 @@ public class JsonComplexType extends JsonField implements Serializable {
 
     /**
      * Gets the value of the jsonEnumFields property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link JsonEnumFields }
-     *     
+     *
      */
     public JsonEnumFields getJsonEnumFields() {
         return jsonEnumFields;
@@ -67,11 +72,11 @@ public class JsonComplexType extends JsonField implements Serializable {
 
     /**
      * Sets the value of the jsonEnumFields property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link JsonEnumFields }
-     *     
+     *
      */
     public void setJsonEnumFields(JsonEnumFields value) {
         this.jsonEnumFields = value;
@@ -79,11 +84,11 @@ public class JsonComplexType extends JsonField implements Serializable {
 
     /**
      * Gets the value of the enumeration property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Boolean }
-     *     
+     *
      */
     public Boolean isEnumeration() {
         return enumeration;
@@ -91,11 +96,11 @@ public class JsonComplexType extends JsonField implements Serializable {
 
     /**
      * Sets the value of the enumeration property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Boolean }
-     *     
+     *
      */
     public void setEnumeration(Boolean value) {
         this.enumeration = value;
@@ -103,11 +108,11 @@ public class JsonComplexType extends JsonField implements Serializable {
 
     /**
      * Gets the value of the uri property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getUri() {
         return uri;
@@ -115,14 +120,20 @@ public class JsonComplexType extends JsonField implements Serializable {
 
     /**
      * Sets the value of the uri property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setUri(String value) {
         this.uri = value;
+    }
+
+    @JsonIgnore
+    @Override
+    public List<? extends Field> getChildFields() {
+        return jsonFields.getJsonField();
     }
 
     public boolean equals(Object object) {

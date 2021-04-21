@@ -106,7 +106,7 @@ export class MappingManagementService {
             return;
           }
           this.cfg.mappings = mappingDefinition;
-          MappingSerializer.deserializeMappingServiceJSON(
+          await MappingSerializer.deserializeMappingServiceJSON(
             mappingJson,
             this.cfg
           );

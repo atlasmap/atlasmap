@@ -78,7 +78,7 @@ export function fromFieldToIFieldsGroup(field: Field): IAtlasmapGroup | null {
   const fields = field.children
     .map(fromFieldToIFields)
     .filter((f) => f) as IAtlasmapField[];
-  return fields.length > 0 && field.visibleInCurrentDocumentSearch
+  return field.visibleInCurrentDocumentSearch
     ? {
         id: `${field.docDef.uri || field.docDef.type + '-' + field.scope}:${
           field.docDef.isSource ? 'source' : 'target'
@@ -88,6 +88,7 @@ export function fromFieldToIFieldsGroup(field: Field): IAtlasmapGroup | null {
         isCollection: field.isCollection,
         isInCollection: field.isInCollection(),
         fields: fields,
+        expanded: !field.collapsed,
         amField: field,
       }
     : null;
@@ -129,7 +130,7 @@ export function fromFieldToIFieldsNode(field: Field): IAtlasmapField | null {
 }
 
 export function fromFieldToIFields(field: Field) {
-  return field.children.length > 0
+  return field.type === 'COMPLEX' && !field.enumeration
     ? fromFieldToIFieldsGroup(field)
     : fromFieldToIFieldsNode(field);
 }
@@ -146,7 +147,7 @@ export function fromNamespaceModelToINamespace(namespace: NamespaceModel) {
 export function fromDocumentDefinitionToFieldGroup(
   def: DocumentDefinition,
 ): IAtlasmapDocument | null {
-  if (!def || !def.fields || def.fields.length === 0) {
+  if (!def || !def.fields) {
     return null;
   }
   const fields = def.fields
@@ -155,7 +156,7 @@ export function fromDocumentDefinitionToFieldGroup(
   const namespaces = def.namespaces
     .map(fromNamespaceModelToINamespace)
     .filter((n) => n) as IAtlasmapNamespace[];
-  return def.visibleInCurrentDocumentSearch && fields.length > 0
+  return def.visibleInCurrentDocumentSearch
     ? {
         id: def.id,
         fields,

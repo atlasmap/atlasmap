@@ -17,6 +17,7 @@ import {
   AtlasmapDocumentType,
   IAtlasmapDocument,
   IAtlasmapField,
+  IAtlasmapGroup,
   IAtlasmapMapping,
 } from '../../models';
 import { Button, Tooltip } from '@patternfly/react-core';
@@ -52,6 +53,10 @@ export interface IPropertiesTreeCallbacks {
   onDeleteProperty: (name: string, scope: string, isSource: boolean) => void;
   canStartMapping: (field: IAtlasmapField) => boolean;
   onStartMapping: (field: IAtlasmapField) => void;
+  onToggleExpandGroup: (
+    group: IAtlasmapGroup,
+    expand?: boolean,
+  ) => Promise<void>;
 }
 
 export interface IPropertiesTreeProps extends IPropertiesTreeCallbacks {
@@ -78,6 +83,7 @@ export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
   canStartMapping,
   onStartMapping,
   renderPreview,
+  onToggleExpandGroup,
 }) => (
   <Tree>
     <TraverseFields
@@ -95,6 +101,7 @@ export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
       draggableType={draggableType}
       onDrop={onDrop}
       canDrop={canDrop}
+      onToggleExpandGroup={onToggleExpandGroup}
       renderActions={(field) => [
         ...commonActions({
           connectedMappings: field.mappings,

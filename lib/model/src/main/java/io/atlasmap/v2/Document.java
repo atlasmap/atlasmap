@@ -49,5 +49,4 @@ public class Document extends Field {
     public void setFields(Fields value) {
         this.fields = value;
     }
-
 }

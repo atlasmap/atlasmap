@@ -25,7 +25,6 @@ import React, {
   ReactNode,
   forwardRef,
   useCallback,
-  useEffect,
   useRef,
   useState,
 } from 'react';
@@ -39,8 +38,13 @@ export interface ITreeGroupProps {
   level: number;
   setSize: number;
   position: number;
-  expanded?: boolean;
-  renderLabel: (props: { expanded: boolean; focused: boolean }) => ReactNode;
+  expanded: boolean;
+  onToggleExpand: (expand?: boolean) => Promise<void>;
+  renderLabel: (props: {
+    expanded: boolean;
+    focused: boolean;
+    isLoading: boolean;
+  }) => ReactNode;
   children: (props: { expanded: boolean; focused: boolean }) => ReactNode;
 }
 
@@ -48,14 +52,30 @@ export const TreeGroup = forwardRef<
   HTMLDivElement,
   PropsWithChildren<ITreeGroupProps>
 >(function TreeGroup(
-  { id, expanded, level, setSize, position, renderLabel, children },
+  {
+    id,
+    expanded,
+    level,
+    setSize,
+    position,
+    onToggleExpand,
+    renderLabel,
+    children,
+  },
   ref,
 ) {
   const divRef = useRef<HTMLDivElement | null>(null);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const toggleExpand = useCallback(() => {
-    setIsExpanded(!isExpanded);
-  }, [isExpanded]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const toggleExpand = useCallback(
+    (expand?: boolean) => {
+      setIsLoading(true);
+      onToggleExpand(expand).then(() => {
+        setIsLoading(false);
+      });
+    },
+    [onToggleExpand],
+  );
   const toggleExpandNoPropagation = useCallback(
     (event: MouseEvent) => {
       event.stopPropagation();
@@ -64,19 +84,13 @@ export const TreeGroup = forwardRef<
     [toggleExpand],
   );
 
-  const expand = useCallback(() => setIsExpanded(true), []);
-  const collapse = useCallback(() => setIsExpanded(false), []);
-
-  useEffect(() => {
-    if (expanded !== undefined) {
-      setIsExpanded(expanded);
-    }
-  }, [expanded]);
+  const expand = useCallback(() => toggleExpand(true), [toggleExpand]);
+  const collapse = useCallback(() => toggleExpand(false), [toggleExpand]);
 
   const { focused, handlers: focusHandlers } = useTreeFocus({
     ref: divRef,
     isExpandable: true,
-    isExpanded,
+    isExpanded: expanded,
     collapseTreeitem: collapse,
     expandTreeitem: expand,
   });
@@ -106,7 +120,7 @@ export const TreeGroup = forwardRef<
       aria-level={level}
       aria-setsize={setSize}
       aria-posinset={position}
-      aria-expanded={isExpanded}
+      aria-expanded={expanded}
       {...focusHandlers}
       onClick={(event) => {
         focusHandlers.onClick(event);
@@ -117,7 +131,7 @@ export const TreeGroup = forwardRef<
     >
       <AccordionItem>
         <AccordionToggle
-          isExpanded={isExpanded}
+          isExpanded={expanded}
           id={`${id}-toggle`}
           data-testid={`${id}-toggle`}
           className={styles.button}
@@ -125,14 +139,18 @@ export const TreeGroup = forwardRef<
           component={Component}
           onClick={toggleExpandNoPropagation}
         >
-          {renderLabel({ expanded: isExpanded, focused: focused || false })}
+          {renderLabel({
+            expanded: expanded,
+            focused: focused || false,
+            isLoading: isLoading,
+          })}
         </AccordionToggle>
         <AccordionContent
-          isHidden={!isExpanded}
-          className={css(styles.content, !isExpanded && styles.hiddenContent)}
+          isHidden={!expanded}
+          className={css(styles.content, !expanded && styles.hiddenContent)}
           role="group"
         >
-          {children({ expanded: isExpanded, focused: focused || false })}
+          {children({ expanded: expanded, focused: focused || false })}
         </AccordionContent>
       </AccordionItem>
     </div>

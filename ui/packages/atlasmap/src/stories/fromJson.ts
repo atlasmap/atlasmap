@@ -103,6 +103,7 @@ export function jsonToFieldGroup(
     isCollection: false,
     isInCollection: false,
     amField: {} as IAtlasmapField['amField'],
+    expanded: true,
   });
 
   return json.JsonInspectionResponse.jsonDocument.fields.field.map(fromGroup);

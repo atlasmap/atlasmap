@@ -18,6 +18,7 @@ import {
   GroupId,
   IAtlasmapDocument,
   IAtlasmapField,
+  IAtlasmapGroup,
   IAtlasmapMapping,
 } from '../../models';
 import { Button, Tooltip } from '@patternfly/react-core';
@@ -83,6 +84,10 @@ export interface ISourceColumnCallbacks
   onFieldPreviewChange: (field: IAtlasmapField, value: string) => void;
   canAddToSelectedMapping: (isSource: boolean) => boolean;
   onEditCSVParams: (id: string, isSource: boolean) => void;
+  onToggleExpandGroup: (
+    group: IAtlasmapGroup,
+    expand?: boolean,
+  ) => Promise<void>;
 }
 
 export interface ISourcesColumnData {
@@ -126,6 +131,7 @@ export const SourcesColumn: FunctionComponent<
   constants,
   sources,
   showTypes,
+  onToggleExpandGroup,
 }) => {
   const renderPreview = useCallback(
     (field: IAtlasmapField) =>
@@ -219,6 +225,7 @@ export const SourcesColumn: FunctionComponent<
                       fields={sourceProperties.fields}
                       showTypes={showTypes}
                       renderPreview={renderPreview}
+                      onToggleExpandGroup={onToggleExpandGroup}
                     />
                   ) : (
                     'No source properties'
@@ -273,6 +280,7 @@ export const SourcesColumn: FunctionComponent<
                       onStartMapping={onStartMapping}
                       fields={constants.fields}
                       renderPreview={renderPreview}
+                      onToggleExpandGroup={onToggleExpandGroup}
                     />
                   ) : (
                     <p>No constants</p>
@@ -363,6 +371,7 @@ export const SourcesColumn: FunctionComponent<
                           draggableType={draggableType}
                           onDrop={onDrop}
                           canDrop={canDrop}
+                          onToggleExpandGroup={onToggleExpandGroup}
                           renderActions={(field) =>
                             commonActions({
                               connectedMappings: field.mappings,

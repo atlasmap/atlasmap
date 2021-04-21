@@ -20,7 +20,7 @@ import React, {
   forwardRef,
   useRef,
 } from 'react';
-import { Tooltip } from '@patternfly/react-core';
+import { Spinner, Tooltip } from '@patternfly/react-core';
 import styles from './DocumentGroup.module.css';
 
 export interface IDocumentGroupProps {
@@ -30,13 +30,14 @@ export interface IDocumentGroupProps {
   type?: string;
   showType?: boolean;
   expanded?: boolean;
+  isLoading?: boolean;
 }
 
 export const DocumentGroup = forwardRef<
   HTMLSpanElement,
   PropsWithChildren<IDocumentGroupProps>
 >(function DocumentGroup(
-  { name, type, icon, iconTooltip, showType = false, expanded },
+  { name, type, icon, iconTooltip, showType = false, expanded, isLoading },
   ref,
 ) {
   const spanRef = useRef<HTMLSpanElement | null>(null);
@@ -60,7 +61,13 @@ export const DocumentGroup = forwardRef<
       data-testid={`field-group-${name}-expanded-${expanded}-field`}
     >
       <span className={styles.buttonIcon}>
-        {expanded ? <FolderOpenIcon /> : <FolderCloseIcon />}
+        {isLoading ? (
+          <Spinner isSVG size="md" />
+        ) : expanded ? (
+          <FolderOpenIcon />
+        ) : (
+          <FolderCloseIcon />
+        )}
       </span>
       {name}
       {showType && ` (${type})`}

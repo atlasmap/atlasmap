@@ -18,6 +18,7 @@ import {
   GroupId,
   IAtlasmapDocument,
   IAtlasmapField,
+  IAtlasmapGroup,
   IAtlasmapMapping,
 } from '../../models';
 import { Button, Tooltip } from '@patternfly/react-core';
@@ -78,6 +79,10 @@ export interface ITargetsColumnCallbacks extends IPropertiesTreeCallbacks {
   onFieldPreviewChange: (field: IAtlasmapField, value: string) => void;
   canAddToSelectedMapping: (isSource: boolean) => boolean;
   onEditCSVParams: (id: string, isSource: boolean) => void;
+  onToggleExpandGroup: (
+    group: IAtlasmapGroup,
+    expand?: boolean,
+  ) => Promise<void>;
 }
 
 export interface ITargetsColumnData {
@@ -116,6 +121,7 @@ export const TargetsColumn: FunctionComponent<
   targets,
   showTypes,
   targetProperties,
+  onToggleExpandGroup,
 }) => {
   const renderPreviewResult = useCallback(
     (field: IAtlasmapField) =>
@@ -204,6 +210,7 @@ export const TargetsColumn: FunctionComponent<
                       fields={targetProperties.fields}
                       showTypes={showTypes}
                       renderPreview={renderPreviewResult}
+                      onToggleExpandGroup={onToggleExpandGroup}
                     />
                   ) : (
                     'No target properties'
@@ -294,6 +301,7 @@ export const TargetsColumn: FunctionComponent<
                           draggableType={draggableType}
                           onDrop={onDrop}
                           canDrop={canDrop}
+                          onToggleExpandGroup={onToggleExpandGroup}
                           renderActions={(field) =>
                             commonActions({
                               connectedMappings: field.mappings,

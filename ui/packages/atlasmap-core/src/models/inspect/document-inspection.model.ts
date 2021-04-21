@@ -59,6 +59,13 @@ export abstract class DocumentInspectionModel {
       return null;
     }
 
+    if (field.path) {
+      const existingField = this.doc.getField(field.path);
+      if (existingField) {
+        return existingField;
+      }
+    }
+
     const parsedField: Field = new Field();
     parsedField.name = field.name!;
     parsedField.type = field.fieldType!;
@@ -95,4 +102,5 @@ export abstract class DocumentInspectionRequestOptions implements Options {
   json: any;
   headers: { [key: string]: string } = { 'Content-Type': 'application/json' };
   searchParams: { [key: string]: string } = {};
+  inspectPaths: string[] = this.doc.inspectionPaths;
 }

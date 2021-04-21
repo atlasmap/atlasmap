@@ -98,7 +98,7 @@ export class MappingPreviewService {
           this.cfg.logger!.debug(
             `Process Mapping Preview Response: ${JSON.stringify(body)}`
           );
-          this.processPreviewResponse(inputFieldMapping, body);
+          this.processPreviewResponse(inputFieldMapping, body).then();
         })
         .catch((error: any) => {
           if (
@@ -139,11 +139,11 @@ export class MappingPreviewService {
     };
   }
 
-  private processPreviewResponse(
+  private async processPreviewResponse(
     inputFieldMapping: MappingModel,
     body: IProcessMappingResponseContainer
   ) {
-    const answer = MappingSerializer.deserializeFieldMapping(
+    const answer = await MappingSerializer.deserializeFieldMapping(
       body.ProcessMappingResponse.mapping,
       this.cfg
     );

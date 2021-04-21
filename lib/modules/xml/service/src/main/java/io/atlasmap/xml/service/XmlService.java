@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.v2.Json;
 import io.atlasmap.xml.inspect.XmlInspectionService;
 import io.atlasmap.xml.v2.XmlDocument;
@@ -119,7 +120,10 @@ public class XmlService {
             response.setExecutionTime(System.currentTimeMillis() - startTime);
         }
 
+        AtlasUtil.excludeNotRequestedFields(d, request.getInspectPaths());
+
         response.setXmlDocument(d);
         return Response.ok().entity(toJson(response)).build();
     }
 }
+

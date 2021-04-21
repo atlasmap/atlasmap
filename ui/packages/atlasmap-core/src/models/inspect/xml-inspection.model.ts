@@ -164,6 +164,7 @@ export class XmlInspectionRequestOptions extends DocumentInspectionRequestOption
       jsonType: XML_INSPECTION_REQUEST_JSON_TYPE,
       type: this.doc.inspectionType,
       xmlData: this.doc.inspectionSource,
+      inspectPaths: this.doc.inspectionPaths,
     },
   };
 }

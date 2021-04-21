@@ -20,11 +20,12 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import io.atlasmap.v2.BaseInspectionRequest;
 import io.atlasmap.v2.StringList;
 
 @JsonRootName("JsonInspectionRequest")
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
-public class JsonInspectionRequest implements Serializable {
+public class JsonInspectionRequest extends BaseInspectionRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -42,11 +43,11 @@ public class JsonInspectionRequest implements Serializable {
 
     /**
      * Gets the value of the fieldNameExclusions property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link StringList }
-     *     
+     *
      */
     public StringList getFieldNameExclusions() {
         return fieldNameExclusions;
@@ -54,11 +55,11 @@ public class JsonInspectionRequest implements Serializable {
 
     /**
      * Sets the value of the fieldNameExclusions property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link StringList }
-     *     
+     *
      */
     public void setFieldNameExclusions(StringList value) {
         this.fieldNameExclusions = value;
@@ -66,11 +67,11 @@ public class JsonInspectionRequest implements Serializable {
 
     /**
      * Gets the value of the typeNameExclusions property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link StringList }
-     *     
+     *
      */
     public StringList getTypeNameExclusions() {
         return typeNameExclusions;
@@ -78,11 +79,11 @@ public class JsonInspectionRequest implements Serializable {
 
     /**
      * Sets the value of the typeNameExclusions property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link StringList }
-     *     
+     *
      */
     public void setTypeNameExclusions(StringList value) {
         this.typeNameExclusions = value;
@@ -90,11 +91,11 @@ public class JsonInspectionRequest implements Serializable {
 
     /**
      * Gets the value of the namespaceExclusions property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link StringList }
-     *     
+     *
      */
     public StringList getNamespaceExclusions() {
         return namespaceExclusions;
@@ -102,11 +103,11 @@ public class JsonInspectionRequest implements Serializable {
 
     /**
      * Sets the value of the namespaceExclusions property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link StringList }
-     *     
+     *
      */
     public void setNamespaceExclusions(StringList value) {
         this.namespaceExclusions = value;
@@ -114,11 +115,11 @@ public class JsonInspectionRequest implements Serializable {
 
     /**
      * Gets the value of the jsonData property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getJsonData() {
         return jsonData;
@@ -126,11 +127,11 @@ public class JsonInspectionRequest implements Serializable {
 
     /**
      * Sets the value of the jsonData property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setJsonData(String value) {
         this.jsonData = value;
@@ -138,11 +139,11 @@ public class JsonInspectionRequest implements Serializable {
 
     /**
      * Gets the value of the uri property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getUri() {
         return uri;
@@ -150,11 +151,11 @@ public class JsonInspectionRequest implements Serializable {
 
     /**
      * Sets the value of the uri property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setUri(String value) {
         this.uri = value;
@@ -162,11 +163,11 @@ public class JsonInspectionRequest implements Serializable {
 
     /**
      * Gets the value of the type property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link InspectionType }
-     *     
+     *
      */
     public InspectionType getType() {
         return type;
@@ -174,11 +175,11 @@ public class JsonInspectionRequest implements Serializable {
 
     /**
      * Sets the value of the type property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link InspectionType }
-     *     
+     *
      */
     public void setType(InspectionType value) {
         this.type = value;

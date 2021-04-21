@@ -470,6 +470,12 @@ endif::internal-generation[]
 |===
 | Field Name| Required| Type| Description| Format
 
+| inspectPaths
+| 
+| List  of <<string>>
+| 
+|  
+
 | fieldNameExclusions
 | 
 | StringList 

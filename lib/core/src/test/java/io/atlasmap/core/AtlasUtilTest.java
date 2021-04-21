@@ -26,12 +26,18 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+import io.atlasmap.v2.ComplexType;
+import io.atlasmap.v2.Document;
+import io.atlasmap.v2.Field;
+import io.atlasmap.v2.Fields;
 import org.junit.jupiter.api.Test;
 
 import io.atlasmap.v2.ValidationStatus;
@@ -275,5 +281,174 @@ public class AtlasUtilTest {
         assertNotNull(AtlasUtil.toAuditStatus(ValidationStatus.INFO));
         assertNotNull(AtlasUtil.toAuditStatus(ValidationStatus.ALL));
         assertNotNull(AtlasUtil.toAuditStatus(ValidationStatus.NONE));
+    }
+
+    @Test
+    public void testExcludeNotRequestedFieldsShouldIncludeAllIfIncludePathsNull() {
+        Document document = new Document();
+        Fields fields = new Fields();
+        fields.getField().add(newField("/A",
+            newField("/A/A",
+                newField("/A/A/A"),
+                newField("/A/A/B")),
+            newField("/A/B",
+                newField("/A/B/A",
+                    newField("/A/B/A/A")))
+        ));
+        document.setFields(fields);
+
+        AtlasUtil.excludeNotRequestedFields(document, null);
+
+        assertEquals("/A{/A/A{/A/A/A{}, /A/A/B{}, }, /A/B{/A/B/A{/A/B/A/A{}, }, }, }, ", fields.getField().get(0).toString());
+    }
+
+    @Test
+    public void testExcludeNotRequestedFieldsShouldIncludeAllIfIncludePathsEmpty() {
+        Document document = new Document();
+        Fields fields = new Fields();
+        fields.getField().add(newField("/A",
+            newField("/A/A",
+                newField("/A/A/A"),
+                newField("/A/A/B")),
+            newField("/A/B",
+                newField("/A/B/A",
+                    newField("/A/B/A/A")))
+        ));
+        document.setFields(fields);
+
+        AtlasUtil.excludeNotRequestedFields(document, Collections.emptyList());
+
+        assertEquals("/A{/A/A{/A/A/A{}, /A/A/B{}, }, /A/B{/A/B/A{/A/B/A/A{}, }, }, }, ", fields.getField().get(0).toString());
+    }
+
+    @Test
+    public void testExcludeNotRequestedFieldsShouldIncludeRootLevel() {
+        Document document = new Document();
+        Fields fields = new Fields();
+        fields.getField().add(newField("/A",
+            newField("/A/A",
+                newField("/A/A/A"),
+                newField("/A/A/B")),
+            newField("/A/B",
+                newField("/A/B/A",
+                    newField("/A/B/A/A")))
+        ));
+        document.setFields(fields);
+
+        AtlasUtil.excludeNotRequestedFields(document, Arrays.asList("/"));
+
+        assertEquals("/A{}, ", fields.getField().get(0).toString());
+    }
+
+    @Test
+    public void testExcludeNotRequestedFieldsShouldIncludeOneLevel() {
+        Document document = new Document();
+        Fields fields = new Fields();
+        fields.getField().add(newField("/A",
+            newField("/A/A",
+                newField("/A/A/A"),
+                newField("/A/A/B")),
+            newField("/A/B",
+                newField("/A/B/A",
+                    newField("/A/B/A/A")))
+        ));
+        document.setFields(fields);
+
+        AtlasUtil.excludeNotRequestedFields(document, Arrays.asList("/A/"));
+
+        assertEquals("/A{/A/A{}, /A/B{}, }, ", fields.getField().get(0).toString());
+    }
+
+    @Test
+    public void testExcludeNotRequestedFieldsShouldIncludeTwoLevels() {
+        Document document = new Document();
+        Fields fields = new Fields();
+        fields.getField().add(newField("/A",
+            newField("/A/A",
+                newField("/A/A/A"),
+                newField("/A/A/B")),
+            newField("/A/B",
+                newField("/A/B/A",
+                    newField("/A/B/A/A")))
+        ));
+        document.setFields(fields);
+
+        AtlasUtil.excludeNotRequestedFields(document, Arrays.asList("/A/B"));
+
+        assertEquals("/A{/A/A{}, /A/B{/A/B/A{}, }, }, ", fields.getField().get(0).toString());
+    }
+
+    @Test
+    public void testExcludeNotRequestedFieldsShouldIncludeTwoDifferentLevels() {
+        Document document = new Document();
+        Fields fields = new Fields();
+        fields.getField().add(newField("/A",
+            newField("/A/A",
+                newField("/A/A/A"),
+                newField("/A/A/B")),
+            newField("/A/B",
+                newField("/A/B/A",
+                    newField("/A/B/A/A")))
+        ));
+        document.setFields(fields);
+
+        AtlasUtil.excludeNotRequestedFields(document, Arrays.asList("/A/A","/A/B"));
+
+        assertEquals("/A{/A/A{/A/A/A{}, /A/A/B{}, }, /A/B{/A/B/A{}, }, }, ", fields.getField().get(0).toString());
+    }
+
+    @Test
+    public void testExcludeNotRequestedFieldsShouldIncludeAllIntermediateLevels() {
+        Document document = new Document();
+        Fields fields = new Fields();
+        fields.getField().add(newField("/A",
+            newField("/A/A",
+                newField("/A/A/A"),
+                newField("/A/A/B")),
+            newField("/A/B",
+                newField("/A/B/A",
+                    newField("/A/B/A/A")))
+        ));
+        document.setFields(fields);
+
+        AtlasUtil.excludeNotRequestedFields(document, Arrays.asList("/A/A/B"));
+
+        assertEquals("/A{/A/A{/A/A/A{}, /A/A/B{}, }, /A/B{}, }, ", fields.getField().get(0).toString());
+    }
+
+    private static class ComplexField extends Field implements ComplexType {
+
+        @Override
+        public List<? extends Field> getChildFields() {
+            return null;
+        }
+    }
+
+    private Field newField(String fieldPath, Field... children) {
+        List<Field> childFields = new ArrayList<>();
+        childFields.addAll(Arrays.asList(children));
+        return new ComplexField() {
+
+            @Override
+            public String getPath() {
+                return fieldPath;
+            }
+
+            @Override
+            public List<? extends Field> getChildFields() {
+                return childFields;
+            }
+
+            @Override
+            public String toString() {
+                StringBuilder text = new StringBuilder();
+                text.append(getPath()).append("{");
+                for (Field field: getChildFields()) {
+                    text.append(field.toString());
+                }
+                text.append("}, ");
+                return text.toString();
+            }
+        };
     }
 }
