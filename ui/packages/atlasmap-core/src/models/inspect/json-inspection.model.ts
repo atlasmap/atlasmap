@@ -139,6 +139,7 @@ export class JsonInspectionRequestOptions extends DocumentInspectionRequestOptio
       jsonType: JSON_INSPECTION_REQUEST_JSON_TYPE,
       type: this.doc.inspectionType,
       jsonData: this.doc.inspectionSource,
+      inspectPaths: this.doc.inspectionPaths,
     },
   };
 }

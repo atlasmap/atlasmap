@@ -16,11 +16,16 @@
 package io.atlasmap.csv.v2;
 
 import java.io.Serializable;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import io.atlasmap.v2.ComplexType;
+import io.atlasmap.v2.Field;
+
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
-public class CsvComplexType extends CsvField implements Serializable {
+public class CsvComplexType extends CsvField implements Serializable, ComplexType {
 
     private static final long serialVersionUID = 1L;
 
@@ -74,6 +79,12 @@ public class CsvComplexType extends CsvField implements Serializable {
      */
     public void setUri(String value) {
         this.uri = value;
+    }
+
+    @JsonIgnore
+    @Override
+    public List<? extends Field> getChildFields() {
+        return csvFields.getCsvField();
     }
 
     public boolean equals(Object object) {

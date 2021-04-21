@@ -441,5 +441,4 @@ public class XmlField extends Field implements Serializable {
         }
         return currentHashCode;
     }
-
 }

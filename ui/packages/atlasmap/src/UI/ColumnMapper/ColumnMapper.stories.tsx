@@ -84,6 +84,7 @@ export const example = () => (
                               position={1}
                               setSize={1}
                               expanded={true}
+                              onToggleExpand={async () => {}}
                               renderLabel={({ expanded }) => (
                                 <DocumentGroup
                                   name={'Group name'}
@@ -106,6 +107,7 @@ export const example = () => (
                                       position={1}
                                       setSize={2}
                                       expanded={true}
+                                      onToggleExpand={async () => {}}
                                       renderLabel={({ expanded }) => (
                                         <DocumentGroup
                                           name={'Nested group'}
@@ -223,6 +225,7 @@ export const example = () => (
                                 level={1}
                                 position={1}
                                 setSize={3}
+                                onToggleExpand={async () => {}}
                                 renderLabel={({ expanded }) => (
                                   <DocumentGroup
                                     name={'Group foo'}

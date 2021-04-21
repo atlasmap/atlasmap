@@ -38,6 +38,7 @@ export interface ITreeGroupAndNodeRefsAndDnDProps {
   level?: number;
   position?: number;
   setSize?: number;
+  onToggleExpand: (expand?: boolean) => Promise<void>;
   children: ITreeGroupProps['children'];
 }
 
@@ -55,6 +56,7 @@ export const TreeGroupAndNodeRefsAndDnD: FunctionComponent<
   level = 1,
   position = 1,
   setSize = 1,
+  onToggleExpand,
   children,
 }) => (
   <FieldDropTarget
@@ -81,8 +83,9 @@ export const TreeGroupAndNodeRefsAndDnD: FunctionComponent<
               level={level}
               position={position}
               setSize={setSize}
-              expanded={isOver === true ? true : undefined}
-              renderLabel={({ expanded }) => (
+              expanded={isOver || group.expanded ? true : false}
+              onToggleExpand={onToggleExpand}
+              renderLabel={({ expanded, isLoading }) => (
                 <DocumentGroup
                   name={group.name}
                   type={group.type}
@@ -94,6 +97,7 @@ export const TreeGroupAndNodeRefsAndDnD: FunctionComponent<
                       : undefined
                   }
                   expanded={isOver || expanded}
+                  isLoading={isLoading}
                 />
               )}
             >

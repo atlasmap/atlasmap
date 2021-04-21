@@ -18,12 +18,14 @@ import {
   CommonUtil,
   ConfigModel,
   DocumentDefinition,
+  DocumentInspectionUtil,
   ErrorInfo,
   ErrorLevel,
   ErrorScope,
   ErrorType,
   NamespaceModel,
 } from '@atlasmap/core';
+import { IAtlasmapGroup } from '../../Views';
 
 /**
  * Modify the document name of the document specified by the document ID.
@@ -100,6 +102,27 @@ export function deleteNamespace(docName: string, alias: string) {
     (namespace: { alias: string }) => namespace.alias !== alias,
   );
   cfg.mappingService.notifyMappingUpdated();
+}
+
+export async function toggleExpandGroup(
+  group: IAtlasmapGroup,
+  expand?: boolean,
+) {
+  return new Promise<void>(async (resolve) => {
+    const cfg = ConfigModel.getConfig();
+    if (expand !== undefined) {
+      group.amField.collapsed = !expand;
+    } else {
+      group.amField.collapsed = !group.amField.collapsed;
+    }
+    const documentInspectionModel =
+      DocumentInspectionUtil.fromDocumentDefinition(cfg, group.amField.docDef);
+    cfg.documentService
+      .inspectDocument(documentInspectionModel, [group.amField.path + '/'])
+      .then(() => {
+        resolve();
+      });
+  });
 }
 
 /**

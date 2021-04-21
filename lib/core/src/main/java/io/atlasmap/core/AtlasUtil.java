@@ -27,9 +27,12 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.file.Path;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -45,6 +48,8 @@ import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.ComplexType;
+import io.atlasmap.v2.Document;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationStatus;
@@ -286,7 +291,7 @@ public class AtlasUtil {
         session.getAudits().getAudit().add(
                 createAudit(status, docId, docName, null, value, message));
     }
-    
+
     public static Audit createAudit(AuditStatus status, String docId, String docName,
             String path, String value, String message) {
         Audit audit = new Audit();
@@ -499,7 +504,7 @@ public class AtlasUtil {
 
     /**
      * Delete all contents in the specified directory.
-     * 
+     *
      * @see #deleteDirectory
      * @param targetDir
      */
@@ -547,4 +552,62 @@ public class AtlasUtil {
         }
     }
 
+    /**
+     * Exclude fields which are not on requested paths.
+     *
+     * If includePaths is null or empty it does nothing and all fields are included.
+     *
+     * @param document
+     * @param includePaths
+     */
+    public static void excludeNotRequestedFields(Document document, List<String> includePaths) {
+        if (includePaths == null || includePaths.isEmpty()) {
+            return;
+        }
+
+        List<Field> fields = document.getFields().getField();
+        List<String> paths = new ArrayList<>();
+        for (String includePath: includePaths) {
+            if (!includePath.endsWith("/")) {
+                includePath += "/";
+            }
+            paths.add(includePath);
+        }
+        includePaths = paths;
+
+        Deque<List<? extends Field>> stack = new ArrayDeque<>();
+        stack.push(fields);
+        while(!stack.isEmpty()) {
+            List<? extends Field> fieldsToCheck = stack.pop();
+            for (Iterator<? extends Field> it = fieldsToCheck.iterator(); it.hasNext(); ) {
+                Field field = it.next();
+                String path = field.getPath();
+                boolean includeField = path.lastIndexOf("/") == 0; //always include root level
+                if (!includeField) {
+                    for (String includePath : includePaths) {
+                        int lastSeparator = path.lastIndexOf("/");
+                        String parentPath = path.substring(0, lastSeparator);
+                        parentPath += "/";
+                        if (includePath.startsWith(parentPath)) {
+                            includeField = true;
+                            break;
+                        }
+                    }
+
+                }
+                if (includeField) {
+                    if (field instanceof ComplexType) {
+                        ComplexType complexTypeField = (ComplexType) field;
+                        if (complexTypeField.getChildFields() != null) {
+                            List<? extends Field> subfields = complexTypeField.getChildFields();
+                            stack.push(subfields); //analyze subfields
+                        }
+                    }
+                } else {
+                    it.remove();
+                }
+
+            }
+        }
+    }
 }

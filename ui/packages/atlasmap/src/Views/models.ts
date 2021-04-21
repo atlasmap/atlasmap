@@ -51,6 +51,7 @@ export interface IAtlasmapGroup {
   type: string;
   isCollection: boolean;
   isInCollection: boolean;
+  expanded: boolean;
 
   // TODO: find a way to remove this maybe?
   amField: Field;

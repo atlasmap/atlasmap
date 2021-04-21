@@ -292,10 +292,10 @@ export class MappingSerializer {
     return jsonMapping;
   }
 
-  static deserializeMappingServiceJSON(
+  static async deserializeMappingServiceJSON(
     json: IAtlasMappingContainer,
     cfg: ConfigModel
-  ): void {
+  ) {
     // Process constants and properties before mappings.
     for (const field of MappingSerializer.deserializeConstants(json)) {
       cfg.constantDoc.addField(field);
@@ -321,9 +321,13 @@ export class MappingSerializer {
     cfg.mappings.parsedDocs = cfg.mappings.parsedDocs.concat(
       MappingSerializer.deserializeDocs(json, cfg.mappings)!
     ); // TODO: check this non null operator
-    cfg.mappings.mappings = cfg.mappings.mappings.concat(
-      MappingSerializer.deserializeMappings(json, cfg)
-    );
+    try {
+      const mappings = await MappingSerializer.deserializeMappings(json, cfg);
+      cfg.mappings.mappings = cfg.mappings.mappings.concat(mappings);
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
     for (const lookupTable of MappingSerializer.deserializeLookupTables(json)) {
       cfg.mappings.addTable(lookupTable);
     }
@@ -360,10 +364,10 @@ export class MappingSerializer {
     }
   }
 
-  static deserializeFieldMapping(
+  static async deserializeFieldMapping(
     mappingJson: IMapping,
     cfg: ConfigModel
-  ): MappingModel {
+  ): Promise<MappingModel> {
     const mapping = new MappingModel();
     mapping.uuid = mappingJson.id;
     mapping.sourceFields = [];
@@ -378,12 +382,26 @@ export class MappingSerializer {
       mappingJson.mappingType &&
       mappingJson.mappingType !== MappingType.NONE
     ) {
-      this.deserializeFieldMappingFromType(mapping, mappingJson, cfg);
+      try {
+        await this.deserializeFieldMappingFromType(mapping, mappingJson, cfg);
+      } catch (e) {
+        console.error(e);
+        throw e;
+      }
       return mapping;
     }
 
     if (mappingJson.inputFieldGroup) {
-      MappingSerializer.deserializeInputFieldGroup(mappingJson, mapping, cfg);
+      try {
+        await MappingSerializer.deserializeInputFieldGroup(
+          mappingJson,
+          mapping,
+          cfg
+        );
+      } catch (e) {
+        console.error(e);
+        throw e;
+      }
     } else {
       const inputField = mappingJson.inputField;
 
@@ -399,7 +417,12 @@ export class MappingSerializer {
         mapping.transition.mode = TransitionMode.ONE_TO_MANY;
       }
       if (cfg.mappings) {
-        MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, true);
+        try {
+          await MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, true);
+        } catch (e) {
+          console.error(e);
+          throw e;
+        }
       }
     }
 
@@ -413,7 +436,12 @@ export class MappingSerializer {
     for (const field of mappingJson.outputField) {
       MappingSerializer.deserializeMappedField(mapping, field, false, cfg);
     }
-    MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, false);
+    try {
+      await MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, false);
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
 
     if (isLookupMapping) {
       mapping.transition.lookupTableName = mappingJson.lookupTableName!;
@@ -423,7 +451,7 @@ export class MappingSerializer {
     return mapping;
   }
 
-  private static deserializeInputFieldGroup(
+  private static async deserializeInputFieldGroup(
     mappingJson: IMapping,
     mapping: MappingModel,
     cfg: ConfigModel
@@ -445,7 +473,7 @@ export class MappingSerializer {
       mapping,
       cfg
     );
-    MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, true);
+    await MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, true);
 
     if (
       mappingJson.inputFieldGroup.actions &&
@@ -929,10 +957,10 @@ export class MappingSerializer {
     return docs;
   }
 
-  private static deserializeMappings(
+  private static async deserializeMappings(
     json: IAtlasMappingContainer,
     cfg: ConfigModel
-  ): MappingModel[] {
+  ): Promise<MappingModel[]> {
     const mappings: MappingModel[] = [];
 
     if (!json.AtlasMapping.mappings?.mapping) {
@@ -945,20 +973,28 @@ export class MappingSerializer {
       if (isCollectionMapping) {
         const collection = fieldMapping as ICollection;
         for (const innerFieldMapping of collection.mappings.mapping) {
-          mappings.push(
-            MappingSerializer.deserializeFieldMapping(
+          try {
+            const mapping = await MappingSerializer.deserializeFieldMapping(
               innerFieldMapping as IMapping,
               cfg
-            )
-          );
+            );
+            mappings.push(mapping);
+          } catch (e) {
+            console.error(e);
+            throw e;
+          }
         }
       } else {
-        mappings.push(
-          MappingSerializer.deserializeFieldMapping(
+        try {
+          const mapping = await MappingSerializer.deserializeFieldMapping(
             fieldMapping as IMapping,
             cfg
-          )
-        );
+          );
+          mappings.push(mapping);
+        } catch (e) {
+          console.error(e);
+          throw e;
+        }
       }
     }
     return mappings;
@@ -974,11 +1010,11 @@ export class MappingSerializer {
    * @param cfg
    * @param ignoreValue
    */
-  private static deserializeFieldMappingFromType(
+  private static async deserializeFieldMappingFromType(
     mapping: MappingModel,
     fieldMapping: IMapping,
     cfg: ConfigModel
-  ): void {
+  ): Promise<void> {
     if (fieldMapping.mappingType === 'SEPARATE') {
       mapping.transition.mode = TransitionMode.ONE_TO_MANY;
       mapping.transition.transitionFieldAction = FieldAction.create(
@@ -1016,7 +1052,7 @@ export class MappingSerializer {
     for (const field of fieldMapping.outputField) {
       MappingSerializer.deserializeMappedField(mapping, field, false, cfg);
     }
-    MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, true);
+    await MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, true);
   }
 
   private static deserializeConstants(

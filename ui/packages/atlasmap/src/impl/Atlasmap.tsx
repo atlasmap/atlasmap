@@ -23,6 +23,7 @@ import {
 import { ExpressionToolbar, MainLayout } from '../Layout';
 import {
   IAtlasmapField,
+  IAtlasmapGroup,
   IAtlasmapMapping,
   ISourceColumnCallbacks,
   ITargetsColumnCallbacks,
@@ -75,6 +76,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     searchSources,
     searchTargets,
     importJarFile,
+    onToggleExpandGroup,
     // expression
     currentMappingExpression,
     executeFieldSearch,
@@ -221,6 +223,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onEditCSVParams: (docId, isSource) => {
         handlers.onEditCSVParams(docId, isSource);
       },
+      onToggleExpandGroup: (group: IAtlasmapGroup, expand?: boolean) =>
+        onToggleExpandGroup(group, expand),
     }),
     [
       selectMapping,
@@ -240,6 +244,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       isFieldDragAndDropAllowed,
       isFieldRemovableFromSelection,
       sourceProperties,
+      onToggleExpandGroup,
     ],
   );
 
@@ -301,6 +306,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onEditCSVParams: (docId, isSource) => {
         handlers.onEditCSVParams(docId, isSource);
       },
+      onToggleExpandGroup: (group: IAtlasmapGroup, expand?: boolean) =>
+        onToggleExpandGroup(group, expand),
     }),
     [
       selectMapping,
@@ -319,6 +326,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       isFieldDragAndDropAllowed,
       isFieldRemovableFromSelection,
       targetProperties,
+      onToggleExpandGroup,
     ],
   );
 

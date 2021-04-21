@@ -28,7 +28,7 @@ import {
   InspectionType,
   MappingSerializer,
 } from '@atlasmap/core';
-import { IAtlasmapDocument, IAtlasmapField } from '../Views';
+import { IAtlasmapDocument, IAtlasmapField, IAtlasmapGroup } from '../Views';
 import React, {
   FunctionComponent,
   createContext,
@@ -96,6 +96,7 @@ import {
   resetAtlasmap,
   selectMapping,
   setSelectedEnumValue,
+  toggleExpandGroup,
   toggleExpressionMode,
   toggleMappingPreview,
   toggleShowMappedFields,
@@ -384,6 +385,10 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
         configModel.previewService.mappingPreviewOutput$.pipe(
           debounceTime(debounceTimeWindow),
         );
+      const documentUpdated =
+        initializationService.cfg.documentService.documentUpdated$.pipe(
+          debounceTime(debounceTimeWindow),
+        );
 
       const subscriptions = [
         initializationObservable.subscribe(() =>
@@ -396,6 +401,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
         lineRefreshObservable.subscribe(() =>
           onSubUpdate('lineRefreshObservable'),
         ),
+        documentUpdated.subscribe(() => onSubUpdate('documentUpdated')),
         configModel.errorService.subscribe(() => onSubUpdate('errorService')),
       ];
 
@@ -488,6 +494,12 @@ export function useAtlasmap() {
     [configModel],
   );
 
+  const handleOnToggleExpandGroup = useCallback(
+    (group: IAtlasmapGroup, expand?: boolean) =>
+      toggleExpandGroup(group, expand),
+    [],
+  );
+
   const handleResetAtlasmap = useCallback(() => {
     onReset();
     resetAtlasmap();
@@ -574,6 +586,7 @@ export function useAtlasmap() {
     exportADMArchiveFile: exportADMArchiveFile,
     importADMArchiveFile: handleImportADMArchiveFile,
     importJarFile: handleImportJarFile,
+    onToggleExpandGroup: handleOnToggleExpandGroup,
     resetAtlasmap: handleResetAtlasmap,
     getUIVersion: getUIVersion,
     getRuntimeVersion: getRuntimeVersion,

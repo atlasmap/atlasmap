@@ -210,7 +210,7 @@ export class InitializationService {
    *
    * @param mappingDigest - {@link ADMDigest} mapping digest
    */
-  private initializeWithMappingDigest(): Promise<boolean> {
+  private async initializeWithMappingDigest(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       this.cfg.fileService
         .getCurrentMappingDigest()
@@ -223,7 +223,7 @@ export class InitializationService {
 
             // load field actions - do this even with no documents so the default field actions are loaded.
             await this.cfg.fieldActionService.fetchFieldActions();
-            this.updateStatus();
+            await this.updateStatus();
             resolve(true);
             return;
           }
@@ -273,7 +273,7 @@ export class InitializationService {
     });
   }
 
-  private addDocumentsFromMappingDigest(
+  private async addDocumentsFromMappingDigest(
     mappingDigest: ADMDigest
   ): Promise<boolean> {
     return new Promise<any>(async (resolve) => {
@@ -301,10 +301,10 @@ export class InitializationService {
           isSource,
           metaFragment.inspectionParameters
         );
-        this.updateStatus();
+        await this.updateStatus();
         fragIndex++;
       }
-      this.cfg.mappingService.notifyMappingUpdated();
+      await this.cfg.mappingService.notifyMappingUpdated();
       resolve(true);
     });
   }
@@ -342,7 +342,7 @@ export class InitializationService {
     });
   }
 
-  updateStatus(): void {
+  async updateStatus(): Promise<void> {
     const documentCount: number = this.cfg.getAllDocs().length;
     let finishedDocCount = 0;
     for (const docDef of this.cfg.getAllDocs()) {
@@ -356,7 +356,7 @@ export class InitializationService {
       this.cfg.fieldActionService.isInitialized
     ) {
       if (this.cfg.preloadedMappingJson) {
-        MappingSerializer.deserializeMappingServiceJSON(
+        await MappingSerializer.deserializeMappingServiceJSON(
           JSON.parse(this.cfg.preloadedMappingJson),
           this.cfg
         );
@@ -365,7 +365,7 @@ export class InitializationService {
       if (this.cfg.mappings) {
         LookupTableUtil.updateLookupTables(this.cfg.mappings);
         MappingUtil.updateDocumentNamespacesFromMappings(this.cfg);
-        MappingUtil.updateMappingsFromDocuments(this.cfg);
+        await MappingUtil.updateMappingsFromDocuments(this.cfg);
         for (const d of this.cfg.getAllDocs()) {
           d.updateFromMappings(this.cfg.mappings);
         }

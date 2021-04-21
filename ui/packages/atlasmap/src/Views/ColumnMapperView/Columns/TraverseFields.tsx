@@ -30,21 +30,27 @@ function getChildrenIds(
   fields: AtlasmapFields,
   idPrefix: string,
 ): (string | undefined)[] {
-  return fields.reduce<(string | undefined)[]>(
-    (ids, f) => [
-      ...ids,
-      `${idPrefix}${f.id}`,
-      ...((f as IAtlasmapGroup).fields
-        ? getChildrenIds((f as IAtlasmapGroup).fields, idPrefix)
-        : []),
-    ],
-    [],
-  );
+  return fields == null
+    ? []
+    : fields.reduce<(string | undefined)[]>(
+        (ids, f) => [
+          ...ids,
+          `${idPrefix}${f.id}`,
+          ...((f as IAtlasmapGroup).fields
+            ? getChildrenIds((f as IAtlasmapGroup).fields, idPrefix)
+            : []),
+        ],
+        [],
+      );
 }
 
 export interface ITraverseFieldsProps
   extends Omit<Omit<IFieldOrGroupProps, 'field'>, 'fieldId'> {
   fields: AtlasmapFields;
+  onToggleExpandGroup: (
+    group: IAtlasmapGroup,
+    expand?: boolean,
+  ) => Promise<void>;
 }
 
 export const TraverseFields: FunctionComponent<ITraverseFieldsProps> = ({
@@ -81,7 +87,10 @@ export const TraverseFields: FunctionComponent<ITraverseFieldsProps> = ({
 export interface IFieldOrGroupProps
   extends Omit<Omit<ITreeItemFieldAndNodeRefsAndDnDProps, 'field'>, 'fieldId'>,
     Omit<
-      Omit<Omit<ITreeGroupAndNodeRefsAndDnDProps, 'group'>, 'fieldId'>,
+      Omit<
+        Omit<Omit<ITreeGroupAndNodeRefsAndDnDProps, 'onToggleExpand'>, 'group'>,
+        'fieldId'
+      >,
       'children'
     > {
   idPrefix: string;
@@ -93,17 +102,22 @@ const FieldOrGroup: FunctionComponent<IFieldOrGroupProps> = ({
   field,
   idPrefix,
   level = 1,
+  onToggleExpandGroup,
   ...props
 }) => {
   const fieldId = `${idPrefix}${field.id}`;
   const maybeGroup = field as IAtlasmapGroup;
   const maybeField = field as IAtlasmapField;
-  if (maybeGroup.fields) {
+
+  if (maybeGroup.type === 'COMPLEX' && !maybeField.enumeration) {
     return (
       <TreeGroupAndNodeRefsAndDnD
         fieldId={fieldId}
         group={maybeGroup}
         level={level}
+        onToggleExpand={(expand?: boolean) =>
+          onToggleExpandGroup(maybeGroup, expand)
+        }
         {...props}
       >
         {({ expanded }) => (
@@ -116,6 +130,7 @@ const FieldOrGroup: FunctionComponent<IFieldOrGroupProps> = ({
             level={level + 1}
             idPrefix={idPrefix}
             isVisible={expanded}
+            onToggleExpandGroup={onToggleExpandGroup}
           />
         )}
       </TreeGroupAndNodeRefsAndDnD>
@@ -126,6 +141,7 @@ const FieldOrGroup: FunctionComponent<IFieldOrGroupProps> = ({
       fieldId={fieldId}
       field={maybeField}
       level={level}
+      onToggleExpandGroup={onToggleExpandGroup}
       {...props}
     />
   );

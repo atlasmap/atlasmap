@@ -16,11 +16,16 @@
 package io.atlasmap.xml.v2;
 
 import java.io.Serializable;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import io.atlasmap.v2.ComplexType;
+import io.atlasmap.v2.Field;
+
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
-public class XmlComplexType extends XmlField implements Serializable {
+public class XmlComplexType extends XmlField implements Serializable, ComplexType {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,11 +43,11 @@ public class XmlComplexType extends XmlField implements Serializable {
 
     /**
      * Gets the value of the xmlEnumFields property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link XmlEnumFields }
-     *     
+     *
      */
     public XmlEnumFields getXmlEnumFields() {
         return xmlEnumFields;
@@ -50,11 +55,11 @@ public class XmlComplexType extends XmlField implements Serializable {
 
     /**
      * Sets the value of the xmlEnumFields property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link XmlEnumFields }
-     *     
+     *
      */
     public void setXmlEnumFields(XmlEnumFields value) {
         this.xmlEnumFields = value;
@@ -62,11 +67,11 @@ public class XmlComplexType extends XmlField implements Serializable {
 
     /**
      * Gets the value of the xmlFields property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link XmlFields }
-     *     
+     *
      */
     public XmlFields getXmlFields() {
         return xmlFields;
@@ -74,11 +79,11 @@ public class XmlComplexType extends XmlField implements Serializable {
 
     /**
      * Sets the value of the xmlFields property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link XmlFields }
-     *     
+     *
      */
     public void setXmlFields(XmlFields value) {
         this.xmlFields = value;
@@ -86,11 +91,11 @@ public class XmlComplexType extends XmlField implements Serializable {
 
     /**
      * Gets the value of the annotation property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Boolean }
-     *     
+     *
      */
     public Boolean isAnnotation() {
         return annotation;
@@ -98,11 +103,11 @@ public class XmlComplexType extends XmlField implements Serializable {
 
     /**
      * Sets the value of the annotation property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Boolean }
-     *     
+     *
      */
     public void setAnnotation(Boolean value) {
         this.annotation = value;
@@ -110,11 +115,11 @@ public class XmlComplexType extends XmlField implements Serializable {
 
     /**
      * Gets the value of the annonymous property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Boolean }
-     *     
+     *
      */
     public Boolean isAnnonymous() {
         return annonymous;
@@ -122,11 +127,11 @@ public class XmlComplexType extends XmlField implements Serializable {
 
     /**
      * Sets the value of the annonymous property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Boolean }
-     *     
+     *
      */
     public void setAnnonymous(Boolean value) {
         this.annonymous = value;
@@ -134,11 +139,11 @@ public class XmlComplexType extends XmlField implements Serializable {
 
     /**
      * Gets the value of the enumeration property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Boolean }
-     *     
+     *
      */
     public Boolean isEnumeration() {
         return enumeration;
@@ -146,11 +151,11 @@ public class XmlComplexType extends XmlField implements Serializable {
 
     /**
      * Sets the value of the enumeration property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Boolean }
-     *     
+     *
      */
     public void setEnumeration(Boolean value) {
         this.enumeration = value;
@@ -158,11 +163,11 @@ public class XmlComplexType extends XmlField implements Serializable {
 
     /**
      * Gets the value of the uri property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getUri() {
         return uri;
@@ -170,14 +175,20 @@ public class XmlComplexType extends XmlField implements Serializable {
 
     /**
      * Sets the value of the uri property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setUri(String value) {
         this.uri = value;
+    }
+
+    @JsonIgnore
+    @Override
+    public List<? extends Field> getChildFields() {
+        return xmlFields.getXmlField();
     }
 
     public boolean equals(Object object) {

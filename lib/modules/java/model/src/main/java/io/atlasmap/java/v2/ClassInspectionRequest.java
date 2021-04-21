@@ -16,16 +16,18 @@
 package io.atlasmap.java.v2;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import io.atlasmap.v2.BaseInspectionRequest;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.StringList;
 
 @JsonRootName("ClassInspectionRequest")
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
-public class ClassInspectionRequest implements Serializable {
+public class ClassInspectionRequest extends BaseInspectionRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -48,13 +50,15 @@ public class ClassInspectionRequest implements Serializable {
 
     protected Boolean disablePublicGetterSetterFields;
 
+    protected List<String> inspectPaths;
+
     /**
      * Gets the value of the fieldNameExclusions property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link StringList }
-     *     
+     *
      */
     public StringList getFieldNameExclusions() {
         return fieldNameExclusions;
@@ -62,11 +66,11 @@ public class ClassInspectionRequest implements Serializable {
 
     /**
      * Sets the value of the fieldNameExclusions property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link StringList }
-     *     
+     *
      */
     public void setFieldNameExclusions(StringList value) {
         this.fieldNameExclusions = value;
@@ -74,11 +78,11 @@ public class ClassInspectionRequest implements Serializable {
 
     /**
      * Gets the value of the classNameExclusions property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link StringList }
-     *     
+     *
      */
     public StringList getClassNameExclusions() {
         return classNameExclusions;
@@ -86,11 +90,11 @@ public class ClassInspectionRequest implements Serializable {
 
     /**
      * Sets the value of the classNameExclusions property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link StringList }
-     *     
+     *
      */
     public void setClassNameExclusions(StringList value) {
         this.classNameExclusions = value;
@@ -98,11 +102,11 @@ public class ClassInspectionRequest implements Serializable {
 
     /**
      * Gets the value of the classpath property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getClasspath() {
         return classpath;
@@ -110,11 +114,11 @@ public class ClassInspectionRequest implements Serializable {
 
     /**
      * Sets the value of the classpath property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setClasspath(String value) {
         this.classpath = value;
@@ -122,11 +126,11 @@ public class ClassInspectionRequest implements Serializable {
 
     /**
      * Gets the value of the className property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getClassName() {
         return className;
@@ -134,11 +138,11 @@ public class ClassInspectionRequest implements Serializable {
 
     /**
      * Sets the value of the className property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setClassName(String value) {
         this.className = value;
@@ -146,11 +150,11 @@ public class ClassInspectionRequest implements Serializable {
 
     /**
      * Gets the value of the collectionType property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link CollectionType }
-     *     
+     *
      */
     public CollectionType getCollectionType() {
         return collectionType;
@@ -158,11 +162,11 @@ public class ClassInspectionRequest implements Serializable {
 
     /**
      * Sets the value of the collectionType property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link CollectionType }
-     *     
+     *
      */
     public void setCollectionType(CollectionType value) {
         this.collectionType = value;
@@ -170,11 +174,11 @@ public class ClassInspectionRequest implements Serializable {
 
     /**
      * Gets the value of the collectionClassName property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getCollectionClassName() {
         return collectionClassName;
@@ -182,11 +186,11 @@ public class ClassInspectionRequest implements Serializable {
 
     /**
      * Sets the value of the collectionClassName property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setCollectionClassName(String value) {
         this.collectionClassName = value;
@@ -194,11 +198,11 @@ public class ClassInspectionRequest implements Serializable {
 
     /**
      * Gets the value of the disablePrivateOnlyFields property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Boolean }
-     *     
+     *
      */
     public Boolean isDisablePrivateOnlyFields() {
         return disablePrivateOnlyFields;
@@ -206,11 +210,11 @@ public class ClassInspectionRequest implements Serializable {
 
     /**
      * Sets the value of the disablePrivateOnlyFields property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Boolean }
-     *     
+     *
      */
     public void setDisablePrivateOnlyFields(Boolean value) {
         this.disablePrivateOnlyFields = value;
@@ -218,11 +222,11 @@ public class ClassInspectionRequest implements Serializable {
 
     /**
      * Gets the value of the disableProtectedOnlyFields property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Boolean }
-     *     
+     *
      */
     public Boolean isDisableProtectedOnlyFields() {
         return disableProtectedOnlyFields;
@@ -230,11 +234,11 @@ public class ClassInspectionRequest implements Serializable {
 
     /**
      * Sets the value of the disableProtectedOnlyFields property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Boolean }
-     *     
+     *
      */
     public void setDisableProtectedOnlyFields(Boolean value) {
         this.disableProtectedOnlyFields = value;
@@ -242,11 +246,11 @@ public class ClassInspectionRequest implements Serializable {
 
     /**
      * Gets the value of the disablePublicOnlyFields property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Boolean }
-     *     
+     *
      */
     public Boolean isDisablePublicOnlyFields() {
         return disablePublicOnlyFields;
@@ -254,11 +258,11 @@ public class ClassInspectionRequest implements Serializable {
 
     /**
      * Sets the value of the disablePublicOnlyFields property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Boolean }
-     *     
+     *
      */
     public void setDisablePublicOnlyFields(Boolean value) {
         this.disablePublicOnlyFields = value;
@@ -266,11 +270,11 @@ public class ClassInspectionRequest implements Serializable {
 
     /**
      * Gets the value of the disablePublicGetterSetterFields property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Boolean }
-     *     
+     *
      */
     public Boolean isDisablePublicGetterSetterFields() {
         return disablePublicGetterSetterFields;
@@ -278,11 +282,11 @@ public class ClassInspectionRequest implements Serializable {
 
     /**
      * Sets the value of the disablePublicGetterSetterFields property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Boolean }
-     *     
+     *
      */
     public void setDisablePublicGetterSetterFields(Boolean value) {
         this.disablePublicGetterSetterFields = value;

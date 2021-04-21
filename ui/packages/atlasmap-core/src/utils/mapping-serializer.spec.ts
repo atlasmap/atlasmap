@@ -403,14 +403,22 @@ describe('MappingSerializer', () => {
 
   tName = 'deserialize & serialize mapping definition';
   test(tName, (done) => {
+    spyOn(ky, 'get').and.returnValue(
+      new (class {
+        json(): Promise<any> {
+          return Promise.resolve(atlasMappingTestJson);
+        }
+      })()
+    );
     createAllDocs(cfg);
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
+
     return cfg.fieldActionService
       .fetchFieldActions()
-      .then(() => {
+      .then(async () => {
         const mappingJson = atlasMappingTestJson as IAtlasMappingContainer;
-        MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
-        MappingUtil.updateMappingsFromDocuments(cfg);
+        await MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
+        await MappingUtil.updateMappingsFromDocuments(cfg);
         expect(cfg?.mappings?.mappings?.length).toEqual(
           Object.keys(
             mappingJson?.AtlasMapping?.mappings?.mapping as IMapping[]
@@ -436,7 +444,7 @@ describe('MappingSerializer', () => {
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
       .fetchFieldActions()
-      .then(() => {
+      .then(async () => {
         cfg.mappings = new MappingDefinition();
         let fieldMapping = null;
         const mappingJson = atlasMappingExprPropJson as IAtlasMappingContainer;
@@ -454,8 +462,8 @@ describe('MappingSerializer', () => {
           expressionIndex++;
         }
         // console.log(JSON.stringify(mappingJson, null, 2));
-        MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
-        MappingUtil.updateMappingsFromDocuments(cfg);
+        await MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
+        await MappingUtil.updateMappingsFromDocuments(cfg);
         expect(cfg.mappings.mappings.length).toEqual(
           Object.keys(mappingJson.AtlasMapping?.mappings?.mapping as IMapping[])
             .length
@@ -655,7 +663,7 @@ describe('MappingSerializer', () => {
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
       .fetchFieldActions()
-      .then(() => {
+      .then(async () => {
         let fieldMapping = null;
         const mappingJson = atlasMappingExprPropJson as IAtlasMappingContainer;
         let expressionIndex = 0;
@@ -670,8 +678,8 @@ describe('MappingSerializer', () => {
           }
           expressionIndex++;
         }
-        MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
-        MappingUtil.updateMappingsFromDocuments(cfg);
+        await MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
+        await MappingUtil.updateMappingsFromDocuments(cfg);
         expect(cfg.mappings?.mappings.length).toEqual(
           Object.keys(mappingJson.AtlasMapping?.mappings?.mapping as IMapping[])
             .length
@@ -743,7 +751,7 @@ describe('MappingSerializer', () => {
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
       .fetchFieldActions()
-      .then(() => {
+      .then(async () => {
         let fieldMapping = null;
         const mappingJson = atlasMappingExprPropJson as IAtlasMappingContainer;
         let expressionIndex = 0;
@@ -758,8 +766,8 @@ describe('MappingSerializer', () => {
           }
           expressionIndex++;
         }
-        MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
-        MappingUtil.updateMappingsFromDocuments(cfg);
+        await MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
+        await MappingUtil.updateMappingsFromDocuments(cfg);
 
         expect(cfg.mappings?.mappings.length).toEqual(
           Object.keys(mappingJson.AtlasMapping?.mappings?.mapping as IMapping[])
@@ -823,11 +831,11 @@ describe('MappingSerializer', () => {
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
       .fetchFieldActions()
-      .then(() => {
+      .then(async () => {
         let mapping = null;
         const mappingJson = atlasMappingExprPropJson as IAtlasMappingContainer;
-        MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
-        MappingUtil.updateMappingsFromDocuments(cfg);
+        await MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
+        await MappingUtil.updateMappingsFromDocuments(cfg);
 
         expect(cfg.mappings?.mappings).toBeDefined();
         if (!cfg.mappings || !cfg.mappings.mappings) {
@@ -861,10 +869,10 @@ describe('MappingSerializer', () => {
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
       .fetchFieldActions()
-      .then(() => {
+      .then(async () => {
         const mappingJson = atlasMappingSplitJson as IAtlasMappingContainer;
-        MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
-        MappingUtil.updateMappingsFromDocuments(cfg);
+        await MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
+        await MappingUtil.updateMappingsFromDocuments(cfg);
         cfg.mappingService.updateMappingsTransition();
 
         expect(cfg.mappings?.mappings).toBeDefined();
@@ -893,11 +901,11 @@ describe('MappingSerializer', () => {
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
       .fetchFieldActions()
-      .then(() => {
+      .then(async () => {
         const mappingJson =
           atlasMappingSplitCollapseJson as IAtlasMappingContainer;
-        MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
-        MappingUtil.updateMappingsFromDocuments(cfg);
+        await MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
+        await MappingUtil.updateMappingsFromDocuments(cfg);
         cfg.mappingService.updateMappingsTransition();
 
         expect(cfg.mappings?.mappings).toBeDefined();
@@ -925,7 +933,7 @@ describe('MappingSerializer', () => {
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
       .fetchFieldActions()
-      .then(() => {
+      .then(async () => {
         cfg.mappings = new MappingDefinition();
         let fieldMapping = null;
         const mappingJson = atlasMappingExprPropJson as IAtlasMappingContainer;
@@ -942,8 +950,8 @@ describe('MappingSerializer', () => {
           }
           expressionIndex++;
         }
-        MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
-        MappingUtil.updateMappingsFromDocuments(cfg);
+        await MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
+        await MappingUtil.updateMappingsFromDocuments(cfg);
         const mapping = cfg.mappings?.mappings[expressionIndex];
         expect(mapping).toBeDefined();
 
@@ -971,7 +979,7 @@ describe('MappingSerializer', () => {
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
       .fetchFieldActions()
-      .then(() => {
+      .then(async () => {
         cfg.mappings = new MappingDefinition();
         let fieldMapping = null;
         const mappingJson =
@@ -1030,8 +1038,8 @@ describe('MappingSerializer', () => {
         docEnumtgt.addField(sl);
 
         // Deserialize then serialize.
-        MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
-        MappingUtil.updateMappingsFromDocuments(cfg);
+        await MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
+        await MappingUtil.updateMappingsFromDocuments(cfg);
         expect(
           TestUtils.isEqualJSON(
             tName,
@@ -1105,7 +1113,7 @@ describe('MappingSerializer', () => {
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
       .fetchFieldActions()
-      .then(() => {
+      .then(async () => {
         cfg.mappings = new MappingDefinition();
         let fieldMapping = null;
         const mappingJson = atlasMappingCSV as IAtlasMappingContainer;
@@ -1185,8 +1193,8 @@ describe('MappingSerializer', () => {
         }
         expect(fieldMapping).toBeDefined();
 
-        MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
-        MappingUtil.updateMappingsFromDocuments(cfg);
+        await MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
+        await MappingUtil.updateMappingsFromDocuments(cfg);
         expect(
           TestUtils.isEqualJSON(
             tName,

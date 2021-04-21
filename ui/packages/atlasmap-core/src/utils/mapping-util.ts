@@ -30,6 +30,7 @@ import {
 } from '../models/error.model';
 import { MappedField, MappingModel } from '../models/mapping.model';
 import { ConfigModel } from '../models/config.model';
+import { DocumentInspectionUtil } from './document-inspection-util';
 import { Field } from '../models/field.model';
 import { IField } from '../contracts/common';
 
@@ -37,11 +38,33 @@ import { IField } from '../contracts/common';
  * Static routines for handling mappings.
  */
 export class MappingUtil {
-  static updateMappingsFromDocuments(cfg: ConfigModel): void {
-    // TODO: check this non null operator
-    for (const mapping of cfg.mappings!.mappings) {
-      MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, true);
-      MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, false);
+  static async updateMappingsFromDocuments(cfg: ConfigModel) {
+    if (cfg.mappings && cfg.mappings.mappings) {
+      const docsByFields = new Map<MappedField, DocumentDefinition>();
+      for (const mapping of cfg.mappings.mappings) {
+        this.groupDocsByFields(docsByFields, mapping, cfg, true);
+        this.groupDocsByFields(docsByFields, mapping, cfg, false);
+      }
+      const pathsByDocs = this.groupPathsByDocs(docsByFields);
+      if (pathsByDocs) {
+        await this.loadDocumentsWithPaths(pathsByDocs, cfg);
+      }
+
+      // TODO: check this non null operator
+      for (const mapping of cfg.mappings!.mappings) {
+        await MappingUtil.applyMappedFieldsFromDocuments(
+          mapping,
+          cfg,
+          true,
+          docsByFields
+        );
+        await MappingUtil.applyMappedFieldsFromDocuments(
+          mapping,
+          cfg,
+          false,
+          docsByFields
+        );
+      }
     }
     for (const doc of cfg.getAllDocs()) {
       if (doc.id == null) {
@@ -54,17 +77,33 @@ export class MappingUtil {
     }
   }
 
-  static updateMappedFieldsFromDocuments(
+  private static groupPathsByDocs(
+    docsByFields: Map<MappedField, DocumentDefinition>
+  ) {
+    const pathsByDocs = new Map<DocumentDefinition, string[]>();
+    docsByFields.forEach((doc, mappedField) => {
+      if (mappedField.mappingField.path) {
+        let paths = pathsByDocs.get(doc);
+        if (!paths) {
+          paths = [];
+          pathsByDocs.set(doc, paths);
+        }
+        paths.push(mappedField.mappingField.path);
+      }
+    });
+    return pathsByDocs;
+  }
+
+  private static groupDocsByFields(
+    docsByFields: Map<MappedField, DocumentDefinition>,
     mapping: MappingModel,
     cfg: ConfigModel,
     isSource: boolean
-  ): void {
+  ) {
     let mappedFields: MappedField[] = mapping.getMappedFields(isSource);
-    let mappedFieldIndex = -1;
 
     for (const mappedField of mappedFields) {
       let doc: DocumentDefinition | null = null;
-      mappedFieldIndex += 1;
 
       if (
         mappedField.field instanceof PaddingField ||
@@ -118,6 +157,39 @@ with ID ${mappedField.mappingField.docId}`,
         doc.id = mappedField.mappingField.docId;
       }
 
+      docsByFields.set(mappedField, doc);
+    }
+  }
+
+  public static async updateMappedFieldsFromDocuments(
+    mapping: MappingModel,
+    cfg: ConfigModel,
+    isSource: boolean
+  ) {
+    const docsByFields = new Map<MappedField, DocumentDefinition>();
+    this.groupDocsByFields(docsByFields, mapping, cfg, isSource);
+    const pathsByDocs = this.groupPathsByDocs(docsByFields);
+    if (pathsByDocs) {
+      await this.loadDocumentsWithPaths(pathsByDocs, cfg);
+    }
+    this.applyMappedFieldsFromDocuments(mapping, cfg, isSource, docsByFields);
+  }
+
+  static applyMappedFieldsFromDocuments(
+    mapping: MappingModel,
+    cfg: ConfigModel,
+    isSource: boolean,
+    docsByFields: Map<MappedField, DocumentDefinition>
+  ): void {
+    let mappedFields: MappedField[] = mapping.getMappedFields(isSource);
+    let mappedFieldIndex = -1;
+
+    for (const mappedField of mappedFields) {
+      let doc: DocumentDefinition | undefined = docsByFields.get(mappedField);
+      mappedFieldIndex += 1;
+      if (doc == null) {
+        continue;
+      }
       if (!mappedField.mappingField.path) {
         continue;
       }
@@ -198,6 +270,35 @@ with ID ${mappedField.mappingField.docId}`,
         );
       }
     }
+  }
+
+  private static async loadDocumentsWithPaths(
+    pathsByDocs: Map<DocumentDefinition, string[]>,
+    cfg: ConfigModel
+  ) {
+    await Promise.all(
+      Array.from(pathsByDocs.entries()).map((entry) => {
+        const docDef = entry[0];
+        const inspectPaths = entry[1];
+
+        let missingPaths: string[] = [];
+        if (inspectPaths != null) {
+          missingPaths = docDef.getMissingPaths(inspectPaths);
+          if (missingPaths.length === 0) {
+            //complete if no missing paths
+            return docDef;
+          } else {
+            const inspectionModel =
+              DocumentInspectionUtil.fromDocumentDefinition(cfg, docDef);
+            return cfg.documentService.inspectDocument(
+              inspectionModel,
+              inspectPaths
+            );
+          }
+        }
+        return docDef;
+      })
+    );
   }
 
   /**

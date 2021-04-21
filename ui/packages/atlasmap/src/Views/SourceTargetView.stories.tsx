@@ -84,6 +84,7 @@ export const sourceTargetView = () =>
               acceptDropType: 'target',
               draggableType: 'source',
               onEditCSVParams: action('onEditCSVParams'),
+              onToggleExpandGroup: async () => {},
             }}
             targetEvents={{
               onCaptureDocumentID: action('onCapthreDocumentID'),
@@ -118,6 +119,7 @@ export const sourceTargetView = () =>
               acceptDropType: 'source',
               draggableType: 'target',
               onEditCSVParams: action('onEditCSVParams'),
+              onToggleExpandGroup: async () => {},
             }}
             showTypes={boolean('Show types', false)}
             showMappingPreview={boolean('Show mapping preview', false)}

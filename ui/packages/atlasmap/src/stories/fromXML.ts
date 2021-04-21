@@ -117,6 +117,7 @@ export function xmlToFieldGroup(
     isCollection: false,
     isInCollection: false,
     amField: {} as IAtlasmapField['amField'],
+    expanded: true,
   });
 
   return xml.XmlInspectionResponse.xmlDocument.fields.field.map((f) =>

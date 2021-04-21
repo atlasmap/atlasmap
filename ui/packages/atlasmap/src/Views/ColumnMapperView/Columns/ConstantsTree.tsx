@@ -18,6 +18,7 @@ import { EditIcon, TrashIcon } from '@patternfly/react-icons';
 import {
   IAtlasmapDocument,
   IAtlasmapField,
+  IAtlasmapGroup,
   IAtlasmapMapping,
 } from '../../models';
 import { IDragAndDropField, Tree } from '../../../UI';
@@ -46,6 +47,10 @@ export interface IConstantsTreeCallbacks {
   onDeleteConstant: (name: string) => void;
   canStartMapping: (field: IAtlasmapField) => boolean;
   onStartMapping: (field: IAtlasmapField) => void;
+  onToggleExpandGroup: (
+    group: IAtlasmapGroup,
+    expand?: boolean,
+  ) => Promise<void>;
 }
 
 export interface IConstantsTreeProps extends IConstantsTreeCallbacks {
@@ -67,6 +72,7 @@ export const ConstantsTree: FunctionComponent<IConstantsTreeProps> = ({
   canStartMapping,
   onStartMapping,
   renderPreview,
+  onToggleExpandGroup,
 }) => (
   <Tree>
     <TraverseFields
@@ -80,6 +86,7 @@ export const ConstantsTree: FunctionComponent<IConstantsTreeProps> = ({
       draggableType={SOURCES_DRAGGABLE_TYPE}
       onDrop={onDrop}
       canDrop={canDrop}
+      onToggleExpandGroup={onToggleExpandGroup}
       renderActions={(field) => [
         ...commonActions({
           connectedMappings: field.mappings,

@@ -26,12 +26,13 @@ import {
   ErrorScope,
   ErrorType,
 } from '../models/error.model';
+
 import {
   HTTP_STATUS_NO_CONTENT,
   constantTypes,
   propertyTypes,
 } from '../common/config.types';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 
 import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from '../models/config.model';
@@ -52,6 +53,9 @@ export class DocumentManagementService {
 
   private mappingUpdatedSubscription!: Subscription;
   private MAX_SEARCH_MATCH = 10000;
+
+  documentUpdated = new Subject<void>();
+  documentUpdated$: Observable<void> = this.documentUpdated.asObservable();
 
   constructor(private api: typeof ky) {}
 
@@ -78,7 +82,7 @@ export class DocumentManagementService {
    */
   inspectDocuments(): Observable<DocumentDefinition> {
     return new Observable<DocumentDefinition>((observer) => {
-      for (const docDef of this.cfg.getAllDocs()) {
+      for (const docDef of this.cfg?.getAllDocs()) {
         if (
           docDef === this.cfg.sourcePropertyDoc ||
           docDef === this.cfg.targetPropertyDoc ||
@@ -105,8 +109,9 @@ export class DocumentManagementService {
     });
   }
 
-  private inspectDocument(
-    inspectionModel: DocumentInspectionModel
+  inspectDocument(
+    inspectionModel: DocumentInspectionModel,
+    inspectPaths?: string[]
   ): Promise<DocumentDefinition> {
     return new Promise<DocumentDefinition>((resolve, reject) => {
       const docDef = inspectionModel.doc;
@@ -119,10 +124,38 @@ export class DocumentManagementService {
         return;
       }
 
+      let missingPaths: string[] = [];
+      if (inspectPaths != null) {
+        missingPaths = docDef.getMissingPaths(inspectPaths);
+        if (missingPaths.length === 0) {
+          //complete if no missing paths
+          this.documentUpdated.next();
+          resolve(docDef);
+          return;
+        } else {
+          docDef.inspectionPaths = docDef.inspectionPaths.concat(missingPaths);
+          inspectionModel = DocumentInspectionUtil.fromDocumentDefinition(
+            this.cfg,
+            docDef
+          );
+        }
+      }
+
       if (!inspectionModel.isOnlineInspectionCapable()) {
         docDef.initialized = true;
         docDef.errorOccurred = true;
+        this.documentUpdated.next();
         reject(docDef);
+        return;
+      }
+
+      if (
+        docDef.inspectionResult &&
+        (inspectPaths == null || missingPaths.length === 0)
+      ) {
+        //complete if document has been parsed and no specific paths requested or no missing paths
+        this.documentUpdated.next();
+        resolve(docDef);
         return;
       }
 
@@ -140,6 +173,7 @@ export class DocumentManagementService {
           inspectionModel.parseResponse(responseJson);
           docDef.initializeFromFields();
           docDef.initialized = true;
+          this.documentUpdated.next();
           resolve(docDef);
         })
         .catch((error: any) => {
@@ -147,6 +181,7 @@ export class DocumentManagementService {
             `Failed to inspect Document: ${docDef.name}(${docDef.id})`,
             error
           );
+          this.documentUpdated.next();
           reject(error);
         });
     });
