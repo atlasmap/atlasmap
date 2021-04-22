@@ -548,7 +548,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
             Field sourceField = session.head().getSourceField();
             FieldGroup sourceFieldGroup = null;
             if (sourceField instanceof FieldGroup) {
-                sourceFieldGroup = (FieldGroup)sourceField;
+                sourceFieldGroup = unwrapNestedGroup((FieldGroup)sourceField);
             }
             for (Field f : targetFields) {
                 targetField = f;
@@ -699,6 +699,14 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         AtlasUtil.addAudit(session, (String)null,
                 String.format("Unsupported mappingType=%s detected", mapping.getMappingType()),
                 AuditStatus.ERROR, null);
+    }
+
+    private FieldGroup unwrapNestedGroup(FieldGroup parent) {
+        if (parent.getPath() == null && parent.getField().size() == 1
+                && parent.getField().get(0) instanceof FieldGroup) {
+            return (FieldGroup) parent.getField().get(0);
+        }
+        return parent;
     }
 
     private boolean auditTargetFieldType(DefaultAtlasSession session, AtlasModule module, Field field) {
