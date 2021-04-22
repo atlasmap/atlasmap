@@ -1,7 +1,7 @@
 {
   "name": "@atlasmap/core",
   "description": "",
-  "version": "2.2.0-M.5",
+  "version": "2.2.0-SNAPSHOT",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
