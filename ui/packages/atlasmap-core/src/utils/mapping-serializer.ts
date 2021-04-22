@@ -1175,7 +1175,17 @@ export class MappingSerializer {
         return null;
       }
       if (!ignoreValue) {
-        mappedField.parsedData.parsedValue = field.value;
+        if (field.value) {
+          mappedField.parsedData.parsedValue = field.value;
+        } else {
+          // TODO: Refactor when we support more complex output elements.
+          if (
+            field.jsonType === 'io.atlasmap.v2.FieldGroup' &&
+            field.field.length > 0
+          ) {
+            mappedField.parsedData.parsedValue = field.field[0].value;
+          }
+        }
       }
       mappedField.parsedData.parsedName = field.name;
       mappedField.parsedData.parsedPath = field.path;
