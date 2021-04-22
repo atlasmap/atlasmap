@@ -20,6 +20,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -121,6 +122,35 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
             }
         }
         return classNames;
+    }
+
+    public ArrayList<String> getSubTypesOf(Class<?> clazz, boolean allowAbstract) throws AtlasException {
+        ArrayList<String> answer = new ArrayList<>();
+        if (clazz == null) {
+            return answer;
+        }
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Searching sub types of {}", clazz.getName());
+        }
+        for (String className : getLibraryClassNames()) {
+            try {
+                Class<?> c = loadClass(className);
+                if (clazz.isAssignableFrom(c)) {
+                    if (!allowAbstract
+                            && (c.isInterface() || Modifier.isAbstract(c.getModifiers()))) {
+                        continue;
+                    }
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Found {}", className);
+                    }
+                    answer.add(className);
+                }
+            } catch (Exception e) {
+                LOG.debug("", e);
+                continue;
+            }
+        }
+        return answer;
     }
 
     public synchronized void reload() {

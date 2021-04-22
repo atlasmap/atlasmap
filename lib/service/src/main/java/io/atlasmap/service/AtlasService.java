@@ -49,6 +49,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.api.AtlasMappingBuilder;
 import io.atlasmap.api.AtlasPreviewContext;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.ADMArchiveHandler;
@@ -633,6 +634,32 @@ public class AtlasService {
         return Response.ok().build();
     }
 
+    @GET
+    @Path("/mappingBuilders")
+    @Operation(summary = "List mapping builder classes",
+        description = "List mapping builder classes which defines custom mapping logic")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiResponses(@ApiResponse(
+            responseCode = "200", content = @Content(schema = @Schema(type = "ArrayList<String>")),
+            description = "Return a list of loadable class names"))
+    public Response listMappingBuilderClasses(@Context UriInfo uriInfo) {
+        ArrayList<String> classNames;
+        try {
+            classNames = libraryLoader.getSubTypesOf(AtlasMappingBuilder.class, false);
+        } catch (Exception e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.error("Library class retrieval error.", e);
+            }
+            throw new WebApplicationException("Error retrieving class names from uploaded JARs.");
+        }
+        byte[] serialized = toJson(classNames);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(new String(serialized));
+        }
+        return Response.ok().entity(serialized).build();
+    }
+
+    
     public AtlasLibraryLoader getLibraryLoader() {
         return this.libraryLoader;
     }
