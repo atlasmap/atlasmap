@@ -563,6 +563,76 @@ ifdef::internal-generation[]
 endif::internal-generation[]
 
 
+[.listMappingBuilderClasses]
+==== listMappingBuilderClasses
+    
+`GET /mappingBuilders`
+
+List mapping builder classes
+
+===== Description 
+
+List mapping builder classes which defines custom mapping logic
+
+
+// markup not found, no include::{specDir}mappingBuilders/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+
+
+
+
+
+===== Return Type
+
+
+<<ArrayList&lt;String&gt;>>
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===         
+| Code | Message | Datatype 
+
+
+| 200
+| Return a list of loadable class names
+|  <<ArrayList&lt;String&gt;>>
+
+|===         
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}mappingBuilders/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}mappingBuilders/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :mappingBuilders/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}mappingBuilders/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
 [.listMappings]
 ==== listMappings
     

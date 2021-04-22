@@ -41,6 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.BaseMapping;
@@ -122,6 +123,7 @@ public class AtlasServiceTest {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         int answer = compiler.run(System.in, System.out, System.err,
                 "-d", "target/tmp",
+                "src/test/resources/upload/io/atlasmap/service/my/MyCustomMappingBuilder.java",
                 "src/test/resources/upload/io/atlasmap/service/my/MyFieldActions.java",
                 "src/test/resources/upload/io/atlasmap/service/my/MyFieldActionsModel.java");
         assertEquals(0, answer);
@@ -147,6 +149,15 @@ public class AtlasServiceTest {
         classEntry = new JarEntry("io/atlasmap/service/my/MyFieldActionsModel.class");
         jarOut.putNextEntry(classEntry);
         in = new BufferedInputStream(new FileInputStream("target/tmp/io/atlasmap/service/my/MyFieldActionsModel.class"));
+        count = -1;
+        while ((count = in.read(buffer)) != -1) {
+            jarOut.write(buffer, 0, count);
+        }
+        in.close();
+        jarOut.closeEntry();
+        classEntry = new JarEntry("io/atlasmap/service/my/MyCustomMappingBuilder.class");
+        jarOut.putNextEntry(classEntry);
+        in = new BufferedInputStream(new FileInputStream("target/tmp/io/atlasmap/service/my/MyCustomMappingBuilder.class"));
         count = -1;
         while ((count = in.read(buffer)) != -1) {
             jarOut.write(buffer, 0, count);
@@ -182,6 +193,11 @@ public class AtlasServiceTest {
         assertEquals(200, resFA.getStatus());
         String responseJson = new String((byte[])resFA.getEntity());
         assertTrue(responseJson, responseJson.contains("myCustomFieldAction"));
+        Response resMB = service.listMappingBuilderClasses(null);
+        assertEquals(200, resMB.getStatus());
+        ArrayNode builders = (ArrayNode) new ObjectMapper().readTree((byte[])resMB.getEntity()).get("ArrayList");
+        assertEquals(1, builders.size());
+        assertEquals("io.atlasmap.service.my.MyCustomMappingBuilder", builders.get(0).asText());
 
         in = new BufferedInputStream(new FileInputStream("src/test/resources/mappings/atlasmapping-custom-action.json"));
         Response resVD = service.validateMappingRequest(in, 0, null);
