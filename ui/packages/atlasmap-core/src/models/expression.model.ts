@@ -632,14 +632,19 @@ export class ExpressionModel {
     offset?: number
   ) {
     const mappedFields = mapping.getUserMappedFields(true);
+    const referenceFields = mapping.getReferenceMappedFields();
     let fieldNodes = this._nodes.filter(
       (n) => n instanceof FieldNode
     ) as FieldNode[];
 
-    // Remove the field from the expression if unmapped.
+    // Remove non-reference fields from the expression if unmapped.
     for (const node of fieldNodes) {
       // TODO: check this non null operator
-      if (mappedFields.includes(node.mappedField!) || node.hasComplexField()) {
+      if (
+        mappedFields.includes(node.mappedField!) ||
+        referenceFields.includes(node.mappedField!) ||
+        node.hasComplexField()
+      ) {
         continue;
       }
       const index = this._nodes.indexOf(node);
@@ -656,12 +661,16 @@ export class ExpressionModel {
       }
     }
 
-    // Add the specified field into the expression - append if no insert position is specified.
+    // Add any non-reference mapped fields into the expression - append if no insert
+    // position is specified.
     fieldNodes = this._nodes.filter(
       (n) => n instanceof FieldNode
     ) as FieldNode[];
     for (const mfield of mappedFields) {
-      if (!fieldNodes.find((n) => n.mappedField === mfield)) {
+      if (
+        !fieldNodes.find((n) => n.mappedField === mfield) &&
+        !referenceFields.find((r) => r.field === mfield.field)
+      ) {
         if (insertPosition) {
           this.insertNodes(
             [new FieldNode(this.mapping, mfield)],

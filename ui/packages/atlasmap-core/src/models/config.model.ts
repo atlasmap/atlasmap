@@ -161,11 +161,6 @@ export class ConfigModel {
   }
 
   set showMappingPreview(show: boolean) {
-    if (show && !this._showMappingPreview) {
-      this.mappingService.enableMappingPreview();
-    } else if (!show && this._showMappingPreview) {
-      this.mappingService.disableMappingPreview();
-    }
     this._showMappingPreview = show;
   }
 
