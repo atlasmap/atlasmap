@@ -127,10 +127,18 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
         doc.id = mappedField.parsedData.parsedDocID;
       }
 
-      mappedField.field = doc.getField(mappedField.parsedData.parsedPath!);
+      if (!mappedField.parsedData.parsedPath) {
+        continue;
+      }
+      mappedField.field = doc.getField(mappedField.parsedData.parsedPath);
 
       if (mappedField.field == null) {
-        if (
+        // Check for collection instance.
+        if (mappedField.parsedData.parsedPath.indexOf('<0>') >= 0) {
+          mappedField.field = doc.getField(
+            mappedField.parsedData.parsedPath!.replace('<0>', '<>')
+          );
+        } else if (
           mappedField.parsedData.fieldIsConstant &&
           mappedField.parsedData.parsedValue &&
           mappedField.parsedData.parsedValueType

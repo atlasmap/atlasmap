@@ -351,27 +351,26 @@ export function mappingExpressionAddField(
         newTextNode.getUuid(),
         isTrailer ? newTextNode.str.length : atIndex,
       );
-    } else {
-      // Try adding the selected field to the active mapping.
-      let field: Field | null = null;
-      for (const doc of initializationService.cfg.getDocs(true)) {
-        field = Field.getField(
-          selectedField,
-          doc.getAllFields(),
-          selectedFieldScope,
-        );
-        if (field) {
-          break;
-        }
-      }
+    }
+    // Try adding the selected field to the active mapping.
+    let field: Field | null = null;
+    for (const doc of initializationService.cfg.getDocs(true)) {
+      field = Field.getField(
+        selectedField,
+        doc.getAllFields(),
+        selectedFieldScope,
+      );
       if (field) {
-        initializationService.cfg.mappingService.fieldSelected(
-          field,
-          true,
-          newTextNode.getUuid(),
-          isTrailer ? newTextNode.toText().length : atIndex,
-        );
+        break;
       }
+    }
+    if (field) {
+      initializationService.cfg.mappingService.fieldSelected(
+        field,
+        true,
+        newTextNode.getUuid(),
+        isTrailer ? newTextNode.toText().length : atIndex,
+      );
     }
   } else {
     mapping.transition!.expression!.addConditionalExpressionNode(

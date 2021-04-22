@@ -186,6 +186,9 @@ export class MappingModel {
     if (!mappedField || !mappedField.field) {
       return;
     }
+    if (mappedField.field.isCollection) {
+      this.removeReferenceField(mappedField);
+    }
     DataMapperUtil.removeItemFromArray(
       mappedField,
       this.getMappedFields(mappedField.field!.isSource())
@@ -281,6 +284,11 @@ export class MappingModel {
     return field;
   }
 
+  /**
+   * Create a reference field in the reference fields array for this mapping.
+   *
+   * @param field
+   */
   createReferenceField(field: Field): MappedField | null {
     let mappedField: MappedField | null = null;
 
@@ -288,9 +296,8 @@ export class MappingModel {
       return null;
     }
     if (
-      field.type === 'COMPLEX' &&
-      (field.serviceObject?.status === 'SUPPORTED' ||
-        field.serviceObject?.status === 'CACHED')
+      field.serviceObject?.status === 'SUPPORTED' ||
+      field.serviceObject?.status === 'CACHED'
     ) {
       mappedField = new MappedField();
       mappedField.field = field;
@@ -300,10 +307,41 @@ export class MappingModel {
   }
 
   /**
-   * A reference field is a complex field which is referenced in a
-   * conditional expression but does not exist as an explicit part of
-   * the mapping.  If the field already exists return it otherwise
-   * create it.
+   * Remove the specified reference field from the reference fields array.
+   *
+   * @param field
+   */
+  removeReferenceField(mappedField: MappedField) {
+    if (!mappedField) {
+      return;
+    }
+    DataMapperUtil.removeItemFromArray(mappedField, this.referenceFields);
+  }
+
+  /**
+   * Return true if a reference field exists in this mapping with the specified field
+   * path, false otherwise.
+   *
+   * @param fieldPath
+   */
+  referenceFieldExists(fieldPath: string): boolean {
+    if (!fieldPath) {
+      return false;
+    }
+    const referenceFields = this.getReferenceMappedFields();
+    for (let i = 0; i < referenceFields.length; i++) {
+      if (referenceFields[i].field?.path === fieldPath) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * A reference field is a complex field which is referenced in a conditional
+   * expression but does not exist as an explicit part of the mapping.  It is
+   * typically used as a parameter to conditional functions/ constructs. If the
+   * field already exists return it otherwise create it.
    *
    * @param fieldPath
    */
@@ -314,7 +352,7 @@ export class MappingModel {
     this.transition.expression.hasComplexField = true;
     const referenceFields = this.getReferenceMappedFields();
     for (let i = 0; i < referenceFields.length; i++) {
-      if (referenceFields[i].parsedData.parsedPath === fieldPath) {
+      if (referenceFields[i].field?.path === fieldPath) {
         return referenceFields[i];
       }
     }

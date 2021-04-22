@@ -516,7 +516,7 @@ export class MappingManagementService {
       // process mapping service not configured.
       return;
     }
-
+    this.cfg.showMappingPreview = true;
     this.mappingPreviewInputSubscription = this.mappingPreviewInput$.subscribe(
       (inputFieldMapping) => {
         if (!inputFieldMapping || !inputFieldMapping.isFullyMapped()) {
@@ -651,7 +651,7 @@ export class MappingManagementService {
     if (this.cfg.mappings?.activeMapping?.isFullyMapped()) {
       for (const mapping of this.cfg.mappings!.getAllMappings(true)) {
         for (const mappedField of mapping.getAllFields()) {
-          if (mappedField.value?.length > 0) {
+          if (mappedField.value?.length > 0 && !mappedField.isConstant()) {
             mappedField.value = '';
             previewValueCleared = true;
           }
@@ -669,6 +669,7 @@ export class MappingManagementService {
       this.mappingPreviewInputSubscription.unsubscribe();
       this.mappingPreviewInputSubscription = undefined;
     }
+    this.cfg.showMappingPreview = false;
   }
 
   /**
