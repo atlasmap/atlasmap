@@ -1,0 +1,55 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "-MYipd8jDixHjPa9gjIU",
+      "name" : "1 - SQL Result",
+      "description" : "Result of SQL [select * from todo]",
+      "uri" : "atlas:json:-MYipd8jDixHjPa9gjIU",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "-MYipkI9DixHjPa9gjIU",
+      "name" : "4 - office",
+      "description" : "-MYipkI9DixHjPa9gjIU",
+      "uri" : "atlas:json:-MYipkI9DixHjPa9gjIU",
+      "dataSourceType" : "TARGET",
+      "template" : null
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "id" : "mapping.370137",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "name" : "task",
+            "path" : "/<>/task",
+            "fieldType" : "STRING",
+            "docId" : "-MYipd8jDixHjPa9gjIU"
+          } ]
+        },
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "name" : "name",
+          "path" : "/arr<>/name",
+          "fieldType" : "STRING",
+          "docId" : "-MYipkI9DixHjPa9gjIU"
+        } ]
+      } ]
+    },
+    "name" : "UI.0",
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "constants" : {
+      "constant" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    }
+  }
+}
