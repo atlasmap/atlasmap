@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">34.14% </span>
+                <span class="strong">33.96% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>127/372</span>
+                <span class='fraction'>127/374</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">17.6% </span>
+                <span class="strong">17.39% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>44/250</span>
+                <span class='fraction'>44/253</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">44.9% </span>
+                <span class="strong">44% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>22/49</span>
+                <span class='fraction'>22/50</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.43% </span>
+                <span class="strong">33.14% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>117/350</span>
+                <span class='fraction'>117/353</span>
             </div>
         
             
@@ -847,7 +847,16 @@
 <a name='L789'></a><a href='#L789'>789</a>
 <a name='L790'></a><a href='#L790'>790</a>
 <a name='L791'></a><a href='#L791'>791</a>
-<a name='L792'></a><a href='#L792'>792</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L792'></a><a href='#L792'>792</a>
+<a name='L793'></a><a href='#L793'>793</a>
+<a name='L794'></a><a href='#L794'>794</a>
+<a name='L795'></a><a href='#L795'>795</a>
+<a name='L796'></a><a href='#L796'>796</a>
+<a name='L797'></a><a href='#L797'>797</a>
+<a name='L798'></a><a href='#L798'>798</a>
+<a name='L799'></a><a href='#L799'>799</a>
+<a name='L800'></a><a href='#L800'>800</a>
+<a name='L801'></a><a href='#L801'>801</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1483,6 +1492,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1490,9 +1507,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1506,11 +1520,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2272,14 +2290,19 @@ export class ExpressionModel {
     offset?: number
   ) {
     const mappedFields = <span class="cstat-no" title="statement not covered" >mapping.getUserMappedFields(true);</span>
+    const referenceFields = <span class="cstat-no" title="statement not covered" >mapping.getReferenceMappedFields();</span>
     let fieldNodes = <span class="cstat-no" title="statement not covered" >this._nodes.filter(</span>
 <span class="fstat-no" title="function not covered" >      (n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n instanceof FieldNode</span>
     ) as FieldNode[];
 &nbsp;
-    // Remove the field from the expression if unmapped.
+    // Remove non-reference fields from the expression if unmapped.
 <span class="cstat-no" title="statement not covered" >    for (const node<span class="cstat-no" title="statement not covered" > of <span class="cstat-no" title="statement not covered" >f</span>ieldNodes)</span> {</span>
       // TODO: check this non null operator
-<span class="cstat-no" title="statement not covered" >      if (mappedFields.includes(node.mappedField!) || node.hasComplexField()) {</span>
+<span class="cstat-no" title="statement not covered" >      if (</span>
+        mappedFields.includes(node.mappedField!) ||
+        referenceFields.includes(node.mappedField!) ||
+        node.hasComplexField()
+      ) {
 <span class="cstat-no" title="statement not covered" >        continue;</span>
       }
       const index = <span class="cstat-no" title="statement not covered" >this._nodes.indexOf(node);</span>
@@ -2296,12 +2319,16 @@ export class ExpressionModel {
       }
     }
 &nbsp;
-    // Add the specified field into the expression - append if no insert position is specified.
+    // Add any non-reference mapped fields into the expression - append if no insert
+    // position is specified.
 <span class="cstat-no" title="statement not covered" >    fieldNodes = this._nodes.filter(</span>
 <span class="fstat-no" title="function not covered" >      (n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n instanceof FieldNode</span>
     ) as FieldNode[];
 <span class="cstat-no" title="statement not covered" >    for (const <span class="cstat-no" title="statement not covered" >mfield<span class="cstat-no" title="statement not covered" > of <span class="cstat-no" title="statement not covered" >m</span></span>appedFields)</span> {</span>
-<span class="cstat-no" title="statement not covered" >      if (!fieldNodes.find(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.mappedField === mfield))</span> {</span>
+<span class="cstat-no" title="statement not covered" >      if (</span>
+        !fieldNodes.find(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.mappedField === mfield) </span>&amp;&amp;
+        !referenceFields.find(<span class="fstat-no" title="function not covered" >(r</span>) =&gt; <span class="cstat-no" title="statement not covered" >r.field === mfield.field)</span>
+      ) {
 <span class="cstat-no" title="statement not covered" >        if (insertPosition) {</span>
 <span class="cstat-no" title="statement not covered" >          this.insertNodes(</span>
             [new FieldNode(this.mapping, mfield)],
@@ -2436,7 +2463,7 @@ export class ExpressionModel {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Apr 22 2021 14:26:39 GMT+0000 (Coordinated Universal Time)
+                at Thu Apr 22 2021 18:32:18 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20.07% </span>
+                <span class="strong">20% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>119/593</span>
+                <span class='fraction'>119/595</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">13.72% </span>
+                <span class="strong">13.64% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>45/328</span>
+                <span class='fraction'>45/330</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">21.35% </span>
+                <span class="strong">21.27% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>114/534</span>
+                <span class='fraction'>114/536</span>
             </div>
         
             
@@ -1389,7 +1389,8 @@
 <a name='L1331'></a><a href='#L1331'>1331</a>
 <a name='L1332'></a><a href='#L1332'>1332</a>
 <a name='L1333'></a><a href='#L1333'>1333</a>
-<a name='L1334'></a><a href='#L1334'>1334</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1334'></a><a href='#L1334'>1334</a>
+<a name='L1335'></a><a href='#L1335'>1335</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1907,7 +1908,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -2060,6 +2061,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -3240,7 +3242,7 @@ export class MappingManagementService {
       // process mapping service not configured.
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
-&nbsp;
+<span class="cstat-no" title="statement not covered" >    this.cfg.showMappingPreview = true;</span>
 <span class="cstat-no" title="statement not covered" >    this.mappingPreviewInputSubscription = this.mappingPreviewInput$.subscribe(</span>
 <span class="fstat-no" title="function not covered" >      (i</span>nputFieldMapping) =&gt; {
 <span class="cstat-no" title="statement not covered" >        if (!inputFieldMapping || !inputFieldMapping.isFullyMapped()) {</span>
@@ -3375,7 +3377,7 @@ export class MappingManagementService {
 <span class="cstat-no" title="statement not covered" >    if (this.cfg.mappings?.activeMapping?.isFullyMapped()) {</span>
 <span class="cstat-no" title="statement not covered" >      for (const mapping<span class="cstat-no" title="statement not covered" > of <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >t</span>his.</span>cfg.mappings!.getAllMappings(true))</span> {</span>
 <span class="cstat-no" title="statement not covered" >        for (const mappedField<span class="cstat-no" title="statement not covered" > of <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >m</span>apping.</span>getAllFields())</span> {</span>
-<span class="cstat-no" title="statement not covered" >          if (mappedField.value?.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >          if (mappedField.value?.length &gt; 0 &amp;&amp; !mappedField.isConstant()) {</span>
 <span class="cstat-no" title="statement not covered" >            mappedField.value = '';</span>
 <span class="cstat-no" title="statement not covered" >            previewValueCleared = true;</span>
           }
@@ -3393,6 +3395,7 @@ export class MappingManagementService {
 <span class="cstat-no" title="statement not covered" >      this.mappingPreviewInputSubscription.unsubscribe();</span>
 <span class="cstat-no" title="statement not covered" >      this.mappingPreviewInputSubscription = undefined;</span>
     }
+<span class="cstat-no" title="statement not covered" >    this.cfg.showMappingPreview = false;</span>
   }
 &nbsp;
   /**
@@ -4062,7 +4065,7 @@ export class MappingManagementService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Apr 22 2021 14:26:39 GMT+0000 (Coordinated Universal Time)
+                at Thu Apr 22 2021 18:32:18 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
