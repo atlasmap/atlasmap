@@ -12,9 +12,14 @@
 
 The AtlasMap is a data mapping solution with interactive web based user interface, that simplifies configuring integrations between Java, XML, and JSON data sources. You can design your data mapping on the AtlasMap Data Mapper UI canvas, and then run that data mapping via runtime engine. AtlasMap Data Mapper UI is primarily designed to work within the [Syndesis UI](https://syndesis.io/), and now we're exploring to improve standalone user experience.
 
-## AtlasMap Documentation
-### [AtlasMap User Guide](http://docs.atlasmap.io/)
-### [AtlasMap Developer Guide](http://docs.atlasmap.io/developer-guide)
+### AtlasMap Documentation
+* [AtlasMap User Guide](http://docs.atlasmap.io/)
+* [AtlasMap Developer Guide](http://docs.atlasmap.io/developer-guide)
+
+### Places to discuss and/or ask a question
+* Gitter for an instant and/or shorter chat, it could be real time - https://gitter.im/atlasmap/community
+* Google Group for a longer discussion - https://groups.google.com/d/forum/atlasmap
+
 
 
 ## The shortest path to run standalone AtlasMap Data Mapper UI
