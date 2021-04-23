@@ -297,7 +297,7 @@ public class DefaultAtlasSession implements AtlasInternalSession {
 
     @Override
     public Map&lt;String, Object&gt; getTargetProperties() {
-<span class="nc" id="L300">        return this.targetProperties;</span>
+<span class="fc" id="L300">        return this.targetProperties;</span>
     }
 
     @Override
@@ -361,94 +361,106 @@ public class DefaultAtlasSession implements AtlasInternalSession {
 <span class="fc" id="L361">        return answer;</span>
     }
 
+    public ConstantModule getConstantModule() {
+<span class="fc" id="L365">        return (ConstantModule) this.getAtlasContext().getSourceModules().get(AtlasConstants.CONSTANTS_DOCUMENT_ID);</span>
+    }
+
+    public PropertyModule getSourcePropertyModule() {
+<span class="fc" id="L369">        return (PropertyModule) this.getAtlasContext().getSourceModules().get(AtlasConstants.PROPERTIES_SOURCE_DOCUMENT_ID);</span>
+    }
+
+    public PropertyModule getTargetPropertyModule() {
+<span class="fc" id="L373">        return (PropertyModule) this.getAtlasContext().getTargetModules().get(AtlasConstants.PROPERTIES_TARGET_DOCUMENT_ID);</span>
+    }
+
     private class HeadImpl implements Head {
         private DefaultAtlasSession session;
         private Mapping mapping;
         private LookupTable lookupTable;
         private Field sourceField;
         private Field targetField;
-<span class="fc" id="L370">        private List&lt;Audit&gt; audits = new LinkedList&lt;Audit&gt;();</span>
+<span class="fc" id="L382">        private List&lt;Audit&gt; audits = new LinkedList&lt;Audit&gt;();</span>
 
-<span class="fc" id="L372">        public HeadImpl(DefaultAtlasSession session) {</span>
-<span class="fc" id="L373">            this.session = session;</span>
-<span class="fc" id="L374">        }</span>
+<span class="fc" id="L384">        public HeadImpl(DefaultAtlasSession session) {</span>
+<span class="fc" id="L385">            this.session = session;</span>
+<span class="fc" id="L386">        }</span>
 
         @Override
         public Mapping getMapping() {
-<span class="fc" id="L378">            return this.mapping;</span>
+<span class="fc" id="L390">            return this.mapping;</span>
         }
 
         @Override
         public LookupTable getLookupTable() {
-<span class="fc" id="L383">            return this.lookupTable;</span>
+<span class="fc" id="L395">            return this.lookupTable;</span>
         }
 
         @Override
         public Field getSourceField() {
-<span class="fc" id="L388">            return this.sourceField;</span>
+<span class="fc" id="L400">            return this.sourceField;</span>
         }
 
         @Override
         public Field getTargetField() {
-<span class="fc" id="L393">            return this.targetField;</span>
+<span class="fc" id="L405">            return this.targetField;</span>
         }
 
         @Override
         public Head setMapping(Mapping mapping) {
-<span class="fc" id="L398">            this.mapping = mapping;</span>
-<span class="fc" id="L399">            return this;</span>
-        }
-
-        @Override
-        public Head setLookupTable(LookupTable table) {
-<span class="fc" id="L404">            this.lookupTable = table;</span>
-<span class="fc" id="L405">            return this;</span>
-        }
-
-        @Override
-        public Head setSourceField(Field sourceField) {
-<span class="fc" id="L410">            this.sourceField = sourceField;</span>
+<span class="fc" id="L410">            this.mapping = mapping;</span>
 <span class="fc" id="L411">            return this;</span>
         }
 
         @Override
-        public Head setTargetField(Field targetField) {
-<span class="fc" id="L416">            this.targetField = targetField;</span>
+        public Head setLookupTable(LookupTable table) {
+<span class="fc" id="L416">            this.lookupTable = table;</span>
 <span class="fc" id="L417">            return this;</span>
         }
 
         @Override
+        public Head setSourceField(Field sourceField) {
+<span class="fc" id="L422">            this.sourceField = sourceField;</span>
+<span class="fc" id="L423">            return this;</span>
+        }
+
+        @Override
+        public Head setTargetField(Field targetField) {
+<span class="fc" id="L428">            this.targetField = targetField;</span>
+<span class="fc" id="L429">            return this;</span>
+        }
+
+        @Override
         public Head unset() {
-<span class="fc" id="L422">            this.mapping = null;</span>
-<span class="fc" id="L423">            this.lookupTable = null;</span>
-<span class="fc" id="L424">            this.sourceField = null;</span>
-<span class="fc" id="L425">            this.targetField = null;</span>
-<span class="fc" id="L426">            return this;</span>
+<span class="fc" id="L434">            this.mapping = null;</span>
+<span class="fc" id="L435">            this.lookupTable = null;</span>
+<span class="fc" id="L436">            this.sourceField = null;</span>
+<span class="fc" id="L437">            this.targetField = null;</span>
+<span class="fc" id="L438">            return this;</span>
         }
 
         @Override
         public boolean hasError() {
-<span class="pc bpc" id="L431" title="1 of 2 branches missed.">            for(Audit audit : audits) {</span>
-<span class="nc bnc" id="L432" title="All 2 branches missed.">                if (audit.getStatus() == AuditStatus.ERROR) {</span>
-<span class="nc" id="L433">                    return true;</span>
+<span class="pc bpc" id="L443" title="1 of 2 branches missed.">            for(Audit audit : audits) {</span>
+<span class="nc bnc" id="L444" title="All 2 branches missed.">                if (audit.getStatus() == AuditStatus.ERROR) {</span>
+<span class="nc" id="L445">                    return true;</span>
                 }
-<span class="nc" id="L435">            }</span>
-<span class="fc" id="L436">            return false;</span>
+<span class="nc" id="L447">            }</span>
+<span class="fc" id="L448">            return false;</span>
         }
 
         @Override
         public Head addAudit(AuditStatus status, Field field, String message) {
-<span class="nc bnc" id="L441" title="All 2 branches missed.">            String docId = field != null ? field.getDocId() : null;</span>
-<span class="nc" id="L442">            String docName = AtlasUtil.getDocumentNameById(session, docId);</span>
-<span class="nc bnc" id="L443" title="All 2 branches missed.">            String path = field != null ? field.getPath() : null;</span>
-<span class="nc" id="L444">            Audit audit = AtlasUtil.createAudit(status, docId, docName, path, null, message);</span>
-<span class="nc" id="L445">            this.audits.add(audit);</span>
-<span class="nc" id="L446">            return this;</span>
+<span class="nc bnc" id="L453" title="All 2 branches missed.">            String docId = field != null ? field.getDocId() : null;</span>
+<span class="nc" id="L454">            String docName = AtlasUtil.getDocumentNameById(session, docId);</span>
+<span class="nc bnc" id="L455" title="All 2 branches missed.">            String path = field != null ? field.getPath() : null;</span>
+<span class="nc" id="L456">            Audit audit = AtlasUtil.createAudit(status, docId, docName, path, null, message);</span>
+<span class="nc" id="L457">            this.audits.add(audit);</span>
+<span class="nc" id="L458">            return this;</span>
         }
 
         @Override
         public List&lt;Audit&gt; getAudits() {
-<span class="fc" id="L451">            return this.audits;</span>
+<span class="fc" id="L463">            return this.audits;</span>
         }
 
     }

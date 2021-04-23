@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>AtlasField.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.builder</a> &gt; <span class="el_source">AtlasField.java</span></div><h1>AtlasField.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2021 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.builder;
+
+import java.util.List;
+
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.ConstantModule;
+import io.atlasmap.core.DefaultAtlasConversionService;
+import io.atlasmap.core.DefaultAtlasFieldActionService;
+import io.atlasmap.core.DefaultAtlasSession;
+import io.atlasmap.core.PropertyModule;
+import io.atlasmap.spi.ActionProcessor;
+import io.atlasmap.spi.AtlasModule;
+import io.atlasmap.spi.AtlasModuleMode;
+import io.atlasmap.v2.Constant;
+import io.atlasmap.v2.Field;
+import io.atlasmap.v2.PropertyField;
+
+/**
+ * A part of custom mapping builder API to implement custom mapping logic in Java code.
+ * This class wraps raw {@link Field} and provide some utility methods to introspect
+ * underlying field tree. {@link DefaultAtlasMappingBuilder#read(String, String)}
+ * reads from source document and creates AtlasField.
+ * @see DefaultAtlasMappingBuilder
+ */
+public class AtlasField {
+
+    private DefaultAtlasSession session;
+    private DefaultAtlasConversionService conversionService;
+    private DefaultAtlasFieldActionService fieldActionService;
+    private Field rawField;
+
+<span class="fc" id="L47">    public AtlasField(DefaultAtlasSession session) {</span>
+<span class="fc" id="L48">        this.session = session;</span>
+<span class="fc" id="L49">        this.conversionService = session.getAtlasContext().getContextFactory().getConversionService();</span>
+<span class="fc" id="L50">        this.fieldActionService = session.getAtlasContext().getContextFactory().getFieldActionService();</span>
+<span class="fc" id="L51">    }</span>
+
+    public AtlasField read(String docId, String path) throws AtlasException {
+<span class="fc" id="L54">        AtlasModule module = session.resolveModule(docId);</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if (module == null) {</span>
+<span class="nc" id="L56">            throw new AtlasException(String.format(&quot;Source document '%s' doesn't exist&quot;, docId));</span>
+        }
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">        if (module.getMode() != AtlasModuleMode.SOURCE) {</span>
+<span class="nc" id="L59">            throw new AtlasException(String.format(</span>
+<span class="nc" id="L60">                    &quot;Unable to read from %s Document '%s'&quot;, module.getMode(), docId));</span>
+        }
+<span class="fc" id="L62">        Field sourceField = module.createField();</span>
+<span class="fc" id="L63">        sourceField.setDocId(docId);</span>
+<span class="fc" id="L64">        sourceField.setPath(path);</span>
+<span class="fc" id="L65">        session.head().setSourceField(sourceField);</span>
+<span class="fc" id="L66">        module.readSourceValue(session);</span>
+<span class="fc" id="L67">        setRawField(sourceField);</span>
+<span class="fc" id="L68">        return this;</span>
+    }
+
+    public AtlasField readConstant(String name) throws AtlasException {
+<span class="fc" id="L72">        ConstantModule module = session.getConstantModule();</span>
+<span class="fc" id="L73">        List&lt;Constant&gt; constants = session.getMapping().getConstants().getConstant();</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        for (Constant constant : constants) {</span>
+<span class="pc bpc" id="L75" title="2 of 4 branches missed.">            if (constant.getName() != null &amp;&amp; constant.getName().equals(name)) {</span>
+<span class="fc" id="L76">                Field sourceField = module.createField();</span>
+<span class="fc" id="L77">                sourceField.setName(constant.getName());</span>
+<span class="fc" id="L78">                sourceField.setFieldType(constant.getFieldType());</span>
+<span class="fc" id="L79">                sourceField.setValue(constant.getValue());</span>
+<span class="fc" id="L80">                session.head().setSourceField(sourceField);</span>
+<span class="fc" id="L81">                module.readSourceValue(session);</span>
+<span class="fc" id="L82">                setRawField(sourceField);</span>
+<span class="fc" id="L83">                return this;</span>
+            }
+<span class="nc" id="L85">        }</span>
+<span class="nc" id="L86">        throw new AtlasException(String.format(&quot;Constant '%s' not found&quot;, name));</span>
+    }
+
+    public AtlasField readProperty(String scope, String name) throws AtlasException {
+<span class="fc" id="L90">        PropertyModule module = session.getSourcePropertyModule();</span>
+<span class="fc" id="L91">        PropertyField sourceField = module.createField();</span>
+<span class="fc" id="L92">        sourceField.setScope(scope);</span>
+<span class="fc" id="L93">        sourceField.setName(name);</span>
+<span class="fc" id="L94">        session.head().setSourceField(sourceField);</span>
+<span class="fc" id="L95">        module.readSourceValue(session);</span>
+<span class="fc" id="L96">        setRawField(sourceField);</span>
+<span class="fc" id="L97">        return this;</span>
+    }
+
+    public void write(String docId, String path) throws AtlasException {
+<span class="fc" id="L101">        AtlasModule module = session.resolveModule(docId);</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        if (module == null) {</span>
+<span class="nc" id="L103">            throw new AtlasException(String.format(&quot;Target document '%s' doesn't exist&quot;, docId));</span>
+        }
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        if (module.getMode() != AtlasModuleMode.TARGET) {</span>
+<span class="nc" id="L106">            throw new AtlasException(String.format(</span>
+<span class="nc" id="L107">                    &quot;Unable to write to %s Document '%s'&quot;, module.getMode(), docId));</span>
+        }
+<span class="fc" id="L109">        Field f = module.createField();</span>
+<span class="fc" id="L110">        f.setDocId(docId);</span>
+<span class="fc" id="L111">        f.setPath(path);</span>
+<span class="fc" id="L112">        session.head().setSourceField(getRawField());</span>
+<span class="fc" id="L113">        session.head().setTargetField(f);</span>
+<span class="fc" id="L114">        module.populateTargetField(session);</span>
+<span class="fc" id="L115">        module.writeTargetValue(session);</span>
+<span class="fc" id="L116">    }</span>
+
+    public void writeProperty(String scope, String name) throws AtlasException {
+<span class="fc" id="L119">        PropertyModule module = session.getTargetPropertyModule();</span>
+<span class="fc" id="L120">        PropertyField f = module.createField();</span>
+<span class="fc" id="L121">        f.setScope(scope);</span>
+<span class="fc" id="L122">        f.setName(name);</span>
+<span class="fc" id="L123">        session.head().setSourceField(getRawField());</span>
+<span class="fc" id="L124">        session.head().setTargetField(f);</span>
+<span class="fc" id="L125">        module.populateTargetField(session);</span>
+<span class="fc" id="L126">        module.writeTargetValue(session);</span>
+<span class="fc" id="L127">    }</span>
+
+    public AtlasField action(String actionName, List&lt;Object&gt; parameters) {
+<span class="nc bnc" id="L130" title="All 4 branches missed.">        Object value = parameters != null &amp;&amp; parameters.size() &gt; 1 ? parameters.get(parameters.size()-1) : null;</span>
+<span class="nc" id="L131">        ActionProcessor ap = this.fieldActionService.findActionProcessor(actionName, value);</span>
+        
+<span class="nc" id="L133">        return this;</span>
+    }
+
+    private Field getRawField() {
+<span class="fc" id="L137">        return this.rawField;</span>
+    }
+
+    private AtlasField setRawField(Field f) {
+<span class="fc" id="L141">        this.rawField = f;</span>
+<span class="fc" id="L142">        return this;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -5,6 +5,7 @@ io.atlasmap.api
 io.atlasmap.mxbean
 io.atlasmap.spi
 io.atlasmap.actions
+io.atlasmap.builder
 io.atlasmap.converters
 io.atlasmap.core
 io.atlasmap.core.validate

@@ -249,5 +249,11 @@ import io.atlasmap.v2.Validations;
     public Field cloneField(Field field) throws AtlasException {
 <span class="nc" id="L250">        return AtlasJsonModelFactory.cloneField((JsonField)field, true);</span>
     }
+
+    @Override
+    public JsonField createField() {
+<span class="fc" id="L255">        return AtlasJsonModelFactory.createJsonField();</span>
+    }
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

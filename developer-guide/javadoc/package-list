@@ -9,6 +9,7 @@ com.sun.xml.xsom.util
 com.sun.xml.xsom.visitor
 io.atlasmap.actions
 io.atlasmap.api
+io.atlasmap.builder
 io.atlasmap.converters
 io.atlasmap.core
 io.atlasmap.core.validate

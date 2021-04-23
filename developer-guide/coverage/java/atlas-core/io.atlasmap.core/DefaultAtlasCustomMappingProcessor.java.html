@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DefaultAtlasCustomMappingProcessor.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.core</a> &gt; <span class="el_source">DefaultAtlasCustomMappingProcessor.java</span></div><h1>DefaultAtlasCustomMappingProcessor.java</h1><pre class="source lang-java linenums">/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.core;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.atlasmap.api.AtlasMappingBuilder;
+import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.CustomMapping;
+
+<span class="fc" id="L25">public class DefaultAtlasCustomMappingProcessor {</span>
+<span class="fc" id="L26">    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasCustomMappingProcessor.class);</span>
+    private static DefaultAtlasCustomMappingProcessor instance;
+
+    public static DefaultAtlasCustomMappingProcessor getInstance() {
+<span class="pc bpc" id="L30" title="1 of 2 branches missed.">        if (instance == null) {</span>
+<span class="fc" id="L31">            instance = new DefaultAtlasCustomMappingProcessor();</span>
+        }
+<span class="fc" id="L33">        return instance;</span>
+    }
+
+    public void process(DefaultAtlasSession session, CustomMapping customMapping) {
+<span class="fc" id="L37">        String className = customMapping.getClassName();</span>
+<span class="pc bpc" id="L38" title="2 of 4 branches missed.">        if (className == null || className.isEmpty()) {</span>
+<span class="nc" id="L39">            AtlasUtil.addAudit(session, className,</span>
+                    &quot;Custom mapping class must be specified&quot;, AuditStatus.ERROR, className);
+<span class="nc" id="L41">            return;</span>
+        }
+<span class="fc" id="L43">        DefaultAtlasContextFactory factory = session.getAtlasContext().getContextFactory();</span>
+        AtlasMappingBuilder builder;
+        try {
+<span class="fc" id="L46">            Class&lt;?&gt; clazz = factory.getClassLoader().loadClass(className);</span>
+<span class="fc" id="L47">            builder = AtlasMappingBuilder.class.cast(clazz.newInstance());</span>
+<span class="nc" id="L48">        } catch (Exception e) {</span>
+<span class="nc" id="L49">            AtlasUtil.addAudit(session, className, String.format(</span>
+                    &quot;Custom mapping class '%s' could not be loaded: %s&quot;,
+<span class="nc" id="L51">                    className, e.getMessage()), AuditStatus.ERROR, className);</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L53">                LOG.error(&quot;&quot;, e);</span>
+            }
+<span class="nc" id="L55">            return;</span>
+<span class="fc" id="L56">        }</span>
+
+<span class="fc" id="L58">        builder.setAtlasSession(session);</span>
+<span class="fc" id="L59">        builder.processMapping();</span>
+<span class="fc" id="L60">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

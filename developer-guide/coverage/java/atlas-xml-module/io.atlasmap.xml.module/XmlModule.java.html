@@ -349,45 +349,50 @@ import io.atlasmap.xml.v2.XmlNamespaces;
 <span class="nc" id="L349">        return AtlasXmlModelFactory.cloneField((XmlField)field, true);</span>
     }
 
+    @Override
+    public XmlField createField() {
+<span class="fc" id="L354">        return AtlasXmlModelFactory.createXmlField();</span>
+    }
+
     protected XmlIOHelper getXmlIOHelper() {
-<span class="fc" id="L353">        return this.ioHelper;</span>
+<span class="fc" id="L358">        return this.ioHelper;</span>
     }
 
     private Document enforceSchema(Document doc) {
-<span class="pc bpc" id="L357" title="1 of 4 branches missed.">        if (getDataSourceMetadata() == null || getDataSourceMetadata().getInspectionType() != InspectionType.SCHEMA</span>
-<span class="pc bpc" id="L358" title="2 of 4 branches missed.">            || getDataSourceMetadata().getSpecification() == null || getDataSourceMetadata().getSpecification().length == 0) {</span>
-<span class="fc" id="L359">            return doc;</span>
+<span class="pc bpc" id="L362" title="1 of 4 branches missed.">        if (getDataSourceMetadata() == null || getDataSourceMetadata().getInspectionType() != InspectionType.SCHEMA</span>
+<span class="pc bpc" id="L363" title="2 of 4 branches missed.">            || getDataSourceMetadata().getSpecification() == null || getDataSourceMetadata().getSpecification().length == 0) {</span>
+<span class="fc" id="L364">            return doc;</span>
         }
         try {
-<span class="fc" id="L362">            byte[] bytes = getDataSourceMetadata().getSpecification();</span>
-<span class="fc" id="L363">            AtlasXmlSchemaSetParser schemaParser = new AtlasXmlSchemaSetParser(getClassLoader());</span>
-<span class="fc" id="L364">            XSSchemaSet schemaSet = schemaParser.parse(new ByteArrayInputStream(bytes));</span>
-<span class="fc" id="L365">            Element sourceRoot = doc.getDocumentElement();</span>
-<span class="fc" id="L366">            String namespaceUri = sourceRoot.getNamespaceURI();</span>
-<span class="pc bpc" id="L367" title="1 of 2 branches missed.">            if (namespaceUri == null) {</span>
-<span class="nc" id="L368">                namespaceUri = XMLConstants.NULL_NS_URI;</span>
+<span class="fc" id="L367">            byte[] bytes = getDataSourceMetadata().getSpecification();</span>
+<span class="fc" id="L368">            AtlasXmlSchemaSetParser schemaParser = new AtlasXmlSchemaSetParser(getClassLoader());</span>
+<span class="fc" id="L369">            XSSchemaSet schemaSet = schemaParser.parse(new ByteArrayInputStream(bytes));</span>
+<span class="fc" id="L370">            Element sourceRoot = doc.getDocumentElement();</span>
+<span class="fc" id="L371">            String namespaceUri = sourceRoot.getNamespaceURI();</span>
+<span class="pc bpc" id="L372" title="1 of 2 branches missed.">            if (namespaceUri == null) {</span>
+<span class="nc" id="L373">                namespaceUri = XMLConstants.NULL_NS_URI;</span>
             }
-<span class="fc" id="L370">            String localName = sourceRoot.getLocalName();</span>
-<span class="pc bpc" id="L371" title="1 of 2 branches missed.">            if (XMLConstants.NULL_NS_URI.equals(namespaceUri)) {</span>
-<span class="nc" id="L372">                localName = sourceRoot.getTagName();</span>
+<span class="fc" id="L375">            String localName = sourceRoot.getLocalName();</span>
+<span class="pc bpc" id="L376" title="1 of 2 branches missed.">            if (XMLConstants.NULL_NS_URI.equals(namespaceUri)) {</span>
+<span class="nc" id="L377">                localName = sourceRoot.getTagName();</span>
             }
-<span class="fc" id="L374">            XSElementDecl rootDecl = schemaSet.getElementDecl(namespaceUri, localName);</span>
-<span class="pc bpc" id="L375" title="1 of 2 branches missed.">            if (rootDecl == null) {</span>
-<span class="nc bnc" id="L376" title="All 2 branches missed.">                LOG.warn(&quot;Declaration of the root element '{}' was not found in the schema&quot;,</span>
+<span class="fc" id="L379">            XSElementDecl rootDecl = schemaSet.getElementDecl(namespaceUri, localName);</span>
+<span class="pc bpc" id="L380" title="1 of 2 branches missed.">            if (rootDecl == null) {</span>
+<span class="nc bnc" id="L381" title="All 2 branches missed.">                LOG.warn(&quot;Declaration of the root element '{}' was not found in the schema&quot;,</span>
                         namespaceUri != null ? namespaceUri + &quot;:&quot; + localName : localName);
-<span class="nc" id="L378">                return doc;</span>
+<span class="nc" id="L383">                return doc;</span>
             }
-<span class="fc" id="L380">            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();</span>
-<span class="fc" id="L381">            dbf.setNamespaceAware(true);</span>
-<span class="fc" id="L382">            Document targetDoc = dbf.newDocumentBuilder().newDocument();</span>
-<span class="fc" id="L383">            rootDecl.visit(new AtlasRewritingXSVisitor(doc, targetDoc));</span>
-<span class="fc" id="L384">            return targetDoc;</span>
-<span class="nc" id="L385">        } catch (Exception e) {</span>
-<span class="nc" id="L386">            LOG.warn(&quot;Failed to load XML schema for the document '{}': {} - ignoring&quot;, getDocId(), e.getMessage());</span>
-<span class="nc bnc" id="L387" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L388">                LOG.debug(&quot;&quot;, e);</span>
+<span class="fc" id="L385">            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();</span>
+<span class="fc" id="L386">            dbf.setNamespaceAware(true);</span>
+<span class="fc" id="L387">            Document targetDoc = dbf.newDocumentBuilder().newDocument();</span>
+<span class="fc" id="L388">            rootDecl.visit(new AtlasRewritingXSVisitor(doc, targetDoc));</span>
+<span class="fc" id="L389">            return targetDoc;</span>
+<span class="nc" id="L390">        } catch (Exception e) {</span>
+<span class="nc" id="L391">            LOG.warn(&quot;Failed to load XML schema for the document '{}': {} - ignoring&quot;, getDocId(), e.getMessage());</span>
+<span class="nc bnc" id="L392" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L393">                LOG.debug(&quot;&quot;, e);</span>
             }
-<span class="nc" id="L390">            return doc;</span>
+<span class="nc" id="L395">            return doc;</span>
         }
     }
 
