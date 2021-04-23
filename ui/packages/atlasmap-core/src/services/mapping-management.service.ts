@@ -642,10 +642,10 @@ export class MappingManagementService {
 
   /**
    * On mapping preview disable, clear any preview values and unsubscribe from
-   * both the mapping-updated and mappimng-preview subscriptions.
+   * both the mapping-updated and mapping-preview subscriptions.
    */
   disableMappingPreview(): void {
-    let previewValueCleared = false;
+    this.cfg.showMappingPreview = false;
 
     // Clear any preview values on mapping preview disable.
     if (this.cfg.mappings?.activeMapping?.isFullyMapped()) {
@@ -653,14 +653,11 @@ export class MappingManagementService {
         for (const mappedField of mapping.getAllFields()) {
           if (mappedField.value?.length > 0 && !mappedField.isConstant()) {
             mappedField.value = '';
-            previewValueCleared = true;
           }
         }
       }
     }
-    if (previewValueCleared) {
-      this.notifyMappingUpdated();
-    }
+
     if (this.mappingUpdatedSubscription) {
       this.mappingUpdatedSubscription.unsubscribe();
       this.mappingUpdatedSubscription = undefined;
@@ -669,7 +666,6 @@ export class MappingManagementService {
       this.mappingPreviewInputSubscription.unsubscribe();
       this.mappingPreviewInputSubscription = undefined;
     }
-    this.cfg.showMappingPreview = false;
   }
 
   /**
