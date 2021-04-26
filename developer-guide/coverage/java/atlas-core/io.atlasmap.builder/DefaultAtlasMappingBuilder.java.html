@@ -48,30 +48,47 @@ import io.atlasmap.v2.AuditStatus;
     }
 
     @Override
+    public void process() {
+        try {
+<span class="fc" id="L53">            processMapping();</span>
+<span class="nc" id="L54">        } catch (Exception e) {</span>
+<span class="nc" id="L55">            addAudit(e);</span>
+<span class="fc" id="L56">        }</span>
+<span class="fc" id="L57">    }</span>
+
+    /**
+     * Define custom mapping logic. User can extend this class and implement
+     * custom mapping logic in this method. The thrown Exception will be catched
+     * in {@link #process()} and added as an Audit.
+     * @throws Exception Indicate mapping error to be recorded as an Audit
+     */
+    public abstract void processMapping() throws Exception;
+
+    @Override
     public void setAtlasSession(AtlasSession session) {
-<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        if (!(session instanceof DefaultAtlasSession)) {</span>
-<span class="nc" id="L53">            throw new IllegalArgumentException(String.format(</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        if (!(session instanceof DefaultAtlasSession)) {</span>
+<span class="nc" id="L70">            throw new IllegalArgumentException(String.format(</span>
                     &quot;This version of MappingBuilder doesn't support %s&quot;,
-<span class="nc" id="L55">                    session.getClass().getName()));</span>
+<span class="nc" id="L72">                    session.getClass().getName()));</span>
         }
-<span class="fc" id="L57">        this.session = (DefaultAtlasSession) session;</span>
-<span class="fc" id="L58">    };</span>
+<span class="fc" id="L74">        this.session = (DefaultAtlasSession) session;</span>
+<span class="fc" id="L75">    };</span>
 
     /**
      * Get {@code DefaultAtlasSession}.
      * @return {@code AtlasSession}.
      */
     public AtlasSession getAtlasSession() {
-<span class="nc" id="L65">        return this.session;</span>
+<span class="nc" id="L82">        return this.session;</span>
     };
 
     public void addAudit(Exception e) {
-<span class="nc" id="L69">        AtlasUtil.addAudit(this.session, this.getClass().getName(),</span>
-<span class="nc" id="L70">                e.getMessage(), AuditStatus.ERROR, null);</span>
-<span class="nc bnc" id="L71" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L72">            LOG.error(&quot;&quot;, e);</span>
+<span class="nc" id="L86">        AtlasUtil.addAudit(this.session, this.getClass().getName(),</span>
+<span class="nc" id="L87">                e.getMessage(), AuditStatus.ERROR, null);</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L89">            LOG.error(&quot;&quot;, e);</span>
         }
-<span class="nc" id="L74">    }</span>
+<span class="nc" id="L91">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
