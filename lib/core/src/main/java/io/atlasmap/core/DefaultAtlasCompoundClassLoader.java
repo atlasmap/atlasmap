@@ -18,7 +18,7 @@ package io.atlasmap.core;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 class DefaultAtlasCompoundClassLoader extends CompoundClassLoader {
     private static final Logger LOG = LoggerFactory.getLogger(CompoundClassLoader.class);
 
-    private Set<ClassLoader> delegates = new HashSet<>();
+    private Set<ClassLoader> delegates = new LinkedHashSet<>();
 
     @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException {
