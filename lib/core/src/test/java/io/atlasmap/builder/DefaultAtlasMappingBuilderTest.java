@@ -21,9 +21,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.BaseDefaultAtlasContextTest;
-import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.FieldType;
 
 public class DefaultAtlasMappingBuilderTest extends BaseDefaultAtlasContextTest {
@@ -32,18 +30,15 @@ public class DefaultAtlasMappingBuilderTest extends BaseDefaultAtlasContextTest 
     public void test() throws Exception {
         DefaultAtlasMappingBuilder builder = new DefaultAtlasMappingBuilder() {
             @Override
-            public void processMapping() {
-                try {
-                    read(DEFAULT_SOURCE_DOCUMENT_ID, "/f1")
-                        .write(DEFAULT_TARGET_DOCUMENT_ID, "/f2");
-                    readConstant("c3").writeProperty(DEFAULT_TARGET_DOCUMENT_ID, "p4");
-                    readProperty(DEFAULT_SOURCE_DOCUMENT_ID, "p5").write(DEFAULT_TARGET_DOCUMENT_ID, "/f6");
-                } catch (AtlasException e) {
-                    addAudit(e);
-                }
+            public void processMapping() throws Exception {
+                read(DEFAULT_SOURCE_DOCUMENT_ID, "/f1")
+                    .write(DEFAULT_TARGET_DOCUMENT_ID, "/f2");
+                readConstant("c3")
+                    .writeProperty(DEFAULT_TARGET_DOCUMENT_ID, "p4");
+                readProperty(DEFAULT_SOURCE_DOCUMENT_ID, "p5")
+                    .write(DEFAULT_TARGET_DOCUMENT_ID, "/f6");
             }
         };
-        AtlasMapping m = session.getMapping();
         populateConstant("c3", "c3value");
         populateSourceField(DEFAULT_SOURCE_DOCUMENT_ID, FieldType.STRING, "f1", "f1value");
         populateProperty(DEFAULT_SOURCE_DOCUMENT_ID, "p5", "p5value");

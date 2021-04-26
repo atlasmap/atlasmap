@@ -23,10 +23,10 @@ package io.atlasmap.api;
 public interface AtlasMappingBuilder {
 
     /**
-     * Define custom mapping logic. User can extend this class and implement
+     * Define custom mapping logic. User can implement this interface and define
      * custom mapping logic in this method.
      */
-    void processMapping();
+    void process();
 
     /**
      * Set {@code AtlasSession}.

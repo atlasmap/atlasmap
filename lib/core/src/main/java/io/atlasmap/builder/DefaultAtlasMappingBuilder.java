@@ -48,6 +48,23 @@ public abstract class DefaultAtlasMappingBuilder implements AtlasMappingBuilder 
     }
 
     @Override
+    public void process() {
+        try {
+            processMapping();
+        } catch (Exception e) {
+            addAudit(e);
+        }
+    }
+
+    /**
+     * Define custom mapping logic. User can extend this class and implement
+     * custom mapping logic in this method. The thrown Exception will be catched
+     * in {@link #process()} and added as an Audit.
+     * @throws Exception Indicate mapping error to be recorded as an Audit
+     */
+    public abstract void processMapping() throws Exception;
+
+    @Override
     public void setAtlasSession(AtlasSession session) {
         if (!(session instanceof DefaultAtlasSession)) {
             throw new IllegalArgumentException(String.format(
