@@ -56,7 +56,7 @@ public class DefaultAtlasCustomMappingProcessor {
         }
 
         builder.setAtlasSession(session);
-        builder.processMapping();
+        builder.process();
     }
 
 }

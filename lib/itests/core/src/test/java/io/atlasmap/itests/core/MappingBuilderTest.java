@@ -52,15 +52,10 @@ public class MappingBuilderTest {
     }
 
     public static class JsonXmlBuilder extends DefaultAtlasMappingBuilder {
-
         @Override
-        public void processMapping() {
-            try {
-                read("SourceJson", "/sourceOrderList/orderBatchNumber")
-                    .write("TargetXml", "/foo/bar/test");
-            } catch (Exception e) {
-                addAudit(e);
-            }
+        public void processMapping() throws Exception {
+            read("SourceJson", "/sourceOrderList/orderBatchNumber")
+                .write("TargetXml", "/foo/bar/test");
         }
     }
 
