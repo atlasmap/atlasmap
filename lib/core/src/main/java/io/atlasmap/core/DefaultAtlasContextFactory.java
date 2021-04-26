@@ -77,9 +77,23 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     }
 
     public static DefaultAtlasContextFactory getInstance() {
+        return getInstance(true);
+    }
+
+    /**
+     * Returns the default singleton, possibly creating it if necessary.
+     *
+     * @param init if {@code true} the newly created {@link DefaultAtlasContextFactory} will be initialized upon
+     *            creation via {@link #init()}; otherwise, the newly created {@link DefaultAtlasContextFactory} will not
+     *            be initialized upon creation via {@link #init()}
+     * @return the singleton
+     */
+    public static DefaultAtlasContextFactory getInstance(boolean init) {
         if (factory == null) {
             factory = new DefaultAtlasContextFactory();
-            factory.init();
+            if (init) {
+                factory.init();
+            }
         }
         return factory;
     }
@@ -120,7 +134,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         this.moduleInfoRegistry = new DefaultAtlasModuleInfoRegistry(this);
         loadModules("moduleClass", AtlasModule.class);
         this.initialized = true;
-        
+
     }
 
     @Override
@@ -333,7 +347,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 
                 if (isClassAtlasModule(moduleClass, moduleInterface)) {
                     @SuppressWarnings("unchecked")
-                    Class<AtlasModule> atlasModuleClass = (Class<AtlasModule>)moduleClass;
+                    Class<AtlasModule> atlasModuleClass = (Class<AtlasModule>) moduleClass;
                     Constructor<AtlasModule> constructor = atlasModuleClass.getDeclaredConstructor();
                     if (constructor != null) {
                         AtlasModuleInfo module = new DefaultAtlasModuleInfo(getModuleName(moduleClass),

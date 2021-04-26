@@ -136,6 +136,40 @@ public class DefaultAtlasContextFactoryTest {
     }
 
     @Test
+    public void testStaticFactoryNonInit() {
+        factory = DefaultAtlasContextFactory.getInstance(false);
+        assertNotNull(factory);
+        assertEquals("io.atlasmap.core.DefaultAtlasContextFactory", factory.getClassName());
+        assertNull(factory.getClassLoader());
+        assertNull(factory.getThreadName());
+        assertNull(factory.getUuid());
+        assertNull(factory.getJmxObjectName());
+        assertNull(factory.getModuleInfoRegistry());
+        factory.destroy();
+        assertNull(factory.getClassLoader());
+        assertNull(factory.getClassLoader());
+        assertNull(factory.getThreadName());
+        assertNull(factory.getUuid());
+        assertNull(factory.getJmxObjectName());
+        assertNull(factory.getModuleInfoRegistry());
+        CompoundClassLoader cl = new DefaultAtlasCompoundClassLoader();
+        factory.init(cl);
+        assertSame(cl, factory.getClassLoader());
+        assertNotNull(factory.getThreadName());
+        assertNotNull(factory.getUuid());
+        assertNotNull(factory.getJmxObjectName());
+        assertNotNull(factory.getModuleInfoRegistry());
+
+        factory.destroy();
+        assertNotNull(factory);
+        assertNull(factory.getThreadName());
+        assertEquals("io.atlasmap.core.DefaultAtlasContextFactory", factory.getClassName());
+        assertNull(factory.getUuid());
+        assertNull(factory.getJmxObjectName());
+        assertNull(factory.getModuleInfoRegistry());
+    }
+
+    @Test
     public void testDefaultAtlasContextFactoryProperties() {
         Map<String, String> properties = new HashMap<>();
         properties.put("key1", "value1");
