@@ -1,7 +1,7 @@
 {
   "name": "@atlasmap/atlasmap",
   "description": "",
-  "version": "2.2.0-M.7",
+  "version": "2.2.0-SNAPSHOT",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -35,7 +35,7 @@
     "endOfLine": "auto"
   },
   "dependencies": {
-    "@atlasmap/core": "^2.2.0-M.7",
+    "@atlasmap/core": "^2.2.0-SNAPSHOT",
     "react-sage": "^0.0.42",
     "use-debounce": "^3.4.2"
   },
