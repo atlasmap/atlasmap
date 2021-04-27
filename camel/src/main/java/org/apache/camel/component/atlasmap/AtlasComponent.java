@@ -17,26 +17,51 @@
 
 package org.apache.camel.component.atlasmap;
 
+import java.io.InputStream;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.camel.Endpoint;
 import org.apache.camel.component.atlasmap.AtlasEndpoint.TargetMapMode;
 import org.apache.camel.impl.DefaultComponent;
 import org.apache.camel.spi.Metadata;
+import org.apache.camel.util.IOHelper;
+import org.apache.camel.util.ObjectHelper;
 import org.apache.camel.util.ResourceHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasContextFactory;
+import io.atlasmap.core.DefaultAtlasContextFactory;
 
 /**
  * @version
  */
 public class AtlasComponent extends DefaultComponent {
 
+    private static final Logger LOG = LoggerFactory.getLogger(AtlasComponent.class);
+
     @Metadata(label = "advanced")
     private AtlasContextFactory atlasContextFactory;
 
+    @Metadata(label = "advanced")
+    private String propertiesFile;
+
     public AtlasContextFactory getAtlasContextFactory() {
         return atlasContextFactory;
+    }
+
+    /**
+     * The URI of the properties file which is used for AtlasContextFactory
+     * initialization.
+     * @param file properties file path
+     */
+    public void setPropertiesFile(String file) {
+        propertiesFile = file;
+    }
+
+    public String getPropertiesFile() {
+        return propertiesFile;
     }
 
     /**
@@ -58,7 +83,7 @@ public class AtlasComponent extends DefaultComponent {
         endpoint.setContentCache(cache);
         endpoint.setSourceMapName(sourceMapName);
         endpoint.setTargetMapName(targetMapName);
-        endpoint.setAtlasContextFactory(getAtlasContextFactory());
+        endpoint.setAtlasContextFactory(getOrCreateAtlasContextFactory());
         if (targetMapMode != null) {
             endpoint.setTargetMapMode(targetMapMode);
         }
@@ -72,4 +97,29 @@ public class AtlasComponent extends DefaultComponent {
 
         return endpoint;
     }
+
+    private synchronized AtlasContextFactory getOrCreateAtlasContextFactory() throws Exception {
+        if (atlasContextFactory != null) {
+            return atlasContextFactory;
+        }
+
+        atlasContextFactory = DefaultAtlasContextFactory.getInstance();
+        atlasContextFactory.addClassLoader(getCamelContext().getApplicationContextClassLoader());
+        // load the properties from property file which may overrides the default ones
+        if (ObjectHelper.isNotEmpty(getPropertiesFile())) {
+            Properties properties = new Properties();
+            InputStream reader = ResourceHelper.resolveMandatoryResourceAsInputStream(getCamelContext(),
+                    getPropertiesFile());
+            try {
+                properties.load(reader);
+                LOG.info("Loaded the Atlas properties file " + getPropertiesFile());
+            } finally {
+                IOHelper.close(reader, getPropertiesFile(), LOG);
+            }
+            LOG.debug("Initializing AtlasContextFactory with properties {}", properties);
+            atlasContextFactory.setProperties(properties);
+        }
+        return atlasContextFactory;
+    }
+
 }
