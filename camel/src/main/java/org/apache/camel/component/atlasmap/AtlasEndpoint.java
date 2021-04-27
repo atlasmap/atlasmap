@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
@@ -33,10 +32,8 @@ import org.apache.camel.Message;
 import org.apache.camel.component.ResourceEndpoint;
 import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
-import org.apache.camel.util.IOHelper;
 import org.apache.camel.util.MessageHelper;
 import org.apache.camel.util.ObjectHelper;
-import org.apache.camel.util.ResourceHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +41,6 @@ import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
@@ -66,8 +62,6 @@ public class AtlasEndpoint extends ResourceEndpoint {
     private boolean loaderCache = true;
     @UriParam
     private String encoding;
-    @UriParam
-    private String propertiesFile;
     @UriParam
     private String sourceMapName;
     @UriParam
@@ -137,19 +131,6 @@ public class AtlasEndpoint extends ResourceEndpoint {
 
     public String getEncoding() {
         return encoding;
-    }
-
-    /**
-     * The URI of the properties file which is used for AtlasContextFactory
-     * initialization.
-     * @param file properties file path
-     */
-    public void setPropertiesFile(String file) {
-        propertiesFile = file;
-    }
-
-    public String getPropertiesFile() {
-        return propertiesFile;
     }
 
     /**
@@ -256,7 +237,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
             }
             // remove the header to avoid it being propagated in the routing
             incomingMessage.removeHeader(AtlasConstants.ATLAS_MAPPING);
-            return getOrCreateAtlasContextFactory().createContext(JSON, is);
+            return atlasContextFactory.createContext(JSON, is);
         } else if (getAtlasContext() != null) {
             // no mapping specified in header, and found an existing context
             return getAtlasContext();
@@ -267,33 +248,9 @@ public class AtlasEndpoint extends ResourceEndpoint {
             log.debug("Atlas mapping content read from resourceUri: {} for endpoint {}",
                     new Object[] { path, getEndpointUri() });
         }
-        atlasContext = getOrCreateAtlasContextFactory().createContext(
+        atlasContext = atlasContextFactory.createContext(
                 path.toLowerCase().endsWith("adm") ? ADM : JSON, getResourceAsInputStream());
         return atlasContext;
-    }
-
-    private synchronized AtlasContextFactory getOrCreateAtlasContextFactory() throws Exception {
-        if (atlasContextFactory != null) {
-            return atlasContextFactory;
-        }
-
-        atlasContextFactory = DefaultAtlasContextFactory.getInstance();
-        atlasContextFactory.addClassLoader(getCamelContext().getApplicationContextClassLoader());
-        // load the properties from property file which may overrides the default ones
-        if (ObjectHelper.isNotEmpty(getPropertiesFile())) {
-            Properties properties = new Properties();
-            InputStream reader = ResourceHelper.resolveMandatoryResourceAsInputStream(getCamelContext(),
-                    getPropertiesFile());
-            try {
-                properties.load(reader);
-                log.info("Loaded the Atlas properties file " + getPropertiesFile());
-            } finally {
-                IOHelper.close(reader, getPropertiesFile(), log);
-            }
-            log.debug("Initializing AtlasContextFactory with properties {}", properties);
-            atlasContextFactory.setProperties(properties);
-        }
-        return atlasContextFactory;
     }
 
     private void populateSourceDocuments(Exchange exchange, AtlasSession session) {
