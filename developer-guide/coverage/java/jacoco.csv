@@ -25,7 +25,7 @@ Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasFieldActionSer
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasFieldActionService.new ActionProcessor() {...},51,145,7,13,8,26,6,9,0,5
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasFieldActionService.new Comparator() {...},0,12,0,0,0,2,0,2,0,2
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasFunctionResolver,31,181,4,18,3,41,4,12,0,5
-Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasContextFactory,164,699,20,56,35,201,23,62,4,43
+Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasContextFactory,163,705,20,58,34,204,23,64,4,44
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasPreviewContext.PreviewModule,20,139,3,31,12,33,13,19,10,5
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,PropertyModule,67,85,6,10,13,30,8,15,2,13
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,AtlasUtil,317,889,59,111,72,199,48,70,5,26
