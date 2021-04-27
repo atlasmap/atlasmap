@@ -676,10 +676,14 @@ export class MappingSerializer {
       ) {
         serializedField.attribute = field.isAttribute;
       }
-      if (!ignoreValue && field.value) {
-        serializedField['value'] = field.value;
-      } else {
-        serializedField['value'] = '';
+
+      // Only capture a value for preview mode and constants.
+      if (!ignoreValue || field.isConstant()) {
+        if (field.value) {
+          serializedField['value'] = field.value;
+        } else {
+          serializedField['value'] = '';
+        }
       }
 
       if (
