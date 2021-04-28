@@ -24,15 +24,28 @@ job_default: &job_defaults
   docker:
     - image: openjdk:8-jdk
   
-load_m2: &load_m2
-  attach_workspace:
-    at: ~/.m2
+load_cache_mvn: &load_cache_mvn
+  restore_cache:
+    key: atlasmap-mvn-{{ checksum "pom.xml" }}
 
-save_m2: &save_m2
-  persist_to_workspace:
-    root: ~/.m2
+load_cache_node: &load_cache_node
+  restore_cache:
+    key: atlasmap-node-{{ checksum "ui/package.json" }}
+
+save_cache_mvn: &save_cache_mvn
+  save_cache:
+    key: atlasmap-mvn-{{ checksum "pom.xml" }}
     paths:
-      - repository/io/atlasmap
+    - ~/.m2
+
+save_cache_node: &save_cache_node
+  save_cache:
+    key: atlasmap-node-{{ checksum "ui/package.json" }}
+    paths:
+    - ui/node_modules
+    - ui/packages/atlasmap-core/node_modules
+    - ui/packages/atlasmap/node_modules
+    - ui/packages/atlasmap-standalone/node_modules
 
 save_junit: &save_junit
   run:
@@ -121,9 +134,8 @@ jobs:
       <<: *common_env
     steps:
       - checkout
-      - restore_cache:
-          key: atlasmap-mvn-{{ checksum "pom.xml" }}
-      - <<: *load_m2
+      - <<: *load_cache_mvn
+      - <<: *load_cache_node
       - run:
           name: Install dependencies 
           command: |
@@ -162,11 +174,8 @@ jobs:
       - <<: *save_checkstyle
       - store_artifacts:
           path: /workspace/checkstyle
-      - <<: *save_m2
-      - save_cache:
-          key: atlasmap-mvn-{{ checksum "pom.xml" }}
-          paths:
-          - ~/.m2
+      - <<: *save_cache_mvn
+      - <<: *save_cache_node
       - <<: *push_images
       # - <<: *publish_npm
 
@@ -176,16 +185,11 @@ jobs:
       <<: *common_env
     steps:
       - checkout
-      - restore_cache:
-          key: atlasmap-mvn-docs-{{ checksum "docs/pom.xml" }}
-      - <<: *load_m2
+      - <<: *load_cache_mvn
       - <<: *publish_docs
       - store_artifacts:
           path: docs/gh-pages
-      - save_cache:
-          key: atlasmap-mvn-docs-{{ checksum "docs/pom.xml" }}
-          paths:
-          - ~/.m2
+      - <<: *save_cache_mvn
 
 workflows:
   version: 2
