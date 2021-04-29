@@ -132,9 +132,7 @@ describe('InitializationService', () => {
     spyOn(cfg.mappingService, 'runtimeServiceActive').and.returnValue(
       Promise.resolve(true)
     );
-    spyOn(cfg.fileService, 'getCurrentMappingCatalog').and.returnValue(
-      of(null)
-    );
+    spyOn(cfg.fileService, 'getCurrentMappingDigest').and.returnValue(of(null));
     service.systemInitialized$.subscribe(() => {
       expect(cfg.sourceDocs[0].fields.length).toEqual(1);
       expect(cfg.sourceDocs[0].fields[0].path).toEqual('/<>');

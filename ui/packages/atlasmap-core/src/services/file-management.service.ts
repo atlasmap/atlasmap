@@ -14,14 +14,14 @@
     limitations under the License.
 */
 import ky from 'ky';
-import { ConfigModel } from '../models/config.model';
 import { gzip } from 'pako';
 import log from 'loglevel';
 import { Observable } from 'rxjs';
-import { DataMapperUtil } from '../common/data-mapper-util';
 import { timeout } from 'rxjs/operators';
+import { DataMapperUtil } from '../common/data-mapper-util';
 import { DocumentManagementService } from './document-management.service';
 import { InspectionType } from '../common/config.types';
+import { ConfigModel } from '../models/config.model';
 import {
   ErrorScope,
   ErrorType,
@@ -84,52 +84,23 @@ export class FileManagementService {
   }
 
   /**
-   * Retrieve the current user data mappings catalog from the server as a GZIP compressed byte array buffer.
+   * Retrieve the current user data mappings digest file from the server as a GZIP compressed byte array buffer.
    */
-  getCurrentMappingCatalog(): Observable<Uint8Array> {
-    return new Observable<Uint8Array>((observer: any) => {
-      const baseURL: string =
-        this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/';
-      const url: string = baseURL;
-      this.cfg.logger!.debug('Mapping Catalog Request: ' + url);
-      const headers = {
-        'Content-Type': 'application/octet-stream',
-        Accept: 'application/octet-stream',
-        'Response-Type': 'application/octet-stream',
-      };
-      this.api
-        .get(url, { headers })
-        .arrayBuffer()
-        .then((body: ArrayBuffer) => {
-          this.cfg.logger!.debug(
-            `Mapping Catalog Response: ${JSON.stringify(body)}`
-          );
-          if (body.byteLength) {
-            observer.next(body);
-          } else {
-            observer.next(null);
-          }
-          observer.complete();
-        })
-        .catch((error: any) => {
-          if (error.status !== DataMapperUtil.HTTP_STATUS_NO_CONTENT) {
-            this.handleError(
-              'Error occurred while accessing the current mappings catalog from the runtime service.',
-              error
-            );
-            observer.error(error);
-          }
-          observer.complete();
-        });
-    }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
+  getCurrentMappingDigest(): Observable<Uint8Array> {
+    return this.getCurrentFile('Mapping digest file', 'GZ');
   }
 
-  getCurrentADMCatalog(): Observable<Uint8Array> {
-    return new Observable<Uint8Array>((observer: any) => {
-      const baseURL: string =
-        this.cfg.initCfg.baseMappingServiceUrl + 'mapping/ZIP/';
-      const url: string = baseURL;
-      this.cfg.logger!.debug('Mapping Catalog Request: ' + url);
+  getCurrentADMArchive(): Observable<Uint8Array> {
+    return this.getCurrentFile('ADM archive file', 'ZIP');
+  }
+
+  private getCurrentFile(
+    fileName: string,
+    fileType: string
+  ): Observable<Uint8Array> {
+    return new Observable<Uint8Array>((observer) => {
+      const url = `${this.cfg.initCfg.baseMappingServiceUrl}mapping/${fileType}/`;
+      this.cfg.logger!.debug(`${fileName} Request: ${url}`);
       const headers = {
         'Content-Type': 'application/octet-stream',
         Accept: 'application/octet-stream',
@@ -140,19 +111,19 @@ export class FileManagementService {
         .arrayBuffer()
         .then((body: ArrayBuffer) => {
           this.cfg.logger!.debug(
-            `Mapping Catalog Response: ${JSON.stringify(body)}`
+            `${fileName} Response: ${JSON.stringify(body)}`
           );
           if (body.byteLength) {
-            observer.next(body);
+            observer.next(new Uint8Array(body));
           } else {
-            observer.next(null);
+            observer.next();
           }
           observer.complete();
         })
         .catch((error: any) => {
           if (error.status !== DataMapperUtil.HTTP_STATUS_NO_CONTENT) {
             this.handleError(
-              'Error occurred while accessing the ADM catalog from the runtime service.',
+              `Error occurred while accessing the ${fileName} from the runtime service.`,
               error
             );
             observer.error(error);
@@ -166,7 +137,7 @@ export class FileManagementService {
    * Establish an observable function to delete mapping files on the runtime.
    */
   resetMappings(): Observable<boolean> {
-    return new Observable<boolean>((observer: any) => {
+    return new Observable<boolean>((observer) => {
       const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/RESET';
       this.cfg.logger!.debug('Mapping Service Request - Reset');
       this.api
@@ -182,6 +153,7 @@ export class FileManagementService {
         })
         .catch((error: any) => {
           this.handleError('Error occurred while resetting mappings.', error);
+          observer.complete();
         });
     }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
   }
@@ -190,7 +162,7 @@ export class FileManagementService {
    * Establish an observable function to delete user-defined JAR library files on the runtime.
    */
   resetLibs(): Observable<boolean> {
-    return new Observable<boolean>((observer: any) => {
+    return new Observable<boolean>((observer) => {
       const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/resetLibs';
       this.cfg.logger!.debug(
         'Mapping Service Request - Reset User-Defined Libraries'
@@ -211,6 +183,7 @@ export class FileManagementService {
             'Error occurred while resetting user-defined JAR libraries.',
             error
           );
+          observer.complete();
         });
     }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
   }
@@ -222,7 +195,7 @@ export class FileManagementService {
    * @param buffer - JSON content
    */
   setMappingToService(jsonBuffer: string): Observable<boolean> {
-    return new Observable<boolean>((observer: any) => {
+    return new Observable<boolean>((observer) => {
       const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON';
       const headers = {
         'Content-Type': 'application/json',
@@ -233,7 +206,7 @@ export class FileManagementService {
       this.api
         .put(url, { headers, body: jsonBuffer })
         .arrayBuffer()
-        .then((res: any) => {
+        .then((res) => {
           this.cfg.logger!.debug(
             `Mapping Service Response: ${JSON.stringify(res)}`
           );
@@ -265,7 +238,7 @@ export class FileManagementService {
       this.api
         .put(url, { body: compressedBuffer })
         .arrayBuffer()
-        .then((res: any) => {
+        .then((res) => {
           this.cfg.logger!.debug(
             `Set Compressed Mapping Service Response: ${JSON.stringify(res)}`
           );
@@ -281,15 +254,15 @@ export class FileManagementService {
   }
 
   /**
-   * Update the current mapping files and export the current mappings catalog (ADM).
+   * Update the current mapping files and export the ADM archive file with current mappings.
    *
-   * Establish the file content in JSON format (mappings + schema + instance-schema), compress
-   * it (GZIP), update the runtime, then fetch the full ADM catalog ZIP file from the runtime
+   * Establish the mapping digest file content in JSON format (mappings + schema + instance-schema),
+   * compress it (GZIP), update the runtime, then fetch the full ADM archive ZIP file from the runtime
    * and export it.
    *
    * @param event
    */
-  async exportMappingsCatalog(mappingsFileName: string): Promise<true> {
+  async exportADMArchive(mappingsFileName: string): Promise<true> {
     return new Promise<true>(async (resolve) => {
       let aggregateBuffer = '   {\n';
       let userExport = true;
@@ -359,7 +332,7 @@ export class FileManagementService {
               // Fetch the full ADM catalog file from the runtime (ZIP) and export it to to the local
               // downloads area.
               if (userExport) {
-                this.getCurrentADMCatalog().subscribe(
+                this.getCurrentADMArchive().subscribe(
                   async (value: Uint8Array) => {
                     // If value is null then no compressed mappings catalog is available on the server.
                     if (value !== null) {
@@ -442,15 +415,15 @@ export class FileManagementService {
   }
 
   /**
-   * Perform a binary read of the specified catalog (.ADM) file and push it to the runtime.  The ADM file is
+   * Perform a binary read of the specified ADM archive file and push it to the runtime.  The ADM file is
    * in (ZIP) file format.  Once pushed, we can retrieve from runtime the extracted compressed (GZIP) mappings
-   * file catalog as well as the mappings JSON file.  These files exist separately for performance reasons.
+   * digest file as well as the mappings JSON file.  These files exist separately for performance reasons.
    *
-   * Once the runtime has its ADM catalog, catalog files and mappings file set then restart the DM.
+   * Once the runtime has its ADM archive file, digest file and mappings file set then restart the DM.
    *
-   * @param mappingsFileName - ADM master ZIP catalog
+   * @param mappingsFileName - ADM archive file
    */
-  async importADMCatalog(mappingsFileName: string): Promise<boolean> {
+  async importADMArchive(mappingsFileName: string): Promise<boolean> {
     return new Promise<boolean>(async (resolve) => {
       let fileBin = null;
       const reader = new FileReader();
@@ -461,7 +434,7 @@ export class FileManagementService {
       } catch (error) {
         this.cfg.errorService.addError(
           new ErrorInfo({
-            message: `Unable to import the specified catalog file '${mappingsFileName}'`,
+            message: `Unable to import the specified ADM file '${mappingsFileName}'`,
             level: ErrorLevel.ERROR,
             scope: ErrorScope.APPLICATION,
             type: ErrorType.INTERNAL,
@@ -485,10 +458,11 @@ export class FileManagementService {
             this.cfg.mappings = null;
             this.cfg.clearDocs();
             await this.cfg.initializationService.initialize();
+            resolve(true);
           } catch (error) {
             this.cfg.errorService.addError(
               new ErrorInfo({
-                message: `Unable to import the catalog file: ${mappingsFileName} ${error.message}`,
+                message: `Unable to import the ADM file: ${mappingsFileName} ${error.message}`,
                 level: ErrorLevel.ERROR,
                 scope: ErrorScope.APPLICATION,
                 type: ErrorType.INTERNAL,
@@ -573,20 +547,20 @@ export class FileManagementService {
    * Retrieve the current user AtlasMap data mappings from the server as a JSON object.
    */
   private getCurrentMappingJson(): Observable<any> {
-    return new Observable<any>((observer: any) => {
+    return new Observable<any>((observer) => {
       const baseURL: string =
         this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON/';
       this.api
         .get(baseURL)
         .json()
-        .then((body: any) => {
+        .then((body) => {
           this.cfg.logger!.debug(
             `Mapping Service Response: ${JSON.stringify(body)}`
           );
           if (body) {
             observer.next(body);
           } else {
-            observer.next(undefined);
+            observer.next();
           }
           observer.complete();
         })
@@ -601,10 +575,6 @@ export class FileManagementService {
           observer.complete();
         });
     });
-  }
-
-  private getMappingId(): string {
-    return this.cfg.mappingFiles.length > 0 ? this.cfg.mappingFiles[0] : '0';
   }
 
   private handleError(message: string, error: any): void {

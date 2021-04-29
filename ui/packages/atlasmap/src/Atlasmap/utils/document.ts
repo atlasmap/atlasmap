@@ -27,7 +27,7 @@ export async function changeDocumentName(
   const docDef = getDocDef(docId, cfg, isSource);
   docDef.name = newDocName;
   await cfg.mappingService.notifyMappingUpdated();
-  await cfg.fileService.exportMappingsCatalog("");
+  await cfg.fileService.exportADMArchive("");
 }
 
 /**
@@ -118,7 +118,7 @@ async function importDoc(
         inspectionParameters,
       )
       .then(() => {
-        cfg.fileService.exportMappingsCatalog("");
+        cfg.fileService.exportADMArchive("");
         resolve(true);
       });
   });
@@ -142,7 +142,7 @@ export async function removeDocumentRef(
       DataMapperUtil.removeItemFromArray(docDef, cfg.targetDocs);
     }
     await cfg.mappingService.notifyMappingUpdated();
-    await cfg.fileService.exportMappingsCatalog("");
+    await cfg.fileService.exportADMArchive("");
     resolve(true);
   });
 }
@@ -320,7 +320,7 @@ export function enableCustomClass(
             );
           }
           await cfg.mappingService.notifyMappingUpdated();
-          await cfg.fileService.exportMappingsCatalog("");
+          await cfg.fileService.exportADMArchive("");
         })
         .catch((error: any) => {
           if (error.status === 0) {

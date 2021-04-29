@@ -50,14 +50,10 @@ export class InitializationService {
   cfg: ConfigModel = ConfigModel.getConfig();
 
   systemInitializedSource = new Subject<void>();
-  systemInitialized$: Observable<
-    void
-  > = this.systemInitializedSource.asObservable();
+  systemInitialized$: Observable<void> = this.systemInitializedSource.asObservable();
 
   initializationStatusChangedSource = new Subject<void>();
-  initializationStatusChanged$: Observable<
-    void
-  > = this.initializationStatusChangedSource.asObservable();
+  initializationStatusChanged$: Observable<void> = this.initializationStatusChangedSource.asObservable();
 
   constructor(
     private documentService: DocumentManagementService,
@@ -335,10 +331,10 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
 
       // Fetch adm-catalog-files.gz if it exists.
       this.cfg.fileService
-        .getCurrentMappingCatalog()
+        .getCurrentMappingDigest()
         .subscribe(async (catalog: Uint8Array) => {
           // If catalog is null then no compressed mappings catalog is available on the server.
-          if (catalog === null) {
+          if (!catalog) {
             if (this.cfg.mappings === null) {
               this.cfg.mappings = new MappingDefinition();
             }
