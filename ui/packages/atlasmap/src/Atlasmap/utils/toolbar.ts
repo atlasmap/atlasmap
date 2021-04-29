@@ -54,7 +54,7 @@ export function exportAtlasFile(fileName: string) {
   if (fileName.split(".").pop() !== "adm") {
     fileName = fileName.concat(".adm");
   }
-  return cfg.fileService.exportMappingsCatalog(fileName);
+  return cfg.fileService.exportADMArchive(fileName);
 }
 
 /**
@@ -65,7 +65,7 @@ export function exportAtlasFile(fileName: string) {
  */
 async function processMappingsCatalog(selectedFile: any, cfg: ConfigModel) {
   cfg.initializationService.updateLoadingStatus("Importing AtlasMap Catalog");
-  await cfg.fileService.importADMCatalog(selectedFile);
+  await cfg.fileService.importADMArchive(selectedFile);
 }
 
 /**
