@@ -1,3 +1,0 @@
-- name: Codacy Coverage Reporter
-  uses: codacy/codacy-coverage-reporter-action@1.0.0
-
