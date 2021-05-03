@@ -187,27 +187,27 @@ public class JavaFieldWriterUtil {
     }
 
     public Object createComplexChildObject(Object parentObject, SegmentContext segmentContext, Class&lt;?&gt; clazz) throws AtlasException {
-<span class="nc bnc" id="L190" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="pc bpc" id="L190" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
 <span class="nc" id="L191">            LOG.debug(&quot;Creating object for segment:'{} \n\tparentObject: {} \n\tclass: {}&quot;,</span>
 <span class="nc" id="L192">            segmentContext, parentObject, clazz.getName());</span>
         }
 
         try {
-<span class="nc" id="L196">            Method setterMethod = resolveSetterMethod(parentObject, segmentContext, null);</span>
-<span class="nc" id="L197">            Object targetObject = instantiateObject(clazz);</span>
-<span class="nc" id="L198">            setterMethod.setAccessible(true);</span>
-<span class="nc" id="L199">            setterMethod.invoke(parentObject, targetObject);</span>
-<span class="nc" id="L200">            return targetObject;</span>
-<span class="nc" id="L201">        } catch (Exception e) {</span>
+<span class="fc" id="L196">            Method setterMethod = resolveSetterMethod(parentObject, segmentContext, null);</span>
+<span class="fc" id="L197">            Object targetObject = instantiateObject(clazz);</span>
+<span class="fc" id="L198">            setterMethod.setAccessible(true);</span>
+<span class="fc" id="L199">            setterMethod.invoke(parentObject, targetObject);</span>
+<span class="fc" id="L200">            return targetObject;</span>
+<span class="fc" id="L201">        } catch (Exception e) {</span>
             try {
-<span class="nc" id="L203">                java.lang.reflect.Field field = resolveField(parentObject.getClass(), segmentContext.getName());</span>
-<span class="nc" id="L204">                field.setAccessible(true);</span>
+<span class="fc" id="L203">                java.lang.reflect.Field field = resolveField(parentObject.getClass(), segmentContext.getName());</span>
+<span class="fc" id="L204">                field.setAccessible(true);</span>
 <span class="nc" id="L205">                Object targetObject = instantiateObject(clazz);</span>
 <span class="nc" id="L206">                field.set(parentObject, targetObject);</span>
 <span class="nc" id="L207">                return targetObject;</span>
-<span class="nc" id="L208">            } catch (Exception e2) {</span>
-<span class="nc bnc" id="L209" title="All 2 branches missed.">                String parentClassName = parentObject == null ? null : parentObject.getClass().getName();</span>
-<span class="nc" id="L210">                throw new AtlasException(&quot;Unable to create value for segment: &quot; + segmentContext.getExpression() + &quot; parentObject: &quot;</span>
+<span class="fc" id="L208">            } catch (Exception e2) {</span>
+<span class="pc bpc" id="L209" title="1 of 2 branches missed.">                String parentClassName = parentObject == null ? null : parentObject.getClass().getName();</span>
+<span class="fc" id="L210">                throw new AtlasException(&quot;Unable to create value for segment: &quot; + segmentContext.getExpression() + &quot; parentObject: &quot;</span>
                         + parentClassName, e2);
             }
         }
@@ -495,8 +495,8 @@ public class JavaFieldWriterUtil {
                 }
 <span class="fc" id="L496">                List list = (List) collection;</span>
 <span class="fc" id="L497">                list.set(index, item);</span>
-<span class="pc bpc" id="L498" title="1 of 2 branches missed.">            } else if (index == collection.size()) {</span>
-<span class="nc" id="L499">                collection.add(item);</span>
+<span class="fc bfc" id="L498" title="All 2 branches covered.">            } else if (index == collection.size()) {</span>
+<span class="fc" id="L499">                collection.add(item);</span>
             } else {
 <span class="fc" id="L501">                LOG.warn(String.format(</span>
                         &quot;Writing into non-List collection - it will be added as a last element anyway. &quot;

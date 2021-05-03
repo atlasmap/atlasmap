@@ -86,8 +86,8 @@ import io.atlasmap.v2.Field;
      *     
      */
     public void setClassName(String value) {
-<span class="nc" id="L89">        this.className = value;</span>
-<span class="nc" id="L90">    }</span>
+<span class="fc" id="L89">        this.className = value;</span>
+<span class="fc" id="L90">    }</span>
 
     public boolean equals(Object object) {
 <span class="nc bnc" id="L93" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
@@ -175,7 +175,7 @@ import io.atlasmap.v2.Field;
 <span class="fc" id="L175">            currentHashCode = (currentHashCode* 31);</span>
             Integer theOrdinal;
 <span class="fc" id="L177">            theOrdinal = this.getOrdinal();</span>
-<span class="pc bpc" id="L178" title="1 of 2 branches missed.">            if (this.ordinal!= null) {</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">            if (this.ordinal!= null) {</span>
 <span class="fc" id="L179">                currentHashCode += theOrdinal.hashCode();</span>
             }
         }
@@ -183,8 +183,8 @@ import io.atlasmap.v2.Field;
 <span class="fc" id="L183">            currentHashCode = (currentHashCode* 31);</span>
             String theClassName;
 <span class="fc" id="L185">            theClassName = this.getClassName();</span>
-<span class="pc bpc" id="L186" title="1 of 2 branches missed.">            if (this.className!= null) {</span>
-<span class="nc" id="L187">                currentHashCode += theClassName.hashCode();</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">            if (this.className!= null) {</span>
+<span class="fc" id="L187">                currentHashCode += theClassName.hashCode();</span>
             }
         }
 <span class="fc" id="L190">        return currentHashCode;</span>

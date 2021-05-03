@@ -43,37 +43,37 @@ import io.atlasmap.v2.FieldType;
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE)
     public LocalDate toLocalDate(GregorianCalendar calendar) {
-<span class="nc" id="L46">        return zdtConverter.toLocalDate(calendar.toZonedDateTime());</span>
+<span class="fc" id="L46">        return zdtConverter.toLocalDate(calendar.toZonedDateTime());</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME)
     public LocalDateTime toLocalDateTime(GregorianCalendar calendar) {
-<span class="nc" id="L51">        return zdtConverter.toLocalDateTime(calendar.toZonedDateTime());</span>
+<span class="fc" id="L51">        return zdtConverter.toLocalDateTime(calendar.toZonedDateTime());</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.TIME)
     public LocalTime toLocalTime(GregorianCalendar calendar) {
-<span class="nc" id="L56">        return zdtConverter.toLocalTime(calendar.toZonedDateTime());</span>
+<span class="fc" id="L56">        return zdtConverter.toLocalTime(calendar.toZonedDateTime());</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE)
     public java.sql.Date toSqlDate(GregorianCalendar calendar) {
-<span class="nc" id="L61">        return zdtConverter.toSqlDate(calendar.toZonedDateTime());</span>
+<span class="fc" id="L61">        return zdtConverter.toSqlDate(calendar.toZonedDateTime());</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.TIME)
     public java.sql.Time toSqlTime(GregorianCalendar calendar) {
-<span class="nc" id="L66">        return zdtConverter.toSqlTime(calendar.toZonedDateTime());</span>
+<span class="fc" id="L66">        return zdtConverter.toSqlTime(calendar.toZonedDateTime());</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME)
     public java.sql.Timestamp toSqlTimestamp(GregorianCalendar calendar) {
-<span class="nc" id="L71">        return zdtConverter.toSqlTimestamp(calendar.toZonedDateTime());</span>
+<span class="fc" id="L71">        return zdtConverter.toSqlTimestamp(calendar.toZonedDateTime());</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
     public ZonedDateTime toZoneDateTime(GregorianCalendar calendar) {
-<span class="nc" id="L76">        return calendar.toZonedDateTime();</span>
+<span class="fc" id="L76">        return calendar.toZonedDateTime();</span>
     }
 
 }

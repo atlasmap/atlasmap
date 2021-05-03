@@ -191,10 +191,10 @@ import io.atlasmap.java.core.accessor.JavaChildAccessor;
             try {
 <span class="fc" id="L192">                getterMethod = detectGetterMethod(object.getClass(), getter);</span>
 <span class="fc" id="L193">                break;</span>
-<span class="nc" id="L194">            } catch (NoSuchMethodException e) {</span>
+<span class="fc" id="L194">            } catch (NoSuchMethodException e) {</span>
                 // exhaust options
             }
-<span class="nc" id="L197">        }</span>
+<span class="fc" id="L197">        }</span>
 
 <span class="pc bpc" id="L199" title="1 of 2 branches missed.">        if (getterMethod == null) {</span>
 <span class="nc" id="L200">            return null;</span>

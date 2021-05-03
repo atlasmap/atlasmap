@@ -137,9 +137,9 @@ public class JsonFieldWriter implements AtlasFieldWriter {
 <span class="fc" id="L137">                parentNode = (ObjectNode) childNode;</span>
 <span class="fc" id="L138">                parentSegment = segment;</span>
 <span class="fc" id="L139">            } else { // this is the last segment of the path, write the value</span>
-<span class="pc bpc" id="L140" title="1 of 2 branches missed.">                if (targetField.getFieldType() == FieldType.COMPLEX) {</span>
-<span class="nc" id="L141">                    createParentNode(parentNode, parentSegment, segment);</span>
-<span class="nc" id="L142">                    return;</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">                if (targetField.getFieldType() == FieldType.COMPLEX) {</span>
+<span class="fc" id="L141">                    createParentNode(parentNode, parentSegment, segment);</span>
+<span class="fc" id="L142">                    return;</span>
                 }
 <span class="pc bpc" id="L144" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
 <span class="nc" id="L145">                    LOG.debug(&quot;Now processing field value segment: &quot; + segment);</span>

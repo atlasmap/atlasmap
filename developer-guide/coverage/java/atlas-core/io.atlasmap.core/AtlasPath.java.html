@@ -282,10 +282,10 @@ public class AtlasPath {
     }
 
     public SegmentContext setVacantCollectionIndex(Integer collectionIndex) {
-<span class="nc bnc" id="L285" title="All 2 branches missed.">        for (int i = 0; i &lt; this.segmentContexts.size(); i++) {</span>
-<span class="nc" id="L286">            SegmentContext sc = segmentContexts.get(i);</span>
-<span class="nc bnc" id="L287" title="All 4 branches missed.">            if (sc.getCollectionType() != CollectionType.NONE &amp;&amp; sc.getCollectionIndex() == null) {</span>
-<span class="nc" id="L288">                return setCollectionIndex(i, collectionIndex);</span>
+<span class="pc bpc" id="L285" title="1 of 2 branches missed.">        for (int i = 0; i &lt; this.segmentContexts.size(); i++) {</span>
+<span class="fc" id="L286">            SegmentContext sc = segmentContexts.get(i);</span>
+<span class="pc bpc" id="L287" title="1 of 4 branches missed.">            if (sc.getCollectionType() != CollectionType.NONE &amp;&amp; sc.getCollectionIndex() == null) {</span>
+<span class="fc" id="L288">                return setCollectionIndex(i, collectionIndex);</span>
             }
         }
 <span class="nc" id="L291">        throw new IllegalArgumentException(&quot;No Vacant index on collection segments in the path &quot; + this.toString());</span>

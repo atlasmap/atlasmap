@@ -90,7 +90,7 @@ public class MappingFieldPairValidator {
 <span class="fc" id="L90">            return;</span>
         }
 <span class="fc" id="L92">        FieldType targetFieldType = targetField.getFieldType();</span>
-<span class="pc bpc" id="L93" title="1 of 4 branches missed.">        if (sourceFieldType == null || targetFieldType == null) {</span>
+<span class="fc bfc" id="L93" title="All 4 branches covered.">        if (sourceFieldType == null || targetFieldType == null) {</span>
 <span class="fc" id="L94">            return;</span>
         }
 <span class="pc bpc" id="L96" title="1 of 4 branches missed.">        if (sourceFieldType == FieldType.ANY || targetFieldType == FieldType.ANY) {</span>
@@ -167,7 +167,7 @@ public class MappingFieldPairValidator {
 <span class="fc bfc" id="L167" title="All 2 branches covered.">            } else  if (atlasConversionConcern.equals(AtlasConversionConcern.RANGE)</span>
 <span class="fc bfc" id="L168" title="All 2 branches covered.">                    || atlasConversionConcern.equals(AtlasConversionConcern.FORMAT)</span>
 <span class="fc bfc" id="L169" title="All 2 branches covered.">                    || atlasConversionConcern.equals(AtlasConversionConcern.FRACTIONAL_PART)</span>
-<span class="pc bpc" id="L170" title="1 of 2 branches missed.">                    || atlasConversionConcern.equals(AtlasConversionConcern.TIMEZONE)) {</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">                    || atlasConversionConcern.equals(AtlasConversionConcern.TIMEZONE)) {</span>
 <span class="fc" id="L171">                Validation validation = new Validation();</span>
 <span class="fc" id="L172">                validation.setScope(ValidationScope.MAPPING);</span>
 <span class="fc" id="L173">                validation.setId(mappingId);</span>

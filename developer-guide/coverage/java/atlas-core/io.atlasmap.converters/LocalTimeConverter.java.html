@@ -61,7 +61,7 @@ import io.atlasmap.v2.FieldType;
 
     @AtlasConversionInfo(sourceType = FieldType.TIME, targetType = FieldType.DATE_TIME_TZ)
     public Calendar toCalendar(LocalTime value) {
-<span class="nc bnc" id="L64" title="All 2 branches missed.">        return value != null ? GregorianCalendar.from(value.atDate(LocalDate.now()).atZone(ZoneId.systemDefault())) : null;</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        return value != null ? GregorianCalendar.from(value.atDate(LocalDate.now()).atZone(ZoneId.systemDefault())) : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.TIME, targetType = FieldType.DATE_TIME)
@@ -81,7 +81,7 @@ import io.atlasmap.v2.FieldType;
 
     @AtlasConversionInfo(sourceType = FieldType.TIME, targetType = FieldType.DATE_TIME_TZ)
     public GregorianCalendar toGregorianCalendar(LocalTime value) {
-<span class="nc bnc" id="L84" title="All 2 branches missed.">        return value != null ? GregorianCalendar.from(value.atDate(LocalDate.now()).atZone(ZoneId.systemDefault())) : null;</span>
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        return value != null ? GregorianCalendar.from(value.atDate(LocalDate.now()).atZone(ZoneId.systemDefault())) : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.TIME, targetType = FieldType.INTEGER,
@@ -100,7 +100,7 @@ import io.atlasmap.v2.FieldType;
 
     @AtlasConversionInfo(sourceType = FieldType.TIME, targetType = FieldType.DATE_TIME)
     public LocalDateTime toLocalDateTime(LocalTime value) {
-<span class="nc bnc" id="L103" title="All 2 branches missed.">        return value != null ? value.atDate(LocalDate.now()) : null;</span>
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">        return value != null ? value.atDate(LocalDate.now()) : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.TIME, targetType = FieldType.TIME)
@@ -165,12 +165,12 @@ import io.atlasmap.v2.FieldType;
 
     @AtlasConversionInfo(sourceType = FieldType.TIME, targetType = FieldType.TIME)
     public java.sql.Time toSqlTime(LocalTime value) {
-<span class="nc" id="L168">        return java.sql.Time.valueOf(value);</span>
+<span class="fc" id="L168">        return java.sql.Time.valueOf(value);</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.TIME, targetType = FieldType.DATE_TIME)
     public java.sql.Timestamp toSqlTimestamp(LocalTime value) {
-<span class="nc bnc" id="L173" title="All 2 branches missed.">        return value != null ? java.sql.Timestamp.valueOf(value.atDate(LocalDate.now())) : null;</span>
+<span class="pc bpc" id="L173" title="1 of 2 branches missed.">        return value != null ? java.sql.Timestamp.valueOf(value.atDate(LocalDate.now())) : null;</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.TIME, targetType = FieldType.DATE_TIME_TZ)

@@ -436,8 +436,8 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 <span class="fc bfc" id="L436" title="All 2 branches covered.">        if (clazz.isArray()) {</span>
 <span class="fc" id="L437">            return CollectionType.ARRAY;</span>
         }
-<span class="pc bpc" id="L439" title="1 of 2 branches missed.">        if (clazz == Collection.class) {</span>
-<span class="nc" id="L440">            return CollectionType.ALL;</span>
+<span class="fc bfc" id="L439" title="All 2 branches covered.">        if (clazz == Collection.class) {</span>
+<span class="fc" id="L440">            return CollectionType.ALL;</span>
         }
 <span class="fc bfc" id="L442" title="All 2 branches covered.">        if( listClasses.contains(clazz.getName())) {</span>
 <span class="fc" id="L443">            return CollectionType.LIST;</span>
@@ -449,12 +449,12 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
     }
 
     private FieldType toFieldType(Class&lt;?&gt; clazz, Type parameterType) {
-<span class="pc bpc" id="L452" title="2 of 5 branches missed.">        switch (toFieldCollectionType(clazz)) {</span>
+<span class="pc bpc" id="L452" title="1 of 5 branches missed.">        switch (toFieldCollectionType(clazz)) {</span>
             case ARRAY:
 <span class="fc" id="L454">                return toFieldType(clazz.getComponentType(), parameterType);</span>
             case ALL:
-<span class="nc" id="L456">                Type t = ((ParameterizedType) parameterType).getActualTypeArguments()[0];</span>
-<span class="nc" id="L457">                return DefaultAtlasConversionService.getInstance().fieldTypeFromClass((Class)t);</span>
+<span class="fc" id="L456">                Type t = ((ParameterizedType) parameterType).getActualTypeArguments()[0];</span>
+<span class="fc" id="L457">                return DefaultAtlasConversionService.getInstance().fieldTypeFromClass((Class)t);</span>
             case LIST:
 <span class="fc" id="L459">                t = ((ParameterizedType) parameterType).getActualTypeArguments()[0];</span>
 <span class="fc" id="L460">                return DefaultAtlasConversionService.getInstance().fieldTypeFromClass((Class)t);</span>

@@ -243,11 +243,11 @@ import io.atlasmap.v2.SubStringBefore;
 <span class="fc" id="L243">            return input;</span>
         }
 
-<span class="pc bpc" id="L246" title="5 of 6 branches missed.">        if (subString == null || subString.getStartIndex() == null || subString.getStartIndex() &lt; 0) {</span>
+<span class="pc bpc" id="L246" title="2 of 6 branches missed.">        if (subString == null || subString.getStartIndex() == null || subString.getStartIndex() &lt; 0) {</span>
 <span class="fc" id="L247">            throw new IllegalArgumentException(&quot;SubString action must be specified with a positive startIndex&quot;);</span>
         }
 
-<span class="nc" id="L250">        return doSubString(input, subString.getStartIndex(), subString.getEndIndex());</span>
+<span class="fc" id="L250">        return doSubString(input, subString.getStartIndex(), subString.getEndIndex());</span>
     }
 
     @AtlasActionProcessor

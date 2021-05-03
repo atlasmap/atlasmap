@@ -14,9 +14,9 @@ public class CopyTo extends Action implements Serializable {
 
     private String index;
 
-<span class="nc" id="L17">    public CopyTo(String index) {</span>
-<span class="nc" id="L18">        this.index = index;</span>
-<span class="nc" id="L19">    }</span>
+<span class="fc" id="L17">    public CopyTo(String index) {</span>
+<span class="fc" id="L18">        this.index = index;</span>
+<span class="fc" id="L19">    }</span>
 
 <span class="fc" id="L21">    public CopyTo() {</span>
 <span class="fc" id="L22">    }</span>
@@ -46,7 +46,7 @@ public class CopyTo extends Action implements Serializable {
     @JsonIgnore
     public List&lt;Integer&gt; getIndexes() {
         // indexes coming from the ui are 1-based while we work with 0-based indexes
-<span class="nc" id="L49">        return Arrays.stream(index.trim().split(&quot;,&quot;)).map(i -&gt; Integer.parseInt(i) - 1).collect(Collectors.toList());</span>
+<span class="fc" id="L49">        return Arrays.stream(index.trim().split(&quot;,&quot;)).map(i -&gt; Integer.parseInt(i) - 1).collect(Collectors.toList());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

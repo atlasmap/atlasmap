@@ -340,7 +340,7 @@ public abstract class BaseModuleValidationService&lt;T extends Field&gt; impleme
             }
 
             // check that the output field is of type String else error
-<span class="pc bpc" id="L343" title="1 of 4 branches missed.">            if (targetField.getFieldType() != null &amp;&amp; targetField.getFieldType() != FieldType.STRING) {</span>
+<span class="fc bfc" id="L343" title="All 4 branches covered.">            if (targetField.getFieldType() != null &amp;&amp; targetField.getFieldType() != FieldType.STRING) {</span>
 <span class="fc" id="L344">                Validation validation = new Validation();</span>
 <span class="fc" id="L345">                validation.setScope(ValidationScope.MAPPING);</span>
 <span class="fc" id="L346">                validation.setId(mappingId);</span>
@@ -376,7 +376,7 @@ public abstract class BaseModuleValidationService&lt;T extends Field&gt; impleme
 
 <span class="pc bpc" id="L377" title="1 of 4 branches missed.">        if (getMode() == AtlasModuleMode.SOURCE &amp;&amp; matchDocIdOrNull(sourceField.getDocId())) {</span>
             // check that the source field is of type String else error
-<span class="pc bpc" id="L379" title="1 of 4 branches missed.">            if (sourceField.getFieldType() != null &amp;&amp; sourceField.getFieldType() != FieldType.STRING) {</span>
+<span class="fc bfc" id="L379" title="All 4 branches covered.">            if (sourceField.getFieldType() != null &amp;&amp; sourceField.getFieldType() != FieldType.STRING) {</span>
 <span class="fc" id="L380">                Validation validation = new Validation();</span>
 <span class="fc" id="L381">                validation.setScope(ValidationScope.MAPPING);</span>
 <span class="fc" id="L382">                validation.setId(mapping.getId());</span>

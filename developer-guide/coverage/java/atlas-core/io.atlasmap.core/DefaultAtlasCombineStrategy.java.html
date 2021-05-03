@@ -105,9 +105,9 @@ import io.atlasmap.spi.StringDelimiter;
 <span class="fc" id="L105">                    combinedString = combinedString.concat(value.trim());</span>
                 }
             } else {
-<span class="pc bpc" id="L108" title="1 of 2 branches missed.">                if (value == null) {</span>
-<span class="nc bnc" id="L109" title="All 2 branches missed.">                    if (!disableAddDelimiterOnNull) {</span>
-<span class="nc bnc" id="L110" title="All 2 branches missed.">                        combinedString = combinedString.concat((delimiter != null ? delimiter.getValue() : DEFAULT_COMBINE_DELIMITER.getValue()));</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">                if (value == null) {</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">                    if (!disableAddDelimiterOnNull) {</span>
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">                        combinedString = combinedString.concat((delimiter != null ? delimiter.getValue() : DEFAULT_COMBINE_DELIMITER.getValue()));</span>
                     }
 <span class="fc bfc" id="L112" title="All 2 branches covered.">                } else if (isDisableAutoTrim()) {</span>
 <span class="fc bfc" id="L113" title="All 2 branches covered.">                    combinedString = combinedString.concat((delimiter != null ? delimiter.getValue() : DEFAULT_COMBINE_DELIMITER.getValue()))</span>

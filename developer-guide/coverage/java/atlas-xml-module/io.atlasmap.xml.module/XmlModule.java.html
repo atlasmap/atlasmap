@@ -113,11 +113,11 @@ import io.atlasmap.xml.v2.XmlNamespaces;
         } else {
 <span class="fc" id="L114">            enableNamespaces = true;</span>
 <span class="fc" id="L115">            String param = this.getUriParameters().get(&quot;disableNamespaces&quot;);</span>
-<span class="pc bpc" id="L116" title="3 of 4 branches missed.">            if (param != null &amp;&amp; &quot;true&quot;.equalsIgnoreCase(param)) {</span>
-<span class="nc bnc" id="L117" title="All 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="pc bpc" id="L116" title="1 of 4 branches missed.">            if (param != null &amp;&amp; &quot;true&quot;.equalsIgnoreCase(param)) {</span>
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
 <span class="nc" id="L118">                    LOG.debug(&quot;Disabling namespace support&quot;);</span>
                 }
-<span class="nc" id="L120">                enableNamespaces = false;</span>
+<span class="fc" id="L120">                enableNamespaces = false;</span>
             }
 <span class="fc" id="L122">            sourceDocumentString = String.class.cast(sourceDocument);</span>
         }
@@ -159,7 +159,7 @@ import io.atlasmap.xml.v2.XmlNamespaces;
 <span class="fc" id="L159">        String template = null;</span>
 <span class="fc bfc" id="L160" title="All 2 branches covered.">        for (DataSource ds : session.getMapping().getDataSource()) {</span>
 <span class="fc bfc" id="L161" title="All 4 branches covered.">            if (DataSourceType.TARGET.equals(ds.getDataSourceType()) &amp;&amp; ds instanceof XmlDataSource</span>
-<span class="pc bpc" id="L162" title="2 of 4 branches missed.">                    &amp;&amp; (ds.getId() == null || ds.getId().equals(getDocId()))) {</span>
+<span class="pc bpc" id="L162" title="1 of 4 branches missed.">                    &amp;&amp; (ds.getId() == null || ds.getId().equals(getDocId()))) {</span>
 <span class="fc" id="L163">                xmlNs = ((XmlDataSource) ds).getXmlNamespaces();</span>
 <span class="fc" id="L164">                template = ((XmlDataSource) ds).getTemplate();</span>
             }
@@ -238,7 +238,7 @@ import io.atlasmap.xml.v2.XmlNamespaces;
                 }
             }
 <span class="fc" id="L240">            super.populateTargetField(session);</span>
-<span class="pc bpc" id="L241" title="1 of 2 branches missed.">        } else if (sourceField instanceof FieldGroup) {</span>
+<span class="fc bfc" id="L241" title="All 2 branches covered.">        } else if (sourceField instanceof FieldGroup) {</span>
 <span class="fc" id="L242">            Field previousTargetSubField = null;</span>
 <span class="fc bfc" id="L243" title="All 2 branches covered.">            for (int i=0; i&lt;((FieldGroup)sourceField).getField().size(); i++) {</span>
 <span class="fc" id="L244">                Field sourceSubField = ((FieldGroup)sourceField).getField().get(i);</span>
@@ -258,14 +258,14 @@ import io.atlasmap.xml.v2.XmlNamespaces;
 <span class="fc" id="L258">            session.head().setSourceField(sourceField);</span>
 <span class="fc" id="L259">            session.head().setTargetField(targetFieldGroup);</span>
 <span class="fc" id="L260">        } else {</span>
-<span class="nc" id="L261">            XmlField targetSubField = new XmlField();</span>
-<span class="nc" id="L262">            AtlasXmlModelFactory.copyField(targetField, targetSubField, false);</span>
-<span class="nc" id="L263">            path.setVacantCollectionIndex(0);</span>
-<span class="nc" id="L264">            targetSubField.setPath(path.toString());</span>
-<span class="nc" id="L265">            targetFieldGroup.getField().add(targetSubField);</span>
-<span class="nc" id="L266">            session.head().setTargetField(targetSubField);</span>
-<span class="nc" id="L267">            super.populateTargetField(session);</span>
-<span class="nc" id="L268">            session.head().setTargetField(targetFieldGroup);</span>
+<span class="fc" id="L261">            XmlField targetSubField = new XmlField();</span>
+<span class="fc" id="L262">            AtlasXmlModelFactory.copyField(targetField, targetSubField, false);</span>
+<span class="fc" id="L263">            path.setVacantCollectionIndex(0);</span>
+<span class="fc" id="L264">            targetSubField.setPath(path.toString());</span>
+<span class="fc" id="L265">            targetFieldGroup.getField().add(targetSubField);</span>
+<span class="fc" id="L266">            session.head().setTargetField(targetSubField);</span>
+<span class="fc" id="L267">            super.populateTargetField(session);</span>
+<span class="fc" id="L268">            session.head().setTargetField(targetFieldGroup);</span>
         }
 
 <span class="pc bpc" id="L271" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>

@@ -67,10 +67,10 @@ public class TargetValueConverter {
             }
 <span class="fc bfc" id="L68" title="All 2 branches covered.">            if (targetField.getFieldType() == FieldType.COMPLEX) {</span>
 <span class="pc bpc" id="L69" title="1 of 4 branches missed.">                targetClassName = clazz != null &amp;&amp; !Modifier.isAbstract(clazz.getModifiers()) ? clazz.getName() : null;</span>
-<span class="pc bpc" id="L70" title="1 of 2 branches missed.">                if (targetField instanceof JavaField) {</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">                if (targetField instanceof JavaField) {</span>
 <span class="fc" id="L71">                    ((JavaField)targetField).setClassName(targetClassName);</span>
                 } else {
-<span class="nc" id="L73">                    ((JavaEnumField)targetField).setClassName(targetClassName);</span>
+<span class="fc" id="L73">                    ((JavaEnumField)targetField).setClassName(targetClassName);</span>
                 }
             }
         }
@@ -152,13 +152,13 @@ public class TargetValueConverter {
         }
 
 <span class="fc bfc" id="L154" title="All 2 branches covered.">        if (targetClazz != null) {</span>
-<span class="pc bpc" id="L155" title="1 of 2 branches missed.">            if (targetField.getFieldType() == null) {</span>
-<span class="nc" id="L156">                targetField.setFieldType(conversionService.fieldTypeFromClass(targetClazz));</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">            if (targetField.getFieldType() == null) {</span>
+<span class="fc" id="L156">                targetField.setFieldType(conversionService.fieldTypeFromClass(targetClazz));</span>
             }
-<span class="pc bpc" id="L158" title="1 of 2 branches missed.">            if (conversionService.isConvertionAvailableFor(sourceValue, targetClazz)) {</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">            if (conversionService.isConvertionAvailableFor(sourceValue, targetClazz)) {</span>
 <span class="fc" id="L159">                return conversionService.convertType(sourceValue, null, targetClazz, null);</span>
             } else {
-<span class="nc" id="L161">                return null;</span>
+<span class="fc" id="L161">                return null;</span>
             }
         } else {
 <span class="fc" id="L164">            return sourceValue;</span>
@@ -176,13 +176,13 @@ public class TargetValueConverter {
 
 <span class="fc" id="L177">        String sourceValue = ((Enum&lt;?&gt;) sourceField.getValue()).name();</span>
 <span class="fc" id="L178">        String targetValue = sourceValue;</span>
-<span class="pc bpc" id="L179" title="1 of 2 branches missed.">        if (lookupTable != null) {</span>
-<span class="nc bnc" id="L180" title="All 2 branches missed.">            for (LookupEntry e : lookupTable.getLookupEntry()) {</span>
-<span class="nc bnc" id="L181" title="All 2 branches missed.">                if (e.getSourceValue().equals(sourceValue)) {</span>
-<span class="nc" id="L182">                    targetValue = e.getTargetValue();</span>
-<span class="nc" id="L183">                    break;</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">        if (lookupTable != null) {</span>
+<span class="fc bfc" id="L180" title="All 2 branches covered.">            for (LookupEntry e : lookupTable.getLookupEntry()) {</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">                if (e.getSourceValue().equals(sourceValue)) {</span>
+<span class="fc" id="L182">                    targetValue = e.getTargetValue();</span>
+<span class="fc" id="L183">                    break;</span>
                 }
-<span class="nc" id="L185">            }</span>
+<span class="fc" id="L185">            }</span>
         }
 
 <span class="pc bpc" id="L188" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
@@ -196,23 +196,23 @@ public class TargetValueConverter {
         @SuppressWarnings(&quot;rawtypes&quot;)
 <span class="fc" id="L197">        Class enumClass = null;</span>
         try {
-<span class="nc" id="L199">            enumClass = this.classLoader.loadClass(targetField.getClassName());</span>
+<span class="fc" id="L199">            enumClass = this.classLoader.loadClass(targetField.getClassName());</span>
 <span class="fc" id="L200">        } catch (Exception e) {</span>
 <span class="fc" id="L201">            AtlasUtil.addAudit(session, targetField,</span>
 <span class="fc" id="L202">                    String.format(&quot;Could not find class for output field class '%s': %s&quot;, targetField.getClassName(), e.getMessage()),</span>
                     AuditStatus.ERROR, targetValue);
 <span class="fc" id="L204">            return null;</span>
-<span class="nc" id="L205">        }</span>
+<span class="fc" id="L205">        }</span>
 
         try {
-<span class="nc" id="L208">            Enum&lt;?&gt; enumValue = Enum.valueOf(enumClass, targetValue);</span>
-<span class="nc" id="L209">            targetField.setValue(enumValue);</span>
-<span class="nc" id="L210">            return enumValue;</span>
-<span class="nc" id="L211">        } catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L212">            AtlasUtil.addAudit(session, targetField,</span>
-<span class="nc" id="L213">                    String.format(&quot;No enum entry found for value '%s': %s&quot;, targetValue, e.getMessage()),</span>
+<span class="fc" id="L208">            Enum&lt;?&gt; enumValue = Enum.valueOf(enumClass, targetValue);</span>
+<span class="fc" id="L209">            targetField.setValue(enumValue);</span>
+<span class="fc" id="L210">            return enumValue;</span>
+<span class="fc" id="L211">        } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L212">            AtlasUtil.addAudit(session, targetField,</span>
+<span class="fc" id="L213">                    String.format(&quot;No enum entry found for value '%s': %s&quot;, targetValue, e.getMessage()),</span>
                     AuditStatus.ERROR, targetValue);
-<span class="nc" id="L215">            return null;</span>
+<span class="fc" id="L215">            return null;</span>
         }
     }
 

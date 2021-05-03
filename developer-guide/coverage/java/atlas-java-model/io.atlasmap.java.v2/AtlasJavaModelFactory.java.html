@@ -61,7 +61,7 @@ import io.atlasmap.v2.FieldGroup;
 <span class="nc" id="L61">            }</span>
 <span class="nc" id="L62">            return clone;</span>
         }
-<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        Field clone = field instanceof JavaEnumField ? new JavaEnumField() : new JavaField();</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        Field clone = field instanceof JavaEnumField ? new JavaEnumField() : new JavaField();</span>
 <span class="fc" id="L65">        copyField(field, clone, withActions);</span>
 <span class="fc" id="L66">        return clone;</span>
     }
@@ -69,7 +69,7 @@ import io.atlasmap.v2.FieldGroup;
     public static void copyField(Field from, Field to, boolean withActions) {
 <span class="fc" id="L70">        AtlasModelFactory.copyField(from, to, withActions);</span>
 
-<span class="pc bpc" id="L72" title="2 of 4 branches missed.">        if (from instanceof JavaField &amp;&amp; to instanceof JavaField) {</span>
+<span class="pc bpc" id="L72" title="1 of 4 branches missed.">        if (from instanceof JavaField &amp;&amp; to instanceof JavaField) {</span>
 <span class="fc" id="L73">            JavaField fromJava = (JavaField) from;</span>
 <span class="fc" id="L74">            JavaField toJava = (JavaField)to;</span>
 
@@ -86,15 +86,15 @@ import io.atlasmap.v2.FieldGroup;
 <span class="fc" id="L86">            toJava.setSynthetic(fromJava.isSynthetic());</span>
 <span class="fc" id="L87">            return;</span>
         }
-<span class="nc bnc" id="L89" title="All 4 branches missed.">        if (from instanceof JavaEnumField &amp;&amp; to instanceof JavaEnumField) {</span>
-<span class="nc" id="L90">            JavaEnumField fromEnum = (JavaEnumField) from;</span>
-<span class="nc" id="L91">            JavaEnumField toEnum = (JavaEnumField)to;</span>
+<span class="pc bpc" id="L89" title="2 of 4 branches missed.">        if (from instanceof JavaEnumField &amp;&amp; to instanceof JavaEnumField) {</span>
+<span class="fc" id="L90">            JavaEnumField fromEnum = (JavaEnumField) from;</span>
+<span class="fc" id="L91">            JavaEnumField toEnum = (JavaEnumField)to;</span>
 
             // defined by JavaEnumField
-<span class="nc" id="L94">            toEnum.setClassName(fromEnum.getClassName());</span>
-<span class="nc" id="L95">            toEnum.setName(fromEnum.getName());</span>
-<span class="nc" id="L96">            toEnum.setOrdinal(fromEnum.getOrdinal());</span>
-<span class="nc" id="L97">            return;</span>
+<span class="fc" id="L94">            toEnum.setClassName(fromEnum.getClassName());</span>
+<span class="fc" id="L95">            toEnum.setName(fromEnum.getName());</span>
+<span class="fc" id="L96">            toEnum.setOrdinal(fromEnum.getOrdinal());</span>
+<span class="fc" id="L97">            return;</span>
         }
         // TODO: needs to be atlasexception, but that's not a dependency for some reason
         // on this project.

@@ -45,12 +45,12 @@ public class JavaMappingFieldPairValidator extends MappingFieldPairValidator {
     @Override
     protected void doValidateFieldTypes(List&lt;Validation&gt; validations, String mappingId,
             Field sourceField, Field targetField, FieldType sourceFieldType) {
-<span class="pc bpc" id="L48" title="1 of 6 branches missed.">        if ((sourceField instanceof JavaField &amp;&amp; targetField instanceof JavaField) &amp;&amp; ((sourceFieldType == null</span>
-<span class="pc bpc" id="L49" title="2 of 4 branches missed.">                || targetField.getFieldType() == null)</span>
+<span class="fc bfc" id="L48" title="All 6 branches covered.">        if ((sourceField instanceof JavaField &amp;&amp; targetField instanceof JavaField) &amp;&amp; ((sourceFieldType == null</span>
+<span class="fc bfc" id="L49" title="All 4 branches covered.">                || targetField.getFieldType() == null)</span>
 <span class="pc bpc" id="L50" title="1 of 2 branches missed.">                || (sourceFieldType == FieldType.COMPLEX || targetField.getFieldType() == FieldType.COMPLEX))) {</span>
             // making an assumption that anything marked as COMPLEX would require the use of
             // the class name to find a validator.
-<span class="nc bnc" id="L53" title="All 4 branches missed.">            if (((JavaField)sourceField).getClassName() != null &amp;&amp; ((JavaField)targetField).getClassName() != null) {</span>
+<span class="pc bpc" id="L53" title="3 of 4 branches missed.">            if (((JavaField)sourceField).getClassName() != null &amp;&amp; ((JavaField)targetField).getClassName() != null) {</span>
 <span class="nc" id="L54">                validateClassConversion(mappingId, (JavaField) sourceField, (JavaField) targetField, validations);</span>
 <span class="nc" id="L55">                return;</span>
             }

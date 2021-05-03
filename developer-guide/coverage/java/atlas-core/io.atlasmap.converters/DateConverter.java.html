@@ -93,7 +93,7 @@ import io.atlasmap.v2.FieldType;
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME_TZ)
     public GregorianCalendar toGregorianCalendar(Date date, String sourceFormat, String targetFormat) {
-<span class="nc" id="L96">        return DateTimeHelper.convertDateToGregorianCalendar(date, sourceFormat);</span>
+<span class="fc" id="L96">        return DateTimeHelper.convertDateToGregorianCalendar(date, sourceFormat);</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE)
@@ -137,12 +137,12 @@ import io.atlasmap.v2.FieldType;
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE)
     public java.sql.Date toSqlDate(Date date, String sourceFormat, String targetFormat) {
-<span class="nc" id="L140">        return DateTimeHelper.convertDateToSqlDate(date, sourceFormat);</span>
+<span class="fc" id="L140">        return DateTimeHelper.convertDateToSqlDate(date, sourceFormat);</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.TIME)
     public Time toSqlTime(Date date, String sourceFormat, String targetFormat) {
-<span class="nc" id="L145">        return DateTimeHelper.convertDateToTime(date, targetFormat);</span>
+<span class="fc" id="L145">        return DateTimeHelper.convertDateToTime(date, targetFormat);</span>
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.STRING)

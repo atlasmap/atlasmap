@@ -123,13 +123,13 @@ import io.atlasmap.v2.Validations;
 <span class="fc" id="L123">        Field targetField = session.head().getTargetField();</span>
 <span class="fc" id="L124">        AtlasPath path = new AtlasPath(targetField.getPath());</span>
 <span class="fc" id="L125">        FieldGroup targetFieldGroup = null;</span>
-<span class="pc bpc" id="L126" title="1 of 4 branches missed.">        if (path.hasCollection() &amp;&amp; !path.isIndexedCollection()) {</span>
+<span class="fc bfc" id="L126" title="All 4 branches covered.">        if (path.hasCollection() &amp;&amp; !path.isIndexedCollection()) {</span>
 <span class="fc" id="L127">            targetFieldGroup = AtlasModelFactory.createFieldGroupFrom(targetField, true);</span>
 <span class="fc" id="L128">            session.head().setTargetField(targetFieldGroup);</span>
         }
 
         // Attempt to Auto-detect field type based on input value
-<span class="pc bpc" id="L132" title="1 of 4 branches missed.">        if (targetField.getFieldType() == null &amp;&amp; sourceField.getValue() != null) {</span>
+<span class="fc bfc" id="L132" title="All 4 branches covered.">        if (targetField.getFieldType() == null &amp;&amp; sourceField.getValue() != null) {</span>
 <span class="fc" id="L133">            targetField.setFieldType(getConversionService().fieldTypeFromClass(sourceField.getValue().getClass()));</span>
         }
 
@@ -156,7 +156,7 @@ import io.atlasmap.v2.Validations;
                 }
             }
 <span class="fc" id="L158">            super.populateTargetField(session);</span>
-<span class="pc bpc" id="L159" title="1 of 2 branches missed.">        } else if (sourceField instanceof FieldGroup) {</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">        } else if (sourceField instanceof FieldGroup) {</span>
 <span class="fc" id="L160">            Field previousTargetSubField = null;</span>
 <span class="fc bfc" id="L161" title="All 2 branches covered.">            for (int i=0; i&lt;((FieldGroup)sourceField).getField().size(); i++) {</span>
 <span class="fc" id="L162">                Field sourceSubField = ((FieldGroup)sourceField).getField().get(i);</span>
@@ -172,14 +172,14 @@ import io.atlasmap.v2.Validations;
 <span class="fc" id="L172">            session.head().setSourceField(sourceField);</span>
 <span class="fc" id="L173">            session.head().setTargetField(targetFieldGroup);</span>
 <span class="fc" id="L174">        } else {</span>
-<span class="nc" id="L175">            JsonField targetSubField = new JsonField();</span>
-<span class="nc" id="L176">            AtlasJsonModelFactory.copyField(targetField, targetSubField, false);</span>
-<span class="nc" id="L177">            path.setVacantCollectionIndex(0);</span>
-<span class="nc" id="L178">            targetSubField.setPath(path.toString());</span>
-<span class="nc" id="L179">            targetFieldGroup.getField().add(targetSubField);</span>
-<span class="nc" id="L180">            session.head().setTargetField(targetSubField);</span>
-<span class="nc" id="L181">            super.populateTargetField(session);</span>
-<span class="nc" id="L182">            session.head().setTargetField(targetFieldGroup);</span>
+<span class="fc" id="L175">            JsonField targetSubField = new JsonField();</span>
+<span class="fc" id="L176">            AtlasJsonModelFactory.copyField(targetField, targetSubField, false);</span>
+<span class="fc" id="L177">            path.setVacantCollectionIndex(0);</span>
+<span class="fc" id="L178">            targetSubField.setPath(path.toString());</span>
+<span class="fc" id="L179">            targetFieldGroup.getField().add(targetSubField);</span>
+<span class="fc" id="L180">            session.head().setTargetField(targetSubField);</span>
+<span class="fc" id="L181">            super.populateTargetField(session);</span>
+<span class="fc" id="L182">            session.head().setTargetField(targetFieldGroup);</span>
         }
 
 <span class="pc bpc" id="L185" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>

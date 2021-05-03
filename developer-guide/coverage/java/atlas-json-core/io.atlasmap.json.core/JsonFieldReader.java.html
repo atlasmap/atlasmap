@@ -127,7 +127,7 @@ public class JsonFieldReader implements AtlasFieldReader {
 <span class="fc" id="L127">                    node = node.elements().next();</span>
                 }
 
-<span class="pc bpc" id="L130" title="1 of 2 branches missed.">                if (segments.size() &gt; 1) {</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">                if (segments.size() &gt; 1) {</span>
 <span class="fc" id="L131">                    depth = 1; //skip the root, if not a collection</span>
                 }
             }
@@ -231,9 +231,9 @@ public class JsonFieldReader implements AtlasFieldReader {
 <span class="fc" id="L231">            return null;</span>
             // we can't detect field type if it's null node
         }
-<span class="pc bpc" id="L234" title="1 of 2 branches missed.">        if (valueNode.isObject()) {</span>
-<span class="nc" id="L235">            jsonField.setFieldType(FieldType.COMPLEX);</span>
-<span class="nc" id="L236">            return null;</span>
+<span class="fc bfc" id="L234" title="All 2 branches covered.">        if (valueNode.isObject()) {</span>
+<span class="fc" id="L235">            jsonField.setFieldType(FieldType.COMPLEX);</span>
+<span class="fc" id="L236">            return null;</span>
         }
 <span class="pc bpc" id="L238" title="1 of 2 branches missed.">        if (valueNode.isArray()) {</span>
 <span class="nc" id="L239">            AtlasUtil.addAudit(session, jsonField,</span>
@@ -257,10 +257,10 @@ public class JsonFieldReader implements AtlasFieldReader {
 
 <span class="fc bfc" id="L258" title="All 2 branches covered.">        if (valueNode.isTextual()) {</span>
 <span class="fc" id="L259">            return handleTextualNode(valueNode, jsonField);</span>
-<span class="pc bpc" id="L260" title="1 of 2 branches missed.">        } else if (valueNode.isNumber()) {</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">        } else if (valueNode.isNumber()) {</span>
 <span class="fc" id="L261">            return handleNumberNode(valueNode, jsonField);</span>
-<span class="nc bnc" id="L262" title="All 2 branches missed.">        } else if (valueNode.isBoolean()) {</span>
-<span class="nc" id="L263">            return handleBooleanNode(valueNode, jsonField);</span>
+<span class="pc bpc" id="L262" title="1 of 2 branches missed.">        } else if (valueNode.isBoolean()) {</span>
+<span class="fc" id="L263">            return handleBooleanNode(valueNode, jsonField);</span>
 <span class="nc bnc" id="L264" title="All 2 branches missed.">        } else if (valueNode.isContainerNode()) {</span>
 <span class="nc" id="L265">            return handleContainerNode(valueNode, jsonField);</span>
 <span class="nc bnc" id="L266" title="All 2 branches missed.">        } else if (valueNode.isNull()) {</span>
@@ -316,8 +316,8 @@ public class JsonFieldReader implements AtlasFieldReader {
     }
 
     private Object handleBooleanNode(JsonNode valueNode, JsonField jsonField) {
-<span class="nc" id="L319">        jsonField.setFieldType(FieldType.BOOLEAN);</span>
-<span class="nc" id="L320">        return valueNode.booleanValue();</span>
+<span class="fc" id="L319">        jsonField.setFieldType(FieldType.BOOLEAN);</span>
+<span class="fc" id="L320">        return valueNode.booleanValue();</span>
     }
 
     private Object handleContainerNode(JsonNode valueNode, JsonField jsonField) throws AtlasException {

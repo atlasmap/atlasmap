@@ -173,17 +173,17 @@ public class JavaModule extends BaseAtlasModule {
 <span class="fc" id="L173">        Field targetField = session.head().getTargetField();</span>
 <span class="fc" id="L174">        AtlasPath path = new AtlasPath(targetField.getPath());</span>
 <span class="fc" id="L175">        FieldGroup targetFieldGroup = null;</span>
-<span class="pc bpc" id="L176" title="1 of 4 branches missed.">        if  (path.hasCollection() &amp;&amp; !path.isIndexedCollection()) {</span>
+<span class="fc bfc" id="L176" title="All 4 branches covered.">        if  (path.hasCollection() &amp;&amp; !path.isIndexedCollection()) {</span>
 <span class="fc" id="L177">            targetFieldGroup = AtlasModelFactory.createFieldGroupFrom(targetField, true);</span>
 <span class="fc" id="L178">            session.head().setTargetField(targetFieldGroup);</span>
         }
 
 <span class="fc" id="L181">        JavaFieldWriter writer = session.getFieldWriter(getDocId(), JavaFieldWriter.class);</span>
 <span class="fc bfc" id="L182" title="All 2 branches covered.">        if (targetFieldGroup == null) {</span>
-<span class="pc bpc" id="L183" title="1 of 2 branches missed.">            if (sourceField instanceof FieldGroup) {</span>
-<span class="nc" id="L184">                List&lt;Field&gt; subFields = ((FieldGroup)sourceField).getField();</span>
-<span class="nc bnc" id="L185" title="All 4 branches missed.">                if (subFields == null || subFields.size() == 0) {</span>
-<span class="nc" id="L186">                    return;</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">            if (sourceField instanceof FieldGroup) {</span>
+<span class="fc" id="L184">                List&lt;Field&gt; subFields = ((FieldGroup)sourceField).getField();</span>
+<span class="pc bpc" id="L185" title="2 of 4 branches missed.">                if (subFields == null || subFields.size() == 0) {</span>
+<span class="fc" id="L186">                    return;</span>
                 }
 <span class="nc" id="L188">                Integer index = targetField.getIndex();</span>
 <span class="nc bnc" id="L189" title="All 2 branches missed.">                if (index != null) {</span>
@@ -207,7 +207,7 @@ public class JavaModule extends BaseAtlasModule {
 <span class="fc" id="L207">                writer.populateTargetFieldValue(session, parentObject);</span>
 <span class="fc" id="L208">                writer.enqueueFieldAndParent(targetField, parentObject);</span>
             }
-<span class="pc bpc" id="L210" title="1 of 2 branches missed.">        } else if (sourceField instanceof FieldGroup) {</span>
+<span class="fc bfc" id="L210" title="All 2 branches covered.">        } else if (sourceField instanceof FieldGroup) {</span>
 <span class="fc bfc" id="L211" title="All 2 branches covered.">            if (((FieldGroup)sourceField).getField().size() == 0) {</span>
 <span class="fc" id="L212">                Object parentObject = writer.prepareParentObject(session);</span>
 <span class="fc bfc" id="L213" title="All 2 branches covered.">                if (parentObject != null) {</span>
@@ -234,18 +234,18 @@ public class JavaModule extends BaseAtlasModule {
 <span class="fc" id="L234">            session.head().setSourceField(sourceField);</span>
 <span class="fc" id="L235">            session.head().setTargetField(targetFieldGroup);</span>
 <span class="fc" id="L236">        } else {</span>
-<span class="nc bnc" id="L237" title="All 2 branches missed.">            Field targetSubField = targetField instanceof JavaEnumField ? new JavaEnumField() : new JavaField();</span>
-<span class="nc" id="L238">            AtlasJavaModelFactory.copyField(targetField, targetSubField, false);</span>
-<span class="nc" id="L239">            path.setVacantCollectionIndex(0);</span>
-<span class="nc" id="L240">            targetSubField.setPath(path.toString());</span>
-<span class="nc" id="L241">            targetFieldGroup.getField().add(targetSubField);</span>
-<span class="nc" id="L242">            session.head().setTargetField(targetSubField);</span>
-<span class="nc" id="L243">            Object parentObject = writer.prepareParentObject(session);</span>
-<span class="nc bnc" id="L244" title="All 2 branches missed.">            if (parentObject != null) {</span>
-<span class="nc" id="L245">                writer.populateTargetFieldValue(session, parentObject);</span>
-<span class="nc" id="L246">                writer.enqueueFieldAndParent(targetSubField, parentObject);</span>
+<span class="pc bpc" id="L237" title="1 of 2 branches missed.">            Field targetSubField = targetField instanceof JavaEnumField ? new JavaEnumField() : new JavaField();</span>
+<span class="fc" id="L238">            AtlasJavaModelFactory.copyField(targetField, targetSubField, false);</span>
+<span class="fc" id="L239">            path.setVacantCollectionIndex(0);</span>
+<span class="fc" id="L240">            targetSubField.setPath(path.toString());</span>
+<span class="fc" id="L241">            targetFieldGroup.getField().add(targetSubField);</span>
+<span class="fc" id="L242">            session.head().setTargetField(targetSubField);</span>
+<span class="fc" id="L243">            Object parentObject = writer.prepareParentObject(session);</span>
+<span class="pc bpc" id="L244" title="1 of 2 branches missed.">            if (parentObject != null) {</span>
+<span class="fc" id="L245">                writer.populateTargetFieldValue(session, parentObject);</span>
+<span class="fc" id="L246">                writer.enqueueFieldAndParent(targetSubField, parentObject);</span>
             }
-<span class="nc" id="L248">            session.head().setTargetField(targetFieldGroup);</span>
+<span class="fc" id="L248">            session.head().setTargetField(targetFieldGroup);</span>
         }
 
 <span class="pc bpc" id="L251" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>

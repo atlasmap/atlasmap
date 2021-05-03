@@ -163,9 +163,9 @@ public class JavaFieldWriter implements AtlasFieldWriter {
                 }
 
 <span class="fc bfc" id="L165" title="All 2 branches covered.">                if (lastSegment.getCollectionType() == CollectionType.NONE) {</span>
-<span class="pc bpc" id="L166" title="1 of 4 branches missed.">                    if (targetField.getFieldType() == FieldType.COMPLEX &amp;&amp; targetField.getValue() == null) {</span>
-<span class="nc bnc" id="L167" title="All 4 branches missed.">                        if (targetClassName != null &amp;&amp; !targetClassName.isEmpty()) {</span>
-<span class="nc" id="L168">                            writerUtil.createComplexChildObject(parentObject, lastSegment, writerUtil.loadClass(targetClassName));</span>
+<span class="fc bfc" id="L166" title="All 4 branches covered.">                    if (targetField.getFieldType() == FieldType.COMPLEX &amp;&amp; targetField.getValue() == null) {</span>
+<span class="pc bpc" id="L167" title="2 of 4 branches missed.">                        if (targetClassName != null &amp;&amp; !targetClassName.isEmpty()) {</span>
+<span class="fc" id="L168">                            writerUtil.createComplexChildObject(parentObject, lastSegment, writerUtil.loadClass(targetClassName));</span>
                         } else {
 <span class="nc" id="L170">                            writerUtil.createComplexChildObject(parentObject, lastSegment);</span>
                         }

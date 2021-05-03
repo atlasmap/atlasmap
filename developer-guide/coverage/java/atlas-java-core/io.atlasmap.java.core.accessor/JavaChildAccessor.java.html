@@ -68,10 +68,10 @@ public abstract class JavaChildAccessor {
             }
 <span class="fc bfc" id="L69" title="All 2 branches covered.">        } else if (getRawValue() instanceof Collection) {</span>
 <span class="fc" id="L70">            this.collectionType = CollectionType.LIST;</span>
-<span class="pc bpc" id="L71" title="1 of 2 branches missed.">            if (getRawValue() instanceof List) {</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">            if (getRawValue() instanceof List) {</span>
 <span class="fc" id="L72">                this.collectionValues = (List&lt;Object&gt;)this.getRawValue();</span>
             } else {
-<span class="nc" id="L74">                this.collectionValues = Arrays.asList(Collection.class.cast(getRawValue()).toArray());</span>
+<span class="fc" id="L74">                this.collectionValues = Arrays.asList(Collection.class.cast(getRawValue()).toArray());</span>
             }
 <span class="pc bpc" id="L76" title="1 of 2 branches missed.">        } else if (getRawValue() instanceof Map) {</span>
             // TODO java.util.Map support
