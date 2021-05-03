@@ -735,20 +735,25 @@ export class MappingSerializer {
 
       this.serializeActions(cfg, mappedField, serializedField);
 
-      // Check for preview-mode collection field references.
-      if (isSource && field.isInCollection() && !ignoreValue) {
+      // Check for collection field references.
+      if (isSource && field.isInCollection()) {
         const collectionParentField = field.getCollectionParentField();
 
         if (!mapping.referenceFieldExists(collectionParentField.path)) {
-          MappingSerializer.processCollectionPreview(
-            cfg,
-            mapping,
-            field,
-            serializedField,
-            fieldsJson
-          );
+          if (!ignoreValue) {
+            MappingSerializer.processCollectionPreview(
+              cfg,
+              mapping,
+              field,
+              serializedField,
+              fieldsJson
+            );
+          } else {
+            fieldsJson.push(serializedField);
+            collectionInputFieldGroup = null;
+          }
         } else {
-          // Establish/add to the inner instance field group.
+          // Establish/add to the inner reference field group.
           if (collectionInstanceInputFieldGroup === null) {
             collectionInstanceInputFieldGroup = MappingSerializer.createInputFieldGroup(
               mapping,
@@ -766,22 +771,27 @@ export class MappingSerializer {
             collectionParentField.serviceObject.fieldType;
 
           // Preview-mode uses element/ item instance <0>.
-          collectionInstanceInputFieldGroup[
-            'path'
-          ] = collectionParentField.path.replace('<>', '<0>');
-          // Establish one outer input field group for the collection.
-          if (collectionInputFieldGroup === null) {
-            collectionInputFieldGroup = MappingSerializer.createInputFieldGroup(
-              mapping,
-              [collectionInstanceInputFieldGroup],
-              cfg,
-              true,
-              collectionParentField.docDef.id,
-              collectionParentField.path
-            );
-            collectionInstanceInputFieldGroup['fieldType'] =
-              collectionParentField.serviceObject.fieldType;
-            fieldsJson.push(collectionInputFieldGroup);
+          if (!ignoreValue) {
+            collectionInstanceInputFieldGroup[
+              'path'
+            ] = collectionParentField.path.replace('<>', '<0>');
+
+            // Establish one outer input field group for the preview collection.
+            if (collectionInputFieldGroup === null) {
+              collectionInputFieldGroup = MappingSerializer.createInputFieldGroup(
+                mapping,
+                [collectionInstanceInputFieldGroup],
+                cfg,
+                true,
+                collectionParentField.docDef.id,
+                collectionParentField.path
+              );
+              collectionInstanceInputFieldGroup['fieldType'] =
+                collectionParentField.serviceObject.fieldType;
+              fieldsJson.push(collectionInputFieldGroup);
+            }
+          } else {
+            fieldsJson.push(collectionInstanceInputFieldGroup);
           }
         }
 
