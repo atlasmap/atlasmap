@@ -37,6 +37,7 @@ save_cache_mvn: &save_cache_mvn
     key: atlasmap-mvn-{{ checksum "pom.xml" }}
     paths:
     - ~/.m2
+      ~/.cache
 
 save_cache_node: &save_cache_node
   save_cache:
@@ -49,7 +50,6 @@ save_cache_node: &save_cache_node
 
 save_junit: &save_junit
   run:
-    when: always
     name: Collect junit reports
     command: |
       mkdir -p /workspace/junit/
@@ -57,7 +57,6 @@ save_junit: &save_junit
 
 save_checkstyle: &save_checkstyle
   run:
-    when: always
     name: Collect checkstyle reports
     command: |
       mkdir -p /workspace/checkstyle/
@@ -65,7 +64,6 @@ save_checkstyle: &save_checkstyle
 
 save_docs: &save_docs
   run:
-    when: always
     name: Collect docs
     command: |
       cp -a docs/target/generated-docs /workspace/docs
@@ -156,19 +154,28 @@ jobs:
       - store_artifacts:
           path: /workspace/docs
       - run:
-          when: always
           name: Collect Coverage reports
           command: |
             mkdir /workspace/coverage/
             cp -a ./coverage-report/target/site/jacoco-aggregate/* /workspace/coverage
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              java -cp ./.circleci/codacy-coverage-reporter-4.0.3-assembly.jar com.codacy.CodacyCoverageReporter report -l Java -r /workspace/coverage/jacoco.xml
-            fi
             mkdir /workspace/coverage/ui
             for dir in `ls --color=never ui/packages`; do
               mkdir /workspace/coverage/ui/${dir}
+              cp ui/packages/${dir}/coverage/lcov.info /workspace/coverage/ui/${dir}/ 2>/dev/null || :
               cp -a ui/packages/${dir}/coverage/lcov-report/* /workspace/coverage/ui/${dir}/ 2>/dev/null || :
             done
+      - run:
+          name: Upload coverage report to Codacy
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              bash <(curl -Ls https://coverage.codacy.com/get.sh) report --partial -r /workspace/coverage/jacoco.xml
+              for dir in `ls --color=never /workspace/coverage/ui`; do
+                bash <(curl -Ls https://coverage.codacy.com/get.sh) report --partial -r /workspace/coverage/ui/${dir}/lcov.info
+              done
+              bash <(curl -Ls https://coverage.codacy.com/get.sh) final
+            else
+              echo "Skipping for the branch ${CIRCLE_BRANCH}"
+            fi
       - store_artifacts:
           path: /workspace/coverage
       - <<: *save_checkstyle
