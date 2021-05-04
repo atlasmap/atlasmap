@@ -58,7 +58,7 @@ import io.atlasmap.v2.Json;
  * </ul>
  * </div>
  * {@link #load(Path)} {@link #export(OutputStream)}
- * 
+ *
  * <div>
  * This handler follows lazy loading strategy as much as
  * possible, i.e. defer to serialize/deserialize until it is really required.
@@ -66,7 +66,7 @@ import io.atlasmap.v2.Json;
  * Only when it imports/exports ADM archive file, library jars are extracted/bundled
  * if {@link #isIgnoreLibrary} is set to {@code false}.
  * </div>
- * 
+ *
  * <div>
  * TODO <a href="https://github.com/atlasmap/atlasmap/issues/1476">
  * https://github.com/atlasmap/atlasmap/issues/1476</a>
@@ -321,7 +321,7 @@ public class ADMArchiveHandler {
                         meta.setId(meta.getName());
                     }
                     meta.setSpecification(spec != null ? spec.getBytes() : null);
-                    this.dataSourceMetadata.put(new DataSourceKey(meta.isSource(), meta.getId()), meta);
+                    this.dataSourceMetadata.put(new DataSourceKey(meta.getIsSource(), meta.getId()), meta);
                 }
             } catch (Exception e) {
                 throw new AtlasException(e);

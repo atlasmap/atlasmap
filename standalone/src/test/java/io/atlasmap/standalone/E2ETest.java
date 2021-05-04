@@ -192,11 +192,11 @@ public class E2ETest {
                 handler.load(Paths.get(DLDIR + File.separator + exportAdmFileName));
                 assertEquals("UI.0", handler.getMappingDefinition().getName());
                 DataSourceMetadata sourceMeta = handler.getDataSourceMetadata(true, "JSONSchemaSource");
-                assertEquals(true, sourceMeta.isSource());
+                assertEquals(true, sourceMeta.getIsSource());
                 assertEquals("JSONSchemaSource", sourceMeta.getName());
                 assertEquals("JSON", sourceMeta.getDataSourceType());
                 DataSourceMetadata targetMeta = handler.getDataSourceMetadata(false, "XMLSchemaSource");
-                assertEquals(false, targetMeta.isSource());
+                assertEquals(false, targetMeta.getIsSource());
                 assertEquals("XMLSchemaSource", targetMeta.getName());
                 assertEquals("XML", targetMeta.getDataSourceType());
                 return;
