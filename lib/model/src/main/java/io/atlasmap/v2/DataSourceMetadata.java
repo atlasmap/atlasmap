@@ -72,11 +72,11 @@ public class DataSourceMetadata implements Serializable {
         this.inspectionType = inspectionType;
     }
 
-    public boolean isSource() {
+    public boolean getIsSource() {
         return isSource;
     }
 
-    public void setSource(boolean isSource) {
+    public void setIsSource(boolean isSource) {
         this.isSource = isSource;
     }
 
