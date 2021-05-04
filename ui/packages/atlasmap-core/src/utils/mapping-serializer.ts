@@ -41,7 +41,7 @@ import { ExpressionModel } from '../models/expression.model';
 import { MappingUtil } from './mapping-util';
 
 export class MappingSerializer {
-  static serializeMappings(cfg: ConfigModel): any {
+  static serializeMappings(cfg: ConfigModel, ignoreValue: boolean = true): any {
     // TODO: check this non null operator
     const mappingDefinition: MappingDefinition = cfg.mappings!;
     let jsonMappings: any[] = [];
@@ -53,7 +53,7 @@ export class MappingSerializer {
           cfg,
           mapping,
           mapping.uuid,
-          true,
+          ignoreValue,
           false
         );
         if (serializedFieldMapping) {

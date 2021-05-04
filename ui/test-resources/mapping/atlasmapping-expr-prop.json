@@ -9,6 +9,7 @@
     }, {
       "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
       "id" : "JSONSchemaSource",
+      "name" : "JSONSchemaSource",
       "uri" : "atlas:json:JSONSchemaSource",
       "dataSourceType" : "SOURCE"
     }, {
@@ -48,9 +49,6 @@
         "inputField" : [ {
           "jsonType" : "io.atlasmap.json.v2.JsonField",
           "actions" : [ {
-            "delimiter" : ":",
-            "@type" : "Split"
-          }, {
             "delimiter" : ":",
             "@type" : "Split"
           } ],
@@ -204,6 +202,106 @@
           "userCreated" : false
         } ],
         "id" : "mapping.983999"
+      }, {
+
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "expression" : "repeat( count( ${JSONSchemaSource:/addressList<>/street}), ${DOC.Constants:/const-str})",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "JSONSchemaSource",
+            "path" : "/addressList<>/street",
+            "fieldType" : "STRING",
+            "name" : "street"
+          }, {
+            "jsonType" : "io.atlasmap.v2.ConstantField",
+            "value" : "const-str",
+            "docId" : "DOC.Constants",
+            "path" : "/const-str",
+            "fieldType" : "STRING"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONSchemaSource",
+          "path" : "/addressList<>/zip",
+          "fieldType" : "STRING",
+          "name" : "zip"
+        } ],
+        "id" : "mapping.71409"
+      }, {
+       "jsonType" : "io.atlasmap.v2.Mapping",
+        "expression" : "select( filter( ${JSONSchemaSource:/addressList<>}, ${/city} != 'Boston'), ${/state})",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.v2.FieldGroup",
+            "actions" : [ ],
+            "docId" : "JSONSchemaSource",
+            "path" : "/addressList<>",
+            "fieldType" : "COMPLEX",
+            "field" : [ {
+              "jsonType" : "io.atlasmap.json.v2.JsonField",
+              "docId" : "JSONSchemaSource",
+              "path" : "/addressList<>/city",
+              "fieldType" : "STRING",
+              "name" : "city"
+            }, {
+              "jsonType" : "io.atlasmap.json.v2.JsonField",
+              "docId" : "JSONSchemaSource",
+              "path" : "/addressList<>/state",
+              "fieldType" : "STRING",
+              "name" : "state"
+            } ]
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONSchemaSource",
+          "path" : "/addressList<>/city",
+          "fieldType" : "STRING",
+          "name" : "city"
+        } ],
+        "id" : "mapping.195528"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ {
+            "delimiter" : " ",
+            "delimitingEmptyValues" : true,
+            "@type" : "Concatenate"
+          } ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "JSONSchemaSource",
+            "index" : 0,
+            "path" : "/addressList<>/zip",
+            "fieldType" : "STRING",
+            "name" : "zip"
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "JSONSchemaSourceb",
+            "index" : 1,
+            "path" : "/addressList<>/street",
+            "fieldType" : "STRING",
+            "name" : "street"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONSchemaSource",
+          "path" : "/primitives/stringPrimitive",
+          "fieldType" : "STRING",
+          "name" : "stringPrimitive"
+        } ],
+        "id" : "mapping.927111"
       } ]
     },
     "lookupTables" : {
@@ -213,6 +311,10 @@
       "constant" : [ {
         "name" : "Boston",
         "value" : "Boston",
+        "fieldType" : "STRING"
+      }, {
+        "name" : "const-str",
+        "value" : "const-str",
         "fieldType" : "STRING"
       } ]
     },
