@@ -1,9 +1,6 @@
 /* tslint:disable:no-unused-variable */
 
-import {
-  LookupTableEntry,
-  LookupTable,
-} from '../../src/models/lookup-table.model';
+import { LookupTable, LookupTableEntry } from '../models/lookup-table.model';
 
 describe('LookupTable', () => {
   test('initialize', () => {

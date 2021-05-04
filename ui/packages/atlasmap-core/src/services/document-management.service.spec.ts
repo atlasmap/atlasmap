@@ -1,18 +1,30 @@
-/* tslint:disable:no-unused-variable */
+/*
+    Copyright (C) 2017 Red Hat, Inc.
 
-import ky from 'ky/umd';
-import log from 'loglevel';
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-import { DocumentManagementService } from '../../src/services/document-management.service';
-import { ErrorHandlerService } from '../../src/services/error-handler.service';
-import { InspectionType, DocumentType } from '../../src/common/config.types';
-import { DocumentDefinition } from '../../src/models/document-definition.model';
-import { ConfigModel } from '../../src/models/config.model';
+            http://www.apache.org/licenses/LICENSE-2.0
 
-import atlasmapInspectionTwitter4jStatusJson from '../../../../test-resources/inspected/atlasmap-inspection-twitter4j.Status.json';
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+import { DocumentType, InspectionType } from '../common/config.types';
+
+import { ConfigModel } from '../models/config.model';
+import { DocumentDefinition } from '../models/document-definition.model';
+import { DocumentManagementService } from '../services/document-management.service';
+import { ErrorHandlerService } from '../services/error-handler.service';
+import { Field } from '../models/field.model';
 import atlasmapInspectionComplexObjectRootedJson from '../../../../test-resources/inspected/atlasmap-inspection-complex-object-rooted.json';
 import atlasmapInspectionPoExampleSchemaJson from '../../../../test-resources/inspected/atlasmap-inspection-po-example-schema.json';
-import { Field } from '../../src/models/field.model';
+import atlasmapInspectionTwitter4jStatusJson from '../../../../test-resources/inspected/atlasmap-inspection-twitter4j.Status.json';
+import ky from 'ky/umd';
+import log from 'loglevel';
 
 describe('DocumentManagementService', () => {
   const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });

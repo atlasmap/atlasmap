@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { MappingModel, MappedField } from './mapping.model';
+import { MappedField, MappingModel } from './mapping.model';
 
 export enum ErrorLevel {
   DEBUG = 'DEBUG',

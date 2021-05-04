@@ -14,11 +14,12 @@
     limitations under the License.
 */
 
-import { Field } from './field.model';
 import { DocumentType, InspectionType } from '../common/config.types';
-import { MappingDefinition } from './mapping-definition.model';
+
 import { DataMapperUtil } from '../common/data-mapper-util';
 import { DocumentInitializationModel } from './config.model';
+import { Field } from './field.model';
+import { MappingDefinition } from './mapping-definition.model';
 
 export class NamespaceModel {
   private static unqualifiedNamespace: NamespaceModel;

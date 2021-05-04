@@ -13,31 +13,29 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-
-import ky from 'ky';
-import { Observable, Subscription } from 'rxjs';
-
 import {
   CollectionType,
   DocumentType,
   InspectionType,
 } from '../common/config.types';
-import { ConfigModel } from '../models/config.model';
-import { EnumValue, Field } from '../models/field.model';
 import {
   DocumentDefinition,
   NamespaceModel,
 } from '../models/document-definition.model';
-
-import { DataMapperUtil } from '../common/data-mapper-util';
+import { EnumValue, Field } from '../models/field.model';
 import {
   ErrorInfo,
   ErrorLevel,
   ErrorScope,
   ErrorType,
 } from '../models/error.model';
-import { timeout } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
+
+import { ConfigModel } from '../models/config.model';
+import { DataMapperUtil } from '../common/data-mapper-util';
 import { Guid } from '../utils';
+import ky from 'ky';
+import { timeout } from 'rxjs/operators';
 
 export class DocumentManagementService {
   cfg!: ConfigModel;

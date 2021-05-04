@@ -13,11 +13,12 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from './error.model';
+import { MappedField, MappingModel } from './mapping.model';
+
 import { ConfigModel } from './config.model';
 import { DocumentDefaultName } from '../common/config.types';
-import { MappedField, MappingModel } from './mapping.model';
 import { Subject } from 'rxjs';
-import { ErrorScope, ErrorType, ErrorInfo, ErrorLevel } from './error.model';
 
 export class ExpressionUpdatedEvent {
   constructor(public node?: ExpressionNode, public offset?: number) {}

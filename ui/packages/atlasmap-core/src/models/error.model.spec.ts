@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
 
-import { ErrorInfo, ErrorLevel } from '../../src/models/error.model';
+import { ErrorInfo, ErrorLevel } from '../models/error.model';
 
 describe('ErrorModel', () => {
   it('initialize', () => {

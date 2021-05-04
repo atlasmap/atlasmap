@@ -126,5 +126,32 @@
     "transformIgnorePatterns": [
       "<rootDir>/node_modules/(?!(ky)/)"
     ]
+  },
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "ecmaFeatures": {
+        "modules": true
+      },
+      "jsx": true,
+      "useJSXTextNode": true,
+      "sourceType": "module"
+    },
+    "extends": [
+      "prettier",
+      "prettier/@typescript-eslint"
+    ],
+    "plugins": [
+      "@typescript-eslint",
+      "import",
+      "react-hooks"
+    ],
+    "rules": {
+      "@typescript-eslint/explicit-function-return-type": "off",
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+      "sort-imports": "error"
+    }
   }
 }

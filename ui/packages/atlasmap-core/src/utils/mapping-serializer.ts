@@ -14,30 +14,31 @@
     limitations under the License.
 */
 
-import { TransitionMode, TransitionModel } from '../models/transition.model';
-import {
-  FieldActionArgument,
-  FieldAction,
-  FieldActionArgumentValue,
-  Multiplicity,
-} from '../models/field-action.model';
-import { MappingModel, MappedField } from '../models/mapping.model';
-import { Field } from '../models/field.model';
-import { MappingDefinition } from '../models/mapping-definition.model';
+import { DataSourceType, DocumentType } from '../common/config.types';
 import {
   DocumentDefinition,
   NamespaceModel,
 } from '../models/document-definition.model';
-import { LookupTable, LookupTableEntry } from '../models/lookup-table.model';
-import { DocumentType, DataSourceType } from '../common/config.types';
-import { ConfigModel } from '../models/config.model';
 import {
   ErrorInfo,
   ErrorLevel,
-  ErrorType,
   ErrorScope,
+  ErrorType,
 } from '../models/error.model';
+import {
+  FieldAction,
+  FieldActionArgument,
+  FieldActionArgumentValue,
+  Multiplicity,
+} from '../models/field-action.model';
+import { LookupTable, LookupTableEntry } from '../models/lookup-table.model';
+import { MappedField, MappingModel } from '../models/mapping.model';
+import { TransitionMode, TransitionModel } from '../models/transition.model';
+
+import { ConfigModel } from '../models/config.model';
 import { ExpressionModel } from '../models/expression.model';
+import { Field } from '../models/field.model';
+import { MappingDefinition } from '../models/mapping-definition.model';
 import { MappingUtil } from './mapping-util';
 
 export class MappingSerializer {

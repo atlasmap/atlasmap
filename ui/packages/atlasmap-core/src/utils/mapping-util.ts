@@ -13,21 +13,20 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-
 import {
-  PaddingField,
   DocumentDefinition,
+  PaddingField,
 } from '../models/document-definition.model';
-import { MappingModel, MappedField } from '../models/mapping.model';
+import {
+  ErrorInfo,
+  ErrorLevel,
+  ErrorScope,
+  ErrorType,
+} from '../models/error.model';
+import { MappedField, MappingModel } from '../models/mapping.model';
 import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
 import { Multiplicity } from '../models/field-action.model';
-import {
-  ErrorType,
-  ErrorScope,
-  ErrorInfo,
-  ErrorLevel,
-} from '../models/error.model';
 
 /**
  * Static routines for handling mappings.

@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
 
-import { ConfigModel } from '../../src/models/config.model';
+import { ConfigModel } from '../models/config.model';
 
 describe('ConfigModel', () => {
   test('initialize', () => {

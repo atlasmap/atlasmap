@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
 
-import { Field } from '../../src/models/field.model';
+import { Field } from '../models/field.model';
 
 describe('Field', () => {
   test('initialize', () => {

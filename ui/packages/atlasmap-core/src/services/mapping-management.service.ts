@@ -14,34 +14,33 @@
     limitations under the License.
 */
 
-import ky, { Options } from 'ky';
-import log from 'loglevel';
-import { Observable, Subscription, Subject, forkJoin, from } from 'rxjs';
-import { timeout } from 'rxjs/operators';
-
-import { DocumentType } from '../common/config.types';
-import { ConfigModel } from '../models/config.model';
-import { Field } from '../models/field.model';
-import { MappingModel, MappedField } from '../models/mapping.model';
-import { TransitionMode, TransitionModel } from '../models/transition.model';
-import { MappingDefinition } from '../models/mapping-definition.model';
 import {
   ErrorInfo,
   ErrorLevel,
-  ErrorType,
   ErrorScope,
+  ErrorType,
 } from '../models/error.model';
 import {
   FieldAction,
   FieldActionArgumentValue,
   Multiplicity,
 } from '../models/field-action.model';
-
-import { MappingSerializer } from '../utils/mapping-serializer';
-import { DataMapperUtil } from '../common/data-mapper-util';
-import { PaddingField } from '../models/document-definition.model';
 import { LookupTableData, LookupTableUtil } from '../utils/lookup-table-util';
+import { MappedField, MappingModel } from '../models/mapping.model';
+import { Observable, Subject, Subscription, forkJoin, from } from 'rxjs';
+import { TransitionMode, TransitionModel } from '../models/transition.model';
+import ky, { Options } from 'ky';
+
+import { ConfigModel } from '../models/config.model';
+import { DataMapperUtil } from '../common/data-mapper-util';
+import { DocumentType } from '../common/config.types';
 import { ExpressionModel } from '../models/expression.model';
+import { Field } from '../models/field.model';
+import { MappingDefinition } from '../models/mapping-definition.model';
+import { MappingSerializer } from '../utils/mapping-serializer';
+import { PaddingField } from '../models/document-definition.model';
+import log from 'loglevel';
+import { timeout } from 'rxjs/operators';
 
 /**
  * Handles mapping updates. It restores mapping status from backend and reflect in UI,

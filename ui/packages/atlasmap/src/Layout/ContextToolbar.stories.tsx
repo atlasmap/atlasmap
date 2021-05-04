@@ -5,4 +5,6 @@ export default {
   title: "AtlasMap|Layout/ContextToolbar",
 };
 
-export const example = () => <ContextToolbar>icons go here</ContextToolbar>;
+export const example = () => {
+  return <ContextToolbar>icons go here</ContextToolbar>;
+};

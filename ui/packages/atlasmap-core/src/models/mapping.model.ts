@@ -14,12 +14,11 @@
     limitations under the License.
 */
 import { ConfigModel } from './config.model';
-import { Field } from './field.model';
-import { TransitionModel } from './transition.model';
-
 import { DataMapperUtil } from '../common/data-mapper-util';
+import { Field } from './field.model';
 import { FieldAction } from './field-action.model';
 import { PaddingField } from './document-definition.model';
+import { TransitionModel } from './transition.model';
 
 export class MappedFieldParsingData {
   parsedName: string | null = null;

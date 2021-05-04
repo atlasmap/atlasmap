@@ -1,7 +1,7 @@
 import {
-  FieldActionDefinition,
   FieldAction,
-} from '../../src/models/field-action.model';
+  FieldActionDefinition,
+} from '../models/field-action.model';
 
 describe('FieldActionModel', () => {
   test('FieldAction.create()', () => {

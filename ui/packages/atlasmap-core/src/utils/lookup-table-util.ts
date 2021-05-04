@@ -13,14 +13,14 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import { ErrorInfo, ErrorScope, ErrorType } from '../models/error.model';
+import { LookupTable, LookupTableEntry } from '../models/lookup-table.model';
 
+import { ConfigModel } from '../models/config.model';
+import { Field } from '../models/field.model';
+import { MappingDefinition } from '../models/mapping-definition.model';
 import { MappingModel } from '../models/mapping.model';
 import { TransitionMode } from '../models/transition.model';
-import { Field } from '../models/field.model';
-import { LookupTable, LookupTableEntry } from '../models/lookup-table.model';
-import { MappingDefinition } from '../models/mapping-definition.model';
-import { ConfigModel } from '../models/config.model';
-import { ErrorInfo, ErrorScope, ErrorType } from '../models/error.model';
 
 const EnumerationUnspecified = '[ None ]';
 
