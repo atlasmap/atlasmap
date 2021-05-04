@@ -3,7 +3,7 @@ import { Dropdown, DropdownProps } from "@patternfly/react-core";
 import { useToggle } from "../Atlasmap/utils";
 
 export interface IAutoDropdown
-  extends Omit<Omit<DropdownProps, "css">, "toggle"> {
+  extends Omit<Omit<DropdownProps, "css">, "toggle" | "key"> {
   toggle: (props: { isOpen: boolean; toggleOpen: () => void }) => ReactElement;
 }
 

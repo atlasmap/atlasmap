@@ -23,7 +23,7 @@
   },
   "peerDependencies": {
     "ky": "^0.17.0",
-    "react": ">=16",
+    "react": "^16.13.1",
     "rxjs": "^6.2.2"
   },
   "husky": {
