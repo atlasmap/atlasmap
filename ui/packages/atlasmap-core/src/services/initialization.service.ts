@@ -13,37 +13,37 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import log from 'loglevel';
-import { inflate } from 'pako';
-import { Subject, Observable } from 'rxjs';
-
 import {
+  CollectionType,
   DocumentType,
   InspectionType,
-  CollectionType,
 } from '../common/config.types';
-import { DataMapperUtil } from '../common/data-mapper-util';
 import {
-  DocumentInitializationModel,
   ConfigModel,
+  DocumentInitializationModel,
 } from '../models/config.model';
-import { DocumentDefinition } from '../models/document-definition.model';
-import { MappingDefinition } from '../models/mapping-definition.model';
+import {
+  ErrorInfo,
+  ErrorLevel,
+  ErrorScope,
+  ErrorType,
+} from '../models/error.model';
+import { Observable, Subject } from 'rxjs';
 
-import { ErrorHandlerService } from './error-handler.service';
+import { DataMapperUtil } from '../common/data-mapper-util';
+import { DocumentDefinition } from '../models/document-definition.model';
 import { DocumentManagementService } from './document-management.service';
-import { MappingManagementService } from './mapping-management.service';
+import { ErrorHandlerService } from './error-handler.service';
 import { FieldActionService } from './field-action.service';
 import { FileManagementService } from './file-management.service';
 import { LookupTableUtil } from '../utils/lookup-table-util';
+import { MappingDefinition } from '../models/mapping-definition.model';
+import { MappingManagementService } from './mapping-management.service';
 import { MappingSerializer } from '../utils/mapping-serializer';
 import { MappingUtil } from '../utils/mapping-util';
-import {
-  ErrorScope,
-  ErrorType,
-  ErrorInfo,
-  ErrorLevel,
-} from '../models/error.model';
+import { inflate } from 'pako';
+import log from 'loglevel';
+
 log.setDefaultLevel(log.levels.WARN);
 
 export class InitializationService {

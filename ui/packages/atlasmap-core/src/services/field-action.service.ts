@@ -13,22 +13,23 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { ConfigModel } from '../models/config.model';
-import {
-  FieldActionDefinition,
-  FieldActionArgument,
-  Multiplicity,
-} from '../models/field-action.model';
-import { Observable } from 'rxjs';
-import ky from 'ky';
-import { MappingModel } from '../models/mapping.model';
-import { Field } from '../models/field.model';
 import {
   ErrorInfo,
   ErrorLevel,
   ErrorScope,
   ErrorType,
 } from '../models/error.model';
+import {
+  FieldActionArgument,
+  FieldActionDefinition,
+  Multiplicity,
+} from '../models/field-action.model';
+
+import { ConfigModel } from '../models/config.model';
+import { Field } from '../models/field.model';
+import { MappingModel } from '../models/mapping.model';
+import { Observable } from 'rxjs';
+import ky from 'ky';
 
 export class FieldActionService {
   cfg: ConfigModel = ConfigModel.getConfig();

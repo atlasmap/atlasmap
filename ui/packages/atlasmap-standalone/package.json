@@ -37,10 +37,15 @@
     "build": "npm-run-all build:module test",
     "test": "react-scripts test --watchAll=false --runInBand",
     "test:coverage": "react-scripts test --watchAll=false --coverage --runInBand",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "tsdx lint src",
+    "format": "yarn lint --fix"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "sort-imports": "error"
+    }
   },
   "browserslist": {
     "production": [

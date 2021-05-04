@@ -1,10 +1,10 @@
 /* tslint:disable:no-unused-variable */
 
 import {
-  NamespaceModel,
   DocumentDefinition,
-} from '../../src/models/document-definition.model';
-import { DocumentType } from '../../src/common/config.types';
+  NamespaceModel,
+} from '../models/document-definition.model';
+import { DocumentType } from '../common/config.types';
 
 describe('DocumentDefinitionModel', () => {
   test('initialize NamespaceModel', () => {

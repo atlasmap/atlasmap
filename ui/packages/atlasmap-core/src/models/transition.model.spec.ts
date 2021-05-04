@@ -1,9 +1,6 @@
 /* tslint:disable:no-unused-variable */
 
-import {
-  TransitionMode,
-  TransitionModel,
-} from '../../src/models/transition.model';
+import { TransitionMode, TransitionModel } from '../models/transition.model';
 
 describe('TransitionModel', () => {
   test('initialize', () => {

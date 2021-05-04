@@ -13,21 +13,22 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import ky from 'ky';
-import { gzip } from 'pako';
-import log from 'loglevel';
-import { Observable } from 'rxjs';
-import { timeout } from 'rxjs/operators';
+import {
+  ErrorInfo,
+  ErrorLevel,
+  ErrorScope,
+  ErrorType,
+} from '../models/error.model';
+
+import { ConfigModel } from '../models/config.model';
 import { DataMapperUtil } from '../common/data-mapper-util';
 import { DocumentManagementService } from './document-management.service';
 import { InspectionType } from '../common/config.types';
-import { ConfigModel } from '../models/config.model';
-import {
-  ErrorScope,
-  ErrorType,
-  ErrorInfo,
-  ErrorLevel,
-} from '../models/error.model';
+import { Observable } from 'rxjs';
+import { gzip } from 'pako';
+import ky from 'ky';
+import log from 'loglevel';
+import { timeout } from 'rxjs/operators';
 
 /**
  * Handles file manipulation stored in the backend, including import/export via UI.

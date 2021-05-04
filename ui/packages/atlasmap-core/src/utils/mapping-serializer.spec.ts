@@ -1,29 +1,30 @@
 /* tslint:disable:no-unused-variable */
 
+import { FieldAction, Multiplicity } from '../models/field-action.model';
+
+import { ConfigModel } from '../models/config.model';
+import { DocumentDefinition } from '../models/document-definition.model';
+import { DocumentType } from '../common/config.types';
+import { ErrorHandlerService } from '../services/error-handler.service';
+import { ExpressionModel } from '../models/expression.model';
+import { Field } from '../models/field.model';
+import { FieldActionService } from '../services/field-action.service';
+import { MappingDefinition } from '../models/mapping-definition.model';
+import { MappingModel } from '../models/mapping.model';
+import { MappingSerializer } from '../utils/mapping-serializer';
+import { MappingUtil } from '../utils/mapping-util';
+import { TransitionMode } from '../models/transition.model';
+
+import atlasMappingCollExprMapping from '../../../../test-resources/mapping/atlasmapping-coll-expr-mapping.json';
+import atlasMappingCollExprPreview from '../../../../test-resources/mapping/atlasmapping-coll-expr-preview.json';
+import atlasMappingCollRefExprMapping from '../../../../test-resources/mapping/atlasmapping-coll-ref-expr-mapping.json';
+import atlasMappingCollRefExprPreview from '../../../../test-resources/mapping/atlasmapping-coll-ref-expr-preview.json';
+import atlasMappingExprPropJson from '../../../../test-resources/mapping/atlasmapping-expr-prop.json';
+import atlasMappingTestJson from '../../../../test-resources/mapping/atlasmapping-test.json';
+import atlasmapFieldActionJson from '../../../../test-resources/fieldActions/atlasmap-field-action.json';
+
 import ky from 'ky/umd';
 import log from 'loglevel';
-
-import { MappingSerializer } from '../../src/utils/mapping-serializer';
-import { ConfigModel } from '../../src/models/config.model';
-import { ErrorHandlerService } from '../../src/services/error-handler.service';
-import { DocumentType } from '../../src/common/config.types';
-import { DocumentDefinition } from '../../src/models/document-definition.model';
-import { Field } from '../../src/models/field.model';
-import { FieldActionService } from '../../src/services/field-action.service';
-import { MappingUtil } from '../../src/utils/mapping-util';
-import { MappingModel } from '../../src/models/mapping.model';
-import { TransitionMode } from '../../src/models/transition.model';
-import { FieldAction, Multiplicity } from '../../src/models/field-action.model';
-import { ExpressionModel } from '../../src/models/expression.model';
-import { MappingDefinition } from '../../src/models/mapping-definition.model';
-
-import atlasmapFieldActionJson from '../../../../test-resources/fieldActions/atlasmap-field-action.json';
-import atlasMappingTestJson from '../../../../test-resources/mapping/atlasmapping-test.json';
-import atlasMappingExprPropJson from '../../../../test-resources/mapping/atlasmapping-expr-prop.json';
-import atlasMappingCollExprPreview from '../../../../test-resources/mapping/atlasmapping-coll-expr-preview.json';
-import atlasMappingCollExprMapping from '../../../../test-resources/mapping/atlasmapping-coll-expr-mapping.json';
-import atlasMappingCollRefExprPreview from '../../../../test-resources/mapping/atlasmapping-coll-ref-expr-preview.json';
-import atlasMappingCollRefExprMapping from '../../../../test-resources/mapping/atlasmapping-coll-ref-expr-mapping.json';
 
 describe('MappingSerializer', () => {
   let cfg: ConfigModel;

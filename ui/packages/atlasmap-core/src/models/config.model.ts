@@ -13,24 +13,22 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-
-import { Logger } from 'loglevel';
-import { MappingDefinition } from './mapping-definition.model';
-import { DocumentDefinition } from './document-definition.model';
-
-import { ErrorHandlerService } from '../services/error-handler.service';
-import { DocumentManagementService } from '../services/document-management.service';
-import { MappingManagementService } from '../services/mapping-management.service';
-import { InitializationService } from '../services/initialization.service';
-
 import {
+  CollectionType,
   DocumentDefaultName,
   DocumentType,
   InspectionType,
-  CollectionType,
 } from '../common/config.types';
+
+import { DocumentDefinition } from './document-definition.model';
+import { DocumentManagementService } from '../services/document-management.service';
+import { ErrorHandlerService } from '../services/error-handler.service';
 import { FieldActionService } from '../services/field-action.service';
 import { FileManagementService } from '../services/file-management.service';
+import { InitializationService } from '../services/initialization.service';
+import { Logger } from 'loglevel';
+import { MappingDefinition } from './mapping-definition.model';
+import { MappingManagementService } from '../services/mapping-management.service';
 
 export class DataMapperInitializationModel {
   dataMapperVersion = '0.9.2017.07.28';

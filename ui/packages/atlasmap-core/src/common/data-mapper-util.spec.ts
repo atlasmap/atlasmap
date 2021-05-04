@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
 
-import { DataMapperUtil } from '../../src/common/data-mapper-util';
+import { DataMapperUtil } from '../common/data-mapper-util';
 
 describe('DataMapperUtil', () => {
   test('removeItemFromArray', () => {

@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
 
-import { MappingModel } from '../../src/models/mapping.model';
+import { MappingModel } from '../models/mapping.model';
 
 describe('MappingModel', () => {
   test('initialize', () => {

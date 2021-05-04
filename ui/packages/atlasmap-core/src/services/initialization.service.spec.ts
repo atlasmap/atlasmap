@@ -1,26 +1,38 @@
-/* tslint:disable:no-unused-variable */
+/*
+    Copyright (C) 2017 Red Hat, Inc.
 
-import ky from 'ky/umd';
-import log from 'loglevel';
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-import { DocumentType, InspectionType } from '../../src/common/config.types';
-import { DocumentManagementService } from '../../src/services/document-management.service';
-import { ErrorHandlerService } from '../../src/services/error-handler.service';
-import { InitializationService } from '../../src/services/initialization.service';
-import { MappingManagementService } from '../../src/services/mapping-management.service';
-import { FieldActionService } from '../../src/services/field-action.service';
-import { FileManagementService } from '../../src/services/file-management.service';
-import { DocumentInitializationModel } from '../../src/models/config.model';
-import { of } from 'rxjs';
+            http://www.apache.org/licenses/LICENSE-2.0
 
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+import { DocumentType, InspectionType } from '../common/config.types';
+
+import { DocumentInitializationModel } from '../models/config.model';
+import { DocumentManagementService } from '../services/document-management.service';
+import { ErrorHandlerService } from '../services/error-handler.service';
+import { FieldActionService } from '../services/field-action.service';
+import { FileManagementService } from '../services/file-management.service';
+import { InitializationService } from '../services/initialization.service';
+import { MappingManagementService } from '../services/mapping-management.service';
 import atlasmapFieldActionJson from '../../../../test-resources/fieldActions/atlasmap-field-action.json';
+import atlasmapInspectionMockJsonInstanceJson from '../../../../test-resources/inspected/atlasmap-inspection-mock-json-instance.json';
 import atlasmapInspectionMockJsonSchemaJson from '../../../../test-resources/inspected/atlasmap-inspection-mock-json-schema.json';
 import atlasmapInspectionMockXmlInstance1Json from '../../../../test-resources/inspected/atlasmap-inspection-mock-xml-instance-1.json';
-import atlasmapInspectionMockJsonInstanceJson from '../../../../test-resources/inspected/atlasmap-inspection-mock-json-instance.json';
 import atlasmapInspectionMockXmlSchema1Json from '../../../../test-resources/inspected/atlasmap-inspection-mock-xml-schema-1.json';
 import atlasmapInspectionOldActionSourceJson from '../../../../test-resources/inspected/atlasmap-inspection-old-action-source.json';
 import atlasmapInspectionOldActionTargetJson from '../../../../test-resources/inspected/atlasmap-inspection-old-action-target.json';
 import atlasmappingOldActionJson from '../../../../test-resources/mapping/atlasmapping-old-action.json';
+import ky from 'ky/umd';
+import log from 'loglevel';
+import { of } from 'rxjs';
 
 describe('InitializationService', () => {
   const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });

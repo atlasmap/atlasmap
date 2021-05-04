@@ -14,12 +14,12 @@
     limitations under the License.
 */
 
-import { TransitionMode } from './transition.model';
 import { DataMapperUtil } from '../common/data-mapper-util';
 import { DocumentDefinition } from './document-definition.model';
 import { Field } from './field.model';
 import { LookupTable } from './lookup-table.model';
 import { MappingModel } from './mapping.model';
+import { TransitionMode } from './transition.model';
 
 export class MappingDefinition {
   name: string | null = null;

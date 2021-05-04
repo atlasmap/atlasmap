@@ -13,22 +13,22 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import { DocumentDefinition, MappingDefinition } from '../models';
+import { TextDecoder, TextEncoder } from 'text-encoding';
+
+import { ConfigModel } from '../models/config.model';
+import { DataMapperUtil } from '../common/data-mapper-util';
+import { ErrorHandlerService } from './error-handler.service';
+import { ErrorLevel } from '../models/error.model';
+import { FileManagementService } from './file-management.service';
 import FileSaver from 'file-saver';
+import { InitializationService } from './initialization.service';
+import { InspectionType } from '../common/config.types';
+import { ResponsePromise } from 'ky';
 import fs from 'fs';
 import ky from 'ky/umd';
-import { ResponsePromise } from 'ky';
 import log from 'loglevel';
-import { TextEncoder, TextDecoder } from 'text-encoding';
 import { mocked } from 'ts-jest/utils';
-
-import { FileManagementService } from './file-management.service';
-import { ErrorHandlerService } from './error-handler.service';
-import { InitializationService } from './initialization.service';
-import { ConfigModel } from '../models/config.model';
-import { ErrorLevel } from '../models/error.model';
-import { DocumentDefinition, MappingDefinition } from '../models';
-import { InspectionType } from '../common/config.types';
-import { DataMapperUtil } from '../common/data-mapper-util';
 
 describe('FileManagementService', () => {
   jest.mock('./initialization.service');

@@ -13,8 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { DocumentType } from '../common/config.types';
 import { DocumentDefinition } from './document-definition.model';
+import { DocumentType } from '../common/config.types';
 
 export class EnumValue {
   name: string;
