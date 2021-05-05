@@ -13,6 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import { DocumentType, InspectionType } from '../common/config.types';
+
 import {
   ErrorInfo,
   ErrorLevel,
@@ -23,7 +25,6 @@ import {
 import { ConfigModel } from '../models/config.model';
 import { DataMapperUtil } from '../common/data-mapper-util';
 import { DocumentManagementService } from './document-management.service';
-import { InspectionType } from '../common/config.types';
 import { Observable } from 'rxjs';
 import { gzip } from 'pako';
 import ky from 'ky';
@@ -296,7 +297,8 @@ export class FileManagementService {
             (doc.inspectionSource !== null &&
               doc.inspectionType === InspectionType.INSTANCE) ||
             doc.inspectionType === InspectionType.SCHEMA ||
-            doc.inspectionType === InspectionType.JAVA_CLASS
+            doc.inspectionType === InspectionType.JAVA_CLASS ||
+            (doc.initModel && doc.initModel.type === DocumentType.CSV)
           ) {
             if (docCount > 0) {
               exportMeta += ',\n';

@@ -13,17 +13,20 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import {
+  ConfigModel,
+  DocumentInitializationModel,
+} from '../models/config.model';
 import { DocumentDefinition, MappingDefinition } from '../models';
+import { DocumentType, InspectionType } from '../common/config.types';
 import { TextDecoder, TextEncoder } from 'text-encoding';
 
-import { ConfigModel } from '../models/config.model';
 import { DataMapperUtil } from '../common/data-mapper-util';
 import { ErrorHandlerService } from './error-handler.service';
 import { ErrorLevel } from '../models/error.model';
 import { FileManagementService } from './file-management.service';
 import FileSaver from 'file-saver';
 import { InitializationService } from './initialization.service';
-import { InspectionType } from '../common/config.types';
 import { ResponsePromise } from 'ky';
 import fs from 'fs';
 import ky from 'ky/umd';
@@ -361,11 +364,22 @@ describe('FileManagementService', () => {
     srcDoc.name = 'dummy source document';
     srcDoc.inspectionType = InspectionType.SCHEMA;
     srcDoc.inspectionSource = 'dummy schema';
+
+    const srcCSVDoc = new DocumentDefinition();
+    srcCSVDoc.name = 'dummy CSV source document';
+    srcCSVDoc.inspectionType = InspectionType.UNKNOWN;
+    srcCSVDoc.inspectionSource = 'dummy CSV';
+    srcCSVDoc.initModel = new DocumentInitializationModel();
+    srcCSVDoc.initModel.isSource = true;
+    srcCSVDoc.initModel.type = DocumentType.CSV;
+
     const tgtDoc = new DocumentDefinition();
     tgtDoc.name = 'dummy target document';
     tgtDoc.inspectionType = InspectionType.SCHEMA;
     tgtDoc.inspectionSource = 'dummy schema';
+
     service.cfg.sourceDocs.push(srcDoc);
+    service.cfg.sourceDocs.push(srcCSVDoc);
     service.cfg.targetDocs.push(tgtDoc);
     service
       .exportADMArchive('atlasmap-mapping.adm')
