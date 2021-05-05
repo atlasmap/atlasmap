@@ -1,0 +1,17 @@
+.iGroup {
+  margin-bottom: 1.0rem;
+  margin-left: 0.5rem;
+  width: 500;
+}
+
+.iSelectBody {
+  font-size: 14;
+  width: 250,
+}
+
+.iSelectLabel {
+  font-size: 14;
+  margin-top: 0.2rem;
+  width: 225;
+  margin-right: 0.5rem;
+}

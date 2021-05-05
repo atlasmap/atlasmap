@@ -1,5 +1,6 @@
-import { IAtlasmapField } from "./../../Views/models";
 import { IAtlasmapDocument, IAtlasmapMapping } from "../../Views";
+
+import { IAtlasmapField } from "./../../Views/models";
 
 export interface DataAction {
   type: "reset" | "loading" | "update" | "error";

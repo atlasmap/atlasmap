@@ -1,9 +1,10 @@
 import { ReactElement, useCallback, useRef } from "react";
 
-import { TimedToast } from "../../UI";
-import { useToggle } from "../../Atlasmap/utils";
 import React from "react";
+import { TimedToast } from "../../UI";
 import { copyToClipboard } from "../utils/ui";
+import { useToggle } from "../../Atlasmap/utils";
+
 let docId = "";
 
 function useCreateToast(): [ReactElement, (cb: () => void) => void] {
@@ -43,10 +44,8 @@ export function useCaptureDocumentNameToast(): [
   ReactElement,
   (documentId: string) => void,
 ] {
-  const [
-    captureDocumentNameToast,
-    openCaptureDocumentNameToast,
-  ] = useCreateToast();
+  const [captureDocumentNameToast, openCaptureDocumentNameToast] =
+    useCreateToast();
   const onCaptureDocumentName = useCallback(
     (documentId: string) => {
       docId = documentId;

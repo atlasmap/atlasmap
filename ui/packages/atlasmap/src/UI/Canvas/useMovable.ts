@@ -1,7 +1,8 @@
-import { useEffect } from "react";
-import { useDrag } from "react-use-gesture";
-import { useCanvas } from "./CanvasContext";
 import { Coords, RectWithId } from "./models";
+
+import { useCanvas } from "./CanvasContext";
+import { useDrag } from "react-use-gesture";
+import { useEffect } from "react";
 
 function intersectRect(r1: RectWithId, r2: RectWithId) {
   return !(

@@ -50,10 +50,12 @@ export class InitializationService {
   cfg: ConfigModel = ConfigModel.getConfig();
 
   systemInitializedSource = new Subject<void>();
-  systemInitialized$: Observable<void> = this.systemInitializedSource.asObservable();
+  systemInitialized$: Observable<void> =
+    this.systemInitializedSource.asObservable();
 
   initializationStatusChangedSource = new Subject<void>();
-  initializationStatusChanged$: Observable<void> = this.initializationStatusChangedSource.asObservable();
+  initializationStatusChanged$: Observable<void> =
+    this.initializationStatusChangedSource.asObservable();
 
   constructor(
     private documentService: DocumentManagementService,
@@ -591,11 +593,12 @@ ${error.status} ${error.statusText}`,
 
         // Reinitialize the model mappings.
         if (mInfo && mInfo.exportMappings) {
-          const catalogMappingsName = MappingSerializer.deserializeAtlasMappingName(
-            DocumentManagementService.getMappingsInfo(
-              mInfo.exportMappings.value
-            )
-          );
+          const catalogMappingsName =
+            MappingSerializer.deserializeAtlasMappingName(
+              DocumentManagementService.getMappingsInfo(
+                mInfo.exportMappings.value
+              )
+            );
 
           // If the live UI mappings name does not match the UI mappings name extracted from the
           // catalog file then use the mappings from the catalog file.  Otherwise use the live
@@ -651,7 +654,8 @@ ${error.status} ${error.statusText}`,
     collectionType?: CollectionType,
     collectionClassName?: string
   ): DocumentDefinition {
-    const model: DocumentInitializationModel = new DocumentInitializationModel();
+    const model: DocumentInitializationModel =
+      new DocumentInitializationModel();
     model.id = className;
     model.type = DocumentType.JAVA;
     model.inspectionType = InspectionType.JAVA_CLASS;
@@ -679,7 +683,8 @@ ${error.status} ${error.statusText}`,
     isSource: boolean,
     inspectionParameters?: { [key: string]: string }
   ): DocumentDefinition {
-    const model: DocumentInitializationModel = new DocumentInitializationModel();
+    const model: DocumentInitializationModel =
+      new DocumentInitializationModel();
     model.name = name;
     model.id = id;
     model.type = documentType;

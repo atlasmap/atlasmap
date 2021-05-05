@@ -1,12 +1,12 @@
 import {
   Children,
+  PropsWithChildren,
   cloneElement,
+  forwardRef,
   isValidElement,
   useRef,
-  forwardRef,
-  PropsWithChildren,
 } from "react";
-import { useNodeRef, NodeRefPropsWithOptionalId } from "./NodeRefProvider";
+import { NodeRefPropsWithOptionalId, useNodeRef } from "./NodeRefProvider";
 
 export const NodeRef = forwardRef<
   HTMLElement | SVGElement,

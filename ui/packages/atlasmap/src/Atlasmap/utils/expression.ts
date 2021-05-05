@@ -1,8 +1,8 @@
 import {
   ConfigModel,
+  ExpressionModel,
   MappedField,
   MappingModel,
-  ExpressionModel,
 } from "@atlasmap/core";
 
 export const trailerId = "expression-trailer";

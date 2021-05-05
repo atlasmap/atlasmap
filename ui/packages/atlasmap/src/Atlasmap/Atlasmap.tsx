@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { AlertGroup } from "@patternfly/react-core";
-import React, { FunctionComponent, useCallback, useMemo } from "react";
-import { CanvasControlBar, MainLayout, ViewToolbar } from "../Layout";
+import { CanvasControlBar, ExpressionToolbar, MainLayout } from "../Layout";
 import {
   CanvasProvider,
   ConditionalExpressionInput,
@@ -11,6 +8,7 @@ import {
 } from "../UI";
 import {
   IAtlasmapField,
+  IAtlasmapMapping,
   IMappingDocumentEvents,
   ISourceColumnCallbacks,
   ITargetsColumnCallbacks,
@@ -18,13 +16,16 @@ import {
   NamespaceTableView,
   SourceMappingTargetView,
   SourceTargetView,
-  IAtlasmapMapping,
 } from "../Views";
+import { IUseContextToolbarData, useContextToolbar } from "./useContextToolbar";
+import React, { FunctionComponent, useCallback, useMemo } from "react";
+import { getConstantType, getPropertyType } from "./utils";
+
+import { AlertGroup } from "@patternfly/react-core";
 import { useAtlasmap } from "./AtlasmapProvider";
 import { useAtlasmapDialogs } from "./useAtlasmapDialogs";
-import { IUseContextToolbarData, useContextToolbar } from "./useContextToolbar";
 import { useSidebar } from "./useSidebar";
-import { getPropertyType, getConstantType } from "./utils";
+
 export interface IAtlasmapProps {
   allowImport?: boolean;
   allowExport?: boolean;
@@ -124,8 +125,8 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     [selectedMapping, showMappingPreview],
   );
 
-  const viewToolbar = (
-    <ViewToolbar>
+  const expressionToolbar = (
+    <ExpressionToolbar>
       <ConditionalExpressionInput
         mappingExpression={
           mappingExpressionEnabled ? currentMappingExpression : undefined
@@ -144,7 +145,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         onToggle={handlers.onToggleExpressionMode}
         setSelectedEnumValue={setSelectedEnumValue}
       />
-    </ViewToolbar>
+    </ExpressionToolbar>
   );
 
   const sourceEvents = useMemo<ISourceColumnCallbacks>(
@@ -442,7 +443,9 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         <MainLayout
           loading={pending}
           contextToolbar={contextToolbar}
-          viewToolbar={activeView !== "NamespaceTable" && viewToolbar}
+          expressionToolbar={
+            activeView !== "NamespaceTable" && expressionToolbar
+          }
           controlBar={activeView === "FreeView" && <CanvasControlBar />}
           showSidebar={!!selectedMapping}
           renderSidebar={renderSidebar}

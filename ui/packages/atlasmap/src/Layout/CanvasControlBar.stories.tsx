@@ -1,11 +1,10 @@
-import React from "react";
+import { Canvas, CanvasProvider } from "../UI";
 
+import { CanvasControlBar } from "./CanvasControlBar";
+import React from "react";
 import { RedhatIcon } from "@patternfly/react-icons";
 import { action } from "@storybook/addon-actions";
 import { boolean } from "@storybook/addon-knobs";
-
-import { Canvas, CanvasProvider } from "../UI";
-import { CanvasControlBar } from "./CanvasControlBar";
 
 export default {
   title: "AtlasMap|Layout/CanvasControlBar",

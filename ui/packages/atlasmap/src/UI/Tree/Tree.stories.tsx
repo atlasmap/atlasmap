@@ -1,6 +1,5 @@
-import React from "react";
-
 import { Tree, TreeGroup, TreeItem } from ".";
+import React from "react";
 
 export default {
   title: "Tree",

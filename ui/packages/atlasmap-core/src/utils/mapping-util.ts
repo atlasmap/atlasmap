@@ -188,9 +188,8 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
           if (!propertyField) {
             propertyField = new Field();
           }
-          const lastSeparator: number = mappedField.parsedData.parsedName.lastIndexOf(
-            '/'
-          );
+          const lastSeparator: number =
+            mappedField.parsedData.parsedName.lastIndexOf('/');
           let fieldName =
             lastSeparator === -1
               ? mappedField.parsedData.parsedName
@@ -225,15 +224,17 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
         for (const action of mappedField.parsedData.parsedActions) {
           let actionDefinition = null;
           if (action.name === 'CustomAction') {
-            actionDefinition = cfg.fieldActionService.getActionDefinitionForName(
-              action.argumentValues[0].value,
-              Multiplicity.ONE_TO_ONE
-            );
+            actionDefinition =
+              cfg.fieldActionService.getActionDefinitionForName(
+                action.argumentValues[0].value,
+                Multiplicity.ONE_TO_ONE
+              );
           } else {
-            actionDefinition = cfg.fieldActionService.getActionDefinitionForName(
-              action.name,
-              Multiplicity.ONE_TO_ONE
-            );
+            actionDefinition =
+              cfg.fieldActionService.getActionDefinitionForName(
+                action.name,
+                Multiplicity.ONE_TO_ONE
+              );
           }
           if (actionDefinition == null) {
             cfg.errorService.addError(

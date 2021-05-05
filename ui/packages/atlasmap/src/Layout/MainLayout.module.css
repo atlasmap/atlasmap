@@ -1,0 +1,9 @@
+.view {
+  background: #fff;
+}
+.view .pf-topology-container {
+  overflow: hidden;
+}
+.view .pf-topology-content {
+  overflow: auto;
+}

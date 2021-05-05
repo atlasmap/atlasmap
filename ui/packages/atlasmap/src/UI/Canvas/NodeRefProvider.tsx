@@ -1,11 +1,11 @@
 import React, {
-  createContext,
   FunctionComponent,
   MutableRefObject,
-  useContext,
-  useRef,
-  useEffect,
+  createContext,
   useCallback,
+  useContext,
+  useEffect,
+  useRef,
 } from "react";
 import { useBoundingCanvasRect } from "./useBoundingCanvasRect";
 

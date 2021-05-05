@@ -1,14 +1,28 @@
-import React, { FunctionComponent } from "react";
+/*
+    Copyright (C) 2017 Red Hat, Inc.
 
-import { Button, Tooltip } from "@patternfly/react-core";
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 import {
   AddCircleOIcon,
   CaretDownIcon,
   CaretRightIcon,
   PlusIcon,
 } from "@patternfly/react-icons";
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { Button, Tooltip } from "@patternfly/react-core";
+import React, { FunctionComponent } from "react";
 
+import styles from "./MappingFields.module.css";
 import { useToggle } from "../Atlasmap/utils";
 
 export interface IMappingFieldsProps {
@@ -21,17 +35,6 @@ export interface IMappingFieldsProps {
 
 export interface IMappedFieldsProps {}
 
-const styles = StyleSheet.create({
-  wrapper: {
-    background: "var(--pf-global--BackgroundColor--light-300)",
-    padding: "1rem",
-    margin: "1rem 0",
-    "& .pf-c-expandable__content": {
-      margin: "0 !important",
-    },
-  },
-});
-
 export const MappingFields: FunctionComponent<IMappingFieldsProps> = ({
   title,
   isSource,
@@ -43,7 +46,7 @@ export const MappingFields: FunctionComponent<IMappingFieldsProps> = ({
   const { state: expanded, toggle: toggleExpanded } = useToggle(true);
 
   return (
-    <div className={css(styles.wrapper)}>
+    <div className={styles.wrapper}>
       <Button
         key={"expandable"}
         variant={"plain"}

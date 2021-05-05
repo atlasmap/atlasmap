@@ -1,33 +1,30 @@
-import { css, StyleSheet } from "@patternfly/react-styles";
+/*
+    Copyright (C) 2017 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 import React, {
   CSSProperties,
   FunctionComponent,
   SVGAttributes,
-  useMemo,
   useEffect,
+  useMemo,
 } from "react";
-import { useCanvas } from "./CanvasContext";
 import { CanvasTransforms } from "./CanvasTransforms";
-import tile from "./canvasBg";
+import { css } from "@patternfly/react-styles";
+import styles from "./Canvas.module.css";
+import { useCanvas } from "./CanvasContext";
 import { useDimensions } from "../useDimensions";
-
-const styles = StyleSheet.create({
-  canvasWrapper: {
-    flex: "1",
-    height: "100%",
-    overflow: "hidden",
-  },
-  svg: {
-    display: "block",
-    "& *": {
-      transition: "stroke 0.35s, stroke-width 0.15s",
-    },
-  },
-  panning: {
-    backgroundImage: `url(${tile})`,
-    backgroundRepeat: "repeat",
-  },
-});
 
 export interface ICanvasProps extends SVGAttributes<SVGSVGElement> {
   isFilled?: boolean;

@@ -57,7 +57,8 @@ export class MappingManagementService {
   debugMappingUpdatedSubscription?: Subscription;
 
   mappingSelectionRequiredSource = new Subject<Field>();
-  mappingSelectionRequired$ = this.mappingSelectionRequiredSource.asObservable();
+  mappingSelectionRequired$ =
+    this.mappingSelectionRequiredSource.asObservable();
 
   mappingPreviewInputSource = new Subject<MappingModel>();
   mappingPreviewInput$ = this.mappingPreviewInputSource.asObservable();
@@ -182,9 +183,8 @@ export class MappingManagementService {
    */
   async removeMapping(mappingModel: MappingModel): Promise<boolean> {
     return new Promise<boolean>(async (resolve) => {
-      const mappingWasRemoved: boolean = this.cfg.mappings!.removeMapping(
-        mappingModel
-      ); // TODO: check this non null operator
+      const mappingWasRemoved: boolean =
+        this.cfg.mappings!.removeMapping(mappingModel); // TODO: check this non null operator
       if (mappingWasRemoved) {
         this.deselectMapping();
         await this.notifyMappingUpdated();
@@ -202,9 +202,8 @@ export class MappingManagementService {
     return new Promise<boolean>(async (resolve) => {
       // TODO: check these non null operator on the mappings
       for (const mapping of this.cfg.mappings!.getAllMappings(true)) {
-        const mappingWasRemoved: boolean = this.cfg.mappings!.removeMapping(
-          mapping
-        );
+        const mappingWasRemoved: boolean =
+          this.cfg.mappings!.removeMapping(mapping);
         if (mappingWasRemoved) {
           this.deselectMapping();
         } else {
@@ -330,9 +329,8 @@ export class MappingManagementService {
 
     // Select other existing mapping if selected field participates, or create a new one
     if (mapping == null) {
-      const mappingsForField: MappingModel[] = this.cfg.mappings!.findMappingsForField(
-        field
-      ); // TODO: check this non null operator
+      const mappingsForField: MappingModel[] =
+        this.cfg.mappings!.findMappingsForField(field); // TODO: check this non null operator
 
       if (mappingsForField && mappingsForField.length === 1) {
         mapping = mappingsForField[0];
@@ -352,7 +350,8 @@ export class MappingManagementService {
     if (!addField && !removeField) {
       this.selectMapping(mapping);
 
-      const mappedFields = this.cfg.mappings!.activeMapping!.getAllMappedFields(); // TODO: check this non null operator
+      const mappedFields =
+        this.cfg.mappings!.activeMapping!.getAllMappedFields(); // TODO: check this non null operator
       for (const mappedField of mappedFields) {
         // TODO: check this non null operator
         mappedField.field!.expandToRoot();
@@ -766,8 +765,8 @@ export class MappingManagementService {
       activeMapping.sourceFields.splice(0, activeMapping.sourceFields.length);
     }
 
-    this.cfg.mappings.activeMapping.transition.enableExpression = !this.cfg
-      .mappings.activeMapping.transition.enableExpression;
+    this.cfg.mappings.activeMapping.transition.enableExpression =
+      !this.cfg.mappings.activeMapping.transition.enableExpression;
     this.updateTransition(this.cfg.mappings.activeMapping);
     if (this.cfg.mappings.activeMapping.transition.expression) {
       this.cfg.mappings.activeMapping.transition.expression.expressionUpdatedSource.next();

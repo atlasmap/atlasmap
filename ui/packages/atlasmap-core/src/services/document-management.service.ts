@@ -133,15 +133,14 @@ export class DocumentManagementService {
   constructor(private api: typeof ky) {}
 
   initialize(): void {
-    this.mappingUpdatedSubscription = this.cfg.mappingService.mappingUpdated$.subscribe(
-      () => {
+    this.mappingUpdatedSubscription =
+      this.cfg.mappingService.mappingUpdated$.subscribe(() => {
         for (const d of this.cfg.getAllDocs()) {
           if (d.initialized) {
             d.updateFromMappings(this.cfg.mappings!); // TODO: check this non null operator
           }
         }
-      }
-    );
+      });
   }
 
   ngOnDestroy() {
@@ -329,9 +328,8 @@ export class DocumentManagementService {
 
       const userFileComps = selectedFile.name.split('.');
       const userFile = userFileComps.slice(0, -1).join('.');
-      const userFileSuffix: string = userFileComps[
-        userFileComps.length - 1
-      ].toUpperCase();
+      const userFileSuffix: string =
+        userFileComps[userFileComps.length - 1].toUpperCase();
 
       if (userFileSuffix !== DocumentType.JAVA_ARCHIVE) {
         // Wait for the async read of the selected ascii document to be completed.
@@ -498,8 +496,8 @@ export class DocumentManagementService {
         disablePrivateOnlyFields: this.cfg.initCfg.disablePrivateOnlyFields,
         disableProtectedOnlyFields: this.cfg.initCfg.disableProtectedOnlyFields,
         disablePublicOnlyFields: this.cfg.initCfg.disablePublicOnlyFields,
-        disablePublicGetterSetterFields: this.cfg.initCfg
-          .disablePublicGetterSetterFields,
+        disablePublicGetterSetterFields:
+          this.cfg.initCfg.disablePublicGetterSetterFields,
       },
     };
     if (

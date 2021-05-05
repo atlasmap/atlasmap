@@ -1,40 +1,38 @@
+/*
+    Copyright (C) 2017 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+import {
+  AccordionContent,
+  AccordionItem,
+  AccordionToggle,
+} from "@patternfly/react-core";
 import React, {
-  forwardRef,
   FunctionComponent,
   MouseEvent,
   PropsWithChildren,
   ReactNode,
+  forwardRef,
   useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
 
-import {
-  AccordionContent,
-  AccordionItem,
-  AccordionToggle,
-} from "@patternfly/react-core";
-import { css, StyleSheet } from "@patternfly/react-styles";
-
+import { css } from "@patternfly/react-styles";
+import styles from "./TreeGroup.module.css";
 import { useTreeFocus } from "./TreeFocusProvider";
-
-const styles = StyleSheet.create({
-  button: {
-    padding: "0 !important",
-  },
-  content: {
-    fontSize: "inherit !important",
-    "& > div": {
-      boxSizing: "border-box",
-      padding:
-        "var(--pf-c-accordion__expanded-content-body--PaddingTop) 0 var(--pf-c-accordion__expanded-content-body--PaddingBottom) 1.2rem !important",
-    },
-  },
-  hiddenContent: {
-    display: "none",
-  },
-});
 
 export interface ITreeGroupProps {
   id: string;
@@ -121,7 +119,7 @@ export const TreeGroup = forwardRef<
         <AccordionToggle
           isExpanded={isExpanded}
           id={`${id}-toggle`}
-          className={css(styles.button)}
+          className={styles.button}
           tabIndex={-1}
           component={Component}
           onClick={toggleExpandNoPropagation}

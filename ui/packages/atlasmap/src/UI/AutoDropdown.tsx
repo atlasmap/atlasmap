@@ -1,5 +1,6 @@
-import React, { FunctionComponent, ReactElement } from "react";
 import { Dropdown, DropdownProps } from "@patternfly/react-core";
+import React, { FunctionComponent, ReactElement } from "react";
+
 import { useToggle } from "../Atlasmap/utils";
 
 export interface IAutoDropdown

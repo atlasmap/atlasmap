@@ -58,9 +58,8 @@ export class FieldActionService {
         ) {
           for (const actionDetail of this.cfg.preloadedFieldActionMetadata
             .ActionDetails.actionDetail) {
-            const fieldActionDefinition = this.extractFieldActionDefinition(
-              actionDetail
-            );
+            const fieldActionDefinition =
+              this.extractFieldActionDefinition(actionDetail);
             if (!fieldActionDefinition.multiplicity) {
               this.cfg.logger!.info(
                 `Field action (${fieldActionDefinition.name}) is missing multiplicity, ingoring`
@@ -210,9 +209,8 @@ export class FieldActionService {
             body.ActionDetails.actionDetail.length
           ) {
             for (const actionDetail of body.ActionDetails.actionDetail) {
-              const fieldActionConfig = this.extractFieldActionDefinition(
-                actionDetail
-              );
+              const fieldActionConfig =
+                this.extractFieldActionDefinition(actionDetail);
               actionConfigs.push(fieldActionConfig);
             }
           }

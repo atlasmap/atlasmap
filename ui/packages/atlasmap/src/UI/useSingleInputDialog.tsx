@@ -1,4 +1,4 @@
-import { Modal, Button, TextInput } from "@patternfly/react-core";
+import { Button, Modal, TextInput } from "@patternfly/react-core";
 import React, {
   FormEvent,
   ReactChild,
@@ -64,7 +64,7 @@ export function useSingleInputDialog({
 
   const modal = createPortal(
     <Modal
-      isSmall
+      variant="small"
       title={title}
       isOpen={isOpen}
       onClose={closeModal}
@@ -77,7 +77,7 @@ export function useSingleInputDialog({
           onChange={handleTextInputChange}
           aria-label={title}
           isRequired={true}
-          isValid={isValid}
+          validated={isValid ? "default" : "error"}
           data-testid={"input-text-field"}
         />,
         <Button
@@ -100,7 +100,6 @@ export function useSingleInputDialog({
           Cancel
         </Button>,
       ]}
-      isFooterLeftAligned={true}
     >
       {content}
     </Modal>,

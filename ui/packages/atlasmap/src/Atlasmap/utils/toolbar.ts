@@ -1,3 +1,5 @@
+import * as constants from "../../atlasmap.json";
+
 import {
   ConfigModel,
   ErrorInfo,
@@ -6,15 +8,12 @@ import {
   ErrorType,
   InspectionType,
 } from "@atlasmap/core";
-
 import {
   getDocDef,
   getDocDefByName,
   importInstanceSchema,
   removeDocumentRef,
 } from "./document";
-
-import * as constants from "../../atlasmap.json";
 
 /**
  * Return true if the specified file object exists as a source or target
@@ -147,9 +146,8 @@ export function importAtlasFile(
 ) {
   const cfg = ConfigModel.getConfig();
   const userFileComps = selectedFile.name.split(".");
-  const userFileSuffix: string = userFileComps[
-    userFileComps.length - 1
-  ].toUpperCase();
+  const userFileSuffix: string =
+    userFileComps[userFileComps.length - 1].toUpperCase();
 
   if (userFileSuffix === "ADM" || userFileSuffix === "JAR") {
     importAtlasGlobalFile(selectedFile, userFileSuffix, cfg);

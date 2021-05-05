@@ -540,9 +540,8 @@ export class DocumentDefinition {
         continue;
       }
       if (field.serviceObject.status === 'SUPPORTED') {
-        this.complexFieldsByClassIdentifier[
-          field.classIdentifier
-        ] = field.copy();
+        this.complexFieldsByClassIdentifier[field.classIdentifier] =
+          field.copy();
       }
       if (field.children) {
         this.discoverComplexFields(field.children);

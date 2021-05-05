@@ -1,5 +1,18 @@
-import React from "react";
+/*
+    Copyright (C) 2017 Red Hat, Inc.
 
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 import {
   Button,
   DropdownItem,
@@ -18,6 +31,7 @@ import {
 
 import { AutoDropdown } from "../../../UI";
 import { IAtlasmapMapping } from "../../../Views";
+import React from "react";
 
 export interface ICommonActionsProps {
   connectedMappings: IAtlasmapMapping[];
@@ -51,7 +65,7 @@ export function commonActions({
         <AutoDropdown
           toggle={({ toggleOpen }) => (
             <DropdownToggle
-              iconComponent={null}
+              toggleIndicator={null}
               aria-label="Show mapping details"
               onToggle={toggleOpen}
             >
@@ -62,16 +76,22 @@ export function commonActions({
           position={"right"}
           dropdownItems={connectedMappings.map((m) => (
             <DropdownItem key={m.id} onClick={() => onShowMappingDetails(m)}>
-              <Title size={"lg"}>{m.name}</Title>
-              <Split gutter="sm">
+              <Title headingLevel="h2" size="lg">
+                {m.name}
+              </Title>
+              <Split hasGutter>
                 <SplitItem>
-                  <Title size={"md"}>Sources</Title>
+                  <Title headingLevel="h2" size="md">
+                    Sources
+                  </Title>
                   {m.sourceFields.map((s) => (
                     <div key={s.id}>{s.name}</div>
                   ))}
                 </SplitItem>
                 <SplitItem>
-                  <Title size={"md"}>Targets</Title>
+                  <Title headingLevel="h2" size="md">
+                    Targets
+                  </Title>
                   {m.targetFields.map((t) => (
                     <div key={t.id}>{t.name}</div>
                   ))}

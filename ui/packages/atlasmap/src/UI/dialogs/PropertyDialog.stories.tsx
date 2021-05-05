@@ -1,9 +1,8 @@
-import React from "react";
-
-import { boolean, text, select } from "@storybook/addon-knobs";
-import { action } from "@storybook/addon-actions";
+import { boolean, select, text } from "@storybook/addon-knobs";
 
 import { PropertyDialog } from "./PropertyDialog";
+import React from "react";
+import { action } from "@storybook/addon-actions";
 
 export default {
   title: "UI|Dialogs",

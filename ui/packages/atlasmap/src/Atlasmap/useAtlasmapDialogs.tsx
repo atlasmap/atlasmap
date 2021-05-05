@@ -1,16 +1,17 @@
-import React, { useCallback, useMemo, useState } from "react";
-import { createPortal } from "react-dom";
-
 import { IConstant, IDocumentName, INamespace, IProperty } from "../UI";
-import { useAtlasmap } from "./AtlasmapProvider";
+import React, { useCallback, useMemo, useState } from "react";
+import { enableCustomClass, getPropertyScopeOptions } from "./utils";
 import {
-  useConstantDialog,
-  useDeleteConstantDialog,
-  useDeleteDocumentDialog,
+  useAboutDialog,
   useCaptureDocumentNameToast,
   useChangeDocumentNameDialog,
+  useConstantDialog,
+  useCustomClassDialog,
+  useDeleteConstantDialog,
+  useDeleteDocumentDialog,
   useDeleteMappingDialog,
   useDeletePropertyDialog,
+  useEditMappingEnumerationDialog,
   useExportCatalogDialog,
   useImportCatalogDialog,
   useImportDocumentDialog,
@@ -18,14 +19,13 @@ import {
   usePropertyDialog,
   useRemoveMappedFieldDialog,
   useResetAtlasmapDialog,
-  useAboutDialog,
   useSpecifyInstanceSchemaDialog,
   useToggleExpressionModeDialog,
-  useCustomClassDialog,
-  useEditMappingEnumerationDialog,
 } from "./dialogs";
-import { enableCustomClass, getPropertyScopeOptions } from "./utils";
+
 import { IAtlasmapDocument } from "../Views";
+import { createPortal } from "react-dom";
+import { useAtlasmap } from "./AtlasmapProvider";
 
 export interface IUseAtlasmapDialogsProps {
   modalContainer: HTMLElement;
@@ -46,9 +46,8 @@ export function useAtlasmapDialogs({
   } = useAtlasmap();
 
   //#region constant dialogs
-  const [createConstantDialog, openCreateConstantDialog] = useConstantDialog(
-    "Create Constant",
-  );
+  const [createConstantDialog, openCreateConstantDialog] =
+    useConstantDialog("Create Constant");
   const onCreateConstant = useCallback(
     (constants: IAtlasmapDocument | null, addToActiveMapping?: boolean) => {
       openCreateConstantDialog(({ value, valueType }) => {
@@ -58,9 +57,8 @@ export function useAtlasmapDialogs({
     [createConstant, openCreateConstantDialog],
   );
 
-  const [editConstantDialog, openEditConstantDialog] = useConstantDialog(
-    "Edit Constant",
-  );
+  const [editConstantDialog, openEditConstantDialog] =
+    useConstantDialog("Edit Constant");
   const onEditConstant = useCallback(
     (constant: IConstant, constants: IAtlasmapDocument | null) => {
       openEditConstantDialog(
@@ -134,24 +132,18 @@ export function useAtlasmapDialogs({
   const [exportCatalogDialog, onExportAtlasCatalog] = useExportCatalogDialog();
   const [resetDialog, onResetAtlasmap] = useResetAtlasmapDialog();
   const [aboutDialog, onAbout] = useAboutDialog();
-  const [
-    toggleExpressionModeDialog,
-    onToggleExpressionMode,
-  ] = useToggleExpressionModeDialog();
+  const [toggleExpressionModeDialog, onToggleExpressionMode] =
+    useToggleExpressionModeDialog();
   //#endregion
 
   //#region document dialogs
   const [importDocumentDialog, onImportDocument] = useImportDocumentDialog();
   const [deleteDocumentDialog, onDeleteDocument] = useDeleteDocumentDialog();
-  const [
-    captureDocumentNameToast,
-    onCaptureDocumentName,
-  ] = useCaptureDocumentNameToast();
+  const [captureDocumentNameToast, onCaptureDocumentName] =
+    useCaptureDocumentNameToast();
 
-  const [
-    changeDocumentNameDialog,
-    openChangeDocumentNameDialog,
-  ] = useChangeDocumentNameDialog();
+  const [changeDocumentNameDialog, openChangeDocumentNameDialog] =
+    useChangeDocumentNameDialog();
   const onChangeDocumentName = useCallback(
     (docNameInfo: IDocumentName) => {
       openChangeDocumentNameDialog(({ id, name, isSource }) => {
@@ -161,10 +153,8 @@ export function useAtlasmapDialogs({
     [changeDocumentName, openChangeDocumentNameDialog],
   );
 
-  const [
-    removeMappedFieldDialog,
-    onRemoveMappedField,
-  ] = useRemoveMappedFieldDialog();
+  const [removeMappedFieldDialog, onRemoveMappedField] =
+    useRemoveMappedFieldDialog();
   const [deleteMappingDialog, onDeleteMapping] = useDeleteMappingDialog();
   const onDeleteSelectedMapping = useCallback(() => {
     if (selectedMapping) {
@@ -172,21 +162,16 @@ export function useAtlasmapDialogs({
     }
   }, [onDeleteMapping, selectedMapping]);
 
-  const [
-    editMappingEnumerationDialog,
-    onEditMappingEnumeration,
-  ] = useEditMappingEnumerationDialog();
+  const [editMappingEnumerationDialog, onEditMappingEnumeration] =
+    useEditMappingEnumerationDialog();
 
-  const [
-    specifyInstanceSchemaDialog,
-    onSpecifyInstanceSchema,
-  ] = useSpecifyInstanceSchemaDialog(false);
+  const [specifyInstanceSchemaDialog, onSpecifyInstanceSchema] =
+    useSpecifyInstanceSchemaDialog(false);
   //#endregion
 
   //#region namespace table dialogs
-  const [createNamespaceDialog, openCreateNamespaceDialog] = useNamespaceDialog(
-    "Create namespace",
-  );
+  const [createNamespaceDialog, openCreateNamespaceDialog] =
+    useNamespaceDialog("Create namespace");
   const onCreateNamespace = useCallback(
     (docName: string) => {
       openCreateNamespaceDialog(
@@ -196,9 +181,8 @@ export function useAtlasmapDialogs({
     },
     [createNamespace, openCreateNamespaceDialog],
   );
-  const [editNamespaceDialog, openEditNamespaceDialog] = useNamespaceDialog(
-    "Edit namespace",
-  );
+  const [editNamespaceDialog, openEditNamespaceDialog] =
+    useNamespaceDialog("Edit namespace");
   const onEditNamespace = useCallback(
     (docName: string, namespace: INamespace) => {
       openEditNamespaceDialog(
@@ -218,10 +202,8 @@ export function useAtlasmapDialogs({
   );
   //#endregion
 
-  const [
-    createEnableCustomClassDialog,
-    openCreateEnableCustomClassDialog,
-  ] = useCustomClassDialog("Load Java Document From Custom Class");
+  const [createEnableCustomClassDialog, openCreateEnableCustomClassDialog] =
+    useCustomClassDialog("Load Java Document From Custom Class");
 
   const onEnableCustomClass = useCallback(
     (isSource: boolean): void => {

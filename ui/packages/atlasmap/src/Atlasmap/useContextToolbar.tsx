@@ -1,11 +1,7 @@
-import React, { useMemo, useState } from "react";
-
-import { ToolbarGroup } from "@patternfly/react-core";
-
-import { ContextToolbar } from "../Layout";
-import { useToggle } from "../Atlasmap/utils";
 import {
+  AboutToolbarItem,
   AddMappingToolbarItem,
+  AtlasmapToolbarItem,
   ToggleColumnMapperViewToolbarItem,
   ToggleFreeViewToolbarItem,
   ToggleMappedFieldsToolbarItem,
@@ -15,10 +11,13 @@ import {
   ToggleNamespaceTableViewToolbarItem,
   ToggleTypesToolbarItem,
   ToggleUnmappedFieldsToolbarItem,
-  AtlasmapToolbarItem,
-  AboutToolbarItem,
 } from "./toolbarItems";
+import React, { useMemo, useState } from "react";
+
+import { ContextToolbar } from "../Layout";
+import { ToolbarGroup } from "@patternfly/react-core";
 import { useAtlasmap } from "./AtlasmapProvider";
+import { useToggle } from "../Atlasmap/utils";
 
 export type Views =
   | "ColumnMapper"
@@ -85,23 +84,17 @@ export function useContextToolbar({
   } = useAtlasmap();
 
   const [activeView, setActiveView] = useState<Views>("ColumnMapper");
-  const {
-    state: showMappingColumn,
-    toggle: toggleShowMappingColumn,
-  } = useToggle(false);
-  const {
-    state: showMappingPreview,
-    toggle: toggleShowMappingPreview,
-  } = useToggle(false, amToggleMappingPreview);
+  const { state: showMappingColumn, toggle: toggleShowMappingColumn } =
+    useToggle(false);
+  const { state: showMappingPreview, toggle: toggleShowMappingPreview } =
+    useToggle(false, amToggleMappingPreview);
   const { state: showTypes, toggle: toggleShowTypes } = useToggle(true);
   const { state: showMappedFields, toggle: toggleShowMappedFields } = useToggle(
     true,
     amToggleShowMappedFields,
   );
-  const {
-    state: showUnmappedFields,
-    toggle: toggleShowUnmappedFields,
-  } = useToggle(true, amToggleShowUnmappedFields);
+  const { state: showUnmappedFields, toggle: toggleShowUnmappedFields } =
+    useToggle(true, amToggleShowUnmappedFields);
 
   const contextToolbar = useMemo(
     () => (
@@ -110,7 +103,7 @@ export function useContextToolbar({
           showImportJarFileToolbarItem ||
           showExportAtlasFileToolbarItem ||
           showResetToolbarItem) && (
-          <ToolbarGroup>
+          <ToolbarGroup variant="button-group" spacer={{ default: "spacerMd" }}>
             <AtlasmapToolbarItem
               showImportAtlasFileToolbarItem={showImportAtlasFileToolbarItem}
               showImportJarFileToolbarItem={showImportJarFileToolbarItem}
@@ -127,7 +120,10 @@ export function useContextToolbar({
           showMappingTableViewToolbarItem ||
           showFreeViewToolbarItem ||
           showNamespaceTableViewToolbarItem) && (
-          <ToolbarGroup>
+          <ToolbarGroup
+            variant="icon-button-group"
+            spacer={{ default: "spacerMd" }}
+          >
             {showColumnMapperViewToolbarItem && (
               <ToggleColumnMapperViewToolbarItem
                 toggled={activeView === "ColumnMapper"}
@@ -154,7 +150,7 @@ export function useContextToolbar({
             )}
           </ToolbarGroup>
         )}
-        <ToolbarGroup>
+        <ToolbarGroup variant="icon-button-group">
           {showToggleMappingColumnToolbarItem &&
             activeView === "ColumnMapper" && (
               <ToggleMappingColumnToolbarItem

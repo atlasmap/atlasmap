@@ -1,25 +1,26 @@
-import React, { FunctionComponent, useCallback } from "react";
+/*
+    Copyright (C) 2017 Red Hat, Inc.
 
-import { Button, Tooltip } from "@patternfly/react-core";
-import { PlusIcon } from "@patternfly/react-icons";
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 import {
-  ColumnBody,
-  Document,
-  DocumentFooter,
-  NodeRef,
-  SearchableColumnHeader,
-  Tree,
-  DocumentFieldPreview,
-  IDragAndDropField,
-} from "../../../UI";
-import {
+  AtlasmapDocumentType,
   GroupId,
   IAtlasmapDocument,
   IAtlasmapField,
   IAtlasmapMapping,
-  AtlasmapDocumentType,
 } from "../../models";
+import { Button, Tooltip } from "@patternfly/react-core";
 import {
   CaptureDocumentNameAction,
   ChangeDocumentNameAction,
@@ -27,7 +28,19 @@ import {
   EnableJavaClassAction,
   ImportAction,
 } from "../Actions";
-import { commonActions } from "./commonActions";
+import {
+  ColumnBody,
+  Document,
+  DocumentFieldPreview,
+  DocumentFooter,
+  IDragAndDropField,
+  NodeRef,
+  SearchableColumnHeader,
+  Tree,
+} from "../../../UI";
+import { ConstantsTree, IConstantsTreeCallbacks } from "./ConstantsTree";
+import { IPropertiesTreeCallbacks, PropertiesTree } from "./PropertiesTree";
+import React, { FunctionComponent, useCallback } from "react";
 import {
   SOURCES_CONSTANTS_ID,
   SOURCES_DOCUMENT_ID_PREFIX,
@@ -36,9 +49,10 @@ import {
   SOURCES_PROPERTIES_ID,
   SOURCES_WIDTH_BOUNDARY_ID,
 } from "./constants";
-import { ConstantsTree, IConstantsTreeCallbacks } from "./ConstantsTree";
-import { IPropertiesTreeCallbacks, PropertiesTree } from "./PropertiesTree";
+
+import { PlusIcon } from "@patternfly/react-icons";
 import { TraverseFields } from "./TraverseFields";
+import { commonActions } from "./commonActions";
 
 export interface ISourceColumnCallbacks
   extends IConstantsTreeCallbacks,
@@ -321,14 +335,12 @@ export const SourcesColumn: FunctionComponent<
                             commonActions({
                               connectedMappings: field.mappings,
                               onShowMappingDetails,
-                              canAddFieldToSelectedMapping: canAddFieldToSelectedMapping(
-                                field,
-                              ),
+                              canAddFieldToSelectedMapping:
+                                canAddFieldToSelectedMapping(field),
                               onAddToSelectedMapping: () =>
                                 onAddToSelectedMapping(field),
-                              canRemoveFromSelectedMapping: canRemoveFromSelectedMapping(
-                                field,
-                              ),
+                              canRemoveFromSelectedMapping:
+                                canRemoveFromSelectedMapping(field),
                               onRemoveFromSelectedMapping: () =>
                                 onRemoveFromSelectedMapping(field),
                               canStartMapping: canStartMapping(field),

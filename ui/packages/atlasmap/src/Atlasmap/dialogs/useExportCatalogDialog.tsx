@@ -1,8 +1,8 @@
-import React, { useCallback, ReactElement } from "react";
+import React, { ReactElement, useCallback } from "react";
 
 import { ExportCatalogDialog } from "../../UI";
-import { useToggle } from "../../Atlasmap/utils";
 import { useAtlasmap } from "../AtlasmapProvider";
+import { useToggle } from "../../Atlasmap/utils";
 
 export function useExportCatalogDialog(): [ReactElement, () => void] {
   const { state, toggleOn, toggleOff } = useToggle(false);

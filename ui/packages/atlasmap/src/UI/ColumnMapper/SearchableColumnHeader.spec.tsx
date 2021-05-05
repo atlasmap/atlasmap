@@ -1,10 +1,8 @@
 import React from "react";
-
-import { render } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-
 import { SearchableColumnHeader } from "./SearchableColumnHeader";
 import { example } from "./SearchableColumnHeader.stories";
+import { render } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 describe("SearchableColumnHeader tests", () => {
   test("should render", async () => {

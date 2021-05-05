@@ -1,6 +1,5 @@
-import React from "react";
-
 import { ColumnHeader } from ".";
+import React from "react";
 
 export default {
   title: "ColumnMapper",

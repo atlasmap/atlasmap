@@ -1,22 +1,25 @@
+/*
+    Copyright (C) 2017 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 import React, { Children, FunctionComponent } from "react";
-
-import { css, StyleSheet } from "@patternfly/react-styles";
-
-const styles = StyleSheet.create({
-  toolbar: {
-    display: "flex",
-    flexFlow: "row no-wrap",
-  },
-  toolbarItem: {
-    minWidth: "1.5rem",
-    flex: "0 1 auto",
-  },
-});
+import styles from "./Actions.module.css";
 
 export const Actions: FunctionComponent = ({ children }) => (
-  <div className={css(styles.toolbar)}>
+  <div className={styles.toolbar}>
     {Children.map(children, (c, idx) => (
-      <div className={css(styles.toolbarItem)} key={idx}>
+      <div className={styles.toolbarItem} key={idx}>
         {c}
       </div>
     ))}

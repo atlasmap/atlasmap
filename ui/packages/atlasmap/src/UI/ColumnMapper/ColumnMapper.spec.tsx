@@ -1,4 +1,4 @@
-import { render, act } from "@testing-library/react";
+import { act, render } from "@testing-library/react";
 import { example } from "./ColumnMapper.stories";
 
 describe("ColumnMapper tests", () => {

@@ -1,9 +1,7 @@
-import React from "react";
-
 import { Button } from "@patternfly/react-core";
-import { text } from "@storybook/addon-knobs";
-
 import { Document } from "./Document";
+import React from "react";
+import { text } from "@storybook/addon-knobs";
 
 export default {
   title: "Document",

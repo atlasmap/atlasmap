@@ -1,18 +1,24 @@
+/*
+    Copyright (C) 2017 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 import React, { FunctionComponent, useEffect } from "react";
 
-import { Label } from "@patternfly/react-core";
-import { css, StyleSheet } from "@patternfly/react-styles";
-
-import { useDimensions } from "../useDimensions";
 import { DraggedField } from "./DraggedField";
-
-const styles = StyleSheet.create({
-  canvasObject: { pointerEvents: "none" },
-  canvasInner: {
-    display: "inline-block",
-    margin: "auto",
-  },
-});
+import { Label } from "@patternfly/react-core";
+import styles from "./FieldDragLayer.module.css";
+import { useDimensions } from "../useDimensions";
 
 export const FieldDragLayer: FunctionComponent = () => {
   const [ref, dimensions, measure] = useDimensions();
@@ -31,9 +37,9 @@ export const FieldDragLayer: FunctionComponent = () => {
               left: currentOffset.x - dimensions.width / 2,
               top: currentOffset.y - dimensions.height,
             }}
-            className={css(styles.canvasObject)}
+            className={styles.canvasObject}
           >
-            <div ref={ref} className={css(styles.canvasInner)}>
+            <div ref={ref} className={styles.canvasInner}>
               <Label>{draggedField.name}</Label>
             </div>
           </div>

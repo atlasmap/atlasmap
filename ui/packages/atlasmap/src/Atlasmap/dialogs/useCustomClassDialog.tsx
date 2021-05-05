@@ -1,25 +1,20 @@
-import { collectionTypes } from "@atlasmap/core";
-
-import React, { useCallback, ReactElement, useState } from "react";
-
 import { CustomClassDialog, ICustomClass } from "../../UI";
-import { useToggle } from "../../Atlasmap/utils";
+import React, { ReactElement, useCallback, useState } from "react";
+
+import { collectionTypes } from "@atlasmap/core";
 import { getCustomClassNameOptions } from "../utils/document";
+import { useToggle } from "../../Atlasmap/utils";
 
 type CustomClassCallback = (constant: ICustomClass) => void;
 
 export function useCustomClassDialog(
   title: string,
 ): [ReactElement, (cb: CustomClassCallback, constant?: ICustomClass) => void] {
-  const [
-    onCustomClassCb,
-    setOnCustomClassCb,
-  ] = useState<CustomClassCallback | null>(null);
+  const [onCustomClassCb, setOnCustomClassCb] =
+    useState<CustomClassCallback | null>(null);
 
-  const [
-    initialCustomClass,
-    setInitialCustomClass,
-  ] = useState<ICustomClass | null>(null);
+  const [initialCustomClass, setInitialCustomClass] =
+    useState<ICustomClass | null>(null);
 
   const [customClassNames, setCustomClassNames] = useState<string[] | null>([]);
 

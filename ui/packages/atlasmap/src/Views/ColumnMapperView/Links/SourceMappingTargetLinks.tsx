@@ -1,21 +1,29 @@
-import React, { FunctionComponent, MouseEvent } from "react";
+/*
+    Copyright (C) 2017 Red Hat, Inc.
 
-import { css, StyleSheet } from "@patternfly/react-styles";
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-import { NodesArc } from "../../../UI";
-import { IAtlasmapMapping } from "../../../Views";
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 import {
   MAPPINGS_DOCUMENT_ID_PREFIX,
   MAPPINGS_FIELD_ID_PREFIX,
   SOURCES_FIELD_ID_PREFIX,
   TARGETS_FIELD_ID_PREFIX,
 } from "../Columns";
+import React, { FunctionComponent, MouseEvent } from "react";
 
-const styles = StyleSheet.create({
-  arc: {
-    cursor: "pointer",
-  },
-});
+import { IAtlasmapMapping } from "../../../Views";
+import { NodesArc } from "../../../UI";
+import styles from "./SourceMappingTargetLinks.module.css";
 
 export interface ISourceMappingTargetLinksEvents {
   onMouseOver: (mapping: IAtlasmapMapping) => void;
@@ -63,7 +71,7 @@ export const SourceMappingTargetLinks: FunctionComponent<
           onClick={handleClick}
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
-          className={css(styles.arc)}
+          className={styles.arc}
         />
       )),
       ...m.targetFields.map((s) => (
@@ -75,7 +83,7 @@ export const SourceMappingTargetLinks: FunctionComponent<
           onClick={handleClick}
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
-          className={css(styles.arc)}
+          className={styles.arc}
         />
       )),
     ];

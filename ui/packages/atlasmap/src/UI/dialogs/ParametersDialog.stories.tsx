@@ -1,9 +1,8 @@
-import React from "react";
-
 import { boolean, text } from "@storybook/addon-knobs";
-import { action } from "@storybook/addon-actions";
 
 import { ParametersDialog } from "./ParametersDialog";
+import React from "react";
+import { action } from "@storybook/addon-actions";
 
 export default {
   title: "UI|Dialogs",

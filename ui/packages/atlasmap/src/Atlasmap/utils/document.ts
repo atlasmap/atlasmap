@@ -1,12 +1,12 @@
 import {
-  InspectionType,
   ConfigModel,
-  DocumentDefinition,
   DataMapperUtil,
+  DocumentDefinition,
   ErrorInfo,
+  ErrorLevel,
   ErrorScope,
   ErrorType,
-  ErrorLevel,
+  InspectionType,
   NamespaceModel,
 } from "@atlasmap/core";
 import { ClassNameComponent } from "./custom-classname";
@@ -164,7 +164,7 @@ export function getDocDef(
       return docDef;
     }
   }
-  return (null as unknown) as DocumentDefinition;
+  return null as unknown as DocumentDefinition;
 }
 
 /**
@@ -186,7 +186,7 @@ export function getDocDefByName(
       return docDef;
     }
   }
-  return (null as unknown) as DocumentDefinition;
+  return null as unknown as DocumentDefinition;
 }
 
 /**
@@ -372,9 +372,7 @@ export function enableCustomClass(
     });
 }
 
-export function getPropertyScopeOptions(
-  isSource: boolean,
-): {
+export function getPropertyScopeOptions(isSource: boolean): {
   value: string;
   label: string;
 }[] {

@@ -37,7 +37,11 @@ const App: React.FC = () => {
         />
       }
     >
-      <PageSection variant={"light"} noPadding={true} isFilled={true}>
+      <PageSection
+        variant={"light"}
+        padding={{ default: "noPadding" }}
+        isFilled={true}
+      >
         <Atlasmap />
       </PageSection>
     </Page>

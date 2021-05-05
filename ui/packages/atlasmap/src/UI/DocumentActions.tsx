@@ -1,8 +1,6 @@
-import React, { FunctionComponent, useState } from "react";
 import {
   Dropdown,
   DropdownItem,
-  DropdownItemIcon,
   DropdownSeparator,
   DropdownToggle,
   DropdownToggleAction,
@@ -12,6 +10,7 @@ import {
   FolderOpenIcon,
   TrashIcon,
 } from "@patternfly/react-icons";
+import React, { FunctionComponent, useState } from "react";
 
 export interface IDocumentActions {
   onExpandFields: () => void;
@@ -44,20 +43,14 @@ export const DocumentActions: FunctionComponent<IDocumentActions> = ({
       position={"right"}
       dropdownItems={[
         <DropdownItem
-          variant={"icon"}
+          icon={<FolderCloseIcon />}
           key={"collapse"}
           onClick={onCollapseFields}
         >
-          <DropdownItemIcon>
-            <FolderCloseIcon />
-          </DropdownItemIcon>
           Collapse all
         </DropdownItem>,
         <DropdownSeparator key={"sep-1"} />,
-        <DropdownItem variant={"icon"} key={"delete"} onClick={onDelete}>
-          <DropdownItemIcon>
-            <TrashIcon />
-          </DropdownItemIcon>
+        <DropdownItem icon={<TrashIcon />} key={"delete"} onClick={onDelete}>
           Remove instance or schema file
         </DropdownItem>,
       ]}

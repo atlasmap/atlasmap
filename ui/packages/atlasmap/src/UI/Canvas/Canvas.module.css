@@ -1,0 +1,18 @@
+.canvasWrapper {
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+}
+
+.svg {
+  display: "block",
+}
+
+.svg * {
+  transition: stroke 0.35s, stroke-width 0.15s;
+}
+
+.panning {
+  background-image: url(canvasBg.png);
+  background-repeat: repeat;
+}

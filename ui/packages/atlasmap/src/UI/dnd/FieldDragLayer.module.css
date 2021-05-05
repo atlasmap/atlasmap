@@ -1,0 +1,9 @@
+.canvasObject {
+  pointer-events: none;
+}
+
+.canvasInner {
+  display: inline-block;
+  margin: auto;
+}
+

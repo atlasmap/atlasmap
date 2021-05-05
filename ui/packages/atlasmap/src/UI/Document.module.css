@@ -1,0 +1,48 @@
+.card {
+  padding: 0 !important;
+}
+
+.stacked {
+  margin: 1rem 0;
+}
+
+.head {
+  padding: 0.5rem 0 !important;
+}
+
+.header {
+  width: 100%;
+  overflow: hidden;
+}
+
+.actions {
+  align-self: center;
+}
+
+.headerButton {
+  max-width: 100%;
+}
+
+.bodyNoPadding {
+  padding: 0 !important;
+}
+
+.bodyWithPadding {
+  padding: 0 1rem 1rem !important;
+}
+
+.hidden {
+  display: none;
+}
+
+.noShadows {
+  box-shadow: none !important;
+}
+
+.dropTarget:before {
+  background: var(--pf-global--active-color--400) !important;
+}
+
+.dropAccepted:before {
+  background: var(--pf-global--success-color--100) !important;
+}

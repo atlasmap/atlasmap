@@ -1,4 +1,4 @@
-import { IAtlasmapGroup, IAtlasmapField, IAtlasmapMapping } from "../Views";
+import { IAtlasmapField, IAtlasmapGroup, IAtlasmapMapping } from "../Views";
 
 interface Restrictions {
   restriction: any[];

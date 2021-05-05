@@ -1,6 +1,6 @@
-import React, { useCallback, ReactElement, useState } from "react";
+import { IParameter, ParametersDialog } from "../../UI";
+import React, { ReactElement, useCallback, useState } from "react";
 
-import { ParametersDialog, IParameter } from "../../UI";
 import { useToggle } from "../../Atlasmap/utils";
 
 type ParametersCallback = (parameters: IParameter[]) => void;
@@ -8,10 +8,8 @@ type ParametersCallback = (parameters: IParameter[]) => void;
 export function useParametersDialog(
   title: string,
 ): [ReactElement, (cb: ParametersCallback, parameters?: IParameter[]) => void] {
-  const [
-    onParametersCb,
-    setOnParametersCb,
-  ] = useState<ParametersCallback | null>(null);
+  const [onParametersCb, setOnParametersCb] =
+    useState<ParametersCallback | null>(null);
   const [parameters, setParameters] = useState<IParameter[]>([]);
   const { state, toggleOn, toggleOff } = useToggle(false);
   const onConfirm = useCallback(

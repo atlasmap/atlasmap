@@ -79,18 +79,15 @@ export class MappingSerializer {
     }
 
     // TODO: check this non null operator
-    const serializedLookupTables: any[] = MappingSerializer.serializeLookupTables(
-      cfg.mappings!
-    );
+    const serializedLookupTables: any[] =
+      MappingSerializer.serializeLookupTables(cfg.mappings!);
     const constantDescriptions: any[] = MappingSerializer.serializeConstants(
       cfg.constantDoc
     );
-    const sourcePropertyDescriptions: any[] = MappingSerializer.serializeProperties(
-      cfg.sourcePropertyDoc
-    );
-    const targetPropertyDescriptions: any[] = MappingSerializer.serializeProperties(
-      cfg.targetPropertyDoc
-    );
+    const sourcePropertyDescriptions: any[] =
+      MappingSerializer.serializeProperties(cfg.sourcePropertyDoc);
+    const targetPropertyDescriptions: any[] =
+      MappingSerializer.serializeProperties(cfg.targetPropertyDoc);
     const serializedDataSources: any = MappingSerializer.serializeDocuments(
       cfg.sourceDocs.concat(cfg.targetDocs),
       mappingDefinition
@@ -365,10 +362,11 @@ export class MappingSerializer {
           mapping.transition.mode = TransitionMode.MANY_TO_ONE;
           const parsedAction = this.parseAction(firstAction);
           // TODO: check this non null operator
-          parsedAction.definition = cfg.fieldActionService.getActionDefinitionForName(
-            parsedAction.name,
-            Multiplicity.MANY_TO_ONE
-          )!;
+          parsedAction.definition =
+            cfg.fieldActionService.getActionDefinitionForName(
+              parsedAction.name,
+              Multiplicity.MANY_TO_ONE
+            )!;
           mapping.transition.transitionFieldAction = parsedAction;
         }
       }
@@ -579,12 +577,13 @@ export class MappingSerializer {
     fieldsJson: any[]
   ) {
     serializedField['path'] = field.path.replace('<>', '<0>');
-    const collectionInstanceInputFieldGroup = MappingSerializer.createInputFieldGroup(
-      [serializedField],
-      true,
-      field.docDef.id,
-      field.path
-    );
+    const collectionInstanceInputFieldGroup =
+      MappingSerializer.createInputFieldGroup(
+        [serializedField],
+        true,
+        field.docDef.id,
+        field.path
+      );
     fieldsJson.push(collectionInstanceInputFieldGroup);
   }
 
@@ -610,9 +609,8 @@ export class MappingSerializer {
         continue;
       }
       actionArguments[argValue.name] = argValue.value;
-      const argumentConfig: FieldActionArgument = action.definition.getArgumentForName(
-        argValue.name
-      );
+      const argumentConfig: FieldActionArgument =
+        action.definition.getArgumentForName(argValue.name);
       if (argumentConfig == null) {
         cfg.errorService.addError(
           new ErrorInfo({
@@ -743,12 +741,13 @@ export class MappingSerializer {
         } else {
           // Establish/add to the inner reference field group.
           if (collectionInstanceInputFieldGroup === null) {
-            collectionInstanceInputFieldGroup = MappingSerializer.createInputFieldGroup(
-              [serializedField],
-              true,
-              collectionParentField.docDef.id,
-              collectionParentField.path
-            );
+            collectionInstanceInputFieldGroup =
+              MappingSerializer.createInputFieldGroup(
+                [serializedField],
+                true,
+                collectionParentField.docDef.id,
+                collectionParentField.path
+              );
           } else {
             collectionInstanceInputFieldGroup!.field.push(serializedField);
             continue;
@@ -758,18 +757,18 @@ export class MappingSerializer {
 
           // Preview-mode uses element/ item instance <0>.
           if (!ignoreValue) {
-            collectionInstanceInputFieldGroup[
-              'path'
-            ] = collectionParentField.path.replace('<>', '<0>');
+            collectionInstanceInputFieldGroup['path'] =
+              collectionParentField.path.replace('<>', '<0>');
 
             // Establish one outer input field group for the preview collection.
             if (collectionInputFieldGroup === null) {
-              collectionInputFieldGroup = MappingSerializer.createInputFieldGroup(
-                [collectionInstanceInputFieldGroup],
-                true,
-                collectionParentField.docDef.id,
-                collectionParentField.path
-              );
+              collectionInputFieldGroup =
+                MappingSerializer.createInputFieldGroup(
+                  [collectionInstanceInputFieldGroup],
+                  true,
+                  collectionParentField.docDef.id,
+                  collectionParentField.path
+                );
               collectionInstanceInputFieldGroup['fieldType'] =
                 collectionParentField.serviceObject.fieldType;
               fieldsJson.push(collectionInputFieldGroup);
@@ -1070,9 +1069,8 @@ export class MappingSerializer {
     }
     for (const action of field.actions) {
       const parsedAction = this.parseAction(action);
-      parsedAction.definition = cfg.fieldActionService.getActionDefinitionForName(
-        parsedAction.name
-      )!; // TODO: check this non null operator
+      parsedAction.definition =
+        cfg.fieldActionService.getActionDefinitionForName(parsedAction.name)!; // TODO: check this non null operator
 
       // @deprecated Support old-style transformation-action-based expressions.
       if (isSource && (action.Expression || action['@type'] === 'Expression')) {
@@ -1217,7 +1215,8 @@ export class MappingSerializer {
           if (!actionParams.hasOwnProperty(paramName)) {
             return null;
           }
-          const parsedArgumentValue: FieldActionArgumentValue = new FieldActionArgumentValue();
+          const parsedArgumentValue: FieldActionArgumentValue =
+            new FieldActionArgumentValue();
           parsedArgumentValue.name = paramName;
           let value = actionParams[paramName];
           value = value == null ? null : value.toString();
@@ -1237,7 +1236,8 @@ export class MappingSerializer {
       if ('@type' === key) {
         continue;
       }
-      const parsedArgumentValue: FieldActionArgumentValue = new FieldActionArgumentValue();
+      const parsedArgumentValue: FieldActionArgumentValue =
+        new FieldActionArgumentValue();
       parsedArgumentValue.name = key;
       const valueString = value == null ? null : (value as any).toString();
       parsedArgumentValue.value = valueString;

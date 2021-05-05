@@ -1,12 +1,13 @@
+import { Arc, IArcProps } from "./Arc";
 import React, {
   FunctionComponent,
   useCallback,
   useEffect,
   useState,
 } from "react";
-import { Arc, IArcProps } from "./Arc";
-import { useCanvas } from "./CanvasContext";
+
 import { Coords } from "./models";
+import { useCanvas } from "./CanvasContext";
 import { useNodeRect } from "./NodeRefProvider";
 
 function leftCoords(rect: DOMRect) {
@@ -55,15 +56,15 @@ export const NodesArc: FunctionComponent<INodesArcProps> = ({
 }) => {
   const { addRedrawListener, removeRedrawListener } = useCanvas();
   const getRect = useNodeRect();
-  const [coords, setCoords] = useState<{
-    start: Coords;
-    end: Coords;
-    startSideSize: number;
-    endSideSize: number;
-  } | null>(null);
-  const [linkType, setLinkType] = useState<"horizontal" | "vertical">(
-    "horizontal",
-  );
+  const [coords, setCoords] =
+    useState<{
+      start: Coords;
+      end: Coords;
+      startSideSize: number;
+      endSideSize: number;
+    } | null>(null);
+  const [linkType, setLinkType] =
+    useState<"horizontal" | "vertical">("horizontal");
 
   const calculateCoords = useCallback(
     function calculateCoordsCb() {

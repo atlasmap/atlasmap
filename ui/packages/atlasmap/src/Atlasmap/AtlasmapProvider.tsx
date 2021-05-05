@@ -1,47 +1,57 @@
+import {
+  DataActionPayload,
+  IDataState,
+  INotificationsState,
+  dataReducer,
+  initDataState,
+  initNotificationsState,
+  notificationsReducer,
+} from "./reducers";
+import {
+  DocumentInitializationModel,
+  DocumentType,
+  InspectionType,
+  MappingSerializer,
+  MappingUtil,
+  TransitionMode,
+  search,
+} from "@atlasmap/core";
+import { IAtlasmapDocument, IAtlasmapField } from "../Views";
 import React, {
-  createContext,
   FunctionComponent,
+  createContext,
   useCallback,
   useContext,
   useEffect,
   useReducer,
 } from "react";
-import { debounceTime } from "rxjs/operators";
-
-import {
-  MappingUtil,
-  search,
-  MappingSerializer,
-  InspectionType,
-  DocumentType,
-  DocumentInitializationModel,
-  TransitionMode,
-} from "@atlasmap/core";
-
-import { IAtlasmapDocument, IAtlasmapField } from "../Views";
 import {
   addToCurrentMapping,
   changeDocumentName,
   createConstant,
   createMapping,
+  createNamespace,
   createProperty,
   deleteAtlasFile,
   deleteConstant,
+  deleteNamespace,
   deleteProperty,
   deselectMapping,
   documentExists,
   editConstant,
+  editNamespace,
   editProperty,
   enableCustomClass,
+  errorInfoToNotification,
   executeFieldSearch,
   exportAtlasFile,
   fromDocumentDefinitionToFieldGroup,
+  fromFieldToIFieldsNode,
+  fromMappedFieldToIMappingField,
   fromMappingDefinitionToIMappings,
   fromMappingModelToImapping,
   getEnumerationValues,
   getFieldEnums,
-  isEnumerationMapping,
-  setSelectedEnumValue,
   getMappingActions,
   getMappingExpression,
   getMultiplicityActionDelimiters,
@@ -50,14 +60,15 @@ import {
   getUIVersion,
   handleActionChange,
   handleIndexChange,
-  handleNewTransformation,
-  handleTransformationChange,
-  handleTransformationArgumentChange,
-  handleRemoveTransformation,
-  handleMultiplicityChange,
   handleMultiplicityArgumentChange,
+  handleMultiplicityChange,
+  handleNewTransformation,
+  handleRemoveTransformation,
+  handleTransformationArgumentChange,
+  handleTransformationChange,
   importAtlasFile,
   initializationService,
+  isEnumerationMapping,
   mappingExpressionAddField,
   mappingExpressionClearText,
   mappingExpressionInit,
@@ -66,32 +77,20 @@ import {
   mappingExpressionRemoveField,
   newMapping,
   onFieldPreviewChange,
-  toggleExpressionMode,
+  removeFromCurrentMapping,
+  removeMappedFieldFromCurrentMapping,
   removeMapping,
   resetAtlasmap,
   selectMapping,
+  setSelectedEnumValue,
+  toggleExpressionMode,
   toggleMappingPreview,
   toggleShowMappedFields,
   toggleShowUnmappedFields,
   trailerId,
-  removeFromCurrentMapping,
-  removeMappedFieldFromCurrentMapping,
-  fromMappedFieldToIMappingField,
-  errorInfoToNotification,
-  createNamespace,
-  editNamespace,
-  deleteNamespace,
-  fromFieldToIFieldsNode,
 } from "./utils";
-import {
-  INotificationsState,
-  IDataState,
-  initDataState,
-  initNotificationsState,
-  dataReducer,
-  notificationsReducer,
-  DataActionPayload,
-} from "./reducers";
+
+import { debounceTime } from "rxjs/operators";
 
 // the document payload with get from Syndesis
 export interface IExternalDocumentProps {
@@ -179,7 +178,8 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
 
       if (externalDocument) {
         externalDocument.inputDocuments.forEach((d) => {
-          const inputDoc: DocumentInitializationModel = new DocumentInitializationModel();
+          const inputDoc: DocumentInitializationModel =
+            new DocumentInitializationModel();
           inputDoc.type = d.documentType;
           inputDoc.inspectionType = d.inspectionType;
           inputDoc.inspectionSource = d.inspectionSource;
@@ -193,7 +193,8 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
           c.addDocument(inputDoc);
         });
 
-        const outputDoc: DocumentInitializationModel = new DocumentInitializationModel();
+        const outputDoc: DocumentInitializationModel =
+          new DocumentInitializationModel();
         outputDoc.type = externalDocument.outputDocument.documentType;
         outputDoc.inspectionType =
           externalDocument.outputDocument.inspectionType;
@@ -345,18 +346,22 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   useEffect(
     function subscriptionListener() {
       const debounceTimeWindow = data.pending ? 1000 : 50;
-      const initializationObservable = initializationService.systemInitializedSource.pipe(
-        debounceTime(debounceTimeWindow),
-      );
-      const lineRefreshObservable = initializationService.cfg.mappingService.lineRefreshSource.pipe(
-        debounceTime(debounceTimeWindow),
-      );
-      const mappingUpdatedSource = initializationService.cfg.mappingService.mappingUpdatedSource.pipe(
-        debounceTime(debounceTimeWindow),
-      );
-      const mappingPreview = initializationService.cfg.mappingService.mappingPreviewOutput$.pipe(
-        debounceTime(debounceTimeWindow),
-      );
+      const initializationObservable =
+        initializationService.systemInitializedSource.pipe(
+          debounceTime(debounceTimeWindow),
+        );
+      const lineRefreshObservable =
+        initializationService.cfg.mappingService.lineRefreshSource.pipe(
+          debounceTime(debounceTimeWindow),
+        );
+      const mappingUpdatedSource =
+        initializationService.cfg.mappingService.mappingUpdatedSource.pipe(
+          debounceTime(debounceTimeWindow),
+        );
+      const mappingPreview =
+        initializationService.cfg.mappingService.mappingPreviewOutput$.pipe(
+          debounceTime(debounceTimeWindow),
+        );
 
       const subscriptions = [
         initializationObservable.subscribe(() =>
@@ -624,7 +629,8 @@ export function useAtlasmap() {
     mappingExpressionObservable,
     mappingExpressionRemoveField,
     mappingHasSourceCollection,
-    mappingExpressionEnabled: initializationService.cfg.mappingService.conditionalMappingExpressionEnabled(),
+    mappingExpressionEnabled:
+      initializationService.cfg.mappingService.conditionalMappingExpressionEnabled(),
     currentMappingExpression: MappingUtil.getMappingExpressionStr(
       true,
       initializationService.cfg.mappings?.activeMapping,

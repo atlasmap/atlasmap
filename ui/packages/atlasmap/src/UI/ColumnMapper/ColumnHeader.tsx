@@ -1,35 +1,25 @@
+/*
+    Copyright (C) 2017 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 import React, { FunctionComponent, ReactElement } from "react";
 
 import { Actions } from "../Actions";
 
-import { BaseSizes, Title } from "@patternfly/react-core";
-import { css, StyleSheet } from "@patternfly/react-styles";
-
-const styles = StyleSheet.create({
-  header: {
-    flex: "0 1 0",
-  },
-  plain: {
-    background: "transparent",
-    border: "0 none transparent",
-  },
-  toolbar: {
-    background: "var(--pf-global--BackgroundColor--150)",
-    border: "1px solid var(--pf-global--BorderColor--100)",
-    borderBottom: 0,
-    padding: "var(--pf-global--spacer--sm) var(--pf-global--spacer--md)",
-    boxSizing: "initial",
-    display: "flex",
-    flexFlow: "row no-wrap",
-  },
-  title: {
-    display: "flex",
-    alignItems: "center",
-    flex: "1 0 auto",
-    marginRight: "var(--pf-global--spacer--sm)",
-    height: "36px",
-  },
-});
+import { Title } from "@patternfly/react-core";
+import { css } from "@patternfly/react-styles";
+import styles from "./ColumnHeader.module.css";
 
 export interface IColumnHeaderProps {
   title: string;
@@ -44,10 +34,12 @@ export const ColumnHeader: FunctionComponent<IColumnHeaderProps> = ({
   children,
 }) => {
   return (
-    <div className={css(styles.header)}>
+    <div className={styles.header}>
       <div className={css(styles.toolbar, variant === "plain" && styles.plain)}>
-        <div className={css(styles.title)}>
-          <Title size={BaseSizes.lg}>{title}</Title>
+        <div className={styles.title}>
+          <Title headingLevel="h2" size="lg">
+            {title}
+          </Title>
         </div>
         <Actions>{actions?.filter((a) => a)}</Actions>
       </div>

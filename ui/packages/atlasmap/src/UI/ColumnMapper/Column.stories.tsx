@@ -1,8 +1,8 @@
-import React from "react";
-
+import { Column, ColumnBody, SearchableColumnHeader } from ".";
 import { boolean, number } from "@storybook/addon-knobs";
+
+import React from "react";
 import { action } from "@storybook/addon-actions";
-import { Column, SearchableColumnHeader, ColumnBody } from ".";
 
 export default {
   title: "ColumnMapper",

@@ -1,5 +1,19 @@
-import React, { Children, FunctionComponent, KeyboardEvent } from "react";
+/*
+    Copyright (C) 2017 Red Hat, Inc.
 
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+import { BoltIcon, InfoAltIcon, TrashIcon } from "@patternfly/react-icons";
 import {
   Button,
   InputGroup,
@@ -10,46 +24,13 @@ import {
   Title,
   Tooltip,
 } from "@patternfly/react-core";
-import { BoltIcon, TrashIcon, InfoAltIcon } from "@patternfly/react-icons";
-import { css, StyleSheet } from "@patternfly/react-styles";
-import { IAtlasmapField } from "../../src/Views/models";
 import { DraggableField, FieldDropTarget } from "./dnd";
-import { NodeRef } from "./Canvas/NodeRef";
+import React, { Children, FunctionComponent, KeyboardEvent } from "react";
 
-const styles = StyleSheet.create({
-  field: {
-    padding: "1rem",
-    background: "var(--pf-global--BackgroundColor--100)",
-    "& + &": {
-      borderTop:
-        "var(--pf-global--BorderWidth--md) solid var(--pf-global--BorderColor--300)",
-    },
-    "&:last-child": {
-      borderBottom:
-        "var(--pf-global--BorderWidth--sm) solid var(--pf-global--BorderColor--200)",
-    },
-  },
-  title: {
-    display: "flex",
-    alignItems: "center",
-  },
-  fieldIndex: {
-    marginRight: "1rem",
-  },
-  fieldName: {
-    flex: "2 0 calc(100% - 6rem)",
-  },
-  link: {
-    padding: 0,
-    marginRight: 5,
-  },
-  transformationsWrapper: {
-    marginTop: "0.5rem",
-    padding: "0.5rem",
-    background: "var(--pf-global--BackgroundColor--150)",
-  },
-  transformations: {},
-});
+import { IAtlasmapField } from "../../src/Views/models";
+import { NodeRef } from "./Canvas/NodeRef";
+import { css } from "@patternfly/react-styles";
+import styles from "./MappingField.module.css";
 
 export interface IMappingFieldProps {
   field: IAtlasmapField;
@@ -120,13 +101,18 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
               ]}
             >
               <div
-                className={css(styles.field)}
+                className={styles.field}
                 aria-labelledby={id}
                 data-testid={id}
               >
                 <Split>
                   <SplitItem isFilled>
-                    <Title size={"sm"} id={id} className={css(styles.title)}>
+                    <Title
+                      headingLevel="h2"
+                      size="md"
+                      id={id}
+                      className={styles.title}
+                    >
                       {canShowIndex && (
                         <Tooltip
                           position={"auto"}
@@ -143,7 +129,7 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
                             </div>
                           }
                         >
-                          <InputGroup className={css(styles.fieldIndex)}>
+                          <InputGroup className={styles.fieldIndex}>
                             <InputGroupText>#</InputGroupText>
                             <TextInput
                               type={"number"}
@@ -164,7 +150,7 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
                         exitDelay={100}
                         content={<div>{info}</div>}
                       >
-                        <div className={css(styles.fieldName)}>
+                        <div className={styles.fieldName}>
                           {name} <InfoAltIcon />
                         </div>
                       </Tooltip>
@@ -182,7 +168,7 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
                         <Button
                           variant={"plain"}
                           onClick={onNewTransformation}
-                          className={css(styles.link)}
+                          className={styles.link}
                           data-testid={`add-transformation-to-${name}-field-button`}
                         >
                           <BoltIcon />
@@ -201,7 +187,7 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
                       <Button
                         variant={"plain"}
                         onClick={onDelete}
-                        className={css(styles.link)}
+                        className={styles.link}
                         data-testid={`remove-${name}-from-mapping-button`}
                       >
                         <TrashIcon />
@@ -223,10 +209,10 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
                         styles.transformationsWrapper,
                       )}
                     >
-                      <Title size={"xs"}>Transformations</Title>
-                      <div className={css(styles.transformations)}>
-                        {children}
-                      </div>
+                      <Title headingLevel="h2" size="md">
+                        Transformations
+                      </Title>
+                      <div className={styles.transformations}>{children}</div>
                     </div>
                   )}
               </div>

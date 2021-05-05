@@ -1,0 +1,8 @@
+.sidebar {
+  font-size: small;
+  height: 100%;
+  overflow: hidden;
+}
+.sidebar > .pf-topology-side-bar__body {
+  height: "100%",
+}

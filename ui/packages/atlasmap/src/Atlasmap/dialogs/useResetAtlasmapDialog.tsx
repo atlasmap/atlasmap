@@ -9,10 +9,10 @@ export function useResetAtlasmapDialog(): [ReactElement, () => void] {
     "Reset All Mappings and Imports?",
     "Are you sure you want to reset all mappings and clear all imported documents?",
   );
-  const onResetAtlasmap = useCallback(() => openResetDialog(resetAtlasmap), [
-    openResetDialog,
-    resetAtlasmap,
-  ]);
+  const onResetAtlasmap = useCallback(
+    () => openResetDialog(resetAtlasmap),
+    [openResetDialog, resetAtlasmap],
+  );
 
   return [resetDialog, onResetAtlasmap];
 }

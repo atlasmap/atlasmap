@@ -1,11 +1,12 @@
-import { useAtlasmap } from "./AtlasmapProvider";
-import React, { useCallback } from "react";
 import {
+  IAtlasmapField,
   IMappingDetailsViewProps,
   MappingDetailsView,
-  IAtlasmapField,
 } from "../Views";
+import React, { useCallback } from "react";
+
 import { DataMapperUtil } from "@atlasmap/core";
+import { useAtlasmap } from "./AtlasmapProvider";
 
 export interface IUseSidebarProps {
   onCreateConstant: (

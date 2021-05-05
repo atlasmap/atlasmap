@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
   stories: [
     '../doc/*.stories.mdx',
@@ -26,5 +28,5 @@ module.exports = {
     '@storybook/addon-knobs',
     '@storybook/addon-viewport',
     '@storybook/addon-actions',
-  ]
+  ],
 }

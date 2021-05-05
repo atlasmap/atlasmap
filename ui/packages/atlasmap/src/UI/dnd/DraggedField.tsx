@@ -1,5 +1,5 @@
 import { FunctionComponent, ReactElement } from "react";
-import { useDragLayer, XYCoord } from "react-dnd";
+import { XYCoord, useDragLayer } from "react-dnd";
 
 import { IDragAndDropField } from "./models";
 import { useFieldsDnd } from "./FieldsDndProvider";

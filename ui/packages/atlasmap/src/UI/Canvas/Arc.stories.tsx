@@ -1,7 +1,7 @@
-import React from "react";
+import { Arc } from "./Arc";
 import { Canvas } from "./Canvas";
 import { CanvasProvider } from "./CanvasContext";
-import { Arc } from "./Arc";
+import React from "react";
 
 export default {
   title: "Canvas",

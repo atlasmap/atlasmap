@@ -277,9 +277,8 @@ export class FileManagementService {
         if (this.cfg.mappings) {
           const jsonBuffer = await this.getJsonBuf();
           if (jsonBuffer) {
-            aggregateBuffer += DocumentManagementService.generateExportMappings(
-              jsonBuffer
-            );
+            aggregateBuffer +=
+              DocumentManagementService.generateExportMappings(jsonBuffer);
           }
         }
 
@@ -297,9 +296,10 @@ export class FileManagementService {
               exportBlockData += ',\n';
             }
             exportMeta += DocumentManagementService.generateExportMetaStr(doc);
-            exportBlockData += DocumentManagementService.generateExportBlockData(
-              doc.inspectionSource
-            );
+            exportBlockData +=
+              DocumentManagementService.generateExportBlockData(
+                doc.inspectionSource
+              );
             docCount++;
           }
         }
