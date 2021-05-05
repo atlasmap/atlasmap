@@ -13,6 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import { DocumentType, InspectionType } from '../common/config.types';
+
 import {
   ErrorInfo,
   ErrorLevel,
@@ -23,7 +25,6 @@ import {
 import { ConfigModel } from '../models/config.model';
 import { DataMapperUtil } from '../common/data-mapper-util';
 import { DocumentManagementService } from './document-management.service';
-import { InspectionType } from '../common/config.types';
 import { Observable } from 'rxjs';
 import { gzip } from 'pako';
 import ky from 'ky';
@@ -292,12 +293,7 @@ export class FileManagementService {
         //   exportMeta - meta-data describing the instance or schema documents.
         //   exportBlockData - the actual source of the instance/schema/mappings documents or the Java class name.
         for (const doc of this.cfg.getAllDocs()) {
-          if (
-            (doc.inspectionSource !== null &&
-              doc.inspectionType === InspectionType.INSTANCE) ||
-            doc.inspectionType === InspectionType.SCHEMA ||
-            doc.inspectionType === InspectionType.JAVA_CLASS
-          ) {
+          if (!doc.isPropertyOrConstant) {
             if (docCount > 0) {
               exportMeta += ',\n';
               exportBlockData += ',\n';

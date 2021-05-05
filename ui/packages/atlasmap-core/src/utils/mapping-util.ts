@@ -82,6 +82,16 @@ export class MappingUtil {
       } else {
         if (docMap === null) {
           docMap = cfg.getDocUriMap(cfg, isSource);
+          if (docMap === null) {
+            cfg.errorService.addError(
+              new ErrorInfo({
+                message: `Could not find document map for URI '${mappedField.parsedData.parsedDocURI}'`,
+                level: ErrorLevel.ERROR,
+                scope: ErrorScope.APPLICATION,
+                type: ErrorType.INTERNAL,
+              })
+            );
+          }
         }
         doc = docMap[
           mappedField.parsedData.parsedDocURI!
