@@ -19,7 +19,6 @@ import {
 } from '../models/config.model';
 import { DocumentDefinition, MappingDefinition } from '../models';
 import { DocumentType, InspectionType } from '../common/config.types';
-import { TextDecoder, TextEncoder } from 'text-encoding';
 
 import { DataMapperUtil } from '../common/data-mapper-util';
 import { ErrorHandlerService } from './error-handler.service';
@@ -38,7 +37,7 @@ describe('FileManagementService', () => {
   const mockedInitService = mocked(InitializationService, true);
   jest.mock('ky');
   const mockedKy = mocked(ky, true);
-  const service = new FileManagementService(mockedKy);
+  const service = new FileManagementService(ky);
   jest.mock('file-saver');
   const mockedFileSaver = mocked(FileSaver);
   jest.mock('../common/data-mapper-util');
@@ -96,80 +95,6 @@ describe('FileManagementService', () => {
     });
   });
 
-  test('getCurrentMappingDigest', (done) => {
-    mockedKy.get = jest.fn().mockReturnValue(
-      new (class {
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return new Promise<ArrayBuffer>((resolve) => {
-            resolve(new TextEncoder().encode('test text'));
-          });
-        }
-      })() as ResponsePromise
-    );
-    service.getCurrentMappingCatalog().subscribe((value) => {
-      expect(new TextDecoder().decode(value)).toMatch('test text');
-      done();
-    });
-  });
-
-  test('getCurrentMappingDigest server error', (done) => {
-    mockedKy.get = jest.fn().mockReturnValue(
-      new (class {
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return new Promise<ArrayBuffer>((_resolve, reject) => {
-            reject('expected error');
-          });
-        }
-      })() as ResponsePromise
-    );
-    service.getCurrentMappingCatalog().subscribe({
-      error: (error) => {
-        expect(error).toMatch('expected error');
-        const err = service.cfg.errorService.getErrors()[0];
-        expect(err.level).toBe(ErrorLevel.ERROR);
-        expect(err.message.indexOf('Mapping digest file')).toBeGreaterThan(0);
-        done();
-      },
-    });
-  });
-
-  test('getCurrentADMArchive', (done) => {
-    mockedKy.get = jest.fn().mockReturnValue(
-      new (class {
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return new Promise<ArrayBuffer>((resolve) => {
-            resolve(new TextEncoder().encode('test text'));
-          });
-        }
-      })() as ResponsePromise
-    );
-    service.getCurrentMappingCatalog().subscribe((value) => {
-      expect(new TextDecoder().decode(value)).toMatch('test text');
-      done();
-    });
-  });
-
-  test('getCurrentADMArchive server error', (done) => {
-    mockedKy.get = jest.fn().mockReturnValue(
-      new (class {
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return new Promise<ArrayBuffer>((_resolve, reject) => {
-            reject('expected error');
-          });
-        }
-      })() as ResponsePromise
-    );
-    service.getCurrentADMCatalog().subscribe({
-      error: (error) => {
-        expect(error).toMatch('expected error');
-        const err = service.cfg.errorService.getErrors()[0];
-        expect(err.level).toBe(ErrorLevel.ERROR);
-        expect(err.message.indexOf('ADM archive file')).toBeGreaterThan(0);
-        done();
-      },
-    });
-  });
-
   test('resetMappings', (done) => {
     mockedKy.delete = jest.fn().mockReturnValue(
       new (class {
@@ -186,29 +111,6 @@ describe('FileManagementService', () => {
     });
   });
 
-  test('resetMappings server error', (done) => {
-    mockedKy.delete = jest.fn().mockReturnValue(
-      new (class {
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return new Promise<ArrayBuffer>((_resolve, reject) => {
-            reject('expected error');
-          });
-        }
-      })()
-    );
-    service.resetMappings().subscribe({
-      error: (error) => {
-        fail(error);
-      },
-      complete: () => {
-        const err = service.cfg.errorService.getErrors()[0];
-        expect(err.level).toBe(ErrorLevel.ERROR);
-        expect(err.message.indexOf('resetting mappings')).toBeGreaterThan(0);
-        done();
-      },
-    });
-  });
-
   test('resetLibs', (done) => {
     mockedKy.delete = jest.fn().mockReturnValue(
       new (class {
@@ -222,29 +124,6 @@ describe('FileManagementService', () => {
     service.resetLibs().subscribe((value) => {
       expect(value).toBeTruthy();
       done();
-    });
-  });
-
-  test('resetLibs server error', (done) => {
-    mockedKy.delete = jest.fn().mockReturnValue(
-      new (class {
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return new Promise<ArrayBuffer>((_resolve, reject) => {
-            reject('expected error');
-          });
-        }
-      })()
-    );
-    service.resetLibs().subscribe({
-      error: (error) => {
-        fail(error);
-      },
-      complete: () => {
-        const err = service.cfg.errorService.getErrors()[0];
-        expect(err.level).toBe(ErrorLevel.ERROR);
-        expect(err.message.indexOf('JAR libraries')).toBeGreaterThan(0);
-        done();
-      },
     });
   });
 
@@ -282,47 +161,6 @@ describe('FileManagementService', () => {
         const err = service.cfg.errorService.getErrors()[0];
         expect(err.level).toBe(ErrorLevel.ERROR);
         expect(err.message.indexOf('establishing mappings')).toBeGreaterThan(0);
-        done();
-      },
-    });
-  });
-
-  test('setBinaryFileToService', (done) => {
-    mockedKy.put = jest.fn().mockReturnValue(
-      new (class {
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return new Promise<ArrayBuffer>((resolve) => {
-            resolve(new ArrayBuffer(0));
-          });
-        }
-      })() as ResponsePromise
-    );
-    const binary = new TextEncoder().encode('dummy binary');
-    const url = service.cfg.initCfg.baseMappingServiceUrl + 'mapping/ZIP/';
-    service.setBinaryFileToService(binary, url).subscribe((value) => {
-      expect(value).toBeTruthy();
-      done();
-    });
-  });
-
-  test('setBinaryFileToService server error', (done) => {
-    mockedKy.put = jest.fn().mockReturnValue(
-      new (class {
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return new Promise<ArrayBuffer>((_resolve, reject) => {
-            reject('expected error');
-          });
-        }
-      })()
-    );
-    const binary = new TextEncoder().encode('dummy binary');
-    const url = service.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/';
-    service.setBinaryFileToService(binary, url).subscribe({
-      error: (error) => {
-        expect(error).toMatch('expected error');
-        const err = service.cfg.errorService.getErrors()[0];
-        expect(err.level).toBe(ErrorLevel.ERROR);
-        expect(err.message.indexOf('saving mapping')).toBeGreaterThan(0);
         done();
       },
     });
