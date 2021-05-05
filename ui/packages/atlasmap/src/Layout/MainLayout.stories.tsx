@@ -1,6 +1,6 @@
-import { boolean } from "@storybook/addon-knobs";
-import React from "react";
 import { MainLayout } from "./MainLayout";
+import React from "react";
+import { boolean } from "@storybook/addon-knobs";
 
 export default {
   title: "AtlasMap|Layout/MainLayout",
@@ -10,7 +10,7 @@ export const example = () => (
   <MainLayout
     loading={boolean("loading", false)}
     contextToolbar={<div>context toolbar</div>}
-    viewToolbar={<div>view toolbar</div>}
+    expressionToolbar={<div>view toolbar</div>}
     controlBar={<div>canvas bar</div>}
     showSidebar={boolean("showSidebar", true)}
     renderSidebar={() => <div>a sidebar</div>}

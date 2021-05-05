@@ -1,0 +1,10 @@
+.toolbar {
+  --pf-c-toolbar--PaddingTop: 0px !important;
+  --pf-c-toolbar--PaddingBottom: 0px !important;
+  border-bottom: 1px solid #ccc;
+}
+
+.toolbarContent {
+  --pf-c-toolbar__content--PaddingLeft: 0px !important;
+  --pf-c-toolbar__content--PaddingRight: 0px !important;
+}

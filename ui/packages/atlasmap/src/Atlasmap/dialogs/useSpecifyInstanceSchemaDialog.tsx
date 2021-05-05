@@ -1,5 +1,5 @@
-import React, { useRef, ReactElement } from "react";
 import { Button, Modal, Radio } from "@patternfly/react-core";
+import React, { ReactElement, useRef } from "react";
 
 import { useToggle } from "../../Atlasmap/utils";
 
@@ -40,7 +40,7 @@ export function useSpecifyInstanceSchemaDialog(
   };
   return [
     <Modal
-      isSmall
+      variant="small"
       title={"Specify Instance/ Schema"}
       description={
         "Distinguish between instance and schema imported file formats."
@@ -60,7 +60,6 @@ export function useSpecifyInstanceSchemaDialog(
           OK
         </Button>,
       ]}
-      isFooterLeftAligned={true}
     >
       {
         <React.Fragment>

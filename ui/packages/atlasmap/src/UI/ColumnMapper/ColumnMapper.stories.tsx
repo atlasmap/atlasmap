@@ -1,8 +1,6 @@
-import React from "react";
-
-import { action } from "@storybook/addon-actions";
-
+import { AddCircleOIcon, ImportIcon } from "@patternfly/react-icons";
 import {
+  CanvasProvider,
   Column,
   ColumnBody,
   ColumnHeader,
@@ -15,13 +13,14 @@ import {
   NodeRefProvider,
   NodesArc,
   SearchableColumnHeader,
-  CanvasProvider,
   Tree,
   TreeGroup,
 } from "..";
-import { TreeItem } from "../Tree/TreeItem";
-import { ImportIcon, AddCircleOIcon } from "@patternfly/react-icons";
+
 import { Button } from "@patternfly/react-core";
+import React from "react";
+import { TreeItem } from "../Tree/TreeItem";
+import { action } from "@storybook/addon-actions";
 
 export default {
   title: "ColumnMapper",

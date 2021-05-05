@@ -1,24 +1,22 @@
-import React, {
-  FunctionComponent,
-  useState,
-  useEffect,
-  useCallback,
-} from "react";
-
-import {
-  Form,
-  FormGroup,
-  TextInput,
-  FormSelect,
-  FormSelectOption,
-  Tooltip,
-  ValidatedOptions,
-} from "@patternfly/react-core";
-
 import {
   ConfirmationDialog,
   IConfirmationDialogProps,
 } from "./ConfirmationDialog";
+import {
+  Form,
+  FormGroup,
+  FormSelect,
+  FormSelectOption,
+  TextInput,
+  Tooltip,
+  ValidatedOptions,
+} from "@patternfly/react-core";
+import React, {
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 
 interface ValueLabelOption {
   label: string;

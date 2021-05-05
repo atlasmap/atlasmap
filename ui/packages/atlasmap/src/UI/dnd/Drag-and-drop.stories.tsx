@@ -1,7 +1,3 @@
-import React from "react";
-
-import { action } from "@storybook/addon-actions";
-
 import {
   Canvas,
   CanvasProvider,
@@ -13,6 +9,9 @@ import {
   NodeRefProvider,
   NodesArc,
 } from "..";
+
+import React from "react";
+import { action } from "@storybook/addon-actions";
 import decorators from "../../stories/decorators";
 
 export default {

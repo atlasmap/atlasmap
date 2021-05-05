@@ -1,11 +1,12 @@
+import { NodeRect, useNodeRect } from "./NodeRefProvider";
 import React, {
+  HTMLAttributes,
   forwardRef,
   useCallback,
   useEffect,
   useState,
-  HTMLAttributes,
 } from "react";
-import { useNodeRect, NodeRect } from "./NodeRefProvider";
+
 import { useCanvas } from "./CanvasContext";
 
 export default forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(

@@ -1,7 +1,8 @@
 import * as React from "react";
-import { render } from "@testing-library/react";
+import { Canvas, CanvasProvider } from "../Canvas";
+
 import { Columns } from "./Columns";
-import { CanvasProvider, Canvas } from "../Canvas";
+import { render } from "@testing-library/react";
 
 describe("Columns tests", () => {
   test("should render", async () => {

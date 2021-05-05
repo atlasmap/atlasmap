@@ -1,8 +1,8 @@
-import React, { FunctionComponent, useRef, useEffect } from "react";
-import { useFilePicker } from "react-sage";
+import { Button, Tooltip } from "@patternfly/react-core";
+import React, { FunctionComponent, useEffect, useRef } from "react";
 
-import { Tooltip, Button } from "@patternfly/react-core";
 import { ImportIcon } from "@patternfly/react-icons";
+import { useFilePicker } from "react-sage";
 
 export interface IImportActionProps {
   id: string;

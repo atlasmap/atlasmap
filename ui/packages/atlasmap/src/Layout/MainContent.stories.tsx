@@ -1,5 +1,5 @@
-import React from "react";
 import { MainContent } from "./MainContent";
+import React from "react";
 import { TextContent } from "@patternfly/react-core";
 
 export default {

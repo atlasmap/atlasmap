@@ -1,28 +1,33 @@
+/*
+    Copyright (C) 2017 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 import React, {
-  FunctionComponent,
   ChangeEvent,
-  useCallback,
+  FunctionComponent,
   ReactElement,
+  useCallback,
 } from "react";
 import {
   Select,
+  SelectGroup,
   SelectOption,
   SelectProps,
-  SelectGroup,
 } from "@patternfly/react-core";
-import { useToggle } from "../Atlasmap/utils";
-import { css, StyleSheet } from "@patternfly/react-styles";
 
-const styles = StyleSheet.create({
-  select: {
-    "& .pf-c-select__menu": {
-      maxWidth: "100%",
-    },
-  },
-  field: {
-    marginLeft: 20,
-  },
-});
+import styles from "./AddFieldTypeahead.module.css";
+import { useToggle } from "../Atlasmap/utils";
 
 export interface IAddFieldTypeaheadField {
   label: string;
@@ -59,7 +64,7 @@ export const AddFieldTypeahead: FunctionComponent<IAddFieldTypeaheadProps> = ({
                 0,
             }}
             data-testid={`add-field-option-${f.label}`}
-            className={css(styles.field)}
+            className={styles.field}
           >
             {f.label}
           </SelectOption>,
@@ -100,14 +105,14 @@ export const AddFieldTypeahead: FunctionComponent<IAddFieldTypeaheadProps> = ({
     <div {...props}>
       <Select
         variant={"typeahead"}
-        ariaLabelTypeAhead={ariaLabelTypeAhead}
+        typeAheadAriaLabel={ariaLabelTypeAhead}
         onToggle={toggle}
-        isExpanded={state}
+        isOpen={state}
         placeholderText={placeholderText}
         onFilter={filterFields}
         onSelect={onSelect}
         maxHeight={300}
-        className={css(styles.select)}
+        className={styles.select}
       >
         {renderOptions(fields)}
       </Select>

@@ -1,10 +1,9 @@
-import { constantTypes } from "@atlasmap/core";
-
-import React, { useCallback, ReactElement, useState } from "react";
-
 import { ConstantDialog, IConstant } from "../../UI";
-import { useToggle } from "../../Atlasmap/utils";
+import React, { ReactElement, useCallback, useState } from "react";
+
 import { IAtlasmapDocument } from "../../Views";
+import { constantTypes } from "@atlasmap/core";
+import { useToggle } from "../../Atlasmap/utils";
 
 type ConstantCallback = (constant: IConstant) => void;
 
@@ -18,9 +17,8 @@ export function useConstantDialog(
     constant?: IConstant,
   ) => void,
 ] {
-  const [onConstantCb, setOnConstantCb] = useState<ConstantCallback | null>(
-    null,
-  );
+  const [onConstantCb, setOnConstantCb] =
+    useState<ConstantCallback | null>(null);
   const [initialConstant, setInitialConstant] = useState<IConstant | null>({
     value: "",
     valueType: constantTypes[0][0],

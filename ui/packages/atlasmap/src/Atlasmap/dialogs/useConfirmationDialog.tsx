@@ -1,8 +1,7 @@
-import React, { useRef, ReactElement, ReactChild } from "react";
-
-import { TextContent } from "@patternfly/react-core";
+import React, { ReactChild, ReactElement, useRef } from "react";
 
 import { ConfirmationDialog } from "../../UI";
+import { TextContent } from "@patternfly/react-core";
 import { useToggle } from "../../Atlasmap/utils";
 
 export function useConfirmationDialog(

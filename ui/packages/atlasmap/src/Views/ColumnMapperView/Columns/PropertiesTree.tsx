@@ -1,16 +1,14 @@
-import React, { FunctionComponent } from "react";
-
-import { Button, Tooltip } from "@patternfly/react-core";
-import { EditIcon, TrashIcon } from "@patternfly/react-icons";
-
-import { Tree, IDragAndDropField } from "../../../UI";
 import {
+  AtlasmapDocumentType,
   IAtlasmapDocument,
   IAtlasmapField,
   IAtlasmapMapping,
-  AtlasmapDocumentType,
 } from "../../models";
-import { commonActions } from "./commonActions";
+import { Button, Tooltip } from "@patternfly/react-core";
+import { EditIcon, TrashIcon } from "@patternfly/react-icons";
+import { IDragAndDropField, Tree } from "../../../UI";
+import { ITraverseFieldsProps, TraverseFields } from "./TraverseFields";
+import React, { FunctionComponent } from "react";
 import {
   SOURCES_FIELD_ID_PREFIX,
   SOURCES_HEIGHT_BOUNDARY_ID,
@@ -21,7 +19,8 @@ import {
   TARGETS_PROPERTIES_ID,
   TARGETS_WIDTH_BOUNDARY_ID,
 } from "./constants";
-import { TraverseFields, ITraverseFieldsProps } from "./TraverseFields";
+
+import { commonActions } from "./commonActions";
 
 export interface IPropertiesTreeCallbacks {
   acceptDropType: AtlasmapDocumentType;

@@ -1,10 +1,11 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
 import {
   Alert,
   AlertActionCloseButton,
   AlertProps,
   // Progress,
 } from "@patternfly/react-core";
+import React, { FunctionComponent, useEffect, useState } from "react";
+
 import { useToggle } from "../Atlasmap/utils";
 
 export interface ITimedToastProps {
@@ -48,7 +49,7 @@ export const TimedToast: FunctionComponent<ITimedToastProps> = ({
       isLiveRegion
       variant={variant}
       title={title}
-      action={
+      actionClose={
         <AlertActionCloseButton
           title={title}
           variantLabel={`${variant} alert`}

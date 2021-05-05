@@ -1,72 +1,43 @@
+/*
+    Copyright (C) 2017 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+import { AngleDownIcon, AngleRightIcon } from "@patternfly/react-icons";
 import {
+  Button,
   Card,
   CardActions,
   CardBody,
-  CardHead,
   CardHeader,
+  CardTitle,
   Title,
-  Button,
 } from "@patternfly/react-core";
-import { css, StyleSheet } from "@patternfly/react-styles";
 import React, {
-  forwardRef,
   HTMLAttributes,
   KeyboardEvent,
   MouseEvent,
   PropsWithChildren,
   ReactElement,
   ReactNode,
+  forwardRef,
   useCallback,
 } from "react";
-import { useToggle } from "../Atlasmap/utils";
 
-import { AngleDownIcon, AngleRightIcon } from "@patternfly/react-icons";
 import { TruncatedString } from "./TruncatedString";
-
-const styles = StyleSheet.create({
-  card: {
-    padding: "0 !important",
-  },
-  stacked: {
-    margin: "1rem 0",
-  },
-  head: {
-    padding: "0.5rem 0 !important",
-  },
-  header: {
-    width: "100%",
-    overflow: "hidden",
-  },
-  actions: {
-    alignSelf: "center",
-  },
-  headerButton: {
-    maxWidth: "100%",
-  },
-  bodyNoPadding: {
-    padding: "0 !important",
-  },
-  bodyWithPadding: {
-    padding: "0 1rem 1rem !important",
-  },
-  noCardPadding: {},
-  hidden: {
-    display: "none",
-  },
-  noShadows: {
-    boxShadow: "none !important",
-  },
-  dropTarget: {
-    "&:before": {
-      background: "var(--pf-global--active-color--400) !important",
-    },
-  },
-  dropAccepted: {
-    "&:before": {
-      background: "var(--pf-global--success-color--100) !important",
-    },
-  },
-});
+import { css } from "@patternfly/react-styles";
+import styles from "./Document.module.css";
+import { useToggle } from "../Atlasmap/utils";
 
 export interface IDocumentProps
   extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
@@ -166,12 +137,12 @@ export const Document = forwardRef<
         aria-label={title}
       >
         {(title || actions) && (
-          <CardHead className={css(styles.head)}>
+          <CardHeader data-codemods="true" className={css(styles.head)}>
             <CardActions className={css(styles.actions)}>
               {actions?.filter((a) => a)}
             </CardActions>
             {title && (
-              <CardHeader className={css(styles.header)}>
+              <CardTitle className={css(styles.header)}>
                 <Button
                   variant={"plain"}
                   onClick={toggleExpanded}
@@ -179,16 +150,16 @@ export const Document = forwardRef<
                   data-testid={`expand-collapse-${title}-button`}
                   className={css(styles.headerButton)}
                 >
-                  <Title size={"lg"} headingLevel={"h2"} aria-label={title}>
+                  <Title size="lg" headingLevel={"h2"} aria-label={title}>
                     <TruncatedString title={title}>
                       {isExpanded ? <AngleDownIcon /> : <AngleRightIcon />}{" "}
                       {title}
                     </TruncatedString>
                   </Title>
                 </Button>
-              </CardHeader>
+              </CardTitle>
             )}
-          </CardHead>
+          </CardHeader>
         )}
         <CardBody
           className={css(

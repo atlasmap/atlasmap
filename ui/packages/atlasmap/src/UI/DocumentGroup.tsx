@@ -1,27 +1,27 @@
+/*
+    Copyright (C) 2017 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+import { FolderCloseIcon, FolderOpenIcon } from "@patternfly/react-icons";
 import React, {
-  forwardRef,
   PropsWithChildren,
   ReactElement,
+  forwardRef,
   useRef,
 } from "react";
-
-import { FolderCloseIcon, FolderOpenIcon } from "@patternfly/react-icons";
-import { css, StyleSheet } from "@patternfly/react-styles";
 import { Tooltip } from "@patternfly/react-core";
-
-const styles = StyleSheet.create({
-  buttonContent: {
-    display: "flex",
-    alignItems: "center",
-    padding: "0.5rem 1rem 0.5rem 1.2rem",
-  },
-  buttonIcon: {
-    marginRight: "1rem",
-  },
-  icon: {
-    paddingLeft: "1.5rem",
-  },
-});
+import styles from "./DocumentGroup.module.css";
 
 export interface IDocumentGroupProps {
   name: string;
@@ -55,18 +55,18 @@ export const DocumentGroup = forwardRef<
 
   return (
     <span
-      className={css(styles.buttonContent)}
+      className={styles.buttonContent}
       ref={handleRef}
       data-testid={`field-group-${name}-expanded-${expanded}-field`}
     >
-      <span className={css(styles.buttonIcon)}>
+      <span className={styles.buttonIcon}>
         {expanded ? <FolderOpenIcon /> : <FolderCloseIcon />}
       </span>
       {name}
       {showType && ` (${type})`}
       {icon && (
         <Tooltip enableFlip content={iconTooltip}>
-          <span className={css(styles.icon)}>{icon}</span>
+          <span className={styles.icon}>{icon}</span>
         </Tooltip>
       )}
     </span>

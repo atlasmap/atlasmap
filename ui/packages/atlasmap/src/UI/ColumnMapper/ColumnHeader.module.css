@@ -1,0 +1,26 @@
+.header {
+  flex: 0 1 0;
+}
+
+.plain {
+  background: transparent;
+  border: 0 none transparent;
+}
+
+.toolbar {
+  background: var(--pf-global--BackgroundColor--150);
+  border: 1px solid var(--pf-global--BorderColor--100);
+  border-bottom: 0;
+  padding: var(--pf-global--spacer--sm) var(--pf-global--spacer--md);
+  box-sizing: initial;
+  display: flex;
+  flex-flow: row no-wrap;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  flex: 1 0 auto;
+  margin-right: var(--pf-global--spacer--sm);
+  height: 36px;
+}

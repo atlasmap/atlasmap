@@ -23,7 +23,9 @@ module.exports = ({ config }) => {
   // HACK: Instruct Babel to check module type before injecting Core JS polyfills
   // https://github.com/i-like-robots/broken-webpack-bundle-test-case
   const babelConfig = jsRule.use.find(({ loader }) => loader === 'babel-loader')
-  babelConfig.options.sourceType = 'unambiguous'
+  if (babelConfig) {
+    babelConfig.options.sourceType = 'unambiguous'
+  }
 
   // HACK: Ensure we only bundle one instance of React
   config.resolve.alias.react = require.resolve('react')
@@ -36,7 +38,49 @@ module.exports = ({ config }) => {
       path.resolve(__dirname, "..")
     ]
   })
-  
+
+  const cssModuleRegex = /\.module\.css$/;
+  config.module.rules.forEach((rule, idx) => {
+    if (rule.test.test('.css')) {
+      if (rule.exclude) {
+        if (Array.isArray(rule.exclude)) {
+          rule.exclude = [...rule.exclude, cssModuleRegex]
+        } else {
+          rule.exclude = [rule.exclude, cssModuleRegex]
+        }
+      } else {
+        rule.exclude = cssModuleRegex;
+      }
+    }
+  })
+
+  config.module.rules.push({
+    test: /\.module\.css$/,
+    sideEffects: true,
+    use: [
+      "style-loader",
+      {
+        loader: "css-loader",
+        options: {
+          importLoaders: 1,
+          modules : {
+            localIdentName: "[path][name]__[local]--[hash:base64:5]",
+          }
+        }
+      },
+      {
+        loader: "postcss-loader",
+        options: {
+          postcssOptions: {
+            plugins: [
+              [ 'postcss-preset-env', {'stage': 0}],
+            ],
+          }
+        }
+      }
+    ],
+    include: [ path.resolve(__dirname, '../') ]
+  })
 
   return config
 }

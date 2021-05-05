@@ -1,0 +1,16 @@
+.button {
+  padding: 0 !important;
+}
+
+.content {
+  font-size: inherit !important;
+}
+
+.content > div {
+  box-sizing: border-box;
+  padding:
+    var(--pf-c-accordion__expanded-content-body--PaddingTop) 0 var(--pf-c-accordion__expanded-content-body--PaddingBottom) 1.2rem !important;
+}
+.hiddenContent {
+    display: none;
+}

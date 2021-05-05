@@ -1,11 +1,10 @@
-import React from "react";
-
-import { action } from "@storybook/addon-actions";
-
 import {
   AddFieldTypeahead,
   IAddFieldTypeaheadField,
 } from "./AddFieldTypeahead";
+
+import React from "react";
+import { action } from "@storybook/addon-actions";
 
 export default {
   title: "UI|Mapping Details/Add field typeahead",

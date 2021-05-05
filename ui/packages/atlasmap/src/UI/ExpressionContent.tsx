@@ -1,3 +1,13 @@
+import {
+  Button,
+  Form,
+  FormGroup,
+  InputGroup,
+  TextInput,
+  Tooltip,
+} from "@patternfly/react-core";
+import { EnumValue, useToggle } from "../Atlasmap/utils";
+import { Observable, Subscription } from "rxjs";
 import React, {
   FunctionComponent,
   KeyboardEvent,
@@ -5,22 +15,11 @@ import React, {
   useCallback,
   useEffect,
 } from "react";
-import { Observable, Subscription } from "rxjs";
-
-import {
-  Button,
-  Form,
-  FormGroup,
-  InputGroup,
-  Tooltip,
-  TextInput,
-} from "@patternfly/react-core";
-import { css } from "@patternfly/react-styles";
-import styles from "@patternfly/react-styles/css/components/FormControl/form-control";
 
 import { ExpressionEnumSelect } from "./ExpressionEnumSelect";
 import { ExpressionFieldSearch } from "./ExpressionFieldSearch";
-import { EnumValue, useToggle } from "../Atlasmap/utils";
+import { css } from "@patternfly/react-styles";
+import styles from "@patternfly/react-styles/css/components/FormControl/form-control";
 
 let atIndex = -1;
 let atContainer: Node | undefined;

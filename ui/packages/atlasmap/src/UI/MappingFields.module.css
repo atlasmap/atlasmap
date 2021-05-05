@@ -1,0 +1,8 @@
+.wrapper {
+  background: var(--pf-global--BackgroundColor--light-300);
+  padding: 1rem;
+  margin: 1rem 0;
+}
+.wrapper .pf-c-expandable__content {
+  margin: 0 !important;
+}

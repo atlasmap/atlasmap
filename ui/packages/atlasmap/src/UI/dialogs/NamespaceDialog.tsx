@@ -1,16 +1,14 @@
-import React, {
-  FunctionComponent,
-  useState,
-  useEffect,
-  useCallback,
-} from "react";
-
-import { Form, FormGroup, TextInput, Checkbox } from "@patternfly/react-core";
-
+import { Checkbox, Form, FormGroup, TextInput } from "@patternfly/react-core";
 import {
   ConfirmationDialog,
   IConfirmationDialogProps,
 } from "./ConfirmationDialog";
+import React, {
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 
 export interface INamespace {
   alias: string;

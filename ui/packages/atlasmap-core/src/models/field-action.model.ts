@@ -97,7 +97,8 @@ export class FieldAction {
         return argValue;
       }
     }
-    const newArgValue: FieldActionArgumentValue = new FieldActionArgumentValue();
+    const newArgValue: FieldActionArgumentValue =
+      new FieldActionArgumentValue();
     newArgValue.name = argumentName;
     newArgValue.value = '0';
     this.argumentValues.push(newArgValue);

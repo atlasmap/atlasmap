@@ -1,4 +1,4 @@
-import React, { forwardRef, SVGAttributes } from "react";
+import React, { SVGAttributes, forwardRef } from "react";
 
 export const AtlasmapLogo = forwardRef<
   SVGSVGElement,

@@ -145,7 +145,7 @@ public class E2ETest {
         waitForLoad.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@data-testid='export-mappings-button']")));
         WebElement exportBtn = driver.findElement(By.xpath("//a[@data-testid='export-mappings-button']"));
         exportBtn.click();
-        WebElement dialogDiv = driver.findElement(By.xpath("//div[@role='dialog' and @aria-label='Export Mappings and Documents.']"));
+        WebElement dialogDiv = driver.findElement(By.xpath("//div[@data-testid='export-catalog-dialog']/.."));
         WebElement exportInput = dialogDiv.findElement(By.id("filename"));
         String exportAdmFileName = UUID.randomUUID().toString() + "-exported.adm";
         exportInput.clear();

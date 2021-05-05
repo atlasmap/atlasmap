@@ -1,15 +1,23 @@
-import React, { FunctionComponent, useRef, useLayoutEffect } from "react";
+/*
+    Copyright (C) 2017 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+import React, { FunctionComponent, useLayoutEffect, useRef } from "react";
 
 import { Accordion } from "@patternfly/react-core";
-import { css, StyleSheet } from "@patternfly/react-styles";
-
 import { TreeFocusProvider } from "./TreeFocusProvider";
-
-const styles = StyleSheet.create({
-  accordion: {
-    padding: "0 1rem 0 0 !important", // TODO: this padding should be 0 and the right spacing should be given by DocumentGroup
-  },
-});
+import styles from "./Tree.module.css";
 
 export const Tree: FunctionComponent = ({ children }) => {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -32,8 +40,7 @@ export const Tree: FunctionComponent = ({ children }) => {
       <div ref={ref}>
         <Accordion
           asDefinitionList={false}
-          className={css(styles.accordion)}
-          noBoxShadow={true}
+          className={styles.accordion}
           role={"tree"}
         >
           {children}

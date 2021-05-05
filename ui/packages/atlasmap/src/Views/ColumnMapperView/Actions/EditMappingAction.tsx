@@ -1,6 +1,6 @@
+import { Button, Tooltip } from "@patternfly/react-core";
 import React, { FunctionComponent } from "react";
 
-import { Tooltip, Button } from "@patternfly/react-core";
 import { ExchangeAltIcon } from "@patternfly/react-icons";
 
 export interface IEditMappingActionProps {

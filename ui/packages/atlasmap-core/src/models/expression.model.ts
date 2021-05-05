@@ -73,8 +73,8 @@ export class FieldNode extends ExpressionNode {
 
         // Factor scope from property meta data.
         if (fieldParts[0].startsWith('DOC.' + DocumentDefaultName.PROPERTIES)) {
-          const pathSeparator = ConfigModel.getConfig().sourcePropertyDoc
-            .pathSeparator;
+          const pathSeparator =
+            ConfigModel.getConfig().sourcePropertyDoc.pathSeparator;
           const propParts = fieldParts[1].split(pathSeparator);
           if (propParts.length === 3) {
             this.mappedField = mapping.getMappedFieldByName(
@@ -442,9 +442,9 @@ export class ExpressionModel {
       nextNode instanceof TextNode &&
       newNodes[newNodes.length - 1] instanceof TextNode
     ) {
-      updatedEvent.offset = (newNodes[
-        newNodes.length - 1
-      ] as TextNode).str.length;
+      updatedEvent.offset = (
+        newNodes[newNodes.length - 1] as TextNode
+      ).str.length;
       nextNode.str =
         (newNodes[newNodes.length - 1] as TextNode).str +
         (nextNode as TextNode).str;
@@ -467,9 +467,9 @@ export class ExpressionModel {
         updatedEvent.offset = 0;
       } else {
         updatedEvent.node = newNodes[newNodes.length - 1];
-        updatedEvent.offset = (newNodes[
-          newNodes.length - 1
-        ] as TextNode).str.length;
+        updatedEvent.offset = (
+          newNodes[newNodes.length - 1] as TextNode
+        ).str.length;
       }
     }
     this.updateCache();
@@ -509,9 +509,8 @@ export class ExpressionModel {
     }
 
     // Requires position handling
-    let updatedEvent:
-      | ExpressionUpdatedEvent
-      | undefined = new ExpressionUpdatedEvent();
+    let updatedEvent: ExpressionUpdatedEvent | undefined =
+      new ExpressionUpdatedEvent();
     let targetNode = this._nodes.find((n) => n.getUuid() === tokenPosition);
     // TODO: check this non null operator
     let targetNodeIndex = this._nodes.indexOf(targetNode!);
@@ -550,9 +549,9 @@ export class ExpressionModel {
         ) {
           const newOffset = (this._nodes[targetNodeIndex - 1] as TextNode).str
             .length;
-          (this._nodes[targetNodeIndex - 1] as TextNode).str += (this._nodes[
-            targetNodeIndex
-          ] as TextNode).str;
+          (this._nodes[targetNodeIndex - 1] as TextNode).str += (
+            this._nodes[targetNodeIndex] as TextNode
+          ).str;
           this._nodes.splice(targetNodeIndex, 1);
           updatedEvent.node = this._nodes[targetNodeIndex - 1];
           updatedEvent.offset = newOffset;
@@ -566,9 +565,9 @@ export class ExpressionModel {
           updatedEvent.offset = 3;
         } else if (this._nodes[targetNodeIndex - 1] instanceof TextNode) {
           updatedEvent.node = this._nodes[targetNodeIndex - 1];
-          updatedEvent.offset = (this._nodes[
-            targetNodeIndex - 1
-          ] as TextNode).str.length;
+          updatedEvent.offset = (
+            this._nodes[targetNodeIndex - 1] as TextNode
+          ).str.length;
         } else if (this._nodes[targetNodeIndex] instanceof TextNode) {
           updatedEvent.node = this._nodes[targetNodeIndex];
           updatedEvent.offset = 0;
@@ -655,9 +654,9 @@ export class ExpressionModel {
         this._nodes[index - 1] instanceof TextNode &&
         this._nodes[index] instanceof TextNode
       ) {
-        (this._nodes[index - 1] as TextNode).str += (this._nodes[
-          index
-        ] as TextNode).str;
+        (this._nodes[index - 1] as TextNode).str += (
+          this._nodes[index] as TextNode
+        ).str;
         this._nodes.splice(index, 1);
       }
     }

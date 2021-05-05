@@ -1,10 +1,3 @@
-import React, {
-  FunctionComponent,
-  useState,
-  useCallback,
-  useEffect,
-} from "react";
-
 import {
   Button,
   Form,
@@ -15,12 +8,17 @@ import {
   Switch,
   TextInput,
 } from "@patternfly/react-core";
-
 import {
   ConfirmationDialog,
   IConfirmationDialogProps,
 } from "./ConfirmationDialog";
 import { PlusIcon, TrashIcon } from "@patternfly/react-icons";
+import React, {
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 
 export interface IParameter {
   name: string;

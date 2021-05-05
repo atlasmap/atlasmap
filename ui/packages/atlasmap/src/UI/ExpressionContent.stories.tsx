@@ -1,10 +1,9 @@
-import React from "react";
-
 import { boolean, text } from "@storybook/addon-knobs";
-import { action } from "@storybook/addon-actions";
 
-import { ExpressionContent } from "./ExpressionContent";
 import { EnumValue } from "../../src/Atlasmap/utils";
+import { ExpressionContent } from "./ExpressionContent";
+import React from "react";
+import { action } from "@storybook/addon-actions";
 
 export default {
   title: "UI|Mapping expression",

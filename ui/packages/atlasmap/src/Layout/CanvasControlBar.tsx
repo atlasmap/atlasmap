@@ -1,15 +1,14 @@
-import React, { FunctionComponent, useCallback, useMemo } from "react";
-
 import {
   ExpandArrowsAltIcon,
   ExpandIcon,
   SearchMinusIcon,
   SearchPlusIcon,
 } from "@patternfly/react-icons";
+import React, { FunctionComponent, useCallback, useMemo } from "react";
 import {
-  createTopologyControlButtons,
   TopologyControlBar,
   TopologyControlButton,
+  createTopologyControlButtons,
 } from "@patternfly/react-topology";
 
 import { useCanvas } from "../UI";

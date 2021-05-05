@@ -1,7 +1,7 @@
-import React, { useCallback, useState, ReactElement } from "react";
+import React, { ReactElement, useCallback, useState } from "react";
 
-import { useAtlasmap } from "../AtlasmapProvider";
 import { AboutDialog } from "../../UI";
+import { useAtlasmap } from "../AtlasmapProvider";
 import { useToggle } from "../../Atlasmap/utils";
 
 export function useAboutDialog(): [ReactElement, () => void] {

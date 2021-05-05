@@ -1,7 +1,6 @@
 import React from "react";
-
-import { boolean } from "@storybook/addon-knobs";
 import { Sidebar } from "./Sidebar";
+import { boolean } from "@storybook/addon-knobs";
 
 export default {
   title: "AtlasMap|Layout/Sidebar",

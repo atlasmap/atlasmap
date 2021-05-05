@@ -1,17 +1,18 @@
-import { initializationService } from "./ui";
 import {
   ConfigModel,
-  Field,
-  constantTypes,
-  propertyTypes,
-  MappingModel,
-  MappedField,
   ErrorInfo,
   ErrorLevel,
   ErrorScope,
   ErrorType,
+  Field,
+  MappedField,
+  MappingModel,
+  constantTypes,
+  propertyTypes,
 } from "@atlasmap/core";
+
 import { LookupTableData } from "../../UI";
+import { initializationService } from "./ui";
 
 export type EnumValue = {
   name: string;
@@ -459,9 +460,10 @@ export function getEnumerationValues(): LookupTableData[] {
  * @param nodeId - enumeration field node ID
  */
 export function getFieldEnums(nodeId: string): EnumValue[] {
-  const uuidNode = initializationService.cfg.mappings!.activeMapping!.transition.expression!.getNode(
-    nodeId,
-  );
+  const uuidNode =
+    initializationService.cfg.mappings!.activeMapping!.transition.expression!.getNode(
+      nodeId,
+    );
   if (uuidNode && uuidNode.mappedField?.field.enumeration) {
     return uuidNode.mappedField.field.enumValues;
   }

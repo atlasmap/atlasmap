@@ -1,9 +1,9 @@
 import {
-  useState,
+  MutableRefObject,
   useCallback,
   useLayoutEffect,
   useRef,
-  MutableRefObject,
+  useState,
 } from "react";
 
 const noSize = {
@@ -43,7 +43,7 @@ export function useDimensions<T = HTMLDivElement>({
 
   const measure = useCallback(() => {
     if (ref.current) {
-      const d = ((ref.current as unknown) as HTMLElement).getBoundingClientRect();
+      const d = (ref.current as unknown as HTMLElement).getBoundingClientRect();
       if (
         areRectsDifferent(d as DOMRect, previousDimensions.current as DOMRect)
       ) {

@@ -1,15 +1,13 @@
-import React, { FunctionComponent } from "react";
-
 import { Button, Tooltip } from "@patternfly/react-core";
 import { EditIcon, TrashIcon } from "@patternfly/react-icons";
-
-import { Tree, IDragAndDropField } from "../../../UI";
 import {
   IAtlasmapDocument,
   IAtlasmapField,
   IAtlasmapMapping,
 } from "../../models";
-import { commonActions } from "./commonActions";
+import { IDragAndDropField, Tree } from "../../../UI";
+import { ITraverseFieldsProps, TraverseFields } from "./TraverseFields";
+import React, { FunctionComponent } from "react";
 import {
   SOURCES_CONSTANTS_ID,
   SOURCES_DRAGGABLE_TYPE,
@@ -18,7 +16,8 @@ import {
   SOURCES_WIDTH_BOUNDARY_ID,
   TARGETS_DRAGGABLE_TYPE,
 } from "./constants";
-import { TraverseFields, ITraverseFieldsProps } from "./TraverseFields";
+
+import { commonActions } from "./commonActions";
 
 export interface IConstantsTreeCallbacks {
   onDrop: (source: IAtlasmapField, target: IDragAndDropField) => void;

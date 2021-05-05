@@ -1,67 +1,30 @@
+/*
+    Copyright (C) 2017 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 import React, {
-  forwardRef,
   PropsWithChildren,
   ReactChild,
   ReactElement,
+  forwardRef,
 } from "react";
 
-import { css, StyleSheet } from "@patternfly/react-styles";
-
-import { TruncatedString } from "./TruncatedString";
-import { useToggle } from "../Atlasmap/utils";
 import { Tooltip } from "@patternfly/react-core";
-
-const styles = StyleSheet.create({
-  element: {
-    "--bg-color": "var(--pf-global--BackgroundColor--100)",
-    "--bg-color-fade": "rgba(255, 255, 255, 0.5)",
-    color: "var(--pf-global--Color--100)",
-    border: "3px solid transparent",
-    background: "var(--bg-color)",
-  },
-  row: {
-    // padding: "0 1rem",
-    display: "flex",
-    position: "relative",
-  },
-  nameWrapper: {
-    display: "flex !important",
-    alignItems: "center",
-  },
-  nameIcon: {
-    width: "48px",
-  },
-  statusIcons: {
-    display: "flex",
-    alignItems: "center",
-    padding: "0 1rem",
-    "& > *": {
-      margin: "0 0.5rem",
-    },
-  },
-  isDragging: {
-    color: "var(--pf-global--active-color--400)",
-  },
-  isSelected: {
-    "--bg-color": "var(--pf-global--BackgroundColor--150)",
-    "--bg-color-fade": "rgba(245, 245, 245, 0.5)",
-  },
-  isDisabled: {
-    pointerEvents: "none",
-    color: "var(--pf-global--disabled-color--200)",
-  },
-  actions: {
-    position: "absolute",
-    top: 0,
-    right: 0,
-    height: "100%",
-    textAlign: "right",
-    transition: "all 0.2s",
-    background:
-      "linear-gradient(to left, var(--bg-color) calc(100% - 2rem), var(--bg-color-fade))",
-    paddingLeft: "2rem",
-  },
-});
+import { TruncatedString } from "./TruncatedString";
+import { css } from "@patternfly/react-styles";
+import styles from "./DocumentField.module.css";
+import { useToggle } from "../Atlasmap/utils";
 
 export interface IDocumentFieldProps {
   name: ReactChild;
@@ -114,8 +77,8 @@ export const DocumentField = forwardRef<
       onMouseEnter={!isDisabled ? showActions : undefined}
       onMouseLeave={!isDisabled ? hideActions : undefined}
     >
-      <div className={css(styles.row)}>
-        {icon && <div className={css(styles.nameIcon)}>{icon}</div>}
+      <div className={styles.row}>
+        {icon && <div className={styles.nameIcon}>{icon}</div>}
         <Tooltip
           key={`${name}`}
           position={"auto"}
@@ -125,7 +88,7 @@ export const DocumentField = forwardRef<
           exitDelay={100}
         >
           <div
-            className={css(styles.nameWrapper)}
+            className={styles.nameWrapper}
             data-testid={`document-${name}-field`}
           >
             <TruncatedString>{name}</TruncatedString>
@@ -136,7 +99,7 @@ export const DocumentField = forwardRef<
           </div>
         </Tooltip>
         {(isHovering || isFocused) && actions && !isDisabled && (
-          <div className={css(styles.actions)}>{actions?.filter((a) => a)}</div>
+          <div className={styles.actions}>{actions?.filter((a) => a)}</div>
         )}
       </div>
       {children}

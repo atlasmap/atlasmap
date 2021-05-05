@@ -1,8 +1,6 @@
-import React from "react";
-
-import { action } from "@storybook/addon-actions";
-
 import { MappingDetailsSidebar } from "./MappingDetailsSidebar";
+import React from "react";
+import { action } from "@storybook/addon-actions";
 
 export default {
   title: "AtlasMap|Layout/MappingDetailsSidebar",

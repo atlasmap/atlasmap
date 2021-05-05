@@ -1,0 +1,14 @@
+.document {
+  font-weight: bold;
+}
+
+.field {
+  margin-left: 20;
+}
+
+.enumSelectMenu {
+  margin: var(--pf-global--spacer--form-element) 0;
+  width: 40%;
+}
+
+

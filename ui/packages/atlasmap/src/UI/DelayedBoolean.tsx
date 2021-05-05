@@ -1,4 +1,4 @@
-import { FunctionComponent, useState, useEffect, ReactElement } from "react";
+import { FunctionComponent, ReactElement, useEffect, useState } from "react";
 
 export interface IDelayedBooleanProps {
   value: boolean;

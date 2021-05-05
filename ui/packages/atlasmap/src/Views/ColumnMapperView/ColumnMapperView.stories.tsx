@@ -1,9 +1,5 @@
-import React from "react";
-
-import { action } from "@storybook/addon-actions";
-import { boolean } from "@storybook/addon-knobs";
-
-import decorators from "../../stories/decorators";
+import { CanvasProvider, Column } from "../../UI";
+import { MappingsColumn, SourcesColumn, TargetsColumn } from "../../Views";
 import {
   constants,
   mappings,
@@ -11,8 +7,11 @@ import {
   sources,
   targets,
 } from "../../stories/sampleData";
-import { CanvasProvider, Column } from "../../UI";
-import { MappingsColumn, SourcesColumn, TargetsColumn } from "../../Views";
+
+import React from "react";
+import { action } from "@storybook/addon-actions";
+import { boolean } from "@storybook/addon-knobs";
+import decorators from "../../stories/decorators";
 
 export default {
   title: "AtlasMap|Views/ColumnMapperView",

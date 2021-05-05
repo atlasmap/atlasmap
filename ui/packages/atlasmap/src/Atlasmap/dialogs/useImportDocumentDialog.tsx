@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useCallback, ReactElement } from "react";
+import { ReactElement, useCallback } from "react";
 
 import { useAtlasmap } from "../AtlasmapProvider";
 import { useConfirmationDialog } from "./useConfirmationDialog";
@@ -19,18 +19,15 @@ export function useImportDocumentDialog(): [
     "Select CSV Processing Parameters",
   );
   const [defaultSchema, setDefaultSchema] = useState(false);
-  const [
-    specifyInstanceSchemaDialog,
-    openSpecifyInstanceSchema,
-  ] = useSpecifyInstanceSchemaDialog(defaultSchema);
+  const [specifyInstanceSchemaDialog, openSpecifyInstanceSchema] =
+    useSpecifyInstanceSchemaDialog(defaultSchema);
 
   const importFile = useCallback(
     (selectedFile: File, isSource: boolean) => {
       if (selectedFile.name) {
         const userFileSplit = selectedFile.name.split(".");
-        const userFileSuffix: string = userFileSplit[
-          userFileSplit.length - 1
-        ].toUpperCase();
+        const userFileSuffix: string =
+          userFileSplit[userFileSplit.length - 1].toUpperCase();
         if (userFileSuffix === "CSV") {
           openParametersDialog(
             (parameters) => {

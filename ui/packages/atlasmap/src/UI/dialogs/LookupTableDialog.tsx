@@ -1,5 +1,18 @@
-import React, { FunctionComponent, useState } from "react";
+/*
+    Copyright (C) 2017 Red Hat, Inc.
 
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 import {
   Form,
   FormGroup,
@@ -7,27 +20,10 @@ import {
   FormSelectOption,
   Label,
 } from "@patternfly/react-core";
+import React, { FunctionComponent, useState } from "react";
 
 import { IConfirmationDialogProps } from "./ConfirmationDialog";
-import { css, StyleSheet } from "@patternfly/react-styles";
-
-const styles = StyleSheet.create({
-  iGroup: {
-    marginBottom: "1.0rem",
-    marginLeft: "0.5rem",
-    width: 500,
-  },
-  iSelectBody: {
-    fontSize: 14,
-    width: 250,
-  },
-  iSelectLabel: {
-    fontSize: 14,
-    marginTop: "0.2rem",
-    width: 225,
-    marginRight: "0.5rem",
-  },
-});
+import styles from "./LookupTableDialog.module.css";
 
 export type LookupTableData = {
   sourceEnumValue: string;
@@ -59,12 +55,12 @@ export const LookupTableDialog: FunctionComponent<ILookupTableDialogProps> = ({
 
   return (
     <Form>
-      <FormGroup className={css(styles.iGroup)} fieldId={"lookup-table-row"}>
-        <Label className={css(styles.iSelectLabel)}>
+      <FormGroup className={styles.iGroup} fieldId={"lookup-table-row"}>
+        <Label className={styles.iSelectLabel}>
           {enumerationValue.sourceEnumValue}
         </Label>
         <FormSelect
-          className={css(styles.iSelectBody)}
+          className={styles.iSelectBody}
           value={targetEnum}
           aria-label={"enum-map"}
           autoFocus={true}

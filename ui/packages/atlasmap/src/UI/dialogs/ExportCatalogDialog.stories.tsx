@@ -1,9 +1,7 @@
-import React from "react";
-
-import { boolean } from "@storybook/addon-knobs";
-import { action } from "@storybook/addon-actions";
-
 import { ExportCatalogDialog } from "./ExportCatalogDialog";
+import React from "react";
+import { action } from "@storybook/addon-actions";
+import { boolean } from "@storybook/addon-knobs";
 
 export default {
   title: "UI|Dialogs",

@@ -1,9 +1,9 @@
-import React from "react";
 import { Canvas } from "./Canvas";
 import { CanvasProvider } from "./CanvasContext";
 import { HTMLObject } from "./HTMLObject";
 import { Movable } from "./Movable";
 import PrintMovableRects from "./PrintMovableRects";
+import React from "react";
 
 export default {
   title: "Canvas",

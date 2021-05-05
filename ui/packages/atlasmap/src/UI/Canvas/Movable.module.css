@@ -1,0 +1,6 @@
+.movable {
+  cursor: grab;
+}
+.movable:active {
+  cursor: "grabbing",
+}

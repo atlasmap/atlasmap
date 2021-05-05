@@ -1,10 +1,25 @@
+/*
+    Copyright (C) 2017 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 import {
-  Modal,
   Button,
-  TextInput,
   FormSelect,
   FormSelectOption,
   Label,
+  Modal,
+  TextInput,
 } from "@patternfly/react-core";
 import React, {
   FormEvent,
@@ -13,9 +28,10 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { createPortal } from "react-dom";
-import { css, StyleSheet } from "@patternfly/react-styles";
+
 import { CancelCallback } from "./useSingleInputDialog";
+import { createPortal } from "react-dom";
+import styles from "./useInputTextSelectDialog.module.css";
 
 export type ConfirmInputTextCallback = (
   value1: string,
@@ -106,30 +122,9 @@ export function useInputTextSelectDialog({
     closeModal();
   }, [onCancel]);
 
-  const styles = StyleSheet.create({
-    iGroup: {
-      marginBottom: "1.0rem",
-      marginLeft: "0.5rem",
-    },
-    iSelectBody: {
-      width: 200,
-      marginLeft: "0.5rem",
-    },
-    iSelectLabel: {
-      marginTop: "1.5rem",
-      marginLeft: "0.5rem",
-      width: 150,
-      marginRight: "250",
-    },
-    iGroupTextLabel: {
-      marginTop: "1.0rem",
-      width: 425,
-    },
-  });
-
   const modal = createPortal(
     <Modal
-      isSmall
+      variant="small"
       title={title}
       isOpen={isOpen}
       onClose={closeModal}
@@ -154,18 +149,17 @@ export function useInputTextSelectDialog({
           Cancel
         </Button>,
       ]}
-      isFooterLeftAligned={false}
     >
       {textLabel1 && (
         <>
           <TextInput
-            className={css(styles.iGroupTextLabel)}
+            className={styles.iGroupTextLabel}
             value={value1}
             type="text"
             onChange={handleTextInputChange}
             aria-label={title}
             isRequired={true}
-            isValid={isValid}
+            validated={isValid ? "default" : "error"}
             isDisabled={text1ReadOnly}
             placeholder={textLabel1}
             data-testid={"itsd-value1-text-input"}
@@ -176,13 +170,13 @@ export function useInputTextSelectDialog({
       {textLabel2.length > 0 && (
         <>
           <TextInput
-            className={css(styles.iGroupTextLabel)}
+            className={styles.iGroupTextLabel}
             value={value2}
             type="text"
             onChange={handleTextInputChange2}
             aria-label={title}
             isRequired={true}
-            isValid={isValid}
+            validated={isValid ? "default" : "error"}
             placeholder={textLabel2}
             data-testid={"itsd-value2-text-input"}
           />
@@ -190,9 +184,9 @@ export function useInputTextSelectDialog({
       )}
       {selectLabel && (
         <>
-          <Label className={css(styles.iSelectLabel)}>{selectLabel}</Label>
+          <Label className={styles.iSelectLabel}>{selectLabel}</Label>
           <FormSelect
-            className={css(styles.iSelectBody)}
+            className={styles.iSelectBody}
             value={selectValue}
             id={selectValue}
             onChange={handleSelect}

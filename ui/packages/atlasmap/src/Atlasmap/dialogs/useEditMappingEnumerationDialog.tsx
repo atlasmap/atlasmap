@@ -1,11 +1,12 @@
-import React, { ReactElement, useCallback, useState } from "react";
 import {
   ConfirmationDialog,
-  LookupTableDialog,
   LookupTableData,
+  LookupTableDialog,
 } from "../../UI";
-import { useToggle } from "../../Atlasmap/utils";
+import React, { ReactElement, useCallback, useState } from "react";
 import { getEnumerationValues, updateEnumerationValues } from "../utils";
+
+import { useToggle } from "../../Atlasmap/utils";
 
 type LookupTableCallback = () => void;
 

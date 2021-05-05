@@ -1,5 +1,18 @@
-import React, { FunctionComponent, MouseEvent } from "react";
+/*
+    Copyright (C) 2017 Red Hat, Inc.
 
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 import {
   Bullseye,
   EmptyState,
@@ -7,19 +20,20 @@ import {
   EmptyStateVariant,
   Title,
 } from "@patternfly/react-core";
-import { TableIcon } from "@patternfly/react-icons";
-import { css, StyleSheet } from "@patternfly/react-styles";
+import { DocumentFieldPreview, DocumentFieldPreviewResults } from "../UI";
+import { IAtlasmapField, IAtlasmapMapping } from "../Views";
 import {
+  ICell,
+  IRow,
   Table,
   TableBody,
   TableHeader,
-  IRow,
-  ICell,
 } from "@patternfly/react-table";
+import React, { FunctionComponent, MouseEvent } from "react";
 
 import { MainContent } from "../Layout";
-import { IAtlasmapField, IAtlasmapMapping } from "../Views";
-import { DocumentFieldPreview, DocumentFieldPreviewResults } from "../UI";
+import { TableIcon } from "@patternfly/react-icons";
+import styles from "./MappingTableView.module.css";
 
 const emptyContent = [
   {
@@ -41,10 +55,6 @@ const emptyContent = [
     ],
   },
 ];
-
-const styles = StyleSheet.create({
-  title: { marginBottom: "1rem" },
-});
 
 export interface IMappingTableProps {
   mappings: Array<IAtlasmapMapping>;
@@ -123,7 +133,7 @@ export const MappingTableView: FunctionComponent<IMappingTableProps> = ({
 
   return (
     <MainContent>
-      <Title size={"lg"} headingLevel={"h1"} className={css(styles.title)}>
+      <Title size="lg" headingLevel={"h1"} className={styles.title}>
         Mappings
       </Title>
       <Table aria-label="Mappings" cells={columns} rows={rows}>

@@ -1,7 +1,8 @@
-import { text, boolean } from "@storybook/addon-knobs";
-import React from "react";
-import { Atlasmap } from "./Atlasmap";
 import { AtlasmapProvider, IAtlasmapProviderProps } from "./AtlasmapProvider";
+import { boolean, text } from "@storybook/addon-knobs";
+
+import { Atlasmap } from "./Atlasmap";
+import React from "react";
 import { action } from "@storybook/addon-actions";
 import { html } from "../stories/htmlKnob";
 

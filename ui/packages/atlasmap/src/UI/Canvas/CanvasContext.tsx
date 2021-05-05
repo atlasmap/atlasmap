@@ -1,3 +1,5 @@
+import { Coords, RectWithId, Rects } from "./models";
+import { FunctionComponent, createContext, useContext } from "react";
 import React, {
   ReactElement,
   useCallback,
@@ -6,9 +8,8 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { createContext, FunctionComponent, useContext } from "react";
+
 import { scaleLinear } from "d3-scale";
-import { Coords, RectWithId, Rects } from "./models";
 import { useGesture } from "react-use-gesture";
 
 type RedrawCallback = () => unknown;

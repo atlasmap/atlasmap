@@ -1,19 +1,23 @@
-import React, { FunctionComponent, useEffect, useRef } from "react";
-import { useFilePicker } from "react-sage";
+/*
+    Copyright (C) 2017 Red Hat, Inc.
 
-import {
-  Button,
-  ToolbarItem,
-  Tooltip,
-  Dropdown,
-  DropdownToggle,
-  DropdownItem,
-  DropdownSeparator,
-  DropdownItemIcon,
-} from "@patternfly/react-core";
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 import {
   BezierCurveIcon,
+  CaretDownIcon,
   CodeIcon,
+  ColumnsIcon,
   ExportIcon,
   EyeIcon,
   HelpIcon,
@@ -22,18 +26,25 @@ import {
   MapIcon,
   MapMarkedIcon,
   PficonDragdropIcon,
-  TableIcon,
-  ColumnsIcon,
-  TrashIcon,
-  CaretDownIcon,
   PlusIcon,
+  TableIcon,
+  TrashIcon,
 } from "@patternfly/react-icons";
-import { css, StyleSheet } from "@patternfly/react-styles";
-import { useToggle } from "../Atlasmap/utils";
+import {
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownSeparator,
+  DropdownToggle,
+  ToolbarItem,
+  Tooltip,
+} from "@patternfly/react-core";
+import React, { FunctionComponent, useEffect, useRef } from "react";
 
-const styles = StyleSheet.create({
-  toggled: { color: "var(--pf-global--primary-color--100) !important" },
-});
+import { css } from "@patternfly/react-styles";
+import styles from "./toolbarItems.module.css";
+import { useFilePicker } from "react-sage";
+import { useToggle } from "../Atlasmap/utils";
 
 export interface IAtlasmapToolbarItemProps {
   showImportAtlasFileToolbarItem: boolean;
@@ -45,75 +56,76 @@ export interface IAtlasmapToolbarItemProps {
   onExportAtlasFile: () => void;
   onResetAtlasmap: () => void;
 }
-export const AtlasmapToolbarItem: FunctionComponent<IAtlasmapToolbarItemProps> = ({
-  showImportAtlasFileToolbarItem,
-  showImportJarFileToolbarItem,
-  showExportAtlasFileToolbarItem,
-  showResetToolbarItem,
-  onImportAtlasFile,
-  onImportJarFile,
-  onExportAtlasFile,
-  onResetAtlasmap,
-}) => {
-  const { state: isOpen, toggle: onToggle, toggleOff } = useToggle(false);
-  const runAndClose = (cb: (...args: any[]) => any) => {
-    return (...args: any[]) => {
-      cb(...args);
-      toggleOff();
+export const AtlasmapToolbarItem: FunctionComponent<IAtlasmapToolbarItemProps> =
+  ({
+    showImportAtlasFileToolbarItem,
+    showImportJarFileToolbarItem,
+    showExportAtlasFileToolbarItem,
+    showResetToolbarItem,
+    onImportAtlasFile,
+    onImportJarFile,
+    onExportAtlasFile,
+    onResetAtlasmap,
+  }) => {
+    const { state: isOpen, toggle: onToggle, toggleOff } = useToggle(false);
+    const runAndClose = (cb: (...args: any[]) => any) => {
+      return (...args: any[]) => {
+        cb(...args);
+        toggleOff();
+      };
     };
+    const dropdownItems = [
+      showImportAtlasFileToolbarItem && (
+        <ImportAtlasFileToolbarItem
+          onFile={runAndClose(onImportAtlasFile)}
+          key="import-catalog"
+        />
+      ),
+      showImportJarFileToolbarItem && (
+        <ImportJarFileToolbarItem
+          onFile={runAndClose(onImportJarFile)}
+          key="import-java-archive"
+        />
+      ),
+      (showImportAtlasFileToolbarItem || showImportJarFileToolbarItem) && (
+        <DropdownSeparator key="import-separator" />
+      ),
+      showExportAtlasFileToolbarItem && (
+        <ExportAtlasFileToolbarItem
+          onClick={runAndClose(onExportAtlasFile)}
+          key={"export-catalog"}
+        />
+      ),
+      showExportAtlasFileToolbarItem && (
+        <DropdownSeparator key="export-separator" />
+      ),
+      showResetToolbarItem && (
+        <ResetToolbarItem
+          onClick={runAndClose(onResetAtlasmap)}
+          key="reset-catalog"
+        />
+      ),
+    ].filter((f) => f);
+    return (
+      <ToolbarItem>
+        <Dropdown
+          toggle={
+            <DropdownToggle
+              id="atlasmap-toggle"
+              onToggle={onToggle}
+              toggleIndicator={CaretDownIcon}
+              data-testid="atlasmap-menu-button"
+            >
+              AtlasMap
+            </DropdownToggle>
+          }
+          isOpen={isOpen}
+          dropdownItems={dropdownItems}
+          isPlain={true}
+        />
+      </ToolbarItem>
+    );
   };
-  const dropdownItems = [
-    showImportAtlasFileToolbarItem && (
-      <ImportAtlasFileToolbarItem
-        onFile={runAndClose(onImportAtlasFile)}
-        key="import-catalog"
-      />
-    ),
-    showImportJarFileToolbarItem && (
-      <ImportJarFileToolbarItem
-        onFile={runAndClose(onImportJarFile)}
-        key="import-java-archive"
-      />
-    ),
-    (showImportAtlasFileToolbarItem || showImportJarFileToolbarItem) && (
-      <DropdownSeparator key="import-separator" />
-    ),
-    showExportAtlasFileToolbarItem && (
-      <ExportAtlasFileToolbarItem
-        onClick={runAndClose(onExportAtlasFile)}
-        key={"export-catalog"}
-      />
-    ),
-    showExportAtlasFileToolbarItem && (
-      <DropdownSeparator key="export-separator" />
-    ),
-    showResetToolbarItem && (
-      <ResetToolbarItem
-        onClick={runAndClose(onResetAtlasmap)}
-        key="reset-catalog"
-      />
-    ),
-  ].filter((f) => f);
-  return (
-    <ToolbarItem>
-      <Dropdown
-        toggle={
-          <DropdownToggle
-            id="atlasmap-toggle"
-            onToggle={onToggle}
-            iconComponent={CaretDownIcon}
-            data-testid="atlasmap-menu-button"
-          >
-            AtlasMap
-          </DropdownToggle>
-        }
-        isOpen={isOpen}
-        dropdownItems={dropdownItems}
-        isPlain={true}
-      />
-    </ToolbarItem>
-  );
-};
 
 export const ImportAtlasFileToolbarItem: FunctionComponent<{
   onFile: (file: File) => void;
@@ -134,10 +146,11 @@ export const ImportAtlasFileToolbarItem: FunctionComponent<{
   }, [files, onFile]);
 
   return (
-    <DropdownItem onClick={onClick} data-testid="import-mappings-button">
-      <DropdownItemIcon>
-        <ImportIcon />
-      </DropdownItemIcon>
+    <DropdownItem
+      icon={<ImportIcon />}
+      onClick={onClick}
+      data-testid="import-mappings-button"
+    >
       Import a catalog (.adm)
       <HiddenFileInput accept=".adm" multiple={false} />
     </DropdownItem>
@@ -163,10 +176,11 @@ export const ImportJarFileToolbarItem: FunctionComponent<{
   }, [files, onFile]);
 
   return (
-    <DropdownItem onClick={onClick} data-testid="import-archive-button">
-      <DropdownItemIcon>
-        <ImportIcon />
-      </DropdownItemIcon>
+    <DropdownItem
+      icon={<ImportIcon />}
+      onClick={onClick}
+      data-testid="import-archive-button"
+    >
       Import a Java archive (.jar)
       <HiddenFileInput accept=".jar" multiple={false} />
     </DropdownItem>
@@ -176,10 +190,11 @@ export const ImportJarFileToolbarItem: FunctionComponent<{
 export const ExportAtlasFileToolbarItem: FunctionComponent<{
   onClick: () => void;
 }> = ({ onClick }) => (
-  <DropdownItem onClick={onClick} data-testid="export-mappings-button">
-    <DropdownItemIcon>
-      <ExportIcon />
-    </DropdownItemIcon>
+  <DropdownItem
+    icon={<ExportIcon />}
+    onClick={onClick}
+    data-testid="export-mappings-button"
+  >
     Export the current mappings and support files into a catalog (.adm)
   </DropdownItem>
 );
@@ -187,10 +202,11 @@ export const ExportAtlasFileToolbarItem: FunctionComponent<{
 export const ResetToolbarItem: FunctionComponent<{
   onClick: () => void;
 }> = ({ onClick }) => (
-  <DropdownItem onClick={onClick} data-testid="reset-all-button">
-    <DropdownItemIcon>
-      <TrashIcon />
-    </DropdownItemIcon>
+  <DropdownItem
+    icon={<TrashIcon />}
+    onClick={onClick}
+    data-testid="reset-all-button"
+  >
     Reset all mappings and clear all imported documents
   </DropdownItem>
 );

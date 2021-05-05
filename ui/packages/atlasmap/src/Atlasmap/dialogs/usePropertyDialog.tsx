@@ -1,10 +1,9 @@
-import { propertyTypes } from "@atlasmap/core";
+import { IProperty, PropertyDialog } from "../../UI";
+import React, { ReactElement, useCallback, useState } from "react";
 
-import React, { useCallback, ReactElement, useState } from "react";
-
-import { PropertyDialog, IProperty } from "../../UI";
-import { useToggle } from "../../Atlasmap/utils";
 import { IAtlasmapDocument } from "../../Views";
+import { propertyTypes } from "@atlasmap/core";
+import { useToggle } from "../../Atlasmap/utils";
 
 type PropertyCallback = (property: IProperty) => void;
 
@@ -22,9 +21,8 @@ export function usePropertyDialog(
     property?: IProperty,
   ) => void,
 ] {
-  const [onPropertyCb, setOnPropertyCb] = useState<PropertyCallback | null>(
-    null,
-  );
+  const [onPropertyCb, setOnPropertyCb] =
+    useState<PropertyCallback | null>(null);
   const [initialProperty, setInitialProperty] = useState<IProperty | null>({
     name: "",
     valueType: propertyTypes[0][0],

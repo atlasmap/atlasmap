@@ -1,6 +1,6 @@
-import React, { useCallback, ReactElement, useState } from "react";
+import { INamespace, NamespaceDialog } from "../../UI";
+import React, { ReactElement, useCallback, useState } from "react";
 
-import { NamespaceDialog, INamespace } from "../../UI";
 import { useToggle } from "../../Atlasmap/utils";
 
 type NamespaceCallback = (namespace: INamespace) => void;
@@ -8,12 +8,10 @@ type NamespaceCallback = (namespace: INamespace) => void;
 export function useNamespaceDialog(
   title: string,
 ): [ReactElement, (cb: NamespaceCallback, namespace?: INamespace) => void] {
-  const [onNamespaceCb, setOnNamespaceCb] = useState<NamespaceCallback | null>(
-    null,
-  );
-  const [initialNamespace, setInitialNamespace] = useState<INamespace | null>(
-    null,
-  );
+  const [onNamespaceCb, setOnNamespaceCb] =
+    useState<NamespaceCallback | null>(null);
+  const [initialNamespace, setInitialNamespace] =
+    useState<INamespace | null>(null);
   const { state, toggleOn, toggleOff } = useToggle(false);
   const onConfirm = useCallback(
     (namespace: INamespace) => {

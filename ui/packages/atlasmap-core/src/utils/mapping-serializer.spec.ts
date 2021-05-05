@@ -362,9 +362,8 @@ describe('MappingSerializer', () => {
         if (!actionDef) {
           fail('Concatenate action defiition not found');
         }
-        mapping.transition.transitionFieldAction = FieldAction.create(
-          actionDef
-        );
+        mapping.transition.transitionFieldAction =
+          FieldAction.create(actionDef);
         const f = new Field();
         f.path = '/Text';
         const docDef = cfg.getDocForIdentifier('twitter4j.Status', true);
@@ -422,9 +421,8 @@ describe('MappingSerializer', () => {
         if (!actionDef) {
           fail('Repeat action definition not found');
         }
-        mapping.transition.transitionFieldAction = FieldAction.create(
-          actionDef
-        );
+        mapping.transition.transitionFieldAction =
+          FieldAction.create(actionDef);
         const f = new Field();
         f.path = '/Text';
         const docDef = cfg.getDocForIdentifier('twitter4j.Status', true);

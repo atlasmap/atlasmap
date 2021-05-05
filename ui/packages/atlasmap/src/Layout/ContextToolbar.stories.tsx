@@ -1,5 +1,5 @@
-import React from "react";
 import { ContextToolbar } from "./ContextToolbar";
+import React from "react";
 
 export default {
   title: "AtlasMap|Layout/ContextToolbar",

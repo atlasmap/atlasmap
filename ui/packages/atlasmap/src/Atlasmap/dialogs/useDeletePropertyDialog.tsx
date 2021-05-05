@@ -8,13 +8,11 @@ export function useDeletePropertyDialog(): [
   (propName: string, propScope: string, isSource: boolean) => void,
 ] {
   const { deleteProperty } = useAtlasmap();
-  const [
-    deletePropertyDialog,
-    openDeletePropertyDialog,
-  ] = useConfirmationDialog(
-    "Delete property?",
-    "Are you sure you want to delete the selected property and remove any associated mapping references?",
-  );
+  const [deletePropertyDialog, openDeletePropertyDialog] =
+    useConfirmationDialog(
+      "Delete property?",
+      "Are you sure you want to delete the selected property and remove any associated mapping references?",
+    );
   const onDeleteProperty = useCallback(
     (propName: string, propScope: string, isSource: boolean) =>
       openDeletePropertyDialog(() =>

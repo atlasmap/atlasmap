@@ -1,6 +1,3 @@
-import ky from "ky";
-import { Observable } from "rxjs";
-
 import {
   ConfigModel,
   DataMapperUtil,
@@ -27,8 +24,6 @@ import {
   TransitionMode,
   TransitionModel,
 } from "@atlasmap/core";
-
-import { ITransformationArgument, ITransformationSelectOption } from "../../UI";
 import {
   IAtlasmapDocument,
   IAtlasmapField,
@@ -38,6 +33,10 @@ import {
   IAtlasmapNamespace,
   INotification,
 } from "../../Views";
+import { ITransformationArgument, ITransformationSelectOption } from "../../UI";
+
+import { Observable } from "rxjs";
+import ky from "ky";
 
 const api = ky.create({ headers: { "ATLASMAP-XSRF-TOKEN": "awesome" } });
 
@@ -413,11 +412,12 @@ export function mappingExpressionClearText(
   startOffset?: number,
   endOffset?: number,
 ) {
-  const uuidNode = initializationService.cfg.mappings!.activeMapping!.transition.expression!.clearText(
-    nodeId!,
-    startOffset,
-    endOffset,
-  );
+  const uuidNode =
+    initializationService.cfg.mappings!.activeMapping!.transition.expression!.clearText(
+      nodeId!,
+      startOffset,
+      endOffset,
+    );
   initializationService.cfg.mappingService.notifyMappingUpdated();
   return uuidNode;
 }
