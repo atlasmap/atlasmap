@@ -13,21 +13,22 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import ky from 'ky';
-import { ConfigModel } from '../models/config.model';
-import { gzip } from 'pako';
-import log from 'loglevel';
-import { Observable } from 'rxjs';
-import { DataMapperUtil } from '../common/data-mapper-util';
-import { timeout } from 'rxjs/operators';
-import { DocumentManagementService } from './document-management.service';
-import { InspectionType } from '../common/config.types';
+import { DocumentType, InspectionType } from '../common/config.types';
+
 import {
-  ErrorScope,
-  ErrorType,
   ErrorInfo,
   ErrorLevel,
+  ErrorScope,
+  ErrorType,
 } from '../models/error.model';
+
+import { ConfigModel } from '../models/config.model';
+import { DataMapperUtil } from '../common/data-mapper-util';
+import { DocumentManagementService } from './document-management.service';
+import { Observable } from 'rxjs';
+import { gzip } from 'pako';
+import log from 'loglevel';
+import { timeout } from 'rxjs/operators';
 
 /**
  * Handles file manipulation stored in the backend, including import/export via UI.
@@ -322,7 +323,8 @@ export class FileManagementService {
             (doc.inspectionSource !== null &&
               doc.inspectionType === InspectionType.INSTANCE) ||
             doc.inspectionType === InspectionType.SCHEMA ||
-            doc.inspectionType === InspectionType.JAVA_CLASS
+            doc.inspectionType === InspectionType.JAVA_CLASS ||
+            (doc.initModel && doc.initModel.type === DocumentType.CSV)
           ) {
             if (docCount > 0) {
               exportMeta += ',\n';

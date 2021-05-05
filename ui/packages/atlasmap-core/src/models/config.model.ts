@@ -244,12 +244,19 @@ export class ConfigModel {
   getDocUriMap(
     cfg: ConfigModel,
     isSource: boolean
-  ): { [key: string]: DocumentDefinition } {
+  ): { [key: string]: DocumentDefinition } | null {
     const docMap: { [key: string]: DocumentDefinition } = {};
+    let docFound = false;
     for (const doc of cfg.getDocs(isSource)) {
-      docMap[doc.uri] = doc;
+      if (doc.uri) {
+        docMap[doc.uri] = doc;
+        docFound = true;
+      }
     }
-    return docMap;
+    if (docFound) {
+      return docMap;
+    }
+    return null;
   }
 
   /**
