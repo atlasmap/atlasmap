@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 
-import { Alert, Button, Modal } from "@patternfly/react-core";
+import { Button, Modal } from "@patternfly/react-core";
 
 export type CloseCallback = () => void;
 
@@ -39,15 +39,6 @@ export const AboutDialog: FunctionComponent<IAboutDialogProps> = ({
       ]}
       isFooterLeftAligned={true}
     >
-      {runtimeVersion !== uiVersion && (
-        <div>
-          <Alert variant="warning" isInline title="WARNING">
-            Different version of UI and Runtime are not supported to work
-            together.
-          </Alert>
-          <div>&nbsp;</div>
-        </div>
-      )}
       <div>UI Version: {uiVersion}</div>
       <div>Runtime Version: {runtimeVersion}</div>
     </Modal>
