@@ -286,7 +286,7 @@
             "name" : "zip"
           }, {
             "jsonType" : "io.atlasmap.json.v2.JsonField",
-            "docId" : "JSONSchemaSourceb",
+            "docId" : "JSONSchemaSource",
             "index" : 1,
             "path" : "/addressList<>/street",
             "fieldType" : "STRING",
