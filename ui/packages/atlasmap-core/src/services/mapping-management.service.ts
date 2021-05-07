@@ -644,6 +644,7 @@ export class MappingManagementService {
    * both the mapping-updated and mapping-preview subscriptions.
    */
   disableMappingPreview(): void {
+    let mappedValueCleared = false;
     this.cfg.showMappingPreview = false;
 
     // Clear any preview values on mapping preview disable.
@@ -652,11 +653,14 @@ export class MappingManagementService {
         for (const mappedField of mapping.getAllFields()) {
           if (mappedField.value?.length > 0 && !mappedField.isConstant()) {
             mappedField.value = '';
+            mappedValueCleared = true;
           }
         }
       }
     }
-
+    if (mappedValueCleared) {
+      this.notifyMappingUpdated();
+    }
     if (this.mappingUpdatedSubscription) {
       this.mappingUpdatedSubscription.unsubscribe();
       this.mappingUpdatedSubscription = undefined;

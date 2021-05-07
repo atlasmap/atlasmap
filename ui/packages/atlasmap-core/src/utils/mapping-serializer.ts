@@ -121,7 +121,6 @@ export class MappingSerializer {
     ignoreValue: boolean = true,
     ignoreExpression: boolean = false
   ): any {
-    let inputFieldGroup = {};
     const jsonMappingType =
       ConfigModel.mappingServicesPackagePrefix + '.Mapping';
     const serializedInputFields: any[] = MappingSerializer.serializeFields(
@@ -145,12 +144,19 @@ export class MappingSerializer {
       mapping.transition.isManyToOneMode() ||
       mapping.transition.isForEachMode()
     ) {
-      inputFieldGroup = MappingSerializer.createInputFieldGroup(
-        mapping,
-        serializedInputFields,
-        cfg,
-        false
-      );
+      const actions = [];
+      if (mapping.transition.transitionFieldAction) {
+        actions[0] = this.serializeAction(
+          mapping.transition.transitionFieldAction,
+          cfg
+        );
+      }
+      const field = serializedInputFields;
+      const inputFieldGroup: any = {
+        jsonType: ConfigModel.mappingServicesPackagePrefix + '.FieldGroup',
+        actions,
+        field,
+      };
       if (mappingExpression.length > 0) {
         jsonMapping = {
           jsonType: jsonMappingType,
@@ -432,27 +438,14 @@ export class MappingSerializer {
   }
 
   private static createInputFieldGroup(
-    mapping: MappingModel,
     field: any[],
-    cfg: ConfigModel,
     isComplex: boolean,
     docId?: string,
     path?: string
   ): any {
-    const actions = [];
-
-    if (
-      mapping.transition.isManyToOneMode() &&
-      mapping.transition.transitionFieldAction
-    ) {
-      actions[0] = this.serializeAction(
-        mapping.transition.transitionFieldAction,
-        cfg
-      );
-    }
     const inputFieldGroup: any = {
       jsonType: ConfigModel.mappingServicesPackagePrefix + '.FieldGroup',
-      actions,
+      actions: [],
       docId: docId,
       path: path,
       field,
@@ -581,17 +574,13 @@ export class MappingSerializer {
    * @param fieldsJson
    */
   private static processCollectionPreview(
-    cfg: ConfigModel,
-    mapping: MappingModel,
     field: Field,
     serializedField: any,
     fieldsJson: any[]
   ) {
     serializedField['path'] = field.path.replace('<>', '<0>');
     const collectionInstanceInputFieldGroup = MappingSerializer.createInputFieldGroup(
-      mapping,
       [serializedField],
-      cfg,
       true,
       field.docDef.id,
       field.path
@@ -743,8 +732,6 @@ export class MappingSerializer {
         if (!mapping.referenceFieldExists(collectionParentField.path)) {
           if (!ignoreValue) {
             MappingSerializer.processCollectionPreview(
-              cfg,
-              mapping,
               field,
               serializedField,
               fieldsJson
@@ -757,9 +744,7 @@ export class MappingSerializer {
           // Establish/add to the inner reference field group.
           if (collectionInstanceInputFieldGroup === null) {
             collectionInstanceInputFieldGroup = MappingSerializer.createInputFieldGroup(
-              mapping,
               [serializedField],
-              cfg,
               true,
               collectionParentField.docDef.id,
               collectionParentField.path
@@ -780,9 +765,7 @@ export class MappingSerializer {
             // Establish one outer input field group for the preview collection.
             if (collectionInputFieldGroup === null) {
               collectionInputFieldGroup = MappingSerializer.createInputFieldGroup(
-                mapping,
                 [collectionInstanceInputFieldGroup],
-                cfg,
                 true,
                 collectionParentField.docDef.id,
                 collectionParentField.path
