@@ -71,7 +71,7 @@
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <mockito.version>3.9.0</mockito.version>
     <okhttp.version>4.9.1</okhttp.version>
-    <openapi-generator-maven-plugin.version>5.1.0</openapi-generator-maven-plugin.version>
+    <openapi-generator-maven-plugin.version>5.1.1</openapi-generator-maven-plugin.version>
     <osgi.symbolic.name>${project.artifactId}</osgi.symbolic.name>
     <osgi.import.pkg>*</osgi.import.pkg>
     <resteasy-spring-boot-starter.version>4.8.0.Final</resteasy-spring-boot-starter.version>
