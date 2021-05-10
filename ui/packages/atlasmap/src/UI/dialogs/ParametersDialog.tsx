@@ -108,7 +108,11 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
   );
 
   const formLabelColumnWidth = {
-    "--pf-c-form--m-horizontal--md__group--GridTemplateColumns": "260px 1fr",
+    "--pf-c-form--m-horizontal--md__group--GridTemplateColumns": "340px 1fr",
+  } as React.CSSProperties;
+  const formLabelParamRequired = {
+    "--pf-c-form__label--FontSize": "large",
+    "--pf-c-form--m-horizontal--md__group--GridTemplateColumns": "140px 1fr",
   } as React.CSSProperties;
   const formLabelTopPadding = {
     "--pf-c-form__label--PaddingTop": "0",
@@ -128,15 +132,18 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
           <FormGroup
             fieldId={`${index}-parameter`}
             key={index}
-            style={!parameter.required ? formLabelTopPadding : {}}
+            style={
+              !parameter.required ? formLabelTopPadding : formLabelParamRequired
+            }
             label={
               parameter.required ? (
-                <b>{parameter.name}</b>
+                <span>{parameter.label}</span>
               ) : (
                 <FormSelect
                   id="selected-paramater"
                   value="0"
-                  label={parameter.name}
+                  label={parameter.label}
+                  style={{ display: "flex", marginLeft: "auto" }}
                   onChange={(availableParameterIndex) =>
                     handleChangeParameter(index, availableParameterIndex)
                   }
@@ -156,7 +163,14 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
           >
             <InputGroup>
               {parameter.boolean ? (
-                <span style={{ paddingTop: 5 }}>
+                <span
+                  style={{
+                    paddingTop: 5,
+                    display: "inline",
+                    marginLeft: "auto",
+                    float: "right",
+                  }}
+                >
                   <Switch
                     id={parameter.name}
                     name={parameter.name}
@@ -192,6 +206,7 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
                   variant="plain"
                   aria-label="Action"
                   onClick={(_event) => handleRemoveParameter(parameter)}
+                  style={{ display: "inline", marginLeft: "0", float: "right" }}
                 >
                   <TrashIcon />
                 </Button>
@@ -199,14 +214,17 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
             </InputGroup>
           </FormGroup>
         ))}
-        <Button
-          isDisabled={availableParameters.length === 0}
-          onClick={handleAddParameter}
-          variant="link"
-          icon={<PlusIcon />}
-        >
-          Add parameter
-        </Button>
+        <span>
+          <Button
+            style={{ display: "inline", float: "left", width: "40" }}
+            isDisabled={availableParameters.length === 0}
+            onClick={handleAddParameter}
+            variant="link"
+            icon={<PlusIcon />}
+          >
+            Add parameter
+          </Button>
+        </span>
       </Form>
     </ConfirmationDialog>
   );
