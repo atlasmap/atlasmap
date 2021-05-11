@@ -28,7 +28,7 @@ export interface IParameter {
   value: string;
   boolean?: boolean;
   options?: IParameterOption[];
-  hidden?: boolean;
+  enabled?: boolean;
   required?: boolean;
 }
 
@@ -59,7 +59,9 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
   );
 
   const reset = useCallback(() => {
-    setDefinedParameters(initialParameters.filter((p) => p.required));
+    setDefinedParameters(
+      initialParameters.filter((p) => p.required || p.enabled),
+    );
   }, [initialParameters]);
 
   const handleOnConfirm = useCallback(() => {
