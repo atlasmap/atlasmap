@@ -13,8 +13,8 @@ export default {
 const parameters = [
   {
     name: "format",
-    label: "Format",
-    value: "Default",
+    label: "CSV File Format",
+    value: "Excel",
     options: [
       { label: "Default", value: "Default" },
       { label: "Excel", value: "Excel" },
@@ -30,6 +30,7 @@ const parameters = [
       { label: "TDF", value: "TDF" },
     ],
     required: true,
+    enabled: true,
   },
   {
     name: "allowDuplicateHeaderNames",
@@ -37,6 +38,7 @@ const parameters = [
     value: "true",
     boolean: true,
     required: false,
+    enabled: true,
   },
   {
     name: "allowMissingColumnNames",
@@ -44,36 +46,53 @@ const parameters = [
     value: "true",
     boolean: true,
     required: false,
+    enabled: true,
   },
   {
     name: "commentMarker",
     label: "Comment Marker",
-    value: "",
+    value: "#",
     required: false,
+    enabled: true,
   },
-  { name: "delimiter", label: "Delimiter", value: "", required: false },
-  { name: "escape", label: "Escape", value: "", required: false },
+  {
+    name: "delimiter",
+    label: "Delimiter",
+    value: ":",
+    required: false,
+    enabled: true,
+  },
+  {
+    name: "escape",
+    label: "Escape",
+    value: "<esc>",
+    required: false,
+    enabled: true,
+  },
   {
     name: "firstRecordAsHeader",
     label: "First Record As Header",
-    value: "true",
+    value: "false",
     boolean: true,
     required: false,
+    enabled: true,
   },
-  { name: "headers", label: "Headers", value: "", required: false },
+  { name: "headers", label: "Headers", value: "hdr", required: false },
   {
     name: "ignoreEmptyLines",
     label: "Ignore Empty Lines",
     value: "true",
     boolean: true,
     required: false,
+    enabled: true,
   },
   {
     name: "ignoreHeaderCase",
     label: "Ignore Header Case",
-    value: "true",
+    value: "false",
     boolean: true,
     required: false,
+    enabled: true,
   },
   {
     name: "ignoreSurroundingSpaces",
@@ -81,19 +100,21 @@ const parameters = [
     value: "true",
     boolean: true,
     required: false,
+    enabled: true,
   },
   {
     name: "nullString",
     label: "Null String",
-    value: "",
+    value: "<nul>",
     required: false,
+    enabled: true,
   },
-  { name: "quote", label: "Quote", value: "", required: false },
+  { name: "quote", label: "Quote", value: "", required: false, enabled: false },
 ];
 
 export const parametersDialog = () => (
   <ParametersDialog
-    title={text("Title", "Parameters dialog title")}
+    title={text("Title", "Select CSV Processing Parameters")}
     isOpen={boolean("Is open", true)}
     onCancel={action("onCancel")}
     onConfirm={action("onConfirm")}

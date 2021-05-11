@@ -16,7 +16,7 @@ export function useImportDocumentDialog(): [
     "A document with the selected name has already been imported into the specified panel. It will appear in addition to the pre-existing document.",
   );
   const [parametersDialog, openParametersDialog] = useParametersDialog(
-    "CSV processing parameters",
+    "Select CSV Processing Parameters",
   );
   const [defaultSchema, setDefaultSchema] = useState(false);
   const [
@@ -48,7 +48,7 @@ export function useImportDocumentDialog(): [
             [
               {
                 name: "format",
-                label: "Format",
+                label: "CSV File Format",
                 value: "Default",
                 options: [
                   { label: "Default", value: "Default" },
