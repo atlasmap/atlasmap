@@ -1385,18 +1385,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1675,6 +1672,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1885,6 +1883,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1916,9 +1915,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">29x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">29x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">29x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2056,6 +2054,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2068,9 +2067,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2377,7 +2376,6 @@
 <span class="cline-any cline-yes">34x</span>
 <span class="cline-any cline-yes">34x</span>
 <span class="cline-any cline-yes">34x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2523,6 +2521,7 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -2542,6 +2541,7 @@
 <span class="cline-any cline-yes">84x</span>
 <span class="cline-any cline-yes">84x</span>
 <span class="cline-any cline-yes">40x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">44x</span>
 <span class="cline-any cline-yes">44x</span>
@@ -2633,18 +2633,15 @@ export class MappingSerializer {
     }
 &nbsp;
     // TODO: check this non null operator
-    const serializedLookupTables: any[] = MappingSerializer.serializeLookupTables(
-      cfg.mappings!
-    );
+    const serializedLookupTables: any[] =
+      MappingSerializer.serializeLookupTables(cfg.mappings!);
     const constantDescriptions: any[] = MappingSerializer.serializeConstants(
       cfg.constantDoc
     );
-    const sourcePropertyDescriptions: any[] = MappingSerializer.serializeProperties(
-      cfg.sourcePropertyDoc
-    );
-    const targetPropertyDescriptions: any[] = MappingSerializer.serializeProperties(
-      cfg.targetPropertyDoc
-    );
+    const sourcePropertyDescriptions: any[] =
+      MappingSerializer.serializeProperties(cfg.sourcePropertyDoc);
+    const targetPropertyDescriptions: any[] =
+      MappingSerializer.serializeProperties(cfg.targetPropertyDoc);
     const serializedDataSources: any = MappingSerializer.serializeDocuments(
       cfg.sourceDocs.concat(cfg.targetDocs),
       mappingDefinition
@@ -2919,10 +2916,11 @@ export class MappingSerializer {
           mapping.transition.mode = TransitionMode.MANY_TO_ONE;
           const parsedAction = this.parseAction(firstAction);
           // TODO: check this non null operator
-          parsedAction.definition = cfg.fieldActionService.getActionDefinitionForName(
-            parsedAction.name,
-            Multiplicity.MANY_TO_ONE
-          )!;
+          parsedAction.definition =
+            cfg.fieldActionService.getActionDefinitionForName(
+              parsedAction.name,
+              Multiplicity.MANY_TO_ONE
+            )!;
           mapping.transition.transitionFieldAction = parsedAction;
         }
       }
@@ -3133,12 +3131,13 @@ export class MappingSerializer {
     fieldsJson: any[]
   ) {
     serializedField['path'] = field.path.replace('&lt;&gt;', '&lt;0&gt;');
-    const collectionInstanceInputFieldGroup = MappingSerializer.createInputFieldGroup(
-      [serializedField],
-      true,
-      field.docDef.id,
-      field.path
-    );
+    const collectionInstanceInputFieldGroup =
+      MappingSerializer.createInputFieldGroup(
+        [serializedField],
+        true,
+        field.docDef.id,
+        field.path
+      );
     fieldsJson.push(collectionInstanceInputFieldGroup);
   }
 &nbsp;
@@ -3164,9 +3163,8 @@ export class MappingSerializer {
 <span class="cstat-no" title="statement not covered" >        continue;</span>
       }
       actionArguments[argValue.name] = argValue.value;
-      const argumentConfig: FieldActionArgument = action.definition.getArgumentForName(
-        argValue.name
-      );
+      const argumentConfig: FieldActionArgument =
+        action.definition.getArgumentForName(argValue.name);
       <span class="missing-if-branch" title="if path not taken" >I</span>if (argumentConfig == null) {
 <span class="cstat-no" title="statement not covered" >        cfg.errorService.addError(</span>
           new ErrorInfo({
@@ -3297,12 +3295,13 @@ export class MappingSerializer {
         } else {
           // Establish/add to the inner reference field group.
           if (collectionInstanceInputFieldGroup === null) {
-            collectionInstanceInputFieldGroup = MappingSerializer.createInputFieldGroup(
-              [serializedField],
-              true,
-              collectionParentField.docDef.id,
-              collectionParentField.path
-            );
+            collectionInstanceInputFieldGroup =
+              MappingSerializer.createInputFieldGroup(
+                [serializedField],
+                true,
+                collectionParentField.docDef.id,
+                collectionParentField.path
+              );
           } else {
             collectionInstanceInputFieldGroup!.field.push(serializedField);
             continue;
@@ -3312,18 +3311,18 @@ export class MappingSerializer {
 &nbsp;
           // Preview-mode uses element/ item instance &lt;0&gt;.
           if (!ignoreValue) {
-            collectionInstanceInputFieldGroup[
-              'path'
-            ] = collectionParentField.path.replace('&lt;&gt;', '&lt;0&gt;');
+            collectionInstanceInputFieldGroup['path'] =
+              collectionParentField.path.replace('&lt;&gt;', '&lt;0&gt;');
 &nbsp;
             // Establish one outer input field group for the preview collection.
             <span class="missing-if-branch" title="else path not taken" >E</span>if (collectionInputFieldGroup === null) {
-              collectionInputFieldGroup = MappingSerializer.createInputFieldGroup(
-                [collectionInstanceInputFieldGroup],
-                true,
-                collectionParentField.docDef.id,
-                collectionParentField.path
-              );
+              collectionInputFieldGroup =
+                MappingSerializer.createInputFieldGroup(
+                  [collectionInstanceInputFieldGroup],
+                  true,
+                  collectionParentField.docDef.id,
+                  collectionParentField.path
+                );
               collectionInstanceInputFieldGroup['fieldType'] =
                 collectionParentField.serviceObject.fieldType;
               fieldsJson.push(collectionInputFieldGroup);
@@ -3624,9 +3623,8 @@ export class MappingSerializer {
     }
     for (const action of field.actions) {
       const parsedAction = this.parseAction(action);
-      parsedAction.definition = cfg.fieldActionService.getActionDefinitionForName(
-        parsedAction.name
-      )!; // TODO: check this non null operator
+      parsedAction.definition =
+        cfg.fieldActionService.getActionDefinitionForName(parsedAction.name)!; // TODO: check this non null operator
 &nbsp;
       // @deprecated Support old-style transformation-action-based expressions.
       <span class="missing-if-branch" title="if path not taken" >I</span>if (isSource &amp;&amp; (action.Expression || action['@type'] === 'Expression')) {
@@ -3771,7 +3769,8 @@ export class MappingSerializer {
           <span class="missing-if-branch" title="if path not taken" >I</span>if (!actionParams.hasOwnProperty(paramName)) {
 <span class="cstat-no" title="statement not covered" >            return null;</span>
           }
-          const parsedArgumentValue: FieldActionArgumentValue = new FieldActionArgumentValue();
+          const parsedArgumentValue: FieldActionArgumentValue =
+            new FieldActionArgumentValue();
           parsedArgumentValue.name = paramName;
           let value = actionParams[paramName];
           value = value == null ? <span class="branch-0 cbranch-no" title="branch not covered" >null </span>: value.toString();
@@ -3791,7 +3790,8 @@ export class MappingSerializer {
       if ('@type' === key) {
         continue;
       }
-      const parsedArgumentValue: FieldActionArgumentValue = new FieldActionArgumentValue();
+      const parsedArgumentValue: FieldActionArgumentValue =
+        new FieldActionArgumentValue();
       parsedArgumentValue.name = key;
       const valueString = value == null ? <span class="branch-0 cbranch-no" title="branch not covered" >null </span>: (value as any).toString();
       parsedArgumentValue.value = valueString;
@@ -3807,7 +3807,7 @@ export class MappingSerializer {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue May 11 2021 20:27:39 GMT+0000 (Coordinated Universal Time)
+                at Fri May 14 2021 12:29:06 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

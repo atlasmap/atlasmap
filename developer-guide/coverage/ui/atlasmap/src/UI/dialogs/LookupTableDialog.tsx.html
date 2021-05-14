@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">31.25% </span>
+                <span class="strong">26.67% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/16</span>
+                <span class='fraction'>4/15</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">35.71% </span>
+                <span class="strong">30.77% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/14</span>
+                <span class='fraction'>4/13</span>
             </div>
         
             
@@ -140,11 +140,20 @@
 <a name='L82'></a><a href='#L82'>82</a>
 <a name='L83'></a><a href='#L83'>83</a>
 <a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L85'></a><a href='#L85'>85</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -153,27 +162,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -232,8 +224,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { FunctionComponent, useState } from "react";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*
+    Copyright (C) 2017 Red Hat, Inc.
 &nbsp;
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+&nbsp;
+            http://www.apache.org/licenses/LICENSE-2.0
+&nbsp;
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 import {
   Form,
   FormGroup,
@@ -241,27 +246,10 @@ import {
   FormSelectOption,
   Label,
 } from "@patternfly/react-core";
+import React, { FunctionComponent, useState } from "react";
 &nbsp;
 import { IConfirmationDialogProps } from "./ConfirmationDialog";
-import { css, StyleSheet } from "@patternfly/react-styles";
-&nbsp;
-const styles = StyleSheet.create({
-  iGroup: {
-    marginBottom: "1.0rem",
-    marginLeft: "0.5rem",
-    width: 500,
-  },
-  iSelectBody: {
-    fontSize: 14,
-    width: 250,
-  },
-  iSelectLabel: {
-    fontSize: 14,
-    marginTop: "0.2rem",
-    width: 225,
-    marginRight: "0.5rem",
-  },
-});
+import styles from "./LookupTableDialog.module.css";
 &nbsp;
 export type LookupTableData = {
   sourceEnumValue: string;
@@ -293,12 +281,12 @@ export const LookupTableDialog: FunctionComponent&lt;ILookupTableDialogProps&gt;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Form&gt;
-      &lt;FormGroup className={css(styles.iGroup)} fieldId={"lookup-table-row"}&gt;
-        &lt;Label className={css(styles.iSelectLabel)}&gt;
+      &lt;FormGroup className={styles.iGroup} fieldId={"lookup-table-row"}&gt;
+        &lt;Label className={styles.iSelectLabel}&gt;
           {enumerationValue.sourceEnumValue}
         &lt;/Label&gt;
         &lt;FormSelect
-          className={css(styles.iSelectBody)}
+          className={styles.iSelectBody}
           value={targetEnum}
           aria-label={"enum-map"}
           autoFocus={true}
@@ -327,7 +315,7 @@ export const LookupTableDialog: FunctionComponent&lt;ILookupTableDialogProps&gt;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue May 11 2021 20:28:16 GMT+0000 (Coordinated Universal Time)
+                at Fri May 14 2021 12:29:39 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

@@ -856,8 +856,7 @@
 <a name='L798'></a><a href='#L798'>798</a>
 <a name='L799'></a><a href='#L799'>799</a>
 <a name='L800'></a><a href='#L800'>800</a>
-<a name='L801'></a><a href='#L801'>801</a>
-<a name='L802'></a><a href='#L802'>802</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L801'></a><a href='#L801'>801</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -932,8 +931,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">20x</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1369,7 +1368,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1733,8 +1731,8 @@ export class FieldNode extends ExpressionNode {
 &nbsp;
         // Factor scope from property meta data.
         <span class="missing-if-branch" title="if path not taken" >I</span>if (fieldParts[0].startsWith('DOC.' + DocumentDefaultName.PROPERTIES)) {
-          const pathSeparator = <span class="cstat-no" title="statement not covered" >ConfigModel.getConfig().sourcePropertyDoc</span>
-            .pathSeparator;
+          const pathSeparator =
+<span class="cstat-no" title="statement not covered" >            ConfigModel.getConfig().sourcePropertyDoc.pathSeparator;</span>
           const propParts = <span class="cstat-no" title="statement not covered" >fieldParts[1].split(pathSeparator);</span>
 <span class="cstat-no" title="statement not covered" >          if (propParts.length === 3) {</span>
 <span class="cstat-no" title="statement not covered" >            this.mappedField = mapping.getMappedFieldByName(</span>
@@ -2102,9 +2100,9 @@ export class ExpressionModel {
       nextNode instanceof TextNode &amp;&amp;
       newNodes[newNodes.length - 1] instanceof TextNode
     ) {
-<span class="cstat-no" title="statement not covered" >      updatedEvent.offset = (newNodes[</span>
-        newNodes.length - 1
-      ] as TextNode).str.length;
+<span class="cstat-no" title="statement not covered" >      updatedEvent.offset = (</span>
+        newNodes[newNodes.length - 1] as TextNode
+      ).str.length;
 <span class="cstat-no" title="statement not covered" >      nextNode.str =</span>
         (newNodes[newNodes.length - 1] as TextNode).str +
         (nextNode as TextNode).str;
@@ -2127,9 +2125,9 @@ export class ExpressionModel {
 <span class="cstat-no" title="statement not covered" >        updatedEvent.offset = 0;</span>
       } else {
 <span class="cstat-no" title="statement not covered" >        updatedEvent.node = newNodes[newNodes.length - 1];</span>
-<span class="cstat-no" title="statement not covered" >        updatedEvent.offset = (newNodes[</span>
-          newNodes.length - 1
-        ] as TextNode).str.length;
+<span class="cstat-no" title="statement not covered" >        updatedEvent.offset = (</span>
+          newNodes[newNodes.length - 1] as TextNode
+        ).str.length;
       }
     }
 <span class="cstat-no" title="statement not covered" >    this.updateCache();</span>
@@ -2169,9 +2167,8 @@ export class ExpressionModel {
     }
 &nbsp;
     // Requires position handling
-    let updatedEvent:
-      | ExpressionUpdatedEvent
-      | undefined = <span class="cstat-no" title="statement not covered" >new ExpressionUpdatedEvent();</span>
+    let updatedEvent: ExpressionUpdatedEvent | undefined =
+<span class="cstat-no" title="statement not covered" >      new ExpressionUpdatedEvent();</span>
     let targetNode = <span class="cstat-no" title="statement not covered" >this._nodes.find(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.getUuid() === tokenPosition);</span></span>
     // TODO: check this non null operator
     let targetNodeIndex = <span class="cstat-no" title="statement not covered" >this._nodes.indexOf(targetNode!);</span>
@@ -2210,9 +2207,9 @@ export class ExpressionModel {
         ) {
           const newOffset = (<span class="cstat-no" title="statement not covered" >this._nodes[targetNodeIndex - 1] as TextNode).str</span>
             .length;
-          (<span class="cstat-no" title="statement not covered" >this._nodes[targetNodeIndex - 1] as TextNode).str += (this._nodes[</span>
-            targetNodeIndex
-          ] as TextNode).str;
+          (<span class="cstat-no" title="statement not covered" >this._nodes[targetNodeIndex - 1] as TextNode).str += (</span>
+            this._nodes[targetNodeIndex] as TextNode
+          ).str;
 <span class="cstat-no" title="statement not covered" >          this._nodes.splice(targetNodeIndex, 1);</span>
 <span class="cstat-no" title="statement not covered" >          updatedEvent.node = this._nodes[targetNodeIndex - 1];</span>
 <span class="cstat-no" title="statement not covered" >          updatedEvent.offset = newOffset;</span>
@@ -2226,9 +2223,9 @@ export class ExpressionModel {
 <span class="cstat-no" title="statement not covered" >          updatedEvent.offset = 3;</span>
         } else <span class="cstat-no" title="statement not covered" >if (this._nodes[targetNodeIndex - 1] instanceof TextNode) {</span>
 <span class="cstat-no" title="statement not covered" >          updatedEvent.node = this._nodes[targetNodeIndex - 1];</span>
-<span class="cstat-no" title="statement not covered" >          updatedEvent.offset = (this._nodes[</span>
-            targetNodeIndex - 1
-          ] as TextNode).str.length;
+<span class="cstat-no" title="statement not covered" >          updatedEvent.offset = (</span>
+            this._nodes[targetNodeIndex - 1] as TextNode
+          ).str.length;
         } else <span class="cstat-no" title="statement not covered" >if (this._nodes[targetNodeIndex] instanceof TextNode) {</span>
 <span class="cstat-no" title="statement not covered" >          updatedEvent.node = this._nodes[targetNodeIndex];</span>
 <span class="cstat-no" title="statement not covered" >          updatedEvent.offset = 0;</span>
@@ -2315,9 +2312,9 @@ export class ExpressionModel {
         this._nodes[index - 1] instanceof TextNode &amp;&amp;
         this._nodes[index] instanceof TextNode
       ) {
-        (<span class="cstat-no" title="statement not covered" >this._nodes[index - 1] as TextNode).str += (this._nodes[</span>
-          index
-        ] as TextNode).str;
+        (<span class="cstat-no" title="statement not covered" >this._nodes[index - 1] as TextNode).str += (</span>
+          this._nodes[index] as TextNode
+        ).str;
 <span class="cstat-no" title="statement not covered" >        this._nodes.splice(index, 1);</span>
       }
     }
@@ -2466,7 +2463,7 @@ export class ExpressionModel {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue May 11 2021 20:27:39 GMT+0000 (Coordinated Universal Time)
+                at Fri May 14 2021 12:29:06 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

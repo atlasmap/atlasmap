@@ -529,11 +529,11 @@
 <a name='L471'></a><a href='#L471'>471</a>
 <a name='L472'></a><a href='#L472'>472</a>
 <a name='L473'></a><a href='#L473'>473</a>
-<a name='L474'></a><a href='#L474'>474</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L474'></a><a href='#L474'>474</a>
+<a name='L475'></a><a href='#L475'>475</a>
+<a name='L476'></a><a href='#L476'>476</a>
+<a name='L477'></a><a href='#L477'>477</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -551,8 +551,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -566,6 +569,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -968,6 +972,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1002,10 +1008,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/* eslint-disable @typescript-eslint/no-unused-vars */
-<span class="cstat-no" title="statement not covered" >import { AlertGroup } from "@patternfly/react-core";</span>
-<span class="cstat-no" title="statement not covered" >import React, { FunctionComponent, useCallback, useMemo } from "react";</span>
-<span class="cstat-no" title="statement not covered" >import { CanvasControlBar, MainLayout, ViewToolbar } from "../Layout";</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { CanvasControlBar, ExpressionToolbar, MainLayout } from "../Layout";</span>
 <span class="cstat-no" title="statement not covered" >import {</span>
   CanvasProvider,
   ConditionalExpressionInput,
@@ -1015,6 +1018,7 @@
 } from "../UI";
 <span class="cstat-no" title="statement not covered" >import {</span>
   IAtlasmapField,
+  IAtlasmapMapping,
   IMappingDocumentEvents,
   ISourceColumnCallbacks,
   ITargetsColumnCallbacks,
@@ -1022,13 +1026,16 @@
   NamespaceTableView,
   SourceMappingTargetView,
   SourceTargetView,
-  IAtlasmapMapping,
 } from "../Views";
+<span class="cstat-no" title="statement not covered" >import { IUseContextToolbarData, useContextToolbar } from "./useContextToolbar";</span>
+<span class="cstat-no" title="statement not covered" >import React, { FunctionComponent, useCallback, useMemo } from "react";</span>
+<span class="cstat-no" title="statement not covered" >import { getConstantType, getPropertyType } from "./utils";</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >import { AlertGroup } from "@patternfly/react-core";</span>
 <span class="cstat-no" title="statement not covered" >import { useAtlasmap } from "./AtlasmapProvider";</span>
 <span class="cstat-no" title="statement not covered" >import { useAtlasmapDialogs } from "./useAtlasmapDialogs";</span>
-<span class="cstat-no" title="statement not covered" >import { IUseContextToolbarData, useContextToolbar } from "./useContextToolbar";</span>
 <span class="cstat-no" title="statement not covered" >import { useSidebar } from "./useSidebar";</span>
-<span class="cstat-no" title="statement not covered" >import { getPropertyType, getConstantType } from "./utils";</span>
+&nbsp;
 export interface IAtlasmapProps {
   allowImport?: boolean;
   allowExport?: boolean;
@@ -1128,8 +1135,8 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
     [selectedMapping, showMappingPreview],
   );
 &nbsp;
-  const viewToolbar = (
-<span class="cstat-no" title="statement not covered" >    &lt;ViewToolbar&gt;</span>
+  const expressionToolbar = (
+<span class="cstat-no" title="statement not covered" >    &lt;ExpressionToolbar&gt;</span>
       &lt;ConditionalExpressionInput
         mappingExpression={
           mappingExpressionEnabled ? currentMappingExpression : undefined
@@ -1148,7 +1155,7 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
         onToggle={handlers.onToggleExpressionMode}
         setSelectedEnumValue={setSelectedEnumValue}
       /&gt;
-    &lt;/ViewToolbar&gt;
+    &lt;/ExpressionToolbar&gt;
   );
 &nbsp;
   const sourceEvents = <span class="cstat-no" title="statement not covered" >useMemo&lt;ISourceColumnCallbacks&gt;(</span>
@@ -1446,7 +1453,9 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
         &lt;MainLayout
           loading={pending}
           contextToolbar={contextToolbar}
-          viewToolbar={activeView !== "NamespaceTable" &amp;&amp; viewToolbar}
+          expressionToolbar={
+            activeView !== "NamespaceTable" &amp;&amp; expressionToolbar
+          }
           controlBar={activeView === "FreeView" &amp;&amp; &lt;CanvasControlBar /&gt;}
           showSidebar={!!selectedMapping}
           renderSidebar={renderSidebar}
@@ -1482,7 +1491,7 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue May 11 2021 20:28:16 GMT+0000 (Coordinated Universal Time)
+                at Fri May 14 2021 12:29:39 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

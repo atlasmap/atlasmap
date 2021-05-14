@@ -957,7 +957,12 @@
 <a name='L899'></a><a href='#L899'>899</a>
 <a name='L900'></a><a href='#L900'>900</a>
 <a name='L901'></a><a href='#L901'>901</a>
-<a name='L902'></a><a href='#L902'>902</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L902'></a><a href='#L902'>902</a>
+<a name='L903'></a><a href='#L903'>903</a>
+<a name='L904'></a><a href='#L904'>904</a>
+<a name='L905'></a><a href='#L905'>905</a>
+<a name='L906'></a><a href='#L906'>906</a>
+<a name='L907'></a><a href='#L907'>907</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1011,8 +1016,10 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -1559,6 +1566,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1610,6 +1618,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1630,6 +1639,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1910,10 +1920,12 @@ export class InitializationService {
   cfg: ConfigModel = ConfigModel.getConfig();
 &nbsp;
   systemInitializedSource = new Subject&lt;void&gt;();
-  systemInitialized$: Observable&lt;void&gt; = this.systemInitializedSource.asObservable();
+  systemInitialized$: Observable&lt;void&gt; =
+    this.systemInitializedSource.asObservable();
 &nbsp;
   initializationStatusChangedSource = new Subject&lt;void&gt;();
-  initializationStatusChanged$: Observable&lt;void&gt; = this.initializationStatusChangedSource.asObservable();
+  initializationStatusChanged$: Observable&lt;void&gt; =
+    this.initializationStatusChangedSource.asObservable();
 &nbsp;
   constructor(
     private documentService: DocumentManagementService,
@@ -2451,11 +2463,12 @@ ${error.status} ${error.statusText}`,
 &nbsp;
         // Reinitialize the model mappings.
 <span class="cstat-no" title="statement not covered" >        if (mInfo &amp;&amp; mInfo.exportMappings) {</span>
-          const <span class="cstat-no" title="statement not covered" >catalogMappingsName = MappingSerializer.deserializeAtlasMappingName(</span>
-            DocumentManagementService.getMappingsInfo(
-              mInfo.exportMappings.value
-            )
-          );
+          const <span class="cstat-no" title="statement not covered" >catalogMappingsName =</span>
+            MappingSerializer.deserializeAtlasMappingName(
+              DocumentManagementService.getMappingsInfo(
+                mInfo.exportMappings.value
+              )
+            );
 &nbsp;
           // If the live UI mappings name does not match the UI mappings name extracted from the
           // catalog file then use the mappings from the catalog file.  Otherwise use the live
@@ -2511,7 +2524,8 @@ ${error.status} ${error.statusText}`,
     collectionType?: CollectionType,
     collectionClassName?: string
   ): DocumentDefinition {
-    const model: DocumentInitializationModel = <span class="cstat-no" title="statement not covered" >new DocumentInitializationModel();</span>
+    const model: DocumentInitializationModel =
+<span class="cstat-no" title="statement not covered" >      new DocumentInitializationModel();</span>
 <span class="cstat-no" title="statement not covered" >    model.id = className;</span>
 <span class="cstat-no" title="statement not covered" >    model.type = DocumentType.JAVA;</span>
 <span class="cstat-no" title="statement not covered" >    model.inspectionType = InspectionType.JAVA_CLASS;</span>
@@ -2539,7 +2553,8 @@ ${error.status} ${error.statusText}`,
     isSource: boolean,
     inspectionParameters?: { [key: string]: string }
   ): DocumentDefinition {
-    const model: DocumentInitializationModel = <span class="cstat-no" title="statement not covered" >new DocumentInitializationModel();</span>
+    const model: DocumentInitializationModel =
+<span class="cstat-no" title="statement not covered" >      new DocumentInitializationModel();</span>
 <span class="cstat-no" title="statement not covered" >    model.name = name;</span>
 <span class="cstat-no" title="statement not covered" >    model.id = id;</span>
 <span class="cstat-no" title="statement not covered" >    model.type = documentType;</span>
@@ -2766,7 +2781,7 @@ ${error.status} ${error.statusText}`,
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue May 11 2021 20:27:39 GMT+0000 (Coordinated Universal Time)
+                at Fri May 14 2021 12:29:06 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

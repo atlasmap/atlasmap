@@ -195,9 +195,10 @@
 <a name='L137'></a><a href='#L137'>137</a>
 <a name='L138'></a><a href='#L138'>138</a>
 <a name='L139'></a><a href='#L139'>139</a>
-<a name='L140'></a><a href='#L140'>140</a>
-<a name='L141'></a><a href='#L141'>141</a>
-<a name='L142'></a><a href='#L142'>142</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L140'></a><a href='#L140'>140</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -216,24 +217,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -338,43 +334,41 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {
-  forwardRef,
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*
+    Copyright (C) 2017 Red Hat, Inc.
+&nbsp;
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+&nbsp;
+            http://www.apache.org/licenses/LICENSE-2.0
+&nbsp;
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+import {
+  AccordionContent,
+  AccordionItem,
+  AccordionToggle,
+} from "@patternfly/react-core";
+import React, {
   FunctionComponent,
   MouseEvent,
   PropsWithChildren,
   ReactNode,
+  forwardRef,
   useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
 &nbsp;
-import {
-  AccordionContent,
-  AccordionItem,
-  AccordionToggle,
-} from "@patternfly/react-core";
-import { css, StyleSheet } from "@patternfly/react-styles";
-&nbsp;
+import { css } from "@patternfly/react-styles";
+import styles from "./TreeGroup.module.css";
 import { useTreeFocus } from "./TreeFocusProvider";
-&nbsp;
-const styles = StyleSheet.create({
-  button: {
-    padding: "0 !important",
-  },
-  content: {
-    fontSize: "inherit !important",
-    "&amp; &gt; div": {
-      boxSizing: "border-box",
-      padding:
-        "var(--pf-c-accordion__expanded-content-body--PaddingTop) 0 var(--pf-c-accordion__expanded-content-body--PaddingBottom) 1.2rem !important",
-    },
-  },
-  hiddenContent: {
-    display: "none",
-  },
-});
 &nbsp;
 export interface ITreeGroupProps {
   id: string;
@@ -461,7 +455,7 @@ export const TreeGroup = forwardRef&lt;
         &lt;AccordionToggle
           isExpanded={isExpanded}
           id={`${id}-toggle`}
-          className={css(styles.button)}
+          className={styles.button}
           tabIndex={-1}
           component={Component}
           onClick={toggleExpandNoPropagation}
@@ -486,7 +480,7 @@ export const TreeGroup = forwardRef&lt;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue May 11 2021 20:28:16 GMT+0000 (Coordinated Universal Time)
+                at Fri May 14 2021 12:29:39 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

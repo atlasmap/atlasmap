@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">45.45% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/12</span>
+                <span class='fraction'>5/11</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">55.56% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/12</span>
+                <span class='fraction'>5/9</span>
             </div>
         
             
@@ -54,7 +54,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -100,19 +100,32 @@
 <a name='L42'></a><a href='#L42'>42</a>
 <a name='L43'></a><a href='#L43'>43</a>
 <a name='L44'></a><a href='#L44'>44</a>
-<a name='L45'></a><a href='#L45'>45</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -124,9 +137,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -144,18 +154,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { FunctionComponent } from "react";
-import { useDebouncedCallback } from "use-debounce";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*
+    Copyright (C) 2017 Red Hat, Inc.
 &nbsp;
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+&nbsp;
+            http://www.apache.org/licenses/LICENSE-2.0
+&nbsp;
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 import { Form, FormGroup, TextInput } from "@patternfly/react-core";
-import { css, StyleSheet } from "@patternfly/react-styles";
+import React, { FunctionComponent } from "react";
 &nbsp;
-const styles = StyleSheet.create({
-  form: {
-    padding: "1rem",
-    marginTop: "0.5rem",
-  },
-});
+import styles from "./DocumentFieldPreview.module.css";
+import { useDebouncedCallback } from "use-debounce";
 &nbsp;
 export interface IDocumentFieldPreviewProps {
   id: string;
@@ -163,31 +181,28 @@ export interface IDocumentFieldPreviewProps {
   onChange: (value: string) =&gt; void;
 }
 &nbsp;
-export const DocumentFieldPreview: FunctionComponent&lt;IDocumentFieldPreviewProps&gt; = <span class="fstat-no" title="function not covered" >({</span>
-<span class="cstat-no" title="statement not covered" >  id,</span>
-<span class="cstat-no" title="statement not covered" >  value,</span>
-<span class="cstat-no" title="statement not covered" >  onChange,</span>
-}) =&gt; {
-  const [<span class="cstat-no" title="statement not covered" >debouncedOnChange]</span> = useDebouncedCallback(onChange, 200);
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Form
-      className={css(styles.form)}
-      onClick={<span class="fstat-no" title="function not covered" >(e</span>vent) =&gt; <span class="cstat-no" title="statement not covered" >event.stopPropagation()}</span>
-    &gt;
-      &lt;FormGroup label="Mapping preview" fieldId={id}&gt;
-        &lt;TextInput
-          id={id}
-          type="text"
-          onChange={debouncedOnChange}
-          defaultValue={value || ""}
-          aria-label="Type sample data here"
-          placeholder="Type sample data here"
-          data-testid={`input-document-mapping-preview-${id}-field`}
-        /&gt;
-      &lt;/FormGroup&gt;
-    &lt;/Form&gt;
-  );
-};
+export const DocumentFieldPreview: FunctionComponent&lt;IDocumentFieldPreviewProps&gt; =
+<span class="fstat-no" title="function not covered" >  ({</span> <span class="cstat-no" title="statement not covered" >id,</span> <span class="cstat-no" title="statement not covered" >value,</span> <span class="cstat-no" title="statement not covered" >onChange </span>}) =&gt; {
+    const [<span class="cstat-no" title="statement not covered" >debouncedOnChange]</span> = useDebouncedCallback(onChange, 200);
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      &lt;Form
+        className={styles.form}
+        onClick={<span class="fstat-no" title="function not covered" >(e</span>vent) =&gt; <span class="cstat-no" title="statement not covered" >event.stopPropagation()}</span>
+      &gt;
+        &lt;FormGroup label="Mapping preview" fieldId={id}&gt;
+          &lt;TextInput
+            id={id}
+            type="text"
+            onChange={debouncedOnChange}
+            defaultValue={value || ""}
+            aria-label="Type sample data here"
+            placeholder="Type sample data here"
+            data-testid={`input-document-mapping-preview-${id}-field`}
+          /&gt;
+        &lt;/FormGroup&gt;
+      &lt;/Form&gt;
+    );
+  };
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -195,7 +210,7 @@ export const DocumentFieldPreview: FunctionComponent&lt;IDocumentFieldPreviewPro
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue May 11 2021 20:28:16 GMT+0000 (Coordinated Universal Time)
+                at Fri May 14 2021 12:29:39 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

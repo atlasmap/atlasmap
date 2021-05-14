@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85% </span>
+                <span class="strong">84.21% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>17/20</span>
+                <span class='fraction'>16/19</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">78.57% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>12/15</span>
+                <span class='fraction'>11/14</span>
             </div>
         
             
@@ -130,7 +130,15 @@
 <a name='L72'></a><a href='#L72'>72</a>
 <a name='L73'></a><a href='#L73'>73</a>
 <a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L75'></a><a href='#L75'>75</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -139,21 +147,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -204,30 +204,30 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {
-  forwardRef,
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*
+    Copyright (C) 2017 Red Hat, Inc.
+&nbsp;
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+&nbsp;
+            http://www.apache.org/licenses/LICENSE-2.0
+&nbsp;
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+import { FolderCloseIcon, FolderOpenIcon } from "@patternfly/react-icons";
+import React, {
   PropsWithChildren,
   ReactElement,
+  forwardRef,
   useRef,
 } from "react";
-&nbsp;
-import { FolderCloseIcon, FolderOpenIcon } from "@patternfly/react-icons";
-import { css, StyleSheet } from "@patternfly/react-styles";
 import { Tooltip } from "@patternfly/react-core";
-&nbsp;
-const styles = StyleSheet.create({
-  buttonContent: {
-    display: "flex",
-    alignItems: "center",
-    padding: "0.5rem 1rem 0.5rem 1.2rem",
-  },
-  buttonIcon: {
-    marginRight: "1rem",
-  },
-  icon: {
-    paddingLeft: "1.5rem",
-  },
-});
+import styles from "./DocumentGroup.module.css";
 &nbsp;
 export interface IDocumentGroupProps {
   name: string;
@@ -261,18 +261,18 @@ export const DocumentGroup = forwardRef&lt;
 &nbsp;
   return (
     &lt;span
-      className={css(styles.buttonContent)}
+      className={styles.buttonContent}
       ref={handleRef}
       data-testid={`field-group-${name}-expanded-${expanded}-field`}
     &gt;
-      &lt;span className={css(styles.buttonIcon)}&gt;
+      &lt;span className={styles.buttonIcon}&gt;
         {expanded ? &lt;FolderOpenIcon /&gt; : &lt;FolderCloseIcon /&gt;}
       &lt;/span&gt;
       {name}
       {showType &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >` (${type})`}</span>
       {icon &amp;&amp; (
 <span class="branch-1 cbranch-no" title="branch not covered" >        &lt;Tooltip enableFlip content={iconTooltip}&gt;</span>
-          &lt;span className={css(styles.icon)}&gt;{icon}&lt;/span&gt;
+          &lt;span className={styles.icon}&gt;{icon}&lt;/span&gt;
         &lt;/Tooltip&gt;
       )}
     &lt;/span&gt;
@@ -285,7 +285,7 @@ export const DocumentGroup = forwardRef&lt;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue May 11 2021 20:28:16 GMT+0000 (Coordinated Universal Time)
+                at Fri May 14 2021 12:29:39 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

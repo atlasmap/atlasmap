@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">22.22% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/28</span>
+                <span class='fraction'>6/27</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">28% </span>
+                <span class="strong">28.57% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>7/25</span>
+                <span class='fraction'>6/21</span>
             </div>
         
             
@@ -158,23 +158,7 @@
 <a name='L100'></a><a href='#L100'>100</a>
 <a name='L101'></a><a href='#L101'>101</a>
 <a name='L102'></a><a href='#L102'>102</a>
-<a name='L103'></a><a href='#L103'>103</a>
-<a name='L104'></a><a href='#L104'>104</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L103'></a><a href='#L103'>103</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -191,14 +175,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -262,29 +260,32 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { FunctionComponent } from "react";
-import React from "react";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*
+    Copyright (C) 2017 Red Hat, Inc.
+&nbsp;
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+&nbsp;
+            http://www.apache.org/licenses/LICENSE-2.0
+&nbsp;
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 import {
   Select,
   SelectOption,
   SelectOptionObject,
 } from "@patternfly/react-core";
-import { StyleSheet, css } from "@patternfly/react-styles";
-import { useToggle } from "../Atlasmap/utils";
-import { EnumValue } from "../../src/Atlasmap/utils";
 &nbsp;
-const styles = StyleSheet.create({
-  document: {
-    fontWeight: "bold",
-  },
-  field: {
-    marginLeft: 20,
-  },
-  enumSelectMenu: {
-    margin: "var(--pf-global--spacer--form-element) 0",
-    width: "40%",
-  },
-});
+import { EnumValue } from "../../src/Atlasmap/utils";
+import { FunctionComponent } from "react";
+import React from "react";
+import styles from "./ExpressionEnumSelect.module.css";
+import { useToggle } from "../Atlasmap/utils";
 &nbsp;
 export interface IExpressionEnumSelectProps {
   selectedNodeId: string;
@@ -294,77 +295,73 @@ export interface IExpressionEnumSelectProps {
 }
 let selectValue = "";
 &nbsp;
-export const ExpressionEnumSelect: FunctionComponent&lt;IExpressionEnumSelectProps&gt; = <span class="fstat-no" title="function not covered" >({</span>
-<span class="cstat-no" title="statement not covered" >  selectedNodeId,</span>
-<span class="cstat-no" title="statement not covered" >  enumCandidates,</span>
-<span class="cstat-no" title="statement not covered" >  clearEnumSelect,</span>
-<span class="cstat-no" title="statement not covered" >  onEnumSelect,</span>
-}) =&gt; {
-  const id = <span class="cstat-no" title="statement not covered" >`expr-enum-select-${selectValue}`;</span>
-  const <span class="cstat-no" title="statement not covered" >{ <span class="cstat-no" title="statement not covered" >s</span>tate,</span> <span class="cstat-no" title="statement not covered" >toggle,</span> <span class="cstat-no" title="statement not covered" >toggleOff } = useToggle(true, onToggleEnumSelect);</span>
+export const ExpressionEnumSelect: FunctionComponent&lt;IExpressionEnumSelectProps&gt; =
+<span class="fstat-no" title="function not covered" >  ({</span> <span class="cstat-no" title="statement not covered" >selectedNodeId,</span> <span class="cstat-no" title="statement not covered" >enumCandidates,</span> <span class="cstat-no" title="statement not covered" >clearEnumSelect,</span> <span class="cstat-no" title="statement not covered" >onEnumSelect </span>}) =&gt; {
+    const id = <span class="cstat-no" title="statement not covered" >`expr-enum-select-${selectValue}`;</span>
+    const <span class="cstat-no" title="statement not covered" >{ <span class="cstat-no" title="statement not covered" >s</span>tate,</span> <span class="cstat-no" title="statement not covered" >toggle,</span> <span class="cstat-no" title="statement not covered" >toggleOff } = useToggle(true, onToggleEnumSelect);</span>
 &nbsp;
-  function <span class="fstat-no" title="function not covered" >onToggleEnumSelect(</span>toggled: boolean): any {
-<span class="cstat-no" title="statement not covered" >    if (!toggled) {</span>
-<span class="cstat-no" title="statement not covered" >      enumCandidates = [];</span>
-<span class="cstat-no" title="statement not covered" >      clearEnumSelect();</span>
+    function <span class="fstat-no" title="function not covered" >onToggleEnumSelect(</span>toggled: boolean): any {
+<span class="cstat-no" title="statement not covered" >      if (!toggled) {</span>
+<span class="cstat-no" title="statement not covered" >        enumCandidates = [];</span>
+<span class="cstat-no" title="statement not covered" >        clearEnumSelect();</span>
+      }
     }
-  }
 &nbsp;
-  function <span class="fstat-no" title="function not covered" >selectionChanged(</span>
-    event: any,
-    value: string | SelectOptionObject,
-    _isPlaceholder?: boolean | undefined,
-  ): void {
-<span class="cstat-no" title="statement not covered" >    selectValue = value as string;</span>
-<span class="cstat-no" title="statement not covered" >    onEnumSelect(selectedNodeId, event.currentTarget.id.split("-").pop());</span>
-<span class="cstat-no" title="statement not covered" >    onToggleEnumSelect(false);</span>
-<span class="cstat-no" title="statement not covered" >    toggleOff();</span>
-  }
-&nbsp;
-  function <span class="fstat-no" title="function not covered" >createSelectOption(</span>selectField: string, idx: number): any {
-<span class="cstat-no" title="statement not covered" >    if (selectField[1].length === 0) {</span>
-<span class="cstat-no" title="statement not covered" >      return (</span>
-        &lt;SelectOption
-          isDisabled={true}
-          label={selectField}
-          value={selectField}
-          key={idx}
-          className={css(styles.document)}
-        /&gt;
-      );
-    } else {
-<span class="cstat-no" title="statement not covered" >      return (</span>
-        &lt;SelectOption
-          label={selectField}
-          value={selectField}
-          key={idx}
-          className={css(styles.field)}
-        /&gt;
-      );
+    function <span class="fstat-no" title="function not covered" >selectionChanged(</span>
+      event: any,
+      value: string | SelectOptionObject,
+      _isPlaceholder?: boolean | undefined,
+    ): void {
+<span class="cstat-no" title="statement not covered" >      selectValue = value as string;</span>
+<span class="cstat-no" title="statement not covered" >      onEnumSelect(selectedNodeId, event.currentTarget.id.split("-").pop());</span>
+<span class="cstat-no" title="statement not covered" >      onToggleEnumSelect(false);</span>
+<span class="cstat-no" title="statement not covered" >      toggleOff();</span>
     }
-  }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;div
-      aria-label="Expression Enumeration"
-      className={css(styles.enumSelectMenu)}
-      data-testid={"expression-enumeration-select"}
-    &gt;
-      &lt;Select
-        onToggle={toggle}
-        isExpanded={state}
-        value={selectValue}
-        id={id}
-        onSelect={selectionChanged}
-        data-testid={id}
+    function <span class="fstat-no" title="function not covered" >createSelectOption(</span>selectField: string, idx: number): any {
+<span class="cstat-no" title="statement not covered" >      if (selectField[1].length === 0) {</span>
+<span class="cstat-no" title="statement not covered" >        return (</span>
+          &lt;SelectOption
+            isDisabled={true}
+            label={selectField}
+            value={selectField}
+            key={idx}
+            className={styles.document}
+          /&gt;
+        );
+      } else {
+<span class="cstat-no" title="statement not covered" >        return (</span>
+          &lt;SelectOption
+            label={selectField}
+            value={selectField}
+            key={idx}
+            className={styles.field}
+          /&gt;
+        );
+      }
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      &lt;div
+        aria-label="Expression Enumeration"
+        className="enumSelectMenu"
+        data-testid={"expression-enumeration-select"}
       &gt;
-        {enumCandidates.map(<span class="fstat-no" title="function not covered" >(s</span>, idx: number) =&gt;
-<span class="cstat-no" title="statement not covered" >          createSelectOption(s.name, idx),</span>
-        )}
-      &lt;/Select&gt;
-    &lt;/div&gt;
-  );
-};
+        &lt;Select
+          onToggle={toggle}
+          isOpen={state}
+          value={selectValue}
+          id={id}
+          onSelect={selectionChanged}
+          data-testid={id}
+        &gt;
+          {enumCandidates.map(<span class="fstat-no" title="function not covered" >(s</span>, idx: number) =&gt;
+<span class="cstat-no" title="statement not covered" >            createSelectOption(s.name, idx),</span>
+          )}
+        &lt;/Select&gt;
+      &lt;/div&gt;
+    );
+  };
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -372,7 +369,7 @@ export const ExpressionEnumSelect: FunctionComponent&lt;IExpressionEnumSelectPro
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue May 11 2021 20:28:16 GMT+0000 (Coordinated Universal Time)
+                at Fri May 14 2021 12:29:39 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

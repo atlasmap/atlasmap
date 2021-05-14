@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">62.5% </span>
+                <span class="strong">57.14% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/8</span>
+                <span class='fraction'>4/7</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">62.5% </span>
+                <span class="strong">66.67% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/8</span>
+                <span class='fraction'>4/6</span>
             </div>
         
             
@@ -92,16 +92,30 @@
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
 <a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -112,7 +126,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -127,43 +140,48 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Form, FormGroup, TextInput } from "@patternfly/react-core";
-import React, { FunctionComponent } from "react";
-import { css, StyleSheet } from "@patternfly/react-styles";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*
+    Copyright (C) 2017 Red Hat, Inc.
 &nbsp;
-const styles = StyleSheet.create({
-  form: {
-    padding: "1rem",
-    marginTop: "0.5rem",
-  },
-});
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+&nbsp;
+            http://www.apache.org/licenses/LICENSE-2.0
+&nbsp;
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+import { Form, FormGroup, TextInput } from "@patternfly/react-core";
+import React, { FunctionComponent } from "react";
+import styles from "./DocumentFieldPreviewResults.module.css";
 &nbsp;
 export interface IDocumentFieldPreviewResultsProps {
   id: string;
   value: string;
 }
 &nbsp;
-export const DocumentFieldPreviewResults: FunctionComponent&lt;IDocumentFieldPreviewResultsProps&gt; = <span class="fstat-no" title="function not covered" >({</span>
-<span class="cstat-no" title="statement not covered" >  id,</span>
-<span class="cstat-no" title="statement not covered" >  value,</span>
-}) =&gt; {
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Form className={css(styles.form)}&gt;
-      &lt;FormGroup label="Preview results" fieldId={id}&gt;
-        &lt;TextInput
-          id={id}
-          type="text"
-          value={value === undefined ? "" : value}
-          aria-label="Mapping results preview"
-          placeholder="Results will be displayed here"
-          isDisabled={true}
-          data-testid={`results-document-mapping-preview-${id}-field`}
-        /&gt;
-      &lt;/FormGroup&gt;
-    &lt;/Form&gt;
-  );
-};
+export const DocumentFieldPreviewResults: FunctionComponent&lt;IDocumentFieldPreviewResultsProps&gt; =
+<span class="fstat-no" title="function not covered" >  ({</span> <span class="cstat-no" title="statement not covered" >id,</span> <span class="cstat-no" title="statement not covered" >value </span>}) =&gt; {
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      &lt;Form className={styles.form}&gt;
+        &lt;FormGroup label="Preview results" fieldId={id}&gt;
+          &lt;TextInput
+            id={id}
+            type="text"
+            value={value === undefined ? "" : value}
+            aria-label="Mapping results preview"
+            placeholder="Results will be displayed here"
+            isDisabled={true}
+            data-testid={`results-document-mapping-preview-${id}-field`}
+          /&gt;
+        &lt;/FormGroup&gt;
+      &lt;/Form&gt;
+    );
+  };
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -171,7 +189,7 @@ export const DocumentFieldPreviewResults: FunctionComponent&lt;IDocumentFieldPre
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue May 11 2021 20:28:16 GMT+0000 (Coordinated Universal Time)
+                at Fri May 14 2021 12:29:39 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

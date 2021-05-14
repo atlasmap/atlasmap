@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">28.57% </span>
+                <span class="strong">25% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/21</span>
+                <span class='fraction'>5/20</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">28.57% </span>
+                <span class="strong">25% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/21</span>
+                <span class='fraction'>5/20</span>
             </div>
         
             
@@ -110,7 +110,41 @@
 <a name='L52'></a><a href='#L52'>52</a>
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -120,12 +154,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -164,60 +192,80 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { FunctionComponent } from "react";
-import { ToolbarGroup, ToolbarItem } from "@patternfly/react-core";
-import { css, StyleSheet } from "@patternfly/react-styles";
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*
+    Copyright (C) 2017 Red Hat, Inc.
+&nbsp;
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+&nbsp;
+            http://www.apache.org/licenses/LICENSE-2.0
+&nbsp;
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 import {
   ExpressionContent,
   IExpressionContentProps,
 } from "./ExpressionContent";
-&nbsp;
-const styles = StyleSheet.create({
-  toolbarItem: { flex: 1 },
-});
+import React, { FunctionComponent } from "react";
+import { ToolbarGroup, ToolbarItem } from "@patternfly/react-core";
+import styles from "./ConditionalExpressionInput.module.css";
 &nbsp;
 export interface IConditionalExpressionInputProps
   extends IExpressionContentProps {}
 &nbsp;
-export const ConditionalExpressionInput: FunctionComponent&lt;IConditionalExpressionInputProps&gt; = <span class="fstat-no" title="function not covered" >({</span>
-<span class="cstat-no" title="statement not covered" >  executeFieldSearch,</span>
-<span class="cstat-no" title="statement not covered" >  getFieldEnums,</span>
-<span class="cstat-no" title="statement not covered" >  mappingExpressionAddField,</span>
-<span class="cstat-no" title="statement not covered" >  mappingExpressionClearText,</span>
-<span class="cstat-no" title="statement not covered" >  isMappingExpressionEmpty,</span>
-<span class="cstat-no" title="statement not covered" >  mappingExpressionInit,</span>
-<span class="cstat-no" title="statement not covered" >  mappingExpressionInsertText,</span>
-<span class="cstat-no" title="statement not covered" >  mappingExpressionObservable,</span>
-<span class="cstat-no" title="statement not covered" >  mappingExpressionRemoveField,</span>
-<span class="cstat-no" title="statement not covered" >  mappingExpression,</span>
-<span class="cstat-no" title="statement not covered" >  trailerId,</span>
-<span class="cstat-no" title="statement not covered" >  disabled,</span>
-<span class="cstat-no" title="statement not covered" >  onToggle,</span>
-<span class="cstat-no" title="statement not covered" >  setSelectedEnumValue,</span>
-}) =&gt; {
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;ToolbarGroup className={css(styles.toolbarItem)} role={"form"}&gt;
-      &lt;ToolbarItem className={css(styles.toolbarItem)}&gt;
-        &lt;ExpressionContent
-          disabled={disabled}
-          executeFieldSearch={executeFieldSearch}
-          getFieldEnums={getFieldEnums}
-          mappingExpressionAddField={mappingExpressionAddField}
-          mappingExpressionClearText={mappingExpressionClearText}
-          isMappingExpressionEmpty={isMappingExpressionEmpty}
-          mappingExpressionInit={mappingExpressionInit}
-          mappingExpressionInsertText={mappingExpressionInsertText}
-          mappingExpressionObservable={mappingExpressionObservable}
-          mappingExpressionRemoveField={mappingExpressionRemoveField}
-          mappingExpression={mappingExpression}
-          trailerId={trailerId}
-          onToggle={onToggle}
-          setSelectedEnumValue={setSelectedEnumValue}
-        /&gt;
-      &lt;/ToolbarItem&gt;
-    &lt;/ToolbarGroup&gt;
-  );
-};
+export const ConditionalExpressionInput: FunctionComponent&lt;IConditionalExpressionInputProps&gt; =
+<span class="fstat-no" title="function not covered" >  ({</span>
+<span class="cstat-no" title="statement not covered" >    executeFieldSearch,</span>
+<span class="cstat-no" title="statement not covered" >    getFieldEnums,</span>
+<span class="cstat-no" title="statement not covered" >    mappingExpressionAddField,</span>
+<span class="cstat-no" title="statement not covered" >    mappingExpressionClearText,</span>
+<span class="cstat-no" title="statement not covered" >    isMappingExpressionEmpty,</span>
+<span class="cstat-no" title="statement not covered" >    mappingExpressionInit,</span>
+<span class="cstat-no" title="statement not covered" >    mappingExpressionInsertText,</span>
+<span class="cstat-no" title="statement not covered" >    mappingExpressionObservable,</span>
+<span class="cstat-no" title="statement not covered" >    mappingExpressionRemoveField,</span>
+<span class="cstat-no" title="statement not covered" >    mappingExpression,</span>
+<span class="cstat-no" title="statement not covered" >    trailerId,</span>
+<span class="cstat-no" title="statement not covered" >    disabled,</span>
+<span class="cstat-no" title="statement not covered" >    onToggle,</span>
+<span class="cstat-no" title="statement not covered" >    setSelectedEnumValue,</span>
+  }) =&gt; {
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      &lt;ToolbarGroup
+        variant="filter-group"
+        className={styles.toolbarItem}
+        role={"form"}
+      &gt;
+        &lt;ToolbarItem className={styles.toolbarItem}&gt;
+          &lt;ExpressionContent
+            disabled={disabled}
+            executeFieldSearch={executeFieldSearch}
+            getFieldEnums={getFieldEnums}
+            mappingExpressionAddField={mappingExpressionAddField}
+            mappingExpressionClearText={mappingExpressionClearText}
+            isMappingExpressionEmpty={isMappingExpressionEmpty}
+            mappingExpressionInit={mappingExpressionInit}
+            mappingExpressionInsertText={mappingExpressionInsertText}
+            mappingExpressionObservable={mappingExpressionObservable}
+            mappingExpressionRemoveField={mappingExpressionRemoveField}
+            mappingExpression={mappingExpression}
+            trailerId={trailerId}
+            onToggle={onToggle}
+            setSelectedEnumValue={setSelectedEnumValue}
+          /&gt;
+        &lt;/ToolbarItem&gt;
+      &lt;/ToolbarGroup&gt;
+    );
+  };
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -225,7 +273,7 @@ export const ConditionalExpressionInput: FunctionComponent&lt;IConditionalExpres
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue May 11 2021 20:28:16 GMT+0000 (Coordinated Universal Time)
+                at Fri May 14 2021 12:29:39 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

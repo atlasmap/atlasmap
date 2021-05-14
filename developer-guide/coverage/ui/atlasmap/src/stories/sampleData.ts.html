@@ -1158,7 +1158,30 @@
 <a name='L1100'></a><a href='#L1100'>1100</a>
 <a name='L1101'></a><a href='#L1101'>1101</a>
 <a name='L1102'></a><a href='#L1102'>1102</a>
-<a name='L1103'></a><a href='#L1103'>1103</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1103'></a><a href='#L1103'>1103</a>
+<a name='L1104'></a><a href='#L1104'>1104</a>
+<a name='L1105'></a><a href='#L1105'>1105</a>
+<a name='L1106'></a><a href='#L1106'>1106</a>
+<a name='L1107'></a><a href='#L1107'>1107</a>
+<a name='L1108'></a><a href='#L1108'>1108</a>
+<a name='L1109'></a><a href='#L1109'>1109</a>
+<a name='L1110'></a><a href='#L1110'>1110</a>
+<a name='L1111'></a><a href='#L1111'>1111</a>
+<a name='L1112'></a><a href='#L1112'>1112</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1925,11 +1948,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2260,15 +2278,29 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { MappingModel } from "@atlasmap/core";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*
+    Copyright (C) 2017 Red Hat, Inc.
 &nbsp;
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+&nbsp;
+            http://www.apache.org/licenses/LICENSE-2.0
+&nbsp;
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 import {
-  IAtlasmapMapping,
   IAtlasmapDocument,
   IAtlasmapField,
   IAtlasmapMappedField,
+  IAtlasmapMapping,
 } from "../Views";
 &nbsp;
+import { MappingModel } from "@atlasmap/core";
 <span class="cstat-no" title="statement not covered" >import { javaToFieldGroup } from "./fromJava";</span>
 <span class="cstat-no" title="statement not covered" >import { jsonToFieldGroup } from "./fromJson";</span>
 <span class="cstat-no" title="statement not covered" >import { xmlToFieldGroup } from "./fromXML";</span>
@@ -2905,8 +2937,7 @@ const XMLSchemaSource = <span class="cstat-no" title="statement not covered" >{<
                                 xmlField: [
                                   {
                                     jsonType: "io.atlasmap.xml.v2.XmlField",
-                                    path:
-                                      "/tns:request/tns:body/Pet/Category/id",
+                                    path: "/tns:request/tns:body/Pet/Category/id",
                                     fieldType: "DECIMAL",
                                     restrictions: {
                                       restriction: [],
@@ -2915,8 +2946,7 @@ const XMLSchemaSource = <span class="cstat-no" title="statement not covered" >{<
                                   },
                                   {
                                     jsonType: "io.atlasmap.xml.v2.XmlField",
-                                    path:
-                                      "/tns:request/tns:body/Pet/Category/name",
+                                    path: "/tns:request/tns:body/Pet/Category/name",
                                     fieldType: "STRING",
                                     restrictions: {
                                       restriction: [],
@@ -2944,8 +2974,7 @@ const XMLSchemaSource = <span class="cstat-no" title="statement not covered" >{<
                                 xmlField: [
                                   {
                                     jsonType: "io.atlasmap.xml.v2.XmlField",
-                                    path:
-                                      "/tns:request/tns:body/Pet/photoUrl/photoUrl",
+                                    path: "/tns:request/tns:body/Pet/photoUrl/photoUrl",
                                     fieldType: "STRING",
                                     restrictions: {
                                       restriction: [],
@@ -2974,8 +3003,7 @@ const XMLSchemaSource = <span class="cstat-no" title="statement not covered" >{<
                                         {
                                           jsonType:
                                             "io.atlasmap.xml.v2.XmlField",
-                                          path:
-                                            "/tns:request/tns:body/Pet/tag/Tag/id",
+                                          path: "/tns:request/tns:body/Pet/tag/Tag/id",
                                           fieldType: "DECIMAL",
                                           restrictions: {
                                             restriction: [],
@@ -2985,8 +3013,7 @@ const XMLSchemaSource = <span class="cstat-no" title="statement not covered" >{<
                                         {
                                           jsonType:
                                             "io.atlasmap.xml.v2.XmlField",
-                                          path:
-                                            "/tns:request/tns:body/Pet/tag/Tag/name",
+                                          path: "/tns:request/tns:body/Pet/tag/Tag/name",
                                           fieldType: "STRING",
                                           restrictions: {
                                             restriction: [],
@@ -3369,7 +3396,7 @@ export const <span class="cstat-no" title="statement not covered" >targets: IAtl
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue May 11 2021 20:28:16 GMT+0000 (Coordinated Universal Time)
+                at Fri May 14 2021 12:29:39 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

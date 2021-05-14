@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
@@ -103,11 +103,9 @@
 <a name='L45'></a><a href='#L45'>45</a>
 <a name='L46'></a><a href='#L46'>46</a>
 <a name='L47'></a><a href='#L47'>47</a>
-<a name='L48'></a><a href='#L48'>48</a>
-<a name='L49'></a><a href='#L49'>49</a>
-<a name='L50'></a><a href='#L50'>50</a>
-<a name='L51'></a><a href='#L51'>51</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L48'></a><a href='#L48'>48</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -117,11 +115,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -156,8 +150,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import React, { useCallback, ReactElement, useState } from "react";</span>
-<span class="cstat-no" title="statement not covered" >import { IDocumentName, ChangeDocumentNameDialog } from "../../UI";</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { ChangeDocumentNameDialog, IDocumentName } from "../../UI";</span>
+<span class="cstat-no" title="statement not covered" >import React, { ReactElement, useCallback, useState } from "react";</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >import { useToggle } from "../../Atlasmap/utils";</span>
 &nbsp;
 type ChangeDocumentNameCallback = (documentNameInfo: IDocumentName) =&gt; void;
@@ -166,18 +161,14 @@ type ChangeDocumentNameCallback = (documentNameInfo: IDocumentName) =&gt; void;
   ReactElement,
   (cb: ChangeDocumentNameCallback, documentNameInfo: IDocumentName) =&gt; void,
 ] {
-  const <span class="cstat-no" title="statement not covered" >[</span>
-<span class="cstat-no" title="statement not covered" >    onDocumentNameCb,</span>
-<span class="cstat-no" title="statement not covered" >    setOnChangeDocumentNameCb,</span>
-  ] = useState&lt;ChangeDocumentNameCallback | null&gt;(null);
-  const <span class="cstat-no" title="statement not covered" >[</span>
-<span class="cstat-no" title="statement not covered" >    initialDocumentName,</span>
-<span class="cstat-no" title="statement not covered" >    setInitialDocumentName,</span>
-  ] = useState&lt;IDocumentName | null&gt;({
-    id: "",
-    name: "",
-    isSource: false,
-  });
+  const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >o</span>nDocumentNameCb,</span> <span class="cstat-no" title="statement not covered" >setOnChangeDocumentNameCb] =</span>
+    useState&lt;ChangeDocumentNameCallback | null&gt;(null);
+  const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >initialDocumentName,</span> <span class="cstat-no" title="statement not covered" >setInitialDocumentName] =</span></span>
+    useState&lt;IDocumentName | null&gt;({
+      id: "",
+      name: "",
+      isSource: false,
+    });
   const <span class="cstat-no" title="statement not covered" >{ <span class="cstat-no" title="statement not covered" >s</span>tate,</span> <span class="cstat-no" title="statement not covered" >toggleOn,</span> <span class="cstat-no" title="statement not covered" >toggleOff } = useToggle(false);</span>
   const onConfirm = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (d</span>ocumentNameInfo: IDocumentName) =&gt; {
@@ -213,7 +204,7 @@ type ChangeDocumentNameCallback = (documentNameInfo: IDocumentName) =&gt; void;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue May 11 2021 20:28:16 GMT+0000 (Coordinated Universal Time)
+                at Fri May 14 2021 12:29:39 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

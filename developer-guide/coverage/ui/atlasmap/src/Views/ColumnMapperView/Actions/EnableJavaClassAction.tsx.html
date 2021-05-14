@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
@@ -93,19 +93,17 @@
 <a name='L35'></a><a href='#L35'>35</a>
 <a name='L36'></a><a href='#L36'>36</a>
 <a name='L37'></a><a href='#L37'>37</a>
-<a name='L38'></a><a href='#L38'>38</a>
-<a name='L39'></a><a href='#L39'>39</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<a name='L38'></a><a href='#L38'>38</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -132,44 +130,43 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import React, { FunctionComponent } from "react";</span>
-<span class="cstat-no" title="statement not covered" >import { Button, Tooltip } from "@patternfly/react-core";</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { Button, Tooltip } from "@patternfly/react-core";</span>
+<span class="cstat-no" title="statement not covered" >import React, { FunctionComponent } from "react";</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >import { AddCircleOIcon } from "@patternfly/react-icons";</span>
 &nbsp;
 export interface IEnableJavaClassActionProps {
   onCustomClassSearch: () =&gt; void;
 }
 &nbsp;
-export const <span class="cstat-no" title="statement not covered" >EnableJavaClassAction: FunctionComponent&lt;IEnableJavaClassActionProps&gt; = <span class="fstat-no" title="function not covered" >({</span></span>
-<span class="cstat-no" title="statement not covered" >  onCustomClassSearch,</span>
-<span class="cstat-no" title="statement not covered" >  ...props</span>
-}) =&gt; {
-  function <span class="fstat-no" title="function not covered" >onEnableClassSearch(</span>): void {
-<span class="cstat-no" title="statement not covered" >    onCustomClassSearch();</span>
-  }
+export const <span class="cstat-no" title="statement not covered" >EnableJavaClassAction: FunctionComponent&lt;IEnableJavaClassActionProps&gt; =</span>
+<span class="fstat-no" title="function not covered" >  ({</span> <span class="cstat-no" title="statement not covered" >onCustomClassSearch,</span> <span class="cstat-no" title="statement not covered" >...props </span>}) =&gt; {
+    function <span class="fstat-no" title="function not covered" >onEnableClassSearch(</span>): void {
+<span class="cstat-no" title="statement not covered" >      onCustomClassSearch();</span>
+    }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Tooltip
-      position={"auto"}
-      enableFlip={true}
-      content={
-        &lt;div&gt;
-          Load a Java document based on classes from your previously imported
-          Java archive.
-        &lt;/div&gt;
-      }
-    &gt;
-      &lt;Button
-        variant="plain"
-        onClick={onEnableClassSearch}
-        aria-label="Load a Java document based on classes from your previously imported Java archive."
-        {...props}
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      &lt;Tooltip
+        position={"auto"}
+        enableFlip={true}
+        content={
+          &lt;div&gt;
+            Load a Java document based on classes from your previously imported
+            Java archive.
+          &lt;/div&gt;
+        }
       &gt;
-        &lt;AddCircleOIcon /&gt;
-      &lt;/Button&gt;
-    &lt;/Tooltip&gt;
-  );
-};
+        &lt;Button
+          variant="plain"
+          onClick={onEnableClassSearch}
+          aria-label="Load a Java document based on classes from your previously imported Java archive."
+          {...props}
+        &gt;
+          &lt;AddCircleOIcon /&gt;
+        &lt;/Button&gt;
+      &lt;/Tooltip&gt;
+    );
+  };
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -177,7 +174,7 @@ export const <span class="cstat-no" title="statement not covered" >EnableJavaCla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue May 11 2021 20:28:16 GMT+0000 (Coordinated Universal Time)
+                at Fri May 14 2021 12:29:39 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>

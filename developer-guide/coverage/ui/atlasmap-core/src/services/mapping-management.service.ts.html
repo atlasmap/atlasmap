@@ -1388,8 +1388,7 @@
 <a name='L1330'></a><a href='#L1330'>1330</a>
 <a name='L1331'></a><a href='#L1331'>1331</a>
 <a name='L1332'></a><a href='#L1332'>1332</a>
-<a name='L1333'></a><a href='#L1333'>1333</a>
-<a name='L1334'></a><a href='#L1334'>1334</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1333'></a><a href='#L1333'>1333</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1449,6 +1448,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -1575,7 +1575,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1594,7 +1593,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1721,17 +1719,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1739,9 +1727,19 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -2781,7 +2779,8 @@ export class MappingManagementService {
   debugMappingUpdatedSubscription?: Subscription;
 &nbsp;
   mappingSelectionRequiredSource = new Subject&lt;Field&gt;();
-  mappingSelectionRequired$ = this.mappingSelectionRequiredSource.asObservable();
+  mappingSelectionRequired$ =
+    this.mappingSelectionRequiredSource.asObservable();
 &nbsp;
   mappingPreviewInputSource = new Subject&lt;MappingModel&gt;();
   mappingPreviewInput$ = this.mappingPreviewInputSource.asObservable();
@@ -2906,9 +2905,8 @@ export class MappingManagementService {
    */
 <span class="fstat-no" title="function not covered" >  async r</span>emoveMapping(mappingModel: MappingModel): Promise&lt;boolean&gt; {
 <span class="cstat-no" title="statement not covered" >    return new Promise&lt;boolean&gt;(<span class="fstat-no" title="function not covered" >async (r</span>esolve<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >) =&gt; {</span></span></span>
-      const <span class="cstat-no" title="statement not covered" >mappingWasRemoved: boolean = this.cfg.mappings!.removeMapping(</span>
-        mappingModel
-      ); // TODO: check this non null operator
+      const <span class="cstat-no" title="statement not covered" >mappingWasRemoved: boolean =</span>
+        this.cfg.mappings!.removeMapping(mappingModel); // TODO: check this non null operator
       if (<span class="cstat-no" title="statement not covered" >mappingWasRemoved)</span> {
 <span class="cstat-no" title="statement not covered" >        this.deselectMapping();</span>
 <span class="cstat-no" title="statement not covered" >        await this.notifyMappingUpdated();</span>
@@ -2926,9 +2924,8 @@ export class MappingManagementService {
 <span class="cstat-no" title="statement not covered" >    return new Promise&lt;boolean&gt;(<span class="fstat-no" title="function not covered" >async (r</span>esolve<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >) =&gt; {</span></span></span>
       // TODO: check these non null operator on the mappings
 <span class="cstat-no" title="statement not covered" >      for (const <span class="cstat-no" title="statement not covered" >mapping of t</span>his.cfg.mappings!.getAllMappings(true)) {</span>
-        const <span class="cstat-no" title="statement not covered" >mappingWasRemoved: boolean = this.cfg.mappings!.removeMapping(</span>
-          mapping
-        );
+        const <span class="cstat-no" title="statement not covered" >mappingWasRemoved: boolean =</span>
+          this.cfg.mappings!.removeMapping(mapping);
 <span class="cstat-no" title="statement not covered" >        if (mappingWasRemoved) {</span>
 <span class="cstat-no" title="statement not covered" >          this.deselectMapping();</span>
         } else {
@@ -3054,9 +3051,8 @@ export class MappingManagementService {
 &nbsp;
     // Select other existing mapping if selected field participates, or create a new one
 <span class="cstat-no" title="statement not covered" >    if (mapping == null) {</span>
-      const mappingsForField: MappingModel[] = <span class="cstat-no" title="statement not covered" >this.cfg.mappings!.findMappingsForField(</span>
-        field
-      ); // TODO: check this non null operator
+      const mappingsForField: MappingModel[] =
+<span class="cstat-no" title="statement not covered" >        this.cfg.mappings!.findMappingsForField(field);</span> // TODO: check this non null operator
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (mappingsForField &amp;&amp; mappingsForField.length === 1) {</span>
 <span class="cstat-no" title="statement not covered" >        mapping = mappingsForField[0];</span>
@@ -3076,7 +3072,8 @@ export class MappingManagementService {
 <span class="cstat-no" title="statement not covered" >    if (!addField &amp;&amp; !removeField) {</span>
 <span class="cstat-no" title="statement not covered" >      this.selectMapping(mapping);</span>
 &nbsp;
-      const mappedFields = <span class="cstat-no" title="statement not covered" >this.cfg.mappings!.activeMapping!.getAllMappedFields();</span> // TODO: check this non null operator
+      const mappedFields =
+<span class="cstat-no" title="statement not covered" >        this.cfg.mappings!.activeMapping!.getAllMappedFields();</span> // TODO: check this non null operator
 <span class="cstat-no" title="statement not covered" >      for (const mappedField<span class="cstat-no" title="statement not covered" > of <span class="cstat-no" title="statement not covered" >m</span>appedFields)</span> {</span>
         // TODO: check this non null operator
 <span class="cstat-no" title="statement not covered" >        mappedField.field!.expandToRoot();</span>
@@ -3490,8 +3487,8 @@ export class MappingManagementService {
       activeMapping.sourceFields.splice(0, activeMapping.sourceFields.length);
     }
 &nbsp;
-    this.cfg.mappings.activeMapping.transition.enableExpression = !this.cfg
-      .mappings.activeMapping.transition.enableExpression;
+    this.cfg.mappings.activeMapping.transition.enableExpression =
+      !this.cfg.mappings.activeMapping.transition.enableExpression;
     this.updateTransition(this.cfg.mappings.activeMapping);
     <span class="missing-if-branch" title="if path not taken" >I</span>if (this.cfg.mappings.activeMapping.transition.expression) {
 <span class="cstat-no" title="statement not covered" >      this.cfg.mappings.activeMapping.transition.expression.expressionUpdatedSource.next();</span>
@@ -4062,7 +4059,7 @@ export class MappingManagementService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue May 11 2021 20:27:39 GMT+0000 (Coordinated Universal Time)
+                at Fri May 14 2021 12:29:06 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

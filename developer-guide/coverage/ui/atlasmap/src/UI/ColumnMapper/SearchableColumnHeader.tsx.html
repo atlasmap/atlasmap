@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">73.33% </span>
+                <span class="strong">69.23% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>11/15</span>
+                <span class='fraction'>9/13</span>
             </div>
         
             
@@ -106,12 +106,7 @@
 <a name='L48'></a><a href='#L48'>48</a>
 <a name='L49'></a><a href='#L49'>49</a>
 <a name='L50'></a><a href='#L50'>50</a>
-<a name='L51'></a><a href='#L51'>51</a>
-<a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L51'></a><a href='#L51'>51</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -122,11 +117,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -164,60 +156,56 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { FormEvent, FunctionComponent, useRef } from "react";
-&nbsp;
-import { Button, InputGroup, TextInput } from "@patternfly/react-core";
-import { SearchIcon } from "@patternfly/react-icons";
-&nbsp;
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Button, InputGroup, TextInput } from "@patternfly/react-core";
 import { ColumnHeader, IColumnHeaderProps } from "./ColumnHeader";
+import React, { FormEvent, FunctionComponent, useRef } from "react";
+&nbsp;
+import { SearchIcon } from "@patternfly/react-icons";
 &nbsp;
 export interface ISearchableColumnHeaderProps extends IColumnHeaderProps {
   onSearch: (content: string) =&gt; void;
 }
 &nbsp;
-export const SearchableColumnHeader: FunctionComponent&lt;ISearchableColumnHeaderProps&gt; = ({
-  title,
-  actions = [],
-  onSearch,
-}) =&gt; {
-  const searchRef = useRef&lt;HTMLInputElement | null&gt;(null);
-  const onSearchSubmit = <span class="fstat-no" title="function not covered" >(e</span>vent: FormEvent&lt;HTMLFormElement&gt;) =&gt; {
-<span class="cstat-no" title="statement not covered" >    if (searchRef.current) {</span>
-<span class="cstat-no" title="statement not covered" >      onSearch(searchRef.current.value);</span>
-    }
-<span class="cstat-no" title="statement not covered" >    event.preventDefault();</span>
-<span class="cstat-no" title="statement not covered" >    return false;</span>
+export const SearchableColumnHeader: FunctionComponent&lt;ISearchableColumnHeaderProps&gt; =
+  ({ title, actions = [], onSearch }) =&gt; {
+    const searchRef = useRef&lt;HTMLInputElement | null&gt;(null);
+    const onSearchSubmit = <span class="fstat-no" title="function not covered" >(e</span>vent: FormEvent&lt;HTMLFormElement&gt;) =&gt; {
+<span class="cstat-no" title="statement not covered" >      if (searchRef.current) {</span>
+<span class="cstat-no" title="statement not covered" >        onSearch(searchRef.current.value);</span>
+      }
+<span class="cstat-no" title="statement not covered" >      event.preventDefault();</span>
+<span class="cstat-no" title="statement not covered" >      return false;</span>
+    };
+    return (
+      &lt;ColumnHeader
+        title={title}
+        actions={[
+          &lt;form onSubmit={onSearchSubmit} key="search-form"&gt;
+            &lt;InputGroup&gt;
+              &lt;TextInput
+                name={"search"}
+                id={`search-${title}`}
+                type="search"
+                aria-label="Search fields"
+                onChange={onSearch}
+                ref={searchRef}
+                data-testid={`search-${title}-fields-input-field`}
+              /&gt;
+              &lt;Button
+                type={"submit"}
+                aria-label="Search"
+                data-testid={`run-search-${title}-button`}
+                variant={"control"}
+              &gt;
+                &lt;SearchIcon /&gt;
+              &lt;/Button&gt;
+            &lt;/InputGroup&gt;
+          &lt;/form&gt;,
+          ...actions,
+        ]}
+      /&gt;
+    );
   };
-  return (
-    &lt;ColumnHeader
-      title={title}
-      actions={[
-        &lt;form onSubmit={onSearchSubmit} key="search-form"&gt;
-          &lt;InputGroup&gt;
-            &lt;TextInput
-              name={"search"}
-              id={`search-${title}`}
-              type="search"
-              aria-label="Search fields"
-              onChange={onSearch}
-              ref={searchRef}
-              data-testid={`search-${title}-fields-input-field`}
-            /&gt;
-            &lt;Button
-              type={"submit"}
-              aria-label="Search"
-              data-testid={`run-search-${title}-button`}
-              variant={"control"}
-            &gt;
-              &lt;SearchIcon /&gt;
-            &lt;/Button&gt;
-          &lt;/InputGroup&gt;
-        &lt;/form&gt;,
-        ...actions,
-      ]}
-    /&gt;
-  );
-};
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -225,7 +213,7 @@ export const SearchableColumnHeader: FunctionComponent&lt;ISearchableColumnHeade
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue May 11 2021 20:28:16 GMT+0000 (Coordinated Universal Time)
+                at Fri May 14 2021 12:29:39 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

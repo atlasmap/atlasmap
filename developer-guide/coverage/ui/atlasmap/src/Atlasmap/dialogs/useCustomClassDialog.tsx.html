@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/29</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -121,13 +121,7 @@
 <a name='L63'></a><a href='#L63'>63</a>
 <a name='L64'></a><a href='#L64'>64</a>
 <a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L66'></a><a href='#L66'>66</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -140,12 +134,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -196,28 +186,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { collectionTypes } from "@atlasmap/core";</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { CustomClassDialog, ICustomClass } from "../../UI";</span>
+<span class="cstat-no" title="statement not covered" >import React, { ReactElement, useCallback, useState } from "react";</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >import React, { useCallback, ReactElement, useState } from "react";</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >import { CustomClassDialog, ICustomClass } from "../../UI";</span>
-<span class="cstat-no" title="statement not covered" >import { useToggle } from "../../Atlasmap/utils";</span>
+<span class="cstat-no" title="statement not covered" >import { collectionTypes } from "@atlasmap/core";</span>
 <span class="cstat-no" title="statement not covered" >import { getCustomClassNameOptions } from "../utils/document";</span>
+<span class="cstat-no" title="statement not covered" >import { useToggle } from "../../Atlasmap/utils";</span>
 &nbsp;
 type CustomClassCallback = (constant: ICustomClass) =&gt; void;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >u</span>seCustomClassDialog(</span>
   title: string,
 ): [ReactElement, (cb: CustomClassCallback, constant?: ICustomClass) =&gt; void] {
-  const <span class="cstat-no" title="statement not covered" >[</span>
-<span class="cstat-no" title="statement not covered" >    onCustomClassCb,</span>
-<span class="cstat-no" title="statement not covered" >    setOnCustomClassCb,</span>
-  ] = useState&lt;CustomClassCallback | null&gt;(null);
+  const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >o</span>nCustomClassCb,</span> <span class="cstat-no" title="statement not covered" >setOnCustomClassCb] =</span>
+    useState&lt;CustomClassCallback | null&gt;(null);
 &nbsp;
-  const <span class="cstat-no" title="statement not covered" >[</span>
-<span class="cstat-no" title="statement not covered" >    initialCustomClass,</span>
-<span class="cstat-no" title="statement not covered" >    setInitialCustomClass,</span>
-  ] = useState&lt;ICustomClass | null&gt;(null);
+  const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >i</span>nitialCustomClass,</span> <span class="cstat-no" title="statement not covered" >setInitialCustomClass] =</span>
+    useState&lt;ICustomClass | null&gt;(null);
 &nbsp;
   const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >c</span>ustomClassNames,</span> <span class="cstat-no" title="statement not covered" >setCustomClassNames] = useState&lt;string[] | null&gt;([]);</span>
 &nbsp;
@@ -273,7 +258,7 @@ type CustomClassCallback = (constant: ICustomClass) =&gt; void;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue May 11 2021 20:28:16 GMT+0000 (Coordinated Universal Time)
+                at Fri May 14 2021 12:29:39 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

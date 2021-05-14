@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/50</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
@@ -304,30 +304,25 @@
 <a name='L246'></a><a href='#L246'>246</a>
 <a name='L247'></a><a href='#L247'>247</a>
 <a name='L248'></a><a href='#L248'>248</a>
-<a name='L249'></a><a href='#L249'>249</a>
-<a name='L250'></a><a href='#L250'>250</a>
-<a name='L251'></a><a href='#L251'>251</a>
-<a name='L252'></a><a href='#L252'>252</a>
-<a name='L253'></a><a href='#L253'>253</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L249'></a><a href='#L249'>249</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -396,11 +391,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -409,12 +400,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -560,14 +552,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import React, { useMemo, useState } from "react";</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >import { ToolbarGroup } from "@patternfly/react-core";</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >import { ContextToolbar } from "../Layout";</span>
-<span class="cstat-no" title="statement not covered" >import { useToggle } from "../Atlasmap/utils";</span>
-<span class="cstat-no" title="statement not covered" >import {</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import {</span>
+  AboutToolbarItem,
   AddMappingToolbarItem,
+  AtlasmapToolbarItem,
   ToggleColumnMapperViewToolbarItem,
   ToggleFreeViewToolbarItem,
   ToggleMappedFieldsToolbarItem,
@@ -577,10 +565,13 @@
   ToggleNamespaceTableViewToolbarItem,
   ToggleTypesToolbarItem,
   ToggleUnmappedFieldsToolbarItem,
-  AtlasmapToolbarItem,
-  AboutToolbarItem,
 } from "./toolbarItems";
+<span class="cstat-no" title="statement not covered" >import React, { useMemo, useState } from "react";</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >import { ContextToolbar } from "../Layout";</span>
+<span class="cstat-no" title="statement not covered" >import { ToolbarGroup } from "@patternfly/react-core";</span>
 <span class="cstat-no" title="statement not covered" >import { useAtlasmap } from "./AtlasmapProvider";</span>
+<span class="cstat-no" title="statement not covered" >import { useToggle } from "../Atlasmap/utils";</span>
 &nbsp;
 export type Views =
   | "ColumnMapper"
@@ -647,23 +638,17 @@ export interface IUseContextToolbarData {
   } = useAtlasmap();
 &nbsp;
   const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >a</span>ctiveView,</span> <span class="cstat-no" title="statement not covered" >setActiveView] = useState&lt;Views&gt;("ColumnMapper");</span>
-  const <span class="cstat-no" title="statement not covered" >{</span>
-<span class="cstat-no" title="statement not covered" >    state: showMappingColumn,</span>
-<span class="cstat-no" title="statement not covered" >    toggle: toggleShowMappingColumn,</span>
-  } = useToggle(false);
-  const <span class="cstat-no" title="statement not covered" >{</span>
-<span class="cstat-no" title="statement not covered" >    state: showMappingPreview,</span>
-<span class="cstat-no" title="statement not covered" >    toggle: toggleShowMappingPreview,</span>
-  } = useToggle(false, amToggleMappingPreview);
+  const <span class="cstat-no" title="statement not covered" >{ <span class="cstat-no" title="statement not covered" >s</span>tate: showMappingColumn,</span> <span class="cstat-no" title="statement not covered" >toggle: toggleShowMappingColumn } =</span>
+    useToggle(false);
+  const <span class="cstat-no" title="statement not covered" >{ <span class="cstat-no" title="statement not covered" >s</span>tate: showMappingPreview,</span> <span class="cstat-no" title="statement not covered" >toggle: toggleShowMappingPreview } =</span>
+    useToggle(false, amToggleMappingPreview);
   const <span class="cstat-no" title="statement not covered" >{ <span class="cstat-no" title="statement not covered" >s</span>tate: showTypes,</span> <span class="cstat-no" title="statement not covered" >toggle: toggleShowTypes } = useToggle(true);</span>
   const <span class="cstat-no" title="statement not covered" >{ <span class="cstat-no" title="statement not covered" >s</span>tate: showMappedFields,</span> <span class="cstat-no" title="statement not covered" >toggle: toggleShowMappedFields } = useToggle(</span>
     true,
     amToggleShowMappedFields,
   );
-  const <span class="cstat-no" title="statement not covered" >{</span>
-<span class="cstat-no" title="statement not covered" >    state: showUnmappedFields,</span>
-<span class="cstat-no" title="statement not covered" >    toggle: toggleShowUnmappedFields,</span>
-  } = useToggle(true, amToggleShowUnmappedFields);
+  const <span class="cstat-no" title="statement not covered" >{ <span class="cstat-no" title="statement not covered" >s</span>tate: showUnmappedFields,</span> <span class="cstat-no" title="statement not covered" >toggle: toggleShowUnmappedFields } =</span>
+    useToggle(true, amToggleShowUnmappedFields);
 &nbsp;
   const contextToolbar = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    () =&gt; <span class="cstat-no" title="statement not covered" >(</span></span>
@@ -672,7 +657,7 @@ export interface IUseContextToolbarData {
           showImportJarFileToolbarItem ||
           showExportAtlasFileToolbarItem ||
           showResetToolbarItem) &amp;&amp; (
-          &lt;ToolbarGroup&gt;
+          &lt;ToolbarGroup variant="button-group" spacer={{ default: "spacerMd" }}&gt;
             &lt;AtlasmapToolbarItem
               showImportAtlasFileToolbarItem={showImportAtlasFileToolbarItem}
               showImportJarFileToolbarItem={showImportJarFileToolbarItem}
@@ -689,7 +674,10 @@ export interface IUseContextToolbarData {
           showMappingTableViewToolbarItem ||
           showFreeViewToolbarItem ||
           showNamespaceTableViewToolbarItem) &amp;&amp; (
-          &lt;ToolbarGroup&gt;
+          &lt;ToolbarGroup
+            variant="icon-button-group"
+            spacer={{ default: "spacerMd" }}
+          &gt;
             {showColumnMapperViewToolbarItem &amp;&amp; (
               &lt;ToggleColumnMapperViewToolbarItem
                 toggled={activeView === "ColumnMapper"}
@@ -716,7 +704,7 @@ export interface IUseContextToolbarData {
             )}
           &lt;/ToolbarGroup&gt;
         )}
-        &lt;ToolbarGroup&gt;
+        &lt;ToolbarGroup variant="icon-button-group"&gt;
           {showToggleMappingColumnToolbarItem &amp;&amp;
             activeView === "ColumnMapper" &amp;&amp; (
               &lt;ToggleMappingColumnToolbarItem
@@ -819,7 +807,7 @@ export interface IUseContextToolbarData {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue May 11 2021 20:28:16 GMT+0000 (Coordinated Universal Time)
+                at Fri May 14 2021 12:29:39 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

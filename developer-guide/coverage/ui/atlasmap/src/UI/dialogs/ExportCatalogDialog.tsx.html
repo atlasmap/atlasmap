@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">36.36% </span>
+                <span class="strong">44.44% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/11</span>
+                <span class='fraction'>4/9</span>
             </div>
         
             
@@ -110,17 +110,7 @@
 <a name='L52'></a><a href='#L52'>52</a>
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L55'></a><a href='#L55'>55</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -128,6 +118,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -142,8 +136,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -172,8 +164,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { FunctionComponent, useState } from "react";
-&nbsp;
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {
+  ConfirmationDialog,
+  IConfirmationDialogProps,
+} from "./ConfirmationDialog";
 import {
   Form,
   FormGroup,
@@ -181,55 +175,49 @@ import {
   InputGroupText,
   TextInput,
 } from "@patternfly/react-core";
-&nbsp;
-import {
-  ConfirmationDialog,
-  IConfirmationDialogProps,
-} from "./ConfirmationDialog";
+import React, { FunctionComponent, useState } from "react";
 &nbsp;
 export interface IExportCatalogDialogProps {
   isOpen: IConfirmationDialogProps["isOpen"];
   onCancel: IConfirmationDialogProps["onCancel"];
   onConfirm: (filename: string) =&gt; void;
 }
-export const ExportCatalogDialog: FunctionComponent&lt;IExportCatalogDialogProps&gt; = <span class="fstat-no" title="function not covered" >({</span>
-<span class="cstat-no" title="statement not covered" >  isOpen,</span>
-<span class="cstat-no" title="statement not covered" >  onCancel,</span>
-<span class="cstat-no" title="statement not covered" >  onConfirm,</span>
-}) =&gt; {
-  const defaultCatalogName = <span class="cstat-no" title="statement not covered" >"atlasmap-mapping";</span>
-  const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >f</span>ilename,</span> <span class="cstat-no" title="statement not covered" >setFilename] = useState(defaultCatalogName);</span>
-  const handleOnConfirm =
-<span class="cstat-no" title="statement not covered" >    filename.length &gt; 0 ? <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nConfirm(filename) :</span> undefined;</span>
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;ConfirmationDialog
-      title={"Export Mappings and Documents."}
-      onCancel={onCancel}
-      onConfirm={handleOnConfirm}
-      isOpen={isOpen}
-    &gt;
-      &lt;Form&gt;
-        &lt;FormGroup
-          label={"Please enter a name for your exported catalog file"}
-          fieldId={"filename"}
-          isRequired={true}
-        &gt;
-          &lt;InputGroup&gt;
-            &lt;TextInput
-              value={filename}
-              onChange={setFilename}
-              id={"filename"}
-              isRequired={true}
-              autoFocus={true}
-              data-testid={"export-catalog-dialog-text-input"}
-            /&gt;
-            &lt;InputGroupText&gt;.adm&lt;/InputGroupText&gt;
-          &lt;/InputGroup&gt;
-        &lt;/FormGroup&gt;
-      &lt;/Form&gt;
-    &lt;/ConfirmationDialog&gt;
-  );
-};
+export const ExportCatalogDialog: FunctionComponent&lt;IExportCatalogDialogProps&gt; =
+<span class="fstat-no" title="function not covered" >  ({</span> <span class="cstat-no" title="statement not covered" >isOpen,</span> <span class="cstat-no" title="statement not covered" >onCancel,</span> <span class="cstat-no" title="statement not covered" >onConfirm </span>}) =&gt; {
+    const defaultCatalogName = <span class="cstat-no" title="statement not covered" >"atlasmap-mapping";</span>
+    const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >f</span>ilename,</span> <span class="cstat-no" title="statement not covered" >setFilename] = useState(defaultCatalogName);</span>
+    const handleOnConfirm =
+<span class="cstat-no" title="statement not covered" >      filename.length &gt; 0 ? <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nConfirm(filename) :</span> undefined;</span>
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      &lt;ConfirmationDialog
+        title={"Export Mappings and Documents."}
+        onCancel={onCancel}
+        onConfirm={handleOnConfirm}
+        isOpen={isOpen}
+        dataTestid={"export-catalog-dialog"}
+      &gt;
+        &lt;Form&gt;
+          &lt;FormGroup
+            label={"Please enter a name for your exported catalog file"}
+            fieldId={"filename"}
+            isRequired={true}
+          &gt;
+            &lt;InputGroup&gt;
+              &lt;TextInput
+                value={filename}
+                onChange={setFilename}
+                id={"filename"}
+                isRequired={true}
+                autoFocus={true}
+                data-testid={"export-catalog-dialog-text-input"}
+              /&gt;
+              &lt;InputGroupText&gt;.adm&lt;/InputGroupText&gt;
+            &lt;/InputGroup&gt;
+          &lt;/FormGroup&gt;
+        &lt;/Form&gt;
+      &lt;/ConfirmationDialog&gt;
+    );
+  };
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -237,7 +225,7 @@ export const ExportCatalogDialog: FunctionComponent&lt;IExportCatalogDialogProps
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue May 11 2021 20:28:16 GMT+0000 (Coordinated Universal Time)
+                at Fri May 14 2021 12:29:39 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
