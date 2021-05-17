@@ -27,9 +27,6 @@ module.exports = ({ config }) => {
     babelConfig.options.sourceType = 'unambiguous'
   }
 
-  // HACK: Ensure we only bundle one instance of React
-  config.resolve.alias.react = require.resolve('react')
-
   config.module.rules.push({
     test: /\.js$/,
     use: ["source-map-loader"],

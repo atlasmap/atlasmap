@@ -17,7 +17,7 @@ export interface IDraggableChildrenProps {
 export interface IDraggableProps
   extends Omit<HTMLAttributes<HTMLElement>, "onDrop"> {
   field: IDragAndDropField;
-  onDrop: (source: IDragAndDropField, target: IDragAndDropField) => void;
+  onDrop: (source: IDragAndDropField, target: IDragAndDropField | null) => void;
   as?: ElementType;
   children: (props: IDraggableChildrenProps) => ReactElement;
 }
@@ -32,6 +32,7 @@ export const DraggableField = forwardRef<HTMLElement, IDraggableProps>(
       IDragAndDropField,
       Omit<IDraggableChildrenProps, "dragRef">
     >({
+      type: field.type,
       item: field,
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),

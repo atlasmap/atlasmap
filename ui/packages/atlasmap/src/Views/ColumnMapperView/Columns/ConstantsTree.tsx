@@ -20,7 +20,7 @@ import {
 import { commonActions } from "./commonActions";
 
 export interface IConstantsTreeCallbacks {
-  onDrop: (source: IAtlasmapField, target: IDragAndDropField) => void;
+  onDrop: (source: IAtlasmapField, target: IDragAndDropField | null) => void;
   canDrop: (source: IAtlasmapField, target: IDragAndDropField) => boolean;
   onShowMappingDetails: (mapping: IAtlasmapMapping) => void;
   canAddFieldToSelectedMapping: (source: IAtlasmapField) => boolean;
