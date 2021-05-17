@@ -49,7 +49,7 @@ export interface ITreeItemFieldAndNodeRefsAndDnDProps {
   renderActions?: (field: IAtlasmapField) => IDocumentFieldProps["actions"];
   renderPreview?: (field: IAtlasmapField) => ReactNode;
   canDrop: (source: IAtlasmapField, target: IDragAndDropField) => boolean;
-  onDrop: (source: IAtlasmapField, target: IDragAndDropField) => void;
+  onDrop: (source: IAtlasmapField, target: IDragAndDropField | null) => void;
 }
 
 export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent<ITreeItemFieldAndNodeRefsAndDnDProps> =

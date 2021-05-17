@@ -5,9 +5,9 @@ import React, {
   useRef,
 } from "react";
 import { DndProvider } from "react-dnd";
-import Html5Backend from "react-dnd-html5-backend";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { IDragAndDropField } from "./models";
-import TouchBackend from "react-dnd-touch-backend";
+import { TouchBackend } from "react-dnd-touch-backend";
 
 const probablyTouch =
   window.matchMedia &&
@@ -24,7 +24,7 @@ const TouchAndPointerProvider: FunctionComponent = ({ children }) => {
 };
 
 const MouseOnlyProvider: FunctionComponent = ({ children }) => (
-  <DndProvider backend={Html5Backend}>{children}</DndProvider>
+  <DndProvider backend={HTML5Backend}>{children}</DndProvider>
 );
 
 interface IFieldsDndContext {

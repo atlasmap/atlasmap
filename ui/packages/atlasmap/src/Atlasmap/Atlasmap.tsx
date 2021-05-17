@@ -160,7 +160,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
           dt,
         );
       },
-      onDrop: (s, t) => onCreateMapping(s, t.payload as IAtlasmapField),
+      onDrop: (s, t) => onCreateMapping(s, t?.payload as IAtlasmapField),
       onShowMappingDetails: selectMapping,
       onAddToSelectedMapping: onAddToMapping,
       canAddToSelectedMapping: canAddToSelectedMapping,
@@ -249,7 +249,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
           dt,
         );
       },
-      onDrop: (s, t) => onCreateMapping(t.payload as IAtlasmapField, s),
+      onDrop: (s, t) => onCreateMapping(t?.payload as IAtlasmapField, s),
       canAddToSelectedMapping: canAddToSelectedMapping,
       canAddFieldToSelectedMapping: (f) =>
         isFieldAddableToSelection("target", f),

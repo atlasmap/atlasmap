@@ -26,7 +26,7 @@ export interface IPropertiesTreeCallbacks {
   acceptDropType: AtlasmapDocumentType;
   draggableType: AtlasmapDocumentType;
   isSource: boolean;
-  onDrop: (source: IAtlasmapField, target: IDragAndDropField) => void;
+  onDrop: (source: IAtlasmapField, target: IDragAndDropField | null) => void;
   canDrop: (source: IAtlasmapField, target: IDragAndDropField) => boolean;
   onShowMappingDetails: (mapping: IAtlasmapMapping) => void;
   canAddFieldToSelectedMapping: (source: IAtlasmapField) => boolean;

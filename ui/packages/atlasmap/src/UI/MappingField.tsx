@@ -45,7 +45,7 @@ export interface IMappingFieldProps {
   onNewTransformation?: () => void;
 }
 
-function onKeyDown(event: KeyboardEvent<HTMLDivElement>): void {
+function onKeyDown(event: KeyboardEvent<HTMLInputElement>): void {
   event.preventDefault();
 }
 

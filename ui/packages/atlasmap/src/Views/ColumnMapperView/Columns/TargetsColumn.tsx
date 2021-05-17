@@ -64,7 +64,7 @@ export interface ITargetsColumnCallbacks extends IPropertiesTreeCallbacks {
   onImportDocument?: (selectedFile: File) => void;
   onCustomClassSearch?: (isSource: boolean) => void;
   onSearch: (content: string) => void;
-  onDrop: (source: IAtlasmapField, target: IDragAndDropField) => void;
+  onDrop: (source: IAtlasmapField, target: IDragAndDropField | null) => void;
   canDrop: (source: IAtlasmapField, target: IDragAndDropField) => boolean;
   onShowMappingDetails: (mapping: IAtlasmapMapping) => void;
   canAddFieldToSelectedMapping: (field: IAtlasmapField) => boolean;

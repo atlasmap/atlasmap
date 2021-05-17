@@ -69,7 +69,7 @@ export interface ISourceColumnCallbacks
   onDeleteDocument?: (id: GroupId) => void;
   onSearch: (content: string) => void;
   canDrop: (source: IAtlasmapField, target: IDragAndDropField) => boolean;
-  onDrop: (source: IAtlasmapField, target: IDragAndDropField) => void;
+  onDrop: (source: IAtlasmapField, target: IDragAndDropField | null) => void;
   onShowMappingDetails: (mapping: IAtlasmapMapping) => void;
   canAddFieldToSelectedMapping: (source: IAtlasmapField) => boolean;
   onAddToSelectedMapping: (source: IAtlasmapField) => void;
