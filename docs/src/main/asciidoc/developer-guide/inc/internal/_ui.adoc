@@ -1,18 +1,18 @@
 [[internal-ui]]
 == UI
 
-Data Mapper UI is a web based user interface to define a data mapping, built with https://angular.io/[Angular].
+The AtlasMap Data Mapper UI is a web based user interface to define a data mapping, built with https://reactjs.org/[React].
 
 - https://github.com/atlasmap/atlasmap/blob/master/ui/
 
+It consists of 3 sub-packages:
 
-=== BOOTSTRAPPING
+- https://github.com/atlasmap/atlasmap/tree/master/ui/packages/atlasmap-core[@atlasmap/core] - UI side business logic which is used by the presentation layer, `@atlasmap/atlasmap`. Published in NPM repoisitory - https://www.npmjs.com/package/@atlasmap/core
+- https://github.com/atlasmap/atlasmap/tree/master/ui/packages/atlasmap[@atlasmap/atlasmap] - The presentation layer of AtlasMap Data Mapper UI built with React. `<AtlasmapProvider>` is meant to be placed in any React Web application. Published in NPM repository - https://www.npmjs.com/package/@atlasmap/atlasmap
+- https://github.com/atlasmap/atlasmap/tree/master/ui/packages/atlasmap-standalone[@atlasmap/standalone] - A thin React bootstrapping component to spin up AtlasMap Data Mapper UI in standalone mode.
 
-Bootstrapping the Data Mapper UI requires a bit of configuration. An example bootstrapping component is provided within the project:
-
-https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/components/data-mapper-example-host.component.ts
-
-=== MODEL
+=== @atlasmap/core  
+==== MODEL
 
 All application data and configuration is stored in a centralized ConfigModel object.
 
@@ -26,7 +26,7 @@ There are two document models contained within the ConfigModel object, both of t
 
 A single MappingDefinition model in the ConfigModel object stores information about field mappings and related lookup tables. Individual mappings are represented in instances of MappingModel, and lookup tables are represented by the LookupTable model.
 
-=== SERVICE
+==== SERVICE
 
 When the Data Mapper UI Bootstraps, a series of service calls are made to the mapping service (https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts[MappingManagementService]) and document service (https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/document-management.service.ts[DocumentManagementService]). 
 
@@ -34,8 +34,17 @@ The document service is used to fetch our source/target document information (na
 
 The mapping service is used to fetch our mappings for the fields mapped from the source to the target document. These mappings (and related lookup tables) are parsed by the management service and stored in the ConfigModel's mappings MappingDefinition model. 
 
-=== Mapping State
+=== @atlasmap/atlasmap
+TODO
+
+
+=== @atlasmap/standalone
+TODO
+
+== Mapping State
 
 As you add fields into mapping, mapping transitions to a different state. Here is a state machine diagram for current mapping state transition.
 
 image:AtlasMap_Mapping_State.svg[]
+
+On the other hand, once you enable Conditional Mapping by pressing `f(x)` button upper left in the UI, it enters into an advanced `expression` mode and gets out of this state transition.

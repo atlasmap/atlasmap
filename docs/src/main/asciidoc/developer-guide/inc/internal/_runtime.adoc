@@ -9,14 +9,14 @@ Here is a shortest code to process a mapping using AtlasMap runtime engine:
 [source,java]
 --------------------------------------------------------------------
 AtlasContextFactory factory = atlasContextFactory = DefaultAtlasContextFactory.getInstance(); // <1>
-AtlasContext context = factory.createContext(new File("./my-mapping.xml")); // <2>
+AtlasContext context = factory.createContext(new File("./my-mapping.adm")); // <2>
 AtlasSession session = context.createSession(); // <3>
 session.setSourceDocument("myJsonSourceDoc", "{...}"); // <4>
 context.process(session); // <5>
 Object targetDoc = session.getTargetDocument("myXmlTargetDoc"); // <6>
 --------------------------------------------------------------------
 <1> https://github.com/atlasmap/atlasmap/blob/master/lib/api/src/main/java/io/atlasmap/api/AtlasContextFactory.java[AtlasContextFactory] is a singleton instance on JVM, which holds global configuration for the AtlasMap.
-<2> `AtlasContextFactory#createContext(File)` creates https://github.com/atlasmap/atlasmap/blob/master/lib/api/src/main/java/io/atlasmap/api/AtlasContext.java[AtlasContext] which represents an AtlasMap mapping context for each mapping definitions by feeding a mapping definition file.
+<2> `AtlasContextFactory#createContext(File)` creates https://github.com/atlasmap/atlasmap/blob/master/lib/api/src/main/java/io/atlasmap/api/AtlasContext.java[AtlasContext] which represents an AtlasMap mapping context for each mapping definitions by feeding an ADM archive file exported from the AtlasMap Data Mapper UI.
 <3> https://github.com/atlasmap/atlasmap/blob/master/lib/api/src/main/java/io/atlasmap/api/AtlasSession.java[AtlasSession] represents a mapping processing session. `AtlasSession` should be created for each execution and should *NOT* be shared among multiple threads.
 <4> Put a source Document with a corresponding Document ID. Make sure Document ID matches with what is specified in the mapping definition.
 <5> Process a mapping by `AtlasContext#process(AtlasSession)`. This invocation also triggers <<internal-runtime-validation,mapping validation>> prior to actually perform a mapping.
