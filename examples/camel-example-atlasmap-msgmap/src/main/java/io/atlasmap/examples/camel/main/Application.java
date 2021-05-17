@@ -10,8 +10,8 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.impl.DefaultMessage;
 import org.apache.camel.main.Main;
-import org.apache.camel.support.DefaultMessage;
 
 public class Application extends RouteBuilder {
 
@@ -44,7 +44,7 @@ public class Application extends RouteBuilder {
 
     public static void main(String args[]) throws Exception {
         Main camelMain = new Main();
-        camelMain.configure().addRoutesBuilder(new Application());
+        camelMain.addRouteBuilder(new Application());
         camelMain.run(args);
     }
 
@@ -59,7 +59,7 @@ public class Application extends RouteBuilder {
         }
 
         public void process(Exchange ex) throws Exception {
-            Message msg = new DefaultMessage(ex);
+            Message msg = new DefaultMessage(ex.getContext());
             msg.setHeader("id", id);
             msg.setHeader("path", path);
             URL url = ex.getContext().getClassResolver().loadResourceAsURL(path);

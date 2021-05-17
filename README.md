@@ -98,5 +98,3 @@ $ yarn build
 $ yarn storybook
 ```
 
-```
-

@@ -1,6 +1,16 @@
 [[camel-atlasmap]]
 = camel-atlasmap component
 
+[NOTE]
+====
+The latest version of `camel-atlasmap` component is now maintained in Apache Camel upstream
+https://camel.apache.org/components/latest/atlasmap-component.html
+https://github.com/apache/camel/tree/main/components/camel-atlasmap
+
+We will keep maintaining Camel2 version of `camel-atlasmap` component in this repository for a while, however for Camel3 you need to go with the one from Apache Camel upstream.
+====
+
+
 camel-atlasmap is an http://camel.apache.org/[Apache Camel] Component for AtlasMap. This component executes AtlasMap mapping as a part of Camel route processing.
 
 Example usage:
@@ -9,7 +19,7 @@ Example usage:
 <camelContext xmlns="http://camel.apache.org/schema/spring">
     <route>
         <from uri="direct:start" />
-        <to uri="atlas:atlasmapping.xml" />
+        <to uri="atlas:atlasmapping.adm" />
         <to uri="mock:result" />
     </route>
 </camelContext>

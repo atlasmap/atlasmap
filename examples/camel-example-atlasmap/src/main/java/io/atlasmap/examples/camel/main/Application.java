@@ -16,7 +16,7 @@ public class Application extends RouteBuilder {
 
     public static void main(String args[]) throws Exception {
         Main camelMain = new Main();
-        camelMain.configure().addRoutesBuilder(new Application());
+        camelMain.addRouteBuilder(new Application());
         camelMain.run(args);
     }
 }
