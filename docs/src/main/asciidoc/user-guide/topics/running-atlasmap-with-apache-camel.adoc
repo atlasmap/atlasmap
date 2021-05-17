@@ -1,6 +1,15 @@
 [id='running-atlasmap-with-apache-camel']
 = Running AtlasMap with Apache Camel
 
+[NOTE]
+====
+The latest version of `camel-atlasmap` component is now maintained in Apache Camel upstream
+https://camel.apache.org/components/latest/atlasmap-component.html
+
+We will keep maintaining Camel2 version of `camel-atlasmap` component in this repository for a while, however for Camel3 you need to go with the one from Apache Camel upstream.
+====
+
+
 Developers who are familiar with Apache Camel can implement a 
 Camel application that uses the `camel-atlasmap` component. 
 A `camel-atlasmap` endpoint 
@@ -21,4 +30,5 @@ uses `key` as a document ID and the corresponding value as the
 document payload.
 
 You can obtain the `camel-atlasmap` component here:   
-link:https://repo1.maven.org/maven2/io/atlasmap/camel-atlasmap/1.42.3/camel-atlasmap-${VERSION}.jar[]
+link:https://repo1.maven.org/maven2/io/atlasmap/camel-atlasmap/${VERSION}/camel-atlasmap-${VERSION}.jar[]
+

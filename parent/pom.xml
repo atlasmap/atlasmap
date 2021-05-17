@@ -40,7 +40,6 @@
     <bcel-bundle-version>5.2_4</bcel-bundle-version>
     <build-helper-maven-plugin.version>3.2.0</build-helper-maven-plugin.version>
     <camel.version>2.23.4</camel.version>
-    <camel3.version>3.3.0</camel3.version>
     <daffodil.version>3.0.0</daffodil.version>
     <kubernetes-maven-plugin.version>1.2.0</kubernetes-maven-plugin.version>
     <jackson.version>2.12.3</jackson.version>
@@ -78,8 +77,6 @@
     <selenium.version>3.141.59</selenium.version>
     <slf4j.version>1.7.30</slf4j.version>
     <spring.version>5.3.7</spring.version>
-    <!-- Version of Spring used by Camel 3.x -->
-    <camel3-spring.version>5.3.7</camel3-spring.version>
     <spring-boot.version>2.4.5</spring-boot.version>
     <swagger.version>2.1.9</swagger.version>
     <swagger2markup.version>1.3.3</swagger2markup.version>
@@ -402,11 +399,6 @@
       <dependency>
         <groupId>io.atlasmap</groupId>
         <artifactId>camel-atlasmap</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.atlasmap</groupId>
-        <artifactId>camel3-atlasmap</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

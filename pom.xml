@@ -88,7 +88,6 @@
     <module>lib</module>
     <module>atlasmap-maven-plugin</module>
     <module>camel</module>
-    <module>camel3</module>
     <module>ui</module>
     <module>standalone</module>
     <module>coverage-report</module>
