@@ -202,9 +202,9 @@ jobs:
     environment:
       <<: *common_env
     steps:
-      - <<: *load_cache_mvn
       - attach_workspace:
           at: /workspace
+      - <<: *load_cache_mvn
       - run:
           name: debug
           command: |
