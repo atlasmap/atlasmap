@@ -443,7 +443,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">The AtlasMap Team</span><br>
 <span id="revnumber">version 2.3.0-SNAPSHOT,</span>
-<span id="revdate">2021-05-17</span>
+<span id="revdate">2021-05-18</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">AtlasMap Developer Guide</div>
@@ -454,43 +454,37 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#running-atlasmap-data-mapper-ui-within-syndesis">2.1. Running AtlasMap Data Mapper UI within Syndesis</a></li>
 <li><a href="#running-atlasmap-data-mapper-ui-standalone">2.2. Running AtlasMap Data Mapper UI standalone</a></li>
 <li><a href="#running-atlasmap-build">2.3. Running AtlasMap build</a></li>
-<li><a href="#tips-for-ui-developer">2.4. Tips for UI developer</a>
-<ul class="sectlevel3">
-<li><a href="#developing-within-syndesis-ui">2.4.1. Developing Within Syndesis UI</a></li>
-<li><a href="#debug-unit-tests-with-chrome-devtools">2.4.2. Debug unit tests with Chrome DevTools</a></li>
-<li><a href="#debug-configuration">2.4.3. Debug Configuration</a></li>
-</ul>
-</li>
+<li><a href="#tips-for-ui-developer">2.4. Tips for UI developer</a></li>
 </ul>
 </li>
 <li><a href="#internal-design">3. Internal Design</a>
 <ul class="sectlevel2">
 <li><a href="#internal-ui">3.1. UI</a>
 <ul class="sectlevel3">
-<li><a href="#bootstrapping">3.1.1. BOOTSTRAPPING</a></li>
-<li><a href="#model">3.1.2. MODEL</a></li>
-<li><a href="#service">3.1.3. SERVICE</a></li>
-<li><a href="#mapping-state">3.1.4. Mapping State</a></li>
+<li><a href="#atlasmapcore">3.1.1. @atlasmap/core</a></li>
+<li><a href="#atlasmapatlasmap">3.1.2. @atlasmap/atlasmap</a></li>
+<li><a href="#atlasmapstandalone">3.1.3. @atlasmap/standalone</a></li>
 </ul>
 </li>
-<li><a href="#internal-design-time-service">3.2. Design Time Service</a>
+<li><a href="#mapping-state">3.2. Mapping State</a></li>
+<li><a href="#internal-design-time-service">3.3. Design Time Service</a>
 <ul class="sectlevel3">
-<li><a href="#core-service">3.2.1. Core Service</a></li>
-<li><a href="#java-service">3.2.2. Java Service</a></li>
-<li><a href="#json-service">3.2.3. JSON Service</a></li>
-<li><a href="#xml-service">3.2.4. XML Service</a></li>
-<li><a href="#dfdl-service">3.2.5. DFDL Service</a></li>
+<li><a href="#core-service">3.3.1. Core Service</a></li>
+<li><a href="#java-service">3.3.2. Java Service</a></li>
+<li><a href="#json-service">3.3.3. JSON Service</a></li>
+<li><a href="#xml-service">3.3.4. XML Service</a></li>
+<li><a href="#dfdl-service">3.3.5. DFDL Service</a></li>
 </ul>
 </li>
-<li><a href="#internal-runtime-engine">3.3. Runtime Engine</a>
+<li><a href="#internal-runtime-engine">3.4. Runtime Engine</a>
 <ul class="sectlevel3">
-<li><a href="#internal-runtime-atlasmodule">3.3.1. AtlasModule and mapping process</a></li>
-<li><a href="#internal-runtime-typeconverter">3.3.2. TypeConverter</a></li>
-<li><a href="#internal-runtime-fieldaction">3.3.3. FieldAction (Transformation)</a></li>
-<li><a href="#internal-runtime-fieldreader">3.3.4. FieldReader</a></li>
-<li><a href="#internal-runtime-fieldwriter">3.3.5. FieldWriter</a></li>
-<li><a href="#internal-runtime-validation">3.3.6. Validation</a></li>
-<li><a href="#internal-runtime-audit">3.3.7. Audit</a></li>
+<li><a href="#internal-runtime-atlasmodule">3.4.1. AtlasModule and mapping process</a></li>
+<li><a href="#internal-runtime-typeconverter">3.4.2. TypeConverter</a></li>
+<li><a href="#internal-runtime-fieldaction">3.4.3. FieldAction (Transformation)</a></li>
+<li><a href="#internal-runtime-fieldreader">3.4.4. FieldReader</a></li>
+<li><a href="#internal-runtime-fieldwriter">3.4.5. FieldWriter</a></li>
+<li><a href="#internal-runtime-validation">3.4.6. Validation</a></li>
+<li><a href="#internal-runtime-audit">3.4.7. Audit</a></li>
 </ul>
 </li>
 </ul>
@@ -615,204 +609,10 @@ $ ./mvnw clean install</code></pre>
 </div>
 <div class="sect2">
 <h3 id="tips-for-ui-developer">2.4. Tips for UI developer</h3>
-<div class="sect3">
-<h4 id="developing-within-syndesis-ui">2.4.1. Developing Within Syndesis UI</h4>
 <div class="paragraph">
-<p>Data Mapper UI is referenced by Syndesis as a dependency. When Syndesis UI&#8217;s dependencies are installed during <strong>yarn install</strong> step, Data Mapper UI will be cloned from the NPM package repository into <strong>${SYNDESIS}/app/ui/node_modules/@atlasmap/atlasmap-data-mapper</strong> directory.</p>
-</div>
-<div class="paragraph">
-<p>You can point your local Syndesis UI&#8217;s Data Mapper UI reference to your working copy of the Data Mapper by <a href="https://yarnpkg.com/lang/en/docs/cli/link/">yarn link</a>. You&#8217;ll do something like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>$ cd ${ATLASMAP}/ui
-$ yarn build:lib
-$ cd dist/lib
-$ yarn link
-$ cd ${SYNDESIS}/app/ui
-$ yarn link @atlasmap/atlasmap-data-mapper</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Note that running <code>yarn install</code> in the Syndesis UI directory <strong>will remove and redownload the ${SYNDESIS}/app/ui/node_modules/@atlasmap/atlasmap-data-mapper directory</strong>, so you&#8217;d want to avoid doing it while you have <code>yarn link</code>. Instead you&#8217;d change ${ATLASMAP}/ui/src and run <code>yarn build:lib</code> to make a change in AtlasMap UI and consume it within Syndesis UI.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="debug-unit-tests-with-chrome-devtools">2.4.2. Debug unit tests with Chrome DevTools</h4>
-<div class="paragraph">
-<p>To debug AtlasMap Data Mapper UI unit tests with using Chrome DevTools:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>$ cd ${ATLASMAP}/ui
-$ yarn test:debug</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Or you can specify target test file alone</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>$ yarn test:debug --main src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.spec.ts</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Then Chromium window opens up. Push the <code>DEBUG</code> button. New DEBUG tab will open.
-<span class="image"><img src="images/Chromium.png" alt="Chromium"></span></p>
-</div>
-<div class="paragraph">
-<p>Then open Chrome DevTools, open TypeScript source file and put a breakpoint.
-<span class="image"><img src="images/DevTools.png" alt="DevTools"></span></p>
-</div>
-<div class="paragraph">
-<p>Once you reload DEBUG tab, it stops at the breakpoint and you can start step debugging.
-<span class="image"><img src="images/Breakpoint.png" alt="Breakpoint"></span></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="debug-configuration">2.4.3. Debug Configuration</h4>
-<div class="paragraph">
-<p>The Data Mapper UI features several developer-friendly debug configuration options. These configuration fields are specified on the <a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/models/config.model.ts">ConfigModel</a> class.</p>
-</div>
-<div class="sect4">
-<h5 id="service-endpoint-configuration">Service Endpoint Configuration</h5>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>baseJavaInspectionServiceUrl</strong> - URL for the Java Inspection Service provided by the AtlasMap Services.</p>
-</li>
-<li>
-<p><strong>baseXMLInspectionServiceUrl</strong> - URL for the XML Inspection Service provided by the AtlasMap Services.</p>
-</li>
-<li>
-<p><strong>baseJSONInspectionServiceUrl</strong> - URL for the JSON Inspection Service provided by the AtlasMap Services.</p>
-</li>
-<li>
-<p><strong>baseMappingServiceUrl</strong> - URL for the Mapping Service provided by the AtlasMap Services.</p>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect4">
-<h5 id="mock-sourcetarget-document-configuration">Mock Source/Target Document Configuration</h5>
-<div class="paragraph">
-<p>These flags control the UI automatically adding the specified mock documents to the system when the UI initializes.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>addMockJavaSingleSource</strong> - Add single Java source document.</p>
-</li>
-<li>
-<p><strong>addMockJavaSources</strong> - Add multiple Java source documents.</p>
-</li>
-<li>
-<p><strong>addMockXMLInstanceSources</strong> - Add multiple XML instance-based source documents.</p>
-</li>
-<li>
-<p><strong>addMockXMLSchemaSources</strong> - Add multiple XML schema-based source documents.</p>
-</li>
-<li>
-<p><strong>addMockJSONSources</strong> - Add multiple JSON source documents.</p>
-</li>
-<li>
-<p><strong>addMockJavaTarget</strong> - Add a Java target document.</p>
-</li>
-<li>
-<p><strong>addMockXMLInstanceTarget</strong> - Add a XML instance target document.</p>
-</li>
-<li>
-<p><strong>addMockXMLSchemaTarget</strong> - Add a XML schema target document.</p>
-</li>
-<li>
-<p><strong>addMockJSONTarget</strong> - Add a JSON target document.</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>The code that initializes these mock documents is in the <a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/initialization.service.ts">InitializationService</a>.
-That service calls various static methods in the <a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/document-management.service.ts">DocumentManagementService</a> to create example XML instance, XML schema, and JSON documents.
-Mock Java documents referenced are from the AtlasMap Services' <a href="https://github.com/atlasmap/atlasmap/tree/master/lib/modules/java/test-model/src/main/java/io/atlasmap/java/test">Atlas Java Test Model Maven Module</a>.</p>
-</div>
-</div>
-<div class="sect4">
-<h5 id="additional-debug-configuration">Additional Debug Configuration</h5>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>discardNonMockSources</strong> - Automatically discard all user-specified (or Syndesis UI-specified) source/target documents before initializing. This is helpful if you&#8217;re trying to test with mock documents alone.</p>
-</li>
-<li>
-<p><strong>addMockJSONMappings</strong> - This flag bootstraps the UI&#8217;s mappings from the provided JSON mapping definition. Useful for repeatedly debugging a particular scenario.</p>
-</li>
-<li>
-<p><strong>debugClassPathServiceCalls</strong> - Log details about JSON request/responses to/from the class path resolution service.</p>
-</li>
-<li>
-<p><strong>debugDocumentServiceCalls</strong> - Log details about JSON request/responses to/from the Java/XML/JSON inspection services.</p>
-</li>
-<li>
-<p><strong>debugMappingServiceCalls</strong> - Log details about JSON request/responses to/from the mapping service.</p>
-</li>
-<li>
-<p><strong>debugValidationServiceCalls</strong> - Log details about JSON request/responses to/from the mapping validation service.</p>
-</li>
-<li>
-<p><strong>debugFieldActionServiceCalls</strong> - Log details about JSON request/responses to/from the mapping field action configuration service.</p>
-</li>
-<li>
-<p><strong>debugDocumentParsing</strong> - Log details about parsing JSON responses from the inspection services.</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>Data Mapper Debug Configuration within the Syndesis UI is defined within your <strong>${SYNDESIS}/ui/src/config.json</strong> file&#8217;s data mapper section:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-json" data-lang="json">{
-  "apiEndpoint": "https://syndesis-staging.b6ff.rh-idev.openshiftapps.com/api/v1",
-  "title": "Syndesis",
-  "datamapper": {
-    "baseJavaInspectionServiceUrl": "http://localhost:8585/v2/atlas/java/",
-    "baseXMLInspectionServiceUrl": "http://localhost:8585/v2/atlas/xml/",
-    "baseJSONInspectionServiceUrl": "http://localhost:8585/v2/atlas/json/",
-    "baseMappingServiceUrl": "http://localhost:8585/v2/atlas/",
-    "discardNonMockSources": true,
-    "addMockJSONMappings": false,
-    "addMockJavaSingleSource": true,
-    "addMockJavaSources": false,
-    "addMockXMLInstanceSources": true,
-    "addMockXMLSchemaSources": true,
-    "addMockJSONSources": true,
-    "addMockJavaTarget": false,
-    "addMockXMLInstanceTarget": false,
-    "addMockXMLSchemaTarget": false,
-    "addMockJSONTarget": true,
-    "debugDocumentServiceCalls": true,
-    "debugMappingServiceCalls": true,
-    "debugClassPathServiceCalls": false,
-    "debugValidationServiceCalls": false,
-    "debugFieldActionServiceCalls": false,
-    "debugDocumentParsing": false
-  },
-  "oauth": {
-    "clientId": "syndesis-ui",
-    "scopes": ["openid"],
-    "oidc": true,
-    "hybrid": true,
-    "issuer": "https://syndesis-staging.b6ff.rh-idev.openshiftapps.com/auth/realms/syndesis",
-    "auto-link-github": true
-  }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If you&#8217;re running the Data Mapper UI locally outside of the Syndesis UI, the debug configuration is specified within the <a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/components/data-mapper-example-host.component.ts">DataMapperAppExampleHostComponent</a>.</p>
+<p>TODO</p>
 </div>
 <div style="page-break-after: always;"></div>
-</div>
-</div>
 </div>
 </div>
 </div>
@@ -836,7 +636,7 @@ Mock Java documents referenced are from the AtlasMap Services' <a href="https://
 </ol>
 </div>
 <div class="paragraph">
-<p><a href="#internal-ui">Data Mapper UI</a> is an Angular based web browser application. <a href="#internal-design-time-service">Design Time Service</a> is a set of REST API which provide background services to be used by the Data Mapper UI behind the scene. Data Mapper UI eventually produces data mapping definition file in XML or JSON format. Then <a href="#internal-runtime-engine">Runtime Engine</a> consumes that mapping definition as well as actual data payload and perform mapping.</p>
+<p><a href="#internal-ui">Data Mapper UI</a> is a React based web browser application. <a href="#internal-design-time-service">Design Time Service</a> is a set of REST API which provide background services to be used by the Data Mapper UI behind the scene. Data Mapper UI eventually produces data mapping definition file in ADM archive format. Then <a href="#internal-runtime-engine">Runtime Engine</a> consumes that mapping definition as well as actual data payload and perform mapping.</p>
 </div>
 <div class="paragraph">
 <p>When data formats are provided into Data Mapper UI, it requests an inspection to Design Time Service and receives a unified metadata, called Document. For example, if the data format is provided as a JSON schema, Data Mapper UI makes a JSON schema inspection request and receive a Document object. While JSON schema is a JSON specific schema to represent message payload, Document object is an AtlasMap internal, but data format agnostic metadata so that the Data Mapper UI can consume and provide an unified mapping experience.</p>
@@ -886,7 +686,7 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 <div class="sect2">
 <h3 id="internal-ui">3.1. UI</h3>
 <div class="paragraph">
-<p>Data Mapper UI is a web based user interface to define a data mapping, built with <a href="https://angular.io/">Angular</a>.</p>
+<p>The AtlasMap Data Mapper UI is a web based user interface to define a data mapping, built with <a href="https://reactjs.org/">React</a>.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -895,17 +695,26 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 </li>
 </ul>
 </div>
-<div class="sect3">
-<h4 id="bootstrapping">3.1.1. BOOTSTRAPPING</h4>
 <div class="paragraph">
-<p>Bootstrapping the Data Mapper UI requires a bit of configuration. An example bootstrapping component is provided within the project:</p>
+<p>It consists of 3 sub-packages:</p>
 </div>
-<div class="paragraph">
-<p><a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/components/data-mapper-example-host.component.ts" class="bare">https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/components/data-mapper-example-host.component.ts</a></p>
-</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/atlasmap/atlasmap/tree/master/ui/packages/atlasmap-core">@atlasmap/core</a> - UI side business logic which is used by the presentation layer, <code>@atlasmap/atlasmap</code>. Published in NPM repoisitory - <a href="https://www.npmjs.com/package/@atlasmap/core" class="bare">https://www.npmjs.com/package/@atlasmap/core</a></p>
+</li>
+<li>
+<p><a href="https://github.com/atlasmap/atlasmap/tree/master/ui/packages/atlasmap">@atlasmap/atlasmap</a> - The presentation layer of AtlasMap Data Mapper UI built with React. <code>&lt;AtlasmapProvider&gt;</code> is meant to be placed in any React Web application. Published in NPM repository - <a href="https://www.npmjs.com/package/@atlasmap/atlasmap" class="bare">https://www.npmjs.com/package/@atlasmap/atlasmap</a></p>
+</li>
+<li>
+<p><a href="https://github.com/atlasmap/atlasmap/tree/master/ui/packages/atlasmap-standalone">@atlasmap/standalone</a> - A thin React bootstrapping component to spin up AtlasMap Data Mapper UI in standalone mode.</p>
+</li>
+</ul>
 </div>
 <div class="sect3">
-<h4 id="model">3.1.2. MODEL</h4>
+<h4 id="atlasmapcore">3.1.1. @atlasmap/core</h4>
+<div class="sect4">
+<h5 id="model">MODEL</h5>
 <div class="paragraph">
 <p>All application data and configuration is stored in a centralized ConfigModel object.</p>
 </div>
@@ -932,8 +741,8 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 <p>A single MappingDefinition model in the ConfigModel object stores information about field mappings and related lookup tables. Individual mappings are represented in instances of MappingModel, and lookup tables are represented by the LookupTable model.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="service">3.1.3. SERVICE</h4>
+<div class="sect4">
+<h5 id="service">SERVICE</h5>
 <div class="paragraph">
 <p>When the Data Mapper UI Bootstraps, a series of service calls are made to the mapping service (<a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts">MappingManagementService</a>) and document service (<a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/document-management.service.ts">DocumentManagementService</a>).</p>
 </div>
@@ -944,23 +753,39 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 <p>The mapping service is used to fetch our mappings for the fields mapped from the source to the target document. These mappings (and related lookup tables) are parsed by the management service and stored in the ConfigModel&#8217;s mappings MappingDefinition model.</p>
 </div>
 </div>
+</div>
 <div class="sect3">
-<h4 id="mapping-state">3.1.4. Mapping State</h4>
+<h4 id="atlasmapatlasmap">3.1.2. @atlasmap/atlasmap</h4>
+<div class="paragraph">
+<p>TODO</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="atlasmapstandalone">3.1.3. @atlasmap/standalone</h4>
+<div class="paragraph">
+<p>TODO</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="mapping-state">3.2. Mapping State</h3>
 <div class="paragraph">
 <p>As you add fields into mapping, mapping transitions to a different state. Here is a state machine diagram for current mapping state transition.</p>
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="images/AtlasMap_Mapping_State.svg" alt="AtlasMap Mapping State"></span></p>
 </div>
+<div class="paragraph">
+<p>On the other hand, once you enable Conditional Mapping by pressing <code>f(x)</code> button upper left in the UI, it enters into an advanced <code>expression</code> mode and gets out of this state transition.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="internal-design-time-service">3.2. Design Time Service</h3>
+<h3 id="internal-design-time-service">3.3. Design Time Service</h3>
 <div class="paragraph">
 <p>Design Time Service is a set of REST API which provide background services to be used by the Data Mapper UI behind the scene. There are 4 types of Design Time Service:</p>
 </div>
 <div class="sect3">
-<h4 id="core-service">3.2.1. Core Service</h4>
+<h4 id="core-service">3.3.1. Core Service</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -976,7 +801,7 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 </div>
 </div>
 <div class="sect3">
-<h4 id="java-service">3.2.2. Java Service</h4>
+<h4 id="java-service">3.3.2. Java Service</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -992,7 +817,7 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 </div>
 </div>
 <div class="sect3">
-<h4 id="json-service">3.2.3. JSON Service</h4>
+<h4 id="json-service">3.3.3. JSON Service</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1008,7 +833,7 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 </div>
 </div>
 <div class="sect3">
-<h4 id="xml-service">3.2.4. XML Service</h4>
+<h4 id="xml-service">3.3.4. XML Service</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1024,7 +849,7 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 </div>
 </div>
 <div class="sect3">
-<h4 id="dfdl-service">3.2.5. DFDL Service</h4>
+<h4 id="dfdl-service">3.3.5. DFDL Service</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1041,7 +866,7 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 </div>
 </div>
 <div class="sect2">
-<h3 id="internal-runtime-engine">3.3. Runtime Engine</h3>
+<h3 id="internal-runtime-engine">3.4. Runtime Engine</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -1058,7 +883,7 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">AtlasContextFactory factory = atlasContextFactory = DefaultAtlasContextFactory.getInstance(); <i class="conum" data-value="1"></i><b>(1)</b>
-AtlasContext context = factory.createContext(new File("./my-mapping.xml")); <i class="conum" data-value="2"></i><b>(2)</b>
+AtlasContext context = factory.createContext(new File("./my-mapping.adm")); <i class="conum" data-value="2"></i><b>(2)</b>
 AtlasSession session = context.createSession(); <i class="conum" data-value="3"></i><b>(3)</b>
 session.setSourceDocument("myJsonSourceDoc", "{...}"); <i class="conum" data-value="4"></i><b>(4)</b>
 context.process(session); <i class="conum" data-value="5"></i><b>(5)</b>
@@ -1073,7 +898,7 @@ Object targetDoc = session.getTargetDocument("myXmlTargetDoc"); <i class="conum"
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td><code>AtlasContextFactory#createContext(File)</code> creates <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/api/src/main/java/io/atlasmap/api/AtlasContext.java">AtlasContext</a> which represents an AtlasMap mapping context for each mapping definitions by feeding a mapping definition file.</td>
+<td><code>AtlasContextFactory#createContext(File)</code> creates <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/api/src/main/java/io/atlasmap/api/AtlasContext.java">AtlasContext</a> which represents an AtlasMap mapping context for each mapping definitions by feeding an ADM archive file exported from the AtlasMap Data Mapper UI.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
@@ -1094,7 +919,7 @@ Object targetDoc = session.getTargetDocument("myXmlTargetDoc"); <i class="conum"
 </table>
 </div>
 <div class="sect3">
-<h4 id="internal-runtime-atlasmodule">3.3.1. AtlasModule and mapping process</h4>
+<h4 id="internal-runtime-atlasmodule">3.4.1. AtlasModule and mapping process</h4>
 <div class="paragraph">
 <p><a href="https://github.com/atlasmap/atlasmap/blob/master/lib/api/src/main/java/io/atlasmap/spi/AtlasModule.java">AtlasModule</a> is a SPI to be implemented by each modules like
 <a href="https://github.com/atlasmap/atlasmap/tree/master/lib/modules/java">Java</a>,
@@ -1177,14 +1002,14 @@ Object targetDoc = session.getTargetDocument("myXmlTargetDoc"); <i class="conum"
 </div>
 </div>
 <div class="sect3">
-<h4 id="internal-runtime-typeconverter">3.3.2. TypeConverter</h4>
+<h4 id="internal-runtime-typeconverter">3.4.2. TypeConverter</h4>
 <div class="paragraph">
 <p>TypeConverter converts one field value to the expected field type. This is automatically invoked during mapping when the actual value is not in expected type. AtlasMap runtime provides OOTB converters for the AtlasMap primitive types
 <a href="https://github.com/atlasmap/atlasmap/tree/master/lib/core/src/main/java/io/atlasmap/converters">here</a>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="internal-runtime-fieldaction">3.3.3. FieldAction (Transformation)</h4>
+<h4 id="internal-runtime-fieldaction">3.4.3. FieldAction (Transformation)</h4>
 <div class="paragraph">
 <p>FieldAction is a function you can apply on a field value as a part of mapping. AtlasMap provides a variety of FieldActions you can apply in the middle of processing mappings
 <a href="https://github.com/atlasmap/atlasmap/tree/master/lib/core/src/main/java/io/atlasmap/actions">here</a>.
@@ -1192,19 +1017,19 @@ Also There is a <a href="#fieldAction">Reference</a> for all available FieldActi
 </div>
 </div>
 <div class="sect3">
-<h4 id="internal-runtime-fieldreader">3.3.4. FieldReader</h4>
+<h4 id="internal-runtime-fieldreader">3.4.4. FieldReader</h4>
 <div class="paragraph">
 <p>Each module implements its own <a href="#internal-runtime-fieldreader">FieldReader</a> to read a field value from document specific payload.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="internal-runtime-fieldwriter">3.3.5. FieldWriter</h4>
+<h4 id="internal-runtime-fieldwriter">3.4.5. FieldWriter</h4>
 <div class="paragraph">
 <p>Each module implements its own <a href="#internal-runtime-fieldwriter">FieldWriter</a> to write a field value into document specific payload.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="internal-runtime-validation">3.3.6. Validation</h4>
+<h4 id="internal-runtime-validation">3.4.6. Validation</h4>
 <div class="paragraph">
 <p><code>AtlasContext#processValidation(AtlasSession)</code> validates a mapping definition associated with this context. After it&#8217;s completed, you can retrieve a collection of <code>Validation</code> object which represents a validation log.</p>
 </div>
@@ -1213,7 +1038,7 @@ Also There is a <a href="#fieldAction">Reference</a> for all available FieldActi
 </div>
 </div>
 <div class="sect3">
-<h4 id="internal-runtime-audit">3.3.7. Audit</h4>
+<h4 id="internal-runtime-audit">3.4.7. Audit</h4>
 <div class="paragraph">
 <p><code>Audit</code> represents an audit log which is emitted from runtime engine during processing a mapping. After <code>AtlasContext#process(AtlasSession)</code> is completed, you can retrieve a collection of <code>Audit</code> object by invoking <code>AtlasSession.getAudits()</code>.</p>
 </div>
@@ -1903,7 +1728,7 @@ string.</p></td>
 <div id="footer">
 <div id="footer-text">
 Version 2.3.0-SNAPSHOT<br>
-Last updated 2021-05-17 11:42:30 UTC
+Last updated 2021-05-18 14:48:21 UTC
 </div>
 </div>
 </body>
