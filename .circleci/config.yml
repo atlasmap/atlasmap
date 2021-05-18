@@ -26,22 +26,22 @@ job_default: &job_defaults
   
 load_cache_mvn: &load_cache_mvn
   restore_cache:
-    key: atlasmap-mvn-{{ checksum "pom.xml" }}
+    key: atlasmap-mvn-0-{{ checksum "pom.xml" }}
 
 load_cache_node: &load_cache_node
   restore_cache:
-    key: atlasmap-node-{{ checksum "ui/package.json" }}
+    key: atlasmap-node-0-{{ checksum "ui/package.json" }}
 
 save_cache_mvn: &save_cache_mvn
   save_cache:
-    key: atlasmap-mvn-{{ checksum "pom.xml" }}
+    key: atlasmap-mvn-0-{{ checksum "pom.xml" }}
     paths:
     - ~/.m2
       ~/.cache
 
 save_cache_node: &save_cache_node
   save_cache:
-    key: atlasmap-node-{{ checksum "ui/package.json" }}
+    key: atlasmap-node-0-{{ checksum "ui/package.json" }}
     paths:
     - ui/node_modules
     - ui/packages/atlasmap-core/node_modules
