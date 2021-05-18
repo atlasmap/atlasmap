@@ -198,7 +198,7 @@ jobs:
     steps:
       - checkout
       - <<: *load_cache_mvn
-      - attach_workspace
+      - attach_workspace:
           at: docs/coverage
       - <<: *publish_docs
       - store_artifacts:
