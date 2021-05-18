@@ -7,18 +7,6 @@ module.exports = {
   ],
   addons: [
     {
-      name: "@storybook/preset-typescript",
-      options: {
-        tsLoaderOptions: {
-          transpileOnly: true
-        },
-        forkTsCheckerWebpackPluginOptions: {
-          ignoreDiagnostics: [2344, 2430] // HACK: remove when better typings will come out
-        },
-        transpileManager: true
-      }
-    },
-    {
       name: "@storybook/addon-docs",
       options: {
         configureJSX: true,
@@ -29,4 +17,13 @@ module.exports = {
     '@storybook/addon-viewport',
     '@storybook/addon-actions',
   ],
+  typescript: {
+    check: false,
+    checkOptions: {},
+    reactDocgen: 'react-docgen-typescript',
+    reactDocgenTypescriptOptions: {
+      shouldExtractLiteralValuesFromEnum: true,
+      propFilter: (prop) => (prop.parent ? !/node_modules/.test(prop.parent.fileName) : true),
+    },
+  }
 }
