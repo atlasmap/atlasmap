@@ -86,10 +86,10 @@ import io.atlasmap.xml.service.XmlService;
         @Produces({ MediaType.APPLICATION_JSON })
         @Path(&quot;/mavenclasspath&quot;)
         public Response generateClasspath(InputStream request) {
-<span class="nc" id="L89">            MavenClasspathResponse response = new MavenClasspathResponse();</span>
-<span class="nc" id="L90">            response.setExecutionTime(0L);</span>
-<span class="nc" id="L91">            response.setClasspath(&quot;&quot;);</span>
-<span class="nc" id="L92">            return Response.ok().entity(toJson(response)).build();</span>
+<span class="fc" id="L89">            MavenClasspathResponse response = new MavenClasspathResponse();</span>
+<span class="fc" id="L90">            response.setExecutionTime(0L);</span>
+<span class="fc" id="L91">            response.setClasspath(&quot;&quot;);</span>
+<span class="fc" id="L92">            return Response.ok().entity(toJson(response)).build();</span>
         }
 
     }

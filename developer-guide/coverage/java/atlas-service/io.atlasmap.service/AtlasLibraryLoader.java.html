@@ -85,15 +85,15 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
 <span class="fc" id="L85">    }</span>
 
     public void clearLibaries() {
-<span class="nc" id="L88">        File[] files = saveDir.listFiles();</span>
-<span class="nc bnc" id="L89" title="All 6 branches missed.">        if (!saveDir.exists() || !saveDir.isDirectory() || files == null) {</span>
+<span class="fc" id="L88">        File[] files = saveDir.listFiles();</span>
+<span class="pc bpc" id="L89" title="3 of 6 branches missed.">        if (!saveDir.exists() || !saveDir.isDirectory() || files == null) {</span>
 <span class="nc" id="L90">            return;</span>
         }
-<span class="nc bnc" id="L92" title="All 2 branches missed.">        for (File f : saveDir.listFiles()) {</span>
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">        for (File f : saveDir.listFiles()) {</span>
 <span class="nc" id="L93">            f.delete();</span>
         }
-<span class="nc" id="L95">        reload();</span>
-<span class="nc" id="L96">    }</span>
+<span class="fc" id="L95">        reload();</span>
+<span class="fc" id="L96">    }</span>
 
     public ArrayList&lt;String&gt; getLibraryClassNames() throws AtlasException {
 <span class="fc" id="L99">        final String classSuffix = &quot;.class&quot;;</span>
@@ -205,7 +205,7 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
         }
 <span class="fc" id="L206">        loaders.addAll(this.alternativeLoaders);</span>
 <span class="fc" id="L207">        ClassLoader tccl = Thread.currentThread().getContextClassLoader();</span>
-<span class="pc bpc" id="L208" title="1 of 2 branches missed.">        if (this != tccl) {</span>
+<span class="fc bfc" id="L208" title="All 2 branches covered.">        if (this != tccl) {</span>
 <span class="fc" id="L209">            loaders.add(tccl);</span>
         }
 <span class="fc" id="L211">        return loaders;</span>

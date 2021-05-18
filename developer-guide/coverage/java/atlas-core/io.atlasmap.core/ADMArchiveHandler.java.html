@@ -137,8 +137,8 @@ public class ADMArchiveHandler {
      * @throws AtlasException If it fails to load
      */
     public void load(InputStream in) throws AtlasException {
-<span class="nc" id="L140">        load(AtlasContextFactory.Format.ADM, in);</span>
-<span class="nc" id="L141">    }</span>
+<span class="fc" id="L140">        load(AtlasContextFactory.Format.ADM, in);</span>
+<span class="fc" id="L141">    }</span>
 
     /**
      * Load an ADM archive or mapping definition from stream.
@@ -188,13 +188,13 @@ public class ADMArchiveHandler {
 <span class="fc" id="L188">                zipOut.closeEntry();</span>
             }
 
-<span class="pc bpc" id="L191" title="4 of 6 branches missed.">            if (!isIgnoreLibrary() &amp;&amp; libraryDirectory != null &amp;&amp; libraryDirectory.toFile().isDirectory()) {</span>
-<span class="nc bnc" id="L192" title="All 2 branches missed.">                for (File jarFile : libraryDirectory.toFile().listFiles()) {</span>
-<span class="nc" id="L193">                    LOG.debug(&quot;  Creating jar file entry '{}'&quot;, &quot;lib/&quot; + jarFile.getName());</span>
-<span class="nc" id="L194">                    ZipEntry libEntry = new ZipEntry(&quot;lib/&quot; + jarFile.getName());</span>
-<span class="nc" id="L195">                    zipOut.putNextEntry(libEntry);</span>
-<span class="nc" id="L196">                    redirectStream(new FileInputStream(jarFile), zipOut);</span>
-<span class="nc" id="L197">                    zipOut.closeEntry();</span>
+<span class="pc bpc" id="L191" title="2 of 6 branches missed.">            if (!isIgnoreLibrary() &amp;&amp; libraryDirectory != null &amp;&amp; libraryDirectory.toFile().isDirectory()) {</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">                for (File jarFile : libraryDirectory.toFile().listFiles()) {</span>
+<span class="fc" id="L193">                    LOG.debug(&quot;  Creating jar file entry '{}'&quot;, &quot;lib/&quot; + jarFile.getName());</span>
+<span class="fc" id="L194">                    ZipEntry libEntry = new ZipEntry(&quot;lib/&quot; + jarFile.getName());</span>
+<span class="fc" id="L195">                    zipOut.putNextEntry(libEntry);</span>
+<span class="fc" id="L196">                    redirectStream(new FileInputStream(jarFile), zipOut);</span>
+<span class="fc" id="L197">                    zipOut.closeEntry();</span>
                 }
             }
 <span class="nc" id="L200">        } catch (Exception e) {</span>
@@ -212,7 +212,7 @@ public class ADMArchiveHandler {
         }
 
 <span class="fc" id="L214">        Path mdPath = this.persistDirectory.resolve(getMappingDefinitionFileName());</span>
-<span class="pc bpc" id="L215" title="1 of 2 branches missed.">        if (getMappingDefinitionBytes() != null) {</span>
+<span class="fc bfc" id="L215" title="All 2 branches covered.">        if (getMappingDefinitionBytes() != null) {</span>
             try {
 <span class="fc" id="L217">                this.mappingDefinition = jsonMapper.readValue(getMappingDefinitionBytes(), AtlasMapping.class);</span>
 <span class="fc" id="L218">            } catch (Exception e) {</span>
@@ -296,18 +296,18 @@ public class ADMArchiveHandler {
     }
 
     public DataSourceMetadata getDataSourceMetadata(boolean isSource, String documentId) throws AtlasException {
-<span class="nc" id="L299">        return getDataSourceMetadata(new DataSourceKey(isSource, documentId));</span>
+<span class="fc" id="L299">        return getDataSourceMetadata(new DataSourceKey(isSource, documentId));</span>
     }
 
     public DataSourceMetadata getDataSourceMetadata(DataSourceKey key) throws AtlasException {
-<span class="nc bnc" id="L303" title="All 2 branches missed.">        if (getDataSourceMetadataMap() == null) {</span>
+<span class="pc bpc" id="L303" title="1 of 2 branches missed.">        if (getDataSourceMetadataMap() == null) {</span>
 <span class="nc" id="L304">            return null;</span>
         }
-<span class="nc" id="L306">        return getDataSourceMetadataMap().get(key);</span>
+<span class="fc" id="L306">        return getDataSourceMetadataMap().get(key);</span>
     }
 
     public Map&lt;DataSourceKey, DataSourceMetadata&gt; getDataSourceMetadataMap() throws AtlasException {
-<span class="pc bpc" id="L310" title="1 of 2 branches missed.">        if (this.dataSourceMetadata == null) {</span>
+<span class="fc bfc" id="L310" title="All 2 branches covered.">        if (this.dataSourceMetadata == null) {</span>
 <span class="fc bfc" id="L311" title="All 2 branches covered.">            if (this.gzippedAdmDigestBytes == null) {</span>
 <span class="fc" id="L312">                return null;</span>
             }
@@ -317,7 +317,7 @@ public class ADMArchiveHandler {
 <span class="fc bfc" id="L317" title="All 2 branches covered.">                for (int i=0; i&lt;digest.getExportMeta().length; i++) {</span>
 <span class="fc" id="L318">                    DataSourceMetadata meta = digest.getExportMeta()[i];</span>
 <span class="fc" id="L319">                    String spec = digest.getExportBlockData()[i].getValue();</span>
-<span class="pc bpc" id="L320" title="1 of 2 branches missed.">                    if (meta.getId() == null) {</span>
+<span class="fc bfc" id="L320" title="All 2 branches covered.">                    if (meta.getId() == null) {</span>
 <span class="fc" id="L321">                        meta.setId(meta.getName());</span>
                     }
 <span class="pc bpc" id="L323" title="1 of 2 branches missed.">                    meta.setSpecification(spec != null ? spec.getBytes() : null);</span>
@@ -364,9 +364,9 @@ public class ADMArchiveHandler {
 <span class="fc" id="L364">    }</span>
 
     public void setLibraryDirectory(Path dir) throws AtlasException {
-<span class="nc" id="L367">        ensureDirectory(dir);</span>
-<span class="nc" id="L368">        this.libraryDirectory = dir;</span>
-<span class="nc" id="L369">    }</span>
+<span class="fc" id="L367">        ensureDirectory(dir);</span>
+<span class="fc" id="L368">        this.libraryDirectory = dir;</span>
+<span class="fc" id="L369">    }</span>
 
     public void setMappingDefinitionId(String id) {
 <span class="fc" id="L372">        this.mappingDefinitionId = id;</span>
@@ -393,12 +393,12 @@ public class ADMArchiveHandler {
         }
 
 <span class="fc" id="L395">        File digestFile = dir.toPath().resolve(getGzippedADMDigestFileName()).toFile();</span>
-<span class="pc bpc" id="L396" title="3 of 4 branches missed.">        if (digestFile.exists() &amp;&amp; digestFile.isFile()) {</span>
-<span class="nc" id="L397">            try (InputStream digestis = new FileInputStream(digestFile)) {</span>
-<span class="nc" id="L398">                this.gzippedAdmDigestBytes = readIntoByteArray(digestis);</span>
+<span class="pc bpc" id="L396" title="1 of 4 branches missed.">        if (digestFile.exists() &amp;&amp; digestFile.isFile()) {</span>
+<span class="fc" id="L397">            try (InputStream digestis = new FileInputStream(digestFile)) {</span>
+<span class="fc" id="L398">                this.gzippedAdmDigestBytes = readIntoByteArray(digestis);</span>
 <span class="nc" id="L399">            } catch (Exception e) {</span>
 <span class="nc" id="L400">                throw new AtlasException(&quot;Failed to read digest file&quot;, e);</span>
-<span class="nc" id="L401">            }</span>
+<span class="fc" id="L401">            }</span>
         }
 <span class="fc" id="L403">    }</span>
 
@@ -424,19 +424,19 @@ public class ADMArchiveHandler {
 <span class="fc" id="L424">                LOG.debug(&quot;  Extracting ADM file entry '{}'&quot;, catEntryName);</span>
 <span class="fc bfc" id="L425" title="All 2 branches covered.">                if (catEntryName.contains(GZIPPED_ADM_DIGEST_FILTER)) {</span>
 <span class="fc" id="L426">                    this.gzippedAdmDigestBytes = readIntoByteArray(zipIn);</span>
-<span class="pc bpc" id="L427" title="1 of 4 branches missed.">                } else if (!isIgnoreLibrary() &amp;&amp; catEntryName.contains(&quot;.jar&quot;)) {</span>
-<span class="nc bnc" id="L428" title="All 2 branches missed.">                    if (this.libraryDirectory == null) {</span>
+<span class="fc bfc" id="L427" title="All 4 branches covered.">                } else if (!isIgnoreLibrary() &amp;&amp; catEntryName.contains(&quot;.jar&quot;)) {</span>
+<span class="pc bpc" id="L428" title="1 of 2 branches missed.">                    if (this.libraryDirectory == null) {</span>
 <span class="nc" id="L429">                        throw new AtlasException(&quot;Library directory is not specified&quot;);</span>
                     }
-<span class="nc" id="L431">                    int separatorPos = catEntryName.lastIndexOf(File.separator);</span>
-<span class="nc bnc" id="L432" title="All 2 branches missed.">                    String name = separatorPos == -1 ? catEntryName : catEntryName.substring(separatorPos + 1);</span>
-<span class="nc" id="L433">                    Path libPath = this.libraryDirectory.resolve(name);</span>
-<span class="nc" id="L434">                    try (FileOutputStream fos = new FileOutputStream(libPath.toFile())) {</span>
-<span class="nc" id="L435">                        redirectStream(zipIn, fos);</span>
+<span class="fc" id="L431">                    int separatorPos = catEntryName.lastIndexOf(File.separator);</span>
+<span class="pc bpc" id="L432" title="1 of 2 branches missed.">                    String name = separatorPos == -1 ? catEntryName : catEntryName.substring(separatorPos + 1);</span>
+<span class="fc" id="L433">                    Path libPath = this.libraryDirectory.resolve(name);</span>
+<span class="fc" id="L434">                    try (FileOutputStream fos = new FileOutputStream(libPath.toFile())) {</span>
+<span class="fc" id="L435">                        redirectStream(zipIn, fos);</span>
 <span class="nc" id="L436">                    } catch (Exception e) {</span>
 <span class="nc" id="L437">                        LOG.warn(String.format(&quot;Failed to save a jar file '%s', ignoring...&quot;, name), e);</span>
-<span class="nc" id="L438">                    }</span>
-<span class="pc bfc" id="L439" title="All 2 branches covered.">                } else if (catEntryName.contains(MAPPING_DEFINITION_FILTER)) {</span>
+<span class="fc" id="L438">                    }</span>
+<span class="fc bfc" id="L439" title="All 2 branches covered.">                } else if (catEntryName.contains(MAPPING_DEFINITION_FILTER)) {</span>
 <span class="pc bpc" id="L440" title="1 of 2 branches missed.">                    if (mappingDefinitionFound) {</span>
 <span class="nc" id="L441">                        throw new AtlasException(&quot;Multiple mapping definition files are found in a same .adm archive&quot;);</span>
                     }
