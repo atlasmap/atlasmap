@@ -188,6 +188,7 @@ jobs:
       - persist_to_workspace:
           root: /workspace
           paths:
+            - pom.xml
             - lib
             - atlasmap-maven-plugin
             - camel
