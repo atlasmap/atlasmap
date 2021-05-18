@@ -38,7 +38,7 @@ describe('FileManagementService', () => {
   const mockedInitService = mocked(InitializationService, true);
   jest.mock('ky');
   const mockedKy = mocked(ky, true);
-  const service = new FileManagementService(mockedKy);
+  const service = new FileManagementService(ky);
   jest.mock('file-saver');
   const mockedFileSaver = mocked(FileSaver);
   jest.mock('../common/data-mapper-util');

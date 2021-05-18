@@ -85,7 +85,11 @@ export const SourceMappingTargetView: FunctionComponent<ISourceMappingTargetView
                 showMappingPreview={showMappingPreview}
                 onMouseOver={handleMouseOver}
                 onMouseOut={handleMouseOut}
-                {...mappingEvents}
+                onSelectMapping={mappingEvents.onSelectMapping}
+                onDeselectMapping={mappingEvents.onDeselectMapping}
+                onEditMapping={mappingEvents.onEditMapping}
+                onFieldPreviewChange={mappingEvents.onFieldPreviewChange}
+                canDrop={mappingEvents.canDrop}
               />
             </Column>
             <Column data-testid={"column-target-area"} totalColumns={3}>
