@@ -1050,6 +1050,25 @@ Also There is a <a href="#fieldAction">Reference</a> for all available FieldActi
 <div class="sect1">
 <h2 id="camel-atlasmap">4. camel-atlasmap component</h2>
 <div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The latest version of <code>camel-atlasmap</code> component is now maintained in Apache Camel upstream
+<a href="https://camel.apache.org/components/latest/atlasmap-component.html" class="bare">https://camel.apache.org/components/latest/atlasmap-component.html</a>
+<a href="https://github.com/apache/camel/tree/main/components/camel-atlasmap" class="bare">https://github.com/apache/camel/tree/main/components/camel-atlasmap</a></p>
+</div>
+<div class="paragraph">
+<p>We will keep maintaining Camel2 version of <code>camel-atlasmap</code> component in this repository for a while, however for Camel3 you need to go with the one from Apache Camel upstream.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>camel-atlasmap is an <a href="http://camel.apache.org/">Apache Camel</a> Component for AtlasMap. This component executes AtlasMap mapping as a part of Camel route processing.</p>
 </div>
@@ -1061,7 +1080,7 @@ Also There is a <a href="#fieldAction">Reference</a> for all available FieldActi
 <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;camelContext xmlns="http://camel.apache.org/schema/spring"&gt;
     &lt;route&gt;
         &lt;from uri="direct:start" /&gt;
-        &lt;to uri="atlas:atlasmapping.xml" /&gt;
+        &lt;to uri="atlas:atlasmapping.adm" /&gt;
         &lt;to uri="mock:result" /&gt;
     &lt;/route&gt;
 &lt;/camelContext&gt;</code></pre>
@@ -1728,7 +1747,7 @@ string.</p></td>
 <div id="footer">
 <div id="footer-text">
 Version 2.3.0-SNAPSHOT<br>
-Last updated 2021-05-18 14:48:21 UTC
+Last updated 2021-05-18 15:42:34 UTC
 </div>
 </div>
 </body>
