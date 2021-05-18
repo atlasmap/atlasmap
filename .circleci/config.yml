@@ -192,7 +192,8 @@ jobs:
             - atlasmap-maven-plugin
             - camel
             - standalone
-            - coverage-report/target/site/jacoco-aggregate
+            - coverage-report
+            - docs
             - ui
 
   docs:
@@ -200,10 +201,14 @@ jobs:
     environment:
       <<: *common_env
     steps:
-      - checkout
       - <<: *load_cache_mvn
       - attach_workspace:
           at: /workspace
+      - run:
+          name: debug
+          command: |
+            ls -l .
+            ls -l docs
       - <<: *publish_docs
       - store_artifacts:
           path: docs/gh-pages
