@@ -189,6 +189,8 @@ jobs:
           root: /workspace
           paths:
             - pom.xml
+            - mvnw
+            - .mvn
             - lib
             - atlasmap-maven-plugin
             - camel
