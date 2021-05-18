@@ -7,10 +7,10 @@ echo ================================
 ../mvnw -f pom-javadoc.xml -pl \!io.atlasmap:atlasmap-lib-all javadoc:aggregate
 mkdir -p target/generated-docs/html/developer-guide/coverage/java
 mkdir target/generated-docs/html/developer-guide/coverage/ui
-cp -a coverage/coverage-report/target/site/jacoco-aggregate/* target/generated-docs/html/developer-guide/coverage/java
-for dir in `ls --color=never coverage/ui/packages`; do
+cp -a ../coverage-report/target/site/jacoco-aggregate/* target/generated-docs/html/developer-guide/coverage/java
+for dir in `ls --color=never ../ui/packages`; do
   mkdir target/generated-docs/html/developer-guide/coverage/ui/${dir}
-  cp -a coverage/ui/packages/${dir}/coverage/lcov-report/* target/generated-docs/html/developer-guide/coverage/ui/${dir}/ 2>/dev/null || :
+  cp -a ../ui/packages/${dir}/coverage/lcov-report/* target/generated-docs/html/developer-guide/coverage/ui/${dir}/ 2>/dev/null || :
 done
 git clone -b gh-pages https://github.com/atlasmap/atlasmap.git gh-pages
 git config --global user.email "travis@atlasmap.io"

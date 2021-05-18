@@ -188,6 +188,10 @@ jobs:
       - persist_to_workspace:
           root: /workspace
           paths:
+            - lib
+            - atlasmap-maven-plugin
+            - camel
+            - standalone
             - coverage-report/target/site/jacoco-aggregate
             - ui
 
@@ -199,7 +203,7 @@ jobs:
       - checkout
       - <<: *load_cache_mvn
       - attach_workspace:
-          at: docs/coverage
+          at: /workspace
       - <<: *publish_docs
       - store_artifacts:
           path: docs/gh-pages
