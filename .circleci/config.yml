@@ -191,6 +191,8 @@ jobs:
             - pom.xml
             - mvnw
             - .mvn
+            - parent
+            - examples
             - lib
             - atlasmap-maven-plugin
             - camel
