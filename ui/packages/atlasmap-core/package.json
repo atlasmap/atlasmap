@@ -45,7 +45,7 @@
     "@babel/core": "^7.12.10",
     "@testing-library/jest-dom": "^5.7.0",
     "@testing-library/react": "^11.2.7",
-    "@types/jest": "^24.9.1",
+    "@types/jest": "^26.0.23",
     "babel-jest": "^24.9.0",
     "husky": "^6.0.0",
     "ts-jest": "^24.3.0",
