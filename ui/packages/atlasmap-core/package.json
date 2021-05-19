@@ -22,7 +22,7 @@
     "format": "yarn lint --fix"
   },
   "peerDependencies": {
-    "ky": "^0.17.0",
+    "ky": "^0.28.1",
     "react": "^17.0.2",
     "rxjs": "^6.2.2"
   },
@@ -54,7 +54,7 @@
     "@types/text-encoding": "0.0.35",
     "babel-jest": "^24.9.0",
     "husky": "^4.2.3",
-    "ky": "^0.17.0",
+    "ky": "^0.28.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "rxjs": "^6.5.4",
