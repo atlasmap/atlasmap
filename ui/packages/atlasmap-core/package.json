@@ -116,6 +116,6 @@
   "dependencies": {
     "file-saver": "2.0.2",
     "loglevel": "^1.6.7",
-    "pako": "^1.0.11"
+    "pako": "^2.0.3"
   }
 }
