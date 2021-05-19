@@ -182,7 +182,9 @@ export class MappingSerializer {
         if (!serializedInputFields[0].actions) {
           serializedInputFields[0].actions = [];
         }
-        serializedInputFields[0].actions.unshift(mappingAction);
+        if (mappingAction) {
+          serializedInputFields[0].actions.unshift(mappingAction);
+        }
       }
       if (mappingExpression.length > 0) {
         if (serializedInputFields[0].jsonType?.includes('FieldGroup')) {
@@ -383,7 +385,9 @@ export class MappingSerializer {
           ignoreValue
         );
       }
-
+      if (mappingJson.outputField.length > 1) {
+        mapping.transition.mode = TransitionMode.ONE_TO_MANY;
+      }
       if (cfg.mappings) {
         MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, null, true);
       }

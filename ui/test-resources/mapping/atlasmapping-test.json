@@ -34,8 +34,8 @@
       },
       {
         "jsonType": "io.atlasmap.v2.DataSource",
-        "id": "SomeXmlTarget",
-        "uri": "atlas:xml:SomeXmlTarget",
+        "id": "XMLInstanceSource",
+        "uri": "atlas:xml:XMLInstanceSource",
         "dataSourceType": "TARGET"
       }
     ],
@@ -224,7 +224,7 @@
           "outputField": [
             {
               "jsonType": "io.atlasmap.xml.v2.XmlField",
-              "docId": "SomeXmlTarget",
+              "docId": "XMLInstanceSource",
               "status": "SUPPORTED",
               "name": "xt0",
               "type": "STRING",
@@ -294,7 +294,7 @@
           "outputField": [
             {
               "jsonType": "io.atlasmap.xml.v2.XmlField",
-              "docId": "SomeXmlTarget",
+              "docId": "XMLInstanceSource",
               "status": "SUPPORTED",
               "name": "xt1",
               "type": "STRING",
@@ -317,7 +317,7 @@
           "outputField": [
             {
               "jsonType": "io.atlasmap.xml.v2.XmlField",
-              "docId": "SomeXmlTarget",
+              "docId": "XMLInstanceSource",
               "status": "SUPPORTED",
               "name": "xt2",
               "type": "STRING",

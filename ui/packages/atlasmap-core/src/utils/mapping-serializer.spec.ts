@@ -1,23 +1,27 @@
 /* tslint:disable:no-unused-variable */
 
+import {
+  DocumentDefinition,
+  NamespaceModel,
+} from '../models/document-definition.model';
 import { FieldAction, Multiplicity } from '../models/field-action.model';
 
 import { ConfigModel } from '../models/config.model';
-import { DocumentDefinition } from '../models/document-definition.model';
 import { DocumentType } from '../common/config.types';
 import { ErrorHandlerService } from '../services/error-handler.service';
 import { ExpressionModel } from '../models/expression.model';
 import { Field } from '../models/field.model';
 import { FieldActionService } from '../services/field-action.service';
 import { MappingDefinition } from '../models/mapping-definition.model';
+import { MappingManagementService } from '../services/mapping-management.service';
 import { MappingModel } from '../models/mapping.model';
 import { MappingSerializer } from '../utils/mapping-serializer';
 import { MappingUtil } from '../utils/mapping-util';
+import { TestUtils } from './TestUtils';
 import { TransitionMode } from '../models/transition.model';
 
 import atlasMappingCollExprMapping from '../../../../test-resources/mapping/atlasmapping-coll-expr-mapping.json';
 import atlasMappingCollExprPreview from '../../../../test-resources/mapping/atlasmapping-coll-expr-preview.json';
-import atlasMappingCollRefExprMapping from '../../../../test-resources/mapping/atlasmapping-coll-ref-expr-mapping.json';
 import atlasMappingCollRefExprPreview from '../../../../test-resources/mapping/atlasmapping-coll-ref-expr-preview.json';
 import atlasMappingExprPropJson from '../../../../test-resources/mapping/atlasmapping-expr-prop.json';
 import atlasMappingTestJson from '../../../../test-resources/mapping/atlasmapping-test.json';
@@ -36,6 +40,8 @@ describe('MappingSerializer', () => {
     const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
     cfg.fieldActionService = new FieldActionService(api);
     cfg.fieldActionService.cfg = cfg;
+    cfg.mappingService = new MappingManagementService(api);
+    cfg.mappingService.cfg = cfg;
     cfg.logger = log.getLogger('config');
 
     // Source Java doc
@@ -45,6 +51,7 @@ describe('MappingSerializer', () => {
     twitter.isSource = true;
     twitter.id = 'twitter4j.Status';
     twitter.uri = 'atlas:java?className=twitter4j.Status';
+    twitter.description = 'random desc';
     const user = new Field();
     user.name = 'User';
     user.path = '/User';
@@ -77,6 +84,7 @@ describe('MappingSerializer', () => {
     jsonSource.isSource = true;
     jsonSource.id = 'SomeJsonSource';
     jsonSource.uri = 'atlas:json:SomeJsonSource';
+    jsonSource.description = 'random desc';
     const js0 = new Field();
     js0.name = 'js0';
     js0.path = '/js0';
@@ -97,6 +105,7 @@ describe('MappingSerializer', () => {
     jsonSchemaSource.isSource = true;
     jsonSchemaSource.id = 'JSONSchemaSource';
     jsonSchemaSource.uri = 'atlas:json:JSONSchemaSource';
+    jsonSchemaSource.description = 'random desc';
     const jc0 = new Field();
     jc0.name = 'addressList';
     jc0.path = '/addressList<>';
@@ -136,6 +145,20 @@ describe('MappingSerializer', () => {
     jcc3.parentField = jc0;
     jc0.children.push(jcc3);
     jsonSchemaSource.addField(jcc3);
+    const primitives = new Field();
+    primitives.name = 'primitives';
+    primitives.path = '/primitives';
+    primitives.type = 'COMPLEX';
+    primitives.serviceObject.status = 'SUPPORTED';
+    jsonSchemaSource.addField(primitives);
+    const stringPrimitive = new Field();
+    stringPrimitive.name = 'stringPrimitive';
+    stringPrimitive.path = '/primitives/stringPrimitive';
+    stringPrimitive.type = 'STRING';
+    stringPrimitive.isPrimitive = true;
+    stringPrimitive.parentField = primitives;
+    primitives.children.push(stringPrimitive);
+    jsonSchemaSource.addField(stringPrimitive);
     jsonSchemaSource.initializeFromFields();
     cfg.sourceDocs.push(jsonSchemaSource);
 
@@ -146,6 +169,7 @@ describe('MappingSerializer', () => {
     xmlSource.isSource = true;
     xmlSource.id = 'SomeXmlSource';
     xmlSource.uri = 'atlas:xml:SomeXmlSource';
+    xmlSource.description = 'random desc';
     const xs0 = new Field();
     xs0.name = 'xs0';
     xs0.path = '/xs0';
@@ -167,6 +191,7 @@ describe('MappingSerializer', () => {
     contact.id = 'salesforce.Contact';
     contact.uri =
       'atlas:java?className=org.apache.camel.salesforce.dto.Contact';
+    contact.description = 'random desc';
     const desc = new Field();
     desc.name = 'Description';
     desc.path = '/Description';
@@ -197,6 +222,7 @@ describe('MappingSerializer', () => {
     jsonTarget.isSource = false;
     jsonTarget.id = 'SomeJsonTarget';
     jsonTarget.uri = 'atlas:json:SomeJsonTarget';
+    jsonTarget.description = 'random desc';
     const jt0 = new Field();
     jt0.name = 'jt0';
     jt0.path = '/jt0';
@@ -217,6 +243,7 @@ describe('MappingSerializer', () => {
     jsonSchemaSource2.isSource = false;
     jsonSchemaSource2.id = 'JSONSchemaSource';
     jsonSchemaSource2.uri = 'atlas:json:JSONSchemaSource';
+    jsonSchemaSource2.description = 'random desc';
     const jtc0 = new Field();
     jtc0.name = 'addressList';
     jtc0.path = '/addressList<>';
@@ -240,16 +267,37 @@ describe('MappingSerializer', () => {
     jtcc1.parentField = jtc0;
     jtc0.children.push(jtcc1);
     jsonSchemaSource2.addField(jtcc1);
+    const tprimitives = new Field();
+    tprimitives.name = 'primitives';
+    tprimitives.path = '/primitives';
+    tprimitives.type = 'COMPLEX';
+    tprimitives.serviceObject.status = 'SUPPORTED';
+    jsonSchemaSource2.addField(tprimitives);
+    const tstringPrimitive = new Field();
+    tstringPrimitive.name = 'stringPrimitive';
+    tstringPrimitive.path = '/primitives/stringPrimitive';
+    tstringPrimitive.type = 'STRING';
+    tstringPrimitive.isPrimitive = true;
+    tstringPrimitive.parentField = primitives;
+    tprimitives.children.push(tstringPrimitive);
+    jsonSchemaSource2.addField(tstringPrimitive);
     jsonSchemaSource2.initializeFromFields();
     cfg.targetDocs.push(jsonSchemaSource2);
 
-    // Target XML doc
+    // Target XML Namespace doc
     const xmlTarget = new DocumentDefinition();
     xmlTarget.type = DocumentType.XML;
-    xmlTarget.name = 'SomeXmlTarget';
-    xmlTarget.isSource = true;
-    xmlTarget.id = 'SomeXmlTarget';
-    xmlTarget.uri = 'atlas:xml:SomeXmlTarget';
+    xmlTarget.name = 'XMLInstanceSource';
+    xmlTarget.isSource = false;
+    xmlTarget.id = 'XMLInstanceSource';
+    xmlTarget.uri = 'atlas:xml:XMLInstanceSource';
+    xmlTarget.description = 'random desc';
+    const ns: NamespaceModel = new NamespaceModel();
+    ns.alias = 'xsi';
+    ns.uri = 'http://www.w3.org/2001/XMLSchema-instance';
+    ns.locationUri = 'http://www.w3.org/2001/XMLSchema-instance';
+    ns.isTarget = true;
+    xmlTarget.namespaces.push(ns);
     const xt0 = new Field();
     xt0.name = 'xt0';
     xt0.path = '/xt0';
@@ -305,16 +353,15 @@ describe('MappingSerializer', () => {
 
         // Find the expression input field group from the raw JSON.
         for (fieldMapping of mappingJson.AtlasMapping.mappings.mapping) {
-          if (fieldMapping.inputFieldGroup) {
-            const firstAction = fieldMapping?.inputFieldGroup?.actions[0];
-            if (firstAction) {
-              if (firstAction['@type'] === 'Expression') {
-                break;
-              }
-            }
+          if (
+            fieldMapping.expression &&
+            fieldMapping.expression.startsWith('if (')
+          ) {
+            break;
           }
           expressionIndex++;
         }
+        // console.log(JSON.stringify(mappingJson, null, 2));
         MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
         MappingUtil.updateMappingsFromDocuments(cfg);
         expect(cfg.mappings.mappings.length).toEqual(
@@ -325,11 +372,11 @@ describe('MappingSerializer', () => {
         expect(mapping).toBeDefined();
         const mfields = mapping.getMappedFields(true);
         let i = 0;
-        if (!fieldMapping?.inputFieldGroup?.field) {
+        if (!mfields || !fieldMapping?.inputFieldGroup?.field) {
           fail();
         }
         for (const field of fieldMapping.inputFieldGroup.field) {
-          expect(mfields[i].parsedData?.parsedPath).toEqual(field.path);
+          expect(mfields[i]?.parsedData?.parsedPath).toEqual(field.path);
           i++;
         }
         expect(fieldMapping.inputFieldGroup.field[0].docId).toContain(
@@ -523,7 +570,6 @@ describe('MappingSerializer', () => {
         }
         MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
         MappingUtil.updateMappingsFromDocuments(cfg);
-
         expect(cfg.mappings?.mappings.length).toEqual(
           Object.keys(mappingJson.AtlasMapping?.mappings?.mapping).length
         );
@@ -560,18 +606,25 @@ describe('MappingSerializer', () => {
           Object.keys(serialized.AtlasMapping?.mappings?.mapping).length
         ).toEqual(cfg.mappings?.mappings?.length);
 
+        // Verify mapping.
+        expect(
+          TestUtils.isEqualJSON(
+            atlasMappingCollExprMapping,
+            MappingSerializer.serializeMappings(cfg) // ignoreValue defaults to true
+          )
+        ).toBe(true);
+
         // Verify preview mode.
         testField.value = 'somestring';
-        let sanitizedRequest = JSON.stringify(
-          MappingSerializer.serializeMappings(cfg, false)
-        ).replace(/\.[0-9]*/g, '.');
-        expect(sanitizedRequest).toEqual(atlasMappingCollExprPreview);
-
-        // Verify mapping.
-        sanitizedRequest = JSON.stringify(
-          MappingSerializer.serializeMappings(cfg) // ignoreValue defaults to true
-        ).replace(/\.[0-9]*/g, '.');
-        expect(sanitizedRequest).toEqual(atlasMappingCollExprMapping);
+        // const sanitizedRequest = JSON.stringify(
+        // MappingSerializer.serializeMappings(cfg, false)
+        // ).replace(/\.[0-9]*/g, '.');
+        expect(
+          TestUtils.isEqualJSON(
+            atlasMappingCollExprPreview,
+            MappingSerializer.serializeMappings(cfg) // ignoreValue defaults to true
+          )
+        ).toBe(true);
 
         done();
       })
@@ -642,16 +695,12 @@ describe('MappingSerializer', () => {
 
         // Verify preview mode.
         testField!.value = 'Bosto';
-        let sanitizedRequest = JSON.stringify(
-          MappingSerializer.serializeMappings(cfg, false)
-        ).replace(/\.[0-9]*/g, '.');
-        expect(sanitizedRequest).toEqual(atlasMappingCollRefExprPreview);
-
-        // Verify mapping.
-        sanitizedRequest = JSON.stringify(
-          MappingSerializer.serializeMappings(cfg) // ignoreValue defaults to true
-        ).replace(/\.[0-9]*/g, '.');
-        expect(sanitizedRequest).toEqual(atlasMappingCollRefExprMapping);
+        expect(
+          TestUtils.isEqualJSON(
+            atlasMappingCollRefExprPreview,
+            MappingSerializer.serializeMappings(cfg, false)
+          )
+        ).toBe(true);
 
         done();
       })
@@ -659,7 +708,6 @@ describe('MappingSerializer', () => {
         fail(error);
       });
   });
-
   test('collection many-to-one deserialize/serialize', (done) => {
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
@@ -680,11 +728,12 @@ describe('MappingSerializer', () => {
           }
         }
         expect(mapping).toBeDefined();
-
-        const sanitizedRequest = JSON.stringify(
-          MappingSerializer.serializeMappings(cfg)
-        ).replace(/\.[0-9]*/g, '.');
-        expect(sanitizedRequest).toEqual(atlasMappingCollRefExprMapping);
+        expect(
+          TestUtils.isEqualJSON(
+            atlasMappingCollExprMapping,
+            MappingSerializer.serializeMappings(cfg) // ignoreValue defaults to true
+          )
+        ).toBe(true);
 
         done();
       })
