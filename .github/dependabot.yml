@@ -139,3 +139,10 @@ updates:
   - dependency-name: org.springframework:spring-test
     versions:
     - ">= 5.2.a, < 5.3"
+
+- package-ecosystem: npm
+  directory: "/ui"
+  schedule:
+    interval: weekly
+    day: sunday
+  open-pull-requests-limit: 50
