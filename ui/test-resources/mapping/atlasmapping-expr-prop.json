@@ -4,17 +4,43 @@
     "dataSource" : [ {
       "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
       "id" : "JSONInstanceSource",
+      "name" : "JSONInstanceSource",
+      "description" : "random desc",
       "uri" : "atlas:json:JSONInstanceSource",
       "dataSourceType" : "SOURCE"
     }, {
       "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
       "id" : "JSONSchemaSource",
       "name" : "JSONSchemaSource",
+      "description" : "random desc",
       "uri" : "atlas:json:JSONSchemaSource",
       "dataSourceType" : "SOURCE"
     }, {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "SomeJsonSource",
+      "name" : "SomeJsonSource",
+      "description" : "random desc",
+      "uri" : "atlas:json:SomeJsonSource",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.xml.v2.XmlDataSource",
+      "id" : "SomeXmlSource",
+      "name" : "SomeXmlSource",
+      "description" : "random desc",
+      "uri" : "atlas:xml:SomeXmlSource",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.xml.v2.XmlDataSource",
+      "id" : "XMLInstanceTarget",
+      "name" : "XMLInstanceTarget",
+      "description" : "random desc",
+      "uri" : "atlas:xml:XMLInstanceTarget",
+      "dataSourceType" : "TARGET"
+    }, {
       "jsonType" : "io.atlasmap.xml.v2.XmlDataSource",
       "id" : "XMLInstanceSource",
+      "name" : "XMLInstanceSource",
+      "description" : "random desc",
       "uri" : "atlas:xml:XMLInstanceSource",
       "dataSourceType" : "TARGET",
       "xmlNamespaces" : {
@@ -29,6 +55,8 @@
     }, {
       "jsonType" : "io.atlasmap.xml.v2.XmlDataSource",
       "id" : "XMLSchemaSource",
+      "name" : "XMLSchemaSource",
+      "description" : "random desc",
       "uri" : "atlas:xml:XMLSchemaSource",
       "dataSourceType" : "TARGET",
       "xmlNamespaces" : {
@@ -39,8 +67,10 @@
       }
     }, {
       "jsonType" : "io.atlasmap.v2.DataSource",
-      "id" : "io.paul.Bicycle",
-      "uri" : "atlas:java?className=io.paul.Bicycle",
+      "id" : "SomeJsonTarget",
+      "name" : "SomeJsonTarget",
+      "description" : "random desc",
+      "uri" : "atlas:json:SomeJsonTarget",
       "dataSourceType" : "TARGET"
     } ],
     "mappings" : {
@@ -52,33 +82,32 @@
             "delimiter" : ":",
             "@type" : "Split"
           } ],
-          "docId" : "JSONInstanceSource",
-          "path" : "/primitives/numberPrimitive",
-          "fieldType" : "INTEGER",
-          "name" : "numberPrimitive",
-          "userCreated" : false
+          "docId" : "SomeJsonSource",
+          "path" : "/js0",
+          "fieldType" : "STRING",
+          "name" : "js0"
         } ],
         "outputField" : [ {
-          "jsonType" : "io.atlasmap.java.v2.JavaField",
-          "docId" : "io.paul.Bicycle",
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "SomeJsonTarget",
           "index" : 0,
-          "path" : "/cadence",
-          "fieldType" : "INTEGER",
-          "name" : "cadence"
+          "path" : "/jt0",
+          "fieldType" : "STRING",
+          "name" : "jt0"
         }, {
-          "jsonType" : "io.atlasmap.java.v2.JavaField",
-          "docId" : "io.paul.Bicycle",
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "SomeJsonTarget",
           "index" : 2,
-          "path" : "/speed",
-          "fieldType" : "INTEGER",
-          "name" : "speed"
+          "path" : "/jt1",
+          "fieldType" : "STRING",
+          "name" : "jt1"
         }, {
-          "jsonType" : "io.atlasmap.java.v2.JavaField",
-          "docId" : "io.paul.Bicycle",
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "XMLInstanceSource",
           "index" : 4,
-          "path" : "/gear",
-          "fieldType" : "INTEGER",
-          "name" : "gear"
+          "path" : "/xt0",
+          "fieldType" : "STRING",
+          "name" : "xt0"
         } ],
         "id" : "mapping.193473"
       }, {
@@ -90,62 +119,44 @@
             "@type" : "Concatenate"
           } ],
           "field" : [ {
-            "jsonType" : "io.atlasmap.json.v2.JsonField",
-            "actions" : [ {
-              "name" : "io.atlasmap.maven.test.PaulsFieldActionsModel",
-              "className" : "io.atlasmap.maven.test.PaulsFieldActionsModel",
-              "methodName" : "myCustomFieldAction",
-              "@type" : "CustomAction"
-            } ],
-            "docId" : "JSONSchemaSource",
-            "index" : 1,
-            "path" : "/primitives/stringPrimitive",
-            "fieldType" : "STRING",
-            "name" : "stringPrimitive",
-            "userCreated" : false
-          }, {
-            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
             "actions" : [ {
               "string" : "rat",
               "@type" : "Append"
             } ],
-            "docId" : "JSONInstanceSource",
+            "docId" : "SomeXmlSource",
             "index" : 3,
-            "path" : "/primitives/stringPrimitive",
+            "path" : "/xs0",
             "fieldType" : "STRING",
-            "name" : "stringPrimitive",
-            "userCreated" : false
+            "name" : "xs0"
           }, {
             "jsonType" : "io.atlasmap.json.v2.JsonField",
             "actions" : [ {
               "string" : "hat",
               "@type" : "Prepend"
             } ],
-            "docId" : "JSONSchemaSource",
+            "docId" : "SomeJsonSource",
             "index" : 5,
-            "path" : "/order/orderId",
+            "path" : "/js0",
             "fieldType" : "STRING",
-            "name" : "orderId",
-            "userCreated" : false
+            "name" : "js0"
           } ]
         },
         "inputField" : [ ],
         "outputField" : [ {
-          "jsonType" : "io.atlasmap.java.v2.JavaField",
-          "docId" : "io.paul.Bicycle",
-          "path" : "/serialId",
+          "jsonType" : "io.atlasmap.java.v2.JsonField",
+          "docId" : "SomeJsonTarget",
+          "path" : "/jt0",
           "fieldType" : "STRING",
-          "name" : "serialId"
+          "name" : "jt0"
         } ],
         "id" : "mapping.895769"
       }, {
         "jsonType" : "io.atlasmap.v2.Mapping",
+        "expression" : "if (${DOC.Properties:/current/prop-city} == ${DOC.Constants:/Boston}, ${SomeJsonSource:/js0}, ${SomeJsonSource:/js1})",
         "inputFieldGroup" : {
           "jsonType" : "io.atlasmap.v2.FieldGroup",
-          "actions" : [ {
-            "expression" : "if (${0}== ${1}, ${2}, ${3})",
-            "@type" : "Expression"
-          } ],
+          "actions" : [ ],
           "field" : [ {
             "jsonType" : "io.atlasmap.v2.PropertyField",
             "actions" : [ {
@@ -156,7 +167,8 @@
             "index" : 0,
             "path" : "/prop-city",
             "fieldType" : "STRING",
-            "name" : "/prop-city"
+            "name" : "prop-city",
+            "scope" : "current"
           }, {
             "jsonType" : "io.atlasmap.v2.ConstantField",
             "value" : "Boston",
@@ -169,37 +181,34 @@
             "actions" : [ {
               "@type" : "Uppercase"
             }, {
-              "string" : "",
+              "string" : "cat",
               "@type" : "Append"
             } ],
-            "docId" : "JSONInstanceSource",
+            "docId" : "SomeJsonSource",
             "index" : 2,
-            "path" : "/order/address/city",
+            "path" : "/js0",
             "fieldType" : "STRING",
-            "name" : "city",
-            "userCreated" : false
+            "name" : "js0"
           }, {
             "jsonType" : "io.atlasmap.json.v2.JsonField",
-            "docId" : "JSONInstanceSource",
+            "docId" : "SomeJsonSource",
             "index" : 3,
-            "path" : "/order/address/state",
+            "path" : "/js1",
             "fieldType" : "STRING",
-            "name" : "state",
-            "userCreated" : false
+            "name" : "js1"
           } ]
         },
         "inputField" : [ ],
         "outputField" : [ {
-          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
           "actions" : [ {
             "string" : "RESULT",
             "@type" : "Append"
           } ],
-          "docId" : "XMLInstanceSource",
-          "path" : "/ns:XmlOE/ns:Address/ns:addressLine1",
+          "docId" : "SomeJsonTarget",
+          "path" : "/jt0",
           "fieldType" : "STRING",
-          "name" : "addressLine1",
-          "userCreated" : false
+          "name" : "jt0"
         } ],
         "id" : "mapping.983999"
       }, {
@@ -225,11 +234,11 @@
         },
         "inputField" : [ ],
         "outputField" : [ {
-          "jsonType" : "io.atlasmap.json.v2.JsonField",
-          "docId" : "JSONSchemaSource",
-          "path" : "/addressList<>/zip",
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "XMLInstanceSource",
+          "path" : "/xt2",
           "fieldType" : "STRING",
-          "name" : "zip"
+          "name" : "xt2"
         } ],
         "id" : "mapping.71409"
       }, {
@@ -322,11 +331,13 @@
       "property" : [ {
         "name" : "boston",
         "value" : "boston",
-        "fieldType" : "STRING"
+        "fieldType" : "STRING",
+        "scope" : "current"
       }, {
         "name" : "prop-city",
         "value" : "boston",
-        "fieldType" : "STRING"
+        "fieldType" : "STRING",
+        "scope" : "current"
       } ]
     },
     "name" : "UI.950612"

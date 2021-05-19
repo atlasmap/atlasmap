@@ -1,1 +1,399 @@
-"{\"AtlasMapping\":{\"jsonType\":\"io.atlasmap.v2.AtlasMapping\",\"dataSource\":[{\"jsonType\":\"io.atlasmap.v2.DataSource\",\"id\":\"twitter4j.Status\",\"name\":\"twitter4j.Status\",\"uri\":\"atlas:java?className=twitter4j.Status\",\"dataSourceType\":\"SOURCE\"},{\"jsonType\":\"io.atlasmap.json.v2.JsonDataSource\",\"id\":\"SomeJsonSource\",\"name\":\"SomeJsonSource\",\"uri\":\"atlas:json:SomeJsonSource\",\"dataSourceType\":\"SOURCE\"},{\"jsonType\":\"io.atlasmap.json.v2.JsonDataSource\",\"id\":\"JSONSchemaSource\",\"name\":\"JSONSchemaSource\",\"uri\":\"atlas:json:JSONSchemaSource\",\"dataSourceType\":\"SOURCE\"},{\"jsonType\":\"io.atlasmap.xml.v2.XmlDataSource\",\"id\":\"SomeXmlSource\",\"name\":\"SomeXmlSource\",\"uri\":\"atlas:xml:SomeXmlSource\",\"dataSourceType\":\"SOURCE\",\"xmlNamespaces\":{\"xmlNamespace\":[]}},{\"jsonType\":\"io.atlasmap.v2.DataSource\",\"id\":\"salesforce.Contact\",\"name\":\"salesforce.Contact\",\"uri\":\"atlas:java?className=org.apache.camel.salesforce.dto.Contact\",\"dataSourceType\":\"TARGET\"},{\"jsonType\":\"io.atlasmap.json.v2.JsonDataSource\",\"id\":\"SomeJsonTarget\",\"name\":\"SomeJsonTarget\",\"uri\":\"atlas:json:SomeJsonTarget\",\"dataSourceType\":\"TARGET\",\"template\":null},{\"jsonType\":\"io.atlasmap.json.v2.JsonDataSource\",\"id\":\"JSONSchemaSource\",\"name\":\"JSONSchemaSource\",\"uri\":\"atlas:json:JSONSchemaSource\",\"dataSourceType\":\"TARGET\",\"template\":null},{\"jsonType\":\"io.atlasmap.xml.v2.XmlDataSource\",\"id\":\"SomeXmlTarget\",\"name\":\"SomeXmlTarget\",\"uri\":\"atlas:xml:SomeXmlTarget\",\"dataSourceType\":\"SOURCE\",\"xmlNamespaces\":{\"xmlNamespace\":[]}}],\"mappings\":{\"mapping\":[{\"jsonType\":\"io.atlasmap.v2.Mapping\",\"id\":\"mapping.\",\"inputField\":[],\"outputField\":[]},{\"jsonType\":\"io.atlasmap.v2.Mapping\",\"id\":\"mapping.\",\"inputFieldGroup\":{\"jsonType\":\"io.atlasmap.v2.FieldGroup\",\"actions\":[{\"delimiter\":\"#\",\"@type\":\"Concatenate\"}],\"field\":[]},\"outputField\":[]},{\"jsonType\":\"io.atlasmap.v2.Mapping\",\"id\":\"mapping.\",\"expression\":\"if (${DOC.Properties.:/prop-city}== ${DOC.Constants.:/Boston}, , )\",\"inputFieldGroup\":{\"jsonType\":\"io.atlasmap.v2.FieldGroup\",\"actions\":[],\"field\":[{\"jsonType\":\"io.atlasmap.v2.PropertyField\",\"name\":\"prop-city\",\"path\":\"/prop-city\",\"fieldType\":\"STRING\",\"docId\":\"DOC.Properties.\",\"index\":0,\"actions\":[{\"@type\":\"Capitalize\"}]},{\"jsonType\":\"io.atlasmap.v2.ConstantField\",\"path\":\"/Boston\",\"fieldType\":\"STRING\",\"docId\":\"DOC.Constants.\",\"value\":\"Boston\",\"index\":1}]},\"outputField\":[]},{\"jsonType\":\"io.atlasmap.v2.Mapping\",\"id\":\"mapping.\",\"expression\":\"repeat( count( ${JSONSchemaSource:/addressList<>/street}), ${DOC.Constants.:/const-str})\",\"inputFieldGroup\":{\"jsonType\":\"io.atlasmap.v2.FieldGroup\",\"actions\":[],\"field\":[{\"name\":\"street\",\"path\":\"/addressList<>/street\",\"fieldType\":\"STRING\",\"docId\":\"JSONSchemaSource\",\"index\":0},{\"jsonType\":\"io.atlasmap.v2.ConstantField\",\"path\":\"/const-str\",\"fieldType\":\"STRING\",\"docId\":\"DOC.Constants.\",\"value\":\"const-str\",\"index\":1}]},\"outputField\":[{\"name\":\"zip\",\"path\":\"/addressList<>/zip\",\"fieldType\":\"STRING\",\"docId\":\"JSONSchemaSource\"}]},{\"jsonType\":\"io.atlasmap.v2.Mapping\",\"id\":\"mapping.\",\"expression\":\"select( filter( ${JSONSchemaSource:/addressList<>}, ${/city} != 'Boston'), ${/state})\",\"inputFieldGroup\":{\"jsonType\":\"io.atlasmap.v2.FieldGroup\",\"actions\":[],\"field\":[{\"jsonType\":\"io.atlasmap.v2.FieldGroup\",\"actions\":[],\"docId\":\"JSONSchemaSource\",\"path\":\"/addressList<>\",\"field\":[{\"name\":\"city\",\"path\":\"/addressList<>/city\",\"fieldType\":\"STRING\",\"docId\":\"JSONSchemaSource\",\"index\":0},{\"name\":\"state\",\"path\":\"/addressList<>/state\",\"fieldType\":\"STRING\",\"docId\":\"JSONSchemaSource\",\"index\":1}]}]},\"outputField\":[{\"name\":\"city\",\"path\":\"/addressList<>/city\",\"fieldType\":\"STRING\",\"docId\":\"JSONSchemaSource\"}]},{\"jsonType\":\"io.atlasmap.v2.Mapping\",\"id\":\"mapping.\",\"inputFieldGroup\":{\"jsonType\":\"io.atlasmap.v2.FieldGroup\",\"actions\":[{\"delimiter\":\" \",\"delimitingEmptyValues\":\"true\",\"@type\":\"Concatenate\"}],\"field\":[{\"name\":\"zip\",\"path\":\"/addressList<>/zip\",\"fieldType\":\"STRING\",\"docId\":\"JSONSchemaSource\",\"index\":0},{\"name\":\"street\",\"path\":\"/addressList<>/street\",\"fieldType\":\"STRING\",\"docId\":\"JSONSchemaSource\",\"index\":1}]},\"outputField\":[]}]},\"name\":\"UI.\",\"lookupTables\":{\"lookupTable\":[]},\"constants\":{\"constant\":[{\"name\":\"Boston\",\"value\":\"Boston\",\"fieldType\":\"STRING\"},{\"name\":\"const-str\",\"value\":\"const-str\",\"fieldType\":\"STRING\"}]},\"properties\":{\"property\":[{\"name\":\"prop-city\",\"fieldType\":\"STRING\",\"dataSourceType\":\"SOURCE\"}]}}}"
+{
+  "AtlasMapping":{
+    "jsonType":"io.atlasmap.v2.AtlasMapping",
+    "dataSource":[
+      {
+        "jsonType":"io.atlasmap.v2.DataSource",
+        "id":"twitter4j.Status",
+        "name":"twitter4j.Status",
+        "description":"random desc",
+        "uri":"atlas:java?className=twitter4j.Status",
+        "dataSourceType":"SOURCE"
+      },
+      {
+        "jsonType":"io.atlasmap.json.v2.JsonDataSource",
+        "id":"SomeJsonSource",
+        "name":"SomeJsonSource",
+        "description":"random desc",
+        "uri":"atlas:json:SomeJsonSource",
+        "dataSourceType":"SOURCE"
+      },
+      {
+        "jsonType":"io.atlasmap.json.v2.JsonDataSource",
+        "id":"JSONSchemaSource",
+        "name":"JSONSchemaSource",
+        "description":"random desc",
+        "uri":"atlas:json:JSONSchemaSource",
+        "dataSourceType":"SOURCE"
+      },
+      {
+        "jsonType":"io.atlasmap.xml.v2.XmlDataSource",
+        "id":"SomeXmlSource",
+        "name":"SomeXmlSource",
+        "description":"random desc",
+        "uri":"atlas:xml:SomeXmlSource",
+        "dataSourceType":"SOURCE",
+        "xmlNamespaces":{
+          "xmlNamespace":[ ]
+        }
+      },
+      {
+        "jsonType":"io.atlasmap.v2.DataSource",
+        "id":"salesforce.Contact",
+        "name":"salesforce.Contact",
+        "description":"random desc",
+        "uri":"atlas:java?className=org.apache.camel.salesforce.dto.Contact",
+        "dataSourceType":"TARGET"
+      },
+      {
+        "jsonType":"io.atlasmap.json.v2.JsonDataSource",
+        "id":"SomeJsonTarget",
+        "name":"SomeJsonTarget",
+        "description":"random desc",
+        "uri":"atlas:json:SomeJsonTarget",
+        "dataSourceType":"TARGET",
+        "template":null
+      },
+      {
+        "jsonType":"io.atlasmap.json.v2.JsonDataSource",
+        "id":"JSONSchemaSource",
+        "name":"JSONSchemaSource",
+        "description":"random desc",
+        "uri":"atlas:json:JSONSchemaSource",
+        "dataSourceType":"TARGET",
+        "template":null
+      },
+      {
+        "jsonType" : "io.atlasmap.xml.v2.XmlDataSource",
+        "id" : "XMLInstanceSource",
+        "name" : "XMLInstanceSource",
+        "description" : "random desc",
+        "uri" : "atlas:xml:XMLInstanceSource",
+        "dataSourceType" : "TARGET",
+        "template":null,
+        "xmlNamespaces" : [ {
+          "xmlNamespace" : [ {
+            "alias" : "xsi",
+            "uri" : "http://www.w3.org/2001/XMLSchema-instance",
+            "locationUri" : "http://www.w3.org/2001/XMLSchema-instance",
+            "targetNamespace" : true
+          } ]
+        } ]
+      }
+    ],
+    "mappings":{
+      "mapping":[
+        {
+          "jsonType" : "io.atlasmap.v2.Mapping",
+          "inputField" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "actions" : [ {
+              "delimiter" : ":",
+              "@type" : "Split"
+            } ],
+            "docId" : "SomeJsonSource",
+            "path" : "/js0",
+            "fieldType" : "STRING",
+            "name" : "js0",
+            "scope": ""
+          } ],
+          "outputField" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "SomeJsonTarget",
+            "index" : 0,
+            "path" : "/jt0",
+            "fieldType" : "STRING",
+            "name" : "jt0",
+            "scope": ""
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "SomeJsonTarget",
+            "index" : 2,
+            "path" : "/jt1",
+            "fieldType" : "STRING",
+            "name" : "jt1",
+            "scope": ""
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "docId" : "XMLInstanceSource",
+            "index" : 4,
+            "path" : "/xt0",
+            "fieldType" : "STRING",
+            "name" : "xt0",
+            "scope": "",
+            "userCreated": "false"
+          } ],
+          "id" : "mapping.193473"
+        },
+        {
+          "jsonType" : "io.atlasmap.v2.Mapping",
+          "id" : "",
+          "inputFieldGroup" : {
+            "jsonType" : "io.atlasmap.v2.FieldGroup",
+            "actions" : [ {
+              "delimiter" : "#",
+              "@type" : "Concatenate"
+            } ],
+            "field" : [ {
+              "jsonType" : "io.atlasmap.xml.v2.XmlField",
+              "actions" : [ {
+                "string" : "rat",
+                "@type" : "Append"
+              } ],
+              "docId" : "SomeXmlSource",
+              "index" : 3,
+              "path" : "/xs0",
+              "fieldType" : "STRING",
+              "name" : "xs0",
+              "scope" : "",
+              "userCreated" : "false"
+            }, {
+              "jsonType" : "io.atlasmap.json.v2.JsonField",
+              "actions" : [ {
+                "string" : "hat",
+                "@type" : "Prepend"
+              } ],
+              "docId" : "SomeJsonSource",
+              "index" : 5,
+              "path" : "/js0",
+              "fieldType" : "STRING",
+              "name" : "js0",
+              "scope" : ""
+            } ]
+          },
+          "outputField" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "SomeJsonTarget",
+            "path" : "/jt0",
+            "fieldType" : "STRING",
+            "name" : "jt0",
+            "scope" : ""
+          } ]
+        },
+        {
+          "jsonType" : "io.atlasmap.v2.Mapping",
+          "expression" : "if (${DOC.Properties:/current/prop-city} == ${DOC.Constants.:/Boston}, ${SomeJsonSource:/js0}, ${SomeJsonSource:/js1})",
+          "inputFieldGroup" : {
+            "jsonType" : "io.atlasmap.v2.FieldGroup",
+            "actions" : [ ],
+            "field" : [ {
+              "jsonType" : "io.atlasmap.v2.PropertyField",
+              "actions" : [ {
+                "@type" : "Capitalize"
+              } ],
+              "docId" : "DOC.Properties",
+              "index" : 0,
+              "path" : "/prop-city",
+              "fieldType" : "STRING",
+              "name" : "prop-city",
+              "scope" : "current"
+            }, {
+              "jsonType" : "io.atlasmap.v2.ConstantField",
+              "value" : "Boston",
+              "docId" : "DOC.Constants.",
+              "index" : 1,
+              "path" : "/Boston",
+              "fieldType" : "STRING",
+              "scope" : ""
+            }, {
+              "jsonType" : "io.atlasmap.json.v2.JsonField",
+              "actions" : [ {
+                "@type" : "Uppercase"
+              }, {
+                "string" : "cat",
+                "@type" : "Append"
+              } ],
+              "docId" : "SomeJsonSource",
+              "index" : 2,
+              "path" : "/js0",
+              "fieldType" : "STRING",
+              "name" : "js0",
+              "scope" : ""
+            }, {
+              "jsonType" : "io.atlasmap.json.v2.JsonField",
+              "docId" : "JSONSchemaSource",
+              "index" : 3,
+              "path" : "/js1",
+              "fieldType" : "STRING",
+              "name" : "js1",
+              "scope" : ""
+            } ]
+          },
+          "outputField" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "actions" : [ {
+              "string" : "RESULT",
+              "@type" : "Append"
+            } ],
+            "docId" : "SomeJsonTarget",
+            "path" : "/jt0",
+            "fieldType" : "STRING",
+            "name" : "jt0",
+            "scope" : ""
+          } ],
+          "id" : "mapping.290795"
+        },
+        {
+          "jsonType":"io.atlasmap.v2.Mapping",
+          "id":"mapping.",
+          "expression":"repeat( count( ${JSONSchemaSource:/addressList<>/street}), ${DOC.Constants.:/const-str})",
+          "inputFieldGroup":{
+            "jsonType":"io.atlasmap.v2.FieldGroup",
+            "actions":[ ],
+            "field":[
+              {
+                "jsonType":"io.atlasmap.json.v2.JsonField",
+                "name":"street",
+                "path":"/addressList<>/street",
+                "fieldType":"STRING",
+                "docId":"JSONSchemaSource",
+                "index":0,
+                "scope" : ""
+              },
+              {
+                "jsonType":"io.atlasmap.v2.ConstantField",
+                "path":"/const-str",
+                "fieldType":"STRING",
+                "docId":"DOC.Constants.",
+                "value":"const-str",
+                "index":1,
+                "scope" : ""
+              }
+            ]
+          },
+          "outputField":[
+            {
+              "jsonType" : "io.atlasmap.xml.v2.XmlField",
+              "docId" : "XMLInstanceSource",
+              "path" : "/xt2",
+              "fieldType" : "STRING",
+              "name" : "xt2",
+              "scope" : "",
+              "userCreated" : "false"
+            }
+          ]
+        },
+        {
+          "jsonType":"io.atlasmap.v2.Mapping",
+          "id":"mapping.",
+          "expression":"select( filter( ${JSONSchemaSource:/addressList<>}, ${/city} != 'Boston'), ${/state})",
+          "inputFieldGroup":{
+            "jsonType":"io.atlasmap.v2.FieldGroup",
+            "actions":[ ],
+            "field":[
+              {
+                "jsonType":"io.atlasmap.v2.FieldGroup",
+                "actions":[ ],
+                "docId":"JSONSchemaSource",
+                "path":"/addressList<>",
+                "field":[
+                  {
+                    "jsonType":"io.atlasmap.json.v2.JsonField",
+                    "name":"city",
+                    "path":"/addressList<>/city",
+                    "fieldType":"STRING",
+                    "docId":"JSONSchemaSource",
+                    "index":0,
+                    "scope" : ""
+                  },
+                  {
+                    "jsonType":"io.atlasmap.json.v2.JsonField",
+                    "name":"state",
+                    "path":"/addressList<>/state",
+                    "fieldType":"STRING",
+                    "docId":"JSONSchemaSource",
+                    "index":1,
+                    "scope" : ""
+                  }
+                ],
+                "fieldType" : "COMPLEX"
+              }
+            ]
+          },
+          "outputField":[
+            {
+              "jsonType":"io.atlasmap.json.v2.JsonField",
+              "name":"city",
+              "path":"/addressList<>/city",
+              "fieldType":"STRING",
+              "docId":"JSONSchemaSource",
+              "scope" : ""
+            }
+          ]
+        },
+        {
+          "jsonType":"io.atlasmap.v2.Mapping",
+          "id":"mapping.",
+          "inputFieldGroup":{
+            "jsonType":"io.atlasmap.v2.FieldGroup",
+            "actions":[
+              {
+                "delimiter":" ",
+                "delimitingEmptyValues":"true",
+                "@type":"Concatenate"
+              }
+            ],
+            "field":[
+              {
+                "jsonType":"io.atlasmap.json.v2.JsonField",
+                "name":"zip",
+                "path":"/addressList<>/zip",
+                "fieldType":"STRING",
+                "docId":"JSONSchemaSource",
+                "index":0,
+                "scope" : ""
+              },
+              {
+                "jsonType":"io.atlasmap.json.v2.JsonField",
+                "name":"street",
+                "path":"/addressList<>/street",
+                "fieldType":"STRING",
+                "docId":"JSONSchemaSource",
+                "index":1,
+                "scope" : ""
+              }
+            ]
+          },
+          "outputField":[
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "name": "stringPrimitive",
+              "path": "/primitives/stringPrimitive",
+              "fieldType": "STRING",
+              "scope": "",
+              "docId": "JSONSchemaSource"
+            }
+          ]
+        }
+      ]
+    },
+    "name":"UI.",
+    "lookupTables":{
+      "lookupTable":[ ]
+    },
+    "constants":{
+      "constant":[
+        {
+          "name":"Boston",
+          "value":"Boston",
+          "fieldType":"STRING"
+        },
+        {
+          "name":"const-str",
+          "value":"const-str",
+          "fieldType":"STRING"
+        }
+      ]
+    },
+    "properties":{
+      "property":[
+        {
+          "name":"prop-city",
+          "fieldType":"STRING",
+          "dataSourceType":"SOURCE",
+          "scope":"current"
+        }
+      ]
+    }
+  }
+}
