@@ -64,7 +64,7 @@
     "@storybook/react": "^6.2.9",
     "@testing-library/jest-dom": "^5.7.0",
     "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^10.3.1",
+    "@testing-library/user-event": "^13.1.9",
     "@types/hoist-non-react-statics": "^3.3.1",
     "@types/jest": "24.9.1",
     "@typescript-eslint/eslint-plugin": "^4.23.0",
