@@ -297,7 +297,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -324,7 +324,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -500,40 +500,40 @@ export interface IUseSidebarProps {
 }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >u</span>seSidebar(</span>{
-<span class="cstat-no" title="statement not covered" >  onCreateConstant,</span>
-<span class="cstat-no" title="statement not covered" >  onCreateProperty,</span>
-<span class="cstat-no" title="statement not covered" >  onRemoveMapping,</span>
-<span class="cstat-no" title="statement not covered" >  onEditEnum,</span>
-<span class="cstat-no" title="statement not covered" >  isEnumMapping,</span>
+  onCreateConstant<span class="cstat-no" title="statement not covered" >,</span>
+  onCreateProperty<span class="cstat-no" title="statement not covered" >,</span>
+  onRemoveMapping<span class="cstat-no" title="statement not covered" >,</span>
+  onEditEnum<span class="cstat-no" title="statement not covered" >,</span>
+  isEnumMapping<span class="cstat-no" title="statement not covered" >,</span>
 }: IUseSidebarProps) {
-  const <span class="cstat-no" title="statement not covered" >{</span>
-<span class="cstat-no" title="statement not covered" >    selectedMapping,</span>
-<span class="cstat-no" title="statement not covered" >    deselectMapping,</span>
-<span class="cstat-no" title="statement not covered" >    removeMappedFieldFromCurrentMapping,</span>
-<span class="cstat-no" title="statement not covered" >    fromMappedFieldToIMappingField,</span>
-<span class="cstat-no" title="statement not covered" >    flatSources,</span>
-<span class="cstat-no" title="statement not covered" >    flatTargets,</span>
-<span class="cstat-no" title="statement not covered" >    constants,</span>
-<span class="cstat-no" title="statement not covered" >    sourceProperties,</span>
-<span class="cstat-no" title="statement not covered" >    targetProperties,</span>
-<span class="cstat-no" title="statement not covered" >    canAddToSelectedMapping,</span>
-<span class="cstat-no" title="statement not covered" >    isFieldAddableToSelection,</span>
-<span class="cstat-no" title="statement not covered" >    addToCurrentMapping,</span>
-<span class="cstat-no" title="statement not covered" >    notifications,</span>
-<span class="cstat-no" title="statement not covered" >    markNotificationRead,</span>
-<span class="cstat-no" title="statement not covered" >    mappingExpressionEnabled,</span>
+  const {
+    selectedMapping<span class="cstat-no" title="statement not covered" >,</span>
+    deselectMapping<span class="cstat-no" title="statement not covered" >,</span>
+    removeMappedFieldFromCurrentMapping<span class="cstat-no" title="statement not covered" >,</span>
+    fromMappedFieldToIMappingField<span class="cstat-no" title="statement not covered" >,</span>
+    flatSources<span class="cstat-no" title="statement not covered" >,</span>
+    flatTargets<span class="cstat-no" title="statement not covered" >,</span>
+    constants<span class="cstat-no" title="statement not covered" >,</span>
+    sourceProperties<span class="cstat-no" title="statement not covered" >,</span>
+    targetProperties<span class="cstat-no" title="statement not covered" >,</span>
+    canAddToSelectedMapping<span class="cstat-no" title="statement not covered" >,</span>
+    isFieldAddableToSelection<span class="cstat-no" title="statement not covered" >,</span>
+    addToCurrentMapping<span class="cstat-no" title="statement not covered" >,</span>
+    notifications<span class="cstat-no" title="statement not covered" >,</span>
+    markNotificationRead<span class="cstat-no" title="statement not covered" >,</span>
+    mappingExpressionEnabled<span class="cstat-no" title="statement not covered" >,</span>
 &nbsp;
     //mapping details
-<span class="cstat-no" title="statement not covered" >    getMultiplicityActions,</span>
-<span class="cstat-no" title="statement not covered" >    getMultiplicityActionDelimiters,</span>
-<span class="cstat-no" title="statement not covered" >    handleIndexChange,</span>
-<span class="cstat-no" title="statement not covered" >    handleNewTransformation,</span>
-<span class="cstat-no" title="statement not covered" >    handleRemoveTransformation,</span>
-<span class="cstat-no" title="statement not covered" >    handleTransformationChange,</span>
-<span class="cstat-no" title="statement not covered" >    handleTransformationArgumentChange,</span>
-<span class="cstat-no" title="statement not covered" >    handleMultiplicityChange,</span>
-<span class="cstat-no" title="statement not covered" >    handleMultiplicityArgumentChange,</span>
-  } = useAtlasmap();
+    getMultiplicityActions<span class="cstat-no" title="statement not covered" >,</span>
+    getMultiplicityActionDelimiters<span class="cstat-no" title="statement not covered" >,</span>
+    handleIndexChange<span class="cstat-no" title="statement not covered" >,</span>
+    handleNewTransformation<span class="cstat-no" title="statement not covered" >,</span>
+    handleRemoveTransformation<span class="cstat-no" title="statement not covered" >,</span>
+    handleTransformationChange<span class="cstat-no" title="statement not covered" >,</span>
+    handleTransformationArgumentChange<span class="cstat-no" title="statement not covered" >,</span>
+    handleMultiplicityChange<span class="cstat-no" title="statement not covered" >,</span>
+    handleMultiplicityArgumentChange<span class="cstat-no" title="statement not covered" >,</span>
+  } = <span class="cstat-no" title="statement not covered" >useAtlasmap();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return useCallback(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >    if (selectedMapping) {</span>
@@ -690,7 +690,7 @@ export interface IUseSidebarProps {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed May 19 2021 01:03:29 GMT+0000 (Coordinated Universal Time)
+                at Wed May 19 2021 06:47:55 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

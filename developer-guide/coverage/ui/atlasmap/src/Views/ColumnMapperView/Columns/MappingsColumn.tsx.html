@@ -574,7 +574,7 @@ export interface IMappingsColumnData
 &nbsp;
 export const <span class="cstat-no" title="statement not covered" >MappingsColumn: FunctionComponent&lt;</span>
   IMappingsColumnData &amp; IMappingDocumentEvents
-&gt; = <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >mappings,</span> <span class="cstat-no" title="statement not covered" >selectedMappingId,</span> <span class="cstat-no" title="statement not covered" >...props </span>}) =&gt; {
+&gt; = <span class="fstat-no" title="function not covered" >({</span> mappings<span class="cstat-no" title="statement not covered" >, s</span>electedMappingId<span class="cstat-no" title="statement not covered" >, ...p</span>rops<span class="cstat-no" title="statement not covered" > }) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
       &lt;ColumnHeader title={"Mappings"} /&gt;
@@ -593,7 +593,7 @@ export const <span class="cstat-no" title="statement not covered" >MappingsColum
             &lt;/div&gt;
           &lt;/NodeRef&gt;
           &lt;DraggedField&gt;
-            {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >draggedField,</span> <span class="cstat-no" title="statement not covered" >getHoveredTarget </span>}) =&gt;
+            {<span class="fstat-no" title="function not covered" >({</span> draggedField<span class="cstat-no" title="statement not covered" >, g</span>etHoveredTarget<span class="cstat-no" title="statement not covered" > })</span> =&gt;
 <span class="cstat-no" title="statement not covered" >              draggedField &amp;&amp; getHoveredTarget()?.type !== "mapping" ? (</span>
                 &lt;NodeRef
                   id={["dnd-new-mapping"]}
@@ -634,16 +634,16 @@ export interface IMappingDocumentData {
 export const <span class="cstat-no" title="statement not covered" >MappingDocument: FunctionComponent&lt;</span>
   IMappingDocumentData &amp; IMappingDocumentEvents
 &gt; = <span class="fstat-no" title="function not covered" >({</span>
-<span class="cstat-no" title="statement not covered" >  mapping,</span>
-<span class="cstat-no" title="statement not covered" >  isSelected,</span>
-<span class="cstat-no" title="statement not covered" >  showMappingPreview,</span>
-<span class="cstat-no" title="statement not covered" >  onSelectMapping,</span>
-<span class="cstat-no" title="statement not covered" >  onDeselectMapping,</span>
-<span class="cstat-no" title="statement not covered" >  onEditMapping,</span>
-<span class="cstat-no" title="statement not covered" >  onFieldPreviewChange,</span>
-<span class="cstat-no" title="statement not covered" >  onMouseOver,</span>
-<span class="cstat-no" title="statement not covered" >  onMouseOut,</span>
-<span class="cstat-no" title="statement not covered" >  canDrop,</span>
+  mapping<span class="cstat-no" title="statement not covered" >,</span>
+  isSelected<span class="cstat-no" title="statement not covered" >,</span>
+  showMappingPreview<span class="cstat-no" title="statement not covered" >,</span>
+  onSelectMapping<span class="cstat-no" title="statement not covered" >,</span>
+  onDeselectMapping<span class="cstat-no" title="statement not covered" >,</span>
+  onEditMapping<span class="cstat-no" title="statement not covered" >,</span>
+  onFieldPreviewChange<span class="cstat-no" title="statement not covered" >,</span>
+  onMouseOver<span class="cstat-no" title="statement not covered" >,</span>
+  onMouseOut<span class="cstat-no" title="statement not covered" >,</span>
+  canDrop<span class="cstat-no" title="statement not covered" >,</span>
 }) =&gt; {
   const documentId = <span class="cstat-no" title="statement not covered" >`${MAPPINGS_DOCUMENT_ID_PREFIX}${mapping.id}`;</span>
   const handleSelect = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
@@ -667,7 +667,7 @@ export const <span class="cstat-no" title="statement not covered" >MappingDocume
       canDrop={<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >canDrop(item, mapping)}</span>
       accept={[SOURCES_DRAGGABLE_TYPE, TARGETS_DRAGGABLE_TYPE]}
     &gt;
-      {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >isDroppable,</span> <span class="cstat-no" title="statement not covered" >isTarget </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+      {<span class="fstat-no" title="function not covered" >({</span> isDroppable<span class="cstat-no" title="statement not covered" >, i</span>sTarget<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
         &lt;NodeRef
           key={documentId}
           id={[documentId, isTarget ? "dnd-target-mapping" : undefined]}
@@ -765,7 +765,7 @@ export const <span class="cstat-no" title="statement not covered" >MappingDocume
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed May 19 2021 01:03:29 GMT+0000 (Coordinated Universal Time)
+                at Wed May 19 2021 06:47:55 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>

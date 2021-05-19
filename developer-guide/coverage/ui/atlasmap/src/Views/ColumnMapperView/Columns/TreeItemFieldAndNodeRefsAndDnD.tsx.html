@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
@@ -556,21 +556,21 @@ export interface ITreeItemFieldAndNodeRefsAndDnDProps {
 &nbsp;
 export const <span class="cstat-no" title="statement not covered" >TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent&lt;ITreeItemFieldAndNodeRefsAndDnDProps&gt; =</span>
 <span class="fstat-no" title="function not covered" >  ({</span>
-<span class="cstat-no" title="statement not covered" >    fieldId,</span>
-<span class="cstat-no" title="statement not covered" >    field,</span>
-<span class="cstat-no" title="statement not covered" >    showTypes,</span>
-<span class="cstat-no" title="statement not covered" >    boundaryId,</span>
-<span class="cstat-no" title="statement not covered" >    overrideWidth,</span>
-<span class="cstat-no" title="statement not covered" >    parentId,</span>
-<span class="cstat-no" title="statement not covered" >    acceptDropType,</span>
-<span class="cstat-no" title="statement not covered" >    draggableType,</span>
-<span class="cstat-no" title="statement not covered" >    level = 1,</span>
-<span class="cstat-no" title="statement not covered" >    position = 1,</span>
-<span class="cstat-no" title="statement not covered" >    setSize = 1,</span>
-<span class="cstat-no" title="statement not covered" >    canDrop,</span>
-<span class="cstat-no" title="statement not covered" >    onDrop,</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >    renderActions = () =&gt; [],</span></span>
-<span class="cstat-no" title="statement not covered" >    renderPreview,</span>
+    fieldId<span class="cstat-no" title="statement not covered" >,</span>
+    field<span class="cstat-no" title="statement not covered" >,</span>
+    showTypes<span class="cstat-no" title="statement not covered" >,</span>
+    boundaryId<span class="cstat-no" title="statement not covered" >,</span>
+    overrideWidth<span class="cstat-no" title="statement not covered" >,</span>
+    parentId<span class="cstat-no" title="statement not covered" >,</span>
+    acceptDropType<span class="cstat-no" title="statement not covered" >,</span>
+    draggableType<span class="cstat-no" title="statement not covered" >,</span>
+<span class="cstat-no" title="statement not covered" >    level<span class="cstat-no" title="statement not covered" > </span>= 1,</span>
+<span class="cstat-no" title="statement not covered" >    position<span class="cstat-no" title="statement not covered" > </span>= 1,</span>
+<span class="cstat-no" title="statement not covered" >    setSize<span class="cstat-no" title="statement not covered" > </span>= 1,</span>
+    canDrop<span class="cstat-no" title="statement not covered" >,</span>
+    onDrop<span class="cstat-no" title="statement not covered" >,</span>
+<span class="cstat-no" title="statement not covered" >    renderActions<span class="cstat-no" title="statement not covered" > </span>= <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >[</span>],</span></span>
+    renderPreview<span class="cstat-no" title="statement not covered" >,</span>
   }) =&gt; {
     const preview = <span class="cstat-no" title="statement not covered" >renderPreview &amp;&amp; renderPreview(field);</span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
@@ -585,7 +585,7 @@ export const <span class="cstat-no" title="statement not covered" >TreeItemWithF
         canDrop={<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >canDrop(field, item)}</span>
         accept={[acceptDropType]}
       &gt;
-        {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >isDroppable,</span> <span class="cstat-no" title="statement not covered" >isTarget </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+        {<span class="fstat-no" title="function not covered" >({</span> isDroppable<span class="cstat-no" title="statement not covered" >, i</span>sTarget<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
           &lt;DraggableField
             field={{
               type: draggableType,
@@ -595,7 +595,7 @@ export const <span class="cstat-no" title="statement not covered" >TreeItemWithF
             }}
             onDrop={<span class="fstat-no" title="function not covered" >(_</span>, target) =&gt; <span class="cstat-no" title="statement not covered" >onDrop(field, target)}</span>
           &gt;
-            {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >isDragging </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+            {<span class="fstat-no" title="function not covered" >({</span> isDragging<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
               &lt;NodeRef
                 id={[
                   fieldId,
@@ -607,7 +607,7 @@ export const <span class="cstat-no" title="statement not covered" >TreeItemWithF
                 overrideWidth={overrideWidth}
               &gt;
                 &lt;TreeItem level={level} position={position} setSize={setSize}&gt;
-                  {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >focused </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+                  {<span class="fstat-no" title="function not covered" >({</span> focused<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
                     &lt;&gt;
                       &lt;DocumentField
                         name={field.name}
@@ -729,7 +729,7 @@ export const <span class="cstat-no" title="statement not covered" >TreeItemWithF
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed May 19 2021 01:03:29 GMT+0000 (Coordinated Universal Time)
+                at Wed May 19 2021 06:47:55 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>

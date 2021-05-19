@@ -24,14 +24,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/57</span>
+                <span class='fraction'>0/58</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/55</span>
+                <span class='fraction'>0/56</span>
             </div>
         
             
@@ -403,21 +403,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -594,28 +594,28 @@ function <span class="fstat-no" title="function not covered" >withMappingsSizes(
 }
 &nbsp;
 export const <span class="cstat-no" title="statement not covered" >LayoutProvider: FunctionComponent&lt;ILayoutProviderProps&gt; = <span class="fstat-no" title="function not covered" >({</span></span>
-<span class="cstat-no" title="statement not covered" >  showMappingColumn = true,</span>
-<span class="cstat-no" title="statement not covered" >  children,</span>
+<span class="cstat-no" title="statement not covered" >  showMappingColumn<span class="cstat-no" title="statement not covered" > </span>= true,</span>
+  children<span class="cstat-no" title="statement not covered" >,</span>
 }) =&gt; {
   const {
-<span class="cstat-no" title="statement not covered" >    dimensions: { <span class="cstat-no" title="statement not covered" >h</span>eight,</span> <span class="cstat-no" title="statement not covered" >width },</span>
-  } = useCanvas();
+    dimensions: { height<span class="cstat-no" title="statement not covered" >, w</span>idth<span class="cstat-no" title="statement not covered" > },</span>
+  } = <span class="cstat-no" title="statement not covered" >useCanvas();</span>
 &nbsp;
   const withMappingSizesObj = <span class="cstat-no" title="statement not covered" >withMappingsSizes(width, height);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  showMappingColumn = showMappingColumn || !withMappingSizesObj.overflows;</span>
 &nbsp;
-  const <span class="cstat-no" title="statement not covered" >{</span>
-<span class="cstat-no" title="statement not covered" >    boxHeight,</span>
-<span class="cstat-no" title="statement not covered" >    sourceWidth,</span>
-<span class="cstat-no" title="statement not covered" >    targetWidth,</span>
-<span class="cstat-no" title="statement not covered" >    mappingWidth,</span>
-<span class="cstat-no" title="statement not covered" >    initialSourceCoords,</span>
-<span class="cstat-no" title="statement not covered" >    initialMappingCoords,</span>
-<span class="cstat-no" title="statement not covered" >    initialTargetCoords,</span>
-  } = showMappingColumn
+  const {
+    boxHeight<span class="cstat-no" title="statement not covered" >,</span>
+    sourceWidth<span class="cstat-no" title="statement not covered" >,</span>
+    targetWidth<span class="cstat-no" title="statement not covered" >,</span>
+    mappingWidth<span class="cstat-no" title="statement not covered" >,</span>
+    initialSourceCoords<span class="cstat-no" title="statement not covered" >,</span>
+    initialMappingCoords<span class="cstat-no" title="statement not covered" >,</span>
+    initialTargetCoords<span class="cstat-no" title="statement not covered" >,</span>
+  } = <span class="cstat-no" title="statement not covered" >showMappingColumn</span>
     ? withMappingSizesObj
-    : withoutMappingsSizes(width, height)<span class="branch-0 cbranch-no" title="branch not covered" >;</span>
+    : withoutMappingsSizes(width, height);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;LayoutContext.Provider
@@ -651,7 +651,7 @@ export const <span class="cstat-no" title="statement not covered" >LayoutProvide
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed May 19 2021 01:03:29 GMT+0000 (Coordinated Universal Time)
+                at Wed May 19 2021 06:47:55 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

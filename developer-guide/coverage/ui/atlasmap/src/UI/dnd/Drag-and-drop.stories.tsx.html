@@ -478,7 +478,7 @@ export const <span class="cstat-no" title="statement not covered" >example = <sp
           field={{ type: "source", id: "abc123", name: "A field" }}
           onDrop={action("onDrop")}
         &gt;
-          {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >isDragging </span>}) =&gt; <span class="cstat-no" title="statement not covered" >&lt;div&gt;{isDragging ? "dragging" : "drag me"}&lt;/div&gt;}</span>
+          {<span class="fstat-no" title="function not covered" >({</span> isDragging<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >&lt;div&gt;{isDragging ? "dragging" : "drag me"}&lt;/div&gt;}</span>
         &lt;/DraggableField&gt;
       &lt;/HTMLObject&gt;
       &lt;HTMLObject x={250} y={10} width={200} height={200}&gt;
@@ -487,7 +487,7 @@ export const <span class="cstat-no" title="statement not covered" >example = <sp
           target={{ type: "target", id: "abc123", name: "A field" }}
           canDrop={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >t</span>rue}</span>
         &gt;
-          {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >isOver,</span> <span class="cstat-no" title="statement not covered" >isDroppable,</span> <span class="cstat-no" title="statement not covered" >field </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+          {<span class="fstat-no" title="function not covered" >({</span> isOver<span class="cstat-no" title="statement not covered" >, i</span>sDroppable<span class="cstat-no" title="statement not covered" >, f</span>ield<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
             &lt;div style={{ border: "1px dashed black" }}&gt;
               &lt;p&gt;Drop here!&lt;/p&gt;
               &lt;p&gt;
@@ -519,7 +519,7 @@ export const <span class="cstat-no" title="statement not covered" >canBeUsedWith
               style={{ height: "100%" }}
               onDrop={action("onDrop")}
             &gt;
-              {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >isDragging </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+              {<span class="fstat-no" title="function not covered" >({</span> isDragging<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
                 &lt;NodeRef id={["f1", isDragging ? "dnd-start" : undefined]}&gt;
                   &lt;Document title="Field #1" dropTarget={isDragging}&gt;
                     {isDragging ? "Dragging" : "Drag me"}
@@ -532,7 +532,7 @@ export const <span class="cstat-no" title="statement not covered" >canBeUsedWith
               style={{ height: "100%" }}
               onDrop={action("onDrop")}
             &gt;
-              {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >isDragging </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+              {<span class="fstat-no" title="function not covered" >({</span> isDragging<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
                 &lt;NodeRef id={["f2", isDragging ? "dnd-start" : undefined]}&gt;
                   &lt;Document title={"Field #2"} dropTarget={isDragging}&gt;
                     {isDragging ? "Dragging" : "Drag me"}
@@ -548,7 +548,7 @@ export const <span class="cstat-no" title="statement not covered" >canBeUsedWith
               canDrop={<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.id === "f2"}</span>
               style={{ height: "100%" }}
             &gt;
-              {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >isDroppable,</span> <span class="cstat-no" title="statement not covered" >isTarget </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+              {<span class="fstat-no" title="function not covered" >({</span> isDroppable<span class="cstat-no" title="statement not covered" >, i</span>sTarget<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
                 &lt;NodeRef id={["df2", isTarget ? "dnd-target" : undefined]}&gt;
                   &lt;Document
                     title="Drop field #2"
@@ -570,7 +570,7 @@ export const <span class="cstat-no" title="statement not covered" >canBeUsedWith
               canDrop={<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.id === "f1"}</span>
               style={{ height: "100%" }}
             &gt;
-              {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >isDroppable,</span> <span class="cstat-no" title="statement not covered" >isTarget </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+              {<span class="fstat-no" title="function not covered" >({</span> isDroppable<span class="cstat-no" title="statement not covered" >, i</span>sTarget<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
                 &lt;NodeRef id={isTarget ? "dnd-target" : undefined}&gt;
                   &lt;Document
                     title="Drop field #1"
@@ -592,7 +592,7 @@ export const <span class="cstat-no" title="statement not covered" >canBeUsedWith
               canDrop={<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.id === "f1"}</span>
               style={{ height: "100%" }}
             &gt;
-              {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >isDroppable,</span> <span class="cstat-no" title="statement not covered" >isTarget </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+              {<span class="fstat-no" title="function not covered" >({</span> isDroppable<span class="cstat-no" title="statement not covered" >, i</span>sTarget<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
                 &lt;NodeRef id={["df1", isTarget ? "dnd-target" : undefined]}&gt;
                   &lt;Document
                     title="Drop field #1"
@@ -625,7 +625,7 @@ export const <span class="cstat-no" title="statement not covered" >canBeUsedWith
           canDrop={<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.id === "f1"}</span>
           style={{ height: "100%" }}
         &gt;
-          {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >isDroppable,</span> <span class="cstat-no" title="statement not covered" >isTarget </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+          {<span class="fstat-no" title="function not covered" >({</span> isDroppable<span class="cstat-no" title="statement not covered" >, i</span>sTarget<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
             &lt;Document
               title="Drop field #1"
               dropTarget={isTarget}
@@ -651,7 +651,7 @@ export const <span class="cstat-no" title="statement not covered" >canBeUsedWith
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed May 19 2021 01:03:29 GMT+0000 (Coordinated Universal Time)
+                at Wed May 19 2021 06:47:55 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

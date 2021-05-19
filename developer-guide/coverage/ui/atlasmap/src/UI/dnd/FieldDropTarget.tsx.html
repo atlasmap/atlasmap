@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">12.12% </span>
+                <span class="strong">10.81% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>4/33</span>
+                <span class='fraction'>4/37</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">18.18% </span>
+                <span class="strong">16% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/22</span>
+                <span class='fraction'>4/25</span>
             </div>
         
             
@@ -178,14 +178,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -249,24 +249,24 @@ export interface IFieldDropTargetProps
 &nbsp;
 export const FieldDropTarget = forwardRef&lt;HTMLElement, IFieldDropTargetProps&gt;(
   function <span class="fstat-no" title="function not covered" >FieldDropTarget(</span>
-    { <span class="cstat-no" title="statement not covered" >accept,</span> <span class="cstat-no" title="statement not covered" >target,</span> <span class="cstat-no" title="statement not covered" >canDrop,</span> <span class="cstat-no" title="statement not covered" >as: As = "div",</span> <span class="cstat-no" title="statement not covered" >children,</span> <span class="cstat-no" title="statement not covered" >...props </span>},
+    { accept<span class="cstat-no" title="statement not covered" >, t</span>arget<span class="cstat-no" title="statement not covered" >, c</span>anDrop<span class="cstat-no" title="statement not covered" >, <span class="cstat-no" title="statement not covered" >a</span>s: A</span>s<span class="cstat-no" title="statement not covered" > = "div", c</span>hildren<span class="cstat-no" title="statement not covered" >, ...p</span>rops<span class="cstat-no" title="statement not covered" > },</span>
     ref,
   ) {
-    const { <span class="cstat-no" title="statement not covered" >setHoveredTarget </span>} = useFieldsDnd();
-    const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >{ <span class="cstat-no" title="statement not covered" >i</span>sOver,</span> <span class="cstat-no" title="statement not covered" >isDroppable,</span> <span class="cstat-no" title="statement not covered" >isTarget,</span> <span class="cstat-no" title="statement not covered" >field </span>}, <span class="cstat-no" title="statement not covered" >dropRef] = useDrop&lt;</span></span>
+    const { setHoveredTarget } = <span class="cstat-no" title="statement not covered" >useFieldsDnd();</span>
+    const [<span class="cstat-no" title="statement not covered" >{ i</span>sOver<span class="cstat-no" title="statement not covered" >, i</span>sDroppable<span class="cstat-no" title="statement not covered" >, i</span>sTarget<span class="cstat-no" title="statement not covered" >, f</span>ield<span class="cstat-no" title="statement not covered" > },</span> dropRef<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seDrop&lt;</span>
       IDragAndDropField,
       IDragAndDropField,
       IFieldDropTargetChildren
     &gt;({
       accept,
-      collect: (monitor) =&gt; ({
+      collect: <span class="fstat-no" title="function not covered" >(m</span>onitor) =&gt; <span class="cstat-no" title="statement not covered" >({</span>
         isOver: monitor.isOver(),
         isDroppable: monitor.canDrop(),
         isTarget: monitor.isOver() &amp;&amp; monitor.canDrop(),
         field: monitor.getItem(),
       }),
-      canDrop: (_, monitor) =&gt; canDrop(monitor.getItem()),
-      drop: () =&gt; target,
+      canDrop: <span class="fstat-no" title="function not covered" >(_</span>, monitor) =&gt; <span class="cstat-no" title="statement not covered" >canDrop(monitor.getItem()),</span>
+      drop: <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >t</span>arget,</span>
     });
 &nbsp;
     const handleRef = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>l: HTMLElement) =&gt; {</span>
@@ -306,7 +306,7 @@ export const FieldDropTarget = forwardRef&lt;HTMLElement, IFieldDropTargetProps&
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed May 19 2021 01:03:29 GMT+0000 (Coordinated Universal Time)
+                at Wed May 19 2021 06:47:55 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

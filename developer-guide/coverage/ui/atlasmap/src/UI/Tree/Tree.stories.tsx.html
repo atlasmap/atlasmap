@@ -206,7 +206,7 @@ export const <span class="cstat-no" title="statement not covered" >example = <sp
       level={1}
       position={1}
       setSize={3}
-      renderLabel={<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >expanded,</span> <span class="cstat-no" title="statement not covered" >focused </span>}) =&gt;
+      renderLabel={<span class="fstat-no" title="function not covered" >({</span> expanded<span class="cstat-no" title="statement not covered" >, f</span>ocused<span class="cstat-no" title="statement not covered" > })</span> =&gt;
 <span class="cstat-no" title="statement not covered" >        `${expanded ? "⌄" : "›"} G1 ${focused ? "- has focus" : ""}`</span>
       }
     &gt;
@@ -217,7 +217,7 @@ export const <span class="cstat-no" title="statement not covered" >example = <sp
             level={2}
             position={1}
             setSize={3}
-            renderLabel={<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >expanded,</span> <span class="cstat-no" title="statement not covered" >focused </span>}) =&gt;
+            renderLabel={<span class="fstat-no" title="function not covered" >({</span> expanded<span class="cstat-no" title="statement not covered" >, f</span>ocused<span class="cstat-no" title="statement not covered" > })</span> =&gt;
 <span class="cstat-no" title="statement not covered" >              `${expanded ? "⌄" : "›"} Group G1-1 ${</span>
                 focused ? "- has focus" : ""
               }`
@@ -226,17 +226,17 @@ export const <span class="cstat-no" title="statement not covered" >example = <sp
             {<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >(</span></span>
               &lt;&gt;
                 &lt;TreeItem level={3} position={1} setSize={3}&gt;
-                  {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >focused </span>}) =&gt;
+                  {<span class="fstat-no" title="function not covered" >({</span> focused<span class="cstat-no" title="statement not covered" > })</span> =&gt;
 <span class="cstat-no" title="statement not covered" >                    `Item G1-1 1 ${focused ? "- has focus" : ""}`</span>
                   }
                 &lt;/TreeItem&gt;
                 &lt;TreeItem level={3} position={2} setSize={3}&gt;
-                  {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >focused </span>}) =&gt;
+                  {<span class="fstat-no" title="function not covered" >({</span> focused<span class="cstat-no" title="statement not covered" > })</span> =&gt;
 <span class="cstat-no" title="statement not covered" >                    `Item G1-1 2 ${focused ? "- has focus" : ""}`</span>
                   }
                 &lt;/TreeItem&gt;
                 &lt;TreeItem level={3} position={3} setSize={3}&gt;
-                  {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >focused </span>}) =&gt;
+                  {<span class="fstat-no" title="function not covered" >({</span> focused<span class="cstat-no" title="statement not covered" > })</span> =&gt;
 <span class="cstat-no" title="statement not covered" >                    `Item G1-1 3 ${focused ? "- has focus" : ""}`</span>
                   }
                 &lt;/TreeItem&gt;
@@ -244,16 +244,16 @@ export const <span class="cstat-no" title="statement not covered" >example = <sp
             )}
           &lt;/TreeGroup&gt;
           &lt;TreeItem level={1} position={2} setSize={2}&gt;
-            {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >focused </span>}) =&gt; <span class="cstat-no" title="statement not covered" >`Item G1-2 ${focused ? "- has focus" : ""}`}</span>
+            {<span class="fstat-no" title="function not covered" >({</span> focused<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >`Item G1-2 ${focused ? "- has focus" : ""}`}</span>
           &lt;/TreeItem&gt;
         &lt;/&gt;
       )}
     &lt;/TreeGroup&gt;
     &lt;TreeItem level={1} position={2} setSize={3}&gt;
-      {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >focused </span>}) =&gt; <span class="cstat-no" title="statement not covered" >`Item G2 ${focused ? "- has focus" : ""}`}</span>
+      {<span class="fstat-no" title="function not covered" >({</span> focused<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >`Item G2 ${focused ? "- has focus" : ""}`}</span>
     &lt;/TreeItem&gt;
     &lt;TreeItem level={1} position={3} setSize={3}&gt;
-      {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >focused </span>}) =&gt; <span class="cstat-no" title="statement not covered" >`Item G3 ${focused ? "- has focus" : ""}`}</span>
+      {<span class="fstat-no" title="function not covered" >({</span> focused<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >`Item G3 ${focused ? "- has focus" : ""}`}</span>
     &lt;/TreeItem&gt;
   &lt;/Tree&gt;
 );
@@ -264,7 +264,7 @@ export const <span class="cstat-no" title="statement not covered" >example = <sp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed May 19 2021 01:03:29 GMT+0000 (Coordinated Universal Time)
+                at Wed May 19 2021 06:47:55 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

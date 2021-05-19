@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/188</span>
+                <span class='fraction'>0/187</span>
             </div>
         
             
@@ -1557,17 +1557,17 @@ export interface IAtlasmapProviderProps {
   onMappingChange?: (serializedMappings: string) =&gt; void;
 }
 export const <span class="cstat-no" title="statement not covered" >AtlasmapProvider: FunctionComponent&lt;IAtlasmapProviderProps&gt; = <span class="fstat-no" title="function not covered" >({</span></span>
-<span class="cstat-no" title="statement not covered" >  baseJavaInspectionServiceUrl,</span>
-<span class="cstat-no" title="statement not covered" >  baseXMLInspectionServiceUrl,</span>
-<span class="cstat-no" title="statement not covered" >  baseJSONInspectionServiceUrl,</span>
-<span class="cstat-no" title="statement not covered" >  baseCSVInspectionServiceUrl,</span>
-<span class="cstat-no" title="statement not covered" >  baseMappingServiceUrl,</span>
-<span class="cstat-no" title="statement not covered" >  externalDocument,</span>
-<span class="cstat-no" title="statement not covered" >  onMappingChange,</span>
-<span class="cstat-no" title="statement not covered" >  children,</span>
+  baseJavaInspectionServiceUrl<span class="cstat-no" title="statement not covered" >,</span>
+  baseXMLInspectionServiceUrl<span class="cstat-no" title="statement not covered" >,</span>
+  baseJSONInspectionServiceUrl<span class="cstat-no" title="statement not covered" >,</span>
+  baseCSVInspectionServiceUrl<span class="cstat-no" title="statement not covered" >,</span>
+  baseMappingServiceUrl<span class="cstat-no" title="statement not covered" >,</span>
+  externalDocument<span class="cstat-no" title="statement not covered" >,</span>
+  onMappingChange<span class="cstat-no" title="statement not covered" >,</span>
+  children<span class="cstat-no" title="statement not covered" >,</span>
 }) =&gt; {
-  const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >d</span>ata,</span> <span class="cstat-no" title="statement not covered" >dispatchData] = useReducer(dataReducer, {}, initDataState);</span>
-  const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >n</span>otifications,</span> <span class="cstat-no" title="statement not covered" >dispatchNotifications] = useReducer(</span>
+  const [data<span class="cstat-no" title="statement not covered" >, d</span>ispatchData<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seReducer(dataReducer, {}, initDataState);</span>
+  const [notifications<span class="cstat-no" title="statement not covered" >, d</span>ispatchNotifications<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seReducer(</span>
     notificationsReducer,
     {},
     initNotificationsState,
@@ -1870,7 +1870,7 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
     );
   }
 &nbsp;
-  const { <span class="cstat-no" title="statement not covered" >onLoading,</span> <span class="cstat-no" title="statement not covered" >onReset,</span> <span class="cstat-no" title="statement not covered" >...state </span>} = context;
+  const { onLoading, onReset, ...state<span class="cstat-no" title="statement not covered" > } = <span class="cstat-no" title="statement not covered" >c</span>ontext;</span>
 &nbsp;
   const searchSources = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(t</span>erm: string) =&gt; <span class="cstat-no" title="statement not covered" >search(term, true), [</span>]);</span>
   const searchTargets = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(t</span>erm: string) =&gt; <span class="cstat-no" title="statement not covered" >search(term, false), [</span>]);</span>
@@ -1931,7 +1931,7 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
    */
   const canAddToSelectedMapping = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (i</span>sSource: boolean): boolean =&gt; {
-      const { <span class="cstat-no" title="statement not covered" >selectedMapping </span>} = context;
+      const { selectedMapping } = <span class="cstat-no" title="statement not covered" >context;</span>
 <span class="cstat-no" title="statement not covered" >      if (</span>
         !selectedMapping ||
         (selectedMapping.mapping.transition.mode === TransitionMode.ENUM &amp;&amp;
@@ -1973,7 +1973,7 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
       field: IAtlasmapField,
       dropTarget?: IAtlasmapField,
     ): boolean =&gt; {
-      const { <span class="cstat-no" title="statement not covered" >selectedMapping </span>} = context;
+      const { selectedMapping } = <span class="cstat-no" title="statement not covered" >context;</span>
       const isSource = <span class="cstat-no" title="statement not covered" >documentType === "source";</span>
 <span class="cstat-no" title="statement not covered" >      if (</span>
         !field ||
@@ -2121,7 +2121,7 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed May 19 2021 01:03:29 GMT+0000 (Coordinated Universal Time)
+                at Wed May 19 2021 06:47:55 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

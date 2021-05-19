@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">5.56% </span>
+                <span class="strong">5.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>4/72</span>
+                <span class='fraction'>4/75</span>
             </div>
         
             
@@ -506,25 +506,25 @@ export interface IPropertyDialogProps {
   onValidation: (name: string, scope: string) =&gt; boolean;
 }
 export const PropertyDialog: FunctionComponent&lt;IPropertyDialogProps&gt; = <span class="fstat-no" title="function not covered" >({</span>
-<span class="cstat-no" title="statement not covered" >  title,</span>
-<span class="cstat-no" title="statement not covered" >  name: initialName = "",</span>
-<span class="cstat-no" title="statement not covered" >  valueType: initialValueType = "",</span>
-<span class="cstat-no" title="statement not covered" >  valueTypeOptions,</span>
-<span class="cstat-no" title="statement not covered" >  scope: initialScope = "",</span>
-<span class="cstat-no" title="statement not covered" >  scopeOptions,</span>
-<span class="cstat-no" title="statement not covered" >  isOpen,</span>
-<span class="cstat-no" title="statement not covered" >  onCancel,</span>
-<span class="cstat-no" title="statement not covered" >  onConfirm,</span>
-<span class="cstat-no" title="statement not covered" >  onValidation,</span>
+  title<span class="cstat-no" title="statement not covered" >,</span>
+<span class="cstat-no" title="statement not covered" >  name: i</span>nitialName<span class="cstat-no" title="statement not covered" > = "",</span>
+<span class="cstat-no" title="statement not covered" >  valueType: i</span>nitialValueType<span class="cstat-no" title="statement not covered" > = "",</span>
+  valueTypeOptions<span class="cstat-no" title="statement not covered" >,</span>
+<span class="cstat-no" title="statement not covered" >  scope: i</span>nitialScope<span class="cstat-no" title="statement not covered" > = "",</span>
+  scopeOptions<span class="cstat-no" title="statement not covered" >,</span>
+  isOpen<span class="cstat-no" title="statement not covered" >,</span>
+  onCancel<span class="cstat-no" title="statement not covered" >,</span>
+  onConfirm<span class="cstat-no" title="statement not covered" >,</span>
+  onValidation<span class="cstat-no" title="statement not covered" >,</span>
 }) =&gt; {
-  const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >n</span>ame,</span> <span class="cstat-no" title="statement not covered" >setName] = useState(initialName);</span>
-  const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >v</span>alueType,</span> <span class="cstat-no" title="statement not covered" >setValueType] = useState(initialValueType);</span>
-  const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >s</span>cope,</span> <span class="cstat-no" title="statement not covered" >setScope] = useState(initialScope);</span>
-  const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >i</span>sPropertyValid,</span> <span class="cstat-no" title="statement not covered" >setPropertyValid] = useState(true);</span>
-  const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >i</span>sPropertyNameValid,</span> <span class="cstat-no" title="statement not covered" >setPropertyNameValid] = useState(</span>
+  const [name<span class="cstat-no" title="statement not covered" >, s</span>etName<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState(initialName);</span>
+  const [valueType<span class="cstat-no" title="statement not covered" >, s</span>etValueType<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState(initialValueType);</span>
+  const [scope<span class="cstat-no" title="statement not covered" >, s</span>etScope<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState(initialScope);</span>
+  const [isPropertyValid<span class="cstat-no" title="statement not covered" >, s</span>etPropertyValid<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState(true);</span>
+  const [isPropertyNameValid<span class="cstat-no" title="statement not covered" >, s</span>etPropertyNameValid<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState(</span>
     ValidatedOptions.default,
   );
-  const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >i</span>sNameAndScopeUnique,</span> <span class="cstat-no" title="statement not covered" >setNameAndScopeUnique] = useState(true);</span>
+  const [isNameAndScopeUnique<span class="cstat-no" title="statement not covered" >, s</span>etNameAndScopeUnique<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState(true);</span>
 &nbsp;
   const reset = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >    setName(initialName);</span>
@@ -622,7 +622,7 @@ export const PropertyDialog: FunctionComponent&lt;IPropertyDialogProps&gt; = <sp
             onChange={setValueType}
             data-testid={"property-type-form-select"}
           &gt;
-            {valueTypeOptions.map(<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >label,</span> <span class="cstat-no" title="statement not covered" >value </span>}, idx) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+            {valueTypeOptions.map(<span class="fstat-no" title="function not covered" >({</span> label<span class="cstat-no" title="statement not covered" >, v</span>alue<span class="cstat-no" title="statement not covered" > },</span> idx) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
               &lt;FormSelectOption key={idx} value={value} label={label} /&gt;
             ))}
           &lt;/FormSelect&gt;
@@ -643,7 +643,7 @@ export const PropertyDialog: FunctionComponent&lt;IPropertyDialogProps&gt; = <sp
                 data-testid={"property-scope-form-select"}
                 style={{ color: "red" }}
               &gt;
-                {scopeOptions.map(<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >label,</span> <span class="cstat-no" title="statement not covered" >value </span>}, idx) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+                {scopeOptions.map(<span class="fstat-no" title="function not covered" >({</span> label<span class="cstat-no" title="statement not covered" >, v</span>alue<span class="cstat-no" title="statement not covered" > },</span> idx) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
                   &lt;FormSelectOption key={idx} label={label} value={value} /&gt;
                 ))}
               &lt;/FormSelect&gt;
@@ -655,7 +655,7 @@ export const PropertyDialog: FunctionComponent&lt;IPropertyDialogProps&gt; = <sp
               onChange={handleOnScopeChange}
               data-testid={"property-scope-form-select"}
             &gt;
-              {scopeOptions.map(<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >label,</span> <span class="cstat-no" title="statement not covered" >value </span>}, idx) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+              {scopeOptions.map(<span class="fstat-no" title="function not covered" >({</span> label<span class="cstat-no" title="statement not covered" >, v</span>alue<span class="cstat-no" title="statement not covered" > },</span> idx) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
                 &lt;FormSelectOption key={idx} label={label} value={value} /&gt;
               ))}
             &lt;/FormSelect&gt;
@@ -672,7 +672,7 @@ export const PropertyDialog: FunctionComponent&lt;IPropertyDialogProps&gt; = <sp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed May 19 2021 01:03:29 GMT+0000 (Coordinated Universal Time)
+                at Wed May 19 2021 06:47:55 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

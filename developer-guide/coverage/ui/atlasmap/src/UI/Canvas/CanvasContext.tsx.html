@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">70.33% </span>
+                <span class="strong">71.13% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>64/91</span>
+                <span class='fraction'>69/97</span>
             </div>
         
             
@@ -326,12 +326,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -445,8 +445,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">80x</span>
-<span class="cline-any cline-yes">80x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">160x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">80x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -538,12 +538,12 @@ export interface ICanvasProviderProps {
 }
 export const CanvasProvider: FunctionComponent&lt;ICanvasProviderProps&gt; = ({
   children,
-<span class="branch-1 cbranch-no" title="branch not covered" >  allowPanning = false,</span>
-<span class="branch-1 cbranch-no" title="branch not covered" >  initialWidth = 0,</span>
-<span class="branch-1 cbranch-no" title="branch not covered" >  initialHeight = 0,</span>
-<span class="branch-1 cbranch-no" title="branch not covered" >  initialZoom = 1,</span>
-<span class="branch-1 cbranch-no" title="branch not covered" >  initialPanX = 0,</span>
-<span class="branch-1 cbranch-no" title="branch not covered" >  initialPanY = 0,</span>
+  allowPanning = false<span class="branch-1 cbranch-no" title="branch not covered" >,</span>
+  initialWidth = 0<span class="branch-1 cbranch-no" title="branch not covered" >,</span>
+  initialHeight = 0<span class="branch-1 cbranch-no" title="branch not covered" >,</span>
+  initialZoom = 1<span class="branch-1 cbranch-no" title="branch not covered" >,</span>
+  initialPanX = 0<span class="branch-1 cbranch-no" title="branch not covered" >,</span>
+  initialPanY = 0<span class="branch-1 cbranch-no" title="branch not covered" >,</span>
 }) =&gt; {
   const [canvasDimension, setCanvasDimension] = useState&lt;ICanvasDimension&gt;({
     width: 0,
@@ -602,13 +602,13 @@ export const CanvasProvider: FunctionComponent&lt;ICanvasProviderProps&gt; = ({
   const [isPanning, setIsPanning] = useState(false);
   const bindCanvas = useGesture(
     {
-      onDrag: <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >movement: [<span class="cstat-no" title="statement not covered" >x</span>,</span> <span class="cstat-no" title="statement not covered" >y]</span>, <span class="cstat-no" title="statement not covered" >first,</span> <span class="cstat-no" title="statement not covered" >last,</span> <span class="cstat-no" title="statement not covered" >memo = [panX, panY] </span>}) =&gt; {
+      onDrag: <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >movement: [x<span class="cstat-no" title="statement not covered" ></span>, y<span class="cstat-no" title="statement not covered" ></span>],</span> first<span class="cstat-no" title="statement not covered" >, l</span>ast<span class="cstat-no" title="statement not covered" >, <span class="cstat-no" title="statement not covered" >m</span>emo<span class="cstat-no" title="statement not covered" > </span>= [panX, panY] })</span> =&gt; {
 <span class="cstat-no" title="statement not covered" >        if (first) <span class="cstat-no" title="statement not covered" >setIsPanning(true);</span></span>
 <span class="cstat-no" title="statement not covered" >        if (last) <span class="cstat-no" title="statement not covered" >setIsPanning(false);</span></span>
 <span class="cstat-no" title="statement not covered" >        setPan({ x: x + memo[0], y: y + memo[1] });</span>
 <span class="cstat-no" title="statement not covered" >        return memo;</span>
       },
-      onWheel: <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >delta </span>}) =&gt; {
+      onWheel: <span class="fstat-no" title="function not covered" >({</span> delta<span class="cstat-no" title="statement not covered" > })</span> =&gt; {
 <span class="cstat-no" title="statement not covered" >        updateZoom(delta[1] * -0.001);</span>
       },
     },
@@ -687,7 +687,7 @@ export interface IWithCanvasProps {
 }
 &nbsp;
 export const WithCanvas: FunctionComponent&lt;IWithCanvasProps&gt; = <span class="fstat-no" title="function not covered" >({</span>
-<span class="cstat-no" title="statement not covered" >  children,</span>
+  children<span class="cstat-no" title="statement not covered" >,</span>
 }) =&gt; {
   const context = <span class="cstat-no" title="statement not covered" >useCanvas();</span>
 <span class="cstat-no" title="statement not covered" >  return children(context);</span>
@@ -699,7 +699,7 @@ export const WithCanvas: FunctionComponent&lt;IWithCanvasProps&gt; = <span class
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed May 19 2021 01:03:29 GMT+0000 (Coordinated Universal Time)
+                at Wed May 19 2021 06:47:55 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

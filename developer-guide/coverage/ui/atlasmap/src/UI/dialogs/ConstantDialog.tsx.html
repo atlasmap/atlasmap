@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">8.89% </span>
+                <span class="strong">8.51% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>4/45</span>
+                <span class='fraction'>4/47</span>
             </div>
         
             
@@ -373,19 +373,19 @@ export interface IConstantDialogProps {
   onValidation: (value: string) =&gt; boolean;
 }
 export const ConstantDialog: FunctionComponent&lt;IConstantDialogProps&gt; = <span class="fstat-no" title="function not covered" >({</span>
-<span class="cstat-no" title="statement not covered" >  title,</span>
-<span class="cstat-no" title="statement not covered" >  value: initialValue = "",</span>
-<span class="cstat-no" title="statement not covered" >  valueType: initialValueType = "",</span>
-<span class="cstat-no" title="statement not covered" >  valueTypeOptions,</span>
-<span class="cstat-no" title="statement not covered" >  isOpen,</span>
-<span class="cstat-no" title="statement not covered" >  onCancel,</span>
-<span class="cstat-no" title="statement not covered" >  onConfirm,</span>
-<span class="cstat-no" title="statement not covered" >  onValidation,</span>
+  title<span class="cstat-no" title="statement not covered" >,</span>
+<span class="cstat-no" title="statement not covered" >  value: i</span>nitialValue<span class="cstat-no" title="statement not covered" > = "",</span>
+<span class="cstat-no" title="statement not covered" >  valueType: i</span>nitialValueType<span class="cstat-no" title="statement not covered" > = "",</span>
+  valueTypeOptions<span class="cstat-no" title="statement not covered" >,</span>
+  isOpen<span class="cstat-no" title="statement not covered" >,</span>
+  onCancel<span class="cstat-no" title="statement not covered" >,</span>
+  onConfirm<span class="cstat-no" title="statement not covered" >,</span>
+  onValidation<span class="cstat-no" title="statement not covered" >,</span>
 }) =&gt; {
-  const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >v</span>alue,</span> <span class="cstat-no" title="statement not covered" >setValue] = useState(initialValue);</span>
-  const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >v</span>alueType,</span> <span class="cstat-no" title="statement not covered" >setValueType] = useState(initialValueType);</span>
-  const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >i</span>sConstantValid,</span> <span class="cstat-no" title="statement not covered" >setConstantValid] = useState(true);</span>
-  const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >i</span>sValueUnique,</span> <span class="cstat-no" title="statement not covered" >setValueUnique] = useState(true);</span>
+  const [value<span class="cstat-no" title="statement not covered" >, s</span>etValue<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState(initialValue);</span>
+  const [valueType<span class="cstat-no" title="statement not covered" >, s</span>etValueType<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState(initialValueType);</span>
+  const [isConstantValid<span class="cstat-no" title="statement not covered" >, s</span>etConstantValid<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState(true);</span>
+  const [isValueUnique<span class="cstat-no" title="statement not covered" >, s</span>etValueUnique<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState(true);</span>
 &nbsp;
   const reset = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >    setValue(initialValue);</span>
@@ -461,7 +461,7 @@ export const ConstantDialog: FunctionComponent&lt;IConstantDialogProps&gt; = <sp
             onChange={setValueType}
             data-testid={"constant-type-form-select"}
           &gt;
-            {valueTypeOptions.map(<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >label,</span> <span class="cstat-no" title="statement not covered" >value </span>}, idx) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+            {valueTypeOptions.map(<span class="fstat-no" title="function not covered" >({</span> label<span class="cstat-no" title="statement not covered" >, v</span>alue<span class="cstat-no" title="statement not covered" > },</span> idx) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
               &lt;FormSelectOption key={idx} value={value} label={label} /&gt;
             ))}
           &lt;/FormSelect&gt;
@@ -477,7 +477,7 @@ export const ConstantDialog: FunctionComponent&lt;IConstantDialogProps&gt; = <sp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed May 19 2021 01:03:29 GMT+0000 (Coordinated Universal Time)
+                at Wed May 19 2021 06:47:55 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

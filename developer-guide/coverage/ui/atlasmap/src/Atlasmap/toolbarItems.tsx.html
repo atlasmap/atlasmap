@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/113</span>
+                <span class='fraction'>0/122</span>
             </div>
         
             
@@ -1074,16 +1074,16 @@ export interface IAtlasmapToolbarItemProps {
 }
 export const <span class="cstat-no" title="statement not covered" >AtlasmapToolbarItem: FunctionComponent&lt;IAtlasmapToolbarItemProps&gt; =</span>
 <span class="fstat-no" title="function not covered" >  ({</span>
-<span class="cstat-no" title="statement not covered" >    showImportAtlasFileToolbarItem,</span>
-<span class="cstat-no" title="statement not covered" >    showImportJarFileToolbarItem,</span>
-<span class="cstat-no" title="statement not covered" >    showExportAtlasFileToolbarItem,</span>
-<span class="cstat-no" title="statement not covered" >    showResetToolbarItem,</span>
-<span class="cstat-no" title="statement not covered" >    onImportAtlasFile,</span>
-<span class="cstat-no" title="statement not covered" >    onImportJarFile,</span>
-<span class="cstat-no" title="statement not covered" >    onExportAtlasFile,</span>
-<span class="cstat-no" title="statement not covered" >    onResetAtlasmap,</span>
+    showImportAtlasFileToolbarItem<span class="cstat-no" title="statement not covered" >,</span>
+    showImportJarFileToolbarItem<span class="cstat-no" title="statement not covered" >,</span>
+    showExportAtlasFileToolbarItem<span class="cstat-no" title="statement not covered" >,</span>
+    showResetToolbarItem<span class="cstat-no" title="statement not covered" >,</span>
+    onImportAtlasFile<span class="cstat-no" title="statement not covered" >,</span>
+    onImportJarFile<span class="cstat-no" title="statement not covered" >,</span>
+    onExportAtlasFile<span class="cstat-no" title="statement not covered" >,</span>
+    onResetAtlasmap<span class="cstat-no" title="statement not covered" >,</span>
   }) =&gt; {
-    const <span class="cstat-no" title="statement not covered" >{ <span class="cstat-no" title="statement not covered" >s</span>tate: isOpen,</span> <span class="cstat-no" title="statement not covered" >toggle: onToggle,</span> <span class="cstat-no" title="statement not covered" >toggleOff } = useToggle(false);</span>
+    const { state: isOpen<span class="cstat-no" title="statement not covered" >, toggle: o</span>nToggle<span class="cstat-no" title="statement not covered" >, t</span>oggleOff<span class="cstat-no" title="statement not covered" > } = <span class="cstat-no" title="statement not covered" >u</span>seToggle(false);</span>
     const runAndClose = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(c</span>b: (...args: any[]) =&gt; any) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      return <span class="fstat-no" title="function not covered" >(<span class="cstat-no" title="statement not covered" >.</span>..args: any[])</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        cb(...args);</span>
@@ -1145,8 +1145,8 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapToolb
 &nbsp;
 export const <span class="cstat-no" title="statement not covered" >ImportAtlasFileToolbarItem: FunctionComponent&lt;{</span>
   onFile: (file: File) =&gt; void;
-}&gt; = <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >onFile </span>}) =&gt; {
-  const <span class="cstat-no" title="statement not covered" >{ <span class="cstat-no" title="statement not covered" >files,</span> <span class="cstat-no" title="statement not covered" >onClick,</span> <span class="cstat-no" title="statement not covered" >HiddenFileInput } = useFilePicker({</span></span>
+}&gt; = <span class="fstat-no" title="function not covered" >({</span> onFile<span class="cstat-no" title="statement not covered" > })</span> =&gt; {
+  const { files<span class="cstat-no" title="statement not covered" >, o</span>nClick<span class="cstat-no" title="statement not covered" >, H</span>iddenFileInput<span class="cstat-no" title="statement not covered" > } = <span class="cstat-no" title="statement not covered" >u</span>seFilePicker({</span>
     maxFileSize: 1,
   });
   const previouslyUploadedFiles = <span class="cstat-no" title="statement not covered" >useRef&lt;File[] | null&gt;(null);</span>
@@ -1175,8 +1175,8 @@ export const <span class="cstat-no" title="statement not covered" >ImportAtlasFi
 &nbsp;
 export const <span class="cstat-no" title="statement not covered" >ImportJarFileToolbarItem: FunctionComponent&lt;{</span>
   onFile: (file: File) =&gt; void;
-}&gt; = <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >onFile </span>}) =&gt; {
-  const <span class="cstat-no" title="statement not covered" >{ <span class="cstat-no" title="statement not covered" >files,</span> <span class="cstat-no" title="statement not covered" >onClick,</span> <span class="cstat-no" title="statement not covered" >HiddenFileInput } = useFilePicker({</span></span>
+}&gt; = <span class="fstat-no" title="function not covered" >({</span> onFile<span class="cstat-no" title="statement not covered" > })</span> =&gt; {
+  const { files<span class="cstat-no" title="statement not covered" >, o</span>nClick<span class="cstat-no" title="statement not covered" >, H</span>iddenFileInput<span class="cstat-no" title="statement not covered" > } = <span class="cstat-no" title="statement not covered" >u</span>seFilePicker({</span>
     maxFileSize: 1,
   });
   const previouslyUploadedFiles = <span class="cstat-no" title="statement not covered" >useRef&lt;File[] | null&gt;(null);</span>
@@ -1205,7 +1205,7 @@ export const <span class="cstat-no" title="statement not covered" >ImportJarFile
 &nbsp;
 export const <span class="cstat-no" title="statement not covered" >ExportAtlasFileToolbarItem: FunctionComponent&lt;{</span>
   onClick: () =&gt; void;
-}&gt; = <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >onClick </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+}&gt; = <span class="fstat-no" title="function not covered" >({</span> onClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;DropdownItem
     icon={&lt;ExportIcon /&gt;}
     onClick={onClick}
@@ -1217,7 +1217,7 @@ export const <span class="cstat-no" title="statement not covered" >ExportAtlasFi
 &nbsp;
 export const <span class="cstat-no" title="statement not covered" >ResetToolbarItem: FunctionComponent&lt;{</span>
   onClick: () =&gt; void;
-}&gt; = <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >onClick </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+}&gt; = <span class="fstat-no" title="function not covered" >({</span> onClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;DropdownItem
     icon={&lt;TrashIcon /&gt;}
     onClick={onClick}
@@ -1231,7 +1231,7 @@ export const <span class="cstat-no" title="statement not covered" >ToggleMapping
   toggled: boolean;
   disabled?: boolean;
   onClick: () =&gt; void;
-}&gt; = <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >toggled,</span> <span class="cstat-no" title="statement not covered" >disabled = false,</span> <span class="cstat-no" title="statement not covered" >onClick </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+}&gt; = <span class="fstat-no" title="function not covered" >({</span> toggled<span class="cstat-no" title="statement not covered" >, <span class="cstat-no" title="statement not covered" >d</span>isabled<span class="cstat-no" title="statement not covered" > </span>= false, o</span>nClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;ToolbarItem&gt;
     &lt;Tooltip
       position={"auto"}
@@ -1256,7 +1256,7 @@ export const <span class="cstat-no" title="statement not covered" >ToggleColumnM
   toggled: boolean;
   disabled?: boolean;
   onClick: () =&gt; void;
-}&gt; = <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >toggled,</span> <span class="cstat-no" title="statement not covered" >disabled = false,</span> <span class="cstat-no" title="statement not covered" >onClick </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+}&gt; = <span class="fstat-no" title="function not covered" >({</span> toggled<span class="cstat-no" title="statement not covered" >, <span class="cstat-no" title="statement not covered" >d</span>isabled<span class="cstat-no" title="statement not covered" > </span>= false, o</span>nClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;ToolbarItem&gt;
     &lt;Tooltip
       position={"auto"}
@@ -1281,7 +1281,7 @@ export const <span class="cstat-no" title="statement not covered" >ToggleMapping
   toggled: boolean;
   disabled?: boolean;
   onClick: () =&gt; void;
-}&gt; = <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >toggled,</span> <span class="cstat-no" title="statement not covered" >disabled = false,</span> <span class="cstat-no" title="statement not covered" >onClick </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+}&gt; = <span class="fstat-no" title="function not covered" >({</span> toggled<span class="cstat-no" title="statement not covered" >, <span class="cstat-no" title="statement not covered" >d</span>isabled<span class="cstat-no" title="statement not covered" > </span>= false, o</span>nClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;ToolbarItem&gt;
     &lt;Tooltip
       position={"auto"}
@@ -1306,7 +1306,7 @@ export const <span class="cstat-no" title="statement not covered" >ToggleNamespa
   toggled: boolean;
   disabled?: boolean;
   onClick: () =&gt; void;
-}&gt; = <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >toggled,</span> <span class="cstat-no" title="statement not covered" >disabled = false,</span> <span class="cstat-no" title="statement not covered" >onClick </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+}&gt; = <span class="fstat-no" title="function not covered" >({</span> toggled<span class="cstat-no" title="statement not covered" >, <span class="cstat-no" title="statement not covered" >d</span>isabled<span class="cstat-no" title="statement not covered" > </span>= false, o</span>nClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;ToolbarItem&gt;
     &lt;Tooltip
       position={"auto"}
@@ -1331,7 +1331,7 @@ export const <span class="cstat-no" title="statement not covered" >ToggleFreeVie
   toggled: boolean;
   disabled?: boolean;
   onClick: () =&gt; void;
-}&gt; = <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >toggled,</span> <span class="cstat-no" title="statement not covered" >disabled = false,</span> <span class="cstat-no" title="statement not covered" >onClick </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+}&gt; = <span class="fstat-no" title="function not covered" >({</span> toggled<span class="cstat-no" title="statement not covered" >, <span class="cstat-no" title="statement not covered" >d</span>isabled<span class="cstat-no" title="statement not covered" > </span>= false, o</span>nClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;ToolbarItem&gt;
     &lt;Tooltip
       position={"auto"}
@@ -1356,7 +1356,7 @@ export const <span class="cstat-no" title="statement not covered" >ToggleMapping
   toggled: boolean;
   disabled?: boolean;
   onClick: () =&gt; void;
-}&gt; = <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >toggled,</span> <span class="cstat-no" title="statement not covered" >disabled = false,</span> <span class="cstat-no" title="statement not covered" >onClick </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+}&gt; = <span class="fstat-no" title="function not covered" >({</span> toggled<span class="cstat-no" title="statement not covered" >, <span class="cstat-no" title="statement not covered" >d</span>isabled<span class="cstat-no" title="statement not covered" > </span>= false, o</span>nClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;ToolbarItem&gt;
     &lt;Tooltip
       position={"auto"}
@@ -1381,7 +1381,7 @@ export const <span class="cstat-no" title="statement not covered" >ToggleTypesTo
   toggled: boolean;
   disabled?: boolean;
   onClick: () =&gt; void;
-}&gt; = <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >toggled,</span> <span class="cstat-no" title="statement not covered" >disabled = false,</span> <span class="cstat-no" title="statement not covered" >onClick </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+}&gt; = <span class="fstat-no" title="function not covered" >({</span> toggled<span class="cstat-no" title="statement not covered" >, <span class="cstat-no" title="statement not covered" >d</span>isabled<span class="cstat-no" title="statement not covered" > </span>= false, o</span>nClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;ToolbarItem&gt;
     &lt;Tooltip
       position={"auto"}
@@ -1406,7 +1406,7 @@ export const <span class="cstat-no" title="statement not covered" >ToggleMappedF
   toggled: boolean;
   disabled?: boolean;
   onClick: () =&gt; void;
-}&gt; = <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >toggled,</span> <span class="cstat-no" title="statement not covered" >disabled = false,</span> <span class="cstat-no" title="statement not covered" >onClick </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+}&gt; = <span class="fstat-no" title="function not covered" >({</span> toggled<span class="cstat-no" title="statement not covered" >, <span class="cstat-no" title="statement not covered" >d</span>isabled<span class="cstat-no" title="statement not covered" > </span>= false, o</span>nClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;ToolbarItem&gt;
     &lt;Tooltip
       position={"auto"}
@@ -1431,7 +1431,7 @@ export const <span class="cstat-no" title="statement not covered" >ToggleUnmappe
   toggled: boolean;
   disabled?: boolean;
   onClick: () =&gt; void;
-}&gt; = <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >toggled,</span> <span class="cstat-no" title="statement not covered" >disabled = false,</span> <span class="cstat-no" title="statement not covered" >onClick </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+}&gt; = <span class="fstat-no" title="function not covered" >({</span> toggled<span class="cstat-no" title="statement not covered" >, <span class="cstat-no" title="statement not covered" >d</span>isabled<span class="cstat-no" title="statement not covered" > </span>= false, o</span>nClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;ToolbarItem&gt;
     &lt;Tooltip
       position={"auto"}
@@ -1454,7 +1454,7 @@ export const <span class="cstat-no" title="statement not covered" >ToggleUnmappe
 &nbsp;
 export const <span class="cstat-no" title="statement not covered" >AddMappingToolbarItem: FunctionComponent&lt;{</span>
   onClick: () =&gt; void;
-}&gt; = <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >onClick </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+}&gt; = <span class="fstat-no" title="function not covered" >({</span> onClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;ToolbarItem&gt;
     &lt;Tooltip
       position={"auto"}
@@ -1475,7 +1475,7 @@ export const <span class="cstat-no" title="statement not covered" >AddMappingToo
 &nbsp;
 export const <span class="cstat-no" title="statement not covered" >AboutToolbarItem: FunctionComponent&lt;{</span>
   onClick: () =&gt; void;
-}&gt; = <span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >onClick </span>}) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+}&gt; = <span class="fstat-no" title="function not covered" >({</span> onClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;ToolbarItem&gt;
     &lt;Tooltip
       position={"auto"}
@@ -1500,7 +1500,7 @@ export const <span class="cstat-no" title="statement not covered" >AboutToolbarI
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed May 19 2021 01:03:29 GMT+0000 (Coordinated Universal Time)
+                at Wed May 19 2021 06:47:55 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

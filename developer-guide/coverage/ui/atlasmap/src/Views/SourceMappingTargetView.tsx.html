@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
@@ -168,7 +168,11 @@
 <a name='L110'></a><a href='#L110'>110</a>
 <a name='L111'></a><a href='#L111'>111</a>
 <a name='L112'></a><a href='#L112'>112</a>
-<a name='L113'></a><a href='#L113'>113</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -230,12 +234,16 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -327,22 +335,22 @@ export interface ISourceMappingTargetViewProps
 &nbsp;
 export const <span class="cstat-no" title="statement not covered" >SourceMappingTargetView: FunctionComponent&lt;ISourceMappingTargetViewProps&gt; =</span>
 <span class="fstat-no" title="function not covered" >  ({</span>
-<span class="cstat-no" title="statement not covered" >    sourceProperties,</span>
-<span class="cstat-no" title="statement not covered" >    targetProperties,</span>
-<span class="cstat-no" title="statement not covered" >    constants,</span>
-<span class="cstat-no" title="statement not covered" >    sources,</span>
-<span class="cstat-no" title="statement not covered" >    mappings,</span>
-<span class="cstat-no" title="statement not covered" >    targets,</span>
-<span class="cstat-no" title="statement not covered" >    showMappingPreview,</span>
-<span class="cstat-no" title="statement not covered" >    showTypes,</span>
-<span class="cstat-no" title="statement not covered" >    selectedMappingId,</span>
-<span class="cstat-no" title="statement not covered" >    onSelectMapping,</span>
-<span class="cstat-no" title="statement not covered" >    sourceEvents,</span>
-<span class="cstat-no" title="statement not covered" >    mappingEvents,</span>
-<span class="cstat-no" title="statement not covered" >    targetEvents,</span>
+    sourceProperties<span class="cstat-no" title="statement not covered" >,</span>
+    targetProperties<span class="cstat-no" title="statement not covered" >,</span>
+    constants<span class="cstat-no" title="statement not covered" >,</span>
+    sources<span class="cstat-no" title="statement not covered" >,</span>
+    mappings<span class="cstat-no" title="statement not covered" >,</span>
+    targets<span class="cstat-no" title="statement not covered" >,</span>
+    showMappingPreview<span class="cstat-no" title="statement not covered" >,</span>
+    showTypes<span class="cstat-no" title="statement not covered" >,</span>
+    selectedMappingId<span class="cstat-no" title="statement not covered" >,</span>
+    onSelectMapping<span class="cstat-no" title="statement not covered" >,</span>
+    sourceEvents<span class="cstat-no" title="statement not covered" >,</span>
+    mappingEvents<span class="cstat-no" title="statement not covered" >,</span>
+    targetEvents<span class="cstat-no" title="statement not covered" >,</span>
   }) =&gt; {
-    const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >h</span>ighlightedMappingId,</span> <span class="cstat-no" title="statement not covered" >setHighlightedMappingId] =</span>
-      useState&lt;string | undefined&gt;();
+    const [highlightedMappingId<span class="cstat-no" title="statement not covered" >, s</span>etHighlightedMappingId<span class="cstat-no" title="statement not covered" >] =</span>
+<span class="cstat-no" title="statement not covered" >      useState&lt;string | undefined&gt;();</span>
     const handleMouseOver = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(m</span>: IAtlasmapMapping) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >      setHighlightedMappingId(m.id);</span>
     const handleMouseOut = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >s</span>etHighlightedMappingId(</span>undefined);</span>
@@ -367,7 +375,11 @@ export const <span class="cstat-no" title="statement not covered" >SourceMapping
                 showMappingPreview={showMappingPreview}
                 onMouseOver={handleMouseOver}
                 onMouseOut={handleMouseOut}
-                {...mappingEvents}
+                onSelectMapping={mappingEvents.onSelectMapping}
+                onDeselectMapping={mappingEvents.onDeselectMapping}
+                onEditMapping={mappingEvents.onEditMapping}
+                onFieldPreviewChange={mappingEvents.onFieldPreviewChange}
+                canDrop={mappingEvents.canDrop}
               /&gt;
             &lt;/Column&gt;
             &lt;Column data-testid={"column-target-area"} totalColumns={3}&gt;
@@ -399,7 +411,7 @@ export const <span class="cstat-no" title="statement not covered" >SourceMapping
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed May 19 2021 01:03:29 GMT+0000 (Coordinated Universal Time)
+                at Wed May 19 2021 06:47:55 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
