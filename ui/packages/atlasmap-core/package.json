@@ -63,7 +63,7 @@
     "ts-loader": "^6.2.2",
     "tsdx": "^0.13.1",
     "tslib": "^1.11.1",
-    "typescript": "~3.9.9"
+    "typescript": "~4.2.4"
   },
   "resolutions": {
     "jest": "24.9.0",
