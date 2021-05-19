@@ -21,52 +21,22 @@ updates:
     - ">= 7.a, < 8"
   - dependency-name: org.apache.camel:camel-blueprint
     versions:
-    - ">= 2.24.a, < 2.25"
-  - dependency-name: org.apache.camel:camel-blueprint
-    versions:
-    - ">= 2.25.a, < 2.26"
-  - dependency-name: org.apache.camel:camel-blueprint
-    versions:
     - ">= 3.a, < 3.999999"
   - dependency-name: org.apache.camel:camel-blueprint
     versions:
     - ">= 3.a, < 4"
   - dependency-name: org.apache.camel:camel-core
     versions:
-    - ">= 2.24.a, < 2.25"
-  - dependency-name: org.apache.camel:camel-core
-    versions:
-    - ">= 2.25.a, < 2.26"
-  - dependency-name: org.apache.camel:camel-core
-    versions:
     - ">= 3.a, < 3.999999"
   - dependency-name: org.apache.camel:camel-core
     versions:
     - ">= 3.a, < 4"
   - dependency-name: org.apache.camel:camel-core-xml
     versions:
-    - ">= 2.24.a, < 2.25"
-  - dependency-name: org.apache.camel:camel-core-xml
-    versions:
-    - ">= 2.25.a, < 2.26"
-  - dependency-name: org.apache.camel:camel-core-xml
-    versions:
     - ">= 3.a, < 3.999999"
   - dependency-name: org.apache.camel:camel-core-xml
     versions:
     - ">= 3.a, < 4"
-  - dependency-name: org.apache.camel:camel-maven-plugin
-    versions:
-    - ">= 2.24.a, < 2.25"
-  - dependency-name: org.apache.camel:camel-maven-plugin
-    versions:
-    - ">= 2.25.a, < 2.26"
-  - dependency-name: org.apache.camel:camel-parent
-    versions:
-    - ">= 2.24.a, < 2.25"
-  - dependency-name: org.apache.camel:camel-parent
-    versions:
-    - ">= 2.25.a, < 2.26"
   - dependency-name: org.apache.camel:camel-parent
     versions:
     - ">= 3.a, < 3.999999"
@@ -75,22 +45,10 @@ updates:
     - ">= 3.a, < 4"
   - dependency-name: org.apache.camel:camel-spring-javaconfig
     versions:
-    - ">= 2.24.a, < 2.25"
-  - dependency-name: org.apache.camel:camel-spring-javaconfig
-    versions:
-    - ">= 2.25.a, < 2.26"
-  - dependency-name: org.apache.camel:camel-spring-javaconfig
-    versions:
     - ">= 3.a, < 3.999999"
   - dependency-name: org.apache.camel:camel-spring-javaconfig
     versions:
     - ">= 3.a, < 4"
-  - dependency-name: org.apache.camel:camel-test-karaf
-    versions:
-    - ">= 2.24.a, < 2.25"
-  - dependency-name: org.apache.camel:camel-test-karaf
-    versions:
-    - ">= 2.25.a, < 2.26"
   - dependency-name: org.apache.camel:camel-test-karaf
     versions:
     - ">= 3.a, < 3.999999"
@@ -99,22 +57,10 @@ updates:
     - ">= 3.a, < 4"
   - dependency-name: org.apache.camel:camel-test-spring
     versions:
-    - ">= 2.24.a, < 2.25"
-  - dependency-name: org.apache.camel:camel-test-spring
-    versions:
-    - ">= 2.25.a, < 2.26"
-  - dependency-name: org.apache.camel:camel-test-spring
-    versions:
     - ">= 3.a, < 3.999999"
   - dependency-name: org.apache.camel:camel-test-spring
     versions:
     - ">= 3.a, < 4"
-  - dependency-name: org.apache.camel:camel-twitter
-    versions:
-    - ">= 2.24.a, < 2.25"
-  - dependency-name: org.apache.camel:camel-twitter
-    versions:
-    - ">= 2.25.a, < 2.26"
   - dependency-name: org.apache.camel:camel-twitter
     versions:
     - ">= 3.a, < 4"
