@@ -31,9 +31,10 @@
     <url>http://github.com/atlasmap/atlasmap</url>
     <tag>HEAD</tag>
   </scm>
+  <inceptionYear>2017</inceptionYear>
   <organization>
-    <name>JBoss by Red Hat</name>
-    <url>http://jboss.org</url>
+    <name>Red Hat, Inc.</name>
+    <url>http://redhat.com</url>
   </organization>
   <issueManagement>
     <system>github</system>
@@ -67,6 +68,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <frontend-maven-plugin.version>1.12.0</frontend-maven-plugin.version>
+    <license-maven-plugin.version>4.1</license-maven-plugin.version>
     <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
     <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
     <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
@@ -110,6 +112,49 @@
           <groupId>com.github.eirslett</groupId>
           <artifactId>frontend-maven-plugin</artifactId>
           <version>${frontend-maven-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>com.mycila</groupId>
+          <artifactId>license-maven-plugin</artifactId>
+          <version>${license-maven-plugin.version}</version>
+          <configuration>
+            <licenseSets>
+              <licenseSet>
+                <header>atlasmap-license-header.txt</header>
+                <excludes>
+                  <exclude>**/node_modules/**</exclude>
+                  <exclude>.editorconfig</exclude>
+                  <exclude>atlasmap-license-header.txt</exclude>
+                  <exclude>.mention-bot</exclude>
+                  <exclude>.mvn/wrapper/maven-wrapper.properties</exclude>
+                  <exclude>mvnw*</exclude>
+                  <exclude>**/resources/**/test-*</exclude>
+                  <exclude>**/*.mustache</exclude>
+                  <exclude>**/test/resources/**</exclude>
+                  <exclude>**/spring.factories</exclude>
+                  <exclude>**/*.adoc</exclude>
+                  <exclude>**/*.ts</exclude>
+                  <exclude>**/*.tsx</exclude>
+                  <exclude>**/*.css</exclude>
+                  <exclude>**/*.scss</exclude>
+                  <exclude>**/setupProxy.js</exclude>
+                  <exclude>ui/packages/**</exclude>
+                  <exclude>**/*.html</exclude>
+                  <exclude>**/config.json*</exclude>
+                  <exclude>**/.gitkeep</exclude>
+                  <exclude>**/*.webapp</exclude>
+                  <exclude>**/browserconfig.xml</exclude>
+                  <exclude>**/licenses/**/*</exclude>
+                  <exclude>lib/modules/xml/xsom/**/*</exclude>
+                </excludes>
+              </licenseSet>
+            </licenseSets>
+            <mapping>
+              <java>SLASHSTAR_STYLE</java>
+            </mapping>
+          </configuration>
+          <dependencies>
+          </dependencies>
         </plugin>
         <plugin>
           <artifactId>maven-assembly-plugin</artifactId>
@@ -176,6 +221,19 @@
     </pluginManagement>
 
     <plugins>
+      <plugin>
+        <groupId>com.mycila</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>license</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>format</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
         <executions>
