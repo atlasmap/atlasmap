@@ -53,7 +53,6 @@
     <jsonschema2pojo-maven-plugin.version>1.1.1</jsonschema2pojo-maven-plugin.version>
     <junit.version>4.13.2</junit.version>
     <keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
-    <license-maven-plugin.version>4.1</license-maven-plugin.version>
     <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
     <log4j2.version>2.14.1</log4j2.version>
     <osgi.include.resource>{maven-resources}</osgi.include.resource>
@@ -605,31 +604,6 @@
           <groupId>io.swagger.core.v3</groupId>
           <artifactId>swagger-maven-plugin</artifactId>
           <version>${swagger.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>com.mycila</groupId>
-          <artifactId>license-maven-plugin</artifactId>
-          <version>${license-maven-plugin.version}</version>
-          <configuration>
-            <aggregate>true</aggregate>
-            <header>header.txt</header>
-            <properties>
-              <owner>Red Hat, Inc.</owner>
-            </properties>
-            <excludes>
-              <exclude>.editorconfig</exclude>
-              <exclude>.mention-bot</exclude>
-              <exclude>license.txt</exclude>
-              <exclude>**/*.adoc</exclude>
-              <exclude>.mvn/wrapper/maven-wrapper.properties</exclude>
-              <exclude>mvnw*</exclude>
-              <exclude>**/resources/**/test-*</exclude>
-              <exclude>**/org/apache/camel/salesforce/dto/**</exclude>
-              <exclude>**/node_modules/**</exclude>
-              <exclude>**/src/main/webapp/angular2/src/lib/**</exclude>
-              <exclude>**/src/main/webapp/angular2/src/app/lib/**</exclude>
-            </excludes>
-          </configuration>
         </plugin>
         <plugin>
           <groupId>org.eclipse.jkube</groupId>
