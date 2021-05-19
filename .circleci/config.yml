@@ -186,20 +186,11 @@ jobs:
       - <<: *push_images
       # - <<: *publish_npm
       - persist_to_workspace:
-          root: /workspace
+          root: /
           paths:
-            - pom.xml
-            - mvnw
-            - .mvn
-            - parent
-            - examples
-            - lib
-            - atlasmap-maven-plugin
-            - camel
-            - standalone
-            - coverage-report
-            - docs
-            - ui
+            - workspace
+            - root/.m2
+            - root/.cache
 
   docs:
     <<: *job_defaults
@@ -208,16 +199,9 @@ jobs:
     steps:
       - attach_workspace:
           at: /workspace
-      - <<: *load_cache_mvn
-      - run:
-          name: debug
-          command: |
-            ls -l .
-            ls -l docs
       - <<: *publish_docs
       - store_artifacts:
           path: docs/gh-pages
-      - <<: *save_cache_mvn
 
 workflows:
   version: 2
