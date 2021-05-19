@@ -46,7 +46,7 @@
     "@patternfly/react-topology": "^4.8.37",
     "@testing-library/jest-dom": "^5.7.0",
     "@testing-library/react": "^11.2.7",
-    "@types/file-saver": "2.0.1",
+    "@types/file-saver": "2.0.2",
     "@types/jest": "^24.9.1",
     "@types/pako": "1.0.1",
     "@types/react": "^17.0.5",
