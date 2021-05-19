@@ -37,7 +37,7 @@
   "dependencies": {
     "@atlasmap/core": "^2.3.0-SNAPSHOT",
     "react-sage": "^0.2.3",
-    "use-debounce": "^3.4.2"
+    "use-debounce": "^6.0.1"
   },
   "peerDependencies": {
     "@patternfly/react-core": "^4.115.2",
