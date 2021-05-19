@@ -27,7 +27,7 @@ export interface IDocumentFieldPreviewProps {
 
 export const DocumentFieldPreview: FunctionComponent<IDocumentFieldPreviewProps> =
   ({ id, value, onChange }) => {
-    const [debouncedOnChange] = useDebouncedCallback(onChange, 200);
+    const debouncedOnChange = useDebouncedCallback(onChange, 200);
     return (
       <Form
         className={styles.form}

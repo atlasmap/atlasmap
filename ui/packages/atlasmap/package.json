@@ -25,46 +25,36 @@
     "format": "yarn lint --fix",
     "storybook": "start-storybook -p 6006"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
-  },
-  "prettier": {
-    "trailingComma": "all",
-    "endOfLine": "auto"
-  },
+
   "dependencies": {
     "@atlasmap/core": "^2.3.0-SNAPSHOT",
-    "react-sage": "^0.2.3",
-    "use-debounce": "^3.4.2"
-  },
-  "peerDependencies": {
     "@patternfly/react-core": "^4.115.2",
     "@patternfly/react-icons": "^4.10.2",
     "@patternfly/react-styles": "^4.10.2",
     "@patternfly/react-table": "^4.26.7",
     "@patternfly/react-topology": "^4.8.37",
-    "@storybook/addon-actions": "^6.2.9",
-    "d3-scale": "^3.2.0",
-    "d3-shape": "^1.3.5",
-    "ky": "^0.17.0",
-    "lodash.clamp": "^4.0.3",
+    "@types/d3-scale": "2.1.1",
+    "@types/d3-shape": "1.3.2",
+    "@types/he": "^1.1.1",
+    "@types/react": "^17.0.5",
+    "@types/react-dom": "^17.0.5",
+    "d3-scale": "^3.2.1",
+    "d3-shape": "^1.3.7",
+    "he": "^1.2.0",
+    "ky": "~0.17.0",
     "react": "^17.0.2",
     "react-dnd": "^14.0.2",
     "react-dnd-html5-backend": "^14.0.0",
     "react-dnd-touch-backend": "^14.0.0",
     "react-dom": "^17.0.2",
+    "react-sage": "^0.2.3",
+    "react-spring": "^9.1.2",
     "react-use-gesture": "^9.1.3",
-    "rxjs": "^6.2.2"
+    "rxjs": "^6.6.7",
+    "use-debounce": "^6.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
-    "@patternfly/react-core": "^4.115.2",
-    "@patternfly/react-icons": "^4.10.2",
-    "@patternfly/react-styles": "^4.10.2",
-    "@patternfly/react-table": "^4.26.7",
-    "@patternfly/react-topology": "^4.8.37",
     "@storybook/addon-actions": "^6.2.9",
     "@storybook/addon-docs": "^6.2.9",
     "@storybook/addon-knobs": "^6.2.9",
@@ -75,44 +65,26 @@
     "@testing-library/jest-dom": "^5.7.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^10.3.1",
-    "@types/d3-scale": "2.1.1",
-    "@types/d3-shape": "1.3.2",
-    "@types/he": "^1.1.1",
     "@types/hoist-non-react-statics": "^3.3.1",
     "@types/jest": "24.9.1",
-    "@types/lodash.clamp": "^4.0.6",
-    "@types/react": "^17.0.5",
-    "@types/react-dom": "^17.0.5",
     "@typescript-eslint/eslint-plugin": "^4.23.0",
     "autoprefixer": "^10.2.5",
     "babel-loader": "8.1.0",
     "css-loader": "^5.2.4",
     "cssnano": "^5.0.2",
-    "d3-scale": "^3.2.1",
-    "d3-shape": "^1.3.7",
     "eslint-config-react-app": "^6.0.0",
     "eslint-plugin-mdx": "^1.13.0",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "fork-ts-checker-webpack-plugin": "^4.1.3",
-    "he": "^1.2.0",
     "husky": "^4.2.3",
     "jest-css-modules-transform": "^4.2.1",
     "jest-environment-jsdom-sixteen": "^1.0.3",
-    "ky": "^0.17.0",
     "lodash.clamp": "^4.0.3",
     "postcss": "^8.2.15",
     "postcss-loader": "^4.2.0",
     "postcss-url": "^10.1.3",
-    "react": "^17.0.2",
-    "react-dnd": "^14.0.2",
-    "react-dnd-html5-backend": "^14.0.0",
-    "react-dnd-touch-backend": "^14.0.0",
-    "react-dom": "^17.0.2",
-    "react-spring": "^9.1.2",
-    "react-use-gesture": "^9.1.3",
     "rollup-plugin-postcss": "^4.0.0",
-    "rxjs": "^6.2.2",
     "source-map-loader": "volune/source-map-loader#fixes",
     "style-loader": "^2.0.0",
     "ts-loader": "^6.2.2",
@@ -123,10 +95,22 @@
     "typescript": "~3.9.9",
     "typescript-plugin-css-modules": "^3.2.0"
   },
+  "peerDependencies": {
+  },
   "resolutions": {
     "jest": "24.9.0",
     "prettier": "^2.3.0",
     "webpack": "4.42.0"
+  },
+
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "endOfLine": "auto"
   },
   "jest": {
     "setupFilesAfterEnv": [
