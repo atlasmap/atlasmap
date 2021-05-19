@@ -189,8 +189,7 @@ jobs:
           root: /
           paths:
             - workspace
-            - root/.m2
-            - root/.cache
+            - root
 
   docs:
     <<: *job_defaults
@@ -198,7 +197,7 @@ jobs:
       <<: *common_env
     steps:
       - attach_workspace:
-          at: /workspace
+          at: /
       - <<: *publish_docs
       - store_artifacts:
           path: docs/gh-pages
