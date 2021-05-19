@@ -27,7 +27,6 @@ import { ErrorLevel } from '../models/error.model';
 import { FileManagementService } from './file-management.service';
 import FileSaver from 'file-saver';
 import { InitializationService } from './initialization.service';
-import { ResponsePromise } from 'ky';
 import fs from 'fs';
 import ky from 'ky/umd';
 import log from 'loglevel';
@@ -54,15 +53,13 @@ describe('FileManagementService', () => {
     mockedKy.get = jest.fn().mockReturnValue(
       new (class {
         json(): Promise<any> {
-          return new Promise<any>((resolve) => {
-            resolve({
-              StringMap: {
-                stringMapEntry: [
-                  { name: 'dummyMappingFile1' },
-                  { name: 'dummyMappingFile2' },
-                ],
-              },
-            });
+          return Promise.resolve({
+            StringMap: {
+              stringMapEntry: [
+                { name: 'dummyMappingFile1' },
+                { name: 'dummyMappingFile2' },
+              ],
+            },
           });
         }
       })()
@@ -79,9 +76,7 @@ describe('FileManagementService', () => {
     mockedKy.get = jest.fn().mockReturnValue(
       new (class {
         json(): Promise<any> {
-          return new Promise<any>((_resolve, reject) => {
-            reject('expected error');
-          });
+          return Promise.reject('expected error');
         }
       })()
     );
@@ -100,11 +95,9 @@ describe('FileManagementService', () => {
     mockedKy.get = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
-          return new Promise<ArrayBuffer>((resolve) => {
-            resolve(new TextEncoder().encode('test text'));
-          });
+          return Promise.resolve(new TextEncoder().encode('test text'));
         }
-      })() as ResponsePromise
+      })()
     );
     service.getCurrentMappingDigest().subscribe((value) => {
       expect(new TextDecoder().decode(value)).toMatch('test text');
@@ -116,11 +109,9 @@ describe('FileManagementService', () => {
     mockedKy.get = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
-          return new Promise<ArrayBuffer>((_resolve, reject) => {
-            reject('expected error');
-          });
+          return Promise.reject('expected error');
         }
-      })() as ResponsePromise
+      })()
     );
     service.getCurrentMappingDigest().subscribe({
       error: (error) => {
@@ -137,11 +128,9 @@ describe('FileManagementService', () => {
     mockedKy.get = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
-          return new Promise<ArrayBuffer>((resolve) => {
-            resolve(new TextEncoder().encode('test text'));
-          });
+          return Promise.resolve(new TextEncoder().encode('test text'));
         }
-      })() as ResponsePromise
+      })()
     );
     service.getCurrentADMArchive().subscribe((value) => {
       expect(new TextDecoder().decode(value)).toMatch('test text');
@@ -153,11 +142,9 @@ describe('FileManagementService', () => {
     mockedKy.get = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
-          return new Promise<ArrayBuffer>((_resolve, reject) => {
-            reject('expected error');
-          });
+          return Promise.reject('expected error');
         }
-      })() as ResponsePromise
+      })()
     );
     service.getCurrentADMArchive().subscribe({
       error: (error) => {
@@ -174,11 +161,9 @@ describe('FileManagementService', () => {
     mockedKy.delete = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
-          return new Promise<ArrayBuffer>((resolve) => {
-            resolve(new ArrayBuffer(0));
-          });
+          return Promise.resolve(new ArrayBuffer(0));
         }
-      })() as ResponsePromise
+      })()
     );
     service.resetMappings().subscribe((value) => {
       expect(value).toBeTruthy();
@@ -190,9 +175,7 @@ describe('FileManagementService', () => {
     mockedKy.delete = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
-          return new Promise<ArrayBuffer>((_resolve, reject) => {
-            reject('expected error');
-          });
+          return Promise.reject('expected error');
         }
       })()
     );
@@ -213,11 +196,9 @@ describe('FileManagementService', () => {
     mockedKy.delete = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
-          return new Promise<ArrayBuffer>((resolve) => {
-            resolve(new ArrayBuffer(0));
-          });
+          return Promise.resolve(new ArrayBuffer(0));
         }
-      })() as ResponsePromise
+      })()
     );
     service.resetLibs().subscribe((value) => {
       expect(value).toBeTruthy();
@@ -229,9 +210,7 @@ describe('FileManagementService', () => {
     mockedKy.delete = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
-          return new Promise<ArrayBuffer>((_resolve, reject) => {
-            reject('expected error');
-          });
+          return Promise.reject('expected error');
         }
       })()
     );
@@ -252,11 +231,9 @@ describe('FileManagementService', () => {
     mockedKy.put = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
-          return new Promise<ArrayBuffer>((resolve) => {
-            resolve(new ArrayBuffer(0));
-          });
+          return Promise.resolve(new ArrayBuffer(0));
         }
-      })() as ResponsePromise
+      })()
     );
     const mappingJson = '{"AtlasMapping": {}}';
     service.setMappingToService(mappingJson).subscribe((value) => {
@@ -269,9 +246,7 @@ describe('FileManagementService', () => {
     mockedKy.put = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
-          return new Promise<ArrayBuffer>((_resolve, reject) => {
-            reject('expected error');
-          });
+          return Promise.reject('expected error');
         }
       })()
     );
@@ -291,11 +266,9 @@ describe('FileManagementService', () => {
     mockedKy.put = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
-          return new Promise<ArrayBuffer>((resolve) => {
-            resolve(new ArrayBuffer(0));
-          });
+          return Promise.resolve(new ArrayBuffer(0));
         }
-      })() as ResponsePromise
+      })()
     );
     const binary = new TextEncoder().encode('dummy binary');
     const url = service.cfg.initCfg.baseMappingServiceUrl + 'mapping/ZIP/';
@@ -309,9 +282,7 @@ describe('FileManagementService', () => {
     mockedKy.put = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
-          return new Promise<ArrayBuffer>((_resolve, reject) => {
-            reject('expected error');
-          });
+          return Promise.reject('expected error');
         }
       })()
     );
@@ -333,30 +304,24 @@ describe('FileManagementService', () => {
     mockedKy.put = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
-          return new Promise<ArrayBuffer>((resolve) => {
-            resolve(new ArrayBuffer(0));
-          });
+          return Promise.resolve(new ArrayBuffer(0));
         }
-      })() as ResponsePromise
+      })()
     );
     // get ADM archive file
     mockedKy.get = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
-          return new Promise<ArrayBuffer>((resolve) => {
-            const buf = fs.readFileSync(
+          return Promise.resolve(
+            fs.readFileSync(
               `${__dirname}/../../../../test-resources/adm/mockdoc.adm`
-            );
-            resolve(buf);
-          });
+            )
+          );
         }
         json(): Promise<any> {
-          return new Promise<any>((resolve) => {
-            const json = { AtlasMapping: {} };
-            resolve(json);
-          });
+          return Promise.resolve({ AtlasMapping: {} });
         }
-      })() as ResponsePromise
+      })()
     );
     mockedFileSaver.saveAs = jest.fn().mockImplementation((_data) => {});
     service.cfg.mappings = new MappingDefinition();
@@ -404,11 +369,9 @@ describe('FileManagementService', () => {
     mockedKy.put = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
-          return new Promise<ArrayBuffer>((resolve) => {
-            resolve(new ArrayBuffer(0));
-          });
+          return Promise.resolve(new ArrayBuffer(0));
         }
-      })() as ResponsePromise
+      })()
     );
     mockedInitService.prototype.initialize = jest
       .fn()

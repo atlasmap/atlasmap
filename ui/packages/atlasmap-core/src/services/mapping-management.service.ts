@@ -29,7 +29,6 @@ import { LookupTableData, LookupTableUtil } from '../utils/lookup-table-util';
 import { MappedField, MappingModel } from '../models/mapping.model';
 import { Observable, Subject, Subscription, forkJoin, from } from 'rxjs';
 import { TransitionMode, TransitionModel } from '../models/transition.model';
-import ky, { Options } from 'ky';
 
 import { ConfigModel } from '../models/config.model';
 import { DataMapperUtil } from '../common/data-mapper-util';
@@ -39,6 +38,7 @@ import { Field } from '../models/field.model';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { MappingSerializer } from '../utils/mapping-serializer';
 import { PaddingField } from '../models/document-definition.model';
+import ky from 'ky';
 import log from 'loglevel';
 import { timeout } from 'rxjs/operators';
 
@@ -777,7 +777,7 @@ export class MappingManagementService {
    * Invoke the runtime service to save the current active mapping.
    * No validation will occur.
    */
-  async updateMappings(payload: Options['json']): Promise<boolean> {
+  async updateMappings(payload: any): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       if (
         this.cfg.initCfg.baseMappingServiceUrl === null ||
@@ -821,7 +821,7 @@ export class MappingManagementService {
   /**
    * Invoke the runtime service to validate the current active mapping.
    */
-  private async validateMappings(payload: Options['json']): Promise<boolean> {
+  private async validateMappings(payload: any): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       if (
         this.cfg.initCfg.baseMappingServiceUrl === null ||

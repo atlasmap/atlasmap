@@ -21,11 +21,48 @@
     "lint": "tsdx lint src test",
     "format": "yarn lint --fix"
   },
-  "peerDependencies": {
-    "ky": "^0.17.0",
+
+  "dependencies": {
+    "@patternfly/react-core": "^4.115.2",
+    "@patternfly/react-icons": "^4.10.2",
+    "@patternfly/react-styles": "^4.10.2",
+    "@patternfly/react-topology": "^4.8.37",
+    "@types/file-saver": "^2.0.2",
+    "@types/pako": "^1.0.1",
+    "@types/react": "^17.0.5",
+    "@types/react-dom": "^17.0.5",
+    "@types/text-encoding": "^0.0.35",
+    "file-saver": "^2.0.5",
+    "ky": "~0.17.0",
+    "loglevel": "^1.7.1",
+    "pako": "^2.0.3",
     "react": "^17.0.2",
-    "rxjs": "^6.2.2"
+    "react-dom": "^17.0.2",
+    "rxjs": "^6.6.7",
+    "text-encoding": "^0.7.0"
   },
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@testing-library/jest-dom": "^5.7.0",
+    "@testing-library/react": "^11.2.7",
+    "@types/jest": "^24.9.1",
+    "babel-jest": "^24.9.0",
+    "husky": "^6.0.0",
+    "ts-jest": "^24.3.0",
+    "ts-loader": "^6.2.2",
+    "tsdx": "^0.13.1",
+    "typescript": "~3.9.9"
+  },
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "rxjs": "^6.6.7"
+  },
+  "resolutions": {
+    "jest": "24.9.0",
+    "prettier": "^2.3.0",
+    "webpack": "4.42.0"
+  },
+
   "husky": {
     "hooks": {
       "pre-commit": "tsdx lint"
@@ -38,42 +75,11 @@
     "trailingComma": "es5",
     "endOfLine": "auto"
   },
-  "devDependencies": {
-    "@babel/core": "^7.12.10",
-    "@patternfly/react-core": "^4.115.2",
-    "@patternfly/react-icons": "^4.10.2",
-    "@patternfly/react-styles": "^4.10.2",
-    "@patternfly/react-topology": "^4.8.37",
-    "@testing-library/jest-dom": "^5.7.0",
-    "@testing-library/react": "^11.2.7",
-    "@types/file-saver": "2.0.1",
-    "@types/jest": "^24.9.1",
-    "@types/pako": "1.0.1",
-    "@types/react": "^17.0.5",
-    "@types/react-dom": "^17.0.5",
-    "@types/text-encoding": "0.0.35",
-    "babel-jest": "^24.9.0",
-    "husky": "^4.2.3",
-    "ky": "^0.17.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "rxjs": "^6.5.4",
-    "text-encoding": "^0.7.0",
-    "ts-jest": "^24.3.0",
-    "ts-loader": "^6.2.2",
-    "tsdx": "^0.13.1",
-    "tslib": "^1.11.1",
-    "typescript": "~3.9.9"
-  },
-  "resolutions": {
-    "jest": "24.9.0",
-    "prettier": "^2.3.0",
-    "webpack": "4.42.0"
-  },
   "jest": {
     "moduleNameMapper": {
       "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js",
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/__mocks__/fileMock.js",
+      "ky": "ky/umd",
       "@src": "<rootDir>/src/index.ts",
       "@src/(.*)": "<rootDir>/src/$1",
       "@test/(.*)": "<rootDir>/test/$1"
@@ -112,10 +118,5 @@
       "react-hooks/exhaustive-deps": "warn",
       "sort-imports": "error"
     }
-  },
-  "dependencies": {
-    "file-saver": "2.0.2",
-    "loglevel": "^1.6.7",
-    "pako": "^1.0.11"
   }
 }

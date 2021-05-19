@@ -19,7 +19,7 @@ import { Field } from '../models/field.model';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { MappingManagementService } from '../services/mapping-management.service';
 import { MappingModel } from '../models/mapping.model';
-import ky from 'ky/umd';
+import ky from 'ky';
 import log from 'loglevel';
 
 describe('MappingManagementService', () => {

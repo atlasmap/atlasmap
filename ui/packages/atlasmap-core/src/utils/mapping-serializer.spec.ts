@@ -23,7 +23,7 @@ import atlasMappingExprPropJson from '../../../../test-resources/mapping/atlasma
 import atlasMappingTestJson from '../../../../test-resources/mapping/atlasmapping-test.json';
 import atlasmapFieldActionJson from '../../../../test-resources/fieldActions/atlasmap-field-action.json';
 
-import ky from 'ky/umd';
+import ky from 'ky';
 import log from 'loglevel';
 
 describe('MappingSerializer', () => {
