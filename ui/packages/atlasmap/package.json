@@ -72,6 +72,7 @@
     "css-loader": "^5.2.4",
     "cssnano": "^5.0.2",
     "eslint-config-react-app": "^6.0.0",
+    "eslint-plugin-header": "^3.1.1",
     "eslint-plugin-mdx": "^1.13.0",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react-hooks": "^4.2.0",
@@ -141,12 +142,17 @@
     ],
     "plugins": [
       "@typescript-eslint",
+      "header",
       "import",
       "react-hooks"
     ],
     "ignorePatterns": "**/*.css.d.ts",
     "rules": {
       "@typescript-eslint/explicit-function-return-type": "off",
+      "header/header": [
+        2,
+        "../../atlasmap-license-header-ui.js"
+      ],
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
       "sort-imports": "error"
