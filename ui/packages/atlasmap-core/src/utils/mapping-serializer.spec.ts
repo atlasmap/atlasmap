@@ -722,6 +722,7 @@ describe('MappingSerializer', () => {
         fail(error);
       });
   });
+
   test('collection many-to-one deserialize/serialize', (done) => {
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
@@ -748,6 +749,50 @@ describe('MappingSerializer', () => {
             MappingSerializer.serializeMappings(cfg) // ignoreValue defaults to true
           )
         ).toBe(true);
+
+        done();
+      })
+      .catch((error) => {
+        fail(error);
+      });
+  });
+
+  test('remove a field node from a conditional expression', (done) => {
+    cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
+    return cfg.fieldActionService
+      .fetchFieldActions()
+      .then(() => {
+        cfg.mappings = new MappingDefinition();
+        let fieldMapping = null;
+        const mappingJson = atlasMappingExprPropJson;
+        let expressionIndex = 0;
+
+        // Find the expression input field group from the raw JSON.
+        for (fieldMapping of mappingJson.AtlasMapping.mappings.mapping) {
+          if (
+            fieldMapping.expression &&
+            fieldMapping.expression.startsWith('select( filter(')
+          ) {
+            break;
+          }
+          expressionIndex++;
+        }
+        MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
+        MappingUtil.updateMappingsFromDocuments(cfg);
+        const mapping = cfg.mappings?.mappings[expressionIndex];
+        expect(mapping).toBeDefined();
+
+        let cityField = mapping?.transition.expression.nodes.find(
+          (n) => n.toText() === `\${/city}`
+        );
+        expect(cityField).toBeDefined();
+
+        // Remove the 'city' field from the expression.
+        mapping?.transition.expression.removeToken(cityField?.getUuid());
+        cityField = mapping?.transition.expression.nodes.find(
+          (n) => n.toText() === `\${/city}`
+        );
+        expect(cityField).toBeUndefined();
 
         done();
       })
