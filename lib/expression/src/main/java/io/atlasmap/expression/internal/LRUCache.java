@@ -46,14 +46,14 @@ public class LRUCache<K, V> extends LinkedHashMap<K, V> {
     }
 
     /**
-     * Constructs an empty <tt>LRUCache</tt> instance with the specified
+     * Constructs an empty {@code LRUCache} instance with the specified
      * initial capacity, maximumCacheSize,load factor and ordering mode.
      * 
      * @param initialCapacity the initial capacity.
      * @param maximumCacheSize maximum cache size
      * @param loadFactor the load factor.
-     * @param accessOrder the ordering mode - <tt>true</tt> for access-order,
-     *                <tt>false</tt> for insertion-order.
+     * @param accessOrder the ordering mode - {@code true} for access-order,
+     *                {@code false} for insertion-order.
      * @throws IllegalArgumentException if the initial capacity is negative or
      *                 the load factor is non-positive.
      */

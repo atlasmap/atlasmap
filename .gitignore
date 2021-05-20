@@ -38,6 +38,7 @@ checkstyle.cache
 /node_modules
 
 # IDEs and editors
+.metadata
 /.idea
 .project
 .classpath

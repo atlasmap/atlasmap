@@ -25,14 +25,13 @@ import io.atlasmap.expression.parser.ParseException;
  * A BooleanExpression is an expression that always
  * produces a Boolean result.
  *
- * @version $Revision: 1.2 $
  */
 public interface BooleanExpression extends Expression {
     
     /**
-     * @param message
+     * @param message expression context
      * @return true if the expression evaluates to Boolean.TRUE.
-     * @throws ExpressionException
+     * @throws ExpressionException exception
      */
     boolean matches(ExpressionContext message) throws ExpressionException;
 
