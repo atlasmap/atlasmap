@@ -492,7 +492,7 @@ export class ExpressionModel {
           )
         ) {
           // TODO: check this non null operator
-          this.mapping.removeMappedField(removed.mappedField!);
+          this.mapping.removeField(removed.mappedField!.field!);
           this.cfg.mappingService.updateMappedField(this.mapping);
         }
       } else if (last instanceof TextNode) {
@@ -539,7 +539,7 @@ export class ExpressionModel {
         )
       ) {
         // TODO: check this non null operator
-        this.mapping.removeMappedField(targetFieldNode.mappedField!);
+        this.mapping.removeField(targetFieldNode.mappedField!.field!);
         this.cfg.mappingService.updateMappedField(this.mapping);
       }
       if (this._nodes.length > targetNodeIndex) {
