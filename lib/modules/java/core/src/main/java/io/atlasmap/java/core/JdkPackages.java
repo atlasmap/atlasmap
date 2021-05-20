@@ -21,7 +21,7 @@ import java.util.List;
 
 public class JdkPackages {
 
-    private static final List<String> JDK8_PACKAGES = Arrays.asList("java.applet", "java.awt", "java.awt.color",
+    private static final List<String> JDK_PACKAGES = Arrays.asList("java.applet", "java.awt", "java.awt.color",
             "java.awt.datatransfer", "java.awt.dnd", "java.awt.event", "java.awt.font", "java.awt.geom", "java.awt.im",
             "java.awt.im.spi", "java.awt.image", "java.awt.image.renderable", "java.awt.print", "java.beans",
             "java.beans.beancontext", "java.io", "java.lang", "java.lang.annotation", "java.lang.instrument",
@@ -103,11 +103,10 @@ public class JdkPackages {
             return new ArrayList<String>();
         }
 
+        // Do we have any usecase to distinguish them?
         switch (version) {
-        case "1.8":
-            return JDK8_PACKAGES;
         default:
-            return new ArrayList<String>();
+            return JDK_PACKAGES;
         }
     }
 

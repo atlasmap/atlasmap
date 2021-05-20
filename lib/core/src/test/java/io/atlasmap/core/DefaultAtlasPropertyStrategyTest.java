@@ -95,7 +95,8 @@ public class DefaultAtlasPropertyStrategyTest {
         assertNotNull(propField);
         assertNotNull(propField.getValue());
         assertTrue(propField.getValue() instanceof String);
-        assertEquals("1.8", propField.getValue());
+        assertTrue((String)propField.getValue(),
+                Double.parseDouble((String)propField.getValue()) >= Double.parseDouble("1.8"));
     }
 
     @Test
