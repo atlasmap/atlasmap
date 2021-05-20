@@ -1,4 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>XmlEnumField.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-xml-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.xml.v2</a> &gt; <span class="el_source">XmlEnumField.java</span></div><h1>XmlEnumField.java</h1><pre class="source lang-java linenums">package io.atlasmap.xml.v2;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>XmlEnumField.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-xml-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.xml.v2</a> &gt; <span class="el_source">XmlEnumField.java</span></div><h1>XmlEnumField.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.xml.v2;
 
 import java.io.Serializable;
 
@@ -7,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.atlasmap.v2.Field;
 
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L10">public class XmlEnumField extends Field implements Serializable {</span>
+<span class="fc" id="L25">public class XmlEnumField extends Field implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
@@ -17,7 +32,7 @@ import io.atlasmap.v2.Field;
 
     protected String typeName;
 
-<span class="fc" id="L20">    protected Boolean attribute = false;</span>
+<span class="fc" id="L35">    protected Boolean attribute = false;</span>
 
     protected Boolean userCreated;
 
@@ -30,7 +45,7 @@ import io.atlasmap.v2.Field;
      *     
      */
     public String getName() {
-<span class="fc" id="L33">        return name;</span>
+<span class="fc" id="L48">        return name;</span>
     }
 
     /**
@@ -42,8 +57,8 @@ import io.atlasmap.v2.Field;
      *     
      */
     public void setName(String value) {
-<span class="fc" id="L45">        this.name = value;</span>
-<span class="fc" id="L46">    }</span>
+<span class="fc" id="L60">        this.name = value;</span>
+<span class="fc" id="L61">    }</span>
 
     /**
      * Gets the value of the ordinal property.
@@ -54,7 +69,7 @@ import io.atlasmap.v2.Field;
      *     
      */
     public Integer getOrdinal() {
-<span class="fc" id="L57">        return ordinal;</span>
+<span class="fc" id="L72">        return ordinal;</span>
     }
 
     /**
@@ -66,8 +81,8 @@ import io.atlasmap.v2.Field;
      *     
      */
     public void setOrdinal(Integer value) {
-<span class="nc" id="L69">        this.ordinal = value;</span>
-<span class="nc" id="L70">    }</span>
+<span class="nc" id="L84">        this.ordinal = value;</span>
+<span class="nc" id="L85">    }</span>
 
     /**
      * Gets the value of the typeName property.
@@ -78,7 +93,7 @@ import io.atlasmap.v2.Field;
      *     
      */
     public String getTypeName() {
-<span class="fc" id="L81">        return typeName;</span>
+<span class="fc" id="L96">        return typeName;</span>
     }
 
     /**
@@ -90,8 +105,8 @@ import io.atlasmap.v2.Field;
      *     
      */
     public void setTypeName(String value) {
-<span class="nc" id="L93">        this.typeName = value;</span>
-<span class="nc" id="L94">    }</span>
+<span class="nc" id="L108">        this.typeName = value;</span>
+<span class="nc" id="L109">    }</span>
 
     /**
      * Gets the value of the attribute property.
@@ -102,7 +117,7 @@ import io.atlasmap.v2.Field;
      *     
      */
     public Boolean isAttribute() {
-<span class="fc" id="L105">        return attribute;</span>
+<span class="fc" id="L120">        return attribute;</span>
     }
 
     /**
@@ -114,8 +129,8 @@ import io.atlasmap.v2.Field;
      *     
      */
     public void setAttribute(Boolean value) {
-<span class="fc" id="L117">        this.attribute = value;</span>
-<span class="fc" id="L118">    }</span>
+<span class="fc" id="L132">        this.attribute = value;</span>
+<span class="fc" id="L133">    }</span>
 
     /**
      * Gets the value of the userCreated property.
@@ -126,7 +141,7 @@ import io.atlasmap.v2.Field;
      *
      */
     public Boolean isUserCreated() {
-<span class="fc" id="L129">        return userCreated;</span>
+<span class="fc" id="L144">        return userCreated;</span>
     }
 
     /**
@@ -138,108 +153,108 @@ import io.atlasmap.v2.Field;
      *
      */
     public void setUserCreated(Boolean value) {
-<span class="fc" id="L141">        this.userCreated = value;</span>
-<span class="fc" id="L142">    }</span>
+<span class="fc" id="L156">        this.userCreated = value;</span>
+<span class="fc" id="L157">    }</span>
 
     public boolean equals(Object object) {
-<span class="nc bnc" id="L145" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
-<span class="nc" id="L146">            return false;</span>
+<span class="nc bnc" id="L160" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L161">            return false;</span>
         }
-<span class="nc bnc" id="L148" title="All 2 branches missed.">        if (this == object) {</span>
-<span class="nc" id="L149">            return true;</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L164">            return true;</span>
         }
-<span class="nc bnc" id="L151" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
-<span class="nc" id="L152">            return false;</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
+<span class="nc" id="L167">            return false;</span>
         }
-<span class="nc" id="L154">        final XmlEnumField that = ((XmlEnumField) object);</span>
+<span class="nc" id="L169">        final XmlEnumField that = ((XmlEnumField) object);</span>
         {
             String leftName;
-<span class="nc" id="L157">            leftName = this.getName();</span>
+<span class="nc" id="L172">            leftName = this.getName();</span>
             String rightName;
-<span class="nc" id="L159">            rightName = that.getName();</span>
-<span class="nc bnc" id="L160" title="All 2 branches missed.">            if (this.name!= null) {</span>
-<span class="nc bnc" id="L161" title="All 2 branches missed.">                if (that.name!= null) {</span>
-<span class="nc bnc" id="L162" title="All 2 branches missed.">                    if (!leftName.equals(rightName)) {</span>
-<span class="nc" id="L163">                        return false;</span>
+<span class="nc" id="L174">            rightName = that.getName();</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">            if (this.name!= null) {</span>
+<span class="nc bnc" id="L176" title="All 2 branches missed.">                if (that.name!= null) {</span>
+<span class="nc bnc" id="L177" title="All 2 branches missed.">                    if (!leftName.equals(rightName)) {</span>
+<span class="nc" id="L178">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L166">                    return false;</span>
+<span class="nc" id="L181">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L169" title="All 2 branches missed.">                if (that.name!= null) {</span>
-<span class="nc" id="L170">                    return false;</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">                if (that.name!= null) {</span>
+<span class="nc" id="L185">                    return false;</span>
                 }
             }
         }
         {
             Integer leftOrdinal;
-<span class="nc" id="L176">            leftOrdinal = this.getOrdinal();</span>
+<span class="nc" id="L191">            leftOrdinal = this.getOrdinal();</span>
             Integer rightOrdinal;
-<span class="nc" id="L178">            rightOrdinal = that.getOrdinal();</span>
-<span class="nc bnc" id="L179" title="All 2 branches missed.">            if (this.ordinal!= null) {</span>
-<span class="nc bnc" id="L180" title="All 2 branches missed.">                if (that.ordinal!= null) {</span>
-<span class="nc bnc" id="L181" title="All 2 branches missed.">                    if (!leftOrdinal.equals(rightOrdinal)) {</span>
-<span class="nc" id="L182">                        return false;</span>
+<span class="nc" id="L193">            rightOrdinal = that.getOrdinal();</span>
+<span class="nc bnc" id="L194" title="All 2 branches missed.">            if (this.ordinal!= null) {</span>
+<span class="nc bnc" id="L195" title="All 2 branches missed.">                if (that.ordinal!= null) {</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">                    if (!leftOrdinal.equals(rightOrdinal)) {</span>
+<span class="nc" id="L197">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L185">                    return false;</span>
+<span class="nc" id="L200">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L188" title="All 2 branches missed.">                if (that.ordinal!= null) {</span>
-<span class="nc" id="L189">                    return false;</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">                if (that.ordinal!= null) {</span>
+<span class="nc" id="L204">                    return false;</span>
                 }
             }
         }
         {
             String leftTypeName;
-<span class="nc" id="L195">            leftTypeName = this.getTypeName();</span>
+<span class="nc" id="L210">            leftTypeName = this.getTypeName();</span>
             String rightTypeName;
-<span class="nc" id="L197">            rightTypeName = that.getTypeName();</span>
-<span class="nc bnc" id="L198" title="All 2 branches missed.">            if (this.typeName!= null) {</span>
-<span class="nc bnc" id="L199" title="All 2 branches missed.">                if (that.typeName!= null) {</span>
-<span class="nc bnc" id="L200" title="All 2 branches missed.">                    if (!leftTypeName.equals(rightTypeName)) {</span>
-<span class="nc" id="L201">                        return false;</span>
+<span class="nc" id="L212">            rightTypeName = that.getTypeName();</span>
+<span class="nc bnc" id="L213" title="All 2 branches missed.">            if (this.typeName!= null) {</span>
+<span class="nc bnc" id="L214" title="All 2 branches missed.">                if (that.typeName!= null) {</span>
+<span class="nc bnc" id="L215" title="All 2 branches missed.">                    if (!leftTypeName.equals(rightTypeName)) {</span>
+<span class="nc" id="L216">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L204">                    return false;</span>
+<span class="nc" id="L219">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L207" title="All 2 branches missed.">                if (that.typeName!= null) {</span>
-<span class="nc" id="L208">                    return false;</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">                if (that.typeName!= null) {</span>
+<span class="nc" id="L223">                    return false;</span>
                 }
             }
         }
-<span class="nc" id="L212">        return true;</span>
+<span class="nc" id="L227">        return true;</span>
     }
 
     public int hashCode() {
-<span class="nc" id="L216">        int currentHashCode = 1;</span>
-<span class="nc" id="L217">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
+<span class="nc" id="L231">        int currentHashCode = 1;</span>
+<span class="nc" id="L232">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
         {
-<span class="nc" id="L219">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L234">            currentHashCode = (currentHashCode* 31);</span>
             String theName;
-<span class="nc" id="L221">            theName = this.getName();</span>
-<span class="nc bnc" id="L222" title="All 2 branches missed.">            if (this.name!= null) {</span>
-<span class="nc" id="L223">                currentHashCode += theName.hashCode();</span>
+<span class="nc" id="L236">            theName = this.getName();</span>
+<span class="nc bnc" id="L237" title="All 2 branches missed.">            if (this.name!= null) {</span>
+<span class="nc" id="L238">                currentHashCode += theName.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L227">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L242">            currentHashCode = (currentHashCode* 31);</span>
             Integer theOrdinal;
-<span class="nc" id="L229">            theOrdinal = this.getOrdinal();</span>
-<span class="nc bnc" id="L230" title="All 2 branches missed.">            if (this.ordinal!= null) {</span>
-<span class="nc" id="L231">                currentHashCode += theOrdinal.hashCode();</span>
+<span class="nc" id="L244">            theOrdinal = this.getOrdinal();</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">            if (this.ordinal!= null) {</span>
+<span class="nc" id="L246">                currentHashCode += theOrdinal.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L235">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L250">            currentHashCode = (currentHashCode* 31);</span>
             String theTypeName;
-<span class="nc" id="L237">            theTypeName = this.getTypeName();</span>
-<span class="nc bnc" id="L238" title="All 2 branches missed.">            if (this.typeName!= null) {</span>
-<span class="nc" id="L239">                currentHashCode += theTypeName.hashCode();</span>
+<span class="nc" id="L252">            theTypeName = this.getTypeName();</span>
+<span class="nc bnc" id="L253" title="All 2 branches missed.">            if (this.typeName!= null) {</span>
+<span class="nc" id="L254">                currentHashCode += theTypeName.hashCode();</span>
             }
         }
-<span class="nc" id="L242">        return currentHashCode;</span>
+<span class="nc" id="L257">        return currentHashCode;</span>
     }
 
 }

@@ -1,4 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>XmlInspectionResponse.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-xml-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.xml.v2</a> &gt; <span class="el_source">XmlInspectionResponse.java</span></div><h1>XmlInspectionResponse.java</h1><pre class="source lang-java linenums">package io.atlasmap.xml.v2;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>XmlInspectionResponse.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-xml-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.xml.v2</a> &gt; <span class="el_source">XmlInspectionResponse.java</span></div><h1>XmlInspectionResponse.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.xml.v2;
 
 import java.io.Serializable;
 
@@ -7,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonRootName(&quot;XmlInspectionResponse&quot;)
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L10">public class XmlInspectionResponse implements Serializable {</span>
+<span class="fc" id="L25">public class XmlInspectionResponse implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
@@ -26,7 +41,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public XmlDocument getXmlDocument() {
-<span class="fc" id="L29">        return xmlDocument;</span>
+<span class="fc" id="L44">        return xmlDocument;</span>
     }
 
     /**
@@ -38,8 +53,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setXmlDocument(XmlDocument value) {
-<span class="fc" id="L41">        this.xmlDocument = value;</span>
-<span class="fc" id="L42">    }</span>
+<span class="fc" id="L56">        this.xmlDocument = value;</span>
+<span class="fc" id="L57">    }</span>
 
     /**
      * Gets the value of the errorMessage property.
@@ -50,7 +65,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public String getErrorMessage() {
-<span class="fc" id="L53">        return errorMessage;</span>
+<span class="fc" id="L68">        return errorMessage;</span>
     }
 
     /**
@@ -62,8 +77,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setErrorMessage(String value) {
-<span class="nc" id="L65">        this.errorMessage = value;</span>
-<span class="nc" id="L66">    }</span>
+<span class="nc" id="L80">        this.errorMessage = value;</span>
+<span class="nc" id="L81">    }</span>
 
     /**
      * Gets the value of the executionTime property.
@@ -74,7 +89,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Long getExecutionTime() {
-<span class="fc" id="L77">        return executionTime;</span>
+<span class="fc" id="L92">        return executionTime;</span>
     }
 
     /**
@@ -86,104 +101,104 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setExecutionTime(Long value) {
-<span class="fc" id="L89">        this.executionTime = value;</span>
-<span class="fc" id="L90">    }</span>
+<span class="fc" id="L104">        this.executionTime = value;</span>
+<span class="fc" id="L105">    }</span>
 
     public boolean equals(Object object) {
-<span class="nc bnc" id="L93" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
-<span class="nc" id="L94">            return false;</span>
+<span class="nc bnc" id="L108" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L109">            return false;</span>
         }
-<span class="nc bnc" id="L96" title="All 2 branches missed.">        if (this == object) {</span>
-<span class="nc" id="L97">            return true;</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L112">            return true;</span>
         }
-<span class="nc" id="L99">        final XmlInspectionResponse that = ((XmlInspectionResponse) object);</span>
+<span class="nc" id="L114">        final XmlInspectionResponse that = ((XmlInspectionResponse) object);</span>
         {
             XmlDocument leftXmlDocument;
-<span class="nc" id="L102">            leftXmlDocument = this.getXmlDocument();</span>
+<span class="nc" id="L117">            leftXmlDocument = this.getXmlDocument();</span>
             XmlDocument rightXmlDocument;
-<span class="nc" id="L104">            rightXmlDocument = that.getXmlDocument();</span>
-<span class="nc bnc" id="L105" title="All 2 branches missed.">            if (this.xmlDocument!= null) {</span>
-<span class="nc bnc" id="L106" title="All 2 branches missed.">                if (that.xmlDocument!= null) {</span>
-<span class="nc bnc" id="L107" title="All 2 branches missed.">                    if (!leftXmlDocument.equals(rightXmlDocument)) {</span>
-<span class="nc" id="L108">                        return false;</span>
+<span class="nc" id="L119">            rightXmlDocument = that.getXmlDocument();</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">            if (this.xmlDocument!= null) {</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">                if (that.xmlDocument!= null) {</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">                    if (!leftXmlDocument.equals(rightXmlDocument)) {</span>
+<span class="nc" id="L123">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L111">                    return false;</span>
+<span class="nc" id="L126">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L114" title="All 2 branches missed.">                if (that.xmlDocument!= null) {</span>
-<span class="nc" id="L115">                    return false;</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">                if (that.xmlDocument!= null) {</span>
+<span class="nc" id="L130">                    return false;</span>
                 }
             }
         }
         {
             String leftErrorMessage;
-<span class="nc" id="L121">            leftErrorMessage = this.getErrorMessage();</span>
+<span class="nc" id="L136">            leftErrorMessage = this.getErrorMessage();</span>
             String rightErrorMessage;
-<span class="nc" id="L123">            rightErrorMessage = that.getErrorMessage();</span>
-<span class="nc bnc" id="L124" title="All 2 branches missed.">            if (this.errorMessage!= null) {</span>
-<span class="nc bnc" id="L125" title="All 2 branches missed.">                if (that.errorMessage!= null) {</span>
-<span class="nc bnc" id="L126" title="All 2 branches missed.">                    if (!leftErrorMessage.equals(rightErrorMessage)) {</span>
-<span class="nc" id="L127">                        return false;</span>
+<span class="nc" id="L138">            rightErrorMessage = that.getErrorMessage();</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">            if (this.errorMessage!= null) {</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">                if (that.errorMessage!= null) {</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">                    if (!leftErrorMessage.equals(rightErrorMessage)) {</span>
+<span class="nc" id="L142">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L130">                    return false;</span>
+<span class="nc" id="L145">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L133" title="All 2 branches missed.">                if (that.errorMessage!= null) {</span>
-<span class="nc" id="L134">                    return false;</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">                if (that.errorMessage!= null) {</span>
+<span class="nc" id="L149">                    return false;</span>
                 }
             }
         }
         {
             Long leftExecutionTime;
-<span class="nc" id="L140">            leftExecutionTime = this.getExecutionTime();</span>
+<span class="nc" id="L155">            leftExecutionTime = this.getExecutionTime();</span>
             Long rightExecutionTime;
-<span class="nc" id="L142">            rightExecutionTime = that.getExecutionTime();</span>
-<span class="nc bnc" id="L143" title="All 2 branches missed.">            if (this.executionTime!= null) {</span>
-<span class="nc bnc" id="L144" title="All 2 branches missed.">                if (that.executionTime!= null) {</span>
-<span class="nc bnc" id="L145" title="All 2 branches missed.">                    if (!leftExecutionTime.equals(rightExecutionTime)) {</span>
-<span class="nc" id="L146">                        return false;</span>
+<span class="nc" id="L157">            rightExecutionTime = that.getExecutionTime();</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">            if (this.executionTime!= null) {</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">                if (that.executionTime!= null) {</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">                    if (!leftExecutionTime.equals(rightExecutionTime)) {</span>
+<span class="nc" id="L161">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L149">                    return false;</span>
+<span class="nc" id="L164">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L152" title="All 2 branches missed.">                if (that.executionTime!= null) {</span>
-<span class="nc" id="L153">                    return false;</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">                if (that.executionTime!= null) {</span>
+<span class="nc" id="L168">                    return false;</span>
                 }
             }
         }
-<span class="nc" id="L157">        return true;</span>
+<span class="nc" id="L172">        return true;</span>
     }
 
     public int hashCode() {
-<span class="nc" id="L161">        int currentHashCode = 1;</span>
+<span class="nc" id="L176">        int currentHashCode = 1;</span>
         {
-<span class="nc" id="L163">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L178">            currentHashCode = (currentHashCode* 31);</span>
             XmlDocument theXmlDocument;
-<span class="nc" id="L165">            theXmlDocument = this.getXmlDocument();</span>
-<span class="nc bnc" id="L166" title="All 2 branches missed.">            if (this.xmlDocument!= null) {</span>
-<span class="nc" id="L167">                currentHashCode += theXmlDocument.hashCode();</span>
+<span class="nc" id="L180">            theXmlDocument = this.getXmlDocument();</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">            if (this.xmlDocument!= null) {</span>
+<span class="nc" id="L182">                currentHashCode += theXmlDocument.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L171">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L186">            currentHashCode = (currentHashCode* 31);</span>
             String theErrorMessage;
-<span class="nc" id="L173">            theErrorMessage = this.getErrorMessage();</span>
-<span class="nc bnc" id="L174" title="All 2 branches missed.">            if (this.errorMessage!= null) {</span>
-<span class="nc" id="L175">                currentHashCode += theErrorMessage.hashCode();</span>
+<span class="nc" id="L188">            theErrorMessage = this.getErrorMessage();</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">            if (this.errorMessage!= null) {</span>
+<span class="nc" id="L190">                currentHashCode += theErrorMessage.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L179">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L194">            currentHashCode = (currentHashCode* 31);</span>
             Long theExecutionTime;
-<span class="nc" id="L181">            theExecutionTime = this.getExecutionTime();</span>
-<span class="nc bnc" id="L182" title="All 2 branches missed.">            if (this.executionTime!= null) {</span>
-<span class="nc" id="L183">                currentHashCode += theExecutionTime.hashCode();</span>
+<span class="nc" id="L196">            theExecutionTime = this.getExecutionTime();</span>
+<span class="nc bnc" id="L197" title="All 2 branches missed.">            if (this.executionTime!= null) {</span>
+<span class="nc" id="L198">                currentHashCode += theExecutionTime.hashCode();</span>
             }
         }
-<span class="nc" id="L186">        return currentHashCode;</span>
+<span class="nc" id="L201">        return currentHashCode;</span>
     }
 
 }

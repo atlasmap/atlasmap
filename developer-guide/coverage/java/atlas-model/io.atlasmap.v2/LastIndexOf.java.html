@@ -1,10 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>LastIndexOf.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.v2</a> &gt; <span class="el_source">LastIndexOf.java</span></div><h1>LastIndexOf.java</h1><pre class="source lang-java linenums">package io.atlasmap.v2;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>LastIndexOf.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.v2</a> &gt; <span class="el_source">LastIndexOf.java</span></div><h1>LastIndexOf.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.v2;
 
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-<span class="fc" id="L7">public class LastIndexOf extends Action implements Serializable {</span>
+<span class="fc" id="L22">public class LastIndexOf extends Action implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
@@ -19,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
      *     
      */
     public String getString() {
-<span class="fc" id="L22">        return string;</span>
+<span class="fc" id="L37">        return string;</span>
     }
 
     /**
@@ -33,8 +48,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
     @JsonPropertyDescription(&quot;The string to look for&quot;)
     @AtlasActionProperty(title = &quot;String&quot;, type = FieldType.STRING)
     public void setString(String value) {
-<span class="fc" id="L36">        this.string = value;</span>
-<span class="fc" id="L37">    }</span>
+<span class="fc" id="L51">        this.string = value;</span>
+<span class="fc" id="L52">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,53 +1,68 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>FieldType.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.v2</a> &gt; <span class="el_source">FieldType.java</span></div><h1>FieldType.java</h1><pre class="source lang-java linenums">package io.atlasmap.v2;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>FieldType.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.v2</a> &gt; <span class="el_source">FieldType.java</span></div><h1>FieldType.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.v2;
 
-<span class="fc" id="L3">public enum FieldType {</span>
+<span class="fc" id="L18">public enum FieldType {</span>
 
-<span class="fc" id="L5">    ANY(&quot;Any&quot;),</span>
-<span class="fc" id="L6">    ANY_DATE(&quot;Any Date&quot;),</span>
-<span class="fc" id="L7">    BIG_INTEGER(&quot;Big Integer&quot;),</span>
-<span class="fc" id="L8">    BOOLEAN(&quot;Boolean&quot;),</span>
-<span class="fc" id="L9">    BYTE(&quot;Byte&quot;),</span>
-<span class="fc" id="L10">    BYTE_ARRAY(&quot;ByteArray&quot;),</span>
-<span class="fc" id="L11">    CHAR(&quot;Char&quot;),</span>
-<span class="fc" id="L12">    COMPLEX(&quot;Complex&quot;),</span>
-<span class="fc" id="L13">    DATE(&quot;Date&quot;),</span>
-<span class="fc" id="L14">    DATE_TIME(&quot;DateTime&quot;),</span>
-<span class="fc" id="L15">    DATE_TIME_TZ(&quot;DateTimeTZ&quot;),</span>
-<span class="fc" id="L16">    DATE_TZ(&quot;DateTZ&quot;),</span>
-<span class="fc" id="L17">    DECIMAL(&quot;Decimal&quot;),</span>
-<span class="fc" id="L18">    DOUBLE(&quot;Double&quot;),</span>
-<span class="fc" id="L19">    FLOAT(&quot;Float&quot;),</span>
-<span class="fc" id="L20">    INTEGER(&quot;Integer&quot;),</span>
-<span class="fc" id="L21">    LONG(&quot;Long&quot;),</span>
-<span class="fc" id="L22">    NONE(&quot;None&quot;),</span>
-<span class="fc" id="L23">    NUMBER(&quot;Number&quot;),</span>
-<span class="fc" id="L24">    SHORT(&quot;Short&quot;),</span>
-<span class="fc" id="L25">    STRING(&quot;String&quot;),</span>
-<span class="fc" id="L26">    TIME(&quot;Time&quot;),</span>
-<span class="fc" id="L27">    TIME_TZ(&quot;TimeTZ&quot;),</span>
-<span class="fc" id="L28">    UNSIGNED_BYTE(&quot;Unsigned Byte&quot;),</span>
-<span class="fc" id="L29">    UNSIGNED_INTEGER(&quot;Unsigned Integer&quot;),</span>
-<span class="fc" id="L30">    UNSIGNED_LONG(&quot;Unsigned Long&quot;),</span>
-<span class="fc" id="L31">    UNSIGNED_SHORT(&quot;Unsigned Short&quot;),</span>
-<span class="fc" id="L32">    UNSUPPORTED(&quot;Unsupported&quot;);</span>
+<span class="fc" id="L20">    ANY(&quot;Any&quot;),</span>
+<span class="fc" id="L21">    ANY_DATE(&quot;Any Date&quot;),</span>
+<span class="fc" id="L22">    BIG_INTEGER(&quot;Big Integer&quot;),</span>
+<span class="fc" id="L23">    BOOLEAN(&quot;Boolean&quot;),</span>
+<span class="fc" id="L24">    BYTE(&quot;Byte&quot;),</span>
+<span class="fc" id="L25">    BYTE_ARRAY(&quot;ByteArray&quot;),</span>
+<span class="fc" id="L26">    CHAR(&quot;Char&quot;),</span>
+<span class="fc" id="L27">    COMPLEX(&quot;Complex&quot;),</span>
+<span class="fc" id="L28">    DATE(&quot;Date&quot;),</span>
+<span class="fc" id="L29">    DATE_TIME(&quot;DateTime&quot;),</span>
+<span class="fc" id="L30">    DATE_TIME_TZ(&quot;DateTimeTZ&quot;),</span>
+<span class="fc" id="L31">    DATE_TZ(&quot;DateTZ&quot;),</span>
+<span class="fc" id="L32">    DECIMAL(&quot;Decimal&quot;),</span>
+<span class="fc" id="L33">    DOUBLE(&quot;Double&quot;),</span>
+<span class="fc" id="L34">    FLOAT(&quot;Float&quot;),</span>
+<span class="fc" id="L35">    INTEGER(&quot;Integer&quot;),</span>
+<span class="fc" id="L36">    LONG(&quot;Long&quot;),</span>
+<span class="fc" id="L37">    NONE(&quot;None&quot;),</span>
+<span class="fc" id="L38">    NUMBER(&quot;Number&quot;),</span>
+<span class="fc" id="L39">    SHORT(&quot;Short&quot;),</span>
+<span class="fc" id="L40">    STRING(&quot;String&quot;),</span>
+<span class="fc" id="L41">    TIME(&quot;Time&quot;),</span>
+<span class="fc" id="L42">    TIME_TZ(&quot;TimeTZ&quot;),</span>
+<span class="fc" id="L43">    UNSIGNED_BYTE(&quot;Unsigned Byte&quot;),</span>
+<span class="fc" id="L44">    UNSIGNED_INTEGER(&quot;Unsigned Integer&quot;),</span>
+<span class="fc" id="L45">    UNSIGNED_LONG(&quot;Unsigned Long&quot;),</span>
+<span class="fc" id="L46">    UNSIGNED_SHORT(&quot;Unsigned Short&quot;),</span>
+<span class="fc" id="L47">    UNSUPPORTED(&quot;Unsupported&quot;);</span>
 
     private final String value;
 
-<span class="fc" id="L36">    FieldType(String v) {</span>
-<span class="fc" id="L37">        value = v;</span>
-<span class="fc" id="L38">    }</span>
+<span class="fc" id="L51">    FieldType(String v) {</span>
+<span class="fc" id="L52">        value = v;</span>
+<span class="fc" id="L53">    }</span>
 
     public String value() {
-<span class="fc" id="L41">        return value;</span>
+<span class="fc" id="L56">        return value;</span>
     }
 
     public static FieldType fromValue(String v) {
-<span class="pc bpc" id="L45" title="1 of 2 branches missed.">        for (FieldType c: FieldType.values()) {</span>
-<span class="fc bfc" id="L46" title="All 2 branches covered.">            if (c.value.equals(v)) {</span>
-<span class="fc" id="L47">                return c;</span>
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">        for (FieldType c: FieldType.values()) {</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">            if (c.value.equals(v)) {</span>
+<span class="fc" id="L62">                return c;</span>
             }
         }
-<span class="nc" id="L50">        throw new IllegalArgumentException(v);</span>
+<span class="nc" id="L65">        throw new IllegalArgumentException(v);</span>
     }
 
 }

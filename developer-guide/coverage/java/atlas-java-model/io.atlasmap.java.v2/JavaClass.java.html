@@ -1,11 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>JavaClass.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-java-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.java.v2</a> &gt; <span class="el_source">JavaClass.java</span></div><h1>JavaClass.java</h1><pre class="source lang-java linenums">package io.atlasmap.java.v2;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>JavaClass.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-java-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.java.v2</a> &gt; <span class="el_source">JavaClass.java</span></div><h1>JavaClass.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.java.v2;
 
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L8">public class JavaClass extends JavaField implements Serializable {</span>
+<span class="fc" id="L23">public class JavaClass extends JavaField implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
@@ -38,7 +53,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public JavaEnumFields getJavaEnumFields() {
-<span class="fc" id="L41">        return javaEnumFields;</span>
+<span class="fc" id="L56">        return javaEnumFields;</span>
     }
 
     /**
@@ -50,8 +65,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setJavaEnumFields(JavaEnumFields value) {
-<span class="fc" id="L53">        this.javaEnumFields = value;</span>
-<span class="fc" id="L54">    }</span>
+<span class="fc" id="L68">        this.javaEnumFields = value;</span>
+<span class="fc" id="L69">    }</span>
 
     /**
      * Gets the value of the javaFields property.
@@ -62,7 +77,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public JavaFields getJavaFields() {
-<span class="fc" id="L65">        return javaFields;</span>
+<span class="fc" id="L80">        return javaFields;</span>
     }
 
     /**
@@ -74,8 +89,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setJavaFields(JavaFields value) {
-<span class="fc" id="L77">        this.javaFields = value;</span>
-<span class="fc" id="L78">    }</span>
+<span class="fc" id="L92">        this.javaFields = value;</span>
+<span class="fc" id="L93">    }</span>
 
     /**
      * Gets the value of the packageName property.
@@ -86,7 +101,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public String getPackageName() {
-<span class="fc" id="L89">        return packageName;</span>
+<span class="fc" id="L104">        return packageName;</span>
     }
 
     /**
@@ -98,8 +113,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setPackageName(String value) {
-<span class="fc" id="L101">        this.packageName = value;</span>
-<span class="fc" id="L102">    }</span>
+<span class="fc" id="L116">        this.packageName = value;</span>
+<span class="fc" id="L117">    }</span>
 
     /**
      * Gets the value of the annotation property.
@@ -110,7 +125,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Boolean isAnnotation() {
-<span class="fc" id="L113">        return annotation;</span>
+<span class="fc" id="L128">        return annotation;</span>
     }
 
     /**
@@ -122,8 +137,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setAnnotation(Boolean value) {
-<span class="fc" id="L125">        this.annotation = value;</span>
-<span class="fc" id="L126">    }</span>
+<span class="fc" id="L140">        this.annotation = value;</span>
+<span class="fc" id="L141">    }</span>
 
     /**
      * Gets the value of the annonymous property.
@@ -134,7 +149,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Boolean isAnnonymous() {
-<span class="fc" id="L137">        return annonymous;</span>
+<span class="fc" id="L152">        return annonymous;</span>
     }
 
     /**
@@ -146,8 +161,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setAnnonymous(Boolean value) {
-<span class="fc" id="L149">        this.annonymous = value;</span>
-<span class="fc" id="L150">    }</span>
+<span class="fc" id="L164">        this.annonymous = value;</span>
+<span class="fc" id="L165">    }</span>
 
     /**
      * Gets the value of the enumeration property.
@@ -158,7 +173,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Boolean isEnumeration() {
-<span class="fc" id="L161">        return enumeration;</span>
+<span class="fc" id="L176">        return enumeration;</span>
     }
 
     /**
@@ -170,8 +185,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setEnumeration(Boolean value) {
-<span class="fc" id="L173">        this.enumeration = value;</span>
-<span class="fc" id="L174">    }</span>
+<span class="fc" id="L188">        this.enumeration = value;</span>
+<span class="fc" id="L189">    }</span>
 
     /**
      * Gets the value of the interface property.
@@ -182,7 +197,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Boolean isInterface() {
-<span class="fc" id="L185">        return isInterface;</span>
+<span class="fc" id="L200">        return isInterface;</span>
     }
 
     /**
@@ -194,8 +209,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setInterface(Boolean value) {
-<span class="fc" id="L197">        this.isInterface = value;</span>
-<span class="fc" id="L198">    }</span>
+<span class="fc" id="L212">        this.isInterface = value;</span>
+<span class="fc" id="L213">    }</span>
 
     /**
      * Gets the value of the localClass property.
@@ -206,7 +221,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Boolean isLocalClass() {
-<span class="fc" id="L209">        return localClass;</span>
+<span class="fc" id="L224">        return localClass;</span>
     }
 
     /**
@@ -218,8 +233,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setLocalClass(Boolean value) {
-<span class="fc" id="L221">        this.localClass = value;</span>
-<span class="fc" id="L222">    }</span>
+<span class="fc" id="L236">        this.localClass = value;</span>
+<span class="fc" id="L237">    }</span>
 
     /**
      * Gets the value of the memberClass property.
@@ -230,7 +245,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Boolean isMemberClass() {
-<span class="fc" id="L233">        return memberClass;</span>
+<span class="fc" id="L248">        return memberClass;</span>
     }
 
     /**
@@ -242,8 +257,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setMemberClass(Boolean value) {
-<span class="fc" id="L245">        this.memberClass = value;</span>
-<span class="fc" id="L246">    }</span>
+<span class="fc" id="L260">        this.memberClass = value;</span>
+<span class="fc" id="L261">    }</span>
 
     /**
      * Gets the value of the uri property.
@@ -254,7 +269,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public String getUri() {
-<span class="fc" id="L257">        return uri;</span>
+<span class="fc" id="L272">        return uri;</span>
     }
 
     /**
@@ -266,297 +281,297 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setUri(String value) {
-<span class="fc" id="L269">        this.uri = value;</span>
-<span class="fc" id="L270">    }</span>
+<span class="fc" id="L284">        this.uri = value;</span>
+<span class="fc" id="L285">    }</span>
 
     public boolean equals(Object object) {
-<span class="nc bnc" id="L273" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
-<span class="nc" id="L274">            return false;</span>
+<span class="nc bnc" id="L288" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L289">            return false;</span>
         }
-<span class="nc bnc" id="L276" title="All 2 branches missed.">        if (this == object) {</span>
-<span class="nc" id="L277">            return true;</span>
+<span class="nc bnc" id="L291" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L292">            return true;</span>
         }
-<span class="nc bnc" id="L279" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
-<span class="nc" id="L280">            return false;</span>
+<span class="nc bnc" id="L294" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
+<span class="nc" id="L295">            return false;</span>
         }
-<span class="nc" id="L282">        final JavaClass that = ((JavaClass) object);</span>
+<span class="nc" id="L297">        final JavaClass that = ((JavaClass) object);</span>
         {
             JavaEnumFields leftJavaEnumFields;
-<span class="nc" id="L285">            leftJavaEnumFields = this.getJavaEnumFields();</span>
+<span class="nc" id="L300">            leftJavaEnumFields = this.getJavaEnumFields();</span>
             JavaEnumFields rightJavaEnumFields;
-<span class="nc" id="L287">            rightJavaEnumFields = that.getJavaEnumFields();</span>
-<span class="nc bnc" id="L288" title="All 2 branches missed.">            if (this.javaEnumFields!= null) {</span>
-<span class="nc bnc" id="L289" title="All 2 branches missed.">                if (that.javaEnumFields!= null) {</span>
-<span class="nc bnc" id="L290" title="All 2 branches missed.">                    if (!leftJavaEnumFields.equals(rightJavaEnumFields)) {</span>
-<span class="nc" id="L291">                        return false;</span>
+<span class="nc" id="L302">            rightJavaEnumFields = that.getJavaEnumFields();</span>
+<span class="nc bnc" id="L303" title="All 2 branches missed.">            if (this.javaEnumFields!= null) {</span>
+<span class="nc bnc" id="L304" title="All 2 branches missed.">                if (that.javaEnumFields!= null) {</span>
+<span class="nc bnc" id="L305" title="All 2 branches missed.">                    if (!leftJavaEnumFields.equals(rightJavaEnumFields)) {</span>
+<span class="nc" id="L306">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L294">                    return false;</span>
+<span class="nc" id="L309">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L297" title="All 2 branches missed.">                if (that.javaEnumFields!= null) {</span>
-<span class="nc" id="L298">                    return false;</span>
+<span class="nc bnc" id="L312" title="All 2 branches missed.">                if (that.javaEnumFields!= null) {</span>
+<span class="nc" id="L313">                    return false;</span>
                 }
             }
         }
         {
             JavaFields leftJavaFields;
-<span class="nc" id="L304">            leftJavaFields = this.getJavaFields();</span>
+<span class="nc" id="L319">            leftJavaFields = this.getJavaFields();</span>
             JavaFields rightJavaFields;
-<span class="nc" id="L306">            rightJavaFields = that.getJavaFields();</span>
-<span class="nc bnc" id="L307" title="All 2 branches missed.">            if (this.javaFields!= null) {</span>
-<span class="nc bnc" id="L308" title="All 2 branches missed.">                if (that.javaFields!= null) {</span>
-<span class="nc bnc" id="L309" title="All 2 branches missed.">                    if (!leftJavaFields.equals(rightJavaFields)) {</span>
-<span class="nc" id="L310">                        return false;</span>
+<span class="nc" id="L321">            rightJavaFields = that.getJavaFields();</span>
+<span class="nc bnc" id="L322" title="All 2 branches missed.">            if (this.javaFields!= null) {</span>
+<span class="nc bnc" id="L323" title="All 2 branches missed.">                if (that.javaFields!= null) {</span>
+<span class="nc bnc" id="L324" title="All 2 branches missed.">                    if (!leftJavaFields.equals(rightJavaFields)) {</span>
+<span class="nc" id="L325">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L313">                    return false;</span>
+<span class="nc" id="L328">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L316" title="All 2 branches missed.">                if (that.javaFields!= null) {</span>
-<span class="nc" id="L317">                    return false;</span>
+<span class="nc bnc" id="L331" title="All 2 branches missed.">                if (that.javaFields!= null) {</span>
+<span class="nc" id="L332">                    return false;</span>
                 }
             }
         }
         {
             String leftPackageName;
-<span class="nc" id="L323">            leftPackageName = this.getPackageName();</span>
+<span class="nc" id="L338">            leftPackageName = this.getPackageName();</span>
             String rightPackageName;
-<span class="nc" id="L325">            rightPackageName = that.getPackageName();</span>
-<span class="nc bnc" id="L326" title="All 2 branches missed.">            if (this.packageName!= null) {</span>
-<span class="nc bnc" id="L327" title="All 2 branches missed.">                if (that.packageName!= null) {</span>
-<span class="nc bnc" id="L328" title="All 2 branches missed.">                    if (!leftPackageName.equals(rightPackageName)) {</span>
-<span class="nc" id="L329">                        return false;</span>
+<span class="nc" id="L340">            rightPackageName = that.getPackageName();</span>
+<span class="nc bnc" id="L341" title="All 2 branches missed.">            if (this.packageName!= null) {</span>
+<span class="nc bnc" id="L342" title="All 2 branches missed.">                if (that.packageName!= null) {</span>
+<span class="nc bnc" id="L343" title="All 2 branches missed.">                    if (!leftPackageName.equals(rightPackageName)) {</span>
+<span class="nc" id="L344">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L332">                    return false;</span>
+<span class="nc" id="L347">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L335" title="All 2 branches missed.">                if (that.packageName!= null) {</span>
-<span class="nc" id="L336">                    return false;</span>
+<span class="nc bnc" id="L350" title="All 2 branches missed.">                if (that.packageName!= null) {</span>
+<span class="nc" id="L351">                    return false;</span>
                 }
             }
         }
         {
             Boolean leftAnnotation;
-<span class="nc" id="L342">            leftAnnotation = this.isAnnotation();</span>
+<span class="nc" id="L357">            leftAnnotation = this.isAnnotation();</span>
             Boolean rightAnnotation;
-<span class="nc" id="L344">            rightAnnotation = that.isAnnotation();</span>
-<span class="nc bnc" id="L345" title="All 2 branches missed.">            if (this.annotation!= null) {</span>
-<span class="nc bnc" id="L346" title="All 2 branches missed.">                if (that.annotation!= null) {</span>
-<span class="nc bnc" id="L347" title="All 2 branches missed.">                    if (!leftAnnotation.equals(rightAnnotation)) {</span>
-<span class="nc" id="L348">                        return false;</span>
+<span class="nc" id="L359">            rightAnnotation = that.isAnnotation();</span>
+<span class="nc bnc" id="L360" title="All 2 branches missed.">            if (this.annotation!= null) {</span>
+<span class="nc bnc" id="L361" title="All 2 branches missed.">                if (that.annotation!= null) {</span>
+<span class="nc bnc" id="L362" title="All 2 branches missed.">                    if (!leftAnnotation.equals(rightAnnotation)) {</span>
+<span class="nc" id="L363">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L351">                    return false;</span>
+<span class="nc" id="L366">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L354" title="All 2 branches missed.">                if (that.annotation!= null) {</span>
-<span class="nc" id="L355">                    return false;</span>
+<span class="nc bnc" id="L369" title="All 2 branches missed.">                if (that.annotation!= null) {</span>
+<span class="nc" id="L370">                    return false;</span>
                 }
             }
         }
         {
             Boolean leftAnnonymous;
-<span class="nc" id="L361">            leftAnnonymous = this.isAnnonymous();</span>
+<span class="nc" id="L376">            leftAnnonymous = this.isAnnonymous();</span>
             Boolean rightAnnonymous;
-<span class="nc" id="L363">            rightAnnonymous = that.isAnnonymous();</span>
-<span class="nc bnc" id="L364" title="All 2 branches missed.">            if (this.annonymous!= null) {</span>
-<span class="nc bnc" id="L365" title="All 2 branches missed.">                if (that.annonymous!= null) {</span>
-<span class="nc bnc" id="L366" title="All 2 branches missed.">                    if (!leftAnnonymous.equals(rightAnnonymous)) {</span>
-<span class="nc" id="L367">                        return false;</span>
+<span class="nc" id="L378">            rightAnnonymous = that.isAnnonymous();</span>
+<span class="nc bnc" id="L379" title="All 2 branches missed.">            if (this.annonymous!= null) {</span>
+<span class="nc bnc" id="L380" title="All 2 branches missed.">                if (that.annonymous!= null) {</span>
+<span class="nc bnc" id="L381" title="All 2 branches missed.">                    if (!leftAnnonymous.equals(rightAnnonymous)) {</span>
+<span class="nc" id="L382">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L370">                    return false;</span>
+<span class="nc" id="L385">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L373" title="All 2 branches missed.">                if (that.annonymous!= null) {</span>
-<span class="nc" id="L374">                    return false;</span>
+<span class="nc bnc" id="L388" title="All 2 branches missed.">                if (that.annonymous!= null) {</span>
+<span class="nc" id="L389">                    return false;</span>
                 }
             }
         }
         {
             Boolean leftEnumeration;
-<span class="nc" id="L380">            leftEnumeration = this.isEnumeration();</span>
+<span class="nc" id="L395">            leftEnumeration = this.isEnumeration();</span>
             Boolean rightEnumeration;
-<span class="nc" id="L382">            rightEnumeration = that.isEnumeration();</span>
-<span class="nc bnc" id="L383" title="All 2 branches missed.">            if (this.enumeration!= null) {</span>
-<span class="nc bnc" id="L384" title="All 2 branches missed.">                if (that.enumeration!= null) {</span>
-<span class="nc bnc" id="L385" title="All 2 branches missed.">                    if (!leftEnumeration.equals(rightEnumeration)) {</span>
-<span class="nc" id="L386">                        return false;</span>
+<span class="nc" id="L397">            rightEnumeration = that.isEnumeration();</span>
+<span class="nc bnc" id="L398" title="All 2 branches missed.">            if (this.enumeration!= null) {</span>
+<span class="nc bnc" id="L399" title="All 2 branches missed.">                if (that.enumeration!= null) {</span>
+<span class="nc bnc" id="L400" title="All 2 branches missed.">                    if (!leftEnumeration.equals(rightEnumeration)) {</span>
+<span class="nc" id="L401">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L389">                    return false;</span>
+<span class="nc" id="L404">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L392" title="All 2 branches missed.">                if (that.enumeration!= null) {</span>
-<span class="nc" id="L393">                    return false;</span>
+<span class="nc bnc" id="L407" title="All 2 branches missed.">                if (that.enumeration!= null) {</span>
+<span class="nc" id="L408">                    return false;</span>
                 }
             }
         }
         {
             Boolean leftInterface;
-<span class="nc" id="L399">            leftInterface = this.isInterface();</span>
+<span class="nc" id="L414">            leftInterface = this.isInterface();</span>
             Boolean rightInterface;
-<span class="nc" id="L401">            rightInterface = that.isInterface();</span>
-<span class="nc bnc" id="L402" title="All 2 branches missed.">            if (this.isInterface!= null) {</span>
-<span class="nc bnc" id="L403" title="All 2 branches missed.">                if (that.isInterface!= null) {</span>
-<span class="nc bnc" id="L404" title="All 2 branches missed.">                    if (!leftInterface.equals(rightInterface)) {</span>
-<span class="nc" id="L405">                        return false;</span>
+<span class="nc" id="L416">            rightInterface = that.isInterface();</span>
+<span class="nc bnc" id="L417" title="All 2 branches missed.">            if (this.isInterface!= null) {</span>
+<span class="nc bnc" id="L418" title="All 2 branches missed.">                if (that.isInterface!= null) {</span>
+<span class="nc bnc" id="L419" title="All 2 branches missed.">                    if (!leftInterface.equals(rightInterface)) {</span>
+<span class="nc" id="L420">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L408">                    return false;</span>
+<span class="nc" id="L423">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L411" title="All 2 branches missed.">                if (that.isInterface!= null) {</span>
-<span class="nc" id="L412">                    return false;</span>
+<span class="nc bnc" id="L426" title="All 2 branches missed.">                if (that.isInterface!= null) {</span>
+<span class="nc" id="L427">                    return false;</span>
                 }
             }
         }
         {
             Boolean leftLocalClass;
-<span class="nc" id="L418">            leftLocalClass = this.isLocalClass();</span>
+<span class="nc" id="L433">            leftLocalClass = this.isLocalClass();</span>
             Boolean rightLocalClass;
-<span class="nc" id="L420">            rightLocalClass = that.isLocalClass();</span>
-<span class="nc bnc" id="L421" title="All 2 branches missed.">            if (this.localClass!= null) {</span>
-<span class="nc bnc" id="L422" title="All 2 branches missed.">                if (that.localClass!= null) {</span>
-<span class="nc bnc" id="L423" title="All 2 branches missed.">                    if (!leftLocalClass.equals(rightLocalClass)) {</span>
-<span class="nc" id="L424">                        return false;</span>
+<span class="nc" id="L435">            rightLocalClass = that.isLocalClass();</span>
+<span class="nc bnc" id="L436" title="All 2 branches missed.">            if (this.localClass!= null) {</span>
+<span class="nc bnc" id="L437" title="All 2 branches missed.">                if (that.localClass!= null) {</span>
+<span class="nc bnc" id="L438" title="All 2 branches missed.">                    if (!leftLocalClass.equals(rightLocalClass)) {</span>
+<span class="nc" id="L439">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L427">                    return false;</span>
+<span class="nc" id="L442">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L430" title="All 2 branches missed.">                if (that.localClass!= null) {</span>
-<span class="nc" id="L431">                    return false;</span>
+<span class="nc bnc" id="L445" title="All 2 branches missed.">                if (that.localClass!= null) {</span>
+<span class="nc" id="L446">                    return false;</span>
                 }
             }
         }
         {
             Boolean leftMemberClass;
-<span class="nc" id="L437">            leftMemberClass = this.isMemberClass();</span>
+<span class="nc" id="L452">            leftMemberClass = this.isMemberClass();</span>
             Boolean rightMemberClass;
-<span class="nc" id="L439">            rightMemberClass = that.isMemberClass();</span>
-<span class="nc bnc" id="L440" title="All 2 branches missed.">            if (this.memberClass!= null) {</span>
-<span class="nc bnc" id="L441" title="All 2 branches missed.">                if (that.memberClass!= null) {</span>
-<span class="nc bnc" id="L442" title="All 2 branches missed.">                    if (!leftMemberClass.equals(rightMemberClass)) {</span>
-<span class="nc" id="L443">                        return false;</span>
+<span class="nc" id="L454">            rightMemberClass = that.isMemberClass();</span>
+<span class="nc bnc" id="L455" title="All 2 branches missed.">            if (this.memberClass!= null) {</span>
+<span class="nc bnc" id="L456" title="All 2 branches missed.">                if (that.memberClass!= null) {</span>
+<span class="nc bnc" id="L457" title="All 2 branches missed.">                    if (!leftMemberClass.equals(rightMemberClass)) {</span>
+<span class="nc" id="L458">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L446">                    return false;</span>
+<span class="nc" id="L461">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L449" title="All 2 branches missed.">                if (that.memberClass!= null) {</span>
-<span class="nc" id="L450">                    return false;</span>
+<span class="nc bnc" id="L464" title="All 2 branches missed.">                if (that.memberClass!= null) {</span>
+<span class="nc" id="L465">                    return false;</span>
                 }
             }
         }
         {
             String leftUri;
-<span class="nc" id="L456">            leftUri = this.getUri();</span>
+<span class="nc" id="L471">            leftUri = this.getUri();</span>
             String rightUri;
-<span class="nc" id="L458">            rightUri = that.getUri();</span>
-<span class="nc bnc" id="L459" title="All 2 branches missed.">            if (this.uri!= null) {</span>
-<span class="nc bnc" id="L460" title="All 2 branches missed.">                if (that.uri!= null) {</span>
-<span class="nc bnc" id="L461" title="All 2 branches missed.">                    if (!leftUri.equals(rightUri)) {</span>
-<span class="nc" id="L462">                        return false;</span>
+<span class="nc" id="L473">            rightUri = that.getUri();</span>
+<span class="nc bnc" id="L474" title="All 2 branches missed.">            if (this.uri!= null) {</span>
+<span class="nc bnc" id="L475" title="All 2 branches missed.">                if (that.uri!= null) {</span>
+<span class="nc bnc" id="L476" title="All 2 branches missed.">                    if (!leftUri.equals(rightUri)) {</span>
+<span class="nc" id="L477">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L465">                    return false;</span>
+<span class="nc" id="L480">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L468" title="All 2 branches missed.">                if (that.uri!= null) {</span>
-<span class="nc" id="L469">                    return false;</span>
+<span class="nc bnc" id="L483" title="All 2 branches missed.">                if (that.uri!= null) {</span>
+<span class="nc" id="L484">                    return false;</span>
                 }
             }
         }
-<span class="nc" id="L473">        return true;</span>
+<span class="nc" id="L488">        return true;</span>
     }
 
     public int hashCode() {
-<span class="nc" id="L477">        int currentHashCode = 1;</span>
-<span class="nc" id="L478">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
+<span class="nc" id="L492">        int currentHashCode = 1;</span>
+<span class="nc" id="L493">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
         {
-<span class="nc" id="L480">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L495">            currentHashCode = (currentHashCode* 31);</span>
             JavaEnumFields theJavaEnumFields;
-<span class="nc" id="L482">            theJavaEnumFields = this.getJavaEnumFields();</span>
-<span class="nc bnc" id="L483" title="All 2 branches missed.">            if (this.javaEnumFields!= null) {</span>
-<span class="nc" id="L484">                currentHashCode += theJavaEnumFields.hashCode();</span>
+<span class="nc" id="L497">            theJavaEnumFields = this.getJavaEnumFields();</span>
+<span class="nc bnc" id="L498" title="All 2 branches missed.">            if (this.javaEnumFields!= null) {</span>
+<span class="nc" id="L499">                currentHashCode += theJavaEnumFields.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L488">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L503">            currentHashCode = (currentHashCode* 31);</span>
             JavaFields theJavaFields;
-<span class="nc" id="L490">            theJavaFields = this.getJavaFields();</span>
-<span class="nc bnc" id="L491" title="All 2 branches missed.">            if (this.javaFields!= null) {</span>
-<span class="nc" id="L492">                currentHashCode += theJavaFields.hashCode();</span>
+<span class="nc" id="L505">            theJavaFields = this.getJavaFields();</span>
+<span class="nc bnc" id="L506" title="All 2 branches missed.">            if (this.javaFields!= null) {</span>
+<span class="nc" id="L507">                currentHashCode += theJavaFields.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L496">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L511">            currentHashCode = (currentHashCode* 31);</span>
             String thePackageName;
-<span class="nc" id="L498">            thePackageName = this.getPackageName();</span>
-<span class="nc bnc" id="L499" title="All 2 branches missed.">            if (this.packageName!= null) {</span>
-<span class="nc" id="L500">                currentHashCode += thePackageName.hashCode();</span>
+<span class="nc" id="L513">            thePackageName = this.getPackageName();</span>
+<span class="nc bnc" id="L514" title="All 2 branches missed.">            if (this.packageName!= null) {</span>
+<span class="nc" id="L515">                currentHashCode += thePackageName.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L504">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L519">            currentHashCode = (currentHashCode* 31);</span>
             Boolean theAnnotation;
-<span class="nc" id="L506">            theAnnotation = this.isAnnotation();</span>
-<span class="nc bnc" id="L507" title="All 2 branches missed.">            if (this.annotation!= null) {</span>
-<span class="nc" id="L508">                currentHashCode += theAnnotation.hashCode();</span>
+<span class="nc" id="L521">            theAnnotation = this.isAnnotation();</span>
+<span class="nc bnc" id="L522" title="All 2 branches missed.">            if (this.annotation!= null) {</span>
+<span class="nc" id="L523">                currentHashCode += theAnnotation.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L512">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L527">            currentHashCode = (currentHashCode* 31);</span>
             Boolean theAnnonymous;
-<span class="nc" id="L514">            theAnnonymous = this.isAnnonymous();</span>
-<span class="nc bnc" id="L515" title="All 2 branches missed.">            if (this.annonymous!= null) {</span>
-<span class="nc" id="L516">                currentHashCode += theAnnonymous.hashCode();</span>
+<span class="nc" id="L529">            theAnnonymous = this.isAnnonymous();</span>
+<span class="nc bnc" id="L530" title="All 2 branches missed.">            if (this.annonymous!= null) {</span>
+<span class="nc" id="L531">                currentHashCode += theAnnonymous.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L520">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L535">            currentHashCode = (currentHashCode* 31);</span>
             Boolean theEnumeration;
-<span class="nc" id="L522">            theEnumeration = this.isEnumeration();</span>
-<span class="nc bnc" id="L523" title="All 2 branches missed.">            if (this.enumeration!= null) {</span>
-<span class="nc" id="L524">                currentHashCode += theEnumeration.hashCode();</span>
+<span class="nc" id="L537">            theEnumeration = this.isEnumeration();</span>
+<span class="nc bnc" id="L538" title="All 2 branches missed.">            if (this.enumeration!= null) {</span>
+<span class="nc" id="L539">                currentHashCode += theEnumeration.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L528">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L543">            currentHashCode = (currentHashCode* 31);</span>
             Boolean theInterface;
-<span class="nc" id="L530">            theInterface = this.isInterface();</span>
-<span class="nc bnc" id="L531" title="All 2 branches missed.">            if (this.isInterface!= null) {</span>
-<span class="nc" id="L532">                currentHashCode += theInterface.hashCode();</span>
+<span class="nc" id="L545">            theInterface = this.isInterface();</span>
+<span class="nc bnc" id="L546" title="All 2 branches missed.">            if (this.isInterface!= null) {</span>
+<span class="nc" id="L547">                currentHashCode += theInterface.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L536">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L551">            currentHashCode = (currentHashCode* 31);</span>
             Boolean theLocalClass;
-<span class="nc" id="L538">            theLocalClass = this.isLocalClass();</span>
-<span class="nc bnc" id="L539" title="All 2 branches missed.">            if (this.localClass!= null) {</span>
-<span class="nc" id="L540">                currentHashCode += theLocalClass.hashCode();</span>
+<span class="nc" id="L553">            theLocalClass = this.isLocalClass();</span>
+<span class="nc bnc" id="L554" title="All 2 branches missed.">            if (this.localClass!= null) {</span>
+<span class="nc" id="L555">                currentHashCode += theLocalClass.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L544">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L559">            currentHashCode = (currentHashCode* 31);</span>
             Boolean theMemberClass;
-<span class="nc" id="L546">            theMemberClass = this.isMemberClass();</span>
-<span class="nc bnc" id="L547" title="All 2 branches missed.">            if (this.memberClass!= null) {</span>
-<span class="nc" id="L548">                currentHashCode += theMemberClass.hashCode();</span>
+<span class="nc" id="L561">            theMemberClass = this.isMemberClass();</span>
+<span class="nc bnc" id="L562" title="All 2 branches missed.">            if (this.memberClass!= null) {</span>
+<span class="nc" id="L563">                currentHashCode += theMemberClass.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L552">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L567">            currentHashCode = (currentHashCode* 31);</span>
             String theUri;
-<span class="nc" id="L554">            theUri = this.getUri();</span>
-<span class="nc bnc" id="L555" title="All 2 branches missed.">            if (this.uri!= null) {</span>
-<span class="nc" id="L556">                currentHashCode += theUri.hashCode();</span>
+<span class="nc" id="L569">            theUri = this.getUri();</span>
+<span class="nc bnc" id="L570" title="All 2 branches missed.">            if (this.uri!= null) {</span>
+<span class="nc" id="L571">                currentHashCode += theUri.hashCode();</span>
             }
         }
-<span class="nc" id="L559">        return currentHashCode;</span>
+<span class="nc" id="L574">        return currentHashCode;</span>
     }
 
 }

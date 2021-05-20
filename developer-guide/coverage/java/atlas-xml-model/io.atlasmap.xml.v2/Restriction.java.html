@@ -1,8 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>Restriction.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-xml-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.xml.v2</a> &gt; <span class="el_source">Restriction.java</span></div><h1>Restriction.java</h1><pre class="source lang-java linenums">package io.atlasmap.xml.v2;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>Restriction.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-xml-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.xml.v2</a> &gt; <span class="el_source">Restriction.java</span></div><h1>Restriction.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.xml.v2;
 
 import java.io.Serializable;
 
-<span class="fc" id="L5">public class Restriction implements Serializable {</span>
+<span class="fc" id="L20">public class Restriction implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
@@ -19,7 +34,7 @@ import java.io.Serializable;
      *     
      */
     public RestrictionType getType() {
-<span class="fc" id="L22">        return type;</span>
+<span class="fc" id="L37">        return type;</span>
     }
 
     /**
@@ -31,8 +46,8 @@ import java.io.Serializable;
      *     
      */
     public void setType(RestrictionType value) {
-<span class="fc" id="L34">        this.type = value;</span>
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L49">        this.type = value;</span>
+<span class="fc" id="L50">    }</span>
 
     /**
      * Gets the value of the value property.
@@ -43,7 +58,7 @@ import java.io.Serializable;
      *     
      */
     public String getValue() {
-<span class="fc" id="L46">        return value;</span>
+<span class="fc" id="L61">        return value;</span>
     }
 
     /**
@@ -55,77 +70,77 @@ import java.io.Serializable;
      *     
      */
     public void setValue(String value) {
-<span class="fc" id="L58">        this.value = value;</span>
-<span class="fc" id="L59">    }</span>
+<span class="fc" id="L73">        this.value = value;</span>
+<span class="fc" id="L74">    }</span>
 
     public boolean equals(Object object) {
-<span class="nc bnc" id="L62" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
-<span class="nc" id="L63">            return false;</span>
+<span class="nc bnc" id="L77" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L78">            return false;</span>
         }
-<span class="nc bnc" id="L65" title="All 2 branches missed.">        if (this == object) {</span>
-<span class="nc" id="L66">            return true;</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L81">            return true;</span>
         }
-<span class="nc" id="L68">        final Restriction that = ((Restriction) object);</span>
+<span class="nc" id="L83">        final Restriction that = ((Restriction) object);</span>
         {
             RestrictionType leftType;
-<span class="nc" id="L71">            leftType = this.getType();</span>
+<span class="nc" id="L86">            leftType = this.getType();</span>
             RestrictionType rightType;
-<span class="nc" id="L73">            rightType = that.getType();</span>
-<span class="nc bnc" id="L74" title="All 2 branches missed.">            if (this.type!= null) {</span>
-<span class="nc bnc" id="L75" title="All 2 branches missed.">                if (that.type!= null) {</span>
-<span class="nc bnc" id="L76" title="All 2 branches missed.">                    if (!leftType.equals(rightType)) {</span>
-<span class="nc" id="L77">                        return false;</span>
+<span class="nc" id="L88">            rightType = that.getType();</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">            if (this.type!= null) {</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">                if (that.type!= null) {</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">                    if (!leftType.equals(rightType)) {</span>
+<span class="nc" id="L92">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L80">                    return false;</span>
+<span class="nc" id="L95">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L83" title="All 2 branches missed.">                if (that.type!= null) {</span>
-<span class="nc" id="L84">                    return false;</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">                if (that.type!= null) {</span>
+<span class="nc" id="L99">                    return false;</span>
                 }
             }
         }
         {
             String leftValue;
-<span class="nc" id="L90">            leftValue = this.getValue();</span>
+<span class="nc" id="L105">            leftValue = this.getValue();</span>
             String rightValue;
-<span class="nc" id="L92">            rightValue = that.getValue();</span>
-<span class="nc bnc" id="L93" title="All 2 branches missed.">            if (this.value!= null) {</span>
-<span class="nc bnc" id="L94" title="All 2 branches missed.">                if (that.value!= null) {</span>
-<span class="nc bnc" id="L95" title="All 2 branches missed.">                    if (!leftValue.equals(rightValue)) {</span>
-<span class="nc" id="L96">                        return false;</span>
+<span class="nc" id="L107">            rightValue = that.getValue();</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">            if (this.value!= null) {</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">                if (that.value!= null) {</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">                    if (!leftValue.equals(rightValue)) {</span>
+<span class="nc" id="L111">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L99">                    return false;</span>
+<span class="nc" id="L114">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L102" title="All 2 branches missed.">                if (that.value!= null) {</span>
-<span class="nc" id="L103">                    return false;</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">                if (that.value!= null) {</span>
+<span class="nc" id="L118">                    return false;</span>
                 }
             }
         }
-<span class="nc" id="L107">        return true;</span>
+<span class="nc" id="L122">        return true;</span>
     }
 
     public int hashCode() {
-<span class="nc" id="L111">        int currentHashCode = 1;</span>
+<span class="nc" id="L126">        int currentHashCode = 1;</span>
         {
-<span class="nc" id="L113">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L128">            currentHashCode = (currentHashCode* 31);</span>
             RestrictionType theType;
-<span class="nc" id="L115">            theType = this.getType();</span>
-<span class="nc bnc" id="L116" title="All 2 branches missed.">            if (this.type!= null) {</span>
-<span class="nc" id="L117">                currentHashCode += theType.hashCode();</span>
+<span class="nc" id="L130">            theType = this.getType();</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">            if (this.type!= null) {</span>
+<span class="nc" id="L132">                currentHashCode += theType.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L121">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L136">            currentHashCode = (currentHashCode* 31);</span>
             String theValue;
-<span class="nc" id="L123">            theValue = this.getValue();</span>
-<span class="nc bnc" id="L124" title="All 2 branches missed.">            if (this.value!= null) {</span>
-<span class="nc" id="L125">                currentHashCode += theValue.hashCode();</span>
+<span class="nc" id="L138">            theValue = this.getValue();</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">            if (this.value!= null) {</span>
+<span class="nc" id="L140">                currentHashCode += theValue.hashCode();</span>
             }
         }
-<span class="nc" id="L128">        return currentHashCode;</span>
+<span class="nc" id="L143">        return currentHashCode;</span>
     }
 
 }

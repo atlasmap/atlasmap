@@ -1,4 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>XmlDocument.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-xml-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.xml.v2</a> &gt; <span class="el_source">XmlDocument.java</span></div><h1>XmlDocument.java</h1><pre class="source lang-java linenums">
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>XmlDocument.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-xml-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.xml.v2</a> &gt; <span class="el_source">XmlDocument.java</span></div><h1>XmlDocument.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package io.atlasmap.xml.v2;
 
 import java.io.Serializable;
@@ -10,7 +25,7 @@ import io.atlasmap.v2.Document;
 
 @JsonRootName(&quot;XmlDocument&quot;)
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L13">public class XmlDocument extends Document implements Serializable {</span>
+<span class="fc" id="L28">public class XmlDocument extends Document implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
@@ -25,7 +40,7 @@ import io.atlasmap.v2.Document;
      *     
      */
     public XmlNamespaces getXmlNamespaces() {
-<span class="fc" id="L28">        return xmlNamespaces;</span>
+<span class="fc" id="L43">        return xmlNamespaces;</span>
     }
 
     /**
@@ -37,54 +52,54 @@ import io.atlasmap.v2.Document;
      *     
      */
     public void setXmlNamespaces(XmlNamespaces value) {
-<span class="fc" id="L40">        this.xmlNamespaces = value;</span>
-<span class="fc" id="L41">    }</span>
+<span class="fc" id="L55">        this.xmlNamespaces = value;</span>
+<span class="fc" id="L56">    }</span>
 
     public boolean equals(Object object) {
-<span class="nc bnc" id="L44" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
-<span class="nc" id="L45">            return false;</span>
+<span class="nc bnc" id="L59" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L60">            return false;</span>
         }
-<span class="nc bnc" id="L47" title="All 2 branches missed.">        if (this == object) {</span>
-<span class="nc" id="L48">            return true;</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L63">            return true;</span>
         }
-<span class="nc bnc" id="L50" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
-<span class="nc" id="L51">            return false;</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
+<span class="nc" id="L66">            return false;</span>
         }
-<span class="nc" id="L53">        final XmlDocument that = ((XmlDocument) object);</span>
+<span class="nc" id="L68">        final XmlDocument that = ((XmlDocument) object);</span>
         {
             XmlNamespaces leftXmlNamespaces;
-<span class="nc" id="L56">            leftXmlNamespaces = this.getXmlNamespaces();</span>
+<span class="nc" id="L71">            leftXmlNamespaces = this.getXmlNamespaces();</span>
             XmlNamespaces rightXmlNamespaces;
-<span class="nc" id="L58">            rightXmlNamespaces = that.getXmlNamespaces();</span>
-<span class="nc bnc" id="L59" title="All 2 branches missed.">            if (this.xmlNamespaces!= null) {</span>
-<span class="nc bnc" id="L60" title="All 2 branches missed.">                if (that.xmlNamespaces!= null) {</span>
-<span class="nc bnc" id="L61" title="All 2 branches missed.">                    if (!leftXmlNamespaces.equals(rightXmlNamespaces)) {</span>
-<span class="nc" id="L62">                        return false;</span>
+<span class="nc" id="L73">            rightXmlNamespaces = that.getXmlNamespaces();</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">            if (this.xmlNamespaces!= null) {</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">                if (that.xmlNamespaces!= null) {</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">                    if (!leftXmlNamespaces.equals(rightXmlNamespaces)) {</span>
+<span class="nc" id="L77">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L65">                    return false;</span>
+<span class="nc" id="L80">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L68" title="All 2 branches missed.">                if (that.xmlNamespaces!= null) {</span>
-<span class="nc" id="L69">                    return false;</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">                if (that.xmlNamespaces!= null) {</span>
+<span class="nc" id="L84">                    return false;</span>
                 }
             }
         }
-<span class="nc" id="L73">        return true;</span>
+<span class="nc" id="L88">        return true;</span>
     }
 
     public int hashCode() {
-<span class="nc" id="L77">        int currentHashCode = 1;</span>
-<span class="nc" id="L78">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
+<span class="nc" id="L92">        int currentHashCode = 1;</span>
+<span class="nc" id="L93">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
         {
-<span class="nc" id="L80">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L95">            currentHashCode = (currentHashCode* 31);</span>
             XmlNamespaces theXmlNamespaces;
-<span class="nc" id="L82">            theXmlNamespaces = this.getXmlNamespaces();</span>
-<span class="nc bnc" id="L83" title="All 2 branches missed.">            if (this.xmlNamespaces!= null) {</span>
-<span class="nc" id="L84">                currentHashCode += theXmlNamespaces.hashCode();</span>
+<span class="nc" id="L97">            theXmlNamespaces = this.getXmlNamespaces();</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">            if (this.xmlNamespaces!= null) {</span>
+<span class="nc" id="L99">                currentHashCode += theXmlNamespaces.hashCode();</span>
             }
         }
-<span class="nc" id="L87">        return currentHashCode;</span>
+<span class="nc" id="L102">        return currentHashCode;</span>
     }
 
 }
