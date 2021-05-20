@@ -21,7 +21,6 @@
     "lint": "tsdx lint src test",
     "format": "yarn lint --fix"
   },
-
   "dependencies": {
     "@patternfly/react-core": "^4.115.2",
     "@patternfly/react-icons": "^4.10.2",
@@ -47,6 +46,7 @@
     "@testing-library/react": "^11.2.7",
     "@types/jest": "^24.9.1",
     "babel-jest": "^24.9.0",
+    "eslint-plugin-header": "^3.1.1",
     "husky": "^6.0.0",
     "ts-jest": "^24.3.0",
     "ts-loader": "^6.2.2",
@@ -62,7 +62,6 @@
     "prettier": "^2.3.0",
     "webpack": "4.42.0"
   },
-
   "husky": {
     "hooks": {
       "pre-commit": "tsdx lint"
@@ -109,11 +108,16 @@
     ],
     "plugins": [
       "@typescript-eslint",
+      "header",
       "import",
       "react-hooks"
     ],
     "rules": {
       "@typescript-eslint/explicit-function-return-type": "off",
+      "header/header": [
+        2,
+        "../../atlasmap-license-header-ui.js"
+      ],
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
       "sort-imports": "error"

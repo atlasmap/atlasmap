@@ -51,7 +51,12 @@
   },
   "eslintConfig": {
     "extends": "react-app",
+    "plugins": [ "header" ],
     "rules": {
+      "header/header": [
+        2,
+        "../../atlasmap-license-header-ui.js"
+      ],
       "sort-imports": "error"
     }
   },
