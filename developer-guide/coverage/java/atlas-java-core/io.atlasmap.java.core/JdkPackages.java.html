@@ -21,7 +21,7 @@ import java.util.List;
 
 <span class="nc" id="L22">public class JdkPackages {</span>
 
-<span class="fc" id="L24">    private static final List&lt;String&gt; JDK8_PACKAGES = Arrays.asList(&quot;java.applet&quot;, &quot;java.awt&quot;, &quot;java.awt.color&quot;,</span>
+<span class="fc" id="L24">    private static final List&lt;String&gt; JDK_PACKAGES = Arrays.asList(&quot;java.applet&quot;, &quot;java.awt&quot;, &quot;java.awt.color&quot;,</span>
             &quot;java.awt.datatransfer&quot;, &quot;java.awt.dnd&quot;, &quot;java.awt.event&quot;, &quot;java.awt.font&quot;, &quot;java.awt.geom&quot;, &quot;java.awt.im&quot;,
             &quot;java.awt.im.spi&quot;, &quot;java.awt.image&quot;, &quot;java.awt.image.renderable&quot;, &quot;java.awt.print&quot;, &quot;java.beans&quot;,
             &quot;java.beans.beancontext&quot;, &quot;java.io&quot;, &quot;java.lang&quot;, &quot;java.lang.annotation&quot;, &quot;java.lang.instrument&quot;,
@@ -103,16 +103,15 @@ import java.util.List;
 <span class="nc" id="L103">            return new ArrayList&lt;String&gt;();</span>
         }
 
-<span class="pc bpc" id="L106" title="1 of 2 branches missed.">        switch (version) {</span>
-        case &quot;1.8&quot;:
-<span class="fc" id="L108">            return JDK8_PACKAGES;</span>
+        // Do we have any usecase to distinguish them?
+<span class="fc" id="L107">        switch (version) {</span>
         default:
-<span class="nc" id="L110">            return new ArrayList&lt;String&gt;();</span>
+<span class="fc" id="L109">            return JDK_PACKAGES;</span>
         }
     }
 
     private static String getRuntimeVersion() {
-<span class="fc" id="L115">        return System.getProperty(&quot;java.specification.version&quot;);</span>
+<span class="fc" id="L114">        return System.getProperty(&quot;java.specification.version&quot;);</span>
     }
 
 }

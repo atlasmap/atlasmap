@@ -69,7 +69,7 @@ public class AtlasXmlNamespaceContext implements NamespaceContext {
     }
 
     @Override
-    public Iterator&lt;?&gt; getPrefixes(String namespaceURI) {
+    public Iterator&lt;String&gt; getPrefixes(String namespaceURI) {
 <span class="nc bnc" id="L73" title="All 4 branches missed.">        if (namespaceURI == null || namespaceURI.isEmpty()) {</span>
 <span class="nc" id="L74">            return null;</span>
         }
