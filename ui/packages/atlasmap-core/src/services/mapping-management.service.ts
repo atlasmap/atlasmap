@@ -128,7 +128,7 @@ export class MappingManagementService {
     mappingFileNames: string[],
     mappingDefinition: MappingDefinition
   ): Observable<boolean> {
-    return new Observable<boolean>((observer: any) => {
+    return new Observable<boolean>((observer) => {
       if (mappingFileNames.length === 0) {
         observer.complete();
         return;
@@ -202,13 +202,8 @@ export class MappingManagementService {
     return new Promise<boolean>(async (resolve) => {
       // TODO: check these non null operator on the mappings
       for (const mapping of this.cfg.mappings!.getAllMappings(true)) {
-        const mappingWasRemoved: boolean =
-          this.cfg.mappings!.removeMapping(mapping);
-        if (mappingWasRemoved) {
-          this.deselectMapping();
-        } else {
-          this.deselectMapping();
-        }
+        this.cfg.mappings!.removeMapping(mapping);
+        this.deselectMapping();
       }
       await this.notifyMappingUpdated();
       resolve(true);
@@ -1317,7 +1312,7 @@ export class MappingManagementService {
 
   getRuntimeVersion(): Promise<string> {
     const url = this.cfg.initCfg.baseMappingServiceUrl + 'version';
-    return new Promise<string>((resolve) => {
+    return new Promise<string>((resolve, reject) => {
       this.api
         .get(url)
         .json()
@@ -1325,7 +1320,10 @@ export class MappingManagementService {
           this.cfg.logger!.debug(
             `Runtime Service Version Response: ${JSON.stringify(body)}`
           );
-          resolve(body.String);
+          resolve(body.string);
+        })
+        .catch((error) => {
+          reject(error);
         });
     });
   }

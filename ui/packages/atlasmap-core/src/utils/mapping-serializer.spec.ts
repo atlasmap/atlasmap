@@ -510,7 +510,6 @@ describe('MappingSerializer', () => {
       })
       .catch((error) => {
         fail(error);
-        done();
       });
   });
 

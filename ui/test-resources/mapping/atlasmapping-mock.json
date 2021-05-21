@@ -1,0 +1,66 @@
+{
+  "AtlasMapping": {
+    "jsonType": "io.atlasmap.v2.AtlasMapping",
+    "dataSource": [
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "SourceJson",
+        "uri": "atlas:json:SourceJson",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "TargetJson",
+        "uri": "atlas:json:TargetJson",
+        "dataSourceType": "TARGET"
+      }
+    ],
+    "mappings": {
+      "mapping": [
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "inputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "docId": "SourceJson",
+              "name": "sourceField",
+              "path": "/sourceField",
+              "type": "STRING",
+              "actions": null
+            }
+          ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "docId": "TargetJson",
+              "name": "targetField",
+              "path": "/targetField",
+              "type": "STRING",
+              "actions": null
+            }
+          ]
+        }
+      ]
+    },
+    "name": "UI.867332",
+    "lookupTables": {},
+    "constants": {
+      "constant": [
+        {
+          "name": "constantName",
+          "value": "constantValue",
+          "fieldType": "String"
+        }
+      ]
+    },
+    "properties": {
+      "property": [
+        {
+          "name": "propertyName",
+          "value": "propertyValue",
+          "fieldType": "String"
+        }
+      ]
+    }
+  }
+}
