@@ -120,7 +120,7 @@
           <configuration>
             <licenseSets>
               <licenseSet>
-                <header>atlasmap-license-header.txt</header>
+                <header>${maven.multiModuleProjectDirectory}/atlasmap-license-header.txt</header>
                 <excludes>
                   <exclude>**/node_modules/**</exclude>
                   <exclude>.editorconfig</exclude>
