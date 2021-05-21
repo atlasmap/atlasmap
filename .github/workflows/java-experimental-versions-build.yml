@@ -28,3 +28,5 @@ jobs:
         distribution: 'adopt'
     - name: Build with Maven
       run: mvn clean install
+      continue-on-error: true
+      
