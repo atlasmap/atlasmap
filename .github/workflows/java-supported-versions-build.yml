@@ -14,9 +14,9 @@ jobs:
 
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         java: [ '8', '11' ]
-        fail-fast: false
     name: Java ${{ matrix.Java }} build
     steps:
     - uses: actions/checkout@v2
