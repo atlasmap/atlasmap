@@ -116,13 +116,22 @@
               </configuration>
             </execution>
             <execution>
-              <id>yarn build</id>
+              <id>yarn build:module</id>
               <phase>compile</phase>
               <goals>
                 <goal>yarn</goal>
               </goals>
               <configuration>
                 <arguments>build:module</arguments>
+              </configuration>
+            </execution>
+             <execution>
+              <id>yarn build:storybook</id>
+              <phase>compile</phase>
+              <goals>
+                <goal>yarn</goal>
+              </goals>
+              <configuration>
                 <arguments>build:storybook</arguments>
               </configuration>
             </execution>
