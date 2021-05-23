@@ -49,7 +49,7 @@
     "eslint-plugin-header": "^3.1.1",
     "husky": "^6.0.0",
     "ts-jest": "^24.3.0",
-    "ts-loader": "^6.2.2",
+    "ts-loader": "^8.3.0",
     "tsdx": "^0.13.1",
     "typescript": "~3.9.9"
   },
