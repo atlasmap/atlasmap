@@ -39,7 +39,7 @@
     "rxjs": "^6.6.7"
   },
   "devDependencies": {
-    "@types/jest": "24.9.1",
+    "@types/jest": "25.2.3",
     "typescript": "~3.9.9"
   },
   "peerDependencies": {},
