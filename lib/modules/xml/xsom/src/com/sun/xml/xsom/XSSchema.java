@@ -110,7 +110,7 @@ public interface XSSchema extends XSComponent
     /**
      * Sine an {@link XSSchema} is not necessarily defined in
      * one schema document (for example one schema can span across
-     * many documents through &lt;xs:include>s.),
+     * many documents through &lt;xs:include&gt;s.),
      * so this method always returns null.
      *
      * @deprecated

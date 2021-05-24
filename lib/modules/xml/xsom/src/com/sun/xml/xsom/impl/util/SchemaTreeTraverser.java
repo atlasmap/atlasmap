@@ -69,7 +69,7 @@ import com.sun.xml.xsom.visitor.XSVisitor;
  * <h2>Usage of this class</h2>
  *
  * <ol> <li>Create a new instance.</li> <li>Call {@link
- * #visit(com.sun.xml.xsom.XSSchemaSet)} function on your schema set.>/li>
+ * #visit(com.sun.xml.xsom.XSSchemaSet)} function on your schema set.</li>
  * <li>Retrieve the model using {@link #getModel()}. </li></ol>
  *
  * Every node in the resulting tree is a {@link SchemaTreeTraverser.SchemaTreeNode},

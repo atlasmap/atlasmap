@@ -87,7 +87,7 @@ public class Iterators {
     }
 
     /**
-     * For each U, apply U->Iterator&lt;T> function and then iterate all
+     * For each U, apply U-&gt;Iterator&lt;T&gt; function and then iterate all
      * the resulting T.
      */
     public static abstract class Map<T,U> extends ReadOnly<T> {

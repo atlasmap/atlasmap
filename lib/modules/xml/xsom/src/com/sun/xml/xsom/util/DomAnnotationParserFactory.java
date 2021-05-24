@@ -38,12 +38,12 @@ import com.sun.xml.xsom.parser.AnnotationParserFactory;
  *
  * <p>
  * If you use this parser factory, you'll get {@link Element} that represents
- * &lt;xs:annotation> from {@link XSAnnotation#getAnnotation()}.
+ * &lt;xs:annotation&gt; from {@link XSAnnotation#getAnnotation()}.
  *
  * <p>
- * When multiple &lt;xs:annotation>s are found for the given schema component,
- * you'll see all &lt;xs:appinfo>s and &lt;xs:documentation>s combined under
- * one &lt;xs:annotation> element.
+ * When multiple &lt;xs:annotation&gt;s are found for the given schema component,
+ * you'll see all &lt;xs:appinfo&gt;s and &lt;xs:documentation&gt;s combined under
+ * one &lt;xs:annotation&gt; element.
  *
  * @author Kohsuke Kawaguchi
  */

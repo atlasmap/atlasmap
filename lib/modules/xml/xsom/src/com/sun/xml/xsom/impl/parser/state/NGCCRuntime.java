@@ -40,6 +40,7 @@ import org.xml.sax.SAXParseException;
  *  <li>manage mapping between namespace URIs and prefixes.
  * 
  *  <li>TODO: provide support for interleaving.
+ * </ol>
  * 
  * @version $Id: NGCCRuntime.java,v 1.15 2002/09/29 02:55:48 okajima Exp $
  * @author Kohsuke Kawaguchi (kk@kohsuke.org)
@@ -58,7 +59,7 @@ public class NGCCRuntime implements ContentHandler, NGCCEventSource {
      * or the reset method is called. You can't replace the root
      * handler while parsing is in progress.
      * <p>
-     * Usually a generated class that corresponds to the &lt;start>
+     * Usually a generated class that corresponds to the &lt;start&gt;
      * pattern will be used as the root handler, but any NGCCHandler
      * can be a root handler.
      * 
