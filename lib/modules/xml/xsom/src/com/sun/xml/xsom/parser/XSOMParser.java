@@ -205,7 +205,7 @@ public final class XSOMParser {
     }
     /**
      * Set an entity resolver that is used to resolve things
-     * like &lt;xsd:import> and &lt;xsd:include>.
+     * like &lt;xsd:import&gt; and &lt;xsd:include&gt;.
      */
     public void setEntityResolver( EntityResolver resolver ) {
         this.entityResolver = resolver;
@@ -229,7 +229,7 @@ public final class XSOMParser {
      * 
      * <p>
      * For each annotation, new instance of this class will be
-     * created and used to parse &lt;xs:annotation>.
+     * created and used to parse &lt;xs:annotation&gt;.
      */
     public void setAnnotationParser( final Class annParser ) {
         setAnnotationParser( new AnnotationParserFactory() {

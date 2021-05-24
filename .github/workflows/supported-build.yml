@@ -34,7 +34,7 @@ jobs:
       run: mvn -Phtml,pdf package
     - name: Build aggregated javadoc
       working-directory: docs
-      run: mvn -f pom-javadoc.xml -pl \!io.atlasmap:atlasmap-lib-all javadoc:aggregate
+      run: mvn -f pom-javadoc.xml -Dfailonerror=true -pl \!io.atlasmap:atlasmap-lib-all javadoc:aggregate
   build_yarn:
     runs-on: ubuntu-latest
     strategy:

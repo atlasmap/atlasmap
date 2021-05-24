@@ -29,7 +29,7 @@ import com.sun.xml.xsom.visitor.XSTermVisitor;
  * boolean isXXX() {
  *     return this instanceof XXX;
  * }
- * <pre>
+ * </pre>
  * 
  * and a set of cast functions (<code>asXXX</code>), which are
  * essentially:

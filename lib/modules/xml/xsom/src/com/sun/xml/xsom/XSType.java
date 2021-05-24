@@ -25,7 +25,7 @@ public interface XSType extends XSDeclaration {
     /**
      * Returns the base type of this type.
      *
-     * Note that if this type represents <tt>xs:anyType</tt>, this method returns itself.
+     * Note that if this type represents {@code xs:anyType}, this method returns itself.
      * This is awkward as an API, but it follows the schema specification.
      *
      * @return  always non-null.
@@ -80,7 +80,7 @@ public interface XSType extends XSDeclaration {
      * Returns true if this type is derived from the specified type.
      *
      * <p>
-     * Note that <tt>t.isDerivedFrom(t)</tt> returns true.
+     * Note that {@code t.isDerivedFrom(t)} returns true.
      */
     boolean isDerivedFrom( XSType t );
 }

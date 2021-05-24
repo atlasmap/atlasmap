@@ -20,23 +20,23 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 
 /**
- * Used to parse &lt;xs:annotation>.
+ * Used to parse &lt;xs:annotation&gt;.
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public abstract class AnnotationParser {
     /**
-     * Called every time a new &lt;xs:annotation> element
+     * Called every time a new &lt;xs:annotation&gt; element
      * is found.
      * 
-     * The sub-tree rooted at &lt;xs:annotation> will be
+     * The sub-tree rooted at &lt;xs:annotation&gt; will be
      * sent to this ContentHandler as if it is a whole document.
      * 
      * @param context
      *      indicates the schema component that owns this annotation.
      *      Always non-null.
      * @param parentElementName
-     *      local name of the element that contains &lt;xs:annotation>.
+     *      local name of the element that contains &lt;xs:annotation&gt;.
      *      (e.g., "element", "attribute", ... )
      * @param errorHandler
      *      The error handler that the client application specifies.
@@ -60,7 +60,7 @@ public abstract class AnnotationParser {
      * @param existing
      *      An annotation object which was returned from another
      *      AnnotationParser before. Sometimes, one schema component
-     *      can have multiple &lt:xs:annotation> elements and
+     *      can have multiple &lt;xs:annotation&gt; elements and
      *      this parameter is used to merge all those annotations
      *      together. If there is no existing object, null will be
      *      passed.
