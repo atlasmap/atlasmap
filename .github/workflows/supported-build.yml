@@ -1,0 +1,70 @@
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Supported
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build_maven:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        java: [ '8', '11' ]
+    name: Java ${{ matrix.java }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Java versions
+      uses: actions/setup-java@v2
+      with:
+        java-version: ${{ matrix.java }}
+        distribution: 'adopt'
+    - name: Build from root with Maven
+      run: mvn clean install
+    - name: Build lib with Maven
+      working-directory: lib
+      run: mvn clean install
+    - name: Build docs
+      working-directory: docs
+      run: mvn -Phtml,pdf package
+    - name: Build aggregated javadoc
+      working-directory: docs
+      run: mvn -f pom-javadoc.xml -pl \!io.atlasmap:atlasmap-lib-all javadoc:aggregate
+  build_yarn:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [ '12', '14' ]
+    name: node ${{ matrix.node }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup node versions
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node }}
+    - name: yarn install
+      working-directory: ui
+      run: yarn install
+    - name: --FIXME lerna build
+      continue-on-error: true
+      working-directory: ui
+      run: yarn build
+    - name: --FIXME yarn build @atlasmap/core
+      continue-on-error: true
+      working-directory: ui/packages/atlasmap-core
+      run: yarn build
+    - name: yarn build @atlasmap/atlasmap
+      working-directory: ui/packages/atlasmap
+      run: yarn build
+    - name: yarn build:storybook @atlasmap/atlasmap
+      working-directory: ui/packages/atlasmap
+      run: yarn build:storybook
+    - name: yarn build @atlasmap/atlasmap-standalone
+      working-directory: ui/packages/atlasmap-standalone
+      run: yarn build
