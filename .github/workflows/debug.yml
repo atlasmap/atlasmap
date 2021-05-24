@@ -23,16 +23,16 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: pwd
       continue-on-error: true
-      working-directory: ui/packages/atalsmap-core
+      working-directory: ui/packages/atlasmap-core
     - run: ls
       continue-on-error: true
-      working-directory: ui/packages/atalsmap-core
+      working-directory: ui/packages/atlasmap-core
     - run: ls .
       continue-on-error: true
-      working-directory: ui/packages/atalsmap-core
+      working-directory: ui/packages/atlasmap-core
     - run: ls ../..
       continue-on-error: true
-      working-directory: ui/packages/atalsmap-core
+      working-directory: ui/packages/atlasmap-core
     - run: yarn build
       continue-on-error: true
-      working-directory: ui/packages/atalsmap-core
+      working-directory: ui/packages/atlasmap-core
