@@ -102,7 +102,7 @@ Unit Test Coverage Report/atlas-core,io.atlasmap.actions,CollectionActions,3,3,0
 Unit Test Coverage Report/atlas-core,io.atlasmap.actions,StringSimpleFieldActions,6,202,3,49,1,48,3,38,0,15
 Unit Test Coverage Report/atlas-core,io.atlasmap.core.validate,BaseModuleValidationService,109,852,37,119,32,179,40,63,3,22
 Unit Test Coverage Report/atlas-core,io.atlasmap.core.validate,MultipleFieldSelectionValidator,77,0,8,0,19,0,6,0,2,0
-Unit Test Coverage Report/atlas-core,io.atlasmap.core.validate,MappingFieldPairValidator,136,310,23,49,36,68,19,29,1,11
+Unit Test Coverage Report/atlas-core,io.atlasmap.core.validate,MappingFieldPairValidator,136,310,22,50,36,68,18,30,1,11
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,ActionParameter,8,34,0,2,4,12,2,9,2,8
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,Capitalize,0,3,0,0,0,1,0,1,0,1
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,Format,0,10,0,0,0,4,0,3,0,3
@@ -255,7 +255,7 @@ Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.core,ClassHelper,224,
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.inspect,JarClassLoader,113,0,12,0,23,0,12,0,6,0
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.inspect,ConstructInvalidException,16,0,0,0,8,0,4,0,4,0
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.inspect,MavenClasspathHelper,849,0,68,0,165,0,50,0,16,0
-Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.inspect,ClassInspectionService,478,1884,95,225,100,393,87,112,5,34
+Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.inspect,ClassInspectionService,485,1877,97,223,101,392,88,111,5,34
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.inspect,ConstructUnsupportedException,16,0,0,0,8,0,4,0,4,0
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.inspect,InspectionException,13,0,0,0,6,0,3,0,3,0
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.inspect,ConstructPrimitiveException,16,0,0,0,8,0,4,0,4,0
