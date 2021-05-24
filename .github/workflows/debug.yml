@@ -21,9 +21,18 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
+    - run: pwd
+      continue-on-error: true
+      working-directory: ui/packages/atalsmap-core
+    - run: ls
+      continue-on-error: true
+      working-directory: ui/packages/atalsmap-core
     - run: ls .
+      continue-on-error: true
       working-directory: ui/packages/atalsmap-core
     - run: ls ../..
+      continue-on-error: true
       working-directory: ui/packages/atalsmap-core
     - run: yarn build
+      continue-on-error: true
       working-directory: ui/packages/atalsmap-core
