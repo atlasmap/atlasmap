@@ -17,11 +17,11 @@ import {
   Select,
   SelectOption,
   SelectOptionObject,
-} from "@patternfly/react-core";
-import { FunctionComponent } from "react";
-import React from "react";
-import styles from "./ExpressionFieldSearch.module.css";
-import { useToggle } from "../Atlasmap/utils";
+} from '@patternfly/react-core';
+import { FunctionComponent } from 'react';
+import React from 'react';
+import styles from './ExpressionFieldSearch.module.css';
+import { useToggle } from '../Atlasmap/utils';
 
 export interface IExpressionFieldSearchProps {
   clearSearchMode: (clearAtSign: boolean) => void;
@@ -29,7 +29,7 @@ export interface IExpressionFieldSearchProps {
   insertSelectedField: (index: number) => void;
   mappedFieldCandidates: string[][];
 }
-let selectValue = "";
+let selectValue = '';
 
 export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProps> =
   ({
@@ -73,10 +73,10 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
      */
     function updateCandidate(sibling: any): void {
       if (candidateSrcElement && sibling) {
-        candidateSrcElement.style.backgroundColor = "white";
+        candidateSrcElement.style.backgroundColor = 'white';
         sibling.focus();
         candidateSrcElement = sibling;
-        candidateSrcElement.style.backgroundColor = "lightblue";
+        candidateSrcElement.style.backgroundColor = 'lightblue';
       }
     }
 
@@ -89,29 +89,29 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
     }
 
     function onKeyDown(event: any): void {
-      if ("Enter" === event.key) {
+      if ('Enter' === event.key) {
         event.preventDefault();
         if (candidateSrcElement) {
           insertSelectedField(candidateIndex);
         }
-      } else if ("ArrowDown" === event.key) {
+      } else if ('ArrowDown' === event.key) {
         event.preventDefault();
         trackSelection(event);
         if (candidateSrcElement) {
           updateCandidate(candidateSrcElement.nextElementSibling);
         }
-      } else if ("ArrowUp" === event.key) {
+      } else if ('ArrowUp' === event.key) {
         event.preventDefault();
         trackSelection(event);
         if (candidateSrcElement) {
           updateCandidate(candidateSrcElement.previousElementSibling);
         }
-      } else if ("Tab" === event.key) {
+      } else if ('Tab' === event.key) {
         if (!candidateSrcElement && event.srcElement) {
           candidateSrcElement =
             event.srcElement.nextElementSibling.firstElementChild;
           candidateIndex = 0;
-          candidateSrcElement.style.backgroundColor = "lightblue";
+          candidateSrcElement.style.backgroundColor = 'lightblue';
         } else if (
           candidateSrcElement &&
           candidateSrcElement.nextElementSibling
@@ -165,7 +165,7 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
       <div
         aria-label="Expression Field Search"
         className="searchMenu"
-        data-testid={"expression-field-search"}
+        data-testid={'expression-field-search'}
       >
         <Select
           onToggle={toggle}

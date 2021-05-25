@@ -13,12 +13,12 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { ConstantDialog, IConstant } from "../../UI";
-import React, { ReactElement, useCallback, useState } from "react";
+import { ConstantDialog, IConstant } from '../../UI';
+import React, { ReactElement, useCallback, useState } from 'react';
 
-import { IAtlasmapDocument } from "../../Views";
-import { constantTypes } from "@atlasmap/core";
-import { useToggle } from "../../Atlasmap/utils";
+import { IAtlasmapDocument } from '../../Views';
+import { constantTypes } from '@atlasmap/core';
+import { useToggle } from '../../Atlasmap/utils';
 
 type ConstantCallback = (constant: IConstant) => void;
 
@@ -35,7 +35,7 @@ export function useConstantDialog(
   const [onConstantCb, setOnConstantCb] =
     useState<ConstantCallback | null>(null);
   const [initialConstant, setInitialConstant] = useState<IConstant | null>({
-    value: "",
+    value: '',
     valueType: constantTypes[0][0],
   });
   const [constants, setConstants] = useState<IAtlasmapDocument | null>(null);

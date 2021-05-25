@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-export * from "./utils";
-export * from "./Atlasmap";
-export * from "./AtlasmapProvider";
-export * from "./useAtlasmapDialogs";
+export * from './utils';
+export * from './Atlasmap';
+export * from './AtlasmapProvider';
+export * from './useAtlasmapDialogs';

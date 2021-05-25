@@ -17,11 +17,11 @@ import {
   IAtlasmapField,
   IMappingDetailsViewProps,
   MappingDetailsView,
-} from "../Views";
-import React, { useCallback } from "react";
+} from '../Views';
+import React, { useCallback } from 'react';
 
-import { DataMapperUtil } from "@atlasmap/core";
-import { useAtlasmap } from "./AtlasmapProvider";
+import { DataMapperUtil } from '@atlasmap/core';
+import { useAtlasmap } from './AtlasmapProvider';
 
 export interface IUseSidebarProps {
   onCreateConstant: (
@@ -94,7 +94,7 @@ export function useSidebar({
 
       const multiplicityFieldAction = m.transition.transitionFieldAction;
 
-      let multiplicity: IMappingDetailsViewProps["multiplicity"] = undefined;
+      let multiplicity: IMappingDetailsViewProps['multiplicity'] = undefined;
       if (multiplicityFieldAction) {
         const transformations = getMultiplicityActions(m);
         const transformationsOptions = transformations.map((a) => ({
@@ -116,7 +116,7 @@ export function useSidebar({
               label: DataMapperUtil.toDisplayable(a.name),
               name: a.name,
               value: a.value,
-              options: a.name === "delimiter" ? delimitersOptions : undefined,
+              options: a.name === 'delimiter' ? delimitersOptions : undefined,
             }),
           ),
           onChange: (name) =>
@@ -132,7 +132,7 @@ export function useSidebar({
 
       const handleRemoveMappedField = (isSource: boolean, index: number) => {
         const amField = selectedMapping.mapping.getMappedFieldForIndex(
-          "" + (index + 1),
+          '' + (index + 1),
           isSource,
         );
         if (amField) {
@@ -146,11 +146,11 @@ export function useSidebar({
         flatSources,
       ]
         .flatMap((fields) => (fields ? (fields as IAtlasmapField[]) : []))
-        .filter((f) => isFieldAddableToSelection("source", f));
+        .filter((f) => isFieldAddableToSelection('source', f));
 
       const addableTargets = [targetProperties?.fields, flatTargets]
         .flatMap((fields) => (fields ? (fields as IAtlasmapField[]) : []))
-        .filter((f) => isFieldAddableToSelection("target", f));
+        .filter((f) => isFieldAddableToSelection('target', f));
 
       return (
         <MappingDetailsView

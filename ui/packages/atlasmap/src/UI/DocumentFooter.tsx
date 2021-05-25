@@ -13,10 +13,10 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent } from 'react';
 
-import { CardFooter } from "@patternfly/react-core";
-import styles from "./DocumentFooter.module.css";
+import { CardFooter } from '@patternfly/react-core';
+import styles from './DocumentFooter.module.css';
 
 export const DocumentFooter: FunctionComponent = ({ children }) => {
   return <CardFooter className={styles.footer}>{children}</CardFooter>;

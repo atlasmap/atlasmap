@@ -13,19 +13,19 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { MappingDetailsSidebar } from "./MappingDetailsSidebar";
-import React from "react";
-import { action } from "@storybook/addon-actions";
+import { MappingDetailsSidebar } from './MappingDetailsSidebar';
+import React from 'react';
+import { action } from '@storybook/addon-actions';
 
 export default {
-  title: "AtlasMap|Layout/MappingDetailsSidebar",
+  title: 'AtlasMap|Layout/MappingDetailsSidebar',
 };
 
 export const example = () => (
   <MappingDetailsSidebar
-    onClose={action("onClose")}
-    onDelete={action("onDelete")}
-    onEditEnum={action("onEditEnum")}
+    onClose={action('onClose')}
+    onDelete={action('onDelete')}
+    onEditEnum={action('onEditEnum')}
     isEnumMapping={() => {
       return false;
     }}

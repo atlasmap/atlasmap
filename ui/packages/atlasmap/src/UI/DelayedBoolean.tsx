@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { FunctionComponent, ReactElement, useEffect, useState } from "react";
+import { FunctionComponent, ReactElement, useEffect, useState } from 'react';
 
 export interface IDelayedBooleanProps {
   value: boolean;

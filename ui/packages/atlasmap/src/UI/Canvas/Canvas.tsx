@@ -19,12 +19,12 @@ import React, {
   SVGAttributes,
   useEffect,
   useMemo,
-} from "react";
-import { CanvasTransforms } from "./CanvasTransforms";
-import { css } from "@patternfly/react-styles";
-import styles from "./Canvas.module.css";
-import { useCanvas } from "./CanvasContext";
-import { useDimensions } from "../useDimensions";
+} from 'react';
+import { CanvasTransforms } from './CanvasTransforms';
+import { css } from '@patternfly/react-styles';
+import styles from './Canvas.module.css';
+import { useCanvas } from './CanvasContext';
+import { useDimensions } from '../useDimensions';
 
 export interface ICanvasProps extends SVGAttributes<SVGSVGElement> {
   isFilled?: boolean;
@@ -62,11 +62,11 @@ export const Canvas: FunctionComponent<ICanvasProps> = ({
   const { allowPanning, isPanning, zoom, bindCanvas } = useCanvas();
   const svgStyle = useMemo(() => {
     return {
-      cursor: allowPanning ? (isPanning ? "grabbing" : "grab") : undefined,
-      userSelect: allowPanning && isPanning ? "none" : "auto",
+      cursor: allowPanning ? (isPanning ? 'grabbing' : 'grab') : undefined,
+      userSelect: allowPanning && isPanning ? 'none' : 'auto',
       backgroundSize: `${30 * zoom}px ${30 * zoom}px`,
-      width: initialWidth || "100%",
-      height: initialHeight || "100%",
+      width: initialWidth || '100%',
+      height: initialHeight || '100%',
       ...style,
     } as CSSProperties;
   }, [allowPanning, initialHeight, initialWidth, isPanning, style, zoom]);

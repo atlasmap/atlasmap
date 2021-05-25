@@ -13,11 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Button, Tooltip } from "@patternfly/react-core";
-import React, { FunctionComponent, useEffect, useRef } from "react";
+import { Button, Tooltip } from '@patternfly/react-core';
+import React, { FunctionComponent, useEffect, useRef } from 'react';
 
-import { ImportIcon } from "@patternfly/react-icons";
-import { useFilePicker } from "react-sage";
+import { ImportIcon } from '@patternfly/react-icons';
+import { useFilePicker } from 'react-sage';
 
 export interface IImportActionProps {
   id: string;
@@ -43,7 +43,7 @@ export const ImportAction: FunctionComponent<IImportActionProps> = ({
 
   return (
     <Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={<div>Import instance or schema file</div>}
     >
@@ -54,7 +54,7 @@ export const ImportAction: FunctionComponent<IImportActionProps> = ({
         onClick={onClick}
       >
         <ImportIcon />
-        <HiddenFileInput accept={".json, .xml, .xsd, .csv"} />
+        <HiddenFileInput accept={'.json, .xml, .xsd, .csv'} />
       </Button>
     </Tooltip>
   );

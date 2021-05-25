@@ -18,13 +18,13 @@ import {
   AlertActionCloseButton,
   AlertProps,
   // Progress,
-} from "@patternfly/react-core";
-import React, { FunctionComponent, useEffect, useState } from "react";
+} from '@patternfly/react-core';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 
-import { useToggle } from "../Atlasmap/utils";
+import { useToggle } from '../Atlasmap/utils';
 
 export interface ITimedToastProps {
-  variant: AlertProps["variant"];
+  variant: AlertProps['variant'];
   title: string;
   onTimeout: () => void;
   onClose: () => void;

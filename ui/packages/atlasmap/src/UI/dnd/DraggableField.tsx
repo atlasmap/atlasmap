@@ -19,18 +19,18 @@ import React, {
   ReactElement,
   forwardRef,
   useEffect,
-} from "react";
+} from 'react';
 
-import { IDragAndDropField } from "./models";
-import { getEmptyImage } from "react-dnd-html5-backend";
-import { useDrag } from "react-dnd";
+import { IDragAndDropField } from './models';
+import { getEmptyImage } from 'react-dnd-html5-backend';
+import { useDrag } from 'react-dnd';
 
 export interface IDraggableChildrenProps {
   isDragging: boolean;
 }
 
 export interface IDraggableProps
-  extends Omit<HTMLAttributes<HTMLElement>, "onDrop"> {
+  extends Omit<HTMLAttributes<HTMLElement>, 'onDrop'> {
   field: IDragAndDropField;
   onDrop: (source: IDragAndDropField, target: IDragAndDropField | null) => void;
   as?: ElementType;
@@ -39,13 +39,13 @@ export interface IDraggableProps
 
 export const DraggableField = forwardRef<HTMLElement, IDraggableProps>(
   function DraggableField(
-    { field, onDrop, as: As = "div", children, ...props },
+    { field, onDrop, as: As = 'div', children, ...props },
     ref,
   ) {
     const [{ isDragging }, dragRef, preview] = useDrag<
       IDragAndDropField,
       IDragAndDropField,
-      Omit<IDraggableChildrenProps, "dragRef">
+      Omit<IDraggableChildrenProps, 'dragRef'>
     >({
       type: field.type,
       item: field,

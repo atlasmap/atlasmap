@@ -13,8 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React, { FunctionComponent } from "react";
-import styles from "./TruncatedString.module.css";
+import React, { FunctionComponent } from 'react';
+import styles from './TruncatedString.module.css';
 
 export interface ITruncatedStringProps {
   title?: string;
@@ -26,7 +26,7 @@ export const TruncatedString: FunctionComponent<ITruncatedStringProps> = ({
 }) => (
   <span
     className={styles.fieldName}
-    data-title={title || (typeof children === "string" ? children : undefined)}
+    data-title={title || (typeof children === 'string' ? children : undefined)}
   >
     {children}
   </span>

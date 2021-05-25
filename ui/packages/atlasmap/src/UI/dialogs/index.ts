@@ -13,13 +13,13 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-export * from "./AboutDialog";
-export * from "./ConfirmationDialog";
-export * from "./ConstantDialog";
-export * from "./CustomClassDialog";
-export * from "./ChangeDocumentNameDialog";
-export * from "./ExportCatalogDialog";
-export * from "./LookupTableDialog";
-export * from "./NamespaceDialog";
-export * from "./PropertyDialog";
-export * from "./ParametersDialog";
+export * from './AboutDialog';
+export * from './ConfirmationDialog';
+export * from './ConstantDialog';
+export * from './CustomClassDialog';
+export * from './ChangeDocumentNameDialog';
+export * from './ExportCatalogDialog';
+export * from './LookupTableDialog';
+export * from './NamespaceDialog';
+export * from './PropertyDialog';
+export * from './ParametersDialog';

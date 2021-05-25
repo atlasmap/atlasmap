@@ -13,9 +13,9 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React, { SVGProps, forwardRef } from "react";
-import { css } from "@patternfly/react-styles";
-import styles from "./HTMLObject.module.css";
+import React, { SVGProps, forwardRef } from 'react';
+import { css } from '@patternfly/react-styles';
+import styles from './HTMLObject.module.css';
 
 export interface IHTMLObjectProps extends SVGProps<SVGForeignObjectElement> {
   width: number;

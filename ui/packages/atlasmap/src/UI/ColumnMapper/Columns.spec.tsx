@@ -13,14 +13,14 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import * as React from "react";
-import { Canvas, CanvasProvider } from "../Canvas";
+import * as React from 'react';
+import { Canvas, CanvasProvider } from '../Canvas';
 
-import { Columns } from "./Columns";
-import { render } from "@testing-library/react";
+import { Columns } from './Columns';
+import { render } from '@testing-library/react';
 
-describe("Columns tests", () => {
-  test("should render", async () => {
+describe('Columns tests', () => {
+  test('should render', async () => {
     const { getByText } = render(
       <CanvasProvider>
         <Canvas>
@@ -28,6 +28,6 @@ describe("Columns tests", () => {
         </Canvas>
       </CanvasProvider>,
     );
-    getByText("test");
+    getByText('test');
   });
 });

@@ -13,17 +13,17 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Checkbox, Form, FormGroup, TextInput } from "@patternfly/react-core";
+import { Checkbox, Form, FormGroup, TextInput } from '@patternfly/react-core';
 import {
   ConfirmationDialog,
   IConfirmationDialogProps,
-} from "./ConfirmationDialog";
+} from './ConfirmationDialog';
 import React, {
   FunctionComponent,
   useCallback,
   useEffect,
   useState,
-} from "react";
+} from 'react';
 
 export interface INamespace {
   alias: string;
@@ -38,15 +38,15 @@ export interface INamespaceDialogProps {
   uri?: string;
   locationUri?: string;
   targetNamespace?: boolean;
-  isOpen: IConfirmationDialogProps["isOpen"];
-  onCancel: IConfirmationDialogProps["onCancel"];
+  isOpen: IConfirmationDialogProps['isOpen'];
+  onCancel: IConfirmationDialogProps['onCancel'];
   onConfirm: (namespace: INamespace) => void;
 }
 export const NamespaceDialog: FunctionComponent<INamespaceDialogProps> = ({
   title,
-  alias: initialAlias = "",
-  uri: initialUri = "",
-  locationUri: initialLocationUri = "",
+  alias: initialAlias = '',
+  uri: initialUri = '',
+  locationUri: initialLocationUri = '',
   targetNamespace: initialTargetNamespace = false,
   isOpen,
   onCancel,
@@ -87,31 +87,31 @@ export const NamespaceDialog: FunctionComponent<INamespaceDialogProps> = ({
       isOpen={isOpen}
     >
       <Form>
-        <FormGroup label={"Alias"} fieldId={"alias"} isRequired={true}>
+        <FormGroup label={'Alias'} fieldId={'alias'} isRequired={true}>
           <TextInput
             value={alias}
             onChange={setAlias}
-            id={"alias"}
+            id={'alias'}
             autoFocus={true}
             isRequired={true}
           />
         </FormGroup>
-        <FormGroup label={"URI"} fieldId={"uri"}>
-          <TextInput value={uri} onChange={setUri} id={"uri"} />
+        <FormGroup label={'URI'} fieldId={'uri'}>
+          <TextInput value={uri} onChange={setUri} id={'uri'} />
         </FormGroup>
-        <FormGroup label={"Location URI"} fieldId={"locationUri"}>
+        <FormGroup label={'Location URI'} fieldId={'locationUri'}>
           <TextInput
             value={locationUri}
             onChange={setLocationUri}
-            id={"locationUri"}
+            id={'locationUri'}
           />
         </FormGroup>
-        <FormGroup fieldId={"targetNamespace"}>
+        <FormGroup fieldId={'targetNamespace'}>
           <Checkbox
             isChecked={targetNamespace}
             onChange={setTargetNamespace}
-            id={"targetNamespace"}
-            label={"Target namespace"}
+            id={'targetNamespace'}
+            label={'Target namespace'}
           />
         </FormGroup>
       </Form>

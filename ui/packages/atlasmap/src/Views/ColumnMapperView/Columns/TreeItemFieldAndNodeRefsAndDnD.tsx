@@ -20,9 +20,9 @@ import {
   CircleIcon,
   GripVerticalIcon,
   LayerGroupIcon,
-} from "@patternfly/react-icons";
-import { AtlasmapDocumentType, IAtlasmapField } from "../../../Views";
-import { Button, Tooltip } from "@patternfly/react-core";
+} from '@patternfly/react-icons';
+import { AtlasmapDocumentType, IAtlasmapField } from '../../../Views';
+import { Button, Tooltip } from '@patternfly/react-core';
 import {
   DocumentField,
   DraggableField,
@@ -31,8 +31,8 @@ import {
   IDragAndDropField,
   NodeRef,
   TreeItem,
-} from "../../../UI";
-import React, { FunctionComponent, ReactNode } from "react";
+} from '../../../UI';
+import React, { FunctionComponent, ReactNode } from 'react';
 
 export interface ITreeItemFieldAndNodeRefsAndDnDProps {
   fieldId: string;
@@ -46,7 +46,7 @@ export interface ITreeItemFieldAndNodeRefsAndDnDProps {
   level?: number;
   position?: number;
   setSize?: number;
-  renderActions?: (field: IAtlasmapField) => IDocumentFieldProps["actions"];
+  renderActions?: (field: IAtlasmapField) => IDocumentFieldProps['actions'];
   renderPreview?: (field: IAtlasmapField) => ReactNode;
   canDrop: (source: IAtlasmapField, target: IDragAndDropField) => boolean;
   onDrop: (source: IAtlasmapField, target: IDragAndDropField | null) => void;
@@ -97,8 +97,8 @@ export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent<ITreeItemFiel
               <NodeRef
                 id={[
                   fieldId,
-                  isDragging ? "dnd-start" : undefined,
-                  isTarget ? "dnd-target-field" : undefined,
+                  isDragging ? 'dnd-start' : undefined,
+                  isTarget ? 'dnd-target-field' : undefined,
                 ]}
                 parentId={parentId}
                 boundaryId={boundaryId}
@@ -112,9 +112,9 @@ export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent<ITreeItemFiel
                         icon={
                           isDroppable || isTarget ? (
                             <Button
-                              variant={isTarget ? "link" : "plain"}
+                              variant={isTarget ? 'link' : 'plain'}
                               tabIndex={-1}
-                              aria-label={"Drop target"}
+                              aria-label={'Drop target'}
                               isDisabled={!isDroppable}
                               data-testid={`is-droppable-${field.name}-button`}
                             >
@@ -122,7 +122,7 @@ export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent<ITreeItemFiel
                             </Button>
                           ) : (
                             <Button
-                              variant={"plain"}
+                              variant={'plain'}
                               tabIndex={-1}
                               aria-hidden={true}
                               data-testid={`grip-${field.name}-button`}
@@ -131,7 +131,7 @@ export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent<ITreeItemFiel
                             </Button>
                           )
                         }
-                        type={field.enumeration ? "ENUM" : field.type}
+                        type={field.enumeration ? 'ENUM' : field.type}
                         scope={field.scope}
                         showType={showTypes}
                         isDragging={isDragging}
@@ -142,14 +142,14 @@ export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent<ITreeItemFiel
                           field.isConnected ? (
                             <Tooltip
                               key="connected"
-                              position={"auto"}
+                              position={'auto'}
                               enableFlip={true}
                               entryDelay={750}
                               exitDelay={100}
                               content={<div>This field is connected</div>}
                             >
                               <CircleIcon
-                                label={"This field is connected"}
+                                label={'This field is connected'}
                                 size="sm"
                                 tabIndex={-1}
                               />
@@ -157,15 +157,15 @@ export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent<ITreeItemFiel
                           ) : null,
                           field.isCollection ? (
                             <Tooltip
-                              key={"collection"}
-                              position={"auto"}
+                              key={'collection'}
+                              position={'auto'}
                               enableFlip={true}
                               entryDelay={750}
                               exitDelay={100}
                               content={<div>This field is a collection</div>}
                             >
                               <LayerGroupIcon
-                                label={"This field is a collection"}
+                                label={'This field is a collection'}
                                 size="sm"
                                 tabIndex={-1}
                               />
@@ -173,8 +173,8 @@ export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent<ITreeItemFiel
                           ) : null,
                           field.hasTransformations ? (
                             <Tooltip
-                              key={"transformations"}
-                              position={"auto"}
+                              key={'transformations'}
+                              position={'auto'}
                               enableFlip={true}
                               entryDelay={750}
                               exitDelay={100}
@@ -183,7 +183,7 @@ export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent<ITreeItemFiel
                               }
                             >
                               <BoltIcon
-                                label={"This field has transformations"}
+                                label={'This field has transformations'}
                                 size="sm"
                                 tabIndex={-1}
                               />
@@ -191,15 +191,15 @@ export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent<ITreeItemFiel
                           ) : null,
                           field.isAttribute ? (
                             <Tooltip
-                              key={"attribute"}
-                              position={"auto"}
+                              key={'attribute'}
+                              position={'auto'}
                               enableFlip={true}
                               entryDelay={750}
                               exitDelay={100}
                               content={<div>This field is an attribute</div>}
                             >
                               <AtIcon
-                                label={"This field is an attribute"}
+                                label={'This field is an attribute'}
                                 size="sm"
                                 tabIndex={-1}
                               />

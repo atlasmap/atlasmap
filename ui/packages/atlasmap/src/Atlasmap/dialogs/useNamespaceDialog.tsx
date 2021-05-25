@@ -13,10 +13,10 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { INamespace, NamespaceDialog } from "../../UI";
-import React, { ReactElement, useCallback, useState } from "react";
+import { INamespace, NamespaceDialog } from '../../UI';
+import React, { ReactElement, useCallback, useState } from 'react';
 
-import { useToggle } from "../../Atlasmap/utils";
+import { useToggle } from '../../Atlasmap/utils';
 
 type NamespaceCallback = (namespace: INamespace) => void;
 

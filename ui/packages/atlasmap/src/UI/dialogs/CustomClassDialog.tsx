@@ -16,19 +16,19 @@
 import {
   ConfirmationDialog,
   IConfirmationDialogProps,
-} from "./ConfirmationDialog";
+} from './ConfirmationDialog';
 import {
   Form,
   FormGroup,
   FormSelect,
   FormSelectOption,
-} from "@patternfly/react-core";
+} from '@patternfly/react-core';
 import React, {
   FunctionComponent,
   useCallback,
   useEffect,
   useState,
-} from "react";
+} from 'react';
 
 interface ValueTypeOption {
   label: string;
@@ -46,15 +46,15 @@ export interface ICustomClassDialogProps {
   customClassNames: string[] | null;
   collectionType?: string;
   collectionTypeOptions: ValueTypeOption[];
-  isOpen: IConfirmationDialogProps["isOpen"];
-  onCancel: IConfirmationDialogProps["onCancel"];
+  isOpen: IConfirmationDialogProps['isOpen'];
+  onCancel: IConfirmationDialogProps['onCancel'];
   onConfirm: (constant: ICustomClass) => void;
 }
 export const CustomClassDialog: FunctionComponent<ICustomClassDialogProps> = ({
   title,
-  customClassName: initialCustomClassName = "",
+  customClassName: initialCustomClassName = '',
   customClassNames,
-  collectionType: initialCollectionType = "",
+  collectionType: initialCollectionType = '',
   collectionTypeOptions,
   isOpen,
   onCancel,
@@ -95,16 +95,16 @@ export const CustomClassDialog: FunctionComponent<ICustomClassDialogProps> = ({
     >
       <Form>
         <FormGroup
-          label={"Custom class name"}
-          fieldId={"custom-class-name"}
+          label={'Custom class name'}
+          fieldId={'custom-class-name'}
           isRequired={true}
         >
           <FormSelect
             value={customClassName}
-            aria-label={"Select class name"}
+            aria-label={'Select class name'}
             autoFocus={true}
             onChange={setCustomClassName}
-            data-testid={"custom-class-name-form-select"}
+            data-testid={'custom-class-name-form-select'}
           >
             {isOpen &&
               customClassNames &&
@@ -113,12 +113,12 @@ export const CustomClassDialog: FunctionComponent<ICustomClassDialogProps> = ({
               ))}
           </FormSelect>
         </FormGroup>
-        <FormGroup label={"Collection type"} fieldId={"valueType"}>
+        <FormGroup label={'Collection type'} fieldId={'valueType'}>
           <FormSelect
             value={collectionType}
-            aria-label={"Select value type"}
+            aria-label={'Select value type'}
             onChange={setCollectionType}
-            data-testid={"collection-type-form-select"}
+            data-testid={'collection-type-form-select'}
           >
             {collectionTypeOptions.map(({ label, value }, idx) => (
               <FormSelectOption key={idx} value={value} label={label} />

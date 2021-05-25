@@ -17,7 +17,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionToggle,
-} from "@patternfly/react-core";
+} from '@patternfly/react-core';
 import React, {
   FunctionComponent,
   MouseEvent,
@@ -28,11 +28,11 @@ import React, {
   useEffect,
   useRef,
   useState,
-} from "react";
+} from 'react';
 
-import { css } from "@patternfly/react-styles";
-import styles from "./TreeGroup.module.css";
-import { useTreeFocus } from "./TreeFocusProvider";
+import { css } from '@patternfly/react-styles';
+import styles from './TreeGroup.module.css';
+import { useTreeFocus } from './TreeFocusProvider';
 
 export interface ITreeGroupProps {
   id: string;
@@ -84,7 +84,7 @@ export const TreeGroup = forwardRef<
   const handleRef = (el: HTMLDivElement | null) => {
     divRef.current = el;
     if (ref) {
-      if (typeof ref === "function") {
+      if (typeof ref === 'function') {
         ref(el);
       } else {
         // @ts-ignore
@@ -94,7 +94,7 @@ export const TreeGroup = forwardRef<
   };
 
   const Component: FunctionComponent = ({ children }) => (
-    <span role={"heading"} aria-level={level + 2}>
+    <span role={'heading'} aria-level={level + 2}>
       {children}
     </span>
   );
@@ -102,7 +102,7 @@ export const TreeGroup = forwardRef<
   return (
     <div
       ref={handleRef}
-      role={"treeitem"}
+      role={'treeitem'}
       aria-level={level}
       aria-setsize={setSize}
       aria-posinset={position}

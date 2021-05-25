@@ -13,9 +13,9 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Form, FormGroup, TextInput } from "@patternfly/react-core";
-import React, { FunctionComponent } from "react";
-import styles from "./DocumentFieldPreviewResults.module.css";
+import { Form, FormGroup, TextInput } from '@patternfly/react-core';
+import React, { FunctionComponent } from 'react';
+import styles from './DocumentFieldPreviewResults.module.css';
 
 export interface IDocumentFieldPreviewResultsProps {
   id: string;
@@ -30,7 +30,7 @@ export const DocumentFieldPreviewResults: FunctionComponent<IDocumentFieldPrevie
           <TextInput
             id={id}
             type="text"
-            value={value === undefined ? "" : value}
+            value={value === undefined ? '' : value}
             aria-label="Mapping results preview"
             placeholder="Results will be displayed here"
             isDisabled={true}

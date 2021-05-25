@@ -18,12 +18,12 @@ import {
   CaretDownIcon,
   CaretRightIcon,
   PlusIcon,
-} from "@patternfly/react-icons";
-import { Button, Tooltip } from "@patternfly/react-core";
-import React, { FunctionComponent } from "react";
+} from '@patternfly/react-icons';
+import { Button, Tooltip } from '@patternfly/react-core';
+import React, { FunctionComponent } from 'react';
 
-import styles from "./MappingFields.module.css";
-import { useToggle } from "../Atlasmap/utils";
+import styles from './MappingFields.module.css';
+import { useToggle } from '../Atlasmap/utils';
 
 export interface IMappingFieldsProps {
   isSource: boolean;
@@ -48,53 +48,53 @@ export const MappingFields: FunctionComponent<IMappingFieldsProps> = ({
   return (
     <div className={styles.wrapper}>
       <Button
-        key={"expandable"}
-        variant={"plain"}
+        key={'expandable'}
+        variant={'plain'}
         aria-label="Ok"
         onClick={toggleExpanded}
         data-testid={`mapping-fields-detail-${title}-toggle`}
-        style={{ display: "inline", marginLeft: "auto" }}
+        style={{ display: 'inline', marginLeft: 'auto' }}
       >
         {expanded ? <CaretDownIcon /> : <CaretRightIcon />}
       </Button>
       {title}
       <Tooltip
-        position={"top"}
+        position={'top'}
         enableFlip={true}
         content={<div>Create and map a property.</div>}
-        key={"create-property"}
+        key={'create-property'}
         entryDelay={750}
         exitDelay={100}
       >
         <Button
-          key={"create-prop"}
-          variant={"plain"}
+          key={'create-prop'}
+          variant={'plain'}
           aria-label="Add Property"
           isDisabled={!canAddToSelectedMapping(isSource)}
           onClick={() => onCreateProperty(isSource, null)}
-          data-testid={"mapping-details-add-property-button-test"}
-          style={{ display: "inline", marginLeft: "auto", float: "right" }}
+          data-testid={'mapping-details-add-property-button-test'}
+          style={{ display: 'inline', marginLeft: 'auto', float: 'right' }}
         >
           <AddCircleOIcon />
         </Button>
       </Tooltip>
       {isSource && (
         <Tooltip
-          position={"top"}
+          position={'top'}
           enableFlip={true}
           content={<div>Create and map a source constant.</div>}
-          key={"create-constant"}
+          key={'create-constant'}
           entryDelay={750}
           exitDelay={100}
         >
           <Button
-            key={"create-const"}
-            variant={"plain"}
+            key={'create-const'}
+            variant={'plain'}
             aria-label="Add Constant"
             isDisabled={!canAddToSelectedMapping(isSource)}
             onClick={onCreateConstant}
-            data-testid={"mapping-details-add-constant-button-test"}
-            style={{ display: "inline", marginLeft: "auto", float: "right" }}
+            data-testid={'mapping-details-add-constant-button-test'}
+            style={{ display: 'inline', marginLeft: 'auto', float: 'right' }}
           >
             <PlusIcon />
           </Button>

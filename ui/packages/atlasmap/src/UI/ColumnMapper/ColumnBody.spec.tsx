@@ -13,14 +13,14 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import * as React from "react";
+import * as React from 'react';
 
-import { ColumnBody } from "./ColumnBody";
-import { render } from "@testing-library/react";
+import { ColumnBody } from './ColumnBody';
+import { render } from '@testing-library/react';
 
-describe("ColumnBody tests", () => {
-  test("should render", async () => {
+describe('ColumnBody tests', () => {
+  test('should render', async () => {
     const { getByText } = render(<ColumnBody>test</ColumnBody>);
-    getByText("test");
+    getByText('test');
   });
 });

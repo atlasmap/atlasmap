@@ -13,11 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-export * from "./ColumnMapperView";
-export * from "./FreeViewMapper";
-export * from "./MappingDetailsView";
-export * from "./MappingTableView";
-export * from "./NamespaceTableView";
-export * from "./models";
-export * from "./SourceMappingTargetView";
-export * from "./SourceTargetView";
+export * from './ColumnMapperView';
+export * from './FreeViewMapper';
+export * from './MappingDetailsView';
+export * from './MappingTableView';
+export * from './NamespaceTableView';
+export * from './models';
+export * from './SourceMappingTargetView';
+export * from './SourceTargetView';

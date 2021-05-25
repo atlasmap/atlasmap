@@ -13,11 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React, { FunctionComponent, useLayoutEffect, useRef } from "react";
+import React, { FunctionComponent, useLayoutEffect, useRef } from 'react';
 
-import { Accordion } from "@patternfly/react-core";
-import { TreeFocusProvider } from "./TreeFocusProvider";
-import styles from "./Tree.module.css";
+import { Accordion } from '@patternfly/react-core';
+import { TreeFocusProvider } from './TreeFocusProvider';
+import styles from './Tree.module.css';
 
 export const Tree: FunctionComponent = ({ children }) => {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -28,9 +28,9 @@ export const Tree: FunctionComponent = ({ children }) => {
         `[role=treeitem][tabindex="0"]`,
       );
       if (!itemInTabSequence) {
-        const firstTreeItem = ref.current.querySelector("[role=treeitem]");
+        const firstTreeItem = ref.current.querySelector('[role=treeitem]');
         if (firstTreeItem) {
-          firstTreeItem.setAttribute("tabindex", "0");
+          firstTreeItem.setAttribute('tabindex', '0');
         }
       }
     }
@@ -41,7 +41,7 @@ export const Tree: FunctionComponent = ({ children }) => {
         <Accordion
           asDefinitionList={false}
           className={styles.accordion}
-          role={"tree"}
+          role={'tree'}
         >
           {children}
         </Accordion>

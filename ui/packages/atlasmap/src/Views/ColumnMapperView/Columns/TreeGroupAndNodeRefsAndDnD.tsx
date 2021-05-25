@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { AtlasmapDocumentType, IAtlasmapGroup } from "../../../Views";
+import { AtlasmapDocumentType, IAtlasmapGroup } from '../../../Views';
 import {
   DelayedBoolean,
   DocumentGroup,
@@ -21,10 +21,10 @@ import {
   ITreeGroupProps,
   NodeRef,
   TreeGroup,
-} from "../../../UI";
-import React, { FunctionComponent } from "react";
+} from '../../../UI';
+import React, { FunctionComponent } from 'react';
 
-import { LayerGroupIcon } from "@patternfly/react-icons";
+import { LayerGroupIcon } from '@patternfly/react-icons';
 
 export interface ITreeGroupAndNodeRefsAndDnDProps {
   fieldId: string;
@@ -38,7 +38,7 @@ export interface ITreeGroupAndNodeRefsAndDnDProps {
   level?: number;
   position?: number;
   setSize?: number;
-  children: ITreeGroupProps["children"];
+  children: ITreeGroupProps['children'];
 }
 
 export const TreeGroupAndNodeRefsAndDnD: FunctionComponent<ITreeGroupAndNodeRefsAndDnDProps> =
@@ -89,7 +89,7 @@ export const TreeGroupAndNodeRefsAndDnD: FunctionComponent<ITreeGroupAndNodeRefs
                     icon={group.isCollection ? <LayerGroupIcon /> : undefined}
                     iconTooltip={
                       group.isCollection
-                        ? "This object is a collection"
+                        ? 'This object is a collection'
                         : undefined
                     }
                     expanded={isOver || expanded}

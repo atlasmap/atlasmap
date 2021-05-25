@@ -13,8 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React, { Children, FunctionComponent } from "react";
-import styles from "./Actions.module.css";
+import React, { Children, FunctionComponent } from 'react';
+import styles from './Actions.module.css';
 
 export const Actions: FunctionComponent = ({ children }) => (
   <div className={styles.toolbar}>

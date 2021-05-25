@@ -13,10 +13,10 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Button, Tooltip } from "@patternfly/react-core";
-import React, { FunctionComponent } from "react";
+import { Button, Tooltip } from '@patternfly/react-core';
+import React, { FunctionComponent } from 'react';
 
-import { TrashIcon } from "@patternfly/react-icons";
+import { TrashIcon } from '@patternfly/react-icons';
 
 export interface IDeleteMappingActionProps {
   id: string;
@@ -25,7 +25,7 @@ export interface IDeleteMappingActionProps {
 export const DeleteMappingAction: FunctionComponent<IDeleteMappingActionProps> =
   ({ id, onClick }) => (
     <Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={<div>Remove the mapping</div>}
     >

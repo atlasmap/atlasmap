@@ -22,7 +22,7 @@ import React, {
   createContext,
   useContext,
   useState,
-} from "react";
+} from 'react';
 
 interface ITreeFocusContext {
   focusedItem: HTMLElement | null;
@@ -62,19 +62,19 @@ export const useTreeFocus = ({
   const { focusedItem, setFocusedItem } = context;
   const getFocusableItems = (el: HTMLElement) => {
     return Array.from<HTMLElement>(
-      el.closest("[role=tree]")?.querySelectorAll("[role=treeitem]") || [],
+      el.closest('[role=tree]')?.querySelectorAll('[role=treeitem]') || [],
     ).filter((el) => {
-      const group = el.parentElement?.closest("[aria-expanded]");
+      const group = el.parentElement?.closest('[aria-expanded]');
       if (group) {
-        return group.getAttribute("aria-expanded") === "true";
+        return group.getAttribute('aria-expanded') === 'true';
       }
       return true;
     });
   };
 
   const setFocus = (index: number, nodes: HTMLElement[]) => {
-    nodes.forEach((n) => n.setAttribute("tabindex", "-1"));
-    nodes[index].setAttribute("tabindex", "0");
+    nodes.forEach((n) => n.setAttribute('tabindex', '-1'));
+    nodes[index].setAttribute('tabindex', '0');
     nodes[index].focus();
   };
 
@@ -124,13 +124,13 @@ export const useTreeFocus = ({
       return;
     }
     switch (event.key) {
-      case " ":
-      case "Enter":
+      case ' ':
+      case 'Enter':
         if (event.target === ref.current) {
           // Create simulated mouse event to mimic the behavior of ATs
           // and let the event handler handleClick do the housekeeping.
           event.target.dispatchEvent(
-            new MouseEvent("click", {
+            new MouseEvent('click', {
               view: window,
               bubbles: true,
               cancelable: true,
@@ -139,17 +139,17 @@ export const useTreeFocus = ({
           setFocusedItem(ref.current);
         }
         break;
-      case "Escape":
+      case 'Escape':
         setFocusedItem(null);
         event.preventDefault();
         break;
-      case "ArrowUp":
+      case 'ArrowUp':
         setFocusToPreviousItem();
         break;
-      case "ArrowDown":
+      case 'ArrowDown':
         setFocusToNextItem();
         break;
-      case "ArrowRight":
+      case 'ArrowRight':
         if (isExpandable) {
           if (isExpanded) {
             setFocusToNextItem();
@@ -160,7 +160,7 @@ export const useTreeFocus = ({
           }
         }
         break;
-      case "ArrowLeft":
+      case 'ArrowLeft':
         if (isExpandable && isExpanded) {
           if (collapseTreeitem) {
             collapseTreeitem();
@@ -171,10 +171,10 @@ export const useTreeFocus = ({
           // }
         }
         break;
-      case "Home":
+      case 'Home':
         setFocusToFirstItem();
         break;
-      case "End":
+      case 'End':
         setFocusToLastItem();
         break;
       default:
@@ -201,8 +201,8 @@ export const useTreeFocus = ({
       onBlur: (event: FocusEvent<HTMLElement>) => {
         if (
           (event.relatedTarget as HTMLElement | null)?.closest(
-            "[role=tree]",
-          ) !== ref.current?.closest("[role=tree]")
+            '[role=tree]',
+          ) !== ref.current?.closest('[role=tree]')
         ) {
           setFocusedItem(null);
         }

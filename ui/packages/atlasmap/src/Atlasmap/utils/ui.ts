@@ -38,7 +38,7 @@ import {
   NamespaceModel,
   TransitionMode,
   TransitionModel,
-} from "@atlasmap/core";
+} from '@atlasmap/core';
 import {
   IAtlasmapDocument,
   IAtlasmapField,
@@ -47,25 +47,25 @@ import {
   IAtlasmapMapping,
   IAtlasmapNamespace,
   INotification,
-} from "../../Views";
-import { ITransformationArgument, ITransformationSelectOption } from "../../UI";
+} from '../../Views';
+import { ITransformationArgument, ITransformationSelectOption } from '../../UI';
 
-import { Observable } from "rxjs";
-import ky from "ky";
+import { Observable } from 'rxjs';
+import ky from 'ky';
 
-const api = ky.create({ headers: { "ATLASMAP-XSRF-TOKEN": "awesome" } });
+const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
 
 export function copyToClipboard(text: string) {
-  const textArea = document.createElement("textarea");
+  const textArea = document.createElement('textarea');
   textArea.value = text;
   document.body.appendChild(textArea);
   textArea.select();
   try {
-    document.execCommand("copy");
+    document.execCommand('copy');
   } catch (err) {
     ConfigModel.getConfig().errorService.addError(
       new ErrorInfo({
-        message: "Error copying " + text + " to clipboard",
+        message: 'Error copying ' + text + ' to clipboard',
         level: ErrorLevel.ERROR,
         scope: ErrorScope.APPLICATION,
         type: ErrorType.INTERNAL,
@@ -90,8 +90,8 @@ export function fromFieldToIFieldsGroup(field: Field): IAtlasmapGroup | null {
     .filter((f) => f) as IAtlasmapField[];
   return fields.length > 0 && field.visibleInCurrentDocumentSearch
     ? {
-        id: `${field.docDef.uri || field.docDef.type + "-" + field.scope}:${
-          field.docDef.isSource ? "source" : "target"
+        id: `${field.docDef.uri || field.docDef.type + '-' + field.scope}:${
+          field.docDef.isSource ? 'source' : 'target'
         }:${field.path}`,
         name: field.name,
         type: field.type,
@@ -111,8 +111,8 @@ export function fromFieldToIFieldsNode(field: Field): IAtlasmapField | null {
     : cfg.showUnmappedFields && field.visibleInCurrentDocumentSearch;
   return shouldBeVisible
     ? {
-        id: `${field.docDef.uri || field.docDef.type + "-" + field.scope}:${
-          field.docDef.isSource ? "source" : "target"
+        id: `${field.docDef.uri || field.docDef.type + '-' + field.scope}:${
+          field.docDef.isSource ? 'source' : 'target'
         }:${field.path}`,
         name: field.getFieldLabel(false, false),
         type: field.type,
@@ -131,8 +131,8 @@ export function fromFieldToIFieldsNode(field: Field): IAtlasmapField | null {
         isInCollection: field.isInCollection(),
         isConnected: partOfMapping,
         isDisabled:
-          field.type === "UNSUPPORTED" ||
-          (field.type === "COMPLEX" && !field.enumeration),
+          field.type === 'UNSUPPORTED' ||
+          (field.type === 'COMPLEX' && !field.enumeration),
         enumeration: field.enumeration,
       }
     : null;
@@ -185,8 +185,8 @@ export function fromMappedFieldToIMappingField(
   return {
     id: `${
       mappedField.field!.docDef.uri ||
-      mappedField.field!.docDef.type + "-" + mappedField.field!.scope
-    }:${mappedField.field!.docDef.isSource ? "source" : "target"}:${
+      mappedField.field!.docDef.type + '-' + mappedField.field!.scope
+    }:${mappedField.field!.docDef.isSource ? 'source' : 'target'}:${
       mappedField.field!.path
     }`,
     name: mappedField.field!.getFieldLabel(false, false),
@@ -235,22 +235,22 @@ export function fromMappedFieldToIMappingField(
 
 export function errorLevelToVariant(
   level: ErrorLevel,
-): INotification["variant"] {
+): INotification['variant'] {
   switch (level) {
     case ErrorLevel.INFO:
-      return "info";
+      return 'info';
     case ErrorLevel.WARN:
-      return "warning";
+      return 'warning';
     case ErrorLevel.ERROR:
-      return "danger";
+      return 'danger';
     default:
-      return "default";
+      return 'default';
   }
 }
 
 export function errorMessageToString(message: any): string {
   switch (typeof message) {
-    case "string":
+    case 'string':
       return message;
     default:
       return message?.message || JSON.stringify(message);
@@ -260,15 +260,15 @@ export function errorMessageToString(message: any): string {
 export function errorTypeToString(type: ErrorType): string {
   switch (type) {
     case ErrorType.INTERNAL:
-      return "Internal";
+      return 'Internal';
     case ErrorType.USER:
-      return "User";
+      return 'User';
     case ErrorType.VALIDATION:
-      return "Validation";
+      return 'Validation';
     case ErrorType.PREVIEW:
-      return "Preview";
+      return 'Preview';
     case ErrorType.FORM:
-      return "Form";
+      return 'Form';
   }
 }
 
@@ -549,7 +549,7 @@ export function handleIndexChange(
     return;
   }
   const sourceField = activeMapping.getMappedFieldForIndex(
-    "" + (currentIndex + 1),
+    '' + (currentIndex + 1),
     isSource,
   );
   if (!sourceField) {
@@ -558,7 +558,7 @@ export function handleIndexChange(
   let newIndex: number | null = 0;
 
   // If the target is an actual index value then check for the need to add padding.
-  if (typeof target === "number") {
+  if (typeof target === 'number') {
     newIndex = target;
     if (target <= 0 || !activeMapping) {
       return;
@@ -593,7 +593,7 @@ export function handleNewTransformation(isSource: boolean, index: number) {
     return;
   }
   const field = activeMapping.getMappedFieldForIndex(
-    "" + (index + 1),
+    '' + (index + 1),
     isSource,
   );
   if (!field) {
@@ -618,7 +618,7 @@ export function handleTransformationChange(
     return;
   }
   const field = activeMapping.getMappedFieldForIndex(
-    "" + (index + 1),
+    '' + (index + 1),
     isSource,
   );
   if (!field) {
@@ -663,7 +663,7 @@ export function handleTransformationArgumentChange(
     return;
   }
   const field = activeMapping.getMappedFieldForIndex(
-    "" + (index + 1),
+    '' + (index + 1),
     isSource,
   );
   if (!field) {
@@ -687,7 +687,7 @@ export function handleRemoveTransformation(
     return;
   }
   const field = activeMapping.getMappedFieldForIndex(
-    "" + (index + 1),
+    '' + (index + 1),
     isSource,
   );
   if (!field) {

@@ -13,16 +13,16 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import * as React from "react";
+import * as React from 'react';
 
-import { Column } from "./Column";
-import { example } from "./Column.stories";
-import { render } from "@testing-library/react";
+import { Column } from './Column';
+import { example } from './Column.stories';
+import { render } from '@testing-library/react';
 
-describe("Column tests", () => {
-  test("should render", async () => {
+describe('Column tests', () => {
+  test('should render', async () => {
     const { getByText } = render(example());
-    getByText("I can scroll.");
+    getByText('I can scroll.');
   });
 
   /* the following tests are not really meant to be unit tests since checking
@@ -30,30 +30,30 @@ describe("Column tests", () => {
    * Puppeteer. But I don't like Jest's snapshots, so...
    * */
 
-  test("should respect the parent size", async () => {
+  test('should respect the parent size', async () => {
     const { getByTestId } = render(
-      <Column totalColumns={2} data-testid={"column"}>
+      <Column totalColumns={2} data-testid={'column'}>
         test
       </Column>,
     );
-    expect(getByTestId("column").style).toHaveProperty("flex", "0 0 50%");
+    expect(getByTestId('column').style).toHaveProperty('flex', '0 0 50%');
   });
 
-  test("should respect the visible prop=false", async () => {
+  test('should respect the visible prop=false', async () => {
     const { getByTestId } = render(
-      <Column visible={false} data-testid={"column"}>
+      <Column visible={false} data-testid={'column'}>
         test
       </Column>,
     );
-    expect(getByTestId("column").className).toBe("column hidden");
+    expect(getByTestId('column').className).toBe('column hidden');
   });
 
-  test("should respect the visible prop=true", async () => {
+  test('should respect the visible prop=true', async () => {
     const { getByTestId } = render(
-      <Column visible={true} data-testid={"column"}>
+      <Column visible={true} data-testid={'column'}>
         test
       </Column>,
     );
-    expect(getByTestId("column").className).toBe("column");
+    expect(getByTestId('column').className).toBe('column');
   });
 });

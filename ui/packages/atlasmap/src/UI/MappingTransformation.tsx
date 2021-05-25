@@ -23,10 +23,10 @@ import {
   Split,
   SplitItem,
   TextInput,
-} from "@patternfly/react-core";
-import React, { FunctionComponent } from "react";
+} from '@patternfly/react-core';
+import React, { FunctionComponent } from 'react';
 
-import { TrashIcon } from "@patternfly/react-icons";
+import { TrashIcon } from '@patternfly/react-icons';
 
 export interface ITransformationSelectOption {
   name: string;
@@ -65,7 +65,7 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
     return (
       <>
         <FormGroup fieldId={`${id}-transformation`}>
-          <InputGroup style={{ background: "transparent" }}>
+          <InputGroup style={{ background: 'transparent' }}>
             <FormSelect
               value={name}
               id={id}
@@ -79,7 +79,7 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
             </FormSelect>
             {onRemoveTransformation && (
               <Button
-                variant={"plain"}
+                variant={'plain'}
                 onClick={onRemoveTransformation}
                 data-testid={`close-transformation-${name}-button`}
                 aria-label="Remove the transformation"
@@ -92,7 +92,7 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
         {transformationsArguments.map((a, idx) => {
           const argId = `${id}-transformation-${idx}`;
           const udOption = a.options?.find(
-            (option) => option.name === "User defined",
+            (option) => option.name === 'User defined',
           );
           // If user-defined option, then this must be a delimiter argument.
           // Replace user-defined option value with arg value, since arg options
@@ -104,7 +104,7 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
           ) {
             udOption.value = a.value;
           }
-          return a.name !== "delimitingEmptyValues" ? (
+          return a.name !== 'delimitingEmptyValues' ? (
             <FormGroup fieldId={argId} label={a.label} key={idx}>
               {a.options ? (
                 <Split>
@@ -170,7 +170,7 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
               key={argId}
               label="Delimit empty values"
               aria-label="Delimit empty values"
-              isChecked={a.value === "true"}
+              isChecked={a.value === 'true'}
               onChange={(value) =>
                 onTransformationArgumentChange(a.name, value.toString())
               }

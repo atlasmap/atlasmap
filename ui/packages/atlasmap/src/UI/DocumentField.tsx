@@ -18,13 +18,13 @@ import React, {
   ReactChild,
   ReactElement,
   forwardRef,
-} from "react";
+} from 'react';
 
-import { Tooltip } from "@patternfly/react-core";
-import { TruncatedString } from "./TruncatedString";
-import { css } from "@patternfly/react-styles";
-import styles from "./DocumentField.module.css";
-import { useToggle } from "../Atlasmap/utils";
+import { Tooltip } from '@patternfly/react-core';
+import { TruncatedString } from './TruncatedString';
+import { css } from '@patternfly/react-styles';
+import styles from './DocumentField.module.css';
+import { useToggle } from '../Atlasmap/utils';
 
 export interface IDocumentFieldProps {
   name: ReactChild;
@@ -81,7 +81,7 @@ export const DocumentField = forwardRef<
         {icon && <div className={styles.nameIcon}>{icon}</div>}
         <Tooltip
           key={`${name}`}
-          position={"auto"}
+          position={'auto'}
           enableFlip={true}
           content={scope ? `${name} <${scope}>` : `${name}`}
           entryDelay={750}

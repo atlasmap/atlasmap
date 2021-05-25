@@ -18,12 +18,12 @@ import {
   IAtlasmapDocument,
   IAtlasmapField,
   IAtlasmapMapping,
-} from "../../models";
-import { Button, Tooltip } from "@patternfly/react-core";
-import { EditIcon, TrashIcon } from "@patternfly/react-icons";
-import { IDragAndDropField, Tree } from "../../../UI";
-import { ITraverseFieldsProps, TraverseFields } from "./TraverseFields";
-import React, { FunctionComponent } from "react";
+} from '../../models';
+import { Button, Tooltip } from '@patternfly/react-core';
+import { EditIcon, TrashIcon } from '@patternfly/react-icons';
+import { IDragAndDropField, Tree } from '../../../UI';
+import { ITraverseFieldsProps, TraverseFields } from './TraverseFields';
+import React, { FunctionComponent } from 'react';
 import {
   SOURCES_FIELD_ID_PREFIX,
   SOURCES_HEIGHT_BOUNDARY_ID,
@@ -33,9 +33,9 @@ import {
   TARGETS_HEIGHT_BOUNDARY_ID,
   TARGETS_PROPERTIES_ID,
   TARGETS_WIDTH_BOUNDARY_ID,
-} from "./constants";
+} from './constants';
 
-import { commonActions } from "./commonActions";
+import { commonActions } from './commonActions';
 
 export interface IPropertiesTreeCallbacks {
   acceptDropType: AtlasmapDocumentType;
@@ -55,9 +55,9 @@ export interface IPropertiesTreeCallbacks {
 }
 
 export interface IPropertiesTreeProps extends IPropertiesTreeCallbacks {
-  fields: IAtlasmapDocument["fields"];
+  fields: IAtlasmapDocument['fields'];
   showTypes: boolean;
-  renderPreview: ITraverseFieldsProps["renderPreview"];
+  renderPreview: ITraverseFieldsProps['renderPreview'];
 }
 
 export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
@@ -107,8 +107,8 @@ export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
           onStartMapping: () => onStartMapping(field),
         }),
         <Tooltip
-          key={"edit"}
-          position={"top"}
+          key={'edit'}
+          position={'top'}
           enableFlip={true}
           content={<div>Edit property</div>}
           entryDelay={750}
@@ -117,7 +117,7 @@ export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
           <Button
             variant="plain"
             onClick={() => onEditProperty(field.name, field.scope, isSource)}
-            aria-label={"Edit property"}
+            aria-label={'Edit property'}
             tabIndex={0}
             data-testid={`edit-property-${field.name}-button`}
           >
@@ -125,8 +125,8 @@ export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
           </Button>
         </Tooltip>,
         <Tooltip
-          key={"delete"}
-          position={"top"}
+          key={'delete'}
+          position={'top'}
           enableFlip={true}
           content={<div>Remove property</div>}
           entryDelay={750}
@@ -135,7 +135,7 @@ export const PropertiesTree: FunctionComponent<IPropertiesTreeProps> = ({
           <Button
             variant="plain"
             onClick={() => onDeleteProperty(field.name, field.scope, isSource)}
-            aria-label={"Remove property"}
+            aria-label={'Remove property'}
             tabIndex={0}
             data-testid={`remove-property-${field.name}-button`}
           >

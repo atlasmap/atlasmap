@@ -21,10 +21,10 @@ import React, {
   useEffect,
   useRef,
   // useEffect,
-} from "react";
-import { IDragAndDropField } from "./models";
-import { useDrop } from "react-dnd";
-import { useFieldsDnd } from "./FieldsDndProvider";
+} from 'react';
+import { IDragAndDropField } from './models';
+import { useDrop } from 'react-dnd';
+import { useFieldsDnd } from './FieldsDndProvider';
 
 export interface IFieldDropTargetChildren {
   isOver: boolean;
@@ -34,7 +34,7 @@ export interface IFieldDropTargetChildren {
 }
 
 export interface IFieldDropTargetProps
-  extends Omit<HTMLAttributes<HTMLElement>, "onDrop"> {
+  extends Omit<HTMLAttributes<HTMLElement>, 'onDrop'> {
   accept: string[];
   target: IDragAndDropField;
   canDrop: (draggedField: IDragAndDropField) => boolean;
@@ -44,7 +44,7 @@ export interface IFieldDropTargetProps
 
 export const FieldDropTarget = forwardRef<HTMLElement, IFieldDropTargetProps>(
   function FieldDropTarget(
-    { accept, target, canDrop, as: As = "div", children, ...props },
+    { accept, target, canDrop, as: As = 'div', children, ...props },
     ref,
   ) {
     const { setHoveredTarget } = useFieldsDnd();

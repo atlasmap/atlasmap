@@ -13,11 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React, { ReactElement, useCallback } from "react";
+import React, { ReactElement, useCallback } from 'react';
 
-import { ExportCatalogDialog } from "../../UI";
-import { useAtlasmap } from "../AtlasmapProvider";
-import { useToggle } from "../../Atlasmap/utils";
+import { ExportCatalogDialog } from '../../UI';
+import { useAtlasmap } from '../AtlasmapProvider';
+import { useToggle } from '../../Atlasmap/utils';
 
 export function useExportCatalogDialog(): [ReactElement, () => void] {
   const { state, toggleOn, toggleOff } = useToggle(false);

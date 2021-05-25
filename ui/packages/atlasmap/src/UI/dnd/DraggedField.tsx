@@ -13,11 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { FunctionComponent, ReactElement } from "react";
-import { XYCoord, useDragLayer } from "react-dnd";
+import { FunctionComponent, ReactElement } from 'react';
+import { XYCoord, useDragLayer } from 'react-dnd';
 
-import { IDragAndDropField } from "./models";
-import { useFieldsDnd } from "./FieldsDndProvider";
+import { IDragAndDropField } from './models';
+import { useFieldsDnd } from './FieldsDndProvider';
 
 export interface IIDraggedFieldChildrenProps {
   isDragging: boolean;
@@ -35,7 +35,7 @@ export const DraggedField: FunctionComponent<IDraggedFieldProps> = ({
 }) => {
   const { getHoveredTarget } = useFieldsDnd();
   const { isDragging, draggedField, currentOffset } = useDragLayer<
-    Omit<IIDraggedFieldChildrenProps, "getHoveredTarget">
+    Omit<IIDraggedFieldChildrenProps, 'getHoveredTarget'>
   >((monitor) => ({
     draggedField: monitor.getItem(),
     currentOffset: monitor.getClientOffset(),

@@ -16,15 +16,15 @@
 import {
   ConfirmationDialog,
   IConfirmationDialogProps,
-} from "./ConfirmationDialog";
+} from './ConfirmationDialog';
 import React, {
   FunctionComponent,
   useCallback,
   useEffect,
   useState,
-} from "react";
+} from 'react';
 
-import { TextInput } from "@patternfly/react-core";
+import { TextInput } from '@patternfly/react-core';
 
 export interface IDocumentName {
   id: string;
@@ -35,12 +35,12 @@ export interface IChangeDocumentNameDialogProps {
   id?: string;
   name?: string;
   isSource?: boolean;
-  isOpen: IConfirmationDialogProps["isOpen"];
-  onCancel: IConfirmationDialogProps["onCancel"];
+  isOpen: IConfirmationDialogProps['isOpen'];
+  onCancel: IConfirmationDialogProps['onCancel'];
   onConfirm: (updatedDocNameInfo: IDocumentName) => void;
 }
 export const ChangeDocumentNameDialog: FunctionComponent<IChangeDocumentNameDialogProps> =
-  ({ id, name: initialName = "", isSource, isOpen, onCancel, onConfirm }) => {
+  ({ id, name: initialName = '', isSource, isOpen, onCancel, onConfirm }) => {
     const [documentName, setDocumentName] = useState(initialName);
 
     const reset = useCallback(() => {
@@ -68,7 +68,7 @@ export const ChangeDocumentNameDialog: FunctionComponent<IChangeDocumentNameDial
 
     return (
       <ConfirmationDialog
-        title={"Change selected document name?"}
+        title={'Change selected document name?'}
         onCancel={handleOnCancel}
         onConfirm={handleOnConfirm}
         isOpen={isOpen}
@@ -78,7 +78,7 @@ export const ChangeDocumentNameDialog: FunctionComponent<IChangeDocumentNameDial
           onChange={(value) => handleOnNameChange(value)}
           id={id}
           name={documentName}
-          data-testid={id + "-parameter-text-input"}
+          data-testid={id + '-parameter-text-input'}
         />
       </ConfirmationDialog>
     );

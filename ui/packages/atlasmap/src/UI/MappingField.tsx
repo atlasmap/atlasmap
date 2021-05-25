@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { BoltIcon, InfoAltIcon, TrashIcon } from "@patternfly/react-icons";
+import { BoltIcon, InfoAltIcon, TrashIcon } from '@patternfly/react-icons';
 import {
   Button,
   InputGroup,
@@ -23,14 +23,14 @@ import {
   TextInput,
   Title,
   Tooltip,
-} from "@patternfly/react-core";
-import { DraggableField, FieldDropTarget } from "./dnd";
-import React, { Children, FunctionComponent, KeyboardEvent } from "react";
+} from '@patternfly/react-core';
+import { DraggableField, FieldDropTarget } from './dnd';
+import React, { Children, FunctionComponent, KeyboardEvent } from 'react';
 
-import { IAtlasmapField } from "../../src/Views/models";
-import { NodeRef } from "./Canvas/NodeRef";
-import { css } from "@patternfly/react-styles";
-import styles from "./MappingField.module.css";
+import { IAtlasmapField } from '../../src/Views/models';
+import { NodeRef } from './Canvas/NodeRef';
+import { css } from '@patternfly/react-styles';
+import styles from './MappingField.module.css';
 
 export interface IMappingFieldProps {
   field: IAtlasmapField;
@@ -69,18 +69,18 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
       target={{
         id: field.id,
         name: field.name,
-        type: "mapping",
+        type: 'mapping',
         payload: field,
       }}
       canDrop={() => {
         return true;
       }}
-      accept={["mapping"]}
+      accept={['mapping']}
     >
       {({ isTarget }) => (
         <DraggableField
           field={{
-            type: "mapping",
+            type: 'mapping',
             id: field.id,
             name: field.name,
             payload: field,
@@ -96,8 +96,8 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
             <NodeRef
               id={[
                 field.id,
-                isDragging ? "dnd-start" : undefined,
-                isTarget ? "dnd-target-field" : undefined,
+                isDragging ? 'dnd-start' : undefined,
+                isTarget ? 'dnd-target-field' : undefined,
               ]}
             >
               <div
@@ -115,7 +115,7 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
                     >
                       {canShowIndex && (
                         <Tooltip
-                          position={"auto"}
+                          position={'auto'}
                           enableFlip={true}
                           entryDelay={750}
                           exitDelay={100}
@@ -132,9 +132,9 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
                           <InputGroup className={styles.fieldIndex}>
                             <InputGroupText>#</InputGroupText>
                             <TextInput
-                              type={"number"}
+                              type={'number'}
                               value={index}
-                              id={"index"}
+                              id={'index'}
                               onKeyDown={onKeyDown}
                               onChange={onIndexChange}
                               data-testid={`change-${name}-input-index`}
@@ -144,7 +144,7 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
                         </Tooltip>
                       )}
                       <Tooltip
-                        position={"auto"}
+                        position={'auto'}
                         enableFlip={true}
                         entryDelay={750}
                         exitDelay={100}
@@ -159,14 +159,14 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
                   {!mappingExpressionEnabled && onNewTransformation && (
                     <SplitItem>
                       <Tooltip
-                        position={"auto"}
+                        position={'auto'}
                         enableFlip={true}
                         entryDelay={750}
                         exitDelay={100}
-                        content={"Add a new transformation."}
+                        content={'Add a new transformation.'}
                       >
                         <Button
-                          variant={"plain"}
+                          variant={'plain'}
                           onClick={onNewTransformation}
                           className={styles.link}
                           data-testid={`add-transformation-to-${name}-field-button`}
@@ -178,14 +178,14 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
                   )}
                   <SplitItem>
                     <Tooltip
-                      position={"auto"}
+                      position={'auto'}
                       enableFlip={true}
                       entryDelay={750}
                       exitDelay={100}
-                      content={"Delete this field from the mapping."}
+                      content={'Delete this field from the mapping.'}
                     >
                       <Button
-                        variant={"plain"}
+                        variant={'plain'}
                         onClick={onDelete}
                         className={styles.link}
                         data-testid={`remove-${name}-from-mapping-button`}
@@ -205,7 +205,7 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
                   Children.count(children) > 0 && (
                     <div
                       className={css(
-                        "pf-c-form",
+                        'pf-c-form',
                         styles.transformationsWrapper,
                       )}
                     >

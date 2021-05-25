@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React, { SVGAttributes, forwardRef } from "react";
+import React, { SVGAttributes, forwardRef } from 'react';
 
 export const AtlasmapLogo = forwardRef<
   SVGSVGElement,

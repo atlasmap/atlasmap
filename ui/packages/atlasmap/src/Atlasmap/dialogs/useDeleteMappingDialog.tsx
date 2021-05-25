@@ -13,11 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { ReactElement, useCallback } from "react";
+import { ReactElement, useCallback } from 'react';
 
-import { IAtlasmapMapping } from "../../Views";
-import { useAtlasmap } from "../AtlasmapProvider";
-import { useConfirmationDialog } from "./useConfirmationDialog";
+import { IAtlasmapMapping } from '../../Views';
+import { useAtlasmap } from '../AtlasmapProvider';
+import { useConfirmationDialog } from './useConfirmationDialog';
 
 export function useDeleteMappingDialog(): [
   ReactElement,
@@ -25,8 +25,8 @@ export function useDeleteMappingDialog(): [
 ] {
   const { removeMapping, deselectMapping } = useAtlasmap();
   const [deleteMappingDialog, openDeleteMappingDialog] = useConfirmationDialog(
-    "Remove Mapping?",
-    "Are you sure you want to remove the current mapping?",
+    'Remove Mapping?',
+    'Are you sure you want to remove the current mapping?',
   );
   const onDeleteMapping = useCallback(
     (mapping: IAtlasmapMapping) => {

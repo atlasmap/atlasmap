@@ -16,7 +16,7 @@
 import {
   ConfirmationDialog,
   IConfirmationDialogProps,
-} from "./ConfirmationDialog";
+} from './ConfirmationDialog';
 import {
   Form,
   FormGroup,
@@ -24,14 +24,14 @@ import {
   FormSelectOption,
   TextInput,
   Tooltip,
-} from "@patternfly/react-core";
+} from '@patternfly/react-core';
 
 import React, {
   FunctionComponent,
   useCallback,
   useEffect,
   useState,
-} from "react";
+} from 'react';
 
 interface ValueTypeOption {
   label: string;
@@ -48,15 +48,15 @@ export interface IConstantDialogProps {
   value?: string;
   valueType?: string;
   valueTypeOptions: ValueTypeOption[];
-  isOpen: IConfirmationDialogProps["isOpen"];
-  onCancel: IConfirmationDialogProps["onCancel"];
+  isOpen: IConfirmationDialogProps['isOpen'];
+  onCancel: IConfirmationDialogProps['onCancel'];
   onConfirm: (constant: IConstant) => void;
   onValidation: (value: string) => boolean;
 }
 export const ConstantDialog: FunctionComponent<IConstantDialogProps> = ({
   title,
-  value: initialValue = "",
-  valueType: initialValueType = "",
+  value: initialValue = '',
+  valueType: initialValueType = '',
   valueTypeOptions,
   isOpen,
   onCancel,
@@ -107,7 +107,7 @@ export const ConstantDialog: FunctionComponent<IConstantDialogProps> = ({
       isOpen={isOpen}
     >
       <Form>
-        <FormGroup label={"Value"} fieldId={"constvalue"} isRequired={true}>
+        <FormGroup label={'Value'} fieldId={'constvalue'} isRequired={true}>
           {!isValueUnique ? (
             <Tooltip
               content={<div>A constant with this value already exists</div>}
@@ -117,30 +117,30 @@ export const ConstantDialog: FunctionComponent<IConstantDialogProps> = ({
               <TextInput
                 value={value}
                 onChange={handleOnValueChange}
-                id={"constvalue"}
+                id={'constvalue'}
                 autoFocus={true}
                 isRequired={true}
-                data-testid={"constant-value-text-input"}
-                style={{ color: "red" }}
+                data-testid={'constant-value-text-input'}
+                style={{ color: 'red' }}
               />
             </Tooltip>
           ) : (
             <TextInput
               value={value}
               onChange={handleOnValueChange}
-              id={"constvalue"}
+              id={'constvalue'}
               autoFocus={true}
               isRequired={true}
-              data-testid={"constant-value-text-input"}
+              data-testid={'constant-value-text-input'}
             />
           )}
         </FormGroup>
-        <FormGroup label={"Value type"} fieldId={"valueType"}>
+        <FormGroup label={'Value type'} fieldId={'valueType'}>
           <FormSelect
             value={valueType}
-            aria-label={"Select value type"}
+            aria-label={'Select value type'}
             onChange={setValueType}
-            data-testid={"constant-type-form-select"}
+            data-testid={'constant-type-form-select'}
           >
             {valueTypeOptions.map(({ label, value }, idx) => (
               <FormSelectOption key={idx} value={value} label={label} />

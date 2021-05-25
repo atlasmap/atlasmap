@@ -13,14 +13,14 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Field, MappingModel } from "@atlasmap/core";
-import { ITransformationArgument, ITransformationSelectOption } from "../UI";
-import { AlertProps } from "@patternfly/react-core";
+import { Field, MappingModel } from '@atlasmap/core';
+import { ITransformationArgument, ITransformationSelectOption } from '../UI';
+import { AlertProps } from '@patternfly/react-core';
 
 export type ElementId = string;
 export type GroupId = string;
 
-export type AtlasmapDocumentType = "source" | "target";
+export type AtlasmapDocumentType = 'source' | 'target';
 
 export type AtlasmapFields = Array<IAtlasmapGroup | IAtlasmapField>;
 
@@ -91,7 +91,7 @@ export interface IAtlasmapMapping {
 
 export interface INotification {
   id: string;
-  variant: AlertProps["variant"];
+  variant: AlertProps['variant'];
   title: string;
   description: string;
   isRead?: boolean;

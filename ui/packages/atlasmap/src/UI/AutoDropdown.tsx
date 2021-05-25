@@ -13,13 +13,13 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Dropdown, DropdownProps } from "@patternfly/react-core";
-import React, { FunctionComponent, ReactElement } from "react";
+import { Dropdown, DropdownProps } from '@patternfly/react-core';
+import React, { FunctionComponent, ReactElement } from 'react';
 
-import { useToggle } from "../Atlasmap/utils";
+import { useToggle } from '../Atlasmap/utils';
 
 export interface IAutoDropdown
-  extends Omit<Omit<DropdownProps, "css">, "toggle"> {
+  extends Omit<Omit<DropdownProps, 'css'>, 'toggle'> {
   toggle: (props: { isOpen: boolean; toggleOpen: () => void }) => ReactElement;
 }
 

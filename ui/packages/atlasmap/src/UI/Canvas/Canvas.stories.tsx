@@ -13,20 +13,20 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Canvas, CanvasProvider } from ".";
-import React from "react";
+import { Canvas, CanvasProvider } from '.';
+import React from 'react';
 
 export default {
-  title: "Canvas",
+  title: 'Canvas',
   includeStories: [], // or don't load this file at all
 };
 
 export const example = () => (
   <CanvasProvider initialHeight={300} allowPanning={true}>
     <Canvas>
-      <circle cx={90} cy={50} r={20} fill={"green"} />
-      <circle cx={150} cy={150} r={50} fill={"purple"} />
-      <circle cx={20} cy={70} r={20} fill={"red"} />
+      <circle cx={90} cy={50} r={20} fill={'green'} />
+      <circle cx={150} cy={150} r={50} fill={'purple'} />
+      <circle cx={20} cy={70} r={20} fill={'red'} />
     </Canvas>
   </CanvasProvider>
 );
@@ -34,9 +34,9 @@ export const example = () => (
 export const panZoomDisabled = () => (
   <CanvasProvider initialHeight={300} allowPanning={false}>
     <Canvas>
-      <circle cx={90} cy={50} r={20} fill={"green"} />
-      <circle cx={150} cy={150} r={50} fill={"purple"} />
-      <circle cx={20} cy={70} r={20} fill={"red"} />
+      <circle cx={90} cy={50} r={20} fill={'green'} />
+      <circle cx={150} cy={150} r={50} fill={'purple'} />
+      <circle cx={20} cy={70} r={20} fill={'red'} />
     </Canvas>
   </CanvasProvider>
 );
@@ -44,9 +44,9 @@ export const panZoomDisabled = () => (
 export const panZoomEnabled = () => (
   <CanvasProvider initialHeight={300} allowPanning={true}>
     <Canvas>
-      <circle cx={90} cy={50} r={20} fill={"green"} />
-      <circle cx={150} cy={150} r={50} fill={"purple"} />
-      <circle cx={20} cy={70} r={20} fill={"red"} />
+      <circle cx={90} cy={50} r={20} fill={'green'} />
+      <circle cx={150} cy={150} r={50} fill={'purple'} />
+      <circle cx={20} cy={70} r={20} fill={'red'} />
     </Canvas>
   </CanvasProvider>
 );
@@ -60,18 +60,18 @@ export const initialZoomAndPan = () => (
     allowPanning={true}
   >
     <Canvas>
-      <circle cx={90} cy={50} r={20} fill={"green"} />
-      <circle cx={150} cy={150} r={50} fill={"purple"} />
-      <circle cx={20} cy={70} r={20} fill={"red"} />
+      <circle cx={90} cy={50} r={20} fill={'green'} />
+      <circle cx={150} cy={150} r={50} fill={'purple'} />
+      <circle cx={20} cy={70} r={20} fill={'red'} />
     </Canvas>
   </CanvasProvider>
 );
 
 export const automaticallySized = () => (
-  <div style={{ width: 500, height: 500, background: "red" }}>
+  <div style={{ width: 500, height: 500, background: 'red' }}>
     <CanvasProvider allowPanning={false}>
       <Canvas>
-        <circle cx={480} cy={480} r={20} fill={"white"} />
+        <circle cx={480} cy={480} r={20} fill={'white'} />
       </Canvas>
     </CanvasProvider>
   </div>

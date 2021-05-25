@@ -13,11 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React, { FunctionComponent } from "react";
-import { Toolbar, ToolbarContent } from "@patternfly/react-core";
+import React, { FunctionComponent } from 'react';
+import { Toolbar, ToolbarContent } from '@patternfly/react-core';
 
-import { css } from "@patternfly/react-styles";
-import styles from "./Toolbar.module.css";
+import { css } from '@patternfly/react-styles';
+import styles from './Toolbar.module.css';
 
 export const ExpressionToolbar: FunctionComponent = ({ children }) => {
   return (

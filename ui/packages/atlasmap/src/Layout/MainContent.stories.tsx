@@ -13,12 +13,12 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { MainContent } from "./MainContent";
-import React from "react";
-import { TextContent } from "@patternfly/react-core";
+import { MainContent } from './MainContent';
+import React from 'react';
+import { TextContent } from '@patternfly/react-core';
 
 export default {
-  title: "AtlasMap|Layout/MainContent",
+  title: 'AtlasMap|Layout/MainContent',
 };
 
 export const example = () => (

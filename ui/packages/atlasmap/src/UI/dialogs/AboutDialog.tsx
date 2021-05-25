@@ -13,8 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Button, Modal } from "@patternfly/react-core";
-import React, { FunctionComponent } from "react";
+import { Button, Modal } from '@patternfly/react-core';
+import React, { FunctionComponent } from 'react';
 
 export type CloseCallback = () => void;
 
@@ -41,11 +41,11 @@ export const AboutDialog: FunctionComponent<IAboutDialogProps> = ({
       onClose={onClose}
       actions={[
         <Button
-          key={"close"}
-          variant={"primary"}
+          key={'close'}
+          variant={'primary'}
           onClick={onClose}
           aria-label="Close"
-          data-testid={"about-dialog-close-button"}
+          data-testid={'about-dialog-close-button'}
           isDisabled={!onClose}
         >
           Close

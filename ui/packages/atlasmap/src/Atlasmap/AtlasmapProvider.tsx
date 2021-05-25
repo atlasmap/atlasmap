@@ -21,7 +21,7 @@ import {
   initDataState,
   initNotificationsState,
   notificationsReducer,
-} from "./reducers";
+} from './reducers';
 import {
   DocumentInitializationModel,
   DocumentType,
@@ -30,8 +30,8 @@ import {
   MappingUtil,
   TransitionMode,
   search,
-} from "@atlasmap/core";
-import { IAtlasmapDocument, IAtlasmapField } from "../Views";
+} from '@atlasmap/core';
+import { IAtlasmapDocument, IAtlasmapField } from '../Views';
 import React, {
   FunctionComponent,
   createContext,
@@ -39,7 +39,7 @@ import React, {
   useContext,
   useEffect,
   useReducer,
-} from "react";
+} from 'react';
 import {
   addToCurrentMapping,
   changeDocumentName,
@@ -103,9 +103,9 @@ import {
   toggleShowMappedFields,
   toggleShowUnmappedFields,
   trailerId,
-} from "./utils";
+} from './utils';
 
-import { debounceTime } from "rxjs/operators";
+import { debounceTime } from 'rxjs/operators';
 
 // the document payload with get from Syndesis
 export interface IExternalDocumentProps {
@@ -159,25 +159,25 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   );
 
   const onReset = () => {
-    dispatchData({ type: "reset" });
+    dispatchData({ type: 'reset' });
     dispatchNotifications({
-      type: "reset",
+      type: 'reset',
     });
   };
 
   const onLoading = () => {
-    dispatchData({ type: "loading" });
+    dispatchData({ type: 'loading' });
   };
 
   const onUpdates = (payload: DataActionPayload) => {
     dispatchData({
-      type: "update",
+      type: 'update',
       payload,
     });
   };
 
   const markNotificationRead = (id: string) =>
-    dispatchNotifications({ type: "dismiss", payload: { id } });
+    dispatchNotifications({ type: 'dismiss', payload: { id } });
 
   useEffect(
     function onInitializationCb() {
@@ -314,11 +314,11 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   const onSubUpdate = useCallback(
     function onSubUpdateCb(caller: string) {
       console.log(
-        "onUpdates",
+        'onUpdates',
         caller,
-        "initialized",
+        'initialized',
         initializationService.cfg.initCfg.initialized,
-        "errors",
+        'errors',
         initializationService.cfg.initCfg.initializationErrorOccurred,
       );
       onUpdates({
@@ -335,12 +335,12 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
         flatTargets: convertTargetsToFlatArray(),
       });
       dispatchNotifications({
-        type: "update",
+        type: 'update',
         payload: {
           notifications: initializationService.cfg.errorService
             .getErrors()
             .reverse()
-            .filter((e) => e.level !== "DEBUG")
+            .filter((e) => e.level !== 'DEBUG')
             .map(errorInfoToNotification),
         },
       });
@@ -380,17 +380,17 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
 
       const subscriptions = [
         initializationObservable.subscribe(() =>
-          onSubUpdate("initializationObservable"),
+          onSubUpdate('initializationObservable'),
         ),
         mappingUpdatedSource.subscribe(() =>
-          onSubUpdate("mappingUpdatedSource"),
+          onSubUpdate('mappingUpdatedSource'),
         ),
-        mappingPreview.subscribe(() => onSubUpdate("mappingPreviewOutput$")),
+        mappingPreview.subscribe(() => onSubUpdate('mappingPreviewOutput$')),
         lineRefreshObservable.subscribe(() =>
-          onSubUpdate("lineRefreshObservable"),
+          onSubUpdate('lineRefreshObservable'),
         ),
         initializationService.cfg.errorService.subscribe(() =>
-          onSubUpdate("errorService"),
+          onSubUpdate('errorService'),
         ),
       ];
 
@@ -554,16 +554,16 @@ export function useAtlasmap() {
    */
   const isFieldAddableToSelection = useCallback(
     (
-      documentType: "source" | "target",
+      documentType: 'source' | 'target',
       field: IAtlasmapField,
       dropTarget?: IAtlasmapField,
     ): boolean => {
       const { selectedMapping } = context;
-      const isSource = documentType === "source";
+      const isSource = documentType === 'source';
       if (
         !field ||
         !field.amField.isTerminal() ||
-        dropTarget?.type === "UNSUPPORTED" ||
+        dropTarget?.type === 'UNSUPPORTED' ||
         (selectedMapping &&
           selectedMapping.mapping.transition.mode === TransitionMode.ENUM &&
           selectedMapping.sourceFields.length > 0 &&
@@ -615,10 +615,10 @@ export function useAtlasmap() {
   );
 
   const isFieldRemovableFromSelection = useCallback(
-    (documentType: "source" | "target", field: IAtlasmapField): boolean =>
+    (documentType: 'source' | 'target', field: IAtlasmapField): boolean =>
       !!context.selectedMapping &&
       !!context.selectedMapping[
-        documentType === "source" ? "sourceFields" : "targetFields"
+        documentType === 'source' ? 'sourceFields' : 'targetFields'
       ].find((f) => f.id === field.id),
     [context.selectedMapping],
   );

@@ -18,18 +18,18 @@ import {
   ExpandIcon,
   SearchMinusIcon,
   SearchPlusIcon,
-} from "@patternfly/react-icons";
-import React, { FunctionComponent, useCallback, useMemo } from "react";
+} from '@patternfly/react-icons';
+import React, { FunctionComponent, useCallback, useMemo } from 'react';
 import {
   TopologyControlBar,
   TopologyControlButton,
   createTopologyControlButtons,
-} from "@patternfly/react-topology";
+} from '@patternfly/react-topology';
 
-import { useCanvas } from "../UI";
+import { useCanvas } from '../UI';
 
 export function getToolbarIconStyle(active: boolean) {
-  return { color: active ? "var(--pf-global--primary-color--100)" : undefined };
+  return { color: active ? 'var(--pf-global--primary-color--100)' : undefined };
 }
 
 export interface ICanvasControlBarProps {
@@ -59,40 +59,40 @@ export const CanvasControlBar: FunctionComponent<ICanvasControlBarProps> = ({
       createTopologyControlButtons({
         zoomIn: true,
         zoomInIcon: <SearchPlusIcon />,
-        zoomInTip: "Zoom In",
-        zoomInAriaLabel: " ",
+        zoomInTip: 'Zoom In',
+        zoomInAriaLabel: ' ',
         zoomInCallback: handleZoomIn,
         zoomInDisabled: disabled,
         zoomInHidden: false,
 
         zoomOut: true,
         zoomOutIcon: <SearchMinusIcon />,
-        zoomOutTip: "Zoom Out",
-        zoomOutAriaLabel: " ",
+        zoomOutTip: 'Zoom Out',
+        zoomOutAriaLabel: ' ',
         zoomOutCallback: handleZoomOut,
         zoomOutDisabled: disabled,
         zoomOutHidden: false,
 
         fitToScreen: false,
         fitToScreenIcon: <ExpandArrowsAltIcon />,
-        fitToScreenTip: "Fit to Screen",
-        fitToScreenAriaLabel: " ",
+        fitToScreenTip: 'Fit to Screen',
+        fitToScreenAriaLabel: ' ',
         fitToScreenCallback: () => void 0,
         fitToScreenDisabled: disabled,
         fitToScreenHidden: false,
 
         resetView: true,
         resetViewIcon: <ExpandIcon />,
-        resetViewTip: "Reset View",
-        resetViewAriaLabel: " ",
+        resetViewTip: 'Reset View',
+        resetViewAriaLabel: ' ',
         resetViewCallback: handleViewReset,
         resetViewDisabled: disabled,
         resetViewHidden: false,
 
         legend: false,
-        legendIcon: "Legend",
-        legendTip: "",
-        legendAriaLabel: "Legend",
+        legendIcon: 'Legend',
+        legendTip: '',
+        legendAriaLabel: 'Legend',
         legendCallback: () => void 0,
         legendDisabled: disabled,
         legendHidden: false,

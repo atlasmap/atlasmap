@@ -13,9 +13,9 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React, { FunctionComponent, useMemo } from "react";
-import { css } from "@patternfly/react-styles";
-import styles from "./Column.module.css";
+import React, { FunctionComponent, useMemo } from 'react';
+import { css } from '@patternfly/react-styles';
+import styles from './Column.module.css';
 
 export interface IColumnProps {
   totalColumns?: number;

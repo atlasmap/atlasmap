@@ -24,10 +24,10 @@ import {
   MappingModel,
   constantTypes,
   propertyTypes,
-} from "@atlasmap/core";
+} from '@atlasmap/core';
 
-import { LookupTableData } from "../../UI";
-import { initializationService } from "./ui";
+import { LookupTableData } from '../../UI';
+import { initializationService } from './ui';
 
 export type EnumValue = {
   name: string;
@@ -96,7 +96,7 @@ export function getConstantType(constVal: string): string {
     cfg.constantDoc.pathSeparator + constVal,
   );
   if (!field) {
-    return "";
+    return '';
   }
   return field.type;
 }
@@ -226,10 +226,10 @@ export function editProperty(
     field.scope = newScope;
   }
   field.type = propType;
-  let originalKey = "";
+  let originalKey = '';
   if (propScope.length > 0) {
     originalKey =
-      cfg.targetPropertyDoc.pathSeparator + propName + "-" + propScope;
+      cfg.targetPropertyDoc.pathSeparator + propName + '-' + propScope;
   }
 
   if (isSource) {
@@ -256,7 +256,7 @@ export function getPropertyType(
         propScope,
       );
   if (!field) {
-    return "";
+    return '';
   }
   return field.type;
 }

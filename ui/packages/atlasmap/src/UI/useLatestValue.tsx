@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { ReactNode, useCallback, useRef, useState } from "react";
+import { ReactNode, useCallback, useRef, useState } from 'react';
 
 export function useLatestValue(): [
   ReactNode | undefined,

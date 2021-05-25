@@ -26,19 +26,19 @@ import {
   ToggleNamespaceTableViewToolbarItem,
   ToggleTypesToolbarItem,
   ToggleUnmappedFieldsToolbarItem,
-} from "./toolbarItems";
-import React, { useMemo, useState } from "react";
+} from './toolbarItems';
+import React, { useMemo, useState } from 'react';
 
-import { ContextToolbar } from "../Layout";
-import { ToolbarGroup } from "@patternfly/react-core";
-import { useAtlasmap } from "./AtlasmapProvider";
-import { useToggle } from "../Atlasmap/utils";
+import { ContextToolbar } from '../Layout';
+import { ToolbarGroup } from '@patternfly/react-core';
+import { useAtlasmap } from './AtlasmapProvider';
+import { useToggle } from '../Atlasmap/utils';
 
 export type Views =
-  | "ColumnMapper"
-  | "MappingTable"
-  | "NamespaceTable"
-  | "FreeView";
+  | 'ColumnMapper'
+  | 'MappingTable'
+  | 'NamespaceTable'
+  | 'FreeView';
 
 export interface IUseContextToolbarHandlers {
   onImportAtlasFile: (file: File) => void;
@@ -98,7 +98,7 @@ export function useContextToolbar({
     newMapping,
   } = useAtlasmap();
 
-  const [activeView, setActiveView] = useState<Views>("ColumnMapper");
+  const [activeView, setActiveView] = useState<Views>('ColumnMapper');
   const { state: showMappingColumn, toggle: toggleShowMappingColumn } =
     useToggle(false);
   const { state: showMappingPreview, toggle: toggleShowMappingPreview } =
@@ -118,7 +118,7 @@ export function useContextToolbar({
           showImportJarFileToolbarItem ||
           showExportAtlasFileToolbarItem ||
           showResetToolbarItem) && (
-          <ToolbarGroup variant="button-group" spacer={{ default: "spacerMd" }}>
+          <ToolbarGroup variant="button-group" spacer={{ default: 'spacerMd' }}>
             <AtlasmapToolbarItem
               showImportAtlasFileToolbarItem={showImportAtlasFileToolbarItem}
               showImportJarFileToolbarItem={showImportJarFileToolbarItem}
@@ -137,80 +137,80 @@ export function useContextToolbar({
           showNamespaceTableViewToolbarItem) && (
           <ToolbarGroup
             variant="icon-button-group"
-            spacer={{ default: "spacerMd" }}
+            spacer={{ default: 'spacerMd' }}
           >
             {showColumnMapperViewToolbarItem && (
               <ToggleColumnMapperViewToolbarItem
-                toggled={activeView === "ColumnMapper"}
-                onClick={() => setActiveView("ColumnMapper")}
+                toggled={activeView === 'ColumnMapper'}
+                onClick={() => setActiveView('ColumnMapper')}
               />
             )}
             {showMappingTableViewToolbarItem && (
               <ToggleMappingTableViewToolbarItem
-                toggled={activeView === "MappingTable"}
-                onClick={() => setActiveView("MappingTable")}
+                toggled={activeView === 'MappingTable'}
+                onClick={() => setActiveView('MappingTable')}
               />
             )}
             {showFreeViewToolbarItem && (
               <ToggleFreeViewToolbarItem
-                toggled={activeView === "FreeView"}
-                onClick={() => setActiveView("FreeView")}
+                toggled={activeView === 'FreeView'}
+                onClick={() => setActiveView('FreeView')}
               />
             )}
             {showNamespaceTableViewToolbarItem && (
               <ToggleNamespaceTableViewToolbarItem
-                toggled={activeView === "NamespaceTable"}
-                onClick={() => setActiveView("NamespaceTable")}
+                toggled={activeView === 'NamespaceTable'}
+                onClick={() => setActiveView('NamespaceTable')}
               />
             )}
           </ToolbarGroup>
         )}
         <ToolbarGroup variant="icon-button-group">
           {showToggleMappingColumnToolbarItem &&
-            activeView === "ColumnMapper" && (
+            activeView === 'ColumnMapper' && (
               <ToggleMappingColumnToolbarItem
                 toggled={showMappingColumn}
                 onClick={toggleShowMappingColumn}
               />
             )}
           {showToggleMappingPreviewToolbarItem &&
-            (activeView === "ColumnMapper" ||
-              activeView === "MappingTable") && (
+            (activeView === 'ColumnMapper' ||
+              activeView === 'MappingTable') && (
               <ToggleMappingPreviewToolbarItem
                 toggled={showMappingPreview}
                 onClick={toggleShowMappingPreview}
               />
             )}
           {showToggleTypesToolbarItem &&
-            (activeView === "ColumnMapper" ||
-              activeView === "MappingTable") && (
+            (activeView === 'ColumnMapper' ||
+              activeView === 'MappingTable') && (
               <ToggleTypesToolbarItem
                 toggled={showTypes}
                 onClick={toggleShowTypes}
               />
             )}
           {showToggleMappedFieldsToolbarItem &&
-            activeView === "ColumnMapper" && (
+            activeView === 'ColumnMapper' && (
               <ToggleMappedFieldsToolbarItem
                 toggled={showMappedFields}
                 onClick={toggleShowMappedFields}
               />
             )}
           {showToggleUnmappedFieldsToolbarItem &&
-            activeView === "ColumnMapper" && (
+            activeView === 'ColumnMapper' && (
               <ToggleUnmappedFieldsToolbarItem
                 toggled={showUnmappedFields}
                 onClick={toggleShowUnmappedFields}
               />
             )}
           {showAddNewMappingToolbarItem &&
-            (activeView === "ColumnMapper" ||
-              activeView === "MappingTable") && (
+            (activeView === 'ColumnMapper' ||
+              activeView === 'MappingTable') && (
               <AddMappingToolbarItem onClick={newMapping} />
             )}
           {showAddNewMappingToolbarItem &&
-            (activeView === "ColumnMapper" ||
-              activeView === "MappingTable") && (
+            (activeView === 'ColumnMapper' ||
+              activeView === 'MappingTable') && (
               <AboutToolbarItem onClick={onAbout} />
             )}
         </ToolbarGroup>

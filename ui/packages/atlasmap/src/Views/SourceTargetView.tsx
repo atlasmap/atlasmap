@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Column, ColumnMapper, Columns, NodeRefProvider } from "../UI";
+import { Column, ColumnMapper, Columns, NodeRefProvider } from '../UI';
 import {
   ISourceColumnCallbacks,
   ISourceMappingTargetLinksData,
@@ -24,14 +24,14 @@ import {
   SourceTargetLinks,
   SourcesColumn,
   TargetsColumn,
-} from "./ColumnMapperView";
-import React, { FunctionComponent } from "react";
+} from './ColumnMapperView';
+import React, { FunctionComponent } from 'react';
 
 export interface ISourceTargetViewProps
   extends ISourcesColumnData,
     ITargetsColumnData,
     ISourceMappingTargetLinksData {
-  onSelectMapping: ISourceMappingTargetLinksEvents["onSelectMapping"];
+  onSelectMapping: ISourceMappingTargetLinksEvents['onSelectMapping'];
   sourceEvents: ISourceColumnCallbacks;
   targetEvents: ITargetsColumnCallbacks;
 }
@@ -53,9 +53,9 @@ export const SourceTargetView: FunctionComponent<ISourceTargetViewProps> = ({
   return (
     <>
       <NodeRefProvider>
-        <ColumnMapper role={"main"}>
+        <ColumnMapper role={'main'}>
           <Columns>
-            <Column data-testid={"column-source-area"} totalColumns={2}>
+            <Column data-testid={'column-source-area'} totalColumns={2}>
               <SourcesColumn
                 sourceProperties={sourceProperties}
                 constants={constants}
@@ -65,7 +65,7 @@ export const SourceTargetView: FunctionComponent<ISourceTargetViewProps> = ({
               />
             </Column>
 
-            <Column data-testid={"column-target-area"} totalColumns={2}>
+            <Column data-testid={'column-target-area'} totalColumns={2}>
               <TargetsColumn
                 targetProperties={targetProperties}
                 showMappingPreview={showMappingPreview}

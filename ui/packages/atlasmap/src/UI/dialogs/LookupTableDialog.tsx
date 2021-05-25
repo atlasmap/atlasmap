@@ -19,11 +19,11 @@ import {
   FormSelect,
   FormSelectOption,
   Label,
-} from "@patternfly/react-core";
-import React, { FunctionComponent, useState } from "react";
+} from '@patternfly/react-core';
+import React, { FunctionComponent, useState } from 'react';
 
-import { IConfirmationDialogProps } from "./ConfirmationDialog";
-import styles from "./LookupTableDialog.module.css";
+import { IConfirmationDialogProps } from './ConfirmationDialog';
+import styles from './LookupTableDialog.module.css';
 
 export type LookupTableData = {
   sourceEnumValue: string;
@@ -33,7 +33,7 @@ export type LookupTableData = {
 export interface ILookupTableDialogProps {
   enumerationValue: LookupTableData;
   sourceKey: number;
-  isOpen: IConfirmationDialogProps["isOpen"];
+  isOpen: IConfirmationDialogProps['isOpen'];
 }
 
 export const LookupTableDialog: FunctionComponent<ILookupTableDialogProps> = ({
@@ -55,17 +55,17 @@ export const LookupTableDialog: FunctionComponent<ILookupTableDialogProps> = ({
 
   return (
     <Form>
-      <FormGroup className={styles.iGroup} fieldId={"lookup-table-row"}>
+      <FormGroup className={styles.iGroup} fieldId={'lookup-table-row'}>
         <Label className={styles.iSelectLabel}>
           {enumerationValue.sourceEnumValue}
         </Label>
         <FormSelect
           className={styles.iSelectBody}
           value={targetEnum}
-          aria-label={"enum-map"}
+          aria-label={'enum-map'}
           autoFocus={true}
           onChange={onChangeTargetEnum}
-          data-testid={"enum-map-select"}
+          data-testid={'enum-map-select'}
           key={`${targetEnum}-${sourceKey}`}
         >
           {isOpen &&

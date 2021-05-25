@@ -23,8 +23,8 @@ import {
   ErrorType,
   InspectionType,
   NamespaceModel,
-} from "@atlasmap/core";
-import { ClassNameComponent } from "./custom-classname";
+} from '@atlasmap/core';
+import { ClassNameComponent } from './custom-classname';
 
 /**
  * Modify the document name of the document specified by the document ID.
@@ -42,7 +42,7 @@ export async function changeDocumentName(
   const docDef = getDocDef(docId, cfg, isSource);
   docDef.name = newDocName;
   await cfg.mappingService.notifyMappingUpdated();
-  await cfg.fileService.exportADMArchive("");
+  await cfg.fileService.exportADMArchive('');
 }
 
 /**
@@ -68,7 +68,7 @@ export function createNamespace(
     locationUri: locationUri,
     createdByUser: true,
     isTarget: isTarget,
-    getPrettyLabel: () => alias + " [" + uri + "]",
+    getPrettyLabel: () => alias + ' [' + uri + ']',
     copy: () => Object.assign({}, namespace),
     copyFrom: (n: NamespaceModel) => Object.assign(namespace, n),
   };
@@ -122,7 +122,7 @@ async function importDoc(
   return new Promise<boolean>(async (resolve) => {
     cfg.initCfg.initialized = false;
     cfg.initializationService.updateLoadingStatus(
-      "Importing Document " + selectedFile.name,
+      'Importing Document ' + selectedFile.name,
     );
     cfg.documentService
       .processDocument(
@@ -133,7 +133,7 @@ async function importDoc(
         inspectionParameters,
       )
       .then(() => {
-        cfg.fileService.exportADMArchive("");
+        cfg.fileService.exportADMArchive('');
         resolve(true);
       });
   });
@@ -157,7 +157,7 @@ export async function removeDocumentRef(
       DataMapperUtil.removeItemFromArray(docDef, cfg.targetDocs);
     }
     await cfg.mappingService.notifyMappingUpdated();
-    await cfg.fileService.exportADMArchive("");
+    await cfg.fileService.exportADMArchive('');
     resolve(true);
   });
 }
@@ -196,7 +196,7 @@ export function getDocDefByName(
 ): DocumentDefinition {
   for (const docDef of cfg.getDocs(isSource)) {
     const candidateDocName =
-      docDef.getName(false) + "." + docDef.type.toLowerCase();
+      docDef.getName(false) + '.' + docDef.type.toLowerCase();
     if (candidateDocName.match(docName)) {
       return docDef;
     }
@@ -222,7 +222,7 @@ export async function getCustomClassNameOptions(): Promise<string[]> {
           cfg.errorService.addError(
             new ErrorInfo({
               message:
-                "Fatal network error: Could not connect to AtlasMap design runtime service.",
+                'Fatal network error: Could not connect to AtlasMap design runtime service.',
               level: ErrorLevel.ERROR,
               scope: ErrorScope.APPLICATION,
               type: ErrorType.INTERNAL,
@@ -231,7 +231,7 @@ export async function getCustomClassNameOptions(): Promise<string[]> {
         } else {
           cfg.errorService.addError(
             new ErrorInfo({
-              message: "Could not find class names from uploaded JARs.",
+              message: 'Could not find class names from uploaded JARs.',
               level: ErrorLevel.WARN,
               scope: ErrorScope.APPLICATION,
               type: ErrorType.INTERNAL,
@@ -327,7 +327,7 @@ export function enableCustomClass(
             }
             cfg.errorService.addError(
               new ErrorInfo({
-                message: "The Java class you selected has no mappable fields.",
+                message: 'The Java class you selected has no mappable fields.',
                 level: ErrorLevel.WARN,
                 scope: ErrorScope.APPLICATION,
                 type: ErrorType.USER,
@@ -335,7 +335,7 @@ export function enableCustomClass(
             );
           }
           await cfg.mappingService.notifyMappingUpdated();
-          await cfg.fileService.exportADMArchive("");
+          await cfg.fileService.exportADMArchive('');
         })
         .catch((error: any) => {
           if (error.status === 0) {
@@ -366,7 +366,7 @@ export function enableCustomClass(
         cfg.errorService.addError(
           new ErrorInfo({
             message:
-              "Fatal network error: Could not connect to AtlasMap design runtime service.",
+              'Fatal network error: Could not connect to AtlasMap design runtime service.',
             level: ErrorLevel.ERROR,
             scope: ErrorScope.APPLICATION,
             type: ErrorType.INTERNAL,
@@ -376,7 +376,7 @@ export function enableCustomClass(
       } else {
         cfg.errorService.addError(
           new ErrorInfo({
-            message: "Could not load the Java class path.",
+            message: 'Could not load the Java class path.',
             level: ErrorLevel.ERROR,
             scope: ErrorScope.APPLICATION,
             type: ErrorType.INTERNAL,
@@ -397,12 +397,12 @@ export function getPropertyScopeOptions(isSource: boolean): {
     label: string;
   }[] = [
     {
-      label: "Current Message Header",
-      value: "current",
+      label: 'Current Message Header',
+      value: 'current',
     },
     {
-      label: "Camel Exchange Property",
-      value: "camelExchangeProperty",
+      label: 'Camel Exchange Property',
+      value: 'camelExchangeProperty',
     },
   ];
   const propertyDocOptions: DocumentDefinition[] = isSource

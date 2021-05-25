@@ -13,11 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React, { ReactElement, useCallback, useState } from "react";
+import React, { ReactElement, useCallback, useState } from 'react';
 
-import { AboutDialog } from "../../UI";
-import { useAtlasmap } from "../AtlasmapProvider";
-import { useToggle } from "../../Atlasmap/utils";
+import { AboutDialog } from '../../UI';
+import { useAtlasmap } from '../AtlasmapProvider';
+import { useToggle } from '../../Atlasmap/utils';
 
 export function useAboutDialog(): [ReactElement, () => void] {
   const { getRuntimeVersion, getUIVersion } = useAtlasmap();
@@ -25,7 +25,7 @@ export function useAboutDialog(): [ReactElement, () => void] {
   const [runtimeVersion, setRuntimeVersion]: [
     string,
     (version: string) => void,
-  ] = useState("0.0");
+  ] = useState('0.0');
   const { state, toggleOn, toggleOff } = useToggle(false);
 
   const dialog = (

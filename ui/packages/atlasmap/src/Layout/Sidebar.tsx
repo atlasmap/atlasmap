@@ -13,9 +13,9 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React, { FunctionComponent, ReactElement } from "react";
-import { TopologySideBar } from "@patternfly/react-topology";
-import styles from "./Sidebar.module.css";
+import React, { FunctionComponent, ReactElement } from 'react';
+import { TopologySideBar } from '@patternfly/react-topology';
+import styles from './Sidebar.module.css';
 
 export interface ISidebarProps {
   show: boolean;

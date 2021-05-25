@@ -13,8 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Coords, RectWithId, Rects } from "./models";
-import { FunctionComponent, createContext, useContext } from "react";
+import { Coords, RectWithId, Rects } from './models';
+import { FunctionComponent, createContext, useContext } from 'react';
 import React, {
   ReactElement,
   useCallback,
@@ -22,10 +22,10 @@ import React, {
   useMemo,
   useRef,
   useState,
-} from "react";
+} from 'react';
 
-import { scaleLinear } from "d3-scale";
-import { useGesture } from "react-use-gesture";
+import { scaleLinear } from 'd3-scale';
+import { useGesture } from 'react-use-gesture';
 
 type RedrawCallback = () => unknown;
 type RedrawCallbacks = Array<RedrawCallback>;
@@ -186,7 +186,7 @@ export const CanvasProvider: FunctionComponent<ICanvasProviderProps> = ({
 export function useCanvas() {
   const context = useContext(CanvasContext);
   if (!context) {
-    throw new Error("A CanvasProvider wrapper is required to use this hook.");
+    throw new Error('A CanvasProvider wrapper is required to use this hook.');
   }
   const {
     dimensions: { width, height },

@@ -13,10 +13,10 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-export * from "./CaptureDocumentNameAction";
-export * from "./ChangeDocumentNameAction";
-export * from "./DeleteDocumentAction";
-export * from "./DeleteMappingAction";
-export * from "./EditMappingAction";
-export * from "./EnableJavaClassAction";
-export * from "./ImportAction";
+export * from './CaptureDocumentNameAction';
+export * from './ChangeDocumentNameAction';
+export * from './DeleteDocumentAction';
+export * from './DeleteMappingAction';
+export * from './EditMappingAction';
+export * from './EnableJavaClassAction';
+export * from './ImportAction';

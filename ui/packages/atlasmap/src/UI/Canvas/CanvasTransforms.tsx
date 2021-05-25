@@ -13,8 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React, { FunctionComponent } from "react";
-import { useCanvas } from "./CanvasContext";
+import React, { FunctionComponent } from 'react';
+import { useCanvas } from './CanvasContext';
 
 export const CanvasTransforms: FunctionComponent = ({ children }) => {
   const { panX, panY, zoom /* width, height, xDomain, yDomain*/ } = useCanvas();

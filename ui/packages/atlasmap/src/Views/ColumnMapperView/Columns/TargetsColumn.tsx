@@ -19,15 +19,15 @@ import {
   IAtlasmapDocument,
   IAtlasmapField,
   IAtlasmapMapping,
-} from "../../models";
-import { Button, Tooltip } from "@patternfly/react-core";
+} from '../../models';
+import { Button, Tooltip } from '@patternfly/react-core';
 import {
   CaptureDocumentNameAction,
   ChangeDocumentNameAction,
   DeleteDocumentAction,
   EnableJavaClassAction,
   ImportAction,
-} from "../Actions";
+} from '../Actions';
 import {
   ColumnBody,
   Document,
@@ -38,20 +38,20 @@ import {
   NodeRef,
   SearchableColumnHeader,
   Tree,
-} from "../../../UI";
-import { IPropertiesTreeCallbacks, PropertiesTree } from "./PropertiesTree";
-import React, { FunctionComponent, useCallback } from "react";
+} from '../../../UI';
+import { IPropertiesTreeCallbacks, PropertiesTree } from './PropertiesTree';
+import React, { FunctionComponent, useCallback } from 'react';
 import {
   TARGETS_DOCUMENT_ID_PREFIX,
   TARGETS_FIELD_ID_PREFIX,
   TARGETS_HEIGHT_BOUNDARY_ID,
   TARGETS_PROPERTIES_ID,
   TARGETS_WIDTH_BOUNDARY_ID,
-} from "./constants";
+} from './constants';
 
-import { PlusIcon } from "@patternfly/react-icons";
-import { TraverseFields } from "./TraverseFields";
-import { commonActions } from "./commonActions";
+import { PlusIcon } from '@patternfly/react-icons';
+import { TraverseFields } from './TraverseFields';
+import { commonActions } from './commonActions';
 
 export interface ITargetsColumnCallbacks extends IPropertiesTreeCallbacks {
   acceptDropType: AtlasmapDocumentType;
@@ -129,21 +129,21 @@ export const TargetsColumn: FunctionComponent<
   return (
     <>
       <SearchableColumnHeader
-        title={"Target"}
+        title={'Target'}
         onSearch={onSearch}
         actions={[
           onImportDocument && (
             <ImportAction
               id="Target"
               onImport={onImportDocument}
-              key={"import"}
+              key={'import'}
             />
           ),
           onCustomClassSearch && (
             <EnableJavaClassAction
               onCustomClassSearch={() => onCustomClassSearch(false)}
-              data-testid={"enable-specific-java-classes-Target-button"}
-              key={"java"}
+              data-testid={'enable-specific-java-classes-Target-button'}
+              key={'java'}
             />
           ),
         ]}
@@ -158,22 +158,22 @@ export const TargetsColumn: FunctionComponent<
                 overrideWidth={TARGETS_WIDTH_BOUNDARY_ID}
               >
                 <Document
-                  title={"Properties"}
+                  title={'Properties'}
                   startExpanded={targetProperties ? true : false}
                   actions={[
                     <Tooltip
-                      position={"top"}
+                      position={'top'}
                       enableFlip={true}
                       content={
                         <div>Create a target property for use in mapping</div>
                       }
-                      key={"create-target-property"}
+                      key={'create-target-property'}
                       entryDelay={750}
                       exitDelay={100}
                     >
                       <Button
                         onClick={() => onCreateProperty(isSource)}
-                        variant={"plain"}
+                        variant={'plain'}
                         aria-label="Create a target property for use in mapping"
                         data-testid="create-target-property-button"
                       >
@@ -208,7 +208,7 @@ export const TargetsColumn: FunctionComponent<
                       renderPreview={renderPreview}
                     />
                   ) : (
-                    "No target properties"
+                    'No target properties'
                   )}
                 </Document>
               </NodeRef>
@@ -236,21 +236,21 @@ export const TargetsColumn: FunctionComponent<
                           <CaptureDocumentNameAction
                             id={documentId}
                             onClick={() => onCaptureDocumentName(t.id)}
-                            key={"capture-document-name"}
+                            key={'capture-document-name'}
                           />
                         ),
                         onChangeDocumentName && (
                           <ChangeDocumentNameAction
                             id={documentId}
                             onClick={() => onChangeDocumentName(t.id, t.name)}
-                            key={"change-document-name"}
+                            key={'change-document-name'}
                           />
                         ),
                         onDeleteDocument && (
                           <DeleteDocumentAction
                             id={documentId}
                             onClick={() => onDeleteDocument(t.id)}
-                            key={"delete-documents"}
+                            key={'delete-documents'}
                           />
                         ),
                       ]}

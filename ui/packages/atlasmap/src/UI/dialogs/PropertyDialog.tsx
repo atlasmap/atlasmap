@@ -16,7 +16,7 @@
 import {
   ConfirmationDialog,
   IConfirmationDialogProps,
-} from "./ConfirmationDialog";
+} from './ConfirmationDialog';
 import {
   Form,
   FormGroup,
@@ -25,13 +25,13 @@ import {
   TextInput,
   Tooltip,
   ValidatedOptions,
-} from "@patternfly/react-core";
+} from '@patternfly/react-core';
 import React, {
   FunctionComponent,
   useCallback,
   useEffect,
   useState,
-} from "react";
+} from 'react';
 
 interface ValueLabelOption {
   label: string;
@@ -51,17 +51,17 @@ export interface IPropertyDialogProps {
   valueTypeOptions: ValueLabelOption[];
   scope?: string;
   scopeOptions: ValueLabelOption[];
-  isOpen: IConfirmationDialogProps["isOpen"];
-  onCancel: IConfirmationDialogProps["onCancel"];
+  isOpen: IConfirmationDialogProps['isOpen'];
+  onCancel: IConfirmationDialogProps['onCancel'];
   onConfirm: (property: IProperty) => void;
   onValidation: (name: string, scope: string) => boolean;
 }
 export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
   title,
-  name: initialName = "",
-  valueType: initialValueType = "",
+  name: initialName = '',
+  valueType: initialValueType = '',
   valueTypeOptions,
-  scope: initialScope = "",
+  scope: initialScope = '',
   scopeOptions,
   isOpen,
   onCancel,
@@ -135,7 +135,7 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
       isOpen={isOpen}
     >
       <Form>
-        <FormGroup label={"Name"} fieldId={"name"} isRequired={true}>
+        <FormGroup label={'Name'} fieldId={'name'} isRequired={true}>
           {!isNameAndScopeUnique ? (
             <Tooltip
               content={
@@ -147,38 +147,38 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
               <TextInput
                 value={name}
                 onChange={handleOnNameChange}
-                id={"name"}
+                id={'name'}
                 autoFocus={true}
                 isRequired={true}
-                data-testid={"property-name-text-input-tooltip"}
-                style={{ color: "red" }}
+                data-testid={'property-name-text-input-tooltip'}
+                style={{ color: 'red' }}
               />
             </Tooltip>
           ) : (
             <TextInput
               value={name}
               onChange={handleOnNameChange}
-              id={"name"}
+              id={'name'}
               autoFocus={true}
               isRequired={true}
-              data-testid={"property-name-text-input"}
+              data-testid={'property-name-text-input'}
               validated={isPropertyNameValid}
             />
           )}
         </FormGroup>
-        <FormGroup label={"Value type"} fieldId={"valueType"}>
+        <FormGroup label={'Value type'} fieldId={'valueType'}>
           <FormSelect
             value={valueType}
-            aria-label={"Select value type"}
+            aria-label={'Select value type'}
             onChange={setValueType}
-            data-testid={"property-type-form-select"}
+            data-testid={'property-type-form-select'}
           >
             {valueTypeOptions.map(({ label, value }, idx) => (
               <FormSelectOption key={idx} value={value} label={label} />
             ))}
           </FormSelect>
         </FormGroup>
-        <FormGroup label={"Scope"} fieldId={"scope"}>
+        <FormGroup label={'Scope'} fieldId={'scope'}>
           {!isNameAndScopeUnique ? (
             <Tooltip
               content={
@@ -189,10 +189,10 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
             >
               <FormSelect
                 value={scope}
-                aria-label={"Select property scope"}
+                aria-label={'Select property scope'}
                 onChange={handleOnScopeChange}
-                data-testid={"property-scope-form-select"}
-                style={{ color: "red" }}
+                data-testid={'property-scope-form-select'}
+                style={{ color: 'red' }}
               >
                 {scopeOptions.map(({ label, value }, idx) => (
                   <FormSelectOption key={idx} label={label} value={value} />
@@ -202,9 +202,9 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
           ) : (
             <FormSelect
               value={scope}
-              aria-label={"Select property scope"}
+              aria-label={'Select property scope'}
               onChange={handleOnScopeChange}
-              data-testid={"property-scope-form-select"}
+              data-testid={'property-scope-form-select'}
             >
               {scopeOptions.map(({ label, value }, idx) => (
                 <FormSelectOption key={idx} label={label} value={value} />

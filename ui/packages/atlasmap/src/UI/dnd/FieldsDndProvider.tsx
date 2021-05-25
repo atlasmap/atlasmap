@@ -18,17 +18,17 @@ import React, {
   createContext,
   useContext,
   useRef,
-} from "react";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { IDragAndDropField } from "./models";
-import { TouchBackend } from "react-dnd-touch-backend";
+} from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { IDragAndDropField } from './models';
+import { TouchBackend } from 'react-dnd-touch-backend';
 
 const probablyTouch =
   window.matchMedia &&
-  (window.matchMedia("(pointer: none)").matches ||
-    window.matchMedia("(pointer: coarse)").matches) &&
-  window.matchMedia("(hover: none)").matches;
+  (window.matchMedia('(pointer: none)').matches ||
+    window.matchMedia('(pointer: coarse)').matches) &&
+  window.matchMedia('(hover: none)').matches;
 
 const TouchAndPointerProvider: FunctionComponent = ({ children }) => {
   return (
@@ -68,7 +68,7 @@ export function useFieldsDnd() {
   const context = useContext(FieldsDndContext);
   if (!context) {
     throw new Error(
-      "A FieldsDndProvider wrapper is required to use this hook.",
+      'A FieldsDndProvider wrapper is required to use this hook.',
     );
   }
 

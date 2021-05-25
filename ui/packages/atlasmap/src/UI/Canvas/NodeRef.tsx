@@ -20,12 +20,12 @@ import {
   forwardRef,
   isValidElement,
   useRef,
-} from "react";
-import { NodeRefPropsWithOptionalId, useNodeRef } from "./NodeRefProvider";
+} from 'react';
+import { NodeRefPropsWithOptionalId, useNodeRef } from './NodeRefProvider';
 
 export const NodeRef = forwardRef<
   HTMLElement | SVGElement,
-  PropsWithChildren<Omit<NodeRefPropsWithOptionalId, "ref">>
+  PropsWithChildren<Omit<NodeRefPropsWithOptionalId, 'ref'>>
 >(function NodeRef({ children, ...props }, ref) {
   const node = Children.only(children);
   const nodeRef = useRef<HTMLElement | SVGElement | null>(null);

@@ -13,12 +13,12 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { IProperty, PropertyDialog } from "../../UI";
-import React, { ReactElement, useCallback, useState } from "react";
+import { IProperty, PropertyDialog } from '../../UI';
+import React, { ReactElement, useCallback, useState } from 'react';
 
-import { IAtlasmapDocument } from "../../Views";
-import { propertyTypes } from "@atlasmap/core";
-import { useToggle } from "../../Atlasmap/utils";
+import { IAtlasmapDocument } from '../../Views';
+import { propertyTypes } from '@atlasmap/core';
+import { useToggle } from '../../Atlasmap/utils';
 
 type PropertyCallback = (property: IProperty) => void;
 
@@ -39,7 +39,7 @@ export function usePropertyDialog(
   const [onPropertyCb, setOnPropertyCb] =
     useState<PropertyCallback | null>(null);
   const [initialProperty, setInitialProperty] = useState<IProperty | null>({
-    name: "",
+    name: '',
     valueType: propertyTypes[0][0],
     scope: scopeOptions[0].value,
   });

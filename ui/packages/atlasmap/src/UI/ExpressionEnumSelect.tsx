@@ -17,13 +17,13 @@ import {
   Select,
   SelectOption,
   SelectOptionObject,
-} from "@patternfly/react-core";
+} from '@patternfly/react-core';
 
-import { EnumValue } from "../../src/Atlasmap/utils";
-import { FunctionComponent } from "react";
-import React from "react";
-import styles from "./ExpressionEnumSelect.module.css";
-import { useToggle } from "../Atlasmap/utils";
+import { EnumValue } from '../../src/Atlasmap/utils';
+import { FunctionComponent } from 'react';
+import React from 'react';
+import styles from './ExpressionEnumSelect.module.css';
+import { useToggle } from '../Atlasmap/utils';
 
 export interface IExpressionEnumSelectProps {
   selectedNodeId: string;
@@ -31,7 +31,7 @@ export interface IExpressionEnumSelectProps {
   clearEnumSelect: () => void;
   onEnumSelect: (selectedNodeId: string, selectedIndex: number) => void;
 }
-let selectValue = "";
+let selectValue = '';
 
 export const ExpressionEnumSelect: FunctionComponent<IExpressionEnumSelectProps> =
   ({ selectedNodeId, enumCandidates, clearEnumSelect, onEnumSelect }) => {
@@ -51,7 +51,7 @@ export const ExpressionEnumSelect: FunctionComponent<IExpressionEnumSelectProps>
       _isPlaceholder?: boolean | undefined,
     ): void {
       selectValue = value as string;
-      onEnumSelect(selectedNodeId, event.currentTarget.id.split("-").pop());
+      onEnumSelect(selectedNodeId, event.currentTarget.id.split('-').pop());
       onToggleEnumSelect(false);
       toggleOff();
     }
@@ -83,7 +83,7 @@ export const ExpressionEnumSelect: FunctionComponent<IExpressionEnumSelectProps>
       <div
         aria-label="Expression Enumeration"
         className="enumSelectMenu"
-        data-testid={"expression-enumeration-select"}
+        data-testid={'expression-enumeration-select'}
       >
         <Select
           onToggle={toggle}
