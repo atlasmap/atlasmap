@@ -13,11 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-const proxy = require('http-proxy-middleware');
+const createProxyMiddleware = require('http-proxy-middleware');
 module.exports = function (app) {
   app.use(
     '/v2',
-    proxy({
+    createProxyMiddleware({
       target: 'http://localhost:8585',
       changeOrigin: true,
     }),
