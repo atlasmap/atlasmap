@@ -1045,7 +1045,7 @@
   PlusIcon,
   TableIcon,
   TrashIcon,
-} from "@patternfly/react-icons";
+} from '@patternfly/react-icons';
 <span class="cstat-no" title="statement not covered" >import {</span>
   Button,
   Dropdown,
@@ -1054,13 +1054,13 @@
   DropdownToggle,
   ToolbarItem,
   Tooltip,
-} from "@patternfly/react-core";
-<span class="cstat-no" title="statement not covered" >import React, { FunctionComponent, useEffect, useRef } from "react";</span>
+} from '@patternfly/react-core';
+<span class="cstat-no" title="statement not covered" >import React, { FunctionComponent, useEffect, useRef } from 'react';</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >import { css } from "@patternfly/react-styles";</span>
-<span class="cstat-no" title="statement not covered" >import styles from "./toolbarItems.module.css";</span>
-<span class="cstat-no" title="statement not covered" >import { useFilePicker } from "react-sage";</span>
-<span class="cstat-no" title="statement not covered" >import { useToggle } from "../Atlasmap/utils";</span>
+<span class="cstat-no" title="statement not covered" >import { css } from '@patternfly/react-styles';</span>
+<span class="cstat-no" title="statement not covered" >import styles from './toolbarItems.module.css';</span>
+<span class="cstat-no" title="statement not covered" >import { useFilePicker } from 'react-sage';</span>
+<span class="cstat-no" title="statement not covered" >import { useToggle } from '../Atlasmap/utils';</span>
 &nbsp;
 export interface IAtlasmapToolbarItemProps {
   showImportAtlasFileToolbarItem: boolean;
@@ -1109,7 +1109,7 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapToolb
       showExportAtlasFileToolbarItem &amp;&amp; (
         &lt;ExportAtlasFileToolbarItem
           onClick={runAndClose(onExportAtlasFile)}
-          key={"export-catalog"}
+          key={'export-catalog'}
         /&gt;
       ),
       showExportAtlasFileToolbarItem &amp;&amp; (
@@ -1234,12 +1234,12 @@ export const <span class="cstat-no" title="statement not covered" >ToggleMapping
 }&gt; = <span class="fstat-no" title="function not covered" >({</span> toggled<span class="cstat-no" title="statement not covered" >, <span class="cstat-no" title="statement not covered" >d</span>isabled<span class="cstat-no" title="statement not covered" > </span>= false, o</span>nClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;ToolbarItem&gt;
     &lt;Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={&lt;div&gt;Show mapping column&lt;/div&gt;}
     &gt;
       &lt;Button
-        variant={"plain"}
+        variant={'plain'}
         aria-label="Show/hide mapping column"
         onClick={onClick}
         isDisabled={disabled}
@@ -1259,12 +1259,12 @@ export const <span class="cstat-no" title="statement not covered" >ToggleColumnM
 }&gt; = <span class="fstat-no" title="function not covered" >({</span> toggled<span class="cstat-no" title="statement not covered" >, <span class="cstat-no" title="statement not covered" >d</span>isabled<span class="cstat-no" title="statement not covered" > </span>= false, o</span>nClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;ToolbarItem&gt;
     &lt;Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={&lt;div&gt;Show column mapper&lt;/div&gt;}
     &gt;
       &lt;Button
-        variant={"plain"}
+        variant={'plain'}
         aria-label="Show column mapper"
         onClick={onClick}
         isDisabled={disabled}
@@ -1284,12 +1284,12 @@ export const <span class="cstat-no" title="statement not covered" >ToggleMapping
 }&gt; = <span class="fstat-no" title="function not covered" >({</span> toggled<span class="cstat-no" title="statement not covered" >, <span class="cstat-no" title="statement not covered" >d</span>isabled<span class="cstat-no" title="statement not covered" > </span>= false, o</span>nClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;ToolbarItem&gt;
     &lt;Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={&lt;div&gt;Show mapping table&lt;/div&gt;}
     &gt;
       &lt;Button
-        variant={"plain"}
+        variant={'plain'}
         aria-label="Show/hide mapping table"
         onClick={onClick}
         isDisabled={disabled}
@@ -1309,12 +1309,12 @@ export const <span class="cstat-no" title="statement not covered" >ToggleNamespa
 }&gt; = <span class="fstat-no" title="function not covered" >({</span> toggled<span class="cstat-no" title="statement not covered" >, <span class="cstat-no" title="statement not covered" >d</span>isabled<span class="cstat-no" title="statement not covered" > </span>= false, o</span>nClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;ToolbarItem&gt;
     &lt;Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={&lt;div&gt;Show namespace table&lt;/div&gt;}
     &gt;
       &lt;Button
-        variant={"plain"}
+        variant={'plain'}
         aria-label="Show/hide namespace table"
         onClick={onClick}
         isDisabled={disabled}
@@ -1334,12 +1334,12 @@ export const <span class="cstat-no" title="statement not covered" >ToggleFreeVie
 }&gt; = <span class="fstat-no" title="function not covered" >({</span> toggled<span class="cstat-no" title="statement not covered" >, <span class="cstat-no" title="statement not covered" >d</span>isabled<span class="cstat-no" title="statement not covered" > </span>= false, o</span>nClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;ToolbarItem&gt;
     &lt;Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={&lt;div&gt;Show free view&lt;/div&gt;}
     &gt;
       &lt;Button
-        variant={"plain"}
+        variant={'plain'}
         aria-label="Show/hide free view"
         onClick={onClick}
         isDisabled={disabled}
@@ -1359,12 +1359,12 @@ export const <span class="cstat-no" title="statement not covered" >ToggleMapping
 }&gt; = <span class="fstat-no" title="function not covered" >({</span> toggled<span class="cstat-no" title="statement not covered" >, <span class="cstat-no" title="statement not covered" >d</span>isabled<span class="cstat-no" title="statement not covered" > </span>= false, o</span>nClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;ToolbarItem&gt;
     &lt;Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={&lt;div&gt;Show/hide mapping preview&lt;/div&gt;}
     &gt;
       &lt;Button
-        variant={"plain"}
+        variant={'plain'}
         aria-label="Show/hide mapping preview"
         onClick={onClick}
         isDisabled={disabled}
@@ -1384,12 +1384,12 @@ export const <span class="cstat-no" title="statement not covered" >ToggleTypesTo
 }&gt; = <span class="fstat-no" title="function not covered" >({</span> toggled<span class="cstat-no" title="statement not covered" >, <span class="cstat-no" title="statement not covered" >d</span>isabled<span class="cstat-no" title="statement not covered" > </span>= false, o</span>nClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;ToolbarItem&gt;
     &lt;Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={&lt;div&gt;Show/hide types&lt;/div&gt;}
     &gt;
       &lt;Button
-        variant={"plain"}
+        variant={'plain'}
         aria-label="Show/hide types"
         onClick={onClick}
         isDisabled={disabled}
@@ -1409,12 +1409,12 @@ export const <span class="cstat-no" title="statement not covered" >ToggleMappedF
 }&gt; = <span class="fstat-no" title="function not covered" >({</span> toggled<span class="cstat-no" title="statement not covered" >, <span class="cstat-no" title="statement not covered" >d</span>isabled<span class="cstat-no" title="statement not covered" > </span>= false, o</span>nClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;ToolbarItem&gt;
     &lt;Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={&lt;div&gt;Show/hide mapped fields&lt;/div&gt;}
     &gt;
       &lt;Button
-        variant={"plain"}
+        variant={'plain'}
         aria-label="Show/hide mapped fields"
         onClick={onClick}
         isDisabled={disabled}
@@ -1434,12 +1434,12 @@ export const <span class="cstat-no" title="statement not covered" >ToggleUnmappe
 }&gt; = <span class="fstat-no" title="function not covered" >({</span> toggled<span class="cstat-no" title="statement not covered" >, <span class="cstat-no" title="statement not covered" >d</span>isabled<span class="cstat-no" title="statement not covered" > </span>= false, o</span>nClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;ToolbarItem&gt;
     &lt;Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={&lt;div&gt;Show/hide unmapped fields&lt;/div&gt;}
     &gt;
       &lt;Button
-        variant={"plain"}
+        variant={'plain'}
         aria-label="Show/hide unmapped fields"
         onClick={onClick}
         isDisabled={disabled}
@@ -1457,12 +1457,12 @@ export const <span class="cstat-no" title="statement not covered" >AddMappingToo
 }&gt; = <span class="fstat-no" title="function not covered" >({</span> onClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;ToolbarItem&gt;
     &lt;Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={&lt;div&gt;Add a new mapping&lt;/div&gt;}
     &gt;
       &lt;Button
-        variant={"plain"}
+        variant={'plain'}
         aria-label="Add a new mapping"
         onClick={onClick}
         data-testid="add-new-mapping-button"
@@ -1478,12 +1478,12 @@ export const <span class="cstat-no" title="statement not covered" >AboutToolbarI
 }&gt; = <span class="fstat-no" title="function not covered" >({</span> onClick<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
   &lt;ToolbarItem&gt;
     &lt;Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={&lt;div&gt;About AtlasMap&lt;/div&gt;}
     &gt;
       &lt;Button
-        variant={"plain"}
+        variant={'plain'}
         aria-label="About AtlasMap"
         onClick={onClick}
         data-testid="about-button"
@@ -1500,7 +1500,7 @@ export const <span class="cstat-no" title="statement not covered" >AboutToolbarI
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

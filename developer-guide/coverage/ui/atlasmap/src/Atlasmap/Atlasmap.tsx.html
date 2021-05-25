@@ -1053,14 +1053,14 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-<span class="cstat-no" title="statement not covered" >import { CanvasControlBar, ExpressionToolbar, MainLayout } from "../Layout";</span>
+<span class="cstat-no" title="statement not covered" >import { CanvasControlBar, ExpressionToolbar, MainLayout } from '../Layout';</span>
 <span class="cstat-no" title="statement not covered" >import {</span>
   CanvasProvider,
   ConditionalExpressionInput,
   FieldDragLayer,
   FieldsDndProvider,
   TimedToast,
-} from "../UI";
+} from '../UI';
 <span class="cstat-no" title="statement not covered" >import {</span>
   IAtlasmapField,
   IAtlasmapMapping,
@@ -1071,15 +1071,15 @@
   NamespaceTableView,
   SourceMappingTargetView,
   SourceTargetView,
-} from "../Views";
-<span class="cstat-no" title="statement not covered" >import { IUseContextToolbarData, useContextToolbar } from "./useContextToolbar";</span>
-<span class="cstat-no" title="statement not covered" >import React, { FunctionComponent, useCallback, useMemo } from "react";</span>
-<span class="cstat-no" title="statement not covered" >import { getConstantType, getPropertyType } from "./utils";</span>
+} from '../Views';
+<span class="cstat-no" title="statement not covered" >import { IUseContextToolbarData, useContextToolbar } from './useContextToolbar';</span>
+<span class="cstat-no" title="statement not covered" >import React, { FunctionComponent, useCallback, useMemo } from 'react';</span>
+<span class="cstat-no" title="statement not covered" >import { getConstantType, getPropertyType } from './utils';</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >import { AlertGroup } from "@patternfly/react-core";</span>
-<span class="cstat-no" title="statement not covered" >import { useAtlasmap } from "./AtlasmapProvider";</span>
-<span class="cstat-no" title="statement not covered" >import { useAtlasmapDialogs } from "./useAtlasmapDialogs";</span>
-<span class="cstat-no" title="statement not covered" >import { useSidebar } from "./useSidebar";</span>
+<span class="cstat-no" title="statement not covered" >import { AlertGroup } from '@patternfly/react-core';</span>
+<span class="cstat-no" title="statement not covered" >import { useAtlasmap } from './AtlasmapProvider';</span>
+<span class="cstat-no" title="statement not covered" >import { useAtlasmapDialogs } from './useAtlasmapDialogs';</span>
+<span class="cstat-no" title="statement not covered" >import { useSidebar } from './useSidebar';</span>
 &nbsp;
 export interface IAtlasmapProps {
   allowImport?: boolean;
@@ -1097,7 +1097,7 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
 <span class="cstat-no" title="statement not covered" >  allowReset<span class="cstat-no" title="statement not covered" > </span>= true,</span>
 <span class="cstat-no" title="statement not covered" >  allowDelete<span class="cstat-no" title="statement not covered" > </span>= true,</span>
 <span class="cstat-no" title="statement not covered" >  allowCustomJavaClasses<span class="cstat-no" title="statement not covered" > </span>= true,</span>
-<span class="cstat-no" title="statement not covered" >  modalsContainerId<span class="cstat-no" title="statement not covered" > </span>= "modals",</span>
+<span class="cstat-no" title="statement not covered" >  modalsContainerId<span class="cstat-no" title="statement not covered" > </span>= 'modals',</span>
   toolbarOptions<span class="cstat-no" title="statement not covered" >,</span>
 }) =&gt; {
   const {
@@ -1206,11 +1206,11 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
   const sourceEvents = <span class="cstat-no" title="statement not covered" >useMemo&lt;ISourceColumnCallbacks&gt;(</span>
 <span class="fstat-no" title="function not covered" >    () =&gt; <span class="cstat-no" title="statement not covered" >(</span>{</span>
       isSource: true,
-      acceptDropType: "target",
-      draggableType: "source",
+      acceptDropType: 'target',
+      draggableType: 'source',
       canDrop: <span class="fstat-no" title="function not covered" >(d</span>t, i) =&gt; {
 <span class="cstat-no" title="statement not covered" >        return isFieldAddableToSelection(</span>
-          "target",
+          'target',
           i.payload as IAtlasmapField,
           dt,
         );
@@ -1220,14 +1220,14 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
       onAddToSelectedMapping: onAddToMapping,
       canAddToSelectedMapping: canAddToSelectedMapping,
       canAddFieldToSelectedMapping: <span class="fstat-no" title="function not covered" >(f</span>) =&gt;
-<span class="cstat-no" title="statement not covered" >        isFieldAddableToSelection("source", f),</span>
+<span class="cstat-no" title="statement not covered" >        isFieldAddableToSelection('source', f),</span>
       onAddFieldToSelectedMapping: onAddToMapping,
       canRemoveFromSelectedMapping: <span class="fstat-no" title="function not covered" >(f</span>) =&gt;
-<span class="cstat-no" title="statement not covered" >        isFieldRemovableFromSelection("source", f),</span>
+<span class="cstat-no" title="statement not covered" >        isFieldRemovableFromSelection('source', f),</span>
       onRemoveFromSelectedMapping: onRemoveFromMapping,
       onCreateConstant: <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >h</span>andlers.onCreateConstant(constants),</span>
       onEditConstant: <span class="fstat-no" title="function not covered" >(c</span>onstant) =&gt; {
-        const [value] = <span class="cstat-no" title="statement not covered" >constant.split(" ");</span>
+        const [value] = <span class="cstat-no" title="statement not covered" >constant.split(' ');</span>
         const valueType = <span class="cstat-no" title="statement not covered" >getConstantType(value);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        handlers.onEditConstant({ value, valueType }, constants);</span>
@@ -1237,7 +1237,7 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
 <span class="cstat-no" title="statement not covered" >        handlers.onCreateProperty(isSource, sourceProperties);</span>
       },
       onEditProperty: <span class="fstat-no" title="function not covered" >(p</span>roperty, scope, isSource) =&gt; {
-        const [leftPart] = <span class="cstat-no" title="statement not covered" >property.split(" ");</span>
+        const [leftPart] = <span class="cstat-no" title="statement not covered" >property.split(' ');</span>
         const valueType = <span class="cstat-no" title="statement not covered" >getPropertyType(leftPart, scope, isSource);</span>
 <span class="cstat-no" title="statement not covered" >        handlers.onEditProperty(</span>
           {
@@ -1295,11 +1295,11 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
   const targetEvents = <span class="cstat-no" title="statement not covered" >useMemo&lt;ITargetsColumnCallbacks&gt;(</span>
 <span class="fstat-no" title="function not covered" >    () =&gt; <span class="cstat-no" title="statement not covered" >(</span>{</span>
       isSource: false,
-      acceptDropType: "source",
-      draggableType: "target",
+      acceptDropType: 'source',
+      draggableType: 'target',
       canDrop: <span class="fstat-no" title="function not covered" >(d</span>t, i) =&gt; {
 <span class="cstat-no" title="statement not covered" >        return isFieldAddableToSelection(</span>
-          "source",
+          'source',
           i.payload as IAtlasmapField,
           dt,
         );
@@ -1307,17 +1307,17 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
       onDrop: <span class="fstat-no" title="function not covered" >(s</span>, t) =&gt; <span class="cstat-no" title="statement not covered" >onCreateMapping(t?.payload as IAtlasmapField, s),</span>
       canAddToSelectedMapping: canAddToSelectedMapping,
       canAddFieldToSelectedMapping: <span class="fstat-no" title="function not covered" >(f</span>) =&gt;
-<span class="cstat-no" title="statement not covered" >        isFieldAddableToSelection("target", f),</span>
+<span class="cstat-no" title="statement not covered" >        isFieldAddableToSelection('target', f),</span>
       onShowMappingDetails: selectMapping,
       onAddToSelectedMapping: onAddToMapping,
       canRemoveFromSelectedMapping: <span class="fstat-no" title="function not covered" >(f</span>) =&gt;
-<span class="cstat-no" title="statement not covered" >        isFieldRemovableFromSelection("target", f),</span>
+<span class="cstat-no" title="statement not covered" >        isFieldRemovableFromSelection('target', f),</span>
       onRemoveFromSelectedMapping: onRemoveFromMapping,
       onCreateProperty: <span class="fstat-no" title="function not covered" >(i</span>sSource: boolean) =&gt; {
 <span class="cstat-no" title="statement not covered" >        handlers.onCreateProperty(isSource, targetProperties);</span>
       },
       onEditProperty: <span class="fstat-no" title="function not covered" >(p</span>roperty, scope, isSource) =&gt; {
-        const [leftPart] = <span class="cstat-no" title="statement not covered" >property.split(" ");</span>
+        const [leftPart] = <span class="cstat-no" title="statement not covered" >property.split(' ');</span>
         const valueType = <span class="cstat-no" title="statement not covered" >getPropertyType(leftPart, scope, isSource);</span>
 <span class="cstat-no" title="statement not covered" >        handlers.onEditProperty(</span>
           {
@@ -1388,7 +1388,7 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
 &nbsp;
   const currentView = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >    switch (activeView) {</span>
-      case "ColumnMapper":
+      case 'ColumnMapper':
 <span class="cstat-no" title="statement not covered" >        return showMappingColumn ? (</span>
           &lt;SourceMappingTargetView
             sourceProperties={sourceProperties}
@@ -1421,7 +1421,7 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
             targetEvents={targetEvents}
           /&gt;
         );
-      case "MappingTable":
+      case 'MappingTable':
 <span class="cstat-no" title="statement not covered" >        return (</span>
           &lt;MappingTableView
             mappings={mappings}
@@ -1430,7 +1430,7 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
             onFieldPreviewChange={onFieldPreviewChange}
           /&gt;
         );
-      case "NamespaceTable":
+      case 'NamespaceTable':
 <span class="cstat-no" title="statement not covered" >        return (</span>
           &lt;NamespaceTableView
             sources={sources}
@@ -1499,9 +1499,9 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
           loading={pending}
           contextToolbar={contextToolbar}
           expressionToolbar={
-            activeView !== "NamespaceTable" &amp;&amp; expressionToolbar
+            activeView !== 'NamespaceTable' &amp;&amp; expressionToolbar
           }
-          controlBar={activeView === "FreeView" &amp;&amp; &lt;CanvasControlBar /&gt;}
+          controlBar={activeView === 'FreeView' &amp;&amp; &lt;CanvasControlBar /&gt;}
           showSidebar={!!selectedMapping}
           renderSidebar={renderSidebar}
         &gt;
@@ -1536,7 +1536,7 @@ export const <span class="cstat-no" title="statement not covered" >Atlasmap: Fun
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

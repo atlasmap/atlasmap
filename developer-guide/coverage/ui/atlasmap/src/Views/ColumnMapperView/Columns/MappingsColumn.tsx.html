@@ -550,8 +550,8 @@
   IDragAndDropField,
   NodeRef,
   TruncatedString,
-} from "../../../UI";
-import { IAtlasmapField, IAtlasmapMapping } from "../../models";
+} from '../../../UI';
+import { IAtlasmapField, IAtlasmapMapping } from '../../models';
 <span class="cstat-no" title="statement not covered" >import {</span>
   MAPPINGS_DOCUMENT_ID_PREFIX,
   MAPPINGS_DROP_TYPE,
@@ -560,14 +560,14 @@ import { IAtlasmapField, IAtlasmapMapping } from "../../models";
   MAPPINGS_WIDTH_BOUNDARY_ID,
   SOURCES_DRAGGABLE_TYPE,
   TARGETS_DRAGGABLE_TYPE,
-} from "./constants";
-<span class="cstat-no" title="statement not covered" >import React, { FunctionComponent, useCallback } from "react";</span>
-<span class="cstat-no" title="statement not covered" >import { Split, SplitItem } from "@patternfly/react-core";</span>
+} from './constants';
+<span class="cstat-no" title="statement not covered" >import React, { FunctionComponent, useCallback } from 'react';</span>
+<span class="cstat-no" title="statement not covered" >import { Split, SplitItem } from '@patternfly/react-core';</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >import { EditMappingAction } from "../Actions";</span>
+<span class="cstat-no" title="statement not covered" >import { EditMappingAction } from '../Actions';</span>
 &nbsp;
 export interface IMappingsColumnData
-  extends Omit&lt;Omit&lt;IMappingDocumentData, "mapping"&gt;, "isSelected"&gt; {
+  extends Omit&lt;Omit&lt;IMappingDocumentData, 'mapping'&gt;, 'isSelected'&gt; {
   mappings: IAtlasmapMapping[];
   selectedMappingId?: string;
 }
@@ -577,7 +577,7 @@ export const <span class="cstat-no" title="statement not covered" >MappingsColum
 &gt; = <span class="fstat-no" title="function not covered" >({</span> mappings<span class="cstat-no" title="statement not covered" >, s</span>electedMappingId<span class="cstat-no" title="statement not covered" >, ...p</span>rops<span class="cstat-no" title="statement not covered" > }) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
-      &lt;ColumnHeader title={"Mappings"} /&gt;
+      &lt;ColumnHeader title={'Mappings'} /&gt;
       &lt;NodeRef id={MAPPINGS_HEIGHT_BOUNDARY_ID}&gt;
         &lt;ColumnBody&gt;
           &lt;NodeRef id={MAPPINGS_WIDTH_BOUNDARY_ID}&gt;
@@ -594,14 +594,14 @@ export const <span class="cstat-no" title="statement not covered" >MappingsColum
           &lt;/NodeRef&gt;
           &lt;DraggedField&gt;
             {<span class="fstat-no" title="function not covered" >({</span> draggedField<span class="cstat-no" title="statement not covered" >, g</span>etHoveredTarget<span class="cstat-no" title="statement not covered" > })</span> =&gt;
-<span class="cstat-no" title="statement not covered" >              draggedField &amp;&amp; getHoveredTarget()?.type !== "mapping" ? (</span>
+<span class="cstat-no" title="statement not covered" >              draggedField &amp;&amp; getHoveredTarget()?.type !== 'mapping' ? (</span>
                 &lt;NodeRef
-                  id={["dnd-new-mapping"]}
+                  id={['dnd-new-mapping']}
                   boundaryId={MAPPINGS_HEIGHT_BOUNDARY_ID}
                   overrideWidth={MAPPINGS_WIDTH_BOUNDARY_ID}
                 &gt;
                   &lt;Document
-                    title={"Create new mapping"}
+                    title={'Create new mapping'}
                     dropTarget={true}
                     scrollIntoView={true}
                   /&gt;
@@ -670,7 +670,7 @@ export const <span class="cstat-no" title="statement not covered" >MappingDocume
       {<span class="fstat-no" title="function not covered" >({</span> isDroppable<span class="cstat-no" title="statement not covered" >, i</span>sTarget<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
         &lt;NodeRef
           key={documentId}
-          id={[documentId, isTarget ? "dnd-target-mapping" : undefined]}
+          id={[documentId, isTarget ? 'dnd-target-mapping' : undefined]}
           boundaryId={MAPPINGS_HEIGHT_BOUNDARY_ID}
           overrideWidth={MAPPINGS_WIDTH_BOUNDARY_ID}
         &gt;
@@ -693,7 +693,7 @@ export const <span class="cstat-no" title="statement not covered" >MappingDocume
             onMouseOut={onMouseOut}
           &gt;
             &lt;Split&gt;
-              &lt;SplitItem style={{ maxWidth: "50%", padding: "0 0 0 1rem" }}&gt;
+              &lt;SplitItem style={{ maxWidth: '50%', padding: '0 0 0 1rem' }}&gt;
                 {mapping.sourceFields.map(<span class="fstat-no" title="function not covered" >(m</span>f) =&gt; {
                   const fieldId = `${<span class="cstat-no" title="statement not covered" >documentId}-${MAPPINGS_FIELD_ID_PREFIX}${mf.id}`;</span>
 <span class="cstat-no" title="statement not covered" >                  return (</span>
@@ -723,9 +723,9 @@ export const <span class="cstat-no" title="statement not covered" >MappingDocume
               &lt;SplitItem isFilled /&gt;
               &lt;SplitItem
                 style={{
-                  maxWidth: "50%",
-                  padding: "0 1rem 0 0",
-                  textAlign: "right",
+                  maxWidth: '50%',
+                  padding: '0 1rem 0 0',
+                  textAlign: 'right',
                 }}
               &gt;
                 {mapping.targetFields.map(<span class="fstat-no" title="function not covered" >(m</span>f) =&gt; {
@@ -765,7 +765,7 @@ export const <span class="cstat-no" title="statement not covered" >MappingDocume
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>

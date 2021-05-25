@@ -572,18 +572,18 @@ import {
   InputGroup,
   Switch,
   TextInput,
-} from "@patternfly/react-core";
+} from '@patternfly/react-core';
 import {
   ConfirmationDialog,
   IConfirmationDialogProps,
-} from "./ConfirmationDialog";
-import { PlusIcon, TrashIcon } from "@patternfly/react-icons";
+} from './ConfirmationDialog';
+import { PlusIcon, TrashIcon } from '@patternfly/react-icons';
 import React, {
   FunctionComponent,
   useCallback,
   useEffect,
   useState,
-} from "react";
+} from 'react';
 &nbsp;
 export interface IParameter {
   name: string;
@@ -603,8 +603,8 @@ export interface IParameterOption {
 export interface IParametersDialogProps {
   title: string;
   parameters?: IParameter[];
-  isOpen: IConfirmationDialogProps["isOpen"];
-  onCancel: IConfirmationDialogProps["onCancel"];
+  isOpen: IConfirmationDialogProps['isOpen'];
+  onCancel: IConfirmationDialogProps['onCancel'];
   onConfirm: (parameters: IParameter[]) =&gt; void;
 }
 &nbsp;
@@ -673,14 +673,14 @@ export const ParametersDialog: FunctionComponent&lt;IParametersDialogProps&gt; =
   );
 &nbsp;
   const formLabelColumnWidth = <span class="cstat-no" title="statement not covered" >{</span>
-    "--pf-c-form--m-horizontal--md__group--GridTemplateColumns": "340px 1fr",
+    '--pf-c-form--m-horizontal--md__group--GridTemplateColumns': '340px 1fr',
   } as React.CSSProperties;
   const formLabelParamRequired = <span class="cstat-no" title="statement not covered" >{</span>
-    "--pf-c-form__label--FontSize": "large",
-    "--pf-c-form--m-horizontal--md__group--GridTemplateColumns": "140px 1fr",
+    '--pf-c-form__label--FontSize': 'large',
+    '--pf-c-form--m-horizontal--md__group--GridTemplateColumns': '140px 1fr',
   } as React.CSSProperties;
   const formLabelTopPadding = <span class="cstat-no" title="statement not covered" >{</span>
-    "--pf-c-form__label--PaddingTop": "0",
+    '--pf-c-form__label--PaddingTop': '0',
   } as React.CSSProperties;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(reset, [reset]);</span>
@@ -708,7 +708,7 @@ export const ParametersDialog: FunctionComponent&lt;IParametersDialogProps&gt; =
                   id="selected-paramater"
                   value="0"
                   label={parameter.label}
-                  style={{ display: "flex", marginLeft: "auto" }}
+                  style={{ display: 'flex', marginLeft: 'auto' }}
                   onChange={<span class="fstat-no" title="function not covered" >(a</span>vailableParameterIndex) =&gt;
 <span class="cstat-no" title="statement not covered" >                    handleChangeParameter(index, availableParameterIndex)</span>
                   }
@@ -731,15 +731,15 @@ export const ParametersDialog: FunctionComponent&lt;IParametersDialogProps&gt; =
                 &lt;span
                   style={{
                     paddingTop: 5,
-                    display: "inline",
-                    marginLeft: "auto",
-                    float: "right",
+                    display: 'inline',
+                    marginLeft: 'auto',
+                    float: 'right',
                   }}
                 &gt;
                   &lt;Switch
                     id={parameter.name}
                     name={parameter.name}
-                    isChecked={parameter.value === "true"}
+                    isChecked={parameter.value === 'true'}
                     onChange={<span class="fstat-no" title="function not covered" >(c</span>hecked) =&gt; {
 <span class="cstat-no" title="statement not covered" >                      handleChangeParameterValue(index, String(checked));</span>
                     }}
@@ -751,7 +751,7 @@ export const ParametersDialog: FunctionComponent&lt;IParametersDialogProps&gt; =
                   onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >handleChangeParameterValue(index, value)}</span>
                   id={parameter.name}
                   name={parameter.name}
-                  data-testid={parameter.name + "-parameter-form-select"}
+                  data-testid={parameter.name + '-parameter-form-select'}
                 &gt;
                   {parameter.options.map(<span class="fstat-no" title="function not covered" >({</span> label<span class="cstat-no" title="statement not covered" >, v</span>alue<span class="cstat-no" title="statement not covered" > },</span> idx) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
                     &lt;FormSelectOption key={idx} value={value} label={label} /&gt;
@@ -763,7 +763,7 @@ export const ParametersDialog: FunctionComponent&lt;IParametersDialogProps&gt; =
                   onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >handleChangeParameterValue(index, value)}</span>
                   id={parameter.name}
                   name={parameter.name}
-                  data-testid={parameter.name + "-parameter-text-input"}
+                  data-testid={parameter.name + '-parameter-text-input'}
                 /&gt;
               )}
               {!parameter.required &amp;&amp; (
@@ -771,7 +771,7 @@ export const ParametersDialog: FunctionComponent&lt;IParametersDialogProps&gt; =
                   variant="plain"
                   aria-label="Action"
                   onClick={<span class="fstat-no" title="function not covered" >(_</span>event) =&gt; <span class="cstat-no" title="statement not covered" >handleRemoveParameter(parameter)}</span>
-                  style={{ display: "inline", marginLeft: "0", float: "right" }}
+                  style={{ display: 'inline', marginLeft: '0', float: 'right' }}
                 &gt;
                   &lt;TrashIcon /&gt;
                 &lt;/Button&gt;
@@ -781,7 +781,7 @@ export const ParametersDialog: FunctionComponent&lt;IParametersDialogProps&gt; =
         ))}
         &lt;span&gt;
           &lt;Button
-            style={{ display: "inline", float: "left", width: "40" }}
+            style={{ display: 'inline', float: 'left', width: '40' }}
             isDisabled={availableParameters.length === 0}
             onClick={handleAddParameter}
             variant="link"
@@ -801,7 +801,7 @@ export const ParametersDialog: FunctionComponent&lt;IParametersDialogProps&gt; =
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

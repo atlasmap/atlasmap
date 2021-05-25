@@ -780,13 +780,13 @@
   MappingField,
   MappingFields,
   MappingTransformation,
-} from "../UI";
-<span class="cstat-no" title="statement not covered" >import { Alert, AlertActionCloseButton, Badge } from "@patternfly/react-core";</span>
-import { IAtlasmapField, IAtlasmapMappedField, INotification } from "./models";
-<span class="cstat-no" title="statement not covered" >import React, { FunctionComponent } from "react";</span>
+} from '../UI';
+<span class="cstat-no" title="statement not covered" >import { Alert, AlertActionCloseButton, Badge } from '@patternfly/react-core';</span>
+import { IAtlasmapField, IAtlasmapMappedField, INotification } from './models';
+<span class="cstat-no" title="statement not covered" >import React, { FunctionComponent } from 'react';</span>
 &nbsp;
-import { Field } from "@atlasmap/core/dist/models/field.model";
-<span class="cstat-no" title="statement not covered" >import { MappingDetailsSidebar } from "../Layout";</span>
+import { Field } from '@atlasmap/core/dist/models/field.model';
+<span class="cstat-no" title="statement not covered" >import { MappingDetailsSidebar } from '../Layout';</span>
 &nbsp;
 export interface IMappingDetailsViewProps {
   notifications: INotification[];
@@ -886,12 +886,12 @@ export const <span class="cstat-no" title="statement not covered" >MappingDetail
     );
 &nbsp;
     const genericPaddingField: IAtlasmapField = <span class="cstat-no" title="statement not covered" >{</span>
-      id: "",
-      name: "Padding field",
-      type: "",
-      scope: "current",
-      path: "",
-      previewValue: "",
+      id: '',
+      name: 'Padding field',
+      type: '',
+      scope: 'current',
+      path: '',
+      previewValue: '',
       mappings: [],
       hasTransformations: false,
       isAttribute: false,
@@ -899,7 +899,7 @@ export const <span class="cstat-no" title="statement not covered" >MappingDetail
       isConnected: false,
       isInCollection: false,
       isDisabled: false,
-      amField: {} as IAtlasmapField["amField"],
+      amField: {} as IAtlasmapField['amField'],
       enumeration: false,
     };
 &nbsp;
@@ -923,7 +923,7 @@ export const <span class="cstat-no" title="statement not covered" >MappingDetail
           hasTransformations={f.transformations.length &gt; 0}
           onDelete={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nRemoveMappedField(isSource, index)}</span>
           onIndexChange={<span class="fstat-no" title="function not covered" >(v</span>alue: string | IAtlasmapField) =&gt;
-<span class="cstat-no" title="statement not covered" >            typeof value === "string"</span>
+<span class="cstat-no" title="statement not covered" >            typeof value === 'string'</span>
               ? onIndexChange(isSource, index, parseInt(value, 10))
               : onIndexChange(isSource, index, value.amField)
           }
@@ -931,7 +931,7 @@ export const <span class="cstat-no" title="statement not covered" >MappingDetail
           index={index + 1}
           canShowIndex={canShowIndex}
         &gt;
-          &lt;div className={"pf-c-form"}&gt;
+          &lt;div className={'pf-c-form'}&gt;
             {f.transformations.map(<span class="fstat-no" title="function not covered" >(t</span>, transformationIndex) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
               &lt;MappingTransformation
                 key={transformationIndex}
@@ -967,8 +967,8 @@ export const <span class="cstat-no" title="statement not covered" >MappingDetail
         &lt;MappingField
           field={genericPaddingField}
           key={index}
-          name={"Padding field"}
-          info={"This padding field has been automatically added"}
+          name={'Padding field'}
+          info={'This padding field has been automatically added'}
           mappingExpressionEnabled={mappingExpressionEnabled}
           hasTransformations={false}
           onDelete={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nRemoveMappedField(isSource, index)}</span>
@@ -987,10 +987,10 @@ export const <span class="cstat-no" title="statement not covered" >MappingDetail
       index: number,
     ) =&gt; <span class="cstat-no" title="statement not covered" >renderMappingField(false, showTargetsIndex, f, index);</span>
 &nbsp;
-    const errors = <span class="cstat-no" title="statement not covered" >notifications.filter(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.variant === "danger");</span></span>
-    const warnings = <span class="cstat-no" title="statement not covered" >notifications.filter(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.variant === "warning");</span></span>
+    const errors = <span class="cstat-no" title="statement not covered" >notifications.filter(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.variant === 'danger');</span></span>
+    const warnings = <span class="cstat-no" title="statement not covered" >notifications.filter(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.variant === 'warning');</span></span>
     const messages = <span class="cstat-no" title="statement not covered" >notifications.filter(</span>
-<span class="fstat-no" title="function not covered" >      (n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.variant !== "warning" &amp;&amp; n.variant !== "danger",</span>
+<span class="fstat-no" title="function not covered" >      (n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.variant !== 'warning' &amp;&amp; n.variant !== 'danger',</span>
     );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return (</span>
@@ -1003,29 +1003,29 @@ export const <span class="cstat-no" title="statement not covered" >MappingDetail
         {errors.length &gt; 0 &amp;&amp; (
           &lt;NotificationsGroup
             notifications={errors}
-            title={"Errors"}
+            title={'Errors'}
             onNotificationRead={onNotificationRead}
           /&gt;
         )}
         {warnings.length &gt; 0 &amp;&amp; (
           &lt;NotificationsGroup
             notifications={warnings}
-            title={"Warnings"}
+            title={'Warnings'}
             onNotificationRead={onNotificationRead}
           /&gt;
         )}
         {messages.length &gt; 0 &amp;&amp; (
           &lt;NotificationsGroup
             notifications={messages}
-            title={"Messages"}
+            title={'Messages'}
             onNotificationRead={onNotificationRead}
           /&gt;
         )}
-        &lt;div className={"pf-c-form"}&gt;
+        &lt;div className={'pf-c-form'}&gt;
           {mappingAction}
           &lt;MappingFields
             isSource={true}
-            title={"Sources"}
+            title={'Sources'}
             onCreateConstant={onCreateConstant}
             onCreateProperty={onCreateProperty}
             canAddToSelectedMapping={canAddToSelectedMapping}
@@ -1033,20 +1033,20 @@ export const <span class="cstat-no" title="statement not covered" >MappingDetail
             {sources.map(renderSourceMappingField)}
             {addableSources.length &gt; 0 &amp;&amp; (
               &lt;AddFieldTypeahead
-                ariaLabelTypeAhead={"Select source to add to the mapping"}
-                placeholderText={"Select source to add to the mapping"}
+                ariaLabelTypeAhead={'Select source to add to the mapping'}
+                placeholderText={'Select source to add to the mapping'}
                 fields={addableSources.map(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; <span class="cstat-no" title="statement not covered" >({</span>
                   label: s.amField.isPropertyOrConstant() ? s.name : s.path,
                   group: s.amField!.docDef.name,
                   onAdd: <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nAddFieldToMapping(true, s),</span>
                 }))}
-                data-testid={"add-source-to-mapping"}
+                data-testid={'add-source-to-mapping'}
               /&gt;
             )}
           &lt;/MappingFields&gt;
           &lt;MappingFields
             isSource={false}
-            title={"Targets"}
+            title={'Targets'}
             onCreateConstant={onCreateConstant}
             onCreateProperty={onCreateProperty}
             canAddToSelectedMapping={canAddToSelectedMapping}
@@ -1054,14 +1054,14 @@ export const <span class="cstat-no" title="statement not covered" >MappingDetail
             {targets.map(renderTargetMappingField)}
             {addableTargets.length &gt; 0 &amp;&amp; (
               &lt;AddFieldTypeahead
-                ariaLabelTypeAhead={"Select target to add to the mapping"}
-                placeholderText={"Select target to add to the mapping"}
+                ariaLabelTypeAhead={'Select target to add to the mapping'}
+                placeholderText={'Select target to add to the mapping'}
                 fields={addableTargets.map(<span class="fstat-no" title="function not covered" >(t</span>) =&gt; <span class="cstat-no" title="statement not covered" >({</span>
                   label: t.amField.isProperty() ? t.name : t.path,
                   group: t.amField!.docDef.name,
                   onAdd: <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nAddFieldToMapping(false, t),</span>
                 }))}
-                data-testid={"add-target-to-mapping"}
+                data-testid={'add-target-to-mapping'}
               /&gt;
             )}
           &lt;/MappingFields&gt;
@@ -1088,7 +1088,7 @@ const NotificationsGroup: FunctionComponent&lt;INotificationsGroupProps&gt; = <s
       noPadding={true}
       actions={[&lt;Badge key={1}&gt;{notifications.length}&lt;/Badge&gt;]}
     &gt;
-      &lt;div style={{ maxHeight: 200, overflow: "auto" }}&gt;
+      &lt;div style={{ maxHeight: 200, overflow: 'auto' }}&gt;
         {notifications.map(<span class="fstat-no" title="function not covered" >(n</span>, idx) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
           &lt;Alert
             key={idx}
@@ -1116,7 +1116,7 @@ const NotificationsGroup: FunctionComponent&lt;INotificationsGroupProps&gt; = <s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

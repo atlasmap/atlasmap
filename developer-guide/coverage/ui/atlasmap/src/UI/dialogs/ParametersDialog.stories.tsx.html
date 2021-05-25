@@ -345,125 +345,125 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-<span class="cstat-no" title="statement not covered" >import { boolean, text } from "@storybook/addon-knobs";</span>
+<span class="cstat-no" title="statement not covered" >import { boolean, text } from '@storybook/addon-knobs';</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >import { ParametersDialog } from "./ParametersDialog";</span>
-<span class="cstat-no" title="statement not covered" >import React from "react";</span>
-<span class="cstat-no" title="statement not covered" >import { action } from "@storybook/addon-actions";</span>
+<span class="cstat-no" title="statement not covered" >import { ParametersDialog } from './ParametersDialog';</span>
+<span class="cstat-no" title="statement not covered" >import React from 'react';</span>
+<span class="cstat-no" title="statement not covered" >import { action } from '@storybook/addon-actions';</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >export default {</span>
-  title: "UI|Dialogs",
+  title: 'UI|Dialogs',
   component: ParametersDialog,
 };
 &nbsp;
 const parameters = <span class="cstat-no" title="statement not covered" >[</span>
   {
-    name: "format",
-    label: "CSV File Format",
-    value: "Excel",
+    name: 'format',
+    label: 'CSV File Format',
+    value: 'Excel',
     options: [
-      { label: "Default", value: "Default" },
-      { label: "Excel", value: "Excel" },
-      { label: "InformixUnload", value: "InformixUnload" },
-      { label: "InformixUnloadCsv", value: "InformixUnloadCsv" },
-      { label: "MongoDBCsv", value: "MongoDBCsv" },
-      { label: "MongoDBTsv", value: "MongoDBTsv" },
-      { label: "MySQL", value: "MySQL" },
-      { label: "Oracle", value: "Oracle" },
-      { label: "PostgreSQLCsv", value: "PostgreSQLCsv" },
-      { label: "PostgreSQLText", value: "PostgreSQLText" },
-      { label: "RFC4180", value: "RFC4180" },
-      { label: "TDF", value: "TDF" },
+      { label: 'Default', value: 'Default' },
+      { label: 'Excel', value: 'Excel' },
+      { label: 'InformixUnload', value: 'InformixUnload' },
+      { label: 'InformixUnloadCsv', value: 'InformixUnloadCsv' },
+      { label: 'MongoDBCsv', value: 'MongoDBCsv' },
+      { label: 'MongoDBTsv', value: 'MongoDBTsv' },
+      { label: 'MySQL', value: 'MySQL' },
+      { label: 'Oracle', value: 'Oracle' },
+      { label: 'PostgreSQLCsv', value: 'PostgreSQLCsv' },
+      { label: 'PostgreSQLText', value: 'PostgreSQLText' },
+      { label: 'RFC4180', value: 'RFC4180' },
+      { label: 'TDF', value: 'TDF' },
     ],
     required: true,
     enabled: true,
   },
   {
-    name: "allowDuplicateHeaderNames",
-    label: "Allow Duplicate Header Names",
-    value: "true",
+    name: 'allowDuplicateHeaderNames',
+    label: 'Allow Duplicate Header Names',
+    value: 'true',
     boolean: true,
     required: false,
     enabled: true,
   },
   {
-    name: "allowMissingColumnNames",
-    label: "Allow Missing Column Names",
-    value: "true",
+    name: 'allowMissingColumnNames',
+    label: 'Allow Missing Column Names',
+    value: 'true',
     boolean: true,
     required: false,
     enabled: true,
   },
   {
-    name: "commentMarker",
-    label: "Comment Marker",
-    value: "#",
+    name: 'commentMarker',
+    label: 'Comment Marker',
+    value: '#',
     required: false,
     enabled: true,
   },
   {
-    name: "delimiter",
-    label: "Delimiter",
-    value: ":",
+    name: 'delimiter',
+    label: 'Delimiter',
+    value: ':',
     required: false,
     enabled: true,
   },
   {
-    name: "escape",
-    label: "Escape",
-    value: "&lt;esc&gt;",
+    name: 'escape',
+    label: 'Escape',
+    value: '&lt;esc&gt;',
     required: false,
     enabled: true,
   },
   {
-    name: "firstRecordAsHeader",
-    label: "First Record As Header",
-    value: "false",
+    name: 'firstRecordAsHeader',
+    label: 'First Record As Header',
+    value: 'false',
     boolean: true,
     required: false,
     enabled: true,
   },
-  { name: "headers", label: "Headers", value: "hdr", required: false },
+  { name: 'headers', label: 'Headers', value: 'hdr', required: false },
   {
-    name: "ignoreEmptyLines",
-    label: "Ignore Empty Lines",
-    value: "true",
-    boolean: true,
-    required: false,
-    enabled: true,
-  },
-  {
-    name: "ignoreHeaderCase",
-    label: "Ignore Header Case",
-    value: "false",
+    name: 'ignoreEmptyLines',
+    label: 'Ignore Empty Lines',
+    value: 'true',
     boolean: true,
     required: false,
     enabled: true,
   },
   {
-    name: "ignoreSurroundingSpaces",
-    label: "Ignore Surrounding Spaces",
-    value: "true",
+    name: 'ignoreHeaderCase',
+    label: 'Ignore Header Case',
+    value: 'false',
     boolean: true,
     required: false,
     enabled: true,
   },
   {
-    name: "nullString",
-    label: "Null String",
-    value: "&lt;nul&gt;",
+    name: 'ignoreSurroundingSpaces',
+    label: 'Ignore Surrounding Spaces',
+    value: 'true',
+    boolean: true,
     required: false,
     enabled: true,
   },
-  { name: "quote", label: "Quote", value: "", required: false, enabled: false },
+  {
+    name: 'nullString',
+    label: 'Null String',
+    value: '&lt;nul&gt;',
+    required: false,
+    enabled: true,
+  },
+  { name: 'quote', label: 'Quote', value: '', required: false, enabled: false },
 ];
 &nbsp;
 export const <span class="cstat-no" title="statement not covered" >parametersDialog = <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >(</span></span></span>
   &lt;ParametersDialog
-    title={text("Title", "Select CSV Processing Parameters")}
-    isOpen={boolean("Is open", true)}
-    onCancel={action("onCancel")}
-    onConfirm={action("onConfirm")}
+    title={text('Title', 'Select CSV Processing Parameters')}
+    isOpen={boolean('Is open', true)}
+    onCancel={action('onCancel')}
+    onConfirm={action('onConfirm')}
     parameters={parameters}
   /&gt;
 );
@@ -474,7 +474,7 @@ export const <span class="cstat-no" title="statement not covered" >parametersDia
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

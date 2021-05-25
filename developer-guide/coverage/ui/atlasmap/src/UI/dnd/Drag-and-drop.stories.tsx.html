@@ -503,14 +503,14 @@
   NodeRef,
   NodeRefProvider,
   NodesArc,
-} from "..";
+} from '..';
 &nbsp;
-<span class="cstat-no" title="statement not covered" >import React from "react";</span>
-<span class="cstat-no" title="statement not covered" >import { action } from "@storybook/addon-actions";</span>
-<span class="cstat-no" title="statement not covered" >import decorators from "../../stories/decorators";</span>
+<span class="cstat-no" title="statement not covered" >import React from 'react';</span>
+<span class="cstat-no" title="statement not covered" >import { action } from '@storybook/addon-actions';</span>
+<span class="cstat-no" title="statement not covered" >import decorators from '../../stories/decorators';</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >export default {</span>
-  title: "Drag &amp; Drop",
+  title: 'Drag &amp; Drop',
   includeStories: [], // or don't load this file at all
   decorators,
 };
@@ -520,25 +520,25 @@ export const <span class="cstat-no" title="statement not covered" >example = <sp
     &lt;Canvas&gt;
       &lt;HTMLObject x={10} y={10} width={200} height={200}&gt;
         &lt;DraggableField
-          field={{ type: "source", id: "abc123", name: "A field" }}
-          onDrop={action("onDrop")}
+          field={{ type: 'source', id: 'abc123', name: 'A field' }}
+          onDrop={action('onDrop')}
         &gt;
-          {<span class="fstat-no" title="function not covered" >({</span> isDragging<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >&lt;div&gt;{isDragging ? "dragging" : "drag me"}&lt;/div&gt;}</span>
+          {<span class="fstat-no" title="function not covered" >({</span> isDragging<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >&lt;div&gt;{isDragging ? 'dragging' : 'drag me'}&lt;/div&gt;}</span>
         &lt;/DraggableField&gt;
       &lt;/HTMLObject&gt;
       &lt;HTMLObject x={250} y={10} width={200} height={200}&gt;
         &lt;FieldDropTarget
-          accept={["source"]}
-          target={{ type: "target", id: "abc123", name: "A field" }}
+          accept={['source']}
+          target={{ type: 'target', id: 'abc123', name: 'A field' }}
           canDrop={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >t</span>rue}</span>
         &gt;
           {<span class="fstat-no" title="function not covered" >({</span> isOver<span class="cstat-no" title="statement not covered" >, i</span>sDroppable<span class="cstat-no" title="statement not covered" >, f</span>ield<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
-            &lt;div style={{ border: "1px dashed black" }}&gt;
+            &lt;div style={{ border: '1px dashed black' }}&gt;
               &lt;p&gt;Drop here!&lt;/p&gt;
               &lt;p&gt;
-                isOver: {isOver ? "yes" : "no"}
+                isOver: {isOver ? 'yes' : 'no'}
                 &lt;br /&gt;
-                isDroppable: {isDroppable ? "yes" : "no"}
+                isDroppable: {isDroppable ? 'yes' : 'no'}
                 &lt;br /&gt;
                 field: {JSON.stringify(field, null, 2)}
               &lt;/p&gt;
@@ -557,30 +557,30 @@ export const <span class="cstat-no" title="statement not covered" >canBeUsedWith
         &lt;code&gt;Canvas&lt;/code&gt; area is dashed.
       &lt;/p&gt;
       &lt;CanvasProvider allowPanning={false} initialHeight={340}&gt;
-        &lt;Canvas style={{ border: "1px dashed grey" }} isFilled={false}&gt;
+        &lt;Canvas style={{ border: '1px dashed grey' }} isFilled={false}&gt;
           &lt;HTMLObject x={10} y={10} width={200} height={100}&gt;
             &lt;DraggableField
-              field={{ type: "source", id: "f1", name: "Field #1" }}
-              style={{ height: "100%" }}
-              onDrop={action("onDrop")}
+              field={{ type: 'source', id: 'f1', name: 'Field #1' }}
+              style={{ height: '100%' }}
+              onDrop={action('onDrop')}
             &gt;
               {<span class="fstat-no" title="function not covered" >({</span> isDragging<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
-                &lt;NodeRef id={["f1", isDragging ? "dnd-start" : undefined]}&gt;
+                &lt;NodeRef id={['f1', isDragging ? 'dnd-start' : undefined]}&gt;
                   &lt;Document title="Field #1" dropTarget={isDragging}&gt;
-                    {isDragging ? "Dragging" : "Drag me"}
+                    {isDragging ? 'Dragging' : 'Drag me'}
                   &lt;/Document&gt;
                 &lt;/NodeRef&gt;
               )}
             &lt;/DraggableField&gt;
             &lt;DraggableField
-              field={{ type: "source", id: "f2", name: "Field #2" }}
-              style={{ height: "100%" }}
-              onDrop={action("onDrop")}
+              field={{ type: 'source', id: 'f2', name: 'Field #2' }}
+              style={{ height: '100%' }}
+              onDrop={action('onDrop')}
             &gt;
               {<span class="fstat-no" title="function not covered" >({</span> isDragging<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
-                &lt;NodeRef id={["f2", isDragging ? "dnd-start" : undefined]}&gt;
-                  &lt;Document title={"Field #2"} dropTarget={isDragging}&gt;
-                    {isDragging ? "Dragging" : "Drag me"}
+                &lt;NodeRef id={['f2', isDragging ? 'dnd-start' : undefined]}&gt;
+                  &lt;Document title={'Field #2'} dropTarget={isDragging}&gt;
+                    {isDragging ? 'Dragging' : 'Drag me'}
                   &lt;/Document&gt;
                 &lt;/NodeRef&gt;
               )}
@@ -588,87 +588,87 @@ export const <span class="cstat-no" title="statement not covered" >canBeUsedWith
           &lt;/HTMLObject&gt;
           &lt;HTMLObject x={350} y={10} width={200} height={100}&gt;
             &lt;FieldDropTarget
-              accept={["source"]}
-              target={{ type: "target", id: "t1", name: "t1" }}
-              canDrop={<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.id === "f2"}</span>
-              style={{ height: "100%" }}
+              accept={['source']}
+              target={{ type: 'target', id: 't1', name: 't1' }}
+              canDrop={<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.id === 'f2'}</span>
+              style={{ height: '100%' }}
             &gt;
               {<span class="fstat-no" title="function not covered" >({</span> isDroppable<span class="cstat-no" title="statement not covered" >, i</span>sTarget<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
-                &lt;NodeRef id={["df2", isTarget ? "dnd-target" : undefined]}&gt;
+                &lt;NodeRef id={['df2', isTarget ? 'dnd-target' : undefined]}&gt;
                   &lt;Document
                     title="Drop field #2"
                     dropTarget={isTarget}
                     dropAccepted={isDroppable}
                   &gt;
                     {isTarget
-                      ? "GIMME!"
+                      ? 'GIMME!'
                       : isDroppable
-                      ? "Drop here!"
-                      : "Drop area"}
+                      ? 'Drop here!'
+                      : 'Drop area'}
                   &lt;/Document&gt;
                 &lt;/NodeRef&gt;
               )}
             &lt;/FieldDropTarget&gt;
             &lt;FieldDropTarget
-              accept={["source"]}
-              target={{ type: "target", id: "t2", name: "t2" }}
-              canDrop={<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.id === "f1"}</span>
-              style={{ height: "100%" }}
+              accept={['source']}
+              target={{ type: 'target', id: 't2', name: 't2' }}
+              canDrop={<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.id === 'f1'}</span>
+              style={{ height: '100%' }}
             &gt;
               {<span class="fstat-no" title="function not covered" >({</span> isDroppable<span class="cstat-no" title="statement not covered" >, i</span>sTarget<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
-                &lt;NodeRef id={isTarget ? "dnd-target" : undefined}&gt;
+                &lt;NodeRef id={isTarget ? 'dnd-target' : undefined}&gt;
                   &lt;Document
                     title="Drop field #1"
                     dropTarget={isTarget}
                     dropAccepted={isDroppable}
                   &gt;
                     {isTarget
-                      ? "GIMME!"
+                      ? 'GIMME!'
                       : isDroppable
-                      ? "Drop here!"
-                      : "Drop area"}
+                      ? 'Drop here!'
+                      : 'Drop area'}
                   &lt;/Document&gt;
                 &lt;/NodeRef&gt;
               )}
             &lt;/FieldDropTarget&gt;
             &lt;FieldDropTarget
-              accept={["source"]}
-              target={{ type: "target", id: "t3", name: "t3" }}
-              canDrop={<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.id === "f1"}</span>
-              style={{ height: "100%" }}
+              accept={['source']}
+              target={{ type: 'target', id: 't3', name: 't3' }}
+              canDrop={<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.id === 'f1'}</span>
+              style={{ height: '100%' }}
             &gt;
               {<span class="fstat-no" title="function not covered" >({</span> isDroppable<span class="cstat-no" title="statement not covered" >, i</span>sTarget<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
-                &lt;NodeRef id={["df1", isTarget ? "dnd-target" : undefined]}&gt;
+                &lt;NodeRef id={['df1', isTarget ? 'dnd-target' : undefined]}&gt;
                   &lt;Document
                     title="Drop field #1"
                     dropTarget={isTarget}
                     dropAccepted={isDroppable}
                   &gt;
                     {isTarget
-                      ? "GIMME!"
+                      ? 'GIMME!'
                       : isDroppable
-                      ? "Drop here!"
-                      : "Also field #1 drop area"}
+                      ? 'Drop here!'
+                      : 'Also field #1 drop area'}
                   &lt;/Document&gt;
                 &lt;/NodeRef&gt;
               )}
             &lt;/FieldDropTarget&gt;
           &lt;/HTMLObject&gt;
-          &lt;NodesArc start={"f1"} end={"df1"} /&gt;
+          &lt;NodesArc start={'f1'} end={'df1'} /&gt;
           &lt;NodesArc
-            start={"dnd-start"}
-            end={"dnd-target"}
-            color={"var(--pf-global--success-color--100)"}
+            start={'dnd-start'}
+            end={'dnd-target'}
+            color={'var(--pf-global--success-color--100)'}
           /&gt;
         &lt;/Canvas&gt;
       &lt;/CanvasProvider&gt;
       &lt;div&gt;
         &lt;p&gt;Can drag &amp; drop outside the canvas too.&lt;/p&gt;
         &lt;FieldDropTarget
-          accept={["source"]}
-          target={{ type: "target", id: "t4", name: "t4" }}
-          canDrop={<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.id === "f1"}</span>
-          style={{ height: "100%" }}
+          accept={['source']}
+          target={{ type: 'target', id: 't4', name: 't4' }}
+          canDrop={<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.id === 'f1'}</span>
+          style={{ height: '100%' }}
         &gt;
           {<span class="fstat-no" title="function not covered" >({</span> isDroppable<span class="cstat-no" title="statement not covered" >, i</span>sTarget<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
             &lt;Document
@@ -678,10 +678,10 @@ export const <span class="cstat-no" title="statement not covered" >canBeUsedWith
               style={{ margin: 10 }}
             &gt;
               {isTarget
-                ? "GIMME!"
+                ? 'GIMME!'
                 : isDroppable
-                ? "Drop here!"
-                : "Also field #1 drop area, but outside the canvas"}
+                ? 'Drop here!'
+                : 'Also field #1 drop area, but outside the canvas'}
             &lt;/Document&gt;
           )}
         &lt;/FieldDropTarget&gt;
@@ -696,7 +696,7 @@ export const <span class="cstat-no" title="statement not covered" >canBeUsedWith
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

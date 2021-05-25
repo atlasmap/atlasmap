@@ -492,19 +492,19 @@
   NodeRef,
   NodeRefProvider,
   NodesArc,
-} from ".";
+} from '.';
 <span class="cstat-no" title="statement not covered" >import React, {</span>
   FunctionComponent,
   createElement,
   useCallback,
   useState,
-} from "react";
-<span class="cstat-no" title="statement not covered" >import { animated, useSpring } from "react-spring";</span>
+} from 'react';
+<span class="cstat-no" title="statement not covered" >import { animated, useSpring } from 'react-spring';</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >import PrintNodeRef from "./PrintNodeRef";</span>
+<span class="cstat-no" title="statement not covered" >import PrintNodeRef from './PrintNodeRef';</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >export default {</span>
-  title: "Canvas",
+  title: 'Canvas',
   includeStories: [], // or don't load this file at all
 };
 &nbsp;
@@ -533,17 +533,17 @@ export const <span class="cstat-no" title="statement not covered" >example: Func
                 style={props}
                 width={40}
                 height={40}
-                fill={"purple"}
+                fill={'purple'}
               /&gt;
             &lt;/NodeRef&gt;
             &lt;NodeRef id="b"&gt;
-              &lt;rect x={150} y={90} width={60} height={60} fill={"red"} /&gt;
+              &lt;rect x={150} y={90} width={60} height={60} fill={'red'} /&gt;
             &lt;/NodeRef&gt;
             &lt;NodeRef id="c"&gt;
-              &lt;rect x={390} y={160} width={80} height={80} fill={"yellow"} /&gt;
+              &lt;rect x={390} y={160} width={80} height={80} fill={'yellow'} /&gt;
             &lt;/NodeRef&gt;
-            &lt;NodesArc start={"a"} end={"b"} /&gt;
-            &lt;NodesArc start={"b"} end={"c"} /&gt;
+            &lt;NodesArc start={'a'} end={'b'} /&gt;
+            &lt;NodesArc start={'b'} end={'c'} /&gt;
           &lt;/NodeRefProvider&gt;
         &lt;/Canvas&gt;
       &lt;/CanvasProvider&gt;
@@ -555,16 +555,16 @@ export const <span class="cstat-no" title="statement not covered" >customWidthAn
     &lt;Canvas&gt;
       &lt;NodeRefProvider&gt;
         &lt;NodeRef id="a"&gt;
-          &lt;rect x={90} y={50} width={40} height={40} fill={"green"} /&gt;
+          &lt;rect x={90} y={50} width={40} height={40} fill={'green'} /&gt;
         &lt;/NodeRef&gt;
         &lt;NodeRef id="b"&gt;
-          &lt;rect x={20} y={240} width={40} height={40} fill={"red"} /&gt;
+          &lt;rect x={20} y={240} width={40} height={40} fill={'red'} /&gt;
         &lt;/NodeRef&gt;
         &lt;NodeRef id="c"&gt;
-          &lt;rect x={350} y={150} width={100} height={100} fill={"purple"} /&gt;
+          &lt;rect x={350} y={150} width={100} height={100} fill={'purple'} /&gt;
         &lt;/NodeRef&gt;
-        &lt;NodesArc start={"a"} end={"c"} color={"green"} width={1} /&gt;
-        &lt;NodesArc start={"b"} end={"c"} color={"red"} width={4} /&gt;
+        &lt;NodesArc start={'a'} end={'c'} color={'green'} width={1} /&gt;
+        &lt;NodesArc start={'b'} end={'c'} color={'red'} width={4} /&gt;
       &lt;/NodeRefProvider&gt;
     &lt;/Canvas&gt;
   &lt;/CanvasProvider&gt;
@@ -575,9 +575,9 @@ export const <span class="cstat-no" title="statement not covered" >svgElementCoo
     &lt;Canvas&gt;
       &lt;NodeRefProvider&gt;
         &lt;NodeRef id="a"&gt;
-          &lt;rect x={50} y={100} width={40} height={40} fill={"purple"} /&gt;
+          &lt;rect x={50} y={100} width={40} height={40} fill={'purple'} /&gt;
         &lt;/NodeRef&gt;
-        &lt;HTMLObject id={"id"} width={200} height={200} x={150} y={0}&gt;
+        &lt;HTMLObject id={'id'} width={200} height={200} x={150} y={0}&gt;
           &lt;PrintNodeRef id="a" /&gt;
         &lt;/HTMLObject&gt;
       &lt;/NodeRefProvider&gt;
@@ -593,7 +593,7 @@ export const <span class="cstat-no" title="statement not covered" >htmlElementCo
           &lt;NodeRef id="a"&gt;
             &lt;PrintNodeRef
               id="a"
-              style={{ width: 300, height: 200, border: "1px solid red" }}
+              style={{ width: 300, height: 200, border: '1px solid red' }}
             /&gt;
           &lt;/NodeRef&gt;
         &lt;/HTMLObject&gt;
@@ -613,8 +613,8 @@ export const <span class="cstat-no" title="statement not covered" >nestedHtmlEle
               style={{
                 width: 300,
                 height: 300,
-                border: "1px solid black",
-                overflow: "scroll",
+                border: '1px solid black',
+                overflow: 'scroll',
               }}
             &gt;
               &lt;NodeRef id="b"&gt;
@@ -623,7 +623,7 @@ export const <span class="cstat-no" title="statement not covered" >nestedHtmlEle
                   style={{
                     width: 50,
                     height: 20,
-                    border: "1px solid red",
+                    border: '1px solid red',
                     marginTop: 50,
                   }}
                 /&gt;
@@ -670,9 +670,9 @@ export const <span class="cstat-no" title="statement not covered" >linksBetweenD
             &lt;/ul&gt;
           &lt;/NodeRef&gt;
         &lt;/HTMLObject&gt;
-        &lt;NodesArc start={"a1"} end={"b3"} /&gt;
-        &lt;NodesArc start={"a3"} end={"b2"} /&gt;
-        &lt;NodesArc start={"a2"} end={"b1"} /&gt;
+        &lt;NodesArc start={'a1'} end={'b3'} /&gt;
+        &lt;NodesArc start={'a3'} end={'b2'} /&gt;
+        &lt;NodesArc start={'a2'} end={'b1'} /&gt;
       &lt;/NodeRefProvider&gt;
     &lt;/Canvas&gt;
   &lt;/CanvasProvider&gt;
@@ -684,7 +684,7 @@ export const <span class="cstat-no" title="statement not covered" >linksBetweenD
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

@@ -435,13 +435,13 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-<span class="cstat-no" title="statement not covered" >import React, { useState } from "react";</span>
-<span class="cstat-no" title="statement not covered" >import { ReactElement, useCallback } from "react";</span>
+<span class="cstat-no" title="statement not covered" >import React, { useState } from 'react';</span>
+<span class="cstat-no" title="statement not covered" >import { ReactElement, useCallback } from 'react';</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >import { useAtlasmap } from "../AtlasmapProvider";</span>
-<span class="cstat-no" title="statement not covered" >import { useConfirmationDialog } from "./useConfirmationDialog";</span>
-<span class="cstat-no" title="statement not covered" >import { useParametersDialog } from "./useParametersDialog";</span>
-<span class="cstat-no" title="statement not covered" >import { useSpecifyInstanceSchemaDialog } from "./useSpecifyInstanceSchemaDialog";</span>
+<span class="cstat-no" title="statement not covered" >import { useAtlasmap } from '../AtlasmapProvider';</span>
+<span class="cstat-no" title="statement not covered" >import { useConfirmationDialog } from './useConfirmationDialog';</span>
+<span class="cstat-no" title="statement not covered" >import { useParametersDialog } from './useParametersDialog';</span>
+<span class="cstat-no" title="statement not covered" >import { useSpecifyInstanceSchemaDialog } from './useSpecifyInstanceSchemaDialog';</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >u</span>seImportDocumentDialog(</span>): [
   ReactElement,
@@ -449,11 +449,11 @@
 ] {
   const { documentExists<span class="cstat-no" title="statement not covered" >, i</span>mportAtlasFile<span class="cstat-no" title="statement not covered" > } = <span class="cstat-no" title="statement not covered" >u</span>seAtlasmap();</span>
   const [importDialog<span class="cstat-no" title="statement not covered" >, o</span>penImportDialog<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seConfirmationDialog(</span>
-    "Confirm document import",
-    "A document with the selected name has already been imported into the specified panel. It will appear in addition to the pre-existing document.",
+    'Confirm document import',
+    'A document with the selected name has already been imported into the specified panel. It will appear in addition to the pre-existing document.',
   );
   const [parametersDialog<span class="cstat-no" title="statement not covered" >, o</span>penParametersDialog<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seParametersDialog(</span>
-    "Select CSV Processing Parameters",
+    'Select CSV Processing Parameters',
   );
   const [defaultSchema<span class="cstat-no" title="statement not covered" >, s</span>etDefaultSchema<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState(false);</span>
   const [specifyInstanceSchemaDialog<span class="cstat-no" title="statement not covered" >, o</span>penSpecifyInstanceSchema<span class="cstat-no" title="statement not covered" >] =</span>
@@ -462,10 +462,10 @@
   const importFile = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (s</span>electedFile: File, isSource: boolean) =&gt; {
 <span class="cstat-no" title="statement not covered" >      if (selectedFile.name) {</span>
-        const userFileSplit = <span class="cstat-no" title="statement not covered" >selectedFile.name.split(".");</span>
+        const userFileSplit = <span class="cstat-no" title="statement not covered" >selectedFile.name.split('.');</span>
         const userFileSuffix: string =
 <span class="cstat-no" title="statement not covered" >          userFileSplit[userFileSplit.length - 1].toUpperCase();</span>
-<span class="cstat-no" title="statement not covered" >        if (userFileSuffix === "CSV") {</span>
+<span class="cstat-no" title="statement not covered" >        if (userFileSuffix === 'CSV') {</span>
 <span class="cstat-no" title="statement not covered" >          openParametersDialog(</span>
 <span class="fstat-no" title="function not covered" >            (p</span>arameters) =&gt; {
               const inspectionParameters: { [key: string]: string } = <span class="cstat-no" title="statement not covered" >{};</span>
@@ -481,91 +481,91 @@
             },
             [
               {
-                name: "format",
-                label: "CSV File Format",
-                value: "Default",
+                name: 'format',
+                label: 'CSV File Format',
+                value: 'Default',
                 options: [
-                  { label: "Default", value: "Default" },
-                  { label: "Excel", value: "Excel" },
-                  { label: "InformixUnload", value: "InformixUnload" },
-                  { label: "InformixUnloadCsv", value: "InformixUnloadCsv" },
-                  { label: "MongoDBCsv", value: "MongoDBCsv" },
-                  { label: "MongoDBTsv", value: "MongoDBTsv" },
-                  { label: "MySQL", value: "MySQL" },
-                  { label: "Oracle", value: "Oracle" },
-                  { label: "PostgreSQLCsv", value: "PostgreSQLCsv" },
-                  { label: "PostgreSQLText", value: "PostgreSQLText" },
-                  { label: "RFC4180", value: "RFC4180" },
-                  { label: "TDF", value: "TDF" },
+                  { label: 'Default', value: 'Default' },
+                  { label: 'Excel', value: 'Excel' },
+                  { label: 'InformixUnload', value: 'InformixUnload' },
+                  { label: 'InformixUnloadCsv', value: 'InformixUnloadCsv' },
+                  { label: 'MongoDBCsv', value: 'MongoDBCsv' },
+                  { label: 'MongoDBTsv', value: 'MongoDBTsv' },
+                  { label: 'MySQL', value: 'MySQL' },
+                  { label: 'Oracle', value: 'Oracle' },
+                  { label: 'PostgreSQLCsv', value: 'PostgreSQLCsv' },
+                  { label: 'PostgreSQLText', value: 'PostgreSQLText' },
+                  { label: 'RFC4180', value: 'RFC4180' },
+                  { label: 'TDF', value: 'TDF' },
                 ],
                 required: true,
               },
               {
-                name: "allowDuplicateHeaderNames",
-                label: "Allow Duplicate Header Names",
-                value: "true",
+                name: 'allowDuplicateHeaderNames',
+                label: 'Allow Duplicate Header Names',
+                value: 'true',
                 boolean: true,
                 required: false,
               },
               {
-                name: "allowMissingColumnNames",
-                label: "Allow Missing Column Names",
-                value: "true",
+                name: 'allowMissingColumnNames',
+                label: 'Allow Missing Column Names',
+                value: 'true',
                 boolean: true,
                 required: false,
               },
               {
-                name: "commentMarker",
-                label: "Comment Marker",
-                value: "",
+                name: 'commentMarker',
+                label: 'Comment Marker',
+                value: '',
                 required: false,
               },
               {
-                name: "delimiter",
-                label: "Delimiter",
-                value: "",
+                name: 'delimiter',
+                label: 'Delimiter',
+                value: '',
                 required: false,
               },
-              { name: "escape", label: "Escape", value: "", required: false },
+              { name: 'escape', label: 'Escape', value: '', required: false },
               {
-                name: "firstRecordAsHeader",
-                label: "First Record As Header",
-                value: "true",
+                name: 'firstRecordAsHeader',
+                label: 'First Record As Header',
+                value: 'true',
                 boolean: true,
                 required: false,
               },
-              { name: "headers", label: "Headers", value: "", required: false },
+              { name: 'headers', label: 'Headers', value: '', required: false },
               {
-                name: "ignoreEmptyLines",
-                label: "Ignore Empty Lines",
-                value: "true",
-                boolean: true,
-                required: false,
-              },
-              {
-                name: "ignoreHeaderCase",
-                label: "Ignore Header Case",
-                value: "true",
+                name: 'ignoreEmptyLines',
+                label: 'Ignore Empty Lines',
+                value: 'true',
                 boolean: true,
                 required: false,
               },
               {
-                name: "ignoreSurroundingSpaces",
-                label: "Ignore Surrounding Spaces",
-                value: "true",
+                name: 'ignoreHeaderCase',
+                label: 'Ignore Header Case',
+                value: 'true',
                 boolean: true,
                 required: false,
               },
               {
-                name: "nullString",
-                label: "Null String",
-                value: "",
+                name: 'ignoreSurroundingSpaces',
+                label: 'Ignore Surrounding Spaces',
+                value: 'true',
+                boolean: true,
                 required: false,
               },
               {
-                name: "skipHeaderRecord",
-                label: "Skip Header Record",
-                value: "true",
+                name: 'nullString',
+                label: 'Null String',
+                value: '',
+                required: false,
+              },
+              {
+                name: 'skipHeaderRecord',
+                label: 'Skip Header Record',
+                value: 'true',
                 boolean: true,
                 required: false,
               },
@@ -574,7 +574,7 @@
 <span class="cstat-no" title="statement not covered" >          return;</span>
         }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        setDefaultSchema(userFileSuffix === "XSD" ? true : false);</span>
+<span class="cstat-no" title="statement not covered" >        setDefaultSchema(userFileSuffix === 'XSD' ? true : false);</span>
 <span class="cstat-no" title="statement not covered" >        openSpecifyInstanceSchema(<span class="fstat-no" title="function not covered" >(i</span>sSchema: boolean) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >          importAtlasFile(selectedFile, isSource, isSchema);</span>
         });
@@ -609,7 +609,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

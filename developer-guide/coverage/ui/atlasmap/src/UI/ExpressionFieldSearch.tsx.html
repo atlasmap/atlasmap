@@ -445,11 +445,11 @@ import {
   Select,
   SelectOption,
   SelectOptionObject,
-} from "@patternfly/react-core";
-import { FunctionComponent } from "react";
-import React from "react";
-import styles from "./ExpressionFieldSearch.module.css";
-import { useToggle } from "../Atlasmap/utils";
+} from '@patternfly/react-core';
+import { FunctionComponent } from 'react';
+import React from 'react';
+import styles from './ExpressionFieldSearch.module.css';
+import { useToggle } from '../Atlasmap/utils';
 &nbsp;
 export interface IExpressionFieldSearchProps {
   clearSearchMode: (clearAtSign: boolean) =&gt; void;
@@ -457,7 +457,7 @@ export interface IExpressionFieldSearchProps {
   insertSelectedField: (index: number) =&gt; void;
   mappedFieldCandidates: string[][];
 }
-let selectValue = "";
+let selectValue = '';
 &nbsp;
 export const ExpressionFieldSearch: FunctionComponent&lt;IExpressionFieldSearchProps&gt; =
 <span class="fstat-no" title="function not covered" >  ({</span>
@@ -501,10 +501,10 @@ export const ExpressionFieldSearch: FunctionComponent&lt;IExpressionFieldSearchP
      */
     function <span class="fstat-no" title="function not covered" >updateCandidate(</span>sibling: any): void {
 <span class="cstat-no" title="statement not covered" >      if (candidateSrcElement &amp;&amp; sibling) {</span>
-<span class="cstat-no" title="statement not covered" >        candidateSrcElement.style.backgroundColor = "white";</span>
+<span class="cstat-no" title="statement not covered" >        candidateSrcElement.style.backgroundColor = 'white';</span>
 <span class="cstat-no" title="statement not covered" >        sibling.focus();</span>
 <span class="cstat-no" title="statement not covered" >        candidateSrcElement = sibling;</span>
-<span class="cstat-no" title="statement not covered" >        candidateSrcElement.style.backgroundColor = "lightblue";</span>
+<span class="cstat-no" title="statement not covered" >        candidateSrcElement.style.backgroundColor = 'lightblue';</span>
       }
     }
 &nbsp;
@@ -517,29 +517,29 @@ export const ExpressionFieldSearch: FunctionComponent&lt;IExpressionFieldSearchP
     }
 &nbsp;
     function <span class="fstat-no" title="function not covered" >onKeyDown(</span>event: any): void {
-<span class="cstat-no" title="statement not covered" >      if ("Enter" === event.key) {</span>
+<span class="cstat-no" title="statement not covered" >      if ('Enter' === event.key) {</span>
 <span class="cstat-no" title="statement not covered" >        event.preventDefault();</span>
 <span class="cstat-no" title="statement not covered" >        if (candidateSrcElement) {</span>
 <span class="cstat-no" title="statement not covered" >          insertSelectedField(candidateIndex);</span>
         }
-      } else <span class="cstat-no" title="statement not covered" >if ("ArrowDown" === event.key) {</span>
+      } else <span class="cstat-no" title="statement not covered" >if ('ArrowDown' === event.key) {</span>
 <span class="cstat-no" title="statement not covered" >        event.preventDefault();</span>
 <span class="cstat-no" title="statement not covered" >        trackSelection(event);</span>
 <span class="cstat-no" title="statement not covered" >        if (candidateSrcElement) {</span>
 <span class="cstat-no" title="statement not covered" >          updateCandidate(candidateSrcElement.nextElementSibling);</span>
         }
-      } else <span class="cstat-no" title="statement not covered" >if ("ArrowUp" === event.key) {</span>
+      } else <span class="cstat-no" title="statement not covered" >if ('ArrowUp' === event.key) {</span>
 <span class="cstat-no" title="statement not covered" >        event.preventDefault();</span>
 <span class="cstat-no" title="statement not covered" >        trackSelection(event);</span>
 <span class="cstat-no" title="statement not covered" >        if (candidateSrcElement) {</span>
 <span class="cstat-no" title="statement not covered" >          updateCandidate(candidateSrcElement.previousElementSibling);</span>
         }
-      } else <span class="cstat-no" title="statement not covered" >if ("Tab" === event.key) {</span>
+      } else <span class="cstat-no" title="statement not covered" >if ('Tab' === event.key) {</span>
 <span class="cstat-no" title="statement not covered" >        if (!candidateSrcElement &amp;&amp; event.srcElement) {</span>
 <span class="cstat-no" title="statement not covered" >          candidateSrcElement =</span>
             event.srcElement.nextElementSibling.firstElementChild;
 <span class="cstat-no" title="statement not covered" >          candidateIndex = 0;</span>
-<span class="cstat-no" title="statement not covered" >          candidateSrcElement.style.backgroundColor = "lightblue";</span>
+<span class="cstat-no" title="statement not covered" >          candidateSrcElement.style.backgroundColor = 'lightblue';</span>
         } else <span class="cstat-no" title="statement not covered" >if (</span>
           candidateSrcElement &amp;&amp;
           candidateSrcElement.nextElementSibling
@@ -593,7 +593,7 @@ export const ExpressionFieldSearch: FunctionComponent&lt;IExpressionFieldSearchP
       &lt;div
         aria-label="Expression Field Search"
         className="searchMenu"
-        data-testid={"expression-field-search"}
+        data-testid={'expression-field-search'}
       &gt;
         &lt;Select
           onToggle={toggle}
@@ -618,7 +618,7 @@ export const ExpressionFieldSearch: FunctionComponent&lt;IExpressionFieldSearchP
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

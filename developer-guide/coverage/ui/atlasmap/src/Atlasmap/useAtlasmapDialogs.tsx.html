@@ -705,9 +705,9 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { IConstant, IDocumentName, INamespace, IProperty } from "../UI";
-<span class="cstat-no" title="statement not covered" >import React, { useCallback, useMemo, useState } from "react";</span>
-<span class="cstat-no" title="statement not covered" >import { enableCustomClass, getPropertyScopeOptions } from "./utils";</span>
+import { IConstant, IDocumentName, INamespace, IProperty } from '../UI';
+<span class="cstat-no" title="statement not covered" >import React, { useCallback, useMemo, useState } from 'react';</span>
+<span class="cstat-no" title="statement not covered" >import { enableCustomClass, getPropertyScopeOptions } from './utils';</span>
 <span class="cstat-no" title="statement not covered" >import {</span>
   useAboutDialog,
   useCaptureDocumentNameToast,
@@ -728,11 +728,11 @@ import { IConstant, IDocumentName, INamespace, IProperty } from "../UI";
   useResetAtlasmapDialog,
   useSpecifyInstanceSchemaDialog,
   useToggleExpressionModeDialog,
-} from "./dialogs";
+} from './dialogs';
 &nbsp;
-import { IAtlasmapDocument } from "../Views";
-<span class="cstat-no" title="statement not covered" >import { createPortal } from "react-dom";</span>
-<span class="cstat-no" title="statement not covered" >import { useAtlasmap } from "./AtlasmapProvider";</span>
+import { IAtlasmapDocument } from '../Views';
+<span class="cstat-no" title="statement not covered" >import { createPortal } from 'react-dom';</span>
+<span class="cstat-no" title="statement not covered" >import { useAtlasmap } from './AtlasmapProvider';</span>
 &nbsp;
 export interface IUseAtlasmapDialogsProps {
   modalContainer: HTMLElement;
@@ -754,7 +754,7 @@ export interface IUseAtlasmapDialogsProps {
 &nbsp;
   //#region constant dialogs
   const [createConstantDialog<span class="cstat-no" title="statement not covered" >, o</span>penCreateConstantDialog<span class="cstat-no" title="statement not covered" >] =</span>
-<span class="cstat-no" title="statement not covered" >    useConstantDialog("Create Constant");</span>
+<span class="cstat-no" title="statement not covered" >    useConstantDialog('Create Constant');</span>
   const onCreateConstant = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (c</span>onstants: IAtlasmapDocument | null, addToActiveMapping?: boolean) =&gt; {
 <span class="cstat-no" title="statement not covered" >      openCreateConstantDialog(<span class="fstat-no" title="function not covered" >({</span> value<span class="cstat-no" title="statement not covered" >, v</span>alueType<span class="cstat-no" title="statement not covered" > })</span> =&gt; {</span>
@@ -765,7 +765,7 @@ export interface IUseAtlasmapDialogsProps {
   );
 &nbsp;
   const [editConstantDialog<span class="cstat-no" title="statement not covered" >, o</span>penEditConstantDialog<span class="cstat-no" title="statement not covered" >] =</span>
-<span class="cstat-no" title="statement not covered" >    useConstantDialog("Edit Constant");</span>
+<span class="cstat-no" title="statement not covered" >    useConstantDialog('Edit Constant');</span>
   const onEditConstant = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (c</span>onstant: IConstant, constants: IAtlasmapDocument | null) =&gt; {
 <span class="cstat-no" title="statement not covered" >      openEditConstantDialog(</span>
@@ -786,7 +786,7 @@ export interface IUseAtlasmapDialogsProps {
     getPropertyScopeOptions(true),
   );
   const [createPropertyDialog<span class="cstat-no" title="statement not covered" >, o</span>penCreatePropertyDialog<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>sePropertyDialog(</span>
-    "Create Property",
+    'Create Property',
     scopeOptions,
   );
   const onCreateProperty = <span class="cstat-no" title="statement not covered" >useCallback(</span>
@@ -803,7 +803,7 @@ export interface IUseAtlasmapDialogsProps {
     [createProperty, openCreatePropertyDialog],
   );
   const [editPropertyDialog<span class="cstat-no" title="statement not covered" >, o</span>penEditPropertyDialog<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>sePropertyDialog(</span>
-    "Edit Property",
+    'Edit Property',
     scopeOptions,
   );
   const onEditProperty = <span class="cstat-no" title="statement not covered" >useCallback(</span>
@@ -878,7 +878,7 @@ export interface IUseAtlasmapDialogsProps {
 &nbsp;
   //#region namespace table dialogs
   const [createNamespaceDialog<span class="cstat-no" title="statement not covered" >, o</span>penCreateNamespaceDialog<span class="cstat-no" title="statement not covered" >] =</span>
-<span class="cstat-no" title="statement not covered" >    useNamespaceDialog("Create namespace");</span>
+<span class="cstat-no" title="statement not covered" >    useNamespaceDialog('Create namespace');</span>
   const onCreateNamespace = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (d</span>ocName: string) =&gt; {
 <span class="cstat-no" title="statement not covered" >      openCreateNamespaceDialog(</span>
@@ -889,7 +889,7 @@ export interface IUseAtlasmapDialogsProps {
     [createNamespace, openCreateNamespaceDialog],
   );
   const [editNamespaceDialog<span class="cstat-no" title="statement not covered" >, o</span>penEditNamespaceDialog<span class="cstat-no" title="statement not covered" >] =</span>
-<span class="cstat-no" title="statement not covered" >    useNamespaceDialog("Edit namespace");</span>
+<span class="cstat-no" title="statement not covered" >    useNamespaceDialog('Edit namespace');</span>
   const onEditNamespace = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (d</span>ocName: string, namespace: INamespace) =&gt; {
 <span class="cstat-no" title="statement not covered" >      openEditNamespaceDialog(</span>
@@ -910,7 +910,7 @@ export interface IUseAtlasmapDialogsProps {
   //#endregion
 &nbsp;
   const [createEnableCustomClassDialog<span class="cstat-no" title="statement not covered" >, o</span>penCreateEnableCustomClassDialog<span class="cstat-no" title="statement not covered" >] =</span>
-<span class="cstat-no" title="statement not covered" >    useCustomClassDialog("Load Java Document From Custom Class");</span>
+<span class="cstat-no" title="statement not covered" >    useCustomClassDialog('Load Java Document From Custom Class');</span>
 &nbsp;
   const onEnableCustomClass = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (i</span>sSource: boolean): void =&gt; {
@@ -1014,7 +1014,7 @@ export interface IUseAtlasmapDialogsProps {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

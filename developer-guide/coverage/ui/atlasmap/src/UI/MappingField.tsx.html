@@ -521,7 +521,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { BoltIcon, InfoAltIcon, TrashIcon } from "@patternfly/react-icons";
+import { BoltIcon, InfoAltIcon, TrashIcon } from '@patternfly/react-icons';
 import {
   Button,
   InputGroup,
@@ -531,14 +531,14 @@ import {
   TextInput,
   Title,
   Tooltip,
-} from "@patternfly/react-core";
-import { DraggableField, FieldDropTarget } from "./dnd";
-import React, { Children, FunctionComponent, KeyboardEvent } from "react";
+} from '@patternfly/react-core';
+import { DraggableField, FieldDropTarget } from './dnd';
+import React, { Children, FunctionComponent, KeyboardEvent } from 'react';
 &nbsp;
-import { IAtlasmapField } from "../../src/Views/models";
-import { NodeRef } from "./Canvas/NodeRef";
-import { css } from "@patternfly/react-styles";
-import styles from "./MappingField.module.css";
+import { IAtlasmapField } from '../../src/Views/models';
+import { NodeRef } from './Canvas/NodeRef';
+import { css } from '@patternfly/react-styles';
+import styles from './MappingField.module.css';
 &nbsp;
 export interface IMappingFieldProps {
   field: IAtlasmapField;
@@ -577,18 +577,18 @@ export const MappingField: FunctionComponent&lt;IMappingFieldProps&gt; = <span c
       target={{
         id: field.id,
         name: field.name,
-        type: "mapping",
+        type: 'mapping',
         payload: field,
       }}
       canDrop={<span class="fstat-no" title="function not covered" >() =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        return true;</span>
       }}
-      accept={["mapping"]}
+      accept={['mapping']}
     &gt;
       {<span class="fstat-no" title="function not covered" >({</span> isTarget<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
         &lt;DraggableField
           field={{
-            type: "mapping",
+            type: 'mapping',
             id: field.id,
             name: field.name,
             payload: field,
@@ -604,8 +604,8 @@ export const MappingField: FunctionComponent&lt;IMappingFieldProps&gt; = <span c
             &lt;NodeRef
               id={[
                 field.id,
-                isDragging ? "dnd-start" : undefined,
-                isTarget ? "dnd-target-field" : undefined,
+                isDragging ? 'dnd-start' : undefined,
+                isTarget ? 'dnd-target-field' : undefined,
               ]}
             &gt;
               &lt;div
@@ -623,7 +623,7 @@ export const MappingField: FunctionComponent&lt;IMappingFieldProps&gt; = <span c
                     &gt;
                       {canShowIndex &amp;&amp; (
                         &lt;Tooltip
-                          position={"auto"}
+                          position={'auto'}
                           enableFlip={true}
                           entryDelay={750}
                           exitDelay={100}
@@ -640,9 +640,9 @@ export const MappingField: FunctionComponent&lt;IMappingFieldProps&gt; = <span c
                           &lt;InputGroup className={styles.fieldIndex}&gt;
                             &lt;InputGroupText&gt;#&lt;/InputGroupText&gt;
                             &lt;TextInput
-                              type={"number"}
+                              type={'number'}
                               value={index}
-                              id={"index"}
+                              id={'index'}
                               onKeyDown={onKeyDown}
                               onChange={onIndexChange}
                               data-testid={`change-${name}-input-index`}
@@ -652,7 +652,7 @@ export const MappingField: FunctionComponent&lt;IMappingFieldProps&gt; = <span c
                         &lt;/Tooltip&gt;
                       )}
                       &lt;Tooltip
-                        position={"auto"}
+                        position={'auto'}
                         enableFlip={true}
                         entryDelay={750}
                         exitDelay={100}
@@ -667,14 +667,14 @@ export const MappingField: FunctionComponent&lt;IMappingFieldProps&gt; = <span c
                   {!mappingExpressionEnabled &amp;&amp; onNewTransformation &amp;&amp; (
                     &lt;SplitItem&gt;
                       &lt;Tooltip
-                        position={"auto"}
+                        position={'auto'}
                         enableFlip={true}
                         entryDelay={750}
                         exitDelay={100}
-                        content={"Add a new transformation."}
+                        content={'Add a new transformation.'}
                       &gt;
                         &lt;Button
-                          variant={"plain"}
+                          variant={'plain'}
                           onClick={onNewTransformation}
                           className={styles.link}
                           data-testid={`add-transformation-to-${name}-field-button`}
@@ -686,14 +686,14 @@ export const MappingField: FunctionComponent&lt;IMappingFieldProps&gt; = <span c
                   )}
                   &lt;SplitItem&gt;
                     &lt;Tooltip
-                      position={"auto"}
+                      position={'auto'}
                       enableFlip={true}
                       entryDelay={750}
                       exitDelay={100}
-                      content={"Delete this field from the mapping."}
+                      content={'Delete this field from the mapping.'}
                     &gt;
                       &lt;Button
-                        variant={"plain"}
+                        variant={'plain'}
                         onClick={onDelete}
                         className={styles.link}
                         data-testid={`remove-${name}-from-mapping-button`}
@@ -713,7 +713,7 @@ export const MappingField: FunctionComponent&lt;IMappingFieldProps&gt; = <span c
                   Children.count(children) &gt; 0 &amp;&amp; (
                     &lt;div
                       className={css(
-                        "pf-c-form",
+                        'pf-c-form',
                         styles.transformationsWrapper,
                       )}
                     &gt;
@@ -738,7 +738,7 @@ export const MappingField: FunctionComponent&lt;IMappingFieldProps&gt; = <span c
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

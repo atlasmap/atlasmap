@@ -439,7 +439,7 @@
   LevelItem,
   Title,
   Tooltip,
-} from "@patternfly/react-core";
+} from '@patternfly/react-core';
 <span class="cstat-no" title="statement not covered" >import {</span>
   ICell,
   IRowData,
@@ -447,14 +447,14 @@
   TableBody,
   TableHeader,
   textCenter,
-} from "@patternfly/react-table";
-<span class="cstat-no" title="statement not covered" >import { PlusIcon, TableIcon } from "@patternfly/react-icons";</span>
-<span class="cstat-no" title="statement not covered" >import React, { FunctionComponent, ReactElement } from "react";</span>
+} from '@patternfly/react-table';
+<span class="cstat-no" title="statement not covered" >import { PlusIcon, TableIcon } from '@patternfly/react-icons';</span>
+<span class="cstat-no" title="statement not covered" >import React, { FunctionComponent, ReactElement } from 'react';</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >import { Actions } from "../UI";</span>
-import { IAtlasmapDocument } from ".";
-<span class="cstat-no" title="statement not covered" >import { MainContent } from "../Layout";</span>
-<span class="cstat-no" title="statement not covered" >import styles from "./NamespaceTableView.module.css";</span>
+<span class="cstat-no" title="statement not covered" >import { Actions } from '../UI';</span>
+import { IAtlasmapDocument } from '.';
+<span class="cstat-no" title="statement not covered" >import { MainContent } from '../Layout';</span>
+<span class="cstat-no" title="statement not covered" >import styles from './NamespaceTableView.module.css';</span>
 &nbsp;
 export interface INamespaceTableProps {
   sources: IAtlasmapDocument[];
@@ -476,11 +476,11 @@ export const <span class="cstat-no" title="statement not covered" >NamespaceTabl
   onDeleteNamespace<span class="cstat-no" title="statement not covered" >,</span>
 }) =&gt; {
   const columns = <span class="cstat-no" title="statement not covered" >[</span>
-    "Alias",
-    "URI",
-    "Location URI",
+    'Alias',
+    'URI',
+    'Location URI',
     {
-      title: "Target Namespace",
+      title: 'Target Namespace',
       transforms: [textCenter],
       cellTransforms: [textCenter],
     },
@@ -488,7 +488,7 @@ export const <span class="cstat-no" title="statement not covered" >NamespaceTabl
 &nbsp;
   const namespaceTables: ReactElement[] = <span class="cstat-no" title="statement not covered" >sources.reduce(</span>
 <span class="fstat-no" title="function not covered" >    (x</span>mlSources: ReactElement[], source: IAtlasmapDocument) =&gt; {
-<span class="cstat-no" title="statement not covered" >      if (source.type !== "XML") {</span>
+<span class="cstat-no" title="statement not covered" >      if (source.type !== 'XML') {</span>
 <span class="cstat-no" title="statement not covered" >        return xmlSources;</span>
       }
 &nbsp;
@@ -496,7 +496,7 @@ export const <span class="cstat-no" title="statement not covered" >NamespaceTabl
 <span class="cstat-no" title="statement not covered" >        !source.namespaces || source.namespaces.length === 0</span>
           ? [
               {
-                cells: ["&lt;None&gt;"],
+                cells: ['&lt;None&gt;'],
               },
             ]
           : source.namespaces.map(<span class="fstat-no" title="function not covered" >(n</span>amespace) =&gt; {
@@ -506,7 +506,7 @@ export const <span class="cstat-no" title="statement not covered" >NamespaceTabl
                   { title: namespace.uri },
                   { title: namespace.locationUri },
                   {
-                    title: namespace.isTarget ? "\u2713" : "",
+                    title: namespace.isTarget ? '\u2713' : '',
                   },
                 ],
               };
@@ -514,7 +514,7 @@ export const <span class="cstat-no" title="statement not covered" >NamespaceTabl
 &nbsp;
       const actions = <span class="cstat-no" title="statement not covered" >[</span>
         {
-          title: "Edit",
+          title: 'Edit',
           onClick: <span class="fstat-no" title="function not covered" >(_</span>event: any, _rowId: any, row: IRowData, _extra: any) =&gt; {
 <span class="cstat-no" title="statement not covered" >            onEditNamespace(</span>
               source.name,
@@ -528,7 +528,7 @@ export const <span class="cstat-no" title="statement not covered" >NamespaceTabl
           },
         },
         {
-          title: "Remove",
+          title: 'Remove',
           onClick: <span class="fstat-no" title="function not covered" >(_</span>event: any, _rowId: any, row: any, _extra: any) =&gt;
 <span class="cstat-no" title="statement not covered" >            onDeleteNamespace(source.name, row.alias.title),</span>
         },
@@ -538,21 +538,21 @@ export const <span class="cstat-no" title="statement not covered" >NamespaceTabl
         ...xmlSources,
         &lt;Level&gt;
           &lt;LevelItem key="title"&gt;
-            &lt;Title size="lg" headingLevel={"h1"} className={styles.title}&gt;
+            &lt;Title size="lg" headingLevel={'h1'} className={styles.title}&gt;
               Namespaces for {source.name}
             &lt;/Title&gt;
           &lt;/LevelItem&gt;
           &lt;LevelItem key="actions"&gt;
             &lt;Actions&gt;
               &lt;Tooltip
-                position={"top"}
+                position={'top'}
                 enableFlip={true}
                 content={&lt;div&gt;Create a namespace&lt;/div&gt;}
-                key={"create-namespace"}
+                key={'create-namespace'}
               &gt;
                 &lt;Button
                   onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nCreateNamespace(source.name)}</span>
-                  variant={"plain"}
+                  variant={'plain'}
                   aria-label="Create a namespace"
                   data-testid="create-namespace-button"
                 &gt;
@@ -600,7 +600,7 @@ export const <span class="cstat-no" title="statement not covered" >NamespaceTabl
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

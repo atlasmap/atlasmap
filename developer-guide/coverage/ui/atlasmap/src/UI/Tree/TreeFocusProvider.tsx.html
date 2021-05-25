@@ -504,7 +504,7 @@ import React, {
   createContext,
   useContext,
   useState,
-} from "react";
+} from 'react';
 &nbsp;
 interface ITreeFocusContext {
   focusedItem: HTMLElement | null;
@@ -544,19 +544,19 @@ export const useTreeFocus = ({
   const { focusedItem, setFocusedItem } = context;
   const getFocusableItems = <span class="fstat-no" title="function not covered" >(e</span>l: HTMLElement) =&gt; {
 <span class="cstat-no" title="statement not covered" >    return Array.from&lt;HTMLElement&gt;(</span>
-      el.closest("[role=tree]")?.querySelectorAll("[role=treeitem]") || [],
+      el.closest('[role=tree]')?.querySelectorAll('[role=treeitem]') || [],
     ).filter(<span class="fstat-no" title="function not covered" >(e</span>l) =&gt; {
-      const group<span class="cstat-no" title="statement not covered" > = el.parentElement?.closest("[aria-expanded]");</span>
+      const group<span class="cstat-no" title="statement not covered" > = el.parentElement?.closest('[aria-expanded]');</span>
 <span class="cstat-no" title="statement not covered" >      if (group) {</span>
-<span class="cstat-no" title="statement not covered" >        return group.getAttribute("aria-expanded") === "true";</span>
+<span class="cstat-no" title="statement not covered" >        return group.getAttribute('aria-expanded') === 'true';</span>
       }
 <span class="cstat-no" title="statement not covered" >      return true;</span>
     });
   };
 &nbsp;
   const setFocus = <span class="fstat-no" title="function not covered" >(i</span>ndex: number, nodes: HTMLElement[]) =&gt; {
-<span class="cstat-no" title="statement not covered" >    nodes.forEach(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.setAttribute("tabindex", "-1"));</span></span>
-<span class="cstat-no" title="statement not covered" >    nodes[index].setAttribute("tabindex", "0");</span>
+<span class="cstat-no" title="statement not covered" >    nodes.forEach(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.setAttribute('tabindex', '-1'));</span></span>
+<span class="cstat-no" title="statement not covered" >    nodes[index].setAttribute('tabindex', '0');</span>
 <span class="cstat-no" title="statement not covered" >    nodes[index].focus();</span>
   };
 &nbsp;
@@ -606,13 +606,13 @@ export const useTreeFocus = ({
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 <span class="cstat-no" title="statement not covered" >    switch (event.key) {</span>
-      case " ":
-      case "Enter":
+      case ' ':
+      case 'Enter':
 <span class="cstat-no" title="statement not covered" >        if (event.target === ref.current) {</span>
           // Create simulated mouse event to mimic the behavior of ATs
           // and let the event handler handleClick do the housekeeping.
 <span class="cstat-no" title="statement not covered" >          event.target.dispatchEvent(</span>
-            new MouseEvent("click", {
+            new MouseEvent('click', {
               view: window,
               bubbles: true,
               cancelable: true,
@@ -621,17 +621,17 @@ export const useTreeFocus = ({
 <span class="cstat-no" title="statement not covered" >          setFocusedItem(ref.current);</span>
         }
 <span class="cstat-no" title="statement not covered" >        break;</span>
-      case "Escape":
+      case 'Escape':
 <span class="cstat-no" title="statement not covered" >        setFocusedItem(null);</span>
 <span class="cstat-no" title="statement not covered" >        event.preventDefault();</span>
 <span class="cstat-no" title="statement not covered" >        break;</span>
-      case "ArrowUp":
+      case 'ArrowUp':
 <span class="cstat-no" title="statement not covered" >        setFocusToPreviousItem();</span>
 <span class="cstat-no" title="statement not covered" >        break;</span>
-      case "ArrowDown":
+      case 'ArrowDown':
 <span class="cstat-no" title="statement not covered" >        setFocusToNextItem();</span>
 <span class="cstat-no" title="statement not covered" >        break;</span>
-      case "ArrowRight":
+      case 'ArrowRight':
 <span class="cstat-no" title="statement not covered" >        if (isExpandable) {</span>
 <span class="cstat-no" title="statement not covered" >          if (isExpanded) {</span>
 <span class="cstat-no" title="statement not covered" >            setFocusToNextItem();</span>
@@ -642,7 +642,7 @@ export const useTreeFocus = ({
           }
         }
 <span class="cstat-no" title="statement not covered" >        break;</span>
-      case "ArrowLeft":
+      case 'ArrowLeft':
 <span class="cstat-no" title="statement not covered" >        if (isExpandable &amp;&amp; isExpanded) {</span>
 <span class="cstat-no" title="statement not covered" >          if (collapseTreeitem) {</span>
 <span class="cstat-no" title="statement not covered" >            collapseTreeitem();</span>
@@ -653,10 +653,10 @@ export const useTreeFocus = ({
           // }
         }
 <span class="cstat-no" title="statement not covered" >        break;</span>
-      case "Home":
+      case 'Home':
 <span class="cstat-no" title="statement not covered" >        setFocusToFirstItem();</span>
 <span class="cstat-no" title="statement not covered" >        break;</span>
-      case "End":
+      case 'End':
 <span class="cstat-no" title="statement not covered" >        setFocusToLastItem();</span>
 <span class="cstat-no" title="statement not covered" >        break;</span>
       default:
@@ -683,8 +683,8 @@ export const useTreeFocus = ({
       onBlur: <span class="fstat-no" title="function not covered" >(e</span>vent: FocusEvent&lt;HTMLElement&gt;) =&gt; {
 <span class="cstat-no" title="statement not covered" >        if (</span>
           (event.relatedTarget as HTMLElement | null)?.closest(
-            "[role=tree]",
-          ) !== ref.current?.closest("[role=tree]")
+            '[role=tree]',
+          ) !== ref.current?.closest('[role=tree]')
         ) {
 <span class="cstat-no" title="statement not covered" >          setFocusedItem(null);</span>
         }
@@ -699,7 +699,7 @@ export const useTreeFocus = ({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

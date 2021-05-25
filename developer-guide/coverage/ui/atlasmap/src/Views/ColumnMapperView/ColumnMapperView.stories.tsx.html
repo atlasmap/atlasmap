@@ -321,59 +321,59 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-<span class="cstat-no" title="statement not covered" >import { CanvasProvider, Column } from "../../UI";</span>
-<span class="cstat-no" title="statement not covered" >import { MappingsColumn, SourcesColumn, TargetsColumn } from "../../Views";</span>
+<span class="cstat-no" title="statement not covered" >import { CanvasProvider, Column } from '../../UI';</span>
+<span class="cstat-no" title="statement not covered" >import { MappingsColumn, SourcesColumn, TargetsColumn } from '../../Views';</span>
 <span class="cstat-no" title="statement not covered" >import {</span>
   constants,
   mappings,
   properties,
   sources,
   targets,
-} from "../../stories/sampleData";
+} from '../../stories/sampleData';
 &nbsp;
-<span class="cstat-no" title="statement not covered" >import React from "react";</span>
-<span class="cstat-no" title="statement not covered" >import { action } from "@storybook/addon-actions";</span>
-<span class="cstat-no" title="statement not covered" >import { boolean } from "@storybook/addon-knobs";</span>
-<span class="cstat-no" title="statement not covered" >import decorators from "../../stories/decorators";</span>
+<span class="cstat-no" title="statement not covered" >import React from 'react';</span>
+<span class="cstat-no" title="statement not covered" >import { action } from '@storybook/addon-actions';</span>
+<span class="cstat-no" title="statement not covered" >import { boolean } from '@storybook/addon-knobs';</span>
+<span class="cstat-no" title="statement not covered" >import decorators from '../../stories/decorators';</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >export default {</span>
-  title: "AtlasMap|Views/ColumnMapperView",
+  title: 'AtlasMap|Views/ColumnMapperView',
   decorators,
 };
 &nbsp;
 export const <span class="cstat-no" title="statement not covered" >sourcesColumn = <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >(</span></span></span>
   &lt;CanvasProvider&gt;
-    &lt;Column data-testid={"column-source-area"} totalColumns={1}&gt;
+    &lt;Column data-testid={'column-source-area'} totalColumns={1}&gt;
       &lt;SourcesColumn
-        onCreateConstant={action("onCreateConstant")}
-        onEditConstant={action("onEditConstant")}
-        onDeleteConstant={action("onDeleteConstant")}
-        onCreateProperty={action("onCreateProperty")}
-        onEditProperty={action("onEditProperty")}
-        onDeleteProperty={action("onDeleteProperty")}
-        onDeleteDocument={action("onDeleteDocument")}
-        onImportDocument={action("onImportDocument")}
-        onCustomClassSearch={action("onCustomClassSearch")}
-        onShowMappingDetails={action("onShowMappingDetails")}
+        onCreateConstant={action('onCreateConstant')}
+        onEditConstant={action('onEditConstant')}
+        onDeleteConstant={action('onDeleteConstant')}
+        onCreateProperty={action('onCreateProperty')}
+        onEditProperty={action('onEditProperty')}
+        onDeleteProperty={action('onDeleteProperty')}
+        onDeleteDocument={action('onDeleteDocument')}
+        onImportDocument={action('onImportDocument')}
+        onCustomClassSearch={action('onCustomClassSearch')}
+        onShowMappingDetails={action('onShowMappingDetails')}
         canAddToSelectedMapping={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >t</span>rue}</span>
         canAddFieldToSelectedMapping={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >t</span>rue}</span>
-        onAddToSelectedMapping={action("onAddToSelectedMapping")}
+        onAddToSelectedMapping={action('onAddToSelectedMapping')}
         canRemoveFromSelectedMapping={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >t</span>rue}</span>
-        onRemoveFromSelectedMapping={action("onRemoveFromSelectedMapping")}
+        onRemoveFromSelectedMapping={action('onRemoveFromSelectedMapping')}
         canStartMapping={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >t</span>rue}</span>
-        onStartMapping={action("onStartMapping")}
+        onStartMapping={action('onStartMapping')}
         shouldShowMappingPreviewForField={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >t</span>rue}</span>
-        onFieldPreviewChange={action("onFieldPreviewChange")}
+        onFieldPreviewChange={action('onFieldPreviewChange')}
         canDrop={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >t</span>rue}</span>
-        onDrop={action("onDrop")}
-        onSearch={action("onSearch")}
-        showTypes={boolean("Show types", true)}
+        onDrop={action('onDrop')}
+        onSearch={action('onSearch')}
+        showTypes={boolean('Show types', true)}
         sourceProperties={properties}
         constants={constants}
         sources={sources}
         isSource={true}
-        acceptDropType={"target"}
-        draggableType={"source"}
+        acceptDropType={'target'}
+        draggableType={'source'}
       /&gt;
     &lt;/Column&gt;
   &lt;/CanvasProvider&gt;
@@ -381,34 +381,34 @@ export const <span class="cstat-no" title="statement not covered" >sourcesColumn
 &nbsp;
 export const <span class="cstat-no" title="statement not covered" >targetsColumn = <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >(</span></span></span>
   &lt;CanvasProvider&gt;
-    &lt;Column data-testid={"column-target-area"} totalColumns={1}&gt;
+    &lt;Column data-testid={'column-target-area'} totalColumns={1}&gt;
       &lt;TargetsColumn
-        onCreateProperty={action("onCreateProperty")}
-        onEditProperty={action("onEditProperty")}
-        onDeleteProperty={action("onDeleteProperty")}
-        onFieldPreviewChange={action("onFieldPreviewChange")}
-        onDeleteDocument={action("onDeleteDocument")}
-        onImportDocument={action("onImportDocument")}
-        onSearch={action("onSearch")}
-        onCustomClassSearch={action("onCustomClassSearch")}
-        onDrop={action("onDrop")}
+        onCreateProperty={action('onCreateProperty')}
+        onEditProperty={action('onEditProperty')}
+        onDeleteProperty={action('onDeleteProperty')}
+        onFieldPreviewChange={action('onFieldPreviewChange')}
+        onDeleteDocument={action('onDeleteDocument')}
+        onImportDocument={action('onImportDocument')}
+        onSearch={action('onSearch')}
+        onCustomClassSearch={action('onCustomClassSearch')}
+        onDrop={action('onDrop')}
         canDrop={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >t</span>rue}</span>
-        onShowMappingDetails={action("onShowMappingDetails")}
+        onShowMappingDetails={action('onShowMappingDetails')}
         canAddToSelectedMapping={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >t</span>rue}</span>
         canAddFieldToSelectedMapping={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >t</span>rue}</span>
-        onAddToSelectedMapping={action("onAddToSelectedMapping")}
+        onAddToSelectedMapping={action('onAddToSelectedMapping')}
         canRemoveFromSelectedMapping={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >t</span>rue}</span>
-        onRemoveFromSelectedMapping={action("onRemoveFromSelectedMapping")}
+        onRemoveFromSelectedMapping={action('onRemoveFromSelectedMapping')}
         canStartMapping={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >t</span>rue}</span>
-        onStartMapping={action("onStartMapping")}
+        onStartMapping={action('onStartMapping')}
         shouldShowMappingPreviewForField={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >t</span>rue}</span>
-        showMappingPreview={boolean("Show mapping preview", false)}
-        showTypes={boolean("Show types", true)}
+        showMappingPreview={boolean('Show mapping preview', false)}
+        showTypes={boolean('Show types', true)}
         targetProperties={properties}
         targets={targets}
         isSource={false}
-        acceptDropType={"source"}
-        draggableType={"target"}
+        acceptDropType={'source'}
+        draggableType={'target'}
       /&gt;
     &lt;/Column&gt;
   &lt;/CanvasProvider&gt;
@@ -416,15 +416,15 @@ export const <span class="cstat-no" title="statement not covered" >targetsColumn
 &nbsp;
 export const <span class="cstat-no" title="statement not covered" >mappingsColumn = <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >(</span></span></span>
   &lt;CanvasProvider&gt;
-    &lt;Column data-testid={"column-mappings-area"} totalColumns={1}&gt;
+    &lt;Column data-testid={'column-mappings-area'} totalColumns={1}&gt;
       &lt;MappingsColumn
-        showMappingPreview={boolean("Show mapping preview", true)}
-        onFieldPreviewChange={action("onFieldPreviewChange")}
-        onSelectMapping={action("onSelectMapping")}
-        onDeselectMapping={action("onDeselectMapping")}
-        onEditMapping={action("onEditMapping")}
-        onMouseOver={action("onMouseOver")}
-        onMouseOut={action("onMouseOut")}
+        showMappingPreview={boolean('Show mapping preview', true)}
+        onFieldPreviewChange={action('onFieldPreviewChange')}
+        onSelectMapping={action('onSelectMapping')}
+        onDeselectMapping={action('onDeselectMapping')}
+        onEditMapping={action('onEditMapping')}
+        onMouseOver={action('onMouseOver')}
+        onMouseOut={action('onMouseOut')}
         canDrop={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >t</span>rue}</span>
         mappings={mappings}
       /&gt;
@@ -438,7 +438,7 @@ export const <span class="cstat-no" title="statement not covered" >mappingsColum
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

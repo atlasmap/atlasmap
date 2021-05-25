@@ -1598,7 +1598,7 @@ import {
   NamespaceModel,
   TransitionMode,
   TransitionModel,
-} from "@atlasmap/core";
+} from '@atlasmap/core';
 import {
   IAtlasmapDocument,
   IAtlasmapField,
@@ -1607,25 +1607,25 @@ import {
   IAtlasmapMapping,
   IAtlasmapNamespace,
   INotification,
-} from "../../Views";
-import { ITransformationArgument, ITransformationSelectOption } from "../../UI";
+} from '../../Views';
+import { ITransformationArgument, ITransformationSelectOption } from '../../UI';
 &nbsp;
-import { Observable } from "rxjs";
-import ky from "ky";
+import { Observable } from 'rxjs';
+import ky from 'ky';
 &nbsp;
-const api = ky.create({ headers: { "ATLASMAP-XSRF-TOKEN": "awesome" } });
+const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
 &nbsp;
 export function <span class="fstat-no" title="function not covered" >copyToClipboard(</span>text: string) {
-  const textArea = <span class="cstat-no" title="statement not covered" >document.createElement("textarea");</span>
+  const textArea = <span class="cstat-no" title="statement not covered" >document.createElement('textarea');</span>
 <span class="cstat-no" title="statement not covered" >  textArea.value = text;</span>
 <span class="cstat-no" title="statement not covered" >  document.body.appendChild(textArea);</span>
 <span class="cstat-no" title="statement not covered" >  textArea.select();</span>
 <span class="cstat-no" title="statement not covered" >  try {</span>
-<span class="cstat-no" title="statement not covered" >    document.execCommand("copy");</span>
+<span class="cstat-no" title="statement not covered" >    document.execCommand('copy');</span>
   } catch (err) {
 <span class="cstat-no" title="statement not covered" >    ConfigModel.getConfig().errorService.addError(</span>
       new ErrorInfo({
-        message: "Error copying " + text + " to clipboard",
+        message: 'Error copying ' + text + ' to clipboard',
         level: ErrorLevel.ERROR,
         scope: ErrorScope.APPLICATION,
         type: ErrorType.INTERNAL,
@@ -1650,8 +1650,8 @@ export function <span class="fstat-no" title="function not covered" >fromFieldTo
     .filter(<span class="fstat-no" title="function not covered" >(f</span>) =&gt; <span class="cstat-no" title="statement not covered" >f) as IAtlasmapField[];</span>
 <span class="cstat-no" title="statement not covered" >  return fields.length &gt; 0 &amp;&amp; field.visibleInCurrentDocumentSearch</span>
     ? {
-        id: `${field.docDef.uri || field.docDef.type + "-" + field.scope}:${
-          field.docDef.isSource ? "source" : "target"
+        id: `${field.docDef.uri || field.docDef.type + '-' + field.scope}:${
+          field.docDef.isSource ? 'source' : 'target'
         }:${field.path}`,
         name: field.name,
         type: field.type,
@@ -1671,8 +1671,8 @@ export function <span class="fstat-no" title="function not covered" >fromFieldTo
     : cfg.showUnmappedFields &amp;&amp; field.visibleInCurrentDocumentSearch;
 <span class="cstat-no" title="statement not covered" >  return shouldBeVisible</span>
     ? {
-        id: `${field.docDef.uri || field.docDef.type + "-" + field.scope}:${
-          field.docDef.isSource ? "source" : "target"
+        id: `${field.docDef.uri || field.docDef.type + '-' + field.scope}:${
+          field.docDef.isSource ? 'source' : 'target'
         }:${field.path}`,
         name: field.getFieldLabel(false, false),
         type: field.type,
@@ -1691,8 +1691,8 @@ export function <span class="fstat-no" title="function not covered" >fromFieldTo
         isInCollection: field.isInCollection(),
         isConnected: partOfMapping,
         isDisabled:
-          field.type === "UNSUPPORTED" ||
-          (field.type === "COMPLEX" &amp;&amp; !field.enumeration),
+          field.type === 'UNSUPPORTED' ||
+          (field.type === 'COMPLEX' &amp;&amp; !field.enumeration),
         enumeration: field.enumeration,
       }
     : null;
@@ -1745,8 +1745,8 @@ export function <span class="fstat-no" title="function not covered" >fromMappedF
 <span class="cstat-no" title="statement not covered" >  return {</span>
     id: `${
       mappedField.field!.docDef.uri ||
-      mappedField.field!.docDef.type + "-" + mappedField.field!.scope
-    }:${mappedField.field!.docDef.isSource ? "source" : "target"}:${
+      mappedField.field!.docDef.type + '-' + mappedField.field!.scope
+    }:${mappedField.field!.docDef.isSource ? 'source' : 'target'}:${
       mappedField.field!.path
     }`,
     name: mappedField.field!.getFieldLabel(false, false),
@@ -1795,22 +1795,22 @@ export function <span class="fstat-no" title="function not covered" >fromMappedF
 &nbsp;
 export function <span class="fstat-no" title="function not covered" >errorLevelToVariant(</span>
   level: ErrorLevel,
-): INotification["variant"] {
+): INotification['variant'] {
 <span class="cstat-no" title="statement not covered" >  switch (level) {</span>
     case ErrorLevel.INFO:
-<span class="cstat-no" title="statement not covered" >      return "info";</span>
+<span class="cstat-no" title="statement not covered" >      return 'info';</span>
     case ErrorLevel.WARN:
-<span class="cstat-no" title="statement not covered" >      return "warning";</span>
+<span class="cstat-no" title="statement not covered" >      return 'warning';</span>
     case ErrorLevel.ERROR:
-<span class="cstat-no" title="statement not covered" >      return "danger";</span>
+<span class="cstat-no" title="statement not covered" >      return 'danger';</span>
     default:
-<span class="cstat-no" title="statement not covered" >      return "default";</span>
+<span class="cstat-no" title="statement not covered" >      return 'default';</span>
   }
 }
 &nbsp;
 export function <span class="fstat-no" title="function not covered" >errorMessageToString(</span>message: any): string {
 <span class="cstat-no" title="statement not covered" >  switch (typeof message) {</span>
-    case "string":
+    case 'string':
 <span class="cstat-no" title="statement not covered" >      return message;</span>
     default:
 <span class="cstat-no" title="statement not covered" >      return message?.message || JSON.stringify(message);</span>
@@ -1820,15 +1820,15 @@ export function <span class="fstat-no" title="function not covered" >errorMessag
 export function <span class="fstat-no" title="function not covered" >errorTypeToString(</span>type: ErrorType): string {
 <span class="cstat-no" title="statement not covered" >  switch (type) {</span>
     case ErrorType.INTERNAL:
-<span class="cstat-no" title="statement not covered" >      return "Internal";</span>
+<span class="cstat-no" title="statement not covered" >      return 'Internal';</span>
     case ErrorType.USER:
-<span class="cstat-no" title="statement not covered" >      return "User";</span>
+<span class="cstat-no" title="statement not covered" >      return 'User';</span>
     case ErrorType.VALIDATION:
-<span class="cstat-no" title="statement not covered" >      return "Validation";</span>
+<span class="cstat-no" title="statement not covered" >      return 'Validation';</span>
     case ErrorType.PREVIEW:
-<span class="cstat-no" title="statement not covered" >      return "Preview";</span>
+<span class="cstat-no" title="statement not covered" >      return 'Preview';</span>
     case ErrorType.FORM:
-<span class="cstat-no" title="statement not covered" >      return "Form";</span>
+<span class="cstat-no" title="statement not covered" >      return 'Form';</span>
   }
 }
 &nbsp;
@@ -2109,7 +2109,7 @@ export function <span class="fstat-no" title="function not covered" >handleIndex
 <span class="cstat-no" title="statement not covered" >    return;</span>
   }
   const sourceField = <span class="cstat-no" title="statement not covered" >activeMapping.getMappedFieldForIndex(</span>
-    "" + (currentIndex + 1),
+    '' + (currentIndex + 1),
     isSource,
   );
 <span class="cstat-no" title="statement not covered" >  if (!sourceField) {</span>
@@ -2118,7 +2118,7 @@ export function <span class="fstat-no" title="function not covered" >handleIndex
   let newIndex: number | null = <span class="cstat-no" title="statement not covered" >0;</span>
 &nbsp;
   // If the target is an actual index value then check for the need to add padding.
-<span class="cstat-no" title="statement not covered" >  if (typeof target === "number") {</span>
+<span class="cstat-no" title="statement not covered" >  if (typeof target === 'number') {</span>
 <span class="cstat-no" title="statement not covered" >    newIndex = target;</span>
 <span class="cstat-no" title="statement not covered" >    if (target &lt;= 0 || !activeMapping) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
@@ -2153,7 +2153,7 @@ export function <span class="fstat-no" title="function not covered" >handleNewTr
 <span class="cstat-no" title="statement not covered" >    return;</span>
   }
   const field = <span class="cstat-no" title="statement not covered" >activeMapping.getMappedFieldForIndex(</span>
-    "" + (index + 1),
+    '' + (index + 1),
     isSource,
   );
 <span class="cstat-no" title="statement not covered" >  if (!field) {</span>
@@ -2178,7 +2178,7 @@ export function <span class="fstat-no" title="function not covered" >handleTrans
 <span class="cstat-no" title="statement not covered" >    return;</span>
   }
   const field = <span class="cstat-no" title="statement not covered" >activeMapping.getMappedFieldForIndex(</span>
-    "" + (index + 1),
+    '' + (index + 1),
     isSource,
   );
 <span class="cstat-no" title="statement not covered" >  if (!field) {</span>
@@ -2223,7 +2223,7 @@ export function <span class="fstat-no" title="function not covered" >handleTrans
 <span class="cstat-no" title="statement not covered" >    return;</span>
   }
   const field = <span class="cstat-no" title="statement not covered" >activeMapping.getMappedFieldForIndex(</span>
-    "" + (index + 1),
+    '' + (index + 1),
     isSource,
   );
 <span class="cstat-no" title="statement not covered" >  if (!field) {</span>
@@ -2247,7 +2247,7 @@ export function <span class="fstat-no" title="function not covered" >handleRemov
 <span class="cstat-no" title="statement not covered" >    return;</span>
   }
   const field = <span class="cstat-no" title="statement not covered" >activeMapping.getMappedFieldForIndex(</span>
-    "" + (index + 1),
+    '' + (index + 1),
     isSource,
   );
 <span class="cstat-no" title="statement not covered" >  if (!field) {</span>
@@ -2316,7 +2316,7 @@ export function <span class="fstat-no" title="function not covered" >deselectMap
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

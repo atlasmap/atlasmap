@@ -395,29 +395,29 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-<span class="cstat-no" title="statement not covered" >import { Canvas } from "./Canvas";</span>
-<span class="cstat-no" title="statement not covered" >import { CanvasProvider } from "./CanvasContext";</span>
-<span class="cstat-no" title="statement not covered" >import { HTMLObject } from "./HTMLObject";</span>
-<span class="cstat-no" title="statement not covered" >import { Movable } from "./Movable";</span>
-<span class="cstat-no" title="statement not covered" >import PrintMovableRects from "./PrintMovableRects";</span>
-<span class="cstat-no" title="statement not covered" >import React from "react";</span>
+<span class="cstat-no" title="statement not covered" >import { Canvas } from './Canvas';</span>
+<span class="cstat-no" title="statement not covered" >import { CanvasProvider } from './CanvasContext';</span>
+<span class="cstat-no" title="statement not covered" >import { HTMLObject } from './HTMLObject';</span>
+<span class="cstat-no" title="statement not covered" >import { Movable } from './Movable';</span>
+<span class="cstat-no" title="statement not covered" >import PrintMovableRects from './PrintMovableRects';</span>
+<span class="cstat-no" title="statement not covered" >import React from 'react';</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >export default {</span>
-  title: "Canvas",
+  title: 'Canvas',
   includeStories: [], // or don't load this file at all
 };
 &nbsp;
 export const <span class="cstat-no" title="statement not covered" >example = <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >(</span></span></span>
   &lt;CanvasProvider initialHeight={150}&gt;
     &lt;Canvas&gt;
-      &lt;Movable&lt;SVGRectElement&gt; id={"id1"}&gt;
+      &lt;Movable&lt;SVGRectElement&gt; id={'id1'}&gt;
         {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >x<span class="cstat-no" title="statement not covered" > </span>= 20, <span class="cstat-no" title="statement not covered" >y<span class="cstat-no" title="statement not covered" ></span> </span>= 70, b</span>ind<span class="cstat-no" title="statement not covered" >, r</span>ef<span class="cstat-no" title="statement not covered" >, c</span>lassName<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
           &lt;rect
             x={x}
             y={y}
             width={200}
             height={40}
-            fill={"red"}
+            fill={'red'}
             {...bind()}
             ref={ref}
             className={className}
@@ -431,14 +431,14 @@ export const <span class="cstat-no" title="statement not covered" >example = <sp
 export const <span class="cstat-no" title="statement not covered" >disabled = <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >(</span></span></span>
   &lt;CanvasProvider initialHeight={150}&gt;
     &lt;Canvas&gt;
-      &lt;Movable&lt;SVGRectElement&gt; id={"id1"} enabled={false}&gt;
+      &lt;Movable&lt;SVGRectElement&gt; id={'id1'} enabled={false}&gt;
         {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >x<span class="cstat-no" title="statement not covered" > </span>= 20, <span class="cstat-no" title="statement not covered" >y<span class="cstat-no" title="statement not covered" ></span> </span>= 70, b</span>ind<span class="cstat-no" title="statement not covered" >, r</span>ef<span class="cstat-no" title="statement not covered" >, c</span>lassName<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
           &lt;rect
             x={x}
             y={y}
             width={200}
             height={40}
-            fill={"red"}
+            fill={'red'}
             {...bind()}
             ref={ref}
             className={className}
@@ -452,7 +452,7 @@ export const <span class="cstat-no" title="statement not covered" >disabled = <s
 export const <span class="cstat-no" title="statement not covered" >htmlObject = <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >(</span></span></span>
   &lt;CanvasProvider initialHeight={300}&gt;
     &lt;Canvas&gt;
-      &lt;Movable&lt;SVGForeignObjectElement&gt; id={"id"}&gt;
+      &lt;Movable&lt;SVGForeignObjectElement&gt; id={'id'}&gt;
         {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >x<span class="cstat-no" title="statement not covered" > </span>= 20, <span class="cstat-no" title="statement not covered" >y<span class="cstat-no" title="statement not covered" ></span> </span>= 20, b</span>ind<span class="cstat-no" title="statement not covered" >, r</span>ef<span class="cstat-no" title="statement not covered" >, c</span>lassName<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
           &lt;HTMLObject width={300} height={150} x={x} y={y} ref={ref}&gt;
             &lt;div
@@ -461,7 +461,7 @@ export const <span class="cstat-no" title="statement not covered" >htmlObject = 
               style={{
                 width: 300,
                 height: 150,
-                border: "1px solid red",
+                border: '1px solid red',
                 borderRadius: 5,
               }}
             &gt;
@@ -484,54 +484,54 @@ export const <span class="cstat-no" title="statement not covered" >htmlObject = 
 export const <span class="cstat-no" title="statement not covered" >multipleMovable = <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >(</span></span></span>
   &lt;CanvasProvider initialHeight={300}&gt;
     &lt;Canvas&gt;
-      &lt;Movable&lt;SVGRectElement&gt; id={"id1"}&gt;
+      &lt;Movable&lt;SVGRectElement&gt; id={'id1'}&gt;
         {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >x<span class="cstat-no" title="statement not covered" > </span>= 20, <span class="cstat-no" title="statement not covered" >y<span class="cstat-no" title="statement not covered" ></span> </span>= 100, b</span>ind<span class="cstat-no" title="statement not covered" >, r</span>ef<span class="cstat-no" title="statement not covered" >, c</span>lassName<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
           &lt;rect
             x={x}
             y={y}
             width={200}
             height={40}
-            fill={"red"}
+            fill={'red'}
             {...bind()}
             ref={ref}
             className={className}
           /&gt;
         )}
       &lt;/Movable&gt;
-      &lt;Movable&lt;SVGCircleElement&gt; id={"id2"}&gt;
+      &lt;Movable&lt;SVGCircleElement&gt; id={'id2'}&gt;
         {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >x<span class="cstat-no" title="statement not covered" > </span>= 300, <span class="cstat-no" title="statement not covered" >y<span class="cstat-no" title="statement not covered" ></span> </span>= 60, b</span>ind<span class="cstat-no" title="statement not covered" >, r</span>ef<span class="cstat-no" title="statement not covered" >, c</span>lassName<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
           &lt;circle
             cx={x + 40}
             cy={y + 40}
             r={40}
-            fill={"purple"}
+            fill={'purple'}
             {...bind()}
             ref={ref}
             className={className}
           /&gt;
         )}
       &lt;/Movable&gt;
-      &lt;Movable&lt;SVGEllipseElement&gt; id={"id3"}&gt;
+      &lt;Movable&lt;SVGEllipseElement&gt; id={'id3'}&gt;
         {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >x<span class="cstat-no" title="statement not covered" > </span>= 450, <span class="cstat-no" title="statement not covered" >y<span class="cstat-no" title="statement not covered" ></span> </span>= 70, b</span>ind<span class="cstat-no" title="statement not covered" >, r</span>ef<span class="cstat-no" title="statement not covered" >, c</span>lassName<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
           &lt;ellipse
             cx={x + 90}
             cy={y + 50}
             rx={90}
             ry={50}
-            fill={"green"}
+            fill={'green'}
             {...bind()}
             ref={ref}
             className={className}
           /&gt;
         )}
       &lt;/Movable&gt;
-      &lt;Movable&lt;SVGPolygonElement&gt; id={"id4"}&gt;
+      &lt;Movable&lt;SVGPolygonElement&gt; id={'id4'}&gt;
         {<span class="fstat-no" title="function not covered" >({</span> <span class="cstat-no" title="statement not covered" >x<span class="cstat-no" title="statement not covered" > </span>= 650, <span class="cstat-no" title="statement not covered" >y<span class="cstat-no" title="statement not covered" ></span> </span>= 90, b</span>ind<span class="cstat-no" title="statement not covered" >, r</span>ef<span class="cstat-no" title="statement not covered" >, c</span>lassName<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
           &lt;polygon
             points={`${x + 60},${y + 20} ${x + 100},${y + 40} ${x + 100},${
               y + 80
             } ${x + 60},${y + 100} ${x + 20},${y + 80} ${x + 20},${y + 40}`}
-            fill={"yellow"}
+            fill={'yellow'}
             {...bind()}
             ref={ref}
             className={className}
@@ -549,7 +549,7 @@ export const <span class="cstat-no" title="statement not covered" >multipleMovab
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

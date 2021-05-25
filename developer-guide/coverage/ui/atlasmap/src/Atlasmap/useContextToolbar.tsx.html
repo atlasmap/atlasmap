@@ -610,19 +610,19 @@
   ToggleNamespaceTableViewToolbarItem,
   ToggleTypesToolbarItem,
   ToggleUnmappedFieldsToolbarItem,
-} from "./toolbarItems";
-<span class="cstat-no" title="statement not covered" >import React, { useMemo, useState } from "react";</span>
+} from './toolbarItems';
+<span class="cstat-no" title="statement not covered" >import React, { useMemo, useState } from 'react';</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >import { ContextToolbar } from "../Layout";</span>
-<span class="cstat-no" title="statement not covered" >import { ToolbarGroup } from "@patternfly/react-core";</span>
-<span class="cstat-no" title="statement not covered" >import { useAtlasmap } from "./AtlasmapProvider";</span>
-<span class="cstat-no" title="statement not covered" >import { useToggle } from "../Atlasmap/utils";</span>
+<span class="cstat-no" title="statement not covered" >import { ContextToolbar } from '../Layout';</span>
+<span class="cstat-no" title="statement not covered" >import { ToolbarGroup } from '@patternfly/react-core';</span>
+<span class="cstat-no" title="statement not covered" >import { useAtlasmap } from './AtlasmapProvider';</span>
+<span class="cstat-no" title="statement not covered" >import { useToggle } from '../Atlasmap/utils';</span>
 &nbsp;
 export type Views =
-  | "ColumnMapper"
-  | "MappingTable"
-  | "NamespaceTable"
-  | "FreeView";
+  | 'ColumnMapper'
+  | 'MappingTable'
+  | 'NamespaceTable'
+  | 'FreeView';
 &nbsp;
 export interface IUseContextToolbarHandlers {
   onImportAtlasFile: (file: File) =&gt; void;
@@ -682,7 +682,7 @@ export interface IUseContextToolbarData {
     newMapping<span class="cstat-no" title="statement not covered" >,</span>
   } = <span class="cstat-no" title="statement not covered" >useAtlasmap();</span>
 &nbsp;
-  const [activeView<span class="cstat-no" title="statement not covered" >, s</span>etActiveView<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState&lt;Views&gt;("ColumnMapper");</span>
+  const [activeView<span class="cstat-no" title="statement not covered" >, s</span>etActiveView<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState&lt;Views&gt;('ColumnMapper');</span>
   const { state: showMappingColumn<span class="cstat-no" title="statement not covered" >, toggle: t</span>oggleShowMappingColumn<span class="cstat-no" title="statement not covered" > } =</span>
 <span class="cstat-no" title="statement not covered" >    useToggle(false);</span>
   const { state: showMappingPreview<span class="cstat-no" title="statement not covered" >, toggle: t</span>oggleShowMappingPreview<span class="cstat-no" title="statement not covered" > } =</span>
@@ -702,7 +702,7 @@ export interface IUseContextToolbarData {
           showImportJarFileToolbarItem ||
           showExportAtlasFileToolbarItem ||
           showResetToolbarItem) &amp;&amp; (
-          &lt;ToolbarGroup variant="button-group" spacer={{ default: "spacerMd" }}&gt;
+          &lt;ToolbarGroup variant="button-group" spacer={{ default: 'spacerMd' }}&gt;
             &lt;AtlasmapToolbarItem
               showImportAtlasFileToolbarItem={showImportAtlasFileToolbarItem}
               showImportJarFileToolbarItem={showImportJarFileToolbarItem}
@@ -721,80 +721,80 @@ export interface IUseContextToolbarData {
           showNamespaceTableViewToolbarItem) &amp;&amp; (
           &lt;ToolbarGroup
             variant="icon-button-group"
-            spacer={{ default: "spacerMd" }}
+            spacer={{ default: 'spacerMd' }}
           &gt;
             {showColumnMapperViewToolbarItem &amp;&amp; (
               &lt;ToggleColumnMapperViewToolbarItem
-                toggled={activeView === "ColumnMapper"}
-                onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >s</span>etActiveView("ColumnMapper")}</span>
+                toggled={activeView === 'ColumnMapper'}
+                onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >s</span>etActiveView('ColumnMapper')}</span>
               /&gt;
             )}
             {showMappingTableViewToolbarItem &amp;&amp; (
               &lt;ToggleMappingTableViewToolbarItem
-                toggled={activeView === "MappingTable"}
-                onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >s</span>etActiveView("MappingTable")}</span>
+                toggled={activeView === 'MappingTable'}
+                onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >s</span>etActiveView('MappingTable')}</span>
               /&gt;
             )}
             {showFreeViewToolbarItem &amp;&amp; (
               &lt;ToggleFreeViewToolbarItem
-                toggled={activeView === "FreeView"}
-                onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >s</span>etActiveView("FreeView")}</span>
+                toggled={activeView === 'FreeView'}
+                onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >s</span>etActiveView('FreeView')}</span>
               /&gt;
             )}
             {showNamespaceTableViewToolbarItem &amp;&amp; (
               &lt;ToggleNamespaceTableViewToolbarItem
-                toggled={activeView === "NamespaceTable"}
-                onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >s</span>etActiveView("NamespaceTable")}</span>
+                toggled={activeView === 'NamespaceTable'}
+                onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >s</span>etActiveView('NamespaceTable')}</span>
               /&gt;
             )}
           &lt;/ToolbarGroup&gt;
         )}
         &lt;ToolbarGroup variant="icon-button-group"&gt;
           {showToggleMappingColumnToolbarItem &amp;&amp;
-            activeView === "ColumnMapper" &amp;&amp; (
+            activeView === 'ColumnMapper' &amp;&amp; (
               &lt;ToggleMappingColumnToolbarItem
                 toggled={showMappingColumn}
                 onClick={toggleShowMappingColumn}
               /&gt;
             )}
           {showToggleMappingPreviewToolbarItem &amp;&amp;
-            (activeView === "ColumnMapper" ||
-              activeView === "MappingTable") &amp;&amp; (
+            (activeView === 'ColumnMapper' ||
+              activeView === 'MappingTable') &amp;&amp; (
               &lt;ToggleMappingPreviewToolbarItem
                 toggled={showMappingPreview}
                 onClick={toggleShowMappingPreview}
               /&gt;
             )}
           {showToggleTypesToolbarItem &amp;&amp;
-            (activeView === "ColumnMapper" ||
-              activeView === "MappingTable") &amp;&amp; (
+            (activeView === 'ColumnMapper' ||
+              activeView === 'MappingTable') &amp;&amp; (
               &lt;ToggleTypesToolbarItem
                 toggled={showTypes}
                 onClick={toggleShowTypes}
               /&gt;
             )}
           {showToggleMappedFieldsToolbarItem &amp;&amp;
-            activeView === "ColumnMapper" &amp;&amp; (
+            activeView === 'ColumnMapper' &amp;&amp; (
               &lt;ToggleMappedFieldsToolbarItem
                 toggled={showMappedFields}
                 onClick={toggleShowMappedFields}
               /&gt;
             )}
           {showToggleUnmappedFieldsToolbarItem &amp;&amp;
-            activeView === "ColumnMapper" &amp;&amp; (
+            activeView === 'ColumnMapper' &amp;&amp; (
               &lt;ToggleUnmappedFieldsToolbarItem
                 toggled={showUnmappedFields}
                 onClick={toggleShowUnmappedFields}
               /&gt;
             )}
           {showAddNewMappingToolbarItem &amp;&amp;
-            (activeView === "ColumnMapper" ||
-              activeView === "MappingTable") &amp;&amp; (
+            (activeView === 'ColumnMapper' ||
+              activeView === 'MappingTable') &amp;&amp; (
               &lt;AddMappingToolbarItem onClick={newMapping} /&gt;
             )}
           {showAddNewMappingToolbarItem &amp;&amp;
-            (activeView === "ColumnMapper" ||
-              activeView === "MappingTable") &amp;&amp; (
+            (activeView === 'ColumnMapper' ||
+              activeView === 'MappingTable') &amp;&amp; (
               &lt;AboutToolbarItem onClick={onAbout} /&gt;
             )}
         &lt;/ToolbarGroup&gt;
@@ -852,7 +852,7 @@ export interface IUseContextToolbarData {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

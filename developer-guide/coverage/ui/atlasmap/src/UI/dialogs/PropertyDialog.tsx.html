@@ -510,7 +510,7 @@
 import {
   ConfirmationDialog,
   IConfirmationDialogProps,
-} from "./ConfirmationDialog";
+} from './ConfirmationDialog';
 import {
   Form,
   FormGroup,
@@ -519,13 +519,13 @@ import {
   TextInput,
   Tooltip,
   ValidatedOptions,
-} from "@patternfly/react-core";
+} from '@patternfly/react-core';
 import React, {
   FunctionComponent,
   useCallback,
   useEffect,
   useState,
-} from "react";
+} from 'react';
 &nbsp;
 interface ValueLabelOption {
   label: string;
@@ -545,17 +545,17 @@ export interface IPropertyDialogProps {
   valueTypeOptions: ValueLabelOption[];
   scope?: string;
   scopeOptions: ValueLabelOption[];
-  isOpen: IConfirmationDialogProps["isOpen"];
-  onCancel: IConfirmationDialogProps["onCancel"];
+  isOpen: IConfirmationDialogProps['isOpen'];
+  onCancel: IConfirmationDialogProps['onCancel'];
   onConfirm: (property: IProperty) =&gt; void;
   onValidation: (name: string, scope: string) =&gt; boolean;
 }
 export const PropertyDialog: FunctionComponent&lt;IPropertyDialogProps&gt; = <span class="fstat-no" title="function not covered" >({</span>
   title<span class="cstat-no" title="statement not covered" >,</span>
-<span class="cstat-no" title="statement not covered" >  name: i</span>nitialName<span class="cstat-no" title="statement not covered" > = "",</span>
-<span class="cstat-no" title="statement not covered" >  valueType: i</span>nitialValueType<span class="cstat-no" title="statement not covered" > = "",</span>
+<span class="cstat-no" title="statement not covered" >  name: i</span>nitialName<span class="cstat-no" title="statement not covered" > = '',</span>
+<span class="cstat-no" title="statement not covered" >  valueType: i</span>nitialValueType<span class="cstat-no" title="statement not covered" > = '',</span>
   valueTypeOptions<span class="cstat-no" title="statement not covered" >,</span>
-<span class="cstat-no" title="statement not covered" >  scope: i</span>nitialScope<span class="cstat-no" title="statement not covered" > = "",</span>
+<span class="cstat-no" title="statement not covered" >  scope: i</span>nitialScope<span class="cstat-no" title="statement not covered" > = '',</span>
   scopeOptions<span class="cstat-no" title="statement not covered" >,</span>
   isOpen<span class="cstat-no" title="statement not covered" >,</span>
   onCancel<span class="cstat-no" title="statement not covered" >,</span>
@@ -629,7 +629,7 @@ export const PropertyDialog: FunctionComponent&lt;IPropertyDialogProps&gt; = <sp
       isOpen={isOpen}
     &gt;
       &lt;Form&gt;
-        &lt;FormGroup label={"Name"} fieldId={"name"} isRequired={true}&gt;
+        &lt;FormGroup label={'Name'} fieldId={'name'} isRequired={true}&gt;
           {!isNameAndScopeUnique ? (
             &lt;Tooltip
               content={
@@ -641,38 +641,38 @@ export const PropertyDialog: FunctionComponent&lt;IPropertyDialogProps&gt; = <sp
               &lt;TextInput
                 value={name}
                 onChange={handleOnNameChange}
-                id={"name"}
+                id={'name'}
                 autoFocus={true}
                 isRequired={true}
-                data-testid={"property-name-text-input-tooltip"}
-                style={{ color: "red" }}
+                data-testid={'property-name-text-input-tooltip'}
+                style={{ color: 'red' }}
               /&gt;
             &lt;/Tooltip&gt;
           ) : (
             &lt;TextInput
               value={name}
               onChange={handleOnNameChange}
-              id={"name"}
+              id={'name'}
               autoFocus={true}
               isRequired={true}
-              data-testid={"property-name-text-input"}
+              data-testid={'property-name-text-input'}
               validated={isPropertyNameValid}
             /&gt;
           )}
         &lt;/FormGroup&gt;
-        &lt;FormGroup label={"Value type"} fieldId={"valueType"}&gt;
+        &lt;FormGroup label={'Value type'} fieldId={'valueType'}&gt;
           &lt;FormSelect
             value={valueType}
-            aria-label={"Select value type"}
+            aria-label={'Select value type'}
             onChange={setValueType}
-            data-testid={"property-type-form-select"}
+            data-testid={'property-type-form-select'}
           &gt;
             {valueTypeOptions.map(<span class="fstat-no" title="function not covered" >({</span> label<span class="cstat-no" title="statement not covered" >, v</span>alue<span class="cstat-no" title="statement not covered" > },</span> idx) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
               &lt;FormSelectOption key={idx} value={value} label={label} /&gt;
             ))}
           &lt;/FormSelect&gt;
         &lt;/FormGroup&gt;
-        &lt;FormGroup label={"Scope"} fieldId={"scope"}&gt;
+        &lt;FormGroup label={'Scope'} fieldId={'scope'}&gt;
           {!isNameAndScopeUnique ? (
             &lt;Tooltip
               content={
@@ -683,10 +683,10 @@ export const PropertyDialog: FunctionComponent&lt;IPropertyDialogProps&gt; = <sp
             &gt;
               &lt;FormSelect
                 value={scope}
-                aria-label={"Select property scope"}
+                aria-label={'Select property scope'}
                 onChange={handleOnScopeChange}
-                data-testid={"property-scope-form-select"}
-                style={{ color: "red" }}
+                data-testid={'property-scope-form-select'}
+                style={{ color: 'red' }}
               &gt;
                 {scopeOptions.map(<span class="fstat-no" title="function not covered" >({</span> label<span class="cstat-no" title="statement not covered" >, v</span>alue<span class="cstat-no" title="statement not covered" > },</span> idx) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
                   &lt;FormSelectOption key={idx} label={label} value={value} /&gt;
@@ -696,9 +696,9 @@ export const PropertyDialog: FunctionComponent&lt;IPropertyDialogProps&gt; = <sp
           ) : (
             &lt;FormSelect
               value={scope}
-              aria-label={"Select property scope"}
+              aria-label={'Select property scope'}
               onChange={handleOnScopeChange}
-              data-testid={"property-scope-form-select"}
+              data-testid={'property-scope-form-select'}
             &gt;
               {scopeOptions.map(<span class="fstat-no" title="function not covered" >({</span> label<span class="cstat-no" title="statement not covered" >, v</span>alue<span class="cstat-no" title="statement not covered" > },</span> idx) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
                 &lt;FormSelectOption key={idx} label={label} value={value} /&gt;
@@ -717,7 +717,7 @@ export const PropertyDialog: FunctionComponent&lt;IPropertyDialogProps&gt; = <sp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

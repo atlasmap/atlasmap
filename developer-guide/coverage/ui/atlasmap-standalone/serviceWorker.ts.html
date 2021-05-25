@@ -400,13 +400,13 @@
 // opt-in, read https://bit.ly/CRA-PWA
 &nbsp;
 const isLocalhost = Boolean(
-  window.location.hostname === "localhost" ||
+  window.location.hostname === 'localhost' ||
     // [::1] is the IPv6 localhost address.
-<span class="branch-1 cbranch-no" title="branch not covered" >    window.location.hostname === "[::1]" </span>||
+<span class="branch-1 cbranch-no" title="branch not covered" >    window.location.hostname === '[::1]' </span>||
     // 127.0.0.1/8 is considered localhost for IPv4.
 <span class="branch-2 cbranch-no" title="branch not covered" >    window.location.hostname.match(</span>
-      /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
-    )
+      /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/,
+    ),
 );
 &nbsp;
 type Config = {
@@ -415,11 +415,11 @@ type Config = {
 };
 &nbsp;
 export function <span class="fstat-no" title="function not covered" >register(</span>config?: Config) {
-<span class="cstat-no" title="statement not covered" >  if (process.env.NODE_ENV === "production" &amp;&amp; "serviceWorker" in navigator) {</span>
+<span class="cstat-no" title="statement not covered" >  if (process.env.NODE_ENV === 'production' &amp;&amp; 'serviceWorker' in navigator) {</span>
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = <span class="cstat-no" title="statement not covered" >new URL(</span>
       (process as { env: { [key: string]: string } }).env.PUBLIC_URL,
-      window.location.href
+      window.location.href,
     );
 <span class="cstat-no" title="statement not covered" >    if (publicUrl.origin !== window.location.origin) {</span>
       // Our service worker won't work if PUBLIC_URL is on a different origin
@@ -428,7 +428,7 @@ export function <span class="fstat-no" title="function not covered" >register(</
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    window.addEventListener("load", <span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    window.addEventListener('load', <span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
       const swUrl = <span class="cstat-no" title="statement not covered" >`${process.env.PUBLIC_URL}/service-worker.js`;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (isLocalhost) {</span>
@@ -439,8 +439,8 @@ export function <span class="fstat-no" title="function not covered" >register(</
         // service worker/PWA documentation.
 <span class="cstat-no" title="statement not covered" >        navigator.serviceWorker.ready.then(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >          console.log(</span>
-            "This web app is being served cache-first by a service " +
-              "worker. To learn more, visit https://bit.ly/CRA-PWA"
+            'This web app is being served cache-first by a service ' +
+              'worker. To learn more, visit https://bit.ly/CRA-PWA',
           );
         });
       } else {
@@ -461,14 +461,14 @@ function <span class="fstat-no" title="function not covered" >registerValidSW(</
 <span class="cstat-no" title="statement not covered" >          return;</span>
         }
 <span class="cstat-no" title="statement not covered" >        installingWorker.onstatechange = <span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >          if (installingWorker.state === "installed") {</span>
+<span class="cstat-no" title="statement not covered" >          if (installingWorker.state === 'installed') {</span>
 <span class="cstat-no" title="statement not covered" >            if (navigator.serviceWorker.controller) {</span>
               // At this point, the updated precached content has been fetched,
               // but the previous service worker will still serve the older
               // content until all client tabs are closed.
 <span class="cstat-no" title="statement not covered" >              console.log(</span>
-                "New content is available and will be used when all " +
-                  "tabs for this page are closed. See https://bit.ly/CRA-PWA."
+                'New content is available and will be used when all ' +
+                  'tabs for this page are closed. See https://bit.ly/CRA-PWA.',
               );
 &nbsp;
               // Execute callback
@@ -479,7 +479,7 @@ function <span class="fstat-no" title="function not covered" >registerValidSW(</
               // At this point, everything has been precached.
               // It's the perfect time to display a
               // "Content is cached for offline use." message.
-<span class="cstat-no" title="statement not covered" >              console.log("Content is cached for offline use.");</span>
+<span class="cstat-no" title="statement not covered" >              console.log('Content is cached for offline use.');</span>
 &nbsp;
               // Execute callback
 <span class="cstat-no" title="statement not covered" >              if (config &amp;&amp; config.onSuccess) {</span>
@@ -491,7 +491,7 @@ function <span class="fstat-no" title="function not covered" >registerValidSW(</
       };
     })
     .catch(<span class="fstat-no" title="function not covered" >(e</span>rror) =&gt; {
-<span class="cstat-no" title="statement not covered" >      console.error("Error during service worker registration:", error);</span>
+<span class="cstat-no" title="statement not covered" >      console.error('Error during service worker registration:', error);</span>
     });
 }
 &nbsp;
@@ -500,10 +500,10 @@ function <span class="fstat-no" title="function not covered" >checkValidServiceW
 <span class="cstat-no" title="statement not covered" >  fetch(swUrl)</span>
     .then(<span class="fstat-no" title="function not covered" >(r</span>esponse) =&gt; {
       // Ensure service worker exists, and that we really are getting a JS file.
-      const contentType = <span class="cstat-no" title="statement not covered" >response.headers.get("content-type");</span>
+      const contentType = <span class="cstat-no" title="statement not covered" >response.headers.get('content-type');</span>
 <span class="cstat-no" title="statement not covered" >      if (</span>
         response.status === 404 ||
-        (contentType != null &amp;&amp; contentType.indexOf("javascript") === -1)
+        (contentType != null &amp;&amp; contentType.indexOf('javascript') === -1)
       ) {
         // No service worker found. Probably a different app. Reload the page.
 <span class="cstat-no" title="statement not covered" >        navigator.serviceWorker.ready.then(<span class="fstat-no" title="function not covered" >(r</span>egistration) =&gt; {</span>
@@ -518,13 +518,13 @@ function <span class="fstat-no" title="function not covered" >checkValidServiceW
     })
     .catch(<span class="fstat-no" title="function not covered" >()</span> =&gt; {
 <span class="cstat-no" title="statement not covered" >      console.log(</span>
-        "No internet connection found. App is running in offline mode."
+        'No internet connection found. App is running in offline mode.',
       );
     });
 }
 &nbsp;
 export function unregister() {
-  <span class="missing-if-branch" title="if path not taken" >I</span>if ("serviceWorker" in navigator) {
+  <span class="missing-if-branch" title="if path not taken" >I</span>if ('serviceWorker' in navigator) {
 <span class="cstat-no" title="statement not covered" >    navigator.serviceWorker.ready.then(<span class="fstat-no" title="function not covered" >(r</span>egistration) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      registration.unregister();</span>
     });
@@ -537,7 +537,7 @@ export function unregister() {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:58 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:46:20 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="prettify.js"></script>

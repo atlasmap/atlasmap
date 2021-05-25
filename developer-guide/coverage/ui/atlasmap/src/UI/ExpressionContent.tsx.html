@@ -1380,21 +1380,21 @@ import {
   InputGroup,
   TextInput,
   Tooltip,
-} from "@patternfly/react-core";
-import { EnumValue, useToggle } from "../Atlasmap/utils";
-import { Observable, Subscription } from "rxjs";
+} from '@patternfly/react-core';
+import { EnumValue, useToggle } from '../Atlasmap/utils';
+import { Observable, Subscription } from 'rxjs';
 import React, {
   FunctionComponent,
   KeyboardEvent,
   MouseEvent,
   useCallback,
   useEffect,
-} from "react";
+} from 'react';
 &nbsp;
-import { ExpressionEnumSelect } from "./ExpressionEnumSelect";
-import { ExpressionFieldSearch } from "./ExpressionFieldSearch";
-import { css } from "@patternfly/react-styles";
-import styles from "@patternfly/react-styles/css/components/FormControl/form-control";
+import { ExpressionEnumSelect } from './ExpressionEnumSelect';
+import { ExpressionFieldSearch } from './ExpressionFieldSearch';
+import { css } from '@patternfly/react-styles';
+import styles from '@patternfly/react-styles/css/components/FormControl/form-control';
 &nbsp;
 let atIndex = -1;
 let atContainer: Node | undefined;
@@ -1403,11 +1403,11 @@ let expressionUpdatedSubscription: Subscription | null;
 let lastUpdatedEvent: IExpressionUpdatedEvent | null = null;
 let mappedFieldCandidates: string[][] = [];
 let markup: HTMLDivElement | null = null;
-let searchFilter = "";
+let searchFilter = '';
 let searchMode = false;
-let selectedNodeId: string = "";
-let trailerHTML = "";
-let trailerID = "";
+let selectedNodeId: string = '';
+let trailerHTML = '';
+let trailerID = '';
 let getMappingExpression: () =&gt; string;
 let mappingExprInit: () =&gt; void;
 let mappingExprObservable: () =&gt; Observable&lt;IExpressionUpdatedEvent&gt; | null;
@@ -1476,7 +1476,7 @@ function <span class="fstat-no" title="function not covered" >moveCaretToEnd(</s
 <span class="cstat-no" title="statement not covered" >  if (!markup || trailerID.length === 0) {</span>
 <span class="cstat-no" title="statement not covered" >    return;</span>
   }
-  const trailerNode = <span class="cstat-no" title="statement not covered" >markup.querySelector("#" + trailerID);</span>
+  const trailerNode = <span class="cstat-no" title="statement not covered" >markup.querySelector('#' + trailerID);</span>
 <span class="cstat-no" title="statement not covered" >  if (!trailerNode) {</span>
 <span class="cstat-no" title="statement not covered" >    return;</span>
   }
@@ -1602,7 +1602,7 @@ export const ExpressionContent: FunctionComponent&lt;IExpressionContentProps&gt;
 <span class="cstat-no" title="statement not covered" >    if (markup &amp;&amp; startContainer === markup) {</span>
 <span class="cstat-no" title="statement not covered" >      if (startOffset === 0) {</span>
         const initialElement = <span class="cstat-no" title="statement not covered" >startContainer.childNodes[0] as Element;</span>
-<span class="cstat-no" title="statement not covered" >        mappingExpressionInsertText(key, initialElement.getAttribute("id")!, 0);</span>
+<span class="cstat-no" title="statement not covered" >        mappingExpressionInsertText(key, initialElement.getAttribute('id')!, 0);</span>
       } else {
 <span class="cstat-no" title="statement not covered" >        mappingExpressionInsertText(key);</span>
       }
@@ -1693,14 +1693,14 @@ export const ExpressionContent: FunctionComponent&lt;IExpressionContentProps&gt;
    * @param event - expression keyboard event
    */
   function <span class="fstat-no" title="function not covered" >onKeyDown(</span>event: KeyboardEvent&lt;HTMLDivElement&gt;): void {
-<span class="cstat-no" title="statement not covered" >    if ("Backspace" === event.key) {</span>
+<span class="cstat-no" title="statement not covered" >    if ('Backspace' === event.key) {</span>
       // TODO handle cursor position
 <span class="cstat-no" title="statement not covered" >      event.preventDefault();</span>
 <span class="cstat-no" title="statement not covered" >      removeTokenAtCaretPosition(true);</span>
 <span class="cstat-no" title="statement not covered" >      if (searchMode) {</span>
 <span class="cstat-no" title="statement not covered" >        updateSearchMode();</span>
       }
-    } else <span class="cstat-no" title="statement not covered" >if ("Delete" === event.key) {</span>
+    } else <span class="cstat-no" title="statement not covered" >if ('Delete' === event.key) {</span>
 <span class="cstat-no" title="statement not covered" >      event.preventDefault();</span>
 <span class="cstat-no" title="statement not covered" >      removeTokenAtCaretPosition(false);</span>
 <span class="cstat-no" title="statement not covered" >      if (searchMode) {</span>
@@ -1743,11 +1743,11 @@ export const ExpressionContent: FunctionComponent&lt;IExpressionContentProps&gt;
 <span class="cstat-no" title="statement not covered" >        mappedFieldCandidates = fieldSearch(searchFilter, true);</span>
       }
     } else {
-<span class="cstat-no" title="statement not covered" >      searchMode = event.key === "@" ? true : false;</span>
+<span class="cstat-no" title="statement not covered" >      searchMode = event.key === '@' ? true : false;</span>
 <span class="cstat-no" title="statement not covered" >      if (searchMode) {</span>
 <span class="cstat-no" title="statement not covered" >        atContainer = window.getSelection()!.getRangeAt(0).startContainer;</span>
 <span class="cstat-no" title="statement not covered" >        atIndex = window.getSelection()!.getRangeAt(0).startOffset;</span>
-<span class="cstat-no" title="statement not covered" >        searchFilter = "";</span>
+<span class="cstat-no" title="statement not covered" >        searchFilter = '';</span>
 <span class="cstat-no" title="statement not covered" >        mappedFieldCandidates = fieldSearch(searchFilter, true);</span>
       }
     }
@@ -1775,7 +1775,7 @@ export const ExpressionContent: FunctionComponent&lt;IExpressionContentProps&gt;
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 <span class="cstat-no" title="statement not covered" >    event.preventDefault();</span>
-    const pasted = <span class="cstat-no" title="statement not covered" >event.clipboardData.getData("text/plain");</span>
+    const pasted = <span class="cstat-no" title="statement not covered" >event.clipboardData.getData('text/plain');</span>
     // TODO handle cursor position... for now just append to the end
 <span class="cstat-no" title="statement not covered" >    mappingExpressionInsertText(pasted);</span>
   }
@@ -1799,9 +1799,9 @@ export const ExpressionContent: FunctionComponent&lt;IExpressionContentProps&gt;
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
     const isTrailer = <span class="cstat-no" title="statement not covered" >getCaretPositionNodeId(atContainer) === trailerID;</span>
-    const selectedFieldComps = <span class="cstat-no" title="statement not covered" >selectedField.split(" ");</span>
+    const selectedFieldComps = <span class="cstat-no" title="statement not covered" >selectedField.split(' ');</span>
 <span class="cstat-no" title="statement not covered" >    selectedField = selectedFieldComps[0];</span>
-    let selectedFieldScope = <span class="cstat-no" title="statement not covered" >"";</span>
+    let selectedFieldScope = <span class="cstat-no" title="statement not covered" >'';</span>
 &nbsp;
     // Extract the scope if it exists.
 <span class="cstat-no" title="statement not covered" >    if (selectedFieldComps[1]) {</span>
@@ -1857,7 +1857,7 @@ export const ExpressionContent: FunctionComponent&lt;IExpressionContentProps&gt;
       }
 <span class="cstat-no" title="statement not covered" >      startContainer = selection!.getRangeAt(0).startContainer;</span>
     }
-<span class="cstat-no" title="statement not covered" >    return startContainer.parentElement!.getAttribute("id")!;</span>
+<span class="cstat-no" title="statement not covered" >    return startContainer.parentElement!.getAttribute('id')!;</span>
   }
 &nbsp;
   /**
@@ -1870,7 +1870,7 @@ export const ExpressionContent: FunctionComponent&lt;IExpressionContentProps&gt;
 <span class="cstat-no" title="statement not covered" >    atIndex = -1;</span>
 <span class="cstat-no" title="statement not covered" >    atContainer = undefined;</span>
 <span class="cstat-no" title="statement not covered" >    searchMode = false;</span>
-<span class="cstat-no" title="statement not covered" >    searchFilter = "";</span>
+<span class="cstat-no" title="statement not covered" >    searchFilter = '';</span>
 <span class="cstat-no" title="statement not covered" >    mappedFieldCandidates = [];</span>
   }
 &nbsp;
@@ -1885,7 +1885,7 @@ export const ExpressionContent: FunctionComponent&lt;IExpressionContentProps&gt;
   }
 &nbsp;
   function <span class="fstat-no" title="function not covered" >clearEnumSelect(</span>) {
-<span class="cstat-no" title="statement not covered" >    selectedNodeId = "";</span>
+<span class="cstat-no" title="statement not covered" >    selectedNodeId = '';</span>
 <span class="cstat-no" title="statement not covered" >    enumCandidates = [];</span>
 <span class="cstat-no" title="statement not covered" >    toggleEnumSelOff();</span>
   }
@@ -1900,7 +1900,7 @@ export const ExpressionContent: FunctionComponent&lt;IExpressionContentProps&gt;
 <span class="cstat-no" title="statement not covered" >  getEnums = getFieldEnums;</span>
 <span class="cstat-no" title="statement not covered" >  setSelEnumValue = setSelectedEnumValue;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  getMappingExpression = <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >m</span>appingExpression || "";</span></span>
+<span class="cstat-no" title="statement not covered" >  getMappingExpression = <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >m</span>appingExpression || '';</span></span>
 <span class="cstat-no" title="statement not covered" >  mappingExprInit = mappingExpressionInit;</span>
 <span class="cstat-no" title="statement not covered" >  mappingExprObservable = mappingExpressionObservable;</span>
 <span class="cstat-no" title="statement not covered" >  trailerID = trailerId;</span>
@@ -1926,25 +1926,25 @@ export const ExpressionContent: FunctionComponent&lt;IExpressionContentProps&gt;
         &lt;FormGroup fieldId="expressionContent"&gt;
           &lt;InputGroup&gt;
             &lt;Tooltip
-              content={"Enable/ Disable conditional mapping expression."}
+              content={'Enable/ Disable conditional mapping expression.'}
               enableFlip={true}
               entryDelay={750}
               exitDelay={100}
-              position={"left"}
+              position={'left'}
             &gt;
               &lt;Button
-                variant={"control"}
+                variant={'control'}
                 aria-label="Enable/ Disable conditional mapping expression"
                 tabIndex={-1}
                 onClick={onToggle}
                 data-testid={
-                  "enable-disable-conditional-mapping-expression-button"
+                  'enable-disable-conditional-mapping-expression-button'
                 }
                 isDisabled={disabled}
               &gt;
                 &lt;i&gt;
                   f
-                  &lt;small style={{ position: "relative", bottom: -3 }}&gt;
+                  &lt;small style={{ position: 'relative', bottom: -3 }}&gt;
                     (x)
                   &lt;/small&gt;
                 &lt;/i&gt;
@@ -1956,14 +1956,14 @@ export const ExpressionContent: FunctionComponent&lt;IExpressionContentProps&gt;
                 enableFlip={true}
                 entryDelay={750}
                 exitDelay={100}
-                position={"left"}
+                position={'left'}
               &gt;
                 &lt;div
                   id="expressionMarkup"
                   key="expressionMarkup-div"
                   aria-label="Expression Content"
                   contentEditable
-                  className={css(styles.formControl, "ExpressionFieldSearch")}
+                  className={css(styles.formControl, 'ExpressionFieldSearch')}
                   suppressContentEditableWarning={true}
                   onChange={onChange}
                   onKeyDown={onKeyDown}
@@ -1978,7 +1978,7 @@ export const ExpressionContent: FunctionComponent&lt;IExpressionContentProps&gt;
             ) : (
               &lt;TextInput
                 isDisabled={true}
-                aria-label={"Expression content"}
+                aria-label={'Expression content'}
               /&gt; /* this to render a disabled field */
             )}
           &lt;/InputGroup&gt;
@@ -2016,7 +2016,7 @@ export const ExpressionContent: FunctionComponent&lt;IExpressionContentProps&gt;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

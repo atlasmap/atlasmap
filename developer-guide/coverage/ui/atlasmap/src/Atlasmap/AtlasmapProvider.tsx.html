@@ -1481,7 +1481,7 @@
   initDataState,
   initNotificationsState,
   notificationsReducer,
-} from "./reducers";
+} from './reducers';
 <span class="cstat-no" title="statement not covered" >import {</span>
   DocumentInitializationModel,
   DocumentType,
@@ -1490,8 +1490,8 @@
   MappingUtil,
   TransitionMode,
   search,
-} from "@atlasmap/core";
-import { IAtlasmapDocument, IAtlasmapField } from "../Views";
+} from '@atlasmap/core';
+import { IAtlasmapDocument, IAtlasmapField } from '../Views';
 <span class="cstat-no" title="statement not covered" >import React, {</span>
   FunctionComponent,
   createContext,
@@ -1499,7 +1499,7 @@ import { IAtlasmapDocument, IAtlasmapField } from "../Views";
   useContext,
   useEffect,
   useReducer,
-} from "react";
+} from 'react';
 <span class="cstat-no" title="statement not covered" >import {</span>
   addToCurrentMapping,
   changeDocumentName,
@@ -1563,9 +1563,9 @@ import { IAtlasmapDocument, IAtlasmapField } from "../Views";
   toggleShowMappedFields,
   toggleShowUnmappedFields,
   trailerId,
-} from "./utils";
+} from './utils';
 &nbsp;
-<span class="cstat-no" title="statement not covered" >import { debounceTime } from "rxjs/operators";</span>
+<span class="cstat-no" title="statement not covered" >import { debounceTime } from 'rxjs/operators';</span>
 &nbsp;
 // the document payload with get from Syndesis
 export interface IExternalDocumentProps {
@@ -1619,25 +1619,25 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
   );
 &nbsp;
   const onReset = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >    dispatchData({ type: "reset" });</span>
+<span class="cstat-no" title="statement not covered" >    dispatchData({ type: 'reset' });</span>
 <span class="cstat-no" title="statement not covered" >    dispatchNotifications({</span>
-      type: "reset",
+      type: 'reset',
     });
   };
 &nbsp;
   const onLoading = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >    dispatchData({ type: "loading" });</span>
+<span class="cstat-no" title="statement not covered" >    dispatchData({ type: 'loading' });</span>
   };
 &nbsp;
   const onUpdates = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>ayload: DataActionPayload) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    dispatchData({</span>
-      type: "update",
+      type: 'update',
       payload,
     });
   };
 &nbsp;
   const markNotificationRead = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>d: string) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    dispatchNotifications({ type: "dismiss", payload: { id } });</span>
+<span class="cstat-no" title="statement not covered" >    dispatchNotifications({ type: 'dismiss', payload: { id } });</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(</span>
     function <span class="fstat-no" title="function not covered" >onInitializationCb(</span>) {
@@ -1774,11 +1774,11 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
   const onSubUpdate = <span class="cstat-no" title="statement not covered" >useCallback(</span>
     function <span class="fstat-no" title="function not covered" >onSubUpdateCb(</span>caller: string) {
 <span class="cstat-no" title="statement not covered" >      console.log(</span>
-        "onUpdates",
+        'onUpdates',
         caller,
-        "initialized",
+        'initialized',
         initializationService.cfg.initCfg.initialized,
-        "errors",
+        'errors',
         initializationService.cfg.initCfg.initializationErrorOccurred,
       );
 <span class="cstat-no" title="statement not covered" >      onUpdates({</span>
@@ -1795,12 +1795,12 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
         flatTargets: convertTargetsToFlatArray(),
       });
 <span class="cstat-no" title="statement not covered" >      dispatchNotifications({</span>
-        type: "update",
+        type: 'update',
         payload: {
           notifications: initializationService.cfg.errorService
             .getErrors()
             .reverse()
-            .filter(<span class="fstat-no" title="function not covered" >(e</span>) =&gt; <span class="cstat-no" title="statement not covered" >e.level !== "DEBUG")</span>
+            .filter(<span class="fstat-no" title="function not covered" >(e</span>) =&gt; <span class="cstat-no" title="statement not covered" >e.level !== 'DEBUG')</span>
             .map(errorInfoToNotification),
         },
       });
@@ -1840,17 +1840,17 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
 &nbsp;
       const subscriptions = <span class="cstat-no" title="statement not covered" >[</span>
         initializationObservable.subscribe(<span class="fstat-no" title="function not covered" >() =&gt;</span>
-<span class="cstat-no" title="statement not covered" >          onSubUpdate("initializationObservable"),</span>
+<span class="cstat-no" title="statement not covered" >          onSubUpdate('initializationObservable'),</span>
         ),
         mappingUpdatedSource.subscribe(<span class="fstat-no" title="function not covered" >() =&gt;</span>
-<span class="cstat-no" title="statement not covered" >          onSubUpdate("mappingUpdatedSource"),</span>
+<span class="cstat-no" title="statement not covered" >          onSubUpdate('mappingUpdatedSource'),</span>
         ),
-        mappingPreview.subscribe(<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nSubUpdate("mappingPreviewOutput$")),</span>
+        mappingPreview.subscribe(<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nSubUpdate('mappingPreviewOutput$')),</span>
         lineRefreshObservable.subscribe(<span class="fstat-no" title="function not covered" >() =&gt;</span>
-<span class="cstat-no" title="statement not covered" >          onSubUpdate("lineRefreshObservable"),</span>
+<span class="cstat-no" title="statement not covered" >          onSubUpdate('lineRefreshObservable'),</span>
         ),
         initializationService.cfg.errorService.subscribe(<span class="fstat-no" title="function not covered" >() =&gt;</span>
-<span class="cstat-no" title="statement not covered" >          onSubUpdate("errorService"),</span>
+<span class="cstat-no" title="statement not covered" >          onSubUpdate('errorService'),</span>
         ),
       ];
 &nbsp;
@@ -2014,16 +2014,16 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
    */
   const isFieldAddableToSelection = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (</span>
-      documentType: "source" | "target",
+      documentType: 'source' | 'target',
       field: IAtlasmapField,
       dropTarget?: IAtlasmapField,
     ): boolean =&gt; {
       const { selectedMapping } = <span class="cstat-no" title="statement not covered" >context;</span>
-      const isSource = <span class="cstat-no" title="statement not covered" >documentType === "source";</span>
+      const isSource = <span class="cstat-no" title="statement not covered" >documentType === 'source';</span>
 <span class="cstat-no" title="statement not covered" >      if (</span>
         !field ||
         !field.amField.isTerminal() ||
-        dropTarget?.type === "UNSUPPORTED" ||
+        dropTarget?.type === 'UNSUPPORTED' ||
         (selectedMapping &amp;&amp;
           selectedMapping.mapping.transition.mode === TransitionMode.ENUM &amp;&amp;
           selectedMapping.sourceFields.length &gt; 0 &amp;&amp;
@@ -2075,10 +2075,10 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
   );
 &nbsp;
   const isFieldRemovableFromSelection = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (d</span>ocumentType: "source" | "target", field: IAtlasmapField): boolean =&gt;
+<span class="fstat-no" title="function not covered" >    (d</span>ocumentType: 'source' | 'target', field: IAtlasmapField): boolean =&gt;
 <span class="cstat-no" title="statement not covered" >      !!context.selectedMapping &amp;&amp;</span>
       !!context.selectedMapping[
-        documentType === "source" ? "sourceFields" : "targetFields"
+        documentType === 'source' ? 'sourceFields' : 'targetFields'
       ].find(<span class="fstat-no" title="function not covered" >(f</span>) =&gt; <span class="cstat-no" title="statement not covered" >f.id === field.id),</span>
     [context.selectedMapping],
   );
@@ -2166,7 +2166,7 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

@@ -803,15 +803,15 @@ import {
   IAtlasmapDocument,
   IAtlasmapField,
   IAtlasmapMapping,
-} from "../../models";
-<span class="cstat-no" title="statement not covered" >import { Button, Tooltip } from "@patternfly/react-core";</span>
+} from '../../models';
+<span class="cstat-no" title="statement not covered" >import { Button, Tooltip } from '@patternfly/react-core';</span>
 <span class="cstat-no" title="statement not covered" >import {</span>
   CaptureDocumentNameAction,
   ChangeDocumentNameAction,
   DeleteDocumentAction,
   EnableJavaClassAction,
   ImportAction,
-} from "../Actions";
+} from '../Actions';
 <span class="cstat-no" title="statement not covered" >import {</span>
   ColumnBody,
   Document,
@@ -821,10 +821,10 @@ import {
   NodeRef,
   SearchableColumnHeader,
   Tree,
-} from "../../../UI";
-<span class="cstat-no" title="statement not covered" >import { ConstantsTree, IConstantsTreeCallbacks } from "./ConstantsTree";</span>
-<span class="cstat-no" title="statement not covered" >import { IPropertiesTreeCallbacks, PropertiesTree } from "./PropertiesTree";</span>
-<span class="cstat-no" title="statement not covered" >import React, { FunctionComponent, useCallback } from "react";</span>
+} from '../../../UI';
+<span class="cstat-no" title="statement not covered" >import { ConstantsTree, IConstantsTreeCallbacks } from './ConstantsTree';</span>
+<span class="cstat-no" title="statement not covered" >import { IPropertiesTreeCallbacks, PropertiesTree } from './PropertiesTree';</span>
+<span class="cstat-no" title="statement not covered" >import React, { FunctionComponent, useCallback } from 'react';</span>
 <span class="cstat-no" title="statement not covered" >import {</span>
   SOURCES_CONSTANTS_ID,
   SOURCES_DOCUMENT_ID_PREFIX,
@@ -832,11 +832,11 @@ import {
   SOURCES_HEIGHT_BOUNDARY_ID,
   SOURCES_PROPERTIES_ID,
   SOURCES_WIDTH_BOUNDARY_ID,
-} from "./constants";
+} from './constants';
 &nbsp;
-<span class="cstat-no" title="statement not covered" >import { PlusIcon } from "@patternfly/react-icons";</span>
-<span class="cstat-no" title="statement not covered" >import { TraverseFields } from "./TraverseFields";</span>
-<span class="cstat-no" title="statement not covered" >import { commonActions } from "./commonActions";</span>
+<span class="cstat-no" title="statement not covered" >import { PlusIcon } from '@patternfly/react-icons';</span>
+<span class="cstat-no" title="statement not covered" >import { TraverseFields } from './TraverseFields';</span>
+<span class="cstat-no" title="statement not covered" >import { commonActions } from './commonActions';</span>
 &nbsp;
 export interface ISourceColumnCallbacks
   extends IConstantsTreeCallbacks,
@@ -922,21 +922,21 @@ export const <span class="cstat-no" title="statement not covered" >SourcesColumn
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
       &lt;SearchableColumnHeader
-        title={"Source"}
+        title={'Source'}
         onSearch={onSearch}
         actions={[
           onImportDocument &amp;&amp; (
             &lt;ImportAction
               id="Source"
               onImport={onImportDocument}
-              key={"import"}
+              key={'import'}
             /&gt;
           ),
           onCustomClassSearch &amp;&amp; (
             &lt;EnableJavaClassAction
               onCustomClassSearch={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nCustomClassSearch(true)}</span>
-              data-testid={"enable-specific-java-classes-Source-button"}
-              key={"java"}
+              data-testid={'enable-specific-java-classes-Source-button'}
+              key={'java'}
             /&gt;
           ),
         ]}
@@ -951,22 +951,22 @@ export const <span class="cstat-no" title="statement not covered" >SourcesColumn
                 overrideWidth={SOURCES_WIDTH_BOUNDARY_ID}
               &gt;
                 &lt;Document
-                  title={"Properties"}
+                  title={'Properties'}
                   startExpanded={sourceProperties ? true : false}
                   actions={[
                     &lt;Tooltip
-                      position={"top"}
+                      position={'top'}
                       enableFlip={true}
                       content={
                         &lt;div&gt;Create a source property for use in mapping&lt;/div&gt;
                       }
-                      key={"create-property"}
+                      key={'create-property'}
                       entryDelay={750}
                       exitDelay={100}
                     &gt;
                       &lt;Button
                         onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nCreateProperty(isSource)}</span>
-                        variant={"plain"}
+                        variant={'plain'}
                         aria-label="Create a source property for use in mapping"
                         data-testid="create-source-property-button"
                       &gt;
@@ -1001,7 +1001,7 @@ export const <span class="cstat-no" title="statement not covered" >SourcesColumn
                       renderPreview={renderPreview}
                     /&gt;
                   ) : (
-                    "No source properties"
+                    'No source properties'
                   )}
                 &lt;/Document&gt;
               &lt;/NodeRef&gt;
@@ -1011,20 +1011,20 @@ export const <span class="cstat-no" title="statement not covered" >SourcesColumn
                 overrideWidth={SOURCES_WIDTH_BOUNDARY_ID}
               &gt;
                 &lt;Document
-                  title={"Constants"}
+                  title={'Constants'}
                   startExpanded={constants ? true : false}
                   actions={[
                     &lt;Tooltip
-                      position={"top"}
+                      position={'top'}
                       enableFlip={true}
                       content={&lt;div&gt;Create a constant for use in mapping&lt;/div&gt;}
-                      key={"create-constant"}
+                      key={'create-constant'}
                       entryDelay={750}
                       exitDelay={100}
                     &gt;
                       &lt;Button
                         onClick={onCreateConstant}
-                        variant={"plain"}
+                        variant={'plain'}
                         aria-label="Create a constant for use in mapping"
                         data-testid="create-constant-button"
                       &gt;
@@ -1083,21 +1083,21 @@ export const <span class="cstat-no" title="statement not covered" >SourcesColumn
                           &lt;CaptureDocumentNameAction
                             id={documentId}
                             onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nCaptureDocumentName(s.id)}</span>
-                            key={"capture-document-name"}
+                            key={'capture-document-name'}
                           /&gt;
                         ),
                         onChangeDocumentName &amp;&amp; (
                           &lt;ChangeDocumentNameAction
                             id={documentId}
                             onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nChangeDocumentName(s.id, s.name)}</span>
-                            key={"change-document-name"}
+                            key={'change-document-name'}
                           /&gt;
                         ),
                         onDeleteDocument &amp;&amp; (
                           &lt;DeleteDocumentAction
                             id={documentId}
                             onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nDeleteDocument(s.id)}</span>
-                            key={"delete-document"}
+                            key={'delete-document'}
                           /&gt;
                         ),
                       ]}
@@ -1152,7 +1152,7 @@ export const <span class="cstat-no" title="statement not covered" >SourcesColumn
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>

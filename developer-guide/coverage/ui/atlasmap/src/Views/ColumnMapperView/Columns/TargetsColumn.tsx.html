@@ -691,15 +691,15 @@ import {
   IAtlasmapDocument,
   IAtlasmapField,
   IAtlasmapMapping,
-} from "../../models";
-<span class="cstat-no" title="statement not covered" >import { Button, Tooltip } from "@patternfly/react-core";</span>
+} from '../../models';
+<span class="cstat-no" title="statement not covered" >import { Button, Tooltip } from '@patternfly/react-core';</span>
 <span class="cstat-no" title="statement not covered" >import {</span>
   CaptureDocumentNameAction,
   ChangeDocumentNameAction,
   DeleteDocumentAction,
   EnableJavaClassAction,
   ImportAction,
-} from "../Actions";
+} from '../Actions';
 <span class="cstat-no" title="statement not covered" >import {</span>
   ColumnBody,
   Document,
@@ -710,20 +710,20 @@ import {
   NodeRef,
   SearchableColumnHeader,
   Tree,
-} from "../../../UI";
-<span class="cstat-no" title="statement not covered" >import { IPropertiesTreeCallbacks, PropertiesTree } from "./PropertiesTree";</span>
-<span class="cstat-no" title="statement not covered" >import React, { FunctionComponent, useCallback } from "react";</span>
+} from '../../../UI';
+<span class="cstat-no" title="statement not covered" >import { IPropertiesTreeCallbacks, PropertiesTree } from './PropertiesTree';</span>
+<span class="cstat-no" title="statement not covered" >import React, { FunctionComponent, useCallback } from 'react';</span>
 <span class="cstat-no" title="statement not covered" >import {</span>
   TARGETS_DOCUMENT_ID_PREFIX,
   TARGETS_FIELD_ID_PREFIX,
   TARGETS_HEIGHT_BOUNDARY_ID,
   TARGETS_PROPERTIES_ID,
   TARGETS_WIDTH_BOUNDARY_ID,
-} from "./constants";
+} from './constants';
 &nbsp;
-<span class="cstat-no" title="statement not covered" >import { PlusIcon } from "@patternfly/react-icons";</span>
-<span class="cstat-no" title="statement not covered" >import { TraverseFields } from "./TraverseFields";</span>
-<span class="cstat-no" title="statement not covered" >import { commonActions } from "./commonActions";</span>
+<span class="cstat-no" title="statement not covered" >import { PlusIcon } from '@patternfly/react-icons';</span>
+<span class="cstat-no" title="statement not covered" >import { TraverseFields } from './TraverseFields';</span>
+<span class="cstat-no" title="statement not covered" >import { commonActions } from './commonActions';</span>
 &nbsp;
 export interface ITargetsColumnCallbacks extends IPropertiesTreeCallbacks {
   acceptDropType: AtlasmapDocumentType;
@@ -801,21 +801,21 @@ export const <span class="cstat-no" title="statement not covered" >TargetsColumn
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
       &lt;SearchableColumnHeader
-        title={"Target"}
+        title={'Target'}
         onSearch={onSearch}
         actions={[
           onImportDocument &amp;&amp; (
             &lt;ImportAction
               id="Target"
               onImport={onImportDocument}
-              key={"import"}
+              key={'import'}
             /&gt;
           ),
           onCustomClassSearch &amp;&amp; (
             &lt;EnableJavaClassAction
               onCustomClassSearch={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nCustomClassSearch(false)}</span>
-              data-testid={"enable-specific-java-classes-Target-button"}
-              key={"java"}
+              data-testid={'enable-specific-java-classes-Target-button'}
+              key={'java'}
             /&gt;
           ),
         ]}
@@ -830,22 +830,22 @@ export const <span class="cstat-no" title="statement not covered" >TargetsColumn
                 overrideWidth={TARGETS_WIDTH_BOUNDARY_ID}
               &gt;
                 &lt;Document
-                  title={"Properties"}
+                  title={'Properties'}
                   startExpanded={targetProperties ? true : false}
                   actions={[
                     &lt;Tooltip
-                      position={"top"}
+                      position={'top'}
                       enableFlip={true}
                       content={
                         &lt;div&gt;Create a target property for use in mapping&lt;/div&gt;
                       }
-                      key={"create-target-property"}
+                      key={'create-target-property'}
                       entryDelay={750}
                       exitDelay={100}
                     &gt;
                       &lt;Button
                         onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nCreateProperty(isSource)}</span>
-                        variant={"plain"}
+                        variant={'plain'}
                         aria-label="Create a target property for use in mapping"
                         data-testid="create-target-property-button"
                       &gt;
@@ -880,7 +880,7 @@ export const <span class="cstat-no" title="statement not covered" >TargetsColumn
                       renderPreview={renderPreview}
                     /&gt;
                   ) : (
-                    "No target properties"
+                    'No target properties'
                   )}
                 &lt;/Document&gt;
               &lt;/NodeRef&gt;
@@ -908,21 +908,21 @@ export const <span class="cstat-no" title="statement not covered" >TargetsColumn
                           &lt;CaptureDocumentNameAction
                             id={documentId}
                             onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nCaptureDocumentName(t.id)}</span>
-                            key={"capture-document-name"}
+                            key={'capture-document-name'}
                           /&gt;
                         ),
                         onChangeDocumentName &amp;&amp; (
                           &lt;ChangeDocumentNameAction
                             id={documentId}
                             onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nChangeDocumentName(t.id, t.name)}</span>
-                            key={"change-document-name"}
+                            key={'change-document-name'}
                           /&gt;
                         ),
                         onDeleteDocument &amp;&amp; (
                           &lt;DeleteDocumentAction
                             id={documentId}
                             onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nDeleteDocument(t.id)}</span>
-                            key={"delete-documents"}
+                            key={'delete-documents'}
                           /&gt;
                         ),
                       ]}
@@ -984,7 +984,7 @@ export const <span class="cstat-no" title="statement not covered" >TargetsColumn
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>

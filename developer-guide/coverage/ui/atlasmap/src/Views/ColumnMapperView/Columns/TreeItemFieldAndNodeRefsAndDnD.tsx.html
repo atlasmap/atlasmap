@@ -522,9 +522,9 @@
   CircleIcon,
   GripVerticalIcon,
   LayerGroupIcon,
-} from "@patternfly/react-icons";
-import { AtlasmapDocumentType, IAtlasmapField } from "../../../Views";
-<span class="cstat-no" title="statement not covered" >import { Button, Tooltip } from "@patternfly/react-core";</span>
+} from '@patternfly/react-icons';
+import { AtlasmapDocumentType, IAtlasmapField } from '../../../Views';
+<span class="cstat-no" title="statement not covered" >import { Button, Tooltip } from '@patternfly/react-core';</span>
 <span class="cstat-no" title="statement not covered" >import {</span>
   DocumentField,
   DraggableField,
@@ -533,8 +533,8 @@ import { AtlasmapDocumentType, IAtlasmapField } from "../../../Views";
   IDragAndDropField,
   NodeRef,
   TreeItem,
-} from "../../../UI";
-<span class="cstat-no" title="statement not covered" >import React, { FunctionComponent, ReactNode } from "react";</span>
+} from '../../../UI';
+<span class="cstat-no" title="statement not covered" >import React, { FunctionComponent, ReactNode } from 'react';</span>
 &nbsp;
 export interface ITreeItemFieldAndNodeRefsAndDnDProps {
   fieldId: string;
@@ -548,7 +548,7 @@ export interface ITreeItemFieldAndNodeRefsAndDnDProps {
   level?: number;
   position?: number;
   setSize?: number;
-  renderActions?: (field: IAtlasmapField) =&gt; IDocumentFieldProps["actions"];
+  renderActions?: (field: IAtlasmapField) =&gt; IDocumentFieldProps['actions'];
   renderPreview?: (field: IAtlasmapField) =&gt; ReactNode;
   canDrop: (source: IAtlasmapField, target: IDragAndDropField) =&gt; boolean;
   onDrop: (source: IAtlasmapField, target: IDragAndDropField | null) =&gt; void;
@@ -599,8 +599,8 @@ export const <span class="cstat-no" title="statement not covered" >TreeItemWithF
               &lt;NodeRef
                 id={[
                   fieldId,
-                  isDragging ? "dnd-start" : undefined,
-                  isTarget ? "dnd-target-field" : undefined,
+                  isDragging ? 'dnd-start' : undefined,
+                  isTarget ? 'dnd-target-field' : undefined,
                 ]}
                 parentId={parentId}
                 boundaryId={boundaryId}
@@ -614,9 +614,9 @@ export const <span class="cstat-no" title="statement not covered" >TreeItemWithF
                         icon={
                           isDroppable || isTarget ? (
                             &lt;Button
-                              variant={isTarget ? "link" : "plain"}
+                              variant={isTarget ? 'link' : 'plain'}
                               tabIndex={-1}
-                              aria-label={"Drop target"}
+                              aria-label={'Drop target'}
                               isDisabled={!isDroppable}
                               data-testid={`is-droppable-${field.name}-button`}
                             &gt;
@@ -624,7 +624,7 @@ export const <span class="cstat-no" title="statement not covered" >TreeItemWithF
                             &lt;/Button&gt;
                           ) : (
                             &lt;Button
-                              variant={"plain"}
+                              variant={'plain'}
                               tabIndex={-1}
                               aria-hidden={true}
                               data-testid={`grip-${field.name}-button`}
@@ -633,7 +633,7 @@ export const <span class="cstat-no" title="statement not covered" >TreeItemWithF
                             &lt;/Button&gt;
                           )
                         }
-                        type={field.enumeration ? "ENUM" : field.type}
+                        type={field.enumeration ? 'ENUM' : field.type}
                         scope={field.scope}
                         showType={showTypes}
                         isDragging={isDragging}
@@ -644,14 +644,14 @@ export const <span class="cstat-no" title="statement not covered" >TreeItemWithF
                           field.isConnected ? (
                             &lt;Tooltip
                               key="connected"
-                              position={"auto"}
+                              position={'auto'}
                               enableFlip={true}
                               entryDelay={750}
                               exitDelay={100}
                               content={&lt;div&gt;This field is connected&lt;/div&gt;}
                             &gt;
                               &lt;CircleIcon
-                                label={"This field is connected"}
+                                label={'This field is connected'}
                                 size="sm"
                                 tabIndex={-1}
                               /&gt;
@@ -659,15 +659,15 @@ export const <span class="cstat-no" title="statement not covered" >TreeItemWithF
                           ) : null,
                           field.isCollection ? (
                             &lt;Tooltip
-                              key={"collection"}
-                              position={"auto"}
+                              key={'collection'}
+                              position={'auto'}
                               enableFlip={true}
                               entryDelay={750}
                               exitDelay={100}
                               content={&lt;div&gt;This field is a collection&lt;/div&gt;}
                             &gt;
                               &lt;LayerGroupIcon
-                                label={"This field is a collection"}
+                                label={'This field is a collection'}
                                 size="sm"
                                 tabIndex={-1}
                               /&gt;
@@ -675,8 +675,8 @@ export const <span class="cstat-no" title="statement not covered" >TreeItemWithF
                           ) : null,
                           field.hasTransformations ? (
                             &lt;Tooltip
-                              key={"transformations"}
-                              position={"auto"}
+                              key={'transformations'}
+                              position={'auto'}
                               enableFlip={true}
                               entryDelay={750}
                               exitDelay={100}
@@ -685,7 +685,7 @@ export const <span class="cstat-no" title="statement not covered" >TreeItemWithF
                               }
                             &gt;
                               &lt;BoltIcon
-                                label={"This field has transformations"}
+                                label={'This field has transformations'}
                                 size="sm"
                                 tabIndex={-1}
                               /&gt;
@@ -693,15 +693,15 @@ export const <span class="cstat-no" title="statement not covered" >TreeItemWithF
                           ) : null,
                           field.isAttribute ? (
                             &lt;Tooltip
-                              key={"attribute"}
-                              position={"auto"}
+                              key={'attribute'}
+                              position={'auto'}
                               enableFlip={true}
                               entryDelay={750}
                               exitDelay={100}
                               content={&lt;div&gt;This field is an attribute&lt;/div&gt;}
                             &gt;
                               &lt;AtIcon
-                                label={"This field is an attribute"}
+                                label={'This field is an attribute'}
                                 size="sm"
                                 tabIndex={-1}
                               /&gt;
@@ -729,7 +729,7 @@ export const <span class="cstat-no" title="statement not covered" >TreeItemWithF
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>

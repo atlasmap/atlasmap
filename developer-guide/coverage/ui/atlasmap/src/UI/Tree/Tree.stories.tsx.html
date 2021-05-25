@@ -235,11 +235,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-<span class="cstat-no" title="statement not covered" >import { Tree, TreeGroup, TreeItem } from ".";</span>
-<span class="cstat-no" title="statement not covered" >import React from "react";</span>
+<span class="cstat-no" title="statement not covered" >import { Tree, TreeGroup, TreeItem } from '.';</span>
+<span class="cstat-no" title="statement not covered" >import React from 'react';</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >export default {</span>
-  title: "Tree",
+  title: 'Tree',
   component: Tree,
   includeStories: [], // or don't load this file at all
 };
@@ -247,24 +247,24 @@
 export const <span class="cstat-no" title="statement not covered" >example = <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >(</span></span></span>
   &lt;Tree&gt;
     &lt;TreeGroup
-      id={"g1"}
+      id={'g1'}
       level={1}
       position={1}
       setSize={3}
       renderLabel={<span class="fstat-no" title="function not covered" >({</span> expanded<span class="cstat-no" title="statement not covered" >, f</span>ocused<span class="cstat-no" title="statement not covered" > })</span> =&gt;
-<span class="cstat-no" title="statement not covered" >        `${expanded ? "⌄" : "›"} G1 ${focused ? "- has focus" : ""}`</span>
+<span class="cstat-no" title="statement not covered" >        `${expanded ? '⌄' : '›'} G1 ${focused ? '- has focus' : ''}`</span>
       }
     &gt;
       {<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >(</span></span>
         &lt;&gt;
           &lt;TreeGroup
-            id={"g1-1"}
+            id={'g1-1'}
             level={2}
             position={1}
             setSize={3}
             renderLabel={<span class="fstat-no" title="function not covered" >({</span> expanded<span class="cstat-no" title="statement not covered" >, f</span>ocused<span class="cstat-no" title="statement not covered" > })</span> =&gt;
-<span class="cstat-no" title="statement not covered" >              `${expanded ? "⌄" : "›"} Group G1-1 ${</span>
-                focused ? "- has focus" : ""
+<span class="cstat-no" title="statement not covered" >              `${expanded ? '⌄' : '›'} Group G1-1 ${</span>
+                focused ? '- has focus' : ''
               }`
             }
           &gt;
@@ -272,33 +272,33 @@ export const <span class="cstat-no" title="statement not covered" >example = <sp
               &lt;&gt;
                 &lt;TreeItem level={3} position={1} setSize={3}&gt;
                   {<span class="fstat-no" title="function not covered" >({</span> focused<span class="cstat-no" title="statement not covered" > })</span> =&gt;
-<span class="cstat-no" title="statement not covered" >                    `Item G1-1 1 ${focused ? "- has focus" : ""}`</span>
+<span class="cstat-no" title="statement not covered" >                    `Item G1-1 1 ${focused ? '- has focus' : ''}`</span>
                   }
                 &lt;/TreeItem&gt;
                 &lt;TreeItem level={3} position={2} setSize={3}&gt;
                   {<span class="fstat-no" title="function not covered" >({</span> focused<span class="cstat-no" title="statement not covered" > })</span> =&gt;
-<span class="cstat-no" title="statement not covered" >                    `Item G1-1 2 ${focused ? "- has focus" : ""}`</span>
+<span class="cstat-no" title="statement not covered" >                    `Item G1-1 2 ${focused ? '- has focus' : ''}`</span>
                   }
                 &lt;/TreeItem&gt;
                 &lt;TreeItem level={3} position={3} setSize={3}&gt;
                   {<span class="fstat-no" title="function not covered" >({</span> focused<span class="cstat-no" title="statement not covered" > })</span> =&gt;
-<span class="cstat-no" title="statement not covered" >                    `Item G1-1 3 ${focused ? "- has focus" : ""}`</span>
+<span class="cstat-no" title="statement not covered" >                    `Item G1-1 3 ${focused ? '- has focus' : ''}`</span>
                   }
                 &lt;/TreeItem&gt;
               &lt;/&gt;
             )}
           &lt;/TreeGroup&gt;
           &lt;TreeItem level={1} position={2} setSize={2}&gt;
-            {<span class="fstat-no" title="function not covered" >({</span> focused<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >`Item G1-2 ${focused ? "- has focus" : ""}`}</span>
+            {<span class="fstat-no" title="function not covered" >({</span> focused<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >`Item G1-2 ${focused ? '- has focus' : ''}`}</span>
           &lt;/TreeItem&gt;
         &lt;/&gt;
       )}
     &lt;/TreeGroup&gt;
     &lt;TreeItem level={1} position={2} setSize={3}&gt;
-      {<span class="fstat-no" title="function not covered" >({</span> focused<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >`Item G2 ${focused ? "- has focus" : ""}`}</span>
+      {<span class="fstat-no" title="function not covered" >({</span> focused<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >`Item G2 ${focused ? '- has focus' : ''}`}</span>
     &lt;/TreeItem&gt;
     &lt;TreeItem level={1} position={3} setSize={3}&gt;
-      {<span class="fstat-no" title="function not covered" >({</span> focused<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >`Item G3 ${focused ? "- has focus" : ""}`}</span>
+      {<span class="fstat-no" title="function not covered" >({</span> focused<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >`Item G3 ${focused ? '- has focus' : ''}`}</span>
     &lt;/TreeItem&gt;
   &lt;/Tree&gt;
 );
@@ -309,7 +309,7 @@ export const <span class="cstat-no" title="statement not covered" >example = <sp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

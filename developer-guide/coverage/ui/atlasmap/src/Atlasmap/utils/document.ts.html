@@ -917,8 +917,8 @@ import {
   ErrorType,
   InspectionType,
   NamespaceModel,
-} from "@atlasmap/core";
-import { ClassNameComponent } from "./custom-classname";
+} from '@atlasmap/core';
+import { ClassNameComponent } from './custom-classname';
 &nbsp;
 /**
  * Modify the document name of the document specified by the document ID.
@@ -936,7 +936,7 @@ export async function <span class="fstat-no" title="function not covered" >chang
   const <span class="cstat-no" title="statement not covered" >docDef = getDocDef(docId, cfg, isSource);</span>
 <span class="cstat-no" title="statement not covered" >  docDef.name = newDocName;</span>
 <span class="cstat-no" title="statement not covered" >  await cfg.mappingService.notifyMappingUpdated();</span>
-<span class="cstat-no" title="statement not covered" >  await cfg.fileService.exportADMArchive("");</span>
+<span class="cstat-no" title="statement not covered" >  await cfg.fileService.exportADMArchive('');</span>
 }
 &nbsp;
 /**
@@ -962,7 +962,7 @@ export function <span class="fstat-no" title="function not covered" >createNames
     locationUri: locationUri,
     createdByUser: true,
     isTarget: isTarget,
-    getPrettyLabel: <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >a</span>lias + " [" + uri + "]",</span>
+    getPrettyLabel: <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >a</span>lias + ' [' + uri + ']',</span>
     copy: <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >O</span>bject.assign({}, namespace),</span>
     copyFrom: <span class="fstat-no" title="function not covered" >(n</span>: NamespaceModel) =&gt; <span class="cstat-no" title="statement not covered" >Object.assign(namespace, n),</span>
   };
@@ -1016,7 +1016,7 @@ async function <span class="fstat-no" title="function not covered" >importDoc(</
 <span class="cstat-no" title="statement not covered" >  return new Promise&lt;boolean&gt;(<span class="fstat-no" title="function not covered" >async (r</span>esolve<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >) =&gt; {</span></span></span>
 <span class="cstat-no" title="statement not covered" >    cfg.initCfg.initialized = false;</span>
 <span class="cstat-no" title="statement not covered" >    cfg.initializationService.updateLoadingStatus(</span>
-      "Importing Document " + selectedFile.name,
+      'Importing Document ' + selectedFile.name,
     );
 <span class="cstat-no" title="statement not covered" >    cfg.documentService</span>
       .processDocument(
@@ -1027,7 +1027,7 @@ async function <span class="fstat-no" title="function not covered" >importDoc(</
         inspectionParameters,
       )
       .then(<span class="fstat-no" title="function not covered" >() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        cfg.fileService.exportADMArchive("");</span>
+<span class="cstat-no" title="statement not covered" >        cfg.fileService.exportADMArchive('');</span>
 <span class="cstat-no" title="statement not covered" >        resolve(true);</span>
       });
   });
@@ -1051,7 +1051,7 @@ export async function <span class="fstat-no" title="function not covered" >remov
 <span class="cstat-no" title="statement not covered" >      DataMapperUtil.removeItemFromArray(docDef, cfg.targetDocs);</span>
     }
 <span class="cstat-no" title="statement not covered" >    await cfg.mappingService.notifyMappingUpdated();</span>
-<span class="cstat-no" title="statement not covered" >    await cfg.fileService.exportADMArchive("");</span>
+<span class="cstat-no" title="statement not covered" >    await cfg.fileService.exportADMArchive('');</span>
 <span class="cstat-no" title="statement not covered" >    resolve(true);</span>
   });
 }
@@ -1090,7 +1090,7 @@ export function <span class="fstat-no" title="function not covered" >getDocDefBy
 ): DocumentDefinition {
 <span class="cstat-no" title="statement not covered" >  for (const docDef<span class="cstat-no" title="statement not covered" > of <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >c</span>fg.</span>getDocs(isSource))</span> {</span>
     const candidateDocName =
-<span class="cstat-no" title="statement not covered" >      docDef.getName(false) + "." + docDef.type.toLowerCase();</span>
+<span class="cstat-no" title="statement not covered" >      docDef.getName(false) + '.' + docDef.type.toLowerCase();</span>
 <span class="cstat-no" title="statement not covered" >    if (candidateDocName.match(docName)) {</span>
 <span class="cstat-no" title="statement not covered" >      return docDef;</span>
     }
@@ -1116,7 +1116,7 @@ export async function <span class="fstat-no" title="function not covered" >getCu
 <span class="cstat-no" title="statement not covered" >          cfg.errorService.addError(</span>
             new ErrorInfo({
               message:
-                "Fatal network error: Could not connect to AtlasMap design runtime service.",
+                'Fatal network error: Could not connect to AtlasMap design runtime service.',
               level: ErrorLevel.ERROR,
               scope: ErrorScope.APPLICATION,
               type: ErrorType.INTERNAL,
@@ -1125,7 +1125,7 @@ export async function <span class="fstat-no" title="function not covered" >getCu
         } else {
 <span class="cstat-no" title="statement not covered" >          cfg.errorService.addError(</span>
             new ErrorInfo({
-              message: "Could not find class names from uploaded JARs.",
+              message: 'Could not find class names from uploaded JARs.',
               level: ErrorLevel.WARN,
               scope: ErrorScope.APPLICATION,
               type: ErrorType.INTERNAL,
@@ -1221,7 +1221,7 @@ export function <span class="fstat-no" title="function not covered" >enableCusto
             }
 <span class="cstat-no" title="statement not covered" >            cfg.errorService.addError(</span>
               new ErrorInfo({
-                message: "The Java class you selected has no mappable fields.",
+                message: 'The Java class you selected has no mappable fields.',
                 level: ErrorLevel.WARN,
                 scope: ErrorScope.APPLICATION,
                 type: ErrorType.USER,
@@ -1229,7 +1229,7 @@ export function <span class="fstat-no" title="function not covered" >enableCusto
             );
           }
 <span class="cstat-no" title="statement not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >          await cfg.mappingService.notifyMappingUpdated();</span></span>
-<span class="cstat-no" title="statement not covered" >          await cfg.fileService.exportADMArchive("");</span>
+<span class="cstat-no" title="statement not covered" >          await cfg.fileService.exportADMArchive('');</span>
         })
         .catch(<span class="fstat-no" title="function not covered" >(e</span>rror: any) =&gt; {
 <span class="cstat-no" title="statement not covered" >          if (error.status === 0) {</span>
@@ -1260,7 +1260,7 @@ export function <span class="fstat-no" title="function not covered" >enableCusto
 <span class="cstat-no" title="statement not covered" >        cfg.errorService.addError(</span>
           new ErrorInfo({
             message:
-              "Fatal network error: Could not connect to AtlasMap design runtime service.",
+              'Fatal network error: Could not connect to AtlasMap design runtime service.',
             level: ErrorLevel.ERROR,
             scope: ErrorScope.APPLICATION,
             type: ErrorType.INTERNAL,
@@ -1270,7 +1270,7 @@ export function <span class="fstat-no" title="function not covered" >enableCusto
       } else {
 <span class="cstat-no" title="statement not covered" >        cfg.errorService.addError(</span>
           new ErrorInfo({
-            message: "Could not load the Java class path.",
+            message: 'Could not load the Java class path.',
             level: ErrorLevel.ERROR,
             scope: ErrorScope.APPLICATION,
             type: ErrorType.INTERNAL,
@@ -1291,12 +1291,12 @@ export function <span class="fstat-no" title="function not covered" >getProperty
     label: string;
   }[] = <span class="cstat-no" title="statement not covered" >[</span>
     {
-      label: "Current Message Header",
-      value: "current",
+      label: 'Current Message Header',
+      value: 'current',
     },
     {
-      label: "Camel Exchange Property",
-      value: "camelExchangeProperty",
+      label: 'Camel Exchange Property',
+      value: 'camelExchangeProperty',
     },
   ];
   const propertyDocOptions: DocumentDefinition[] = <span class="cstat-no" title="statement not covered" >isSource</span>
@@ -1317,7 +1317,7 @@ export function <span class="fstat-no" title="function not covered" >getProperty
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 24 2021 21:48:18 GMT+0000 (Coordinated Universal Time)
+                at Tue May 25 2021 18:45:17 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
